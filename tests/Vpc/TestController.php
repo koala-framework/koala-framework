@@ -12,7 +12,7 @@ class Vpc_TestController extends Vps_Controller_Action
 
         Vps_Component_Data_Root::setComponentClass($this->_getParam('root'));
         $root = Vps_Component_Data_Root::getInstance();
-        $data = $root->getPageByPath($this->_getParam('url'));
+        $data = $root->getPageByUrl($this->_getParam('url'));
         if (!$data) {
             throw new Vps_Exception_NotFound();
         }

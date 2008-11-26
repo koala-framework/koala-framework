@@ -19,10 +19,11 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
     protected function _initFields()
     {
         $types = array();
-        $generator = current(Vps_Component_Generator_Abstract::getInstances(
-            Vps_Component_Data_Root::getComponentClass(), array('pageGenerator' => true))
-        );
-        $classes = $generator->getChildComponentClasses();
+        $generators = Vps_Component_Data_Root::getInstance()->getPageGenerators();
+        $classes = array();
+        foreach ($generators as $generator) {
+            $classes = array_merge($classes, $generator->getChildComponentClasses());
+        }
         foreach ($classes as $component=>$class) {
             $name = Vpc_Abstract::getSetting($class, 'componentName');
             if ($name) {

@@ -5,13 +5,16 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
     protected $_componentClass = 'row';
     protected $_idSeparator = false;
     protected $_loadTableFromComponent = false;
-    private $_pageData;
-    private $_pageParent;
-    private $_pageFilename;
-    private $_pageComponentParent;
-    private $_pageComponent;
-    private $_pageHome;
-    private $_pageCategory;
+
+    protected $_pageData;
+    protected $_pageParent;
+    protected $_pageFilename;
+    protected $_pageComponentParent;
+    protected $_pageComponent;
+    protected $_pageHome;
+    protected $_pageCategory;
+    protected $_pageDomain;
+    protected $_pageDomainFilename;
 
     protected function _init()
     {
@@ -22,13 +25,13 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         $this->_pageFilename = array();
         $this->_pageComponentParent = array();
         $this->_pageComponent = array();
-        $this->_pageHome = 0;
+        $this->_pageHome = array();
         if (isset($this->_settings['model'])) {
             $rows = $this->_getModel()->fetchAll(null, 'pos')->toArray();
         } else {
             $select = new Zend_Db_Select(Vps_Registry::get('db'));
             $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
-                                        'filename', 'hide', 'category', 'name', 'is_home', 'tags'));
+                                        'filename', 'hide', 'category', 'domain', 'name', 'is_home', 'tags'));
             $select->order('pos');
             $rows = $select->query()->fetchAll();
         }
@@ -36,12 +39,16 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             $this->_pageData[$row['id']] = $row;
             $parentId = $row['parent_id'];
             if (is_null($parentId)) $parentId = 0;
+            $domain = isset($row['domain']) ? (string)$row['domain'] : '';
             $this->_pageChilds[$parentId][] = $row['id'];
             $this->_pageFilename[$parentId][$row['filename']] = $row['id'];
+            if ($parentId == 0)
+                $this->_pageDomainFilename[$domain][$row['filename']] = $row['id'];
             $this->_pageComponentParent[$parentId][$row['component']][] = $row['id'];
             $this->_pageComponent[$row['component']][] = $row['id'];
             $this->_pageCategory[$row['category']][] = $row['id'];
-            if ($row['is_home']) $this->_pageHome = $row['id'];
+            $this->_pageDomain[$domain][] = $row['id'];
+            if ($row['is_home']) $this->_pageHome[$domain] = $row['id'];
         }
     }
 
@@ -59,15 +66,44 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
     {
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
+        $pageIds = $this->_getPageIds($parentData, $select);
+
+        $ret = array();
+        foreach ($pageIds as $pageId) {
+            $page = $this->_pageData[$pageId];
+            if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
+                $menu = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
+                if ($menu == $page['hide']) continue;
+            }
+            static $showInvisible;
+            if (is_null($showInvisible)) {
+                $showInvisible = Vps_Registry::get('config')->showInvisible;
+            }
+            if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+            } else if (!$showInvisible) {
+                if (!$this->_pageData[$pageId]['visible']) continue;
+            }
+
+            $d = $this->_createData($parentData, $pageId, $select);
+            if ($d) $ret[] = $d;
+
+            if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
+                if (count($ret) >= $select->getPart(Vps_Model_Select::LIMIT_COUNT)) break;
+            }
+        }
+        return $ret;
+    }
+
+    protected function _getPageIds($parentData, $select)
+    {
         if ($parentData) {
-            if ($parentData instanceof Vps_Component_Data_Root ||
-                is_instance_of($parentData->componentClass, 'Vpc_Root_Category_Component')
-            ) {
+            if ($parentData->componentClass == $this->_class) {
                 $parentId = 0;
             } else {
                 $parentId = $parentData->dbId;
             }
         }
+
         $pageIds = array();
         if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
             if (isset($this->_pageData[$id])) {
@@ -82,15 +118,13 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
                 }
             }
         } else if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
-            if ($this->_pageHome) {
-                $pageIds[] = $this->_pageHome;
-            }
+            $pageId = $this->_getPageIdHome($parentData);
+            if ($pageId) $pageIds[] = $pageId;
         } else if (isset($parentId)) {
             if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
                 $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
-                if (isset($this->_pageFilename[$parentId][$filename])) {
-                    $pageIds[] = $this->_pageFilename[$parentId][$filename];
-                }
+                $pageId = $this->_getPageIdByFilename($parentData, $filename);
+                if ($pageId) $pageIds[] = $pageId;
             } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
                 $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
                 $keys = array();
@@ -126,51 +160,34 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         } else {
             throw new Vps_Exception("This would return all pages. You don't want this.");
         }
-        if ($parentData && is_instance_of($parentData->componentClass, 'Vpc_Root_Category_Component')) {
-            if (isset($this->_pageCategory[$parentData->row->id])) {
-                $pageIds = array_intersect($this->_pageCategory[$parentData->row->id], $pageIds);
-            } else {
-                $pageIds = array();
-            }
+        return $pageIds;
+    }
+
+    protected function _getPageIdByFilename($parentData, $filename)
+    {
+        $parentId = $parentData->dbId;
+        if ($parentData->componentClass == $this->_class) $parentId = 0;
+        if (isset($this->_pageFilename[$parentId][$filename])) {
+            return $this->_pageFilename[$parentId][$filename];
         }
+        return null;
+    }
 
-        $ret = array();
-        foreach ($pageIds as $pageId) {
-            $page = $this->_pageData[$pageId];
-            if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
-                $menu = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
-                if ($menu == $page['hide']) continue;
-            }
-            static $showInvisible;
-            if (is_null($showInvisible)) {
-                $showInvisible = Vps_Registry::get('config')->showInvisible;
-            }
-            if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
-            } else if (!$showInvisible) {
-                if (!$this->_pageData[$pageId]['visible']) continue;
-            }
-
-            $d = $this->_createData($parentData, $pageId, $select);
-            if ($d) $ret[] = $d;
-
-            if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
-                if (count($ret) >= $select->getPart(Vps_Model_Select::LIMIT_COUNT)) break;
-            }
+    protected function _getPageIdHome($parentData)
+    {
+        if (isset($this->_pageHome[''])) {
+            return $this->_pageHome[''];
         }
-        return $ret;
+        return null;
     }
 
     protected function _createData($parentData, $id, $select)
     {
         $page = $this->_pageData[$id];
-        if (!$parentData || (($parentData instanceof Vps_Component_Data_Root) && $page['parent_id'])) {
+
+        if (!$parentData || ($parentData->componentClass == $this->_class && $page['parent_id'])) {
             if (!$page['parent_id']) {
-                $root = Vps_Component_Data_Root::getInstance();
-                if ($root->componentClass == $this->_class) {
-                    $parentData = $root;
-                } else {
-                    $parentData = $root->getChildComponent('-' . $page['category']);
-                }
+                $parentData = $this->_createParentDataByRow($page);
             } else {
                 $c = array();
                 if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
@@ -178,12 +195,15 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
                 }
                 $parentData = Vps_Component_Data_Root::getInstance()
                                     ->getComponentById($page['parent_id'], $c);
-                if (!$parentData) {
-                    return null;
-                }
+                if (!$parentData) return null;
             }
         }
         return parent::_createData($parentData, $id, $select);
+    }
+
+    protected function _createParentDataByRow($row)
+    {
+        return Vps_Component_Data_Root::getInstance();
     }
 
     protected function _formatConfig($parentData, $id)

@@ -57,7 +57,7 @@ class Vps_Component_Generator_Page_Test extends PHPUnit_Framework_TestCase
 
     public function testHome()
     {
-        $home = $this->_root->getPageByPath('/');
+        $home = $this->_root->getPageByUrl('/');
         $this->assertNotNull($home);
         $this->assertEquals($home->url, '/');
         $child = $home->getChildComponent('-foo');

@@ -356,7 +356,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                 } else {
                     if (isset($linkClasses['intern']) && $linkClasses['intern']) {
                         $internLinkPage = Vps_Component_Data_Root::getInstance()
-                            ->getPageByPath($part['href']);
+                            ->getPageByUrl($part['href']);
                         if ($internLinkPage) {
                             $destRow->component = 'intern';
                         }
