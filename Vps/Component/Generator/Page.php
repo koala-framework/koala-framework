@@ -39,7 +39,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             $this->_pageData[$row['id']] = $row;
             $parentId = $row['parent_id'];
             if (is_null($parentId)) $parentId = 0;
-            $domain = isset($row['domain']) ? (string)$row['domain'] : '';
+            $domain = isset($row['domain']) ? $row['domain'] : '';
             $this->_pageChilds[$parentId][] = $row['id'];
             $this->_pageFilename[$parentId][$row['filename']] = $row['id'];
             if ($parentId == 0)
@@ -240,7 +240,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
 
     protected function _getDataClass($config, $id)
     {
-        if ($id == $this->_pageHome) {
+        if ($this->_pageData[$id]['is_home']) {
             return 'Vps_Component_Data_Home';
         } else {
             return parent::_getDataClass($config, $id);
