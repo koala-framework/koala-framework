@@ -7,8 +7,13 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
 
     public function _isAllowed($user)
     {
+        if ($this->_getParam('id')) {
+            $id = $this->_getParam('id');
+        } else {
+            $id = $this->_getParam('parent_id');
+        }
         $c = Vps_Component_Data_Root::getInstance()
-            ->getComponentByDbId($this->_getParam('id'), array('ignoreVisible'=>true));
+            ->getComponentByDbId($id, array('ignoreVisible'=>true));
         if (!$c) {
             throw new Vps_Exception("Can't find component to check permissions");
         }
@@ -44,6 +49,18 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
-        $row->parent_id = $this->_getParam('parent_id');
+        if (is_numeric($this->_getParam('parent_id'))) {
+            $row->parent_id = $this->_getParam('parent_id');
+        } else {
+            preg_match('#^root-([^-]+)-?([^-]*)$#', $this->_getParam('parent_id'), $m);
+            $row->parent_id = null;
+            if ($m[2]) {
+                $row->domain = $m[1];
+                $row->category = $m[2];
+            } else {
+                $row->domain = null;
+                $row->category = $m[1];
+            }
+        }
     }
 }
