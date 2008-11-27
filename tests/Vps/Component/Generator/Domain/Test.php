@@ -53,14 +53,23 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
 
     public function testById()
     {
+        // at
         $page = $this->_root->getComponentById('1');
         $this->assertNotNull($page);
         $this->assertEquals(1, $page->componentId);
         $this->assertEquals('root-at-main', $page->parent->componentId);
-        $this->assertEquals('root-at-main', $this->_root->getComponentById('1')->parent->componentId);
         $this->assertNotNull($this->_root->getComponentById('2'));
         $this->assertEquals('1', $this->_root->getComponentById('2')->parent->componentId);
         $this->assertEquals('root-at-main', $this->_root->getComponentById('2')->parent->parent->componentId);
+
+        // ch
+        $page = $this->_root->getComponentById('5');
+        $this->assertNotNull($page);
+        $this->assertEquals(5, $page->componentId);
+        $this->assertEquals('root-ch-main', $page->parent->componentId);
+        $this->assertNotNull($this->_root->getComponentById('6'));
+        $this->assertEquals('5', $this->_root->getComponentById('6')->parent->componentId);
+        $this->assertEquals('root-ch-main', $this->_root->getComponentById('6')->parent->parent->componentId);
     }
 
     public function testByPath()
