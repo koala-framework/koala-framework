@@ -93,4 +93,5 @@
     height: 15px;
     margin-left: 5px;
     background-image: url(/assets/vps/Vpc/Basic/Image/Enlarge/zoom.png);
+    background-repeat: no-repeat;
 }
