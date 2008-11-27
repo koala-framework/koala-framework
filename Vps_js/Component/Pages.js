@@ -109,7 +109,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             for (var i in this.editActions) {
                 this.editActions[i].hide();
             }
-            if (!node.attributes.data.isPage) {
+            if (node.attributes.type != 'default') {
                 this.getAction('properties').disable();
                 this.getAction('delete').disable();
                 this.getAction('visible').disable();
