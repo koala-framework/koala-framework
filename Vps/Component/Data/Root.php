@@ -6,6 +6,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private $_hasChildComponentCache;
     private $_componentsByClassCache;
     private $_currentPage;
+    private $_pageGenerators;
 
     public function __construct($config = array())
     {
@@ -114,15 +115,17 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     public function getPageGenerators()
     {
-        $ret = array();
-        foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
-                if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) {
-                    $ret[] = Vps_Component_Generator_Abstract::getInstance($class, $key, $generator);
+        if (!$this->_pageGenerators) {
+            $this->_pageGenerators = array();
+            foreach (Vpc_Abstract::getComponentClasses() as $class) {
+                foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+                    if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) {
+                        $this->_pageGenerators[] = Vps_Component_Generator_Abstract::getInstance($class, $key, $generator);
+                    }
                 }
             }
         }
-        return $ret;
+        return $this->_pageGenerators;
     }
 
     private function _getIdParts($componentId)
