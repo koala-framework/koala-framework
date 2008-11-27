@@ -31,31 +31,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
         }
         if ($allowed) {
-            if ($resource == 'vps_component') {
-                $a = $this->getRequest()->getActionName();
-                if ($a != 'json-index' && $a != 'index') {
-                    if (!$this->_getParam('componentId')) {
-                        $allowed = false;
-                        foreach (Vps_Registry::get('acl')->getAllResources() as $r) {
-                            if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {
-                                if ($this->_getParam('class') == $r->getComponentClass()) {
-                                    $allowed = Vps_Registry::get('acl')->getComponentAcl()
-                                        ->isAllowed($this->_getAuthData(), $this->_getParam('class'));
-                                    break;
-                                }
-                            }
-                        }
-                    } else {
-                        $c = Vps_Component_Data_Root::getInstance()
-                            ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
-                        if (!$c) {
-                            throw new Vps_Exception("Can't find component to check permissions");
-                        }
-                        $allowed = Vps_Registry::get('acl')->getComponentAcl()
-                            ->isAllowed($this->_getAuthData(), $c);
-                    }
-                }
-            }
+            $allowed = $this->_isAllowedComponent();
         }
         if ($allowed) {
             if ($this->_getUserRole() == 'cli') {
@@ -80,6 +56,38 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
     protected function _isAllowed($user)
     {
         return true;
+    }
+
+    protected function _isAllowedComponent()
+    {
+        $allowed = true;
+        $resource = $this->getRequest()->getResourceName();
+        if ($resource == 'vps_component') {
+            $a = $this->getRequest()->getActionName();
+            if ($a != 'json-index' && $a != 'index') {
+                if (!$this->_getParam('componentId')) {
+                    $allowed = false;
+                    foreach (Vps_Registry::get('acl')->getAllResources() as $r) {
+                        if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {
+                            if ($this->_getParam('class') == $r->getComponentClass()) {
+                                $allowed = Vps_Registry::get('acl')->getComponentAcl()
+                                    ->isAllowed($this->_getAuthData(), $this->_getParam('class'));
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    $c = Vps_Component_Data_Root::getInstance()
+                        ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
+                    if (!$c) {
+                        throw new Vps_Exception("Can't find component to check permissions");
+                    }
+                    $allowed = Vps_Registry::get('acl')->getComponentAcl()
+                        ->isAllowed($this->_getAuthData(), $c);
+                }
+            }
+        }
+        return $allowed;
     }
 
     public function postDispatch()
