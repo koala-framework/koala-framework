@@ -27,12 +27,19 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         $this->_pageComponent = array();
         $this->_pageHome = array();
         if (isset($this->_settings['model'])) {
-            $rows = $this->_getModel()->fetchAll(null, 'pos')->toArray();
+            $select = $this->_getModel()->select()->order('pos');
+            foreach ($this->_getInitWhere() as $key => $val) {
+                $select->whereEquals($key, $val);
+            }
+            $rows = $this->_getModel()->fetchAll($select)->toArray();
         } else {
             $select = new Zend_Db_Select(Vps_Registry::get('db'));
             $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
                                         'filename', 'hide', 'category', 'domain', 'name', 'is_home', 'tags'));
             $select->order('pos');
+            foreach ($this->_getInitWhere() as $key => $val) {
+                $select->where("$key = ?", $val);
+            }
             $rows = $select->query()->fetchAll();
         }
         foreach ($rows as $row) {
@@ -50,6 +57,11 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             $this->_pageDomain[$domain][] = $row['id'];
             if ($row['is_home']) $this->_pageHome[$domain] = $row['id'];
         }
+    }
+
+    protected function _getInitWhere()
+    {
+        return array();
     }
 
     protected function _formatSelectFilename(Vps_Component_Select $select)
@@ -195,9 +207,10 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
                 }
                 $parentData = Vps_Component_Data_Root::getInstance()
                                     ->getComponentById($page['parent_id'], $c);
-                if (!$parentData) return null;
             }
         }
+        if (!$parentData) return null;
+        //if ($parentData->componentClass != $this->_class) return null;
         return parent::_createData($parentData, $id, $select);
     }
 

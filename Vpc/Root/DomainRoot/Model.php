@@ -2,7 +2,7 @@
 class Vpc_Root_DomainRoot_Model extends Vps_Model_Data_Abstract
 {
     private $_domains;
-    protected $_columns = array('id', 'name', 'domain');
+    protected $_columns = array('id', 'name', 'domain', 'component');
 
     public function __construct($config = array())
     {
@@ -18,7 +18,7 @@ class Vpc_Root_DomainRoot_Model extends Vps_Model_Data_Abstract
     {
         $this->_data = array();
         foreach ($this->_domains as $key => $val) {
-            $this->_data[] = array('id' => $key, 'name' => $val['name'], 'domain' => $val['domain']);
+            $this->_data[] = array('id' => $key, 'name' => $val['name'], 'domain' => $val['domain'], 'component' => $key);
         }
         parent::_init();
     }

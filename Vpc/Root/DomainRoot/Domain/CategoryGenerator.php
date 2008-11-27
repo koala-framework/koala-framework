@@ -3,6 +3,9 @@ class Vpc_Root_DomainRoot_Domain_CategoryGenerator extends Vpc_Root_CategoryGene
 {
     protected function _getParentDataByRow($row)
     {
+        p($row);
+        $root = Vps_Component_Data_Root::getInstance()->getChildComponents();
+
         throw new Vps_Exception('Not supported, do you really need it?');
     }
 }

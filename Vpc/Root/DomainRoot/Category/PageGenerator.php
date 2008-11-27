@@ -18,6 +18,19 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
         return $pageIds;
     }
 
+    protected function _getInitWhere()
+    {
+        $components = Vps_Component_Data_Root::getInstance()->getChildComponents();
+        $domain = null;
+        foreach ($components as $component) {
+            $generators = Vpc_Abstract::getSetting($component->componentClass, 'generators');
+            foreach ($generators as $generator) {
+                if ($generator['component'] == $this->_class) $domain = $component->row->id;
+            }
+        }
+        return array('domain' => $domain);
+    }
+
     protected function _getPageIdHome($parentData)
     {
         $domain = $parentData->parent->row->id;
@@ -42,8 +55,10 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
 
     protected function _getParentDataByRow($row)
     {
-        return Vps_Component_Data_Root::getInstance()
+        $parentData = Vps_Component_Data_Root::getInstance()
             ->getChildComponent('-' . $row['domain'])
             ->getChildComponent('-' . $row['category']);
+        if ($parentData->componentClass != $this->_class) return null;
+        return $parentData;
     }
 }
