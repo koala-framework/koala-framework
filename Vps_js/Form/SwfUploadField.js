@@ -76,6 +76,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         });
 
         if (Ext.isLinux) return;
+        return; // Flash Uploader deaktiviert
         if (this.allowOnlyImages) {
             fileTypes = '*.jpg;*.jpeg;*.gif;*.png';
             fileTypesDescription = 'Web Image Files';
