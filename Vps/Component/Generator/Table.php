@@ -81,8 +81,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $parentData = $this->_getParentDataByRow($row);
             if (!$parentData) return null; //siehe Vps_Component_Generator_GetComponentByClassWithComponentId_Test
             if ($parentData->componentClass != $this->_class) {
-                //d($this);
-                p(get_class($this));
                 throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$parentData->componentClass}' instead of '$this->_class'");
             }
         }
