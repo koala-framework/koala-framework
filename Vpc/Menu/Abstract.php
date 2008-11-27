@@ -28,11 +28,15 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                 $level = $this->_getSetting('level');
             }
             if (is_string($level)) {
-                $category = Vps_Component_Data_Root::getInstance()
-                     ->getComponentByClass('Vpc_Root_Category_Component', array('id' => '-'.$level));
-                if (!$category) {
-                    throw new Vps_Exception("Category-Component '$level' not found");
+                $component = $this->getData()->parent;
+                while ($component &&
+                    !is_instance_of($component->componentClass, 'Vpc_Root_Category_Component')
+                ) {
+                    $component = $component->parent;
                 }
+                if (!$component) throw new Vps_Exception("Category-Generator not found");
+                $category = $component->parent->getChildComponent('-' . $level);
+                if (!$category) throw new Vps_Exception("Category-Component '$level' not found");
                 $ret = $category->getChildPages($constraints);
             } else {
                 if (isset($currentPages[$level-2])) {
