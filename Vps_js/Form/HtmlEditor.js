@@ -424,7 +424,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         var a = this.getFocusElement('a');
         if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
-            var expr = new RegExp(this.component_id+'-(l|d)([0-9]+)');
+            var expr = new RegExp(this.componentId+'-(l|d)([0-9]+)');
             var m = a.href.match(expr);
             if (m) {
                 if (m[1] == 'l') {
@@ -459,10 +459,10 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         return ret;
     },
     setValue : function(v) {
-        if (v && v.component_id) {
-            this.component_id = v.component_id;
+        if (v && v.componentId) {
+            this.componentId = v.componentId;
             if (this.stylesIdPattern) {
-                var m = this.component_id.match(this.stylesIdPattern);
+                var m = this.componentId.match(this.stylesIdPattern);
                 m = m ? m[0] : null;
                 if (this.ownStylesParam != m) {
                     this.ownStylesParam = m;
@@ -477,7 +477,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 this.stylesEditorDialog.master.show();
             }
             this.stylesEditorDialog.applyBaseParams({
-                componentId: this.component_id,
+                componentId: this.componentId,
                 componentClass: this.componentClass
             });
         }
@@ -489,7 +489,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         var img = this.getFocusElement('img');
         if (img && img.tagName && img.tagName.toLowerCase() == 'img') {
             this._currentImage = img;
-            var expr = new RegExp('/media/[^/]+/'+this.component_id+'-i([0-9]+)/');
+            var expr = new RegExp('/media/[^/]+/'+this.componentId+'-i([0-9]+)/');
             var m = img.src.match(expr);
             if (m) {
                 var nr = parseInt(m[1]);
@@ -498,20 +498,20 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 this.linkDialog.un('datachange', this._insertImage, this);
                 this.linkDialog.un('datachange', this._modifyImage, this);
                 this.imageDialog.showEdit({
-                    component_id: this.component_id+'-i'+nr
+                    componentId: this.componentId+'-i'+nr
                 });
                 this.imageDialog.on('datachange', this._modifyImage, this);
                 return;
             }
         }
         Ext.Ajax.request({
-            params: {component_id: this.component_id},
+            params: {componentId: this.componentId},
             url: this.controllerUrl+'/json-add-image',
             success: function(response, options, r) {
                 this.linkDialog.un('datachange', this._insertImage, this);
                 this.linkDialog.un('datachange', this._modifyImage, this);
                 this.imageDialog.showEdit({
-                    component_id: r.component_id
+                    componentId: r.componentId
                 });
                 this.imageDialog.on('datachange', this._insertImage, this);
             },
@@ -535,7 +535,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         var a = this.getFocusElement('a');
         if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
-            var expr = new RegExp(this.component_id+'-l([0-9]+)');
+            var expr = new RegExp(this.componentId+'-l([0-9]+)');
             var m = a.href.match(expr);
             if (m) {
                 var nr = parseInt(m[1]);
@@ -543,18 +543,18 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             if (nr) {
                 this.linkDialog.un('datachange', this._insertLink, this);
                 this.linkDialog.showEdit({
-                    component_id: this.component_id+'-l'+nr
+                    componentId: this.componentId+'-l'+nr
                 });
                 return;
             }
         }
         Ext.Ajax.request({
-            params: {component_id: this.component_id},
+            params: {componentId: this.componentId},
             url: this.controllerUrl+'/json-add-link',
             success: function(response, options, r) {
                 this.linkDialog.un('datachange', this._insertLink, this);
                 this.linkDialog.showEdit({
-                    component_id: r.component_id
+                    componentId: r.componentId
                 });
                 this.linkDialog.on('datachange', this._insertLink, this, { single: true });
             },
@@ -564,13 +564,13 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
     _insertLink : function() {
         var params = this.linkDialog.getAutoForm().getBaseParams();
-        this.relayCmd('createlink', params.component_id);
+        this.relayCmd('createlink', params.componentId);
     },
 
     createDownload: function() {
         var a = this.getFocusElement('a');
         if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
-            var expr = new RegExp(this.component_id+'-d([0-9]+)');
+            var expr = new RegExp(this.componentId+'-d([0-9]+)');
             var m = a.href.match(expr);
             if (m) {
                 var nr = parseInt(m[1]);
@@ -578,18 +578,18 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             if (nr) {
                 this.downloadDialog.un('datachange', this._insertDownloadLink, this);
                 this.downloadDialog.showEdit({
-                    component_id: this.component_id+'-d'+nr
+                    componentId: this.componentId+'-d'+nr
                 });
                 return;
             }
         }
         Ext.Ajax.request({
-            params: {component_id: this.component_id},
+            params: {componentId: this.componentId},
             url: this.controllerUrl+'/json-add-download',
             success: function(response, options, r) {
                 this.downloadDialog.un('datachange', this._insertDownloadLink, this);
                 this.downloadDialog.showEdit({
-                    component_id: r.component_id
+                    componentId: r.componentId
                 });
                 this.downloadDialog.on('datachange', this._insertDownloadLink, this, { single: true });
             },
@@ -599,7 +599,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
     _insertDownloadLink : function() {
         var params = this.downloadDialog.getAutoForm().getBaseParams();
-        this.relayCmd('createlink', params.component_id);
+        this.relayCmd('createlink', params.componentId);
     },
 
     insertChar: function()
@@ -652,7 +652,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         Ext.Ajax.request({
             url: this.controllerUrl+'/json-tidy-html',
             params: {
-                component_id: this.component_id,
+                componentId: this.componentId,
                 html: this.getValue()
             },
             success: function(response, options, r) {
@@ -829,7 +829,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         reloadCss.call(this, this.doc);
         Ext.Ajax.request({
             params: {
-                componentId: this.component_id
+                componentId: this.componentId
             },
             url: this.controllerUrl+'/json-styles',
             success: function(response, options, result) {
