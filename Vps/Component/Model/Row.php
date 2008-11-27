@@ -2,7 +2,7 @@
 class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
 {
     protected $_data;
-    
+
     public function __construct(array $config)
     {
         $this->_data = $config['data'];
@@ -67,7 +67,8 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function delete()
     {
         $this->_beforeDelete();
-        $this->_data->row->delete();
+        $m = new Vps_Dao_Pages();
+        $m->find($this->_data->row->id)->current()->delete();
         $this->_afterDelete();
     }
 

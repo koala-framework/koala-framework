@@ -40,7 +40,7 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
         }
     }
 
-    protected function _createParentDataByRow($row)
+    protected function _getParentDataByRow($row)
     {
         return Vps_Component_Data_Root::getInstance()
             ->getChildComponent('-' . $row['domain'])

@@ -187,7 +187,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
 
         if (!$parentData || ($parentData->componentClass == $this->_class && $page['parent_id'])) {
             if (!$page['parent_id']) {
-                $parentData = $this->_createParentDataByRow($page);
+                $parentData = $this->_getParentDataByRow($page);
             } else {
                 $c = array();
                 if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
@@ -201,7 +201,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         return parent::_createData($parentData, $id, $select);
     }
 
-    protected function _createParentDataByRow($row)
+    protected function _getParentDataByRow($row)
     {
         return Vps_Component_Data_Root::getInstance();
     }

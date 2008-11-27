@@ -16,7 +16,7 @@ class Vpc_Root_Category_PageGenerator extends Vps_Component_Generator_Page
         return $pageIds;
     }
 
-    protected function _createParentDataByRow($row)
+    protected function _getParentDataByRow($row)
     {
         return Vps_Component_Data_Root::getInstance()->getChildComponent('-' . $row['category']);
     }
