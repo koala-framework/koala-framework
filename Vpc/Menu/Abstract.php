@@ -34,8 +34,20 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                 ) {
                     $component = $component->parent;
                 }
-                if (!$component) throw new Vps_Exception("Category-Generator not found");
-                $category = $component->parent->getChildComponent('-' . $level);
+                $category = null;
+                if (!$component) {
+                    //wenn seite nicht _unter_ einer kategorie anders suchen
+                    $component = $this->getData()->parent;
+                    while ($component && !$category) {
+                        $component = $component->parent;
+                        $category = $component->getChildComponent('-' . $level);
+                        if ($category && !is_instance_of($category->componentClass, 'Vpc_Root_Category_Component')) {
+                            $category = false;
+                        }
+                    }
+                } else {
+                    $category = $component->parent->getChildComponent('-' . $level);
+                }
                 if (!$category) throw new Vps_Exception("Category-Component '$level' not found");
                 $ret = $category->getChildPages($constraints);
             } else {
