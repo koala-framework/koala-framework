@@ -194,7 +194,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Properties of selected Page'),
                 handler : function () {
-                    this.editDialog.getAutoForm().setBaseParams({});
+                    this.editDialog.getAutoForm().setBaseParams();
                     this.editDialog.showEdit(this.treePanel.tree.selModel.selNode.id);
                 },
                 icon    : '/assets/silkicons/page_gear.png',
@@ -206,7 +206,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 text    : trlVps('Add new Subpage'),
                 handler : function () {
                     this.editDialog.getAutoForm().setBaseParams({
-                        parent_id: this.treePanel.tree.selModel.selNode.id
+                        parent_id: this.treePanel.tree.selModel.selNode.id,
+                        domain: this.treePanel.tree.selModel.selNode.attributes.domain
                     });
                     this.editDialog.showAdd();
                 },

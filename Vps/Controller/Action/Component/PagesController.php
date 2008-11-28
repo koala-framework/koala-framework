@@ -42,16 +42,25 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['bIcon'] = $this->_icons['root']->__toString();
             $data['expanded'] = true;
             $data['type'] = 'root';
+            $data['domain'] = null;
         }
         if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_Category_Component')) {
             $data['bIcon'] = $this->_icons['folder']->__toString();
             $data['expanded'] = true;
             $data['type'] = 'category';
+            $domain = null;
+            $domainComponent = $row->getData()->parent;
+            if ($domainComponent) $domain = $row->getData()->parent->row->id;
+            $data['domain'] = $domain;
         }
         if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_DomainRoot_Domain_Component')) {
             $data['bIcon'] = $this->_icons['domain']->__toString();
             $data['expanded'] = true;
             $data['type'] = 'root';
+            $data['domain'] = null;
+        }
+        if (!array_key_exists('domain', $data)) {
+            $data['domain'] = $row->getData()->row->domain;
         }
         $data['uiProvider'] = 'Vps.Component.PagesNode';
 
