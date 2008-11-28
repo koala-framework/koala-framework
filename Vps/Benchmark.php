@@ -86,6 +86,7 @@ class Vps_Benchmark
 
     public static function output()
     {
+        if (isset($_COOKIE['unitTest'])) return;
         if (!self::$_enabled) return;
         if (PHP_SAPI != 'cli') {
             echo '<div style="text-align:left;position:absolute;top:0;right:0;z-index:1;width:200px">';
@@ -163,71 +164,43 @@ class Vps_Benchmark
     public static function shutDown()
     {
         if (!self::$_logEnabled) return;
-        $fields = false;
-        $newFile = true;
-        if (file_exists('benchmark')) {
-            $newFile = false;
-            $fp = fopen('benchmark', 'r');
-            $fields = fgetcsv($fp, 1024, ';');
-            fclose($fp);
+
+        static $wasCalled = false;
+        if ($wasCalled) return;
+        $wasCalled = true;
+
+        $memcache = new Memcache;
+        $memcache->addServer('localhost');
+        $prefix = Zend_Registry::get('config')->application->id.'-'.
+                            Vps_Setup::getConfigSection().'-bench-';
+        if (!isset($_SERVER['REQUEST_URI'])) {
+            if (php_sapi_name() == 'cli') $urlType == 'cli';
+            else $urlType = 'unknown';
+        } else if (substr($_SERVER['REQUEST_URI'], 0, 8) == '/assets/') {
+            $urlType = 'asset';
+        } else if (substr($_SERVER['REQUEST_URI'], 0, 7) == '/media/') {
+            $urlType = 'media';
+        } else if (substr($_SERVER['REQUEST_URI'], 0, 7) == '/admin/') {
+            $urlType = 'admin';
+        } else if (substr($_SERVER['REQUEST_URI'], 0, 5) == '/vps/') {
+            $urlType = 'admin';
+        } else {
+            $urlType = 'content';
         }
-        if ($fields) {
-            foreach (array_keys(self::$_counter) as $i) {
-                if (!in_array($i, $fields)) {
-                    $newFile = true;
-                    $fields = false;
-                    break;
-                }
+        $prefix .= $urlType.'-';
+        if (!$memcache->increment($prefix.'requests', 1)) {
+            $memcache->set($prefix.'requests', 1, 0, 0);
+        }
+        foreach (self::$_counter as $name=>$value) {
+            if (is_array($value)) $value = count($value);
+            if (!$memcache->increment($prefix.$name, $value)) {
+                $memcache->set($prefix.$name, $value, 0, 0);
             }
         }
-        if (!$fields) {
-            $fields = array('date', 'url', 'ip', 'useragent', 'load', 'duration', 'memory', 'queries');
-            foreach (self::$_counter as $k=>$i) {
-                $fields[] = $k;
-            }
+        $value = (int)((microtime(true) - self::$_startTime)*1000);
+        if (!$memcache->increment($prefix.'duration', $value)) {
+            $memcache->set($prefix.'duration', $value, 0, 0);
         }
-        $fp = fopen('benchmark', $newFile ? 'w' : 'a');
-        if ($newFile) {
-            fwrite($fp, implode(';', $fields)."\n");
-        }
-        $out = array();
-        foreach ($fields as $i) {
-            if ($i == 'ip') {
-                $out[] = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-            } else if ($i == 'useragent') {
-                $out[] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-            } else if ($i == 'date') {
-                $out[] = date('Y-m-d H:i:s');
-            } else if ($i == 'url') {
-                $out[] = $_SERVER['REQUEST_URI'];
-            } else if ($i == 'load') {
-                $load = @file_get_contents('/proc/loadavg');
-                $load = explode(' ', $load);
-                if (isset($load[0])) {
-                    $out[] = $load[0];
-                } else {
-                    $out[] = '';
-                }
-            } else if ($i == 'duration') {
-                $out[] = round(microtime(true) - self::$_startTime, 2);
-            } else if ($i == 'memory') {
-                if (function_exists('memory_get_peak_usage')) {
-                    $out[] = round(memory_get_peak_usage()/1024);
-                } else {
-                    $out[] = round(memory_get_usage()/1024);
-                }
-            } else if ($i == 'queries') {
-                //$out[] = Vps_Db_Profiler::getCount();
-            } else if (!isset(self::$_counter[$i])) {
-                $out[] = 0;
-            } else if (is_array(self::$_counter[$i])) {
-                $out[] = count(self::$_counter[$i]);
-            } else {
-                $out[] = self::$_counter[$i];
-            }
-        }
-        fwrite($fp, implode(';', $out)."\n");
-        fclose($fp);
     }
 
 }

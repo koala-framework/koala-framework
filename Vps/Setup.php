@@ -289,6 +289,7 @@ class Vps_Setup
         if (Zend_Registry::get('config')->debug->querylog && !isset($_SERVER['SHELL'])) {
             header('X-Vps-DbQueries: '.Vps_Db_Profiler::getCount());
         }
+        Vps_Benchmark::shutDown();
     }
 
     public static function createDb()
@@ -400,7 +401,6 @@ class Vps_Setup
             $root->setCurrentPage($data);
             if ($data->url != $_SERVER['REDIRECT_URL']) {
                 header('Location: '.$data->url);
-                Vps_Benchmark::shutDown();
                 exit;
             }
             $page = $data->getComponent();
@@ -413,8 +413,6 @@ class Vps_Setup
             if ($page instanceof Vpc_Abstract_Feed_Component) {
                 echo "-->";
             }
-            Vps_Benchmark::shutDown();
-
             exit;
         }
     }
