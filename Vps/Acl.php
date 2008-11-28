@@ -23,7 +23,7 @@ class Vps_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('vps_debug_sql'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_debug_assets'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_debug_activate'), 'vps_debug');
-        $this->add(new Zend_Acl_Resource('vps_debug_sessionrestart'), 'vps_debug');
+        $this->add(new Zend_Acl_Resource('vps_debug_session-restart'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_media_upload'));
         $this->add(new Zend_Acl_Resource('vps_test'));
         $this->add(new Zend_Acl_Resource('edit_role'));
