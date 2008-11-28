@@ -202,8 +202,6 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         if (!$this->_getParam('end')) throw new Vps_ClientException("end not specified");
         $start = strtotime($this->_getParam('start'));
         $end = strtotime($this->_getParam('end'));
-        $start = mktime(19, 0, 0, 11, 27);
-        $end = mktime(9, 0, 0, 11, 28);
 
         foreach (self::getGraphs() as $gName=>$graph) {
             echo "benchmark-$gName.png\n";
