@@ -124,10 +124,12 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
                 $insert = true;
             }
 
-
             if ($insert) {
                 $sessionFormId = new Zend_Session_Namespace('avoid_reinsert_id');
-                if (isset($sessionFormId->avoid[$this->_getParam('avoid_reinsert_id')])) {
+
+                if ($this->_getParam('avoid_reinsert_id') &&
+                    isset($sessionFormId->avoid[$this->_getParam('avoid_reinsert_id')])
+                ) {
                     $skip = true;
                 }
                 if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {

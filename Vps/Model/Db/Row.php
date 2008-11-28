@@ -59,8 +59,6 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
 
     public function save()
     {
-        parent::save();
-
         $insert =
             !is_array($this->_getPrimaryKey())
             && !$this->{$this->_getPrimaryKey()};
@@ -78,6 +76,8 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
             $this->_afterUpdate();
         }
         $this->_afterSave();
+
+        parent::save();
         return $ret;
     }
 

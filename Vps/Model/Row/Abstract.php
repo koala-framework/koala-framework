@@ -51,7 +51,10 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
                     $r = $m->getRowBySiblingRow($this);
                 } else {
                     $ref = $m->getReferenceByModelClass(get_class($this->_model), $k);
-                    $r = $m->getRow(array('equals'=>array($ref['column']=>$this->{$this->_getPrimaryKey()})));
+                    $r = null;
+                    if ($this->{$this->_getPrimaryKey()}) {
+                        $r = $m->getRow(array('equals'=>array($ref['column']=>$this->{$this->_getPrimaryKey()})));
+                    }
                     if (!$r) {
                         $r = $m->createRow();
                         $r->{$ref['column']} = $this->{$this->_getPrimaryKey()};
@@ -121,7 +124,13 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
 
     public function save()
     {
-        foreach ($this->_getSiblingRows() as $r) {
+        foreach ($this->_getSiblingRows() as $k=>$r) {
+            if (!$r->getModel() instanceof Vps_Model_SubModel_Interface) {
+                $ref = $r->getModel()->getReferenceByModelClass(get_class($this->_model), $k);
+                if (!$r->{$ref['column']}) {
+                    $r->{$ref['column']} = $this->{$this->_getPrimaryKey()};
+                }
+            }
             $r->save();
         }
         return null;
@@ -129,11 +138,6 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
 
     protected function _postInsert()
     {
-        foreach ($this->_getSiblingRows() as $r) {
-            $ref = $r->getModel()->getReferenceByModelClass(get_class($this->_model));
-            $r->{$ref['column']} = $value;
-            $r->save();
-        }
     }
 
     public function delete()

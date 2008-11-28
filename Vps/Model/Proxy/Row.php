@@ -47,8 +47,6 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
 
     public function save()
     {
-        parent::save();
-
         $id = $this->{$this->_getPrimaryKey()};
         if (!$id) {
             $this->_beforeInsert();
@@ -63,6 +61,7 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
             $this->_afterUpdate();
         }
         $this->_afterSave();
+        parent::save();
         return $ret;
     }
 
