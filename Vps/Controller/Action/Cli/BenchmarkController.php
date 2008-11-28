@@ -158,6 +158,24 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                     'color' => '#00FF00',
                     'label' => 'hit'
                 ),
+            ),
+            'memcacheHits' => array(
+                'verticalLabel' => 'accesses',
+                'getHits' => array(
+                    'color' => '#00FF00',
+                ),
+                'getHits' => array(
+                    'color' => '#FF0000',
+                ),
+            ),
+            'memcacheBytes' => array(
+                'verticalLabel' => '[bytes]',
+                'bytesRead' => array(
+                    'color' => '#00FF00',
+                ),
+                'bytesWritten' => array(
+                    'color' => '#FF0000',
+                ),
             )
         );
         return $graphs;
@@ -170,8 +188,13 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
             $cmd = "rrdtool create benchmark.rrd ";
             $cmd .= "--start ".(time()-1)." ";
             $cmd .= "--step ".($interval)." ";
+            $cmd .= "DS:load:ABSOLUTE:".($interval*2).":0:1000 ";
+            $cmd .= "DS:bytesRead:COUNTER:".($interval*2).":0:".(2^64)." ";
+            $cmd .= "DS:bytesWritten:COUNTER:".($interval*2).":0:".(2^64)." ";
+            $cmd .= "DS:getHits:COUNTER:".($interval*2).":0:".(2^31)." ";
+            $cmd .= "DS:getMisses:COUNTER:".($interval*2).":0:".(2^31)." ";
             foreach ($this->_getFields() as $field) {
-                $cmd .= "DS:".self::_escapeField($field).":COUNTER:".($interval*2).":0:2147483648 ";
+                $cmd .= "DS:".self::_escapeField($field).":COUNTER:".($interval*2).":0:".(2^31)." ";
             }
             $cmd .= "RRA:AVERAGE:0.6:1:2016 "; //1 woche
             $cmd .= "RRA:AVERAGE:0.6:7:1500 "; //1 Monat
@@ -180,12 +203,19 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         }
 
         $values = array();
+        $load = @file_get_contents('/proc/loadavg');
+        $load = explode(' ', $load);
+        $values[] = $load[0];
+        $memcache = new Memcache;
+        $memcache->addServer('localhost');
+        $stats = $memcache->getStats();
+        $values[] = $stats['bytes_read'];
+        $values[] = $stats['bytes_written'];
+        $values[] = $stats['get_hits'];
+        $values[] = $stats['get_misses'];
+        $prefix = Zend_Registry::get('config')->application->id.'-'.
+                            Vps_Setup::getConfigSection().'-bench-';
         foreach ($this->_getFields() as $field) {
-            $memcache = new Memcache;
-            $memcache->addServer('localhost');
-
-            $prefix = Zend_Registry::get('config')->application->id.'-'.
-                                Vps_Setup::getConfigSection().'-bench-';
             $value = $memcache->get($prefix.$field);
             if ($value===false) $value = 'U';
             $values[] = $value;
@@ -199,9 +229,12 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
     public function graphAction()
     {
         if (!$this->_getParam('start')) throw new Vps_ClientException("start not specified");
-        if (!$this->_getParam('end')) throw new Vps_ClientException("end not specified");
+        if (!$this->_getParam('end')) {
+            $end = time();
+        } else {
+            $end = strtotime($this->_getParam('end'));
+        }
         $start = strtotime($this->_getParam('start'));
-        $end = strtotime($this->_getParam('end'));
 
         foreach (self::getGraphs() as $gName=>$graph) {
             echo "benchmark-$gName.png\n";
