@@ -56,7 +56,6 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function save()
     {
-        parent::save();
         $update = isset($this->_cleanData[$this->_getPrimaryKey()]);
 
         $this->_beforeSave();
@@ -79,6 +78,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
             $this->_afterInsert();
         }
         $this->_afterSave();
+        parent::save();
 
         return $ret;
     }
