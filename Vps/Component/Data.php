@@ -47,7 +47,7 @@ class Vps_Component_Data
                     $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
                     break;
                 } else {
-                    $filenames[] = $page->filename;
+                    if ($page->filename) $filenames[] = $page->filename;
                 }
             } while ($page = $page->getParentPseudoPage());
             return '/'.implode('/', array_reverse($filenames));
