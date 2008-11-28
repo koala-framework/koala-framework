@@ -15,6 +15,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
 
         this.addEvents(
+            'beforeloadform',
             'loadform',
             'deleteaction',
             'addaction',
@@ -170,8 +171,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 if (result.data && this.getForm()) {
                     if (this.actions['delete']) this.actions['delete'].enable();
 //                     if (this.getForm()) {
+                    	this.fireEvent('beforeloadform', this.getForm(), result.data);
                         this.getForm().setValues(result.data);
-                    this.fireEvent('loadform', this.getForm(), result.data);
+                        this.fireEvent('loadform', this.getForm(), result.data);
 //todo: werte zwischenspeichern und setzen wenn form gerendered wurde?
 //erstmal auskommentiert, da das eher nach hack aussschaut und womöglich eh gar nicht gebraucht wird...
 //                     } else {

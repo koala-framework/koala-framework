@@ -90,7 +90,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $table = $this->_model->getTable();
         $row = $table->find($id)->current();
         if ($row) {
-            $oldRows = $table->fetchAll("is_home=1 AND id!='$id'");
+            $domain = $row->domain;
+            $domainWhere = $domain ? "domain='$domain'" : "ISNULL(domain)";
+            $oldRows = $table->fetchAll("is_home=1 AND id!='$id' AND $domainWhere");
             $oldId = $id;
             $oldVisible = false;
             foreach ($oldRows as $oldRow) {

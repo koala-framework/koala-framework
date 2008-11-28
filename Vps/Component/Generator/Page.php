@@ -28,18 +28,16 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         $this->_pageHome = array();
         if (isset($this->_settings['model'])) {
             $select = $this->_getModel()->select()->order('pos');
-            foreach ($this->_getInitWhere() as $key => $val) {
-                $select->whereEquals($key, $val);
-            }
+            $domain = $this->getDomain();
+            if ($domain) $select->whereEquals("domain", $domain);
             $rows = $this->_getModel()->fetchAll($select)->toArray();
         } else {
             $select = new Zend_Db_Select(Vps_Registry::get('db'));
             $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
                                         'filename', 'hide', 'category', 'domain', 'name', 'is_home', 'tags'));
             $select->order('pos');
-            foreach ($this->_getInitWhere() as $key => $val) {
-                $select->where("$key = ?", $val);
-            }
+            $domain = $this->getDomain();
+            if ($domain) $select->where("domain = ?", $domain);
             $rows = $select->query()->fetchAll();
         }
         foreach ($rows as $row) {
@@ -57,6 +55,10 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             $this->_pageDomain[$domain][] = $row['id'];
             if ($row['is_home']) $this->_pageHome[$domain] = $row['id'];
         }
+    }
+
+    public function getDomain() {
+        return null;
     }
 
     protected function _getInitWhere()
