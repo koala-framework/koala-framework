@@ -61,7 +61,7 @@ class Vps_Acl extends Zend_Acl
         $this->allow(null, 'vps_media_upload');
         $this->allow('admin', 'edit_role');
         $this->allow(null, 'vps_spam_set');
-        $this->allow(null, 'vps_debug_sessionrestart');
+        $this->allow(null, 'vps_debug_session-restart');
         $this->allow(null, 'vps_test');
     }
 
