@@ -166,16 +166,16 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
     public function recordAction()
     {
         if (!file_exists('benchmark.rrd')) {
-            $interval = 5*60;
+            $interval = 60;
             $cmd = "rrdtool create benchmark.rrd ";
             $cmd .= "--start ".(time()-1)." ";
             $cmd .= "--step ".($interval)." ";
             foreach ($this->_getFields() as $field) {
                 $cmd .= "DS:".self::_escapeField($field).":COUNTER:".($interval*2).":0:2147483648 ";
             }
-            $cmd .= "RRA:AVERAGE:0.5:1:2016 "; //1 woche
-            $cmd .= "RRA:AVERAGE:0.5:7:1500 "; //1 Monat
-            $cmd .= "RRA:AVERAGE:0.5:50:2500 "; //1 Jahr
+            $cmd .= "RRA:AVERAGE:0.6:1:2016 "; //1 woche
+            $cmd .= "RRA:AVERAGE:0.6:7:1500 "; //1 Monat
+            $cmd .= "RRA:AVERAGE:0.6:50:2500 "; //1 Jahr
             $this->_systemCheckRet($cmd);
         }
 
