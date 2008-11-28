@@ -19,32 +19,27 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
         }
         return Vps_Registry::get('acl')->getComponentAcl()
             ->isAllowed($this->_getAuthData(), $c);
+        return true;
     }
 
     protected function _initFields()
     {
-        $types = array();
-        $generators = Vps_Component_Data_Root::getInstance()->getPageGenerators();
-        $classes = array();
-        foreach ($generators as $generator) {
-            $classes = array_merge($classes, $generator->getChildComponentClasses());
-        }
-        foreach ($classes as $component=>$class) {
-            $name = Vpc_Abstract::getSetting($class, 'componentName');
-            if ($name) {
-                $name = str_replace('.', ' ', $name);
-                $types[$component] = $name;
-            }
+        $model = new Vps_Component_ComponentModel();
+        $data = array();
+        foreach ($model->getRows() as $d) {
+            $data[] = array($d->id, $d->name, $d->domain);
         }
 
         $fields = $this->_form->fields;
         $fields->add(new Vps_Form_Field_TextField('name', trlVps('Name of Page')))
             ->setAllowBlank(false);
         $fields->add(new Vps_Form_Field_Select('component',  trlVps('Pagetype')))
-            ->setValues($types)
+            ->setStore(array('data' => $data, 'fields' => array('id', 'name', 'domain')))
+            ->setTpl('<tpl for="."><div class="x-combo-list-item">{name}</div></tpl>')
             ->setAllowBlank(false);
         $fields->add(new Vps_Form_Field_Checkbox('hide',  trlVps('Hide in Menu')));
         $fields->add(new Vps_Form_Field_TextField('tags', trlVps('Tags')));
+        $fields->add(new Vps_Form_Field_LoadData('domain'));
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
