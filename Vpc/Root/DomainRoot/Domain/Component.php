@@ -9,6 +9,7 @@ class Vpc_Root_DomainRoot_Domain_Component extends Vpc_Abstract
             'component' => 'Vpc_Root_DomainRoot_Category_Component',
             'model' => 'Vpc_Root_CategoryModel'
         );
+        $ret['dataClass'] = 'Vpc_Root_DomainRoot_Domain_Data';
         $ret['componentName'] = trlVps('Domain');
         return $ret;
     }
