@@ -45,6 +45,7 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
         if (is_numeric($this->_getParam('parent_id'))) {
+            $row->domain = $this->_getParam('domain');
             $row->parent_id = $this->_getParam('parent_id');
         } else {
             preg_match('#^root-([^-]+)-?([^-]*)$#', $this->_getParam('parent_id'), $m);
