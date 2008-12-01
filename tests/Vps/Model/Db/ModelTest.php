@@ -221,4 +221,10 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
         $row = $this->_model->createRow();
         $this->assertEquals('defaultFoo', $row->foo);
     }
+
+    public function testIsSet()
+    {
+        $row = $this->_model->createRow();
+        $this->assertTrue(isset($row->bar));
+    }
 }
