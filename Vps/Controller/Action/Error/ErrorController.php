@@ -33,7 +33,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         $errors = $this->getRequest()->getParam('error_handler');
         $exception = $errors->exception;
         if (!$exception instanceof Vps_ExceptionNoMail) {
-            $exception = new Vps_ExceptionOther($exception);
+            $exception = new Vps_Exception_Other($exception);
         }
         if ($exception instanceof Vps_ClientException) {
             $this->view->error = $exception->getMessage();
