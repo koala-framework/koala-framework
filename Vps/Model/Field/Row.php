@@ -16,10 +16,32 @@ class Vps_Model_Field_Row extends Vps_Model_Row_Data_Abstract
         return $this->_siblingRow;
     }
 
+    protected function _beforeSaveSiblingMaster()
+    {
+        parent::_beforeSaveSiblingMaster();
+        $this->_siblingRow->{$this->_fieldName} = serialize($this->_data);
+    }
+
     public function save()
     {
+        $update = isset($this->_cleanData[$this->_getPrimaryKey()]);
+
+        $this->_beforeSaveSiblingMaster();
+        $this->_beforeSave();
+        if ($update) {
+            $this->_beforeUpdate();
+        } else {
+            $this->_beforeInsert();
+        }
+
         Vps_Model_Row_Abstract::save();
-        $this->_siblingRow->{$this->_fieldName} = serialize($this->_data);
+
+        if ($update) {
+            $this->_afterUpdate();
+        } else {
+            $this->_afterInsert();
+        }
+        $this->_afterSave();
     }
 
     public function delete()
