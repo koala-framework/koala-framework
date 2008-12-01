@@ -8,8 +8,7 @@ class Vps_Crm_Customer_ContactpersonsController extends Vps_Controller_Action_Au
 
     public function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column_Button('info', 'Info', 30))
-                ->setButtonIcon('/assets/silkicons/pencil.png');
+        $this->_columns->add(new Vps_Grid_Column_Button('edit'));
 
         $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('Firstname'), 100));
         $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Lastname'), 100));
