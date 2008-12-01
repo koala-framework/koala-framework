@@ -174,7 +174,7 @@ class Vps_Benchmark
         $prefix = Zend_Registry::get('config')->application->id.'-'.
                             Vps_Setup::getConfigSection().'-bench-';
         if (!isset($_SERVER['REQUEST_URI'])) {
-            if (php_sapi_name() == 'cli') $urlType == 'cli';
+            if (php_sapi_name() == 'cli') $urlType = 'cli';
             else $urlType = 'unknown';
         } else if (substr($_SERVER['REQUEST_URI'], 0, 8) == '/assets/') {
             $urlType = 'asset';
