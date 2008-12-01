@@ -43,7 +43,7 @@ class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
         // Nicht-Vps_Exception mit Mail
         Zend_Registry::get('config')->debug->errormail = 'foo';
         $e = new Zend_Exception();
-        $exception = new Vps_ExceptionOther($e);
+        $exception = new Vps_Exception_Other($e);
         $mail = $this->getMock('Zend_Mail', array('send'));
         $mail->expects($this->once())->method('send');
         $exception->setMail($mail);
@@ -57,17 +57,17 @@ class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($view->template, 'error.tpl');
         Zend_Registry::get('config')->debug->errormail = false;
 
-        // Vps_ExceptionNoMail mit Debug
+        // Vps_Exception_NoMail mit Debug
         Zend_Registry::get('config')->debug->errormail = 'foo';
-        $exception = new Vps_ExceptionNoMail();
+        $exception = new Vps_Exception_NoMail();
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
         $this->assertFalse($view->debug);
         Zend_Registry::get('config')->debug->errormail = false;
         $this->assertEquals($view->template, 'error.tpl');
 
-        // Vps_ExceptionNoMail ohne Debug
-        $exception = new Vps_ExceptionNoMail();
+        // Vps_Exception_NoMail ohne Debug
+        $exception = new Vps_Exception_NoMail();
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
         $this->assertTrue($view->debug);

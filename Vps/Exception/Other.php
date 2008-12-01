@@ -1,5 +1,5 @@
 <?php
-class Vps_ExceptionOther extends Vps_Exception
+class Vps_Exception_Other extends Vps_Exception
 {
     private $_exception;
 
