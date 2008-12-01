@@ -56,6 +56,11 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     public function insert(Vps_Model_Row_Interface $row, $rowData)
     {
+        if ($row->{$this->getPrimaryKey()}) {
+            if ($this->getRow($row->{$this->getPrimaryKey()})) {
+                throw new Vps_Exception("Duplicate Entry for Row ".$row->{$this->getPrimaryKey()});
+            }
+        }
         $this->getData();
         if (!isset($rowData[$this->getPrimaryKey()])) {
             if (!isset($this->_autoId)) {
