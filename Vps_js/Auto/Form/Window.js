@@ -44,11 +44,11 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             onRender();
         }
 
-        var buttons = [this.getAction('save'), this.getAction('cancel')];
-		if (this.initialConfig['close']) {
+        var buttons = this.getButtons();
+        if (this.initialConfig['close']) {
             buttons = [this.getAction('close')];
-		}
-		Ext.applyIf(this, {
+        }
+        Ext.applyIf(this, {
             width: 400,
             height: 300,
             layout: 'fit',
@@ -65,6 +65,11 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         this.relayEvents(this.autoForm, ['renderform', 'datachange', 'beforeloadform', 'loadform', 'addaction']);
 
         Vps.Auto.Form.Window.superclass.initComponent.call(this);
+    },
+
+    getButtons : function ()
+    {
+        return [this.getAction('save'), this.getAction('cancel')];
     },
 
     getAction : function(type)
