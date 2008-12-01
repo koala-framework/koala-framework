@@ -52,11 +52,12 @@ class Vps_Db_TablesModel_TableFieldsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $row->default);
         $this->assertEquals('', $row->extra);
     }
+
     public function testInsertField()
     {
         $this->_db->expects($this->exactly(1))
             ->method('query')
-            ->with($this->equalTo('ALTER TABLE foo ADD new_field TEXT NOT NULL DEFAULT \'\''));
+            ->with($this->equalTo('ALTER TABLE foo ADD new_field TEXT NOT NULL'));
         $row = $this->_model->getRow('foo');
         $fieldRow = $row->createChildRow('Fields');
         $fieldRow->field = 'new_field';
@@ -77,7 +78,7 @@ class Vps_Db_TablesModel_TableFieldsTest extends PHPUnit_Framework_TestCase
             )));
         $this->_db->expects($this->exactly(1))
             ->method('query')
-            ->with($this->equalTo('ALTER TABLE foo CHANGE foo foo VARCHAR(10) NULL DEFAULT \'\''));
+            ->with($this->equalTo('ALTER TABLE foo CHANGE foo foo VARCHAR(10) NULL'));
         $row = $this->_model->getRow('foo');
         $fieldRow = $this->_model->getRow('foo')
             ->getChildRows('Fields', $this->_model->select()->whereId('foo'))
