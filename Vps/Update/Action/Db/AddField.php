@@ -22,6 +22,9 @@ class Vps_Update_Action_Db_AddField extends Vps_Update_Action_Db_Abstract
     public function update()
     {
         $table = $this->model->getRow($this->table);
+        if (!$table) {
+            throw new Vps_ClientException("Table '$this->table' not found");
+        }
         $field = $table->getChildRows('Fields', $this->model->select()
                     ->whereId($this->field))->current();
         if ($field) {
