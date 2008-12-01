@@ -12,8 +12,8 @@ class Vps_Debug
 
     public static function handleException($exception)
     {
-        if (!$exception instanceof Vps_ExceptionNoMail) {
-            $exception = new Vps_ExceptionOther($exception);
+        if (!$exception instanceof Vps_Exception_NoMail) {
+            $exception = new Vps_Exception_Other($exception);
         }
 
         $view = self::getView();
