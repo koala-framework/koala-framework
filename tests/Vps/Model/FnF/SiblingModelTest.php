@@ -47,7 +47,7 @@ class Vps_Model_FnF_SiblingModelTest extends PHPUnit_Framework_TestCase
         $row->save();
         $this->assertEquals(11, $row->master_id);
         $data = Vps_Model_Abstract::getInstance('Vps_Model_FnF_SiblingModel')->getData();
-        $this->assertEquals(11, $data[3]['master_id']);
+        $this->assertEquals(11, $data[4]['master_id']);
     }
 
     public function testAddEntryWithAutoIncrementId()
