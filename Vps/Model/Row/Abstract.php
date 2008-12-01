@@ -209,6 +209,16 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         return $ret;
     }
 
+    /**
+     * Um in Model_Field vor dem speichern den wert setzen zu können
+     */
+    protected function _beforeSaveSiblingMaster()
+    {
+        foreach ($this->_getSiblingRows() as $k=>$r) {
+            $r->_beforeSaveSiblingMaster();
+        }
+    }
+
     protected function _beforeSave()
     {
         $this->_updateFilters(false);
@@ -262,7 +272,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     {
     }
 
-    private function _updateFilters($filterAfterSave = false)
+    protected function _updateFilters($filterAfterSave = false)
     {
         if ($this->_skipFilters) return; //für saveSkipFilters
 

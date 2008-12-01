@@ -58,6 +58,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
     {
         $update = isset($this->_cleanData[$this->_getPrimaryKey()]);
 
+        $this->_beforeSaveSiblingMaster();
         $this->_beforeSave();
         if ($update) {
             $this->_beforeUpdate();
@@ -78,7 +79,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
             $this->_afterInsert();
         }
         $this->_afterSave();
-        parent::save();
+        parent::save(); //siblings nach uns speichern; damit auto-inc id vorhanden
 
         return $ret;
     }
