@@ -1,5 +1,5 @@
 <?php
-class Vps_ExceptionNoMail extends Exception
+class Vps_Exception_NoMail extends Exception
 {
     public function getHeader()
     {

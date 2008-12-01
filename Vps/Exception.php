@@ -1,5 +1,5 @@
 <?php
-class Vps_Exception extends Vps_ExceptionNoMail
+class Vps_Exception extends Vps_Exception_NoMail
 {
     private $_mail;
 
