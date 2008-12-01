@@ -139,6 +139,19 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($row->foo, 'bar');
     }
 
+    public function testDoubleCreateRow()
+    {
+        $this->setExpectedException('Vps_Exception');
+        $model = new Vps_Model_FnF(array('data'=>array(
+            array('id'=> 1, 'foo'=>'')
+        )));
+        $row = $model->createRow(array('foo' => 'hallo'));
+        $row->save();
+
+        $rowNew = $model->createRow(array('id' => 2, 'foo' => 'hallo'));
+        $rowNew->save();
+    }
+
     public function testDelete()
     {
         $model = new Vps_Model_FnF(array('data'=>array(

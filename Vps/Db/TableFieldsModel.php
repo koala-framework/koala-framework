@@ -119,13 +119,10 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
         $sql .= "{$row->field} {$row->type} ";
         $sql .= $row->null ? 'NULL ' : 'NOT NULL ';
 
-        if ($row->extra != 'auto_increment') {
-            $sql .= "DEFAULT ";
-            if (is_null($row->default)) {
-                $sql .= "NULL ";
-            } else {
-                $sql .= "'{$row->default}' ";
-            }
+        if (is_null($row->default)) {
+            $sql .= "DEFAULT NULL ";
+        } else if ($row->default) {
+            $sql .= "DEFAULT '{$row->default}' ";
         }
         $sql .= $row->extra;
         $row->getModelParentRow()->getModel()->getDb()->query(trim($sql));
@@ -143,7 +140,7 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
     public function delete(Vps_Model_Row_Interface $row)
     {
         $iId = $row->getModelParentRow()->getInternalId();
-        
+
         if (!$row->field) {
             throw new Vps_ClientException("field is required");
         }
