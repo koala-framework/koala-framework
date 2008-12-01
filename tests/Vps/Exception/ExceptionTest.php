@@ -7,7 +7,9 @@ class Vps_Exception_TestView extends Vps_View
         $this->template = $name;
     }
 }
-
+/**
+ * @group Exception
+ */
 class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
 {
     public function testExceptions()
