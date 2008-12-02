@@ -192,6 +192,9 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     public function getParentRow($rule)
     {
         $ref = $this->_model->getReference($rule);
+        if (!isset($ref['column'])) {
+            throw new Vps_Exception("column for reference '$rule' not set");
+        }
         $id = $this->{$ref['column']};
         if (!$id) return null;
         return Vps_Model_Abstract::getInstance($ref['refModelClass'])->getRow($id);
