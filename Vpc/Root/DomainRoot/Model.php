@@ -3,6 +3,7 @@ class Vpc_Root_DomainRoot_Model extends Vps_Model_Data_Abstract
 {
     private $_domains;
     protected $_columns = array('id', 'name', 'domain', 'component');
+    protected $_toStringField = 'name';
 
     public function __construct($config = array())
     {

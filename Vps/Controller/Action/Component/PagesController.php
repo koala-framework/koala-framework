@@ -11,7 +11,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         'delete' => 'page_delete',
         'folder' => 'folder',
         'home' => 'application_home',
-        'domain' => 'world',
+        'domain' => 'page_world',
+        'allowed' => 'page_white',
         'root' => 'world'
         );
     protected $_buttons = array();
@@ -38,31 +39,37 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['bIcon'] = $this->_icons['home']->__toString();
         }
         $data['type'] = 'default';
+        $data['allowed'] = Vps_Registry::get('acl')->getComponentAcl()
+            ->isAllowed(Zend_Registry::get('userModel')->getAuthedUser(), $row->getData());
+
         if ($row->componentId == 'root') {
             $data['bIcon'] = $this->_icons['root']->__toString();
             $data['expanded'] = true;
             $data['type'] = 'root';
             $data['domain'] = null;
-        }
-        if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_Category_Component')) {
+        } else if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_Category_Component')) {
             $data['bIcon'] = $this->_icons['folder']->__toString();
-            $data['expanded'] = true;
+            $data['expanded'] = $data['allowed'];
             $data['type'] = 'category';
             $domain = null;
             $domainComponent = $row->getData()->parent;
-            if ($domainComponent) $domain = $row->getData()->parent->row->id;
+            if (is_instance_of($domainComponent->componentClass, 'Vpc_Root_DomainRoot_Domain_Component'))
+                $domain = $row->getData()->parent->row->id;
             $data['domain'] = $domain;
-        }
-        if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_DomainRoot_Domain_Component')) {
+            $data['category'] = $row->getData()->row->id;
+        } else if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_DomainRoot_Domain_Component')) {
             $data['bIcon'] = $this->_icons['domain']->__toString();
-            $data['expanded'] = true;
             $data['type'] = 'root';
-            $data['domain'] = null;
-        }
-        if (!array_key_exists('domain', $data)) {
+            $data['expanded'] = $data['allowed'];
+            $data['domain'] = $row->getData()->row->id;
+        } else {
             $data['domain'] = $row->getData()->row->domain;
+            $data['category'] = $row->getData()->row->category;
         }
         $data['uiProvider'] = 'Vps.Component.PagesNode';
+        if (!$data['allowed']) {
+            $data['bIcon'] = $this->_icons['allowed']->__toString();
+        }
 
         $component = $row->getData();
         $editComponents = $component->getRecursiveChildComponents(
