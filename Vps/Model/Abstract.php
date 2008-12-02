@@ -7,6 +7,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     protected $_siblingModels = array();
     protected $_dependentModels = array();
     protected $_referenceMap = array();
+    protected $_toStringField;
     /**
      * Row-Filters für automatisch befüllte Spalten
      *
@@ -241,5 +242,10 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function fetchCount($where = array())
     {
         return $this->countRows($where);
+    }
+
+    public function getToStringField()
+    {
+        return $this->_toStringField;
     }
 }

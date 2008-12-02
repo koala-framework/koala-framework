@@ -44,4 +44,10 @@ class Vps_Model_ChildRows_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($row->getParentRow('Parent')->id, 1);
         $this->assertEquals($row->getParentRow('Parent')->foo, 'foo1');
     }
+
+    public function testToString()
+    {
+        $model = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_Model');
+        $this->assertEquals('foo1', $model->getRow('1')->__toString());
+    }
 }
