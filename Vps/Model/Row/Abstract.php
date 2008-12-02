@@ -209,6 +209,15 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         return $ret;
     }
 
+    public function __toString()
+    {
+        $field = $this->getModel()->getToStringField();
+        if ($field && isset($this->$field)) {
+            return $this->$field;
+        }
+        throw new Vps_Exception('Either override __toString() or define $_toStringFieldname in Model');
+    }
+
     /**
      * Um in Model_Field vor dem speichern den wert setzen zu können
      */
