@@ -91,15 +91,17 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }, this);
 
         tree.on('dblclick', function (o, e) {
-			var action;
-            for (var i in this.editActions) {
-                if (!this.editActions[i].isHidden()) {
-                    action = this.editActions[i];
-                }
-            }
-			if (action) {
-                this.editActions[i].execute(this.editActions[i].initialConfig);
-			}
+        	if (o.attributes.allowed) {
+				var action;
+	            for (var i in this.editActions) {
+	                if (!this.editActions[i].isHidden()) {
+	                    action = this.editActions[i];
+	                }
+	            }
+				if (action) {
+					action.execute(action.initialConfig);
+				}
+        	}
         }, this);
     },
 
@@ -109,7 +111,13 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             for (var i in this.editActions) {
                 this.editActions[i].hide();
             }
-            if (node.attributes.type != 'default') {
+            if (!node.attributes.allowed) {
+            	this.pageButton.disable();
+            } else {
+            	this.pageButton.enable();
+            }
+            	
+            if (node.attributes.type != 'default' || !node.attributes.allowed) {
                 this.getAction('properties').disable();
                 this.getAction('delete').disable();
                 this.getAction('visible').disable();
@@ -124,7 +132,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('add').enable();
                 this.getAction('preview').enable();
             }
-			if (node.attributes.type == 'category') {
+			if (node.attributes.type == 'category' && node.attributes.allowed) {
 				this.getAction('add').enable();
 			}
             node.attributes.data.editComponents.each(function(component) {
@@ -147,6 +155,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                         icon    : component.componentIcon,
                         cls     : 'x-btn-text-icon',
                         scope   : this,
+                        disabled : !node.attributes.allowed,
                         componentClass: component.componentClass
                     });
                     this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
@@ -207,7 +216,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 handler : function () {
                     this.editDialog.getAutoForm().setBaseParams({
                         parent_id: this.treePanel.tree.selModel.selNode.id,
-                        domain: this.treePanel.tree.selModel.selNode.attributes.domain
+                        domain: this.treePanel.tree.selModel.selNode.attributes.domain,
+                        category: this.treePanel.tree.selModel.selNode.attributes.category
                     });
                     this.editDialog.showAdd();
                 },

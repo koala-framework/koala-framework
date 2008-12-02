@@ -51,6 +51,8 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
             $this->_beforeInsert();
             $row = $m->createRow();
         }
+        $row->parent_id = $this->parent_id;
+        $row->pos = $this->pos;
         $row->visible = $this->visible;
         $row->name = $this->name;
         $row->is_home = $this->is_home;
