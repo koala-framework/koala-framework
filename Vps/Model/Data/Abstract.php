@@ -149,6 +149,10 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             $dataKeys = $sortedDataKeys;
         }
 
+        if ($select->hasPart(Vps_Model_Select::LIMIT_OFFSET)) {
+            $limitOffset = $select->getPart(Vps_Model_Select::LIMIT_OFFSET);
+            $dataKeys = array_slice($dataKeys, $limitOffset);
+        }
         if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
             $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
             $dataKeys = array_slice($dataKeys, 0, $limitCount);
