@@ -59,6 +59,7 @@ class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
         parent::addResources($acl);
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
+
         if (count($components) > 1) {
             $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_news',
                         array('text'=>$this->_resourceName, 'icon'=>'newspaper.png')), 'vps_component_root');
@@ -67,7 +68,7 @@ class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
                         array('text'=>$c->getTitle(), 'icon'=>'newspaper.png'),
                         '/admin/component/edit/'.$c->componentClass.'?componentId='.$c->dbId), 'vpc_news');
             }
-        } else {
+        } else if (count($components) == 1) {
             $c = $components[0];
             $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
                     array('text'=>$this->_resourceName, 'icon'=>'newspaper.png'),

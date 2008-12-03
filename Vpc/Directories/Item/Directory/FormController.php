@@ -7,7 +7,7 @@ class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Actio
     public function _initFields()
     {
         $data = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByDbId($this->_getParam('componentId'));
+                        ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible' => true));
 
         $this->_form = Vpc_Abstract_Form::createChildComponentForm(
                 $data->componentClass, '-detail', $data->componentClass);
