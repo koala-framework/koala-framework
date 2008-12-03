@@ -36,7 +36,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                     $this->getResponse()->setHeader('Content-Type', 'text/javascript');
                 } else {
                     echo '<pre>';
-                    print_r($this->view->getOutput());
+                    echo $this->_jsonFormat(Zend_Json::encode($this->view->getOutput()));
                     echo '</pre>';
                     $this->setNoRender();
                 }
@@ -50,5 +50,77 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
     public function isJson()
     {
         return substr($this->getRequest()->getActionName(), 0, 4) == 'json';
+    }
+
+    private function _jsonFormat($json)
+    {
+        $tab = "  ";
+        $ret = "";
+        $indentLevel = 0;
+        $inString = false;
+
+        $len = strlen($json);
+
+        for($c = 0; $c < $len; $c++)
+        {
+            $char = $json[$c];
+            switch($char)
+            {
+                case '{':
+                case '[':
+                    if(!$inString)
+                    {
+                        $ret .= $char . "\n" . str_repeat($tab, $indentLevel+1);
+                        $indentLevel++;
+                    }
+                    else
+                    {
+                        $ret .= $char;
+                    }
+                    break;
+                case '}':
+                case ']':
+                    if(!$inString)
+                    {
+                        $indentLevel--;
+                        $ret .= "\n" . str_repeat($tab, $indentLevel) . $char;
+                    }
+                    else
+                    {
+                        $ret .= $char;
+                    }
+                    break;
+                case ',':
+                    if(!$inString)
+                    {
+                        $ret .= ",\n" . str_repeat($tab, $indentLevel);
+                    }
+                    else
+                    {
+                        $ret .= $char;
+                    }
+                    break;
+                case ':':
+                    if(!$inString)
+                    {
+                        $ret .= ": ";
+                    }
+                    else
+                    {
+                        $ret .= $char;
+                    }
+                    break;
+                case '"':
+                    if($c > 0 && $json[$c-1] != '\\')
+                    {
+                        $inString = !$inString;
+                    }
+                default:
+                    $ret .= $char;
+                    break;
+            }
+        }
+
+        return $ret;
     }
 }
