@@ -20,9 +20,12 @@ class Vpc_Root_DomainRoot_Component extends Vpc_Root_Abstract
         $setting = $this->_getSetting('generators');
         $modelName = $setting['domain']['model'];
         $model = Vps_Model_Abstract::getInstance($modelName);
+        $row = $model->getRow($model->select()->whereEquals('domain', $host));
+        if (!$row)
+            throw new Vps_Exception("Domain $host not found, please enter in config");
         $path =
             '/' .
-            $model->getRow($model->select()->whereEquals('domain', $host))->id .
+            $row->id .
             $parsedUrl['path'];
         return $path;
     }
