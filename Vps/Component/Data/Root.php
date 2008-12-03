@@ -187,6 +187,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                         $generatorSelect = clone $select;
                     } else {
                         $generatorSelect = new Vps_Component_Select(); // Select erst bei letzten Part
+                        if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+                            $generatorSelect->ignoreVisible($select->getPart(Vps_Component_Select::IGNORE_VISIBLE));
+                        }
                     }
                     if (isset($limitCount)) {
                         $generatorSelect->limit($limitCount - count($ret));
