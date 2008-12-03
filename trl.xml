@@ -1,17 +1,9 @@
 <?xml version="1.0"?>
 <trl>
 <text>
-<id>1</id>
-</text>
-<text>
 <en>Visible</en>
 <de>Sichtbar</de>
 <id>2</id>
-</text>
-<text>
-<en>version</en>
-<de>Version</de>
-<id>3</id>
 </text>
 <text>
 <en>Copyright 2007 Vivid Planet Software GmbH</en>
@@ -24,16 +16,6 @@
 <id>5</id>
 </text>
 <text>
-<en>Errortype:</en>
-<de>Fehlertyp:</de>
-<id>6</id>
-</text>
-<text>
-<en>Message:</en>
-<de>Nachricht:</de>
-<id>7</id>
-</text>
-<text>
 <en>An Error ocurred. Please try again later.</en>
 <de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es zu einem sp&#xE4;teren Zeitpunkt noch einmal.</de>
 <id>8</id>
@@ -42,16 +24,6 @@
 <en>Page not found</en>
 <de>Seite wurde nicht gefunden.</de>
 <id>9</id>
-</text>
-<text>
-<en>Email:</en>
-<de>E-Mail:</de>
-<id>10</id>
-</text>
-<text>
-<en>Password:</en>
-<de>Passwort:</de>
-<id>11</id>
 </text>
 <text>
 <en>Lost password?</en>
@@ -86,74 +58,14 @@ wurde soeben erstellt.</de>
 <id>17</id>
 </text>
 <text>
-<en>Your email address at {0} has been changed
-from {1} to {2}</en>
-<de>Ihre E-Mail Adresse bei {0} wurde von {1} auf {2} ge&#xE4;ndert.</de>
-<id>18</id>
-</text>
-<text>
 <en>Your account at {0} has been deleted.</en>
 <de>Ihr Konto bei {0} wurde gel&#xF6;scht.</de>
 <id>19</id>
 </text>
 <text>
-<en>This email has been generated automatically. There may be no
-recipient if you answer to this email.</en>
-<de>Diese E-Mail wurde automatisch erzeugt. Es gibt keinen Empf&#xE4;nger an den eine Antwort gesendet werden kann.</de>
-<id>20</id>
-</text>
-<text>
-<en>This email has been generated using the lost password function
-at {0}</en>
-<de>Diese E-Mail wurde erzeugt durch die "Passwort vergessen"-Funktion bei {0}.</de>
-<id>21</id>
-</text>
-<text>
 <en>Please use the following link to choose yourself a new password.</en>
 <de>Bitte verwenden Sie den folgenden Link um sich selbst ein neues Passwort zu erstellen.</de>
 <id>22</id>
-</text>
-<text>
-<en>If you did not request this email you may just ignore it and
-use the login as before.</en>
-<de>Wenn Sie diese E-Mail nicht angefordert haben, k&#xF6;nnen Sie diese ignorieren und
-sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
-<id>23</id>
-</text>
-<text>
-<en>Invalid type: {0}, no such childComponent exists</en>
-<de>Falscher Typ: {0}, es existiert keine derartige Kinderkomponente ;-)</de>
-<id>24</id>
-</text>
-<text>
-<en>'name' is required in _pages array</en>
-<de>'name' ist erforderlich im _pages Array.</de>
-<id>25</id>
-</text>
-<text>
-<en>'componentClass' is required in _pages array</en>
-<de>'componentClass' ist erforderlich im _pages Array.</de>
-<id>26</id>
-</text>
-<text>
-<en>No _componentClass specified for {0}</en>
-<de>Keine _componentClass ist f&#xFC;r {0} spezifiziert.</de>
-<id>27</id>
-</text>
-<text>
-<en>ID {0} doesnt match pattern for Id: {1}</en>
-<de>ID {0} passt nicht zum Muster f&#xFC;r ID: {1}</de>
-<id>28</id>
-</text>
-<text>
-<en>Template not found for Component {0}</en>
-<de>Template f&#xFC;r Component {0} nicht gefunden.</de>
-<id>29</id>
-</text>
-<text>
-<en>ChildComponentClass {0} is not defined in settings.</en>
-<de>ChildComponentClass {0} wurde in den Einstellungen nicht definiert.</de>
-<id>30</id>
 </text>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
@@ -236,11 +148,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>46</id>
 </text>
 <text>
-<en>Infotext</en>
-<de>Infotext</de>
-<id>47</id>
-</text>
-<text>
 <en>Filename</en>
 <de>Dateiname</de>
 <id>48</id>
@@ -269,11 +176,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>File (optional)</en>
 <de>Datei (optional)</de>
 <id>53</id>
-</text>
-<text>
-<en>enlarge</en>
-<de>vergr&#xF6;&#xDF;ern</de>
-<id>54</id>
 </text>
 <text>
 <en>Comment</en>
@@ -321,21 +223,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>63</id>
 </text>
 <text>
-<en>The captcha field has to be filled out correctly!</en>
-<de>Das Captcha-Feld muss korrekt ausgef&#xFC;llt werden!</de>
-<id>64</id>
-</text>
-<text>
-<en>Field {0} does not fit to the required formatting ({1})</en>
-<de>Das Feld {0} passt nicht zur erforderlichen Formatierung ({1})</de>
-<id>65</id>
-</text>
-<text>
-<en>Field {0} is mandatory.</en>
-<de>Das Feld {0} ist verpflichtend.</de>
-<id>66</id>
-</text>
-<text>
 <en>Maximum Length</en>
 <de>Maximale L&#xE4;nge</de>
 <id>67</id>
@@ -346,54 +233,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>68</id>
 </text>
 <text>
-<en>Please check you values, errors occured</en>
-<de>Bitte &#xFC;berpr&#xFC;fen Sie Ihre Eingaben - es sind Fehler aufgetreten.</de>
-<id>69</id>
-</text>
-<text>
-<en>Field Label</en>
-<de>Feldbezeichnung</de>
-<id>70</id>
-</text>
-<text>
-<en>Mandatory</en>
-<de>Pflicht</de>
-<id>71</id>
-</text>
-<text>
-<en>Row</en>
-<de>Zeile</de>
-<id>72</id>
-</text>
-<text>
 <en>Passwords are different. Please try again.</en>
 <de>Passw&#xF6;rter sind unterschiedlich. Bitte versuchen Sie es erneut.</de>
 <id>73</id>
-</text>
-<text>
-<en>Field {0} is mandatory, please fill out</en>
-<de>Bitte f&#xFC;llen Sie das Feld {0} aus</de>
-<id>74</id>
-</text>
-<text>
-<en>Invalid format in field {0}, valid formats: {1}</en>
-<de>Ung&#xFC;ltiges Dateiformat in Feld {0}, g&#xFC;ltiges Format: {1}</de>
-<id>75</id>
-</text>
-<text>
-<en>Maximum Upload {0} kB</en>
-<de>Maximale Dateig&#xF6;&#xDF;e: {0} kB</de>
-<id>76</id>
-</text>
-<text>
-<en>Max. filesize (in kb)</en>
-<de>Maximale Dateig&#xF6;&#xDF;e (in kB)</de>
-<id>77</id>
-</text>
-<text>
-<en>Valid types (e.g. jpg, gif)</en>
-<de>erlaubte Formate (z.B. jpg, gif)</de>
-<id>78</id>
 </text>
 <text>
 <en>Description</en>
@@ -401,19 +243,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>79</id>
 </text>
 <text>
-<en>Checked</en>
-<de>Kontrolliert</de>
-<id>80</id>
-</text>
-<text>
 <en>Submit</en>
 <de>Senden</de>
 <id>81</id>
-</text>
-<text>
-<en>The following data has been sent:</en>
-<de>Folgende Daten wurden gesendet:</de>
-<id>82</id>
 </text>
 <text>
 <en>Validator</en>
@@ -446,16 +278,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>88</id>
 </text>
 <text>
-<en>Topics</en>
-<de>Themen</de>
-<id>89</id>
-</text>
-<text>
-<en>Entries</en>
-<de>Beitr&#xE4;ge</de>
-<id>90</id>
-</text>
-<text>
 <en>Last Entry</en>
 <de>Letzter Beitrag</de>
 <id>91</id>
@@ -469,14 +291,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>at</en>
 <de>um</de>
 <id>93</id>
-</text>
-<text>
-<en>answer</en>
-<en_plural>answers</en_plural>
-<de>Antwort</de>
-<de_plural>Antworten</de_plural>
-<id>94</id>
-<sp_plural>_</sp_plural>
 </text>
 <text>
 <en>Empty</en>
@@ -504,11 +318,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>99</id>
 </text>
 <text>
-<en>Title</en>
-<de>Titel</de>
-<id>100</id>
-</text>
-<text>
 <en>Subject</en>
 <de>Betreff</de>
 <id>101</id>
@@ -519,114 +328,14 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>102</id>
 </text>
 <text>
-<en>create answer</en>
-<de>Antwort erstellen</de>
-<id>103</id>
-</text>
-<text>
-<en>Moderation</en>
-<de>Moderation</de>
-<id>104</id>
-</text>
-<text>
-<en>Edit entry</en>
-<de>Beitrag bearbeiten</de>
-<id>105</id>
-</text>
-<text>
-<en>of</en>
-<de>von</de>
-<id>106</id>
-</text>
-<text>
 <en>Member since</en>
 <de>Mitglied seit</de>
 <id>107</id>
 </text>
 <text>
-<en>Please check your entry, errors occured</en>
-<de>Bitte &#xFC;berpr&#xFC;fen Sie Ihren Beitrag, Fehler sind aufgetreten.</de>
-<id>108</id>
-</text>
-<text>
-<en>Post was successfully saved.</en>
-<de>Beitrag wurde erfolgreich gespeichert.</de>
-<id>109</id>
-</text>
-<text>
-<en>Entry was successfully saved.</en>
-<de>Eintrag wurde erfolgreich gespeichert.</de>
-<id>110</id>
-</text>
-<text>
-<en>Action was successfully saved.</en>
-<de>Die Aktion wurde erfolgreich gespeichert.</de>
-<id>111</id>
-</text>
-<text>
-<en>to topic</en>
-<de>Zum Thema</de>
-<id>112</id>
-</text>
-<text>
-<en>back to group</en>
-<de>Zur&#xFC;ck zur Gruppe.</de>
-<id>113</id>
-</text>
-<text>
-<en>back to forum</en>
-<de>Zur&#xFC;ck zum Forum.</de>
-<id>114</id>
-</text>
-<text>
-<en>Change properties</en>
-<de>Eigenschaften &#xE4;ndern.</de>
-<id>115</id>
-</text>
-<text>
-<en>This "name for the forum" already exists. </en>
-<de>Dieser "Forumsname" existiert bereits. </de>
-<id>116</id>
-</text>
-<text>
-<en>Please choose a different.</en>
-<de>Bitte w&#xE4;hlen Sie einen anderen.</de>
-<id>117</id>
-</text>
-<text>
-<en>Forum - Properties</en>
-<de>Forum - Einstellungen</de>
-<id>118</id>
-</text>
-<text>
-<en>Changed data was successfully saved</en>
-<de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert</de>
-<id>119</id>
-</text>
-<text>
 <en>Click here</en>
 <de>Hier klicken</de>
 <id>120</id>
-</text>
-<text>
-<en>to get back to the forum</en>
-<de>um zum Forum zur&#xFC;ckzukehren</de>
-<id>121</id>
-</text>
-<text>
-<en>User does not exist (anymore).</en>
-<de>Benutzer existiert nicht (mehr).</de>
-<id>122</id>
-</text>
-<text>
-<en>Forum-User does not exist (anymore).</en>
-<de>Forum-Benutzer existiert nicht (mehr).</de>
-<id>123</id>
-</text>
-<text>
-<en>Userprofile:</en>
-<de>Benutzerprofil:</de>
-<id>124</id>
 </text>
 <text>
 <en>Name</en>
@@ -639,39 +348,14 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>126</id>
 </text>
 <text>
-<en>Town</en>
-<de>Stadt</de>
-<id>127</id>
-</text>
-<text>
 <en>Short description</en>
 <de>Kurze Beschreibung</de>
 <id>128</id>
 </text>
 <text>
-<en>interests, hobbies, pets, ...</en>
-<de>Interessen, Hobbies, Haustiere, ...</de>
-<id>129</id>
-</text>
-<text>
 <en>Signature</en>
 <de>Signatur</de>
 <id>130</id>
-</text>
-<text>
-<en>Latest topics</en>
-<de>Letzte Themen</de>
-<id>131</id>
-</text>
-<text>
-<en>Latest entries</en>
-<de>Letzte Beitr&#xE4;ge</de>
-<id>132</id>
-</text>
-<text>
-<en>childComponentClass must be set for key \{0}\</en>
-<de>childComponentClass muss auf den Schl&#xFC;ssel \{0}\ gesetzt werden</de>
-<id>133</id>
 </text>
 <text>
 <en>News Categories</en>
@@ -694,56 +378,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>137</id>
 </text>
 <text>
-<en>News category pageFactory not set (key: {0})</en>
-<de>News Kategorie pageFactory nicht gesetzt (key: {0})</de>
-<id>138</id>
-</text>
-<text>
-<en>Component {0} not found</en>
-<de>Komponente {0} nicht gefunden</de>
-<id>139</id>
-</text>
-<text>
-<en>Comments</en>
-<de>Kommentare</de>
-<id>140</id>
-</text>
-<text>
-<en>Created</en>
-<de>Erstellt</de>
-<id>141</id>
-</text>
-<text>
-<en>Content</en>
-<de>Inhalt</de>
-<id>142</id>
-</text>
-<text>
-<en>Change Post</en>
-<de>Beitrag &#xE4;ndern</de>
-<id>143</id>
-</text>
-<text>
-<en>Member since</en>
-<de>Mitglied seit</de>
-<id>144</id>
-</text>
-<text>
-<en>Please enter the desired newstext:</en>
-<de>Bitte geben Sie den gew&#xFC;nschten Newstext ein:</de>
-<id>145</id>
-</text>
-<text>
-<en>Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
-<de>Bitte gib den gew&#xFC;nschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
-<id>146</id>
-</text>
-<text>
-<en>Create comment</en>
-<de>Kommentar erstellen</de>
-<id>147</id>
-</text>
-<text>
 <en>Comment was successfully saved.</en>
 <de>Kommentar wurde erfolgreich gespeichert.</de>
 <id>148</id>
@@ -759,46 +393,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>150</id>
 </text>
 <text>
-<en>filename</en>
-<de>Dateiname</de>
-<id>151</id>
-</text>
-<text>
-<en>price</en>
-<de>Preis</de>
-<id>152</id>
-</text>
-<text>
-<en>vat</en>
-<de>MwSt.</de>
-<id>153</id>
-</text>
-<text>
-<en>componentClass is required for Vpc_Table in config</en>
-<de>componentClass is erforderlich f&#xFC;r Vpc_Table in config</de>
-<id>154</id>
-</text>
-<text>
-<en>activate Account</en>
-<de>Konto aktivieren</de>
-<id>155</id>
-</text>
-<text>
-<en>Data was not sent completely. </en>
-<de>Daten wurden nicht vollst&#xE4;ndig gesendet. </de>
-<id>156</id>
-</text>
-<text>
-<en>Please copy the complete address out of the email.</en>
-<de>Bitte kopieren Sie die vollst&#xE4;ndige Adresse aus der E-Mail.</de>
-<id>157</id>
-</text>
-<text>
-<en>Activation code is wrong. Eventually your account has already been activated</en>
-<de>Aktivierungscode ist falsch. Eventuell wurde Ihr Konto bereits aktiviert.</de>
-<id>158</id>
-</text>
-<text>
 <en>Activate Useraccount</en>
 <de>Benutzerkonto aktivieren</de>
 <id>159</id>
@@ -809,19 +403,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>160</id>
 </text>
 <text>
-<en>After the activation you are automatically loggid and you could use your account.</en>
-<de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie k&#xF6;nnen Ihr Konto verwenden.</de>
-<id>161</id>
-</text>
-<text>
 <en>Your useraccount was successfully activated.</en>
 <de>Ihr Benutzerkonto wurde erfolgreich aktiviert.</de>
 <id>162</id>
-</text>
-<text>
-<en>You were logged in, automatically.</en>
-<de>Sie sind automatisch angemeldet.</de>
-<id>163</id>
 </text>
 <text>
 <en>to get back to the Startpage</en>
@@ -844,19 +428,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>167</id>
 </text>
 <text>
-<en>Edit account</en>
-<de>Speichern</de>
-<id>168</id>
-</text>
-<text>
 <en>Account - Properties</en>
 <de>Konto - Eigenschaften</de>
 <id>169</id>
-</text>
-<text>
-<en>E-Mail Adress</en>
-<de>E-Mail Adresse</de>
-<id>170</id>
 </text>
 <text>
 <en>The changed data was saved successfully</en>
@@ -867,26 +441,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Parent Resource id {0} does not exist</en>
 <de>Parent Resource id {0} existiert nicht</de>
 <id>172</id>
-</text>
-<text>
-<en>Unknown AssetsType: {0}</en>
-<de>Unbekannter AssetsType: {0}</de>
-<id>173</id>
-</text>
-<text>
-<en>Assets-Path-Type {0} not found in config.</en>
-<de>Assets-Path-Type {0} in config nicht gefunden.</de>
-<id>174</id>
-</text>
-<text>
-<en>Path {0} does not exist.</en>
-<de>Pfad {0} existiert nicht.</de>
-<id>175</id>
-</text>
-<text>
-<en>Asset-File {0} does not exist.</en>
-<de>Asset-File {0} existiert nicht.</de>
-<id>176</id>
 </text>
 <text>
 <en>autologin failed: {0}</en>
@@ -907,11 +461,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Offset {0} not found</en>
 <de>Offset {0} nicht gefunden</de>
 <id>180</id>
-</text>
-<text>
-<en>userId is required</en>
-<de>userId ist erforderklich</de>
-<id>181</id>
 </text>
 <text>
 <en>You don't have enough permissions for this Action</en>
@@ -942,11 +491,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service</en>
 <de>_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service</de>
 <id>187</id>
-</text>
-<text>
-<en>Debug is not enabled</en>
-<de>Debuggen ist nicht aktiviert</de>
-<id>188</id>
 </text>
 <text>
 <en>Login data</en>
@@ -994,11 +538,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>197</id>
 </text>
 <text>
-<en>Accessdata and person</en>
-<de>Zugangsdaten und Person</de>
-<id>198</id>
-</text>
-<text>
 <en>Webcode</en>
 <de>Webcode</de>
 <id>199</id>
@@ -1019,24 +558,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>202</id>
 </text>
 <text>
-<en>Invalid controller class ("{0}")</en>
-<de>Ung&#xFC;ltige Controller Klasse ("{0}")</de>
-<id>203</id>
-</text>
-<text>
-<en>Page width id {0} not found</en>
-<de>Seite mit der ID {0} wurde nicht gefunden</de>
-<id>204</id>
-</text>
-<text>
 <en>Param "uploads" has to be set in the file application/config.ini.</en>
 <de>_</de>
 <id>205</id>
-</text>
-<text>
-<en>No File was uploaded.</en>
-<de>Es wurde keine Datei hochgeladen.</de>
-<id>206</id>
 </text>
 <text>
 <en>The file is larger than the maximum upload amount.</en>
@@ -1059,11 +583,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>210</id>
 </text>
 <text>
-<en>Cant sort by {0}, field doesnt exist in row</en>
-<de>Sortierung nach {0} nicht m&#xF6;glich, das Feld existiert nicht</de>
-<id>211</id>
-</text>
-<text>
 <en>Can't sort by , array_multisort returned an error</en>
 <de>Sortierung nicht m&#xF6;glich, array_multisort liefert einen Fehler zur&#xFC;ck</de>
 <id>212</id>
@@ -1084,61 +603,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>215</id>
 </text>
 <text>
-<en> - Useraccount created</en>
-<de> - Benutzerkonto wurde eingerichtet</de>
-<id>216</id>
-</text>
-<text>
-<en> - lost password</en>
-<de> - Passwort vergessen</de>
-<id>217</id>
-</text>
-<text>
-<en> - Email changed</en>
-<de> - E-Mail wurde ge&#xE4;ndert</de>
-<id>218</id>
-</text>
-<text>
-<en> - Account deleted</en>
-<de> - Konto wurde gel&#xF6;scht</de>
-<id>219</id>
-</text>
-<text>
-<en>Invalid urlScheme specified</en>
-<de>Ung&#xFC;ltiges url-Schema wurde rezeugt</de>
-<id>220</id>
-</text>
-<text>
-<en>Component must be instance of Vpc_Interface.</en>
-<de>Die Komponente muss eine Instanz des Vpc_Interface sein.</de>
-<id>221</id>
-</text>
-<text>
-<en>Pagename must not be empty. Probably Component is not a Page.</en>
-<de>Seitenname darf nicht leer sein. Wahrscheinlich ist die Komponente keine Seite.</de>
-<id>222</id>
-</text>
-<text>
-<en>A page with the same componentId already exists.</en>
-<de>Es existiert bereits eine Seite mit der gleichen componenId.</de>
-<id>223</id>
-</text>
-<text>
-<en>Couldn\t create Page with id {0}</en>
-<de>Die Seite mit der id {0} konnte nicht erstellt werden</de>
-<id>224</id>
-</text>
-<text>
-<en>Cannot set Parent Page for the same object: {0}</en>
-<de>&#xDC;bergeordnete Seite kann nicht f&#xFC;r das selbe Objekt gesetzt werden: {0}</de>
-<id>225</id>
-</text>
-<text>
-<en>Page does not exist: {0}</en>
-<de>Seite existiert nicht: {0}</de>
-<id>226</id>
-</text>
-<text>
 <en>'service.users.url' not defined in config (usually defined in VPS config)</en>
 <de>'service.users.url' ist in config nicht definiert (gew&#xF6;hnlich wird diesen in VPS config definiert)</de>
 <id>227</id>
@@ -1157,11 +621,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Can't save, please fill all marked fields correctly.</en>
 <de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle markierten Felder aus.</de>
 <id>230</id>
-</text>
-<text>
-<en>Cant save, please fill all marked fields correctly.</en>
-<de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle markierten Felder aus.</de>
-<id>231</id>
 </text>
 <text>
 <en>Do you really want to delete this entry?</en>
@@ -1209,11 +668,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>240</id>
 </text>
 <text>
-<en>Edit Content</en>
-<de>Inhalt bearbeiten</de>
-<id>241</id>
-</text>
-<text>
 <en>Properties of selected Page</en>
 <de>Eigenschaften der gew&#xE4;hlten Seite</de>
 <id>242</id>
@@ -1239,11 +693,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>246</id>
 </text>
 <text>
-<en>Reload all</en>
-<de>Alles neuladen</de>
-<id>247</id>
-</text>
-<text>
 <en>Expand here</en>
 <de>Hier erweitern</de>
 <id>248</id>
@@ -1257,16 +706,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Open Preview</en>
 <de>Vorschau &#xF6;ffnen</de>
 <id>250</id>
-</text>
-<text>
-<en>Javascript Parse Exception</en>
-<de>Javascript Parse Ausnahme</de>
-<id>251</id>
-</text>
-<text>
-<en>PHP Exception</en>
-<de>PHP Ausnahme</de>
-<id>252</id>
 </text>
 <text>
 <en>A Server failure occured.</en>
@@ -1287,11 +726,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>A connection problem occured.</en>
 <de>Ein Verbindungsfehler ist aufgetreten.</de>
 <id>256</id>
-</text>
-<text>
-<en>Debug info</en>
-<de>Debug Info</de>
-<id>257</id>
 </text>
 <text>
 <en>Select your Position</en>
@@ -1334,11 +768,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>265</id>
 </text>
 <text>
-<en>Error), trlVps(Code {0} Error Returned</en>
-<de>Error), trlVps(Code {0} Error Returned</de>
-<id>266</id>
-</text>
-<text>
 <en>Insert new image or edit selected image.</en>
 <de>F&#xFC;gt neues Bild ein oder bearbeitet das ausgew&#xE4;hlte Bild.</de>
 <id>267</id>
@@ -1372,11 +801,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Insert text without formating.</en>
 <de>Text ohne Formatierung einf&#xFC;gen.</de>
 <id>273</id>
-</text>
-<text>
-<en>Clean up Html and remove formatings.</en>
-<de>HTML-Bereinigung und entfernen von Formatierungen.</de>
-<id>274</id>
 </text>
 <text>
 <en>Insert Custom Character</en>
@@ -1479,11 +903,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>294</id>
 </text>
 <text>
-<en>No controllerUrl specified for AutoForm.</en>
-<de>No controllerUrl specified for AutoForm.</de>
-<id>295</id>
-</text>
-<text>
 <en>delete?</en>
 <de>L&#xF6;schen?</de>
 <id>296</id>
@@ -1552,11 +971,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Character</en>
 <de>Zeichen</de>
 <id>309</id>
-</text>
-<text>
-<en>Clean Html</en>
-<de>HTML bereinigen</de>
-<id>310</id>
 </text>
 <text>
 <en>Loading...</en>
@@ -1819,11 +1233,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>362</id>
 </text>
 <text>
-<en>This field should be a URL in the format "http:/'+'/www.domain.com"</en>
-<de>Dieses Feld sollte eine Webadresse im Format "http:/'+'/www.domain.com" enthalten.</de>
-<id>363</id>
-</text>
-<text>
 <en>This field should only contain letters and _</en>
 <de>Dieses Feld sollte nur Zeichen und _ enthalten</de>
 <id>364</id>
@@ -2029,11 +1438,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>404</id>
 </text>
 <text>
-<en>Do you really want to delete this entry:\n\n"</en>
-<de>Wollen Sie diesen Beitrag wirklich l&#xF6;schen:\n\n"</de>
-<id>405</id>
-</text>
-<text>
 <en>Sitetree</en>
 <de>Seitenbaum</de>
 <id>406</id>
@@ -2052,11 +1456,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>lang</en>
 <de>Spr.</de>
 <id>409</id>
-</text>
-<text>
-<en>Small Image (optional)</en>
-<de>Kleines Bild (optional)</de>
-<id>410</id>
 </text>
 <text>
 <en>Paragraphs</en>
@@ -2104,19 +1503,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>419</id>
 </text>
 <text>
-<en>TextImages</en>
-<de>Text-Bilder</de>
-<id>420</id>
-</text>
-<text>
 <en>Reload</en>
 <de>Neu laden</de>
 <id>421</id>
-</text>
-<text>
-<en>Save properties</en>
-<de>Eigenschaften speichern</de>
-<id>422</id>
 </text>
 <text>
 <en>Login successful</en>
@@ -2124,81 +1513,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>423</id>
 </text>
 <text>
-<en>Back to topic</en>
-<de>Zur&#xFC;ck zum Thema</de>
-<id>424</id>
-</text>
-<text>
-<en>Back to group</en>
-<de>Zur&#xFC;ck zur Gruppe</de>
-<id>425</id>
-</text>
-<text>
-<en>Back to forum</en>
-<de>Zur&#xFC;ck zum Forum</de>
-<id>426</id>
-</text>
-<text>
 <en>to get back to the formular</en>
 <de>um zum Formular zur&#xFC;ck zu gelangen</de>
 <id>427</id>
-</text>
-<text>
-<en>Forum name</en>
-<de>Name f&#xFC;r Forum</de>
-<id>428</id>
-</text>
-<text>
-<en>Location</en>
-<de>Ort</de>
-<id>429</id>
-</text>
-<text>
-<context>forum</context>
-<en>Location</en>
-<de>Wohnort</de>
-<id>430</id>
-</text>
-<text>
-<en>Avatar (Image)</en>
-<de>Avatar (Bild)</de>
-<id>431</id>
-</text>
-<text>
-<en>Delete current Avatar</en>
-<de>Aktuellen Avatar l&#xF6;schen</de>
-<id>432</id>
-</text>
-<text>
-<en>You may upload a picture that is displayed in your profile and in each of your posts in a small version (40x40 Pixels).</en>
-<de>Hier k&#xF6;nnen Sie ein Bild hochladen, welches in Ihrem Profil und in verkleinerter Version (40x40 Pixel) bei Ihren Beitr&#xE4;gen angezeigt wird.</de>
-<id>433</id>
-</text>
-<text>
-<en>For optimized displayment the picture should have a width of at least 150 Pixels, the file size may not be bigger than 2 MB.</en>
-<de>F&#xFC;r eine optimale Darstellung sollte das Bild mindestens 150 Pixel breit sein, die maximale Dateigr&#xF6;&#xDF;e darf 2 MB nicht &#xFC;berschreiten.</de>
-<id>434</id>
-</text>
-<text>
-<en>Delete avatar</en>
-<de>Avatar l&#xF6;schen</de>
-<id>435</id>
-</text>
-<text>
-<context>forum</context>
-<en>Signature</en>
-<de>Signatur</de>
-<id>436</id>
-</text>
-<text>
-<en>will be displayed at the end of each post</en>
-<de>wird am Ende eines jeden Forumbeitrags angeh&#xE4;ngt</de>
-<id>437</id>
-</text>
-<text>
-<en>File-Type not allowed. Only Images are allowed.</en>
-<de>_</de>
-<id>438</id>
 </text>
 <text>
 <en>Show Original</en>
@@ -2216,11 +1533,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>441</id>
 </text>
 <text>
-<en>Plese enter in both fields the password which you want to use for your useraccount</en>
-<de>_</de>
-<id>442</id>
-</text>
-<text>
 <en>Original Size</en>
 <de>_</de>
 <id>443</id>
@@ -2229,16 +1541,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>By</en>
 <de>Von</de>
 <id>444</id>
-</text>
-<text>
-<en>Latest posts from this topic</en>
-<de>Die letzten Beitr&#xE4;ge in diesem Thema</de>
-<id>445</id>
-</text>
-<text>
-<en>Last entry by</en>
-<de>Letzter Beitrag von</de>
-<id>446</id>
 </text>
 <text>
 <en>Y-m-d</en>
@@ -2266,12 +1568,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>451</id>
 </text>
 <text>
-<en>Plese enter in both fields the password which you want to use
-    	for your useraccount</en>
-<de>_</de>
-<id>452</id>
-</text>
-<text>
 <en>There is no editing for this component.</en>
 <de>Diese Komponente hat keinen Bearbeitungsbereich.</de>
 <id>453</id>
@@ -2287,44 +1583,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>455</id>
 </text>
 <text>
-<en>Profile picture</en>
-<de>Profilbild</de>
-<id>456</id>
-</text>
-<text>
-<en>Delete picture</en>
-<de>Bild l&#xF6;schen</de>
-<id>457</id>
-</text>
-<text>
-<en>Delete current picture</en>
-<de>Aktuelles Bild l&#xF6;schen</de>
-<id>458</id>
-</text>
-<text>
 <en>New post in observed thread</en>
 <de>Neuer Beitrag in beobachtetem Thema</de>
 <id>459</id>
-</text>
-<text>
-<en>A new Post has been written in thread:</en>
-<de>In folgendem Thema wurde ein neuer Beitrag verfasst:</de>
-<id>460</id>
-</text>
-<text>
-<en>in the forum of:</en>
-<de>im Forum von:</de>
-<id>461</id>
-</text>
-<text>
-<en>Click the following link to go directly to the mentioned thread:</en>
-<de>Klicken Sie auf folgenden Link um direkt zum betreffenden Thema zu gelangen:</de>
-<id>462</id>
-</text>
-<text>
-<en>Please type in your email address in the field below.</en>
-<de>Bitte geben Sie im Feld Ihre Email-Adresse ein.</de>
-<id>463</id>
 </text>
 <text>
 <en>You will receive an email with a passwort reset link and further instructions.</en>
@@ -2352,11 +1613,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>468</id>
 </text>
 <text>
-<en>Do you really wish to delete this post?</en>
-<de>M&#xF6;chten Sie diesen Beitrag wirklich l&#xF6;schen?</de>
-<id>469</id>
-</text>
-<text>
 <en>Created by</en>
 <de>Erstellt von</de>
 <id>470</id>
@@ -2365,26 +1621,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Create a new topic</en>
 <de>Neues Thema erstellen</de>
 <id>471</id>
-</text>
-<text>
-<en>New entry in guestbook</en>
-<de>Neuer Eintrag im Gaestebuch</de>
-<id>472</id>
-</text>
-<text>
-<en>Users</en>
-<de>Benutzer</de>
-<id>473</id>
-</text>
-<text>
-<en>Account - Images</en>
-<de>Benutzerprofil - Bilder</de>
-<id>474</id>
-</text>
-<text>
-<en>Upload new image</en>
-<de>Neues Bild hochladen</de>
-<id>475</id>
 </text>
 <text>
 <en>Upload</en>
@@ -2415,16 +1651,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Duplicating...</en>
 <de>Duplizieren</de>
 <id>481</id>
-</text>
-<text>
-<en>clubId is required</en>
-<de>clubId ist erforderlich</de>
-<id>482</id>
-</text>
-<text>
-<en>Events.show Categories</en>
-<de>_</de>
-<id>483</id>
 </text>
 <text>
 <en>empty</en>
@@ -2465,11 +1691,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Info</en>
 <de>Info</de>
 <id>491</id>
-</text>
-<text>
-<en>Do you really want to delete this entry:</en>
-<de>Wollen Sie diesen Eintrag wirklich l&#xF6;schen:</de>
-<id>492</id>
 </text>
 <text>
 <en>yyyy-mm-dd</en>
@@ -2652,30 +1873,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>528</id>
 </text>
 <text>
-<en>Forum Feed</en>
-<de>Forum-Feed</de>
-<id>529</id>
-</text>
-<text>
-<en>You may upload a picture that is displayed in your profile
-                and in each of your posts in a small version (40x40 Pixels).</en>
-<de>Sie k&#xF6;nnen ein Bild hochladen, das in in Ihrem Profil angezeigt wird
-                und in jedem Ihrer Schreiben als kleine Version (40x40 Pixels).</de>
-<id>530</id>
-</text>
-<text>
-<en>For optimized displayment the picture should have a width of at least 150 Pixels,
-                the file size may not be bigger than 2 MB.</en>
-<de>F&#xFC;r eine optimale Bildschirmdarstellung sollten das Bild eine Mindestbreite von 150 Pixel haben,
-                die Dateigr&#xF6;&#xDF;e sollte nicht mehr als 2 MB betragen.</de>
-<id>531</id>
-</text>
-<text>
-<en>Information</en>
-<de>Information</de>
-<id>532</id>
-</text>
-<text>
 <en>Link Image</en>
 <de>Bild Link</de>
 <id>533</id>
@@ -2696,24 +1893,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>536</id>
 </text>
 <text>
-<en>Show News</en>
-<de>Nachrichten zeigen</de>
-<id>537</id>
-</text>
-<text>
-<en>News.List</en>
-<de>News.List</de>
-<id>538</id>
-</text>
-<text>
 <en>Months</en>
 <de>Monate</de>
 <id>539</id>
-</text>
-<text>
-<en>News Feed</en>
-<de>News Feed</de>
-<id>540</id>
 </text>
 <text>
 <en>Categories</en>
@@ -2721,19 +1903,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>541</id>
 </text>
 <text>
-<en>News.show Categories</en>
-<de>News.show Kategorien</de>
-<id>542</id>
-</text>
-<text>
 <en>Request password</en>
 <de>Passwort anfordern</de>
 <id>543</id>
-</text>
-<text>
-<en>{0} '{1}' must be a subclass of {2}.</en>
-<de>{0} '{1}' muss eine Unterklasse von {2} sein.</de>
-<id>544</id>
 </text>
 <text>
 <en>Label</en>
@@ -2821,21 +1993,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>561</id>
 </text>
 <text>
-<en>Activation code is invalid. Maybe the URL wasn't copied completely?</en>
-<de>Der Aktivierungscode ist falsch. Vielleicht wurde die URL unvollst&#xE4;ndig kopiert.</de>
-<id>562</id>
-</text>
-<text>
-<en>New password couldn't be set</en>
-<de>Das neue Passwort konnte nicht erstellt werden</de>
-<id>563</id>
-</text>
-<text>
-<en>_createAuthAdapter didn't return instance of Vps_Auth_Adapter_Service</en>
-<de>_</de>
-<id>564</id>
-</text>
-<text>
 <en>Activation link</en>
 <de>Aktivierungslink</de>
 <id>565</id>
@@ -2854,11 +2011,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Template</en>
 <de>Vorlage</de>
 <id>568</id>
-</text>
-<text>
-<en>(all templates)</en>
-<de>(alle Vorlagen)</de>
-<id>569</id>
 </text>
 <text>
 <en>Variable</en>
@@ -2901,21 +2053,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>577</id>
 </text>
 <text>
-<en>A Post at {0} has been reported with the following comment</en>
-<de>Der Eintrag auf {0} wurde mit folgendem Kommentar versehen</de>
-<id>578</id>
-</text>
-<text>
-<en>to go directly to the post or read it below</en>
-<de>um direkt zum Eintrag zu gelangen oder lesen Sie in unten</de>
-<id>579</id>
-</text>
-<text>
-<en>Click the link</en>
-<de>Klicken Sie auf den Link</de>
-<id>580</id>
-</text>
-<text>
 <en>A new entry has been written in your guestbook.</en>
 <de>Ein neuer Eintrag wurde in Ihr G&#xE4;stebuch geschrieben.</de>
 <id>581</id>
@@ -2934,11 +2071,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Click here to go directly to your profile</en>
 <de>Klicken Sie bitte hier um direkt zu Ihrem Profil zu gelangen</de>
 <id>584</id>
-</text>
-<text>
-<en>This email has been generated using the lost password function at</en>
-<de>Diese Email wurde durch die Passwort vergessen funktion auf</de>
-<id>585</id>
 </text>
 <text>
 <en>If you did not request this email you may just ignore it and use the login as before.</en>
@@ -2961,11 +2093,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>589</id>
 </text>
 <text>
-<en>From your old email address {0} to {1}</en>
-<de>&#xC4;ndern Sie bitte Ihre alte E-Mail Adresse von {0} zu {1}</de>
-<id>590</id>
-</text>
-<text>
 <en>Not Found</en>
 <de>Nicht gefunden</de>
 <id>591</id>
@@ -2984,21 +2111,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Password</en>
 <de>Passwort</de>
 <id>594</id>
-</text>
-<text>
-<en>Errortype</en>
-<de>_</de>
-<id>595</id>
-</text>
-<text>
-<en>Message</en>
-<de>Nachricht</de>
-<id>596</id>
-</text>
-<text>
-<en>Last DB-Query</en>
-<de>_</de>
-<id>597</id>
 </text>
 <text>
 <en>Revision</en>
@@ -3026,13 +2138,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>602</id>
 </text>
 <text>
-<en>Do you really want to delete this entry:
-
-"</en>
-<de>_</de>
-<id>603</id>
-</text>
-<text>
 <en>Activate / Login</en>
 <de>Aktivieren / Einloggen</de>
 <id>604</id>
@@ -3056,16 +2161,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Error sending the mail.</en>
 <de>Fehler beim senden der Email.</de>
 <id>608</id>
-</text>
-<text>
-<en>male</en>
-<de>m&#xE4;nnlich</de>
-<id>609</id>
-</text>
-<text>
-<en>female</en>
-<de>weiblich</de>
-<id>610</id>
 </text>
 <text>
 <en>URL</en>
@@ -3103,11 +2198,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>617</id>
 </text>
 <text>
-<en>Login required</en>
-<de>_</de>
-<id>618</id>
-</text>
-<text>
 <en>Bestfit</en>
 <de>_</de>
 <id>619</id>
@@ -3138,26 +2228,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>624</id>
 </text>
 <text>
-<en>Branch directory</en>
-<de>_</de>
-<id>625</id>
-</text>
-<text>
-<en>AGBs</en>
-<de>_</de>
-<id>626</id>
-</text>
-<text>
-<en>Verkn&#xFC;pfte Eintr&#xE4;ge</en>
-<de>_</de>
-<id>627</id>
-</text>
-<text>
-<en>Edit Images</en>
-<de>Bildergalerie</de>
-<id>628</id>
-</text>
-<text>
 <en>An error has occured</en>
 <de>_</de>
 <id>629</id>
@@ -3176,11 +2246,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Forum</en>
 <de>_</de>
 <id>632</id>
-</text>
-<text>
-<en>go</en>
-<de>_</de>
-<id>633</id>
 </text>
 <text>
 <en>Threads</en>
@@ -3213,11 +2278,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Forum.Latest Threads</en>
 <de>_</de>
 <id>639</id>
-</text>
-<text>
-<en>add Comment</en>
-<de>Antwort erstellen</de>
-<id>640</id>
 </text>
 <text>
 <en>Comment was successfully reported.</en>
@@ -3280,11 +2340,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>652</id>
 </text>
 <text>
-<en>Images Enlarge</en>
-<de>_</de>
-<id>653</id>
-</text>
-<text>
 <en>Bookmark bei</en>
 <de>_</de>
 <id>654</id>
@@ -3300,12 +2355,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <id>656</id>
 </text>
 <text>
-<en>Hello,&lt;br /&gt;&lt;br /&gt;
-a post has been reported for the following reason:</en>
-<de>_</de>
-<id>657</id>
-</text>
-<text>
 <en>Open the post or read it directly:</en>
 <de>Kommentar &#xF6;ffnen oder direkt lesen:</de>
 <id>658</id>
@@ -3319,13 +2368,6 @@ a post has been reported for the following reason:</en>
 <en>A post has been reported</en>
 <de>Ein Kommentar wurde gemeldet</de>
 <id>660</id>
-</text>
-<text>
-<en>Hello,
-
-a post has been reported for the following reason:</en>
-<de>_</de>
-<id>661</id>
 </text>
 <text>
 <en>Open this url to go to the post or read it here:</en>
@@ -3459,11 +2501,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>edit account</en>
 <de>Speichern</de>
 <id>687</id>
-</text>
-<text>
-<en>Users.List</en>
-<de>_</de>
-<id>688</id>
 </text>
 <text>
 <en>My account</en>
@@ -3663,22 +2700,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>727</id>
 </text>
 <text>
-<en>Hello,&lt;br /&gt;&lt;br /&gt;
-a post in an observed thread has been submitted:</en>
-<de>Hallo,&lt;br /&gt;&lt;br /&gt;
-es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
-<id>728</id>
-</text>
-<text>
-<en>Hello,
-
-a post in an observed thread has been submitted:</en>
-<de>Hallo,
-
-es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
-<id>729</id>
-</text>
-<text>
 <en>Link to concerning thread:</en>
 <de>_</de>
 <id>730</id>
@@ -3739,19 +2760,9 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <id>741</id>
 </text>
 <text>
-<en>Register</en>
-<de>Registrieren</de>
-<id>742</id>
-</text>
-<text>
 <en>With a free {0} account you can take part actively in the forum and write own posts. In addition, you have the possibility to observe single discussions and get informed by e-mail about new posts on the subject.</en>
 <de>Mit einem kostenlosen Benutzerkonto auf "{0}" k&#xF6;nnen Sie aktiv am Forum teilnehmen und eigene Beitr&#xE4;ge verfassen. Zus&#xE4;tzlich haben Sie die M&#xF6;glichkeit, einzelne Diskussionen gezielt zu beobachten und werden per E-Mail &#xFC;ber neue Beitr&#xE4;ge zum Thema informiert.</de>
 <id>743</id>
-</text>
-<text>
-<en>Preview:</en>
-<de>_</de>
-<id>744</id>
 </text>
 <text>
 <en>'%value%' is less than %min% characters long</en>
@@ -3804,11 +2815,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <id>754</id>
 </text>
 <text>
-<en>chosen thread</en>
-<de>Ausgew&#xE4;hltes Thema</de>
-<id>755</id>
-</text>
-<text>
 <en>Please choose a group, in which the thread should be moved</en>
 <de>Bitte klicken Sie auf die Gruppe, in die das Thema verschoben werden soll</de>
 <id>756</id>
@@ -3823,11 +2829,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en>Space</en>
 <de>Abstand</de>
 <id>758</id>
-</text>
-<text>
-<en>ANBs</en>
-<de>_</de>
-<id>759</id>
 </text>
 <text>
 <en>Close</en>
@@ -3858,11 +2859,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en>Posts.Last Posts</en>
 <de>_</de>
 <id>765</id>
-</text>
-<text>
-<en>User ID ist invalid.</en>
-<de>Der Aktivierungscode ist ung&#xFC;ltig.</de>
-<id>766</id>
 </text>
 <text>
 <en>Forum.User-List</en>
@@ -4070,11 +3066,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <id>807</id>
 </text>
 <text>
-<en>Prepayment</en>
-<de>Vorauskasse</de>
-<id>808</id>
-</text>
-<text>
 <en>Paypal</en>
 <de>_</de>
 <id>809</id>
@@ -4083,11 +3074,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en>Order successfully sent.</en>
 <de>Die Bestellung wurde erfolgreich abgeschickt.</de>
 <id>810</id>
-</text>
-<text>
-<en>Confirm</en>
-<de>Best&#xE4;tigen</de>
-<id>811</id>
 </text>
 <text>
 <en>Checkout</en>
@@ -4155,19 +3141,9 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <id>824</id>
 </text>
 <text>
-<en>Back</en>
-<de>Zur&#xFC;ck</de>
-<id>825</id>
-</text>
-<text>
 <en>Back to cart</en>
 <de>Zur&#xFC;ck zum Warenkorb</de>
 <id>826</id>
-</text>
-<text>
-<en>Delete</en>
-<de>L&#xF6;schen</de>
-<id>827</id>
 </text>
 <text>
 <en>Shop.Cart</en>
@@ -4185,21 +3161,10 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <id>830</id>
 </text>
 <text>
-<en>Title</en>
-<de>Titel</de>
-<id>831</id>
-</text>
-<text>
 <context>sex</context>
 <en>Title</en>
 <de>Anrede</de>
 <id>832</id>
-</text>
-<text>
-<context>agb</context>
-<en>Terms</en>
-<de>AGB</de>
-<id>833</id>
 </text>
 <text>
 <en>What type of payment do you wish?</en>
@@ -4247,11 +3212,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <id>842</id>
 </text>
 <text>
-<en>testWord</en>
-<de>_</de>
-<id>843</id>
-</text>
-<text>
 <en>You pay by</en>
 <de>Sie zahlen per</de>
 <id>844</id>
@@ -4272,21 +3232,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <id>847</id>
 </text>
 <text>
-<en>User</en>
-<de>_</de>
-<id>848</id>
-</text>
-<text>
-<en>Todo</en>
-<de>_</de>
-<id>849</id>
-</text>
-<text>
-<en>Datum</en>
-<de>_</de>
-<id>850</id>
-</text>
-<text>
 <en>Ok</en>
 <de>_</de>
 <id>851</id>
@@ -4295,16 +3240,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en>This field should be a URL in the format "http:/</en>
 <de>_</de>
 <id>852</id>
-</text>
-<text>
-<en>This field should only contain letters and _</en>
-<de>_</de>
-<id>853</id>
-</text>
-<text>
-<en>This field should only contain letters, numbers and _</en>
-<de>_</de>
-<id>854</id>
 </text>
 <text>
 <en>Do you really want to delete this entry:nn"</en>
@@ -4327,16 +3262,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <id>858</id>
 </text>
 <text>
-<en>This field should only contain letters and _</en>
-<de>_</de>
-<id>859</id>
-</text>
-<text>
-<en>This field should only contain letters, numbers and _</en>
-<de>_</de>
-<id>860</id>
-</text>
-<text>
 <en>If you have lost your password, </en>
 <de>Wenn Sie ihr Passwort vergessen haben, k&#xF6;nnen Sie </de>
 <id>861</id>
@@ -4345,16 +3270,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en>request a new one here</en>
 <de>hier ein Neues anfordern</de>
 <id>862</id>
-</text>
-<text>
-<en>This field should only contain letters and _</en>
-<de>_</de>
-<id>863</id>
-</text>
-<text>
-<en>This field should only contain letters, numbers and _</en>
-<de>_</de>
-<id>864</id>
 </text>
 <text>
 <en>Edit Profile</en>
@@ -4520,6 +3435,56 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en>Website</en>
 <de>_</de>
 <id>898</id>
+</text>
+<text>
+<en>Type</en>
+<de>_</de>
+<id>900</id>
+</text>
+<text>
+<en>Todo Details</en>
+<de>_</de>
+<id>901</id>
+</text>
+<text>
+<en>Vivid Planet Software GmbH</en>
+<de>_</de>
+<id>906</id>
+</text>
+<text>
+<en>Contact person</en>
+<de>_</de>
+<id>907</id>
+</text>
+<text>
+<en>test</en>
+<de>_</de>
+<id>909</id>
+</text>
+<text>
+<en>foobar</en>
+<de>_</de>
+<id>910</id>
+</text>
+<text>
+<en>Category</en>
+<de>_</de>
+<id>911</id>
+</text>
+<text>
+<en>Domain</en>
+<de>_</de>
+<id>912</id>
+</text>
+<text>
+<en>Show Component</en>
+<de>_</de>
+<id>913</id>
+</text>
+<text>
+<en>visible</en>
+<de>_</de>
+<id>914</id>
 </text>
 </trl>
 

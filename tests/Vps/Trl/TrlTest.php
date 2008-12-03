@@ -263,7 +263,7 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
     public function testTrlTranslation ()
     {
         $modelVps = new Vps_Model_FnF(array(
-        	'data' => array(
+            'data' => array(
                 array('id' => 1, 'en' => 'foo', 'de' => 'dings'),
                 array('id' => 2, 'en' => 'foobar', 'de' => 'dingsbums'),
                 array('id' => 3, 'en' => 'foobar', 'en_plural' => 'foobars', 'de' => 'dingsbums', 'de_plural' => 'dingsbumse'),
@@ -313,12 +313,33 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('notfound', $this->_trlObject->trl('notfound', array(), 'vps'));
     }
 
-
-    //zum schreiben der ids in ein element ohne ids
-    /*public function testmanipulateXml ()
+    public function testTrlParserCleanup()
     {
-        $xmlModel = new Vps_Model_Xml();
-        $xmlModel->updateVpsXmlFile();
-    }*/
+        $modelWeb = new Vps_Trl_TestModel(array(
+            'columns' => array('id', 'en', 'de'),
+            'data' => array(
+                array('id' => 1, 'en' => 'foo', 'de' => 'dings'),
+                array('id' => 2, 'en' => 'foobar', 'de' => 'dingsbums')
+            )
+        ));
+
+        $modelVps = new Vps_Model_FnF(array(
+            'columns' => array('id', 'en', 'de'),
+            'data' => array(
+                array('id' => 1, 'en' => 'foo', 'de' => 'dings'),
+                array('id' => 2, 'en' => 'foobar', 'de' => 'dingsbums')
+            )
+        ));
+
+        $parser = new Vps_Trl_Parser($modelVps, $modelWeb, 'vps', 'vps');
+        $parser->setLanguages(array('en', 'de'));
+        $path = VPS_PATH."/tests/Vps/Trl/TestParseFolder";
+        $results = $parser->parse(array('web' => $path, 'vps' => $path), true);
+
+        $this->assertEquals(1, count($results['added']['Vps_Model_FnF']));
+        $this->assertEquals(1, count($results['deleted']['Vps_Model_FnF']));
+        $this->assertEquals("foo", $results['deleted']['Vps_Model_FnF'][0]);
+
+    }
 
 }
