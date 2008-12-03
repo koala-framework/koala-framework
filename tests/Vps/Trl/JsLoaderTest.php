@@ -70,7 +70,7 @@ class Vps_Trl_JsLoaderTest extends PHPUnit_Framework_TestCase
         $result = $this->_jsLoader->trlLoad($input, 'de');
         $this->assertEquals($expected, $result);
 
-        $input = "trlpVps('answer', 'answers', 2)";
+        $input = "trlpVps('reply', 'replies', 2)";
         $expected = "trlp('Antwort', 'Antworten', 2)";
         $result = $this->_jsLoader->trlLoad($input, 'de');
         $this->assertEquals($expected, $result);
@@ -80,8 +80,8 @@ class Vps_Trl_JsLoaderTest extends PHPUnit_Framework_TestCase
         $result = $this->_jsLoader->trlLoad($input, 'en');
         $this->assertEquals($expected, $result);
 
-        $input = "trlcVps('forum', 'Location')";
-        $expected = "trl('Wohnort')";
+        $input = "trlcVps('time', 'On')";
+        $expected = "trl('Am')";
         $result = $this->_jsLoader->trlLoad($input, 'de');
         $this->assertEquals($expected, $result);
 
