@@ -228,7 +228,7 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
         ));
         $parser = new Vps_Trl_Parser($modelVps, $modelWeb, 'vps');
         $parser->setLanguages(array('en', 'de'));
-        $parser->insertToXml(array(array('text' => 'newFoo', 'source' => 'vps')), $tmpfname);
+        $parser->insertToXml(array(array('text' => 'newFoo', 'source' => 'vps')), $tmpfname, 'vps');
         $select = $modelVps->select();
         $select->whereEquals('en', 'newFoo');
         $row = $modelVps->getRows($select)->current();
@@ -237,22 +237,22 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
 
         //insert same again
         $this->assertEquals(3, $modelVps->getRows()->count());
-        $parser->insertToXml(array(array('text' => 'newFoo', 'source' => 'web')), $tmpfname);
+        $parser->insertToXml(array(array('text' => 'newFoo', 'source' => 'web')), $tmpfname, 'vps');
         $this->assertEquals(3, $modelVps->getRows()->count());
 
         //insert other
         $this->assertEquals(3, $modelVps->getRows()->count());
-        $parser->insertToXml(array(array('text' => 'newFoo2', 'source' => 'vps')), $tmpfname);
+        $parser->insertToXml(array(array('text' => 'newFoo2', 'source' => 'vps')), $tmpfname, 'vps');
         $this->assertEquals(4, $modelVps->getRows()->count());
 
          //insert other
         $this->assertEquals(4, $modelVps->getRows()->count());
-        $parser->insertToXml(array(array('text' => 'This field should only contain letters and _', 'source' => 'vps')), $tmpfname);
+        $parser->insertToXml(array(array('text' => 'This field should only contain letters and _', 'source' => 'vps')), $tmpfname, 'vps');
         $this->assertEquals(5, $modelVps->getRows()->count());
 
          //insert other
         $this->assertEquals(5, $modelVps->getRows()->count());
-        $parser->insertToXml(array(array('text' => 'This field should only contain letters and _', 'source' => 'vps')), $tmpfname);
+        $parser->insertToXml(array(array('text' => 'This field should only contain letters and _', 'source' => 'vps')), $tmpfname, 'vps');
         $this->assertEquals(5, $modelVps->getRows()->count());
 
         unlink($tmpfname);
