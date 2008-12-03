@@ -254,6 +254,17 @@ class Vps_Setup
             exit;
         }
 
+        if (Zend_Registry::get('config')->showPlaceholder
+                && !Zend_Registry::get('config')->ignoreShowPlaceholder
+                && php_sapi_name() != 'cli'
+                && isset($_SERVER['REQUEST_URI'])
+                && substr($_SERVER['REQUEST_URI'], 0, 8)!='/assets/'
+        ) {
+            $view = new Vps_View();
+            echo $view->render('placeholder.tpl');
+            exit;
+        }
+
         if (php_sapi_name() != 'cli' && Zend_Registry::get('config')->preLogin && !isset($_COOKIE['unitTest'])) {
             $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
             if (empty($sessionPhpAuthed->success)) {
