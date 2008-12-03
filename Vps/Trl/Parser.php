@@ -4,13 +4,30 @@ class Vps_Trl_Parser
     private $_modelVps;
     private $_modelWeb;
     private $_mode;
+    private $_usedIds = array();
     private $_languages = array();
     private $_debug = false;
+    private $_added = array();
+    private $_deletedRows = array();
+    private $_cleanUp;
+    private $_warnings = array();
 
-    public function __construct($modelVps, $modelWeb, $mode = 'all')
+    public function __construct($modelVps, $modelWeb, $mode = 'all', $cleanUp = 'none')
     {
         $this->_modelVps = $modelVps;
         $this->_modelWeb = $modelWeb;
+
+        $this->_cleanUp = $cleanUp;
+
+        $this->_added[get_class($modelVps)] = array();
+        $this->_added[get_class($modelWeb)] = array();
+
+        $this->_deletedRows[get_class($modelVps)] = array();
+        $this->_deletedRows[get_class($modelWeb)] = array();
+
+        $this->_usedIds[get_class($modelVps)] = array();
+        $this->_usedIds[get_class($modelWeb)] = array();
+
         $this->_mode = $mode;
         $this->_languages = Zend_Registry::get('trl')->getLanguages();
         $this->_codeLanguage = Zend_Registry::get('trl')->getWebCodeLanguage();
@@ -31,24 +48,30 @@ class Vps_Trl_Parser
         $this->_codeLanguage = $language;
     }
 
-    public function parse()
+    public function parse($directories = null, $quiet = false)
     {
         //das Project
-        $directoryWeb = ".";
-        $directoryVps = VPS_PATH;
-        $directories = array('web' => $directoryWeb, 'vps' => $directoryVps);
+        if (!$directories) {
+            $directoryWeb = ".";
+            $directoryVps = VPS_PATH;
+            $directories = array('web' => $directoryWeb, 'vps' => $directoryVps);
+        }
 
         $errors = array();
         $files = 0;
         $phpfiles = 0;
         $jsfiles = 0;
         $tplfiles = 0;
-        foreach ($directories as $directory){
+        $this->_usedIds = array();
+        $this->_usedIds[get_class($this->_modelVps)] = array();
+        $this->_usedIds[get_class($this->_modelWeb)] = array();
+        foreach ($directories as $dirKey => $directory){
             $iterator = new RecursiveDirectoryIterator($directory);
             foreach(new RecursiveIteratorIterator($iterator) as $file)
             {
                 if(!$file->isDir()) {
-                    if (!stripos($file->getPathname(), "/vps/tests/Vps/Trl/") && !stripos($file->getPathname(), "vps/Vps/Trl.php")) { //tests werden ausgeschlossen
+                    if ((!stripos($file->getPathname(), "/vps/tests/Vps/Trl/") && !stripos($file->getPathname(), "vps/Vps/Trl.php")) ||
+                        stripos($file->getPathname(), "testparse")) { //tests werden ausgeschlossen
                         $extension = end(explode('.', $file->getFileName()));
                       if($extension=='php' || $extension =='js' || $extension =='tpl') {
                           switch ($extension) {
@@ -59,31 +82,41 @@ class Vps_Trl_Parser
                           $files++;
                           //nach trl aufrufen suchen
                           $ret = array();
-                          if ($this->_debug) {
-                              echo 'currentfile: '.$file->getPathname()."\n";
-                          } else {
-                              echo '.';
+                          if (!$quiet) {
+                              if ($this->_debug) {
+                                  echo 'currentfile: '.$file->getPathname()."\n";
+                              } else {
+                                  echo '.';
+                              }
                           }
                           $ret = Zend_Registry::get('trl')->parse(file_get_contents($file), $extension);
                           if ($ret){
                               set_time_limit(60);
-                              $errors = array_merge($errors, $this->insertToXml($ret, $file->getPathname()));
+                              $errors = array_merge($errors, $this->insertToXml($ret, $file->getPathname(), $dirKey));
                           }
                       }
                     }
                 }
             }
         }
+
+        $this->_cleanUp($quiet);
         $ret = array();
         $ret ['files'] = $files;
         $ret ['phpfiles'] = $phpfiles;
         $ret ['jsfiles'] = $jsfiles;
         $ret ['tplfiles'] = $tplfiles;
         $ret ['errors'] = $errors;
+        $ret ['added'] = $this->_added;
+        if ($this->_cleanUp != 'none')
+            $ret ['deleted'] = $this->_deletedRows;
+        else
+            $ret ['deleted'] = false;
+        $ret ['warnings'] = $this->_warnings;
         return $ret;
     }
 
-    public function insertToXml ($entries, $path)
+    public function insertToXml ($entries, $path, $dirKey)
     {
         $errors = array();
         foreach ($entries as $key => $entry){
@@ -91,33 +124,45 @@ class Vps_Trl_Parser
                 $entry['path'] = $path;
                 $errors[] = $entry;
             } else {
-              $xmlsource = $entry['source'];
-              $xmlModel = $this->_getModel($xmlsource);
+                $xmlsource = $entry['source'];
+                $xmlModel = $this->_getModel($xmlsource);
                 $content = array();
 
-              if ($this->_mode == $xmlsource || ($this->_mode == 'all' && $entry)){
-                  if ($this->_checkNotExists($entry, $xmlsource)) {
-                      $content[$this->_getDefaultLanguage($xmlsource)] = $entry['text'];
-                      if (isset($entry['plural'])) {
-                          $content[$this->_getDefaultLanguage($xmlsource).'_plural'] = $entry['plural'];
-                      }
-                      foreach ($this->_languages as $lang) {
-                          if ($lang != $this->_getDefaultLanguage($xmlsource)) {
-                              $content[$lang]  = '_';
-                              if (isset($entry['plural'])) {
-                                  $content[$lang.'_plural'] = '_';
-                              }
-                          }
-                      }
-                      if (isset($entry['context'])) {
-                          $content['context'] = $entry['context'];
-                      }
-                      set_time_limit(20);
-                      $row = $xmlModel->createRow($content);
-                      $row->save();
+                if ($this->_mode == $xmlsource || ($this->_mode == 'all' && $entry)){
 
-                  }
-              }
+                    if ($this->_checkNotExists($entry, $xmlsource)) {
+                        //Warnings check
+
+                        if ($entry['source'] != $dirKey) {
+
+                            $this->_warnings[] = array('dir' => $dirKey, 'before' => $entry['before'],
+                                                'path' => $path, 'linenr' => $entry['linenr']);
+                        } else {
+                            $this->_added[get_class($xmlModel)][] = $entry;
+                            $content[$this->_getDefaultLanguage($xmlsource)] = $entry['text'];
+                            if (isset($entry['plural'])) {
+                              $content[$this->_getDefaultLanguage($xmlsource).'_plural'] = $entry['plural'];
+                            }
+                            foreach ($this->_languages as $lang) {
+                              if ($lang != $this->_getDefaultLanguage($xmlsource)) {
+                                  $content[$lang]  = '_';
+                                  if (isset($entry['plural'])) {
+                                      $content[$lang.'_plural'] = '_';
+                                  }
+                              }
+                            }
+                            if (isset($entry['context'])) {
+                              $content['context'] = $entry['context'];
+                            }
+                            set_time_limit(20);
+                            $row = $xmlModel->createRow($content);
+
+
+                            $this->_usedIds[get_class($xmlModel)][$row->save()] = 1;
+                        }
+
+                    }
+                }
             }
         }
         return $errors;
@@ -134,14 +179,20 @@ class Vps_Trl_Parser
 
     protected function _checkNotExists($entry, $xmlsource)
     {
-
         $model = $this->_getModel($xmlsource);
         $select = $model->select();
         $select->whereEquals($this->_getDefaultLanguage($xmlsource), $entry['text']);
         if (isset($entry['context'])) $select->whereEquals('context', $entry['context']);
         else $select->whereNull('context');
-        $rowscount = $model->getRows($select)->count();
-        if ($rowscount) return false;
+        $rows = $model->getRows($select);
+        $rowscount = $rows->count();
+
+        if ($rowscount) {
+            $row = $rows->current();
+            $this->_usedIds[get_class($model)][$row->id] = 1;
+            return false;
+        }
+
 
         return true;
     }
@@ -153,6 +204,34 @@ class Vps_Trl_Parser
             return 'en';
         } else {
             return Zend_Registry::get('trl')->getWebCodeLanguage();
+        }
+    }
+
+    private function _cleanUp ($quiet)
+    {
+        set_time_limit(200);
+        $toDeleteRows = array();
+        if ($this->_cleanUp == "all" || $this->_cleanUp == "vps") {
+            $rows = $this->_modelVps->getRows();
+            foreach ($rows as $row) {
+                if (!array_key_exists($row->id, $this->_usedIds[get_class($this->_modelVps)])) {
+                    $this->_deletedRows[get_class($this->_modelVps)][] = $row->en;
+                    $toDeleteRows[] = $row;
+                }
+            }
+        }
+        if ($this->_cleanUp == "all" || $this->_cleanUp == "web") {
+            $rows = $this->_modelWeb->getRows();
+            foreach ($rows as $row) {
+                if (!array_key_exists($row->id, $this->_usedIds[get_class($this->_modelWeb)])) {
+                    $this->_deletedRows[get_class($this->_modelWeb)][] = $row->{$this->_codeLanguage};
+                    $toDeleteRows[] = $row;
+                }
+            }
+        }
+        foreach ($toDeleteRows as $r) {
+            if (!$quiet) echo "-$r->id-";
+            $r->delete();
         }
     }
 
