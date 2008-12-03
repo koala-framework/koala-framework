@@ -32,6 +32,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         if (isset($config['dependentModels'])) $this->_dependentModels = (array)$config['dependentModels'];
         if (isset($config['referenceMap'])) $this->_referenceMap = (array)$config['referenceMap'];
         if (isset($config['filters'])) $this->_filters = (array)$config['filters'];
+        if (isset($config['toStringField'])) $this->_toStringField = (string)$config['toStringField'];
         $this->_init();
     }
 
