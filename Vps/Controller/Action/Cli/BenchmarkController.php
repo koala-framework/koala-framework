@@ -282,7 +282,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         }
         exec($cmd, $out, $ret);
         if ($ret) {
-            throw new Vps_Exception($out);
+            throw new Vps_Exception(implode('', $out));
         }
         $ret = file_get_contents($tmpFile);
         unlink($tmpFile);
