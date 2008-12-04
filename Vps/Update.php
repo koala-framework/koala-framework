@@ -85,6 +85,12 @@ abstract class Vps_Update
 
         $u = self::getUpdatesForDir(VPS_PATH.'/Vps', $from, $to);
         $ret = array_merge($ret, $u);
+
+        $revisions = array();
+        foreach ($ret as $u) {
+            $revisions[] = $u->getRevision();
+        }
+        array_multisort($revisions, $ret, SORT_NUMERIC);
         return $ret;
     }
 
@@ -139,6 +145,12 @@ abstract class Vps_Update
                 break;
             }
         }
+
+        $revisions = array();
+        foreach ($ret as $u) {
+            $revisions[] = $u->getRevision();
+        }
+        array_multisort($revisions, $ret, SORT_NUMERIC);
         return $ret;
     }
 }
