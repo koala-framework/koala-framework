@@ -84,6 +84,12 @@ class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
         $this->assertEquals($view->template, 'error.tpl');
+
+        // ClientException
+        $exception = new Vps_ClientException();
+        $view = $this->_processException($exception);
+        $this->assertEquals($view->message, $exception->getMessage());
+        $this->assertEquals($view->template, 'error-client.tpl');
     }
 
     private function _processException($exception)
@@ -92,5 +98,31 @@ class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
         Vps_Debug::setView($view);
         Vps_Debug::handleException($exception);
         return $view;
+    }
+
+    public function testController()
+    {
+        $d = Zend_Registry::get('testDomain');
+
+        $client = new Zend_Http_Client("http://$d/vps/test/vps_exception_test/access-denied");
+        $response = $client->request();
+        $this->assertEquals(401, $response->getStatus());
+
+        $client = new Zend_Http_Client("http://$d/vps/test/vps_exception_test/not-found");
+        $response = $client->request();
+        $this->assertEquals(404, $response->getStatus());
+
+        $client = new Zend_Http_Client("http://$d/vps/test/vps_exception_test/client");
+        $response = $client->request();
+        $this->assertEquals(500, $response->getStatus());
+        $this->assertContains('client exception', $response->getBody());
+
+        $client = new Zend_Http_Client("http://$d/vps/test/vps_exception_test/exception");
+        $response = $client->request();
+        $this->assertEquals(500, $response->getStatus());
+
+        $client = new Zend_Http_Client("http://$d/vps/test/vps_exception_test/exception-other");
+        $response = $client->request();
+        $this->assertEquals(500, $response->getStatus());
     }
 }
