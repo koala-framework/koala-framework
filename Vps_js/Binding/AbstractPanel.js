@@ -62,6 +62,7 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
         if (!this.baseParams) {
             this.baseParams = {};
         }
+        this.setBaseParams(this.baseParams); //damit baseParams in applyBaseParams modifiziert werden können
 
         Vps.Binding.AbstractPanel.superclass.initComponent.call(this);
     },
