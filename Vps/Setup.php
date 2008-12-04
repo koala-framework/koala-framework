@@ -422,6 +422,8 @@ class Vps_Setup
             $page = $data->getComponent();
             $page->sendContent();
 
+            Vps_Benchmark::shutDown();
+
             if ($page instanceof Vpc_Abstract_Feed_Component) {
                 echo "<!--";
             }
