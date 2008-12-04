@@ -77,6 +77,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
             }
         }
         $ret = parent::dispatch($request, $response);
+        Vps_Benchmark::shutDown();
         return $ret;
     }
 }
