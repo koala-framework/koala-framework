@@ -1,14 +1,24 @@
 <?php
 class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Auto_Form
 {
-    protected $_permissions = array('save', 'add');
-    protected $_userDataFormName = 'Vpc_User_Edit_Form_Form';
+    private $_permissionFieldset;
+
+    public function preDispatch()
+    {
+        $regUserForm = Vps_Registry::get('config')->user->form;
+        if (is_string($regUserForm)) {
+            $this->_formName = $regUserForm;
+        } else {
+            $this->_formName = $regUserForm->grid;
+        }
+        parent::preDispatch();
+    }
 
     protected function _initFields()
     {
-        $this->_form->setTable(Zend_Registry::get('userModel'));
+        parent::_initFields();
 
-        $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Advice')));
+        $fs = $this->_form->prepend(new Vps_Form_Container_FieldSet(trlVps('Advice')));
         $fs->setLabelWidth(80);
 
         $fs->add(new Vps_Form_Field_Panel())
@@ -17,53 +27,35 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         $fs->add(new Vps_Form_Field_ShowField('password', trlVps('Activation link')))
             ->setData(new Vps_Controller_Action_User_Users_ActivationlinkData());
 
-
-        $userEditForm = $this->_form->add(new $this->_userDataFormName('user'));
-        $userEditForm->setIdTemplate('{0}');
-
-        $userDirectory = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_User_Directory_Component');
-        if ($userDirectory) {
-            $detailClass = Vpc_Abstract::getChildComponentClass($userDirectory->componentClass, 'detail');
-            $userEditForm->addUserForms($detailClass, array('general'));
-            $userEditForm->fields['firstname']->setAllowBlank(true);
-            $userEditForm->fields['lastname']->setAllowBlank(true);
-        } else {
-            $this->_form->add(new Vpc_User_Detail_General_Form('general', null))
-                        ->setIdTemplate('{0}');
-        }
-
         if ($roleField = $this->_getRoleField()) {
-            $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Permissions')));
-            $fs->setLabelWidth(100);
-            $fs->add($roleField);
-        }
-
-        $config = Zend_Registry::get('config');
-        if (isset($this->_getAuthData()->language) && $config->languages){
-            $data = array();
-            foreach ($config->languages as $key => $value){
-                $data[$key] = $value;
-            }
-            $this->_form->add(new Vps_Form_Field_Select('language', trlVps('Language')))
-            ->setValues($data);
+            $this->_getPermissionFieldset()->add($roleField);
         }
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         if (Vps_Registry::get('acl')->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
-            $this->_form->add(new Vps_Form_Field_Checkbox('webcode', trlVps('Webcode')))
+            $this->_getPermissionFieldset()->add(new Vps_Form_Field_Checkbox('webcode', trlVps('Webcode')))
                 ->setData(new Vps_Controller_Action_User_Users_WebcodeData());
         }
+    }
 
+    private function _getPermissionFieldset()
+    {
+        if (!$this->_permissionFieldset) {
+            $this->_permissionFieldset = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Permissions')));
+            $this->_permissionFieldset->setLabelWidth(100);
+        }
+        return $this->_permissionFieldset;
     }
 
     protected function _getRoleField()
     {
-        $acl = Zend_Registry::get('acl');
+        $acl = Vps_Registry::get('acl');
+        $userRole = Vps_Registry::get('userModel')->getAuthedUserRole();
+        $authedUser = Vps_Registry::get('userModel')->getAuthedUser();
 
         // alle erlaubten haupt-rollen in variable
         $roles = array();
-        foreach ($acl->getAllowedEditRolesByRole($this->_getUserRole()) as $role) {
+        foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
             $roles[$role->getRoleId()] = $role->getRoleName();
         }
         if (!$roles) return null;
@@ -77,15 +69,13 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
         // Wenns keine additionalRoles gibt, normales select verwenden
         if (!$addRoles) {
-                $ret = new Vps_Form_Field_Select('role', trlVps('Rights'));
-                $ret->setValues($roles)->setAllowBlank(false);
-
-
+            $ret = new Vps_Form_Field_Select('role', trlVps('Rights'));
+            $ret->setValues($roles)->setAllowBlank(false);
         } else {
             // eigene additionalRoles holen, nur die dürfen zugewiesen werden
             $allowedRoles = array_merge(
-                $this->_getAuthData()->getAdditionalRoles(),
-                $acl->getAllowedEditResourceRoleIdsByRole($this->_getUserRole())
+                $authedUser->getAdditionalRoles(),
+                $acl->getAllowedEditResourceRoleIdsByRole($userRole)
             );
 
             // cards container erstellen und zu form hinzufügen

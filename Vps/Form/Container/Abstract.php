@@ -63,6 +63,11 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
         return $this->fields->add($v);
     }
 
+    public function prepend($v)
+    {
+        return $this->fields->prepend($v);
+    }
+
     public function insertBefore($where, $v = null)
     {
         return $this->fields->insertBefore($where, $v);
