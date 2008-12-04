@@ -42,9 +42,15 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
         }
 
         if (!$allowed) {
+            $role = null;
+            if ($this->_getAuthData()) $role = $this->_getAuthData()->role;
+            $params = array(
+                'resource' => $resource,
+                'role' => $role
+            );
             if ($this->getHelper('ViewRenderer')->isJson()) {
                 $this->_forward('json-login', 'login',
-                                    'vps_controller_action_user');
+                                    'vps_controller_action_user', $params);
             } else {
                 $params = array('location' => $this->getRequest()->getPathInfo());
                 $this->_forward('index', 'login',
