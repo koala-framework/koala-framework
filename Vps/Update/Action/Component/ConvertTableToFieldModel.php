@@ -16,6 +16,13 @@ class Vps_Update_Action_Component_ConvertTableToFieldModel extends Vps_Update_Ac
         if ($field->key != 'PRI') {
             throw new Vps_ClientException("Field 'component_id' is not the primary key");
         }
+        if (!$this->model->getRow('vpc_data')) {
+            Vps_Registry::get('db')->query("CREATE TABLE IF NOT EXISTS `vpc_data` (
+                `component_id` varchar(255) collate utf8_unicode_ci NOT NULL,
+                `data` text collate utf8_unicode_ci NOT NULL,
+                PRIMARY KEY  (`component_id`)
+            ) ENGINE=InnoDB;");
+        }
         $model = new Vps_Component_FieldModel();
         $rows = Vps_Registry::get('db')->fetchAssoc("SELECT * FROM {$this->table}");
         foreach ($rows as $row) {
