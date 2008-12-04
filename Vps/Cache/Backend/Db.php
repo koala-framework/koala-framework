@@ -98,6 +98,7 @@ class Vps_Cache_Backend_Db extends Zend_Cache_Backend
                 throw new Vps_Exception("second argument must be an array");
             }
             $tags['idPattern'] = str_replace('_', '\_', $tags['idPattern']);
+            $tags['idPattern'] = str_replace('-', '\_\_', $tags['idPattern']);
             $vars = array($tags['idPattern'], $tags['idPattern'] . '%\_\_master');
             $sql = "DELETE FROM {$this->_options['table']} WHERE id LIKE ? AND id NOT LIKE ?";
             if (isset($tags['componentClass']) && $tags['componentClass']) {
