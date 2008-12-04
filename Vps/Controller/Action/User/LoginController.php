@@ -18,6 +18,8 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         if ($this->_getUserRole() != 'guest') {
             $this->view->message = trlVps("You don't have enough permissions for this Action");
         }
+        $this->view->resource = $this->_getParam('resource');
+        $this->view->role = $this->_getParam('role');
         $this->view->login = true;
         $this->view->success = false;
     }

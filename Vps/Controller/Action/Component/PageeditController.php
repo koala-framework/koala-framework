@@ -14,6 +14,7 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
         }
         $c = Vps_Component_Data_Root::getInstance()
             ->getComponentByDbId($id, array('ignoreVisible'=>true));
+
         if (!$c) {
             throw new Vps_Exception("Can't find component to check permissions");
         }

@@ -1,14 +1,6 @@
 <?php
 class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
 {
-    protected $_resourceName;
-
-    protected function _init()
-    {
-        parent::_init();
-        $this->_resourceName = trlVps('News');
-    }
-
     public function getExtConfig()
     {
         $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
@@ -59,10 +51,12 @@ class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
         parent::addResources($acl);
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
+        $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
+        if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
 
         if (count($components) > 1) {
             $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_news',
-                        array('text'=>$this->_resourceName, 'icon'=>'newspaper.png')), 'vps_component_root');
+                        array('text'=>$name, 'icon'=>'newspaper.png')), 'vps_component_root');
             foreach ($components as $c) {
                 $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
                         array('text'=>$c->getTitle(), 'icon'=>'newspaper.png'),
@@ -71,7 +65,7 @@ class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
         } else if (count($components) == 1) {
             $c = $components[0];
             $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
-                    array('text'=>$this->_resourceName, 'icon'=>'newspaper.png'),
+                    array('text'=>$name, 'icon'=>'newspaper.png'),
                     '/admin/component/edit/'.$c->componentClass.'?componentId='.$c->dbId), 'vps_component_root');
 
         }

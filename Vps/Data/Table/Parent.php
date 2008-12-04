@@ -26,7 +26,7 @@ class Vps_Data_Table_Parent extends Vps_Data_Abstract
             $tables = $this->_parentTable;
         }
         foreach ($tables as $t) {
-            if ($t instanceof Zend_Db_Table) {
+            if ($t instanceof Zend_Db_Table_Abstract || is_instance_of($t, 'Zend_Db_Table_Abstract')) {
                 $row = $row->findParentRow($t, $this->_ruleKey);
             } else {
                 $row = $row->getParentRow($this->_parentTable);
