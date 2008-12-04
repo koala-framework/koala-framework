@@ -214,7 +214,9 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
     load: function(params, options) {
     },
     reload : function(options) {
-        this.load(null, options);
+        if (!this.disabled) {
+            this.load(null, options);
+        }
     },
     getSelectedId: function() {
     },

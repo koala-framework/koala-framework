@@ -335,11 +335,11 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                         url: this.controllerUrl+'/json-delete',
                         params: {id: this.getForm().baseParams.id},
                         success: function(response, options, r) {
-                            this.fireEvent('datachange', r);
+                            this.disable();
                             this.getForm().clearValues();
                             this.getForm().clearInvalid();
                             this.getForm().resetDirty();
-                            this.disable();
+                            this.fireEvent('datachange', r);
                             this.fireEvent('deleteaction', this);
                         },
                         scope: this
