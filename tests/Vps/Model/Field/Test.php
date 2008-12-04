@@ -113,4 +113,24 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('defaultFoo1', $row->foo1);
         $this->assertEquals('defaultFoo2', $row->foo2);
     }
+
+    public function testWithProxy()
+    {
+        $fnf = new Vps_Model_FnF(array(
+            'columns' => array('id', 'foo1', 'data')
+        ));
+        $model = new Vps_Model_Proxy(array(
+            'proxyModel' => $fnf,
+            'siblingModels' => array(new Vps_Model_Field(array(
+                'fieldName'=>'data'
+            )))
+        ));
+        $row = $model->createRow();
+        $row->foo1 = 'bar';
+        $row->blub = 'bum';
+        $row->save();
+        $this->assertEquals($fnf->getData(), array(
+            array('id'=>1, 'foo1'=>'bar', 'data'=>serialize(array('blub'=>'bum')))
+        ));
+    }
 }
