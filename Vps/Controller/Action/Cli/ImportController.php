@@ -15,9 +15,15 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_sshDir = $config->server->dir;
 
         if ($ownConfig->server->host == $config->server->host) {
-            $onlineRevision = `cd {$config->server->dir} && php bootstrap.php import get-update-revision`;
+            $cmd = "cd {$config->server->dir} && php bootstrap.php import get-update-revision";
         } else {
-            $onlineRevision = `sudo -u www-data sshvps $this->_sshHost $this->_sshDir import get-update-revision`;
+            $cmd = "sudo -u www-data sshvps $this->_sshHost $this->_sshDir import get-update-revision";
+        }
+        exec($cmd, $onlineRevision, $ret);
+        if ($ret != 0) throw new Vps_ClientException();
+
+        if (!$onlineRevision) {
+            throw new Vps_ClientException("Can't get onlineRevision");
         }
 
         echo "kopiere uploads...\n";
@@ -42,10 +48,12 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         echo "erstelle datenbank dump ($server)...\n";
         if ($ownConfig->server->host == $config->server->host) {
-            $dumpname = `cd {$config->server->dir} && php bootstrap.php import create-dump`;
+            $cmd = "cd {$config->server->dir} && php bootstrap.php import create-dump";
         } else {
-            $dumpname = `sudo -u www-data sshvps $this->_sshHost $this->_sshDir import create-dump`;
+            $cmd = "sudo -u www-data sshvps $this->_sshHost $this->_sshDir import create-dump";
         }
+        exec($cmd, $dumpname, $ret);
+        if ($ret != 0) throw new Vps_ClientException();
 
         if ($ownConfig->server->host != $config->server->host) {
             echo "kopiere datenbank dump...\n";
