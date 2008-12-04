@@ -33,7 +33,7 @@ class Vps_Registry extends Zend_Registry
             $this->offsetSet('acl', $v);
             return $v;
         } else if ($index == 'userModel' && !parent::offsetExists($index)) {
-            $userModel = self::get('config')->userModel;
+            $userModel = self::get('config')->user->model;
             $v = new $userModel();
             $this->offsetSet('userModel', $v);
             return $v;
