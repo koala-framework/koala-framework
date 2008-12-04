@@ -25,6 +25,15 @@ class Vpc_Shop_Products_Directory_Controller extends Vps_Controller_Action_Auto_
     }
     public function jsonIndexAction()
     {
-        $this->view->vpc(Vpc_Admin::getInstance($this->class)->getExtConfig());
+        $this->view->vpc(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
+    }
+
+    public function indexAction()
+    {
+        $c = array(
+            'xtype' => 'vps.component',
+            'mainComponentClass' => $this->_getParam('class')
+        );
+        $this->view->vpc($c);
     }
 }

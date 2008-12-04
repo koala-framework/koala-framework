@@ -28,14 +28,12 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
 
     public function indexAction()
     {
-        $config = Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig();
-        $config['baseParams']['componentId'] = $this->_getParam('componentId');
-        if ($this->getRequest()->module == 'component_test' && isset($config['controllerUrl'])) {
-            $config['controllerUrl'] = str_replace('/admin/component/edit/',
-                        '/vps/componentedittest/'.Vps_Component_Data_Root::getComponentClass().'/',
-                        $config['controllerUrl']);
-        }
-        $this->view->vpc($config);
+        $c = array(
+            'xtype' => 'vps.component',
+            'mainComponentClass' => $this->_getParam('class'),
+            'baseParams' => array('id' => $this->_getParam('componentId'))
+        );
+        $this->view->vpc($c);
     }
 
     public function jsonInsertAction()
