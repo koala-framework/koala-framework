@@ -203,9 +203,11 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     public function toDebug()
     {
         $i = get_class($this);
-        if (method_exists($this, '__toString')) {
-            $i .= " (".$this->__toString().")\n";
-        }
+        try {
+            if (method_exists($this, '__toString')) {
+                $i .= " (".$this->__toString().")\n";
+            }
+        } catch (Vps_Exception $e) {}
         $ret = print_r($this->toArray(), true);
         $ret = preg_replace('#^Array#', $i, $ret);
         $ret = "<pre>$ret</pre>";
