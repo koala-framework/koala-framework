@@ -29,6 +29,8 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
 
     private static function _escapeField($f)
     {
+        if (in_array($f, array('getHits', 'getMisses', 'bytesRead', 'bytesWritten'))) return $f;
+
         $ret = strtolower(preg_replace('#[^a-zA-Z]#', '', $f));
         if (strlen($ret) > 19) {
             $ret = substr($ret, 0, 10).substr($ret, -9);
@@ -164,7 +166,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                 'getHits' => array(
                     'color' => '#00FF00',
                 ),
-                'getHits' => array(
+                'getMisses' => array(
                     'color' => '#FF0000',
                 ),
             ),
@@ -175,6 +177,12 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                 ),
                 'bytesWritten' => array(
                     'color' => '#FF0000',
+                ),
+            ),
+            'load' => array(
+                'verticalLabel' => '[load]',
+                'load' => array(
+                    'color' => '#000000',
                 ),
             )
         );
@@ -280,9 +288,10 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
             }
             $i++;
         }
+        $cmd .= " 2>&1";
         exec($cmd, $out, $ret);
         if ($ret) {
-            throw new Vps_Exception(implode('', $out));
+            throw new Vps_ClientException(implode('', $out));
         }
         $ret = file_get_contents($tmpFile);
         unlink($tmpFile);

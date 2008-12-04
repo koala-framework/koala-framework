@@ -20,13 +20,15 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         if (!$start || $start > time() || (time()-$start) < 1*24*60*60) {
             $start = time()-1*24*60*60;
         }
-        
-        header('Content-Type: image/png');
-        echo Vps_Controller_Action_Cli_BenchmarkController::getGraphContent(
+        $start = max($start, mktime(17,0,0,12,4,2008));
+
+        $c = Vps_Controller_Action_Cli_BenchmarkController::getGraphContent(
             $this->_getParam('name'),
             $start,
             time()
         );
+        header('Content-Type: image/png');
+        echo $c;
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }
