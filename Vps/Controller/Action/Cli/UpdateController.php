@@ -38,8 +38,8 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             exit;
         }
         $updateRevision = file_get_contents('application/update');
-        if (is_numeric($updateRevision)) {
-            $updateRevision = array('start' => $updateRevision);
+        if (is_numeric(trim($updateRevision))) {
+            $updateRevision = array('start' => trim($updateRevision));
         } else {
             $updateRevision = unserialize($updateRevision);
         }
