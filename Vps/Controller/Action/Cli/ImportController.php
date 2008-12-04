@@ -21,6 +21,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
         exec($cmd, $onlineRevision, $ret);
         if ($ret != 0) throw new Vps_ClientException();
+        $onlineRevision = implode('', $onlineRevision);
 
         if (!$onlineRevision) {
             throw new Vps_ClientException("Can't get onlineRevision");
@@ -54,6 +55,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
         exec($cmd, $dumpname, $ret);
         if ($ret != 0) throw new Vps_ClientException();
+        $dumpname = implode('', $dumpname);
 
         if ($ownConfig->server->host != $config->server->host) {
             echo "kopiere datenbank dump...\n";
