@@ -46,4 +46,13 @@ class Vps_Update_Test extends PHPUnit_Framework_TestCase
         $updates = Vps_Update::getUpdatesForDir('Vps/Update/UpdateDir', 101, 110);
         $this->assertEquals(0, count($updates));
     }
+
+    public function testGetUpdatesForMultipleDir()
+    {
+        $updates = Vps_Update::getUpdatesForDir('Vps/Update/UpdateMultiple', 1, 1100);
+        $this->assertEquals(3, count($updates));
+        $this->assertEquals(20, $updates[0]->getRevision());
+        $this->assertEquals(100, $updates[1]->getRevision());
+        $this->assertEquals(1000, $updates[2]->getRevision());
+    }
 }
