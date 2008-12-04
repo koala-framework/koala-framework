@@ -1,6 +1,12 @@
 <?php
 class Vps_Exception_TestController extends Vps_Controller_Action
 {
+    public function noExceptionAction()
+    {
+        echo 'OK';
+        exit;
+    }
+
     public function accessDeniedAction()
     {
         throw new Vps_Exception_AccessDenied();

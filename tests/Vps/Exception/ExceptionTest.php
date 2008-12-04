@@ -103,25 +103,31 @@ class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
     public function testController()
     {
         $d = Zend_Registry::get('testDomain');
+        $testCookie = md5(uniqid('testId', true));
 
         $client = new Zend_Http_Client("http://$d/vps/test/vps_exception_test/access-denied");
+        $client->setCookie('unitTest', $testCookie);
         $response = $client->request();
         $this->assertEquals(401, $response->getStatus());
 
         $client = new Zend_Http_Client("http://$d/vps/test/vps_exception_test/not-found");
+        $client->setCookie('unitTest', $testCookie);
         $response = $client->request();
         $this->assertEquals(404, $response->getStatus());
 
         $client = new Zend_Http_Client("http://$d/vps/test/vps_exception_test/client");
+        $client->setCookie('unitTest', $testCookie);
         $response = $client->request();
-        $this->assertEquals(500, $response->getStatus());
+        $this->assertEquals(200, $response->getStatus());
         $this->assertContains('client exception', $response->getBody());
 
         $client = new Zend_Http_Client("http://$d/vps/test/vps_exception_test/exception");
+        $client->setCookie('unitTest', $testCookie);
         $response = $client->request();
         $this->assertEquals(500, $response->getStatus());
 
         $client = new Zend_Http_Client("http://$d/vps/test/vps_exception_test/exception-other");
+        $client->setCookie('unitTest', $testCookie);
         $response = $client->request();
         $this->assertEquals(500, $response->getStatus());
     }
