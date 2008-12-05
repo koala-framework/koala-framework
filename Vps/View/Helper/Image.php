@@ -11,8 +11,8 @@ class Vps_View_Helper_Image
     public function image($image, $type = 'default', $alt = '', $cssClass = null)
     {
         if (is_string($image)) {
-            $alt = $type;
             $cssClass = $alt;
+            $alt = $type;
         }
         $attr = '';
         if (is_string($cssClass)) {
