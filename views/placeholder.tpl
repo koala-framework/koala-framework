@@ -8,7 +8,7 @@
     <div class="placeholder">
         <p class="first">
             Hier entsteht eine neue Homepage für unseren Kunden
-            <strong><?=str_replace('www.', '', $_SERVER['HTTP_HOST'])?></strong>
+            <strong><?=$_SERVER['HTTP_HOST']?></strong>
         </p>
         <p>Wir bitten Sie, uns in naher Zukunft wieder zu besuchen.</p>
     </div>
