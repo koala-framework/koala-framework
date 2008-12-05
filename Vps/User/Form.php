@@ -7,7 +7,9 @@ class Vps_User_Form extends Vps_Form
     protected function _init()
     {
         parent::_init();
-        $this->setTable(Zend_Registry::get('userModel'));
+        if (!$this->getModel()) {
+            $this->setTable(Zend_Registry::get('userModel'));
+        }
     }
 
     protected function _initFields()

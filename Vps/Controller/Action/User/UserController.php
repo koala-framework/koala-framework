@@ -1,6 +1,8 @@
 <?php
 class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Auto_Form
 {
+    protected $_permissions = array('save', 'add');
+
     private $_permissionFieldset;
 
     public function preDispatch()

@@ -117,11 +117,11 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
                 if (!is_array($i)) {
                     $store['data'][] = array($k, $i);
                 } else {
-                    if (isset($i['id'])) $id = $i['id'];
-                    elseif (isset($i[0])) $id = $i[0];
+                    if (array_key_exists('id', $i)) $id = $i['id'];
+                    elseif (array_key_exists(0, $i)) $id = $i[0];
                     else throw new Vps_Exception("id not found");
-                    if (isset($i['value'])) $value = $i['value'];
-                    else if (isset($i[1])) $value = $i[1];
+                    if (array_key_exists('value', $i)) $value = $i['value'];
+                    else if (array_key_exists(1, $i)) $value = $i[1];
                     else throw new Vps_Exception("value not found");
                     $store['data'][] = array($id, $value);
                 }
