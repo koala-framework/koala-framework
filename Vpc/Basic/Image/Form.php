@@ -43,6 +43,11 @@ class Vpc_Basic_Image_Form extends Vpc_Abstract_Form
         $this->add(new Vps_Form_Field_File('Image', trlVps('Image')))
             ->setAllowBlank(Vpc_Abstract::getSetting($class, 'allowBlank'))
             ->setAllowOnlyImages(true);
+        if (Vpc_Abstract::getSetting($class, 'showHelpText')) {
+            $helptext = trlVps('Size of Target Image') . ': ' . $dimensions[0] . 'x' . $dimensions[1] . 'px';
+            $helptext .= "<br />" . trlVps('If size does not fit, scale method will be') . ': ' . $dimensions[2];
+            $this->getByName('Image')->setHelpText($helptext);
+        }
     }
 
     public function setFieldLabel($label)
