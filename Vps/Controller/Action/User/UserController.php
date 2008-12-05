@@ -82,7 +82,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
             // cards container erstellen und zu form hinzufügen
             $ret = new Vps_Form_Container_Cards('role', trlVps('Rights'));
-            $ret->setAllowBlank(false);
+            $ret->getCombobox()->setAllowBlank(false);
             foreach ($roles as $roleId => $roleName) {
                 $card = $ret->add();
                 $card->setTitle($roleName);
