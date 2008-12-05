@@ -11,7 +11,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         'delete' => 'page_delete',
         'folder' => 'folder',
         'home' => 'application_home',
-        'domain' => 'page_world',
+        'domain' => 'world',
         'allowed' => 'page_white',
         'root' => 'world'
         );
@@ -27,6 +27,16 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     {
         $this->_model = new Vps_Component_Model();
         parent::init();
+    }
+
+    // Bei Domains Root ausblenden
+    protected function _formatNodes($parentRow = null)
+    {
+        $root = Vps_Component_Data_Root::getInstance();
+        if (is_instance_of($root->componentClass, 'Vpc_Root_DomainRoot_Component') && is_null($parentRow)) {
+            $parentRow = $this->_model->getRow($this->_model->select()->whereNull('parent_id'));
+        }
+        return parent::_formatNodes($parentRow);
     }
 
     protected function _formatNode($row)
