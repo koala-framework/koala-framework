@@ -6,9 +6,10 @@
   </head>
   <body>
     <div class="placeholder">
-        <p class="first">Hier entsteht für unseren Kunden<br />
-        <strong><?=str_replace('www.', '', $_SERVER['HTTP_HOST'])?></strong><br />
-        eine Internetpräsentation.</p>
+        <p class="first">
+            Hier entsteht eine neue Homepage für unseren Kunden
+            <strong><?=str_replace('www.', '', $_SERVER['HTTP_HOST'])?></strong>
+        </p>
         <p>Wir bitten Sie, uns in naher Zukunft wieder zu besuchen.</p>
     </div>
     <p class="copy">© 2000 - <?=date('Y')?> Vivid Planet Software GmbH</p>
