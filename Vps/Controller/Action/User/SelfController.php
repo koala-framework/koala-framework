@@ -1,6 +1,8 @@
 <?php
 class Vps_Controller_Action_User_SelfController extends Vps_Controller_Action_Auto_Form
 {
+    protected $_permissions = array('save', 'add');
+
     public function preDispatch()
     {
         $regUserForm = Vps_Registry::get('config')->user->form;
