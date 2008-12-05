@@ -18,7 +18,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             'imgCssClass'       => '',
             'emptyImage'        => false,
             'useParentImage'    => false,
-
+            'showHelpText'      => false
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
         return $ret;
