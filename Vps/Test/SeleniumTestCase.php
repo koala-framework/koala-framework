@@ -185,4 +185,9 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         return $m->getRows($select
                     ->whereEquals('identifier', $this->_unitTestCookie));
     }
+
+    public function assertBodyText($search)
+    {
+        $this->assertEquals($search, $this->getText('//body'));
+    }
 }
