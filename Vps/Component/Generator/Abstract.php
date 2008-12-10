@@ -144,7 +144,7 @@ abstract class Vps_Component_Generator_Abstract
         }
         static $cache = null;
         if (!$cache) {
-            $cache = Zend_Cache::factory('Core', 'Memcached', array(
+            $cache = Vps_Cache::factory('Core', 'Memcached', array(
                 'lifetime'=>null,
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));

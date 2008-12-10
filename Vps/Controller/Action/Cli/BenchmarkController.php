@@ -215,7 +215,8 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         $load = explode(' ', $load);
         $values[] = $load[0];
         $memcache = new Memcache;
-        $memcache->addServer('localhost');
+        $memcacheSettings = Vps_Registry::get('config')->server->memcache;
+        $memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
         $stats = $memcache->getStats();
         $values[] = $stats['bytes_read'];
         $values[] = $stats['bytes_written'];
@@ -257,7 +258,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         $graphs = self::getGraphs();
         $graph = $graphs[$gName];
         $tmpFile = tempnam('/tmp', 'graph');
-        $cmd = "rrdtool graph $tmpFile -h 768 -w 1024 ";
+        $cmd = "rrdtool graph $tmpFile -h 300 -w 600 ";
         $cmd .= "-s $start ";
         $cmd .= "-e $end ";
         if (isset($graph['verticalLabel'])) {
