@@ -12,11 +12,17 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_Abstr
         );
         return $ret;
     }
-    
+
+    protected function _getPassword()
+    {
+        return $this->_getSetting('password');
+    }
+
     public function isLoggedId()
     {
-        $pw = $this->_getSetting('password');
+        $pw = $this->_getPassword();
         if (!is_array($pw)) $pw = array($pw);
+        p($pw);
 
         $msg = '';
         $session = new Zend_Session_Namespace('password');
@@ -27,7 +33,7 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_Abstr
         }
         return $session->login;
     }
-    
+
     public function processOutput($output)
     {
         if ($this->isLoggedId()) return $output;
