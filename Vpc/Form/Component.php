@@ -19,7 +19,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['viewCache'] = false;
         $ret['method'] = 'post';
         $ret['cssClass'] = 'webStandard webForm';
-        
+
         //todo: wenn mehrere verbessern
         $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
 
@@ -37,12 +37,12 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     public function preProcessInput(array $postData)
     {
     }
-    
+
     public function processInput(array $postData)
     {
         $this->_processInput($postData);
     }
-    
+
     protected function _processInput($postData)
     {
         if ($this->_processed) {
@@ -150,7 +150,12 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         return $ret;
     }
-    
+
+    public function hasContent()
+    {
+        return true;
+    }
+
     public function isProcessed()
     {
         return $this->_processed;
