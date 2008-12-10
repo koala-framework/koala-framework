@@ -15,16 +15,21 @@ class Vps_Form_Cards_CardsTest extends Vps_Test_SeleniumTestCase
     {
 
         $this->open('/vps/test/vps_form_cards_test?id=4');
-        $this->click("//input[@name = 'lastname']");
         $this->waitForConnections();
+        $this->assertFalse($this->isVisible("//input[@name = 'firstname']"));
+        $this->assertTrue($this->isVisible("//input[@name = 'lastname']"));
+        $this->assertEquals('foo', $this->getValue("//input[@name = 'lastname']"));
+
         $this->open('/vps/test/vps_form_cards_test?id=1');
-        $this->click("//input[@name = 'firstname']");
         $this->waitForConnections();
+        $this->assertFalse($this->isVisible("//input[@name = 'lastname']"));
+        $this->assertTrue($this->isVisible("//input[@name = 'firstname']"));
+        $this->assertEquals('Max', $this->getValue("//input[@name = 'firstname']"));
+
         $this->type("//input[@name = 'firstname']", 'newName');
         $this->click("//button[text()='".trlVps('Save')."']");
         $this->open('/vps/test/vps_form_cards_test/get-model-data');
-        $this->assertTextPresent('newName');
-        sleep(5);
+        $this->assertBodyText('newName');
 
     }
 
