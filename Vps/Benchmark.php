@@ -170,7 +170,8 @@ class Vps_Benchmark
         $wasCalled = true;
 
         $memcache = new Memcache;
-        $memcache->addServer('localhost');
+        $memcacheSettings = Vps_Registry::get('config')->server->memcache;
+        $memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
         $prefix = Zend_Registry::get('config')->application->id.'-'.
                             Vps_Setup::getConfigSection().'-bench-';
         if (!isset($_SERVER['REQUEST_URI'])) {

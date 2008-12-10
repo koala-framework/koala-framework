@@ -48,7 +48,7 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
             }
         }
         if (in_array('memcache', $types)) {
-            $cache = Zend_Cache::factory('Core', 'Memcached', array(
+            $cache = Vps_Cache::factory('Core', 'Memcached', array(
                 'lifetime'=>null,
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));

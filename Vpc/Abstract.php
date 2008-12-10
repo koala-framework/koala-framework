@@ -109,7 +109,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
         static $cache = null;
         if (!$cache) {
-            $cache = Zend_Cache::factory('Core', 'Memcached', array('lifetime'=>null, 'automatic_serialization'=>true));
+            $cache = Vps_Cache::factory('Core', 'Memcached', array('lifetime'=>null, 'automatic_serialization'=>true));
         }
         $currentCacheId = 'iccc'.Vps_Setup::getConfigSection().md5($class.$cacheId);
 
