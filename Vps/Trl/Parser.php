@@ -143,14 +143,14 @@ class Vps_Trl_Parser
                             if (isset($entry['plural'])) {
                               $content[$this->_getDefaultLanguage($xmlsource).'_plural'] = $entry['plural'];
                             }
-                            foreach ($this->_languages as $lang) {
+                           /* foreach ($this->_languages as $lang) {
                               if ($lang != $this->_getDefaultLanguage($xmlsource)) {
                                   $content[$lang]  = '_';
                                   if (isset($entry['plural'])) {
                                       $content[$lang.'_plural'] = '_';
                                   }
                               }
-                            }
+                            }*/
                             if (isset($entry['context'])) {
                               $content['context'] = $entry['context'];
                             }
