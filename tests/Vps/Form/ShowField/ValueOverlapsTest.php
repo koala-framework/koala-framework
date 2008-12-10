@@ -13,7 +13,7 @@ class Vps_Form_ShowField_ValueOverlapsTest extends Vps_Test_SeleniumTestCase
 
     public function testValueOverlaps()
     {
-        $this->open('/vps/test/vps_form_show-field_value-overlaps-error');
+        $this->open('/vps/test/vps_form_show-field_value-overlaps-error-form');
         $this->click("//button[text()='testA']");
         $this->waitForConnections();
         sleep(3);
