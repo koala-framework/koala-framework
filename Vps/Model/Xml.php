@@ -175,18 +175,18 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
     private function _getSimpleXml()
     {
         if (!isset($this->_simpleXml)) {
-	        if ($this->_xmlContent) {
-	            $contents = $this->_xmlContent;
-	        } else {
-		        if (file_exists($this->_filepath)){
-		            $contents = file_get_contents($this->_filepath);
-		        } elseif (isset($this->_rootNode)) {
-		            $contents = "<$this->_rootNode ></$this->_rootNode>";
-		        } else {
-		            throw new Vps_Exception("Neither a rootnode nor a filepath is set");
-		        }
-	        }
-	        $this->_simpleXml = new SimpleXMLElement($contents);
+            if ($this->_xmlContent) {
+                $contents = $this->_xmlContent;
+            } else {
+                if (file_exists($this->_filepath)){
+                    $contents = file_get_contents($this->_filepath);
+                } elseif (isset($this->_rootNode)) {
+                    $contents = "<$this->_rootNode ></$this->_rootNode>";
+                } else {
+                    throw new Vps_Exception("Neither a rootnode nor a filepath is set");
+                }
+            }
+            $this->_simpleXml = new SimpleXMLElement($contents);
         }
         return $this->_simpleXml;
     }
@@ -238,6 +238,16 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
             return md5($this->_xmlContent);
         } else {
             throw new Vps_Exception("no unique identifier set");
+        }
+    }
+
+
+    public function isEqual(Vps_Model_Interface $other)
+    {
+        if ($other instanceof Vps_Model_Xml && $this->getFilepath() ==  $other->getFilepath()) {
+            return true;
+        } else {
+            return false;
         }
     }
 
