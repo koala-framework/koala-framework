@@ -38,17 +38,11 @@ class Vps_Form_Cards_TestController extends Vps_Controller_Action_Auto_Form
 
     public function getModelDataAction()
     {
-        $sessionInserted = new Zend_Session_Namespace('test_inserted_value');
-        echo ($sessionInserted->value);
+        $model = Vps_Model_Abstract::getInstance('Vps_Form_Cards_TopModel');
+        $row = $model->getRow(1);
+        echo $row->firstname;
         exit;
 
-    }
-
-    protected function _afterSave(Vps_Model_Row_Interface $row)
-    {
-        $sessionInserted = new Zend_Session_Namespace('test_inserted_value');
-        $silblingRow = $row->getSilblingRow();
-        $sessionInserted->value = $silblingRow->firstname;
     }
 }
 
