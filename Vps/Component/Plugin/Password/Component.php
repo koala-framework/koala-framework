@@ -22,8 +22,6 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_Abstr
     {
         $pw = $this->_getPassword();
         if (!is_array($pw)) $pw = array($pw);
-        p($pw);
-
         $msg = '';
         $session = new Zend_Session_Namespace('password');
         if (isset($_POST['password'])) {
