@@ -215,6 +215,10 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             if (!($data[$expr->getField()] && $data[$expr->getField()] < $expr->getValue())) {
                 return false;
             }
+        } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
+            if (!(isset($data[$expr->getField()]) && $data[$expr->getField()] && is_numeric(strpos($data[$expr->getField()], $expr->getValue())))) {
+                return false;
+            }
         } else if ($expr instanceof Vps_Model_Select_Expr_Not) {
                 if ($this->_checkExpressions($expr->getExpression(), $data)) {
                     return false;
