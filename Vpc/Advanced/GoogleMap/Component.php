@@ -20,7 +20,8 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Advanced_GoogleMapView_Compon
     protected function _getOptions()
     {
         $row = $this->_getRow();
-        $fields = array('coordinates', 'width', 'height', 'zoom_properties', 'scale', 'satelite', 'overview');
+        $fields = array('coordinates', 'zoom', 'width', 'height', 'zoom_properties',
+                        'scale', 'satelite', 'overview');
         foreach ($fields as $f) {
             $ret[$f] = $row->$f;
         }
