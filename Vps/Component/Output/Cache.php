@@ -121,7 +121,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
                 'pageId' => $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($componentId))
             ), $lifetime);
         } else {
-            $ret = "{hasContent " . $componentId . "}";
+            $ret = "{hasContent " . $componentId . '#' . uniqid() . "}";
             $this->_toLoadHasContent[$ret] = array(
                 'componentId' => $componentId,
                 'componentClass' => $componentClass,
