@@ -32,6 +32,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                         'vps_controller_action_spam');
         $this->addControllerDirectory(VPS_PATH . '/tests',
                                         'vps_test');
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Trl',
+                                'vps_controller_action_trl');
         if (file_exists('application/controllers/Cli')) {
             $this->addControllerDirectory('application/controllers/Cli', 'cli');
         }
