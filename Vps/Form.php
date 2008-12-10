@@ -135,7 +135,6 @@ class Vps_Form extends Vps_Form_NonTableForm
     private function _rowIsParentRow($parentRow)
     {
         $id = $this->_getIdByParentRow($parentRow);
-
         if ($parentRow && !$parentRow instanceof Vps_Model_FnF_Row
             && $parentRow->getModel()->isEqual($this->_model)
             && $parentRow->{$parentRow->getModel()->getPrimaryKey()} == $id
