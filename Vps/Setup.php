@@ -246,10 +246,20 @@ class Vps_Setup
             Zend_Registry::get('config')->debug->benchmark = false;
         }
 
-        if (Zend_Registry::get('config')->server->redirectToDomain
+        // Falls redirectToDomain eingeschalten ist, umleiten
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
+        $domains = array();
+        if (Zend_Registry::get('config')->vpc->domains) {
+            foreach (Zend_Registry::get('config')->vpc->domains as $domain) {
+               $domains[] = $domain->domain;
+            }
+        }
+        if ($host
+            && Zend_Registry::get('config')->server->redirectToDomain
             && Zend_Registry::get('config')->server->domain
-            && isset($_SERVER['HTTP_HOST'])
-            && $_SERVER['HTTP_HOST'] != Zend_Registry::get('config')->server->domain) {
+            && $host != Zend_Registry::get('config')->server->domain
+            && !in_array($host, $domains)
+        ) {
             header("Location: http://".Zend_Registry::get('config')->server->domain.$_SERVER['REQUEST_URI'], true, 301);
             exit;
         }
