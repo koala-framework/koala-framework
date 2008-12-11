@@ -3,7 +3,6 @@ class Vps_Asset
 {
     private $_icon;
     private $_type;
-    private $_filename;
     public function __construct($icon, $type = null)
     {
         if (!$type) {
@@ -27,16 +26,18 @@ class Vps_Asset
                 $filename = $paths->silkicons.'/'.$icon.'.png';
                 $type = 'silkicons';
                 $icon .= '.png';
+            } else {
+                throw new Vps_Exception("Asset '$icon' not found");
             }
         }
         $this->_type = $type;
         $this->_icon = $icon;
-        $this->_filename = $filename;
     }
     
     public function getFilename()
     {
-        return $this->_filename;
+        $paths = Zend_Registry::get('config')->path;
+        return $paths->{$this->_type}.'/'.$this->_icon;
     }
 
     public function __toString()
