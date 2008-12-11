@@ -16,8 +16,7 @@ class Vps_Update_Action_Component_ConvertComponentIds extends Vps_Update_Action_
     {
         $search = $this->search;
         $replace = $this->replace;
-        $pattern = $this->pattern;
-        if (!$pattern) $pattern = $search . '%';
+        $pattern = isset($this->pattern) ? $this->pattern : $search . '%';
 
         $db = Zend_Registry::get('db');
         foreach ($db->query("SHOW TABLES")->fetchAll() as $table) {
