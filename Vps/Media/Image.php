@@ -8,6 +8,9 @@ class Vps_Media_Image
 
     public static function calculateScaleDimensions($sourceSize, $size)
     {
+        if (is_string($sourceSize)) {
+            $sourceSize = @getimagesize($sourceSize);
+        }
         if (isset($size['width'])) $width = $size['width'];
         else if (isset($size[0])) $width = $size[0];
         else $width = 0;

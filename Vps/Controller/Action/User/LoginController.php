@@ -58,6 +58,11 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
                 $this->view->text = trlVps('Login successful').'<!--successful-->';
             } else {
                 $this->view->text = trlVps('Login failed');
+
+                $msgs = $result->getMessages();
+                if ($msgs && isset($msgs[0]) && $msgs[0] == 'IP address not allowed') {
+                    $this->view->text .= ' ('.$msgs[0].')';
+                }
             }
         } else {
             $this->view->text = '';

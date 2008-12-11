@@ -14,6 +14,16 @@ class Vps_Cache_Core extends Zend_Cache_Core
     public function load($cacheId)
     {
         $ret = parent::load($cacheId);
+
+        if ($ret && isset($ret['mtimeFilesCheckAlways']) && $ret['mtimeFilesCheckAlways']) {
+            foreach ($ret['mtimeFilesCheckAlways'] as $f) {
+                if (file_exists($f) && filemtime($f) > $ret['mtime']) {
+                    $ret = false;
+                    break;
+                }
+            }
+        }
+
         if ($ret && Vps_Registry::get('config')->debug->componentCache->checkComponentModification)
         {
             if (isset($ret['mtimeFiles'])) {
