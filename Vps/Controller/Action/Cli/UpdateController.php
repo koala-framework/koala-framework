@@ -88,19 +88,21 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 $this->_executeUpdate($updates, 'postUpdate');
                 Vps_Controller_Action_Cli_ClearCacheController::clearCache();
                 echo "\ncleared cache";
-                echo "\n\033[32mupdate finished\033[0m\n";
                 foreach ($updates as $k=>$u) {
                     if (!in_array($u->getRevision(), $updateRevision['done'])) {
                         $updateRevision['done'][] = $u->getRevision();
                     }
                 }
                 file_put_contents('application/update', serialize($updateRevision));
+                echo "\n\033[32mupdate finished\033[0m\n";
             } else {
                 echo "\nupdate stopped\n";
             }
         }
 
-        $this->_helper->viewRenderer->setNoRender(true);
+        //$this->_helper->viewRenderer->setNoRender(true);
+
+        exit;
     }
 
     private function _executeUpdate($updates, $method)
