@@ -71,7 +71,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
 
     protected function _renderContent($componentId, $componentClass, $masterTemplate)
     {
-        if (!Vpc_Abstract::getSetting($componentClass, 'viewCache')) {
+        if (!$this->_hasViewCache($componentClass)) {
             return parent::_renderContent($componentId, $componentClass, $masterTemplate);
         }
         $ret = false;
@@ -102,7 +102,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
     protected function _renderHasContent($componentId, $componentClass, $content)
     {
         // Wenn Komponente keinen View Cache hat, ohne Cache ausgeben
-        if (!Vpc_Abstract::getSetting($componentClass, 'viewCache')) {
+        if (!$this->_hasViewCache($componentClass)) {
             return parent::_renderHasContent($componentId, $componentClass, $content);
         }
 
