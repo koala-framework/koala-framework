@@ -233,7 +233,7 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
         $select->whereEquals('en', 'newFoo');
         $row = $modelVps->getRows($select)->current();
         $this->assertEquals(3, $row->id);
-        $this->assertEquals('_', $row->de);
+        $this->assertEquals('', $row->de);
 
         //insert same again
         $this->assertEquals(3, $modelVps->getRows()->count());
