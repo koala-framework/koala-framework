@@ -16,7 +16,7 @@ class Vps_Media_Cache extends Vps_Cache_Core
 
     public function remove($id)
     {
-        Vps_Benchmark::info("Media-Cache '$id' gelöscht.");
+        Vps_Benchmark::info("Media-Cache '$id' gelÃ¶scht.");
         return parent::remove($id);
     }
 }

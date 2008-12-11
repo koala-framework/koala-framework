@@ -77,7 +77,7 @@ class Vps_Util_Check_Ip
         }
 
         $checkIpParts = explode('.', $ip);
-
+        $ipCorrect = false;
         foreach ($allowedIps as $allowedIp) {
             $allowedIpParts = explode('.', $allowedIp);
             $ipCorrect = true;

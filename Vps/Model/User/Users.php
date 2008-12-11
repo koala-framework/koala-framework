@@ -148,8 +148,8 @@ class Vps_Model_User_Users extends Vps_Db_Table
 
         $restClient = new Vps_Rest_Client();
         $restClient->login($this->getRowWebcode(), $identity, $credential);
-
         $restResult = $restClient->get();
+
         if ($restResult->status()) {
             $userRow = $this->find($restResult->id())->current();
 
@@ -171,6 +171,12 @@ class Vps_Model_User_Users extends Vps_Db_Table
                 'identity'           => $identity,
                 'messages'           => array($restResult->msg()),
                 'userId'             => $restResult->id()
+            );
+        } else if (strpos($restResult->toValue($restResult->getIterator()), 'Vps_Util_Check_Ip_Exception')) {
+            return array(
+                'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
+                'identity'           => $identity,
+                'messages'           => array('IP address not allowed')
             );
         } else {
             return array(
