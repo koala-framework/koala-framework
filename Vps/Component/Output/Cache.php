@@ -78,7 +78,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         $cacheId = $this->getCache()->getCacheIdFromComponentId($componentId, $masterTemplate);
 
         if ($this->getCache()->isLoaded($cacheId)) {
-            Vps_Benchmark::count('rendered cache (preloaded)', $componentId.($masterTemplate?' (master)':''));
+            Vps_Benchmark::count('rendered cache', $componentId.($masterTemplate?' (master)':''));
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) {
             $ret = parent::_renderContent($componentId, $componentClass, $masterTemplate);
@@ -111,7 +111,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         $cacheId = $this->getCache()->getCacheIdFromComponentId($componentId, false, true);
 
         if ($this->getCache()->isLoaded($cacheId)) { // Wurde bereits preloaded
-            Vps_Benchmark::count('rendered cache (preloaded)', $componentId.' (hasContent)');
+            Vps_Benchmark::count('rendered cache', $componentId.' (hasContent)');
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) { // Nicht in Cache, aber sollte in Cache sein -> ohne Cache holen
             $ret = parent::_renderHasContent($componentId, $componentClass, $content);
