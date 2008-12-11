@@ -34,6 +34,7 @@ class Vpc_Basic_Text_Pdf extends Vpc_Abstract_Pdf
                 $html = preg_replace('#<p[^>]*>#', '<br>', $html);
                 $html = preg_replace('#<p[^>]*///>#', '<br/>', $html);
                 $html = str_replace("\n", "", $html);
+                $html = str_replace('<img src= "', '<img src="', $html); // Sonst spinnt tcpdf
 
             } elseif ($content['type'] == 'image') {
                 $this->textAreaHTML($html);
