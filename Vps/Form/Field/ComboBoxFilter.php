@@ -3,7 +3,7 @@
  * Für zwei (oder mehr) zusammengeschaltete ComboBoxen (Auswahl in der ersten
  * lädt Daten in der zweiten nach, gespeichert wird nur die zweite wenn nicht anders angegeben)
  **/
-class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_ComboBox
+class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
 {
     public function __construct($field_name = null, $field_label = null)
     {
