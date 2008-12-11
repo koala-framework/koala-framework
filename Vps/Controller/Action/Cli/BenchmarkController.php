@@ -12,7 +12,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         $fields = array(
             'requests', 'duration', 'queries',
             'componentDatas', 'generators', 'componentData Pages', 'components',
-            'preload cache', 'rendered nocache', 'rendered cache (preloaded)',
+            'preload cache', 'rendered nocache', 'rendered cache', 'rendered noviewcache',
             'getRecursiveChildComponents', 'getChildComponents uncached', 'getChildComponents cached', 'countChildComponents',
             'iccc cache semi-hit', 'iccc cache miss', 'iccc cache hit',
             'Generator::getInst semi-hit', 'Generator::getInst miss', 'Generator::getInst hit',
@@ -27,7 +27,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
 
     }
 
-    private static function _escapeField($f)
+    public static function escapeField($f)
     {
         if (in_array($f, array('getHits', 'getMisses', 'bytesRead', 'bytesWritten'))) return $f;
 
@@ -43,21 +43,6 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         $graphs = array(
             'requests'=>array(
                 'verticalLabel' => 'requests / s',
-                'content-requests' => array(
-                    'perRequest' => false,
-                    'color' => '#000000',
-                    'label' => 'content'
-                ),
-                'media-requests' => array(
-                    'perRequest' => false,
-                    'color' => '#00FFFF',
-                    'label' => 'media'
-                ),
-                'admin-requests' => array(
-                    'perRequest' => false,
-                    'color' => '#0000FF',
-                    'label' => 'admin'
-                ),
                 'asset-requests' => array(
                     'perRequest' => false,
                     'color' => '#00FF00',
@@ -72,7 +57,23 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                     'perRequest' => false,
                     'color' => '#FF0000',
                     'label' => 'unkown'
-                )
+                ),
+                'media-requests' => array(
+                    'perRequest' => false,
+                    'color' => '#00FFFF',
+                    'label' => 'media'
+                ),
+                'admin-requests' => array(
+                    'perRequest' => false,
+                    'color' => '#0000FF',
+                    'label' => 'admin'
+                ),
+                'content-requests' => array(
+                    'perRequest' => false,
+                    'color' => '#000000',
+                    'label' => 'content'
+                ),
+
             ),
             'cache'=>array(
                 'verticalLabel' => 'components rendered / request',
@@ -80,28 +81,32 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                     'color' => '#FF0000',
                     'label' => 'nocache'
                 ),
-                'content-rendered cache (preloaded)' => array(
+                'content-rendered cache' => array(
                     'color' => '#00FF00',
                     'label' => 'cache'
+                ),
+                'content-rendered noviewcache' => array(
+                    'color' => '#000000',
+                    'label' => 'noviewcache'
                 )
             ),
             'duration'=>array(
                 'verticalLabel' => 'processing time / request [s]',
-                'content-duration' => array(
-                    'cmd' => 'CDEF:perrequestx0=perrequest0,1000,/',
-                    'line' => 'LINE2:perrequestx0#FF0000:"content" ',
+                'asset-duration' => array(
+                    'cmd' => 'CDEF:perrequestx2=perrequest2,1000,/',
+                    'line' => 'LINE2:perrequestx2#000000:"asset" ',
                 ),
                 'media-duration' => array(
                     'cmd' => 'CDEF:perrequestx1=perrequest1,1000,/',
                     'line' => 'LINE2:perrequestx1#00FF00:"media" ',
                 ),
-                'asset-duration' => array(
-                    'cmd' => 'CDEF:perrequestx2=perrequest2,1000,/',
-                    'line' => 'LINE2:perrequestx2#000000:"asset" ',
-                ),
                 'admin-duration' => array(
                     'cmd' => 'CDEF:perrequestx3=perrequest3,1000,/',
                     'line' => 'LINE2:perrequestx3#0000FF:"admin" ',
+                ),
+                'content-duration' => array(
+                    'cmd' => 'CDEF:perrequestx0=perrequest0,1000,/',
+                    'line' => 'LINE2:perrequestx0#FF0000:"content" ',
                 ),
             ),
             'objects'=>array(
@@ -170,6 +175,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                     'color' => '#FF0000',
                 ),
             ),
+            /*
             'memcacheBytes' => array(
                 'verticalLabel' => '[bytes]',
                 'bytesRead' => array(
@@ -179,6 +185,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                     'color' => '#FF0000',
                 ),
             ),
+            */
             'load' => array(
                 'verticalLabel' => '[load]',
                 'load' => array(
@@ -202,7 +209,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
             $cmd .= "DS:getHits:COUNTER:".($interval*2).":0:".(2^31)." ";
             $cmd .= "DS:getMisses:COUNTER:".($interval*2).":0:".(2^31)." ";
             foreach ($this->_getFields() as $field) {
-                $cmd .= "DS:".self::_escapeField($field).":COUNTER:".($interval*2).":0:".(2^31)." ";
+                $cmd .= "DS:".self::escapeField($field).":COUNTER:".($interval*2).":0:".(2^31)." ";
             }
             $cmd .= "RRA:AVERAGE:0.6:1:2016 "; //1 woche
             $cmd .= "RRA:AVERAGE:0.6:7:1500 "; //1 Monat
@@ -264,11 +271,11 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         if (isset($graph['verticalLabel'])) {
             $cmd .= "--vertical-label \"$graph[verticalLabel]\" ";
         }
-        $cmd .= "DEF:requests=benchmark.rrd:".self::_escapeField('content-requests').":AVERAGE ";
+        $cmd .= "DEF:requests=benchmark.rrd:".self::escapeField('content-requests').":AVERAGE ";
         $i = 0;
         foreach ($graph as $field=>$settings) {
             if ($field == 'verticalLabel') continue;
-            $cmd .= "DEF:line$i=benchmark.rrd:".self::_escapeField($field).":AVERAGE ";
+            $cmd .= "DEF:line$i=benchmark.rrd:".self::escapeField($field).":AVERAGE ";
             $cmd .= "CDEF:perrequest$i=line$i,requests,/ ";
             if (isset($settings['cmd'])) $cmd .= $settings['cmd'].' ';
             if (isset($settings['line'])) {
