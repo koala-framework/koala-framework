@@ -6,6 +6,16 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function __construct(array $config)
     {
         $this->_data = $config['data'];
+/*
+        $m = new Vps_Dao_Pages();
+        if (isset($this->_data->row) && $row = $m->find($this->_data->row->id)->current()) {
+            $this->parent_id = $row->parent_id;
+            $this->pos = $row->pos;
+            $this->visible = $row->visible;
+            $this->name = $row->name;
+            $this->is_home = $row->is_home;
+        }
+*/
         parent::__construct($config);
     }
 
@@ -51,11 +61,11 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
             $this->_beforeInsert();
             $row = $m->createRow();
         }
-        $row->parent_id = $this->parent_id;
-        $row->pos = $this->pos;
-        $row->visible = $this->visible;
-        $row->name = $this->name;
-        $row->is_home = $this->is_home;
+        if (isset($this->parent_id)) $row->parent_id = $this->parent_id;
+        if (isset($this->pos)) $row->pos = $this->pos;
+        if (isset($this->visible)) $row->visible = $this->visible;
+        if (isset($this->name)) $row->name = $this->name;
+        if (isset($this->is_home)) $row->is_home = $this->is_home;
         $ret = $row->save();
         if ($id) {
             $this->_afterUpdate();
