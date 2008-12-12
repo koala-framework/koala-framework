@@ -19,7 +19,8 @@ class Vps_Component_Generator_Domain_Category extends Vpc_Root_DomainRoot_Catego
                   'parent_id'=>null, 'component'=>'empty_ch', 'is_home'=>false, 'category'=>'bottom', 'domain' => 'ch', 'hide'=>false),
         )));
         $ret['generators']['page']['component'] = array(
-            'empty' => 'Vpc_Basic_Empty_Component'
+            'empty' => 'Vpc_Basic_Empty_Component',
+            'empty_ch' => 'Vpc_Basic_Image_Component'
         );
         return $ret;
     }
