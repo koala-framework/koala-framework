@@ -220,6 +220,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $select = new Vps_Component_Select($select);
         }
         $cacheId = $class.serialize($select->getParts());
+        if (is_instance_of($class, 'Vpc_Root_Abstract')) {
+            $this->_componentsByClassCache[$cacheId] = array($this);
+        }
         if (!isset($this->_componentsByClassCache[$cacheId])) {
             $benchmark = Vps_Benchmark::start();
 
@@ -247,7 +250,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $select = new Vps_Component_Select($select);
         }
         $select->whereComponentClasses($lookingForChildClasses);
-
 
         $ret = array();
         foreach ($this->_getGeneratorsForClasses($lookingForChildClasses) as $generator) {

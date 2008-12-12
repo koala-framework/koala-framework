@@ -9,9 +9,11 @@ class Vps_Component_ComponentModel extends Vps_Model_Data_Abstract
         $generators = Vps_Component_Data_Root::getInstance()->getPageGenerators();
         $classes = array();
         foreach ($generators as $generator) {
-            $domain = $generator->getDomain();
-            if (!isset($classes[$domain])) $classes[$domain] = array();
-            $classes[$domain] = array_merge($classes[$domain], $generator->getChildComponentClasses());
+            $domains = $generator->getDomains();
+            foreach ($domains as $domain) {
+                if (!isset($classes[$domain])) $classes[$domain] = array();
+                $classes[$domain] = array_merge($classes[$domain], $generator->getChildComponentClasses());
+            }
         }
         foreach ($classes as $domain => $c) {
             foreach ($c as $component=>$class) {

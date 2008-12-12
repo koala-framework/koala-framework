@@ -34,7 +34,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     {
         $root = Vps_Component_Data_Root::getInstance();
         if (is_instance_of($root->componentClass, 'Vpc_Root_DomainRoot_Component') && is_null($parentRow)) {
-            $parentRow = $this->_model->getRow($this->_model->select()->whereNull('parent_id'));
+            //$parentRow = $this->_model->getRow($this->_model->select()->whereNull('parent_id'));
         }
         return parent::_formatNodes($parentRow);
     }

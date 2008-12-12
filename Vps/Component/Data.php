@@ -190,6 +190,18 @@ class Vps_Component_Data
                 Vpc_Abstract::getIndirectChildComponentClasses($c, $select)
             );
         }
+        // Nur bei hasEditComponents, Root soll keine Domain-Komponenten anzeigen
+        if ($select->hasPart(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS) &&
+            $this instanceof Vps_Component_Data_Root
+        ) {
+            $cc = array();
+            foreach ($classes as $class) {
+                if (!is_instance_of($class, 'Vpc_Root_DomainRoot_Domain_Component')) {
+                    $cc[] = $class;
+                }
+            }
+            $classes = $cc;
+        }
         $childSelect->whereComponentClasses(array_unique($classes));
         return $childSelect;
     }
