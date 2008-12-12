@@ -164,6 +164,11 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return isset($classes[0]);
     }
 
+    public function getRow()
+    {
+        return $this->_getRow();
+    }
+
     protected function _getRow()
     {
         if (!isset($this->_row)) {
