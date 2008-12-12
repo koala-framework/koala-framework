@@ -7,8 +7,6 @@ class Vps_Crm_Customer_CommentController extends Vps_Controller_Action_Auto_Form
     protected function _initFields()
     {
         $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Comment')));
-        $fs->setLabelWidth(50);
-        $fs->setStyle('margin:10px;');
 
         $fs->add(new Vps_Form_Field_ShowField('insert_date', trlVps('Date')));
         $fs->add(new Vps_Form_Field_TextArea('value', trlVps('Text')))

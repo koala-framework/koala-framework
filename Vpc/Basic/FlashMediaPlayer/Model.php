@@ -1,12 +1,11 @@
 <?php
-class Vpc_Basic_FlashMediaPlayer_Model extends Vpc_Table
+class Vpc_Basic_FlashMediaPlayer_Model extends Vps_Model_Db
 {
-    protected $_name = 'vpc_basic_flashmediaplayer';
+    protected $_table = 'vpc_basic_flashmediaplayer';
     protected $_referenceMap    = array(
         'FileMedia' => array(
-            'columns'           => array('vps_upload_id_media'),
-            'refTableClass'     => 'Vps_Dao_File',
-            'refColumns'        => array('id')
+            'column'            => 'vps_upload_id_media',
+            'refModelClass'     => 'Vps_Uploads_Model'
         )
     );
 }
