@@ -28,7 +28,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         $ret = array();
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
-        
+
         foreach (array_keys($this->_settings['component']) as $key) {
             if ($this->_acceptKey($key, $select, $parentData)) {
                 $ret[] = $key;
@@ -82,7 +82,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         $c = $this->_settings;
         $priority = isset($c['priority']) ? $c['priority'] : 0;
         $inherit = !isset($c['inherit']) || $c['inherit'];
-        
+
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,

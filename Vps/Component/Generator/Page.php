@@ -28,16 +28,14 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         $this->_pageHome = array();
         if (isset($this->_settings['model'])) {
             $select = $this->_getModel()->select()->order('pos');
-            $domain = $this->getDomain();
-            if ($domain) $select->whereEquals("domain", $domain);
             $rows = $this->_getModel()->fetchAll($select)->toArray();
         } else {
             $select = new Zend_Db_Select(Vps_Registry::get('db'));
             $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
                                         'filename', 'hide', 'category', 'domain', 'name', 'is_home', 'tags'));
             $select->order('pos');
-            $domain = $this->getDomain();
-            if ($domain) $select->where("domain = ?", $domain);
+            $domains = $this->getDomains();
+            if ($domains) $select->where("domain IN ('" . implode("', '", $domains) . "')", '');
             $rows = $select->query()->fetchAll();
         }
         foreach ($rows as $row) {
@@ -57,7 +55,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         }
     }
 
-    public function getDomain() {
+    public function getDomains() {
         return null;
     }
 
