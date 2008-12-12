@@ -335,11 +335,20 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
 
         $sc = Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
-        if (substr($url, 0, strlen($sc)) != $sc) return false;
+        $parts = explode('/', $url);
+        if (is_instance_of(
+                Vps_Component_Data_Root::getInstance()->componentClass,
+                'Vpc_Root_DomainRoot_Component'
+            )
+        ) {
+            $url = substr($url, strpos($url, '/', 1));
+        }
+        $shortcut = substr($url, 1, strpos($url, '/', 1) - 1);
+        if ($shortcut != $sc) return false;
         $ret = Vps_Component_Data_Root::getInstance()
             ->getComponentByClass($componentClass);
         if (!$ret) return false;
-        return $ret->getChildPageByPath(substr($url, strlen($sc)+1));
+        return $ret->getChildPageByPath(substr($url, strlen($sc) + 2));
     }
 
     public static function getComponentClassesByParentClass($class)
