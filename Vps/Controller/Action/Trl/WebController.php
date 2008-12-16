@@ -1,12 +1,12 @@
 <?php
-class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto_Grid
+class Vps_Controller_Action_Trl_WebController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_modelName = "Vps_Trl_Model_Vps";
+    protected $_modelName = "Vps_Trl_Model_Web";
     protected $_buttons = array();
     protected $_sortable = true;
     protected $_defaultOrder = 'id';
     protected $_paging = 30;
-    protected $_editDialog = array('controllerUrl'=>'/vps/trl/vps-edit',
+    protected $_editDialog = array('controllerUrl'=>'/vps/trl/web-edit',
                                    'width'=>600,
                                    'height'=>550);
     protected $_columns;
@@ -17,12 +17,13 @@ class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto
             'type'=>'TextField',
             'width'=>80
         );
-
+        $config = Zend_Registry::get('config');
+        $lang = $config->webCodeLanguage;
         $this->_columns->add(new Vps_Grid_Column_Button('edit'));
         $this->_columns->add(new Vps_Grid_Column('id', 'Id', 50));
         $this->_columns->add(new Vps_Grid_Column('context', 'Context', 100));
-        $this->_columns->add(new Vps_Grid_Column('en', 'English Singular', 350));
-        $this->_columns->add(new Vps_Grid_Column('en_plural', 'English Plural', 350));
+        $this->_columns->add(new Vps_Grid_Column($lang, $lang.' Singular', 350));
+        $this->_columns->add(new Vps_Grid_Column($lang.'_plural', $lang.' Plural', 350));
 
         parent::_initColumns();
     }
@@ -30,8 +31,7 @@ class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto
     public function indexAction ()
     {
         $config = array(
-            'controllerUrl' => $this->getRequest()->getPathInfo(),
-            'language' => 'en'
+            'controllerUrl' => $this->getRequest()->getPathInfo()
         );
         $this->view->ext('Vps.Trl.Grid', $config);
     }
