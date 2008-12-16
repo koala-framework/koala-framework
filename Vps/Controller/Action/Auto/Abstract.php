@@ -49,12 +49,12 @@ abstract class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
             }
         }
     }
-    
+
     public final function setHelpText($helpText)
     {
         $this->_helpText = $helpText;
     }
-    
+
     public final function getHelpText()
     {
         return $this->_helpText;

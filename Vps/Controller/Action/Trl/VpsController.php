@@ -13,10 +13,10 @@ class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto
 
     protected function _initColumns()
     {
-       /* $this->_filters['en'] = array(
+        $this->_filters['text'] = array(
             'type'=>'TextField',
             'width'=>80
-        );*/
+        );
 
         $this->_columns->add(new Vps_Grid_Column_Button('edit'));
         $this->_columns->add(new Vps_Grid_Column('id', 'Id', 50));
@@ -27,11 +27,11 @@ class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto
         parent::_initColumns();
     }
 
-    public function indexAction ()
+   /* public function indexAction ()
     {
         $config = array(
             'controllerUrl' => $this->getRequest()->getPathInfo()
         );
         $this->view->ext('Vps.Trl.Grid', $config);
-    }
+    }*/
 }
