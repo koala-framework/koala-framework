@@ -140,7 +140,7 @@ class Vps_Trl
         else $select->whereNull('context');
         $row = $rows = $model->getRows($select)->current();
 
-        if ($row && $row->$target != '_') {
+        if ($row && $row->$target != '' && $row->$target != '_') { //unterstrich entfernt
             return (string) $row->$target;
         }
         return $needle;
@@ -162,7 +162,7 @@ class Vps_Trl
 
         $rows = $model->getRows($select);
         foreach ($rows as $row) {
-            if ($row->$target && $row->$target != '_') return (string) $row->$target;
+            if ($row->$target && $row->$target != '' && $row->$target != '_') return (string) $row->$target; //unterstrich entfernt
         }
 
         return $plural;

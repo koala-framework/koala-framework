@@ -215,8 +215,33 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             if (!($data[$expr->getField()] && $data[$expr->getField()] < $expr->getValue())) {
                 return false;
             }
+        } else if ($expr instanceof Vps_Model_Select_Expr_HigherDate) {
+            if ($data[$expr->getField()] && $data[$expr->getField()]) {
+               $fieldTime = strtotime($data[$expr->getField()]);
+               $exprTime = strtotime($expr->getValue());
+               if ($fieldTime > $exprTime) {
+                    return true;
+               } else {
+                   return false;
+               }
+            } else {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_SmallerDate) {
+            if ($data[$expr->getField()] && $data[$expr->getField()]) {
+
+               $fieldTime = strtotime($data[$expr->getField()]);
+               $exprTime = strtotime($expr->getValue());
+               if ($fieldTime < $exprTime) {
+                    return true;
+               } else {
+                   return false;
+               }
+            } else {
+                return false;
+            }
         } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
-            if (!(isset($data[$expr->getField()]) && $data[$expr->getField()] && is_numeric(strpos($data[$expr->getField()], $expr->getValue())))) {
+            if (!(isset($data[$expr->getField()]) && $data[$expr->getField()] && strpos(strtolower($data[$expr->getField()]), strtolower($expr->getValue())) !== false )) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Not) {
@@ -230,6 +255,13 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 }
             }
             return false;
+        } else if ($expr instanceof Vps_Model_Select_Expr_And) {
+            foreach ($expr->getExpressions() as $andExpr) {
+                if (!$this->_checkExpressions($andExpr, $data)) {
+                    return false;
+                }
+            }
+            return true;
         }
         return true;
     }

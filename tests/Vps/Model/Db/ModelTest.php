@@ -51,11 +51,12 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
         $this->_dbSelect->expects($this->once())
             ->method('where')
             ->with($this->equalTo('testtable.id = ?'), $this->equalTo(1));
-        $select = $this->_model->select()
-                    ->whereId(1);
         $this->_table->expects($this->once())
                   ->method('fetchAll')
                   ->with($this->equalTo($this->_dbSelect));
+
+        $select = $this->_model->select()
+                    ->whereId(1);
         $this->_model->fetchAll($select);
     }
 

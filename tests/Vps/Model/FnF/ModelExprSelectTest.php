@@ -128,6 +128,35 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, $count);
     }
 
+    public function testExprContains()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 'Herbert'),
+            array('id' => 2, 'value' => 'Kurt'),
+            array('id' => 3, 'value' => 'Klaus'),
+            array('id' => 4, 'value' => 'Rainer'),
+            array('id' => 5, 'value' => 'Franz'),
+            array('id' => 6, 'value' => 'Niko'),
+            array('id' => 7, 'value' => 'Lorenz'),
+        ));
+
+        $select = $model->select();
+        $containsExpression = new Vps_Model_Select_Expr_Contains('value', 'Kla');
+        $select = $model->select();
+        $select->where($containsExpression);
+        $rows = $model->getRows($select);
+        $count = $rows->count();
+        $this->assertEquals(1, $count);
+
+        $containsExpression = new Vps_Model_Select_Expr_Contains('value', 'n');
+        $select = $model->select();
+        $select->where($containsExpression);
+        $rows = $model->getRows($select);	
+        $count = $rows->count();
+        $this->assertEquals(4, $count);
+    }
+
     public function testExprExtraBig()
     {
         $model = new Vps_Model_FnF();

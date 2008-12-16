@@ -24,32 +24,31 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
         }
         if ($select->getPart(Vps_Model_Select::WHERE_EQUALS) || $select->getPart(Vps_Model_Select::WHERE_NULL)) {
             $cacheSetting = $this->_getCacheSetting($select);
-	        if ($cacheSetting) {
+            if ($cacheSetting) {
 
 
-				$cacheId = $this->_getCacheId($cacheSetting);
+                $cacheId = $this->_getCacheId($cacheSetting);
 
-				if (!isset($this->_cacheData[$cacheId])) {
-
-				    if (!$this->_cacheData[$cacheId] = $this->_getCache()->load($cacheId)) {
-						$this->_cacheData[$cacheId] = $this->_getCacheData($cacheSetting);
-						$this->_getCache()->save($this->_cacheData[$cacheId], $cacheId);
-				    }
-				}
-				$whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
-				$whereNull = $select->getPart(Vps_Model_Select::WHERE_NULL);
-				$values = array();
-				foreach ($cacheSetting['index'] as $value) {
-				    if ($whereEquals) {
-				        if (isset($whereEquals[$value])) $values[] = $this->_escapeSearchKeyElement($whereEquals[$value]);
-				    }
-				    if ($whereNull) {
-					    foreach (array_values($whereNull) as $whereKey => $whereValue) {
+                if (!isset($this->_cacheData[$cacheId])) {
+                    if (!$this->_cacheData[$cacheId] = $this->_getCache()->load($cacheId)) {
+                        $this->_cacheData[$cacheId] = $this->_getCacheData($cacheSetting);
+                        $this->_getCache()->save($this->_cacheData[$cacheId], $cacheId);
+                    }
+                }
+                $whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
+                $whereNull = $select->getPart(Vps_Model_Select::WHERE_NULL);
+                $values = array();
+                foreach ($cacheSetting['index'] as $value) {
+                    if ($whereEquals) {
+                        if (isset($whereEquals[$value])) $values[] = $this->_escapeSearchKeyElement($whereEquals[$value]);
+                    }
+                    if ($whereNull) {
+                        foreach (array_values($whereNull) as $whereKey => $whereValue) {
                             if ($whereValue == $value)
-						        $values[] = $this->_escapeSearchKeyElement(null);
-						}
-				    }
-				}
+                                $values[] = $this->_escapeSearchKeyElement(null);
+                        }
+                    }
+                }
                 $valuesbefore = $values;
                 $v = implode($values, '_');
 
@@ -61,12 +60,12 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
 
 
 
-		        return new $this->_rowsetClass(array(
-		            'model' => $this,
-		            'rowClass' => $this->_rowClass,
-		            'cacheData' => $data
-		        ));
-	        }
+                return new $this->_rowsetClass(array(
+                    'model' => $this,
+                    'rowClass' => $this->_rowClass,
+                    'cacheData' => $data
+                ));
+            }
         }
         return parent::getRows($where, $order, $limit, $start);
     }
@@ -74,34 +73,34 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
     private function _getCacheSetting ($where)
     {
         $necessary = array();
-	    $whereEquals = $where->getPart(Vps_Model_Select::WHERE_EQUALS);
-	    $whereNull = $where->getPart(Vps_Model_Select::WHERE_NULL);
+        $whereEquals = $where->getPart(Vps_Model_Select::WHERE_EQUALS);
+        $whereNull = $where->getPart(Vps_Model_Select::WHERE_NULL);
 
         foreach ($this->_cacheSettings as $cacheSetting) {
             $check = true;
             foreach ($cacheSetting['index'] as $value) {
                 $cacheSettingCheck = false;
-			    if ($whereEquals) {
-				    if (isset($whereEquals[$value])) {
-				        $values[] = $this->_escapeSearchKeyElement($whereEquals[$value]);
-				        $cacheSettingCheck = true;
-				    }
-				}
-				if ($whereNull) {
-				    foreach (array_values($whereNull) as $whereKey => $whereValue) {
+                if ($whereEquals) {
+                    if (isset($whereEquals[$value])) {
+                        $values[] = $this->_escapeSearchKeyElement($whereEquals[$value]);
+                        $cacheSettingCheck = true;
+                    }
+                }
+                if ($whereNull) {
+                    foreach (array_values($whereNull) as $whereKey => $whereValue) {
                         if ($whereValue == $value) {
-				            $values[] = $this->_escapeSearchKeyElement(null);
-						        $cacheSettingCheck = true;
+                            $values[] = $this->_escapeSearchKeyElement(null);
+                                $cacheSettingCheck = true;
                         }
-				    }
-				}
-				if ($cacheSettingCheck == false) {
-				    $check = false;
-				}
-		    }
-		    if ($check) {
-		        return $cacheSetting;
-		    }
+                    }
+                }
+                if ($cacheSettingCheck == false) {
+                    $check = false;
+                }
+            }
+            if ($check) {
+                return $cacheSetting;
+            }
         }
         return null;
     }
@@ -141,6 +140,9 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
             $searchKey = $this->_getSearchKey($row, $indexes);
             $parts = array();
             foreach ($colindexes as $key => $colindex) {
+                if (is_object($row->{$colindex})) {
+                    throw new Vps_Exception(get_class($row->{$colindex})." is a object");
+                }
                 $parts['data'][$colindex] = $row->{$colindex};
             }
             if (!$this->getPrimaryKey()) {
@@ -240,22 +242,22 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
         $this->_createCacheDataRow($row);
     }
 
-    public function _createCacheDataRow($row)
+    private function _createCacheDataRow($row)
     {
         foreach ($this->_cacheSettings as $cacheSetting) {
             //wenn cache nocht nicht geladen nicht updated
             if (!isset($this->_cacheData[$this->_getCacheId($cacheSetting)])) continue;
             $cachedata = array();
-	        $indexes = $cacheSetting['index'];
-	        $colindexes = $cacheSetting['columns'];
-	        $colindexes[] = $this->getPrimaryKey();
-	        $ret = array();
-	        $searchKey = $this->_getSearchKey($row, $indexes);
-	        $parts = array();
-	        foreach ($colindexes as $key => $colindex) {
-	            $parts['data'][$colindex] = $row->{$colindex};
-	        }
-	        $parts['id'] = $row->{$this->getPrimaryKey()};
+            $indexes = $cacheSetting['index'];
+            $colindexes = $cacheSetting['columns'];
+            $colindexes[] = $this->getPrimaryKey();
+            $ret = array();
+            $searchKey = $this->_getSearchKey($row, $indexes);
+            $parts = array();
+            foreach ($colindexes as $key => $colindex) {
+                $parts['data'][$colindex] = $row->{$colindex};
+            }
+            $parts['id'] = $row->{$this->getPrimaryKey()};
             $this->_cacheData[$this->_getCacheId($cacheSetting)][$searchKey][$row->{$this->getPrimaryKey()}] = $parts;
         }
         $this->_rows[$row->{$this->getPrimaryKey()}] = $row;

@@ -121,7 +121,6 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
             $this->_parts[self::WHERE_EXPRESSION][] = $cond;
             return $this;
         }
-
         if (strpos($cond, '?') !==false && is_null($value)) {
             throw new Vps_Exception("Can't use '$cond' with value 'null'");
         }
