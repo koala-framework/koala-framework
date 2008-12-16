@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_LinkTag_Extern_Model extends Vps_Model_Db_Proxy
+class Vpc_Basic_LinkTag_Extern_Model extends Vpc_Basic_LinkTag_Abstract_Model
 {
     protected $_table = 'vpc_basic_link_extern';
 
