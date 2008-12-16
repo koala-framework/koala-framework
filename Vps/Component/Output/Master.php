@@ -2,7 +2,7 @@
 class Vps_Component_Output_Master extends Vps_Component_Output_NoCache
 {
     protected $_masterTemplates = array();
-    
+
     public function render($component)
     {
         $c = $component;
@@ -14,7 +14,8 @@ class Vps_Component_Output_Master extends Vps_Component_Output_NoCache
             if ($master) {
                 $this->_masterTemplates[] = array(
                     'component' => $c,
-                    'template' => $master
+                    'template' => $master,
+                    'masterComponent' => $component
                 );
             }
             $component = $component->parent;
@@ -36,7 +37,7 @@ class Vps_Component_Output_Master extends Vps_Component_Output_NoCache
         }
         return $ret;
     }
-    
+
     protected function _renderContent($componentId, $componentClass, $masterTemplate)
     {
         // So lange die Master-Templates rendern, bis sie leer sind
@@ -49,6 +50,7 @@ class Vps_Component_Output_Master extends Vps_Component_Output_NoCache
             $templateVars = array();
             $templateVars['component'] = $component;
             $templateVars['boxes'] = array();
+            $templateVars['cssClass'] = Vpc_Abstract::getCssClass($masterTemplate['masterComponent']->componentClass);
             foreach ($component->getChildBoxes() as $box) {
                 $templateVars['boxes'][$box->box] = $box;
             }
