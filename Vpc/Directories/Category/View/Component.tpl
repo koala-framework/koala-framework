@@ -4,8 +4,7 @@
     <ul>
         <? foreach ($this->items as $item) { ?>
             <li>
-                <?=$this->componentLink($item, $this->placeholder['linkPrefix'].$item->getPage()->name);?>
-                (<?= $item->listCount; ?>)
+                    <?=$this->componentLink($item, $this->placeholder['linkPrefix'].$item->getPage()->name.'<span class="counter">('.$item->listCount.')</span>');?>
             </li>
         <? } ?>
     </ul>

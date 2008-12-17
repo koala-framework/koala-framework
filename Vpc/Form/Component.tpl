@@ -20,6 +20,7 @@ if ($this->showSuccess) {
             <span class="beforeButton"></span><span class="button"><button class="submit" type="submit" name="<?= $this->formName ?>" value="submit"><?= $this->placeholder['submitButton'] ?></button></span><span class="afterButton"></span>
             <div class="clear"></div>
         </div>
+        <div class="clear"></div>
         <? if ($this->method == 'get') { ?>
             <? /* IE schickt bei enter-taste den submit-value nicht mit */ ?>
             <input type="hidden" name="<?= $this->formName ?>" value="submit" />
