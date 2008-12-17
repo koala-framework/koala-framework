@@ -12,14 +12,20 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     public function getShipping()
     {
         return Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Shop_Cart_Component')
+            ->getComponentByClass(
+                'Vpc_Shop_Cart_Component',
+                array('subroot' => $this->getData())
+            )
             ->getComponent()->getShipping($this);
     }
 
     public function getCashOnDeliveryCharge()
     {
         return Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Shop_Cart_Component')
+            ->getComponentByClass(
+                'Vpc_Shop_Cart_Component',
+                array('subroot' => $this->getData())
+            )
             ->getComponent()->getCashOnDeliveryCharge($this);
     }
 

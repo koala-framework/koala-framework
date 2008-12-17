@@ -31,13 +31,16 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
     {
         $postsData = $this->getData()->getChildComponent('-posts');
         $select = $postsData->getGenerator('detail')->select($this->getData());
-        
+
         $select->limit(1);
         $select->order('create_time', 'ASC');
         $firstPost = $postsData->getChildComponent($select);
         if ($firstPost) {
             $firstPost->user = Vps_Component_Data_Root::getInstance()
-                ->getComponentByClass('Vpc_User_Directory_Component')
+                ->getComponentByClass(
+                    'Vpc_User_Directory_Component',
+                    array('subroot' => $this->getData())
+                )
                 ->getChildComponent('_' . $firstPost->row->user_id);
         }
 
@@ -46,12 +49,15 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         $lastPost = $postsData->getChildComponent($select);
         if ($lastPost) {
             $lastPost->user = Vps_Component_Data_Root::getInstance()
-                ->getComponentByClass('Vpc_User_Directory_Component')
+                ->getComponentByClass(
+                    'Vpc_User_Directory_Component',
+                    array('subroot' => $this->getData())
+                )
                 ->getChildComponent('_' . $lastPost->row->user_id);
         }
-        
+
         $replies = $postsData->countChildComponents($select) - 1;
-        
+
         $ret = array();
         $ret['replies'] = $replies;
         $ret['firstPost'] = $firstPost;

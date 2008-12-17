@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Edit_Component extends Vpc_Abstract_Composite_Component 
+class Vpc_User_Edit_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
@@ -10,7 +10,7 @@ class Vpc_User_Edit_Component extends Vpc_Abstract_Composite_Component
         $ret['viewCache'] = false;
         return $ret;
     }
-    
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -18,7 +18,10 @@ class Vpc_User_Edit_Component extends Vpc_Abstract_Composite_Component
         $ret['userProfile'] = false;
         if ($ret['authedUser']) {
             $ret['userProfile'] = Vps_Component_Data_Root::getInstance()
-                ->getComponentByClass('Vpc_User_Directory_Component')
+                ->getComponentByClass(
+                    'Vpc_User_Directory_Component',
+                    array('subroot' => $this->getData())
+                )
                 ->getChildComponent('_' .  $ret['authedUser']->id);
         }
         return $ret;

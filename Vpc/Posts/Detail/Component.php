@@ -8,15 +8,18 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component']['signature'] = 'Vpc_Posts_Detail_Signature_Component';
         return $ret;
     }
-    
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
         $data = $this->getData();
-        
+
         $ret['content'] = self::replaceCodes($data->row->content);
         $ret['user'] = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_User_Directory_Component')
+            ->getComponentByClass(
+                'Vpc_User_Directory_Component',
+                array('subroot' => $this->getData())
+            )
             ->getChildComponent('_'.$data->row->user_id);
         $select = $data->parent->getGenerator('detail')->select($data->parent)
             ->where('create_time <= ?', $data->row->create_time);

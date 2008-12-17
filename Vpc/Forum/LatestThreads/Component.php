@@ -15,16 +15,19 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['threads'] = array();
-        
-        $forum = Vps_Component_Data_Root::getInstance()->getComponentByClass($this->_getSetting('forumClass'));
+
+        $forum = Vps_Component_Data_Root::getInstance()->getComponentByClass(
+            $this->_getSetting('forumClass'),
+            array('subroot' => $this->getData())
+        );
         $groupComponentClass = Vpc_Abstract::getChildComponentClass($forum->componentClass, 'groups');
         $threadComponentClass = Vpc_Abstract::getChildComponentClass($groupComponentClass, 'detail');
         $postsComponentClass = Vpc_Abstract::getChildComponentClass($threadComponentClass, 'child', 'posts');
-        
+
         $groupGenerator = Vps_Component_Generator_Abstract::getInstance($forum->componentClass, 'groups');
         $threadGenerator = Vps_Component_Generator_Abstract::getInstance($groupComponentClass, 'detail');
         $postGenerator = Vps_Component_Generator_Abstract::getInstance($postsComponentClass, 'detail');
-        
+
         $select = $postGenerator->select(null);
         $select = $postGenerator->joinWithParentGenerator($select, $threadGenerator);
         $select = $threadGenerator->joinWithParentGenerator($select, $groupGenerator, $forum);
@@ -32,7 +35,7 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
         $select->order('create_time', 'DESC');
         $threads = array();
         $threadIds = array();
-        
+
         $x = 0;
         while (count($threads) < $this->_getSetting('numberOfThreads') && $x < 5) {
             $x++;

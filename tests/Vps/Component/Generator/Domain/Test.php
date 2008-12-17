@@ -68,7 +68,7 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, $page->componentId);
         $this->assertEquals('root-ch-main', $page->parent->componentId);
         $this->assertNotNull($this->_root->getComponentById('6'));
-        $this->assertEquals('Vpc_Basic_Image_Component', $this->_root->getComponentById('6')->componentClass);
+        $this->assertEquals('Vpc_Basic_Link_Component', $this->_root->getComponentById('6')->componentClass);
         $this->assertEquals('5', $this->_root->getComponentById('6')->parent->componentId);
         $this->assertEquals('root-ch-main', $this->_root->getComponentById('6')->parent->parent->componentId);
     }
@@ -123,5 +123,19 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $select = $model->select()->whereEquals('parent_id', 'root-ch-main');
         $this->assertEquals(1, $model->countRows($select));
         $this->assertEquals('5', $model->getRow($select)->componentId);
+    }
+
+    public function testSubroot()
+    {
+        $components = $this->_root->getComponentsByClass('Vpc_Basic_Image_Component');
+        $this->assertEquals(2, count($components));
+
+        $c = $this->_root->getComponentById('6');
+
+        $components = $this->_root->getComponentsByClass('Vpc_Basic_Image_Component', array('subroot' => $c));
+        $this->assertEquals(1, count($components));
+
+        $component = $this->_root->getComponentByClass('Vpc_Basic_Image_Component', array('subroot' => $c));
+        $this->assertEquals(5, $component->componentId);
     }
 }

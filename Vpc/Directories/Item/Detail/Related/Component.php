@@ -19,8 +19,10 @@ class Vpc_Directories_Item_Detail_Related_Component extends Vpc_Abstract
 
     protected function _getCategoryDirectory()
     {
-        return Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Directories_Category_Directory_Component');
+        return Vps_Component_Data_Root::getInstance()->getComponentByClass(
+            'Vpc_Directories_Category_Directory_Component',
+            array('subroot' => $this->getData())
+        );
     }
 
     public function hasContent()

@@ -219,7 +219,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-        $cacheId = $class.serialize($select->getParts());
+        $cacheId = $class.$select->getHash();
         if (is_instance_of($class, 'Vpc_Root_Abstract')) {
             $this->_componentsByClassCache[$cacheId] = array($this);
         }
