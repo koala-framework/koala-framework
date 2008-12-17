@@ -33,7 +33,7 @@ class Vps_View_Helper_Image
             if (!$this->_dep) {
                 $this->_dep = new Vps_Assets_Dependencies();
             }
-            if (stripos($url, "/assets/") == 0) {
+            if (stripos($url, "/assets/") === 0) {
                 $depUrl = substr($url, 8);
             } else {
                 throw new Vps_Exception("Path does not include '/assets/'. Not implemented yet.");
