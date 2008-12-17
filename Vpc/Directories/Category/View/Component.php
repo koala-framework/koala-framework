@@ -57,11 +57,13 @@ class Vpc_Directories_Category_View_Component
                 $categoryIds = $this->_getCountCategoryIds($item);
 
                 $select = $directoryComponent->getSelect();
-                $select->join(
-                    $connectData['tableName'],
-                    "$connectData[refTableName].$connectData[refItemColumn] = $connectData[tableName].$connectData[itemColumn]",
-                    array()
-                );
+                if (!Vpc_Abstract::getSetting(get_class($directoryComponent), 'generatorJoins')) {
+                    $select->join(
+                        $connectData['tableName'],
+                        "$connectData[refTableName].$connectData[refItemColumn] = $connectData[tableName].$connectData[itemColumn]",
+                        array()
+                    );
+                }
                 $select->where("$connectData[tableName].category_id IN(".implode(',', $categoryIds).")");
 
                 $item->listCount = $directoryComponent->getData()->countChildComponents($select);
