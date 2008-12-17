@@ -4,7 +4,7 @@ class Vpc_Basic_LinkTag_Abstract_Admin extends Vpc_Admin
     public function onRowUpdate($row)
     {
         parent::onRowUpdate($row);
-        if ($row instanceof Vps_Model_Db_Row &&
+        if ($row instanceof Vps_Model_Row_Abstract &&
             $row->getModel() instanceof Vpc_Basic_LinkTag_Abstract_Model
         ) {
             foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
