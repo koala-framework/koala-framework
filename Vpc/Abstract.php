@@ -338,22 +338,34 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         if (!Vpc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
             throw new Vps_Exception("You must either have the setting 'shortcutUrl' or reimplement getDataByShortcutUrl method for '$componentClass'");
         }
-
         $sc = Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
         $parts = explode('/', $url);
+        $domain = null;
         if (is_instance_of(
                 Vps_Component_Data_Root::getInstance()->componentClass,
                 'Vpc_Root_DomainRoot_Component'
             )
         ) {
-            $url = substr($url, strpos($url, '/', 1));
+            $pos = strpos($url, '/', 1);
+            $domain = substr($url, 0, $pos);
+            $url = substr($url, $pos);
         }
         $shortcut = substr($url, 1, strpos($url, '/', 1) - 1);
         if ($shortcut != $sc) return false;
-        $ret = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass($componentClass);
-        if (!$ret) return false;
-        return $ret->getChildPageByPath(substr($url, strlen($sc) + 2));
+        $component = null;
+        $components = Vps_Component_Data_Root::getInstance()
+            ->getComponentsByClass($componentClass);
+        if (count($components) == 1) {
+            $component = current($components);
+        } else if (count($components) > 1) {
+            foreach ($components as $component) {
+                if ($component->domain == $domain) break;
+            }
+        }
+        if ($component) {
+            return $component->getChildPageByPath(substr($url, strlen($sc) + 2));
+        }
+        return false;
     }
 
     public static function getComponentClassesByParentClass($class)
