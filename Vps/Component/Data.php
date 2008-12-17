@@ -232,7 +232,7 @@ class Vps_Component_Data
     public function getChildComponents($select = array())
     {
         $select = $this->_formatSelect($select);
-        $sc = serialize($select->getParts());
+        $sc = $select->getHash();
         if (isset($this->_constraintsCache[$sc])) {
             Vps_Benchmark::count('getChildComponents cached', print_r($select->getParts(), true));
         } else {

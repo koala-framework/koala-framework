@@ -98,7 +98,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-        $cacheId = serialize($select->getParts());
+        $cacheId = $select->getHash();
         $ret = self::_getIndirectChildComponentClasses($class, $select, $cacheId);
         return $ret;
     }
@@ -340,7 +340,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
         $sc = Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
         $parts = explode('/', $url);
-        $domain = null;
+        $constraints = array();
         if (is_instance_of(
                 Vps_Component_Data_Root::getInstance()->componentClass,
                 'Vpc_Root_DomainRoot_Component'
@@ -348,20 +348,17 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         ) {
             $pos = strpos($url, '/', 1);
             $domain = substr($url, 0, $pos);
+            $components = Vps_Component_Data_Root::getInstance()->
+                getComponentsByClass('Vpc_Root_DomainRoot_Domain_Component');
+            foreach ($components as $c) {
+                if ($c->row->id == $domain) $constraints = array('subroot' => $c);
+            }
             $url = substr($url, $pos);
         }
         $shortcut = substr($url, 1, strpos($url, '/', 1) - 1);
         if ($shortcut != $sc) return false;
-        $component = null;
-        $components = Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass($componentClass);
-        if (count($components) == 1) {
-            $component = current($components);
-        } else if (count($components) > 1) {
-            foreach ($components as $component) {
-                if ($component->domain == $domain) break;
-            }
-        }
+        $component = Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass($componentClass, $constraints);
         if ($component) {
             return $component->getChildPageByPath(substr($url, strlen($sc) + 2));
         }

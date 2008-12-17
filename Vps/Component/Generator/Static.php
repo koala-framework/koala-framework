@@ -17,7 +17,8 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
                 }
             }
             foreach ($parentDatas as $parentData) {
-                $ret[] = $this->_createData($parentData, $key, $select);
+                $data = $this->_createData($parentData, $key, $select);
+                if ($data) $ret[] = $data;
             }
         }
         return $ret;

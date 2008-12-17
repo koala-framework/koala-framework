@@ -15,16 +15,28 @@ class Vpc_User_BoxWithoutLogin_Component extends Vpc_Abstract_Composite_Componen
         $ret = parent::getTemplateVars();
         $ret['authedUser'] = Vps_Registry::get('userModel')->getAuthedUser();
         $ret['register'] = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByClass('Vpc_User_Register_Component');
+                        ->getComponentByClass(
+                            'Vpc_User_Register_Component',
+                            array('subroot' => $this->getData())
+                        );
         if ($this->_getSetting('showLostPassword')) {
             $ret['lostPassword'] = Vps_Component_Data_Root::getInstance()
-                            ->getComponentByClass('Vpc_User_LostPassword_Component');
+                            ->getComponentByClass(
+                                'Vpc_User_LostPassword_Component',
+                                array('subroot' => $this->getData())
+                            );
         }
         $ret['login'] = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByClass('Vpc_User_Login_Component');
+                        ->getComponentByClass(
+                            'Vpc_User_Login_Component',
+                            array('subroot' => $this->getData())
+                        );
         if ($ret['authedUser']) {
             $ret['myProfile'] = Vps_Component_Data_Root::getInstance()
-                ->getComponentByClass('Vpc_User_Directory_Component')
+                ->getComponentByClass(
+                    'Vpc_User_Directory_Component',
+                    array('subroot' => $this->getData())
+                )
                 ->getChildComponent('_' . $ret['authedUser']->id);
             $ret['links'] = $this->_getLinks();
         }

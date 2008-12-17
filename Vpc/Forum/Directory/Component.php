@@ -70,7 +70,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                     ::getInstance($groupComponentClass, 'detail');
                 $postsGenerator = Vps_Component_Generator_Abstract
                     ::getInstance($postsComponentClass, 'detail');
-                    
+
                 // countThreads
                 $select = $threadGenerator->select($group);
                 $group->countThreads = $threadGenerator->countChildData($group, $select);
@@ -86,16 +86,19 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                 $select->order('create_time', 'DESC');
                 $select->limit(1);
                 $group->lastPost = current($postsGenerator->getChildData(null, $select));
-                
+
                 // lastUser
                 if ($group->lastPost) {
                     $group->lastUser = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByClass('Vpc_User_Directory_Component')
+                        ->getComponentByClass(
+                            'Vpc_User_Directory_Component',
+                            array('subroot' => $this->getData())
+                        )
                         ->getChildComponent('_' . $group->lastPost->row->user_id);
                 }
 
                 $group->childGroups = $this->getGroups($group->row->id);
-                
+
                 $ret[] = $group;
             }
         }

@@ -13,7 +13,10 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
     {
         $ret = parent::getTemplateVars();
         $ret['register'] = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByClass('Vpc_User_Register_Component');
+                        ->getComponentByClass(
+                            'Vpc_User_Register_Component',
+                            array('subroot' => $this->getData())
+                        );
         return $ret;
     }
 
@@ -21,7 +24,7 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
     {
         // Leer, weil _processInput schon in proProcessInput aufgerufen wurde
     }
-    
+
     public function preProcessInput($postData)
     {
         $this->_processInput($postData);

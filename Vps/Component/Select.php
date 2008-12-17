@@ -17,6 +17,7 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_SHOW_IN_MENU = 'whereShowInMenu';
     const WHERE_HOME = 'whereHome';
     const WHERE_PAGE_GENERATOR = 'wherePageGenerator';
+    const WHERE_SUBROOT = 'whereSubroot';
     const IGNORE_VISIBLE = 'ignoreVisible';
 
     public function __construct($where = array())
@@ -155,9 +156,29 @@ class Vps_Component_Select extends Vps_Model_Select
         return $this;
     }
 
+    public function whereSubroot($value = true)
+    {
+        if (!$value instanceof Vps_Component_Data)
+            throw new Vps_Exception("Subroot has to be a component");
+        $this->_parts[self::WHERE_SUBROOT] = $value;
+        return $this;
+    }
+
     public function ignoreVisible($value = true)
     {
         $this->_parts[self::IGNORE_VISIBLE] = $value;
         return $this;
     }
+
+    public function getHash()
+    {
+        $parts = $this->getParts();
+        foreach ($parts as $key => $part) {
+            if ($key == self::WHERE_SUBROOT) {
+                $parts[$key] = $part->componentId;
+            }
+        }
+        return serialize($parts);
+    }
+
 }
