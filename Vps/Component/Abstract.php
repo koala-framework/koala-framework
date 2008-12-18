@@ -39,7 +39,7 @@ class Vps_Component_Abstract
         if (!isset($s[$class])) {
             throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
         }
-        return isset($s[$class][$setting]);
+        return array_key_exists($setting, $s[$class]);
     }
 
     public static function getSetting($class, $setting, $useSettingsCache = true)
