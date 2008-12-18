@@ -73,7 +73,8 @@ class Vps_Component_Abstract
         if (!isset($s[$class])) {
             throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
         }
-        if (!isset($s[$class][$setting])) {
+        // man k√∂nnte hier isset() machen, nur wenn das setting NULL ist, gibt es false zur√ºck... scheis PHP :)
+        if (!array_key_exists($setting, $s[$class])) {
             throw new Vps_Exception("Setting '$setting' does not exist for Component '$class'");
         }
         return $s[$class][$setting];
@@ -86,7 +87,7 @@ class Vps_Component_Abstract
         return $s['mtime'];
     }
 
-    //wenn root ge‰ndert wird muss der cache hier gelˆscht werden kˆnnen
+    //wenn root ge√§ndert wird muss der cache hier gel√∂scht werden k√∂nnen
     public static function resetSettingsCache()
     {
         self::$_settings = null;
