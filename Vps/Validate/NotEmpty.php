@@ -6,7 +6,7 @@ class Vps_Validate_NotEmpty extends Zend_Validate_NotEmpty
     {
         $this->_messageTemplates[self::IS_EMPTY] = trlVps("Value is empty, but a non-empty value is required");
     }
-/*
+
     public function isValid($value)
     {
         $valueString = (string) $value;
@@ -18,5 +18,4 @@ class Vps_Validate_NotEmpty extends Zend_Validate_NotEmpty
 
         return true;
     }
-*/
 }
