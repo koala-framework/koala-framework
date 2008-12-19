@@ -35,26 +35,35 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
 
         this.loginPanel.on('render', function(panel) {
             var frame = this.loginPanel.body.first('iframe');
-            Ext.EventManager.on(frame, 'load', this.onLoginLoad, this);
+            var doc = this._getDoc();
+            if (doc && doc.body) {
+                this.onLoginLoad();
+            } else {
+                Ext.EventManager.on(frame, 'load', this.onLoginLoad, this);
+            }
         }, this, { delay: 1 });
 
         Vps.User.Login.Dialog.superclass.initComponent.call(this);
     },
 
-    onLoginLoad : function() {
+    _getDoc: function() {
         var frame = this.loginPanel.body.first('iframe');
         if(Ext.isIE){
-            doc = frame.dom.contentWindow.document;
+            return frame.dom.contentWindow.document;
         } else {
-            doc = (frame.dom.contentDocument || window.frames[id].document);
+            return (frame.dom.contentDocument || window.frames[id].document);
         }
-
-        // IE sux :)
-        if (!doc) {
+    },
+    onLoginLoad : function() {
+        var doc = this._getDoc();
+/*
+        // IE sux sometimes :)
+        if (!doc || !doc.body) {
+            Vps.log('deferring');
             this.onLoginLoad.defer(100, this);
             return ;
         }
-
+*/
         if(doc && doc.body){
             if (doc.body.innerHTML.match(/successful/)) {
                 this.hide();
