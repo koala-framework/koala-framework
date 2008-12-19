@@ -1,12 +1,25 @@
+Vps.onContentReady(function()
+{
+    var fadeComponents = Ext.query('div.vpsFadeElements');
+    Ext.each(fadeComponents, function(c) {
+        var selector = Ext.query('.fadeSelector', c)[0].value;
+        var fade = new Vps.Fade.Elements({
+            selector: selector,
+            selectorRoot: c
+        });
+        fade.start();
+    });
+});
+
 Ext.namespace("Vps.Fade");
 
 Vps.Fade.Elements = function(cfg) {
     this.selector = cfg.selector;
     this.selectorRoot = document;
-    this.duration = 2.5;
+    this.duration = 3;
     this.easingFadeOut = 'easeIn';
     this.easingFadeIn = 'easeIn';
-    this.fadeEvery = 6000;
+    this.fadeEvery = 7000;
 
     if (cfg.selectorRoot) this.selectorRoot = cfg.selectorRoot;
     if (cfg.duration) this.duration = cfg.duration;
@@ -29,10 +42,11 @@ Vps.Fade.Elements = function(cfg) {
 Vps.Fade.Elements.prototype = {
 
     active: 0,
+    firstFaded: false,
 
     start: function() {
         if (this.fadeElements.length <= 1) return;
-        this.doFade.defer(this.fadeEvery, this);
+        this.doFade.defer(this._getDeferTime(), this);
     },
 
     doFade: function() {
@@ -51,19 +65,15 @@ Vps.Fade.Elements.prototype = {
         nextEl.fadeIn({ endOpacity: 1.0, easing: this.easingFadeIn, duration: this.duration, useDisplay: true });
 
 
-        this.doFade.defer(this.fadeEvery, this);
+        this.doFade.defer(this._getDeferTime(), this);
+    },
+
+    _getDeferTime: function() {
+        if (!this.firstFaded) {
+            this.firstFaded = true;
+            return this.fadeEvery - (this.duration * 1000);
+        } else {
+            return this.fadeEvery;
+        }
     }
 };
-
-Vps.onContentReady(function()
-{
-    var fadeComponents = Ext.query('div.vpcFadeElements');
-    Ext.each(fadeComponents, function(c) {
-        var selector = Ext.query('.fadeSelector', c)[0].value;
-        var fade = new Vps.Fade.Elements({
-            selector: selector,
-            selectorRoot: c
-        });
-        fade.start();
-    });
-});
