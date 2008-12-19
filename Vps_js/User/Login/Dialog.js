@@ -54,6 +54,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
             return (frame.dom.contentDocument || window.frames[id].document);
         }
     },
+
     onLoginLoad : function() {
         var doc = this._getDoc();
 /*
