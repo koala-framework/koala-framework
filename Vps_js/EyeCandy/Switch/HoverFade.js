@@ -26,7 +26,7 @@ Vps.Switch.HoverFade = function(cfg) {
     if (cfg.fadeInAfter) this.fadeInAfter = cfg.fadeInAfter;
     if (cfg.endOpacity) this.endOpacity = cfg.endOpacity;
 
-    this.switchLink = Ext.get(Ext.query('a.switchLink', cfg.wrapper)[0]);
+    this.switchLink = Ext.get(Ext.query('.switchLink', cfg.wrapper)[0]);
     this.switchContent = Ext.get(Ext.query('div.switchContent', cfg.wrapper)[0]);
     this.fadeWrapper = Ext.get(cfg.wrapper);
 
