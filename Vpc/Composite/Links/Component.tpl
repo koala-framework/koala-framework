@@ -1,7 +1,15 @@
 <div class="<?=$this->cssClass?>">
     <ul>
-        <?php foreach ($this->children as $child) { ?>
-            <li><?php echo $this->component($child) ?></li>
-        <?php } ?>
+        <? $i = 0; ?>
+        <? foreach ($this->children as $child) { ?>
+            <?
+                $class = '';
+                if ($i == 0) $class .= 'vpcFirst ';
+                if ($i == count($this->children)-1) $class .= 'vpcLast ';
+                $class = trim($class);
+                $i++;
+            ?>
+            <li class="<?= $class; ?>"><? echo $this->component($child) ?></li>
+        <? } ?>
     </ul>
 </div>
