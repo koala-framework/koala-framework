@@ -48,6 +48,13 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
         } else {
             doc = (frame.dom.contentDocument || window.frames[id].document);
         }
+
+        // IE sux :)
+        if (!doc) {
+            this.onLoginLoad.defer(100, this);
+            return ;
+        }
+
         if(doc && doc.body){
             if (doc.body.innerHTML.match(/successful/)) {
                 this.hide();
