@@ -30,6 +30,7 @@ class Vps_Benchmark_Profile
                     if (is_array($a)) {
                         foreach ($a as &$ai) {
                             if (is_array($ai)) $ai = 'Array';
+                            if (is_object($ai)) $ai = 'Object';
                         }
                         $a = implode(', ', $a);
                     }

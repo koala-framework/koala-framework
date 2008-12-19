@@ -156,11 +156,25 @@ class Vps_Component_Select extends Vps_Model_Select
         return $this;
     }
 
-    public function whereSubroot($value = true)
+    public function whereSubroot($component)
     {
-        if (!$value instanceof Vps_Component_Data)
-            throw new Vps_Exception("Subroot has to be a component");
-        $this->_parts[self::WHERE_SUBROOT] = $value;
+        if (!is_array($component)) {;
+            if (!$component instanceof Vps_Component_Data) {
+                throw new Vps_Exception("Subroot has to be a component");
+            }
+            $where = array();
+            while ($component) {
+                if (Vpc_Abstract::getFlag($component->componentClass, 'subroot')) {
+                    $where[] = $component;
+                }
+                $component = $component->parent;
+            }
+        } else {
+            $where = $component;
+        }
+        if (!empty($where)) {
+            $this->_parts[self::WHERE_SUBROOT] = $where;
+        }
         return $this;
     }
 
@@ -172,11 +186,12 @@ class Vps_Component_Select extends Vps_Model_Select
 
     public function getHash()
     {
-        $parts = $this->getParts();
-        foreach ($parts as $key => $part) {
-            if ($key == self::WHERE_SUBROOT) {
-                $parts[$key] = $part->componentId;
+        $parts = array();
+        foreach ($this->getParts() as $key => $part) {
+            if ($key == self::WHERE_SUBROOT && !empty($part)) {
+                $part = $part[0]->componentId;
             }
+            $parts[$key] = $part;
         }
         return serialize($parts);
     }

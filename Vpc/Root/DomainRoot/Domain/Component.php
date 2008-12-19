@@ -14,4 +14,21 @@ class Vpc_Root_DomainRoot_Domain_Component extends Vpc_Abstract
         $ret['flags']['subroot'] = 'domain';
         return $ret;
     }
+
+    public static function getComponentForHost($host)
+    {
+        $host = str_replace('www.', '', $host);
+        $root = Vps_Component_Data_Root::getInstance();
+        $settings = Vpc_Abstract::getSetting($root->componentClass, 'generators');
+        $model = Vps_Model_Abstract::getInstance($settings['domain']['model']);
+        $row = $model->getRow(
+            $model->select()->whereEquals('domain', $host)
+        );
+        if (!$row) throw new Vps_Exception('Domain not found: ' . $host);
+        return $root->getComponentByClass(
+            'Vpc_Root_DomainRoot_Domain_Component',
+            array('id' => '-' . $row->id)
+        );
+    }
+
 }

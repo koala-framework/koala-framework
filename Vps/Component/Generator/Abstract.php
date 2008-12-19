@@ -477,19 +477,31 @@ abstract class Vps_Component_Generator_Abstract
     protected function _createData($parentData, $row, $select)
     {
         $id = $this->_getIdFromRow($row);
-
         if (is_array($select)) $select = new Vps_Component_Select($select);
         if ($select && $select->hasPart('whereSubroot')) {
-            $subrootComponent = $select->getPart('whereSubroot');
-            while ($subrootComponent && !Vpc_Abstract::getFlag($subrootComponent->componentClass, 'subroot')) {
-                $subrootComponent = $subrootComponent->parent;
-            }
-            if ($subrootComponent) {
-                $c = $parentData;
-                while ($c && $c->componentId != $subrootComponent->componentId) {
+            foreach ($select->getPart('whereSubroot') as $subroot) {
+                $subrootLevel = 0;
+                $c = $subroot;
+                while ($c) {
+                    $subrootLevel++;
                     $c = $c->parent;
                 }
-                if (!$c) return null;
+                $parentLevel = 0;
+                $c = $parentData;
+                while ($c) {
+                    $parentLevel++;
+                    $c = $c->parent;
+                }
+                if ($parentLevel >= $subrootLevel) {
+                    $compareData = $parentData;
+                    for ($x = 0; $x < ($parentLevel - $subrootLevel); $x++) {
+                        $compareData = $compareData->parent;
+                    }
+                    if ($compareData->componentId != $subroot->componentId) {
+                        return null;
+                    }
+                    break;
+                }
             }
         }
 

@@ -83,6 +83,8 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
                         }
                     }
                 } else {
+                    p(Vps_Component_Data_Root::getInstance()
+                        ->getComponentByDbId('company_6345', array('ignoreVisible'=>true)));
                     $c = Vps_Component_Data_Root::getInstance()
                         ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
                     if (!$c) {
