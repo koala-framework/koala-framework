@@ -7,15 +7,14 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
     public function getChildData($parentData, $select = array())
     {
         $ret = array();
-        foreach ($this->_fetchKeys($parentData, $select) as $key) {
-            if (!isset($parentDatas)) {
-                if (!$parentData) {
-                    $parentDatas = Vps_Component_Data_Root::getInstance()
-                                                ->getComponentsByClass($this->_class);
-                } else {
-                    $parentDatas = array($parentData);
-                }
+        $pData = $parentData;
+        foreach ($this->_fetchKeys($pData, $select) as $key) {
+            $parentData = $pData;
+            if (!$parentData) {
+                $parentData = Vps_Component_Data_Root::getInstance()
+                                ->getComponentsBySameClass($this->_class);
             }
+            $parentDatas = is_array($parentData) ? $parentData : array($parentData);
             foreach ($parentDatas as $parentData) {
                 $data = $this->_createData($parentData, $key, $select);
                 if ($data) $ret[] = $data;

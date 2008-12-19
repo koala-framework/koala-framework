@@ -296,7 +296,7 @@ class Vps_Setup
             }
         }
 
-        $frontendOptions = array('automatic_serialization' => true);
+        $frontendOptions = array('automatic_serialization' => true, 'write_control' => false);
         $cache = Vps_Cache::factory('Core', 'Memcached', $frontendOptions);
         Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
 

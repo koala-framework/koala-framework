@@ -5,6 +5,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private static $_rootComponentClass;
     private $_hasChildComponentCache;
     private $_componentsByClassCache;
+    private $_componentsByDbIdCache;
     private $_currentPage;
     private $_pageGenerators;
 
@@ -79,6 +80,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else {
             $select = clone $select;
         }
+
         $ret = $this;
         $idParts = $this->_getIdParts($componentId);
         foreach ($idParts as $i=>$idPart) {
@@ -96,6 +98,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                         //komponenten finden
                         $s['ignoreVisible'] = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
                     }
+                    if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+                        //ignoreVisible doch mitnehmen damit wir unterkomponeten von unsichtbaren
+                        //komponenten finden
+                        $s['subroot'] = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+                    }
+                    $s = new Vps_Component_Select($s);
                 }
 
                 if ($i == 0) { // Muss eine Page sein
@@ -148,71 +156,84 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     public function getComponentByDbId($dbId, $select = array())
     {
-        if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
+        $components = $this->getComponentsByDbId($dbId, $select);
+        if (count($components) > 1) {
+            throw new Vps_Exception('getComponentByClass must not get more than one component');
         }
-        $select->limit(1);
-        $cmp = $this->getComponentsByDbId($dbId, $select);
-        return isset($cmp[0]) ? $cmp[0] : null;
+        if (isset($components[0])) {
+            return $components[0];
+        }
+        return null;
     }
 
     public function getComponentsByDbId($dbId, $select = array())
     {
-        $benchmark = Vps_Benchmark::start();
-        if (is_numeric(substr($dbId, 0, 1)) || substr($dbId, 0, 4)=='root') {
-            $data = $this->getComponentById($dbId, $select);
-            if ($data) {
-                return array($data);
-            } else {
-                return array();
-            }
-        }
-
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
 
+        $cacheId = $dbId.$select->getHash();
+        if (!isset($this->_componentsByDbIdCache[$cacheId])) {
+            $benchmark = Vps_Benchmark::start();
 
-        if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
-            $limitCount = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
-        }
-        $ret = array();
-        foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
-                if (isset($generator['dbIdShortcut'])
-                        && substr($dbId, 0, strlen($generator['dbIdShortcut'])) == $generator['dbIdShortcut']) {
-                    $idParts = $this->_getIdParts(substr($dbId, strlen($generator['dbIdShortcut']) - 1));
-                    $generator = Vps_Component_Generator_Abstract::getInstance($class, $key);
-                    if (count($idParts) <= 1) {
-                        $generatorSelect = clone $select;
-                    } else {
-                        $generatorSelect = new Vps_Component_Select(); // Select erst bei letzten Part
-                        if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
-                            $generatorSelect->ignoreVisible($select->getPart(Vps_Component_Select::IGNORE_VISIBLE));
+            if (is_numeric(substr($dbId, 0, 1)) || substr($dbId, 0, 4)=='root') {
+                $idSelect = clone $select;
+                if ($idSelect->hasPart('whereSubroot')) {
+                    $subroot = $idSelect->getPart('whereSubroot');
+                    $idSelect->unsetPart('whereSubroot');
+                    $idComponent = $this->getComponentById($dbId, $select);
+                }
+                $data = $this->getComponentById($dbId, $select);
+                if ($data) {
+                    return array($data);
+                } else {
+                    return array();
+                }
+            }
+
+            if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
+                $limitCount = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
+            }
+            $ret = array();
+            foreach (Vpc_Abstract::getComponentClasses() as $class) {
+                foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+                    if (isset($generator['dbIdShortcut'])
+                            && substr($dbId, 0, strlen($generator['dbIdShortcut'])) == $generator['dbIdShortcut']) {
+                        $idParts = $this->_getIdParts(substr($dbId, strlen($generator['dbIdShortcut']) - 1));
+                        $generator = Vps_Component_Generator_Abstract::getInstance($class, $key);
+                        if (count($idParts) <= 1) {
+                            $generatorSelect = clone $select;
+                        } else {
+                            $generatorSelect = new Vps_Component_Select(); // Select erst bei letzten Part
+                            if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+                                $generatorSelect->ignoreVisible($select->getPart(Vps_Component_Select::IGNORE_VISIBLE));
+                            }
+                            if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+                                $generatorSelect->whereSubroot($select->getPart(Vps_Component_Select::WHERE_SUBROOT));
+                            }
                         }
-                    }
-                    if (isset($limitCount)) {
-                        $generatorSelect->limit($limitCount - count($ret));
-                    }
-                    $generatorSelect->whereId($idParts[0]);
-                    $data = $generator->getChildData(null, $generatorSelect);
-                    if (isset($data[0])) {
+                        if (isset($limitCount)) {
+                            $generatorSelect->limit($limitCount - count($ret));
+                        }
+                        $generatorSelect->whereId($idParts[0]);
+                        $data = $generator->getChildData(null, $generatorSelect);
                         unset($idParts[0]);
-                        $componentId = $data[0]->componentId . implode('', $idParts);
-                        $data = $this->getComponentById($componentId, $select);
-                        if ($data) {
-                            $ret[] = $data;
-                        }
-                    }
-                    if (isset($limitCount)) {
-                        if ($limitCount - count($ret) <= 0) {
-                            return $ret;
+                        foreach ($data as $d) {
+                            $componentId = $d->componentId . implode('', $idParts);
+                            $data = $this->getComponentById($componentId, $select);
+                            if ($data) {
+                                $ret[] = $data;
+                            }
+                            if (isset($limitCount) && $limitCount - count($ret) <= 0) {
+                                break 3;
+                            }
                         }
                     }
                 }
             }
+            $this->_componentsByDbIdCache[$cacheId] = $ret;
         }
-        return $ret;
+        return $this->_componentsByDbIdCache[$cacheId];
     }
     public function getComponentsByClass($class, $select = array())
     {
@@ -220,9 +241,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $select = new Vps_Component_Select($select);
         }
         $cacheId = $class.$select->getHash();
-        if (is_instance_of($class, 'Vpc_Root_Abstract')) {
-            $this->_componentsByClassCache[$cacheId] = array($this);
-        }
         if (!isset($this->_componentsByClassCache[$cacheId])) {
             $benchmark = Vps_Benchmark::start();
 
@@ -242,6 +260,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     public function getComponentsBySameClass($lookingForChildClasses, $select = array())
     {
+        if (!is_array($lookingForChildClasses) &&
+            is_instance_of($lookingForChildClasses, 'Vpc_Root_Abstract')
+        ) {
+            return array($this);
+        }
+
         if (!is_array($lookingForChildClasses)) {
             $lookingForChildClasses = array($lookingForChildClasses);
         }
@@ -251,10 +275,18 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         $select->whereComponentClasses($lookingForChildClasses);
 
+        if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
+            $limitCount = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
+        }
+
         $ret = array();
         foreach ($this->_getGeneratorsForClasses($lookingForChildClasses) as $generator) {
-            $data = $generator->getChildData(null, $select);
-            $ret = array_merge($ret, $data);
+            foreach ($generator->getChildData(null, $select) as $data) {
+                $ret[] = $data;
+                if (isset($limitCount) && $limitCount - count($ret) <= 0) {
+                    return $ret;
+                }
+            }
         }
         return $ret;
     }
@@ -262,6 +294,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private function _getGeneratorsForClasses($lookingForClasses)
     {
         $ret = array();
+        $generators = array();
         foreach (Vpc_Abstract::getComponentClasses() as $c) {
             foreach (Vpc_Abstract::getSetting($c, 'generators') as $key => $generator) {
                 if (is_array($generator['component'])) {
@@ -271,9 +304,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 }
                 foreach ($childClasses as $childClass) {
                     if (in_array($childClass, $lookingForClasses)) {
-                        $ret[] = Vps_Component_Generator_Abstract::getInstance($c, $key);
+                        $generators[$c][$key] = Vps_Component_Generator_Abstract::getInstance($c, $key);
                     }
                 }
+            }
+        }
+        foreach ($generators as $key => $val) {
+            foreach ($val as $k => $v) {
+                $ret[] = $v;
             }
         }
         return $ret;
@@ -282,6 +320,21 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentByClass($class, $select = array())
     {
         $components = $this->getComponentsByClass($class, $select);
+        if (count($components) > 1) {
+            throw new Vps_Exception('getComponentByClass must not get more than one component');
+        }
+        if (isset($components[0])) {
+            return $components[0];
+        }
+        return null;
+    }
+
+    public function getComponentBySameClass($class, $select = array())
+    {
+        $components = $this->getComponentsBySameClass($class, $select);
+        if (count($components) > 1) {
+            throw new Vps_Exception('getComponentByClass must not get more than one component');
+        }
         if (isset($components[0])) {
             return $components[0];
         }

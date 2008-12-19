@@ -341,24 +341,26 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $sc = Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
         $parts = explode('/', $url);
         $constraints = array();
-        if (is_instance_of(
-                Vps_Component_Data_Root::getInstance()->componentClass,
-                'Vpc_Root_DomainRoot_Component'
-            )
-        ) {
+        $isDomain = is_instance_of(
+            Vps_Component_Data_Root::getInstance()->componentClass,
+           'Vpc_Root_DomainRoot_Component'
+        );
+        if ($isDomain) {
             $pos = strpos($url, '/', 1);
             $domain = substr($url, 0, $pos);
-            $components = Vps_Component_Data_Root::getInstance()->
-                getComponentsByClass('Vpc_Root_DomainRoot_Domain_Component');
-            foreach ($components as $c) {
-                if ($c->row->id == $domain) $constraints = array('subroot' => $c);
-            }
             $url = substr($url, $pos);
         }
         $shortcut = substr($url, 1, strpos($url, '/', 1) - 1);
         if ($shortcut != $sc) return false;
+        if ($isDomain) {
+            $components = Vps_Component_Data_Root::getInstance()->
+                getComponentsByClass('Vpc_Root_DomainRoot_Domain_Component', array('id' => '-' . $domain));
+            foreach ($components as $c) {
+                if ($c->row->id == $domain) $constraints = array('subroot' => $c);
+            }
+        }
         $component = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass($componentClass, $constraints);
+            ->getComponentBySameClass($componentClass, $constraints);
         if ($component) {
             return $component->getChildPageByPath(substr($url, strlen($sc) + 2));
         }

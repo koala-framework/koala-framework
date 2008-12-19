@@ -14,6 +14,12 @@ class Vpc_Root_DomainRoot_Generator extends Vps_Component_Generator_PseudoPage_T
         return $ret;
     }
 
+    protected function _formatSelect($parentData, $select)
+    {
+        $select = parent::_formatSelect($parentData, $select);
+        return $select;
+    }
+
     protected function _getParentDataByRow($row)
     {
         return Vps_Component_Data_Root::getInstance();

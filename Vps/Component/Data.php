@@ -480,16 +480,10 @@ class Vps_Component_Data
         }
         return $page;
     }
-/*
+
     public function toDebug()
     {
-        $ret = '';
-        foreach ($this as $k=>$i) {
-            if ($k == 'parent') continue;
-            $ret .= "$k: $i<br >\n";
-        }
-        return $ret;
+        return $this->componentId . ' (' . $this->componentClass . ')';
     }
-*/
 }
 ?>

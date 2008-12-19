@@ -37,8 +37,11 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
             $this->_referersCache = array();
             foreach ($rowset as $row) {
                 $host = parse_url($row->referer_url, PHP_URL_HOST);
+                $component = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
+                    $row->component_id, array('subroot' => $this->getData())
+                );
                 $this->_referersCache[] = array(
-                    'component' => Vps_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id),
+                    'component' => $component,
                     'row'       => $row,
                     'host'      => $host,
                     'query'     => Vpc_Advanced_SearchEngineReferer_Component::getQueryVar($row->referer_url)

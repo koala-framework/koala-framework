@@ -58,9 +58,22 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if ($select) {
             $rows = $this->_getModel()->fetchAll($select);
         }
+        $pData = $parentData;
         foreach ($rows as $row) {
-            $d = $this->_createData($parentData, $row, $select);
-            if ($d) $ret[] = $d;
+            $parentData = $pData;
+            if (!$parentData) {
+                $parentData = $this->_getParentDataByRow($row, $select);
+            }
+            $parentDatas = is_array($parentData) ? $parentData : array($parentData);
+            foreach ($parentDatas as $parentData) {
+                if ($parentData->componentClass != $this->_class) {
+                    throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$parentData->componentClass}' instead of '$this->_class'");
+                }
+                $data = $this->_createData($parentData, $row, $select);
+                if ($data) {
+                    $ret[] = $data;
+                }
+            }
         }
         return $ret;
     }
@@ -77,21 +90,18 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     protected function _createData($parentData, $row, $select)
     {
-        if (!$parentData) {
-            $parentData = $this->_getParentDataByRow($row);
-            if (!$parentData) return null; //siehe Vps_Component_Generator_GetComponentByClassWithComponentId_Test
-            if ($parentData->componentClass != $this->_class) {
-                throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$parentData->componentClass}' instead of '$this->_class'");
-            }
-        }
         return parent::_createData($parentData, $row, $select);
     }
 
-    protected function _getParentDataByRow($row)
+    protected function _getParentDataByRow($row, $select)
     {
-        if (isset($row->component_id)) {
+        if (isset($row->component_id) && $row->component_id) {
+            $constraints = array('componentClass'=>$this->_class);
+            if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+                $constraints['subroot'] = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+            }
             $ret = Vps_Component_Data_Root::getInstance()
-                ->getComponentByDbId($row->component_id, array('componentClass'=>$this->_class));
+                ->getComponentsByDbId($row->component_id, $constraints);
         } else {
             throw new Vps_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
         }
