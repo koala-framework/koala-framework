@@ -20,9 +20,15 @@
                             <input type="password" name="password" autocomplete="on" size="20" class="x-form-text x-form-field" style="width: 180px;"/>
                         </div>
                     </div>
-                    <div tabindex="-1" class="x-form-item"></div>
+                    <? if ($this->text) { ?>
+                        <div class="x-form-item vpsLoginResult <?= $this->cssClass; ?>">
+                            <span><?= $this->text ?></span>
+                        </div>
+                    <? } else { ?>
+                        <div tabindex="-1" class="x-form-item"></div>
+                    <? } ?>
                     <div class="x-form-clear-left"></div>
-                    <table cellspacing="0" cellpadding="0" border="0" align="right" class="x-btn-wrap x-btn" id="ext-comp-1008" style="margin-top:16px; margin-right:16px;">
+                    <table cellspacing="0" cellpadding="0" border="0" align="right" class="x-btn-wrap x-btn" id="ext-comp-1008" style="margin-top:12px; margin-right:16px;">
                         <tbody>
                             <tr>
                                 <td class="x-btn-left"></td>
@@ -42,7 +48,6 @@
                         </tbody>
                     </table>
                     <div class="x-clear"></div>
-                    <div class="x-form-item" style="width: 270px; margin-top:10px"><?= $this->text ?></div>
                 </div>
             </form>
         </div>

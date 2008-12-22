@@ -1,0 +1,19 @@
+.vpsLoginResult {
+    margin-top:10px; margin-bottom: 0px;
+    text-align: center;
+}
+
+.vpsLoginResult span {
+    background-position: left top; background-repeat: no-repeat;
+    padding-left: 22px; padding-top: 2px;
+}
+
+.vpsLoginResultSuccess span {
+    color: #070;
+    background-image: url(/assets/silkicons/tick.png);
+}
+
+.vpsLoginResultFailure span {
+    color: #b11;
+    background-image: url(/assets/silkicons/cross.png);
+}
