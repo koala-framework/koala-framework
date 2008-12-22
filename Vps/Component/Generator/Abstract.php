@@ -127,15 +127,7 @@ abstract class Vps_Component_Generator_Abstract
             $componentClass = $component;
             $component = null;
         }
-        static $cacheIdPrefix;
-        if (!isset($cacheIdPrefix)) {
-            $cacheIdPrefix = Zend_Registry::get('config')->application->id;
-            if (!$cacheIdPrefix) {
-                throw new Vps_Exception("application.id has to be set in config");
-            }
-            $cacheIdPrefix .= Vps_Setup::getConfigSection();
-        }
-        $cacheId = $cacheIdPrefix.$componentClass;
+        $cacheId = $componentClass;
         if ($component) {
             $ic = $component->inheritClasses;
             foreach ($ic as $inheritComponent) {
