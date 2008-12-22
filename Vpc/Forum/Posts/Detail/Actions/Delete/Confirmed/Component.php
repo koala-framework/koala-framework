@@ -5,7 +5,6 @@ class Vpc_Forum_Posts_Detail_Actions_Delete_Confirmed_Component extends Vpc_Post
     {
         $ret = parent::_getTargetPage();
         if ($this->_getNumPosts() == 1) {
-            p('B');
             $ret = $ret->getParentPage();
         }
         return $ret;
@@ -16,7 +15,6 @@ class Vpc_Forum_Posts_Detail_Actions_Delete_Confirmed_Component extends Vpc_Post
         parent::postProcessInput($postData);
         $numPosts = $this->_getNumPosts();
         if ($numPosts == 0) {
-            p('A');
             //thread auch löschen
             $this->getData()->parent->parent->parent->parent->parent->row->delete();
         }

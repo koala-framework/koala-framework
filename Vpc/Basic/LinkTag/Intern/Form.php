@@ -10,8 +10,7 @@ class Vpc_Basic_LinkTag_Intern_TargetData extends Vps_Data_Table
         }
         $ret = array('id' => $row->$name);
         $cmp = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
-            $ret['id'],
-            array('subroot' => $this)
+            $ret['id']
         );
         if ($cmp) {
             $ret['name'] = $cmp->getTitle();
@@ -38,8 +37,7 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vpc_Abstract_Form
     {
         if ($parentRow) {
             $data = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
-                $parentRow->component_id,
-                array('subroot' => $parentRow)
+                $parentRow->component_id
             );
             if ($this->fields['target']->getInternalSave() &&
                     $data && $data->getPage() && $data->getPage()->dbId == $postData[$this->fields['target']->getFieldName()]) {
