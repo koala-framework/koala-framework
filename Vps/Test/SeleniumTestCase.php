@@ -84,7 +84,8 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
                 $exception = unserialize(base64_decode($exception));
                 throw $exception;
             }
-            $this->assertTextNotPresent('Fehler');
+            //$this->assertTextNotPresent('Fehler');
+            $this->assertTitleNotContains('Internal Server Error');
             $this->assertTextNotPresent('Exception');
             $this->assertTextNotPresent('Fatal error');
             $this->assertTextNotPresent('Parse error');
@@ -189,5 +190,15 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     public function assertBodyText($search)
     {
         $this->assertEquals($search, $this->getText('//body'));
+    }
+
+    public function assertTitleContains($title, $message = '')
+    {
+        $this->assertContains($title, $this->getTitle(), $message);
+    }
+
+    public function assertTitleNotContains($title, $message = '')
+    {
+        $this->assertNotContains($title, $this->getTitle(), $message);
     }
 }

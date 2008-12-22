@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>500 <?= trlVps('Internal Server Error'); ?></title>
+        <title>500 Internal Server Error</title>
     </head>
     <body>
         <h1><?= trlVps('Error') ?></h1>
