@@ -17,12 +17,25 @@ class Vpc_Directories_CategoryTree_Directory_Row extends Vps_Db_Table_Row_Abstra
 
     public function getTreePath($separator = ' » ')
     {
-        $path = $this->__toString();
+        $ret = array();
+        foreach ($this->getTreePathRows() as $row) {
+            $ret[] = $row->__toString();
+        }
+        $ret = implode($separator, $ret);
+        return $ret;
+    }
+
+    /**
+     * Kann überschrieben werden um bestimmte Kategorien auszublenden, zB ProSalzburg die Root-Kategorie
+     */
+    public function getTreePathRows()
+    {
+        $parts = array($this);
         $upperRow = $this;
         while (!is_null($upperRow = $upperRow->findParentRow(get_class($this->_getTable())))) {
-            $path = $upperRow->__toString().$separator.$path;
+            $parts[] = $upperRow;
         }
-        return $path;
+        return array_reverse($parts);
     }
 
     public function getRecursiveChildCategoryIds(array $where = array(), $parentId = null)

@@ -18,15 +18,13 @@ class Vpc_Directories_CategoryTree_Detail_Breadcrumbs_Component
         $detail = $this->getData()->parent;
         $directory = $detail->parent;
 
-        $breadcrumbs = array($detail);
+        $breadcrumbs = array();
 
-        $row = $detail->row->getRow()->findParentRow($detail->row->getModel()->getTable());
-        while ($row) {
+        foreach ($detail->row->getRow()->getTreePathRows() as $row) {
             $breadcrumbs[] = $directory->getChildComponent('_'.$row->id);
-            $row = $row->findParentRow($row->getTable());
         }
         $ret['root'] = $this->_getCategoryTreeRoot();
-        $ret['breadcrumbs'] = array_reverse($breadcrumbs);
+        $ret['breadcrumbs'] = $breadcrumbs;
         return $ret;
     }
 
