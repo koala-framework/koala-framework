@@ -10,6 +10,7 @@ class Vps_Cache extends Zend_Cache
                 'host' => Vps_Registry::get('config')->server->memcache->host,
                 'port' => Vps_Registry::get('config')->server->memcache->port
             ));
+            $backendClass = 'Vps_Cache_Backend_' . $backend;
         }
         $frontendObject = new $frontendClass($frontendOptions);
         $backendObject = new $backendClass($backendOptions);

@@ -111,7 +111,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         if (!$cache) {
             $cache = Vps_Cache::factory('Core', 'Memcached', array('lifetime'=>null, 'automatic_serialization'=>true));
         }
-        $currentCacheId = 'iccc'.Vps_Setup::getConfigSection().md5($class.$cacheId);
+        $currentCacheId = 'iccc'.md5($class.$cacheId);
 
         if (isset($ccc[$class.$cacheId])) {
             Vps_Benchmark::count('iccc cache hit');
