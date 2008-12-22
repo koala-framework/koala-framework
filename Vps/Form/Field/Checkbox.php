@@ -7,6 +7,15 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
         $this->setXtype('checkbox');
     }
 
+    protected function _validateNotAllowBlank($data, $name)
+    {
+        $ret = array();
+        if (!$data) {
+            $ret[] = $name.": ".trlVps("Value is empty, but a non-empty value is required");
+        }
+        return $ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();

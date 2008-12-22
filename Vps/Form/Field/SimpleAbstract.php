@@ -35,10 +35,7 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
             if ($this->getAllowBlank() === false
                 || $this->getAllowBlank() === 0
                 || $this->getAllowBlank() === '0') {
-                $v = new Vps_Validate_NotEmpty();
-                if (!$v->isValid($data)) {
-                    $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
-                }
+                $ret = array_merge($ret, $this->_validateNotAllowBlank($data, $name));
             }
             if ($data) {
                 foreach ($this->getValidators() as $v) {
@@ -53,6 +50,16 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
                     }
                 }
             }
+        }
+        return $ret;
+    }
+
+    protected function _validateNotAllowBlank($data, $name)
+    {
+        $ret = array();
+        $v = new Vps_Validate_NotEmpty();
+        if (!$v->isValid($data)) {
+            $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
         }
         return $ret;
     }
