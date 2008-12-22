@@ -83,13 +83,19 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
                         }
                     }
                 } else {
-                    $c = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
-                    if (!$c) {
+                    $components = Vps_Component_Data_Root::getInstance()
+                        ->getComponentsByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
+                    if (empty($components)) {
                         throw new Vps_Exception("Can't find component to check permissions");
                     }
-                    $allowed = Vps_Registry::get('acl')->getComponentAcl()
-                        ->isAllowed($this->_getAuthData(), $c);
+                    $allowed = false;
+                    foreach ($components as $component) {
+                        if (Vps_Registry::get('acl')->getComponentAcl()
+                            ->isAllowed($this->_getAuthData(), $component)
+                        ) {
+                            $allowed = true;
+                        }
+                    }
                 }
             }
         }
