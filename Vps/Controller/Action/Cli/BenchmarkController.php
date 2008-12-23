@@ -12,11 +12,11 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         $fields = array(
             'requests', 'duration', 'queries',
             'componentDatas', 'generators', 'componentData Pages', 'components',
-            'preload cache', 'rendered nocache', 'rendered cache', 'rendered noviewcache',
+            'preload cache', 'rendered nocache', 'rendered cache',
             'getRecursiveChildComponents', 'getChildComponents uncached', 'getChildComponents cached', 'countChildComponents',
             'iccc cache semi-hit', 'iccc cache miss', 'iccc cache hit',
             'Generator::getInst semi-hit', 'Generator::getInst miss', 'Generator::getInst hit',
-            'processing dependencies miss',
+            'processing dependencies miss', 'rendered noviewcache'
         );
         foreach (array('content', 'media', 'admin', 'asset', 'cli', 'unkown') as $t) {
             foreach ($fields as $f) {
