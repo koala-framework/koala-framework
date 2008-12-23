@@ -25,7 +25,7 @@ class Vpc_Basic_LinkTag_Admin extends Vpc_Admin
                 if (is_instance_of($componentClass, 'Vpc_Menu_Abstract')) {
                     $page = Vps_Component_Data_Root::getInstance()
                         ->getComponentById($row->component_id, array('ignoreVisible' => true));
-                    if ($page->isPage) {
+                    if ($page && $page->isPage) {
                         Vps_Component_Cache::getInstance()
                             ->cleanComponentClass($componentClass);
                     }
