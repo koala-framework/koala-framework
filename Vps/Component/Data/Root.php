@@ -80,7 +80,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else {
             $select = clone $select;
         }
-
         $ret = $this;
         $idParts = $this->_getIdParts($componentId);
         foreach ($idParts as $i=>$idPart) {
@@ -157,9 +156,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentByDbId($dbId, $select = array())
     {
         $components = $this->getComponentsByDbId($dbId, $select);
-        if (count($components) > 1) {
-            throw new Vps_Exception('getComponentByClass must not get more than one component');
-        }
+        $this->_checkSingleComponent($components);
         if (isset($components[0])) {
             return $components[0];
         }
@@ -216,6 +213,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                             $generatorSelect->limit($limitCount - count($ret));
                         }
                         $generatorSelect->whereId($idParts[0]);
+                        p(get_class($generator));
                         $data = $generator->getChildData(null, $generatorSelect);
                         unset($idParts[0]);
                         foreach ($data as $d) {
@@ -320,9 +318,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentByClass($class, $select = array())
     {
         $components = $this->getComponentsByClass($class, $select);
-        if (count($components) > 1) {
-            throw new Vps_Exception('getComponentByClass must not get more than one component');
-        }
+        $this->_checkSingleComponent($components);
         if (isset($components[0])) {
             return $components[0];
         }
@@ -332,13 +328,22 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentBySameClass($class, $select = array())
     {
         $components = $this->getComponentsBySameClass($class, $select);
-        if (count($components) > 1) {
-            throw new Vps_Exception('getComponentByClass must not get more than one component');
-        }
+        $this->_checkSingleComponent($components);
         if (isset($components[0])) {
             return $components[0];
         }
         return null;
+    }
+
+    private function _checkSingleComponent($components)
+    {
+        if (count($components) > 1) {
+            $ids = array();
+            foreach ($components as $c) {
+                $ids[] = $c->componentId;
+            }
+            throw new Vps_Exception('getComponentByXxx must not get more than one component but got these: ' . implode(', ', $ids));
+        }
     }
 
     public function setCurrentPage(Vps_Component_Data $page)
