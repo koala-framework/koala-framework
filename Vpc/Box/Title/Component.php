@@ -5,9 +5,15 @@ class Vpc_Box_Title_Component extends Vpc_Abstract
     {
         $ret = $this->getData()->getTitle();
         if ($ret) $ret .= ' - ';
-        $ret .= Zend_Registry::get('config')->application->name;
+        $ret .= $this->_getApplicationTitle();
         return $ret;
     }
+
+    protected function _getApplicationTitle()
+    {
+        return Zend_Registry::get('config')->application->name;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
