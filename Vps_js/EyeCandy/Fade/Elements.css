@@ -1,1 +1,2 @@
-.fadeElement { position: absolute; top: 0px; left: 0px; }
+.vpsFadeElements { display: none; }
+.vpsFadeElement { position: absolute; top: 0px; left: 0px; }
