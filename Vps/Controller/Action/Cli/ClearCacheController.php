@@ -61,8 +61,21 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
         }
         foreach (self::_getCacheDirs() as $d) {
             if (in_array($d, $types)) {
-                system("rm -rf application/cache/$d/*");
+                self::_removeDirContents("application/cache/$d");
                 if ($output) echo "cleared $d cache...\n";
+            }
+        }
+    }
+
+    private static function _removeDirContents($path)
+    {
+        $dir = new DirectoryIterator($path);
+        foreach ($dir as $fileinfo) {
+            if ($fileinfo->isFile()) {
+                unlink($fileinfo->getPathName());
+            } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
+                removeDir($fileinfo->getPathName());
+                rmdir($path);
             }
         }
     }
