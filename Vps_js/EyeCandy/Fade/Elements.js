@@ -8,6 +8,8 @@ Vps.onContentReady(function()
             selectorRoot: c
         });
         fade.start();
+        // fade component ist standardmäßig auf display: none (css) sonst flackerts beim laden kurz auf
+        Ext.get(c).setStyle('display', 'block');
     });
 });
 
@@ -27,11 +29,12 @@ Vps.Fade.Elements = function(cfg) {
     if (cfg.easingFadeIn) this.easingFadeIn = cfg.easingFadeIn;
     if (cfg.fadeEvery) this.fadeEvery = cfg.fadeEvery;
 
-    this.fadeElements = Ext.query(this.selector, this.selectorRoot);
+    // random ist hier dran
+    this.fadeElements = Ext.query(this.selector, this.selectorRoot).shuffle();
     var i = 0;
     Ext.each(this.fadeElements, function(e) {
         var ee = Ext.get(e);
-        ee.addClass('fadeElement');
+        ee.addClass('vpsFadeElement');
         if (i >= 1) {
             ee.setStyle('display', 'none');
         }

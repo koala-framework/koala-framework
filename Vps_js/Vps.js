@@ -27,6 +27,13 @@ Ext.applyIf(Array.prototype, {
     //add is alias for push
     add : function() {
         this.push.apply(this, arguments);
+    },
+
+    //+ Jonas Raoni Soares Silva
+    //@ http://jsfromhell.com/array/shuffle [rev. #1]
+    shuffle : function() {
+        for(var j, x, i = this.length; i; j = parseInt(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x);
+        return this;
     }
 });
 
@@ -96,7 +103,7 @@ Ext.onReady(function()
 
 Vps.application = { version: '{$application.version}' };
 
-//log das auch ohne irgendwelche abhänigkeiten funktioniert (zB im Selenium)
+//log das auch ohne irgendwelche abhï¿½nigkeiten funktioniert (zB im Selenium)
 Vps.log = function(msg) {
     if (!Vps.debugDiv) {
         Vps.debugDiv = document.createElement('div');
