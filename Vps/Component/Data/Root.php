@@ -213,7 +213,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                             $generatorSelect->limit($limitCount - count($ret));
                         }
                         $generatorSelect->whereId($idParts[0]);
-                        p(get_class($generator));
                         $data = $generator->getChildData(null, $generatorSelect);
                         unset($idParts[0]);
                         foreach ($data as $d) {
