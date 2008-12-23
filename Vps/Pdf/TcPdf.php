@@ -9,15 +9,17 @@ class Vps_Pdf_TcPdf extends TCPDF
 
     public function __construct($component = null , $format = 'A4')
     {
+
         $this->_component = $component;
         parent::__construct("P", "mm", $format);
         $this->SetFont($this->_font, "B", 16);
-        $this->SetAuthor("Vivid Planet Software GmbH");
+        $this->SetAuthor(trlVps("Vivid Planet Software GmbH"));
         $this->SetCreator("Vivid Planet Software GmbH mit FPDF");
         $this->SetTitle("Wochenbericht");
         $this->setLIsymbol(utf8_encode(chr(0x95))); // = •
-       // $this->AddFontPath("/www/public/lorenz/tcpdf/fonts/");
-        //$this->setListIndentWidth($this->getStringWidth("00"));
+        $this->setListIndentWidth($this->getStringWidth("00"));
+       // $this->AddFont('times', '', 'times');
+       // $this->AddFont('arial', '', 'arial');
     }
 
     public function getRightMargin()
@@ -87,12 +89,12 @@ class Vps_Pdf_TcPdf extends TCPDF
         return implode($delimiter, $implodeParts);
     }
 
-    public function textArea ($text, $align = "L", $indent = 0, $height = 0, $fontweight = '', $ln = 1)
+    public function textArea ($text, $align = "L", $indent = 0, $height = 0, $fontweight = '', $ln = 1, $border = 0)
     {
         $this->SetFont($this->getFont(), $fontweight, $this->getFontsize());
         $xtmp = $this->GetX();
         $this->SetX($this->GetX()+$indent);
-        $this->MultiCell($this->getMaxTextWidth(), $height, $this->decodeText($text), 0, $align, 0, $ln);
+        $this->MultiCell($this->getMaxTextWidth(), $height, $this->decodeText($text), $border, $align, 0, $ln);
         $this->SetX($xtmp);
         $this->SetFont($this->getFont(), "", $this->getFontsize());
     }
@@ -107,10 +109,11 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->SetX($xtmp);
     }
 
-    public function textBox ($text, $fontweight = '', $align = 'L', $border = '', $linebreak = 0, $fontsize = false) {
+    public function textBox ($text, $fontweight = '', $align = 'L', $border = '', $linebreak = 0, $fontsize = false, $width = false, $fill = 0) {
         if (!$fontsize) $fontsize = $this->getFontsize();
         $this->SetFont($this->getFont(), $fontweight, $fontsize);
-        $this->Cell($this->getMaxTextWidth(), 3, $this->decodeText($text), $border, $linebreak, $align);
+        if (!$width) $width = $this->getMaxTextWidth();
+        $this->Cell($width, 3, $this->decodeText($text), $border, $linebreak, $align, $fill);
         $this->SetFont($this->getFont(), "", $this->getFontsize());
     }
 
@@ -129,6 +132,7 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->_fontsize = $fontsize;
     }
 
+
     public function decodeText ($text)
     {
         $text = str_replace("€", utf8_encode(chr(0x80)), $text);
@@ -137,12 +141,21 @@ class Vps_Pdf_TcPdf extends TCPDF
         return $text;
     }
 
-    public function setCellHeightRatio ($ratio) {
+    public function setCellHeightRatio ($ratio)
+    {
         $this->cell_height_ratio = $ratio;
     }
 
     //workaround für bug bei pdf erstellung
-    public function AddFont($family, $style='', $file='') {
+    protected $_check = false;
+    /*public function AddFont($family, $style='', $file='')
+    {
+        if (!file_exists($this->_getfontpath().$file.".php") && $file) {
+            $config = Zend_Registry::get('config');
+            $file = $config->path->tcpdf_fonts."/".$file.".php";
+            //$this->_check = true;
+        }
+
         $allowedStyles = array('B', 'I', 'BI', 'IB', '');
         if (!in_array($style, $allowedStyles)) {
             if (in_array(substr($style, 0, 1), $allowedStyles)) {
@@ -150,7 +163,18 @@ class Vps_Pdf_TcPdf extends TCPDF
             }
         }
         return parent::AddFont($family, $style, $file);
-    }
+    }*/
+
+  /*  public function SetFont($family, $style='', $size=0, $fontfile='') {
+        $config = Zend_Registry::get('config');
+        $filetmp = $config->path->tcpdf_fonts."/".$family.".php";
+
+        if (file_exists($filetmp)) {
+            $fontfile = $filetmp;
+        }
+        //$this->_font = $family;
+        parent::SetFont($family, $style, $size, $fontfile);
+    }*/
 
 
     /*
