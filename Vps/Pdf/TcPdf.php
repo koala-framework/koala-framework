@@ -103,9 +103,16 @@ class Vps_Pdf_TcPdf extends TCPDF
     {
         $xtmp = $this->GetX();
         $this->SetX($this->GetX()+$indent);
-        $this->MultiCell($this->getMaxTextWidth(), $height,
-                            $this->writeHTML($this->decodeText($text), false, 0, false, false, $align)
-                         , 0, $align, 0);
+        try {
+            $html = $this->writeHTML($this->decodeText($text), false, 0, false, false, $align);
+        } catch (Exception $e) {
+            $html = $this->writeHTML(
+                '<strong style="color:red">' . trlVps('Fehler') . '</strong>' .
+                ': <br/>' .
+                $e->getMessage()
+            );
+        }
+        $this->MultiCell($this->getMaxTextWidth(), $height, $html, 0, $align, 0);
         $this->SetX($xtmp);
     }
 
