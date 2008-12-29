@@ -17,6 +17,9 @@ class Vpc_Root_DomainRoot_Component extends Vpc_Root_Abstract
         if (!isset($parsedUrl['host']))
             throw new Vps_Exception("Host is missing in url '$url'");
         $host = $parsedUrl['host'];
+        if (substr($host, 0, 8) == 'preview.') {
+            $host = substr($host, 8);
+        }
         $setting = $this->_getSetting('generators');
         $modelName = $setting['domain']['model'];
         $model = Vps_Model_Abstract::getInstance($modelName);
