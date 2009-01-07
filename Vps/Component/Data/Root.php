@@ -6,6 +6,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private $_hasChildComponentCache;
     private $_componentsByClassCache;
     private $_componentsByDbIdCache;
+    private $_generatorsForClassesCache = array();
     private $_currentPage;
     private $_pageGenerators;
 
@@ -290,28 +291,50 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     private function _getGeneratorsForClasses($lookingForClasses)
     {
-        $ret = array();
-        $generators = array();
-        foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            foreach (Vpc_Abstract::getSetting($c, 'generators') as $key => $generator) {
-                if (is_array($generator['component'])) {
-                    $childClasses = $generator['component'];
-                } else {
-                    $childClasses = array($generator['component']);
-                }
-                foreach ($childClasses as $childClass) {
-                    if (in_array($childClass, $lookingForClasses)) {
-                        $generators[$c][$key] = Vps_Component_Generator_Abstract::getInstance($c, $key);
+
+        static $cache = null;
+        if (!$cache) {
+            $cache = Vps_Cache::factory('Core', 'Memcached', array(
+                'lifetime'=>null,
+                'automatic_cleaning_factor' => false,
+                'automatic_serialization'=>true));
+        }
+
+        $cacheId = 'genForCls'.implode('', $lookingForClasses);
+        if (isset($this->_generatorsForClassesCache[$cacheId])) {
+            Vps_Benchmark::count('_getGeneratorsForClasses hit', implode(', ', $lookingForClasses));
+        } else if (($generators = $cache->load($cacheId)) !== false) {
+            $ret = array();
+            foreach ($generators as $g) {
+                $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
+            }
+            $this->_generatorsForClassesCache[$cacheId] = $ret;
+            Vps_Benchmark::count('_getGeneratorsForClasses semi-hit', implode(', ', $lookingForClasses));
+        } else {
+            Vps_Benchmark::count('_getGeneratorsForClasses miss', implode(', ', $lookingForClasses));
+            $generators = array();
+            foreach (Vpc_Abstract::getComponentClasses() as $c) {
+                foreach (Vpc_Abstract::getSetting($c, 'generators') as $key => $generator) {
+                    if (is_array($generator['component'])) {
+                        $childClasses = $generator['component'];
+                    } else {
+                        $childClasses = array($generator['component']);
+                    }
+                    foreach ($childClasses as $childClass) {
+                        if (in_array($childClass, $lookingForClasses)) {
+                            $generators[] = array($c, $key);
+                        }
                     }
                 }
             }
-        }
-        foreach ($generators as $key => $val) {
-            foreach ($val as $k => $v) {
-                $ret[] = $v;
+            $cache->save($generators, $cacheId);
+            $ret = array();
+            foreach ($generators as $g) {
+                $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
             }
+            $this->_generatorsForClassesCache[$cacheId] = $ret;
         }
-        return $ret;
+        return $this->_generatorsForClassesCache[$cacheId];
     }
 
     public function getComponentByClass($class, $select = array())
