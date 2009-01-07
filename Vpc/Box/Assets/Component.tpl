@@ -1,0 +1,1 @@
+<?= $this->assets('Frontend', $this->section) ?>
