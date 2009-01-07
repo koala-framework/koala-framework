@@ -36,6 +36,20 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
             }
             $ret['metaTags']['robots'] .= 'noindex';
         }
+
+        // verify-v1
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = Vps_Registry::get('config')->server->domain;
+        }
+        $hostParts = explode('.', $host);
+        $configDomain = $hostParts[count($hostParts)-2]  // zB 'vivid-planet'
+                        .$hostParts[count($hostParts)-1]; // zB 'com'
+        $configVerify = Vps_Registry::get('config')->verifyV1;
+        if ($configVerify && $configVerify->$configDomain) {
+            $ret['metaTags']['verify-v1'] = $configVerify->$configDomain;
+        }
         return $ret;
     }
 }
