@@ -16,7 +16,7 @@ class Vps_Assets_Dependencies
         $this->_jsLoader = new Vps_Trl_JsLoader();
     }
 
-    public function getAssetUrls($assetsType, $fileType = null)
+    public function getAssetUrls($assetsType, $fileType = null, $section = 'web')
     {
         $b = Vps_Benchmark::start();
         if ($this->_config->debug->menu) {
@@ -29,24 +29,24 @@ class Vps_Assets_Dependencies
         if (!$this->_config->debug->assets->$fileType || (isset($session->$fileType) && !$session->$fileType)) {
             $v = $this->_config->application->version;
             $language = Zend_Registry::get('trl')->getTargetLanguage();
-            $ret[] = "/assets/All$assetsType-$language.$fileType?v=$v";
+            $ret[] = "/assets/$section-All$assetsType-$language.$fileType?v=$v";
             $allUsed = true;
         }
 
-        foreach ($this->getAssetFiles($assetsType, $fileType) as $file) {
+        foreach ($this->getAssetFiles($assetsType, $fileType, $section) as $file) {
             if ($file instanceof Vps_Assets_Dynamic) {
                 $file = $file->getFile();
             }
             if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
                 $ret[] = $file;
             } else if (empty($allUsed)) {
-                $ret[] = '/assets/'.$file;
+                $ret[] = "/assets/$file";
             }
         }
         return $ret;
     }
 
-    public function getAssetFiles($assetsType, $fileType = null)
+    public function getAssetFiles($assetsType, $fileType = null, $section = 'web')
     {
         if (!isset($this->_files[$assetsType])) {
             $cacheId = 'dependencies'.$assetsType;
@@ -55,7 +55,6 @@ class Vps_Assets_Dependencies
             if ($this->_files[$assetsType]===false) {
                 Vps_Benchmark::count('processing dependencies miss', $assetsType);
                 $this->_files[$assetsType] = array();
-                $assetsSection = $assetsType;
                 if (!isset($this->_config->assets->$assetsType)) {
                     throw new Vps_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
                 }
@@ -68,24 +67,29 @@ class Vps_Assets_Dependencies
             }
         }
 
-        if (is_null($fileType)) return $this->_files[$assetsType];
-
-        $files = array();
-        foreach ($this->_files[$assetsType] as $file) {
-            if ((is_string($file) && substr($file, -strlen($fileType)-1) == '.'.$fileType)
-                || ($file instanceof Vps_Assets_Dynamic && $file->getType() == $fileType)) {
-                if (is_string($file) && substr($file, -strlen($fileType)-1) == " $fileType") {
-                    //wenn asset hinten mit " js" aufhört das js abschneiden
-                    //wird benötigt für googlemaps wo die js-dateien kein js am ende haben
-                    $file = substr($file, 0, -strlen($fileType)-1);
+        if (is_null($fileType)) {
+            $files = $this->_files[$assetsType];
+        } else {
+            $files = array();
+            foreach ($this->_files[$assetsType] as $file) {
+                if ((is_string($file) && substr($file, -strlen($fileType)-1) == '.'.$fileType)
+                    || ($file instanceof Vps_Assets_Dynamic && $file->getType() == $fileType)) {
+                    if (is_string($file) && substr($file, -strlen($fileType)-1) == " $fileType") {
+                        //wenn asset hinten mit " js" aufhört das js abschneiden
+                        //wird benötigt für googlemaps wo die js-dateien kein js am ende haben
+                        $file = substr($file, 0, -strlen($fileType)-1);
+                    }
+                    $files[] = $file;
                 }
-                $files[] = $file;
             }
         }
-
         //hack: übersetzung immer zuletzt anhängen
         if ($fileType == 'js') {
             $files[] = 'vps/Ext/ext-lang-en.js';
+        }
+
+        foreach ($files as &$f) {
+            if (is_string($f)) $f = $section . '-' . $f;
         }
         return $files;
     }
@@ -278,7 +282,11 @@ class Vps_Assets_Dependencies
     {
         if (file_exists($url)) return $url;
         $paths = $this->_config->path;
+
         $type = substr($url, 0, strpos($url, '/'));
+        if (strpos($type, '-')!==false) {
+            $type = substr($type, strpos($type, '-')+1); //section abschneiden
+        }
         $url = substr($url, strpos($url, '/')+1);
         if (!isset($paths->$type)) {
             throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' for url '$url' not found in config.");
@@ -292,38 +300,37 @@ class Vps_Assets_Dependencies
 
     public function getFileContents($file, $language = null)
     {
-
         if (!$language) {
             $language = Zend_Registry::get('trl')->getTargetLanguage();
         }
         $ret = array();
         if ($file == 'AllRteStyles.css') {
             $ret = Vpc_Basic_Text_StylesModel::getStylesContents();
-        } else if (preg_match('#^All([a-z]+)\\-([a-z]+)\\.(printcss|js|css)$#i', $file, $m)) {
-
+        } else if (preg_match('#^([a-z0-9]+)-All([a-z]+)\\-([a-z]+)\\.(printcss|js|css)$#i', $file, $m)) {
             $section = $m[1];
-            if (substr($section, -5) == 'Debug' && !$this->_config->debug->menu) {
+            $assetsType = $m[2];
+            if (substr($assetsType, -5) == 'Debug' && !$this->_config->debug->menu) {
                 throw new Vps_Exception("Debug Assets are not avaliable as the debug menu is disabled");
             }
-            $language = $m[2];
-            $fileType = $m[3];
+            $language = $m[3];
+            $fileType = $m[4];
 
             $encoding = Vps_Media_Output::getEncoding();
             $cache = $this->_getCache();
-            $cacheId = str_replace('.', '_', $fileType).$encoding.$section.Vps_Setup::getConfigSection().$language;
+            $cacheId = str_replace('.', '_', $fileType).$encoding.$assetsType.Vps_Setup::getConfigSection().$language.$section;
             if (!$cacheData = $cache->load($cacheId)) {
 
                 $cacheData  = array();
 
                 $cacheData['contents'] = '';
                 $cacheData['mtimeFiles'] = array();
-                foreach ($this->getAssetFiles($section, $fileType) as $file) {
+                foreach ($this->getAssetFiles($assetsType, $fileType, $section) as $file) {
                     if ($file instanceof Vps_Assets_Dynamic) {
                         $file = $file->getFile();
                     }
                     if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
                         try {
-                            $c = $this->getFileContents($file, $language);
+                            $c = $this->getFileContents($file, $language, $section);
                         } catch (Vps_Assets_NotFoundException $e) {
                             throw new Vps_Exception($file.': '.$e->getMessage());
                         }
@@ -371,33 +378,35 @@ class Vps_Assets_Dependencies
             if (substr($ret['mimeType'], 0, 5) == 'text/') { //nur texte cachen
 
                 $cache = $this->_getCache();
-                $cacheId = 'fileContents'.$language.str_replace(array('/', '.', '-'), array('_', '_', '_'), $file);
+                $section = substr($file, 0, strpos($file, '-'));
+                $cacheId = 'fileContents'.$language.$section.str_replace(array('/', '.', '-'), array('_', '_', '_'), $file);
                 if (!$cacheData = $cache->load($cacheId)) {
                     $cacheData['contents'] = file_get_contents($this->getAssetPath($file));
                     $cacheData['mtimeFiles'] = array($this->getAssetPath($file));
-                    if (substr($file, 0, 4)=='ext/' && substr($ret['mimeType'], 0, 5) == 'text/') {
+                    if ((substr($file, 0, strlen($section)+5)==$section.'-ext/' || substr($file, 0, 4)=='ext/')
+                        && substr($ret['mimeType'], 0, 5) == 'text/'
+                    ) {
                         //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
                         $cacheData['contents'] = str_replace('../images/', '/assets/ext/resources/images/', $cacheData['contents']);
                     }
 
-                    if (substr($ret['mimeType'], 0, 8) == 'text/css') {
-                        static $cssConfig;
-                        if (!isset($cssConfig)) {
-                            try {
-                                $cssConfig = new Zend_Config_Ini('application/config.ini', 'css');
-                            } catch (Zend_Config_Exception $e) {
-                                $cssConfig = array();
-                            }
+                    if (file_exists('application/assetVariables.ini')) {
+                        $cacheData['mtimeFiles'][] = 'application/assetVariables.ini';
+                        static $assetVariables = array();
+                        if (!isset($assetVariables[$section])) {
+                            $assetVariables[$section] = new Zend_Config_Ini('application/assetVariables.ini', $section);
                         }
-                        foreach ($cssConfig as $k=>$i) {
+                        foreach ($assetVariables[$section] as $k=>$i) {
                             $cacheData['contents'] = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $cacheData['contents']);
                         }
+                    }
+                    if (substr($ret['mimeType'], 0, 8) == 'text/css') {
                         $cssClass = $file;
-                        if (substr($cssClass, 0, 4) == 'web/') {
-                            $cssClass = substr($cssClass, 4);
+                        if (substr($cssClass, 0, strlen($section)+5) == $section.'-web/') {
+                            $cssClass = substr($cssClass, strlen($section)+5);
                         }
-                        if (substr($cssClass, 0, 4) == 'vps/') {
-                            $cssClass = substr($cssClass, 4);
+                        if (substr($cssClass, 0, strlen($section)+5) == $section.'-vps/') {
+                            $cssClass = substr($cssClass, strlen($section)+5);
                         }
                         if (substr($cssClass, -4) == '.css') {
                             $cssClass = substr($cssClass, 0, -4);
