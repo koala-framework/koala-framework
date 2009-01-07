@@ -233,38 +233,37 @@ class Vps_Component_Abstract
 
     public static function getComponentClasses($useSettingsCache = true)
     {
-        static $componentClasses = null;
-        static $usedRoot = null;
-        if ($usedRoot != Vps_Component_Data_Root::getComponentClass()) {
-            //wg. unit-tests wo sich die root ändern kann
-            $usedRoot = Vps_Component_Data_Root::getComponentClass();
-            $componentClasses = null;
+        if ($useSettingsCache) {
+            $s =& self::_getSettingsCached();
+            $ret = array_keys($s);
+            unset($ret[array_search('mtime', $ret)]);
+            unset($ret[array_search('mtimeFiles', $ret)]);
+            return array_values($ret);
         }
-        if ($componentClasses) return $componentClasses;
-        if (!$usedRoot) return array();
-        $componentClasses = array($usedRoot);
-        self::_getChildComponentClasses($componentClasses, $usedRoot, $useSettingsCache);
+        $root = Vps_Component_Data_Root::getComponentClass();
+        $componentClasses = array($root);
+        self::_getChildComponentClasses($componentClasses, $root);
         return $componentClasses;
     }
 
-    private static function _getChildComponentClasses(&$componentClasses, $class, $useSettingsCache)
+    private static function _getChildComponentClasses(&$componentClasses, $class)
     {
         $classes = array();
-        foreach (Vpc_Abstract::getSetting($class, 'generators', $useSettingsCache) as $generator) {
+        foreach (Vpc_Abstract::getSetting($class, 'generators', false) as $generator) {
             if (is_array($generator['component'])) {
                 $classes = array_merge($classes, $generator['component']);
             } else {
                 $classes[] = $generator['component'];
             }
         }
-        $plugins = Vpc_Abstract::getSetting($class, 'plugins', $useSettingsCache);
+        $plugins = Vpc_Abstract::getSetting($class, 'plugins', false);
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
         }
         foreach ($classes as $class) {
             if ($class && !in_array($class, $componentClasses)) {
                 $componentClasses[] = $class;
-                self::_getChildComponentClasses($componentClasses, $class, $useSettingsCache);
+                self::_getChildComponentClasses($componentClasses, $class);
             }
         }
     }
