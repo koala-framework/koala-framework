@@ -241,6 +241,7 @@ class Vps_Component_Abstract
             return array_values($ret);
         }
         $root = Vps_Component_Data_Root::getComponentClass();
+        if (!$root) return array();
         $componentClasses = array($root);
         self::_getChildComponentClasses($componentClasses, $root);
         return $componentClasses;
