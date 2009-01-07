@@ -300,10 +300,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 'automatic_serialization'=>true));
         }
 
-        $cacheId = 'genForCls'.implode('', $lookingForClasses);
-        if (isset($this->_generatorsForClassesCache[$cacheId])) {
+        $cacheId = 'genForCls'.$this->getComponentClass().implode('', $lookingForClasses);
+        if (false && isset($this->_generatorsForClassesCache[$cacheId])) {
             Vps_Benchmark::count('_getGeneratorsForClasses hit', implode(', ', $lookingForClasses));
-        } else if (($generators = $cache->load($cacheId)) !== false) {
+        } else if (false && ($generators = $cache->load($cacheId)) !== false) {
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
@@ -322,11 +322,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     }
                     foreach ($childClasses as $childClass) {
                         if (in_array($childClass, $lookingForClasses)) {
-                            $generators[] = array($c, $key);
+                            $generators[$c.$key] = array($c, $key);
                         }
                     }
                 }
             }
+            $generators = array_values($generators);
             $cache->save($generators, $cacheId);
             $ret = array();
             foreach ($generators as $g) {
