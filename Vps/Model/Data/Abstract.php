@@ -202,7 +202,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         return true;
     }
 
-    private function _checkExpressions(Vps_Model_Select_Expr_Interface $expr, $data) {
+    private function _checkExpressions(Vps_Model_Select_Expr_Interface $expr, $data)
+    {
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
             if (!($data[$expr->getField()] && $data[$expr->getField()] == $expr->getValue())) {
                 return false;
@@ -242,6 +243,10 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
             if (!(isset($data[$expr->getField()]) && $data[$expr->getField()] && strpos(strtolower($data[$expr->getField()]), strtolower($expr->getValue())) !== false )) {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {
+            if (!(isset($data[$expr->getField()]) && $data[$expr->getField()] && substr($data[$expr->getField()], 0, strlen($expr->getValue()))==$expr->getValue())) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Not) {
