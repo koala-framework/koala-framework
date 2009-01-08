@@ -61,6 +61,9 @@ class Vps_Component_Abstract
                 return $ret;
             } else {
                 $settings = call_user_func(array($class, 'getSettings'));
+                if (!array_key_exists($setting, $settings)) {
+                    throw new Vps_Exception("Couldn't find required setting '$setting' for $class.");
+                }
                 return $settings[$setting];
             }
 
