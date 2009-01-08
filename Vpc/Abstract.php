@@ -242,6 +242,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             }
         }
         foreach ($process as $i) {
+            Vps_Benchmark::count('processInput', $i->componentId);
             if (method_exists($i->getComponent(), 'preProcessInput')) {
                 $i->getComponent()->preProcessInput($postData);
             }
