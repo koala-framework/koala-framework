@@ -90,7 +90,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             }
             if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
                 $subroot = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
-                $domain = $subroot[0]->row->id;
+                $domain = $subroot[count($subroot)-1]->row->id;
                 if ($domain != $page['domain']) continue;
             }
             static $showInvisible;
