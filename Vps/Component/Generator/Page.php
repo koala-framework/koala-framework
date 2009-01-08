@@ -16,9 +16,9 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
     protected $_pageDomain;
     protected $_pageDomainFilename;
 
-    protected function _init()
+    protected function _preparePageData($parentData, $select)
     {
-        parent::_init();
+        if ($this->_pageData) return;
 
         $this->_pageData = array();
         $this->_pageParent = array();
@@ -34,8 +34,8 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
                                         'filename', 'hide', 'category', 'domain', 'name', 'is_home', 'tags'));
             $select->order('pos');
-            $domains = $this->getDomains();
-            if ($domains) $select->where("domain IN ('" . implode("', '", $domains) . "')", '');
+            $domain = $this->getDomain($parentData, $select);
+            if ($domain) $select->where("domain ='$domain'");
             $rows = $select->query()->fetchAll();
         }
         foreach ($rows as $row) {
@@ -55,7 +55,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         }
     }
 
-    public function getDomains() {
+    public function getDomain() {
         return null;
     }
 
@@ -76,6 +76,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
 
     public function getChildData($parentData, $select = array())
     {
+        $this->_preparePageData($parentData, $select);
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
         $pageIds = $this->_getPageIds($parentData, $select);
@@ -86,6 +87,11 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
                 $menu = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
                 if ($menu == $page['hide']) continue;
+            }
+            if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+                $subroot = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+                $domain = $subroot[0]->row->id;
+                if ($domain != $page['domain']) continue;
             }
             static $showInvisible;
             if (is_null($showInvisible)) {
