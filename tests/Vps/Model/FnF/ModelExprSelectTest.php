@@ -182,4 +182,29 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, $count);
     }
 
+    public function testExprStartsWith()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 'Herbert'),
+            array('id' => 2, 'value' => 'Kurt'),
+            array('id' => 3, 'value' => 'Klaus'),
+            array('id' => 4, 'value' => 'Rainer'),
+            array('id' => 5, 'value' => 'Franz'),
+            array('id' => 6, 'value' => 'Niko'),
+            array('id' => 7, 'value' => 'Lorenz'),
+        ));
+
+        $rows = $model->getRows($model->select()
+            ->where(new Vps_Model_Select_Expr_StartsWith('value', 'Kla')));
+        $this->assertEquals(1, $rows->count());
+
+        $rows = $model->getRows($model->select()
+            ->where(new Vps_Model_Select_Expr_StartsWith('value', 'laus')));
+        $this->assertEquals(0, $rows->count());
+
+        $rows = $model->getRows($model->select()
+            ->where(new Vps_Model_Select_Expr_StartsWith('value', 'kla')));
+        $this->assertEquals(0, $rows->count());
+    }
 }

@@ -142,16 +142,24 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     private function _createDbSelectExpression($expr)
     {
+        if ($expr instanceof Vps_Model_Select_Expr_CompareField_Abstract) {
+            $quotedValue = $expr->getValue();
+            $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
+        }
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
-            return $expr->getField()." LIKE '".$expr->getValue()."'";
+            return $expr->getField()." = ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_Smaller
                 || $expr instanceof Vps_Model_Select_Expr_SmallerDate) {
-            return $expr->getField()." < '".$expr->getValue()."'";
+            return $expr->getField()." < ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_Higher
                 || $expr instanceof Vps_Model_Select_Expr_HigherDate) {
-            return $expr->getField()." > '".$expr->getValue()."'";
+            return $expr->getField()." > ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
-            return $expr->getField()." LIKE '%".$expr->getValue()."%'";
+            $v = $expr->getValue();
+            $quotedValue = $this->_table->getAdapter()->quote('%'.$v.'%');
+            return $expr->getField()." LIKE ".$quotedValue;
+        } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {
+            return "LEFT({$expr->getField()}, ".strlen($expr->getValue()).") = ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_NOT) {
             return "NOT (".$this->_createDbSelectExpression($expr->getExpression()).")";
         } else if ($expr instanceof Vps_Model_Select_Expr_Or) {
