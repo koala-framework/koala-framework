@@ -127,7 +127,7 @@ abstract class Vps_Component_Generator_Abstract
             $componentClass = $component;
             $component = null;
         }
-        $cacheId = $componentClass;
+        $cacheId = 'genInst'.$componentClass;
         if ($component) {
             $ic = $component->inheritClasses;
             foreach ($ic as $inheritComponent) {
