@@ -135,6 +135,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
     private function _getPageIdFromComponentId($componentId)
     {
         $pos = strrpos($componentId, '_');
+        if (!$pos) $pos = strpos($componentId, '-');
         if (!$pos) $pos = strlen($componentId);
         return substr($componentId, 0, $pos);
     }

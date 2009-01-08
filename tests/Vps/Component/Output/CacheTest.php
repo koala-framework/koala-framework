@@ -205,7 +205,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
                                         $this->equalTo('root__child'),
                                         $this->equalTo(array(
                                             'componentClass' => 'Vps_Component_Output_C1_Child_Component',
-                                            'pageId' => 'root__child')
+                                            'pageId' => 'root')
                                         ),
                                         $this->equalTo(null)
                                     );
