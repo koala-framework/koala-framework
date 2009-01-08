@@ -7,7 +7,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     private $_model;
 
     //Einstellungen:
-    //setColumnName
+    //setColumnName('id')
        //- wenn bei setValues() kein rowset übergeben wird
     //setReferences
        //- wenn ned über innoDb ermittelt werden können
@@ -20,6 +20,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             $model = $tableName;
         } else if (class_exists($tableName)) {
             $model = new $tableName();
+        } else {
+            throw new Vps_Exception("'$tableName' does not exist");
         }
 
         parent::__construct(get_class($model));
