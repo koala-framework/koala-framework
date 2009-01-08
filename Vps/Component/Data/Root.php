@@ -121,7 +121,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
 
-    public function getPageGenerators()
+    public function getPageGenerators($fromComponentClass = null)
     {
         if (!$this->_pageGenerators) {
             $this->_pageGenerators = array();
@@ -301,9 +301,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
 
         $cacheId = 'genForCls'.$this->getComponentClass().implode('', $lookingForClasses);
-        if (false && isset($this->_generatorsForClassesCache[$cacheId])) {
+        if (isset($this->_generatorsForClassesCache[$cacheId])) {
             Vps_Benchmark::count('_getGeneratorsForClasses hit', implode(', ', $lookingForClasses));
-        } else if (false && ($generators = $cache->load($cacheId)) !== false) {
+        } else if (($generators = $cache->load($cacheId)) !== false) {
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
