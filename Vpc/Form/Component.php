@@ -50,6 +50,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         }
         $this->_processed = true;
 
+        if (!$this->getForm()) return;
+
         Vps_Registry::get('db')->beginTransaction();
 
         $this->getForm()->initFields();
