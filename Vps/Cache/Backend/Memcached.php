@@ -35,7 +35,7 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
             }
             $cacheIdPrefix .= Vps_Setup::getConfigSection();
         }
-        $id = $cacheIdPrefix.$id;
+        $id = md5($cacheIdPrefix.$id);
         return $id;
     }
 
