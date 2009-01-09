@@ -4,7 +4,6 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
     protected function _getPageIds($parentData, $select)
     {
         $pageIds = parent::_getPageIds($parentData, $select);
-
         if ($parentData && $parentData->parent &&
             is_instance_of($parentData->parent->componentClass, 'Vpc_Root_DomainRoot_Domain_Component')
         ) {
@@ -18,13 +17,13 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
         return $pageIds;
     }
 
-    public function getDomain($parentData = null, $select = null)
+    public function getDomains($parentData = null, $select = null)
     {
         $c = null;
-        if ($select instanceof Vps_Component_Select &&
-            $select->hasPart(Vps_Component_Select::WHERE_SUBROOT)
-        ) {
-            $c = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+        if ($select instanceof Vps_Component_Select) {
+            if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+                $c = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+            }
         }
         if (!$c && $parentData) {
             $c = $parentData;
@@ -36,7 +35,16 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
             }
             if ($c) return $c->row->id;
         }
-        return null;
+
+        $components = Vps_Component_Data_Root::getInstance()->getChildComponents();
+        $domains = array();
+        foreach ($components as $component) {
+            $generators = Vpc_Abstract::getSetting($component->componentClass, 'generators');
+            foreach ($generators as $generator) {
+                if ($generator['component'] == $this->_class) $domains[] = $component->row->id;
+            }
+        }
+        return $domains;
     }
 
     protected function _getPageIdHome($parentData)

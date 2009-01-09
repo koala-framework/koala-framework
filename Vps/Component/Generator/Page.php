@@ -16,7 +16,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
     protected $_pageDomain;
     protected $_pageDomainFilename;
 
-    protected function _preparePageData($parentData, $select)
+    protected function _preparePageData($parentData, $s)
     {
         if ($this->_pageData) return;
 
@@ -34,8 +34,8 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
                                         'filename', 'hide', 'category', 'domain', 'name', 'is_home', 'tags'));
             $select->order('pos');
-            $domain = $this->getDomain($parentData, $select);
-            if ($domain) $select->where("domain ='$domain'");
+            $domains = $this->getDomains();
+            if ($domains) $select->where("domain IN ('" . implode("', '", $domains) . "')", '');
             $rows = $select->query()->fetchAll();
         }
         foreach ($rows as $row) {
@@ -55,7 +55,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         }
     }
 
-    public function getDomain() {
+    public function getDomains() {
         return null;
     }
 
