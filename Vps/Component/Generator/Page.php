@@ -34,7 +34,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
                                         'filename', 'hide', 'category', 'domain', 'name', 'is_home', 'tags'));
             $select->order('pos');
-            $domains = $this->getDomains();
+            $domains = $this->getDomains($parentData, $s);
             if ($domains) $select->where("domain IN ('" . implode("', '", $domains) . "')", '');
             $rows = $select->query()->fetchAll();
         }
@@ -76,6 +76,8 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
 
     public function getChildData($parentData, $select = array())
     {
+        Vps_Benchmark::count('GenPage::getChildData');
+
         $this->_preparePageData($parentData, $select);
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
@@ -114,14 +116,13 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
 
     protected function _getPageIds($parentData, $select)
     {
-        if ($parentData) {
-            if ($parentData->componentClass == $this->_class) {
-                $parentId = 0;
-            } else {
-                $parentId = $parentData->dbId;
-            }
+        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE))) {
+            if ($p->getPage()) $p = $p->getPage();
+            $parentData = $p;
         }
-
+        if ($parentData) {
+            $parentId = $parentData->getPage() ? $parentData->dbId : 0;
+        }
         $pageIds = array();
         if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
             if (isset($this->_pageData[$id])) {
@@ -183,8 +184,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
 
     protected function _getPageIdByFilename($parentData, $filename)
     {
-        $parentId = $parentData->dbId;
-        if ($parentData->componentClass == $this->_class) $parentId = 0;
+        $parentId = $parentData->getPage() ? $parentData->dbId : 0;
         if (isset($this->_pageFilename[$parentId][$filename])) {
             return $this->_pageFilename[$parentId][$filename];
         }
