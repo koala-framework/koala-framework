@@ -75,7 +75,7 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
                 unlink($fileinfo->getPathName());
             } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
                 self::_removeDirContents($fileinfo->getPathName());
-                rmdir($path);
+                rmdir($fileinfo->getPathName());
             }
         }
     }
