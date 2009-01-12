@@ -23,9 +23,9 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_Abstr
         $pw = $this->_getPassword();
         if (!is_array($pw)) $pw = array($pw);
         $msg = '';
-        $session = new Zend_Session_Namespace('password');
-        if (isset($_POST['password'])) {
-            if (in_array($_POST['password'], $pw)) {
+        $session = new Zend_Session_Namespace('login_password');
+        if (isset($_POST['login_password'])) {
+            if (in_array($_POST['login_password'], $pw)) {
                 $session->login = true;
             }
         }
@@ -39,7 +39,7 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_Abstr
         $templateVars = array();
         $templateVars['loginForm'] = Vps_Component_Data_Root::getInstance()
             ->getComponentById($this->_componentId)->getChildComponent('-loginForm');
-        $templateVars['wrongLogin'] = isset($_POST['password']);
+        $templateVars['wrongLogin'] = isset($_POST['login_password']);
 
         $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
         $view = new Vps_View_Component();
