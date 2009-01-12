@@ -21,19 +21,22 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
     {
         $c = null;
         if ($select instanceof Vps_Component_Select) {
-            if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+            if ($select->hasPart(Vps_Component_Select::WHERE_ON_SAME_PAGE)) {
+                $c = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE);
+            }
+            if (!$c && $select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
                 $c = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
             }
         }
         if (!$c && $parentData) {
             $c = $parentData;
-        };
+        }
 
         if ($c) {
             while($c && !$c instanceof Vpc_Root_DomainRoot_Domain_Data) {
                 $c = $c->parent;
             }
-            if ($c) return $c->row->id;
+            if ($c) return array($c->row->id);
         }
 
         $components = Vps_Component_Data_Root::getInstance()->getChildComponents();
@@ -49,7 +52,14 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
 
     protected function _getPageIdHome($parentData)
     {
-        $domain = $parentData->parent->row->id;
+        $d = $parentData;
+        while (!is_instance_of($d->componentClass, 'Vpc_Root_DomainRoot_Domain_Component')) {
+            $d = $d->parent;
+            if (!$d) {
+                throw new Vps_Exception("Domain component not found");
+            }
+        }
+        $domain = $d->row->id;
         if (isset($this->_pageHome[$domain])) {
             return $this->_pageHome[$domain];
         }
@@ -58,8 +68,15 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
 
     protected function _getPageIdByFilename($parentData, $filename)
     {
-        if ($parentData->componentClass == $this->_class) {
-            $domain = $parentData->parent->row->id;
+        if (!$parentData->getPage()) {
+            $d = $parentData;
+            while (!is_instance_of($d->componentClass, 'Vpc_Root_DomainRoot_Domain_Component')) {
+                $d = $d->parent;
+                if (!$d) {
+                    throw new Vps_Exception("Domain component not found");
+                }
+            }
+            $domain = $d->row->id;
             if (isset($this->_pageDomainFilename[$domain][$filename])) {
                 return $this->_pageDomainFilename[$domain][$filename];
             }

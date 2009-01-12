@@ -121,8 +121,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
 
-    public function getPageGenerators($fromComponentClass = null)
+    public function getPageGenerators()
     {
+        Vps_Benchmark::count('getPageGenerators');
         if (!$this->_pageGenerators) {
             $this->_pageGenerators = array();
             foreach (Vpc_Abstract::getComponentClasses() as $class) {

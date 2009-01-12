@@ -141,10 +141,9 @@ abstract class Vps_Component_Generator_Abstract
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));
         }
-
         static $cachedGenerators;
         if (isset($cachedGenerators[$cacheId])) {
-            Vps_Benchmark::count('Generator::getInst hit');
+            Vps_Benchmark::countBt('Generator::getInst hit');
             $generators = $cachedGenerators[$cacheId];
         } else if (($cachedGeneratorData = $cache->load($cacheId)) !== false) {
             Vps_Benchmark::count('Generator::getInst semi-hit');
@@ -337,7 +336,6 @@ abstract class Vps_Component_Generator_Abstract
                 }
                 if ($continue) { continue; }
             }
-
             if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
                 if (!$g instanceof Vps_Component_Generator_Page) continue;
             }
@@ -345,6 +343,7 @@ abstract class Vps_Component_Generator_Abstract
 
             $ret[] = $g;
         }
+
         return $ret;
     }
 
@@ -355,6 +354,9 @@ abstract class Vps_Component_Generator_Abstract
 
     public static function getStaticChildComponentClasses($data, $select = array())
     {
+        if ($select === array()) {
+            return $data['component']; //performance
+        }
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
@@ -378,6 +380,7 @@ abstract class Vps_Component_Generator_Abstract
                 }
             }
         }
+
         if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)) {
             $componentKey = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_KEY);
             if (isset($ret[$componentKey])) {
@@ -386,7 +389,6 @@ abstract class Vps_Component_Generator_Abstract
                 return array();
             }
         }
-
         return $ret;
     }
 
@@ -499,6 +501,9 @@ abstract class Vps_Component_Generator_Abstract
 
         if (!isset($this->_dataCache[$parentData->componentId][$id])) {
             $config = $this->_formatConfig($parentData, $row);
+            if (!$config['componentClass']) {
+                throw new Vps_Exception("no componentClass set (id $parentData->componentId $id)");
+            }
             $config['id'] = $id;
             $pageDataClass = $this->_getDataClass($config, $row);
             $this->_dataCache[$parentData->componentId][$id] = new $pageDataClass($config);

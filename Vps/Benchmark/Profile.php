@@ -50,7 +50,7 @@ class Vps_Benchmark_Profile
         $this->identifier = $identifier;
         $this->addInfo = $addInfo;
         $this->_start = microtime(true);
-        if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
+        if (Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
             $this->_queriesStart =
                 Zend_Registry::get('db')->getProfiler()->getQueryCount();
         }
@@ -95,7 +95,7 @@ class Vps_Benchmark_Profile
             $this->_memoryStop = memory_get_usage();
             $this->memory = $this->_memoryStop - $this->_memoryStart;
         }
-        if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
+        if (Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
             $this->_queriesStop =  Zend_Registry::get('db')->getProfiler()->getQueryCount();
             $this->queries = $this->_queriesStop - $this->_queriesStart;
         }

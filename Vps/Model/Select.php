@@ -41,6 +41,15 @@ class Vps_Model_Select
         }
     }
 
+    public function copyParts(array $parts, Vps_Model_Select $sourceSelect)
+    {
+        foreach ($parts as $p) {
+            if (isset($sourceSelect->_parts[$p])) {
+                $this->_parts[$p] = $sourceSelect->_parts[$p];
+            }
+        }
+    }
+
     //vielleicht mal umstellen auf:
     /*
 interface Vps_Model_Select_Expr_Interface {}
@@ -201,13 +210,13 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
 
     public function toDebug()
     {
-        $out = array();
+        $out = '';
         foreach ($this->_parts as $type=>$p) {
-            $out[$type] = $p;
+            $out .= ", $type => "._btArgString($p);
         }
-        $ret = print_r($out, true);
-        $ret = preg_replace('#^Array#', get_class($this), $ret);
-        $ret = "<pre>$ret</pre>";
+        $out = trim($out, ', ');
+        $ret = get_class($this).': '.$out;
+        $ret = "$ret";
         return $ret;
     }
 

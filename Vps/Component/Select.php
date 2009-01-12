@@ -18,6 +18,7 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_HOME = 'whereHome';
     const WHERE_PAGE_GENERATOR = 'wherePageGenerator';
     const WHERE_SUBROOT = 'whereSubroot';
+    const WHERE_ON_SAME_PAGE = 'whereOnSamePage';
     const IGNORE_VISIBLE = 'ignoreVisible';
 
     public function __construct($where = array())
@@ -178,6 +179,12 @@ class Vps_Component_Select extends Vps_Model_Select
         return $this;
     }
 
+    public function whereOnSamePage(Vps_Component_Data $page)
+    {
+        $this->_parts[self::WHERE_ON_SAME_PAGE] = $page;
+        return $this;
+    }
+
     public function ignoreVisible($value = true)
     {
         $this->_parts[self::IGNORE_VISIBLE] = $value;
@@ -190,6 +197,9 @@ class Vps_Component_Select extends Vps_Model_Select
         foreach ($this->getParts() as $key => $part) {
             if ($key == self::WHERE_SUBROOT && !empty($part)) {
                 $part = $part[0]->componentId;
+            }
+            if ($key == self::WHERE_ON_SAME_PAGE && !empty($part)) {
+                $part = $part->componentId;
             }
             $parts[$key] = $part;
         }

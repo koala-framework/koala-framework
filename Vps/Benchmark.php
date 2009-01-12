@@ -62,20 +62,52 @@ class Vps_Benchmark
             }
         }
     }
-    private static function _countArray(&$counter, $name, $value)
+
+    public static function countBt($name, $value = null)
+    {
+        if (!self::$_enabled && !self::$_logEnabled) return false;
+
+        self::_countArray(self::$_counter, $name, $value, true);
+
+        foreach (self::$benchmarks as $b) {
+            if (!$b->stopped) {
+                self::_countArray($b->counter, $name, $value, true);
+            }
+        }
+    }
+
+    private static function _countArray(&$counter, $name, $value, $backtrace = false)
     {
         if (!isset($counter[$name])) {
-            if ($value) {
+            if (!is_null($value)) {
                 $counter[$name] = array();
             } else {
                 $counter[$name] = 0;
             }
         }
-        if ($value) {
+        if (!is_null($value)) {
             if (!is_array($counter[$name])) {
                 throw new Vps_Exception("Missing value for counter '$name'");
             }
-            $counter[$name][] = $value;;
+            $bt = false;
+            if ($backtrace) {
+                $b = debug_backtrace();
+                unset($b[0]);
+                unset($b[1]);
+                $bt = '';
+                foreach ($b as $i) {
+                    $bt .=
+                        (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
+                        (isset($i['line']) ? $i['line'] : '?') . ' - ' .
+                        ((isset($i['object']) && $i['object'] instanceof Vps_Component_Data) ? $i['object']->componentId . '->' : '') .
+                        (isset($i['function']) ? $i['function'] : '') . '(' .
+                        _btArgsString($i['args']) . ')' . "<br />";
+                }
+            }
+            $counter[$name][] = array(
+                'value' => $value,
+                'bt' => $bt
+            );
         } else {
             if (is_array($counter[$name])) {
                 throw new Vps_Exception("no value possible for counter '$name'");
@@ -133,13 +165,19 @@ class Vps_Benchmark
                     echo "$k: ".count($i)."</a>";
                     echo "<ul style=\"display:none\">";
                     foreach ($i as $j) {
-                        echo "<li>$j</li>";
+                        echo "<li>";
+                        if ($j['bt']) {
+                            echo "<strong style=\"font-weight:bold\">{$j['value']}</strong><br />{$j['bt']}";
+                        } else {
+                            echo $j['value'];
+                        }
+                        echo "</li>";
                     }
                     echo "</ul>";
                 } else {
                     echo "$k: (".count($i).') ';
                     foreach ($i as $j) {
-                        echo $j.' ';
+                        echo $j['value'].' ';
                     }
                     echo "\n";
                 }

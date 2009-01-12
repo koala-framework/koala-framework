@@ -10,6 +10,7 @@ class Vps_Component_Data
     protected $_uniqueParentDatas;
 
     private $_constraintsCache = array();
+    private $_recursiveGeneratorsCache = array();
 
     public function __construct($config)
     {
@@ -146,25 +147,127 @@ class Vps_Component_Data
         }
     }
 
-    public function getRecursiveChildComponents($select = array(),
-                                $childSelect = array('page'=>false))
+    public function getRecursiveChildComponents($select = array(), $childSelect = array('page'=>false))
     {
-        Vps_Benchmark::count('getRecursiveChildComponents');
+        static $cache = null;
+        if (!$cache) {
+            $cache = Vps_Cache::factory('Core', 'Memcached', array(
+                'lifetime'=>null,
+                'automatic_cleaning_factor' => false,
+                'automatic_serialization'=>true));
+        }
+
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
+        } else {
+            $select = clone $select;
         }
+        Vps_Benchmark::count('getRecursiveChildComponents', $this->componentId.' '.$select->toDebug());
         if (is_array($childSelect)) {
             $childSelect = new Vps_Component_Select($childSelect);
         }
         $ret = $this->getChildComponents($select);
-        if ($ret && $select->getPart(Vps_Component_Select::LIMIT_COUNT) == 1) {
-            return $ret;
-        }
-        $childSelect = $this->_formatChildConstraints($select, $childSelect);
 
-        foreach ($this->getChildComponents($childSelect) as $component) {
-            $ret = array_merge($ret, $component->getRecursiveChildComponents($select, $childSelect));
+        $genSelect = new Vps_Component_Select();
+        $genSelect->copyParts(array(
+            Vps_Component_Select::WHERE_HOME,
+            Vps_Component_Select::WHERE_PAGE,
+            Vps_Component_Select::WHERE_PSEUDO_PAGE,
+            Vps_Component_Select::WHERE_FLAGS,
+            Vps_Component_Select::WHERE_BOX,
+            Vps_Component_Select::WHERE_MULTI_BOX,
+            Vps_Component_Select::WHERE_SHOW_IN_MENU,
+            Vps_Component_Select::WHERE_COMPONENT_CLASSES,
+        ), $select);
+
+        $selectHash = md5($genSelect->getHash().$childSelect->getHash());
+        $cacheId = 'recCCGen'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
+        if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
+            Vps_Benchmark::count('getRecCC Gen hit', $this->componentClass.' '.$genSelect->toDebug());
+            $generators = $this->_recursiveGeneratorsCache[$cacheId];
+        } else if (($generators = $cache->load($cacheId)) !== false) {
+            Vps_Benchmark::count('getRecCC Gen semi-hit', $this->componentClass.' '.$genSelect->toDebug());
+            $this->_recursiveGeneratorsCache[$cacheId] = $generators;
+        } else {
+            Vps_Benchmark::count('getRecCC Gen miss', $this->componentClass.' '.$genSelect->toDebug());
+            $generators = array();
+            foreach (Vpc_Abstract::getChildComponentClasses($this, $childSelect) as $class) {
+                $g = $this->_getRecursiveGenerators($class, $genSelect, $childSelect, $selectHash);
+                $generators = array_merge($generators, $g);
+            }
+            $this->_recursiveGeneratorsCache[$cacheId] = $generators;
+            $cache->save($generators, $cacheId);
         }
+
+        $select->whereOnSamePage($this);
+        foreach ($generators as $g) {
+            if (!$g['static']) {
+                $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
+                foreach ($gen->getChildData(null, $select) as $d) {
+                    if (!in_array($d, $ret, true)) {
+                        $ret[] = $d;
+                    }
+                }
+            }
+        }
+
+        $staticGeneratorComponentClasses = array();
+        foreach ($generators as $k=>$g) {
+            if ($g['static']) {
+                $staticGeneratorComponentClasses[] = $g['class'];
+            }
+        }
+        if ($staticGeneratorComponentClasses) {
+            $pd = $this->getRecursiveChildComponents(array(
+                'componentClasses' => $staticGeneratorComponentClasses
+            ));
+            foreach ($generators as $k=>$g) {
+                if ($g['static']) {
+                    $parentDatas = array();
+                    foreach ($pd as $d) {
+                        if ($d->componentClass == $g['class']) {
+                            $parentDatas[] = $d;
+                        }
+                    }
+                    if ($parentDatas) {
+                        $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
+                        foreach ($gen->getChildData($parentDatas, $select) as $d) {
+                            if (!in_array($d, $ret, true)) {
+                                $ret[] = $d;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $ret;
+    }
+
+    private function _getRecursiveGenerators($componentClass, $select, $childSelect, $selectHash)
+    {
+        $cacheId = $componentClass.$selectHash;
+        Vps_Benchmark::count('_getRecursiveGenerators');
+        if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
+            return $this->_recursiveGeneratorsCache[$cacheId];
+        }
+
+        $ret = array();
+        $this->_recursiveGeneratorsCache[$cacheId] = array();
+        foreach (Vps_Component_Generator_Abstract::getInstances($componentClass, $select) as $generator) {
+            if ($generator->getChildComponentClasses($select)) {
+                $ret[] = array(
+                    'static' => $generator instanceof Vps_Component_Generator_Static,
+                    'class' => $generator->getClass(),
+                    'key' => $generator->getGeneratorKey()
+                );
+            }
+        }
+        foreach (Vps_Component_Generator_Abstract::getInstances($componentClass, $childSelect) as $generator) {
+            foreach ($generator->getChildComponentClasses() as $c) {
+                $ret = array_merge($ret, $this->_getRecursiveGenerators($c, $select, $childSelect, $selectHash));
+            }
+        }
+        $this->_recursiveGeneratorsCache[$cacheId] = $ret;
         return $ret;
     }
 
@@ -234,7 +337,7 @@ class Vps_Component_Data
         $select = $this->_formatSelect($select);
         $sc = $select->getHash();
         if (isset($this->_constraintsCache[$sc])) {
-            Vps_Benchmark::count('getChildComponents cached', print_r($select->getParts(), true));
+            Vps_Benchmark::count('getChildComponents cached', $select->toDebug());
         } else {
             Vps_Benchmark::count('getChildComponents uncached');
         }
@@ -475,7 +578,12 @@ class Vps_Component_Data
     {
         $page = $this;
         foreach (explode('/', $path) as $pathPart) {
-            $page = $page->getChildPseudoPage(array('filename' => $pathPart));
+            $pages = $page->getRecursiveChildComponents(array(
+                                'filename' => $pathPart,
+                                'pseudoPage'=>true,
+                                'limit'=>1),
+                            array('pseudoPage'=>false));
+            $page = current($pages);
             if (!$page) break;
         }
         return $page;
