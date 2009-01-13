@@ -56,8 +56,18 @@ class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
 
     public function testExprContainsEscaping()
     {
+        $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Contains('foo', 'a%aa'));
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo LIKE '%a\%aa%')",
+        $this->_model->createDbSelect($select)->__toString());
+
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Contains('foo', 'a\'aa'));
         $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo LIKE '%a\'aa%')",
+            $this->_model->createDbSelect($select)->__toString());
+
+
+
+        $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Contains('foo', 'a_aa'));
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo LIKE '%a\_aa%')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
@@ -121,12 +131,12 @@ class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
             $this->_model->createDbSelect($select)->__toString());
     }
 
-	public function testExprAndException()
+    public function testExprAndException()
     {
-		$this->setExpectedException('Vps_Exception');
+        $this->setExpectedException('Vps_Exception');
         $expr = new Vps_Model_Select_Expr_And(array());
         $select = $this->_model->select()->where($expr);
-		$this->_model->createDbSelect($select);
+        $this->_model->createDbSelect($select);
     }
 
     public function testBigExpr()

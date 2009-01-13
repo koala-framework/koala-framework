@@ -143,8 +143,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private function _createDbSelectExpression($expr)
     {
         if ($expr instanceof Vps_Model_Select_Expr_CompareField_Abstract) {
+
             $quotedValue = $expr->getValue();
             $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
+
         }
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
             return $expr->getField()." = ".$quotedValue;
@@ -156,7 +158,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
             return $expr->getField()." > ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
             $v = $expr->getValue();
-            $quotedValue = $this->_table->getAdapter()->quote('%'.$v.'%');
+            $quotedValueContains = $this->_table->getAdapter()->quote('%'.$v.'%');
+
+            $quotedValue = str_replace("%", "\\%", $quotedValue);
+            $quotedValue = str_replace("_", "\\_", $quotedValue);
+            $quotedValue = str_replace(
+                            substr($quotedValueContains, 2, strlen($quotedValueContains)-4),
+                            substr($quotedValue, 1, strlen($quotedValue)-2),
+                            $quotedValueContains);
             return $expr->getField()." LIKE ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {
             return "LEFT({$expr->getField()}, ".strlen($expr->getValue()).") = ".$quotedValue;
