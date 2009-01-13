@@ -249,20 +249,36 @@ class Vps_Setup
 
         // Falls redirectToDomain eingeschalten ist, umleiten
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
-        $domains = array();
-        if (Zend_Registry::get('config')->vpc->domains) {
-            foreach (Zend_Registry::get('config')->vpc->domains as $domain) {
-               $domains[] = $domain->domain;
+        if ($host && Zend_Registry::get('config')->server->redirectToDomain) {
+            $redirect = false;
+            if (Zend_Registry::get('config')->vpc->domains) {
+                $domains = Zend_Registry::get('config')->vpc->domains;
+                $noRedirect = false;
+                foreach ($domains as $domain) {
+                    if ($domain->domain == $host) {
+                        $noRedirect = true;
+                        break;
+                    }
+                }
+                if (!$noRedirect) {
+                    foreach ($domains as $domain) {
+                        if (!$redirect && !$domain->pattern) $redirect = $domain->domain;
+                        if ($domain->pattern && preg_match('/' . $domain->pattern . '/', $host)
+                        ) {
+                            $redirect = $domain->domain;
+                            break;
+                        }
+                    }
+                }
+            } else if (Zend_Registry::get('config')->server->domain
+                && $host != Zend_Registry::get('config')->server->domain
+            ) {
+                $redirect = Zend_Registry::get('config')->server->domain;
             }
-        }
-        if ($host
-            && Zend_Registry::get('config')->server->redirectToDomain
-            && Zend_Registry::get('config')->server->domain
-            && $host != Zend_Registry::get('config')->server->domain
-            && !in_array($host, $domains)
-        ) {
-            header("Location: http://".Zend_Registry::get('config')->server->domain.$_SERVER['REQUEST_URI'], true, 301);
-            exit;
+            if ($redirect) {
+                header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
+                exit;
+            }
         }
 
         if (Zend_Registry::get('config')->showPlaceholder
