@@ -183,6 +183,9 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                     return null;
                 }
             } else {
+                if (!in_array('component', $cols)) {
+                    throw new Vps_Exception("Column component does not exist for a generator in '$this->_class'");
+                }
                 $select->whereEquals('component', $keys);
             }
         }
