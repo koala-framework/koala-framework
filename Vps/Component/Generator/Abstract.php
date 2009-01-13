@@ -449,6 +449,8 @@ abstract class Vps_Component_Generator_Abstract
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
+        } else {
+            $select = clone $select;
         }
 
         if (is_null($select)) return null;
