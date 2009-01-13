@@ -177,7 +177,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $uploadId = '0';
         }
         $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
-                    " value=\"\" />";
+                    " value=\"$uploadId\" />";
         $ret['html'] .= '</div>';
         return $ret;
     }
