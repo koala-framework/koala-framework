@@ -178,6 +178,7 @@ class Vps_Component_Data
             Vps_Component_Select::WHERE_MULTI_BOX,
             Vps_Component_Select::WHERE_SHOW_IN_MENU,
             Vps_Component_Select::WHERE_COMPONENT_CLASSES,
+            Vps_Component_Select::WHERE_PAGE_GENERATOR,
         ), $select);
 
         $selectHash = md5($genSelect->getHash().$childSelect->getHash());
@@ -389,7 +390,7 @@ class Vps_Component_Data
         return $this->_constraintsCache[$sc];
     }
 
-    public function getChildPages($select = array())
+    public function getChildPages($select = array(), $childSelect = array('page'=>false))
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
@@ -397,7 +398,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->wherePage(true);
-        return $this->getRecursiveChildComponents($select);
+        return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
     public function getChildPseudoPages($select = array())
@@ -443,13 +444,13 @@ class Vps_Component_Data
         return $this->getComponent()->hasContent();
     }
 
-    public function getChildPage($select = array())
+    public function getChildPage($select = array(), $childSelect = array('page'=>false))
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
         $select->limit(1);
-        return current($this->getChildPages($select));
+        return current($this->getChildPages($select, $childSelect));
     }
 
     public function getChildPseudoPage($select = array())
