@@ -22,11 +22,11 @@ Ext.util.Format.decimal = function(v, p)
     if (p) p.css = 'vps-renderer-decimal';
     if (v === null || v == undefined) return "";
 
-	v = v.toString().replace(",", ".");
-	v = (Math.round((v-0)*100))/100;
+    v = v.toString().replace(",", ".");
+    v = (Math.round((v-0)*100))/100;
     v = (v == Math.floor(v)) ? v + ".00" : ((v*10 == Math.floor(v*10)) ? v + "0" : v);
     v = v.toString().replace(".", ",");
-	return v;
+    return v;
 };
 
 Ext.util.Format.money = function(v, p)
@@ -79,7 +79,7 @@ Ext.util.Format.component = function(v, f) {
 
 //date-funktion überschreiben, damit Y-m-d als eingabeformat verwendet werden kann
 Ext.util.Format.date = function(v, format) {
-	if(!v){
+    if(!v){
         return '';
     }
     if(!(v instanceof Date)){
@@ -152,5 +152,11 @@ Ext.util.Format.fileSize = function(size) {
         size = (Math.round(((size*10) / 1048576))/10);
     }
     return size.toString().replace(".", ",") + ' ' + unit;
+};
+
+Ext.util.Format.notEditable = function(v, p)
+{
+    p.css += 'vps-renderer-noteditable';
+    return v;
 };
 
