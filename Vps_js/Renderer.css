@@ -2,8 +2,12 @@
 .vps-renderer-bright { color: #888888; }
 .vps-renderer-linebreak {
     overflow:visible;
-	white-space: normal;
+    white-space: normal;
 }
 .x-grid3-check-col {
     height:14px;
+}
+.vps-renderer-noteditable {
+    color: #777777;
+    font-style:italic;
 }
