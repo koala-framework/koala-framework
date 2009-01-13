@@ -142,6 +142,7 @@ class Vps_Pdf_TcPdf extends TCPDF
 
     public function decodeText ($text)
     {
+        $text = str_replace(' href=""', ' href="#"', $text);
         $text = str_replace("€", utf8_encode(chr(0x80)), $text);
         $text = str_replace("—", utf8_encode(chr(0x97)), $text);
         $text = str_replace("•", utf8_encode(chr(0x95)), $text);
