@@ -22,21 +22,7 @@ class Vpc_Root_DomainRoot_Component extends Vpc_Root_Abstract
         }
         $setting = $this->_getSetting('generators');
         $modelName = $setting['domain']['model'];
-        $model = Vps_Model_Abstract::getInstance($modelName);
-        $domain = null;
-        $rows = $model->getRows();
-        foreach ($rows as $row) {
-            if ($row->domain == $host) $domain = $row;
-        }
-        if (!$domain) {
-            foreach ($rows as $row) {
-                if (!$domain && !$row->pattern) $domain = $row;
-                if ($row->pattern && preg_match('/' . $row->pattern . '/', $host)
-                ) {
-                    $domain = $row;
-                }
-            }
-        }
+        $domain = Vps_Model_Abstract::getInstance($modelName)->getRowByHost($host);
         if (!$domain)
             throw new Vps_Exception("Domain $host not found, please enter in config");
         $path =

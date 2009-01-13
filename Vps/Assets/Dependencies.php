@@ -379,6 +379,7 @@ class Vps_Assets_Dependencies
 
                 $cache = $this->_getCache();
                 $section = substr($file, 0, strpos($file, '-'));
+                if (!$section) $section = 'web';
                 $cacheId = 'fileContents'.$language.$section.str_replace(array('/', '.', '-'), array('_', '_', '_'), $file);
                 if (!$cacheData = $cache->load($cacheId)) {
                     $cacheData['contents'] = file_get_contents($this->getAssetPath($file));

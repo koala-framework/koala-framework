@@ -24,4 +24,21 @@ class Vpc_Root_DomainRoot_Model extends Vps_Model_Data_Abstract
         }
         parent::_init();
     }
+
+    public function getRowByHost($host)
+    {
+        $rows = $this->getRows();
+        foreach ($rows as $row) {
+            if ($row->domain == $host) return $row;
+        }
+        $ret = null;
+        foreach ($rows as $row) {
+            if (!$ret && !$row->pattern) $ret = $row;
+            if ($row->pattern && preg_match('/' . $row->pattern . '/', $host)
+            ) {
+                $ret = $row;
+            }
+        }
+        return $ret;
+    }
 }
