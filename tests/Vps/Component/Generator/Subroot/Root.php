@@ -9,7 +9,9 @@ class Vps_Component_Generator_Subroot_Root extends Vpc_Root_DomainRoot_Component
             'ch' => 'Vps_Component_Generator_Subroot_DomainCh'
         );
         $ret['generators']['domain']['model'] = new Vps_Model_FnF(
-            array('data' => array(
+            array(
+                'columns' => array('id', 'name', 'domain', 'component'),
+                'data' => array(
                 array('id' => 'at', 'name' => 'Österreich', 'domain' => 'rotary.at', 'component' => 'at'),
                 array('id' => 'ch', 'name' => 'Liechtenstein und Schweiz', 'domain' => 'rotary.ch', 'component' => 'ch')
             ))
