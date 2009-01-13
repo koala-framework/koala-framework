@@ -18,7 +18,13 @@ class Vpc_Basic_LinkTag_FirstChildPage_Data extends Vps_Component_Data
     {
         // zuerst prüfen ob es eine händisch angelegte child page gibt
         $page = $this->getChildPage(array('pageGenerator' => true));
-        if (!$page) $page = $this->getChildPage();
+        if (!$page) {
+            $page = $this->getChildPage(array('inherit'=>false),
+                                    array(
+                                        'inherit'=>false,
+                                        'page'=>false
+                                    ));
+        }
         if (!$page) return null;
         return $page;
     }
