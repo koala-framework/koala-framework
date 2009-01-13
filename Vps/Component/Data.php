@@ -179,6 +179,7 @@ class Vps_Component_Data
             Vps_Component_Select::WHERE_SHOW_IN_MENU,
             Vps_Component_Select::WHERE_COMPONENT_CLASSES,
             Vps_Component_Select::WHERE_PAGE_GENERATOR,
+            Vps_Component_Select::WHERE_GENERATOR
         ), $select);
 
         $selectHash = md5($genSelect->getHash().$childSelect->getHash());
@@ -265,7 +266,8 @@ class Vps_Component_Data
         }
         foreach (Vps_Component_Generator_Abstract::getInstances($componentClass, $childSelect) as $generator) {
             foreach ($generator->getChildComponentClasses() as $c) {
-                $ret = array_merge($ret, $this->_getRecursiveGenerators($c, $select, $childSelect, $selectHash));
+                if ($c)
+                    $ret = array_merge($ret, $this->_getRecursiveGenerators($c, $select, $childSelect, $selectHash));
             }
         }
         $this->_recursiveGeneratorsCache[$cacheId] = $ret;
