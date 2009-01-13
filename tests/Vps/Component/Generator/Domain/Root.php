@@ -8,7 +8,7 @@ class Vps_Component_Generator_Domain_Root extends Vpc_Root_DomainRoot_Component
             'at' => 'Vps_Component_Generator_Domain_Domain',
             'ch' => 'Vps_Component_Generator_Domain_DomainCh'
         );
-        $ret['generators']['domain']['model'] = 'Vps_Component_Generator_Domain_Model';
+        $ret['generators']['domain']['model'] = 'Vps_Component_Generator_Domain_DomainModel';
         unset($ret['generators']['box']);
         return $ret;
     }
