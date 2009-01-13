@@ -8,12 +8,7 @@ class Vps_Component_Generator_Domain_Root extends Vpc_Root_DomainRoot_Component
             'at' => 'Vps_Component_Generator_Domain_Domain',
             'ch' => 'Vps_Component_Generator_Domain_DomainCh'
         );
-        $ret['generators']['domain']['model'] = new Vps_Model_FnF(
-            array('data' => array(
-                array('id' => 'at', 'name' => 'Österreich', 'domain' => 'rotary.at', 'component' => 'at'),
-                array('id' => 'ch', 'name' => 'Liechtenstein und Schweiz', 'domain' => 'rotary.ch', 'component' => 'ch')
-            ))
-        );
+        $ret['generators']['domain']['model'] = 'Vps_Component_Generator_Domain_Model';
         unset($ret['generators']['box']);
         return $ret;
     }
