@@ -2,10 +2,10 @@
 <? if ($this->authedUser) { ?>
     <div class="account">
         <ul>
-            <li>
+            <li class="mail">
                 <?=$this->authedUser->email?>
             </li>
-            <li>
+            <li class="profile">
                 <?=$this->componentLink($this->myProfile, trlVps('My Profile'))?>
             </li>
             <? foreach ($this->links as $l) { ?>
@@ -13,6 +13,7 @@
             <? } ?>
             <li class="logout"><a href="?logout"><?=trlVps('Logout')?></a></li>
         </ul>
+        <div class="clear"></div>
     </div>
 <? } else { ?>
     <ul>
