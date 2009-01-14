@@ -60,14 +60,24 @@ class Vps_Trl
 
     public function getTargetLanguage()
     {
-        $languages = $this->getLanguages();
-        if (count($languages) > 2 && isset(Zend_Registry::get('userModel')->getAuthedUser()->language)){
-            $userLanguage = Zend_Registry::get('userModel')->getAuthedUser()->language;
-            if (array_search($userLanguage, $languages)) {
-                return $userLanguage;
-            }
+
+        $config = Zend_Registry::get('config');
+        if (!Zend_Registry::get('userModel') ||
+            !Zend_Registry::get('userModel')->getAuthedUser() ||
+            !Zend_Registry::get('userModel')->getAuthedUser()->language)
+            {
+                return $this->getWebCodeLanguage();
         }
-        return $this->getWebCodeLanguage();
+        $cnt = 1;
+        if ($config->languages) {
+            foreach ($config->languages as $lang) {
+                if ($lang != $this->getWebCodeLanguage()) {
+                    return $lang;
+                }
+            }
+        } else {
+            return $this->getWebCodeLanguage();
+        }
     }
 
     public function getWebCodeLanguage()
