@@ -21,7 +21,7 @@ class Vpc_Forum_Directory_FormController extends Vps_Controller_Action_Auto_Form
         if ($this->_getParam('parent_id')) {
             $row->parent_id = $this->_getParam('parent_id');
         }
-        $row->component_id = $this->_getParam('component_id');
+        $row->component_id = $this->_getParam('componentId');
         $row->pos = 0;
         $row->visible = 0;
     }
