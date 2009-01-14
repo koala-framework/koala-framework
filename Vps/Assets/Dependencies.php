@@ -319,7 +319,7 @@ class Vps_Assets_Dependencies
             } else {
                 $host = Vps_Registry::get('config')->server->domain;
             }
-            $host = str_replace('.', '', $host);
+            $host = str_replace(array('.', '-'), array('', ''), $host);
             $encoding = Vps_Media_Output::getEncoding();
             $cache = $this->_getCache();
             $cacheId = str_replace('.', '_', $fileType).$encoding.$assetsType.Vps_Setup::getConfigSection().$language.$section.$host;
@@ -390,7 +390,7 @@ class Vps_Assets_Dependencies
                 } else {
                     $host = Vps_Registry::get('config')->server->domain;
                 }
-                $host = str_replace('.', '', $host);
+                $host = str_replace(array('.', '-'), array('', ''), $host);
                 $cacheId = 'fileContents'.$language.$section.$host.str_replace(array('/', '.', '-'), array('_', '_', '_'), $file);
                 if (!$cacheData = $cache->load($cacheId)) {
                     $cacheData['contents'] = file_get_contents($this->getAssetPath($file));
