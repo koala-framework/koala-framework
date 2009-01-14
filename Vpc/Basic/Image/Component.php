@@ -139,7 +139,12 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             return null;
         }
 
-        $output = Vps_Media_Image::scale($file, self::_getDimensions($row, $className));
+        $dim = self::_getDimensions($row, $className);
+        if ($dim) {
+            $output = Vps_Media_Image::scale($file, $dim);
+        } else {
+            $output = file_get_contents($file);
+        }
         $ret = array(
             'contents' => $output,
             'mimeType' => $mimeType,
