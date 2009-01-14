@@ -8,6 +8,7 @@ class Vps_Media_Image
 
     public static function calculateScaleDimensions($sourceSize, $size)
     {
+
         if (is_string($sourceSize)) {
             $sourceSize = @getimagesize($sourceSize);
         }
@@ -23,11 +24,9 @@ class Vps_Media_Image
         else if (isset($size[2])) $scale = $size[2];
         else $scale = self::SCALE_BESTFIT;
         if (!$scale) $scale = self::SCALE_BESTFIT;
-
         if ($width == 0 && $height == 0 && $scale != self::SCALE_ORIGINAL) {
             return false;
         }
-        
         $size = $sourceSize;
         if (isset($size['width'])) $size[0] = $size['width'];
         if (isset($size['height'])) $size[1] = $size['height'];
@@ -74,6 +73,8 @@ class Vps_Media_Image
                 $y = 0;
                 $height = $cropFromHeight;
             }
+
+
             return array('width'        => round($width),
                          'height'       => round($height),
                          'x'            => round($x),
@@ -84,6 +85,7 @@ class Vps_Media_Image
             );
 
         } elseif ($scale == self::SCALE_BESTFIT) {
+
             // Bild wird auf größte Maximale Ausdehnung skaliert
             // Bild wird NICHT vergrößert! (kann also auch kleiner ausgegeben werden als angefordert)
 
@@ -120,7 +122,6 @@ class Vps_Media_Image
             return array('width'=>$size[0], 'height'=>$size[1], 'scale'=>$scale);
 
         } else {
-
             return false;
 
         }

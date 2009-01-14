@@ -2,7 +2,7 @@
 class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 {
     private $_fields;
-    
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -156,7 +156,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
                         " value=\"$value[uploadId]\" />";
             if ($value['image']) {
                 //todo: with und height von image
-                $ret['html'] .= " <img src=\"/vps/media/upload/preview?uploadId=$value[uploadId]&amp;size=frontend\" alt=\"\" width=\"100\" height=\"100\" />";
+                $ret['html'] .= " <img src=\"/vps/media/upload/preview?uploadId=$value[uploadId]&hashKey=$value[hashKey]&amp;size=frontend\" alt=\"\" width=\"100\" height=\"100\" />";
             }
         }
         $ret['html'] .= '</div>';

@@ -19,16 +19,30 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
         }
         $fileRow = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')
             ->createRow();
-        $fileRow->uploadFile($file);
+        if ($this->_getParam('maxResolution') && substr($file['type'], 0, 6) ==  'image/') {
+            $maxResolution = $this->_getParam('maxResolution');
+            $fileData = Vps_Media_Image::scale($file['tmp_name'], array('width' => $maxResolution, 'height' => $maxResolution, 'scale' => Vps_Media_Image::SCALE_BESTFIT));
+            $filename = substr($file['name'], 0, strrpos($file['name'], '.'));
+            $extension = substr(strrchr($file['name'], '.'), 1);
+            $fileRow->verifyUpload($file);
+            $fileRow->writeFile($fileData, $filename, $extension, $file['type']);
+        } else {
+            $fileRow->uploadFile($file);
+        }
 
         $this->view->value = $fileRow->getFileInfo();
+
     }
 
     public function previewAction()
     {
-        //TODO: mit hash absichern!!!
+        if (md5($this->_getParam('uploadId').Vps_Uploads_Row::HASH_KEY) != $this->_getParam('hashKey')) {
+           throw new Vps_Exception_AccessDenied();
+        }
         $fileRow = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')
             ->getRow($this->_getParam('uploadId'));
+
+
         if (!$fileRow) throw new Vps_Exception("Can't find upload");
 
         $sizes = array(
@@ -55,9 +69,12 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
         Vps_Media_Output::output($output);
     }
 
+
     public function downloadAction()
     {
-        //TODO: mit hash absichern?
+        if (md5($this->_getParam('uploadId').Vps_Uploads_Row::HASH_KEY) != $this->_getParam('hashKey')) {
+            throw new Vps_Exception_AccessDenied();
+        }
         $fileRow = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')
             ->getRow($this->_getParam('uploadId'));
         if (!$fileRow) throw new Vps_Exception("Can't find upload");
