@@ -179,7 +179,12 @@ class Vps_Component_Data
             Vps_Component_Select::WHERE_SHOW_IN_MENU,
             Vps_Component_Select::WHERE_COMPONENT_CLASSES,
             Vps_Component_Select::WHERE_PAGE_GENERATOR,
-            Vps_Component_Select::WHERE_GENERATOR
+            Vps_Component_Select::WHERE_GENERATOR,
+            Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS,
+            Vps_Component_Select::WHERE_INHERIT,
+            Vps_Component_Select::WHERE_UNIQUE,
+            Vps_Component_Select::WHERE_GENERATOR_CLASS,
+            Vps_Component_Select::WHERE_COMPONENT_KEY,
         ), $select);
 
         $selectHash = md5($genSelect->getHash().$childSelect->getHash());
@@ -192,15 +197,12 @@ class Vps_Component_Data
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
         } else {
             Vps_Benchmark::count('getRecCC Gen miss', $this->componentClass.' '.$genSelect->toDebug());
-            $generators = array();
-            foreach (Vpc_Abstract::getChildComponentClasses($this, $childSelect) as $class) {
-                $g = $this->_getRecursiveGenerators($class, $genSelect, $childSelect, $selectHash);
-                $generators = array_merge($generators, $g);
-            }
+            $generators = $this->_getRecursiveGenerators(
+                        Vpc_Abstract::getChildComponentClasses($this, $childSelect),
+                        $genSelect, $childSelect, $selectHash);
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
             $cache->save($generators, $cacheId);
         }
-
         $select->whereOnSamePage($this);
         foreach ($generators as $g) {
             if (!$g['static']) {
@@ -245,9 +247,9 @@ class Vps_Component_Data
         return $ret;
     }
 
-    private function _getRecursiveGenerators($componentClass, $select, $childSelect, $selectHash)
+    private function _getRecursiveGenerators($componentClasses, $select, $childSelect, $selectHash)
     {
-        $cacheId = $componentClass.$selectHash;
+        $cacheId = Implode('-', $componentClasses).$selectHash;
         Vps_Benchmark::count('_getRecursiveGenerators');
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
             return $this->_recursiveGeneratorsCache[$cacheId];
@@ -255,19 +257,32 @@ class Vps_Component_Data
 
         $ret = array();
         $this->_recursiveGeneratorsCache[$cacheId] = array();
-        foreach (Vps_Component_Generator_Abstract::getInstances($componentClass, $select) as $generator) {
-            if ($generator->getChildComponentClasses($select)) {
-                $ret[] = array(
-                    'static' => $generator instanceof Vps_Component_Generator_Static,
-                    'class' => $generator->getClass(),
-                    'key' => $generator->getGeneratorKey()
-                );
+        foreach ($componentClasses as $componentClass) {
+            if (!$componentClass) continue;
+            foreach (Vps_Component_Generator_Abstract::getInstances($componentClass, $select) as $generator) {
+                if ($generator->getChildComponentClasses($select)) {
+                    $ret[] = array(
+                        'static' => $generator instanceof Vps_Component_Generator_Static,
+                        'class' => $generator->getClass(),
+                        'key' => $generator->getGeneratorKey()
+                    );
+                }
             }
         }
-        foreach (Vps_Component_Generator_Abstract::getInstances($componentClass, $childSelect) as $generator) {
-            foreach ($generator->getChildComponentClasses() as $c) {
-                if ($c)
-                    $ret = array_merge($ret, $this->_getRecursiveGenerators($c, $select, $childSelect, $selectHash));
+        foreach ($componentClasses as $componentClass) {
+            if (!$componentClass) continue;
+            foreach (Vps_Component_Generator_Abstract::getInstances($componentClass, $childSelect) as $generator) {
+                $g = $this->_getRecursiveGenerators(
+                                    $generator->getChildComponentClasses(),
+                                    $select, $childSelect, $selectHash);
+                foreach ($g as $i) {
+                    foreach ($ret as $j) {
+                        if ($j['class'] == $i['class'] && $j['key'] == $i['key']) {
+                            continue 2;
+                        }
+                    }
+                    $ret[] = $i;
+                }
             }
         }
         $this->_recursiveGeneratorsCache[$cacheId] = $ret;
