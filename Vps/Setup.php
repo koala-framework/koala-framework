@@ -94,6 +94,8 @@ function _btArgString($arg)
     } else if (is_string($arg)) {
         if (strlen($arg) > 50) $arg = substr($arg, 0, 47)."...";
         $ret[] = '"'.$arg.'"';
+    } else if (is_bool($arg)) {
+        $ret[] = $arg ? 'true' : 'false';
     } else {
         $ret[] = $arg;
     }
