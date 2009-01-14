@@ -19,6 +19,7 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
 
     public function getDomains($parentData = null, $select = null)
     {
+        /*
         $c = null;
         if ($select instanceof Vps_Component_Select) {
             if ($select->hasPart(Vps_Component_Select::WHERE_ON_SAME_PAGE)) {
@@ -38,6 +39,7 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
             }
             if ($c) return array($c->row->id);
         }
+        */
 
         $components = Vps_Component_Data_Root::getInstance()->getChildComponents();
         $domains = array();
