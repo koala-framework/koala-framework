@@ -1,6 +1,7 @@
 <?php
 class Vps_Uploads_Row extends Vps_Model_Proxy_Row
 {
+    const HASH_KEY = "ajsdfkljdsaöljfasöjfaslkjf";
     protected function _deleteFile()
     {
         $filename = $this->getFileSource();
@@ -42,6 +43,16 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
 
     public function uploadFile($filedata)
     {
+        $this->verifyUpload($filedata);
+
+        $filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
+        $extension = substr(strrchr($filedata['name'], '.'), 1);
+        $this->copyFile($filedata['tmp_name'], $filename, $extension, $filedata['type']);
+        return $this;
+    }
+
+    public function verifyUpload($filedata)
+    {
         if ($filedata['error'] == UPLOAD_ERR_NO_FILE || !$filedata['tmp_name'] || !file_exists($filedata['tmp_name'])) {
             throw new Vps_Exception('No File was uploaded.');
         }
@@ -57,14 +68,9 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
         if ($filedata['error'] != UPLOAD_ERR_OK) {
             throw new Vps_Exception('An Error when processing file upload happend: '.$filedata['error']);
         }
-
-        $filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
-        $extension = substr(strrchr($filedata['name'], '.'), 1);
-        $this->copyFile($filedata['tmp_name'], $filename, $extension, $filedata['type']);
-        return $this;
     }
 
-    private function _detectMimeType($mimeType, $contents) 
+    private function _detectMimeType($mimeType, $contents)
     {
         $ret = $mimeType;
         if (!$mimeType || $mimeType == 'application/octet-stream') {
@@ -107,7 +113,8 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
             'mimeType' => $this->mime_type,
             'filename' => $this->filename,
             'extension'=> $this->extension,
-            'fileSize' => $this->getFileSize()
+            'fileSize' => $this->getFileSize(),
+            'hashKey'  => md5($this->id.self::HASH_KEY)
         );
         if (!$this->id && is_file($this->filename)) {
             $ret['mimeType'] = $this->_getMimeType($this->filename);

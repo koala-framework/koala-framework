@@ -52,7 +52,9 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
                 if (this.swfReady) {
                     this.swfu.selectFile();
                 } else {
-                    var win = new Vps.Form.FileUploadWindow();
+                    var win = new Vps.Form.FileUploadWindow({
+                        maxResolution: this.maxResolution
+                    });
                     win.on('uploaded', function(win, result) {
                         this.setValue(result.value);
                         this.fireEvent('uploaded', this, result.value);
@@ -199,14 +201,14 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             var icon = false;
             if (value.mimeType) {
                 if (value.mimeType.match(/(^image\/)/)) {
-                    icon = '/vps/media/upload/preview?uploadId='+value.uploadId;
+                    icon = '/vps/media/upload/preview?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
                 } else {
                     icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
                     icon = '/assets/silkicons/' + icon + '.png';
                 }
                 this.previewTpl.overwrite(this.previewImage, {
                     preview: icon,
-                    href: '/vps/media/upload/download?uploadId='+value.uploadId
+                    href: '/vps/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey
                 });
                 this.infoTpl.overwrite(this.infoContainer, value);
             } else {

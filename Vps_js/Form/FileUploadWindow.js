@@ -6,10 +6,13 @@ Vps.Form.FileUploadWindow = Ext.extend(Ext.Window, {
     height: 120,
     initComponent: function() {
         this.addEvents(['uploaded']);
+        if (!this.maxResolution) {
+            this.maxResolution = 0;
+        }
         this.form = new Ext.FormPanel({
             baseCls: 'x-plain',
             style: 'padding: 10px;',
-            url: '/vps/media/upload/json-upload',
+            url: '/vps/media/upload/json-upload'+'?maxResolution='+this.maxResolution,
             fileUpload: true,
             items: [{
                 name: 'Filedata',
