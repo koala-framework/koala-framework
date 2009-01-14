@@ -56,6 +56,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
                     if ($i === null) {
                        unset ($f->$k);
                     } else {
+                        $i =  str_replace('&', '&amp;', $i); //bugfix für php bug, sonst kommt der fehler "unterminated entity reference"
                         $f->$k = $i;
                     }
 
@@ -105,6 +106,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
             throw new Vps_Exception("No Id was set, inserting impossible");
         }
         foreach ($rowData as $k=>$i) {
+
            if ($k == $this->getPrimaryKey()) {
                if (!$i) {
                    $i = $this->_getNewId();
@@ -115,6 +117,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
                throw  new Vps_Exception("No arguments allowed in a Xml Node");
            }
            if ($i !== null) {
+               $i =  str_replace('&', '&amp;', $i); //bugfix für php bug, sonst kommt der fehler "unterminated entity reference"
                $node->addChild($k, $i);
            }
         }
