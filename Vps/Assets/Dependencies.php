@@ -314,10 +314,15 @@ class Vps_Assets_Dependencies
             }
             $language = $m[3];
             $fileType = $m[4];
-
+            if (isset($_SERVER['HTTP_HOST'])) {
+                $host = $_SERVER['HTTP_HOST'];
+            } else {
+                $host = Vps_Registry::get('config')->server->domain;
+            }
+            $host = str_replace('.', '', $host);
             $encoding = Vps_Media_Output::getEncoding();
             $cache = $this->_getCache();
-            $cacheId = str_replace('.', '_', $fileType).$encoding.$assetsType.Vps_Setup::getConfigSection().$language.$section;
+            $cacheId = str_replace('.', '_', $fileType).$encoding.$assetsType.Vps_Setup::getConfigSection().$language.$section.$host;
             if (!$cacheData = $cache->load($cacheId)) {
 
                 $cacheData  = array();
@@ -380,7 +385,13 @@ class Vps_Assets_Dependencies
                 $cache = $this->_getCache();
                 $section = substr($file, 0, strpos($file, '-'));
                 if (!$section) $section = 'web';
-                $cacheId = 'fileContents'.$language.$section.str_replace(array('/', '.', '-'), array('_', '_', '_'), $file);
+                if (isset($_SERVER['HTTP_HOST'])) {
+                    $host = $_SERVER['HTTP_HOST'];
+                } else {
+                    $host = Vps_Registry::get('config')->server->domain;
+                }
+                $host = str_replace('.', '', $host);
+                $cacheId = 'fileContents'.$language.$section.$host.str_replace(array('/', '.', '-'), array('_', '_', '_'), $file);
                 if (!$cacheData = $cache->load($cacheId)) {
                     $cacheData['contents'] = file_get_contents($this->getAssetPath($file));
                     $cacheData['mtimeFiles'] = array($this->getAssetPath($file));
