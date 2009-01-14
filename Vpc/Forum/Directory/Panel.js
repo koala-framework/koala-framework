@@ -2,14 +2,14 @@ Ext.namespace('Vpc.Forum');
 Vpc.Forum.Panel = Ext.extend(Vps.Auto.TreePanel,
 {
     initComponent: function() {
-        var modAssignGrid = new Vps.Auto.AssignGridPanel({
+        this.modAssignGrid = new Vps.Auto.AssignGridPanel({
             gridAssignedControllerUrl : '/admin/component/edit/Vpc_Forum_Directory_ModeratorsToGroup',
             gridDataControllerUrl     : '/admin/component/edit/Vpc_Forum_Directory_Moderators',
             gridDataHeight            : 300
         });
 
         this.bindings = [
-            { item: modAssignGrid, queryParam: 'group_id' }
+            { item: this.modAssignGrid, queryParam: 'group_id' }
         ];
 
         this.modDialog = new Ext.Window({
@@ -18,7 +18,7 @@ Vpc.Forum.Panel = Ext.extend(Vps.Auto.TreePanel,
             closeAction: 'hide',
             width: 600,
             height: 480,
-            items: [ modAssignGrid ]
+            items: [ this.modAssignGrid ]
         });
 
         this.actions.moderators = new Ext.Action({
@@ -43,6 +43,16 @@ Vpc.Forum.Panel = Ext.extend(Vps.Auto.TreePanel,
     onModerators: function()
     {
         this.modDialog.show()
+    },
+
+    setBaseParams: function(bp) {
+        this.modAssignGrid.setBaseParams(bp);
+        return Vpc.Forum.Panel.superclass.setBaseParams.call(this, bp);
+    },
+
+    applyBaseParams: function(bp) {
+        this.modAssignGrid.applyBaseParams(bp);
+        return Vpc.Forum.Panel.superclass.applyBaseParams.call(this, bp);
     }
 });
 

@@ -9,7 +9,6 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
     assignActionUrl: '',
     gridDataParamName: 'foreign_keys',
 
-
     initComponent: function()
     {
         this.actions.assign = new Ext.Action({
@@ -117,7 +116,20 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
         if (!this.gridData.getStore()) {
             this.gridData.load();
         }
+    },
+
+    setBaseParams: function(bp) {
+        this.gridAssigned.setBaseParams(bp);
+        this.gridData.setBaseParams(bp);
+        return Vpc.Forum.Panel.superclass.setBaseParams.call(this, bp);
+    },
+
+    applyBaseParams: function(bp) {
+        this.gridAssigned.applyBaseParams(bp);
+        this.gridData.applyBaseParams(bp);
+        return Vpc.Forum.Panel.superclass.applyBaseParams.call(this, bp);
     }
+
 });
 
 Ext.reg('vps.assigngrid', Vps.Auto.AssignGridPanel);
