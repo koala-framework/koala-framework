@@ -50,6 +50,22 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, $testrow->id);
     }
 
+
+    public function testXmlBasicAndCheck()
+    {
+        $model = new Vps_Model_Xml(array(
+            'xpath' => '/trl',
+            'topNode' => 'text',
+            'xmlContent' => '<trl><text><id>1</id><en>Visible</en><de>Sichtbar</de></text></trl>'
+        ));
+
+        $newrow = $model->createRow(array('en' => "hel&lo", 'de' => "hallo"));
+        $newrow->save();
+        $row = $model->getRow(2);
+        $this->assertEquals("hel&lo", $row->en);
+
+    }
+
     public function testXmlPaths()
     {
         $model = new Vps_Model_Xml(array(
@@ -155,9 +171,9 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
-            				 <text><id>1</id><en>Visible</en><de>Sichtbar</de></text>
-            				 <text><id>2</id><en>Delete</en><de>löschen</de></text>
-            				 </trl>'
+                             <text><id>1</id><en>Visible</en><de>Sichtbar</de></text>
+                             <text><id>2</id><en>Delete</en><de>löschen</de></text>
+                             </trl>'
         ));
         $this->assertEquals(2, $model->getRows()->count());
         $row = $model->getRow(2);
@@ -175,9 +191,9 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
-            				 <text><en>Visible</en><de>Sichtbar</de></text>
-            				 <text><en>Delete</en><de>löschen</de></text>
-            				 </trl>'
+                             <text><en>Visible</en><de>Sichtbar</de></text>
+                             <text><en>Delete</en><de>löschen</de></text>
+                             </trl>'
         ));
         $select = $model->select();
         $select->whereEquals('en', 'Delete');
@@ -197,10 +213,10 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
-            				 <text><en>Visible</en><de>Sichtbar</de></text>
-            				 <text><en>Delete</en><de>löschen</de></text>
-            				 </trl>',
-        	'primaryKey' => ''
+                             <text><en>Visible</en><de>Sichtbar</de></text>
+                             <text><en>Delete</en><de>löschen</de></text>
+                             </trl>',
+            'primaryKey' => ''
         ));
         $select = $model->select();
         $select->whereEquals('en', 'Delete');
@@ -216,9 +232,9 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
-            				 <text><en>Visible</en><de>Sichtbar</de></text>
-            				 <text><en>Delete</en><de>löschen</de></text>
-            				 </trl>',
+                             <text><en>Visible</en><de>Sichtbar</de></text>
+                             <text><en>Delete</en><de>löschen</de></text>
+                             </trl>',
             'primaryKey' => 'en'
         ));
         $select = $model->select();
@@ -245,9 +261,9 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
-            				 <text><ident>1</ident><en>Visible</en><de>Sichtbar</de></text>
-            				 <text><ident>2</ident><en>Delete</en><de>löschen</de></text>
-            				 </trl>',
+                             <text><ident>1</ident><en>Visible</en><de>Sichtbar</de></text>
+                             <text><ident>2</ident><en>Delete</en><de>löschen</de></text>
+                             </trl>',
             'primaryKey' => 'ident'
         ));
 
@@ -262,9 +278,9 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
             'xpath' => '/trl',
             'topNode' => 'text',
             'xmlContent' => '<trl>
-            				 <text><ident>1</ident><en>Visible</en><de>Sichtbar</de></text>
-            				 <text><ident>2</ident><en>Delete</en><de>löschen</de></text>
-            				 </trl>',
+                             <text><ident>1</ident><en>Visible</en><de>Sichtbar</de></text>
+                             <text><ident>2</ident><en>Delete</en><de>löschen</de></text>
+                             </trl>',
             'primaryKey' => 'ident'
         ));
 
@@ -317,13 +333,13 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
 
         //check ob der file richtig geschrieben wurde
         $contents = file_get_contents($tmpfname);
-		$simpleXml = new SimpleXMLElement($contents);
-		$xml = $simpleXml->asXML();
-		$this->assertTrue((bool)strpos($xml, '<en>german</en>'));
-		$this->assertTrue((bool)strpos($xml, '<de>deutsch</de>'));
-		$this->assertFalse((bool)strpos($xml, '<en>english</en>'));
-		$this->assertFalse((bool)strpos($xml, '<de>englisch</de>'));
-		unlink($tmpfname);
+        $simpleXml = new SimpleXMLElement($contents);
+        $xml = $simpleXml->asXML();
+        $this->assertTrue((bool)strpos($xml, '<en>german</en>'));
+        $this->assertTrue((bool)strpos($xml, '<de>deutsch</de>'));
+        $this->assertFalse((bool)strpos($xml, '<en>english</en>'));
+        $this->assertFalse((bool)strpos($xml, '<de>englisch</de>'));
+        unlink($tmpfname);
     }
 
     public function testXmlFindContextNull ()
