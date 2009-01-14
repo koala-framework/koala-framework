@@ -64,6 +64,7 @@ class Vps_Trl
         $config = Zend_Registry::get('config');
         if (!Zend_Registry::get('userModel') ||
             !Zend_Registry::get('userModel')->getAuthedUser() ||
+            !isset(Zend_Registry::get('userModel')->getAuthedUser()->language) ||
             !Zend_Registry::get('userModel')->getAuthedUser()->language)
             {
                 return $this->getWebCodeLanguage();
