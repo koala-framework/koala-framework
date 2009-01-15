@@ -9,11 +9,25 @@ class Vpc_Directories_Category_View_Component
         return $ret;
     }
 
-    public static function getItemCountCacheId($row)
+    public function getItemCountCacheId($row)
     {
         // Row kann von hier (Model) oder von Admin (DB-Row) kommen
+        $c = $this->getData();
+        while ($c) {
+            $isSubroot = Vps_Component_Abstract::getFlag($c->componentClass, 'subroot');
+            if ($isSubroot) {
+                break;
+            }
+            $c = $c->parent;
+        }
+        if (!$c) {
+            $cacheClass = '';
+        } else {
+            $cacheClass = $c->componentClass;
+        }
+
         if ($row instanceof Vps_Model_Row_Interface) $row = $row->getRow();
-        return 'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getTable()).$row->id.'_itemCount';
+        return $cacheClass.'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getTable()).$row->id.'_itemCount';
     }
 
     public static function getItemCountCache()
@@ -35,7 +49,7 @@ class Vpc_Directories_Category_View_Component
         $cache = self::getItemCountCache();
 
         foreach ($items as &$item) {
-            $cacheId = self::getItemCountCacheId($item->row);
+            $cacheId = $this->getItemCountCacheId($item->row);
 
             if (($item->listCount = $cache->load($cacheId)) == false) {
                 if (!isset($itemDirectory)) {
