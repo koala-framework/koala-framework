@@ -63,6 +63,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
             $rowset = array($root);
         } else if (isset($where['parent_id'])) {
             $page = $root->getComponentById($where['parent_id'], array('ignoreVisible' => true));
+            if (!$page) d($where['parent_id']);
             $rowset = array_values($page->getChildComponents($this->_constraints));
 
             $constraints = $this->_constraints;
