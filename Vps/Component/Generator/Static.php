@@ -23,8 +23,14 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
                     'componentClass' => $this->_class
                 ));
             } else {
+                $parentSelect = new Vps_Component_Select();
+                $parentSelect->copyParts(array(
+                    Vps_Component_Select::WHERE_SUBROOT,
+                    Vps_Component_Select::WHERE_ON_SAME_PAGE),
+                    $select
+                );
                 $parentData = Vps_Component_Data_Root::getInstance()
-                            ->getComponentsBySameClass($this->_class);
+                            ->getComponentsBySameClass($this->_class, $parentSelect);
             }
         }
         $parentDatas = is_array($parentData) ? $parentData : array($parentData);

@@ -19,7 +19,6 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
 
     public function getDomains($parentData = null, $select = null)
     {
-        /*
         $c = null;
         if ($select instanceof Vps_Component_Select) {
             if ($select->hasPart(Vps_Component_Select::WHERE_ON_SAME_PAGE)) {
@@ -28,6 +27,7 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
             if (!$c && $select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
                 $c = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
             }
+            if (is_array($c)) $c = array_shift($c);
         }
         if (!$c && $parentData) {
             $c = $parentData;
@@ -37,9 +37,14 @@ class Vpc_Root_DomainRoot_Category_PageGenerator extends Vpc_Root_Category_PageG
             while($c && !$c instanceof Vpc_Root_DomainRoot_Domain_Data) {
                 $c = $c->parent;
             }
-            if ($c) return array($c->row->id);
+            if ($c) {
+                $classes = $c->getGenerator('category')->getChildComponentClasses();
+                if ($classes['category'] != $this->_class) {
+                    return array();
+                }
+                return array($c->row->id);
+            }
         }
-        */
 
         $components = Vps_Component_Data_Root::getInstance()->getChildComponents();
         $domains = array();
