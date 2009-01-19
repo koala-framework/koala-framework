@@ -19,7 +19,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
     public function getTemplateVars()
     {
         if (Vpc_Abstract::hasSetting(get_class($this), 'default')) {
-            throw new Vps_Exception("Setting 'default' doesn't exist anymore for html components, you need to overwrite the Model.");
+            throw new Vps_Exception("Setting 'default' doesn't exist anymore for ".get_class($this).", you need to overwrite the Model.");
         }
         $ret = parent::getTemplateVars();
         $c = $this->_getRow()->content;
