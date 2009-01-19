@@ -14,16 +14,24 @@ class Vps_Component_Generator_Plugin_Test extends PHPUnit_Framework_TestCase
 
     public function testPlugin()
     {
-        $this->markTestIncomplete();
+        $components = $this->_root->getChildComponents(array(
+            'componentClasses' => array('Vps_Component_Generator_Plugin_Static')
+        ));
+        $this->assertEquals(1, count($components));
+
+        $components = $this->_root->getRecursiveChildComponents(array(
+            'componentClasses' => array('Vps_Component_Generator_Plugin_Static')
+        ));
+        $this->assertEquals(1, count($components));
 
         $generators = Vps_Component_Generator_Abstract::getInstances(
             'Vps_Component_Generator_Plugin_Static',
-            array('componentClasses' => array('Vps_Component_Plugin_Password_Component'))
+            array('componentClasses' => array('Vps_Component_Plugin_Password_LoginForm_Component'))
         );
         $this->assertEquals(1, count($generators));
 
         $components = $this->_root->getRecursiveChildComponents(array(
-            'componentClasses' => array('Vps_Component_Plugin_Password_Component')
+            'componentClasses' => array('Vps_Component_Plugin_Password_LoginForm_Component')
         ));
         $this->assertEquals(1, count($components));
 

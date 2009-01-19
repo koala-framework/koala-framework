@@ -3,6 +3,7 @@ abstract class Vps_Component_Generator_Abstract
 {
     protected $_class;
     protected $_settings;
+    protected $_pluginBaseComponentClass = false;
 
     protected $_loadTableFromComponent = false;
 
@@ -80,9 +81,9 @@ abstract class Vps_Component_Generator_Abstract
         self::$instances = array();
     }
 
-    public static function getInstance($componentClass, $key, $settings = array())
+    public static function getInstance($componentClass, $key, $settings = array(), $pluginBaseComponentClass = false)
     {
-        $instanceKey = $componentClass . '_' . $key;
+        $instanceKey = $componentClass . '_' . $key . '_' . $pluginBaseComponentClass;
         if (!isset(self::$instances[$instanceKey])) {
             if (empty($settings)) {
                 $settings = Vpc_Abstract::getSetting($componentClass, 'generators');
@@ -102,16 +103,19 @@ abstract class Vps_Component_Generator_Abstract
             }
             $settings['generator'] = $key;
             self::$instances[$instanceKey] = new $settings['class']($componentClass, $settings);
+            if ($pluginBaseComponentClass) {
+                self::$instances[$instanceKey]->_pluginBaseComponentClass = $pluginBaseComponentClass;
+            }
         }
         return self::$instances[$instanceKey];
     }
 
-    private static function _getGeneratorsForComponent($componentClass)
+    private static function _getGeneratorsForComponent($componentClass, $pluginBaseComponentClass)
     {
         $ret = array();
         $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
         foreach ($generators as $key => $generator) {
-            $ret[] = self::getInstance($componentClass, $key, $generator);
+            $ret[] = self::getInstance($componentClass, $key, $generator, $pluginBaseComponentClass);
         }
         return $ret;
     }
@@ -149,14 +153,14 @@ abstract class Vps_Component_Generator_Abstract
             Vps_Benchmark::count('Generator::getInst semi-hit');
             $generators = array();
             foreach ($cachedGeneratorData as $g) {
-                $generators[] = self::getInstance($g['componentClass'], $g['key']);
+                $generators[] = self::getInstance($g['componentClass'], $g['key'], array(), $g['pluginBaseComponentClass']);
             }
         } else {
             Vps_Benchmark::count('Generator::getInst miss', $cacheId);
 
-            $generators = self::_getGeneratorsForComponent($componentClass);
+            $generators = self::_getGeneratorsForComponent($componentClass, false);
             foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
-                $generators = array_merge($generators, self::_getGeneratorsForComponent($pluginClass));
+                $generators = array_merge($generators, self::_getGeneratorsForComponent($pluginClass, $componentClass));
             }
             if (is_object($component) && $component->inheritClasses) {
                 $ic = $component->inheritClasses;
@@ -223,7 +227,8 @@ abstract class Vps_Component_Generator_Abstract
             $cachedGeneratorData = array();
             foreach ($generators as $g) {
                 $cachedGeneratorData[] = array('componentClass' => $g->_class,
-                                               'key' => $g->_settings['generator']);
+                                               'key' => $g->_settings['generator'],
+                                               'pluginBaseComponentClass' => $g->_pluginBaseComponentClass);
             }
             $cache->save($cachedGeneratorData, $cacheId);
         }
@@ -543,6 +548,16 @@ abstract class Vps_Component_Generator_Abstract
     public function getGeneratorKey()
     {
         return $this->_settings['generator'];
+    }
+
+    /**
+     * Wenn Generator von einem Plugin, gibt es Komponenten-Klasse der Komponente
+     * die das Plugin beinhaltet zurück.
+     * Wenn Generator in einer normalen Komponente false.
+     */
+    public function getPluginBaseComponentClass()
+    {
+        return $this->_pluginBaseComponentClass;
     }
 
 }
