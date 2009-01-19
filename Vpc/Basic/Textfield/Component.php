@@ -9,9 +9,7 @@ class Vpc_Basic_Textfield_Component extends Vpc_Basic_Html_Component
     {
         return array_merge(parent::getSettings(), array(
             'componentName' => trlVps('Headline'),
-            'default' => array(
-                'content' => ''
-            )
+            'modelname' => 'Vpc_Basic_Textfield_Model'
         ));
     }
 }
