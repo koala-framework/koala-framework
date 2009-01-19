@@ -1,10 +1,10 @@
 <?php
-class Vpc_Basic_Html_Form extends Vpc_Abstract_Form
+class Vpc_Basic_Html_Form extends Vpc_Abstract_Composite_Form
 {
-    public function __construct($name, $class, $id = null)
+    protected function _initFields()
     {
-        parent::__construct($name, $class, $id);
-        $this->fields->add(new Vps_Form_Field_TextArea('content'))
+        parent::_initFields();
+        $this->fields->prepend(new Vps_Form_Field_TextArea('content'))
             ->setFieldLabel(trlVps('Content'))
             ->setHeight(225)
             ->setWidth(450);
