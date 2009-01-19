@@ -218,7 +218,11 @@ class Vps_Component_Data
         $staticGeneratorComponentClasses = array();
         foreach ($generators as $k=>$g) {
             if ($g['static']) {
-                $staticGeneratorComponentClasses[] = $g['class'];
+                if ($g['pluginBaseComponentClass']) {
+                    $staticGeneratorComponentClasses[] = $g['pluginBaseComponentClass'];
+                } else {
+                    $staticGeneratorComponentClasses[] = $g['class'];
+                }
             }
         }
         if ($staticGeneratorComponentClasses) {
@@ -229,12 +233,13 @@ class Vps_Component_Data
                 if ($g['static']) {
                     $parentDatas = array();
                     foreach ($pd as $d) {
-                        if ($d->componentClass == $g['class']) {
+                        if ($d->componentClass == $g['class'] || $d->componentClass == $g['pluginBaseComponentClass']) {
                             $parentDatas[] = $d;
                         }
                     }
                     if ($parentDatas) {
-                        $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
+                        $gen = Vps_Component_Generator_Abstract
+                                ::getInstance($g['class'], $g['key'], array(), $g['pluginBaseComponentClass']);
                         foreach ($gen->getChildData($parentDatas, $select) as $d) {
                             if (!in_array($d, $ret, true)) {
                                 $ret[] = $d;
@@ -264,6 +269,7 @@ class Vps_Component_Data
                     $ret[] = array(
                         'static' => $generator instanceof Vps_Component_Generator_Static,
                         'class' => $generator->getClass(),
+                        'pluginBaseComponentClass' => $generator->getPluginBaseComponentClass(),
                         'key' => $generator->getGeneratorKey()
                     );
                 }
