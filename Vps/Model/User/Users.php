@@ -213,6 +213,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
 
     public function getAuthedUser()
     {
+        if (php_sapi_name() == 'cli') return null;
         if (!isset($this->_authedUser)) {
             $loginData = Vps_Auth::getInstance()->getStorage()->read();
             if (!$loginData) return null;
