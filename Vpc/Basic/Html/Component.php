@@ -3,19 +3,14 @@
  * @package Vpc
  * @subpackage Basic
  */
-class Vpc_Basic_Html_Component extends Vpc_Abstract
+class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlVps('Html'),
             'componentIcon' => new Vps_Asset('tag'),
-            'tablename'     => 'Vpc_Basic_Html_Model',
-            'width'         => 400,
-            'height'        => 400,
-            'default'       => array(
-                'content' => Vpc_Abstract::LOREM_IPSUM
-            )
+            'modelname'     => 'Vpc_Basic_Html_Model'
         ));
         $ret['flags']['searchContent'] = true;
         return $ret;
@@ -24,7 +19,17 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['content'] = $this->_getRow()->content;
+        $c = $this->_getRow()->content;
+        preg_match_all('#{([a-z0-9]+)}#', $c, $m);
+        if ($m[0]) {
+            $helper = new Vps_View_Helper_Component;
+            foreach ($m[1] as $i) {
+                if (isset($ret[$i]) && $ret[$i] instanceof Vps_Component_Data) {
+                    $c = str_replace('{'.$i.'}', $helper->component($ret[$i]), $c);
+                }
+            }
+        }
+        $ret['content'] = $c;
         return $ret;
     }
 
