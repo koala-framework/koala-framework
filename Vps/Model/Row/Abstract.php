@@ -220,7 +220,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         if ($field && isset($this->$field)) {
             return $this->$field;
         }
-        throw new Vps_Exception('Either override __toString() or define $_toStringField in Model');
+        throw new Vps_Exception('Either override __toString() or define $_toStringField in Model '.get_class($this->getModel()).'');
     }
 
     /**
