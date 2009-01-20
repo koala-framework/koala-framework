@@ -17,7 +17,7 @@
                     <div class="detail"><?=$this->componentLink($item, trlVps('Detail info').' ...');?></div>
                 </div>
                 <div class="orderStuff">
-                    <div class="productPrice"><?=trl('EUR')?> <?=$this->money($item->row->price,'');?></div>
+                    <div class="productPrice"><?=trlVps('EUR')?> <?=$this->money($item->row->price,'');?></div>
                     <?=$this->component($item->addToCart);?>
                 </div>
             </div>

@@ -29,7 +29,7 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
     {
         $webCode = Zend_Registry::get('config')->service->users->webcode;
         if (is_null($webCode)) {
-            throw new Vps_Exception(trlVps("'service.users.webcode' not defined in config"));
+            throw new Vps_Exception(("'service.users.webcode' not defined in config"));
         }
         return $webCode;
     }

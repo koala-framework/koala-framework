@@ -35,7 +35,7 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
     public function copyFile($file, $filename, $extension, $mimeType = null)
     {
         if (!file_exists($file)) {
-            throw new Vps_Exception(trlVps("File {0} does not exist", '\''.$file.'\''));
+            throw new Vps_Exception("File '$file' does not exist");
         }
         $this->writeFile(file_get_contents($file), $filename, $extension, $mimeType);
         return $this;

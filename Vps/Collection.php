@@ -47,7 +47,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
         if (is_null($offset)) {
             $this->add($value);
         } else {
-            throw new Vps_Exception(trlVps("Not yet Implemented."));
+            throw new Vps_Exception(("Not yet Implemented."));
         }
     }
 
@@ -69,7 +69,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
                 return;
             }
         }
-        throw new Vps_Exception(trlVps("Offset {0} not found", '\''.$offset.'\''));
+        throw new Vps_Exception("Offset '$offset' not found");
     }
 
     //IteratorAggregate
@@ -156,7 +156,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
             $value = new $this->_defaultClass($value);
         }
         if (!$value instanceof Vps_Collection_Item_Interface) {
-            throw new Vps_Exception(trlVps("Vps_Collection can hold only items with Vps_Collection_Item_Interface"));
+            throw new Vps_Exception(("Vps_Collection can hold only items with Vps_Collection_Item_Interface"));
         }
         return $value;
     }
