@@ -7,7 +7,7 @@
         </p>
     <? } ?>
     <? if ($this->lostPassword) { ?>
-        <p><?=trlVps("If you have lost your password, ")?>
+        <p><?=trlVps("If you have lost your password,")?>
         <?=$this->componentLink($this->lostPassword, trlVps('request a new one here'))?>.
         </p>
     <? } ?>

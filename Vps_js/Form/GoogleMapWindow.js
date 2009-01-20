@@ -27,29 +27,29 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
             scope : this
         }, this.actions.clear);
 
-		this.buttons = [
-		{
-			text: trlVps('Cancel'),
-			handler: function() {
-				this.hide();
-			},
-			scope: this
-		},{
-			text: trlVps('Ok'),
-			handler: function() {
-				this.clear = false;
-				this.fireEvent('confirm', this);
-				this.hide();
-			},
-			scope: this
-		}];
-		Vps.Form.GoogleMapWindow.superclass.initComponent.call(this);
-	},
-	afterRender:function(){
-		Vps.Form.GoogleMapWindow.superclass.afterRender.call(this);
-	    this.map = new GMap2(this.body.dom);
-		this.geocoder = new GClientGeocoder();
-		this.map.addControl(new GLargeMapControl());
+        this.buttons = [
+        {
+            text: trlVps('Cancel'),
+            handler: function() {
+                this.hide();
+            },
+            scope: this
+        },{
+            text: trlVps('Ok'),
+            handler: function() {
+                this.clear = false;
+                this.fireEvent('confirm', this);
+                this.hide();
+            },
+            scope: this
+        }];
+        Vps.Form.GoogleMapWindow.superclass.initComponent.call(this);
+    },
+    afterRender:function(){
+        Vps.Form.GoogleMapWindow.superclass.afterRender.call(this);
+        this.map = new GMap2(this.body.dom);
+        this.geocoder = new GClientGeocoder();
+        this.map.addControl(new GLargeMapControl());
         this.buttons = [
         {
             text: trlVps('Cancel'),
@@ -80,12 +80,12 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
 
             var point = new GLatLng(47.9534, 13.2448);
             this.marker = new GMarker(point, {draggable: true});
-			//TODO falscher startort
-			if (this.markerpoint_x) {
-				this.setMarkerPoint(this.markerpoint_y+';'+this.markerpoint_x);
-			} else {
-				this.setMarkerPoint ('47.9534;13.2448');
-			}
+            //TODO falscher startort
+            if (this.markerpoint_x) {
+                this.setMarkerPoint(this.markerpoint_y+';'+this.markerpoint_x);
+            } else {
+                this.setMarkerPoint ('47.9534;13.2448');
+            }
 
             GEvent.addListener(this.marker, 'click',     this.showLatLng.createDelegate(this));
             GEvent.addListener(this.marker, 'dragstart', this.hideLatLng.createDelegate(this));
@@ -93,7 +93,7 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
         }, this);
     },
     addressPrompt:function(){
-        Ext.Msg.prompt(trlVps('enter address'), trlVps('Example: Pfongauerstraße 67, 5202 Neumarkt am Wallersee'), function(btn, text){
+        Ext.Msg.prompt(trlVps('enter address'), trlVps('Example')+': Pfongauerstraße 67, 5202 Neumarkt am Wallersee', function(btn, text){
             if (btn == 'ok' && text != ''){
                 this.geoCodeLookup(text);
             }
@@ -145,29 +145,29 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
                         this.setMarkerPoint(this.placemarks[index].Point.coordinates[1]+';'+this.placemarks[index].Point.coordinates[0]);
                     }, this);
 
-					var win = new Ext.Window({
-						modal: true,
-						title: trlVps('Possible Destinations'),
-						width:400,
-						height:250,
-						shadow:true,
-						closeAction: 'close',
-						layout: 'fit',
-						buttons: [{
-							text: 'Ok',
-							handler: function() {
-								win.close();
-							},
-							scope: this
-						}],
-						items: [grid]
-            		});
-					win.show();
-				} else {
-					this.setMarkerPoint(place.Point.coordinates[1]+';'+place.Point.coordinates[0]);
-				}
-			}
-	  	}
+                    var win = new Ext.Window({
+                        modal: true,
+                        title: trlVps('Possible Destinations'),
+                        width:400,
+                        height:250,
+                        shadow:true,
+                        closeAction: 'close',
+                        layout: 'fit',
+                        buttons: [{
+                            text: 'Ok',
+                            handler: function() {
+                                win.close();
+                            },
+                            scope: this
+                        }],
+                        items: [grid]
+                    });
+                    win.show();
+                } else {
+                    this.setMarkerPoint(place.Point.coordinates[1]+';'+place.Point.coordinates[0]);
+                }
+            }
+          }
     },
     showLatLng:function(){
         var pnt = this.marker.getPoint();

@@ -56,8 +56,8 @@ Vps.Component.Overview = Ext.extend(Vps.Auto.GridPanel, {
             params: { type: createType, 'class': this.getSelected().data['class'] },
             success: function(a, b, r) {
                 this.reload();
-                Ext.Msg.alert(trlVps('create ')+createType,
-                              trlVps("File successfully created: ")+r.path);
+                Ext.Msg.alert(trlVps('create')+' '+createType,
+                              trlVps("File successfully created:")+" "+r.path);
             },
             scope: this,
             callback: function() {

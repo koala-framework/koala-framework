@@ -11,7 +11,7 @@ class Vpc_Composite_Downloads_Controller extends Vpc_Abstract_List_Controller
             'Vpc_Basic_Download_Component'
         );
 
-        $this->_columns->add(new Vps_Grid_Column($class, trlVps('Beschreibungstext'), 200))
+        $this->_columns->add(new Vps_Grid_Column($class, trlVps('Descriptiontext'), 200))
             ->setData($data);
         parent::_initColumns();
     }

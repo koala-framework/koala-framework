@@ -11,7 +11,7 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['edit'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Forum_Thread_Edit_Component',
-            'name' => trlVps('edit')
+            'name' => trlVps('Edit')
         );
         $ret['name'] = trlVps('Forum');
         return $ret;

@@ -20,7 +20,7 @@
 
     <div class="lastPost">
         <? if ($this->lastPost) { ?>
-        <strong><?= trlVps('Last entry') ?>:</strong>
+        <strong><?= trlVps('Last Entry') ?>:</strong>
         <?= $this->componentLink($this->lastPost->user) ?>
         <div class="time"><?= $this->timestamp($this->lastPost->row->create_time) ?></div>
         <? } ?>

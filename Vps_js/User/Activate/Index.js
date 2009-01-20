@@ -20,9 +20,9 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
                 width: 330,
 
                 items: [{
-                    html: trlVps('Please type in your password. After clicking the button below ')
-                         +trlVps('you are logged in automatically and may use the typed in password ')
-                         +trlVps('for future logins.')+'<br />'+trlVps('Your email address: ')+'<b>' + this.email + '</b>',
+                    html: trlVps('Please type in your password. After clicking the button below')+' '
+                         +trlVps('you are logged in automatically and may use the typed in password'+' ')
+                         +trlVps('for future logins.')+'<br />'+trlVps('Your email address:')+' <b>' + this.email + '</b>',
                     xtype: 'panel',
                     bodyStyle: 'background-color:transparent; padding:5px; margin-bottom:10px;'
                 }, {
