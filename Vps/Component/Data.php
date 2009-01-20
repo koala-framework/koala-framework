@@ -283,7 +283,9 @@ class Vps_Component_Data
                                     $select, $childSelect, $selectHash);
                 foreach ($g as $i) {
                     foreach ($ret as $j) {
-                        if ($j['class'] == $i['class'] && $j['key'] == $i['key']) {
+                        if ($j['class'] == $i['class']
+                                && $j['key'] == $i['key']
+                                && $j['pluginBaseComponentClass'] == $i['pluginBaseComponentClass']) {
                             continue 2;
                         }
                     }
