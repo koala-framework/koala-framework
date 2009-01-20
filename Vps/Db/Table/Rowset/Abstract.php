@@ -43,7 +43,7 @@ abstract class Vps_Db_Table_Rowset_Abstract extends Zend_Db_Table_Rowset_Abstrac
                 if (substr($i, -3) == 'ASC') $i = substr($i, 0, -3);
                 $i = trim($i);
                 if (!isset($row->$i)) {
-                    throw new Vps_Exception(trlVps("Can't sort by {0}, field doesn't exist in row", '\''.$i.'\''));
+                    throw new Vps_Exception("Can't sort by '$i', field doesn't exist in row");
                 }
                 $sortData[$k][] = $row->$i;
             }
@@ -59,7 +59,7 @@ abstract class Vps_Db_Table_Rowset_Abstract extends Zend_Db_Table_Rowset_Abstrac
         $args[] =& $rows; //ohne & hört sich der spaß auf
 
         if (!call_user_func_array('array_multisort', &$args)) {
-            throw new Vps_Exception(trlVps("Can't sort by , array_multisort returned an error", '\''.$order.'\''));
+            throw new Vps_Exception("Can't sort by '$order', array_multisort returned an error");
         }
         $this->_rows = array();
 

@@ -251,13 +251,13 @@ class Vps_Assets_Dependencies
         if (is_string($file) && substr($file, -2)=="/*") {
             $pathType = substr($file, 0, strpos($file, '/'));
             if (!isset($this->_config->path->$pathType)) {
-                throw new Vps_Exception(trlVps("Assets-Path-Type '{0}' not found in config.", $pathType));
+                throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
             }
             $file = substr($file, strpos($file, '/')); //pathtype abschneiden
             $file = substr($file, 0, -1); //* abschneiden
             $path = $this->_config->path->$pathType.$file;
             if (!file_exists($path)) {
-                throw new Vps_Exception(trlVps("Path '{0}' does not exist.", $path));
+                throw new Vps_Exception("Path '$path' does not exist.");
             }
             $DirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
             foreach ($DirIterator as $file) {

@@ -3,7 +3,6 @@ class Vps_Trl_Model_Web extends Vps_Trl_Model_Abstract
 {
     public function __construct(array $config = array())
     {
-
         $modelWeb = new Vps_Model_Xml(array(
             'rootNode' => 'trl',
             'xpath' => '/trl',

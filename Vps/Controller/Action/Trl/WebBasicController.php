@@ -8,6 +8,7 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
     protected $_paging = 30;
     protected $_columns;
     protected $_colNames = array();
+    protected $_showAllLanguages = false;
 
     protected function _initColumns()
     {
@@ -28,9 +29,10 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
         $plural = array();
         $role = $this->_getAuthData()->role;
         $user_lang = $this->_getAuthData()->language;
+        $showAllLanguages = $role == 'admin' || $this->_showAllLanguages;
 
         //defintion der zu übersetzenden sprachen
-        if ($role == 'admin') {
+        if ($showAllLanguages) {
             if ($config->languages) {
                 foreach($config->languages as $language) {
                     if ($language != $weblang) {
@@ -47,13 +49,13 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
         foreach ($languages as $lang) {
             //Singular
             if ($lang == $weblang) {
-                $this->_columns->add(new Vps_Grid_Column($lang, trlVps("$lang Singular")))
+                $this->_columns->add(new Vps_Grid_Column($lang, $lang." ".trlVps("Singular")))
                     ->setWidth(200)
                     ->setRenderer('notEditable');
                 $this->_colNames[] = $lang;
             } else {
-                if ($lang == $user_lang || $role == 'admin') {
-                    $this->_columns->add(new Vps_Grid_Column($lang, trlVps("$lang Singular")))
+                if ($lang == $user_lang || $showAllLanguages) {
+                    $this->_columns->add(new Vps_Grid_Column($lang, $lang." ".trlVps("Singular")))
                         ->setEditor(new Vps_Form_Field_TextField())
                         ->setWidth(200);;
                     $this->_colNames[] = $lang;
@@ -65,13 +67,13 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
         foreach ($languages as $lang) {
             //Plural
             if ($lang == $weblang) {
-                $this->_columns->add(new Vps_Grid_Column($lang."_plural", $lang.trlVps(" Plural")))
+                $this->_columns->add(new Vps_Grid_Column($lang."_plural", $lang." ".trlVps("Plural")))
                     ->setWidth(200)
                     ->setRenderer('notEditable');
                 $this->_colNames[] = $lang."_plural";
             } else {
-                if ($lang == $user_lang || $role == 'admin') {
-                    $this->_columns->add(new Vps_Grid_Column($lang."_plural", $lang.trlVps(" Plural")))
+                if ($lang == $user_lang || $showAllLanguages) {
+                    $this->_columns->add(new Vps_Grid_Column($lang."_plural", $lang." ".trlVps("Plural")))
                         ->setEditor(new Vps_Form_Field_TextField())
                         ->setWidth(200);
                     $this->_colNames[] = $lang."_plural";

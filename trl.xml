@@ -438,31 +438,6 @@ wurde soeben erstellt.</de>
 <id>171</id>
 </text>
 <text>
-<en>Parent Resource id {0} does not exist</en>
-<de>Parent Resource id {0} existiert nicht</de>
-<id>172</id>
-</text>
-<text>
-<en>autologin failed: {0}</en>
-<de>Automatischer Login ist fehlgeschlagen: {0}</de>
-<id>177</id>
-</text>
-<text>
-<en>Not yet Implemented.</en>
-<de>Noch nicht implementiert.</de>
-<id>178</id>
-</text>
-<text>
-<en>Vps_Collection can hold only items with Vps_Collection_Item_Interface</en>
-<de>Vps_Collection can hold only items with Vps_Collection_Item_Interface</de>
-<id>179</id>
-</text>
-<text>
-<en>Offset {0} not found</en>
-<de>Offset {0} nicht gefunden</de>
-<id>180</id>
-</text>
-<text>
 <en>You don't have enough permissions for this Action</en>
 <de>Sie haben nicht die erforderlichen Befugnisse f&#xFC;r diese Aktion.</de>
 <id>182</id>
@@ -488,16 +463,6 @@ wurde soeben erstellt.</de>
 <id>186</id>
 </text>
 <text>
-<en>_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service</en>
-<de>_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service</de>
-<id>187</id>
-</text>
-<text>
-<en>Login data</en>
-<de>Login-Daten</de>
-<id>189</id>
-</text>
-<text>
 <en>Change password</en>
 <de>Passwort &#xE4;ndern</de>
 <id>190</id>
@@ -506,11 +471,6 @@ wurde soeben erstellt.</de>
 <en>Repeat password</en>
 <de>Passwort wiederholen</de>
 <id>191</id>
-</text>
-<text>
-<en>Personal data</en>
-<de>Pers&#xF6;nliche Daten</de>
-<id>192</id>
 </text>
 <text>
 <en>First name</en>
@@ -558,11 +518,6 @@ wurde soeben erstellt.</de>
 <id>202</id>
 </text>
 <text>
-<en>Param "uploads" has to be set in the file application/config.ini.</en>
-<de>_</de>
-<id>205</id>
-</text>
-<text>
 <en>The file is larger than the maximum upload amount.</en>
 <de>Die Datei &#xFC;bersteigt die maximale Dategr&#xF6;&#xDF;e f&#xFC;r Dateiuploads.</de>
 <id>207</id>
@@ -573,26 +528,6 @@ wurde soeben erstellt.</de>
 <id>208</id>
 </text>
 <text>
-<en>Path for uploads is not writeable: {0}</en>
-<de>Der Pfad f&#xFC;r Dateiuploads ist schreibgesch&#xFC;tzt: {0}</de>
-<id>209</id>
-</text>
-<text>
-<en>File {0} does not exist</en>
-<de>Datei {0} existiert nicht</de>
-<id>210</id>
-</text>
-<text>
-<en>Can't sort by , array_multisort returned an error</en>
-<de>Sortierung nicht m&#xF6;glich, array_multisort liefert einen Fehler zur&#xFC;ck</de>
-<id>212</id>
-</text>
-<text>
-<en>'service.users.webcode' not defined in config</en>
-<de>'service.users.webcode' ist in config nicht definiert</de>
-<id>213</id>
-</text>
-<text>
 <en>An account with this email address already exists</en>
 <de>Es besteht bereits ein Konto mit dieser E-Mail Adresse</de>
 <id>214</id>
@@ -601,11 +536,6 @@ wurde soeben erstellt.</de>
 <en>Passwords are different - please try again</en>
 <de>Passw&#xF6;rter sind unterschiedlich - bitte versuchen Sie es erneut</de>
 <id>215</id>
-</text>
-<text>
-<en>'service.users.url' not defined in config (usually defined in VPS config)</en>
-<de>'service.users.url' ist in config nicht definiert (gew&#xF6;hnlich wird diesen in VPS config definiert)</de>
-<id>227</id>
 </text>
 <text>
 <en>Please enter the text you wish to assign.</en>
@@ -1443,11 +1373,6 @@ wurde soeben erstellt.</de>
 <id>406</id>
 </text>
 <text>
-<en>Components</en>
-<de>Komponenten</de>
-<id>407</id>
-</text>
-<text>
 <en>Language</en>
 <de>Sprache</de>
 <id>408</id>
@@ -1559,12 +1484,11 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>add new entry</en>
-<de>_</de>
 <id>450</id>
 </text>
 <text>
 <en>Edit Paragraph</en>
-<de>_</de>
+<de>Absatz bearbeiten</de>
 <id>451</id>
 </text>
 <text>
@@ -1729,7 +1653,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Tag</en>
-<de>_</de>
+<de>Tag</de>
 <id>500</id>
 </text>
 <text>
@@ -1739,7 +1663,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Selector</en>
-<de>_</de>
+<de>Selektor</de>
 <id>502</id>
 </text>
 <text>
@@ -1749,12 +1673,12 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Normal</en>
-<de>_</de>
+<de>Normal</de>
 <id>504</id>
 </text>
 <text>
 <en>Normal (p)</en>
-<de>_</de>
+<de>Normal (p)</de>
 <id>505</id>
 </text>
 <text>
@@ -2021,21 +1945,6 @@ wurde soeben erstellt.</de>
 <en>Html</en>
 <de>HTML</de>
 <id>571</id>
-</text>
-<text>
-<en>Can't sort by {0}, field doesn't exist in row</en>
-<de>Nach {0} kann nicht sorteirt werden, das Feld existiert nicht als Spalte</de>
-<id>572</id>
-</text>
-<text>
-<en>Assets-Path-Type '{0}' not found in config.</en>
-<de>Der Assets-Path-Type '{0}' konnte in der config nicht gefunden werden.</de>
-<id>573</id>
-</text>
-<text>
-<en>Path '{0}' does not exist.</en>
-<de>Der Pfad '{0}' existiert nicht.</de>
-<id>574</id>
 </text>
 <text>
 <en>Cannot set Home Page invisible</en>
@@ -2695,11 +2604,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>726</id>
 </text>
 <text>
-<en>Internal Server Error</en>
-<de>_</de>
-<id>727</id>
-</text>
-<text>
 <en>Link to concerning thread:</en>
 <de>_</de>
 <id>730</id>
@@ -3227,11 +3131,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>846</id>
 </text>
 <text>
-<en>News</en>
-<de>_</de>
-<id>847</id>
-</text>
-<text>
 <en>Ok</en>
 <de>_</de>
 <id>851</id>
@@ -3362,11 +3261,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>883</id>
 </text>
 <text>
-<en>Events</en>
-<de>_</de>
-<id>884</id>
-</text>
-<text>
 <en>Shop</en>
 <de>_</de>
 <id>885</id>
@@ -3482,9 +3376,64 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>913</id>
 </text>
 <text>
-<en>visible</en>
-<de>_</de>
-<id>914</id>
+<en>Size of Target Image</en>
+<id>915</id>
+</text>
+<text>
+<en>If size does not fit, scale method will be</en>
+<id>916</id>
+</text>
+<text>
+<en>Assets Select</en>
+<id>917</id>
+</text>
+<text>
+<en>Section</en>
+<id>918</id>
+</text>
+<text>
+<en>Properties</en>
+<id>919</id>
+</text>
+<text>
+<en>Edit News</en>
+<id>920</id>
+</text>
+<text>
+<en>Fehler</en>
+<id>921</id>
+</text>
+<text>
+<en>Id</en>
+<id>922</id>
+</text>
+<text>
+<en>Context</en>
+<id>923</id>
+</text>
+<text>
+<en>English Singular</en>
+<id>924</id>
+</text>
+<text>
+<en>English Plural</en>
+<id>925</id>
+</text>
+<text>
+<en>(offline hidden)</en>
+<id>927</id>
+</text>
+<text>
+<en>Favicon</en>
+<id>928</id>
+</text>
+<text>
+<en>Singular</en>
+<id>929</id>
+</text>
+<text>
+<en>Plural</en>
+<id>930</id>
 </text>
 </trl>
 

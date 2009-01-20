@@ -20,10 +20,10 @@ class Vps_Controller_Action_Trl_WebEditController extends Vps_Controller_Action_
         if ($config->languages) {
             foreach ($config->languages as $lang) {
                 if ($lang != $weblang) {
-                    $this->_form->add(new Vps_Form_Field_TextField($lang, trlVps("$lang. Singular")))->setWidth(400);
+                    $this->_form->add(new Vps_Form_Field_TextField($lang, $lang." ".trlVps("Singular")))->setWidth(400);
                     $this->_colNames[] = $lang;
 
-                    $this->_form->add(new Vps_Form_Field_TextField("$lang._plural", trlVps("$lang. Plural")))->setWidth(400);
+                    $this->_form->add(new Vps_Form_Field_TextField("$lang._plural", $lang." ".trlVps("Plural")))->setWidth(400);
                     $this->_colNames[] = "$lang._plural";
                 }
             }
