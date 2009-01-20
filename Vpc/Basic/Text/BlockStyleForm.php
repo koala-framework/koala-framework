@@ -7,12 +7,12 @@ class Vpc_Basic_Text_BlockStyleForm extends Vpc_Basic_Text_InlineStyleForm
         $tag = $this->fields->insertAfter('name', new Vps_Form_Field_Select('tag', trlVps('Tag')))
             ->setValues(array(
                 'p'    => trlVps('Normal (p)'),
-                'h1'   => trlVps('Überschrift 1 (h1)'),
-                'h2'   => trlVps('Überschrift 2 (h2)'),
-                'h3'   => trlVps('Überschrift 3 (h3)'),
-                'h4'   => trlVps('Überschrift 4 (h4)'),
-                'h5'   => trlVps('Überschrift 5 (h5)'),
-                'h6'   => trlVps('Überschrift 6 (h6)')
+                'h1'   => trlVps('Headline 1 (h1)'),
+                'h2'   => trlVps('Headline 2 (h2)'),
+                'h3'   => trlVps('Headline 3 (h3)'),
+                'h4'   => trlVps('Headline 4 (h4)'),
+                'h5'   => trlVps('Headline 5 (h5)'),
+                'h6'   => trlVps('Headline 6 (h6)')
              ))
             ->setAllowBlank(false)
             ->setDefaultValue('p');

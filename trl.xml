@@ -6,11 +6,6 @@
 <id>2</id>
 </text>
 <text>
-<en>Copyright 2007 Vivid Planet Software GmbH</en>
-<de>Copyright 2007 Vivid Planet Software GmbH</de>
-<id>4</id>
-</text>
-<text>
 <en>Error</en>
 <de>Fehler</de>
 <id>5</id>
@@ -281,11 +276,6 @@ wurde soeben erstellt.</de>
 <en>Last Entry</en>
 <de>Letzter Beitrag</de>
 <id>91</id>
-</text>
-<text>
-<en>Last entry</en>
-<de>Letzter Beitrag</de>
-<id>92</id>
 </text>
 <text>
 <en>at</en>
@@ -568,13 +558,13 @@ wurde soeben erstellt.</de>
 <id>234</id>
 </text>
 <text>
-<en>create </en>
-<de>erstellen </de>
+<en>create</en>
+<de>erstellen</de>
 <id>235</id>
 </text>
 <text>
-<en>File successfully created: </en>
-<de>Datei wurde erfolgreich erstellt: </de>
+<en>File successfully created:</en>
+<de>Datei wurde erfolgreich erstellt:</de>
 <id>236</id>
 </text>
 <text>
@@ -668,8 +658,8 @@ wurde soeben erstellt.</de>
 <id>259</id>
 </text>
 <text>
-<en>Example: Pfongauerstra&#xDF;e 67, 5202 Neumarkt am Wallersee</en>
-<de>Beispiel: Pfongauerstra&#xDF;e 67, 5202 Neumarkt am Wallersee</de>
+<en>Example</en>
+<de>Beispiel</de>
 <id>260</id>
 </text>
 <text>
@@ -758,13 +748,13 @@ wurde soeben erstellt.</de>
 <id>279</id>
 </text>
 <text>
-<en>Please type in your password. After clicking the button below </en>
-<de>Bitte geben Sie Ihr Passwort ein. Nach dem Klick auf den unteren Button </de>
+<en>Please type in your password. After clicking the button below</en>
+<de>Bitte geben Sie Ihr Passwort ein. Nach dem Klick auf den unteren Button</de>
 <id>280</id>
 </text>
 <text>
-<en>you are logged in automatically and may use the typed in password </en>
-<de>werden Sie automatisch angemeldet und k&#xF6;nnen das eingegebenen Passwort </de>
+<en>you are logged in automatically and may use the typed in password</en>
+<de>werden Sie automatisch angemeldet und k&#xF6;nnen das eingegebenen Passwort</de>
 <id>281</id>
 </text>
 <text>
@@ -773,8 +763,8 @@ wurde soeben erstellt.</de>
 <id>282</id>
 </text>
 <text>
-<en>Your email address: </en>
-<de>Ihre E-Mail Adresse: </de>
+<en>Your email address:</en>
+<de>Ihre E-Mail Adresse:</de>
 <id>283</id>
 </text>
 <text>
@@ -1444,7 +1434,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Show Original</en>
-<de>_</de>
+<de>Original zeigen</de>
 <id>439</id>
 </text>
 <text>
@@ -1459,7 +1449,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Original Size</en>
-<de>_</de>
+<de>Originalgr&#xF6;e</de>
 <id>443</id>
 </text>
 <text>
@@ -1484,6 +1474,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>add new entry</en>
+<de>neuen Eintrag hinzuf&#xFC;gen</de>
 <id>450</id>
 </text>
 <text>
@@ -1682,36 +1673,6 @@ wurde soeben erstellt.</de>
 <id>505</id>
 </text>
 <text>
-<en>&#xDC;berschrift 1 (h1)</en>
-<de>_</de>
-<id>506</id>
-</text>
-<text>
-<en>&#xDC;berschrift 2 (h2)</en>
-<de>_</de>
-<id>507</id>
-</text>
-<text>
-<en>&#xDC;berschrift 3 (h3)</en>
-<de>_</de>
-<id>508</id>
-</text>
-<text>
-<en>&#xDC;berschrift 4 (h4)</en>
-<de>_</de>
-<id>509</id>
-</text>
-<text>
-<en>&#xDC;berschrift 5 (h5)</en>
-<de>_</de>
-<id>510</id>
-</text>
-<text>
-<en>&#xDC;berschrift 6 (h6)</en>
-<de>_</de>
-<id>511</id>
-</text>
-<text>
 <en>Block-Styles</en>
 <de>Absatz-Formatvorlagen</de>
 <id>512</id>
@@ -1780,11 +1741,6 @@ wurde soeben erstellt.</de>
 <en>You can't delete master styles</en>
 <de>Master Formatvorlagen k&#xF6;nnen nicht gel&#xF6;scht werden</de>
 <id>525</id>
-</text>
-<text>
-<en>Beschreibungstext</en>
-<de>Beschreibungstext</de>
-<id>526</id>
 </text>
 <text>
 <en>Linktype</en>
@@ -2023,7 +1979,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Revision</en>
-<de>_</de>
+<de>Revision</de>
 <id>598</id>
 </text>
 <text>
@@ -2058,7 +2014,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Select Page</en>
-<de>_</de>
+<de>Seite ausw&#xE4;hlen</de>
 <id>606</id>
 </text>
 <text>
@@ -2070,11 +2026,6 @@ wurde soeben erstellt.</de>
 <en>Error sending the mail.</en>
 <de>Fehler beim senden der Email.</de>
 <id>608</id>
-</text>
-<text>
-<en>URL</en>
-<de>URL</de>
-<id>611</id>
 </text>
 <text>
 <en>Open in</en>
@@ -2108,17 +2059,17 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Bestfit</en>
-<de>_</de>
+<de>Anpassen</de>
 <id>619</id>
 </text>
 <text>
 <en>Crop</en>
-<de>_</de>
+<de>Abschneiden</de>
 <id>620</id>
 </text>
 <text>
 <en>Deform</en>
-<de>_</de>
+<de>Verformen</de>
 <id>621</id>
 </text>
 <text>
@@ -2138,22 +2089,22 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>An error has occured</en>
-<de>_</de>
+<de>Ein Fehler ist aufgetreten</de>
 <id>629</id>
 </text>
 <text>
 <en>Offline hidden Html</en>
-<de>_</de>
+<de>Offline verstecktes Html</de>
 <id>630</id>
 </text>
 <text>
 <en>Feed</en>
-<de>_</de>
+<de>Feed</de>
 <id>631</id>
 </text>
 <text>
 <en>Forum</en>
-<de>_</de>
+<de>Forum</de>
 <id>632</id>
 </text>
 <text>
@@ -2185,7 +2136,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Forum.Latest Threads</en>
-<de>_</de>
+<de>Forum.Letzte Eintr&#xE4;ge</de>
 <id>639</id>
 </text>
 <text>
@@ -2244,18 +2195,8 @@ wurde soeben erstellt.</de>
 <id>651</id>
 </text>
 <text>
-<en>Formular</en>
-<de>_</de>
-<id>652</id>
-</text>
-<text>
-<en>Bookmark bei</en>
-<de>_</de>
-<id>654</id>
-</text>
-<text>
 <en>Search engine referer</en>
-<de>_</de>
+<de>Suchmaschinenverweiser</de>
 <id>655</id>
 </text>
 <text>
@@ -2325,7 +2266,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>News.Show categories</en>
-<de>_</de>
+<de>News.Zeige Kategorien</de>
 <id>671</id>
 </text>
 <text>
@@ -2473,12 +2414,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Show</en>
-<de>_</de>
+<de>Zeigen</de>
 <id>701</id>
 </text>
 <text>
 <en>This category can't be deleted, because there exist sub-categories in it.</en>
-<de>_</de>
+<de>Diese Kategorie kann nicht entfernt werden, da Unterkategorie existieren.</de>
 <id>702</id>
 </text>
 <text>
@@ -2493,7 +2434,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Show field</en>
-<de>_</de>
+<de>Zeige Feld</de>
 <id>705</id>
 </text>
 <text>
@@ -2503,12 +2444,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Radio Buttons</en>
-<de>_</de>
+<de>Optionsfelder</de>
 <id>707</id>
 </text>
 <text>
 <en>Permissions</en>
-<de>_</de>
+<de>Berechtigungen</de>
 <id>708</id>
 </text>
 <text>
@@ -2523,7 +2464,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%value%' is an empty string</en>
-<de>_</de>
+<de>'%value%' ist eine leere Zeichenkette</de>
 <id>711</id>
 </text>
 <text>
@@ -2538,27 +2479,27 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%hostname%' does not appear to have a valid MX record for the email address '%value%'</en>
-<de>_</de>
+<de>'%hostname%' erscheint nicht in einem validen MX record f&#xFC;r die E-Mail-Adresse '%value%'</de>
 <id>714</id>
 </text>
 <text>
 <en>'%localPart%' not matched against dot-atom format</en>
-<de>_</de>
+<de>'%localPart%' stimmt nicht mit dem dot-atom Format &#xFC;berein</de>
 <id>715</id>
 </text>
 <text>
 <en>'%localPart%' not matched against quoted-string format</en>
-<de>_</de>
+<de>'%localPart%'stimmt nicht mit dem quoted-string Format &#xFC;berein</de>
 <id>716</id>
 </text>
 <text>
 <en>'%localPart%' is not a valid local part for email address '%value%'</en>
-<de>_</de>
+<de>%localPart%' ist kein valider lokaler Teil f&#xFC;r die E-Mail-Adresse '%value%'</de>
 <id>717</id>
 </text>
 <text>
 <en>'%value%' has not only alphabetic characters</en>
-<de>_</de>
+<de>'%value%' besteht nur aus Buchstaben</de>
 <id>718</id>
 </text>
 <text>
@@ -2588,7 +2529,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>H:i</en>
-<de>_</de>
+<de>H:i</de>
 <id>724</id>
 </text>
 <text>
@@ -2605,7 +2546,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Link to concerning thread:</en>
-<de>_</de>
+<de>Link zum betreffenden Thread:</de>
 <id>730</id>
 </text>
 <text>
@@ -2685,22 +2626,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but cannot match TLD against known list</en>
-<de>_</de>
+<de>'%value%' stimmt nicht mit der TLD Liste &#xFC;berein</de>
 <id>748</id>
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but contains a dash (-) in an invalid position</en>
-<de>_</de>
+<de>'%value%' hat einen Bindestrich (-) an einer ung&#xFC;ltigen Position</de>
 <id>749</id>
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'</en>
-<de>_</de>
+<de>'%value%' stimmt nicht mit dem Schema f&#xFC;r TLD '%tld%' &#xFC;berein</de>
 <id>750</id>
 </text>
 <text>
 <en>'%value%' appears to be a DNS hostname but cannot extract TLD part</en>
-<de>_</de>
+<de>'%value%' kann den TLD Teil nicht extrahieren</de>
 <id>751</id>
 </text>
 <text>
@@ -2736,12 +2677,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Close</en>
-<de>_</de>
+<de>Schlie&#xDF;en</de>
 <id>760</id>
 </text>
 <text>
 <en>Link</en>
-<de>_</de>
+<de>Link</de>
 <id>761</id>
 </text>
 <text>
@@ -2751,7 +2692,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Forum.Forum</en>
-<de>_</de>
+<de>Forum.Forum</de>
 <id>763</id>
 </text>
 <text>
@@ -2761,17 +2702,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Posts.Last Posts</en>
-<de>_</de>
+<de>Eintr&#xE4;e-Letzte Eintr&#xE4;e</de>
 <id>765</id>
 </text>
 <text>
 <en>Forum.User-List</en>
-<de>_</de>
+<de>Forum.Benutzerliste</de>
 <id>767</id>
 </text>
 <text>
 <en>News.News</en>
-<de>_</de>
+<de>News.News</de>
 <id>768</id>
 </text>
 <text>
@@ -2881,27 +2822,27 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Image Positionable</en>
-<de>_</de>
+<de>Bild positionierbar</de>
 <id>790</id>
 </text>
 <text>
 <en>Flash Media Player</en>
-<de>_</de>
+<de>Flash Media Player</de>
 <id>791</id>
 </text>
 <text>
 <en>Element</en>
-<de>_</de>
+<de>Element</de>
 <id>792</id>
 </text>
 <text>
 <en>Start automatically</en>
-<de>_</de>
+<de>automatisch Starten</de>
 <id>793</id>
 </text>
 <text>
 <en>Loop</en>
-<de>_</de>
+<de>Schleife</de>
 <id>794</id>
 </text>
 <text>
@@ -2971,7 +2912,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Paypal</en>
-<de>_</de>
+<de>Paypal</de>
 <id>809</id>
 </text>
 <text>
@@ -2986,42 +2927,42 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>From</en>
-<de>_</de>
+<de>Von</de>
 <id>813</id>
 </text>
 <text>
 <en>To</en>
-<de>_</de>
+<de>Bis</de>
 <id>814</id>
 </text>
 <text>
 <en>Place (City)</en>
-<de>_</de>
+<de>Ort (Stadt)</de>
 <id>815</id>
 </text>
 <text>
 <en>Events.Top</en>
-<de>_</de>
+<de>Veranstaltungen.Oben</de>
 <id>816</id>
 </text>
 <text>
 <en>Events.Events</en>
-<de>_</de>
+<de>Veranstaltungen.Veranstaltungen</de>
 <id>817</id>
 </text>
 <text>
 <en>Start Date</en>
-<de>_</de>
+<de>Beginndatum</de>
 <id>818</id>
 </text>
 <text>
 <en>End Date</en>
-<de>_</de>
+<de>Enddatum</de>
 <id>819</id>
 </text>
 <text>
 <en>Events.Show categories</en>
-<de>_</de>
+<de>Veranstaltungen.Kategorien anzeigen</de>
 <id>820</id>
 </text>
 <text>
@@ -3036,7 +2977,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>EUR</en>
-<de>_</de>
+<de>EUR</de>
 <id>823</id>
 </text>
 <text>
@@ -3132,37 +3073,37 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Ok</en>
-<de>_</de>
+<de>Ok</de>
 <id>851</id>
 </text>
 <text>
 <en>This field should be a URL in the format "http:/</en>
-<de>_</de>
+<de>Diese Feld sollte eine Url im Format "http:/</de>
 <id>852</id>
 </text>
 <text>
 <en>Do you really want to delete this entry:nn"</en>
-<de>_</de>
+<de>Wollen Sie diesen Eintrag:nn wirklich l&#xF6;schen</de>
 <id>855</id>
 </text>
 <text>
 <en>Link.Extern</en>
-<de>_</de>
+<de>Link.Extern</de>
 <id>856</id>
 </text>
 <text>
 <en>Link.FirstChildPage</en>
-<de>_</de>
+<de>Link.ErsteUnterseite</de>
 <id>857</id>
 </text>
 <text>
 <en>a post in an observed thread has been submitted</en>
-<de>_</de>
+<de>ein Eintrag in einem &#xFC;berwachten Thread wurde vorgebracht</de>
 <id>858</id>
 </text>
 <text>
-<en>If you have lost your password, </en>
-<de>Wenn Sie ihr Passwort vergessen haben, k&#xF6;nnen Sie </de>
+<en>If you have lost your password,</en>
+<de>Wenn Sie ihr Passwort vergessen haben, k&#xF6;nnen Sie</de>
 <id>861</id>
 </text>
 <text>
@@ -3202,57 +3143,57 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Image big</en>
-<de>_</de>
+<de>Bild gro&#xDF;</de>
 <id>872</id>
 </text>
 <text>
 <en>Image small</en>
-<de>_</de>
+<de>Bild klein</de>
 <id>873</id>
 </text>
 <text>
 <en>Dogear</en>
-<de>_</de>
+<de>Eselsohr</de>
 <id>874</id>
 </text>
 <text>
 <en>Colors</en>
-<de>_</de>
+<de>Farben</de>
 <id>875</id>
 </text>
 <text>
 <en>Color small 1</en>
-<de>_</de>
+<de>Farbe klein 1</de>
 <id>876</id>
 </text>
 <text>
 <en>Color small 2</en>
-<de>_</de>
+<de>Farbe klein 2</de>
 <id>877</id>
 </text>
 <text>
 <en>Color big 1</en>
-<de>_</de>
+<de>Farbe gro&#xDF; 1</de>
 <id>878</id>
 </text>
 <text>
 <en>Color big 2</en>
-<de>_</de>
+<de>Farbe gro&#xDF; 2</de>
 <id>879</id>
 </text>
 <text>
 <en>Dogears</en>
-<de>_</de>
+<de>Eselsohren</de>
 <id>880</id>
 </text>
 <text>
 <en>Welcome-Image</en>
-<de>_</de>
+<de>Begr&#xFC;&#xDF;ungsbild</de>
 <id>881</id>
 </text>
 <text>
 <en>Login-Image</en>
-<de>_</de>
+<de>Loginbild</de>
 <id>882</id>
 </text>
 <text>
@@ -3262,42 +3203,42 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop</en>
-<de>_</de>
+<de>Shop</de>
 <id>885</id>
 </text>
 <text>
 <en>Products</en>
-<de>_</de>
+<de>Produkte</de>
 <id>886</id>
 </text>
 <text>
 <en>Tags</en>
-<de>_</de>
+<de>Tags</de>
 <id>887</id>
 </text>
 <text>
 <en>Status</en>
-<de>_</de>
+<de>Status</de>
 <id>888</id>
 </text>
 <text>
 <en>Priority</en>
-<de>_</de>
+<de>Priorit&#xE4;t</de>
 <id>889</id>
 </text>
 <text>
 <en>Estimated time</en>
-<de>_</de>
+<de>veranschlagte Zeit</de>
 <id>890</id>
 </text>
 <text>
 <en>Create date</en>
-<de>_</de>
+<de>Datum erzeugen</de>
 <id>891</id>
 </text>
 <text>
 <en>Deadline</en>
-<de>_</de>
+<de>Deadline</de>
 <id>892</id>
 </text>
 <text>
@@ -3322,118 +3263,193 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Fax</en>
-<de>_</de>
+<de>Fax</de>
 <id>897</id>
 </text>
 <text>
 <en>Website</en>
-<de>_</de>
+<de>Webseite</de>
 <id>898</id>
 </text>
 <text>
 <en>Type</en>
-<de>_</de>
+<de>Typ</de>
 <id>900</id>
 </text>
 <text>
 <en>Todo Details</en>
-<de>_</de>
+<de>Todo Details</de>
 <id>901</id>
 </text>
 <text>
-<en>Vivid Planet Software GmbH</en>
-<de>_</de>
-<id>906</id>
-</text>
-<text>
 <en>Contact person</en>
-<de>_</de>
+<de>Kontaktperson</de>
 <id>907</id>
 </text>
 <text>
 <en>test</en>
-<de>_</de>
+<de>test</de>
 <id>909</id>
 </text>
 <text>
 <en>foobar</en>
-<de>_</de>
+<de>foobar</de>
 <id>910</id>
 </text>
 <text>
 <en>Category</en>
-<de>_</de>
+<de>Kategorie</de>
 <id>911</id>
 </text>
 <text>
 <en>Domain</en>
-<de>_</de>
+<de>Domain</de>
 <id>912</id>
 </text>
 <text>
 <en>Show Component</en>
-<de>_</de>
+<de>Komponente anzeigen</de>
 <id>913</id>
 </text>
 <text>
 <en>Size of Target Image</en>
+<de>Gr&#xF6;&#xDF;e des Zielbildes</de>
 <id>915</id>
 </text>
 <text>
 <en>If size does not fit, scale method will be</en>
+<de>Falls die gr&#xF6;&#xDF;e des Bildes nicht passt, wird eine Skalirungsmethode</de>
 <id>916</id>
 </text>
 <text>
 <en>Assets Select</en>
+<de>Assets ausw&#xE4;hlen</de>
 <id>917</id>
 </text>
 <text>
 <en>Section</en>
+<de>Sektion</de>
 <id>918</id>
 </text>
 <text>
 <en>Properties</en>
+<de>Einstellungen</de>
 <id>919</id>
 </text>
 <text>
 <en>Edit News</en>
+<de>Neuigkeiten bearbeiten</de>
 <id>920</id>
 </text>
 <text>
-<en>Fehler</en>
-<id>921</id>
-</text>
-<text>
 <en>Id</en>
+<de>Id</de>
 <id>922</id>
 </text>
 <text>
 <en>Context</en>
+<de>Kontext</de>
 <id>923</id>
 </text>
 <text>
 <en>English Singular</en>
+<de>Englisch Einzahl</de>
 <id>924</id>
 </text>
 <text>
 <en>English Plural</en>
+<de>Englisch Mehrzahl</de>
 <id>925</id>
 </text>
 <text>
 <en>(offline hidden)</en>
+<de>(offline versteckt)</de>
 <id>927</id>
 </text>
 <text>
 <en>Favicon</en>
+<de>Favicon</de>
 <id>928</id>
 </text>
 <text>
 <en>Singular</en>
+<de>Einzahl</de>
 <id>929</id>
 </text>
 <text>
 <en>Plural</en>
+<de>Mehrzahl</de>
 <id>930</id>
+</text>
+<text>
+<en>Annotation</en>
+<de>Anmerkung</de>
+<id>931</id>
+</text>
+<text>
+<en>Date of birth</en>
+<de>Geburtstag</de>
+<id>932</id>
+</text>
+<text>
+<en>Mobile</en>
+<de>Mobiltelefon</de>
+<id>933</id>
+</text>
+<text>
+<en>Capacity</en>
+<de>Kapazit&#xE4;t</de>
+<id>934</id>
+</text>
+<text>
+<en>File successfully created: </en>
+<de>Dateien erfolgreich erzeugt: </de>
+<id>935</id>
+</text>
+<text>
+<en>Headline 1 (h1)</en>
+<de>&#xDC;berschrift 1 (h1)</de>
+<id>936</id>
+</text>
+<text>
+<en>Headline 2 (h2)</en>
+<de>&#xDC;berschrift 2 (h2)</de>
+<id>937</id>
+</text>
+<text>
+<en>Headline 3 (h3)</en>
+<de>&#xDC;berschrift 3 (h3)</de>
+<id>938</id>
+</text>
+<text>
+<en>Headline 4 (h4)</en>
+<de>&#xDC;berschrift 4 (h4)</de>
+<id>939</id>
+</text>
+<text>
+<en>Headline 5 (h5)</en>
+<de>&#xDC;berschrift 5 (h5)</de>
+<id>940</id>
+</text>
+<text>
+<en>Headline 6 (h6)</en>
+<de>&#xDC;berschrift 6 (h6)</de>
+<id>941</id>
+</text>
+<text>
+<en>Descriptiontext</en>
+<de>Beschreibungstext</de>
+<id>942</id>
+</text>
+<text>
+<en>Form</en>
+<de>Formular</de>
+<id>943</id>
+</text>
+<text>
+<en>Bookmark at</en>
+<de>Bookmark f&#xFC;r</de>
+<id>944</id>
 </text>
 </trl>
 

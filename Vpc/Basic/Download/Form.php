@@ -7,7 +7,7 @@ class Vpc_Basic_Download_Form extends Vpc_Abstract_Form
         $form = Vpc_Abstract_Form::createChildComponentForm($class, '-downloadTag');
         $this->add($form);
 
-        $this->add(new Vps_Form_Field_TextField('infotext', trlVps('Beschreibungstext')))
+        $this->add(new Vps_Form_Field_TextField('infotext', trlVps('Descriptiontext')))
             ->setWidth(300)
             ->setHelpText(hlpVps('vpc_download_linktext'));
     }
