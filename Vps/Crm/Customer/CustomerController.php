@@ -8,10 +8,11 @@ class Vps_Crm_Customer_CustomerController extends Vps_Controller_Action_Auto_For
     protected function _initFields()
     {
         $fs = $this->_form->add(new Vps_Form_Container_FieldSet('Stammdaten'));
-        $fs->setLabelWidth(60);
-        $fs->setStyle('margin:10px;');
+        $fs->setLabelWidth(65);
 
-        $fs->add(new Vps_Form_Field_TextField('name', trlVps('Name')))
+        $fs->add(new Vps_Form_Field_TextField('name', trlVps('Name').' 1'))
+            ->setWidth(250);
+        $fs->add(new Vps_Form_Field_TextField('name2', trlVps('Name').' 2'))
             ->setWidth(250);
         $fs->add(new Vps_Form_Field_TextField('street', trlVps('Street')))
             ->setWidth(250);
@@ -27,6 +28,9 @@ class Vps_Crm_Customer_CustomerController extends Vps_Controller_Action_Auto_For
             ->setWidth(250);
         $fs->add(new Vps_Form_Field_TextField('website', trlVps('Website')))
             ->setWidth(250);
+        $fs->add(new Vps_Form_Field_TextArea('annotation', trlVps('Annotation')))
+            ->setWidth(250)
+            ->setHeight(70);
     }
 
 
