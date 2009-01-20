@@ -36,7 +36,7 @@ class Vps_User_Form extends Vps_Form
         if (isset($authedUser->language) && $config->languages){
             $data = array();
             foreach ($config->languages as $key => $value){
-                $data[$key] = $value;
+                $data[$value] = $value;
             }
             $this->fields->add(new Vps_Form_Field_Select('language', trlVps('Language')))
             ->setValues($data);

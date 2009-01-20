@@ -60,7 +60,6 @@ class Vps_Trl
 
     public function getTargetLanguage()
     {
-
         $config = Zend_Registry::get('config');
         if (!Zend_Registry::get('userModel') ||
             !Zend_Registry::get('userModel')->getAuthedUser() ||
@@ -68,16 +67,8 @@ class Vps_Trl
             !Zend_Registry::get('userModel')->getAuthedUser()->language)
             {
                 return $this->getWebCodeLanguage();
-        }
-        $cnt = 1;
-        if ($config->languages) {
-            foreach ($config->languages as $lang) {
-                if ($lang != $this->getWebCodeLanguage()) {
-                    return $lang;
-                }
-            }
         } else {
-            return $this->getWebCodeLanguage();
+            return Zend_Registry::get('userModel')->getAuthedUser()->language;
         }
     }
 
