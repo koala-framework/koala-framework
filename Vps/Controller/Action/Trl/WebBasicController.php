@@ -26,21 +26,24 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
         $languages = array();
         $languages[] = $weblang;
         $plural = array();
-        $config = Zend_Registry::get('config');
-        $cnt = 1;
-        if ($config->languages) {
-            foreach ($config->languages as $lang) {
-                if ($lang != $weblang) {
-                    $languages[$cnt++] = $lang;
+        $role = $this->_getAuthData()->role;
+        $user_lang = $this->_getAuthData()->language;
+
+        //defintion der zu übersetzenden sprachen
+        if ($role == 'admin') {
+            if ($config->languages) {
+                foreach($config->languages as $language) {
+                    if ($language != $weblang) {
+                        $languages[] = $language;
+                    }
                 }
             }
+        } else {
+            if ($user_lang != $weblang)
+                $languages[] = $user_lang;
         }
 
-        $role = $this->_getAuthData()->role;
-        $lang_id = $this->_getAuthData()->language;
-        if (!$lang_id) $lang_id = 0;
-        $targetLang = $languages[$lang_id];
-
+        //ausgabe der einzahl Felder
         foreach ($languages as $lang) {
             //Singular
             if ($lang == $weblang) {
@@ -49,7 +52,7 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
                     ->setRenderer('notEditable');
                 $this->_colNames[] = $lang;
             } else {
-                if ($lang == $targetLang || $role == 'admin') {
+                if ($lang == $user_lang || $role == 'admin') {
                     $this->_columns->add(new Vps_Grid_Column($lang, trlVps("$lang Singular")))
                         ->setEditor(new Vps_Form_Field_TextField())
                         ->setWidth(200);;
@@ -58,6 +61,7 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
             }
         }
 
+        //Ausgabe der Plural felder
         foreach ($languages as $lang) {
             //Plural
             if ($lang == $weblang) {
@@ -66,7 +70,7 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
                     ->setRenderer('notEditable');
                 $this->_colNames[] = $lang."_plural";
             } else {
-                if ($lang == $targetLang || $role == 'admin') {
+                if ($lang == $user_lang || $role == 'admin') {
                     $this->_columns->add(new Vps_Grid_Column($lang."_plural", $lang.trlVps(" Plural")))
                         ->setEditor(new Vps_Form_Field_TextField())
                         ->setWidth(200);
