@@ -22,11 +22,20 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function setUp()
     {
-        $domain = Vps_Registry::get('testDomain');
-        if (!$domain) {
-            throw new Vps_Exception("No testDomain set");
+        if (!$cfg = Vps_Registry::get('testServerConfig')) {
+            throw new Vps_Exception("testServerConfig not set");
+        }
+        $d = $this->_domain;
+        if (!$d) {
+            $domain = $cfg->server->domain;
+        } else {
+            if (!isset($cfg->vpc->domains->$d)) {
+                throw new Vps_Exception("Domain '$d' not found in config");
+            }
+            $domain = $cfg->vpc->domains->$d->domain;
         }
         $this->setBrowserUrl('http://'.$domain.'/');
+
         $this->_unitTestCookie = md5(uniqid('testId', true));
     }
 
