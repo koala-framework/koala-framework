@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Vpc_Basic_Text
+ * @group Vpc_Basic_Text_Model
  **/
 class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 {
