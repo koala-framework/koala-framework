@@ -1,0 +1,135 @@
+<?php
+/**
+ * @group Amazon
+ */
+class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
+{
+    public function testNodes()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+
+        $select = $m->select();
+        $select->whereEquals('Keywords', 'php');
+        $select->whereEquals('SearchIndex', 'Books');
+        $select->limit(10);
+
+        $rows = $m->getRows($select);
+        $this->assertEquals(10, count($rows));
+        $nodes = array();
+        foreach ($rows as $row) {
+            foreach ($row->getChildRows('ProductsToNodes') as $r) {
+                $node = $r->getParentRow('Node');
+                $nodes[] = $node->name;
+            }
+            $this->assertContains('PHP', $row->title);
+            $this->assertContains('PHP', $nodes);
+        }
+    }
+    public function testPaging()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+
+        $select = $m->select();
+        $select->whereEquals('Keywords', 'php');
+        $select->whereEquals('SearchIndex', 'Books');
+        $select->limit(10);
+        $asins = array();
+        foreach ($m->getRows($select) as $r) {
+            $asins[] = $r->asin;
+        }
+        $select->limit(10, 10);
+        foreach ($m->getRows($select) as $r) {
+            $asins[] = $r->asin;
+        }
+        $select->limit(10, 20);
+        foreach ($m->getRows($select) as $r) {
+            $asins[] = $r->asin;
+        }
+        $this->assertEquals(count($asins), count(array_unique($asins)));
+    }
+    public function testGetRow()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $this->assertNotNull($m->getRow('3772369197'));
+        $this->assertNotNull($m->getRows($m->select()->whereId('3772369197')));
+        $this->assertNotNull($m->getRows($m->select()->whereEquals('asin', '3772369197')));
+    }
+
+    public function testInvalidLimit()
+    {
+        $this->setExpectedException("Vps_Exception");
+        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $select = $m->select();
+        $select->whereEquals('Keywords', 'php');
+        $select->whereEquals('SearchIndex', 'Books');
+        $select->limit(11);
+        $m->getRows($select);
+    }
+    public function testInvalidOffset()
+    {
+        $this->setExpectedException("Vps_Exception");
+        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $select = $m->select();
+        $select->whereEquals('Keywords', 'php');
+        $select->whereEquals('SearchIndex', 'Books');
+        $select->limit(10, 12);
+        $m->getRows($select);
+    }
+    public function testMultipleOrder()
+    {
+        $this->setExpectedException("Vps_Exception");
+        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $select = $m->select();
+        $select->whereEquals('Keywords', 'php');
+        $select->whereEquals('SearchIndex', 'Books');
+        $select->limit(10);
+        $select->order('foo');
+        $select->order('bar');
+        $m->getRows($select);
+    }
+    public function testOrderDesc()
+    {
+        $this->setExpectedException("Vps_Exception");
+        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $select = $m->select();
+        $select->whereEquals('Keywords', 'php');
+        $select->whereEquals('SearchIndex', 'Books');
+        $select->limit(10);
+        $select->order('foo', 'DESC');
+        $m->getRows($select);
+    }
+
+    public function testPerformance()
+    {
+        Vps_Benchmark::enable();
+        Vps_Benchmark::reset();
+        $m = new Vps_Util_Model_Amazon_Products();
+
+        $select = $m->select();
+        $select->whereEquals('Keywords', 'php');
+        $select->whereEquals('SearchIndex', 'Books');
+        $select->limit(10);
+        $m->getRows($select);
+
+        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+
+        $m->countRows($select);
+        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+
+        $select->limit(10, 10);
+        $m->countRows($select);
+        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+
+        Vps_Benchmark::reset();
+        $m = new Vps_Util_Model_Amazon_Products();
+        $select->limit(10, 10);
+        $m->getRows($select);
+        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+
+        $select->limit(10, 0);
+        $m->countRows($select);
+        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+        
+        Vps_Benchmark::disable();
+    }
+}
