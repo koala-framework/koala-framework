@@ -56,7 +56,6 @@ abstract class Vps_Update_Action_Rrd_Abstract extends Vps_Update_Action_Abstract
         $c = str_replace("></cdp_prep>", ">\n{$i}{$i}</cdp_prep>", $c);
 
         file_put_contents($file, $c);
-        echo ".";
         $this->_systemCheckRet("rrdtool restore $file {$this->file}.new");
         copy($this->file, $this->file.date('Y-m-DH:i:s'));
         rename($this->file.'.new', $this->file);
