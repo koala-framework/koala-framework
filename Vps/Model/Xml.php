@@ -26,7 +26,9 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         if (!isset($this->_data)) {
             $data = array();
             foreach ($this->_getElements() as $key=>$element) {
-                $data[$key] = (array)$element;
+                foreach ($element as $eKey => $eVal) {
+                    $data[$key][$eKey] = (string)$eVal;
+                }
             }
             $this->_data = $data;
         }
@@ -37,7 +39,10 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
     {
         if (!isset($this->_rows[$key])) {
             $elements = $this->_getElements();
-            $data = (array)$elements[$key];
+            $data = array();
+            foreach ($elements[$key] as $eKey => $eVal) {
+                $data[$eKey] = (string)$eVal;
+            }
             $this->_rows[$key] = new $this->_rowClass(array(
                 'data' => $data,
                 'model' => $this
@@ -50,6 +55,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
     {
         $id = $row->{$this->getPrimaryKey()};
         $simpleXml = $this->_getSimpleXml();
+
         foreach ($this->_getElements() as $f) {
             if ($f->{$this->getPrimaryKey()} == $id) {
                 foreach ($rowData as $k=>$i) {
@@ -77,7 +83,6 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
             }
         }
         $this->_data = $data;
-
         if ($this->_filepath) {
             file_put_contents($this->_filepath, $this->_asPrettyXML($simpleXml->asXML()));
         }
