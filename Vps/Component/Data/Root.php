@@ -18,7 +18,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 'isPage' => false,
                 'isPseudoPage' => false,
                 'inherits' => true,
-                'componentId' => 'root'
+                'componentId' => 'root',
+                'filename' => false
             ), $config
         );
         parent::__construct($config);
@@ -53,13 +54,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     {
         $parsedUrl = parse_url($url);
         $path = $this->getComponent()->formatPath($parsedUrl);
-        if (substr($path, -1) == '/') {
-            $path = substr($path, 0, -1);
-        }
+        $path = trim($path, '/');
         if ($path == '') {
             $ret = $this->getChildPage(array('home' => true));
         } else {
-            $path = substr($path, 1);
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
                 if (Vpc_Abstract::getFlag($c, 'shortcutUrl')) {
                     $ret = call_user_func(array($c, 'getDataByShortcutUrl'), $c, $path);
@@ -378,6 +376,11 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getCurrentPage()
     {
         return $this->_currentPage;
+    }
+
+    public function setFilename($f)
+    {
+        $this->_filename = $f;
     }
 }
 ?>
