@@ -88,13 +88,12 @@ class Vpc_Paging_Component extends Vpc_Abstract
 
     protected function _getCurrentPage()
     {
-        $pages = $this->_getPages();
         if (!isset($_GET[$this->_getParamName()])) {
             $page = 1;
         } else {
             $page = (int)$_GET[$this->_getParamName()];
         }
-        if ($page < 1 || $page > $pages) $page = 1;
+        if ($page < 1) $page = 1;
         return $page;
     }
 
