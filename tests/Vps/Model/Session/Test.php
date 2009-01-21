@@ -2,6 +2,7 @@
 /**
  * @group Model_Session
  * @group selenium
+ * @group slow
  */
 class Vps_Model_Session_Test extends Vps_Test_SeleniumTestCase
 {

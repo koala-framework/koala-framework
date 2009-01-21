@@ -7,6 +7,7 @@ class Vps_Model_FieldRows_Test extends PHPUnit_Framework_TestCase
     public function testFnFFieldRows()
     {
         $model = new Vps_Model_FnF(array(
+            'columns' => array(),
             'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(
             array(
                 'autoId'=>2,

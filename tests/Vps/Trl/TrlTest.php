@@ -263,6 +263,7 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
     public function testTrlTranslation ()
     {
         $modelVps = new Vps_Model_FnF(array(
+            'columns' => array(),
             'data' => array(
                 array('id' => 1, 'en' => 'foo', 'de' => 'dings'),
                 array('id' => 2, 'en' => 'foobar', 'de' => 'dingsbums'),

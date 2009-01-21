@@ -1,6 +1,7 @@
 <?php
 /**
  * @group selenium
+ * @group slow
  */
 class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
 {
