@@ -5,6 +5,7 @@ class Vpc_Basic_LinkTagExtern_TestModel extends Vpc_Basic_LinkTag_Model
     {
         $config['proxyModel'] = new Vps_Model_FnF(array(
             'primaryKey' => 'component_id',
+            'columns' => array(),
             'data'=> array(
                 array('component_id'=>'1200', 'target'=>'http://example.com',
                         'rel'=>'', 'param' => '', 'open_type' => 'self'),
