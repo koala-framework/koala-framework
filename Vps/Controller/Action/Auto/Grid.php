@@ -102,11 +102,16 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $this->_sortable = false;
                 $this->_defaultOrder = $this->_position;
             }
-            $primaryFound = false;
             foreach ($this->_columns as $column) {
                 if (!$column->getType() && isset($info['metadata'][$column->getDataIndex()])) {
                     $column->setType($this->_getTypeFromDbType($info['metadata'][$column->getDataIndex()]['DATA_TYPE']));
                 }
+            }
+        }
+
+        if ($this->_primaryKey) {
+            $primaryFound = false;
+            foreach ($this->_columns as $column) {
                 if ($column->getDataIndex() == $this->_primaryKey) {
                     $primaryFound = true;
                 }
