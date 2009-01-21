@@ -26,6 +26,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         if (!isset($this->_data)) {
             $data = array();
             foreach ($this->_getElements() as $key=>$element) {
+                $data[$key] = array();
                 foreach ($element as $eKey => $eVal) {
                     $data[$key][$eKey] = (string)$eVal;
                 }
