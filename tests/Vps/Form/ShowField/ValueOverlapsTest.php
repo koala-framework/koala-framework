@@ -1,6 +1,7 @@
 <?php
 /**
  * @group selenium
+ * @group slow
  * @group AutoForm
  */
 class Vps_Form_ShowField_ValueOverlapsTest extends Vps_Test_SeleniumTestCase

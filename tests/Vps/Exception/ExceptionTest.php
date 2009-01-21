@@ -9,6 +9,7 @@ class Vps_Exception_TestView extends Vps_View
 }
 /**
  * @group Exception
+ * @group slow
  */
 class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
 {

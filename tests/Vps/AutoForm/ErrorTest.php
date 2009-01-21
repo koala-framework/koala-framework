@@ -1,6 +1,7 @@
 <?php
 /**
  * @group selenium
+ * @group slow
  * @group AutoForm
  */
 class Vps_AutoForm_ErrorTest extends Vps_Test_SeleniumTestCase

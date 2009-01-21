@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Amazon
+ * @group slow
  * alle sleeps damit der webservice nicht überfordert wird
  */
 class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase

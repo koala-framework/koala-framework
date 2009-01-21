@@ -1,6 +1,7 @@
 <?php
 /**
  * @group selenium
+ * @group slow
  * @group Cards
  */
 class Vps_Form_Cards_CardsTest extends Vps_Test_SeleniumTestCase

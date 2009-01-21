@@ -1,6 +1,7 @@
 <?php
 /**
  * @group selenium
+ * @group slow
  * @group Vpc_Amazon
  */
 class Vpc_Advanced_Amazon_Nodes_Test extends Vps_Test_SeleniumTestCase
