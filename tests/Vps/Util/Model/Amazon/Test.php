@@ -1,9 +1,14 @@
 <?php
 /**
  * @group Amazon
+ * alle sleeps damit der webservice nicht überfordert wird
  */
 class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        sleep(1);
+    }
     public function testNodes()
     {
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
@@ -14,10 +19,12 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
         $select->limit(10);
 
         $rows = $m->getRows($select);
+        sleep(1);
         $this->assertEquals(10, count($rows));
         $nodes = array();
         foreach ($rows as $row) {
             foreach ($row->getChildRows('ProductsToNodes') as $r) {
+                sleep(1);
                 $node = $r->getParentRow('Node');
                 $nodes[] = $node->name;
             }
@@ -27,7 +34,7 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
     }
     public function testPaging()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
+        $m = new Vps_Util_Model_Amazon_Products;
 
         $select = $m->select();
         $select->whereEquals('Keywords', 'php');
@@ -37,14 +44,17 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
         foreach ($m->getRows($select) as $r) {
             $asins[] = $r->asin;
         }
+        sleep(1);
         $select->limit(10, 10);
         foreach ($m->getRows($select) as $r) {
             $asins[] = $r->asin;
         }
+        sleep(1);
         $select->limit(10, 20);
         foreach ($m->getRows($select) as $r) {
             $asins[] = $r->asin;
         }
+        sleep(1);
         $this->assertEquals(count($asins), count(array_unique($asins)));
     }
     public function testGetRow()
@@ -119,6 +129,7 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
         $select->limit(10, 10);
         $m->countRows($select);
         $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+        sleep(1);
 
         Vps_Benchmark::reset();
         $m = new Vps_Util_Model_Amazon_Products();
