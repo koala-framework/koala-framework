@@ -6,6 +6,9 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
     public function __construct(array $config = array())
     {
         if (isset($config['uniqueIdentifier'])) $this->_uniqueIdentifier = $config['uniqueIdentifier'];
+        if (!isset($config['columns']) && isset($config['data'][0])) {
+            $config['columns'] = array_keys($config['data'][0]);
+        }
         parent::__construct($config);
     }
 
