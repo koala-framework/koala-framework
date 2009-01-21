@@ -56,12 +56,13 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/vps/test/:controller/:action',
                     array('module'     => 'vps_test',
                           'action'     =>'index')));
-        $this->AddRoute('vps_vpctest', new Zend_Controller_Router_Route(
-                    '/vps/vpctest/:root/:url',
+        $this->AddRoute('vps_vpctest', new Zend_Controller_Router_Route_Regex(
+                    'vps/vpctest/([^/]+)/(.*)',
                     array('module'     => 'vps_test',
                           'controller' => 'vpc_test',
                           'action'     => 'index',
-                          'url'        => '')));
+                          'url'        => ''),
+                    array('root'=>1, 'url'=>2)));
         $this->AddRoute('vps_test_componentedit', new Zend_Controller_Router_Route(
                     '/vps/componentedittest/:root/:class/:action',
                     array('module' => 'component_test',
