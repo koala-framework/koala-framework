@@ -121,6 +121,8 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('server')) {
             $cfg = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
             Vps_Registry::set('testDomain', $cfg->server->domain);
+            Vps_Registry::set('testServer', $this->_getParam('server'));
+            Vps_Registry::set('testServerConfig', $cfg);
         }
         if ($this->_getParam('report')) {
             $resultLogger = new Vps_Test_ResultLogger(true/*verbose*/);
