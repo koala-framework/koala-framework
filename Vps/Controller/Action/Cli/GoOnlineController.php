@@ -77,9 +77,11 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             $runner = new PHPUnit_TextUI_TestRunner;
 
             Vps_Registry::set('testDomain', $testConfig->server->domain);
+            Vps_Registry::set('testServerConfig', $cfg);
 
             $arguments = array();
             $arguments['colors'] = true;
+            $arguments['stopOnFailure'] = true;
             $result = $runner->doRun($suite, $arguments);
             if (!$result->wasSuccessful()) {
                 $this->_systemSshVps("tag-checkout web-switch --version=trunk", $testConfig);
