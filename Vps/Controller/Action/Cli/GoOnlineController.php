@@ -77,7 +77,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             $runner = new PHPUnit_TextUI_TestRunner;
 
             Vps_Registry::set('testDomain', $testConfig->server->domain);
-            Vps_Registry::set('testServerConfig', $cfg);
+            Vps_Registry::set('testServerConfig', $testConfig);
 
             $arguments = array();
             $arguments['colors'] = true;
