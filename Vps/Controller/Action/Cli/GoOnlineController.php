@@ -82,6 +82,8 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             $arguments['colors'] = true;
             $result = $runner->doRun($suite, $arguments);
             if (!$result->wasSuccessful()) {
+                $this->_systemSshVps("tag-checkout web-switch --version=trunk", $testConfig);
+                $this->_systemSshVps("tag-checkout vps-use --version=trunk", $testConfig);
                 throw new Vps_ClientException("Tests failed");
             }
         }
@@ -110,6 +112,6 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
         echo "\n\n\n\033[32mF E R T I G ! ! !\033[0m\n";
 
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
 }
