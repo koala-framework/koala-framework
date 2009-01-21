@@ -3,6 +3,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
     protected $autoStop = false;
     protected $_unitTestCookie;
+    protected $_domain = null;
 
     public static function suite($className)
     {
