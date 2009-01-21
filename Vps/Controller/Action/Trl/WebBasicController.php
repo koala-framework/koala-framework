@@ -89,7 +89,9 @@ class Vps_Controller_Action_Trl_WebBasicController extends Vps_Controller_Action
         parent::_beforeSave($row, $submitRow);
         foreach ($this->_colNames as $colName)
         if (!$row->{$colName}) {
-            unset($row->{$colName});
+            $row->{$colName} = null;
+        } else if ($row->$colName == ' ') {
+            $row->$colName = '';
         }
     }
 }
