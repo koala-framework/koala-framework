@@ -1,0 +1,10 @@
+.$cssClass .bookInfos {
+    margin-bottom: 20px;
+}
+.$cssClass .bookInfos img.cover {
+    float: left;
+    margin-right: 20px;
+}
+.$cssClass .customerReviews li { margin-bottom: 20px; }
+.$cssClass .ratingStar { margin-right: -5px; }
+.$cssClass .summary { margin-left: 10px; font-weight: bold; }
