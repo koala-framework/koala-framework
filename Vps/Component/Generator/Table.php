@@ -55,33 +55,43 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         Vps_Benchmark::count('GenTable::getChildData');
 
         $ret = array();
-        $select = $this->_formatSelect($parentData, $select);
-        $rows = array();
-        if ($select) {
-            $rows = $this->_getModel()->fetchAll($select);
+        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE))
+                && !$this->_getModel()->hasColumn('component_id')) {
+            $parentDatas = $p->getRecursiveChildComponents(array(
+                'componentClass' => $this->_class
+            ));
+        } else {
+            $parentDatas = array($parentData /* kann auch null sein*/);
         }
-        $pData = $parentData;
-        foreach ($rows as $row) {
-            $parentData = $pData;
-            if (!$parentData) {
-                $parentData = $this->_getParentDataByRow($row, $select);
+
+        foreach ($parentDatas as $parentData) {
+            $select = $this->_formatSelect($parentData, $select);
+            $rows = array();
+            if ($select) {
+                $rows = $this->_getModel()->fetchAll($select);
             }
-            if (!is_array($parentData)) {
-                if ($parentData) {
-                    $parentDatas = array($parentData);
+            foreach ($rows as $row) {
+                $currentPd = $parentData;
+                if (!$currentPd) {
+                    $currentPd = $this->_getParentDataByRow($row, $select);
+                }
+                if (!is_array($currentPd)) {
+                    if ($currentPd) {
+                        $currentPds = array($currentPd);
+                    } else {
+                        $currentPds = array();
+                    }
                 } else {
-                    $parentDatas = array();
+                    $currentPds = $currentPd;
                 }
-            } else {
-                $parentDatas = $parentData;
-            }
-            foreach ($parentDatas as $parentData) {
-                if ($parentData->componentClass != $this->_class) {
-                    throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$parentData->componentClass}' instead of '$this->_class'");
-                }
-                $data = $this->_createData($parentData, $row, $select);
-                if ($data) {
-                    $ret[] = $data;
+                foreach ($currentPds as $currentPd) {
+                    if ($currentPd->componentClass != $this->_class) {
+                        throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$currentPd->componentClass}' instead of '$this->_class'");
+                    }
+                    $data = $this->_createData($currentPd, $row, $select);
+                    if ($data) {
+                        $ret[] = $data;
+                    }
                 }
             }
         }
@@ -134,14 +144,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     protected function _formatSelect($parentData, $select)
     {
-        $select = parent::_formatSelect($parentData, $select);
-        if (is_null($select)) return null;
-
-        $select = $this->_formatSelectId($select);
-        if (is_null($select)) return null;
-
-        $cols = $this->_getModel()->getColumns();
-        if (in_array('component_id', $cols)) {
+        if ($this->_getModel()->hasColumn('component_id')) {
             if ($parentData) {
                 $select->whereEquals('component_id', $parentData->dbId);
             } else if ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE)) {
@@ -153,7 +156,13 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             }
         }
 
-        if (in_array('pos', $cols) && !$select->hasPart(Vps_Component_Select::ORDER)) {
+        $select = parent::_formatSelect($parentData, $select);
+        if (is_null($select)) return null;
+
+        $select = $this->_formatSelectId($select);
+        if (is_null($select)) return null;
+
+        if ($this->_getModel()->hasColumn('pos') && !$select->hasPart(Vps_Component_Select::ORDER)) {
             $select->order("pos");
         }
 
@@ -162,7 +171,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $showInvisible = Vps_Registry::get('config')->showInvisible;
         }
         if (!$select->getPart(Vps_Component_Select::IGNORE_VISIBLE)
-            && in_array('visible', $cols) && !$showInvisible) {
+            && $this->_getModel()->hasColumn('visible') && !$showInvisible) {
             $select->whereEquals("visible", 1);
         }
 
@@ -183,7 +192,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                     return null;
                 }
             } else {
-                if (!in_array('component', $cols)) {
+                if (!$this->_getModel()->hasColumn('component')) {
                     throw new Vps_Exception("Column component does not exist for a generator in '$this->_class'");
                 }
                 $select->whereEquals('component', $keys);
