@@ -5,7 +5,7 @@ class Vps_Component_Data
 
     private $_url;
     private $_rel;
-    private $_filename;
+    protected $_filename;
     protected $_inheritClasses;
     protected $_uniqueParentDatas;
 
@@ -48,9 +48,9 @@ class Vps_Component_Data
                     $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
                     break;
                 } else {
-                    if ($page->filename) $filenames[] = $page->filename;
+                    if ($page->_filename) $filenames[] = $page->_filename;
                 }
-            } while ($page = $page->getParentPseudoPage());
+            } while ($page = $page->getParentPseudoPageOrRoot());
             return '/'.implode('/', array_reverse($filenames));
         } else if ($var == 'rel') {
             /*
@@ -64,7 +64,7 @@ class Vps_Component_Data
             }
             return trim($rel);
         } else if ($var == 'filename') {
-            return $this->getPseudoPage()->_filename;
+            return $this->getPseudoPageOrRoot()->_filename;
         } else if ($var == 'inherits') {
             return false;
         } else if ($var == 'visible') {
@@ -225,6 +225,7 @@ class Vps_Component_Data
                 }
             }
         }
+
         if ($staticGeneratorComponentClasses) {
             $pd = $this->getRecursiveChildComponents(array(
                 'componentClasses' => $staticGeneratorComponentClasses
@@ -540,6 +541,16 @@ class Vps_Component_Data
         return $page;
     }
 
+    public function getPseudoPageOrRoot()
+    {
+        $page = $this;
+        while ($page && !$page->isPseudoPage) {
+            if ($page instanceof Vps_Component_Data_Root) return $page;
+            $page = $page->parent;
+        }
+        return $page;
+    }
+
     public function getPseudoPage()
     {
         $page = $this;
@@ -572,6 +583,16 @@ class Vps_Component_Data
         $page = $this->getPseudoPage();
         if ($page && $page->parent) {
             return $page->parent->getPseudoPage();
+        }
+        return null;
+    }
+
+
+    public function getParentPseudoPageOrRoot()
+    {
+        $page = $this->getPseudoPage();
+        if ($page && $page->parent) {
+            return $page->parent->getPseudoPageOrRoot();
         }
         return null;
     }
