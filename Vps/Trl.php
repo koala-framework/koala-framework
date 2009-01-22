@@ -64,9 +64,10 @@ class Vps_Trl
         if (!Zend_Registry::get('userModel') ||
             !Zend_Registry::get('userModel')->getAuthedUser() ||
             !isset(Zend_Registry::get('userModel')->getAuthedUser()->language) ||
-            !Zend_Registry::get('userModel')->getAuthedUser()->language)
-            {
-                return $this->getWebCodeLanguage();
+            !Zend_Registry::get('userModel')->getAuthedUser()->language ||
+            !in_array(Zend_Registry::get('userModel')->getAuthedUser()->language, $this->getLanguages()))
+        {
+            return $this->getWebCodeLanguage();
         } else {
             return Zend_Registry::get('userModel')->getAuthedUser()->language;
         }
