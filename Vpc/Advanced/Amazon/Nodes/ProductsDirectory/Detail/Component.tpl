@@ -15,7 +15,7 @@
                 <?=$this->imageAsset('/assets/vps/images/rating/ratingStarEmpty.jpg','StarEmpty', 'ratingStar');?>
             <? } ?></p>
         <? } ?>
-        <a href="<?=$this->product->detailPageURL?>" rel="popup_blank"><?=trlVps('order now')?></a>
+        <a class="order" href="<?=$this->product->detailPageURL?>" rel="popup_blank"><?=trlVps('order now at amazon')?></a>
         <div class="clear"></div>
     </div>
 
