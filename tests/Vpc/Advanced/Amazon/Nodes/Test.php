@@ -24,7 +24,7 @@ class Vpc_Advanced_Amazon_Nodes_Test extends Vps_Test_SeleniumTestCase
         $this->clickAndWait('link=PHP 5 / MySQL 5. Studienausgabe');
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h1", "PHP 5 / MySQL 5. Studienausgabe");
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h2", "Caroline Kannengiesser, Matthias Kannengiesser");
-        $href = $this->getAttribute('link='.trlVps('order now').'@href');
+        $href = $this->getAttribute('link='.trlVps('order now at amazon').'@href');
         $this->assertEquals('http://www.amazon.de', substr($href, 0, 20));
         $this->assertContains('3772369197', $href);
         $this->assertContains('prosalzburgat-21', $href);
