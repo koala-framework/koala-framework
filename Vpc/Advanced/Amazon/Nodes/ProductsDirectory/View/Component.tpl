@@ -8,7 +8,7 @@
             <?php foreach ($this->items as $item) { ?>
                 <li class="products">
                     <? if ($item->row->getItem()->SmallImage) { ?>
-                    <img src="<?=$item->row->getItem()->SmallImage->Url->__toString()?>" width="<?=$item->row->getItem()->SmallImage->Width?>" height="<?=$item->row->getItem()->SmallImage->Height?>" alt="" />
+                    <img src="<?=$item->row->getItem()->SmallImage->Url->__toString()?>" width="50px" height="<?=$item->row->getItem()->SmallImage->Height?>" alt="" />
                     <? } ?>
                     <h1><?=$this->componentLink($item);?></h1>
                     <h2><?=$item->row->author?></h2>
