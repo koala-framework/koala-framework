@@ -22,7 +22,7 @@ class Vps_Util_Model_Amazon_Nodes extends Vps_Model_Abstract
     protected function _init()
     {
         if (!$this->_amazon) {
-            $this->_amazon = new Vps_Service_Amazon('1DVYKJMB3SQV8HWW04G2', 'DE');
+            $this->_amazon = new Vps_Service_Amazon();
         }
         parent::_init();
     }

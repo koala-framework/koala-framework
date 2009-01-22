@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_Amazon_Nodes_Model extends Vps_Model_Db_Proxy
+class Vpc_Advanced_Amazon_Nodes_NodesModel extends Vps_Model_Db_Proxy
 {
     protected $_table = 'vpc_amazon_nodes';
     protected $_toStringField = 'name';

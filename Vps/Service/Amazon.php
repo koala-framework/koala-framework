@@ -1,6 +1,11 @@
 <?php
 class Vps_Service_Amazon extends Zend_Service_Amazon
 {
+    public function __construct($appId = '0CJ03620WGKVWMR2F3R2', $countryCode = 'DE')
+    {
+        parent::__construct($appId, $countryCode);
+    }
+
     /**
      * Search for Items
      *
@@ -21,9 +26,6 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
             throw new Zend_Service_Exception('An error occurred sending request. Status code: '
                                            . $response->getStatus());
         }
-// Request/TotalResults
-//         echo($response->getBody());
-//         exit;
         $dom = new DOMDocument();
         $dom->loadXML($response->getBody());
         self::_checkErrors($dom);

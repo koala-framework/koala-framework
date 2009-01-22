@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_Amazon_Nodes_TestModel extends Vpc_Advanced_Amazon_Nodes_Model
+class Vpc_Advanced_Amazon_Nodes_TestNodesModel extends Vpc_Advanced_Amazon_Nodes_NodesModel
 {
     public function __construct($config = array())
     {

@@ -23,7 +23,7 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
     protected function _init()
     {
         if (!$this->_amazon) {
-            $this->_amazon = new Vps_Service_Amazon('1DVYKJMB3SQV8HWW04G2', 'DE');
+            $this->_amazon = new Vps_Service_Amazon();
         }
         parent::_init();
     }
@@ -56,7 +56,11 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
         }
         if (isset($options['asin'])) {
             //wenn nach asin gesucht wird alles andere ignorieren
-            $options = array('asin'=>$options['asin']);
+            $o = $options;
+            $options = array('asin'=>$o['asin']);
+            if (isset($o['AssociateTag'])) {
+                $options['AssociateTag'] = $o['AssociateTag'];
+            }
         }
         if ($select->getPart(Vps_Model_Select::LIMIT_COUNT) && $select->getPart(Vps_Model_Select::LIMIT_COUNT) != 10) {
             if (!isset($options['asin'])) {

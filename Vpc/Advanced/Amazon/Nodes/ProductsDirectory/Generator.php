@@ -9,6 +9,10 @@ class Vpc_Advanced_Amazon_Nodes_ProductsDirectory_Generator extends Vps_Componen
         $select = parent::_formatSelect($parentData, $select);
         if (!$select) return $select;
         $select->whereEquals('SearchIndex', 'Books');
+        $tag = $parentData->parent->getComponent()->getRow()->associate_tag;
+        if ($tag) {
+            $select->whereEquals('AssociateTag', $tag);
+        }
         $select->limit(10);
         return $select;
     }
