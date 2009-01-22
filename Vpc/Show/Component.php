@@ -12,8 +12,13 @@ class Vpc_Show_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['target'] = Vps_Component_Data_Root::getInstance()
-            ->getComponentById($this->_row->target);
+        $ret['target'] = $this->getShowComponent();
         return $ret;
+    }
+
+    public function getShowComponent()
+    {
+        return Vps_Component_Data_Root::getInstance()
+            ->getComponentById($this->getRow()->target);
     }
 }

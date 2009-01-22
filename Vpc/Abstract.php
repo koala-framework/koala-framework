@@ -230,6 +230,17 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         if (Vps_Component_Abstract::getFlag(get_class($this), 'processInput')) {
             $process[] = $this->getData();
         }
+        // TODO: Äußerst suboptimal
+        if ($this instanceof Vpc_Show_Component) {
+            $process += $this->getShowComponent()
+                ->getRecursiveChildComponents(array(
+                    'page' => false,
+                    'flags' => array('processInput' => true)
+                ));
+            if (Vps_Component_Abstract::getFlag(get_class($this->getShowComponent()->getComponent()), 'processInput')) {
+                $process[] = $this->getData();
+            }
+        }
 
         $postData = $_REQUEST;
         //in _REQUEST sind _FILES nicht mit drinnen
