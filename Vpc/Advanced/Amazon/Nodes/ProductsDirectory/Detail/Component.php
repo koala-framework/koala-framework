@@ -13,7 +13,10 @@ class Vpc_Advanced_Amazon_Nodes_ProductsDirectory_Detail_Component extends Vpc_A
         $ret['product'] = $this->getData()->row;
         $ret['item'] = $ret['product']->getItem();
         $ret['similarProducts'] = array();
+        $asins = array();
         foreach ($ret['item']->SimilarProducts as $p) {
+            if (in_array($p->ASIN, $asins)) continue;
+            $asins[] = $p->ASIN;
             $p = $ret['product']->getModel()->getRow($p->ASIN);
             foreach ($p->getChildRows('ProductsToNodes') as $n) {
                 $s = new Vps_Component_Select();
