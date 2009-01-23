@@ -57,6 +57,9 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                 $item['preHtml'] .= $item['item']->getLabelSeparator();
                 $item['preHtml'] .= '</label>';
             }
+            if ($item['item']->getComment()) {
+                $item['postHtml'] .= '<span class="comment">'.$item['item']->getComment().'</span>';
+            }
             $item['postHtml'] .= '</div>';
         }
         return $item;

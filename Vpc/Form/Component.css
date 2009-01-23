@@ -90,3 +90,4 @@
     font-weight: bold;
     font-size: 12px;
 }
+.$cssClass span.comment { margin-left: 10px; color: #999; }
