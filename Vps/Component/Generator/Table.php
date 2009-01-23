@@ -181,8 +181,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $childClasses = $this->_settings['component'];
             $keys = array();
             foreach ($selectClasses as $selectClass) {
-                $key = array_search($selectClass, $childClasses);
-                if ($key) $keys[] = $key;
+                $keys = array_merge($keys, array_keys($childClasses, $selectClass));
             }
 
             if (!$keys) return null;
