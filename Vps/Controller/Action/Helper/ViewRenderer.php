@@ -38,6 +38,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                     echo '<pre>';
                     echo $this->_jsonFormat(Zend_Json::encode($this->view->getOutput()));
                     echo '</pre>';
+                    Vps_Benchmark::output();
                     $this->setNoRender();
                 }
             } else {
