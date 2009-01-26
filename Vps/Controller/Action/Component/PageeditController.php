@@ -34,6 +34,15 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
         $fields = $this->_form->fields;
         $fields->add(new Vps_Form_Field_TextField('name', trlVps('Name of Page')))
             ->setAllowBlank(false);
+
+        $fs = $fields->add(new Vps_Form_Container_FieldSet('name', trlVps('Name of Page')))
+            ->setTitle(trlVps('Custom Filename'))
+            ->setCheckboxName('custom_filename')
+            ->setCheckboxToggle(true);
+        $fs->add(new Vps_Form_Field_TextField('filename', trlVps('Filename')))
+            ->setAllowBlank(false)
+            ->setVType('alphanum');
+
         $fields->add(new Vps_Form_Field_Select('component',  trlVps('Pagetype')))
             ->setStore(array('data' => $data, 'fields' => array('id', 'name', 'domain')))
             ->setTpl('<tpl for="."><div class="x-combo-list-item">{name}</div></tpl>')
