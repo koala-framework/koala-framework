@@ -166,12 +166,13 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             echo file_get_contents('application/update');
         } else {
             try {
-                $info = new SimpleXMLElement(`svn info --xml"`);
+                $info = new SimpleXMLElement(`svn info --xml`);
                 $onlineRevision = (int)$info->entry['revision'];
             } catch (Exception $e) {}
             if (!$onlineRevision) {
                 throw new Vps_ClientException("Can't detect online revision");
             }
+            echo $onlineRevision;
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
