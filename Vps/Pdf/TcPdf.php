@@ -198,7 +198,7 @@ class Vps_Pdf_TcPdf extends TCPDF
                     $this->lasth = $this->lasth / 2;
                     break;
             }
-            parent::closeHTMLTagHandler(&$dom, $key, $cell);
+            parent::closeHTMLTagHandler($dom, $key, $cell);
             $this->lasth = $temp;
     }
 
