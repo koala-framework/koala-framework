@@ -7,7 +7,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
         $dbConfig = $dbConfig->web;
-        $mysqlLocalOptions = "--host={$dbConfig->host} --user={$dbConfig->username} --password={$dbConfig->password} ";
+        $mysqlLocalOptions = "--host={$dbConfig->host} ";
+        //auskommentiert weil: es muss in ~/.my.cnf ein benutzer der das machen darf eingestellt sein!
+        //ansonsten gibt es probleme für das erstellen von triggers, dazu benötigt man SUPER priviliges
+        // -> scheiß mysql
+        //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
 
         $server = $this->_getParam('server');
         $config = new Zend_Config_Ini('application/config.ini', $server);

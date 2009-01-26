@@ -38,7 +38,7 @@ class Vps_Controller_Action_Cli_CopyToTestController extends Vps_Controller_Acti
         $this->_sshDir = $config->server->dir;
 
         $this->_systemSshVps("import");
-echo "dooo";
+
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }
