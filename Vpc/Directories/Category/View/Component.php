@@ -16,14 +16,14 @@ class Vpc_Directories_Category_View_Component
         while ($c) {
             $isSubroot = Vps_Component_Abstract::getFlag($c->componentClass, 'subroot');
             if ($isSubroot) {
-                break;
+                $highestSubRoot = $c;
             }
             $c = $c->parent;
         }
-        if (!$c) {
+        if (!$highestSubRoot) {
             $cacheClass = '';
         } else {
-            $cacheClass = $c->componentClass;
+            $cacheClass = $highestSubRoot->componentClass;
         }
 
         if ($row instanceof Vps_Model_Row_Interface) $row = $row->getRow();
