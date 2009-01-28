@@ -89,16 +89,20 @@ class Vps_Media_Image
             // Bild wird auf größte Maximale Ausdehnung skaliert
             // Bild wird NICHT vergrößert! (kann also auch kleiner ausgegeben werden als angefordert)
 
+            // $width / $height => target size
+            // $size => original size
+
             // 3 if abfragen um zu verhindern, dass das bild vergrößert wird
             if ($size[0] <= $width && $size[1] <= $height) {
                 $width = $size[0];
                 $height = $size[1];
-            } else if ($size[0] < $width) {
-                $height = $height / ($width / $size[0]);
-                $width = $size[0];
-            } else if ($size[1] < $height) {
-                $width = $width / ($height / $size[1]);
-                $height = $size[1];
+            } else {
+                if ($size[0] < $width) {
+                    $width = $size[0];
+                }
+                if ($size[1] < $height) {
+                    $height = $size[1];
+                }
             }
 
             $widthRatio = $size[0] / $width;
