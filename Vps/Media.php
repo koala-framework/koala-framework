@@ -10,7 +10,13 @@ class Vps_Media
             $filename = $filename->filename . '.' . $filename->extension;
         }
         $checksum = self::getChecksum($class, $id, $type, $filename);
-        return '/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$filename;
+        $prefix = '';
+        if ($r = Vps_Component_Data_Root::getInstance()) {
+            if ($r->filename) {
+                $prefix = '/'.$r->filename;
+            }
+        }
+        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$filename;
     }
 
     public static function getChecksum($class, $id, $type, $filename)
