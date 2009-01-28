@@ -1,7 +1,7 @@
 <?php
 class Vps_View_Helper_ComponentLink
 {
-    public function componentLink($m, $text = null, $cssClass = null, $get = array())
+    public function componentLink($m, $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
         if ($m instanceof Vps_Component_Data) {
             $m = $m->getPage();
@@ -11,11 +11,15 @@ class Vps_View_Helper_ComponentLink
                 'name' => $m->name
             );
         }
+        if (!$get) $get = array();
         if (!empty($get)) {
             $m['url'] .= '?';
         }
         foreach ($get as $key => $val) {
             $m['url'] .= "&$key=$val";
+        }
+        if ($anchor) {
+            $m['url'] .= "#$anchor";
         }
         if (!$text) $text = $m['name'];
         if ($cssClass) {
