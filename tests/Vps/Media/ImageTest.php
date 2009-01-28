@@ -6,6 +6,9 @@ class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
 {
     public function testImageScaleDimensions()
     {
+        $this->_testBestFit(array(16, 16), array(10, 50), array(10, 10));
+        $this->_testBestFit(array(16, 16), array(50, 10), array(10, 10));
+
         $dimension = array(100, 100);
         $this->_testBestFit(array(100, 100), $dimension, array(100, 100));
         $this->_testBestFit(array(200, 200), $dimension, array(100, 100));
@@ -25,9 +28,7 @@ class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
         $this->_testBestFit(array(200, 100), $dimension, array(100, 50));
         $this->_testBestFit(array(100, 200), $dimension, array(25, 50));
         $this->_testBestFit(array(100, 30), $dimension, array(100, 30));
-        $this->markTestIncomplete();
-        $this->_testBestFit(array(16, 16), array(10, 50), array(10, 10));
-        $this->_testBestFit(array(16, 16), array(50, 10), array(10, 10));
+
     }
 
     private function _testBestFit($imageSize, $dimension, $expectedSize)
