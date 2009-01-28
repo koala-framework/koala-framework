@@ -49,7 +49,7 @@ class Vps_Assets_Dependencies
     public function getAssetFiles($assetsType, $fileType = null, $section = 'web')
     {
         if (!isset($this->_files[$assetsType])) {
-            $cacheId = 'dependencies'.$assetsType;
+            $cacheId = 'dependencies'.$assetsType.Vps_Component_Data_Root::getComponentClass();
             $cache = $this->_getCache();
             $this->_files[$assetsType] = $cache->load($cacheId);
             if ($this->_files[$assetsType]===false) {
@@ -322,7 +322,9 @@ class Vps_Assets_Dependencies
             $host = str_replace(array('.', '-'), array('', ''), $host);
             $encoding = Vps_Media_Output::getEncoding();
             $cache = $this->_getCache();
-            $cacheId = str_replace('.', '_', $fileType).$encoding.$assetsType.Vps_Setup::getConfigSection().$language.$section.$host;
+            $cacheId = str_replace('.', '_', $fileType).$encoding.$assetsType.
+                        Vps_Setup::getConfigSection().$language.$section.$host.
+                        Vps_Component_Data_Root::getComponentClass();
             if (!$cacheData = $cache->load($cacheId)) {
 
                 $cacheData  = array();
@@ -391,7 +393,9 @@ class Vps_Assets_Dependencies
                     $host = Vps_Registry::get('config')->server->domain;
                 }
                 $host = str_replace(array('.', '-'), array('', ''), $host);
-                $cacheId = 'fileContents'.$language.$section.$host.str_replace(array('/', '.', '-'), array('_', '_', '_'), $file);
+                $cacheId = 'fileContents'.$language.$section.$host.
+                    str_replace(array('/', '.', '-'), array('_', '_', '_'), $file).
+                    Vps_Component_Data_Root::getComponentClass();
                 if (!$cacheData = $cache->load($cacheId)) {
                     $cacheData['contents'] = file_get_contents($this->getAssetPath($file));
                     $cacheData['mtimeFiles'] = array($this->getAssetPath($file));
