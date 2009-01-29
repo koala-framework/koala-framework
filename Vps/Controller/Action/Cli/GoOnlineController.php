@@ -47,28 +47,33 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $webVersion = $this->_getParam('web-version');
 
 
-        echo "\n\n*** [01/14] vps-tag erstellen\n";
+        echo "\n\n*** [00/13] ueberpruefe auf nicht eingecheckte dateien\n";
+        echo "lokaler-server:\n";
+        Vps_Controller_Action_Cli_SvnUpController::checkForModifiedFiles();
+        echo "test-server:\n";
+        $this->_systemSshVps("svn-up check-for-modified-files", $testConfig);
+        echo "prod-server:\n";
+        $this->_systemSshVps("svn-up check-for-modified-files", $prodConfig);
+
+        echo "\n\n*** [01/13] vps-tag erstellen\n";
         Vps_Controller_Action_Cli_TagController::createVpsTag($this->_getParam('vps-branch'), $vpsVersion);
 
-        echo "\n\n*** [02/14] web-tag erstellen\n";
+        echo "\n\n*** [02/13] web-tag erstellen\n";
         Vps_Controller_Action_Cli_TagController::createWebTag($this->_getParam('web-branch'), $webVersion);
 
-        echo "\n\n*** [03/14] prod daten auf test uebernehmen\n";
-        $this->_systemSshVps("import", $testConfig);
-
-        echo "\n\n*** [04/14] vps tag auschecken\n";
+        echo "\n\n*** [03/13] vps tag auschecken\n";
         $this->_systemSshVps("tag-checkout vps-checkout --version=$vpsVersion", $testConfig);
 
-        echo "\n\n*** [05/14] test: vps-version anpassen\n";
+        echo "\n\n*** [04/13] test: vps-version anpassen\n";
         $this->_systemSshVps("tag-checkout vps-use --version=$vpsVersion", $testConfig);
 
-        echo "\n\n*** [06/14] test: web tag switchen\n";
+        echo "\n\n*** [05/13] test: web tag switchen\n";
         $this->_systemSshVps("tag-checkout web-switch --version=$webVersion", $testConfig);
 
-        echo "\n\n*** [07/14] test: update ausfüuehren\n";
-        $this->_systemSshVps("update", $testConfig);
+        echo "\n\n*** [06/13] prod daten auf test uebernehmen\n";
+        $this->_systemSshVps("import", $testConfig);
 
-        echo "\n\n*** [08/14] test: unit-tests laufen lassen\n";
+        echo "\n\n*** [07/13] test: unit-tests laufen lassen\n";
         if ($this->_getParam('skip-test')) {
             echo "(uebersprungen)\n";
         } else {
@@ -90,25 +95,25 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             }
         }
 
-        echo "\n\n*** [09/14] test: web zurueck auf trunk switchen\n";
+        echo "\n\n*** [08/13] test: web zurueck auf trunk switchen\n";
         $this->_systemSshVps("tag-checkout web-switch --version=trunk", $testConfig);
 
-        echo "\n\n*** [10/14] test: vps-version zurueck auf trunk anpassen\n";
+        echo "\n\n*** [09/13] test: vps-version zurueck auf trunk anpassen\n";
         $this->_systemSshVps("tag-checkout vps-use --version=trunk", $testConfig);
 
         if ($this->_getParam('skip-prod')) {
-            echo "\n\n*** [11/14] prod: (uebersprungen)\n";
+            echo "\n\n*** [10/13] prod: (uebersprungen)\n";
         } else {
-            echo "\n\n*** [11/14] prod: erstelle datenbank backup\n";
+            echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
             $this->_systemSshVps("import backup-db", $prodConfig);
 
-            echo "\n\n*** [12/14] prod: vps-version anpassen\n";
+            echo "\n\n*** [11/13] prod: vps-version anpassen\n";
             $this->_systemSshVps("tag-checkout vps-use --version=$vpsVersion", $prodConfig);
 
-            echo "\n\n*** [13/14] prod: web tag switchen\n";
+            echo "\n\n*** [12/13] prod: web tag switchen\n";
             $this->_systemSshVps("tag-checkout web-switch --version=$webVersion", $prodConfig);
 
-            echo "\n\n*** [14/14] prod: update ausführen\n";
+            echo "\n\n*** [13/13] prod: update ausführen\n";
             $this->_systemSshVps("update", $prodConfig);
         }
 

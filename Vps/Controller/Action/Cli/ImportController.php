@@ -81,7 +81,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         echo "schreibe application/update...\n";
         file_put_contents('application/update', $onlineRevision);
 
-        Vps_Controller_Action_Cli_ClearCacheController::clearCache();
+        Vps_Controller_Action_Cli_UpdateController::update();
 
         echo "fertig!\n";
 
