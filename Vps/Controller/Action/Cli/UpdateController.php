@@ -22,11 +22,11 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
     }
     public function indexAction()
     {
-        self::update();
+        self::update($this->_getParam('rev'), $this->_getParam('current'));
         exit;
     }
 
-    public static function update()
+    public static function update($rev = false, $current = false)
     {
         echo "Update\n";
         $currentRevision = false;
@@ -55,10 +55,10 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         if (!isset($updateRevision['done'])) $updateRevision['done'] = array();
         $from = $updateRevision['start'];
         $to = $currentRevision;
-        if ($this->_getParam('current')) {
+        if ($current) {
             $to++;
-        } else if ($this->_getParam('rev')) {
-            $ex = explode(':', $this->_getParam('rev'), 2);
+        } else if ($rev) {
+            $ex = explode(':', $rev, 2);
             $ex1 = $ex[0];
             if (!isset($ex[1])) {
                 $ex2 = null;
@@ -80,18 +80,18 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             echo "Looking for update-scripts from revistion $from to {$to}...";
             $updates = Vps_Update::getUpdates($from, $to);
             foreach ($updates as $k=>$u) {
-                if (in_array($u->getRevision(), $updateRevision['done']) && !$this->_getParam('rev')) {
-                    if ($this->_getParam('current') && $u->getRevision() == $to-1) continue;
+                if (in_array($u->getRevision(), $updateRevision['done']) && !$rev) {
+                    if ($current && $u->getRevision() == $to-1) continue;
                     unset($updates[$k]);
                 }
             }
             echo " found ".count($updates)."\n\n";
-            if ($this->_executeUpdate($updates, 'checkSettings')) {
+            if (self::_executeUpdate($updates, 'checkSettings')) {
                 Vps_Controller_Action_Cli_ClearCacheController::clearCache();
-                $this->_executeUpdate($updates, 'preUpdate');
-                $this->_executeUpdate($updates, 'update');
+                self::_executeUpdate($updates, 'preUpdate');
+                self::_executeUpdate($updates, 'update');
                 Vps_Controller_Action_Cli_ClearCacheController::clearCache();
-                $this->_executeUpdate($updates, 'postUpdate');
+                self::_executeUpdate($updates, 'postUpdate');
                 Vps_Controller_Action_Cli_ClearCacheController::clearCache();
                 echo "\ncleared cache";
                 foreach ($updates as $k=>$u) {
@@ -107,7 +107,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         }
     }
 
-    private function _executeUpdate($updates, $method)
+    private static function _executeUpdate($updates, $method)
     {
         $ret = true;
         foreach ($updates as $update) {
