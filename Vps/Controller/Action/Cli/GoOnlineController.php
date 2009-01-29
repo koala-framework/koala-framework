@@ -15,6 +15,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $ret['webVersion']['allowBlank'] = false;
         $ret[] = array('param' => 'skip-test');
         $ret[] = array('param' => 'skip-prod');
+        $ret[] = array('param' => 'skip-check');
         return $ret;
     }
 
@@ -48,12 +49,16 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
 
         echo "\n\n*** [00/13] ueberpruefe auf nicht eingecheckte dateien\n";
-        echo "lokaler-server:\n";
-        Vps_Controller_Action_Cli_SvnUpController::checkForModifiedFiles();
-        echo "test-server:\n";
-        $this->_systemSshVps("svn-up check-for-modified-files", $testConfig);
-        echo "prod-server:\n";
-        $this->_systemSshVps("svn-up check-for-modified-files", $prodConfig);
+        if ($this->_getParam('skip-check')) {
+            echo "(uebersprungen)\n";
+        } else {
+            echo "lokaler-server:\n";
+            Vps_Controller_Action_Cli_SvnUpController::checkForModifiedFiles();
+            echo "test-server:\n";
+            $this->_systemSshVps("svn-up check-for-modified-files", $testConfig);
+            echo "prod-server:\n";
+            $this->_systemSshVps("svn-up check-for-modified-files", $prodConfig);
+        }
 
         echo "\n\n*** [01/13] vps-tag erstellen\n";
         Vps_Controller_Action_Cli_TagController::createVpsTag($this->_getParam('vps-branch'), $vpsVersion);
@@ -74,7 +79,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $this->_systemSshVps("import", $testConfig);
 
         echo "\n\n*** [07/13] test: unit-tests laufen lassen\n";
-        if ($this->_getParam('skip-test')) {
+        if ($this->_getParam('skip-test') || $this->_getParam('skip-tests')) {
             echo "(uebersprungen)\n";
         } else {
             Vps_Controller_Action_Cli_TestController::initForTests();
