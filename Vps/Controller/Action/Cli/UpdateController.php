@@ -22,6 +22,12 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
     }
     public function indexAction()
     {
+        self::update();
+        exit;
+    }
+
+    public static function update()
+    {
         echo "Update\n";
         $currentRevision = false;
         try {
@@ -99,10 +105,6 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 echo "\nupdate stopped\n";
             }
         }
-
-        //$this->_helper->viewRenderer->setNoRender(true);
-
-        exit;
     }
 
     private function _executeUpdate($updates, $method)

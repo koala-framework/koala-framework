@@ -159,6 +159,8 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         passthru("svn cp $b/$branch $b/tags/$project/$version -m \"created new version through vps-cli\"", $ret);
         if (!$ret) {
             echo "Tag tags/$project/$version from $branch successfully created.\n";
+        } else {
+            throw new Vps_ClientException("Failed creating Tag '$version'");
         }
     }
 }
