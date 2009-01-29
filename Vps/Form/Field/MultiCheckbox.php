@@ -53,6 +53,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     {
         $ret = parent::getMetaData();
         $ret['items'] = $this->_getFields()->getMetaData();
+        if (!$ret['items']) unset($ret['items']);
         if (isset($ret['tableName'])) unset($ret['tableName']);
         if (isset($ret['values'])) unset($ret['values']);
         return $ret;
