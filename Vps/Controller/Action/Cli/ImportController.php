@@ -83,7 +83,15 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         Vps_Controller_Action_Cli_UpdateController::update();
 
-        echo "fertig!\n";
+        if (Vps_Registry::get('config')->application->id != 'service') {
+            if (file_exists('/www/public/vps-projekte/service')) {
+                echo "\n\nso, und jetzt noch den service importieren:\n";
+                system("cd /www/public/vps-projekte/service && php bootstrap.php import");
+            }
+
+            echo "\n\nfertig!\n";
+        }
+
 
         $this->_helper->viewRenderer->setNoRender(true);
     }
