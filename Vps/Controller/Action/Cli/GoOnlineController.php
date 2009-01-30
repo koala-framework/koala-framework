@@ -47,7 +47,6 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $vpsVersion = $this->_getParam('vps-version');
         $webVersion = $this->_getParam('web-version');
 
-
         echo "\n\n*** [00/13] ueberpruefe auf nicht eingecheckte dateien\n";
         if ($this->_getParam('skip-check')) {
             echo "(uebersprungen)\n";
@@ -120,6 +119,14 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
             echo "\n\n*** [13/13] prod: update ausführen\n";
             $this->_systemSshVps("update", $prodConfig);
+        }
+
+        $cfg = Vps_Registry::get('config');
+        $msg = "{$cfg->application->name} ist soeben mit Version $webVersion (Vps $vpsVersion) online gegangen.";
+        foreach ($cfg->notifyUsers as $user=>$state) {
+            if ($state) {
+                Vps_Util_Jabber_SendMessage::send($user.'@vivid', $msg);
+            }
         }
 
         echo "\n\n\n\033[32mF E R T I G ! ! !\033[0m\n";
