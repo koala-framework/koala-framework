@@ -7,6 +7,7 @@ class Vps_Model_Session extends Vps_Model_Data_Abstract
     public function __construct(array $config = array())
     {
         if (isset($config['namespace'])) $this->_namespace = $config['namespace'];
+        if (isset($config['defaultData'])) $this->_defaultData = $config['defaultData'];
         parent::__construct($config);
     }
 
