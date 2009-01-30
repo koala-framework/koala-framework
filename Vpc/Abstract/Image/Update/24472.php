@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_Image_Update_24490 extends Vps_Update
+class Vpc_Abstract_Image_Update_24472 extends Vps_Update
 {
     protected function _init()
     {
