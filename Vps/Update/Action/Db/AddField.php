@@ -21,6 +21,7 @@ class Vps_Update_Action_Db_AddField extends Vps_Update_Action_Db_Abstract
 
     public function update()
     {
+        echo "add field $this->field to $this->table\n";
         $table = $this->model->getRow($this->table);
         if (!$table) {
             throw new Vps_ClientException("Table '$this->table' not found");
@@ -38,6 +39,7 @@ class Vps_Update_Action_Db_AddField extends Vps_Update_Action_Db_Abstract
         if (isset($this->default)) $field->default = $this->default;
         if (isset($this->extra)) $field->extra = $this->extra;
         $field->save();
+
 
         return array();
     }
