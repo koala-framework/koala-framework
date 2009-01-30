@@ -143,7 +143,8 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
         $c = $this->_root->getComponentById('1600');
-        $c->getComponent()->getImageRow()->save();
+        $row = $c->getComponent()->getImageRow();
+        $row->save();
         Vps_Component_RowObserver::getInstance()->process(false);
         Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
         $this->assertEquals(3, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);

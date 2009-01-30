@@ -6,7 +6,7 @@ class Vpc_Basic_Image_TestModel extends Vpc_Abstract_Image_Model
         $this->_referenceMap['Image']['refModelClass'] = 'Vpc_Basic_Image_UploadsModel';
 
         $config['proxyModel'] = new Vps_Model_FnF(array(
-                'columns' => array('component_id', 'dimension', 'width', 'height', 'scale', 'vps_upload_id', 'filename', 'enlarge', 'comment'),
+                'columns' => array(),
                 'primaryKey' => 'component_id',
                 'data'=> array(
                     array('component_id'=>1600, 'vps_upload_id'=>1),
