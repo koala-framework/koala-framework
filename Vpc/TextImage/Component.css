@@ -1,0 +1,14 @@
+.$cssClass .positionLeft .image {
+    float: left;
+    margin-right: 10px;
+}
+.$cssClass .positionLeft .noFlow .text {
+    padding-left: 10px;
+}
+.$cssClass .positionRight .image {
+    float: right;
+    margin-left: 10px;
+}
+.$cssClass .positionRight .noFlow .text {
+    padding-right: 10px;
+}

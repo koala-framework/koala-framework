@@ -15,13 +15,20 @@ class Vpc_TextImage_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $row = $this->getRow();
+        $ret['row'] = $row;
         if (!$row->image) {
             $ret['image'] = false;
         } else {
+            $dim = $ret['image']->getComponent()->getImageDimensions();
+            $ret['imageWidth'] = false;
+            if ($dim && isset($dim['width'])) {
+                $ret['imageWidth'] = $dim['width'];
+            }
             $pos = $row->position;
             if ($pos == 'alternate') {
                 $pos = 'left'; //TODO
             }
+            $ret['position'] = $pos;
             $ret['propCssClass'] = 'position'.ucfirst($pos);
             if ($row->flow) {
                 $ret['propCssClass'] .= ' flow';
