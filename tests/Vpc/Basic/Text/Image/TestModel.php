@@ -1,12 +1,12 @@
 <?php
-class Vpc_Basic_Text_Image_TestModel extends Vpc_Basic_Image_Model
+class Vpc_Basic_Text_Image_TestModel extends Vpc_Abstract_Image_Model
 {
     public function __construct($config = array())
     {
         $this->_referenceMap['Image']['refModelClass'] = 'Vpc_Basic_Text_Image_UploadsModel';
 
         $config['proxyModel'] = new Vps_Model_FnF(array(
-            'columns' => array('component_id', 'width', 'height', 'scale', 'vps_upload_id', 'filename', 'enlarge', 'comment'),
+            'columns' => array(),
             'primaryKey' => 'component_id',
             'data'=> array(
                 array('component_id'=>'1011-i1', 'vps_upload_id'=>1),

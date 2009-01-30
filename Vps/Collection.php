@@ -1,5 +1,5 @@
 <?php
-class Vps_Collection implements ArrayAccess, IteratorAggregate
+class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
 {
     private $_array = array();
 
@@ -13,6 +13,11 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
     public function __construct($defaultClass = null)
     {
         $this->_defaultClass = $defaultClass;
+    }
+
+    public function count()
+    {
+        return count($this->_array);
     }
 
     //ArrayAccess

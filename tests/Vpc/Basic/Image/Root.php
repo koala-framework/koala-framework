@@ -19,6 +19,26 @@ class Vpc_Basic_Image_Root extends Vps_Component_NoCategoriesRoot
                   'parent_id'=>null, 'component'=>'parentImage', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
             array('id'=>1606, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
                   'parent_id'=>null, 'component'=>'bestFitWithZeroHeight', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1607, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'multipleDimensions', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1608, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'multipleDimensions', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1609, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'multipleDimensions', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1610, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'multipleDimensions', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1611, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'multipleDimensions', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1612, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'multipleDimensions', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1613, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'multipleDimensions', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1614, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'multipleDimensions', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1615, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'multipleDimensions', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
+            array('id'=>1616, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'multipleDimensions', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
 
         )));
         $ret['generators']['page']['component'] = array(
@@ -26,7 +46,8 @@ class Vpc_Basic_Image_Root extends Vps_Component_NoCategoriesRoot
             'imageFix' => 'Vpc_Basic_Image_FixDimensionComponent',
             'emptyImage' => 'Vpc_Basic_Image_EmptyImageComponent',
             'parentImage' => 'Vpc_Basic_Image_ParentImageComponent_Component',
-            'bestFitWithZeroHeight' => 'tests_Vpc_Basic_Image_BestFitWithZeroHeightComponent'
+            'bestFitWithZeroHeight' => 'Vpc_Basic_Image_BestFitWithZeroHeightComponent',
+            'multipleDimensions' => 'Vpc_Basic_Image_MultipleDimensionsComponent'
         );
 
         unset($ret['generators']['title']);

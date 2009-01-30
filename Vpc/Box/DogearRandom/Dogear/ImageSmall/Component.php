@@ -6,7 +6,9 @@ class Vpc_Box_DogearRandom_Dogear_ImageSmall_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Image small');
-        $ret['dimensions'] = array(140, 140, Vps_Media_Image::SCALE_CROP);
+        $ret['dimensions'] = array(
+            array('width'=>140, 'height'=>140, 'scale'=>Vps_Media_Image::SCALE_CROP)
+        );
         return $ret;
     }
 }

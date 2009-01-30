@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_List_Row extends Vpc_Row
+class Vpc_Abstract_List_Row extends Vps_Model_Proxy_Row
 {
     protected function _delete()
     {
