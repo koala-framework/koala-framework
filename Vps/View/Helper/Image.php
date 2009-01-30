@@ -23,7 +23,7 @@ class Vps_View_Helper_Image
             }
         }
 
-        if ($image instanceof Vpc_Basic_Image_Component) {
+        if ($image instanceof Vpc_Abstract_Image_Component) {
             $image = $image->getData();
         }
         if (is_string($image)){
@@ -43,8 +43,8 @@ class Vps_View_Helper_Image
             $size['height'] = $size[1];
         } else if ($image instanceof Vps_Component_Data) {
             $c = $image->getComponent();
-            if (!$c instanceof Vpc_Basic_Image_Component) {
-                throw new Vps_Exception("No Vpc_Basic_Image_Component Component given (is '".get_class($c)."')");
+            if (!$c instanceof Vpc_Abstract_Image_Component) {
+                throw new Vps_Exception("No Vpc_Abstract_Image_Component Component given (is '".get_class($c)."')");
             }
             $url = $c->getImageUrl();
             $size = $c->getImageDimensions();

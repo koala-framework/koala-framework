@@ -6,7 +6,7 @@ class Vpc_Basic_Image_ParentImageComponent_Child_Component
     {
         $ret = parent::getSettings();
         $ret['modelname'] = 'Vpc_Basic_Image_TestModel';
-        $ret['dimensions'] = array(16, 16, Vps_Media_Image::SCALE_DEFORM);
+        $ret['dimensions'] = array(array('width'=>16, 'height'=>16, 'scale'=>Vps_Media_Image::SCALE_DEFORM));
         $ret['useParentImage'] = true;
         return $ret;
     }

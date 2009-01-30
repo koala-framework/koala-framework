@@ -5,7 +5,9 @@ class Vpc_Box_Favicon_Component extends Vpc_Basic_Image_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Favicon');
-        $ret['dimensions'] = array(16, 16, Vps_Media_Image::SCALE_ORIGINAL);
+        $ret['dimensions'] = array(
+            array('width'=>16, 'height'=>16, 'scale'=>Vps_Media_Image::SCALE_ORIGINAL)
+        );
         return $ret;
     }
 

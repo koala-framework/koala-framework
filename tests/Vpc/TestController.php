@@ -9,6 +9,7 @@ class Vpc_TestController extends Vps_Controller_Action
     public function indexAction()
     {
         Zend_Registry::get('config')->debug->componentCache->disable = true;
+        Zend_Registry::set('db', false);
 
         Vps_Component_Data_Root::setComponentClass($this->_getParam('root'));
         $root = Vps_Component_Data_Root::getInstance();

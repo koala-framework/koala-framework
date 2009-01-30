@@ -157,4 +157,58 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(16, $s['width']);
         $this->assertEquals(16, $s['height']);
     }
+
+    public function testMultipleDimensions()
+    {
+        $c = $this->_root->getComponentById('1607');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(100, $s['width']);
+        $this->assertEquals(100, $s['height']);
+
+        $c = $this->_root->getComponentById('1608');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(200, $s['width']);
+        $this->assertEquals(200, $s['height']);
+
+        $c = $this->_root->getComponentById('1609');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(16, $s['width']);
+        $this->assertEquals(16, $s['height']);
+
+        $c = $this->_root->getComponentById('1610');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(50, $s['width']);
+        $this->assertEquals(300, $s['height']);
+
+        $c = $this->_root->getComponentById('1611');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(300, $s['width']);
+        $this->assertEquals(50, $s['height']);
+
+        $c = $this->_root->getComponentById('1612');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(50, $s['width']);
+        $this->assertEquals(50, $s['height']);
+
+        $c = $this->_root->getComponentById('1613');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(10, $s['width']);
+        $this->assertEquals(10, $s['height']);
+
+        $c = $this->_root->getComponentById('1614');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(300, $s['width']); //correct?
+        $this->assertEquals(300, $s['height']);
+/*
+        $c = $this->_root->getComponentById('1615');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(300, $s['width']); //correct?
+        $this->assertEquals(300, $s['height']); //correct?
+
+        $c = $this->_root->getComponentById('1616');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(300, $s['width']); //correct?
+        $this->assertEquals(300, $s['height']); //correct?
+*/
+    }
 }

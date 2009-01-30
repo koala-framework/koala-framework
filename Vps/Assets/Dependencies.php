@@ -52,6 +52,7 @@ class Vps_Assets_Dependencies
             $cacheId = 'dependencies'.$assetsType.Vps_Component_Data_Root::getComponentClass();
             $cache = $this->_getCache();
             $this->_files[$assetsType] = $cache->load($cacheId);
+            $this->_files[$assetsType] = false;
             if ($this->_files[$assetsType]===false) {
                 Vps_Benchmark::count('processing dependencies miss', $assetsType);
                 $this->_files[$assetsType] = array();

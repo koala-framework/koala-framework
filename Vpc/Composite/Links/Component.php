@@ -7,7 +7,7 @@ class Vpc_Composite_Links_Component extends Vpc_Abstract_List_Component
         $ret['generators']['child']['component'] = 'Vpc_Basic_Link_Component';
         $ret['componentName'] = trlVps('Links');
         $ret['componentIcon'] = new Vps_Asset('links');
-        $ret['tablename'] = 'Vpc_Composite_Links_Model';
+        $ret['modelname'] = 'Vpc_Composite_Links_Model';
         $ret['cssClass'] = 'webStandard';
 
         return $ret;

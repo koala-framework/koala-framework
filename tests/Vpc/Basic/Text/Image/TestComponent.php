@@ -5,7 +5,9 @@ class Vpc_Basic_Text_Image_TestComponent extends Vpc_Basic_Text_Image_Component
     {
         $ret = parent::getSettings();
         $ret['modelname'] = 'Vpc_Basic_Text_Image_TestModel';
-        $ret['dimensions'] = array(100, 100, Vps_Media_Image::SCALE_DEFORM);
+        $ret['dimensions'] = array(
+            array('width'=>100, 'height'=>100, 'scale'=>Vps_Media_Image::SCALE_DEFORM)
+        );
         return $ret;
     }
 

@@ -5,7 +5,7 @@ class Vpc_Basic_ImagePosition_Image_TestComponent extends Vpc_Basic_Image_Compon
     {
         $ret = parent::getSettings();
         $ret['modelname'] = 'Vpc_Basic_ImagePosition_Image_TestModel';
-        $ret['dimensions'] = array(100, 100);
+        $ret['dimensions'] = array(array('width'=>100, 'height'=>100));
         return $ret;
     }
 }

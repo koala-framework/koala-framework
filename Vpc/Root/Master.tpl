@@ -1,7 +1,7 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?= $this->component($this->boxes['title']) ?>
+        <?=$this->assets('Frontend')?>
     </head>
     <body>
         Default-Master, in Root-Komponente überschreiben!

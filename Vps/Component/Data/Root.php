@@ -30,7 +30,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public static function getInstance()
     {
         if (is_null(self::$_instance)) {
-            self::$_instance = new self(array('componentClass' => self::getComponentClass()));
+            $c = self::getComponentClass();
+            if ($c) {
+                self::$_instance = new self(array('componentClass' => $c));
+            } else {
+                self::$_instance = false;
+            }
         }
         return self::$_instance;
     }
@@ -38,7 +43,11 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public static function getComponentClass()
     {
         if (is_null(self::$_rootComponentClass)) {
-            self::$_rootComponentClass = Vps_Registry::get('config')->vpc->rootComponent;
+            if (Vps_Registry::get('config')->vpc->rootComponent) {
+                self::$_rootComponentClass = Vps_Registry::get('config')->vpc->rootComponent;
+            } else {
+                self::$_rootComponentClass = false;
+            }
         }
         return self::$_rootComponentClass;
     }

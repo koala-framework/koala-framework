@@ -35,4 +35,11 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
         ));
         return $ret;
     }
+
+    public function hasContent()
+    {
+        return $this->getData()->getChildComponent(array(
+            'generator' => 'link'
+        ))->hasContent();
+    }
 }

@@ -1,4 +1,7 @@
-<?php
-echo $this->component($this->linkTag);
-echo $this->mailEncodeText($this->text);
-echo '</a>';
+<?=$this->component($this->linkTag)?>
+
+    <?=$this->mailEncodeText($this->text)?>
+
+<?=$this->ifHasContent($this->linkTag)?>
+</a>
+<?=$this->ifHasContent()?>

@@ -109,6 +109,11 @@ class Vps_Component_Abstract
                 $incPaths = explode(PATH_SEPARATOR, get_include_path());
                 foreach (self::getComponentClasses(false/*don't use settings cache*/) as $c) {
                     self::$_settings[$c] = call_user_func(array($c, 'getSettings'));
+                    try {
+                        call_user_func(array($c, 'validateSettings'), self::$_settings[$c], $c);
+                    } catch (Vps_Exception $e) {
+                        throw new Vps_Exception("$c: ".$e->getMessage());
+                    }
                     self::$_settings[$c]['templates'] = array(
                         'Master' => Vpc_Admin::getComponentFile($c, 'Master', 'tpl'),
                         'Component' => Vpc_Admin::getComponentFile($c, 'Component', 'tpl')
@@ -160,6 +165,10 @@ class Vps_Component_Abstract
             'generators'    => array(),
             'flags'         => array()
         );
+    }
+
+    public static function validateSettings($settings, $componentClass)
+    {
     }
 
     public function getTable($tablename = null)
@@ -264,10 +273,13 @@ class Vps_Component_Abstract
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
         }
-        foreach ($classes as $class) {
-            if ($class && !in_array($class, $componentClasses)) {
-                $componentClasses[] = $class;
-                self::_getChildComponentClasses($componentClasses, $class);
+        foreach ($classes as $c) {
+            if ($c&& !in_array($c, $componentClasses)) {
+                if (!class_exists($c)) {
+                    throw new Vps_Exception("Component Class '$c' does not exist, used in '$class'");
+                }
+                $componentClasses[] = $c;
+                self::_getChildComponentClasses($componentClasses, $c);
             }
         }
     }
