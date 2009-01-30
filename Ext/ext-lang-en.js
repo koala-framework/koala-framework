@@ -5,26 +5,26 @@
  * English Translations
  */
 
-if(Ext.UpdateManager && Ext.UpdateManager.defaults){
+if(Ext && Ext.UpdateManager && Ext.UpdateManager.defaults){
     Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">'+trlVps('Loading...')+'</div>';
 }
-if(Ext.View){
+if(Ext && Ext.View){
   Ext.View.prototype.emptyText = "";
 }
 
-if(Ext.grid.Grid){
+if(Ext && Ext.grid.Grid){
   Ext.grid.Grid.prototype.ddText = trlVps("{0} selected row(s)");
 }
 
-if(Ext.TabPanelItem){
+if(Ext && Ext.TabPanelItem){
   Ext.TabPanelItem.prototype.closeText = trlVps("Close this tab");
 }
 
-if(Ext.form.Field){
+if(Ext && Ext.form.Field){
   Ext.form.Field.prototype.invalidText = trlVps("The value in this field is invalid");
 }
 
-if(Ext.LoadMask){
+if(Ext && Ext.LoadMask){
   Ext.LoadMask.prototype.msg = trlVps("Loading...");
 }
 
@@ -80,7 +80,7 @@ Date.getShortDayName = function(day) {
   return Date.dayNames[day].substring(0, 3);
 };
 
-if(Ext.MessageBox){
+if(Ext && Ext.MessageBox){
   Ext.MessageBox.buttonText = {
     ok     : trlVps("OK"),
     cancel : trlVps("Cancel"),
@@ -98,7 +98,7 @@ if(Ext.MessageBox){
   };
 }*/
 
-if(Ext.DatePicker){
+if(Ext && Ext.DatePicker){
   Ext.apply(Ext.DatePicker.prototype, {
     todayText         : trlVps("Today"),
     minText           : trlVps("This date is before the minimum date"),
@@ -118,7 +118,7 @@ if(Ext.DatePicker){
   });
 }
 
-if(Ext.PagingToolbar){
+if(Ext && Ext.PagingToolbar){
   Ext.apply(Ext.PagingToolbar.prototype, {
     beforePageText : trlVps("Page"),
     afterPageText  : trlVps("of {0}"),
@@ -132,7 +132,7 @@ if(Ext.PagingToolbar){
   });
 }
 
-if(Ext.form.TextField){
+if(Ext && Ext.form.TextField){
   Ext.apply(Ext.form.TextField.prototype, {
     minLengthText : trlVps("The minimum length for this field is {0}"),
     maxLengthText : trlVps("The maximum length for this field is {0}"),
@@ -142,7 +142,7 @@ if(Ext.form.TextField){
   });
 }
 
-if(Ext.form.NumberField){
+if(Ext && Ext.form.NumberField){
   Ext.apply(Ext.form.NumberField.prototype, {
     minText : trlVps("The minimum value for this field is {0}"),
     maxText : trlVps("The maximum value for this field is {0}"),
@@ -150,7 +150,7 @@ if(Ext.form.NumberField){
   });
 }
 
-if(Ext.form.DateField){
+if(Ext && Ext.form.DateField){
   Ext.apply(Ext.form.DateField.prototype, {
     disabledDaysText  : trlVps("Disabled"),
     disabledDatesText : trlVps("Disabled"),
@@ -162,14 +162,14 @@ if(Ext.form.DateField){
   });
 }
 
-if(Ext.form.ComboBox){
+if(Ext && Ext.form.ComboBox){
   Ext.apply(Ext.form.ComboBox.prototype, {
     loadingText       : trlVps("Loading..."),
     valueNotFoundText : undefined
   });
 }
 
-if(Ext.form.VTypes){
+if(Ext && Ext.form.VTypes){
   Ext.apply(Ext.form.VTypes, {
     emailText    : trlVps('This field should be an e-mail address in the format "user@domain.com"'),
     urlText      : trlVps('This field should be a URL in the format "http:/'+'/www.domain.com"'),
@@ -178,7 +178,7 @@ if(Ext.form.VTypes){
   });
 }
 
-if(Ext.form.HtmlEditor){
+if(Ext && Ext.form.HtmlEditor){
   Ext.apply(Ext.form.HtmlEditor.prototype, {
     createLinkText : trlVps('Please enter the URL for the link:'),
     buttonTips : {
@@ -256,7 +256,7 @@ if(Ext.form.HtmlEditor){
   });
 }
 
-if(Ext.grid.GridView){
+if(Ext && Ext.grid.GridView){
   Ext.apply(Ext.grid.GridView.prototype, {
     sortAscText  : trlVps("Sort Ascending"),
     sortDescText : trlVps("Sort Descending"),
@@ -266,7 +266,7 @@ if(Ext.grid.GridView){
   });
 }
 
-if(Ext.grid.GroupingView){
+if(Ext && Ext.grid.GroupingView){
   Ext.apply(Ext.grid.GroupingView.prototype, {
     emptyGroupText : trlVps('(None)'),
     groupByText    : trlVps('Group By This Field'),
@@ -274,7 +274,7 @@ if(Ext.grid.GroupingView){
   });
 }
 
-if(Ext.grid.PropertyColumnModel){
+if(Ext && Ext.grid.PropertyColumnModel){
   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
     nameText   : trlVps("Name"),
     valueText  : trlVps("Value"),
@@ -282,7 +282,7 @@ if(Ext.grid.PropertyColumnModel){
   });
 }
 
-if(Ext.layout && Ext.layout.BorderLayout && Ext.layout.BorderLayout.SplitRegion){
+if(Ext && Ext.layout && Ext.layout.BorderLayout && Ext.layout.BorderLayout.SplitRegion){
   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
     splitTip            : trlVps("Drag to resize."),
     collapsibleSplitTip : trlVps("Drag to resize. Double click to hide.")
