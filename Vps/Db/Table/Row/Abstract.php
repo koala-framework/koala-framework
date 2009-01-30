@@ -295,4 +295,33 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
         return parent::findParentRow($parentTable, $ruleKey, $select);
     }
+
+    protected function _postUpdate()
+    {
+        parent::_postUpdate();
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            Vps_Component_RowObserver::getInstance()->update($this);
+        }
+    }
+
+    protected function _postInsert()
+    {
+        parent::_postInsert();
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            Vps_Component_RowObserver::getInstance()->insert($this);
+        }
+    }
+
+    protected function _postDelete()
+    {
+        parent::_postDelete();
+        /* Das clone vor dem $this is zwar bisserl eine verarsche, aber da im
+           Vps_Component_Cache nur gesammelt und später erst ausgeführt ist,
+           wär sonst die row (bzw. dessen Daten) in einer onRowDelete() methode
+           einer Admin.php nicht mehr verfügbar
+        */
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            Vps_Component_RowObserver::getInstance()->delete(clone $this);
+        }
+    }
 }
