@@ -33,7 +33,7 @@ function p($src, $Type = 'LOG')
     if (function_exists('debug_backtrace')) {
         $bt = debug_backtrace();
         $i = 0;
-        if ($bt[1]['function'] == 'd') $i = 1;
+        if (isset($bt[1]) && isset($bt[1]['function']) && $bt[1]['function'] == 'd') $i = 1;
         echo $bt[$i]['file'].':'.$bt[$i]['line'];
         if (!isset($_SERVER['SHELL'])) echo "<br />";
         echo "\n";
