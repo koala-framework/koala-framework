@@ -87,12 +87,9 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             }
             echo " found ".count($updates)."\n\n";
             if (self::_executeUpdate($updates, 'checkSettings')) {
-                Vps_Controller_Action_Cli_ClearCacheController::clearCache();
                 self::_executeUpdate($updates, 'preUpdate');
                 self::_executeUpdate($updates, 'update');
-                Vps_Controller_Action_Cli_ClearCacheController::clearCache();
                 self::_executeUpdate($updates, 'postUpdate');
-                Vps_Controller_Action_Cli_ClearCacheController::clearCache();
                 echo "\ncleared cache";
                 foreach ($updates as $k=>$u) {
                     if (!in_array($u->getRevision(), $updateRevision['done'])) {
@@ -111,6 +108,8 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
     {
         $ret = true;
         foreach ($updates as $update) {
+            Vps_Controller_Action_Cli_ClearCacheController::clearCache();
+            Vps_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
             if ($method != 'checkSettings') echo "executing $method ".get_class($update)."... ";
             $e = false;
             try {
