@@ -13,6 +13,7 @@ class Vps_Update_Action_Db_DropField extends Vps_Update_Action_Db_Abstract
 
     public function update()
     {
+        echo "drop field $this->field from $this->table\n";
         $table = $this->model->getRow($this->table);
         $field = $table->getChildRows('Fields', $this->model->select()
                     ->whereId($this->field))->current();
