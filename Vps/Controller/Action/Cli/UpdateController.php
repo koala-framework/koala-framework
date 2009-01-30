@@ -108,9 +108,11 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
     {
         $ret = true;
         foreach ($updates as $update) {
-            Vps_Controller_Action_Cli_ClearCacheController::clearCache();
-            Vps_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
-            if ($method != 'checkSettings') echo "executing $method ".get_class($update)."... ";
+            if ($method != 'checkSettings') {
+                Vps_Controller_Action_Cli_ClearCacheController::clearCache();
+                Vps_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
+                echo "executing $method ".get_class($update)."... ";
+            }
             $e = false;
             try {
                 $res = $update->$method();
