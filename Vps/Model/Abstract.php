@@ -216,6 +216,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function getDependentModel($rule)
     {
+        if (!$rule) {
+            throw new Vps_Exception("rule parameter is required");
+        }
+        if (!is_string($rule)) {
+            throw new Vps_Exception("rule parameter as string is required, ".gettype($rule)." given");
+        }
         if (!isset($this->_dependentModels[$rule])) {
             throw new Vps_Exception("dependent Model with rule '$rule' does not exist for '".get_class($this)."'");
         }
