@@ -22,6 +22,9 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
     {
         Vps_Form_Field_Abstract::prepareSave($row, $postData);
         $value = $postData[$this->getFieldName()];
+        if (is_string($value)) {
+            $value = Zend_Json::decode($value);
+        }
         if (!is_array($value)) $value = array();
         $row->dimension = isset($value['dimension']) ? $value['dimension'] : null;
         $row->width = isset($value['width']) ? $value['width'] : null;
