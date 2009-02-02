@@ -86,7 +86,18 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 }
             }
             echo " found ".count($updates)."\n\n";
+
             if (self::_executeUpdate($updates, 'checkSettings')) {
+
+                $offlineBootstrap  = "<?php\nheader(\"HTTP/1.0 503 Service Unavailable\");\n";
+                $offlineBootstrap .= "echo \"<html><head><title>503 Service Unavailable</title></head><body>\";\n";
+                $offlineBootstrap .= "echo \"<h1>Service Unavailable</h1>\";\n";
+                $offlineBootstrap .= "echo \"<p>Server ist im Moment wegen Wartungsarbeiten nicht verfügbar.</p>\";\n";
+                $offlineBootstrap .= "echo \"</body></html>\";\n";
+                rename('bootstrap.php', 'bootstrap.php.backup');
+                file_put_contents('bootstrap.php', $offlineBootstrap);
+                echo "\nwrote offline bootstrap.php";
+
                 self::_executeUpdate($updates, 'preUpdate');
                 self::_executeUpdate($updates, 'update');
                 self::_executeUpdate($updates, 'postUpdate');
@@ -98,6 +109,10 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 }
                 file_put_contents('application/update', serialize($updateRevision));
                 echo "\n\033[32mupdate finished\033[0m\n";
+
+                rename('bootstrap.php.backup', 'bootstrap.php');
+                echo "\nrestored bootstrap.php";
+
             } else {
                 echo "\nupdate stopped\n";
             }
