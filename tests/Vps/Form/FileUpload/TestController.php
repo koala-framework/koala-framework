@@ -15,6 +15,9 @@ class Vps_Form_FileUpload_TestController extends Vps_Controller_Action_Auto_Form
         $this->_form->add(new Vps_Form_Field_File("filename", "Filename"))
             ->setMaxResolution(200);
 
+        $this->_form->add(new Vps_Form_Field_File("filename", "Filename2"))
+            ->setMaxResolution(200);
+
     }
 }
 
