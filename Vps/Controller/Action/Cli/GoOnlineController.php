@@ -16,6 +16,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $ret[] = array('param' => 'skip-test');
         $ret[] = array('param' => 'skip-prod');
         $ret[] = array('param' => 'skip-check');
+        $ret[] = array('param' => 'skip-notify');
         return $ret;
     }
 
@@ -121,11 +122,13 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             $this->_systemSshVps("update", $prodConfig);
         }
 
-        $cfg = Vps_Registry::get('config');
-        $msg = "{$cfg->application->name} ist soeben mit Version $webVersion (Vps $vpsVersion) online gegangen.";
-        foreach ($cfg->notifyUsers as $user=>$state) {
-            if ($state) {
-                Vps_Util_Jabber_SendMessage::send($user.'@vivid', $msg);
+        if (!$this->_getParam('skip-prod')) {
+            $cfg = Vps_Registry::get('config');
+            $msg = "{$cfg->application->name} ist soeben mit Version $webVersion (Vps $vpsVersion) online gegangen.";
+            foreach ($cfg->developers as $user) {
+                if ($user->notifyGoOnline && $user->jid) {
+                    Vps_Util_Jabber_SendMessage::send($user->jid, $msg);
+                }
             }
         }
 
