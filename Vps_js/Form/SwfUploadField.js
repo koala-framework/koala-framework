@@ -32,9 +32,8 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         }
         this.infoTpl.compile();
 
-        this.swfReady = false;
-
         Vps.Form.SwfUploadField.superclass.initComponent.call(this);
+
     },
     afterRender: function() {
         Vps.Form.SwfUploadField.superclass.afterRender.call(this);
@@ -42,27 +41,15 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             style: 'margin-right: 10px; padding: 5px; float: left; border: 1px solid #b5b8c8;'+
                    'background-color: white;'
         });
-        this.uploadButton = new Ext.Button({
-            text: trlVps('Upload File'),
-            cls: 'x-btn-text-icon',
-            icon: '/assets/silkicons/add.png',
-            renderTo: this.el.createChild({ style: 'float:left; margin-right: 5px; ' }),
-            scope: this,
-            handler: function() {
-                if (this.swfReady) {
-                    this.swfu.selectFile();
-                } else {
-                    var win = new Vps.Form.FileUploadWindow({
-                        maxResolution: this.maxResolution
-                    });
-                    win.on('uploaded', function(win, result) {
-                        this.setValue(result.value);
-                        this.fireEvent('uploaded', this, result.value);
-                    }, this);
-                    win.show();
-                }
-            }
-        });
+
+        this.previewImage.update(this.emptyTpl); //bild wird in der richtigen größe angezeigt
+
+        this.uploadButtonContainer = this.el.createChild({
+                                         style: 'float:left; margin-right: 5px; '
+                                     });
+
+        this.uploadButtonContainerChildId = 'uploadButton'+Ext.id();
+        this.createUploadButton(false);
         this.deleteButton = new Ext.Button({
             text: trlVps('Delete File'),
             cls: 'x-btn-text-icon',
@@ -77,8 +64,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             style: 'margin-top: 3px;'
         });
 
-        if (Ext.isLinux) return;
-        return; // Flash Uploader deaktiviert
+        //return; // Flash Uploader deaktiviert
         if (this.allowOnlyImages) {
             fileTypes = '*.jpg;*.jpeg;*.gif;*.png';
             fileTypesDescription = 'Web Image Files';
@@ -92,23 +78,38 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         var cookies = document.cookie.split(';');
         Ext.each(cookies, function(c) {
             c = c.split('=');
-            if (c[0] == 'PHPSESSID' && c[1]) {
+
+            if (c[0].trim() == 'PHPSESSID' && c[1]) {
                 params.PHPSESSID = c[1];
             }
         });
         if (!params.PHPSESSID) return;
+        if (!(navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"])){
+            return;
+        }
+        /*this.uploadChild = this.uploadButtonContainer.createChild({
+            id: 'uploadButton'+Ext.id()
+        });*/
+        this.checkSwf = false;
         this.swfu = new SWFUpload({
             custom_settings: {field: this},
             upload_url: location.protocol+'/'+'/'+location.host+'/vps/media/upload/json-upload',
-            flash_url: '/assets/swfupload/Flash9/swfupload_f9.swf',
+            flash_url: '/assets/swfupload/Flash/swfupload.swf',
             file_size_limit: this.fileSizeLimit,
             file_types: fileTypes,
             file_types_description: fileTypesDescription,
             post_params: params,
-            swfupload_loaded_handler: function() {
-                this.customSettings.field.swfReady = true;
-            },
+            button_image_url: "/assets/swfupload/Flash/uploadbutton.jpg",
+            button_width: "120",
+            button_height: "21",
+            button_placeholder_id: this.uploadButtonContainerChildId,
+            button_text: '<span class="theFont">'+trlVps('Upload File')+'</span>',
+            button_text_style: ".theFont { font-size: 11; font-family:tahoma,verdana, helvetica;}",
+            button_text_left_padding: 28,
+            button_text_top_padding: 2,
+
             file_queued_handler: function(file) {
+                this.checkSwf = true;
                 this.progress = Ext.MessageBox.show({
                     title : trlVps('Upload'),
                     msg : trlVps('Uploading file'),
@@ -169,14 +170,84 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             },
             upload_error_handler: function(file, errorCode, errorMessage) {
                 this.progress.hide();
-                if (errorCode != SWFUpload.UPLOAD_ERROR.FILE_CANCELLED) {
-                    Vps.handleError(errorMessage, 'Upload Error');
+                // Upload Errors
+                var message = errorMessage;
+                 if (errorCode == SWFUpload.UPLOAD_ERROR.HTTP_ERROR) {
+                    message = trlVps("A http Error occured.");
+                } else if (errorCode == SWFUpload.UPLOAD_ERROR.MISSING_UPLOAD_URL) {
+                    message = trlVps("Upload URL string is empty.");
+                } else if (errorCode == SWFUpload.UPLOAD_ERROR.IO_ERROR) {
+                    message = trlVps("IO Error.");
+                } else if (errorCode == SWFUpload.UPLOAD_ERROR.SECURITY_ERROR) {
+                    message = trlVps("Security Error.");
+                } else if (errorCode == SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED) {
+                    message = trlVps("The upload limit has been reached.");
+                } else if (errorCode == SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED) {
+                    message = errorMessage;
+                } else if (errorCode == SWFUpload.UPLOAD_ERROR.SPECIFIED_FILE_ID_NOT_FOUND) {
+                    message = "File ID not found in the queue.";
+                } else if (errorCode == SWFUpload.UPLOAD_ERROR.FILE_VALIDATION_FAILED) {
+                    message = "Call to uploadStart return false. Not uploading file.";
+                } else if (errorCode == SWFUpload.UPLOAD_ERROR.FILE_CANCELLED) {
+                    message = "File Upload Cancelled.";
+                } else if (errorCode == SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED) {
+                    message = "Upload Stopped";
                 }
+                if (errorCode != SWFUpload.UPLOAD_ERROR.FILE_CANCELLED) {
+                    //Vps.handleError(errorMessage, 'Upload Error');
+                     Ext.Msg.alert(trlVps("Upload Error"), message);
+                }
+            },
+            file_queue_error_handler: function(file, errorCode, errorMessage) {
+                var message = "File is zero bytes or cannot be accessed and cannot be uploaded.";
+                if (errorCode == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
+                    message = trlVps("File size exceeds allowed limit.");
+                } else if (errorCode == SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
+                    message = trlVps("File size exceeds allowed limit.");
+                } else if (errorCode == SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE) {
+                    message = trlVps("File is zero bytes and cannot be uploaded.");
+                } else if (errorCode == SWFUpload.QUEUE_ERROR.INVALID_FILETYPE) {
+                    message = trlVps("File is not an allowed file type.");
+                }
+                Ext.Msg.alert(trlVps("Upload Error"), message);
+            },
+            swfupload_loaded_handler: function(file, errorCode, errorMessage) {
+                this.customSettings.field.checkSwf = true;
+            }
+        });
+        var checkButton = function() {
+            if (!this.checkSwf) {
+                this.createUploadButton(true);
+            }
+        };
+        checkButton.defer(5000, this);
+
+    },
+
+    createUploadButton : function (check) {
+        if (check == true) {
+            this.uploadButtonContainer.first().remove();
+        }
+        this.uploadButton = new Ext.Button({
+            text: trlVps('Upload File'),
+            cls: 'x-btn-text-icon',
+            icon: '/assets/silkicons/add.png',
+            renderTo: this.uploadButtonContainer.createChild({
+                id: this.uploadButtonContainerChildId
+            }),
+            scope: this,
+            handler: function() {
+                var win = new Vps.Form.FileUploadWindow({
+                    maxResolution: this.maxResolution
+                });
+                win.on('uploaded', function(win, result) {
+                    this.setValue(result.value);
+                    this.fireEvent('uploaded', this, result.value);
+                }, this);
+                win.show();
             }
         });
     },
-
-
     onDestroy: function()
     {
         Vps.Form.SwfUploadField.superclass.onDestroy.call(this);
@@ -233,5 +304,11 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
     }
 
 });
+
+
+
 Ext.reg('swfuploadfield', Vps.Form.SwfUploadField);
+
+
+
 
