@@ -3,7 +3,7 @@ require_once 'tcpdf.php';
 class Vps_Pdf_TcPdf extends TCPDF
 {
 
-    protected $_font = 'helvetica'; //sollte eigentlich helvetica sein
+    protected $_font = 'helvetica';
     protected $_fontsize = 10;
     protected $_component;
 
@@ -13,13 +13,11 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->_component = $component;
         parent::__construct("P", "mm", $format);
         $this->SetFont($this->_font, "B", 16);
-        $this->SetAuthor(trlVps("Vivid Planet Software GmbH"));
+        $this->SetAuthor("Vivid Planet Software GmbH");
         $this->SetCreator("Vivid Planet Software GmbH mit FPDF");
         $this->SetTitle("Wochenbericht");
         $this->setLIsymbol(utf8_encode(chr(0x95))); // = •
         $this->setListIndentWidth($this->getStringWidth("00"));
-       // $this->AddFont('times', '', 'times');
-       // $this->AddFont('arial', '', 'arial');
     }
 
     public function getRightMargin()
@@ -107,7 +105,7 @@ class Vps_Pdf_TcPdf extends TCPDF
             $html = $this->writeHTML($this->decodeText($text), false, 0, false, false, $align);
         } catch (Exception $e) {
             $html = $this->writeHTML(
-                '<strong style="color:red">' . trlVps('Fehler') . '</strong>' .
+                '<strong style="color:red">' . trlVps('Error') . '</strong>' .
                 ': <br/>' .
                 $e->getMessage()
             );
@@ -155,35 +153,19 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->cell_height_ratio = $ratio;
     }
 
-    //workaround für bug bei pdf erstellung
-    protected $_check = false;
-    /*public function AddFont($family, $style='', $file='')
+    public function AddFont($family, $style='', $fontfile='')
     {
-        if (!file_exists($this->_getfontpath().$file.".php") && $file) {
-            $config = Zend_Registry::get('config');
-            $file = $config->path->tcpdf_fonts."/".$file.".php";
-            //$this->_check = true;
-        }
 
-        $allowedStyles = array('B', 'I', 'BI', 'IB', '');
-        if (!in_array($style, $allowedStyles)) {
-            if (in_array(substr($style, 0, 1), $allowedStyles)) {
-                $style = substr($style, 0, 1);
-            }
-        }
-        return parent::AddFont($family, $style, $file);
-    }*/
-
-  /*  public function SetFont($family, $style='', $size=0, $fontfile='') {
         $config = Zend_Registry::get('config');
-        $filetmp = $config->path->tcpdf_fonts."/".$family.".php";
-
-        if (file_exists($filetmp)) {
+        $filetmp = $config->path->tcpdf_fonts."/".strtolower($family.$style).".php";
+        if (!$fontfile && file_exists($filetmp)) {
             $fontfile = $filetmp;
+            //$family = $family.$style;
+            //$style = '';
         }
-        //$this->_font = $family;
-        parent::SetFont($family, $style, $size, $fontfile);
-    }*/
+
+        return parent::AddFont($family, $style, $fontfile);
+    }
 
 
     /*
@@ -198,7 +180,7 @@ class Vps_Pdf_TcPdf extends TCPDF
                     $this->lasth = $this->lasth / 2;
                     break;
             }
-            parent::closeHTMLTagHandler($dom, $key, $cell);
+            parent::closeHTMLTagHandler(&$dom, $key, $cell);
             $this->lasth = $temp;
     }
 
@@ -213,6 +195,9 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->Image("images/pdf/$text.jpg", $this->GetX(), $this->GetY(), 5, 5);
     }
 
-
+    public function Error($msg)
+    {
+        throw new Vps_Exception($msg);
+    }
 
 }
