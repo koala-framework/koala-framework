@@ -5,7 +5,7 @@ class Vpc_Composite_Downloads_Component extends Vpc_Abstract_List_Component
     {
         $settings = parent::getSettings();
         $settings['generators']['child']['component'] = 'Vpc_Basic_Download_Component';
-        $settings['componentName'] = 'Downloads';
+        $settings['componentName'] = trlVps('Downloads');
         $settings['modelname'] = 'Vpc_Composite_Downloads_Model';
 
         return $settings;
