@@ -1,6 +1,8 @@
 Vps.Connection = Ext.extend(Ext.data.Connection, {
     request: function(options)
     {
+
+        Vps.requestSentSinceLastKeepAlive = true;
         Vps.Connection.runningRequests++;
         if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9\-]+(\/|\?|)/)) {
 
@@ -46,143 +48,143 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
     },
     vpsSuccess: function(response, options)
     {
-		if (!options.ignoreErrors) {
-	        options.vpsIsSuccess = false;
-	        options.vpsLogin = false;
+        if (!options.ignoreErrors) {
+            options.vpsIsSuccess = false;
+            options.vpsLogin = false;
 
-	        var errorMsg = false;
+            var errorMsg = false;
 
-	        var encParams;
-	        if (typeof options.params == "string") {
-	            encParams = options.params;
-	        } else {
-	            encParams = Ext.urlEncode(options.params);
-	        }
-	        try {
-	            if (!response.responseText) {
-	                errorMsg = 'response is empty';
-	            } else {
-	                var r = Ext.decode(response.responseText);
-	            }
-	        } catch(e) {
-	            errorMsg = e.toString()+': <br />'+response.responseText;
-	            var errorMsgTitle = 'Javascript Parse Exception';
-	        }
-	        if (Vps.Debug.querylog && r && r.requestNum) {
-	            var rm = location.protocol + '/'+'/' + location.host;
-	            var url = options.url;
-	            if (url.substr(0, rm.length) == rm) {
-	                url = url.substr(rm.length);
-	            }
-	            var data = [[new Date(), url, encParams, r.requestNum]];
-	            Vps.Debug.requestsStore.loadData(data, true);
-	        }
-	        if (!errorMsg && r.exception) {
-	            var p;
-	            if (typeof options.params == "string") {
-	                p = options.params;
-	            } else {
-	                p = Ext.urlEncode(options.params);
-	            }
-	            errorMsg = r.exception;
-	            var errorMsgTitle = 'PHP Exception';
-	        }
-	        if (errorMsg && !options.ignoreErrors) {
-	            errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />' + errorMsg;
-	            var sendMail = !r || !r.exception;
-				if (options.errorText) {
-					errorText = options.errorText;
-				} else {
-					errorText = null;
-				}
-				Vps.handleError({
-				    message: errorMsg,
-					title: errorMsgTitle,
-					mail: sendMail,
-					errorText: errorText,
-					checkRetry: false,
-					retry: function() {
-						this.connection.repeatRequest(this.options);
-					},
-					abort: function() {
-	                    Ext.callback(this.options.vpsCallback.failure, this.options.vpsCallback.scope, [this.response, this.options]);
-					},
-					scope: { connection: this, options: options, response: response }
-				});
-	            return;
-	        }
+            var encParams;
+            if (typeof options.params == "string") {
+                encParams = options.params;
+            } else {
+                encParams = Ext.urlEncode(options.params);
+            }
+            try {
+                if (!response.responseText) {
+                    errorMsg = 'response is empty';
+                } else {
+                    var r = Ext.decode(response.responseText);
+                }
+            } catch(e) {
+                errorMsg = e.toString()+': <br />'+response.responseText;
+                var errorMsgTitle = 'Javascript Parse Exception';
+            }
+            if (Vps.Debug.querylog && r && r.requestNum) {
+                var rm = location.protocol + '/'+'/' + location.host;
+                var url = options.url;
+                if (url.substr(0, rm.length) == rm) {
+                    url = url.substr(rm.length);
+                }
+                var data = [[new Date(), url, encParams, r.requestNum]];
+                Vps.Debug.requestsStore.loadData(data, true);
+            }
+            if (!errorMsg && r.exception) {
+                var p;
+                if (typeof options.params == "string") {
+                    p = options.params;
+                } else {
+                    p = Ext.urlEncode(options.params);
+                }
+                errorMsg = r.exception;
+                var errorMsgTitle = 'PHP Exception';
+            }
+            if (errorMsg && !options.ignoreErrors) {
+                errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />' + errorMsg;
+                var sendMail = !r || !r.exception;
+                if (options.errorText) {
+                    errorText = options.errorText;
+                } else {
+                    errorText = null;
+                }
+                Vps.handleError({
+                    message: errorMsg,
+                    title: errorMsgTitle,
+                    mail: sendMail,
+                    errorText: errorText,
+                    checkRetry: false,
+                    retry: function() {
+                        this.connection.repeatRequest(this.options);
+                    },
+                    abort: function() {
+                        Ext.callback(this.options.vpsCallback.failure, this.options.vpsCallback.scope, [this.response, this.options]);
+                    },
+                    scope: { connection: this, options: options, response: response }
+                });
+                return;
+            }
 
-	        if (!r.success && !options.ignoreErrors) {
-	            if (r.wrongversion) {
-	                Ext.Msg.alert(trlVps('Error - wrong version'),
-	                trlVps('Because of an application update the application has to be reloaded.'),
-	                function(){
-	                    location.reload();
-	                });
-	                Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
-	                return;
-	            }
-	            if (r.login) {
-	                options.vpsLogin = true;
-	                var dlg = new Vps.User.Login.Dialog({
-	                    message: r.message,
-	                    success: function() {
-	                        //redo action...
-	                        this.repeatRequest(options);
-	                    },
-	                    scope: this
-	                });
-	                Ext.getBody().unmask();
-	                dlg.showLogin();
-	                return;
-	            }
-	            if (r.error) {
-	                Ext.Msg.alert(trlVps('Error'), r.error);
-	            } else {
-	                Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
-	            }
-	            Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
-	            return;
-	        }
-	        options.vpsIsSuccess = true;
-	        Vps.callWithErrorHandler(function() {
-	            Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options, r]);
-	        });
-		};
+            if (!r.success && !options.ignoreErrors) {
+                if (r.wrongversion) {
+                    Ext.Msg.alert(trlVps('Error - wrong version'),
+                    trlVps('Because of an application update the application has to be reloaded.'),
+                    function(){
+                        location.reload();
+                    });
+                    Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+                    return;
+                }
+                if (r.login) {
+                    options.vpsLogin = true;
+                    var dlg = new Vps.User.Login.Dialog({
+                        message: r.message,
+                        success: function() {
+                            //redo action...
+                            this.repeatRequest(options);
+                        },
+                        scope: this
+                    });
+                    Ext.getBody().unmask();
+                    dlg.showLogin();
+                    return;
+                }
+                if (r.error) {
+                    Ext.Msg.alert(trlVps('Error'), r.error);
+                } else {
+                    Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
+                }
+                Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+                return;
+            }
+            options.vpsIsSuccess = true;
+            Vps.callWithErrorHandler(function() {
+                Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options, r]);
+            });
+        };
     },
 
     vpsFailure: function(response, options)
     {
-		if (!options.ignoreErrors) {
-	        options.vpsIsSuccess = false;
+        if (!options.ignoreErrors) {
+            options.vpsIsSuccess = false;
 
-			errorMsgTitle = trlVps('Error');
-			if (options.errorText) {
+            errorMsgTitle = trlVps('Error');
+            if (options.errorText) {
                 errorText = options.errorText;
-				errorMsg = options.errorText;
-			} else {
-	           errorMsg = trlVps("A connection problem occured.");
-			   errorText = null;
-			}
-	        if (!options.ignoreErrors) {
-				Vps.handleError({
-		            message: errorMsg,
-		            title: errorMsgTitle,
-					errorText: errorText,
-		            mail: false,
-					checkRetry: true,
-		            retry: function() {
-		                this.repeatRequest(options);
-		            },
-		            abort: function() {
-		                Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
-		            },
-		            scope: this
-		        });
-		        Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
-			}
-	        return;
-		}
+                errorMsg = options.errorText;
+            } else {
+               errorMsg = trlVps("A connection problem occured.");
+               errorText = null;
+            }
+            if (!options.ignoreErrors) {
+                Vps.handleError({
+                    message: errorMsg,
+                    title: errorMsgTitle,
+                    errorText: errorText,
+                    mail: false,
+                    checkRetry: true,
+                    retry: function() {
+                        this.repeatRequest(options);
+                    },
+                    abort: function() {
+                        Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+                    },
+                    scope: this
+                });
+                Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+            }
+            return;
+        }
     },
 
     vpsCallback: function(options, success, response)
