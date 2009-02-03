@@ -1,8 +1,6 @@
-<?php if (count($this->pageLinks) > 1) { ?>
+<?php if ($this->show) { ?>
 <div class="<?=$this->cssClass?>">
     <span><?= trlVps('Page') ?>:</span>
-    <?php foreach ($this->pageLinks as $l) { ?>
-        <a href="<?= $l['href'] ?>" rel="<?= $l['rel'] ?>"<?php if ($l['active']) { ?> class="active"<?php } ?>><?= $l['text'] ?></a>
-    <?php } ?>
+    <?php echo $this->partials($this->data, 'Vps_Component_Partial_Pager', $this->partialParams)?>
 </div>
 <?php } ?>

@@ -399,10 +399,15 @@ class Vps_Component_Data
                     $parentData = $this;
                 }
                 foreach ($generator->getChildData($parentData, $generatorSelect) as $data) {
-                    if (isset($ret[$data->componentId])) {
-                        throw new Vps_Exception("Id not unique: {$data->componentId}");
+                    if (!$select->hasPart(Vps_Component_Select::RETURN_IDS)) {
+                        if (isset($ret[$data->componentId])) {
+                            throw new Vps_Exception("Id not unique: {$data->componentId}");
+                        }
+                        $id = $data->componentId;
+                    } else {
+                        $id = $data;
                     }
-                    $ret[$data->componentId] = $data;
+                    $ret[] = $data;
 
                     if ($limitCount) {
                         if ($limitCount - count($ret) <= 0) {
@@ -502,6 +507,16 @@ class Vps_Component_Data
             $ret[] = $data->componentId;
         }
         return $ret;
+    }
+
+    public function getChildIds($select = array())
+    {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        d($this->getChildComponents($select));
+        $select->returnIds(true);
+        return $this->getChildComponents($select);
     }
 
     public function getChildComponent($select = array())

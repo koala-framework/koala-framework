@@ -32,6 +32,27 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
             $ret = str_replace($search, $replace, $ret);
         }
 
+        // partials-Tags ersetzen
+        preg_match_all('/{partials: ([^ }]+) ([^ }]+) ([^ }]+) ([^ ]+) }/', $ret, $matches);
+        foreach ($matches[0] as $key => $search) {
+            $componentId = $matches[1][$key];
+            $componentClass = $matches[2][$key];
+            $partialsClass = $matches[3][$key];
+            $params = unserialize($matches[4][$key]);
+            $partial = new $partialsClass($params);
+            $ids = $partial->getIds();
+            $content = '';
+            $number = 0; $count = count($ids);
+            foreach ($ids as $id) {
+                $info = array(
+                    'total' => $count,
+                    'number' => ++$number
+                );
+                $content .= $this->_renderPartial($componentId, $componentClass, $partial, $id, $info);
+            }
+            $ret = str_replace($search, $content, $ret);
+        }
+
         // nocache-Tags ersetzen
         preg_match_all('/{nocache: ([^ }]+) ([^ }]*) ?([^}]*)}/', $ret, $matches);
         foreach ($matches[0] as $key => $search) {
@@ -41,7 +62,20 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
             $replace = $this->_processComponent($componentId, $componentClass, false, $plugins);
             $ret = str_replace($search, $replace, $ret);
         }
+
         return $ret;
+    }
+
+    protected function _renderPartial($componentId, $componentClass, $partial, $id, $info)
+    {
+        if ($this->_hasViewCache($componentClass)) {
+            Vps_Benchmark::count('rendered partial nocache', $componentId);
+        } else {
+            Vps_Benchmark::count('rendered partial', $componentId);
+        }
+        $output = new Vps_Component_Output_ComponentPartial();
+        $output->setIgnoreVisible($this->ignoreVisible());
+        return $output->render($this->_getComponent($componentId), $partial, $id, $info);
     }
 
     protected function _renderHasContent($componentId, $componentClass, $content)

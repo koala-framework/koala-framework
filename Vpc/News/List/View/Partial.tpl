@@ -1,0 +1,1 @@
+<div class="text">    <?=$this->componentLink($this->item);?>    <span class="publishDate"><?=$this->item->row->publish_date?></span>    <p><?=$this->mailEncodeText($this->item->row->teaser)?></p></div>

@@ -9,6 +9,13 @@ class Vpc_Directories_Category_View_Component
         return $ret;
     }
 
+    public function getPartialVars($partial, $nr, $info)
+    {
+        $ret = parent::getPartialVars($partial, $nr, $info);
+        $ret['placeholder'] = $this->_getSetting('placeholder');
+        return $ret;
+    }
+
     public function getItemCountCacheId($row)
     {
         // Row kann von hier (Model) oder von Admin (DB-Row) kommen
@@ -42,11 +49,13 @@ class Vpc_Directories_Category_View_Component
         return array($item->row->id);
     }
 
-    protected function _getItems()
+    protected function _getItems($select = null)
     {
-        $items = parent::_getItems();
+        $items = parent::_getItems($select);
 
         $cache = self::getItemCountCache();
+
+        if ($select->hasPart(Vps_Component_Select::RETURN_IDS)) return $items;
 
         foreach ($items as &$item) {
             $cacheId = $this->getItemCountCacheId($item->row);

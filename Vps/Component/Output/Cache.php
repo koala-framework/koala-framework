@@ -4,6 +4,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
     private $_cache;
     private $_toLoadHasContent = array();
     private $_toLoad = array();
+    private $_toLoadPartial = array();
 
     public function setCache(Vps_Component_Cache $cache)
     {
@@ -43,8 +44,15 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         $this->_toLoadHasContent = array();
         $toLoad = $this->_toLoad;
         $this->_toLoad = array();
+        $toLoadPartial = $this->_toLoadPartial;
+        $this->_toLoadPartial = array();
         foreach ($toLoadHasContent as $val) {
             $componentId = $this->getCache()->getCacheIdFromComponentId($val['componentId'], false, true);
+            $pageId = $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($val['componentId']));
+            $preloadIds[$componentId] = $pageId;
+        }
+        foreach ($toLoadPartial as $val) {
+            $componentId = $this->getCache()->getCacheIdFromComponentId($val['componentId'], false, false, $val['nr']);
             $pageId = $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($val['componentId']));
             $preloadIds[$componentId] = $pageId;
         }
@@ -58,13 +66,51 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         // Nochmal durchgehen und ersetzen
         foreach ($toLoadHasContent as $search => $val) {
             $content = $this->_renderHasContent($val['componentId'], $val['componentClass'], $val['content']);
-            $childRenderData = $this->_parseTemplate($content, true);
+            $childRenderData = $this->_parseTemplate($content);
+            $replace = $this->_processComponent2($childRenderData);
+            $ret = str_replace($search, $replace, $ret);
+        }
+        foreach ($toLoadPartial as $search => $val) {
+            $content = $this->_renderPartial($val['componentId'], $val['componentClass'], $val['partial'], $val['nr'], $val['info']);
+            $childRenderData = $this->_parseTemplate($content);
             $replace = $this->_processComponent2($childRenderData);
             $ret = str_replace($search, $replace, $ret);
         }
         foreach ($toLoad as $search => $val) {
             $replace = $this->_render($val['componentId'], $val['componentClass'], $val['masterTemplate']);
             $ret = str_replace($search, $replace, $ret);
+        }
+        return $ret;
+    }
+
+    protected function _renderPartial($componentId, $componentClass, $partial, $id, $info)
+    {
+        if (!$this->_hasViewCache($componentClass)) {
+            return parent::_renderPartial($componentId, $componentClass, $partial, $id, $info);
+        }
+        $ret = false;
+        $cacheId = $this->getCache()->getCacheIdFromComponentId($componentId, false, false, $id);
+
+        if ($this->getCache()->isLoaded($cacheId)) {
+            Vps_Benchmark::count('rendered partial cache', $componentId . '~' . $id);
+            $ret = $this->getCache()->load($cacheId);
+        } else if ($this->getCache()->shouldBeLoaded($cacheId)) {
+            $ret = parent::_renderPartial($componentId, $componentClass, $partial, $id, $info);
+            $tags = array(
+                'componentClass' => $componentClass,
+                'pageId' => $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($componentId))
+            );
+            $lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
+            $this->getCache()->save($ret, $cacheId, $tags, $lifetime);
+        } else {
+            $ret = "{partial: $componentId $id}";
+            $this->_toLoadPartial[$ret] = array(
+                'componentClass' => $componentClass,
+                'componentId' => $componentId,
+                'partial' => $partial,
+                'nr' => $id,
+                'info' => $info
+            );
         }
         return $ret;
     }

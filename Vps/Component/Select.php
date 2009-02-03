@@ -20,6 +20,7 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_SUBROOT = 'whereSubroot';
     const WHERE_ON_SAME_PAGE = 'whereOnSamePage';
     const IGNORE_VISIBLE = 'ignoreVisible';
+    const RETURN_IDS = 'returnIds';
 
     public function __construct($where = array())
     {
@@ -188,6 +189,12 @@ class Vps_Component_Select extends Vps_Model_Select
     public function ignoreVisible($value = true)
     {
         $this->_parts[self::IGNORE_VISIBLE] = $value;
+        return $this;
+    }
+
+    public function returnIds($value = true)
+    {
+        $this->_parts[self::RETURN_IDS] = $value;
         return $this;
     }
 
