@@ -275,7 +275,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         return $this->_primaryKey;
     }
 
-    public function getColumns()
+    public function getOwnColumns()
     {
         return $this->_columns;
     }

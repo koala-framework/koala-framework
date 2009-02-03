@@ -115,7 +115,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
         ));
     }
 
-    public function getColumns()
+    public function getOwnColumns()
     {
         if (!$this->_columns) {
             $this->_columns = $this->_client->getColumns();

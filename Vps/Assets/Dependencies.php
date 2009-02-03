@@ -64,6 +64,11 @@ class Vps_Assets_Dependencies
                         $this->_processDependency($assetsType, $d);
                     }
                 }
+                foreach ($this->_files[$assetsType] as $f) {
+                    if (is_string($f)) {
+                        $this->getAssetPath($f); //wirft exception wenn datei nicht gefunden
+                    }
+                }
                 $cache->save($this->_files[$assetsType], $cacheId);
             }
         }
@@ -294,7 +299,7 @@ class Vps_Assets_Dependencies
         }
         $p = $paths->$type;
         if (!file_exists($p.'/'.$url)) {
-            throw new Vps_Assets_NotFoundException("Assets '$url' not found");
+            throw new Vps_Assets_NotFoundException("Assets '$p/$url' not found");
         }
         return $p.'/'.$url;
     }

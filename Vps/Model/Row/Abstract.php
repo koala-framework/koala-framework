@@ -99,7 +99,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
 
     public function __set($name, $value)
     {
-        if ($this->_model->getColumns() && !in_array($name, $this->_model->getColumns())) {
+        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
             foreach ($this->_getSiblingRows() as $r) {
                 if ($r->getModel()->hasColumn($name)) {
                     $r->$name = $value;
