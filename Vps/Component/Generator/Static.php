@@ -43,6 +43,11 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
+    public function getChildIds($parentData, $select = array())
+    {
+
+    }
+
     protected function _fetchKeys($parentData, $select)
     {
         $ret = array();

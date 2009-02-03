@@ -1,0 +1,1 @@
+<?php/** * @deprectated */class Vpc_Directories_List_View_ComponentNonPartial extends Vpc_Directories_List_View_Component{    public function getTemplateVars()    {        $ret = parent::getTemplateVars();        $ret['items'] = $this->_getItems();        return $ret;    }}

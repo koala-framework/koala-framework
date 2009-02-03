@@ -53,7 +53,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     public function getChildData($parentData, $select = array())
     {
         Vps_Benchmark::count('GenTable::getChildData');
-
         $ret = array();
         if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE))
                 && !$this->_getModel()->hasColumn('component_id')) {
@@ -108,11 +107,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
     }
 
-    protected function _createData($parentData, $row, $select)
-    {
-        return parent::_createData($parentData, $row, $select);
-    }
-
     protected function _getParentDataByRow($row, $select)
     {
         if (isset($row->component_id) && $row->component_id) {
@@ -133,11 +127,13 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
             $id = $select->getPart(Vps_Model_Select::WHERE_ID);
             $separator = substr($id, 0, 1);
-            $id = substr($id, 1);
-            if ($separator != $this->_idSeparator || ($this->_hasNumericIds && !is_numeric($id))) {
-                return null;
+            if (in_array($separator, array('_', '-'))) {
+                $id = substr($id, 1);
+                if ($separator != $this->_idSeparator || ($this->_hasNumericIds && !is_numeric($id))) {
+                    return null;
+                }
+                $select->whereId($id);
             }
-            $select->whereId($id);
         }
         return $select;
     }

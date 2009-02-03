@@ -1,5 +1,6 @@
 <?php
 class Vpc_Paging_Component extends Vpc_Abstract
+    implements Vps_Component_Partial_Interface
 {
     private $_entries;
     public static function getSettings()
@@ -9,9 +10,10 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['maxPagingLinks'] = 13;
         $ret['bigPagingSteps'] = array(10, 50);
         $ret['cssClass'] = 'webPaging webStandard';
-        $ret['viewCache'] = false;
+        $ret['viewCache'] = true;
         return $ret;
     }
+
     public function getCount()
     {
         if (!isset($this->_entries)) {
@@ -88,10 +90,20 @@ class Vpc_Paging_Component extends Vpc_Abstract
 
     protected function _getCurrentPage()
     {
-        if (!isset($_GET[$this->_getParamName()])) {
+        return self::getCurrentPageByParam($this->_getParamName());
+    }
+
+    public function getCurrentPage()
+    {
+        return $this->_getCurrentPage();
+    }
+
+    public static function getCurrentPageByParam($paramName)
+    {
+        if (!isset($_GET[$paramName])) {
             $page = 1;
         } else {
-            $page = (int)$_GET[$this->_getParamName()];
+            $page = (int)$_GET[$paramName];
         }
         if ($page < 1) $page = 1;
         return $page;
@@ -128,13 +140,36 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['pages'] = $this->_getPages();
         $ret['currentPage'] = $this->_getCurrentpage();
-        $ret['pageLinks'] = array();
+        $ret['show'] = $this->getCount() > $this->_getSetting('pagesize');
+        $ret['partialParams'] = $this->getPartialParams();
+        return $ret;
+    }
 
-        if ($ret['currentPage'] >= 3) {
-            $ret['pageLinks'][] = $this->_getLinkData(1, '&lt;&lt;');
+    public function getPartialParams()
+    {
+        return array(
+            'class' => get_class($this),
+            'paramName' => $this->_getParamName(),
+            'pages' => $this->_getPages()
+        );
+    }
+
+    public function getPartialVars($partial, $nr, $info)
+    {
+        $pages = $partial->getParam('pages');
+        return array(
+            'pageLinks' => $this->_getPageLinks($pages, $nr)
+        );
+    }
+
+    protected function _getPageLinks($pages, $currentPage)
+    {
+        $pageLinks = array();
+        if ($currentPage >= 3) {
+            $pageLinks[] = $this->_getLinkData(1, '&lt;&lt;');
         }
-        if ($ret['currentPage'] >= 2) {
-            $ret['pageLinks'][] = $this->_getLinkData($ret['currentPage']-1, '&lt;');
+        if ($currentPage >= 2) {
+            $pageLinks[] = $this->_getLinkData($currentPage-1, '&lt;');
         }
 
         $appendPagelinks = array();
@@ -142,47 +177,46 @@ class Vpc_Paging_Component extends Vpc_Abstract
         rsort($bigSteps);
         foreach ($bigSteps as $stepOffset) {
             if ($this->_getSetting('maxPagingLinks') < $stepOffset * 2) {
-                if ($ret['currentPage'] >= $stepOffset + 1) {
-                    $ret['pageLinks'][] = $this->_getLinkData($ret['currentPage'] - $stepOffset);
+                if ($currentPage >= $stepOffset + 1) {
+                    $pageLinks[] = $this->_getLinkData($currentPage - $stepOffset);
                 }
 
-                if ($ret['currentPage'] <= $ret['pages'] - $stepOffset) {
-                    array_unshift($appendPagelinks, $this->_getLinkData($ret['currentPage'] + $stepOffset));
+                if ($currentPage <= $pages - $stepOffset) {
+                    array_unshift($appendPagelinks, $this->_getLinkData($currentPage + $stepOffset));
                 }
             }
         }
 
-        if ($ret['currentPage'] < $ret['pages']) {
-            $appendPagelinks[] = $this->_getLinkData($ret['currentPage']+1, '&gt;');
+        if ($currentPage < $pages) {
+            $appendPagelinks[] = $this->_getLinkData($currentPage+1, '&gt;');
         }
-        if ($ret['currentPage'] < $ret['pages'] - 1) {
-            $appendPagelinks[] = $this->_getLinkData($ret['pages'], '&gt;&gt;');
+        if ($currentPage < $pages - 1) {
+            $appendPagelinks[] = $this->_getLinkData($pages, '&gt;&gt;');
         }
 
         $linksPerDirection = floor(
-            ($this->_getSetting('maxPagingLinks') - (count($ret['pageLinks']) + count($appendPagelinks) + 1)) / 2
+            ($this->_getSetting('maxPagingLinks') - (count($pageLinks) + count($appendPagelinks) + 1)) / 2
         );
         if ($linksPerDirection < 0) $linksPerDirection = 0;
 
-        $fromPage = $ret['currentPage'] - $linksPerDirection;
-        $toPage = $ret['currentPage'] + $linksPerDirection;
+        $fromPage = $currentPage - $linksPerDirection;
+        $toPage = $currentPage + $linksPerDirection;
         if ($fromPage < 1) {
             $toPage += abs($fromPage - 1);
         }
-        if ($toPage > $ret['pages']) {
-            $fromPage -= ($toPage - $ret['pages']);
+        if ($toPage > $pages) {
+            $fromPage -= ($toPage - $pages);
         }
         if ($fromPage < 1) $fromPage = 1;
-        if ($toPage > $ret['pages']) $toPage = $ret['pages'];
+        if ($toPage > $pages) $toPage = $pages;
 
         for ($i = $fromPage; $i <= $toPage; $i++) {
-            $ret['pageLinks'][] = $this->_getLinkData($i);
+            $pageLinks[] = $this->_getLinkData($i);
         }
 
         foreach ($appendPagelinks as $linkData) {
-            $ret['pageLinks'][] = $linkData;
+            $pageLinks[] = $linkData;
         }
-
-        return $ret;
+        return $pageLinks;
     }
 }

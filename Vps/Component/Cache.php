@@ -192,7 +192,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
         return isset($this->_preloadedValues[$cacheId]);
     }
 
-    public function getCacheIdFromComponentId($componentId, $masterTemplate = false, $isHasContent = false)
+    public function getCacheIdFromComponentId($componentId, $masterTemplate = false, $isHasContent = false, $partialNumber = null)
     {
         if ($masterTemplate) {
             //nicht optimal, wer was besseres weis - bitte
@@ -203,7 +203,8 @@ class Vps_Component_Cache extends Zend_Cache_Core
             }
         }
         if ($isHasContent) { $componentId .= '-hasContent'; }
-        return str_replace('-', '__', $componentId);
+        if (!is_null($partialNumber)) { $componentId .= '~' . $partialNumber; }
+        return str_replace('~', '___', str_replace('-', '__', $componentId));
     }
 
     public function getComponentIdFromCacheId($cacheId)
@@ -211,7 +212,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
         if (substr($cacheId, -8) == '__master') {
             return null;
         } else {
-            return str_replace('__', '-', $cacheId);
+            return str_replace('___', '~', str_replace('__', '-', $cacheId));
         }
     }
 }

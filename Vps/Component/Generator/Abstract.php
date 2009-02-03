@@ -506,6 +506,10 @@ abstract class Vps_Component_Generator_Abstract
             }
         }
 
+        if ($select->hasPart(Vps_Component_Select::RETURN_IDS)) {
+            return $id;
+        }
+
         if (!isset($this->_dataCache[$parentData->componentId][$id])) {
             $config = $this->_formatConfig($parentData, $row);
             if (!$config['componentClass']) {
