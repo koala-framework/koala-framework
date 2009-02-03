@@ -27,7 +27,7 @@ class Vpc_Directories_Category_View_Component
         }
 
         if ($row instanceof Vps_Model_Row_Interface) $row = $row->getRow();
-        return $cacheClassId.'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getTable()).$row->id.'_itemCount';
+        return preg_replace('/[^a-zA-Z0-9_]/', '_', $cacheClassId).'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getTable()).$row->id.'_itemCount';
     }
 
     public static function getItemCountCache()
