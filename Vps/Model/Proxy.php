@@ -11,6 +11,14 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         parent::__construct($config);
     }
 
+    protected function _init()
+    {
+        parent::_init();
+        if ($this->_proxyModel instanceof Vps_Model_Db) {
+            $this->_proxyModel->setIndirectSiblingModels($this->_siblingModels);
+        }
+    }
+
     public function getProxyModel()
     {
         return $this->_proxyModel;

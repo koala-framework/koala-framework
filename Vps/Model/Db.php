@@ -5,6 +5,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
     protected $_rowsetClass = 'Vps_Model_Db_Rowset';
     protected $_table;
 
+    private $_indirectSiblingModels = array();
+
     public function __construct($config = array())
     {
         if (isset($config['tableName'])) {
@@ -16,6 +18,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
         parent::__construct($config);
     }
 
+    //kann gesetzt werden von proxy
+    public function setIndirectSiblingModels($m)
+    {
+        $this->_indirectSiblingModels = $m;
+    }
     protected function _init()
     {
         parent::_init();
@@ -92,7 +99,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
     }
     private function _formatFieldInternal($field, $dbSelect)
     {
-        foreach ($this->_siblingModels as $k=>$m) {
+        $sm = array_merge($this->_siblingModels, $this->_indirectSiblingModels);
+        foreach ($sm as $k=>$m) {
             if ($m instanceof Vps_Model_Proxy) {
                 $m = $m->getProxyModel();
             }
