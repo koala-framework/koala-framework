@@ -21,13 +21,13 @@ class Vpc_Directories_Category_View_Component
             $c = $c->parent;
         }
         if (!$highestSubRoot) {
-            $cacheClass = '';
+            $cacheClassId = '';
         } else {
-            $cacheClass = $highestSubRoot->componentClass;
+            $cacheClassId = $highestSubRoot->componentId;
         }
 
         if ($row instanceof Vps_Model_Row_Interface) $row = $row->getRow();
-        return $cacheClass.'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getTable()).$row->id.'_itemCount';
+        return $cacheClassId.'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getTable()).$row->id.'_itemCount';
     }
 
     public static function getItemCountCache()
