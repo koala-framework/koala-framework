@@ -54,7 +54,7 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         return false;
     }
 
-    public function getColumns()
+    public function getOwnColumns()
     {
         return $this->_proxyModel->getColumns();
     }

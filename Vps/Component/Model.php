@@ -111,7 +111,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
         return new Vps_Dao_Pages();
     }
 
-    public function getColumns()
+    public function getOwnColumns()
     {
         throw new Vps_Exception('Not implemented yet.');
     }

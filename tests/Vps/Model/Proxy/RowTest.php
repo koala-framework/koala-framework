@@ -51,12 +51,14 @@ class Vps_Model_Proxy_RowTest extends PHPUnit_Framework_TestCase
         ));
         $model = new Vps_Model_Proxy(array('proxyModel' => $fnf));
 
-        $this->assertEquals(array('id', 'name', 'data'), $fnf->getColumns());
+        $this->assertEquals(array('id', 'name', 'data'), $fnf->getOwnColumns());
+        $this->assertEquals(array('id', 'name', 'data', 'name1'), $fnf->getColumns());
         $this->assertTrue($fnf->hasColumn('id'));
         $this->assertTrue($fnf->hasColumn('name'));
         $this->assertTrue($fnf->hasColumn('name1'));
 
-        $this->assertEquals(array('id', 'name', 'data'), $model->getColumns());
+        $this->assertEquals(array('id', 'name', 'data', 'name1'), $model->getOwnColumns());
+        $this->assertEquals(array('id', 'name', 'data', 'name1'), $model->getColumns());
         $this->assertTrue($model->hasColumn('id'));
         $this->assertTrue($model->hasColumn('name'));
         $this->assertTrue($model->hasColumn('name1'));
@@ -101,7 +103,7 @@ class Vps_Model_Proxy_RowTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($fnf->hasColumn('name'));
         $this->assertFalse($fnf->hasColumn('name1'));
 
-        $this->assertEquals(array('id', 'name', 'data'), $model->getColumns());
+        $this->assertEquals(array('id', 'name', 'data', 'name1'), $model->getColumns());
         $this->assertTrue($model->hasColumn('id'));
         $this->assertTrue($model->hasColumn('name'));
 

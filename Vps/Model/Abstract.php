@@ -167,12 +167,23 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function hasColumn($col)
     {
-        if (!$this->getColumns()) return true;
-        if (in_array($col, $this->getColumns())) return true;
+        if (!$this->getOwnColumns()) return true;
+        if (in_array($col, $this->getOwnColumns())) return true;
         foreach ($this->getSiblingModels() as $m) {
             if ($m->hasColumn($col)) return true;
         }
         return false;
+    }
+
+    abstract public function getOwnColumns();
+
+    public function getColumns()
+    {
+        $ret = $this->getOwnColumns();
+        foreach ($this->getSiblingModels() as $m) {
+            $ret = array_merge($ret, $m->getColumns());
+        }
+        return $ret;
     }
 
     public function getSiblingModels()

@@ -35,7 +35,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
     }
 
-    public function getColumns()
+    public function getOwnColumns()
     {
         return $this->_table->info(Zend_Db_Table_Abstract::COLS);
     }
@@ -78,6 +78,40 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $this->_rows[$id];
     }
 
+    private function _formatField($field, $select)
+    {
+        if (in_array($field, $this->getOwnColumns())) {
+            return $this->_table->info('name').'.'.$field;
+        }
+        $ret = $this->_formatFieldInternal($field, $select);
+        if (!$ret) {
+            throw new Vps_Exception("Can't find field '$field'");
+        }
+
+        return $ret;
+    }
+    private function _formatFieldInternal($field, $dbSelect)
+    {
+        foreach ($this->_siblingModels as $k=>$m) {
+            if ($m instanceof Vps_Model_Proxy) {
+                $m = $m->getProxyModel();
+            }
+            if ($m instanceof Vps_Model_Db) {
+                if (in_array($field, $m->getOwnColumns())) {
+                    $ref = $m->getReferenceByModelClass(get_class($this), $k);
+                    $siblingTableName = $m->_table->info(Zend_Db_Table_Abstract::NAME);
+                    $dbSelect->joinLeft($siblingTableName,
+                            $this->_table->info('name').'.'.$this->getPrimaryKey()
+                            .' = '.$siblingTableName.'.'.$ref['column'], array());
+                    return $m->_table->info('name').'.'.$field;
+                }
+                $ret = $m->_formatFieldInternal($field, $dbSelect);
+                if ($ret) return $ret;
+            }
+        }
+        return false;
+    }
+
     public function createDbSelect($select)
     {
         if (!$select) return null;
@@ -91,9 +125,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
                         $v = $this->getAdapter()->quote($v);
                     }
                     $value = implode(', ', $value);
-                    $dbSelect->where("$tablename.$field IN ($value)");
+                    $dbSelect->where($this->_formatField($field, $select)." IN ($value)");
                 } else {
-                    $dbSelect->where("$tablename.$field = ?", $value);
+                    $dbSelect->where($this->_formatField($field, $select)." = ?", $value);
                 }
             }
         }
@@ -104,9 +138,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
                         $v = $this->getAdapter()->quote($v);
                     }
                     $value = implode(', ', $value);
-                    $dbSelect->where("$tablename.$field NOT IN ($value)");
+                    $dbSelect->where($this->_formatField($field, $select)." NOT IN ($value)");
                 } else {
-                    $dbSelect->where("$tablename.$field != ?", $value);
+                    $dbSelect->where($this->_formatField($field, $select)." != ?", $value);
                 }
             }
         }
@@ -117,12 +151,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
 
         if ($whereId = $select->getPart(Vps_Model_Select::WHERE_ID)) {
-            $dbSelect->where($tablename.'.'.$this->getPrimaryKey()." = ?", $whereId);
+            $dbSelect->where($this->_formatField($this->getPrimaryKey(), $select)." = ?", $whereId);
         }
 
         if ($whereNull = $select->getPart(Vps_Model_Select::WHERE_NULL)) {
             foreach ($whereNull as $field) {
-                $dbSelect->where("ISNULL($tablename.$field)");
+                $dbSelect->where("ISNULL(".$this->_formatField($field, $select).")");
             }
         }
 
@@ -213,7 +247,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         $dbSelect = $this->createDbSelect($select);
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
-            $tablename = $this->_table->info('name');
             foreach ($order as $o) {
                 if ($o['field'] instanceof Zend_Db_Expr) {
                     $dbSelect->order($o['field']);
@@ -223,7 +256,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     if (strpos($o['field'], '.') === false &&
                         strpos($o['field'], '(') === false
                     ) {
-                        $o['field'] = $tablename.'.'.$o['field'];
+                        $o['field'] = $this->_formatField($o['field'], $select);
                     }
                     $dbSelect->order($o['field'].' '.$o['direction']);
                 }

@@ -13,7 +13,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function __isset($name)
     {
-        if ($this->_model->getColumns() && !in_array($name, $this->_model->getColumns())) {
+        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
             return parent::__isset($name);
         } else {
             return true;
@@ -22,7 +22,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function __unset($name)
     {
-        if ($this->_model->getColumns() && !in_array($name, $this->_model->getColumns())) {
+        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
             parent::__unset($name);
         } else if (isset($this->_data[$name])) {
             unset($this->_data[$name]);
@@ -31,7 +31,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        if ($this->_model->getColumns() && !in_array($name, $this->_model->getColumns())) {
+        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
             return parent::__get($name);
         } else {
             if (!isset($this->_data[$name])) return null;
@@ -41,7 +41,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function __set($name, $value)
     {
-        if ($this->_model->getColumns() && !in_array($name, $this->_model->getColumns())) {
+        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
             parent::__set($name, $value);
             return;
         }

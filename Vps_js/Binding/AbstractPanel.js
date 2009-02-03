@@ -1,5 +1,5 @@
 Vps.Binding.AbstractPanel = function(config) {
-    if (!config.actions) this.actions = {}; //muss hier sein
+    if (!config || !config.actions) this.actions = {}; //muss hier sein
     Vps.Binding.AbstractPanel.superclass.constructor.apply(this, arguments);
 };
 Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
