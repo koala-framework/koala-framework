@@ -35,4 +35,25 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Framework_TestCase
         ));
         $this->assertEquals('1x1', $model->getRow(1)->test1);
     }
+
+    /**
+     * @group slow
+     */
+    public function testEscapingBruteForce()
+    {
+        $model = new Vps_Model_Db(array(
+            'table' => $this->_tableName
+        ));
+        for($i=0;$i<1000;$i++) {
+            $v = '';
+            for($j=0;$j<10;$j++) {
+                $v .= chr(rand(0, 255));
+            }
+            $s = $model->select()->whereEquals('test1', $v);
+            $model->getRow($s);
+
+            $s = $model->select()->where(new Vps_Model_Select_Expr_Equals('test1', $v));
+            $model->getRow($s);
+        }
+    }
 }
