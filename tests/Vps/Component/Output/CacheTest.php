@@ -1,6 +1,6 @@
 <?php
 /**
- * @group Component_Output
+ * @group Component_Output_Cache
  */
 class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
 {
@@ -239,5 +239,36 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         self::$_expectedCalls = 2;
         $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foo', $this->_output->renderMaster($this->_root));
+    }
+
+    public function testPartial()
+    {
+        $this->_setup('Vps_Component_Output_Partial_Random_Component');
+
+        $this->_output->getCache()->expects($this->never())
+                                    ->method('save');
+
+        $params = serialize($this->_root->getComponent()->getPartialParams());
+        self::$_templates = array(
+            'root__master' => "{partials: root Vps_Component_Output_Partial_Random_Component Vps_Component_Partial_Random $params }",
+            'root___0' => 'bar0',
+            'root___1' => 'bar1',
+            'root___2' => 'bar2',
+        );
+        self::$_calls = 0;
+        self::$_expectedCalls = 2;
+
+        $this->_output->getCache()->emptyPreload();
+        $value = $this->_output->renderMaster($this->_root);
+        $this->assertTrue(in_array($value, array(
+            'bar0bar1', 'bar0bar2', 'bar1bar2', 'bar1bar0', 'bar2bar0', 'bar2bar1'
+        )));
+
+        self::$_expectedCalls = 100;
+        $x = 0;
+        while ($x <= 10 && $value == $this->_output->renderMaster($this->_root)) {
+            $x++;
+        }
+        $this->assertTrue($x < 100);
     }
 }
