@@ -133,9 +133,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
                         $v = $this->getAdapter()->quote($v);
                     }
                     $value = implode(', ', $value);
-                    $dbSelect->where($this->_formatField($field, $select)." IN ($value)");
+                    $dbSelect->where($this->_formatField($field, $dbSelect)." IN ($value)");
                 } else {
-                    $dbSelect->where($this->_formatField($field, $select)." = ?", $value);
+                    $dbSelect->where($this->_formatField($field, $dbSelect)." = ?", $value);
                 }
             }
         }
@@ -146,9 +146,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
                         $v = $this->getAdapter()->quote($v);
                     }
                     $value = implode(', ', $value);
-                    $dbSelect->where($this->_formatField($field, $select)." NOT IN ($value)");
+                    $dbSelect->where($this->_formatField($field, $dbSelect)." NOT IN ($value)");
                 } else {
-                    $dbSelect->where($this->_formatField($field, $select)." != ?", $value);
+                    $dbSelect->where($this->_formatField($field, $dbSelect)." != ?", $value);
                 }
             }
         }
@@ -159,12 +159,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
 
         if ($whereId = $select->getPart(Vps_Model_Select::WHERE_ID)) {
-            $dbSelect->where($this->_formatField($this->getPrimaryKey(), $select)." = ?", $whereId);
+            $dbSelect->where($this->_formatField($this->getPrimaryKey(), $dbSelect)." = ?", $whereId);
         }
 
         if ($whereNull = $select->getPart(Vps_Model_Select::WHERE_NULL)) {
             foreach ($whereNull as $field) {
-                $dbSelect->where("ISNULL(".$this->_formatField($field, $select).")");
+                $dbSelect->where("ISNULL(".$this->_formatField($field, $dbSelect).")");
             }
         }
 
@@ -264,7 +264,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     if (strpos($o['field'], '.') === false &&
                         strpos($o['field'], '(') === false
                     ) {
-                        $o['field'] = $this->_formatField($o['field'], $select);
+                        $o['field'] = $this->_formatField($o['field'], $dbSelect);
                     }
                     $dbSelect->order($o['field'].' '.$o['direction']);
                 }

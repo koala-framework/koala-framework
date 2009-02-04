@@ -1,6 +1,6 @@
 <?php
 /**
- * @group DbSibling
+ * @group Model_Db_Sibling
  */
 class Vps_Model_Db_DbSibling_Test extends PHPUnit_Framework_TestCase
 {
