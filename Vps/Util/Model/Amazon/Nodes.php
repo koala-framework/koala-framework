@@ -66,7 +66,7 @@ class Vps_Util_Model_Amazon_Nodes extends Vps_Model_Abstract
         return 'browseNodeId';
     }
 
-    public function getColumns()
+    public function getOwnColumns()
     {
         return array('browseNodeId', 'name');
     }

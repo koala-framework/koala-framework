@@ -61,7 +61,7 @@ class Vps_Util_Model_Amazon_ProductsToNodes extends Vps_Model_Abstract
         return 'id';
     }
 
-    public function getColumns()
+    public function getOwnColumns()
     {
         return array('id', 'node_id');
     }
