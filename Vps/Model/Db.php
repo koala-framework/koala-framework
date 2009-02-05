@@ -1,5 +1,6 @@
 <?php
 class Vps_Model_Db extends Vps_Model_Abstract
+    implements Vps_Model_Interface_Id
 {
     protected $_rowClass = 'Vps_Model_Db_Row';
     protected $_rowsetClass = 'Vps_Model_Db_Rowset';
@@ -245,7 +246,28 @@ class Vps_Model_Db extends Vps_Model_Abstract
         ));
     }
 
+    public function getIds($where = array(), $order=null, $limit=null, $start=null)
+    {
+        $dbSelect = $this->_getDbSelect($where, $order, $limit, $start);
+        $id = $this->getPrimaryKey();
+        $ret = array();
+        foreach ($this->_table->fetchAll($dbSelect) as $row) {
+            $ret[] = $row->$id;
+        }
+        return $ret;
+    }
+
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
+    {
+        $dbSelect = $this->_getDbSelect($where, $order, $limit, $start);
+        return new $this->_rowsetClass(array(
+            'rowset' => $this->_table->fetchAll($dbSelect),
+            'rowClass' => $this->_rowClass,
+            'model' => $this
+        ));
+    }
+
+    private function _getDbSelect($where, $order, $limit, $start)
     {
         if (!is_object($where)) {
             if (is_string($where)) $where = array($where);
@@ -275,11 +297,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($limitCount || $limitOffset) {
             $dbSelect->limit($limitCount, $limitOffset);
         }
-        return new $this->_rowsetClass(array(
-            'rowset' => $this->_table->fetchAll($dbSelect),
-            'rowClass' => $this->_rowClass,
-            'model' => $this
-        ));
+        return $dbSelect;
     }
 
     public function countRows($select = array())

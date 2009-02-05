@@ -46,6 +46,18 @@ class Vps_Model_Db_FetchTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(null, $this->_model->getRows()->current()->bar);
     }
 
+    public function testGetIds()
+    {
+        $this->_table->expects($this->exactly(2))
+            ->method('_fetch')
+            ->will($this->returnValue(array(
+                    array('id'=>1, 'foo'=>'foo', 'bar'=>null),
+                    array('id'=>2, 'foo'=>'bar', 'bar'=>'foo')
+            )));
+        $this->assertEquals(2, count($this->_model->getIds()));
+        $this->assertEquals(array(1, 2), $this->_model->getIds());
+    }
+
     public function testUniqueRowObject()
     {
         $this->_table->expects($this->any())
@@ -56,7 +68,7 @@ class Vps_Model_Db_FetchTest extends PHPUnit_Framework_TestCase
 
         $r1 = $this->_model->getRows()->current();
         $r2 = $this->_model->getRows()->current();
-        
+
         $this->assertEquals($r2->foo, '');
         $r1->foo = 'foo';
         $this->assertEquals($r2->foo, 'foo');
@@ -82,11 +94,11 @@ class Vps_Model_Db_FetchTest extends PHPUnit_Framework_TestCase
         $r1 = $this->_model->createRow();
         $r1->foo = 'foo';
         $r1->save();
-        
+
         $r2 = $this->_model->getRow(2);
         $this->assertTrue($r1 === $r2);
     }
-    
+
     public function testValuesNotInModel()
     {
         $this->_table->expects($this->any())
@@ -101,7 +113,7 @@ class Vps_Model_Db_FetchTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foobar', $row->foobar);
         $this->assertFalse(isset($row->foobar1));
     }
-    
+
     /**
      * @expectedException Vps_Exception
      */

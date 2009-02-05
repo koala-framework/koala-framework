@@ -55,8 +55,6 @@ class Vpc_Directories_Category_View_Component
 
         $cache = self::getItemCountCache();
 
-        if ($select->hasPart(Vps_Component_Select::RETURN_IDS)) return $items;
-
         foreach ($items as &$item) {
             $cacheId = $this->getItemCountCacheId($item->row);
 

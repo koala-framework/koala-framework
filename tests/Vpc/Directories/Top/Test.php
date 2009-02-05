@@ -15,12 +15,13 @@ class Vpc_Directories_Top_Test extends PHPUnit_Framework_TestCase
         $details = $dir->getChildComponents(array('generator'=>'detail'));
         $this->assertEquals(count($details), 8);
     }
+
     public function testTop()
     {
         $dir = $this->_root->getComponentById('root_top');
         $this->assertNotNull($dir);
         $vars = $dir->getChildComponent('-view')->getComponent()->getTemplateVars();
-        $this->assertEquals(count($vars['items']), 5);
+        $this->assertEquals($vars['partialParams']['count'], 5);
         $paging = $dir->getChildComponent('-view')->getChildComponent('-paging');
         $this->assertEquals($paging->getComponent()->getCount(), 5);
     }

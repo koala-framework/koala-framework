@@ -45,7 +45,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
 
     public function getChildIds($parentData, $select = array())
     {
-
+        throw new Vps_Exception('getChildIds only supports table generators');
     }
 
     protected function _fetchKeys($parentData, $select)

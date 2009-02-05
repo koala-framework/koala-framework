@@ -359,6 +359,16 @@ class Vps_Component_Data
         return current($generators)->countChildData($this, $select);
     }
 
+    public function getChildIds($select = array())
+    {
+        $select = $this->_formatSelect($select);
+        if (!$select->hasPart(Vps_Component_Select::WHERE_GENERATOR)) {
+            throw new Vps_Exception('Only one generator supported, please restrict select to a generator');
+        }
+        $generator = current(Vps_Component_Generator_Abstract::getInstances($this, $select));
+        return $generator->getChildIds($this, $select);
+    }
+
     public function getChildComponents($select = array())
     {
         $select = $this->_formatSelect($select);
@@ -399,15 +409,10 @@ class Vps_Component_Data
                     $parentData = $this;
                 }
                 foreach ($generator->getChildData($parentData, $generatorSelect) as $data) {
-                    if (!$select->hasPart(Vps_Component_Select::RETURN_IDS)) {
-                        if (isset($ret[$data->componentId])) {
-                            throw new Vps_Exception("Id not unique: {$data->componentId}");
-                        }
-                        $id = $data->componentId;
-                    } else {
-                        $id = $data;
+                    if (isset($ret[$data->componentId])) {
+                        throw new Vps_Exception("Id not unique: {$data->componentId}");
                     }
-                    $ret[] = $data;
+                    $ret[$data->componentId] = $data;
 
                     if ($limitCount) {
                         if ($limitCount - count($ret) <= 0) {
@@ -507,16 +512,6 @@ class Vps_Component_Data
             $ret[] = $data->componentId;
         }
         return $ret;
-    }
-
-    public function getChildIds($select = array())
-    {
-        if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
-        }
-        d($this->getChildComponents($select));
-        $select->returnIds(true);
-        return $this->getChildComponents($select);
     }
 
     public function getChildComponent($select = array())

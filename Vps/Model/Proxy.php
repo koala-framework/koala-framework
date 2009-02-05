@@ -1,5 +1,6 @@
 <?php
 class Vps_Model_Proxy extends Vps_Model_Abstract
+    implements Vps_Model_Interface_Id
 {
     protected $_proxyModel;
     protected $_rowClass = 'Vps_Model_Proxy_Row';
@@ -74,6 +75,11 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
             if ($m->hasColumn($col)) return true;
         }
         return false;
+    }
+
+    public function getIds($where=null, $order=null, $limit=null, $start=null)
+    {
+        return $this->_proxyModel->getIds($where, $order, $limit, $start);
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)

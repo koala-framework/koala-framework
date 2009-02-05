@@ -1,5 +1,6 @@
 <?php
 abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
+    implements Vps_Model_Interface_Id
 {
     protected $_rowClass = 'Vps_Model_Row_Data_Abstract';
 
@@ -27,18 +28,33 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
     {
     }
 
+    public function getIds($where=null, $order=null, $limit=null, $start=null)
+    {
+        $dataKeys = $this->_getDataKeys($where, $order, $limit, $start);
+        $ret = array();
+        foreach ($dataKeys as $key) {
+            $ret[] = $this->_data[$key][$this->_primaryKey];
+        }
+        return $ret;
+    }
+
     public function getRows($where=null, $order=null, $limit=null, $start=null)
+    {
+        $dataKeys = $this->_getDataKeys($where, $order, $limit, $start);
+        return new $this->_rowsetClass(array(
+            'model' => $this,
+            'dataKeys' => $dataKeys
+        ));
+    }
+
+    private function _getDataKeys($where, $order, $limit, $start)
     {
         if (!is_object($where) || $where instanceof Vps_Model_Select_Expr_Interface) {
             $select = $this->select($where, $order, $limit, $start);
         } else {
             $select = $where;
         }
-        $dataKeys = $this->_selectDataKeys($select, $this->getData());
-        return new $this->_rowsetClass(array(
-            'model' => $this,
-            'dataKeys' => $dataKeys
-        ));
+        return $this->_selectDataKeys($select, $this->getData());
     }
 
     public function update(Vps_Model_Row_Interface $row, $rowData)
