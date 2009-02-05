@@ -70,9 +70,5 @@ class Vps_Component_Output_NoCacheTest extends PHPUnit_Framework_TestCase
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_Partial_Paging_Component');
         $value = $output->renderMaster(Vps_Component_Data_Root::getInstance());
         $this->assertEquals('bar2', $value);
-
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_Partial_Id_Component');
-        $value = $output->renderMaster(Vps_Component_Data_Root::getInstance());
-        $this->assertEquals('bar2', $value);
     }
 }

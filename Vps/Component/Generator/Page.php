@@ -84,6 +84,11 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         return $select;
     }
 
+    public function getChildIds($parentData, $select = array())
+    {
+        throw new Vps_Exception('Not supported yet');
+    }
+
     public function getChildData($parentData, $select = array())
     {
         Vps_Benchmark::count('GenPage::getChildData');

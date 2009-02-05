@@ -414,6 +414,7 @@ abstract class Vps_Component_Generator_Abstract
     }
 
     abstract public function getChildData($parentData, $select = array());
+    abstract public function getChildIds($parentData, $select = array());
 
     public function countChildData($parentData, $select = array())
     {
@@ -504,10 +505,6 @@ abstract class Vps_Component_Generator_Abstract
                     break;
                 }
             }
-        }
-
-        if ($select->hasPart(Vps_Component_Select::RETURN_IDS)) {
-            return $id;
         }
 
         if (!isset($this->_dataCache[$parentData->componentId][$id])) {
