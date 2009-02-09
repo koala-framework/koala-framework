@@ -25,6 +25,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         if (substr($dir, 0, 4)=='/tmp') {
             system('rm -r '.$dir);
         }
+        Vps_Model_Abstract::clearInstances();
     }
 
     public function testCreatesLinkComponent()

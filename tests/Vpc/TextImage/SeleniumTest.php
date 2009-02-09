@@ -18,6 +18,7 @@ class Vpc_TextImage_SeleniumTest extends Vps_Test_SeleniumTestCase
         if (substr($dir, 0, 4)=='/tmp') {
             system('rm -r '.$dir);
         }
+        Vps_Model_Abstract::clearInstances();
     }
 
     public function testLightbox()
