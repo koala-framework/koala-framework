@@ -34,6 +34,9 @@ class Vps_Cache_CacheTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($cache->load($cacheId));
 
+        unlink($f);
+        $cache->cleanUp();
+
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
     }
 
@@ -65,6 +68,9 @@ class Vps_Cache_CacheTest extends PHPUnit_Framework_TestCase
         clearstatcache();
 
         $this->assertFalse($cache->load($cacheId));
+
+        unlink($f);
+        $cache->cleanUp();
 
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
     }

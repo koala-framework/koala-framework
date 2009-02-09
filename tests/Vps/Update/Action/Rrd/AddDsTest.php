@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Update_Action
+ * @group Update_Action_Rrd
  */
 class Vps_Update_Action_Rrd_AddDsTest extends Vps_Update_Action_Rrd_AbstractTest
 {
@@ -15,8 +16,11 @@ class Vps_Update_Action_Rrd_AddDsTest extends Vps_Update_Action_Rrd_AbstractTest
             'minimalHeartbeat' => 120,
             'min' => 0,
             'max' => 1000,
+            'backup'=>false
         ));
+        $action->preUpdate();
         $action->update();
+        $action->postUpdate();
 
         $cmd = "rrdtool dump $file > $file.xml";
         $this->_systemCheckRet($cmd);

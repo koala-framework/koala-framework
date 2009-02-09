@@ -16,12 +16,4 @@ class Vpc_Basic_ImagePosition_Image_UploadsModel extends Vps_Uploads_Model
 
         $this->createRow()->copyFile(VPS_PATH.'/images/information.png', 'foo', 'png', 'image/png');
     }
-
-    public function __destruct()
-    {
-        $dir = $this->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-    }
 }
