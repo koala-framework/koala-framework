@@ -1,6 +1,7 @@
 <?php
 abstract class Vps_Update_Action_Rrd_Abstract extends Vps_Update_Action_Abstract
 {
+    public $backup = true;
     public $file;
     private $_tempFiles = array();
 
@@ -57,7 +58,9 @@ abstract class Vps_Update_Action_Rrd_Abstract extends Vps_Update_Action_Abstract
 
         file_put_contents($file, $c);
         $this->_systemCheckRet("rrdtool restore $file {$this->file}.new");
-        copy($this->file, $this->file.date('Y-m-DH:i:s'));
+        if ($this->backup) {
+            copy($this->file, $this->file.'-'.date('Y-m-DH:i:s'));
+        }
         rename($this->file.'.new', $this->file);
     }
 
