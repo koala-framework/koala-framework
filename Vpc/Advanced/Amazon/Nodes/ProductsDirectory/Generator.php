@@ -13,7 +13,6 @@ class Vpc_Advanced_Amazon_Nodes_ProductsDirectory_Generator extends Vps_Componen
         if ($tag) {
             $select->whereEquals('AssociateTag', $tag);
         }
-        $select->limit(10);
         return $select;
     }
 }

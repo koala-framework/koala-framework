@@ -2,7 +2,7 @@
 /**
  * @group Amazon
  * @group slow
- * alle sleeps damit der webservice nicht überfordert wird
+ * alle sleeps damit der webservice nicht ï¿½berfordert wird
  */
 class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
 {
@@ -58,6 +58,43 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
         sleep(1);
         $this->assertEquals(count($asins), count(array_unique($asins)));
     }
+
+    public function testPaging2()
+    {
+        Vps_Benchmark::enable();
+        Vps_Benchmark::reset();
+        $m = new Vps_Util_Model_Amazon_Products;
+
+        $select = $m->select();
+        $select->whereEquals('Keywords', 'php');
+        $select->whereEquals('SearchIndex', 'Books');
+        $select->limit(1);
+        $rows1 = $m->getRows($select);
+        $this->assertEquals(1, $rows1->count());
+
+        $select = $m->select();
+        $select->whereEquals('Keywords', 'php');
+        $select->whereEquals('SearchIndex', 'Books');
+        $select->limit(1, 1);
+        $rows2 = $m->getRows($select);
+        $this->assertEquals(1, $rows2->count());
+
+        $select = $m->select();
+        $select->whereEquals('Keywords', 'php');
+        $select->whereEquals('SearchIndex', 'Books');
+        $rows3 = $m->getRows($select);
+        $this->assertEquals(10, $rows3->count());
+        foreach ($rows3 as $r) {
+            $asins[] = $r->asin;
+        }
+
+        $this->assertEquals($asins[0], $rows1->current()->asin);
+        $this->assertEquals($asins[1], $rows2->current()->asin);
+
+        $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
+        sleep(1);
+    }
+
     public function testGetRow()
     {
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
@@ -74,16 +111,6 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
         $select->whereEquals('Keywords', 'php');
         $select->whereEquals('SearchIndex', 'Books');
         $select->limit(11);
-        $m->getRows($select);
-    }
-    public function testInvalidOffset()
-    {
-        $this->setExpectedException("Vps_Exception");
-        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
-        $select = $m->select();
-        $select->whereEquals('Keywords', 'php');
-        $select->whereEquals('SearchIndex', 'Books');
-        $select->limit(10, 12);
         $m->getRows($select);
     }
     public function testMultipleOrder()
