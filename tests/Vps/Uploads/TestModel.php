@@ -15,12 +15,4 @@ class Vps_Uploads_TestModel extends Vps_Uploads_Model
 
         parent::__construct($config);
     }
-
-    public function __destruct()
-    {
-        $dir = $this->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-    }
 }

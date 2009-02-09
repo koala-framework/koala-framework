@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Update_Action
+ * @group Update_Action_Rrd
  */
 class Vps_Update_Action_Rrd_RenameDsTest extends Vps_Update_Action_Rrd_AbstractTest
 {
@@ -11,9 +12,12 @@ class Vps_Update_Action_Rrd_RenameDsTest extends Vps_Update_Action_Rrd_AbstractT
         $action = new Vps_Update_Action_Rrd_RenameDs(array(
             'file' => $file,
             'name' => 'test1',
-            'newName' => 'test3'
+            'newName' => 'test3',
+            'backup'=>false
         ));
+        $action->preUpdate();
         $action->update();
+        $action->postUpdate();
 
         $cmd = "rrdtool dump $file > $file.xml";
         $this->_systemCheckRet($cmd);

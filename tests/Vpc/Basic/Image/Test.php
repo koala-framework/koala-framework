@@ -12,6 +12,15 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
+    public function tearDown()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_UploadsModel');
+        $dir = $m->getUploadDir();
+        if (substr($dir, 0, 4)=='/tmp') {
+            system('rm -r '.$dir);
+        }
+    }
+
     public function testUrl()
     {
         $c = $this->_root->getComponentById('1600');

@@ -20,7 +20,7 @@ class Vps_Media_CacheClass extends Vps_Cache_Core
         $this->setBackend($backend);
     }
 
-    public function __destruct()
+    public function cleanUp()
     {
         if (substr($this->_cacheDir, 0, 4)=='/tmp') {
             system('rm -r '.$this->_cacheDir);

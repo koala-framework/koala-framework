@@ -18,11 +18,4 @@ class Vpc_Basic_ImageEnlarge_UploadsModel extends Vps_Uploads_Model
         $this->createRow()->copyFile(VPS_PATH.'/images/vividplanet.gif', 'foo', 'gif', 'image/gif');
     }
 
-    public function __destruct()
-    {
-        $dir = $this->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-    }
 }

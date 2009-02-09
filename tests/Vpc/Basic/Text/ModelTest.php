@@ -13,6 +13,20 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
+    public function tearDown()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Image_UploadsModel');
+        $dir = $m->getUploadDir();
+        if (substr($dir, 0, 4)=='/tmp') {
+            system('rm -r '.$dir);
+        }
+        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Download_UploadsModel');
+        $dir = $m->getUploadDir();
+        if (substr($dir, 0, 4)=='/tmp') {
+            system('rm -r '.$dir);
+        }
+    }
+
     public function testCreatesLinkComponent()
     {
         $c = $this->_root->getComponentById(1003)->getComponent();

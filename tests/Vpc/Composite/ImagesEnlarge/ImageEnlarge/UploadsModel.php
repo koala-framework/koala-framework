@@ -16,12 +16,4 @@ class Vpc_Composite_ImagesEnlarge_ImageEnlarge_UploadsModel extends Vps_Uploads_
 
         $this->createRow()->copyFile(VPS_PATH.'/images/information.png', 'foo', 'png', 'image/png');
     }
-
-    public function __destruct()
-    {
-        $dir = $this->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-    }
 }

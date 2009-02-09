@@ -1,6 +1,10 @@
 <?php
 abstract class Vps_Update_Action_Rrd_AbstractTest extends PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+    }
+
     protected function _systemCheckRet($cmd)
     {
         $ret = null;
