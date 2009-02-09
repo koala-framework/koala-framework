@@ -51,6 +51,11 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
                 $options[$f] = $v;
             }
         }
+        if ($c = $select->getPart(Vps_Model_Select::LIMIT_COUNT)) {
+            if ($c > 10) {
+                throw new Vps_Exception('limitCount can\'t be higher than 10');
+            }
+        }
         if ($select->getPart(Vps_Model_Select::WHERE_ID)) {
             $options['asin'] = $select->getPart(Vps_Model_Select::WHERE_ID);
         }
@@ -62,16 +67,8 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
                 $options['AssociateTag'] = $o['AssociateTag'];
             }
         }
-        if ($select->getPart(Vps_Model_Select::LIMIT_COUNT) && $select->getPart(Vps_Model_Select::LIMIT_COUNT) != 10) {
-            if (!isset($options['asin'])) {
-                throw new Vps_Exception('limitCount must be 10');
-            }
-        }
         if ($offs = $select->getPart(Vps_Model_Select::LIMIT_OFFSET)) {
-            if ($offs % 10 != 0) {
-                throw new Vps_Exception('limitOffset must be in 10er steps');
-            }
-            $options['ItemPage'] = $offs/10 + 1;
+            $options['ItemPage'] = floor($offs/10) + 1;
         }
         if ($ord = $select->getPart(Vps_Model_Select::ORDER)) {
             $ord = array_values($ord);
@@ -106,9 +103,16 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
             $dataKeys = array($asin);
         } else {
             $results = $this->_itemSearch($options);
+            $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
+            $limitOffset = $select->getPart(Vps_Model_Select::LIMIT_OFFSET);
+            $i = 0;
+            $dataKeys = array();
             foreach ($results as $result) {
+                $i++;
+                if ($limitOffset >= $i) continue;
                 $dataKeys[] = $result->ASIN;
                 $this->_items[$result->ASIN] = $result;
+                if ($limitCount && count($dataKeys) >= $limitCount) break;
             }
         }
         return new $this->_rowsetClass(array(
@@ -128,11 +132,10 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
     private function _itemSearch($options)
     {
         $cacheId = $this->_itemSearchCacheId($options);
-        if (isset($options['ItemPage'])) {
-            $page = $options['ItemPage'];
-        } else {
-            $page = 0;
+        if (!isset($options['ItemPage'])) {
+            $options['ItemPage'] = 1;
         }
+        $page = $options['ItemPage'];
         if (!isset($this->_resultsCache[$cacheId][$page])) {
             $this->_resultsCache[$cacheId][$page] = $this->_amazon->itemSearch($options);
         }
