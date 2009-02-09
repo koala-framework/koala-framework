@@ -17,6 +17,7 @@ class Vps_Update_Action_Db_ChangeFieldTest extends PHPUnit_Framework_TestCase
         $a->field = 'bar';
         $a->type = 'int';
         $a->default = 5;
+        $a->silent = true;
         $a->update();
 
         $rows = $a->model->getRow('foo')->getChildRows('Fields');

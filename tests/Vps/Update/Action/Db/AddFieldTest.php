@@ -16,6 +16,7 @@ class Vps_Update_Action_Db_AddFieldTest extends PHPUnit_Framework_TestCase
         $a->table = 'foo';
         $a->field = 'new_field';
         $a->type = 'text';
+        $a->silent = true;
         $a->update();
 
         $rows = $a->model->getRow('foo')->getChildRows('Fields');

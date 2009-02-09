@@ -16,6 +16,7 @@ class Vps_Update_Action_Db_DropTableTest extends PHPUnit_Framework_TestCase
         $a->table = 'foo';
         $a->field = 'bar';
         $a->newName = 'new_bar';
+        $a->silent = true;
         $a->update();
 
         $rows = $a->model->getRow('foo')->getChildRows('Fields');
