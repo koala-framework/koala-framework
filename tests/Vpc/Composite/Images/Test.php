@@ -12,16 +12,6 @@ class Vpc_Composite_Images_Test extends PHPUnit_Framework_TestCase
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
-    public function tearDown()
-    {
-        $m = Vps_Model_Abstract::getInstance('Vpc_Composite_Images_Image_UploadsModel');
-        $dir = $m->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-        Vps_Model_Abstract::clearInstances();
-    }
-
     public function testHtml()
     {
         $output = new Vps_Component_Output_NoCache();

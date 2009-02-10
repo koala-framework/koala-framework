@@ -15,21 +15,6 @@ class Vpc_Basic_Text_ModelContentTest extends PHPUnit_Framework_TestCase
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
-    public function tearDown()
-    {
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Image_UploadsModel');
-        $dir = $m->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Download_UploadsModel');
-        $dir = $m->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-        Vps_Model_Abstract::clearInstances();
-    }
-
     public function testOnlyText()
     {
         $c = $this->_root->getComponentById(1000)->getComponent();

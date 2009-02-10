@@ -13,16 +13,6 @@ class Vpc_TextImage_Test extends PHPUnit_Framework_TestCase
         parent::setUp();
     }
 
-    public function tearDown()
-    {
-        $m = Vps_Model_Abstract::getInstance('Vpc_TextImage_ImageEnlarge_UploadsModel');
-        $dir = $m->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-        Vps_Model_Abstract::clearInstances();
-    }
-
     public function testIt()
     {
         

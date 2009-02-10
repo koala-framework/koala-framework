@@ -12,16 +12,6 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
-    public function tearDown()
-    {
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel');
-        $dir = $m->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-        Vps_Model_Abstract::clearInstances();
-    }
-
     public function testWithoutSmallImageComponent()
     {
         $c = $this->_root->getComponentById('1800');
