@@ -4,23 +4,26 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     public $fields;
     private $_model;
     private $_references;
+    private $_referenceName;
 
-    public function __construct($tableName = null)
+    public function __construct($reference = null)
     {
-        if (is_object($tableName)) {
-            $model = $tableName;
-        } else if (class_exists($tableName)) {
-            $model = new $tableName();
+        if (is_object($reference)) {
+            $model = $reference;
+        } else if (class_exists($reference) && is_instance_of($reference, 'Zend_Db_Table_Abstract')) {
+            $model = new $reference();
         } else {
-            throw new Vps_Exception("Invalid table or model: '$tableName'");
+            $this->_referenceName = $reference;
         }
-        parent::__construct(get_class($model));
-        if ($model instanceof Zend_Db_Table_Abstract) {
-            $model = new Vps_Model_Db(array(
-                'table' => $model
-            ));
+        parent::__construct(is_object($reference) ? get_class($reference) : $reference);
+        if (isset($model)) {
+            if (!($model instanceof Vps_Model_Interface)) {
+                $model = new Vps_Model_Db(array(
+                    'table' => $model
+                ));
+            }
+            $this->setModel($model);
         }
-        $this->setModel($model);
         $this->fields = new Vps_Collection_FormFields();
         $this->setBorder(false);
         $this->setXtype('multifields');
@@ -79,14 +82,14 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
     protected function _getRowsByRow(Vps_Model_Row_Interface $row)
     {
-        if ($this->_model instanceof Vps_Model_FieldRows) {
-            $rows = $this->_model->fetchByParentRow($row);
+        $pk = $row->getModel()->getPrimaryKey();
+        if (!$row->$pk) {
+            //neuer eintrag (noch keine id)
+            return array();
+        }
+        if (isset($this->_referenceName)) {
+            $rows = $row->getChildRows($this->_referenceName);
         } else {
-            $pk = $row->getModel()->getPrimaryKey();
-            if (!$row->$pk) {
-                //neuer eintrag (noch keine id)
-                return array();
-            }
             $ref = $this->_getReferences($row);
             $where = array();
             foreach (array_keys($ref['columns']) as $k) {
@@ -115,12 +118,17 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             foreach ($rows as $r) {
                 $rowsArray[] = $r;
             }
+
             foreach ($postData as $i=>$rPostData) {
                 $retRow = array();
                 if (isset($rowsArray[$i]) && (!isset($rPostData['isNewRow']) || !$rPostData['isNewRow'])) {
                     $r = $rowsArray[$i];
                 } else {
-                    $r = $this->_model->createRow();
+                    if (isset($this->_referenceName)) {
+                        $r = $row->createChildRow($this->_referenceName);
+                    } else {
+                        $r = $this->_model->createRow();
+                    }
                 }
                 $rPostData = $postData[$i];
                 foreach ($this->fields as $field) {
@@ -202,7 +210,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         }
 
         foreach ($fieldPostData as $rowPostData) {
-            $r = $this->_model->createRow();
+            if (isset($this->_referenceName)) {
+                $r = $row->createChildRow($this->_referenceName);
+            } else {
+                $r = $this->_model->createRow();
+            }
             $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>true);
         }
 
@@ -285,7 +297,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         foreach ($postData['save'] as $i) {
             $r = $i['row'];
             $rowPostData = $i['data'];
-            if ($i['insert']) {
+            if ($i['insert'] && !isset($this->_referenceName)) {
                 if ($this->_model instanceof Vps_Model_FieldRows) {
                     //nichts zu tun, keine parent_id muss gesetzt werden
                 } else {
