@@ -10,9 +10,9 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
                                    'height'=>410);
     protected $_filters = array('text' => true);
 
-    protected function _getWhere()
+    protected function _getSelect()
     {
-        $where = parent::_getWhere();
+        $select = parent::_getSelect();
         $acl = Zend_Registry::get('acl');
         $roles = array();
         foreach ($acl->getAllResources() as $res) {
@@ -24,17 +24,17 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         }
 
         if ($roles) {
-            $where[] = "role IN ('".implode("','", $roles)."')";
+            $select->whereEquals('role', $roles);
         } else {
-            $where[] = "0 = 1";
+            $select = null;
         }
 
-        return $where;
+        return $select;
     }
 
     public function preDispatch()
     {
-        $this->_table = Zend_Registry::get('userModel');
+        $this->_model = Zend_Registry::get('userModel');
         parent::preDispatch();
     }
 

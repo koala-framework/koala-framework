@@ -23,10 +23,23 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
         return $ret;
     }
 
+    public static function getDbCacheTables()
+    {
+        $ret = array();
+        $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
+        foreach ($tables as $table) {
+            if (substr($table, 0, 6) == 'cache_') {
+                $ret[] = $table;
+            }
+        }
+        return $ret;
+    }
+
     public static function getHelpOptions()
     {
-        $types = array('all', 'memcache', 'view');
+        $types = array('all', 'memcache');
         $types = array_merge($types, self::_getCacheDirs());
+        $types = array_merge($types, self::getDbCacheTables());
         return array(
             array(
                 'param'=> 'type',
@@ -40,8 +53,9 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
     public static function clearCache($types = 'all', $output = false)
     {
         if ($types == 'all') {
-            $types = array('memcache', 'view');
+            $types = array('memcache');
             $types = array_merge($types, self::_getCacheDirs());
+            $types = array_merge($types, self::getDbCacheTables());
         } else {
             if (!is_array($types)) {
                 $types = explode(',', $types);
@@ -53,16 +67,16 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));
             $cache->clean();
-            if ($output) echo "cleared memcache...\n";
+            if ($output) echo "cleared:     memcache...\n";
         }
-        if (in_array('view', $types) && Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_Cache::getInstance()->clean();
-            if ($output) echo "cleared view...\n";
+        foreach (self::getDbCacheTables() as $t) {
+            Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
+            if ($output) echo "cleared db:  $t...\n";
         }
         foreach (self::_getCacheDirs() as $d) {
             if (in_array($d, $types)) {
                 self::_removeDirContents("application/cache/$d");
-                if ($output) echo "cleared $d cache...\n";
+                if ($output) echo "cleared dir: $d cache...\n";
             }
         }
     }

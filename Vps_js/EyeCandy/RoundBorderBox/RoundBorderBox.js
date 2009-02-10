@@ -17,7 +17,5 @@ Vps.onContentReady(function()
         var ht = extEl.getHeight() - extEl.down('.vpsTopLeft').getHeight() - extEl.down('.vpsBottomLeft').getHeight();
         extEl.down('.vpsMiddleLeft').setHeight(ht);
         extEl.down('.vpsMiddleRight').setHeight(ht);
-
-        
     });
 });

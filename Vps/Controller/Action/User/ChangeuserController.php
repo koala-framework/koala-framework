@@ -24,7 +24,7 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
 
     public function init()
     {
-        $this->_table = Zend_Registry::get('userModel');
+        $this->_model = Zend_Registry::get('userModel');
     }
 
     protected function _initColumns()

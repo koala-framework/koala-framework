@@ -60,16 +60,19 @@ class Vps_Trl
 
     public function getTargetLanguage()
     {
-        $config = Zend_Registry::get('config');
-        if (!Zend_Registry::get('userModel') ||
-            !Zend_Registry::get('userModel')->getAuthedUser() ||
-            !isset(Zend_Registry::get('userModel')->getAuthedUser()->language) ||
-            !Zend_Registry::get('userModel')->getAuthedUser()->language ||
-            !in_array(Zend_Registry::get('userModel')->getAuthedUser()->language, $this->getLanguages()))
+        if (php_sapi_name() == 'cli') {
+            return $this->getWebCodeLanguage();
+        }
+
+        $userModel = Vps_Registry::get('userModel');
+        if (!$userModel || !$userModel->getAuthedUser() ||
+            !isset($userModel->getAuthedUser()->language) ||
+            !$userModel->getAuthedUser()->language ||
+            !in_array($userModel->getAuthedUser()->language, $this->getLanguages()))
         {
             return $this->getWebCodeLanguage();
         } else {
-            return Zend_Registry::get('userModel')->getAuthedUser()->language;
+            return $userModel->getAuthedUser()->language;
         }
     }
 

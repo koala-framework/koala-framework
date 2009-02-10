@@ -4,7 +4,7 @@ class Vpc_User_Detail_General_Form extends Vpc_Abstract_Composite_Form
     protected $_generalFieldset;
     protected function _init()
     {
-        $this->setTable(Zend_Registry::get('userModel'));
+        $this->setModel(Zend_Registry::get('userModel'));
         parent::_init();
     }
 

@@ -20,9 +20,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
     }
 
     //kann gesetzt werden von proxy
-    public function setIndirectSiblingModels($m)
+    public function addIndirectSiblingModels($m)
     {
-        $this->_indirectSiblingModels = $m;
+        $this->_indirectSiblingModels = array_merge($this->_indirectSiblingModels, $m);
     }
     protected function _init()
     {
@@ -102,12 +102,18 @@ class Vps_Model_Db extends Vps_Model_Abstract
     {
         $sm = array_merge($this->_siblingModels, $this->_indirectSiblingModels);
         foreach ($sm as $k=>$m) {
-            if ($m instanceof Vps_Model_Proxy) {
+            if (is_array($m)) {
+                $siblingOf = $m['siblingOf'];
+                $m = $m['sibling'];
+            } else {
+                $siblingOf = $this;
+            }
+            while ($m instanceof Vps_Model_Proxy) {
                 $m = $m->getProxyModel();
             }
             if ($m instanceof Vps_Model_Db) {
                 if (in_array($field, $m->getOwnColumns())) {
-                    $ref = $m->getReferenceByModelClass(get_class($this), $k);
+                    $ref = $m->getReferenceByModelClass(get_class($siblingOf), $k);
                     $siblingTableName = $m->_table->info(Zend_Db_Table_Abstract::NAME);
                     $dbSelect->joinLeft($siblingTableName,
                             $this->_table->info('name').'.'.$this->getPrimaryKey()

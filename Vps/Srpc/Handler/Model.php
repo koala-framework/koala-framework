@@ -2,6 +2,7 @@
 class Vps_Srpc_Handler_Model
 {
     protected $_model;
+    protected $_extraParams;
 
     public function __construct(array $config = array())
     {
@@ -13,6 +14,19 @@ class Vps_Srpc_Handler_Model
 
     protected function _init()
     {
+    }
+
+    /**
+     * Speichert extra-parameter, die individuell abgerufen werden müssen
+     */
+    public function setExtraParams($params)
+    {
+        $this->_extraParams = $params;
+    }
+
+    public function getExtraParams()
+    {
+        return $this->_extraParams;
     }
 
     public function getModel()

@@ -18,16 +18,13 @@ class Vps_Auth extends Zend_Auth
                 if (!$loginData['userId']) {
                     $userModel = Zend_Registry::get('userModel');
 
-                    $restClient = new Vps_Rest_Client();
-                    $restClient->exists($userModel->getRowWebcode(), $autologin);
-                    $restResult = $restClient->get();
-
-                    if (!$restResult->status()) {
-                        $msg = $restResult->msg();
+                    $r = $userModel->getRow($userModel->select()->whereEquals('email', $autologin));
+                    if (!$r) {
+                        $msg = "Autologin email '$autologin' does not exists";
                         throw new Vps_Exception("autologin failed: $msg");
                     }
 
-                    $loginData['userId'] = $restResult->id();
+                    $loginData['userId'] = $r->id;
                     $storage->write($loginData);
                 }
             }
@@ -40,7 +37,7 @@ class Vps_Auth extends Zend_Auth
     {
         $ret = parent::clearIdentity();
         $userModel = Vps_Registry::get('userModel');
-        if ($userModel) { $userModel->clearAuthedUser(); }
+        if ($userModel) $userModel->clearAuthedUser();
         return $ret;
     }
 

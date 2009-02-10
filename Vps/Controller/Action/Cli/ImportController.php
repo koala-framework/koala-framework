@@ -155,15 +155,18 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $mysqlDir = '/usr/local/mysql/bin/';
         }
 
-        $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
-
-
-        $this->_systemCheckRet("{$mysqlDir}mysqldump --ignore-table={$dbConfig->dbname}.cache_component $mysqlOptions {$dbConfig->dbname} > $dumpname");
-        if (in_array('cache_component', $tables)) {
-            $this->_systemCheckRet("{$mysqlDir}mysqldump --no-data $mysqlOptions {$dbConfig->dbname} cache_component >> $dumpname");
+        $cacheTables = Vps_Controller_Action_Cli_ClearCacheController::getDbCacheTables();
+        $ignoreTables = '';
+        foreach ($cacheTables as $t) {
+            $ignoreTables .= " --ignore-table={$dbConfig->dbname}.{$t}";
         }
 
-        $this->_systemCheckRet("bzip2 $dumpname");
+        $this->_systemCheckRet("{$mysqlDir}mysqldump{$ignoreTables} $mysqlOptions {$dbConfig->dbname} > $dumpname");
+        foreach ($cacheTables as $t) {
+            $this->_systemCheckRet("{$mysqlDir}mysqldump --no-data $mysqlOptions {$dbConfig->dbname} $t >> $dumpname");
+        }
+
+        $this->_systemCheckRet("bzip2 --fast $dumpname");
 
         echo $dumpname.".bz2";
     }

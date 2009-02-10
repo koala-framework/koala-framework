@@ -11,7 +11,7 @@ class Vpc_Forum_Directory_ModeratorsController extends Vps_Controller_Action_Aut
 
     public function preDispatch()
     {
-        $this->_table = Zend_Registry::get('userModel');
+        $this->_model = Zend_Registry::get('userModel');
         parent::preDispatch();
     }
 

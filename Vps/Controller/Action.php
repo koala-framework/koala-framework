@@ -111,12 +111,12 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     protected function _getUserRole()
     {
-        return Zend_Registry::get('userModel')->getAuthedUserRole();
+        return Vps_Registry::get('userModel')->getAuthedUserRole();
     }
 
     protected function _getAuthData()
     {
-        return Zend_Registry::get('userModel')->getAuthedUser();
+        return Vps_Registry::get('userModel')->getAuthedUser();
     }
     /**
      * @return Vps_Acl

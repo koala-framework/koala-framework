@@ -13,7 +13,7 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
     {
         return $this->getData()->parent->parent;
     }
-    
+
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
         $row->component_id = $this->_getPostsComponent()->dbId;
@@ -23,7 +23,7 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
             {
                 $guestbook = $this->getData()->parent->parent;
                 $userRow = $this->getData()->parent->parent->parent->row;
-                
+
                 $mail = new Vps_Mail($guestbook);
                 $mail->subject = trlVps('New entry in your guestbook');
                 $mail->addTo($userRow->email, $userRow->__toString());
@@ -31,32 +31,27 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
                 $mail->url = 'http://' . $_SERVER['HTTP_HOST'] . $guestbook->getUrl();
                 $mail->text = $row->content;
                 $mail->send();
-                
             } else if ($this->getData()->getParentPage()->getChildComponent('-observe')) {
-                
                 $thread = $this->getData()->getParentPage();
                 $observe = $thread->getChildComponent('-observe');
                 $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
                 $table = Vpc_Abstract::createTable($observe->componentClass);
                 $observers = $table->fetchAll(array('thread_id = ?' => $thread->row->id));
+                $userModel = Zend_Registry::get('userModel');
                 foreach ($observers as $observer) {
                     if ($authedUser && $authedUser->id == $observer->user_id) {
                         continue;
                     }
-    
-                    $userRow = Zend_Registry::get('userModel')->fetchAll(array(
-                        'id = ?' => $observer->user_id
-                    ))->current();
-    
+
+                    $userRow = $userModel->getRow($userModel->select()->whereEquals('id', $observer->user_id));
                     if ($userRow) {
                         $this->_sendObserveMail($userRow, $thread, $observe);
                     }
                 }
-                
             }
         }
     }
-    
+
     private function _sendObserveMail($userRow, $thread, $observe)
     {
         $mail = new Vps_Mail($observe);

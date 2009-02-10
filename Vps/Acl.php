@@ -92,8 +92,8 @@ class Vps_Acl extends Zend_Acl
     public function isAllowedUser($user, $resource = null, $privilege = null)
     {
         if (is_numeric($user)) {
-            $table = Vps_Registry::get('userModel');
-            $user = $table->find($user)->current();
+            $userModel = Vps_Registry::get('userModel');
+            $user = $userModel->getRow($userModel->select()->whereEquals('id', $user));
         }
 
         if (!$user) {

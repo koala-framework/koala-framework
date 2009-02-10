@@ -5,11 +5,20 @@
 class Vps_Srpc_Client
 {
     protected $_serverUrl;
+    protected $_extraParams = array();
 
     public function __construct(array $config = array())
     {
         if (!empty($config['serverUrl'])) {
             $this->setServerUrl($config['serverUrl']);
+        }
+        if (!empty($config['extraParams']) && is_array($config['extraParams'])) {
+            if (array_key_exists('method', $config['extraParams'])
+                || array_key_exists('arguments', $config['extraParams'])
+            ) {
+                throw new Vps_Exception("'method' or 'argument' may not be a key of config value 'extraParams'");
+            }
+            $this->_extraParams = $config['extraParams'];
         }
     }
 
@@ -38,13 +47,18 @@ class Vps_Srpc_Client
     {
         $params = array(
             'method' => $method,
-            'arguments' => array()
+            'arguments' => array(),
+            'extraParams' => array()
         );
         if (is_array($args) && count($args)) {
             $params['arguments'] = $args;
         }
 
+        if ($this->_extraParams) {
+            $params['extraParams'] = $this->_extraParams;
+        }
         $params['arguments'] = serialize($params['arguments']);
+        $params['extraParams'] = serialize($params['extraParams']);
 
         $response = $this->_performRequest($params);
         if (@unserialize($response) === false) {
