@@ -89,15 +89,17 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
 
             if (self::_executeUpdate($updates, 'checkSettings')) {
 
-                $offlineBootstrap  = "<?php\nheader(\"HTTP/1.0 503 Service Unavailable\");\n";
-                $offlineBootstrap .= "echo \"<html><head><title>503 Service Unavailable</title></head><body>\";\n";
-                $offlineBootstrap .= "echo \"<h1>Service Unavailable</h1>\";\n";
-                $offlineBootstrap .= "echo \"<p>Server ist im Moment wegen Wartungsarbeiten nicht verfügbar.</p>\";\n";
-                $offlineBootstrap .= "echo \"</body></html>\";\n";
-                if (!file_exists('bootstrap.php.backup')) {
-                    rename('bootstrap.php', 'bootstrap.php.backup');
-                    file_put_contents('bootstrap.php', $offlineBootstrap);
-                    echo "\nwrote offline bootstrap.php";
+                if (Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
+                    $offlineBootstrap  = "<?php\nheader(\"HTTP/1.0 503 Service Unavailable\");\n";
+                    $offlineBootstrap .= "echo \"<html><head><title>503 Service Unavailable</title></head><body>\";\n";
+                    $offlineBootstrap .= "echo \"<h1>Service Unavailable</h1>\";\n";
+                    $offlineBootstrap .= "echo \"<p>Server ist im Moment wegen Wartungsarbeiten nicht verfügbar.</p>\";\n";
+                    $offlineBootstrap .= "echo \"</body></html>\";\n";
+                    if (!file_exists('bootstrap.php.backup')) {
+                        rename('bootstrap.php', 'bootstrap.php.backup');
+                        file_put_contents('bootstrap.php', $offlineBootstrap);
+                        echo "\nwrote offline bootstrap.php";
+                    }
                 }
 
                 self::_executeUpdate($updates, 'preUpdate');
@@ -112,9 +114,11 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 file_put_contents('application/update', serialize($updateRevision));
                 echo "\n\033[32mupdate finished\033[0m\n";
 
-                if (file_get_contents('bootstrap.php') == $offlineBootstrap) {
-                    rename('bootstrap.php.backup', 'bootstrap.php');
-                    echo "\nrestored bootstrap.php\n";
+                if (Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
+                    if (file_get_contents('bootstrap.php') == $offlineBootstrap) {
+                        rename('bootstrap.php.backup', 'bootstrap.php');
+                        echo "\nrestored bootstrap.php\n";
+                    }
                 }
 
             } else {
