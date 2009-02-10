@@ -69,4 +69,32 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
         $post = $form->processInput($form->getRow(), $post);
         $this->assertEquals(1, count($form->validate($form->getRow(), $post)));
     }
+
+    public function testWithRelations()
+    {
+        $form = new Vps_Form();
+        $form->setModel(Vps_Model_Abstract::getInstance('Vps_Form_MultiFields_TestModel1'));
+        $form->add(new Vps_Form_Field_TextField('blub'));
+        $form->add(new Vps_Form_Field_MultiFields('Model2'))
+            ->fields->add(new Vps_Form_Field_TextField('foo'));
+
+        $post = array(
+            'blub' => 'blab',
+            'Model2' => array(
+                array('foo' => 'bab')
+            )
+        );
+        $post = $form->processInput($form->getRow(), $post);
+        $form->validate($form->getRow(), $post);
+        $form->prepareSave(null, $post);
+        $form->save(null, $post);
+
+        $r = Vps_Model_Abstract::getInstance('Vps_Form_MultiFields_TestModel1')->getRow(3);
+        $this->assertEquals('blab', $r->blub);
+        $this->assertEquals(3, $r->id);
+
+        $r = Vps_Model_Abstract::getInstance('Vps_Form_MultiFields_TestModel2')->getRow(4);
+        $this->assertEquals('bab', $r->foo);
+        //TODO: Model Bug $this->assertEquals(3, $r->model1_id);
+    }
 }
