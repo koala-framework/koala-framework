@@ -3458,7 +3458,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>order now at amazon</en>
-<de>Jetzt über Amazon bestellen</de>
+<de>Jetzt &#xFC;ber Amazon bestellen</de>
 <id>946</id>
 </text>
 <text>
@@ -3494,8 +3494,138 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>similar products</en>
-<de>Ähnliche Produkte</de>
+<de>&#xC4;hnliche Produkte</de>
 <id>954</id>
+</text>
+<text>
+<en>A http Error occured.</en>
+<de>Ein Fehler ist aufgetreten.</de>
+<id>955</id>
+</text>
+<text>
+<en>Upload URL string is empty.</en>
+<de>Es wurde keine Upload-Datei angegeben.</de>
+<id>956</id>
+</text>
+<text>
+<en>IO Error.</en>
+<de>Lese- oder Schreibfehler</de>
+<id>957</id>
+</text>
+<text>
+<en>Security Error.</en>
+<de>Sicherheitsfehler.</de>
+<id>958</id>
+</text>
+<text>
+<en>The upload limit has been reached.</en>
+<de>Das Upload-Limit wurde erreicht.</de>
+<id>959</id>
+</text>
+<text>
+<en>File size exceeds allowed limit.</en>
+<de>Dateigr&#xF6;&#xDF;e &#xFC;berschreitet das erlaubte Limit.</de>
+<id>960</id>
+</text>
+<text>
+<en>File is zero bytes and cannot be uploaded.</en>
+<de>Datei hat keine Gr&#xF6;&#xDF;e und kann nicht hochgeladen werden.</de>
+<id>961</id>
+</text>
+<text>
+<en>File is not an allowed file type.</en>
+<de>Dateityp ist nicht erlaubt.</de>
+<id>962</id>
+</text>
+<text>
+<en>Associate-Tag</en>
+<de>Assoziierender-Tag {0}</de>
+<id>963</id>
+</text>
+<text>
+<en>Node {0}</en>
+<de>Knoten {0}</de>
+<id>964</id>
+</text>
+<text>
+<en>Upload Error</en>
+<de>Fehler beim Hochladen</de>
+<id>965</id>
+</text>
+<text>
+<en>None</en>
+<de>keine</de>
+<id>966</id>
+</text>
+<text>
+<en>Enlarge Image</en>
+<en>Bild vergr&#xF6;&#xDF;ern</en>
+<id>967</id>
+</text>
+<text>
+<en>Alternative Preview Image</en>
+<de>Alternatives Vorschaubild</de>
+<id>968</id>
+</text>
+<text>
+<en>Click on Preview Image</en>
+<de>Hier klicken f&#xFC;r Bildvorschau</de>
+<id>969</id>
+</text>
+<text>
+<en>Image Texts</en>
+<de>Bildtexte</de>
+<id>970</id>
+</text>
+<text>
+<en>Alt-Text</en>
+<de>Alternativer Text</de>
+<id>971</id>
+</text>
+<text>
+<en>Downloads</en>
+<de>Downloads</de>
+<id>972</id>
+</text>
+<text>
+<en>Image Size</en>
+<de>Bildgr&#xF6;&#xDF;e</de>
+<id>973</id>
+</text>
+<text>
+<en>Original</en>
+<de>Original</de>
+<id>974</id>
+</text>
+<text>
+<en>Dimension</en>
+<de>Dimension</de>
+<id>975</id>
+</text>
+<text>
+<en>Text-Image</en>
+<de>Text-Bild</de>
+<id>976</id>
+</text>
+<text>
+<en>Layout</en>
+<de>Anordnung</de>
+<id>977</id>
+</text>
+<text>
+<en>Position Image</en>
+<de>Bildposition</de>
+<id>978</id>
+</text>
+<text>
+<en>Text flows around Image</en>
+<de>Text umflie&#xDF;t Bild</de>
+<id>979</id>
+</text>
+<text>
+<en>Custom Filename</en>
+<de>benutzerdefinierter Dateiname</de>
+<id>980</id>
 </text>
 </trl>
 
