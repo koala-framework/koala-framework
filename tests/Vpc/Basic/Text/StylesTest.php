@@ -10,21 +10,6 @@ class Vpc_Basic_Text_StylesTest extends PHPUnit_Framework_TestCase
         Vps_Component_Data_Root::setComponentClass('Vpc_Basic_Text_Root');
     }
 
-    public function tearDown()
-    {
-        Vpc_Basic_Text_StylesModel::removeCache();
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Image_UploadsModel');
-        $dir = $m->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Download_UploadsModel');
-        $dir = $m->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-    }
-
     public function testStyles()
     {
         $model = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_TestStylesModel');

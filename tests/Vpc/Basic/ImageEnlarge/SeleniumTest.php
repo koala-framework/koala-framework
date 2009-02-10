@@ -11,16 +11,6 @@ class Vpc_Basic_ImageEnlarge_SeleniumTest extends Vps_Test_SeleniumTestCase
         Vps_Component_Data_Root::setComponentClass('Vpc_Basic_ImageEnlarge_Root');
     }
 
-    public function tearDown()
-    {
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel');
-        $dir = $m->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-        Vps_Model_Abstract::clearInstances();
-    }
-
     public function testLightbox()
     {
         $this->openVpc('/foo1');
