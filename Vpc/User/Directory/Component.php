@@ -6,7 +6,7 @@ class Vpc_User_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
         $ret = parent::getSettings();
         $ret['generators']['detail']['class'] = 'Vpc_User_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Vpc_User_Detail_Component';
-        $ret['generators']['detail']['table'] = get_class(Vps_Registry::get('userModel'));
+        $ret['generators']['detail']['model'] = Vps_Registry::get('config')->user->model;
         $ret['generators']['detail']['dbIdShortcut'] = 'users_';
         $ret['generators']['detail']['filenameColumn'] = 'nickname';
         $ret['generators']['detail']['nameColumn'] = 'nickname';

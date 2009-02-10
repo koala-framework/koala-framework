@@ -8,7 +8,7 @@ class Vps_User_Form extends Vps_Form
     {
         parent::_init();
         if (!$this->getModel()) {
-            $this->setTable(Zend_Registry::get('userModel'));
+            $this->setModel(Zend_Registry::get('userModel'));
         }
     }
 
@@ -19,9 +19,9 @@ class Vps_User_Form extends Vps_Form
         $userEditForm = $this->fields->add(new $this->_userDataFormName('user'));
         $userEditForm->setIdTemplate('{0}');
 
-        $userDirectory = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_User_Directory_Component');
-        if ($userDirectory) {
+        $root =  Vps_Component_Data_Root::getInstance();
+        if ($root) $userDirectory = $root->getComponentByClass('Vpc_User_Directory_Component');
+        if ($root && isset($userDirectory) && $userDirectory) {
             $detailClass = Vpc_Abstract::getChildComponentClass($userDirectory->componentClass, 'detail');
             $userEditForm->addUserForms($detailClass, array('general'));
             $userEditForm->fields['firstname']->setAllowBlank(true);

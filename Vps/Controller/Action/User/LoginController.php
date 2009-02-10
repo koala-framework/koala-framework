@@ -77,7 +77,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         list($userId, $code) = explode('-', $activationCode, 2);
 
         $users = Zend_Registry::get('userModel');
-        $row = $users->find($userId)->current();
+        $row = $users->getRow($userId);
 
         $config = array(
             'errorMsg' => '',
@@ -113,7 +113,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         }
 
         $users = Zend_Registry::get('userModel');
-        $row = $users->find($userId)->current();
+        $row = $users->getRow($userId);
 
         if (!$row) {
             throw new Vps_ClientException('User not found in Web.');

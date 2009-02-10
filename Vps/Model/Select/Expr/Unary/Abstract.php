@@ -14,7 +14,7 @@ abstract class Vps_Model_Select_Expr_Unary_Abstract implements Vps_Model_Select_
     public function validate ()
     {
         if (count($this->_expressions) == 0) {
-            throw new Vps_Exception("'".get_class($this)."' hast to contain at least one Expression");
+            throw new Vps_Exception("'".get_class($this)."' has to contain at least one Expression");
         }
         foreach ($this->_expressions as $expression) {
             $expression->validate();

@@ -4,7 +4,7 @@ class Vpc_User_Edit_Form_Form extends Vps_Form
     protected function _init()
     {
         parent::_init();
-        $this->setTable(Zend_Registry::get('userModel'));
+        $this->setModel(Zend_Registry::get('userModel'));
     }
 
     public function addUserForms($detailsClass, $forms)

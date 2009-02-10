@@ -10,17 +10,17 @@ class Vpc_Forum_Directory_ModeratorsToGroupController extends Vps_Controller_Act
 
     protected function _initColumns()
     {
-        $serviceUserClass = get_class(Zend_Registry::get('userModel'));
+        $userModel = Zend_Registry::get('userModel');
 
         $this->_columns->add(new Vps_Grid_Column('user_id', 'ID', 55));
         $this->_columns->add(new Vps_Grid_Column('title', trlVps('Title'), 60))
-                       ->setData(new Vps_Data_Table_Parent($serviceUserClass, 'title'));
+                       ->setData(new Vps_Data_Table_Parent($userModel, 'title'));
         $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('Firstname'), 120))
-                       ->setData(new Vps_Data_Table_Parent($serviceUserClass, 'firstname'));
+                       ->setData(new Vps_Data_Table_Parent($userModel, 'firstname'));
         $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Lastname'), 120))
-                       ->setData(new Vps_Data_Table_Parent($serviceUserClass, 'lastname'));
+                       ->setData(new Vps_Data_Table_Parent($userModel, 'lastname'));
         $this->_columns->add(new Vps_Grid_Column('email', trlVps('Email'), 180))
-                       ->setData(new Vps_Data_Table_Parent($serviceUserClass, 'email'));
+                       ->setData(new Vps_Data_Table_Parent($userModel, 'email'));
     }
 
     protected function _getWhere()

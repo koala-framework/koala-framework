@@ -39,7 +39,7 @@ class Vps_Srpc_Server
         return $this->_handler;
     }
 
-    public function handle($method = null, $arguments = null)
+    public function handle($method = null, $arguments = null, $extraParams = null)
     {
         try {
             if (is_null($method) && isset($_REQUEST['method']) && !is_null($_REQUEST['method'])) {
@@ -47,6 +47,9 @@ class Vps_Srpc_Server
             }
             if (is_null($arguments) && isset($_REQUEST['arguments']) && !is_null($_REQUEST['arguments'])) {
                 $arguments = unserialize($_REQUEST['arguments']);
+            }
+            if (is_null($extraParams) && isset($_REQUEST['extraParams']) && !is_null($_REQUEST['extraParams'])) {
+                $extraParams = unserialize($_REQUEST['extraParams']);
             }
             if (is_null($arguments)) {
                 $arguments = array();
@@ -66,7 +69,10 @@ class Vps_Srpc_Server
                 throw new Vps_Srpc_Exception("'arguments' is expected to be an array");
             }
 
-            $result = call_user_func_array(array($this->getHandler(), $method), $arguments);
+            $handler = $this->getHandler();
+            if ($extraParams) $handler->setExtraParams($extraParams);
+
+            $result = call_user_func_array(array($handler, $method), $arguments);
             $result = serialize($result);
         } catch (Vps_Srpc_Exception $e) {
             $result = serialize($e);

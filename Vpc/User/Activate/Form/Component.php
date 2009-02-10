@@ -17,7 +17,6 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         $this->_form->add(new Vps_Form_Field_Hidden('code'));
     }
 
-    
     public function processInput(array $postData)
     {
         parent::processInput($postData);
@@ -34,7 +33,8 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         } else {
             $userId = (int)$code[0];
             $code = $code[1];
-            $this->_user = Zend_Registry::get('userModel')->find($userId)->current();
+            $userModel = Zend_Registry::get('userModel');
+            $this->_user = $userModel->getRow($userModel->select()->whereEquals('id', $userId));
             if (!$this->_user) {
                 $this->_errors[] = trlVps('Data was not sent completely. Please copy the complete address out of the email.');
             } else if ($this->_user->getActivationCode() != $code) {

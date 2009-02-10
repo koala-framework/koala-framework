@@ -306,9 +306,6 @@ class Vps_Assets_Dependencies
 
     public function getFileContents($file, $language = null)
     {
-        if (!$language) {
-            $language = Zend_Registry::get('trl')->getTargetLanguage();
-        }
         $ret = array();
         if ($file == 'AllRteStyles.css') {
             $ret = Vpc_Basic_Text_StylesModel::getStylesContents();
@@ -389,6 +386,9 @@ class Vps_Assets_Dependencies
             }
 
             if (substr($ret['mimeType'], 0, 5) == 'text/') { //nur texte cachen
+                if (!$language) {
+                    $language = Zend_Registry::get('trl')->getTargetLanguage();
+                }
 
                 $cache = $this->_getCache();
                 $section = substr($file, 0, strpos($file, '-'));

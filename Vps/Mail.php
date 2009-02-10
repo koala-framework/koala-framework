@@ -255,7 +255,6 @@ class Vps_Mail
             }
         }
 
-
         // txt mail
         $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.txt.tpl");
         foreach ($vars as $row) {

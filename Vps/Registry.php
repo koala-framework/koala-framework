@@ -2,6 +2,8 @@
 require_once 'Zend/Registry.php';
 class Vps_Registry extends Zend_Registry
 {
+    private $_creatingUserModel = false;
+    
     public function offsetGet($index)
     {
         if ($index == 'db' && !parent::offsetExists($index)) {
@@ -33,9 +35,11 @@ class Vps_Registry extends Zend_Registry
             $this->offsetSet('acl', $v);
             return $v;
         } else if ($index == 'userModel' && !parent::offsetExists($index)) {
-            $userModel = self::get('config')->user->model;
-            $v = new $userModel();
+            if ($this->_creatingUserModel) return null;
+            $this->_creatingUserModel = true;
+            $v = new Vps_User_Model();
             $this->offsetSet('userModel', $v);
+            $this->_creatingUserModel = false;
             return $v;
         } else if ($index == 'trl' && !parent::offsetExists($index)) {
             $v = new Vps_Trl();
