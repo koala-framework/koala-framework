@@ -3,7 +3,7 @@ class Vpc_TextImage_Text_TestModel extends Vpc_Basic_Text_Model
 {
     public function __construct($config = array())
     {
-        $this->_dependentModels['ChildComponents'] = new Vps_Model_FnF();
+        $this->_dependentModels['ChildComponents'] = 'Vpc_TextImage_Text_ChildComponentsModel';
 
         $config['proxyModel'] = new Vps_Model_FnF(array(
                 'primaryKey' => 'component_id',
