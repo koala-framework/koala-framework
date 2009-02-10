@@ -111,11 +111,13 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     protected function _getUserRole()
     {
+        if (php_sapi_name() == 'cli') return 'cli';
         return Vps_Registry::get('userModel')->getAuthedUserRole();
     }
 
     protected function _getAuthData()
     {
+        if (php_sapi_name() == 'cli') return null;
         return Vps_Registry::get('userModel')->getAuthedUser();
     }
     /**
