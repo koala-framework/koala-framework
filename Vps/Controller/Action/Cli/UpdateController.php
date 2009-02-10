@@ -94,9 +94,11 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 $offlineBootstrap .= "echo \"<h1>Service Unavailable</h1>\";\n";
                 $offlineBootstrap .= "echo \"<p>Server ist im Moment wegen Wartungsarbeiten nicht verfügbar.</p>\";\n";
                 $offlineBootstrap .= "echo \"</body></html>\";\n";
-                rename('bootstrap.php', 'bootstrap.php.backup');
-                file_put_contents('bootstrap.php', $offlineBootstrap);
-                echo "\nwrote offline bootstrap.php";
+                if (!file_exists('bootstrap.php.backup')) {
+                    rename('bootstrap.php', 'bootstrap.php.backup');
+                    file_put_contents('bootstrap.php', $offlineBootstrap);
+                    echo "\nwrote offline bootstrap.php";
+                }
 
                 self::_executeUpdate($updates, 'preUpdate');
                 self::_executeUpdate($updates, 'update');
@@ -110,8 +112,10 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 file_put_contents('application/update', serialize($updateRevision));
                 echo "\n\033[32mupdate finished\033[0m\n";
 
-                rename('bootstrap.php.backup', 'bootstrap.php');
-                echo "\nrestored bootstrap.php";
+                if (file_get_contents('bootstrap.php') == $offlineBootstrap) {
+                    rename('bootstrap.php.backup', 'bootstrap.php');
+                    echo "\nrestored bootstrap.php\n";
+                }
 
             } else {
                 echo "\nupdate stopped\n";
