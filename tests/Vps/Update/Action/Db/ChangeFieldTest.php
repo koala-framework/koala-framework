@@ -45,6 +45,7 @@ class Vps_Update_Action_Db_ChangeFieldTest extends PHPUnit_Framework_TestCase
         $a->field = 'bar';
         $a->null = true;
         $a->default = null;
+        $a->silent = true;
         $a->update();
 
         $rows = $a->model->getRow('foo')->getChildRows('Fields');
@@ -71,6 +72,7 @@ class Vps_Update_Action_Db_ChangeFieldTest extends PHPUnit_Framework_TestCase
         $a->model = $model;
         $a->table = 'foo';
         $a->field = 'bar';
+        $a->silent = true;
         $a->update();
 
         $row = $a->model->getRow('foo')->getChildRows('Fields',
