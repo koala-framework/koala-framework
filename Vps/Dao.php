@@ -30,7 +30,16 @@ class Vps_Dao
             $dbConfig = $this->_config->$db->toArray();
             $this->_db[$db] = Zend_Db::factory('PDO_MYSQL', $dbConfig);
             $this->_db[$db]->query('SET names UTF8');
-            $this->_db[$db]->query("SET lc_time_names = '".trlVps('en_US')."'");
+
+            /**
+             * lc_time_names wird hier nicht gesetzt weil man für trlVps
+             * momentan das userModel benötigt und das gibts ohne DB
+             * Verbindung nicht -> Endlosschleifen gefahr.
+             * lc_time_names wurde früher vermutlich im TreeCache noch benötigt
+             * (z.B. bei den News Month), aber das macht jetzt das PHP, dehalb
+             * ist es nicht mehr nötig dies zu setzen.
+             */
+//             $this->_db[$db]->query("SET lc_time_names = '".trlVps('en_US')."'");
 
 
             if (Zend_Registry::get('config')->debug->querylog) {

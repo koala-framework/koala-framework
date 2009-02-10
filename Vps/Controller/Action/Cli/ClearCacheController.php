@@ -70,8 +70,10 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
             if ($output) echo "cleared:     memcache...\n";
         }
         foreach (self::getDbCacheTables() as $t) {
-            Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
-            if ($output) echo "cleared db:  $t...\n";
+            if (in_array($t, $types)) {
+                Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
+                if ($output) echo "cleared db:  $t...\n";
+            }
         }
         foreach (self::_getCacheDirs() as $d) {
             if (in_array($d, $types)) {
