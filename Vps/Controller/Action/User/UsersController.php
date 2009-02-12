@@ -47,12 +47,11 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         $this->_columns->add(new Vps_Grid_Column('password', trlVps('Activated'), 60))
             ->setRenderer('boolean');
         $this->_columns->add(new Vps_Grid_Column_Checkbox('locked', trlVps('Locked'), 60));
-        $this->_columns->add(new Vps_Grid_Column_Checkbox('deleted', trlVps('Deleted'), 60));
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $acl = Zend_Registry::get('acl');
         if ($acl->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
-            $this->_columns->add(new Vps_Grid_Column_Checkbox('webcode', trlVps('Only for this web'), 100))
+            $this->_columns->add(new Vps_Grid_Column_Checkbox('webcode', trlVps('Only for this web'), 110))
                  ->setData(new Vps_Controller_Action_User_Users_WebcodeData());
         }
     }
