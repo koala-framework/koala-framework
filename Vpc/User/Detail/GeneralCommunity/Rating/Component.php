@@ -49,4 +49,22 @@ class Vpc_User_Detail_GeneralCommunity_Rating_Component extends Vpc_Abstract
         }
         return $ret;
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+/*
+        $row = $this->getData()->parent->row;
+        $model = $row->getModel();
+        if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+        $ret[] = array(
+            'model' => get_class($model),
+            'id' => $row->id
+        );*/
+        $ret[] = array(
+            'model' => 'Vpc_Forum_Directory_Model',
+            'id' => null
+        );
+        return $ret;
+    }
 }

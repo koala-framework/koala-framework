@@ -42,4 +42,9 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
             'generator' => 'link'
         ))->hasContent();
     }
+
+    public function getCacheVars()
+    {
+        return array();
+    }
 }

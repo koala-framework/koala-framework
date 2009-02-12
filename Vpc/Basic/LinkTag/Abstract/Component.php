@@ -8,4 +8,20 @@ abstract class Vpc_Basic_LinkTag_Abstract_Component extends Vpc_Abstract
         ));
     }
 
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $parent = $this->getData()->parent;
+        if ($parent->getComponent() instanceof Vpc_Basic_LinkTag_Component) {
+            $model = $parent->getComponent()->getModel();
+            $row = $model->getRow($parent->dbId);
+            $ret[] = array(
+                'model' => get_class($model),
+                'id' => $row->component_id
+            );
+        }
+
+        return $ret;
+    }
+
 }

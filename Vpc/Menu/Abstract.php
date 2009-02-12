@@ -92,4 +92,31 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
         }
         return $this->_currentPages;
     }
+
+    public static function getStaticCacheVars()
+    {
+        $ret = array();
+        foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+            foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
+                if (!isset($generator['showInMenu']) || !$generator['showInMenu']) continue;
+                if (!is_instance_of($generator['class'], 'Vps_Component_Generator_PseudoPage_Table') &&
+                    !is_instance_of($generator['class'], 'Vps_Component_Generator_Page')
+                ) continue;
+                $generator = current(Vps_Component_Generator_Abstract::getInstances(
+                    $componentClass, array('generator' => $key))
+                );
+                $model = $generator->getModel();
+                if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+                $ret[] = array(
+                    'model' => get_class($model),
+                    'id' => null
+                );
+            }
+        }
+        $ret[] = array(
+            'model' => 'Vps_Component_Model',
+            'id' => null
+        );
+        return $ret;
+    }
 }

@@ -25,18 +25,20 @@ Vps.Debug.showActivator = true;
 //DebugData-Helper doesn't output anything so we set it here
 Vps.Debug.displayErrors = true;
 
-Ext.Container.prototype.logXTypesTree = function() {
-    var level = 0;
-    function foo(c) {
-        if(c.items){
-            var cs = c.items.items;
-            level++;
-            for(var i = 0, len = cs.length; i < len; i++){
-                console.log(new Array(level).join(' ')+cs[i].getXTypes());
-                foo(cs[i]);
+if (Ext.Container) {
+    Ext.Container.prototype.logXTypesTree = function() {
+        var level = 0;
+        function foo(c) {
+            if(c.items){
+                var cs = c.items.items;
+                level++;
+                for(var i = 0, len = cs.length; i < len; i++){
+                    console.log(new Array(level).join(' ')+cs[i].getXTypes());
+                    foo(cs[i]);
+                }
+                level--;
             }
-            level--;
         }
-    }
-    foo(this);
-};
+        foo(this);
+    };
+}

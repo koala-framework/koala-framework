@@ -21,4 +21,8 @@ class Vpc_Box_Title_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public static function getStaticCacheVars()
+    {
+        return Vpc_Menu_Component::getStaticCacheVars();
+    }
 }

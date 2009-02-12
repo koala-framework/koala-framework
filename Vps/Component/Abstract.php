@@ -215,7 +215,7 @@ class Vps_Component_Abstract
                 $modelName = Vpc_Abstract::getSetting($class, 'modelname');
                 $models[$class] = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                throw new Vps_Exception("tablename and modelname not set for '$class'");
+                return null;
             }
         }
         return $models[$class];

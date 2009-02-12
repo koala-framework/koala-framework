@@ -60,6 +60,9 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
         $this->assertEquals(count($generators), 0);
 
+        $constraints = array('generatorClass' => 'Vps_Component_Generator_Static');
+        $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
+        $this->assertEquals(count($generators), 2);
     }
 
     public function testPlugin()

@@ -76,4 +76,15 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
 
         return nl2br($content);
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $row = $this->getData()->row;
+        $ret[] = array(
+            'model' => 'Vps_Model_User_User',
+            'id' => $row->user_id
+        );
+        return $ret;
+    }
 }
