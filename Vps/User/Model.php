@@ -42,21 +42,16 @@ class Vps_User_Model extends Vps_Model_Proxy
             $identdType = 'id';
         }
 
-        $deletedExpr = new Vps_Model_Select_Expr_Or(array(
-            new Vps_Model_Select_Expr_IsNull('deleted'),
-            new Vps_Model_Select_Expr_Equals('deleted', 0),
-        ));
-
         $select = $this->select()
             ->whereEquals($identdType, $identd)
             ->whereEquals('webcode', $this->getRowWebcode())
-            ->where($deletedExpr);
+            ->whereEquals('deleted', 0);
         $row = $this->getRow($select);
         if (!$row) {
             $select = $this->select()
                 ->whereEquals($identdType, $identd)
                 ->whereEquals('webcode', '')
-                ->where($deletedExpr);
+                ->whereEquals('deleted', 0);
             $row = $this->getRow($select);
         }
         return $row;

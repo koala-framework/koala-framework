@@ -111,10 +111,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
             }
         }
 
-        $select->where(new Vps_Model_Select_Expr_Or(array(
-            new Vps_Model_Select_Expr_IsNull('deleted'),
-            new Vps_Model_Select_Expr_Equals('deleted', 0),
-        )));
+        $select->whereEquals('deleted', 0);
 
         if ($roles) {
             $select->whereEquals('role', $roles);
