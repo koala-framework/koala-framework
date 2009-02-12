@@ -5,7 +5,7 @@ class Vps_Controller_Action_User_Users_ActivationlinkData extends Vps_Data_Abstr
     public function load($row)
     {
         if (empty($row->password)) {
-            return '<a href="/vps/user/login/activate?code='.$row->id.'-'.$row->getRow()->getActivationCode()
+            return '<a href="/vps/user/login/activate?code='.$row->id.'-'.$row->getActivationCode()
                 .'" target="_blank">'.trlVps('Click here').'</a>';
         } else {
             return trlVps('Already activated');

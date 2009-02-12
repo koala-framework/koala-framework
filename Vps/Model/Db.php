@@ -199,6 +199,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
             return $expr->getField()." = ".$quotedValue;
+        } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
+            return $expr->getField()." IS NULL";
         } else if ($expr instanceof Vps_Model_Select_Expr_Smaller
                 || $expr instanceof Vps_Model_Select_Expr_SmallerDate) {
             return $expr->getField()." < ".$quotedValue;

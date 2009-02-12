@@ -2,7 +2,7 @@
 class Vps_Filter_Row_AutoFill extends Vps_Filter_Row_Abstract
 {
     protected $_template;
-    
+
     public function __construct($template)
     {
         $this->_template = $template;
@@ -18,7 +18,7 @@ class Vps_Filter_Row_AutoFill extends Vps_Filter_Row_Abstract
         }
         return $value;
     }
-    
+
     public function filterAfterSave()
     {
         return strpos($this->_template, '{id}') !== false;

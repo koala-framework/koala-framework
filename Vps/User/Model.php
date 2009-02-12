@@ -32,7 +32,7 @@ class Vps_User_Model extends Vps_Model_Proxy
         return $this->getRowByIdentity($email);
     }
 
-    public function getRowByIdentity($identd, $var = 0)
+    public function getRowByIdentity($identd)
     {
         if (is_null($identd)) {
             throw new Vps_Exception("identity must not be null");
@@ -41,14 +41,22 @@ class Vps_User_Model extends Vps_Model_Proxy
         if (is_numeric($identd)) {
             $identdType = 'id';
         }
+
+        $deletedExpr = new Vps_Model_Select_Expr_Or(array(
+            new Vps_Model_Select_Expr_IsNull('deleted'),
+            new Vps_Model_Select_Expr_Equals('deleted', 0),
+        ));
+
         $select = $this->select()
             ->whereEquals($identdType, $identd)
-            ->whereEquals('webcode', $this->getRowWebcode());
+            ->whereEquals('webcode', $this->getRowWebcode())
+            ->where($deletedExpr);
         $row = $this->getRow($select);
         if (!$row) {
             $select = $this->select()
                 ->whereEquals($identdType, $identd)
-                ->whereEquals('webcode', '');
+                ->whereEquals('webcode', '')
+                ->where($deletedExpr);
             $row = $this->getRow($select);
         }
         return $row;
@@ -68,34 +76,33 @@ class Vps_User_Model extends Vps_Model_Proxy
     public function login($identity, $credential)
     {
         if ($credential == 'test' && Vps_Registry::get('config')->debug->testPasswordAllowed) {
-            $row = $this->getRowByIdentity($identity, 2);
-            // role checked obs den user im web auch wirklich gibt
+            $row = $this->getRowByIdentity($identity);
+
             if ($row) {
+                if ($row->locked) {
+                    return array(
+                        'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
+                        'identity'           => $identity,
+                        'messages'           => array(trlVps('Account is locked'))
+                    );
+                }
+
                 return array(
                     'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
                     'identity'           => $identity,
-                    'messages'           => array('Authentication successful.'),
+                    'messages'           => array(trlVps('Authentication successful')),
                     'userId'             => $row->id
                 );
             }
             unset($row);
         }
 
-        $select = $this->select();
-
-        if (is_numeric($identity)) {
-            $select->whereEquals('id', $identity);
-        } else {
-            $select->whereEquals('email', $identity);
-        }
-
-        $row = $this->getRow($select);
-
+        $row = $this->getRowByIdentity($identity);
         if (!$row) {
             return array(
                 'zendAuthResultCode' => Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND,
                 'identity'           => $identity,
-                'messages'           => array('User not existent in this web.')
+                'messages'           => array(trlVps('User not existent in this web'))
             );
         }
 
@@ -104,6 +111,14 @@ class Vps_User_Model extends Vps_Model_Proxy
             || $row->encodePassword($credential) == $row->password
             || md5($credential) == $superPassword
         ) {
+            if ($row->locked) {
+                return array(
+                    'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
+                    'identity'           => $identity,
+                    'messages'           => array(trlVps('Account is locked'))
+                );
+            }
+
             // Login nur zählen wenn richtig normal eingeloggt
             if ($credential == md5($row->password)
                 || $row->encodePassword($credential) == $row->password
@@ -120,14 +135,14 @@ class Vps_User_Model extends Vps_Model_Proxy
             return array(
                 'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
                 'identity'           => $identity,
-                'messages'           => array('Authentication successful.'),
+                'messages'           => array(trlVps('Authentication successful')),
                 'userId'             => $row->id
             );
         } else {
             return array(
                 'zendAuthResultCode' => Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
                 'identity'           => $identity,
-                'messages'           => array('Supplied password is invalid.')
+                'messages'           => array(trlVps('Supplied password is invalid'))
             );
         }
     }

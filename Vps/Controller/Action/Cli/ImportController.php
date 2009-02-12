@@ -13,6 +13,13 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         // -> scheiß mysql
         //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
 
+        if (Vps_Registry::get('config')->application->id != 'service') {
+            if (file_exists('/www/public/vps-projekte/service')) {
+                echo "\nservice importieren:\n\n";
+                system("cd /www/public/vps-projekte/service && php bootstrap.php import");
+            }
+        }
+
         $server = $this->_getParam('server');
         $config = new Zend_Config_Ini('application/config.ini', $server);
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
@@ -83,15 +90,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         Vps_Controller_Action_Cli_UpdateController::update();
 
-        if (Vps_Registry::get('config')->application->id != 'service') {
-            if (file_exists('/www/public/vps-projekte/service')) {
-                echo "\n\nso, und jetzt noch den service importieren:\n";
-                system("cd /www/public/vps-projekte/service && php bootstrap.php import");
-            }
-
-            echo "\n\nfertig!\n";
-        }
-
+        echo "\n\nfertig!\n";
 
         $this->_helper->viewRenderer->setNoRender(true);
     }

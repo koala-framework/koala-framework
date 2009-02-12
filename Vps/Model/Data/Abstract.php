@@ -180,7 +180,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
     {
 
         foreach ($data as &$d) {
-            $d = (string)$d;
+            if (!is_null($d)) $d = (string)$d;
         }
         if ($id = $select->getPart(Vps_Model_Select::WHERE_ID)) {
             if ($data[$this->getPrimaryKey()] != (string)$id) return false;
@@ -222,6 +222,10 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
     {
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
             if (!($data[$expr->getField()] && $data[$expr->getField()] == $expr->getValue())) {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
+            if (isset($data[$expr->getField()])) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Higher) {

@@ -43,13 +43,12 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
     afterRender: function() {
         Vps.Form.FieldSet.superclass.afterRender.call(this);
         if (this.helpText) {
-            this.helpEl = this.el.createChild({
+            this.helpEl = this.getEl().createChild({
                 tag: 'a',
                 href: '#',
-                style: 'display: block; width: 16px; height: 16px; '+
-                       'position: absolute; '+
+                style: 'display: block; width: 16px; height: 16px; float: right; '+
                        'background-image: url(/assets/silkicons/information.png)'
-            }, this.body);
+            }, this.getEl().down('legend'));
             this.helpEl.on('click', function(e) {
                 e.stopEvent();
                 var helpWindow = new Ext.Window({
@@ -63,9 +62,9 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
                 });
                 helpWindow.show();
             }, this);
-            this.helpEl.alignTo(this.el, 'tr', [-10, -3]);
+            this.helpEl.alignTo(this.el, 'tr', [-10, -2]);
             this.on('afterlayout', function() {
-                this.helpEl.alignTo(this.el, 'tr', [-30, -3]);
+                this.helpEl.alignTo(this.el, 'tr', [-30, -2]);
             }, this);
         }
     }

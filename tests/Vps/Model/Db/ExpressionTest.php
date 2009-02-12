@@ -19,6 +19,13 @@ class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testExprNull()
+    {
+        $select = $this->_model->select()->where(new Vps_Model_Select_Expr_IsNull('foo'));
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo IS NULL)",
+            $this->_model->createDbSelect($select)->__toString());
+    }
+
     public function testExprEquals()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Equals('foo', 'aaa'));
