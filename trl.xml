@@ -3627,5 +3627,85 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>benutzerdefinierter Dateiname</de>
 <id>980</id>
 </text>
+<text>
+<de>Benutzer löschen</de>
+<en>Delete user</en>
+<id>981</id>
+</text>
+<text>
+<de>Benutzer sperren / entsperren</de>
+<en>Lock / unlock user</en>
+<id>982</id>
+</text>
+<text>
+<de>Benutzer sperrent</de>
+<en>Lock user</en>
+<id>983</id>
+</text>
+<text>
+<de>Sind Sie sicher dass Sie diesen Benutzer (ent-)sperrent möchten?</de>
+<en>Do you really wish to (un)lock this user?</en>
+<id>984</id>
+</text>
+<text>
+<de>Sperre / entsperre...</de>
+<en>Locking / unlocking...</en>
+<id>985</id>
+</text>
+<text>
+<de>Sind Sie sicher dass Sie diesen Benutzer löschen möchten?</de>
+<en>Do you really wish to delete this user?</en>
+<id>986</id>
+</text>
+<text>
+<de>Bild vergrößern</de>
+<en>Enlarge Image</en>
+<id>987</id>
+</text>
+<text>
+<de>Nur für dieses Web</de>
+<en>Only for this web</en>
+<id>988</id>
+</text>
+<text>
+<de>Wenn diese Box aktiv ist kann der Benutzer nur für dieses Web verwendet werden. Wenn Sie den selben Benutzer in einem anderen Web verwenden möchten, dann muss diese Box leer bleiben.</de>
+<en>If this box is checked, the account may only be used for this web. If you wish to use the same account for another web, do not check this box.</en>
+<id>989</id>
+</text>
+<text>
+<de>Zeige nur gesperrte Benutzer</de>
+<en>Show locked users only</en>
+<id>990</id>
+</text>
+<text>
+<de>Gesperrt</de>
+<en>Locked</en>
+<id>991</id>
+</text>
+<text>
+<de>Gelöscht</de>
+<en>Deleted</en>
+<id>992</id>
+</text>
+<text>
+<de>Account ist gesperrt</de>
+<en>Account is locked</en>
+<id>993</id>
+</text>
+<text>
+<de>Authentifizierung erfolgreich</de>
+<en>Authentication successful</en>
+<id>994</id>
+</text>
+<text>
+<de>Benutzer existiert in diesem Web nicht</de>
+<en>User not existent in this web</en>
+<id>995</id>
+</text>
+<text>
+<de>Übergebenes Passwort ist ungültig</de>
+<en>Supplied password is invalid</en>
+<id>996</id>
+</text>
 </trl>
 
