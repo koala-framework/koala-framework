@@ -8,6 +8,12 @@ class Vpc_Basic_Text_StylesTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         Vps_Component_Data_Root::setComponentClass('Vpc_Basic_Text_Root');
+        Vpc_Basic_Text_StylesModel::removeCache();
+    }
+
+    public function tearDown()
+    {
+        Vpc_Basic_Text_StylesModel::removeCache();
     }
 
     public function testStyles()
