@@ -40,4 +40,15 @@ class Vpc_Forum_Thread_Moderate_Close_Component extends Vpc_Abstract
     {
         return $this->_isClosed;
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $row = $this->getData()->parent->parent->row;
+        $ret[] = array(
+            'model' => get_class($row->getModel()->getTable()),
+            'id' => $row->id
+        );
+        return $ret;
+    }
 }

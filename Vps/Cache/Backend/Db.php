@@ -79,6 +79,33 @@ class Vps_Cache_Backend_Db extends Zend_Cache_Backend
         }
         return $res;
     }
+
+    public function saveMeta($vars)
+    {
+        $ret = false;
+        foreach ($vars as $meta) {
+            if ($meta && $meta['model'] && $meta['model'] != 'Vps_Model_FnF') {
+                $table = $this->_options['table'] . '_meta';
+                // Löschen
+                $delete = array();
+                foreach ($meta as $k => $d) {
+                    $delete[] = $d ? "$k = '$d'" : "ISNULL($k)";
+                }
+                $sql = "DELETE FROM {$table} WHERE " . implode(' AND ', $delete);
+                $this->_adapter->query($sql);
+                // Einfügen
+                $sql = "REPLACE INTO {$table} (model, id, cache_id, component_class)";
+                $sql .= "VALUES (:model, :id, :cache_id, :component_class)";
+                $this->_adapter->query($sql, array(
+                    'model' => $meta['model'],
+                    'id' => $meta['id'],
+                    'cache_id' => $meta['cache_id'],
+                    'component_class' => $meta['component_class']
+                ));
+            }
+        }
+    }
+
     public function remove($id)
     {
         return (bool)$this->_adapter->query("DELETE FROM {$this->_options['table']} WHERE id='$id'");
@@ -86,45 +113,44 @@ class Vps_Cache_Backend_Db extends Zend_Cache_Backend
 
     public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, $tags = array())
     {
+        if (!$this->_adapter) return;
+        if ($mode == Vps_Component_Cache::CLEANING_MODE_DEFAULT) {
+            if (!is_array($tags) || count($tags) != 2) {
+                throw new Vps_Exception("second argument must be an array containing model an id");
+            }
+            $sql = "SELECT cache_id, component_class FROM {$this->_options['table']}_meta WHERE model=? AND (ISNULL(id) OR id=?)";
+            foreach ($this->_adapter->fetchAll($sql, $tags) as $row) {
+                if ($row['cache_id']) {
+                    $this->clean(Vps_Component_Cache::CLEANING_MODE_ID, $row['cache_id']);
+                }
+                if ($row['component_class']) {
+                    $this->clean(Vps_Component_Cache::CLEANING_MODE_COMPONENT_CLASS, $row['component_class']);
+                }
+            }
+            return true;
+        }
         if ($mode == Vps_Component_Cache::CLEANING_MODE_COMPONENT_CLASS) {
             if (!is_string($tags)) {
                 throw new Vps_Exception("second argument must be a component class name");
             }
-            $res = $this->_adapter->query("DELETE FROM {$this->_options['table']} WHERE component_class=?", array($tags));
-            return (bool)$res;
+            Vps_Benchmark::info("Kompletter Cache für Komponente '$tags' gelöscht.");
+            return (bool)$this->_adapter->query("DELETE FROM {$this->_options['table']} WHERE component_class=?", array($tags));
         }
-        if ($mode == Vps_Component_Cache::CLEANING_MODE_ID_PATTERN) {
-            if (!is_array($tags) || !isset($tags['idPattern'])) {
-                throw new Vps_Exception("second argument must be an array");
+        if ($mode == Vps_Component_Cache::CLEANING_MODE_ID) {
+            if (!is_string($tags)) {
+                throw new Vps_Exception("second argument must be an id");
             }
-            $tags['idPattern'] = str_replace('_', '\_', $tags['idPattern']);
-            $tags['idPattern'] = str_replace('-', '\_\_', $tags['idPattern']);
-            $vars = array($tags['idPattern'], $tags['idPattern'] . '%\_\_master');
-            $sql = "DELETE FROM {$this->_options['table']} WHERE id LIKE ? AND id NOT LIKE ?";
-            if (isset($tags['componentClass']) && $tags['componentClass']) {
-                $sql .= " AND component_class=?";
-                $vars[] = $tags['componentClass'];
-            }
-            $res = $this->_adapter->query($sql, $vars);
-            return (bool)$res;
-        }
-        if ($mode==Vps_Component_Cache::CLEANING_MODE_SELECT) {
-            if ($tags instanceof Zend_Db_Select) {
-                $tags = $tags->__toString();
-            }
-            $sql = "DELETE FROM {$this->_options['table']}";
-            $sql .= " WHERE id IN (".$tags.")";
-            $res = $this->_adapter->query($sql);
-            return (bool)$res;
+            Vps_Benchmark::info("Cache für Komponente '$tags' gelöscht.");
+            $sql = "DELETE FROM {$this->_options['table']} WHERE id = ?";
+            return (bool) $this->_adapter->query($sql, array($tags));
         }
         if ($mode==Zend_Cache::CLEANING_MODE_ALL) {
-            $res = $this->_adapter->query("DELETE FROM {$this->_options['table']}");
-            return (bool)$res;
+            $this->_adapter->query("DELETE FROM {$this->_options['table']}_meta");
+            return (bool)$this->_adapter->query("DELETE FROM {$this->_options['table']}");
         }
         if ($mode==Zend_Cache::CLEANING_MODE_OLD) {
             $mktime = time();
-            $res = $this->_adapter->query("DELETE FROM {$this->_options['table']} WHERE expire>0 AND expire<=$mktime");
-            return (bool)$res;
+            return (bool)$this->_adapter->query("DELETE FROM {$this->_options['table']} WHERE expire>0 AND expire<=$mktime");
         }
         if ($mode==Zend_Cache::CLEANING_MODE_MATCHING_TAG) {
             $this->_log("Vps_Cache_Backend_Db::clean() : tags are unsupported by the Db backend");

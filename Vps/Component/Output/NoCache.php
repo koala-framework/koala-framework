@@ -23,12 +23,13 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
     protected function _parseTemplate($ret)
     {
         // hasContent-Tags ersetzen
-        preg_match_all("/{content: ([^ }]+) ([^ }]*)}(.*){content}/imsU", $ret, $matches);
+        preg_match_all("/{content: ([^ }]+) ([^ }]+) ([^ }]+)}(.*){content}/imsU", $ret, $matches);
         foreach ($matches[0] as $key => $search) {
             $componentId = $matches[2][$key];
             $componentClass = $matches[1][$key];
-            $content = $matches[3][$key];
-            $replace = $this->_renderHasContent($componentId, $componentClass, $content);
+            $counter = $matches[3][$key];
+            $content = $matches[4][$key];
+            $replace = $this->_renderHasContent($componentId, $componentClass, $content, $counter);
             $ret = str_replace($search, $replace, $ret);
         }
 
@@ -78,7 +79,7 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         return $output->render($this->_getComponent($componentId), $partial, $id, $info);
     }
 
-    protected function _renderHasContent($componentId, $componentClass, $content)
+    protected function _renderHasContent($componentId, $componentClass, $content, $counter)
     {
         if ($this->_hasViewCache($componentClass)) {
             Vps_Benchmark::count('rendered nocache', $componentId.' (hasContent)');

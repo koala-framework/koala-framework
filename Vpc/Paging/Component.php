@@ -162,6 +162,26 @@ class Vpc_Paging_Component extends Vpc_Abstract
         );
     }
 
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $ret[] = array(
+            'model' => $this->getData()->parent->getComponent()->getPagingModelname(),
+            'id' => null
+        );
+        return $ret;
+    }
+
+    public function getPartialCacheVars($nr)
+    {
+        $ret = array();
+        $ret[] = array(
+            'model' => $this->getData()->parent->getComponent()->getPagingModelname(),
+            'id' => null
+        );
+        return $ret;
+    }
+
     protected function _getPageLinks($pages, $currentPage)
     {
         $pageLinks = array();

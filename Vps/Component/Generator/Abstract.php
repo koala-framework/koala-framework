@@ -75,6 +75,11 @@ abstract class Vps_Component_Generator_Abstract
         return $this->_model;
     }
 
+    public function getModel()
+    {
+        return $this->_getModel();
+    }
+
     //um den speicherverbrauch zu reduzieren
     public static function clearInstances()
     {
@@ -246,7 +251,7 @@ abstract class Vps_Component_Generator_Abstract
                 continue;
             }
             if ($value = $select->getPart(Vps_Component_Select::WHERE_GENERATOR_CLASS)) {
-                if ($g instanceof $value) {
+                if (!$g instanceof $value) {
                     continue;
                 }
             }

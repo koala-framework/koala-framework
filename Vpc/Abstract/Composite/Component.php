@@ -5,8 +5,6 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['assetsAdmin']['dep'][] = 'VpsTabPanel';
-        $ret['modelname'] = 'Vps_Model_FnF';
-        //$ret['generators']['child']['component']['xxx']
         $ret['generators']['child'] = array(
             'class' => 'Vps_Component_Generator_Static',
             'component' => array()

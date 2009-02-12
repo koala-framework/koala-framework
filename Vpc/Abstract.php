@@ -185,7 +185,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                         $this->_row->component_id = $this->getDbId();
                     }
                 }
-                if (get_class($model) == 'Vps_Model_Db') {
+                if (get_class($model) == 'Vps_Model_Db' && $this->_row) {
                     $this->_row = $this->_row->getRow();
                 }
             } else {
@@ -292,6 +292,77 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $ret['data'] = $this->getData();
         if ($this->_hasSetting('modelname') && is_instance_of($this->_getSetting('modelname'), 'Vps_Component_FieldModel')) {
             $ret['row'] = $this->_getRow();
+        }
+        return $ret;
+    }
+
+    public function getCacheVars()
+    {
+        $ret = array();
+        $row = $this->_getCacheRow();
+        if ($row) {
+            $model = $row->getModel();
+            if ($model instanceof Vps_Db_Table_Abstract) {
+                $primaryKey = $model->info('primary');
+            } else {
+                $primaryKey = $model->getPrimaryKey();
+            }
+            if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+            $ret[] = array(
+                'model' => get_class($model),
+                'id' => $row->$primaryKey
+            );
+        }
+
+        if (isset($this->getData()->row) &&
+            $this->getData()->row instanceof Vps_Model_Row_Abstract
+        ) {
+            $row = $this->getData()->row;
+            $model = $row->getModel();
+            if ($model instanceof Vps_Db_Table_Abstract) {
+                $primaryKey = $model->info('primary');
+            } else {
+                $primaryKey = $model->getPrimaryKey();
+            }
+            if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+
+            $ret[] = array(
+                'model' => get_class($model),
+                'id' => $row->$primaryKey
+            );
+        }
+
+
+        $generatorSettings = $this->_getSetting('generators');
+        if (!isset($generatorSettings['child']['component']['view'])) {
+            $tableGenerators = Vps_Component_Generator_Abstract::getInstances(
+                $this->getData(), array('generatorClass' => 'Vps_Component_Generator_Table')
+            );
+            foreach ($tableGenerators as $key => $generator) {
+                foreach ($generator->getChildData($this->getData()) as $c) {
+                    $model = $c->row->getModel();
+                    if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+                    $ret[] = array(
+                        'model' => get_class($model),
+                        'id' => $c->row->id
+                    );
+                }
+            }
+        }
+
+        //p($this->getData()->getPage()->inheritClasses);
+
+        return $ret;
+    }
+
+    protected function _getCacheRow()
+    {
+        $model = $this->getModel();
+        $ret = null;
+        if ($model instanceof Vps_Model_Interface) {
+            $ret = $model->getRow($this->getDbId());
+        } else if ($model instanceof Vps_Db_Table) {
+            $ret = $model->find($this->getDbId())->current();
         }
         return $ret;
     }

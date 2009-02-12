@@ -10,7 +10,7 @@ class Vps_Acl_Vpc_Root extends Vpc_Root_Component
         );
         $ret['generators']['child'] = array(
             'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vps_Component_Cache_ClearWithComponentId_Html'
+            'component' => 'Vpc_Basic_Empty_Component'
         );
         $ret['generators']['box']['component'] = array();
         unset($ret['generators']['title']);

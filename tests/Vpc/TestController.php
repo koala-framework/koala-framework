@@ -1,7 +1,7 @@
 <?php
 /**
- * Controller der f�r eigene root-komponenten verwendet werden kann.
- * f�r selenium-tests.
+ * Controller der für eigene root-komponenten verwendet werden kann.
+ * für selenium-tests.
  * Url: /vps/vpctest/Vpc_Basic_Text_Root/url
  */
 class Vpc_TestController extends Vps_Controller_Action

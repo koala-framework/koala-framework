@@ -20,7 +20,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         $this->_root = Vps_Component_Data_Root::getInstance();
         $this->_output = new Vps_Component_Output_Cache();
         $cache = $this->getMock('Vps_Component_Cache',
-            array('save', '_preload'), array(), '', false);
+            array('save', '_preload', 'saveMeta'), array(), '', false);
         $cache->expects($this->any())
              ->method('_preload')
              ->will($this->returnCallback(array('Vps_Component_Output_CacheTest', 'callback')));
@@ -134,8 +134,8 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
 
         // IfHasContent
         self::$_templates = array(
-            'root__master' => 'foo {content: Vps_Component_Output_C1_Child_Component root-child}{content}',
-            'root__child__hasContent' => 'bar',
+            'root__master' => 'foo {content: Vps_Component_Output_C1_Child_Component root-child 1}{content}',
+            'root__child__hasContent1' => 'bar',
         );
         self::$_calls = 0;
         self::$_expectedCalls = 2;
@@ -144,9 +144,9 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
 
         // IfHasContent Child
         self::$_templates = array(
-            'root__master' => 'foo {content: Vps_Component_Output_C1_Child_Component root-child}{content}',
-            'root__child__hasContent' => 'bar {content: Vps_Component_Output_C1_Child_Component root-child-child}{content}',
-            'root__child__child__hasContent' => 'foo',
+            'root__master' => 'foo {content: Vps_Component_Output_C1_Child_Component root-child 1}{content}',
+            'root__child__hasContent1' => 'bar {content: Vps_Component_Output_C1_Child_Component root-child-child 1}{content}',
+            'root__child__child__hasContent1' => 'foo',
         );
         self::$_calls = 0;
         self::$_expectedCalls = 3;
@@ -155,9 +155,9 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
 
         // IfHasContent Child mit Plugin
         self::$_templates = array(
-            'root__master' => 'foo {content: Vps_Component_Output_C1_Child_Component root-child}{content}',
-            'root__child__hasContent' => 'bar {content: Vps_Component_Output_C1_Child_Component root-child-child}{content}',
-            'root__child__child__hasContent' => 'foo {nocache: Vps_Component_Output_C1_ChildChild_Component root-child-child Vps_Component_Output_Plugin}',
+            'root__master' => 'foo {content: Vps_Component_Output_C1_Child_Component root-child 1}{content}',
+            'root__child__hasContent1' => 'bar {content: Vps_Component_Output_C1_Child_Component root-child-child 1}{content}',
+            'root__child__child__hasContent1' => 'foo {nocache: Vps_Component_Output_C1_ChildChild_Component root-child-child Vps_Component_Output_Plugin}',
             'root__child__child' => 'child',
         );
         self::$_calls = 0;
@@ -167,8 +167,8 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
 
         // Es darf nur 2x preloaded werden
         self::$_templates = array(
-            'root__master' => 'foo {content: Vps_Component_Output_C1_Child_Component root-child}{content} {nocache: Vps_Component_Output_C1_Child_Component root-child} {nocache: Vps_Component_Output_C1_ChildChild_Component root-child-child}',
-            'root__child__hasContent' => '{nocache: Vps_Component_Output_C1_Child_Component root-child}',
+            'root__master' => 'foo {content: Vps_Component_Output_C1_Child_Component root-child 1}{content} {nocache: Vps_Component_Output_C1_Child_Component root-child} {nocache: Vps_Component_Output_C1_ChildChild_Component root-child-child}',
+            'root__child__hasContent1' => '{nocache: Vps_Component_Output_C1_Child_Component root-child}',
             'root__child' => 'child',
             'root__child__child' => 'child2',
         );
@@ -176,6 +176,17 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         self::$_expectedCalls = 2;
         $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foo child child child2', $this->_output->renderMaster($this->_root));
+
+        // 2x hasContent mit gleicher ComponentClass
+        self::$_templates = array(
+            'root__master' => '{content: Vps_Component_Output_C1_Child_Component root-child 1}{content}{content: Vps_Component_Output_C1_Child_Component root-child 2}{content}',
+            'root__child__hasContent1' => 'foo',
+            'root__child__hasContent2' => 'bar'
+        );
+        self::$_calls = 0;
+        self::$_expectedCalls = 2;
+        $this->_output->getCache()->emptyPreload();
+        $this->assertEquals('foobar', $this->_output->renderMaster($this->_root));
     }
 
     public function testCacheDisabledForComponent()

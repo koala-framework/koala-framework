@@ -1,23 +1,9 @@
 <?php
 class Vpc_Basic_Image_Admin extends Vpc_Admin
 {
-    protected function _deleteCacheForRow($row)
+    protected function _onRowAction($row)
     {
-        if ($row instanceof Vpc_Abstract_Image_Row &&
-            Vpc_Abstract::hasSetting($this->_class, 'useParentImage') && 
-            Vpc_Abstract::getSetting($this->_class, 'useParentImage')
-        ) {
-            $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId(
-                    $row->component_id, array('ignoreVisible' => true)
-                );
-            foreach ($components as $c) {
-                Vps_Component_Cache::getInstance()->remove(
-                    $c->getChildComponents(array('componentClass'=>$this->_class))
-                );
-            }
-        } else {
-            parent::_deleteCacheForRow($row);
-        }
+
         if ($row instanceof Vpc_Abstract_Image_Row) {
             $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId(
                 $row->component_id, array('ignoreVisible' => true, 'componentClass'=>$this->_class)

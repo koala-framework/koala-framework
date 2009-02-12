@@ -1,9 +1,9 @@
 <?php
 class Vps_Component_Cache extends Zend_Cache_Core
 {
+    const CLEANING_MODE_DEFAULT = 'default';
     const CLEANING_MODE_COMPONENT_CLASS = 'componentClass';
-    const CLEANING_MODE_ID_PATTERN = 'idPattern';
-    const CLEANING_MODE_SELECT = 'select';
+    const CLEANING_MODE_ID = 'id';
 
     static private $_instance;
     private $_backend;
@@ -40,22 +40,27 @@ class Vps_Component_Cache extends Zend_Cache_Core
         return self::$_instance;
     }
 
-    public function removeByIdPattern($idPattern, $componentClass = null)
+    public function saveMeta($meta)
     {
-        $this->_backend->clean(self::CLEANING_MODE_ID_PATTERN,
-            array('idPattern' => $idPattern, 'componentClass' => $componentClass)
-        );
-        if ($componentClass) {
-            Vps_Benchmark::info("Cache für Pattern '$idPattern' mit Klasse '$componentClass' gelöscht.");
+        $this->_backend->saveMeta($meta);
+    }
+
+    public function clean($mode = 'all', $tags = array())
+    {
+        if (in_array($mode, array( self::CLEANING_MODE_DEFAULT,
+                                   self::CLEANING_MODE_COMPONENT_CLASS,
+                                   self::CLEANING_MODE_ID))
+        ) {
+            if (!$this->_backend) return null;
+            return $this->_backend->clean($mode, $tags);
         } else {
-            Vps_Benchmark::info("Cache für Pattern '$idPattern' gelöscht.");
+            return parent::clean($mode, $tags);
         }
     }
 
-    public function removeBySelect(Zend_Db_Table_Select $select)
+    public function cleanComponentClass($componentClass)
     {
-        $this->_backend->clean(self::CLEANING_MODE_SELECT, $select);
-        Vps_Benchmark::info("Cache mit Select gelöscht.");
+        $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
     }
 
     /**
@@ -85,12 +90,6 @@ class Vps_Component_Cache extends Zend_Cache_Core
         parent::remove($cacheId);
         $cacheId = $this->getCacheIdFromComponentId($componentId, false, true);
         parent::remove($cacheId);
-    }
-
-    public function cleanComponentClass($componentClass)
-    {
-        $this->_backend->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
-        Vps_Benchmark::info("Kompletter Cache für Komponente '$componentClass' gelöscht.");
     }
 
     public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
@@ -141,6 +140,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
     public function preload($ids)
     {
         $this->_preloadedValues = $this->_preloadedValues + $this->_preload($ids);
+        return !empty($this->preloadedValues);
     }
 
     protected function _preload($ids)
