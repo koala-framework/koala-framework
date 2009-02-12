@@ -58,7 +58,12 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
                 $this->view->text = trlVps('Login successful').'<!--successful-->';
                 $this->view->cssClass = 'vpsLoginResultSuccess';
             } else {
-                $this->view->text = trlVps('Login failed');
+                if ($result->getCode() == Zend_Auth_Result::FAILURE_UNCATEGORIZED) {
+                    $msgs = $result->getMessages();
+                    $this->view->text = $msgs[0];
+                } else {
+                    $this->view->text = trlVps('Login failed');
+                }
                 $this->view->cssClass = 'vpsLoginResultFailure';
 
                 $msgs = $result->getMessages();
@@ -121,11 +126,8 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
             throw new Vps_ClientException(trlVps('Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?'));
         }
 
-        $status = $row->setPassword($password);
-
-        if (!$status) {
-            throw new Vps_ClientException(trlVps('New password couldn\'t be set'));
-        }
+        $row->setPassword($password);
+        $row->save();
 
         $this->_login($row->email, $password);
     }

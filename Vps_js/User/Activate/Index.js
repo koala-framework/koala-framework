@@ -17,7 +17,7 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
                 labelWidth: 130,
                 bodyStyle:'padding: 8px;',
                 title: trlVps('Activate / Login'),
-                width: 330,
+                width: 400,
 
                 items: [{
                     html: trlVps('Please type in your password. After clicking the button below')+' '

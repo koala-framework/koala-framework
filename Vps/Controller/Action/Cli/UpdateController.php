@@ -77,7 +77,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         if ($from == $to) {
             echo "Already up-to-date\n\n";
         } else {
-            echo "Looking for update-scripts from revistion $from to {$to}...";
+            echo "Looking for update-scripts from revision $from to {$to}...";
             $updates = Vps_Update::getUpdates($from, $to);
             foreach ($updates as $k=>$u) {
                 if (in_array($u->getRevision(), $updateRevision['done']) && !$rev) {

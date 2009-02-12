@@ -4,6 +4,24 @@
  */
 class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
 {
+    public function testExprNullSelect()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 'foo'),
+            array('id' => 2, 'value' => null),
+            array('id' => 3),
+        ));
+
+        $select = $model->select();
+        $select->where(new Vps_Model_Select_Expr_IsNull('value'));
+        $rows = $model->getRows($select);
+        $count = $rows->count();
+        $current = $rows->current();
+        $this->assertEquals(2, $count);
+        $this->assertEquals(2, $current->id);
+    }
+
     public function testExprEqualsSelect()
     {
         $model = new Vps_Model_FnF();

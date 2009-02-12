@@ -28,7 +28,6 @@ Ext.form.Field.override({
                     tag: 'a',
                     href: '#',
                     style: 'display: block; width: 16px; height: 16px; '+
-                        'position: absolute; '+
                         'background-image: url(/assets/silkicons/information.png)'
                 });
                 helpEl.on('click', function(e) {

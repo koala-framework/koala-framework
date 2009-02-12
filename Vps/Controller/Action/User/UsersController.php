@@ -1,14 +1,103 @@
 <?php
 class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_buttons = array('add'); //delete button entfernt
+    protected $_buttons = array('add', 'userlock', 'userdelete'); // original delete button entfernt
+    protected $_permissions = array('userlock' => true, 'userdelete' => true);
     protected $_sortable = true;
     protected $_defaultOrder = 'id';
     protected $_paging = 20;
     protected $_editDialog = array('controllerUrl'=>'/vps/user/user',
-                                   'width'=>500,
-                                   'height'=>410);
+                                   'width'=>520,
+                                   'height'=>500);
     protected $_filters = array('text' => true);
+
+    public function preDispatch()
+    {
+        $this->_model = Zend_Registry::get('userModel');
+        parent::preDispatch();
+    }
+
+    protected function _initColumns()
+    {
+        parent::_initColumns();
+        $this->_filters['locked'] = array(
+            'type'      => 'Button',
+            'icon'      => '/assets/silkicons/user_red.png',
+            'cls'       => 'x-btn-icon',
+            'tooltip'   => trlVps('Show locked users only')
+        );
+
+        $this->_columns->add(new Vps_Grid_Column_Button('edit', trlVps('Edit')));
+        $this->_columns->add(new Vps_Grid_Column('id', 'ID', 50));
+        $this->_columns->add(new Vps_Grid_Column('email', trlVps('Email'), 140));
+        $this->_columns->add(new Vps_Grid_Column('role', trlVps('Rights')))
+            ->setData(new Vps_Controller_Action_User_Users_RoleData());
+
+        $this->_columns->add(new Vps_Grid_Column('gender', trlVps('Gender'), 70))
+            ->setRenderer('genderIcon');
+        $this->_columns->add(new Vps_Grid_Column('title', trlVps('Title'), 80));
+
+        $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('First name'), 110));
+        $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Last name'), 110));
+
+        if (isset($this->_getAuthData()->language)) {
+             $this->_columns->add(new Vps_Grid_Column('language', trlVps('lang'), 30));
+        }
+
+        $this->_columns->add(new Vps_Grid_Column('password', trlVps('Activated'), 60))
+            ->setRenderer('boolean');
+        $this->_columns->add(new Vps_Grid_Column_Checkbox('locked', trlVps('Locked'), 60));
+        $this->_columns->add(new Vps_Grid_Column_Checkbox('deleted', trlVps('Deleted'), 60));
+
+        $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
+        $acl = Zend_Registry::get('acl');
+        if ($acl->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
+            $this->_columns->add(new Vps_Grid_Column_Checkbox('webcode', trlVps('Only for this web'), 100))
+                 ->setData(new Vps_Controller_Action_User_Users_WebcodeData());
+        }
+    }
+
+    public function jsonUserDeleteAction()
+    {
+        if (!isset($this->_permissions['userdelete']) || !$this->_permissions['userdelete']) {
+            throw new Vps_Exception("userdelete is not allowed.");
+        }
+        $ids = $this->getRequest()->getParam($this->_primaryKey);
+        $ids = explode(';', $ids);
+
+        foreach ($ids as $id) {
+            $row = $this->_model->getRow($id);
+            if (!$row) {
+                throw new Vps_ClientException("Can't find row with id '$id'.");
+            }
+            if (!$this->_hasPermissions($row, 'userlock')) {
+                throw new Vps_Exception("You don't have the permissions to delete this user.");
+            }
+            $row->deleted = 1;
+            $row->save();
+        }
+    }
+
+    public function jsonUserLockAction()
+    {
+        if (!isset($this->_permissions['userlock']) || !$this->_permissions['userlock']) {
+            throw new Vps_Exception("userlock is not allowed.");
+        }
+        $ids = $this->getRequest()->getParam($this->_primaryKey);
+        $ids = explode(';', $ids);
+
+        foreach ($ids as $id) {
+            $row = $this->_model->getRow($id);
+            if (!$row) {
+                throw new Vps_ClientException("Can't find row with id '$id'.");
+            }
+            if (!$this->_hasPermissions($row, 'userlock')) {
+                throw new Vps_Exception("You don't have the permissions to lock this user.");
+            }
+            $row->locked = $row->locked ? 0 : 1;
+            $row->save();
+        }
+    }
 
     protected function _getSelect()
     {
@@ -23,6 +112,11 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
             }
         }
 
+        $select->where(new Vps_Model_Select_Expr_Or(array(
+            new Vps_Model_Select_Expr_IsNull('deleted'),
+            new Vps_Model_Select_Expr_Equals('deleted', 0),
+        )));
+
         if ($roles) {
             $select->whereEquals('role', $roles);
         } else {
@@ -32,40 +126,11 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         return $select;
     }
 
-    public function preDispatch()
+    public function indexAction()
     {
-        $this->_model = Zend_Registry::get('userModel');
-        parent::preDispatch();
-    }
-
-    protected function _initColumns()
-    {
-        parent::_initColumns();
-        $this->_columns->add(new Vps_Grid_Column_Button('edit', trlVps('Edit')));
-        $this->_columns->add(new Vps_Grid_Column('id', 'ID', 50));
-        $this->_columns->add(new Vps_Grid_Column('email', trlVps('Email'), 140));
-        $this->_columns->add(new Vps_Grid_Column('role', trlVps('Rights')))
-            ->setData(new Vps_Controller_Action_User_Users_RoleData());
-
-        $this->_columns->add(new Vps_Grid_Column('gender', trlVps('Gender'), 70))
-            ->setRenderer('genderIcon');
-        $this->_columns->add(new Vps_Grid_Column('title', trlVps('Title'), 100));
-
-        $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('First name'), 150));
-        $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Last name'), 150));
-
-        if (isset($this->_getAuthData()->language)){
-             $this->_columns->add(new Vps_Grid_Column('language', trlVps('lang'), 30));
-        }
-
-        $this->_columns->add(new Vps_Grid_Column('password', trlVps('Activated'), 60))
-            ->setRenderer('boolean');
-
-        $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
-        $acl = Zend_Registry::get('acl');
-        if ($acl->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
-            $this->_columns->add(new Vps_Grid_Column_Checkbox('webcode', trlVps('Webcode'), 60))
-                 ->setData(new Vps_Controller_Action_User_Users_WebcodeData());
-        }
+        $config = array(
+            'controllerUrl' => $this->getRequest()->getPathInfo()
+        );
+        $this->view->ext('Vps.User.Grid.Index', $config);
     }
 }
