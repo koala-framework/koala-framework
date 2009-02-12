@@ -32,5 +32,9 @@ class Vps_Update_Action_Component_ConvertComponentIds extends Vps_Update_Action_
                         WHERE component_id LIKE '".str_replace('_', '\_', $pattern)."'");
             }
         }
+        $db->query("UPDATE vpc_basic_text SET content =
+                REPLACE(content, 'href=\"$search-', 'href=\"$replace-')");
+        //TODO: Images
+
     }
 }
