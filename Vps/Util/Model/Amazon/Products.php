@@ -105,6 +105,7 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
             $results = $this->_itemSearch($options);
             $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
             $limitOffset = $select->getPart(Vps_Model_Select::LIMIT_OFFSET);
+            $limitOffset = $limitOffset - (floor($limitOffset/10)*10);
             $i = 0;
             $dataKeys = array();
             foreach ($results as $result) {
