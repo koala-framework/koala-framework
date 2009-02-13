@@ -39,7 +39,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
 
     public function getDownloadUrl()
     {
-        return $this->data->url;
+        return $this->getData()->url;
     }
 
     public function getFilesize()
