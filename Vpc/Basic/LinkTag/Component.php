@@ -19,9 +19,10 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
         $ret['generators']['link'] = array(
             'class' => 'Vpc_Basic_LinkTag_Generator',
             'component' => array(
-                'intern' => 'Vpc_Basic_LinkTag_Intern_Component',
-                'extern' => 'Vpc_Basic_LinkTag_Extern_Component',
-                'mail'     => 'Vpc_Basic_LinkTag_Mail_Component'
+                'intern'   => 'Vpc_Basic_LinkTag_Intern_Component',
+                'extern'   => 'Vpc_Basic_LinkTag_Extern_Component',
+                'mail'     => 'Vpc_Basic_LinkTag_Mail_Component',
+                'download' => 'Vpc_Basic_DownloadTag_Component'
             )
         );
         $ret['assetsAdmin']['dep'][] = 'VpsFormCards';
