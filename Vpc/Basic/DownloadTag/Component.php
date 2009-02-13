@@ -1,15 +1,14 @@
 <?php
-class Vpc_Basic_DownloadTag_Component extends Vpc_Abstract implements Vps_Media_Output_Interface
+class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Component implements Vps_Media_Output_Interface
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
             'modelname'     => 'Vpc_Basic_DownloadTag_Model',
-            'componentName' => 'Download Tag',
+            'componentName' => trlVps('Download Tag'),
             'componentIcon' => new Vps_Asset('folder_link'),
-            'default'   => array(
-            )
         ));
+        $ret['dataClass'] = 'Vpc_Basic_DownloadTag_Data';
         $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/DownloadTag/Panel.js';
         return $ret;
@@ -40,18 +39,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Abstract implements Vps_Media_
 
     public function getDownloadUrl()
     {
-        $row = $this->getFileRow();
-        $fRow = $row->getParentRow('File');
-        if (!$fRow) {
-            return null;
-        }
-        $filename = $row->filename;
-        if (!$filename) {
-            $filename = $fRow->filename;
-        }
-        $filename .= '.'.$fRow->extension;
-        $id = $this->getData()->dbId;
-        return Vps_Media::getUrl(get_class($this), $id, 'default', $filename);
+        return $this->data->url;
     }
 
     public function getFilesize()
