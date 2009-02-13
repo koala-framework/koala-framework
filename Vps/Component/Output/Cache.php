@@ -206,8 +206,10 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         } else {
             $meta = $component->getComponent()->getPartialCacheVars($partial);
         }
-        if (isset($meta['model'])) bt();
-        foreach ($meta as $id => $m) {
+        foreach ($meta as $id => &$m) {
+            if (!isset($m['model'])) throw new Vps_Exception('getCacheVars must deliver model');
+            if ($m['model'] instanceof Vps_Model_Db) $m['model'] = get_class($m['model']->getTable());
+            if ($m['model'] instanceof Vps_Model_Abstract) $m['model'] = get_class($m['model']);
             $meta[$id]['cache_id'] = $cacheId;
             $meta[$id]['component_class'] = null;
         }

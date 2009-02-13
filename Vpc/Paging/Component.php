@@ -166,7 +166,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
     {
         $ret = parent::getCacheVars();
         $ret[] = array(
-            'model' => $this->getData()->parent->getComponent()->getPagingModelname(),
+            'model' => $this->getData()->parent->getComponent()->getPagingModel(),
             'id' => null
         );
         return $ret;
@@ -176,7 +176,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
     {
         $ret = array();
         $ret[] = array(
-            'model' => $this->getData()->parent->getComponent()->getPagingModelname(),
+            'model' => $this->getData()->parent->getComponent()->getPagingModel(),
             'id' => null
         );
         return $ret;

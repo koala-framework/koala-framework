@@ -2,5 +2,5 @@
 interface Vpc_Paging_ParentInterface
 {
     public function getPagingCount();
-    public function getPagingModelname();
+    public function getPagingModel();
 }

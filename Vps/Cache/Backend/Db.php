@@ -133,14 +133,14 @@ class Vps_Cache_Backend_Db extends Zend_Cache_Backend
             if (!is_string($tags)) {
                 throw new Vps_Exception("second argument must be a component class name");
             }
-            Vps_Benchmark::info("Kompletter Cache für Komponente '$tags' gelöscht.");
+            p("Kompletter Cache für Komponente '$tags' gelöscht.");
             return (bool)$this->_adapter->query("DELETE FROM {$this->_options['table']} WHERE component_class=?", array($tags));
         }
         if ($mode == Vps_Component_Cache::CLEANING_MODE_ID) {
             if (!is_string($tags)) {
                 throw new Vps_Exception("second argument must be an id");
             }
-            Vps_Benchmark::info("Cache für Komponente '$tags' gelöscht.");
+            p("Cache für Komponente '$tags' gelöscht.");
             $sql = "DELETE FROM {$this->_options['table']} WHERE id = ?";
             return (bool) $this->_adapter->query($sql, array($tags));
         }
