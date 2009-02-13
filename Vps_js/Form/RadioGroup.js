@@ -7,6 +7,13 @@ Vps.Form.RadioGroup = Ext.extend(Ext.form.RadioGroup, {
         if (this.value) {
             this.setValue(this.value);
         }
+        this.items.each(function(c) {
+            c.on('check', function(field, newValue, oldValue) {
+                if (field.getValue()) {
+                    this.fireEvent('change', this, field.inputValue, 'TODO');
+                }
+            }, this);
+        }, this);
     },
     getValue: function() {
         if (!this.rendered) {
