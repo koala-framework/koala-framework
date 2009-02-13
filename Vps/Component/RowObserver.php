@@ -56,6 +56,7 @@ class Vps_Component_RowObserver
         foreach ($this->_process as $action => $process) {
             foreach ($process as $row) {
                 // Admins wie gehabt aufrufen
+                /*
                 foreach (Vpc_Abstract::getComponentClasses() as $c) {
                     $method = 'onRow' . ucfirst($action);
                     if ($row instanceof Vps_Model_Row_Interface && get_class($row->getModel()) == 'Vps_Model_Db') {
@@ -64,6 +65,7 @@ class Vps_Component_RowObserver
                         Vpc_Admin::getInstance($c)->$method($row);
                     }
                 }
+                */
                 // Cache
                 if ($row instanceof Zend_Db_Table_Row_Abstract) {
                     $model = $row->getTable();
