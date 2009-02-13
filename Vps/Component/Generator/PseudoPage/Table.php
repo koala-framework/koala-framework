@@ -38,7 +38,12 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
             if ($this->_settings['uniqueFilename']) {
                 $select->whereEquals($this->_settings['filenameColumn'], $filename);
             } else {
-                if (!preg_match('#^([0-9]+)_#', $filename, $m)) return null;
+                if ($this->_hasNumericIds) {
+                    $pattern = '#^([0-9]+)_#';
+                } else {
+                    $pattern = '#^([^_]+)_#';
+                }
+                if (!preg_match($pattern, $filename, $m)) return null;
                 $select->whereId($this->_idSeparator . $m[1]);
             }
         }
