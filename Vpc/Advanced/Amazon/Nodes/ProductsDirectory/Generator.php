@@ -3,6 +3,7 @@ class Vpc_Advanced_Amazon_Nodes_ProductsDirectory_Generator extends Vps_Componen
 {
     protected $_loadTableFromComponent = false;
     protected $_idColumn = 'asin';
+    protected $_hasNumericIds = false;
 
     protected function _formatSelect($parentData, $select)
     {
