@@ -5,7 +5,6 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
 
     public function __construct($name, $class)
     {
-        parent::__construct($name, $class);
         if (!$this->getModel()) {
             $this->setModel(new Vps_Model_FnF());
             $this->setCreateMissingRow(true);
