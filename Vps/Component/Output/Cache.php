@@ -35,6 +35,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
                     foreach ($vars as $id => $var) {
                         $vars[$id]['component_class'] = $componentClass;
                         $vars[$id]['cache_id'] = null;
+                        $vars[$id]['callback'] = null;
                     }
                     $meta = array_merge($meta, $vars);
                 }
@@ -210,7 +211,14 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             if (!isset($m['model'])) throw new Vps_Exception('getCacheVars must deliver model');
             if ($m['model'] instanceof Vps_Model_Db) $m['model'] = get_class($m['model']->getTable());
             if ($m['model'] instanceof Vps_Model_Abstract) $m['model'] = get_class($m['model']);
-            $meta[$id]['cache_id'] = $cacheId;
+            $meta[$id]['model'] = $m['model'];
+            if (!isset($m['callback'])) {
+                $meta[$id]['callback'] = null;
+                $meta[$id]['cache_id'] = $cacheId;
+            } else {
+                $meta[$id]['callback'] = $componentId;
+                $meta[$id]['cache_id'] = null;
+            }
             $meta[$id]['component_class'] = null;
         }
         return $meta;

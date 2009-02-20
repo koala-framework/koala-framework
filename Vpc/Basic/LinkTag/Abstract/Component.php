@@ -16,12 +16,27 @@ abstract class Vpc_Basic_LinkTag_Abstract_Component extends Vpc_Abstract
             $model = $parent->getComponent()->getModel();
             $row = $model->getRow($parent->dbId);
             $ret[] = array(
-                'model' => get_class($model),
+                'model' => $model,
                 'id' => $row->component_id
             );
+            $ret[] = array(
+                'model' => $model,
+                'id' => $row->component_id,
+                'callback' => true
+            );
         }
-
         return $ret;
+    }
+
+    public function onCacheCallback($row)
+    {
+        if ($this->getData()->parent->isPage) {
+            foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+                if (is_instance_of($componentClass, 'Vpc_Menu_Abstract')) {
+                    Vps_Component_Cache::getInstance()->cleanComponentClass($componentClass);
+                }
+            }
+        }
     }
 
 }

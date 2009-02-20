@@ -92,6 +92,11 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         return $this->_getRow();
     }
 
+    public function _getCacheRow()
+    {
+        return $this->getImageRow();
+    }
+
     protected static function _getEmptyImage($className)
     {
         return false;

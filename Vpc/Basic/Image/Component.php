@@ -60,9 +60,4 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract_Image_Component
         $filename = substr($emptyImage, 0, strrpos($emptyImage, '.'));
         return Vpc_Admin::getComponentFile($className, $filename, $ext);
     }
-
-    public function _getCacheRow()
-    {
-        return $this->getImageRow();
-    }
 }

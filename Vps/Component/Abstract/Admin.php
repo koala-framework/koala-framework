@@ -113,30 +113,6 @@ class Vps_Component_Abstract_Admin
     {
     }
 
-    public function onRowUpdate($row)
-    {
-        $this->_onRowAction($row);
-    }
-
-    public function onRowDelete($row)
-    {
-        $this->_onRowAction($row);
-    }
-
-    public function onRowInsert($row)
-    {
-        $this->_onRowAction($row);
-    }
-
-    public function onRowSave($row)
-    {
-        $this->_onRowAction($row);
-    }
-
-    protected function _onRowAction($row)
-    {
-    }
-
     public function addResources(Vps_Acl $acl)
     {
     }
