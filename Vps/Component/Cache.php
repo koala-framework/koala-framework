@@ -45,14 +45,14 @@ class Vps_Component_Cache extends Zend_Cache_Core
         $this->_backend->saveMeta($meta);
     }
 
-    public function clean($mode = 'all', $tags = array())
+    public function clean($mode = 'all', $tags = array(), $row = null)
     {
         if (in_array($mode, array( self::CLEANING_MODE_DEFAULT,
                                    self::CLEANING_MODE_COMPONENT_CLASS,
                                    self::CLEANING_MODE_ID))
         ) {
             if (!$this->_backend) return null;
-            return $this->_backend->clean($mode, $tags);
+            return $this->_backend->clean($mode, $tags, $row);
         } else {
             return parent::clean($mode, $tags);
         }

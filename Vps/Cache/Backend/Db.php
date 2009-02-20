@@ -111,20 +111,28 @@ class Vps_Cache_Backend_Db extends Zend_Cache_Backend
         return (bool)$this->_adapter->query("DELETE FROM {$this->_options['table']} WHERE id='$id'");
     }
 
-    public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, $tags = array(), $row = null)
     {
         if (!$this->_adapter) return;
         if ($mode == Vps_Component_Cache::CLEANING_MODE_DEFAULT) {
             if (!is_array($tags) || count($tags) != 2) {
                 throw new Vps_Exception("second argument must be an array containing model an id");
             }
-            $sql = "SELECT cache_id, component_class FROM {$this->_options['table']}_meta WHERE model=? AND (ISNULL(id) OR id=?)";
+            $sql = "SELECT cache_id, callback, component_class FROM {$this->_options['table']}_meta WHERE model=? AND (ISNULL(id) OR id=?)";
             foreach ($this->_adapter->fetchAll($sql, $tags) as $row) {
-                if ($row['cache_id']) {
-                    $this->clean(Vps_Component_Cache::CLEANING_MODE_ID, $row['cache_id']);
-                }
                 if ($row['component_class']) {
                     $this->clean(Vps_Component_Cache::CLEANING_MODE_COMPONENT_CLASS, $row['component_class']);
+                }
+                if ($row['callback']) {
+                    $component = Vps_Component_Data_Root::getInstance()
+                        ->getComponentById($row['callback']);
+                    if ($component) {
+                        $component->getComponent()->onCacheCallback($row);
+                        Vps_Benchmark::info("Callback für die Komponente {$component->componentClass} mit id {$component->componentId} aufgerufen.");
+                    }
+                }
+                if ($row['cache_id']) {
+                    $this->clean(Vps_Component_Cache::CLEANING_MODE_ID, $row['cache_id']);
                 }
             }
             return true;
@@ -133,14 +141,14 @@ class Vps_Cache_Backend_Db extends Zend_Cache_Backend
             if (!is_string($tags)) {
                 throw new Vps_Exception("second argument must be a component class name");
             }
-            p("Kompletter Cache für Komponente '$tags' gelöscht.");
+            Vps_Benchmark::info("Kompletter Cache für Komponente '$tags' gelöscht.");
             return (bool)$this->_adapter->query("DELETE FROM {$this->_options['table']} WHERE component_class=?", array($tags));
         }
         if ($mode == Vps_Component_Cache::CLEANING_MODE_ID) {
             if (!is_string($tags)) {
                 throw new Vps_Exception("second argument must be an id");
             }
-            p("Cache für Komponente '$tags' gelöscht.");
+            Vps_Benchmark::info("Cache für Komponente '$tags' gelöscht.");
             $sql = "DELETE FROM {$this->_options['table']} WHERE id = ?";
             return (bool) $this->_adapter->query($sql, array($tags));
         }

@@ -55,17 +55,6 @@ class Vps_Component_RowObserver
         $delete = array();
         foreach ($this->_process as $action => $process) {
             foreach ($process as $row) {
-                // Admins wie gehabt aufrufen
-                /*
-                foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                    $method = 'onRow' . ucfirst($action);
-                    if ($row instanceof Vps_Model_Row_Interface && get_class($row->getModel()) == 'Vps_Model_Db') {
-                        Vpc_Admin::getInstance($c)->$method($row->getRow());
-                    } else {
-                        Vpc_Admin::getInstance($c)->$method($row);
-                    }
-                }
-                */
                 // Cache
                 if ($row instanceof Zend_Db_Table_Row_Abstract) {
                     $model = $row->getTable();
@@ -83,9 +72,8 @@ class Vps_Component_RowObserver
             foreach ($val as $id => $null) {
                 Vps_Component_Cache::getInstance()->clean(
                     Vps_Component_Cache::CLEANING_MODE_DEFAULT,
-                    array($model, $id)
+                    array($model, $id, $row)
                 );
-
             }
         }
         Vps_Dao_Index::process();

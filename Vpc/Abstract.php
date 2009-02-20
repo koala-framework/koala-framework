@@ -307,9 +307,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             } else {
                 $primaryKey = $model->getPrimaryKey();
             }
-            if ($model instanceof Vps_Model_Db) $model = $model->getTable();
             $ret[] = array(
-                'model' => get_class($model),
+                'model' => $model,
                 'id' => $row->$primaryKey
             );
         }
@@ -324,10 +323,9 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             } else {
                 $primaryKey = $model->getPrimaryKey();
             }
-            if ($model instanceof Vps_Model_Db) $model = $model->getTable();
 
             $ret[] = array(
-                'model' => get_class($model),
+                'model' => $model,
                 'id' => $row->$primaryKey
             );
         }
@@ -350,8 +348,6 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             }
         }
 
-        //p($this->getData()->getPage()->inheritClasses);
-
         return $ret;
     }
 
@@ -366,6 +362,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
         return $ret;
     }
+
+    public function onCacheCallback($row) {}
 
     public function getTemplateFile($filename = 'Component')
     {
