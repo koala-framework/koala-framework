@@ -115,11 +115,8 @@ class Vps_Cache_Backend_Db extends Zend_Cache_Backend
     {
         if (!$this->_adapter) return;
         if ($mode == Vps_Component_Cache::CLEANING_MODE_DEFAULT) {
-            if (!is_array($tags) || count($tags) != 2) {
-                throw new Vps_Exception("second argument must be an array containing model an id");
-            }
             $sql = "SELECT cache_id, callback, component_class FROM {$this->_options['table']}_meta WHERE model=? AND (ISNULL(id) OR id=?)";
-            foreach ($this->_adapter->fetchAll($sql, $tags) as $row) {
+            foreach ($this->_adapter->fetchAll($sql, array($tags[0], $tags[1])) as $row) {
                 if ($row['component_class']) {
                     $this->clean(Vps_Component_Cache::CLEANING_MODE_COMPONENT_CLASS, $row['component_class']);
                 }
