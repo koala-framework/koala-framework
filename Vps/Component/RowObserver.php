@@ -64,6 +64,7 @@ class Vps_Component_RowObserver
                     $primaryKey = $model->getPrimaryKey();
                     if ($model instanceof Vps_Model_Db) $model = $model->getTable();
                 }
+                if (get_class($model) == 'Vps_Db_Table') continue
                 $id = $row->$primaryKey;
                 $delete[get_class($model)][$id] = true;
             }
