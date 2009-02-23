@@ -6,10 +6,9 @@ class Vpc_Basic_DownloadTag_Data extends Vps_Component_Data
         if ($var == 'url') {
             $m = Vpc_Abstract::createModel($this->componentClass);
             $row = $m->getRow($this->dbId);
+            if (!$row) return null;
             $fRow = $row->getParentRow('File');
-            if (!$fRow) {
-                return null;
-            }
+            if (!$fRow) return null;
             $filename = $row->filename;
             if (!$filename) {
                 $filename = $fRow->filename;
