@@ -39,15 +39,25 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
             this.firstChangeDone = true;
         }, this);
 
+        this.saveBox.store.on('beforeload', function() {
+            this.saveBox.store.baseParams.customer_id = this.filterBox.getValue();
+        }, this);
+
         this.saveBox.on('expand', function(box, r, idx) {
-            this.saveBox.store.filterBy(function(r, id) {
-                if (!r.data[this.saveBox.filterField] ||
-                    (r.data[this.saveBox.filterField] && r.data[this.saveBox.filterField] == this.filterBox.getValue())
-                ) {
-                    return true;
+            if (typeof this.saveBox.store.proxy == 'undefined') {
+                this.saveBox.store.filterBy(function(r, id) {
+                    if (!r.data[this.saveBox.filterField] ||
+                        (r.data[this.saveBox.filterField] && r.data[this.saveBox.filterField] == this.filterBox.getValue())
+                    ) {
+                        return true;
+                    }
+                    return false;
+                }, this);
+            } else {
+                if (this.saveBox.store.data.items.length >= 1) {
+                    this.saveBox.store.reload();
                 }
-                return false;
-            }, this);
+            }
         }, this);
 
         this.filterBox.setValue('');
