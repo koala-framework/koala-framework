@@ -29,20 +29,6 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
             throw new Vps_Exception("setFilterField(str) must be called for the save-combo-box");
         }
 
-        // Breite von Filter übernehmen, wenn gesetzt
-/*        if (!empty($filterMetaData['width'])) {
-            $saveMetaData['width'] = $filterMetaData['width'];
-        } else if (!empty($saveMetaData['width'])) {
-            unset($saveMetaData['width']);
-        }
-
-        if (empty($saveMetaData['store']['fields'])) {
-            $saveMetaData['store']['fields'] = array('id', 'value', 'filterId');
-        }
-        if (empty($filterMetaData['store']['fields'])) {
-            $filterMetaData['store']['fields'] = array('id', 'value');
-        }
-*/
         $data = $saveCombo->getValues();
         if (is_array($data)) {
             $saveMetaData['store']['data'] = array();
@@ -54,8 +40,6 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
                 $saveMetaData['store']['data'][] = $addArray;
             }
         }
-//         $ret['store'] = $saveMetaData['store'];
-
 
         $ret['items'] = array(
             $filterMetaData,
@@ -63,6 +47,15 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
         );
 
         return $ret;
+    }
+
+    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    {
+        parent::prepareSave($row, $postData);
+        $filteredCombo = $this->getFilteredCombo();
+        if ($filteredCombo->getSave() !== false && $filteredCombo->getInternalSave() !== false) {
+            $filteredCombo->prepareSave($row, $postData);
+        }
     }
 
     public function processInput($row, $postData)
