@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Model_Db
+ * @group Model_DbWithConnection
  */
 class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
 {
@@ -67,11 +68,7 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
             for($j=0;$j<10;$j++) {
                 $v .= chr(rand(0, 255));
             }
-
             $s = $model->select()->whereEquals('test1', $v);
-            $model->getRow($s);
-
-            $s = $model->select()->where(new Vps_Model_Select_Expr_Equals('test1', $v));
             $model->getRow($s);
         }
     }
