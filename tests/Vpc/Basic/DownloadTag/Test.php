@@ -44,7 +44,7 @@ class Vpc_Basic_DownloadTag_Test extends PHPUnit_Framework_TestCase
     {
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($this->_root->getComponentById(1700));
-        $this->assertEquals('<a href="/media/Vpc_Basic_DownloadTag_TestComponent/1700/default/26ef864633eb161c415779746271adc8/foo.png">'."\n", $html);
+        $this->assertEquals('<a href="/media/Vpc_Basic_DownloadTag_TestComponent/1700/default/26ef864633eb161c415779746271adc8/foo.png">', $html);
     }
 
     public function testEmpty()
