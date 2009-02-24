@@ -355,6 +355,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     }
                 } else {
                     /*
+                    funktioniert nicht weil getPageByUrl die domain weglöscht
                     if (isset($linkClasses['intern']) && $linkClasses['intern']) {
                         $internLinkPage = Vps_Component_Data_Root::getInstance()
                             ->getPageByUrl($part['href']);
