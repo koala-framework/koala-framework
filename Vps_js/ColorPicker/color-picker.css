@@ -1,0 +1,129 @@
+body, html {
+  width: 100%;
+  height: 100%; }
+
+#color-picker {
+  position: absolute;
+  margin: 100px; }
+
+.x-panel-icon.x-color-wheel, .x-color-wheel {
+  background-image: url('../images/color_wheel.png'); }
+
+.x-color-picker.x-panel-body {
+  background-image: url('../images/background.jpg'); }
+
+.x-color-picker.x-panel .x-layer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  visibility: visible; }
+.x-color-picker.x-panel .blank {
+  background-image: url('../images/blank.gif'); }
+.x-color-picker.x-panel .bar-brightness {
+  background-image: url('../images/bar-brightness.png'); }
+.x-color-picker.x-panel .map-hue {
+  background-image: url('../images/map-hue.png'); }
+.x-color-picker.x-panel .bar-hue {
+  background-image: url('../images/bar-hue.png'); }
+.x-color-picker.x-panel .map-saturation {
+  background-image: url('../images/map-saturation.png'); }
+.x-color-picker.x-panel .map-saturation-overlay {
+  background-image: url('../images/map-saturation-overlay.png'); }
+.x-color-picker.x-panel .bar-saturation {
+  background-image: url('../images/bar-saturation.png'); }
+.x-color-picker.x-panel .map-brightness {
+  background-image: url('../images/map-brightness.png'); }
+.x-color-picker.x-panel .bar-brightness {
+  background-image: url('../images/bar-brightness.png'); }
+.x-color-picker.x-panel .map-red-max {
+  background-image: url('../images/map-red-max.png'); }
+.x-color-picker.x-panel .map-red-min {
+  background-image: url('../images/map-red-min.png'); }
+.x-color-picker.x-panel .bar-red-tl {
+  background-image: url('../images/bar-red-tl.png'); }
+.x-color-picker.x-panel .bar-red-tr {
+  background-image: url('../images/bar-red-tr.png'); }
+.x-color-picker.x-panel .bar-red-br {
+  background-image: url('../images/bar-red-br.png'); }
+.x-color-picker.x-panel .bar-red-bl {
+  background-image: url('../images/bar-red-bl.png'); }
+.x-color-picker.x-panel .map-green-max {
+  background-image: url('../images/map-green-max.png'); }
+.x-color-picker.x-panel .map-green-min {
+  background-image: url('../images/map-green-min.png'); }
+.x-color-picker.x-panel .bar-green-tl {
+  background-image: url('../images/bar-green-tl.png'); }
+.x-color-picker.x-panel .bar-green-tr {
+  background-image: url('../images/bar-green-tr.png'); }
+.x-color-picker.x-panel .bar-green-br {
+  background-image: url('../images/bar-green-br.png'); }
+.x-color-picker.x-panel .bar-green-bl {
+  background-image: url('../images/bar-green-bl.png'); }
+.x-color-picker.x-panel .map-blue-max {
+  background-image: url('../images/map-blue-max.png'); }
+.x-color-picker.x-panel .map-blue-min {
+  background-image: url('../images/map-blue-min.png'); }
+.x-color-picker.x-panel .bar-blue-tl {
+  background-image: url('../images/bar-blue-tl.png'); }
+.x-color-picker.x-panel .bar-blue-tr {
+  background-image: url('../images/bar-blue-tr.png'); }
+.x-color-picker.x-panel .bar-blue-br {
+  background-image: url('../images/bar-blue-br.png'); }
+.x-color-picker.x-panel .bar-blue-bl {
+  background-image: url('../images/bar-blue-bl.png'); }
+.x-color-picker.x-panel .x-map {
+  border: 1px solid black;
+  width: 255px;
+  height: 255px;
+  float: left;
+  margin: 10px;
+  position: relative;
+  overflow: hidden; }
+  .x-color-picker.x-panel .x-map .x-pointer {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    background-image: url('../images/mappoint.gif'); }
+.x-color-picker.x-panel .x-track {
+  height: 255px;
+  width: 20px;
+  border: 1px solid black;
+  float: left;
+  margin: 10px 10px 10px 0;
+  position: relative; }
+  .x-color-picker.x-panel .x-track .x-slider {
+    width: 40px;
+    height: 9px;
+    position: absolute;
+    left: -10px;
+    top: 0px;
+    background-image: url('../images/rangearrows.gif'); }
+.x-color-picker.x-panel .x-console {
+  float: left;
+  width: 75px;
+  margin: 0 10px 10px 0; }
+  .x-color-picker.x-panel .x-console .preview {
+    padding-top: 0;
+    margin-top: 10px;
+    border: 1px solid black;
+    width: 50px;
+    height: 50px; }
+  .x-color-picker.x-panel .x-console li {
+    position: relative;
+    padding-top: 6px; }
+  .x-color-picker.x-panel .x-console .x-radio {
+    position: absolute;
+    top: 8px;
+    left: 1px;
+    width: 20px;
+    height: 20px;
+    background-image: url('../images/radio/background.png'); }
+  .x-color-picker.x-panel .x-console .x-radio.x-dialed {
+    background-image: url('../images/radio/over.png'); }
+  .x-color-picker.x-panel .x-console .x-form-text {
+    width: 50px;
+    padding-left: 25px;
+    font-family: Courier New, Courier; }
+  .x-color-picker.x-panel .x-console .hex .x-form-text {
+    padding-left: 15px;
+    width: 60px; }
