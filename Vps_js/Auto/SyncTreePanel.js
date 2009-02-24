@@ -83,12 +83,13 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
 
         // Toolbar
-        if (meta.buttons.each == undefined) { // Abfrage n�tig, falls keine Buttons geliefert
+        if (meta.buttons.each == undefined) { // Abfrage nötig, falls keine Buttons geliefert
             var tbar = [];
             for (var button in meta.buttons) {
                 tbar.add(this.getAction(button));
             }
         }
+        
         // Tree
         baseParams = this.baseParams != undefined ? this.baseParams : {};
         if (this.openedId != undefined) { baseParams.openedId = this.openedId; }
@@ -102,7 +103,8 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             enableDD    : meta.enableDD,
             autoScroll: true,
             rootVisible : meta.rootVisible,
-            tbar        : tbar
+            tbar        : tbar,
+            dropConfig  : meta.dropConfig
         });
 
         this.tree.setRootNode(
@@ -230,19 +232,29 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         );
     },
 
-    onMove : function(e){
+    onMove : function(dropEvent){
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-move',
             params: {
-                source: e.dropNode.id,
-                target: e.target.id,
-                point: e.point
+                source: dropEvent.dropNode.id,
+                target: dropEvent.target.id,
+                point: dropEvent.point
+            },
+            success: function(r) {
+                response = Ext.decode(r.responseText);
+                var parent = this.tree.getNodeById(response.parent);
+                var node = this.tree.getNodeById(response.node);
+                var before = this.tree.getNodeById(response.before);
+                parent.insertBefore(node, before);
+                parent.expand();
             },
             failure: function(r) {
                 this.tree.getRootNode().reload();
             },
             scope: this
-        })
+        });
+        dropEvent.dropStatus = true;
+        dropEvent.cancel = true;
         return true;
     },
 
