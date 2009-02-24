@@ -28,4 +28,9 @@ class Vps_Controller_Router_Cli extends Zend_Controller_Router_Abstract
 
         }
     }
+    public function assemble($userParams, $name = null, $reset = false, $encode = true)
+    {
+        return '';
+    }
+
 }

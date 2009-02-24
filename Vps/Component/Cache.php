@@ -6,7 +6,6 @@ class Vps_Component_Cache extends Zend_Cache_Core
     const CLEANING_MODE_ID = 'id';
 
     static private $_instance;
-    private $_backend;
     private $_preloadedValues = array();
 
     public function __construct()
