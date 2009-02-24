@@ -14,6 +14,21 @@ class Vps_Exception extends Vps_Exception_NoMail
         return $this->_mail;
     }
 
+    /**
+     * Informiert den Entwickler über diese Exception
+     */
+    public function notify()
+    {
+        if ($this->sendErrorMail()) {
+            return;
+        }
+        if (php_sapi_name() == 'cli') {
+            echo 'WARNING: '.$this->getMessage()."\n";
+        } else if (Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
+            p($this->getMessage(), 'WARNING');
+        }
+    }
+
     public function sendErrorMail()
     {
         $requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '' ;

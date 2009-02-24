@@ -127,6 +127,22 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return false;
     }
 
+    /**
+     * Workaround
+     *
+     * @see http://framework.zend.com/issues/browse/ZF-1343
+     * @see http://bugs.php.net/bug.php?id=44251
+     */
+    private function _fixStupidQuoteBug($v)
+    {
+        if (strpos($v, '?') !== false && strpos($v, '\'') !== false) {
+            $e = new Vps_Exception("? and ' are used together in an sql query value. This is a problem because of an Php bug. ' is ignored.");
+            $e->notify();
+            $v = str_replace('\'', '', $v);
+        }
+        return $v;
+    }
+
     public function createDbSelect($select)
     {
         if (!$select) return null;
@@ -137,11 +153,13 @@ class Vps_Model_Db extends Vps_Model_Abstract
             foreach ($whereEquals as $field=>$value) {
                 if (is_array($value)) {
                     foreach ($value as &$v) {
+                        $v = $this->_fixStupidQuoteBug($v);
                         $v = $this->getAdapter()->quote($v);
                     }
                     $value = implode(', ', $value);
                     $dbSelect->where($this->_formatField($field, $dbSelect)." IN ($value)");
                 } else {
+                    $value = $this->_fixStupidQuoteBug($value);
                     $dbSelect->where($this->_formatField($field, $dbSelect)." = ?", $value);
                 }
             }
@@ -150,11 +168,13 @@ class Vps_Model_Db extends Vps_Model_Abstract
             foreach ($whereNotEquals as $field=>$value) {
                 if (is_array($value)) {
                     foreach ($value as &$v) {
+                        $v = $this->_fixStupidQuoteBug($v);
                         $v = $this->getAdapter()->quote($v);
                     }
                     $value = implode(', ', $value);
                     $dbSelect->where($this->_formatField($field, $dbSelect)." NOT IN ($value)");
                 } else {
+                    $value = $this->_fixStupidQuoteBug($value);
                     $dbSelect->where($this->_formatField($field, $dbSelect)." != ?", $value);
                 }
             }
@@ -166,6 +186,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
 
         if ($whereId = $select->getPart(Vps_Model_Select::WHERE_ID)) {
+            $whereId = $this->_fixStupidQuoteBug($whereId);
             $dbSelect->where($this->_formatField($this->getPrimaryKey(), $dbSelect)." = ?", $whereId);
         }
 
@@ -192,10 +213,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private function _createDbSelectExpression($expr)
     {
         if ($expr instanceof Vps_Model_Select_Expr_CompareField_Abstract) {
-
             $quotedValue = $expr->getValue();
+            $quotedValue = $this->_fixStupidQuoteBug($quotedValue);
             $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
-
         }
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
             return $expr->getField()." = ".$quotedValue;
@@ -209,6 +229,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             return $expr->getField()." > ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
             $v = $expr->getValue();
+            $v = $this->_fixStupidQuoteBug($v);
             $quotedValueContains = $this->_table->getAdapter()->quote('%'.$v.'%');
 
             $quotedValue = str_replace("%", "\\%", $quotedValue);
@@ -219,7 +240,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                             $quotedValueContains);
             return $expr->getField()." LIKE ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {
-            return "LEFT({$expr->getField()}, ".strlen($expr->getValue()).") = ".$quotedValue;
+            return "LEFT({$expr->getField()}, ".strlen($this->_fixStupidQuoteBug($expr->getValue())).") = ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_NOT) {
             return "NOT (".$this->_createDbSelectExpression($expr->getExpression()).")";
         } else if ($expr instanceof Vps_Model_Select_Expr_Or) {
