@@ -8,12 +8,12 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         );
         $this->view->ext('Vps.Auto.TreePanel', $config);
     }
-    
+
     protected function _getTreeWhere($parentId = null)
     {
         return $this->_getWhere();
     }
-    
+
     public function jsonDataAction()
     {
         $parentId = $this->_getParam('node');
@@ -21,14 +21,11 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         $this->_saveSessionNodeOpened($parentId, true);
         $this->_saveNodeOpened();
 
-        $select = $this->_model->select($this->_getTreeWhere($parentId));
+        $select = $this->_getSelect($this->_getTreeWhere($parentId));
         if (!$parentId) {
             $select->whereNull($this->_parentField);
         } else {
             $select->whereEquals($this->_parentField, $parentId);
-        }
-        if ($this->_hasPosition) {
-            $select->order('pos');
         }
         $rows = $this->_model->fetchAll($select);
         $nodes = array();
@@ -43,12 +40,12 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         }
         $this->view->nodes = $nodes;
     }
-    
+
     protected function _formatNodes($parentId = null)
     {
         return array();
     }
-    
+
     protected function _formatNode($row)
     {
         $data = parent::_formatNode($row);
@@ -69,7 +66,6 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         } else {
             $data['children'] = array();
             $data['expanded'] = true;
-            $data['leaf'] = true;
         }
         return $data;
     }

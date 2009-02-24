@@ -33,6 +33,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected $_editDialog;
     private $_openedNodes = array();
     protected $_addPosition = self::ADD_FIRST;
+    protected $_enableDD;
+    protected $_defaultOrder;
 
     public function indexAction()
     {
@@ -106,6 +108,13 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $this->_icons[$k] = new Vps_Asset($i);
             }
         }
+
+        if (is_string($this->_defaultOrder)) {
+            $this->_defaultOrder = array(
+                'field' => $this->_defaultOrder,
+                'direction'   => 'ASC'
+            );
+        }
     }
 
     public function jsonMetaAction()
@@ -115,11 +124,18 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         foreach ($this->_icons as $k=>$i) {
             $this->view->icons[$k] = $i->__toString();
         }
-        $this->view->enableDD = $this->_hasPosition;
         $this->view->rootText = $this->_rootText;
         $this->view->rootVisible = $this->_rootVisible;
         $this->view->buttons = $this->_buttons;
         $this->view->editDialog = $this->_editDialog;
+        if (is_null($this->_enableDD)) {
+            $this->view->enableDD = $this->_hasPosition;
+        } else {
+            $this->view->enableDD = $this->_enableDD;
+            if ($this->_enableDD) {
+                $this->view->dropConfig = array('appendOnly' => true);
+            }
+        }
     }
 
     public function jsonDataAction()
@@ -156,20 +172,31 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected function _formatNodes($parentRow = null)
     {
         $nodes = array();
-        $select = $this->_model->select($this->_getTreeWhere($parentRow));
+        $select = $this->_getSelect($this->_getTreeWhere($parentRow));
         if (!$parentRow) {
             $select->whereNull($this->_parentField);
         } else {
             $select->whereEquals($this->_parentField, $parentRow->{$this->_primaryKey});
-        }
-        if ($this->_hasPosition) {
-            $select->order('pos');
         }
         $rows = $this->_model->fetchAll($select);
         foreach ($rows as $row) {
             $nodes[] = $this->_formatNode($row);
         }
         return $nodes;
+    }
+
+    protected function _getSelect($where)
+    {
+        $select = $this->_model->select($where);
+        if ($this->_hasPosition) {
+            $select->order('pos');
+        } else if (!$select->hasPart('order') && $this->_defaultOrder) {
+            $select->order(
+                $this->_defaultOrder['field'],
+                $this->_defaultOrder['direction']
+            );
+        }
+        return $select;
     }
 
     protected function _formatNode($row)
@@ -278,9 +305,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $target = $this->getRequest()->getParam('target');
         $point  = $this->getRequest()->getParam('point');
 
-        $row = $this->_model->find($source)->current();
+        $parentField = $this->_parentField;
+        $row = $this->_model->getTable()->find($source)->current();
+
         if ($point == 'append') {
-            $parentField = $this->_parentField;
             $row->$parentField = (int)$target == 0 ? null : $target;
             if ($this->_hasPosition) {
                 $row->pos = '1';
@@ -288,21 +316,46 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         } else {
             $targetRow = $this->_model->getTable()->find($target)->current();
             if ($targetRow) {
-                $parentField = $this->_parentField;
-                $row->$parentField = $targetRow->$parentField;
                 if ($this->_hasPosition) {
                     $targetPosition = $targetRow->pos;
-                    if ($point == 'above') {
-                        $row->pos = $targetPosition;
-                    } else {
-                        $row->pos = $targetPosition + 1;
+                    if ($point == 'below') {
+                        $targetPosition++;
                     }
+                    if ($row->$parentField == $targetRow->$parentField &&
+                        $row->pos < $targetRow->pos
+                    ) {
+                         $targetPosition--;
+                    }
+                    $row->pos = $targetPosition;
                 }
+                $row->$parentField = $targetRow->$parentField;
             } else {
                 $this->view->error = 'Cannot move here.';
             }
         }
         $row->save();
+
+        $row = $this->_model->find($row->id)->current();
+        $primaryKey = $this->_model->getPrimaryKey();
+        $before = null;
+        $select = $this->_getSelect($this->_getTreeWhere());
+        $parentValue = $row->$parentField;
+        if (!$parentValue) {
+            $select->whereNull($this->_parentField);
+        } else {
+            $select->whereEquals($this->_parentField, $parentValue);
+        }
+        foreach ($this->_model->fetchAll($select) as $r) {
+            if ($before === true) $before = $r->$primaryKey;
+            if ($r->$primaryKey == $source) {
+                $before = true;
+            }
+        }
+        if ($before === true) $before = null;
+
+        $this->view->parent = $row->$parentField;
+        $this->view->node = $source;
+        $this->view->before = $before;
     }
 
     public function jsonCollapseAction()
