@@ -64,7 +64,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCreatesInternLinkComponent()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete(); //funtioniert nicht wegen domains
         $c = $this->_root->getComponentById(1014)->getComponent();
         $row = $c->getRow();
         $html = '<p><a href="/foo1">foo</a></p>';
@@ -210,7 +210,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/a1b024ef219bcfe6b3f5ac9916d8f722/foo.png\">\nfoo</a>\n</p>".
+                    "<p>\n  <a href=\"/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/a1b024ef219bcfe6b3f5ac9916d8f722/foo.png\">foo</a>\n</p>".
                     "</div>", $html);
     }
 
@@ -230,13 +230,4 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
                     "<p>\n  <div class=\"vpcBasicTextImageTestComponent\"><img src=\"/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/default/987577de8b2c5b4b75b8343ed85db0bf/foo.png\" width=\"100\" height=\"100\" alt=\"\" class=\"\" /></div>\n</p>".
                     "</div>", $html);
     }
-
-    public function testMore()
-    {
-        $this->markTestIncomplete();
-        /*
-        - testen: beim speichern einträge löschen die nicht im html vorkommen
-        - testen: beim speichern saved=1 setzen
-        - testen: beim löschen unterkompoenten mitlöschen
-        */
-    }}
+}
