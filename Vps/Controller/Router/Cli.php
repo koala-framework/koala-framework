@@ -32,5 +32,4 @@ class Vps_Controller_Router_Cli extends Zend_Controller_Router_Abstract
     {
         return '';
     }
-
 }

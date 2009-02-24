@@ -14,4 +14,6 @@ class Vps_Model_Db_TestAdapter extends Zend_Db_Adapter_Abstract
     public function setFetchMode($mode) {}
     public function limit($sql, $count, $offset = 0) {}
     public function supportsParameters($type) {}
+    public function getServerVersion() {}
+    public function isConnected() { return true; }
 }
