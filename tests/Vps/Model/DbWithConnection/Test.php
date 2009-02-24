@@ -2,7 +2,7 @@
 /**
  * @group Model_Db
  */
-class Vps_Model_DbWithConnection_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
 {
     private $_tableName;
     public function setUp()
@@ -36,6 +36,24 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('1x1', $model->getRow(1)->test1);
     }
 
+    public function testEscaping()
+    {
+        $values = array('a\'b', '\'?', '?', 'a?b', 'a"b', 'a\\b', 'a\\\'b');
+        $model = new Vps_Model_Db(array(
+            'table' => $this->_tableName
+        ));
+
+        $this->expectOutputString(str_repeat("WARNING: ? and ' are used together in an sql query value. This is a problem because of an Php bug. ' is ignored.\n", 2));
+
+        foreach ($values as $v) {
+            $s = $model->select()->whereEquals('test1', $v);
+            $model->getRow($s);
+
+            $s = $model->select()->where(new Vps_Model_Select_Expr_Equals('test1', $v));
+            $model->getRow($s);
+        }
+    }
+
     /**
      * @group slow
      */
@@ -49,6 +67,7 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Framework_TestCase
             for($j=0;$j<10;$j++) {
                 $v .= chr(rand(0, 255));
             }
+
             $s = $model->select()->whereEquals('test1', $v);
             $model->getRow($s);
 
