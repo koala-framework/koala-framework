@@ -9,7 +9,6 @@ class Vps_Exception_TestView extends Vps_View
 }
 /**
  * @group Exception
- * @group slow
  */
 class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
 {
@@ -37,8 +36,8 @@ class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($view->message, $exception->getMessage());
         $this->assertFalse($view->debug);
         $headers = $mail->getHeaders();
-        $this->assertEquals($headers['To'][0], '<vperror@vivid-planet.com>');
-        $this->assertEquals($headers['Cc'][0], '<foo>');
+        $this->assertEquals($headers['To'][0], 'vperror@vivid-planet.com');
+        $this->assertEquals($headers['Cc'][0], 'foo');
         $this->assertEquals($view->template, 'error.tpl');
 
         // Nicht-Vps_Exception mit Mail
@@ -53,8 +52,8 @@ class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($view->message, $e->getMessage());
         $this->assertFalse($view->debug);
         $headers = $mail->getHeaders();
-        $this->assertEquals($headers['To'][0], '<vperror@vivid-planet.com>');
-        $this->assertEquals($headers['Cc'][0], '<foo>');
+        $this->assertEquals($headers['To'][0], 'vperror@vivid-planet.com');
+        $this->assertEquals($headers['Cc'][0], 'foo');
         $this->assertEquals($view->template, 'error.tpl');
         Zend_Registry::get('config')->debug->errormail = false;
 
@@ -100,7 +99,9 @@ class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
         Vps_Debug::handleException($exception);
         return $view;
     }
-
+    /**
+     * @group slow
+     */
     public function testController()
     {
         $d = Zend_Registry::get('testDomain');
