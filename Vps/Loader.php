@@ -1,6 +1,10 @@
 <?php
 if (file_exists(VPS_PATH.'/include_path')) {
     $zendPath = trim(file_get_contents(VPS_PATH.'/include_path'));
+    $zendPath = str_replace(
+        '%version%',
+        file_get_contents(VPS_PATH.'/include_path_version'),
+        $zendPath);
 } else {
     die ('zend not found');
 }
