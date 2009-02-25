@@ -341,7 +341,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                     $model = $c->row->getModel();
                     if ($model instanceof Vps_Model_Db) $model = $model->getTable();
                     $ret[] = array(
-                        'model' => get_class($model),
+                        'model' => $model,
                         'id' => $c->row->id
                     );
                 }

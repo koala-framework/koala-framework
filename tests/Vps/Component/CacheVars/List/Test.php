@@ -25,7 +25,7 @@ class Vps_Component_CacheVars_List_Test extends PHPUnit_Framework_TestCase
             ->getChildComponent('-view');
         $cacheVars = $view->getComponent()->getCacheVars();
         $this->assertEquals(1, count($cacheVars));
-        $this->assertEquals('Vps_Component_CacheVars_List_Model', $cacheVars[0]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_List_Model', get_class($cacheVars[0]['model']));
         $this->assertEquals(null, $cacheVars[0]['id']);
     }
 
@@ -35,7 +35,7 @@ class Vps_Component_CacheVars_List_Test extends PHPUnit_Framework_TestCase
             ->getChildComponent('-view');
         $cacheVars = $view->getComponent()->getPartialCacheVars(1);
         $this->assertEquals(1, count($cacheVars));
-        $this->assertEquals('Vps_Component_CacheVars_List_Model', $cacheVars[0]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_List_Model', get_class($cacheVars[0]['model']));
         $this->assertEquals(3, $cacheVars[0]['id']);
     }
 
@@ -46,7 +46,7 @@ class Vps_Component_CacheVars_List_Test extends PHPUnit_Framework_TestCase
             ->getChildComponent('-paging');
         $cacheVars = $view->getComponent()->getCacheVars();
         $this->assertEquals(1, count($cacheVars));
-        $this->assertEquals('Vps_Component_CacheVars_List_Model', $cacheVars[0]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_List_Model', get_class($cacheVars[0]['model']));
         $this->assertEquals(null, $cacheVars[0]['id']);
         $partialVars = $view->getComponent()->getPartialCacheVars(1);
         $this->assertEquals($cacheVars, $partialVars);
