@@ -64,4 +64,14 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
             ->order('id', 'DESC')
             ->limit($this->_getSetting('limit'));
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $ret[] = array(
+            'model' => $this->_getParentModel(),
+            'id' => null
+        );
+        return $ret;
+    }
 }

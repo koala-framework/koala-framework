@@ -26,6 +26,9 @@ class Vpc_Advanced_SearchEngineReferer_Test extends PHPUnit_Framework_TestCase
 
     public function testModifyTable()
     {
+        // Vps_Component_Cache wird neu geschrieben, danach kann man das besser testen
+        $this->markTestIncomplete();
+
         $this->_cache->expects($this->once())
             ->method('remove')
             ->with($this->equalTo(array('root-referer'=>$this->_root->getChildComponent('-referer'))));
