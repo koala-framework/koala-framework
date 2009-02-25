@@ -46,7 +46,6 @@ class Vps_Component_Cache extends Zend_Cache_Core
 
     public function clean($mode = 'all', $tags = array(), $row = null)
     {
-        p($tags);
         if (in_array($mode, array( self::CLEANING_MODE_DEFAULT,
                                    self::CLEANING_MODE_COMPONENT_CLASS,
                                    self::CLEANING_MODE_ID))
