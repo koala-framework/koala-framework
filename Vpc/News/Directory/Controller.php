@@ -1,14 +1,7 @@
 <?php
-class Vpc_News_Directory_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
+class Vpc_News_Directory_Controller extends Vpc_Directories_Item_Directory_Controller
 {
-    protected $_buttons = array(
-        'save' => true,
-        'delete' => true,
-        'reload' => true,
-        'add'   => true
-    );
     protected $_defaultOrder = array('field' => 'publish_date', 'direction' => 'DESC');
-    //protected $_editDialog = array();
 
     protected function _initColumns()
     {
