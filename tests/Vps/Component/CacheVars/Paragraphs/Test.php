@@ -17,9 +17,9 @@ class Vps_Component_CacheVars_Paragraphs_Test extends PHPUnit_Framework_TestCase
         $view = $this->_root->getChildComponent('-paragraphs');
         $cacheVars = $view->getComponent()->getCacheVars();
         $this->assertEquals(2, count($cacheVars));
-        $this->assertEquals('Vps_Component_CacheVars_Paragraphs_Model', $cacheVars[0]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_Paragraphs_Model', get_class($cacheVars[0]['model']));
         $this->assertEquals('1', $cacheVars[0]['id']);
-        $this->assertEquals('Vps_Component_CacheVars_Paragraphs_Model', $cacheVars[1]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_Paragraphs_Model', get_class($cacheVars[1]['model']));
         $this->assertEquals('2', $cacheVars[1]['id']);
     }
 
@@ -29,9 +29,9 @@ class Vps_Component_CacheVars_Paragraphs_Test extends PHPUnit_Framework_TestCase
             ->getChildComponent('-2');
         $cacheVars = $view->getComponent()->getCacheVars();
         $this->assertEquals(2, count($cacheVars));
-        $this->assertEquals('Vps_Model_FnF', $cacheVars[0]['model']);
+        $this->assertEquals('Vps_Model_FnF', get_class($cacheVars[0]['model']));
         $this->assertEquals('root-paragraphs-2', $cacheVars[0]['id']);
-        $this->assertEquals('Vps_Component_CacheVars_Paragraphs_Model', $cacheVars[1]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_Paragraphs_Model', get_class($cacheVars[1]['model']));
         $this->assertEquals('2', $cacheVars[1]['id']);
     }
 }

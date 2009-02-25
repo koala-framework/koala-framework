@@ -22,7 +22,7 @@ class Vps_Component_CacheVars_Box_Test extends PHPUnit_Framework_TestCase
             ->getChildComponent('-box')
             ->getComponent()->getCacheVars();
         $this->assertEquals(1, count($cacheVars));
-        $this->assertEquals('Vps_Component_CacheVars_Box_Model', $cacheVars[0]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_Box_Model', get_class($cacheVars[0]['model']));
         $this->assertEquals('root-box', $cacheVars[0]['id']);
 
         $cacheVars = $this->_root
@@ -36,7 +36,7 @@ class Vps_Component_CacheVars_Box_Test extends PHPUnit_Framework_TestCase
             ->getChildComponent('-box')
             ->getComponent()->getCacheVars();
         $this->assertEquals(1, count($cacheVars));
-        $this->assertEquals('Vps_Component_CacheVars_Box_Model', $cacheVars[0]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_Box_Model', get_class($cacheVars[0]['model']));
         $this->assertEquals('root_boxOverwritten-box', $cacheVars[0]['id']);
     }
 
@@ -50,7 +50,7 @@ class Vps_Component_CacheVars_Box_Test extends PHPUnit_Framework_TestCase
             ->getChildComponent('-boxUnique')
             ->getComponent()->getCacheVars();
         $this->assertEquals(1, count($cacheVars));
-        $this->assertEquals('Vps_Component_CacheVars_Box_Model', $cacheVars[0]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_Box_Model', get_class($cacheVars[0]['model']));
         $this->assertEquals('root-boxUnique', $cacheVars[0]['id']);
 
         $cacheVars = $this->_root
@@ -58,7 +58,7 @@ class Vps_Component_CacheVars_Box_Test extends PHPUnit_Framework_TestCase
             ->getChildComponent('-boxUnique')
             ->getComponent()->getCacheVars();
         $this->assertEquals(1, count($cacheVars));
-        $this->assertEquals('Vps_Component_CacheVars_Box_Model', $cacheVars[0]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_Box_Model', get_class($cacheVars[0]['model']));
         $this->assertEquals('root-boxUnique', $cacheVars[0]['id']);
 
         $cacheVars = $this->_root
@@ -66,7 +66,7 @@ class Vps_Component_CacheVars_Box_Test extends PHPUnit_Framework_TestCase
             ->getChildComponent('-boxUnique')
             ->getComponent()->getCacheVars();
         $this->assertEquals(1, count($cacheVars));
-        $this->assertEquals('Vps_Component_CacheVars_Box_Model', $cacheVars[0]['model']);
+        $this->assertEquals('Vps_Component_CacheVars_Box_Model', get_class($cacheVars[0]['model']));
         $this->assertEquals('root-boxUnique', $cacheVars[0]['id']);
     }
 

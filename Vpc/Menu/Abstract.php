@@ -105,10 +105,8 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                 $generator = current(Vps_Component_Generator_Abstract::getInstances(
                     $componentClass, array('generator' => $key))
                 );
-                $model = $generator->getModel();
-                if ($model instanceof Vps_Model_Db) $model = $model->getTable();
                 $ret[] = array(
-                    'model' => get_class($model),
+                    'model' => $generator->getModel(),
                     'id' => null
                 );
             }
