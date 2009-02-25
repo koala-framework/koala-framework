@@ -46,6 +46,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
 
     public function clean($mode = 'all', $tags = array(), $row = null)
     {
+        p($tags);
         if (in_array($mode, array( self::CLEANING_MODE_DEFAULT,
                                    self::CLEANING_MODE_COMPONENT_CLASS,
                                    self::CLEANING_MODE_ID))
@@ -60,35 +61,6 @@ class Vps_Component_Cache extends Zend_Cache_Core
     public function cleanComponentClass($componentClass)
     {
         $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
-    }
-
-    /**
-     * @param array/Vps_Component_Data/componentId
-     **/
-    public function remove($componentId)
-    {
-        if (is_array($componentId)) {
-            foreach ($componentId as $c) {
-                $this->remove($c);
-            }
-            return;
-        }
-        if ($componentId instanceof Vps_Component_Data) {
-            $componentClass = $componentId->componentClass;
-            $componentId = $componentId->componentId;
-        } else {
-            $componentClass = '';
-        }
-        $cacheId = $this->getCacheIdFromComponentId($componentId);
-        if (parent::remove($cacheId)) {
-            Vps_Benchmark::info("Cache für Komponente $componentClass mit Id '$componentId' gelöscht.");
-        } else {
-            Vps_Benchmark::info("Cache NICHT für Komponente $componentClass mit Id '$componentId' gelöscht. (keiner vorhanden)");
-        }
-        $cacheId = $this->getCacheIdFromComponentId($componentId, true);
-        parent::remove($cacheId);
-        $cacheId = $this->getCacheIdFromComponentId($componentId, false, true);
-        parent::remove($cacheId);
     }
 
     public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
