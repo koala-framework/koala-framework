@@ -302,11 +302,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $row = $this->_getCacheRow();
         if ($row) {
             $model = $row->getModel();
-            if ($model instanceof Vps_Db_Table_Abstract) {
-                $primaryKey = $model->info('primary');
-            } else {
-                $primaryKey = $model->getPrimaryKey();
-            }
+            $primaryKey = $model->getPrimaryKey();
             $ret[] = array(
                 'model' => $model,
                 'id' => $row->$primaryKey
@@ -318,11 +314,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         ) {
             $row = $this->getData()->row;
             $model = $row->getModel();
-            if ($model instanceof Vps_Db_Table_Abstract) {
-                $primaryKey = $model->info('primary');
-            } else {
-                $primaryKey = $model->getPrimaryKey();
-            }
+            $primaryKey = $model->getPrimaryKey();
 
             $ret[] = array(
                 'model' => $model,
@@ -339,7 +331,6 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             foreach ($tableGenerators as $key => $generator) {
                 foreach ($generator->getChildData($this->getData()) as $c) {
                     $model = $c->row->getModel();
-                    if ($model instanceof Vps_Model_Db) $model = $model->getTable();
                     $ret[] = array(
                         'model' => $model,
                         'id' => $c->row->id
