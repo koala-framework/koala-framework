@@ -116,4 +116,32 @@ class Vps_Component_Abstract_Admin
     public function addResources(Vps_Acl $acl)
     {
     }
+
+    /**
+     * Hilfsfunktion zum hinzufügen von Menüpunkten für alle Komponenten dieser klasse
+     */
+    protected function _addResourcesBySameClass(Vps_Acl $acl)
+    {
+        $components = Vps_Component_Data_Root::getInstance()
+                ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
+        $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
+        $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
+        if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
+
+        if (count($components) > 1) {
+            $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_news',
+                        array('text'=>$name, 'icon'=>$icon)), 'vps_component_root');
+            foreach ($components as $c) {
+                $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
+                        array('text'=>$c->getTitle(), 'icon'=>$icon),
+                        '/admin/component/edit/'.$c->componentClass.'?componentId='.$c->dbId), 'vpc_news');
+            }
+        } else if (count($components) == 1) {
+            $c = $components[0];
+            $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
+                    array('text'=>$name, 'icon'=>$icon),
+                    '/admin/component/edit/'.$c->componentClass.'?componentId='.$c->dbId), 'vps_component_root');
+
+        }
+    }
 }

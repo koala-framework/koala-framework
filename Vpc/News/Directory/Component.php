@@ -18,7 +18,7 @@ class Vpc_News_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
             'name' => trlVps('Feed')
         );
 
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Directory/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/Panel.js';
         $ret['enableExpireDate'] = false;
         $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';
         $ret['flags']['hasResources'] = true;
