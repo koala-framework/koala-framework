@@ -75,7 +75,11 @@ class Vps_Srpc_Server
             $result = call_user_func_array(array($handler, $method), $arguments);
             $result = serialize($result);
         } catch (Vps_Srpc_Exception $e) {
-            $result = serialize($e);
+            $result = @serialize($e);
+            if (!$result) {
+                $c = get_class($e);
+                $result = new $c($e->getMessage());
+            }
         }
 
         if (!$this->_returnResponse) {
