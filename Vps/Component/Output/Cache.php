@@ -32,7 +32,10 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
                 $methods = get_class_methods($componentClass);
                 if (in_array('getStaticCacheVars', $methods)) {
                     $vars = call_user_func(array($componentClass, 'getStaticCacheVars'));
-                    foreach ($vars as $id => $var) {
+                    foreach ($vars as $id => $m) {
+                        if ($m['model'] instanceof Vps_Model_Db) $m['model'] = get_class($m['model']->getTable());
+                        if ($m['model'] instanceof Vps_Model_Abstract) $m['model'] = get_class($m['model']);
+                        $vars[$id]['model'] = $m['model'];
                         $vars[$id]['component_class'] = $componentClass;
                         $vars[$id]['cache_id'] = null;
                         $vars[$id]['callback'] = null;
