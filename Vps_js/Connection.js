@@ -7,14 +7,18 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9\-]+(\/|\?|)/)) {
 
             if (options.mask) {
-                if (Vps.Connection.masks == 0) {
-                    if (Ext.get('loading')) {
-                        Ext.getBody().mask();
-                    } else {
-                        Ext.getBody().mask(trlVps('Loading...'));
+                if (options.mask instanceof Ext.Element) {
+                    options.mask.mask(options.maskText || trlVps('Loading...'));
+                } else {
+                    if (Vps.Connection.masks == 0) {
+                        if (Ext.get('loading')) {
+                            Ext.getBody().mask();
+                        } else {
+                            Ext.getBody().mask(options.maskText || trlVps('Loading...'));
+                        }
                     }
+                    Vps.Connection.masks++;
                 }
-                Vps.Connection.masks++;
             }
             options.vpsCallback = {
                 success: options.success,
@@ -194,11 +198,15 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         if (options.vpsLogin) return;
 
         if (options.mask) {
-            Vps.Connection.masks--;
-            if (Vps.Connection.masks == 0) {
-                Ext.getBody().unmask();
-                if (Ext.get('loading')) {
-                    Ext.get('loading').fadeOut({remove: true});
+            if (options.mask instanceof Ext.Element) {
+                options.mask.unmask();
+            } else {
+                Vps.Connection.masks--;
+                if (Vps.Connection.masks == 0) {
+                    Ext.getBody().unmask();
+                    if (Ext.get('loading')) {
+                        Ext.get('loading').fadeOut({remove: true});
+                    }
                 }
             }
         }
