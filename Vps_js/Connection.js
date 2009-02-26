@@ -1,4 +1,9 @@
 Vps.Connection = Ext.extend(Ext.data.Connection, {
+    /**
+     * Options:
+     * - mask (true für body, sonst element)
+     * - maskText (default Loading...)
+     */
     request: function(options)
     {
 
