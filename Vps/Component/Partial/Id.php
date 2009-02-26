@@ -4,8 +4,18 @@ class Vps_Component_Partial_Id extends
 {
     public function getIds()
     {
+        $ret = array();
+        $class = $this->getParam('class', false);
+        $paramName = $this->getParam('paramName', false);
         $component = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->getParam('componentId'));
-        return $component->getComponent()->getItemIds();
+        $count = null;
+        $offset = null;
+        if ($class && $paramName) {
+            $page = call_user_func(array($class, 'getCurrentPageByParam'), $paramName);
+            $count = Vpc_Abstract::getSetting($class, 'pagesize');
+            $offset = (($page - 1) * $count) + 1;
+        }
+        return $component->getComponent()->getItemIds($count, $offset);
     }
 
 }
