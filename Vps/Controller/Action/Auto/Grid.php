@@ -169,6 +169,11 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->_model = $model;
     }
 
+    protected function _getModel()
+    {
+        return $this->_model;
+    }
+
     protected function _getSelect()
     {
         $ret = $this->_model->select();
