@@ -49,12 +49,16 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function createRow(array $data=array())
     {
-        $proxyRow = $this->_proxyModel->createRow($data);
+        $proxyRow = $this->_proxyModel->createRow();
         $ret = new $this->_rowClass(array(
             'row' => $proxyRow,
             'model' => $this
         ));
         $this->_rows[$proxyRow->getInternalId()] = $ret;
+        $data = array_merge($this->_default, $data);
+        foreach ($data as $k=>$i) {
+            $ret->$k = $i;
+        }
         return $ret;
     }
 
