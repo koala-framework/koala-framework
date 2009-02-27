@@ -47,6 +47,11 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         ));
     }
 
+    public function deleteRows($where)
+    {
+        foreach ($this->getRows($where) as $row) $row->delete();
+    }
+
     private function _getDataKeys($where, $order, $limit, $start)
     {
         if (!is_object($where) || $where instanceof Vps_Model_Select_Expr_Interface) {
