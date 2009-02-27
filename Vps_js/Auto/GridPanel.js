@@ -896,6 +896,10 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
     //für AbstractPanel
     selectId: function(id) {
+        if (!this.getStore()) {
+            //TODO: wenn benötigt id merken und beim ersten laden row auswählen
+            return;
+        }
         if (id) {
             var r = this.getStore().getById(id);
             if (r) {
