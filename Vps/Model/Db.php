@@ -227,8 +227,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $quotedValue = $expr->getValue();
             $quotedValue = $this->_fixStupidQuoteBug($quotedValue);
             $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
+            $field = $this->_formatField($expr->getField(), $dbSelect);
         }
-        $field = $this->_formatField($expr->getField(), $dbSelect);
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
             return $field." = ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
