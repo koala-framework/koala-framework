@@ -11,7 +11,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_table = $this->getMock('Vps_Model_Db_Table',
-            array('select', '_setupMetadata', '_setupPrimaryKey', 'fetchAll'),
+            array('select', '_setupMetadata', '_setupPrimaryKey', 'fetchAll', 'delete'),
             array('db' => new Vps_Model_Db_TestAdapter()), '', true);
 
         $this->_dbSelect = $this->getMock('Vps_Db_Table_Select', array(), array($this->_table));
@@ -31,6 +31,52 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
         $this->_table->expects($this->once())
                   ->method('fetchAll');
         $this->_model->fetchAll();
+    }
+
+    public function testDelete()
+    {
+        $this->_table->expects($this->once())
+                  ->method('delete')
+                  ->with($this->equalTo(array()));
+        $this->_model->deleteRows(array());
+    }
+
+    public function testDeleteWhereEquals()
+    {
+        $this->_table->expects($this->once())
+            ->method('delete')
+            ->with($this->equalTo(array(
+                "(testtable.foo = 'bar')",
+                "(testtable.bar = 1)"
+            ))
+        );
+        $select = $this->_model->select()
+            ->whereEquals('foo', 'bar')
+            ->whereEquals('bar', 1);
+        $this->_model->deleteRows($select);
+    }
+
+    public function testDeleteWhereExpr()
+    {
+        $this->_table->expects($this->once())
+            ->method('delete')
+            ->with($this->equalTo(array(
+                "(testtable.foo > 1)"
+            ))
+        );
+        $select = $this->_model->select()->where(
+            new Vps_Model_Select_Expr_Higher('foo', 1)
+        );
+        $this->_model->deleteRows($select);
+    }
+
+    /**
+     * @expectedException Vps_Exception
+     */
+    public function testDeleteException()
+    {
+        $select = $this->_model->select()->join('foo');
+        $this->_model->deleteRows($select);
     }
 
     public function testSelectWhereEquals()

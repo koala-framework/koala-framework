@@ -153,6 +153,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
         $tablename = $this->_table->info('name');
         $dbSelect = $this->_table->select();
         $dbSelect->from($tablename);
+        $dbSelect = $this->_applySelect($dbSelect, $select);
+        return $dbSelect;
+    }
+
+    private function _applySelect($dbSelect, $select)
+    {
         if ($whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
             foreach ($whereEquals as $field=>$value) {
                 if (is_array($value)) {
@@ -208,29 +214,31 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($whereExpression = $select->getPart(Vps_Model_Select::WHERE_EXPRESSION)) {
             foreach ($whereExpression as $expr) {
                 $expr->validate();
-                $dbSelect->where($this->_createDbSelectExpression($expr));
+                $dbSelect->where($this->_createDbSelectExpression($expr, $dbSelect));
             }
         }
+
         return $dbSelect;
     }
 
-    private function _createDbSelectExpression($expr)
+    private function _createDbSelectExpression($expr, $dbSelect)
     {
         if ($expr instanceof Vps_Model_Select_Expr_CompareField_Abstract) {
             $quotedValue = $expr->getValue();
             $quotedValue = $this->_fixStupidQuoteBug($quotedValue);
             $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
         }
+        $field = $this->_formatField($expr->getField(), $dbSelect);
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
-            return $expr->getField()." = ".$quotedValue;
+            return $field." = ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
-            return $expr->getField()." IS NULL";
+            return $field." IS NULL";
         } else if ($expr instanceof Vps_Model_Select_Expr_Smaller
                 || $expr instanceof Vps_Model_Select_Expr_SmallerDate) {
-            return $expr->getField()." < ".$quotedValue;
+            return $field." < ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_Higher
                 || $expr instanceof Vps_Model_Select_Expr_HigherDate) {
-            return $expr->getField()." > ".$quotedValue;
+            return $field." > ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
             $v = $expr->getValue();
             $v = $this->_fixStupidQuoteBug($v);
@@ -242,21 +250,21 @@ class Vps_Model_Db extends Vps_Model_Abstract
                             substr($quotedValueContains, 2, strlen($quotedValueContains)-4),
                             substr($quotedValue, 1, strlen($quotedValue)-2),
                             $quotedValueContains);
-            return $expr->getField()." LIKE ".$quotedValue;
+            return $field." LIKE ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {
-            return "LEFT({$expr->getField()}, ".strlen($this->_fixStupidQuoteBug($expr->getValue())).") = ".$quotedValue;
+            return "LEFT($field, ".strlen($this->_fixStupidQuoteBug($expr->getValue())).") = ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_NOT) {
-            return "NOT (".$this->_createDbSelectExpression($expr->getExpression()).")";
+            return "NOT (".$this->_createDbSelectExpression($expr->getExpression(), $dbSelect).")";
         } else if ($expr instanceof Vps_Model_Select_Expr_Or) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {
-                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression).")";
+                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
             }
             return implode(" OR ", $sqlExpressions);
         } else if ($expr instanceof Vps_Model_Select_Expr_And) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {
-                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression).")";
+                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
             }
             return implode(" AND ", $sqlExpressions);
         }
@@ -298,6 +306,28 @@ class Vps_Model_Db extends Vps_Model_Abstract
             'rowClass' => $this->_rowClass,
             'model' => $this
         ));
+    }
+
+    public function deleteRows($where)
+    {
+        if (!is_object($where)) {
+            if (is_string($where)) $where = array($where);
+            $select = $this->select($where);
+        } else {
+            $select = $where;
+        }
+        if ($select->getPart(Vps_Model_Select::OTHER) ||
+            $select->getPart(Vps_Model_Select::LIMIT_COUNT) ||
+            $select->getPart(Vps_Model_Select::LIMIT_OFFSET))
+            throw new Vps_Exception('Select for delete must only contain where* parts');
+        $dbSelect = new Zend_Db_Select($this->getAdapter());
+        $dbSelect = $this->_applySelect($dbSelect, $select);
+        $where = array();
+        foreach ($dbSelect->getPart('where') as $part) {
+            if (substr($part, 0, 4) == 'AND ') $part = substr($part, 4);
+            $where[] = $part;
+        }
+        return $this->_table->delete($where);
     }
 
     private function _getDbSelect($where, $order, $limit, $start)

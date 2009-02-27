@@ -31,6 +31,21 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(count($model->find(3)), 0);
     }
 
+    public function testDeleteRows()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 'foo'),
+            array('id' => 2, 'value' => 'bar'),
+            ));
+        $model->deleteRows($model->select()->whereEquals('value', 'foo'));
+        $this->assertEquals(count($model->fetchAll()), 1);
+        $this->assertEquals(count($model->find(1)), 0);
+        $this->assertEquals($model->find(2)->current()->value, 'bar');
+        $model->deleteRows($model->select());
+        $this->assertEquals(count($model->fetchAll()), 0);
+    }
+
     public function testSelect()
     {
         $model = new Vps_Model_FnF();

@@ -38,5 +38,13 @@ class Vps_Model_DbWithConnection_DbSibling_Test extends PHPUnit_Framework_TestCa
         $this->assertEquals('xxy', $r->foo);
         $this->assertEquals(null, $r->bar);
         $this->assertEquals('xxz', $r->baz);
+
+        $r = $m->createRow();
+        $r->foo = 'toDelete';
+        $r->save();
+        $select = $m->select()->whereEquals('foo', 'toDelete');
+        $this->assertEquals(1, $m->countRows($select));
+        $m->deleteRows($select);
+        $this->assertEquals(0, $m->countRows($select));
     }
 }
