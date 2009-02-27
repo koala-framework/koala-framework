@@ -9,22 +9,23 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
 
         Vps.requestSentSinceLastKeepAlive = true;
         Vps.Connection.runningRequests++;
-        if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9\-]+(\/|\?|)/)) {
 
-            if (options.mask) {
-                if (options.mask instanceof Ext.Element) {
-                    options.mask.mask(options.maskText || trlVps('Loading...'));
-                } else {
-                    if (Vps.Connection.masks == 0) {
-                        if (Ext.get('loading')) {
-                            Ext.getBody().mask();
-                        } else {
-                            Ext.getBody().mask(options.maskText || trlVps('Loading...'));
-                        }
+        if (options.mask) {
+            if (options.mask instanceof Ext.Element) {
+                options.mask.mask(options.maskText || trlVps('Loading...'));
+            } else {
+                if (Vps.Connection.masks == 0) {
+                    if (Ext.get('loading')) {
+                        Ext.getBody().mask();
+                    } else {
+                        Ext.getBody().mask(options.maskText || trlVps('Loading...'));
                     }
-                    Vps.Connection.masks++;
                 }
+                Vps.Connection.masks++;
             }
+        }
+
+        if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9\-]+(\/|\?|)/)) {
             options.vpsCallback = {
                 success: options.success,
                 failure: options.failure,
