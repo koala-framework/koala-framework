@@ -13,7 +13,7 @@ class Vps_Component_Partial_Id extends
         if ($class && $paramName) {
             $page = call_user_func(array($class, 'getCurrentPageByParam'), $paramName);
             $count = Vpc_Abstract::getSetting($class, 'pagesize');
-            $offset = (($page - 1) * $count) + 1;
+            $offset = (($page - 1) * $count);
         }
         return $component->getComponent()->getItemIds($count, $offset);
     }
