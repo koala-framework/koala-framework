@@ -6,6 +6,8 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
 {
     checkDirty: true,
 
+    loadBindingsOnSelectionChange: true, //wenn false muss loadBindings() selbst aufgerufen werden
+
     initComponent: function() {
         this.activeId = null;
 
@@ -25,39 +27,27 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
         if (binds) {
             this.addBinding.apply(this, binds);
         }
-        this.on('selectionchange', function() {
-            var id = this.getSelectedId();
-            if (id) {
-                this.activeId = id;
+        if (this.loadBindingsOnSelectionChange) {
+            this.on('selectionchange', function() {
+                this.loadBindings();
+            }, this, {buffer: 500});
+            this.on('beforeselectionchange', function(id) {
+                var ret = true;
                 this.bindings.each(function(b) {
-                    b.item.enable();
-                    if (b.item.ownerCt instanceof Ext.TabPanel) {
-                        if (b.item.ownerCt.getActiveTab() != b.item) {
-                            //dieses binding überspringen, liegt in einem
-                            //tab der nicht aktiv ist
-                            return;
-                        }
+                    if (!b.item.mabySubmit({
+                        callback: function() {
+                            b.item.reset();
+                            this.selectId(id);
+                        },
+                        scope: this
+                    })) {
+                        ret = false;
+                        return false; //break each
                     }
-                    this._loadBinding(b);
-                }, this);
-            }
-        }, this, {buffer: 500});
-        this.on('beforeselectionchange', function(id) {
-            var ret = true;
-            this.bindings.each(function(b) {
-                if (!b.item.mabySubmit({
-                    callback: function() {
-                        b.item.reset();
-                        this.selectId(id);
-                    },
-                    scope: this
-                })) {
-                    ret = false;
-                    return false; //break each
-                }
-            }, this)
-            return ret;
-        }, this);
+                }, this)
+                return ret;
+            }, this);
+        }
 
         if (this.baseParams) {
             this.setBaseParams(this.baseParams); //damit baseParams in applyBaseParams modifiziert werden können
@@ -67,6 +57,28 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
         }
 
         Vps.Binding.AbstractPanel.superclass.initComponent.call(this);
+    },
+
+    /**
+     * Lädt alle Bindings, wird normalerweise im selectionchange event aufgerufen
+     */
+    loadBindings: function(id)
+    {
+        if (!id) id = this.getSelectedId();
+        if (id) {
+            this.activeId = id;
+            this.bindings.each(function(b) {
+                b.item.enable();
+                if (b.item.ownerCt instanceof Ext.TabPanel) {
+                    if (b.item.ownerCt.getActiveTab() != b.item) {
+                        //dieses binding überspringen, liegt in einem
+                        //tab der nicht aktiv ist
+                        return;
+                    }
+                }
+                this._loadBinding(b);
+            }, this);
+        }
     },
 
     //private
