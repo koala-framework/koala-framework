@@ -50,11 +50,15 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     public function createRow(array $data=array())
     {
-        $data = array_merge($this->_default, $data);
-        return new $this->_rowClass(array(
-            'row' => $this->_table->createRow($data),
+        $ret = new $this->_rowClass(array(
+            'row' => $this->_table->createRow(),
             'model' => $this
         ));
+        $data = array_merge($this->_default, $data);
+        foreach ($data as $k=>$i) {
+            $ret->$k = $i;
+        }
+        return $ret;
     }
 
     public function afterInsert($row)
