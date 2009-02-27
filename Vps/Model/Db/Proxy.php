@@ -25,11 +25,4 @@ class Vps_Model_Db_Proxy extends Vps_Model_Proxy
         }
         parent::__construct($config);
     }
-
-    protected function _init()
-    {
-        parent::_init();
-        $this->_proxyModel->setDefault($this->_default);
-    }
-
 }
