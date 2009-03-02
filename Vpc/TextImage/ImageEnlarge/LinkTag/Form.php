@@ -4,6 +4,6 @@ class Vpc_TextImage_ImageEnlarge_LinkTag_Form extends Vpc_Basic_LinkTag_Form
     protected function _init()
     {
         parent::_init();
-        $this->fields['component']->setHideLabel(true);
+        $this->fields->first()->setHideLabel(true);
     }
 }
