@@ -445,10 +445,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 throw new Vps_Exception("Select object may not be used when using SQL-Export");
             }
             $systemData = $this->_getSystemData();
-            $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false --no-create-info=true $systemData[mysqlOptions] $systemData[tableName] | gzip";
+            $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false --no-create-info=true "
+                ."$systemData[mysqlOptions] $systemData[tableName] | gzip -c";
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL export failed");
-            return implode('', $output);
+            return implode("\n", $output);
         } else {
             return parent::export($format, $select);
         }
@@ -459,6 +460,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($format == self::FORMAT_SQL) {
             $filename = tempnam('/tmp', 'modelimport');
             file_put_contents($filename, $data);
+
             $systemData = $this->_getSystemData();
             $cmd = "gunzip -c $filename | {$systemData['mysqlDir']}mysql $systemData[mysqlOptions]";
             exec($cmd, $output, $ret);
@@ -473,9 +475,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
     {
         $ret = array();
 
-        $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
-        $dbConfig = $dbConfig->web;
-        $ret['mysqlOptions'] = "--host={$dbConfig->host} --user={$dbConfig->username} --password={$dbConfig->password} {$dbConfig->dbname} ";
+        $dbConfig = Zend_Registry::get('db')->getConfig();
+        $ret['mysqlOptions'] = "--host={$dbConfig['host']} --user={$dbConfig['username']} --password={$dbConfig['password']} {$dbConfig['dbname']} ";
         $config = Zend_Registry::get('config');
 
         $ret['mysqlDir'] = '';
