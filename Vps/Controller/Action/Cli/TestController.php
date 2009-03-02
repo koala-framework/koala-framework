@@ -68,15 +68,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         Zend_Registry::get('config')->hasIndex = false; //zwischenlösung bis index auf models umgestellt wurde und auch getestet werden muss
         Zend_Registry::get('config')->debug->errormail = false;
 
-        $db = Zend_Db::factory('PDO_MYSQL', array(
-            'host'=>'vivid',
-            'username'=>'test',
-            'password'=>'test',
-            'dbname'=>'test'
-        ));
-        $db->query('SET names UTF8');
-        $db->query("SET lc_time_names = '".trlVps('en_US')."'");
-        Zend_Registry::set('db', $db);
+        Zend_Registry::set('db', Vps_Test::getTestDb());
 
         set_time_limit(0);
         Vps_Benchmark::disable();

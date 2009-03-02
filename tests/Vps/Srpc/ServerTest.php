@@ -17,9 +17,9 @@ class Vps_Srpc_ServerTest extends PHPUnit_Framework_TestCase
         $srv = new Vps_Srpc_Server(array('returnResponse' => true));
         $response = $srv->handle();
 
-        $exception = @unserialize($response);
-        if (!$exception) {
-            $exception = $this->_matchSrpcServerException($response);
+        $exception = unserialize($response);
+        if ($exception instanceof Vps_Exception_Serialized) {
+            $exception = $exception->getException();
         }
         $this->assertTrue($exception instanceof Vps_Srpc_Exception);
     }
@@ -31,9 +31,9 @@ class Vps_Srpc_ServerTest extends PHPUnit_Framework_TestCase
             'returnResponse' => true
         ));
         $response = $srv->handle(null, array(3));
-        $exception = @unserialize($response);
-        if (!$exception) {
-            $exception = $this->_matchSrpcServerException($response);
+        $exception = unserialize($response);
+        if ($exception instanceof Vps_Exception_Serialized) {
+            $exception = $exception->getException();
         }
         $this->assertTrue($exception instanceof Vps_Srpc_Exception);
     }
