@@ -1,6 +1,4 @@
-
-Ext.onReady(function()
-{
+Vps.onContentReady(function() {
     var galleries = Ext.query('div.vpcCompositeImagesEnlarge');
     Ext.each(galleries, function(gallery) {
         var galleryEls = [ ];
