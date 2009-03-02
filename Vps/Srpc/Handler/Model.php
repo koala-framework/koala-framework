@@ -93,4 +93,19 @@ class Vps_Srpc_Handler_Model
         $row->delete();
         return true;
     }
+
+    public function deleteRows($where)
+    {
+        return $this->getModel()->deleteRows($where);
+    }
+
+    public function export($format, $select = array())
+    {
+        return $this->getModel()->export($format, $select);
+    }
+
+    public function import($format, $data)
+    {
+        return $this->getModel()->import($format, $data);
+    }
 }
