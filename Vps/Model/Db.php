@@ -227,6 +227,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $quotedValue = $expr->getValue();
             $quotedValue = $this->_fixStupidQuoteBug($quotedValue);
             $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
+        }
+        if ($expr instanceof Vps_Model_Select_Expr_CompareField_Abstract ||
+            $expr instanceof Vps_Model_Select_Expr_IsNull
+        ) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
         }
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
@@ -239,17 +243,19 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else if ($expr instanceof Vps_Model_Select_Expr_Higher
                 || $expr instanceof Vps_Model_Select_Expr_HigherDate) {
             return $field." > ".$quotedValue;
-        } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
-            $v = $expr->getValue();
-            $v = $this->_fixStupidQuoteBug($v);
-            $quotedValueContains = $this->_table->getAdapter()->quote('%'.$v.'%');
-
-            $quotedValue = str_replace("%", "\\%", $quotedValue);
+        } else if ($expr instanceof Vps_Model_Select_Expr_Like) {
             $quotedValue = str_replace("_", "\\_", $quotedValue);
-            $quotedValue = str_replace(
-                            substr($quotedValueContains, 2, strlen($quotedValueContains)-4),
-                            substr($quotedValue, 1, strlen($quotedValue)-2),
-                            $quotedValueContains);
+            if ($expr instanceof Vps_Model_Select_Expr_Contains) {
+                $v = $expr->getValue();
+                $v = $this->_fixStupidQuoteBug($v);
+                $quotedValueContains = $this->_table->getAdapter()->quote('%'.$v.'%');
+
+                $quotedValue = str_replace("%", "\\%", $quotedValue);
+                $quotedValue = str_replace(
+                                substr($quotedValueContains, 2, strlen($quotedValueContains)-4),
+                                substr($quotedValue, 1, strlen($quotedValue)-2),
+                                $quotedValueContains);
+            }
             return $field." LIKE ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {
             return "LEFT($field, ".strlen($this->_fixStupidQuoteBug($expr->getValue())).") = ".$quotedValue;

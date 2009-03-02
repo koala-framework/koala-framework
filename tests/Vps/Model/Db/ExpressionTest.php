@@ -22,87 +22,100 @@ class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
     public function testExprNull()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_IsNull('foo'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo IS NULL)",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo IS NULL)",
             $this->_model->createDbSelect($select)->__toString());
     }
 
     public function testExprEquals()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Equals('foo', 'aaa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo = 'aaa')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo = 'aaa')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
     public function testExprEqualsEscaping()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Equals('foo', 'a\'aa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo = 'a\'aa')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo = 'a\'aa')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
     public function testExprSmaller()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Smaller('foo', 'aaa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo < 'aaa')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo < 'aaa')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
     public function testExprHigher()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Higher('foo', 'aaa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo > 'aaa')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo > 'aaa')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
     public function testExprContains()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Contains('foo', 'aaa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo LIKE '%aaa%')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE '%aaa%')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
     public function testExprContainsEscaping()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Contains('foo', 'a%aa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo LIKE '%a\%aa%')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE '%a\%aa%')",
         $this->_model->createDbSelect($select)->__toString());
 
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Contains('foo', 'a\'aa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo LIKE '%a\'aa%')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE '%a\'aa%')",
             $this->_model->createDbSelect($select)->__toString());
 
-
-
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Contains('foo', 'a_aa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo LIKE '%a\_aa%')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE '%a\_aa%')",
+            $this->_model->createDbSelect($select)->__toString());
+    }
+
+    public function testExprLike()
+    {
+        $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Like('foo', 'aaa'));
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE 'aaa')",
+            $this->_model->createDbSelect($select)->__toString());
+
+        $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Like('foo', 'aa%a'));
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE 'aa%a')",
+            $this->_model->createDbSelect($select)->__toString());
+
+        $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Like('foo', '%a_aa'));
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo LIKE '%a\_aa')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
     public function testExprStartsWith()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_StartsWith('foo', 'aaa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (LEFT(foo, 3) = 'aaa')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (LEFT(testtable.foo, 3) = 'aaa')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
     public function testExprStartsWithEscaping()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_StartsWith('foo', 'a\'aa'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (LEFT(foo, 4) = 'a\'aa')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (LEFT(testtable.foo, 4) = 'a\'aa')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
     public function testExprSmallerDate()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_SmallerDate('foo', '2008-06-06'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo < '2008-06-06')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo < '2008-06-06')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
     public function testExprHigherDate()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_HigherDate('foo', '2008-06-06'));
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (foo > '2008-06-06')",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo > '2008-06-06')",
             $this->_model->createDbSelect($select)->__toString());
     }
 
@@ -114,7 +127,7 @@ class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
 
         ));
         $select = $this->_model->select()->where($expr);
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE ((foo = 'aaa') OR (foo = 'bbb'))",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE ((testtable.foo = 'aaa') OR (testtable.foo = 'bbb'))",
             $this->_model->createDbSelect($select)->__toString());
     }
 
@@ -126,7 +139,7 @@ class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
 
         ));
         $select = $this->_model->select()->where($expr);
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE ((foo = 'aaa') AND (foo = 'bbb'))",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE ((testtable.foo = 'aaa') AND (testtable.foo = 'bbb'))",
             $this->_model->createDbSelect($select)->__toString());
     }
 
@@ -134,7 +147,7 @@ class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
     {
         $expr = new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_Equals('foo', 'aaa'));
         $select = $this->_model->select()->where($expr);
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (NOT (foo = 'aaa'))",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (NOT (testtable.foo = 'aaa'))",
             $this->_model->createDbSelect($select)->__toString());
     }
 
@@ -162,8 +175,8 @@ class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
         $expr4 = new Vps_Model_Select_Expr_Or(array($expr, $expr2, $expr3));
 
         $select = $this->_model->select()->where($expr4);
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (((foo = 'aaa') AND ".
-         "(foo = 'bbb')) OR ((foo = 'aaa') OR (foo = 'bbb')) OR (NOT (foo = 'aaa')))",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (((testtable.foo = 'aaa') AND ".
+         "(testtable.foo = 'bbb')) OR ((testtable.foo = 'aaa') OR (testtable.foo = 'bbb')) OR (NOT (testtable.foo = 'aaa')))",
             $this->_model->createDbSelect($select)->__toString());
 
     }
