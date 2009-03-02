@@ -85,7 +85,7 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
 
     public function setInternalSave($v)
     {
-        $this->setProperty('save', $v);
+        $this->setProperty('internalSave', $v);
         foreach ($this as $f) {
             $f->setInternalSave($v);
         }
