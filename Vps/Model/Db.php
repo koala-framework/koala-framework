@@ -445,11 +445,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 throw new Vps_Exception("Select object may not be used when using SQL-Export");
             }
             $systemData = $this->_getSystemData();
+            $filename = tempnam('/tmp', 'modelimport');
             $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false --no-create-info=true "
-                ."$systemData[mysqlOptions] $systemData[tableName] | gzip -c";
+                ."$systemData[mysqlOptions] $systemData[tableName] | gzip -c > $filename";
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL export failed");
-            return implode("\n", $output);
+            $ret = file_get_contents($filename);
+            unlink($filename);
+            return $ret;
         } else {
             return parent::export($format, $select);
         }
@@ -462,7 +465,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             file_put_contents($filename, $data);
 
             $systemData = $this->_getSystemData();
-            $cmd = "gunzip -c $filename | {$systemData['mysqlDir']}mysql $systemData[mysqlOptions]";
+            $cmd = "gunzip -c $filename | {$systemData['mysqlDir']}mysql $systemData[mysqlOptions] 2>&1";
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL import failed");
             unlink($filename);
