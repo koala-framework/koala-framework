@@ -69,8 +69,8 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
             this.activeId = id;
             this.bindings.each(function(b) {
                 b.item.enable();
-                if (b.item.ownerCt instanceof Ext.TabPanel) {
-                    if (b.item.ownerCt.getActiveTab() != b.item) {
+                if (b.item.ownerCt && b.item.ownerCt.getLayout && b.item.ownerCt.getLayout() instanceof Ext.layout.CardLayout) {
+                    if (b.item.ownerCt.getLayout().activeItem != b.item) {
                         //dieses binding überspringen, liegt in einem
                         //tab der nicht aktiv ist
                         return;
@@ -130,8 +130,8 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
                     //die anderen auch neu laden
                     this.bindings.each(function(b) {
                         b.item.enable();
-                        if (b.item.ownerCt instanceof Ext.TabPanel) {
-                            if (b.item.ownerCt.getActiveTab() != b.item) {
+                        if (b.item.ownerCt && b.item.ownerCt.getLayout && b.item.ownerCt.getLayout() instanceof Ext.layout.CardLayout) {
+                            if (b.item.ownerCt.getLayout().activeItem != b.item) {
                                 //dieses binding überspringen, liegt in einem
                                 //tab der nicht aktiv ist
                                 return;
