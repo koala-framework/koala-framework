@@ -1,6 +1,19 @@
 <?php
 class Vps_Test
 {
+    public static function getTestDb()
+    {
+        $db = Zend_Db::factory('PDO_MYSQL', array(
+            'host'=>'vivid',
+            'username'=>'test',
+            'password'=>'test',
+            'dbname'=>'test'
+        ));
+        $db->query('SET names UTF8');
+        $db->query("SET lc_time_names = '".trlVps('en_US')."'");
+        return $db;
+    }
+
     public static function setup()
     {
         $include_path  = get_include_path();

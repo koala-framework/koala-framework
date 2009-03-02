@@ -5,9 +5,61 @@
  */
 class Vps_Model_DbWithConnection_ImportExport_Test extends PHPUnit_Framework_TestCase
 {
+    private $_model;
+    private $_tableName;
+
+    public function setUp()
+    {
+        $this->_tableName = 'dbexport'.uniqid();
+
+        $this->_model = new Vps_Model_DbWithConnection_ImportExport_Model(array(
+            "table" => $this->_tableName
+        ));
+        $this->_model->writeInitRows();
+    }
+
+    public function tearDown()
+    {
+        $this->_model->dropTable();
+    }
+
+    public function testServiceFormatSql()
+    {
+        $d = Zend_Registry::get('testDomain');
+
+        $client = new Vps_Srpc_Client(array(
+            'serverUrl' => "http://$d/vps/test/vps_model_db-with-connection_import-export_test/export",
+            'extraParams' => array('table' => $this->_tableName)
+        ));
+        $model = new Vps_Model_Service(array('client' => $client));
+
+        $r = $model->getRow(1);
+        $this->assertEquals(1, $r->id);
+        $this->assertEquals('aaabbbccc', $r->foo);
+
+        $data = $model->export(Vps_Model_Interface::FORMAT_SQL);
+
+        $model->deleteRows(array());
+        $r = $model->getRow(1);
+        $this->assertEquals(null, $r);
+
+        $model->import(Vps_Model_Interface::FORMAT_SQL, $data);
+
+        $r = $model->getRow(1);
+        $this->assertEquals(1, $r->id);
+        $this->assertEquals('aaabbbccc', $r->foo);
+        $this->assertEquals('abcd', $r->bar);
+        $r = $model->getRow(2);
+        $this->assertEquals(2, $r->id);
+        $this->assertEquals('bam', $r->foo);
+        $this->assertEquals('bum', $r->bar);
+    }
+
     public function testFormatSql()
     {
-        $ex = new Vps_Model_DbWithConnection_DbSibling_ExportModel();
+        $ex = new Vps_Model_DbWithConnection_ImportExport_Model(array(
+            "table" => $this->_tableName
+        ));
         $data = $ex->export(Vps_Model_Interface::FORMAT_SQL);
 
         // zweimal das export hernehmen, da die tabelle ja gleich heißen muss
@@ -34,7 +86,9 @@ class Vps_Model_DbWithConnection_ImportExport_Test extends PHPUnit_Framework_Tes
 
     public function testFormatArray()
     {
-        $ex = new Vps_Model_DbWithConnection_DbSibling_ExportModel();
+        $ex = new Vps_Model_DbWithConnection_ImportExport_Model(array(
+            "table" => $this->_tableName
+        ));
         $data = $ex->export(Vps_Model_Interface::FORMAT_ARRAY, new Vps_Model_Select());
 
         $check = array(
@@ -43,7 +97,10 @@ class Vps_Model_DbWithConnection_ImportExport_Test extends PHPUnit_Framework_Tes
         );
         $this->assertEquals($check, $data);
 
-        $im = new Vps_Model_DbWithConnection_DbSibling_ImportModel();
+        $im = new Vps_Model_DbWithConnection_ImportExport_Model(array(
+            "table" => $this->_tableName
+        ));
+        $im->deleteRows(array());
         $r = $im->getRow(1);
         $this->assertEquals(null, $r);
 

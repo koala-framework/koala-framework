@@ -467,7 +467,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $systemData = $this->_getSystemData();
             $cmd = "gunzip -c $filename | {$systemData['mysqlDir']}mysql $systemData[mysqlOptions] 2>&1";
             exec($cmd, $output, $ret);
-            if ($ret != 0) throw new Vps_Exception("SQL import failed");
+            if ($ret != 0) throw new Vps_Exception("SQL import failed: ".implode("\n", $output));
             unlink($filename);
         } else {
             parent::import($format, $data);

@@ -68,11 +68,12 @@ class Vps_Srpc_Client
         }
 
         // result könnte eine Exception sein, wenn ja wird sie weitergeschmissen
-        if ($result instanceof Exception) {
+        if ($result instanceof Vps_Exception_Serialized) {
+            throw $result->getException();
+        } else if ($result instanceof Exception) {
             throw $result;
         }
 
         return $result;
     }
 }
-

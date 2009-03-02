@@ -14,10 +14,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
 
         if (Vps_Registry::get('config')->application->id != 'service') {
-            if (file_exists('/www/public/vps-projekte/service')) {
-                echo "\nservice importieren:\n\n";
-                system("cd /www/public/vps-projekte/service && php bootstrap.php import");
-            }
+            $this->_copyServiceUsers();
         }
 
         $server = $this->_getParam('server');
@@ -94,6 +91,62 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         $this->_helper->viewRenderer->setNoRender(true);
     }
+
+    private function _copyServiceUsers()
+    {
+        // copy users table
+        $targetUrl = $this->_getConfig('web')->service->usersAll->url;
+        $sourceConfig = $this->_getConfig('production');
+        $sourceUrl = $sourceConfig->service->usersAll->url;
+        if ($targetUrl == $sourceUrl) return;
+
+        $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl));
+        $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl));
+
+        echo "\n*** Service: source=$sourceUrl target=$targetUrl\n";
+        echo "Service: Kopiere 'users' tabelle...\n";
+
+        $targetModel->deleteRows(array());
+        $targetModel->import(
+            Vps_Model_Interface::FORMAT_SQL,
+            $sourceModel->export(Vps_Model_Interface::FORMAT_SQL)
+        );
+
+        // copy users_to_web
+        $targetUrl = Vps_Registry::get('config')->service->usersRelation->url;
+        $sourceConfig = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
+        $sourceUrl = $sourceConfig->service->usersRelation->url;
+        if ($targetUrl == $sourceUrl) return;
+
+        $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl));
+        $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl));
+
+        echo "Service: Lösche Benutzerzuweisungen zu diesem Web...\n";
+        $importSelect = new Vps_Model_Select();
+        $importSelect->whereEquals('web_id', Vps_Registry::get('config')->application->id);
+        $targetModel->deleteRows($importSelect);
+
+        echo "Service: Füge Produktiv-Benutzerzuweisungen hinzu...\n";
+        $targetModel->import(
+            Vps_Model_Interface::FORMAT_ARRAY,
+            $sourceModel->export(Vps_Model_Interface::FORMAT_ARRAY, $importSelect)
+        );
+    }
+
+    private function _getConfig($type = 'web')
+    {
+        if ($type == 'web') {
+            return Vps_Registry::get('config');
+        } else if ($type == 'production') {
+            $webConfig = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
+            $vpsConfig = new Zend_Config_Ini(VPS_PATH.'/config.ini', $this->_getParam('server'),
+                            array('allowModifications'=>true));
+            $vpsConfig->merge($webConfig);
+            return $vpsConfig;
+        }
+        return null;
+    }
+
     private function _systemSshVps($cmd, $dir = null)
     {
         if (!$dir) $dir = $this->_sshDir;
