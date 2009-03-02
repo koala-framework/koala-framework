@@ -58,6 +58,14 @@
     </ul>
     <? } ?>
 
+    
+    <ul class="similarProducts">
+        <li><h2><?=trlVps('This entry is classified in:');?></h2></li>
+        <? foreach ($this->nodes as $n) { ?>
+            <li><?=$this->componentLink($n)?></li>
+        <? } ?>
+    </ul>
+
 </div>
 
 

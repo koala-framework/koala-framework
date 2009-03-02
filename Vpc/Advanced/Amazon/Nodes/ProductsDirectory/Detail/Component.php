@@ -27,6 +27,18 @@ class Vpc_Advanced_Amazon_Nodes_ProductsDirectory_Detail_Component extends Vpc_A
                 }
             }
         }
+
+        $ret['nodes'] = array();
+        $nodes = $ret['product']->getChildRows('ProductsToNodes');
+        foreach ($nodes as $node) {
+            $s = new Vps_Component_Select();
+            $s->whereEquals('node_id', $node->node_id);
+            $s->whereGenerator('detail');
+            $node = $this->getData()->parent->parent->getChildComponent($s);
+            if ($node) {
+                $ret['nodes'][] = $node;
+            }
+        }
         return $ret;
     }
 
