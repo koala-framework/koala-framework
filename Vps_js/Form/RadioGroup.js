@@ -1,5 +1,6 @@
 Vps.Form.RadioGroup = Ext.extend(Ext.form.RadioGroup, {
     initComponent: function() {
+        this.addEvents('changevalue');
         Vps.Form.RadioGroup.superclass.initComponent.call(this);
     },
     afterRender: function() {
@@ -11,6 +12,7 @@ Vps.Form.RadioGroup = Ext.extend(Ext.form.RadioGroup, {
             c.on('check', function(field, newValue, oldValue) {
                 if (field.getValue()) {
                     this.fireEvent('change', this, field.inputValue, 'TODO');
+                    this.fireEvent('changevalue', field.inputValue);
                 }
             }, this);
         }, this);
@@ -41,6 +43,7 @@ Vps.Form.RadioGroup = Ext.extend(Ext.form.RadioGroup, {
                 }
             }, this);
         }
+        this.fireEvent('changevalue', v);
     }
 });
 Ext.reg('radiogroup', Vps.Form.RadioGroup);
