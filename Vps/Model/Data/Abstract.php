@@ -183,7 +183,6 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     private function _matchSelect($data, $select)
     {
-
         foreach ($data as &$d) {
             if (!is_null($d)) $d = (string)$d;
         }
@@ -270,6 +269,19 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             if (!(isset($data[$expr->getField()]) && $data[$expr->getField()] && strpos(strtolower($data[$expr->getField()]), strtolower($expr->getValue())) !== false )) {
                 return false;
             }
+        } else if ($expr instanceof Vps_Model_Select_Expr_Like) {
+            if (isset($data[$expr->getField()])) {
+                $value = $data[$expr->getField()];
+                $reg = $expr->getValue();
+                $partsToEscape = array('\\', '(', ')', '_', '*', '.', '^', '$');
+                foreach ($partsToEscape as $part) {
+                    $reg = str_replace($part, '\\' . $part, $reg);
+                }
+                $reg = str_replace('%', '(.*)', $reg);
+                $reg = "^$reg$";
+                return eregi($reg, $value);
+            }
+            return false;
         } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {
             if (!(isset($data[$expr->getField()]) && $data[$expr->getField()] && substr($data[$expr->getField()], 0, strlen($expr->getValue()))==$expr->getValue())) {
                 return false;

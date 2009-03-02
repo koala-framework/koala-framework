@@ -170,9 +170,40 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         $containsExpression = new Vps_Model_Select_Expr_Contains('value', 'n');
         $select = $model->select();
         $select->where($containsExpression);
-        $rows = $model->getRows($select);	
+        $rows = $model->getRows($select);
         $count = $rows->count();
         $this->assertEquals(4, $count);
+    }
+
+    public function testExprLike()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 'aaa'),
+            array('id' => 2, 'value' => 'aba'),
+            array('id' => 3, 'value' => 'caa'),
+            array('id' => 3, 'value' => 'aaa_1'),
+        ));
+
+        $rows = $model->getRows($model->select()->where(
+            new Vps_Model_Select_Expr_Like('value', 'a%')
+        ));
+        $this->assertEquals(3, $rows->count());
+
+        $rows = $model->getRows($model->select()->where(
+            new Vps_Model_Select_Expr_Like('value', 'a%_%')
+        ));
+        $this->assertEquals(1, $rows->count());
+
+        $rows = $model->getRows($model->select()->where(
+            new Vps_Model_Select_Expr_Like('value', '%c%')
+        ));
+        $this->assertEquals(1, $rows->count());
+
+        $rows = $model->getRows($model->select()->where(
+            new Vps_Model_Select_Expr_Like('value', '%f%')
+        ));
+        $this->assertEquals(0, $rows->count());
     }
 
     public function testExprExtraBig()
