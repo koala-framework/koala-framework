@@ -11,14 +11,33 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         $this->setXtype('vps.cards');
         $this->setLayout('form');
 
-        $this->_combobox = $this->fields->add(new Vps_Form_Field_Select($name, $fieldLabel))
-            ->setWidth(150)
+        $this->_combobox = new Vps_Form_Field_Select($name, $fieldLabel);
+        $this->_combobox->setWidth(150)
             ->setListWidth(150);
+    }
+
+    public function hasChildren()
+    {
+        return true;
+    }
+
+    public function getChildren()
+    {
+        $ret = array($this->_combobox);
+        $ret = array_merge($ret, parent::getChildren()->getArray());
+        return $ret;
     }
 
     public function getCombobox()
     {
         return $this->_combobox;
+    }
+
+    //um zB die combobox durch radios zu ersetzen
+    public function setCombobox($box)
+    {
+        $this->_combobox = $box;
+        return $this;
     }
 
     public function setFieldLabel($value)
@@ -39,14 +58,13 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
 
         $comboboxData = array();
         foreach ($this->fields as $card) {
-            if ($card != $this->_combobox) {
+            if ($card instanceof Vps_Form_Container_Card) {
                 $comboboxData[$card->getName()] = $card->getTitle();
             }
         }
         $this->_combobox->setValues($comboboxData);
 
         $cardItems = $this->fields->getMetaData();
-        unset($cardItems[0]); //die combobox
         $cardItems = array_values($cardItems);
         foreach ($cardItems as $k => $v) {
             unset($cardItems[$k]['title']);
