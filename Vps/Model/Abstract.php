@@ -267,8 +267,29 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $this->_toStringField;
     }
 
+    public function export($format, $select = array())
+    {
+        if ($format == self::FORMAT_ARRAY) {
+            return $this->getRows($select)->toArray();
+        } else {
+            throw new Vps_Exception_NotYetImplemented();
+        }
+    }
+
+    public function import($format, $data)
+    {
+        if ($format == self::FORMAT_ARRAY) {
+            foreach ($data as $k => $v) {
+                $this->createRow($v)->save();
+            }
+        } else {
+            throw new Vps_Exception_NotYetImplemented();
+        }
+    }
+
     public function deleteRows($where)
     {
         throw new Vps_Exception('not implemented yet.');
     }
+
 }

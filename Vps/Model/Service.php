@@ -150,4 +150,19 @@ class Vps_Model_Service extends Vps_Model_Abstract
         }
     }
 
+    public function deleteRows($where)
+    {
+        return $this->_client->deleteRows($where);
+    }
+
+    public function export($format, $select = array())
+    {
+        return $this->_client->export($format, $select);
+    }
+
+    public function import($format, $data)
+    {
+        $this->_client->import($format, $data);
+    }
+
 }

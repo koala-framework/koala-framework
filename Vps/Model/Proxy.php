@@ -135,4 +135,19 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
             throw new Vps_Exception("no unique identifier set");
         }
     }
+
+    public function deleteRows($where)
+    {
+        return $this->_proxyModel->deleteRows($where);
+    }
+
+    public function export($format, $select = array())
+    {
+        return $this->_proxyModel->export($format, $select);
+    }
+
+    public function import($format, $data)
+    {
+        $this->_proxyModel->import($format, $data);
+    }
 }

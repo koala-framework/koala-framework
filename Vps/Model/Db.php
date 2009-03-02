@@ -436,4 +436,55 @@ class Vps_Model_Db extends Vps_Model_Abstract
     public function getUniqueIdentifier() {
         return $this->_table->info(Zend_Db_Table_Abstract::NAME);
     }
+
+
+    public function export($format, $select = array())
+    {
+        if ($format == self::FORMAT_SQL) {
+            if ($select) {
+                throw new Vps_Exception("Select object may not be used when using SQL-Export");
+            }
+            $systemData = $this->_getSystemData();
+            $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false --no-create-info=true $systemData[mysqlOptions] $systemData[tableName] | gzip";
+            exec($cmd, $output, $ret);
+            if ($ret != 0) throw new Vps_Exception("SQL export failed");
+            return implode('', $output);
+        } else {
+            return parent::export($format, $select);
+        }
+    }
+
+    public function import($format, $data)
+    {
+        if ($format == self::FORMAT_SQL) {
+            $filename = tempnam('/tmp', 'modelimport');
+            file_put_contents($filename, $data);
+            $systemData = $this->_getSystemData();
+            $cmd = "gunzip -c $filename | {$systemData['mysqlDir']}mysql $systemData[mysqlOptions]";
+            exec($cmd, $output, $ret);
+            if ($ret != 0) throw new Vps_Exception("SQL import failed");
+            unlink($filename);
+        } else {
+            parent::import($format, $data);
+        }
+    }
+
+    private function _getSystemData()
+    {
+        $ret = array();
+
+        $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
+        $dbConfig = $dbConfig->web;
+        $ret['mysqlOptions'] = "--host={$dbConfig->host} --user={$dbConfig->username} --password={$dbConfig->password} {$dbConfig->dbname} ";
+        $config = Zend_Registry::get('config');
+
+        $ret['mysqlDir'] = '';
+        if ($config->server->host == 'vivid-planet.com') {
+            $ret['mysqlDir'] = '/usr/local/mysql/bin/';
+        }
+        $ret['tableName'] = $this->getTable()->info(Zend_Db_Table_Abstract::NAME);
+
+        return $ret;
+    }
+
 }

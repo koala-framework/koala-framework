@@ -1,6 +1,9 @@
 <?php
 interface Vps_Model_Interface
 {
+    const FORMAT_SQL = 'sql';
+    const FORMAT_ARRAY = 'array';
+
     public function createRow(array $data=array());
     public function getPrimaryKey();
     public function isEqual(Vps_Model_Interface $other);
@@ -17,6 +20,10 @@ interface Vps_Model_Interface
     public function getRow($id);
     public function getRows($where=null, $order=null, $limit=null, $start=null);
     public function countRows($where = array());
+
+    public function export($format, $select = array());
+    public function import($format, $data);
+
     public function deleteRows($where);
 
     //deprecated
