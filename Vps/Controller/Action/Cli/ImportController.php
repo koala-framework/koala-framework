@@ -113,8 +113,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         );
 
         // copy users_to_web
-        $targetUrl = Vps_Registry::get('config')->service->usersRelation->url;
-        $sourceConfig = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
+        $targetUrl = $this->_getConfig('web')->service->usersRelation->url;
+        $sourceConfig = $this->_getConfig('production');
         $sourceUrl = $sourceConfig->service->usersRelation->url;
         if ($targetUrl == $sourceUrl) return;
 
