@@ -164,7 +164,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         $tablename = $this->getTableName();
         $dbSelect = $this->_table->select();
         $dbSelect->from($tablename);
-        $dbSelect = $this->_applySelect($dbSelect, $select);
+        $this->_applySelect($dbSelect, $select);
         return $dbSelect;
     }
 
@@ -228,8 +228,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $dbSelect->where($this->_createDbSelectExpression($expr, $dbSelect));
             }
         }
-
-        return $dbSelect;
     }
 
     private function _createDbSelectExpression($expr, $dbSelect)
@@ -338,7 +336,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $select->getPart(Vps_Model_Select::LIMIT_OFFSET))
             throw new Vps_Exception('Select for delete must only contain where* parts');
         $dbSelect = new Zend_Db_Select($this->getAdapter());
-        $dbSelect = $this->_applySelect($dbSelect, $select);
+        $this->_applySelect($dbSelect, $select);
         $where = array();
         foreach ($dbSelect->getPart('where') as $part) {
             if (substr($part, 0, 4) == 'AND ') $part = substr($part, 4);
@@ -468,6 +466,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $ret = file_get_contents($filename);
             unlink($filename);
             return $ret;
+        } else if ($format == self::FORMAT_ARRAY) {
+            if (!is_object($select)) {
+                if (is_string($select)) $where = array($select);
+                $select = $this->select($select);
+            }
+            $dbSelect = $this->createDbSelect($select);
+            if (!$dbSelect) return array();
+            return $dbSelect->query()->fetchAll();
         } else {
             return parent::export($format, $select);
         }
