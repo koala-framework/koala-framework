@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Model_Db
+ * @group Model_DbWithConnection
  * @group Model_Db_Import_Export
  */
 class Vps_Model_DbWithConnection_ImportExport_Test extends PHPUnit_Framework_TestCase
@@ -115,4 +116,24 @@ class Vps_Model_DbWithConnection_ImportExport_Test extends PHPUnit_Framework_Tes
         $this->assertEquals('bum', $r->bar);
     }
 
+    public function testFormatArrayBuffered()
+    {
+        $ex = new Vps_Model_DbWithConnection_ImportExport_Model(array(
+            "table" => $this->_tableName
+        ));
+        $data = $ex->export(Vps_Model_Interface::FORMAT_ARRAY, new Vps_Model_Select());
+
+        $im = new Vps_Model_DbWithConnection_ImportExport_Model(array(
+            "table" => $this->_tableName
+        ));
+        $im->deleteRows(array());
+
+        $im->import(Vps_Model_Interface::FORMAT_ARRAY, $data, array('buffer'=>true));
+        $data = array(array('id'=>null, 'foo'=>'abcd', 'bar'=>'haha'));
+        $im->import(Vps_Model_Interface::FORMAT_ARRAY, $data, array('buffer'=>true));
+        $im->import(Vps_Model_Interface::FORMAT_ARRAY, $data, array('buffer'=>true));
+        $im->writeBuffer();
+        $r = $im->getRows();
+        $this->assertEquals(4, count($r));
+    }
 }

@@ -8,6 +8,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
     protected $_autoId;
     protected $_columns = array();
     protected $_primaryKey = 'id';
+    protected $_uniqueColumns;
 
     public function __construct(array $config = array())
     {
@@ -15,6 +16,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         if (isset($config['autoId'])) (int)$this->_autoId = $config['autoId'];
         if (isset($config['columns'])) $this->_columns = (array)$config['columns'];
         if (isset($config['primaryKey'])) $this->_primaryKey = (string)$config['primaryKey'];
+        if (isset($config['uniqueColumns'])) $this->_uniqueColumns = (array)$config['uniqueColumns'];
         parent::__construct($config);
     }
 
@@ -331,7 +333,33 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         return false;
     }
 
-    public function getUniqueIdentifier() {
-        throw new Vps_Exception('Not implemented');
+    public function getUniqueIdentifier()
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
+    public function import($format, $data, $options = array())
+    {
+        if ($format == self::FORMAT_ARRAY) {
+            if (isset($options['replace']) && $options['replace'] && !isset($this->_uniqueColumns)) {
+                throw new Vps_Exception('You must set uniqueColumns for this model if you use replace');
+            }
+            foreach ($data as $k => $v) {
+                $s = $this->select();
+                foreach ($this->_uniqueColumns as $c) {
+                    $s->whereEquals($c, $v[$c]);
+                }
+                $row = $this->getRow($s);
+                if (!$row) {
+                    $row = $this->createRow();
+                }
+                foreach ($v as $k=>$i) {
+                    $row->$k = $i;
+                }
+                $row->save();
+            }
+        } else {
+            throw new Vps_Exception_NotYetImplemented();
+        }
     }
 }

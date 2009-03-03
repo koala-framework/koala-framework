@@ -141,8 +141,13 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         return $this->_proxyModel->export($format, $select);
     }
 
-    public function import($format, $data)
+    public function import($format, $data, $options = array())
     {
-        $this->_proxyModel->import($format, $data);
+        $this->_proxyModel->import($format, $data, $options);
+    }
+
+    public function writeBuffer()
+    {
+        $this->_proxyModel->writeBuffer();
     }
 }

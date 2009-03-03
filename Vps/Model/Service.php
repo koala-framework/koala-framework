@@ -168,9 +168,9 @@ class Vps_Model_Service extends Vps_Model_Abstract
         return $this->_client->export($format, $select);
     }
 
-    public function import($format, $data)
+    public function import($format, $data, $options = array())
     {
-        $this->_client->import($format, $data);
+        $this->_client->import($format, $data, $options);
     }
 
 }

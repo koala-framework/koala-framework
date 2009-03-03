@@ -22,7 +22,8 @@ interface Vps_Model_Interface
     public function countRows($where = array());
 
     public function export($format, $select = array());
-    public function import($format, $data);
+    public function import($format, $data, $options = array());
+    public function writeBuffer();
 
     public function deleteRows($where);
 
