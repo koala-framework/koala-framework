@@ -541,6 +541,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     private function _importArray($data, $options)
     {
+        if (empty($data)) return;
         $fields = array_keys($data[0]);
         if (isset($options['replace']) && $options['replace']) {
             $sql = 'REPLACE';
