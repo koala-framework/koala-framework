@@ -81,7 +81,7 @@ class Vps_Srpc_Server
                 $result = false;
             }
             if (!$result) {
-                $result = new Vps_Exception_Serialized($e);
+                $result = new Vps_Exception_Serializable($e);
                 $result = serialize($result);
             }
         }
