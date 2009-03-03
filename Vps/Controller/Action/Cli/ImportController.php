@@ -106,7 +106,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         echo "\n*** Service: source=$sourceUrl target=$targetUrl\n";
         echo "Service: Kopiere 'users' tabelle...\n";
 
-        $targetModel->deleteRows(array());
         $targetModel->import(
             Vps_Model_Interface::FORMAT_SQL,
             $sourceModel->export(Vps_Model_Interface::FORMAT_SQL)
