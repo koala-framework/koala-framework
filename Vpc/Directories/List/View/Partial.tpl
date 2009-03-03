@@ -1,1 +1,1 @@
-<?=$this->component($item);?>
+<?=$this->component($this->item);?>
