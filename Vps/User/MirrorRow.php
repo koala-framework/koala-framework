@@ -3,7 +3,7 @@ class Vps_User_MirrorRow extends Vps_Model_MirrorCache_Row
 {
     protected function _getInsertSourceRow()
     {
-        if (empty($this->webcode)) {
+        if (empty($this->webcode) && !is_null($this->webcode)) {
             $allModel = Vps_Model_Abstract::getInstance('Vps_User_All_Model');
             $allRow = $allModel->getRow($allModel->select()
                 ->whereEquals('email', $this->email)
