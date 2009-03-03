@@ -75,8 +75,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             ));
         }
 
-        $info = $this->_getTableInfo();
-
         // PrimaryKey setzen
         if (!isset($this->_primaryKey)) {
             $this->_primaryKey = $this->_model->getPrimaryKey();
@@ -85,22 +83,21 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             }
         }
 
-        if ($info) {
-            // Invisible-Button hinzufügen falls nicht überschrieben und in DB
-            if (array_key_exists('invisible', $this->_buttons) &&
-                is_null($this->_buttons['invisible']) &&
-                in_array('visible', $info['cols']))
-            {
-                $this->_buttons['invisible'] = true;
-            }
+        $cols = $this->_model->getColumns();
+        // Invisible-Button hinzufügen falls nicht überschrieben und in DB
+        if (array_key_exists('invisible', $this->_buttons) &&
+            is_null($this->_buttons['invisible']) &&
+            in_array('visible', $cols))
+        {
+            $this->_buttons['invisible'] = true;
+        }
 
-            // Pos-Feld
-            if (!isset($this->_hasPosition)) {
-                $this->_hasPosition = in_array('pos', $info['cols']);
-            }
-            if ($this->_hasPosition && !in_array('pos', $info['cols'])) {
-                throw new Vps_Exception("_hasPosition is true, but 'pos' does not exist in database");
-            }
+        // Pos-Feld
+        if (!isset($this->_hasPosition)) {
+            $this->_hasPosition = in_array('pos', $cols);
+        }
+        if ($this->_hasPosition && !in_array('pos', $cols)) {
+            throw new Vps_Exception("_hasPosition is true, but 'pos' does not exist in database");
         }
 
         foreach ($this->_icons as $k=>$i) {
