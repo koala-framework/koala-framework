@@ -35,6 +35,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected $_addPosition = self::ADD_FIRST;
     protected $_enableDD;
     protected $_defaultOrder;
+    protected $_rootParentValue = null;
 
     public function indexAction()
     {
@@ -171,7 +172,11 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $nodes = array();
         $select = $this->_getSelect($this->_getTreeWhere($parentRow));
         if (!$parentRow) {
-            $select->whereNull($this->_parentField);
+            if (is_null($this->_rootParentValue)) {
+                $select->whereNull($this->_parentField);
+            } else {
+                $select->whereEquals($this->_parentField, $this->_rootParentValue);
+            }
         } else {
             $select->whereEquals($this->_parentField, $parentRow->{$this->_primaryKey});
         }
@@ -338,7 +343,11 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $select = $this->_getSelect($this->_getTreeWhere());
         $parentValue = $row->$parentField;
         if (!$parentValue) {
-            $select->whereNull($this->_parentField);
+            if (is_null($this->_rootParentValue)) {
+                $select->whereNull($this->_parentField);
+            } else {
+                $select->whereEquals($this->_parentField, $this->_rootParentValue);
+            }
         } else {
             $select->whereEquals($this->_parentField, $parentValue);
         }
