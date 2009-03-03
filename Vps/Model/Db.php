@@ -460,7 +460,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $systemData = $this->_getSystemData();
             $filename = tempnam('/tmp', 'modelimport');
             $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false --no-create-info=true "
-                ."$systemData[mysqlOptions] $systemData[tableName] | gzip -c > $filename";
+                ."$systemData[mysqlOptions] $systemData[tableName] | sed -e \"s|INSERT INTO|REPLACE INTO|\" | gzip -c > $filename";
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL export failed");
             $ret = file_get_contents($filename);
