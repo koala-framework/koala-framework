@@ -60,9 +60,10 @@ class Vps_Model_Row_Item_Abstract extends Vps_Model_Row_Abstract
 
     public function toArray()
     {
-        $ret = array();
+        $ret = parent::toArray();
         foreach ($this->_model->getOwnColumns() as $c) {
-            $ret[$c] = $this->$c;
+            $n = $this->_transformColumnName($c);
+            $ret[$c] = $this->$n;
         }
         return $ret;
     }

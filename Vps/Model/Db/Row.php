@@ -25,8 +25,9 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
 
     public function __unset($name)
     {
-        if (isset($this->_row->$name)) {
-            unset($this->_row->$name);
+        $n = $this->_transformColumnName($name);
+        if (isset($this->_row->$n)) {
+            unset($this->_row->$n);
         } else {
             parent::__unset($name);
         }
@@ -34,8 +35,9 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        if (isset($this->_row->$name)) {
-            $value = $this->_row->$name;
+        $n = $this->_transformColumnName($name);
+        if (isset($this->_row->$n)) {
+            $value = $this->_row->$n;
             if (is_string($value) && substr($value, 0, 13) =='vpsSerialized') {
                 $value = unserialize(substr($value, 13));
             }
@@ -47,11 +49,12 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
 
     public function __set($name, $value)
     {
-        if (isset($this->_row->$name)) {
+        $n = $this->_transformColumnName($name);
+        if (isset($this->_row->$n)) {
             if (is_array($value) || is_object($value)) {
                 $value = 'vpsSerialized'.serialize($value);
             }
-            $this->_row->$name = $value;
+            $this->_row->$n = $value;
         } else {
             parent::__set($name, $value);
         }
@@ -103,9 +106,15 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
     {
         return $this->_row;
     }
+
     public function toArray()
     {
-        return $this->_row->toArray();
+        $ret = parent::toArray();
+        foreach ($this->_model->getColumns() as $c) {
+            $n = $this->_transformColumnName($c);
+            $ret[$c] = $this->$n;
+        }
+        return $ret;
     }
 
     public function findDependentRowset($dependentTable, $ruleKey = null, Vps_Model_Select $select = null)

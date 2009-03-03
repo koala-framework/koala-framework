@@ -66,6 +66,11 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         return $this->_siblingRows;
     }
 
+    protected function _transformColumnName($name)
+    {
+        return $name;
+    }
+
     public function __isset($name)
     {
         foreach ($this->_getSiblingRows() as $r) {
@@ -318,5 +323,14 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     public function getTable()
     {
         return null;
+    }
+
+    public function toArray()
+    {
+        $ret = array();
+        foreach ($this->_getSiblingRows() as $r) {
+            $ret = array_merge($ret, $r->toArray());
+        }
+        return $ret;
     }
 }
