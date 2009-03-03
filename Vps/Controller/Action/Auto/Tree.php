@@ -23,7 +23,11 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
 
         $select = $this->_getSelect($this->_getTreeWhere($parentId));
         if (!$parentId) {
-            $select->whereNull($this->_parentField);
+            if (is_null($this->_rootParentValue)) {
+                $select->whereNull($this->_parentField);
+            } else {
+                $select->whereEquals($this->_parentField, $this->_rootParentValue);
+            }
         } else {
             $select->whereEquals($this->_parentField, $parentId);
         }
