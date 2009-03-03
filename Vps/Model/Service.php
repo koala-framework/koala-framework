@@ -4,6 +4,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
     protected $_rowClass = 'Vps_Model_Service_Row';
     protected $_client;
     protected $_serverUrl;
+    protected $_serverConfig;
     protected $_data = array();
 
     protected $_primaryKey;
@@ -16,8 +17,15 @@ class Vps_Model_Service extends Vps_Model_Abstract
             if (!($this->_client instanceof Vps_Srpc_Client)) {
             }
         } else if (!empty($config['serverUrl'])) {
-            $this->_client = new Vps_Srpc_Client(array('serverUrl' => $config['serverUrl']));
-        } else if ($this->_serverUrl) {
+            $this->_serverUrl = $config['serverUrl'];
+        } else if (!empty($config['serverConfig'])) {
+            $this->_serverConfig = $config['serverConfig'];
+        }
+
+        if ($this->_serverConfig && !$this->_serverUrl) {
+            $this->_serverUrl = Vps_Registry::get('config')->service->{$this->_serverConfig}->url;
+        }
+        if ($this->_serverUrl) {
             $this->_client = new Vps_Srpc_Client(array('serverUrl' => $this->_serverUrl));
         }
 
