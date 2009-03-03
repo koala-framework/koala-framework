@@ -299,4 +299,8 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         throw new Vps_Exception('not implemented yet.');
     }
 
+    public function transformColumnName($c)
+    {
+        return $c;
+    }
 }

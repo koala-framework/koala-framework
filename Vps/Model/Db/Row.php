@@ -110,9 +110,8 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
     public function toArray()
     {
         $ret = parent::toArray();
-        foreach ($this->_model->getColumns() as $c) {
-            $n = $this->_transformColumnName($c);
-            $ret[$c] = $this->$n;
+        foreach ($this->_model->getOwnColumns() as $c) {
+            $ret[$c] = $this->$c;
         }
         return $ret;
     }

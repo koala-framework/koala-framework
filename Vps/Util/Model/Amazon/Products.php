@@ -169,4 +169,11 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
     {
         throw new Vps_Exception_NotYetImplemented();
     }
+
+    public function transformColumnName($name)
+    {
+        $name = strtoupper(substr($name, 0, 1)).substr($name, 1);
+        if ($name == 'Asin') $name = 'ASIN';
+        return $name;
+    }
 }
