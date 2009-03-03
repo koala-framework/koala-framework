@@ -101,7 +101,7 @@ class Vps_Srpc_HandlerModelTest extends PHPUnit_Framework_TestCase
         // save a new row
         $data = array('firstname' => 'Herbert');
         $result = $this->_handler->rowSave(null, $data);
-        $this->assertEquals(array('id' => 642, 'firstname' => 'Herbert'), $result);
+        $this->assertEquals(array('id' => 642, 'firstname' => 'Herbert', 'lastname' => ''), $result);
 
         // save without data
         $data = array();
