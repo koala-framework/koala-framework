@@ -53,6 +53,9 @@ class Vps_Model_Service_ModelTest extends PHPUnit_Framework_TestCase
         $this->_client->expects($this->any())
             ->method('getPrimaryKey')
             ->will($this->returnValue('id'));
+        $this->_client->expects($this->any())
+            ->method('getColumns')
+            ->will($this->returnValue(array('id', 'name')));
         $this->_client->expects($this->once())
             ->method('getRows')
             ->with(
