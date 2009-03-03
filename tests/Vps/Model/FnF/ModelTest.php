@@ -333,4 +333,20 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($model->getRows($model->select()->whereId('4-foo'))));
         $this->assertEquals(0, count($model->getRows($model->select()->whereEquals('id', '4-foo'))));
     }
+
+    public function testImportReplace()
+    {
+        $model = new Vps_Model_FnF(array(
+            'data' => array(
+                array('id'=>'1', 'xy' => 'blub'),
+                array('id'=>'3-foo', 'xy' => 'blab'),
+                array('id'=>'4', 'xy' => 'bleb'),
+            ),
+            'uniqueColumns' => array('id')
+        ));
+        $data = array(array('id'=>'1', 'xy'=>'blub'), array('id'=>'2'), array('id'=>'4', 'xy'=>'NEW'));
+        $model->import(Vps_Model_Interface::FORMAT_ARRAY, $data, array('replace'=>true));
+        $this->assertEquals(4, count($model->getRows()));
+        $this->assertEquals('NEW', $model->getRow(4)->xy);
+    }
 }

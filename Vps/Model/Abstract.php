@@ -276,15 +276,22 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         }
     }
 
-    public function import($format, $data)
+    public function import($format, $data, $options = array())
     {
         if ($format == self::FORMAT_ARRAY) {
+            if (isset($options['replace']) && $options['replace']) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
             foreach ($data as $k => $v) {
                 $this->createRow($v)->save();
             }
         } else {
             throw new Vps_Exception_NotYetImplemented();
         }
+    }
+
+    public function writeBuffer()
+    {
     }
 
     public function deleteRows($where)

@@ -8,6 +8,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     private $_indirectSiblingModels = array();
 
+    private $_importBuffer;
+    private $_importBufferOptions;
+
     public function __construct($config = array())
     {
         if (isset($config['tableName'])) {
@@ -17,6 +20,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $this->_table = $config['table'];
         }
         parent::__construct($config);
+    }
+
+    public function __destruct()
+    {
+        if (isset($this->_importBuffer)) {
+            echo 'writeBuffer must be called!'; //echo falls exception nicht richtig angezeigt wird
+            throw new Vps_Exception('writeBuffer must be called!');
+        }
     }
 
     //kann gesetzt werden von proxy
@@ -93,7 +104,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private function _formatField($field, $select)
     {
         if (in_array($field, $this->getOwnColumns())) {
-            return $this->_table->info('name').'.'.$field;
+            return $this->getTableName().'.'.$field;
         }
         $ret = $this->_formatFieldInternal($field, $select);
         if (!$ret) {
@@ -118,11 +129,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
             if ($m instanceof Vps_Model_Db) {
                 if (in_array($field, $m->getOwnColumns())) {
                     $ref = $m->getReferenceByModelClass(get_class($siblingOf), $k);
-                    $siblingTableName = $m->_table->info(Zend_Db_Table_Abstract::NAME);
+                    $siblingTableName = $m->getTableName();
                     $dbSelect->joinLeft($siblingTableName,
-                            $this->_table->info('name').'.'.$this->getPrimaryKey()
+                            $this->getTableName().'.'.$this->getPrimaryKey()
                             .' = '.$siblingTableName.'.'.$ref['column'], array());
-                    return $m->_table->info('name').'.'.$field;
+                    return $m->getTableName().'.'.$field;
                 }
                 $ret = $m->_formatFieldInternal($field, $dbSelect);
                 if ($ret) return $ret;
@@ -150,7 +161,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     public function createDbSelect($select)
     {
         if (!$select) return null;
-        $tablename = $this->_table->info('name');
+        $tablename = $this->getTableName();
         $dbSelect = $this->_table->select();
         $dbSelect->from($tablename);
         $dbSelect = $this->_applySelect($dbSelect, $select);
@@ -408,11 +419,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $this->getTable()->getAdapter();
     }
 
+    public function getTableName()
+    {
+        return $this->_table->info(Zend_Db_Table_Abstract::NAME);
+    }
+
     public function isEqual(Vps_Model_Interface $other) {
         if ($other instanceof Vps_Model_Db &&
-            $this->getTable()->info(Zend_Db_Table_Abstract::NAME) ==
-            $other->getTable()->info(Zend_Db_Table_Abstract::NAME)
-        ) {
+            $this->getTableName() == $other->getTableName()) {
             return true;
         }
         return false;
@@ -433,8 +447,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $ret;
     }
 
-    public function getUniqueIdentifier() {
-        return $this->_table->info(Zend_Db_Table_Abstract::NAME);
+    public function getUniqueIdentifier()
+    {
+        return $this->getTableName();
     }
 
 
@@ -458,9 +473,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
     }
 
-    public function import($format, $data)
+    public function import($format, $data, $options = array())
     {
         if ($format == self::FORMAT_SQL) {
+            if ($options) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
             $filename = tempnam('/tmp', 'modelimport');
             file_put_contents($filename, $data);
 
@@ -469,6 +487,20 @@ class Vps_Model_Db extends Vps_Model_Abstract
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL import failed: ".implode("\n", $output));
             unlink($filename);
+        } else if ($format == self::FORMAT_ARRAY) {
+            if (isset($options['buffer']) && $options['buffer']) {
+                if (isset($this->_importBuffer)) {
+                    if ($options != $this->_importBufferOptions) {
+                        throw new Vps_Exception_NotYetImplemented("You can't buffer imports with different options (not yet implemented)");
+                    }
+                    $this->_importBuffer = array_merge($this->_importBuffer, $data);
+                } else {
+                    $this->_importBufferOptions = $options;
+                    $this->_importBuffer = $data;
+                }
+            } else {
+                $this->_importArray($data, $options);
+            }
         } else {
             parent::import($format, $data);
         }
@@ -486,9 +518,47 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($config->server->host == 'vivid-planet.com') {
             $ret['mysqlDir'] = '/usr/local/mysql/bin/';
         }
-        $ret['tableName'] = $this->getTable()->info(Zend_Db_Table_Abstract::NAME);
+        $ret['tableName'] = $this->getTableName();
 
         return $ret;
     }
 
+    public function writeBuffer()
+    {
+        parent::writeBuffer();
+        if (isset($this->_importBuffer)) {
+            $this->_importArray($this->_importBuffer, $this->_importBufferOptions);
+            unset($this->_importBuffer);
+            unset($this->_importBufferOptions);
+        }
+    }
+
+    private function _importArray($data, $options)
+    {
+        $fields = array_keys($data[0]);
+        if (isset($options['replace']) && $options['replace']) {
+            $sql = 'REPLACE';
+        } else {
+            $sql = 'INSERT';
+        }
+        $sql .= ' INTO '.$this->getTableName().' ('.implode(', ', $fields).') VALUES ';
+        foreach ($data as $d) {
+            if (array_keys($d) != $fields) {
+                throw new Vps_Exception_NotYetImplemented("You must have always the same keys when importing");
+            }
+            $sql .= '(';
+            foreach ($d as $i) {
+                if (is_null($i)) {
+                    $sql .= 'NULL';
+                } else {
+                    $sql .= $this->_table->getAdapter()->quote($i);
+                }
+                $sql .= ',';
+            }
+            $sql = substr($sql, 0, -1);
+            $sql .= '),';
+        }
+        $sql = substr($sql, 0, -1);
+        $this->_table->getAdapter()->query($sql);
+    }
 }
