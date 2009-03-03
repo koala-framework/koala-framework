@@ -84,6 +84,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if (!is_array($keys)) $keys = array($keys);
         $ids = array();
         foreach ($keys as $key) {
+            $key = $this->transformColumnName($key);
             $ids[] = $row->$key;
         }
         return implode('_', $ids);
@@ -104,7 +105,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private function _formatField($field, $select)
     {
         if (in_array($field, $this->getOwnColumns())) {
-            return $this->getTableName().'.'.$field;
+            $f = $this->transformColumnName($field);
+            return $this->getTableName().'.'.$f;
         }
         $ret = $this->_formatFieldInternal($field, $select);
         if (!$ret) {
