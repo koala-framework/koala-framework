@@ -19,10 +19,8 @@ class Vpc_User_Detail_General_Form extends Vpc_Abstract_Composite_Form
         $this->_generalFieldset->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
                     ->setVType('email')
                     ->setAllowBlank(false)
-                    ->setWidth(250);
-// da hängt noch das deleted flag dran, dehalb ist dieser validator hier nicht (mehr) richtig
-//                     ->addValidator(new Vps_Validate_Row_Unique());
-
+                    ->setWidth(250)
+                    ->addValidator(new Vpc_User_Detail_General_Validate_UniqueEmail());
 
         $this->_generalFieldset->add(new Vps_Form_Field_TextField('firstname', trlVps('Firstname')))
                     ->setAllowBlank(false)
