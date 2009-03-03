@@ -25,6 +25,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
             parent::__unset($name);
         } else if (isset($this->_data[$name])) {
+            $name = $this->_transformColumnName($name);
             unset($this->_data[$name]);
         }
     }
@@ -34,6 +35,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
             return parent::__get($name);
         } else {
+            $name = $this->_transformColumnName($name);
             if (!isset($this->_data[$name])) return null;
             return $this->_data[$name];
         }
@@ -45,13 +47,22 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
             parent::__set($name, $value);
             return;
         }
-        $this->_data[$name] = $value;
+        $n = $this->_transformColumnName($name);
+        $this->_data[$n] = $value;
         $this->_postSet($name, $value);
     }
 
     public function toArray()
     {
-        return $this->_data;
+        $ret = parent::toArray();
+        foreach ($this->_model->getColumns() as $c) {
+            $n = $this->_transformColumnName($c);
+            $ret[$c] = $this->$n;
+        }
+        if (!$this->_model->getOwnColumns()) {
+            $ret = array_merge($this->_data, $ret);
+        }
+        return $ret;
     }
 
     public function save()
