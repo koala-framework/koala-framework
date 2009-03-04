@@ -91,12 +91,15 @@ Vpc.Basic.ImageEnlarge.prototype =
             var name = i.className.replace('vpsEnlargeTagData', '').trim();
             data[name] = i.innerHTML;
         }, this);
-        linkEl.prev('.vpsEnlargeTagData').query('> *').each(function(i) {
-            if (i.className) {
-                var name = i.className.trim();
-                data[name] = i.innerHTML;
-            }
-        }, this);
+        var dataEl = linkEl.prev('.vpsEnlargeTagData');
+        if (dataEl) {
+            dataEl.query('> *').each(function(i) {
+                if (i.className) {
+                    var name = i.className.trim();
+                    data[name] = i.innerHTML;
+                }
+            }, this);
+        }
 
         var options = linkEl.down(".options", true);
         if (options && options.value) {
