@@ -1,4 +1,5 @@
-Ext.namespace('Vps.User.Grid');
+
+Ext.namespace("Vps.User.Grid");
 
 Vps.User.Grid.Index = Ext.extend(Vps.Auto.GridPanel,
 {
@@ -104,5 +105,5 @@ Vps.User.Grid.Index = Ext.extend(Vps.Auto.GridPanel,
                 }
             }
         });
-    },
+    }
 });
