@@ -16,6 +16,13 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
             ->setListWidth(150);
     }
 
+    public function setNamePrefix($v)
+    {
+        parent::setNamePrefix($v);
+        $this->_combobox->setNamePrefix($this->fields->getFormName());
+        return $this;
+    }
+
     public function hasChildren()
     {
         return true;
@@ -37,6 +44,7 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
     public function setCombobox($box)
     {
         $this->_combobox = $box;
+        $this->_combobox->setFormName($this->fields->getFormName());
         return $this;
     }
 
