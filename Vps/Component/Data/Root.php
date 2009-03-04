@@ -130,16 +130,35 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     public function getPageGenerators()
     {
-        Vps_Benchmark::count('getPageGenerators');
-        if (!$this->_pageGenerators) {
-            $this->_pageGenerators = array();
+        if (!is_null($this->_pageGenerators)) return $this->_pageGenerators;
+
+        static $cache = null;
+        if (!$cache) {
+            $cache = Vps_Cache::factory('Core', 'Memcached', array(
+                'lifetime'=>null,
+                'automatic_cleaning_factor' => false,
+                'automatic_serialization'=>true));
+        }
+        $cacheId = $this->componentClass . '_pageGenerators';
+
+        $generators = $cache->load($cacheId);
+        if (!$generators) {
+            $generators = array();
             foreach (Vpc_Abstract::getComponentClasses() as $class) {
                 foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
                     if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) {
-                        $this->_pageGenerators[] = Vps_Component_Generator_Abstract::getInstance($class, $key, $generator);
+                        $generators[] = array('class' => $class, 'key' => $key, 'generator' => $generator);
                     }
                 }
             }
+            $cache->save($generators, $cacheId);
+        }
+
+        $this->_pageGenerators = array();
+        foreach ($generators as $g) {
+            $this->_pageGenerators[] = Vps_Component_Generator_Abstract::getInstance(
+                $g['class'], $g['key'], $g['generator']
+            );
         }
         return $this->_pageGenerators;
     }
