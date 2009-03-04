@@ -9,6 +9,7 @@ class Vpc_Advanced_SearchEngineReferer_Test extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        /*
         $this->_cache = $this->getMock('Vps_Component_Cache', array('remove'), array(), '', false);
         Vps_Component_Cache::setInstance($this->_cache);
 
@@ -16,10 +17,12 @@ class Vpc_Advanced_SearchEngineReferer_Test extends PHPUnit_Framework_TestCase
         $this->_root = Vps_Component_Data_Root::getInstance();
 
         Vps_Component_RowObserver::getInstance()->clear();
+        */
     }
 
     public function tearDown()
     {
+        $this->markTestIncomplete();
         Vps_Component_Cache::setInstance(null);
         if (isset($_SERVER['HTTP_REFERER'])) unset($_SERVER['HTTP_REFERER']);
     }
@@ -44,6 +47,7 @@ class Vpc_Advanced_SearchEngineReferer_Test extends PHPUnit_Framework_TestCase
 
     public function testComponentNewEntry()
     {
+        $this->markTestIncomplete();
         $ref2 = $this->_root->getChildComponent('-referer2')->getComponent();
         $model = $ref2->getModel();
         $oldRow = $model->getRow($model->select()

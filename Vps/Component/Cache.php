@@ -1,36 +1,26 @@
 <?php
-class Vps_Component_Cache extends Zend_Cache_Core
+class Vps_Component_Cache
 {
-    const CLEANING_MODE_DEFAULT = 'default';
-    const CLEANING_MODE_COMPONENT_CLASS = 'componentClass';
-    const CLEANING_MODE_ID = 'id';
-
     static private $_instance;
     private $_preloadedValues = array();
+    private $_model;
+    private $_metaModel;
+    private $_countPreloadCalls = 0;
 
-    public function __construct()
-    {
-        parent::__construct(array(
-            'lifetime' => null,
-            'write_control'=>false,
-            'automatic_cleaning_factor'=>0
-        ));
+    const TYPE_DEFAULT = '';
+    const TYPE_MASTER = 'master';
+    const TYPE_HASCONTENT = 'hasContent';
+    const TYPE_PARTIAL = 'partial';
 
-        $this->_backend = new Vps_Cache_Backend_Db(array(
-            'table' => 'cache_component',
-            'adapter' => Vps_Registry::get('db')
-        ));
-        $this->setBackend($this->_backend);
-    }
+    const META_CACHE_ID = 'cacheId';
+    const META_CALLBACK = 'callback';
+    const META_COMPONENT_CLASS = 'componentClass';
 
-    //für unit testing
-    public static function setInstance($instance)
-    {
-        self::$_instance = $instance;
-    }
-    /**
-     * @return Vps_Component_Cache
-     */
+    const CLEANING_MODE_META = 'default';
+    const CLEANING_MODE_COMPONENT_CLASS = 'componentClass';
+    const CLEANING_MODE_ID = 'id';
+    const CLEANING_MODE_ALL = 'all';
+
     public static function getInstance()
     {
         if (!self::$_instance) {
@@ -39,22 +29,81 @@ class Vps_Component_Cache extends Zend_Cache_Core
         return self::$_instance;
     }
 
-    public function saveMeta($meta)
+    public function getMetaModel()
     {
-        $this->_backend->saveMeta($meta);
+        if (!$this->_metaModel) $this->setMetaModel(new Vps_Component_Cache_MetaModel());
+        return $this->_metaModel;
     }
 
-    public function clean($mode = 'all', $tags = array(), $row = null)
+    public function setMetaModel(Vps_Component_Cache_MetaModel $model)
     {
-        if (in_array($mode, array( self::CLEANING_MODE_DEFAULT,
-                                   self::CLEANING_MODE_COMPONENT_CLASS,
-                                   self::CLEANING_MODE_ID))
-        ) {
-            if (!$this->_backend) return null;
-            return $this->_backend->clean($mode, $tags, $row);
-        } else {
-            return parent::clean($mode, $tags);
+        $this->_metaModel = $model;
+    }
+
+    public function getModel()
+    {
+        if (!$this->_model) $this->setModel(new Vps_Component_Cache_Model());
+        return $this->_model;
+    }
+
+    public function setModel(Vps_Component_Cache_Model $model)
+    {
+        $this->_model = $model;
+    }
+
+    public function save($content, $cacheId, $componentClass = '', $lifetime = null)
+    {
+        $lastModified = time();
+        $expire = is_null($lifetime) ? 0 : $lastModified + $lifetime;
+        $pageId = $this->_getPageIdFromComponentId($cacheId);
+        $data = array(
+            'id' => $cacheId,
+            'page_id' => $pageId,
+            'component_class' => $componentClass,
+            'content' => $content,
+            'last_modified' => $lastModified,
+            'expire' => $expire
+        );
+        $options = array(
+            'buffer' => true,
+            'bufferSize' => 50,
+            'replace' => true
+        );
+        $this->getModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+    }
+
+    public function getCacheId($componentId, $type = self::TYPE_DEFAULT, $number = null)
+    {
+        if ($type == self::TYPE_MASTER) {
+            $componentId .= '-master';
         }
+        if ($type == self::TYPE_HASCONTENT) {
+            $componentId .= '-hasContent';
+        }
+        if ($type == self::TYPE_PARTIAL) {
+            $componentId .= '~';
+        }
+        if ($type == self::TYPE_HASCONTENT || $type == self::TYPE_PARTIAL) {
+            if (is_null($number)) throw new Vps_Exception('Missing $number.');
+            $componentId .= $number;
+        }
+        return $componentId;
+    }
+
+    public function saveMeta($model, $id, $value, $type = self::META_CACHE_ID)
+    {
+        $data = array(
+            'model' => $model,
+            'id' => $id,
+            'value' => $value,
+            'type' => $type
+        );
+        $options = array(
+            'buffer' => true,
+            'bufferSize' => 50,
+            'replace' => true
+        );
+        $this->getMetaModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
     public function cleanComponentClass($componentClass)
@@ -62,74 +111,124 @@ class Vps_Component_Cache extends Zend_Cache_Core
         $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
     }
 
-    public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
+    public function clean($mode = self::CLEANING_MODE_META, $value = null)
     {
-        if ($this->isLoaded($id)) {
-            return $this->_preloadedValues[$id];
-        }
+        if ($mode == Vps_Component_Cache::CLEANING_MODE_META) {
 
-        //TODO: nicht test() aufrufen, macht 2. sql abfrage
-        if (!$this->test($id)) {
-            return false;
-        }
-        return parent::load($id, $doNotTestCacheValidity, $doNotUnserialize);
-    }
-
-    public function test($id)
-    {
-        $lastModified = parent::test($id);
-        static $checkComponentModification;
-        if (is_null($checkComponentModification)) {
-            $checkComponentModification = Vps_Registry::get('config')->debug->componentCache->checkComponentModification;
-        }
-        if (!$checkComponentModification) {
-            return $lastModified;
-        }
-
-        $componentId = $this->getComponentIdFromCacheId($id);
-        if ($componentId) {
-            $data = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
-            if ($data) {
-                $file = Vpc_Admin::getComponentFile($data->componentClass, 'Component', 'tpl');
-                if ($lastModified < filemtime($file)) return false;
-                // Alle Component.php der Klassenhierarchie prüfen
-                foreach (Vpc_Abstract::getParentClasses($data->componentClass) as $class) {
-                    $file = Vpc_Admin::getComponentFile($class, 'Component', 'php');
-                    if ($lastModified < filemtime($file)) return false;
+            if (!is_array($value) ||
+                !array_key_exists('model', $value) ||
+                !array_key_exists('id', $value) ||
+                !array_key_exists('row', $value)
+            ) {
+                throw new Vps_Exception('$value must be an array with "model", "id" and "row"');
+            }
+            $select = $this->getMetaModel()->select()->where(
+                new Vps_Model_Select_Expr_And(array(
+                    new Vps_Model_Select_Expr_Equals('model', $value['model']),
+                    new Vps_Model_Select_Expr_Or(array(
+                        new Vps_Model_Select_Expr_IsNull('id'),
+                        new Vps_Model_Select_Expr_Equals('id', $value['id'])
+                    ))
+                ))
+            );
+            foreach ($this->getMetaModel()->getRows($select) as $row) {
+                if ($row->type == self::META_CACHE_ID) {
+                    $this->clean(self::CLEANING_MODE_ID, $row->value);
+                } else if ($row->type == self::META_CALLBACK) {
+                    $component = Vps_Component_Data_Root::getInstance()
+                        ->getComponentById($row->value);
+                    if ($component) {
+                        $component->getComponent()->onCacheCallback($value['row']);
+                        Vps_Benchmark::cacheInfo("Cache: Callback for component {$component->componentId} ({$component->componentClass}) called.");
+                    }
+                } else if ($row->type == self::META_COMPONENT_CLASS) {
+                    $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $row->value);
                 }
             }
+            return true;
+
+        } else if ($mode == Vps_Component_Cache::CLEANING_MODE_COMPONENT_CLASS) {
+
+            if (!is_string($value)) throw new Vps_Exception("value must be a component class");
+            $select = $this->getModel()->select()->whereEquals('component_class', $value);
+            $count = $this->getModel()->countRows($select);
+            $this->getModel()->deleteRows($select);
+            Vps_Benchmark::cacheInfo("Cache: $count entries for Component Class '$value' deleted.");
+            return true;
+
+        } else if ($mode == Vps_Component_Cache::CLEANING_MODE_ID) {
+
+            if (!is_string($value)) throw new Vps_Exception("value must be an id");
+            $select = $this->getModel()->select()->whereEquals('id', $value);
+            $count = $this->getModel()->countRows($select);
+            $this->getModel()->deleteRows($select);
+            Vps_Benchmark::cacheInfo("Cache: $count entries for Component '$value' deleted.");
+            return true;
+
+        } else if ($mode==Zend_Cache::CLEANING_MODE_ALL) {
+
+            $this->getModel()->deleteRows(array());
+            $this->getMetaModel()->deleteRows(array());
+            Vps_Benchmark::cacheInfo("Cache: completely deleted.");
+            return true;
+
         }
-        return $lastModified;
+        return false;
+    }
+
+    private function _getPageIdFromComponentId($componentId)
+    {
+        $pagePos = strrpos($componentId, '_');
+        $componentPos = strpos($componentId, '-', $pagePos);
+        $partialPos = strpos($componentId, '~', $pagePos);
+        $cutPos = 0;
+        if ($componentPos) $cutPos = $componentPos;
+        if ($partialPos) $cutPos = $partialPos;
+        if ($componentPos && $partialPos) $cutPos = min($componentPos, $partialPos);
+
+        $ret = $componentId;
+        if ($cutPos > $pagePos) {
+            $ret = substr($componentId, 0, $cutPos);
+        }
+        return $ret;
     }
 
     public function emptyPreload()
     {
         $this->_preloadedValues = array();
+        $this->_countPreloadCalls = 0;
+    }
+
+    public function load($id)
+    {
+        return $this->_preloadedValues[$id];
     }
 
     public function preload($ids)
     {
+        $this->_countPreloadCalls++;
         $this->_preloadedValues = $this->_preloadedValues + $this->_preload($ids);
-        return !empty($this->preloadedValues);
+        return !empty($this->_preloadedValues);
     }
 
     protected function _preload($ids)
     {
-        $parts = array();
+        $or = array();
         $values = array();
-        foreach ($ids as $key => $val) {
-            if ($key) {
-                $parts[] = "(id LIKE '{$key}%' AND page_id='$val')";
-                $values[$key] = null;
-            } else {
-                $parts[] = "page_id='$val'";
-                $values[(string)$val] = null;
-            }
+        foreach ($ids as $id) {
+            $pageId = $this->_getPageIdFromComponentId($id);
+            $or[] = new Vps_Model_Select_Expr_And(array(
+                new Vps_Model_Select_Expr_Like('id', $id . '%'),
+                new Vps_Model_Select_Expr_Equals('page_id', $pageId)
+            ));
+            $values[$id] = null;
         }
-        if ($parts) {
-            $sql = "SELECT id, content, expire FROM cache_component WHERE " . implode(' OR ', $parts);
-            Vps_Benchmark::count('preload cache', $sql);
-            $rows = Zend_Registry::get('db')->query($sql)->fetchAll();
+        $select = $this->getModel()->select()->where(
+            new Vps_Model_Select_Expr_Or($or)
+        );
+        if ($values) {
+            Vps_Benchmark::count('preload cache', implode(', ', $ids));
+            $rows = $this->getModel()->export(Vps_Model_Db::FORMAT_ARRAY, $select);
             foreach ($rows as $row) {
                 if ($row['expire'] == 0 || $row['expire'] > time()) {
                     $values[(string)$row['id']] = $row['content'];
@@ -139,50 +238,18 @@ class Vps_Component_Cache extends Zend_Cache_Core
         return $values;
     }
 
-    public function shouldBeLoaded($cacheId)
+    public function shouldBeLoaded($id)
     {
-        $cacheId = (string)$cacheId;
-        if (array_key_exists($cacheId, $this->_preloadedValues)) {
-            return true;
-        }
-        $cutId = $cacheId;
-        while ($cutId) {
-            $pos = strrpos($cutId, '-');
-            $cutId = $pos ? substr($cutId, 0, $pos) : '';
-            if (in_array($cutId, array_keys($this->_preloadedValues)))  {
-                return true;
-            }
-        }
-        return false;
+        return array_key_exists($id, $this->_preloadedValues);
     }
 
-    public function isLoaded($cacheId)
+    public function isLoaded($id)
     {
-        $cacheId = (string)$cacheId;
-        return isset($this->_preloadedValues[$cacheId]);
+        return isset($this->_preloadedValues[$id]);
     }
 
-    public function getCacheIdFromComponentId($componentId, $masterTemplate = false, $isHasContent = false, $partialNumber = null)
+    public function countPreloadCalls()
     {
-        if ($masterTemplate) {
-            //nicht optimal, wer was besseres weis - bitte
-            if ($masterTemplate == 'application/views/master/default.tpl') {
-                $componentId .= '-master';
-            } else {
-                return false;
-            }
-        }
-        if ($isHasContent) { $componentId .= '-hasContent'; }
-        if (!is_null($partialNumber)) { $componentId .= '~' . $partialNumber; }
-        return str_replace('~', '___', str_replace('-', '__', $componentId));
-    }
-
-    public function getComponentIdFromCacheId($cacheId)
-    {
-        if (substr($cacheId, -8) == '__master') {
-            return null;
-        } else {
-            return str_replace('___', '~', str_replace('__', '-', $cacheId));
-        }
+        return $this->_countPreloadCalls;
     }
 }

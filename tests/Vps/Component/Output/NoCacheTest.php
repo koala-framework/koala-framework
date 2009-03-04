@@ -6,20 +6,18 @@ class Vps_Component_Output_NoCacheTest extends PHPUnit_Framework_TestCase
 {
     public function testMaster()
     {
-        $this->markTestIncomplete();
-
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_C3_Root_Component');
         $root = Vps_Component_Data_Root::getInstance();
         $output = new Vps_Component_Output_Master();
 
         $value = $output->render($root);
-        $this->assertEquals('master {nocache: Vps_Component_Output_C3_Root_Component root }', $value);
+        $this->assertEquals('master {nocache: Vps_Component_Output_C1_Box_Component root-box } {nocache: Vps_Component_Output_C3_Root_Component root }', $value);
 
         $value = $output->render($root->getChildComponent('_childpage'));
-        $this->assertEquals('master master2 {nocache: Vps_Component_Output_C3_ChildPage_Component root_childpage }', $value);
+        $this->assertEquals('master {nocache: Vps_Component_Output_C3_Box_Component root_childpage-box } {nocache: Vps_Component_Output_C3_ChildPage_Component root_childpage }', $value);
 
         $value = $output->renderMaster($root->getChildComponent('_childpage')->getChildComponent('_childpage'));
-        $this->assertEquals('master master2 {nocache: Vps_Component_Output_C3_ChildPage2_Component root_childpage_childpage }', $value);
+        $this->assertEquals('master {nocache: Vps_Component_Output_C3_Box_Component root_childpage_childpage-box } master2 {nocache: Vps_Component_Output_C3_ChildPage2_Component root_childpage_childpage }', $value);
     }
 
     public function testC1()

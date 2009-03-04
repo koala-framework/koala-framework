@@ -59,6 +59,10 @@ class Vps_Component_RowObserver
                 if ($row instanceof Zend_Db_Table_Row_Abstract) {
                     $model = $row->getTable();
                     $primaryKey = current($model->info('primary'));
+                } else if ($row->getModel() instanceof Vps_Component_Cache_MetaModel ||
+                    $row->getModel() instanceof Vps_Component_Cache_Model
+                ) {
+                    continue;
                 } else {
                     $model = $row->getModel();
                     $primaryKey = $model->getPrimaryKey();
@@ -72,8 +76,8 @@ class Vps_Component_RowObserver
         foreach ($delete as $model => $val) {
             foreach ($val as $id => $null) {
                 Vps_Component_Cache::getInstance()->clean(
-                    Vps_Component_Cache::CLEANING_MODE_DEFAULT,
-                    array($model, $id, $row)
+                    Vps_Component_Cache::CLEANING_MODE_META,
+                    array('model' => $model, 'id' => $id, 'row' => $row)
                 );
             }
         }

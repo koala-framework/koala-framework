@@ -11,6 +11,9 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         $this->_cache = $cache;
     }
 
+    /**
+     * @return Vps_Component_Cache
+     */
     public function getCache()
     {
         if (!$this->_cache) {
@@ -22,10 +25,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
     public function render($component, $masterTemplate = false, array $plugins = array())
     {
         // Erste Komponente vorausladen
-        $componentId = $this->getCache()->getCacheIdFromComponentId($component->componentId, $masterTemplate);
-        $pageId = $component->getPage() ? $component->getPage()->componentId : '';
-        $pageId = $this->getCache()->getCacheIdFromComponentId($pageId);
-        $result = $this->getCache()->preload(array($componentId => $pageId));
+        $result = $this->getCache()->preload(array($component->componentId));
         if (!$result) {
             $meta = array();
             foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
@@ -33,20 +33,19 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
                 if (in_array('getStaticCacheVars', $methods)) {
                     $vars = call_user_func(array($componentClass, 'getStaticCacheVars'));
                     foreach ($vars as $id => $m) {
-                        if ($m['model'] instanceof Vps_Model_Db) $m['model'] = get_class($m['model']->getTable());
-                        if ($m['model'] instanceof Vps_Model_Abstract) $m['model'] = get_class($m['model']);
-                        $vars[$id]['model'] = $m['model'];
-                        $vars[$id]['component_class'] = $componentClass;
-                        $vars[$id]['cache_id'] = null;
-                        $vars[$id]['callback'] = null;
+                        $model = $m['model'];
+                        if ($model instanceof Vps_Model_Db) $model = get_class($model->getTable());
+                        if ($model instanceof Vps_Model_Abstract) $model = get_class($model);
+                        $this->getCache()->saveMeta($model, null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
                     }
-                    $meta = array_merge($meta, $vars);
                 }
             }
-            $this->getCache()->saveMeta($meta);
         }
         // Normal rendern
-        return parent::render($component, $masterTemplate, $plugins);
+        $ret = parent::render($component, $masterTemplate, $plugins);
+        $this->getCache()->getModel()->writeBuffer();
+        $this->getCache()->getMetaModel()->writeBuffer();
+        return $ret;
     }
 
     protected function _render($componentId, $componentClass, $masterTemplate = false, array $plugins = array())
@@ -66,21 +65,27 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         $toLoadPartial = $this->_toLoadPartial;
         $this->_toLoadPartial = array();
         foreach ($toLoadHasContent as $val) {
-            $componentId = $this->getCache()->getCacheIdFromComponentId($val['componentId'], false, true) . $val['counter'];
-            $pageId = $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($val['componentId']));
-            $preloadIds[$componentId] = $pageId;
+            $preloadIds[] = $this->getCache()->getCacheId(
+                $val['componentId'],
+                Vps_Component_Cache::TYPE_HASCONTENT,
+                $val['counter']
+            );
         }
         foreach ($toLoadPartial as $val) {
-            $componentId = $this->getCache()->getCacheIdFromComponentId($val['componentId'], false, false, $val['nr']);
-            $pageId = $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($val['componentId']));
-            $preloadIds[$componentId] = $pageId;
+            $preloadIds[] = $this->getCache()->getCacheId(
+                $val['componentId'],
+                Vps_Component_Cache::TYPE_PARTIAL,
+                $val['nr']
+            );
         }
         foreach ($toLoad as $val) {
-            $componentId = $this->getCache()->getCacheIdFromComponentId($val['componentId'], $val['masterTemplate']);
-            $pageId = $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($val['componentId']));
-            $preloadIds[$componentId] = $pageId;
+            $type = $val['masterTemplate'] ? Vps_Component_Cache::TYPE_MASTER : Vps_Component_Cache::TYPE_DEFAULT;
+            $preloadIds[] = $this->getCache()->getCacheId($val['componentId'], $type);
         }
-        $this->getCache()->preload($preloadIds);
+
+        if ($preloadIds) {
+            $this->getCache()->preload($preloadIds);
+        }
 
         // Nochmal durchgehen und ersetzen
         foreach ($toLoadHasContent as $search => $val) {
@@ -99,7 +104,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             $replace = $this->_render($val['componentId'], $val['componentClass'], $val['masterTemplate']);
             $ret = str_replace($search, $replace, $ret);
         }
-        return $ret;
+        return $this->_parseTemplate($ret);
     }
 
     protected function _renderPartial($componentId, $componentClass, $partial, $id, $info)
@@ -108,20 +113,16 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             return parent::_renderPartial($componentId, $componentClass, $partial, $id, $info);
         }
         $ret = false;
-        $cacheId = $this->getCache()->getCacheIdFromComponentId($componentId, false, false, $id);
+        $cacheId = $this->getCache()->getCacheId($componentId, Vps_Component_Cache::TYPE_PARTIAL, $id);
 
         if ($this->getCache()->isLoaded($cacheId)) {
-            Vps_Benchmark::count('rendered partial cache', $componentId . '~' . $id);
+            Vps_Benchmark::count('rendered partial cache', $cacheId);
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) {
             $ret = parent::_renderPartial($componentId, $componentClass, $partial, $id, $info);
-            $tags = array(
-                'componentClass' => $componentClass,
-                'pageId' => $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($componentId))
-            );
             $lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
-            $this->getCache()->save($ret, $cacheId, $tags, $lifetime);
-            $this->getCache()->saveMeta($this->_getMeta($componentId, $cacheId, $id));
+            $this->getCache()->save($ret, $cacheId, $componentClass, $lifetime);
+            $this->_saveMeta($componentId, $cacheId, $id);
         } else {
             $ret = "{partial: $componentId $id}";
             $this->_toLoadPartial[$ret] = array(
@@ -141,20 +142,17 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             return parent::_renderContent($componentId, $componentClass, $masterTemplate);
         }
         $ret = false;
-        $cacheId = $this->getCache()->getCacheIdFromComponentId($componentId, $masterTemplate);
+        $type = $masterTemplate ? Vps_Component_Cache::TYPE_MASTER : Vps_Component_Cache::TYPE_DEFAULT;
+        $cacheId = $this->getCache()->getCacheId($componentId, $type);
 
         if ($this->getCache()->isLoaded($cacheId)) {
-            Vps_Benchmark::count('rendered cache', $componentId.($masterTemplate?' (master)':''));
+            Vps_Benchmark::count('rendered cache', $cacheId);
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) {
             $ret = parent::_renderContent($componentId, $componentClass, $masterTemplate);
-            $tags = array(
-                'componentClass' => $componentClass,
-                'pageId' => $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($componentId))
-            );
             $lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
-            $this->getCache()->save($ret, $cacheId, $tags, $lifetime);
-            $this->getCache()->saveMeta($this->_getMeta($componentId, $cacheId));
+            $this->getCache()->save($ret, $cacheId, $componentClass, $lifetime);
+            $this->_saveMeta($componentId, $cacheId);
         } else {
             $ret = "{empty: $componentId}";
             $this->_toLoad[$ret] = array(
@@ -175,20 +173,16 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
 
         // Komponente aus Cache holen
         $ret = false; // Falls nicht in Cache und sollte noch nicht geladen sein, kann auch false zurückgegeben werden
-        $cacheId = $this->getCache()->getCacheIdFromComponentId($componentId, false, true) . $counter;
+        $cacheId = $this->getCache()->getCacheId($componentId, Vps_Component_Cache::TYPE_HASCONTENT, $counter);
 
         if ($this->getCache()->isLoaded($cacheId)) { // Wurde bereits preloaded
-            Vps_Benchmark::count('rendered cache', $componentId.' (hasContent)');
+            Vps_Benchmark::count('rendered cache', $cacheId);
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) { // Nicht in Cache, aber sollte in Cache sein -> ohne Cache holen
             $ret = parent::_renderHasContent($componentId, $componentClass, $content, $counter);
             $lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
-            $tags = array(
-                'componentClass' => $componentClass,
-                'pageId' => $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($componentId))
-            );
-            $this->getCache()->save($ret, $cacheId, $tags, $lifetime);
-            $this->getCache()->saveMeta($this->_getMeta($componentId, $cacheId));
+            $this->getCache()->save($ret, $cacheId, $componentClass, $lifetime);
+            $this->_saveMeta($componentId, $cacheId);
         } else {
             $ret = "{hasContent " . $componentId . '#' . $counter . "}";
             $this->_toLoadHasContent[$ret] = array(
@@ -202,7 +196,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         return $ret;
     }
 
-    private function _getMeta($componentId, $cacheId, $partial = false)
+    private function _saveMeta($componentId, $cacheId, $partial = false)
     {
         $component = $this->_getComponent($componentId);
         if ($partial === false) {
@@ -210,28 +204,21 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         } else {
             $meta = $component->getComponent()->getPartialCacheVars($partial);
         }
-        foreach ($meta as $id => &$m) {
-            if (!isset($m['model'])) throw new Vps_Exception('getCacheVars must deliver model');
-            if ($m['model'] instanceof Vps_Model_Db) $m['model'] = get_class($m['model']->getTable());
-            if ($m['model'] instanceof Vps_Model_Abstract) $m['model'] = get_class($m['model']);
-            $meta[$id]['model'] = $m['model'];
-            if (!isset($m['callback'])) {
-                $meta[$id]['callback'] = null;
-                $meta[$id]['cache_id'] = $cacheId;
+        foreach ($meta as $m) {
+            $model = $m['model'];
+            if (!isset($model)) throw new Vps_Exception('getCacheVars must deliver model');
+            if ($model instanceof Vps_Model_Db) $model = get_class($model->getTable());
+            if ($model instanceof Vps_Model_Abstract) $model = get_class($model);
+            $id = isset($m['id']) ? $m['id'] : null;
+            if (isset($m['callback']) && $m['callback']) {
+                $type = Vps_Component_Cache::META_CALLBACK;
+                $value = $componentId;
             } else {
-                $meta[$id]['callback'] = $componentId;
-                $meta[$id]['cache_id'] = null;
+                $type = Vps_Component_Cache::META_CACHE_ID;
+                $value = $cacheId;
             }
-            $meta[$id]['component_class'] = null;
+            $this->getCache()->saveMeta($model, $id, $value, $type);
         }
         return $meta;
-    }
-
-    private function _getPageIdFromComponentId($componentId)
-    {
-        $pos = strrpos($componentId, '_');
-        if (!$pos) $pos = strpos($componentId, '-');
-        if (!$pos) $pos = strlen($componentId);
-        return substr($componentId, 0, $pos);
     }
 }

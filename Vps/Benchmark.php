@@ -199,6 +199,14 @@ class Vps_Benchmark
         }
     }
 
+    public static function cacheInfo($msg)
+    {
+        if (!Vps_Registry::get('config')->debug->componentCache->info) return;
+        if (Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
+            p($msg, 'INFO');
+        }
+    }
+
     public static function shutDown()
     {
         if (!self::$_logEnabled) return;

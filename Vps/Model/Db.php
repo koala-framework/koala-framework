@@ -5,6 +5,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
     protected $_rowClass = 'Vps_Model_Db_Row';
     protected $_rowsetClass = 'Vps_Model_Db_Rowset';
     protected $_table;
+    private $_tableName;
+    private $_columns;
 
     private $_indirectSiblingModels = array();
 
@@ -39,6 +41,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     {
         parent::_init();
         if (is_string($this->_table)) {
+            $this->_tableName = $this->_table;
             $this->_table = new Vps_Db_Table(array(
                 'name' => $this->_table
             ));
@@ -56,7 +59,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     public function getOwnColumns()
     {
-        return $this->_table->info(Zend_Db_Table_Abstract::COLS);
+        if (!$this->_columns)
+            $this->_columns = $this->_table->info(Zend_Db_Table_Abstract::COLS);
+        return $this->_columns;
     }
 
     public function createRow(array $data=array())
@@ -421,7 +426,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     public function getTableName()
     {
-        return $this->_table->info(Zend_Db_Table_Abstract::NAME);
+        if (!$this->_tableName)
+            $this->_tableName = $this->_table->info(Zend_Db_Table_Abstract::NAME);
+        return $this->_tableName;
     }
 
     public function isEqual(Vps_Model_Interface $other) {
@@ -502,6 +509,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
                         throw new Vps_Exception_NotYetImplemented("You can't buffer imports with different options (not yet implemented)");
                     }
                     $this->_importBuffer = array_merge($this->_importBuffer, $data);
+                    if (isset($options['bufferSize']) &&
+                        count($this->_importBuffer) > $options['bufferSize'])
+                    {
+                        p('written');
+                        $this->writeBuffer();
+                    }
                 } else {
                     $this->_importBufferOptions = $options;
                     $this->_importBuffer = $data;
@@ -568,6 +581,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $sql .= '),';
         }
         $sql = substr($sql, 0, -1);
-        $this->_table->getAdapter()->query($sql);
+        // Performance, bei Pdo wird der Adapter umgangen
+        if ($this->_table->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $this->_table->getAdapter()->getConnection()->query($sql);
+        } else {
+            $this->_table->getAdapter()->query($sql);
+        }
     }
 }
