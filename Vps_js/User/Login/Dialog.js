@@ -33,6 +33,15 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
             border: false
         }, this.loginPanel];
 
+        this.buttons = [
+            new Ext.Button({
+                text    : trlVps('Lost password?'),
+                style   : 'position: absolute; z-index: 500000; margin-top: -40px; margin-left: -270px;',
+                handler : this.lostPassword,
+                scope   : this
+            })
+        ];
+
         this.loginPanel.on('render', function(panel) {
             var frame = this.loginPanel.body.first('iframe');
             // IE sux :)
@@ -71,11 +80,6 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
             } else if (doc.getElementsByName('username').length >= 1) {
                 doc.getElementsByName('username')[0].focus();
             }
-
-            var lostPwEl = doc.getElementById('lostPassword');
-            if (lostPwEl) {
-                Ext.EventManager.on(lostPwEl, 'click', this.lostPassword, this);
-            }
         }
     },
 
@@ -104,8 +108,4 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
         this.show();
     }
 });
-
-
-
-
 
