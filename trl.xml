@@ -3707,5 +3707,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Supplied password is invalid</en>
 <id>996</id>
 </text>
+<text>
+<de>Diese Seite wurde zuletzt gefunden von</de>
+<en>This site was latest found by</en>
+<id>997</id>
+</text>
 </trl>
-

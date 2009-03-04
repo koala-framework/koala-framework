@@ -1,5 +1,6 @@
 <? if ($this->referers) { ?>
     <div class="<?=$this->cssClass?>">
+        <h3 class="refererFound"><?= $this->placeholder['header']; ?></h3>
         <ul>
             <?  $i = 0;
             foreach ($this->referers as $v) { ?>

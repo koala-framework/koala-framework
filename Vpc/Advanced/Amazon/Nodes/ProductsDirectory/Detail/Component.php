@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_Amazon_Nodes_ProductsDirectory_Detail_Component extends Vpc_Abstract
+class Vpc_Advanced_Amazon_Nodes_ProductsDirectory_Detail_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
