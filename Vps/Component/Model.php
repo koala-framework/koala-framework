@@ -113,7 +113,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
 
     public function getOwnColumns()
     {
-        throw new Vps_Exception('Not implemented yet.');
+        return array('componentId', 'parent_id', 'pos', 'visible', 'name', 'is_home');
     }
 
     public function getUniqueIdentifier()
