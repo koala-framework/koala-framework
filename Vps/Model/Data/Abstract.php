@@ -347,7 +347,11 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             foreach ($data as $k => $v) {
                 $s = $this->select();
                 foreach ($this->_uniqueColumns as $c) {
-                    $s->whereEquals($c, $v[$c]);
+                    if (is_null($v[$c])) {
+                        $s->whereNull($c);
+                    } else {
+                        $s->whereEquals($c, $v[$c]);
+                    }
                 }
                 $row = $this->getRow($s);
                 if (!$row) {

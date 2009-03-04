@@ -61,6 +61,10 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
                 $types = explode(',', $types);
             }
         }
+        if (in_array('view', $types)) {
+            $types[] = 'cache_component';
+            $types[] = 'cache_component_meta';
+        }
         if (in_array('memcache', $types)) {
             $cache = Vps_Cache::factory('Core', 'Memcached', array(
                 'lifetime'=>null,
