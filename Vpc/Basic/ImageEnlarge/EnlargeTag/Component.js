@@ -85,6 +85,19 @@ Vpc.Basic.ImageEnlarge.prototype =
 
         var data = {};
 
+        data.title = linkEl.dom.title ? linkEl.dom.title : '&nbsp;';
+
+        linkEl.query('> .vpsEnlargeTagData').each(function(i) {
+            var name = i.className.replace('vpsEnlargeTagData', '').trim();
+            data[name] = i.innerHTML;
+        }, this);
+        linkEl.prev('.vpsEnlargeTagData').query('> *').each(function(i) {
+            if (i.className) {
+                var name = i.className.trim();
+                data[name] = i.innerHTML;
+            }
+        }, this);
+
         var options = linkEl.down(".options", true);
         if (options && options.value) {
             options = Ext.decode(options.value);
@@ -96,7 +109,6 @@ Vpc.Basic.ImageEnlarge.prototype =
         } else {
             data.fullSizeLink = '';
         }
-        data.title = linkEl.dom.title ? linkEl.dom.title : '&nbsp;';
         data.image = {
             src: linkEl.dom.href,
             width: parseInt(m[1]),
