@@ -1,3 +1,5 @@
+.vpsEnlargeTagData { display: none; }
+
 .lightbox { position:absolute; background-color: #fff; width: 680px; height: 542px; z-index: 100; display: none; }
 
 .lightbox .lightboxHeader {
