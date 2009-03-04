@@ -214,6 +214,9 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function getReference($rule)
     {
+        if (!isset($this->_referenceMap[$rule])) {
+            throw new Vps_Exception("Reference '$rule' for model '".get_class($this)."' not set");
+        }
         return $this->_referenceMap[$rule];
     }
 
