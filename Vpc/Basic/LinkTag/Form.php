@@ -11,7 +11,7 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
             ->setDefaultValue(key($classes));
 
         foreach ($classes as $name => $class) {
-            $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), '-' . $name);
+            $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), '-' . $name, $name);
             if ($form) {
                 $form->setIdTemplate('{0}-link');
                 $form->setAutoHeight(true);
