@@ -1,10 +1,8 @@
 <?php
-class Vpc_Basic_ImageEnlarge_EnlargeTag_Form extends Vpc_Abstract_Form
+class Vpc_Basic_ImageEnlarge_EnlargeTag_Form extends Vpc_Abstract_Composite_Form
 {
     protected function _initFields()
     {
-        parent::_initFields();
-
         if (Vpc_Abstract::getSetting($this->getClass(), 'alternativePreviewImage')) {
             $fs = $this->add(new Vps_Form_Container_FieldSet(trlVps('Alternative Preview Image')))
                     ->setCheckboxToggle(true)
@@ -13,5 +11,8 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Form extends Vpc_Abstract_Form
             $fs->add(new Vpc_Abstract_Image_Form('image', $this->getClass()))
                 ->setIdTemplate('{0}');
         }
+
+        //absichtlich nicht aufrufen: parent::_initFields();
+        //benötigen wir hier nicht, und abgeleitete komponenten können es noch tun
     }
 }
