@@ -51,7 +51,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['row'] = $this->getImageRow();
+        $ret['row'] = $this->_getRow();
+        $ret['imageRow'] = $this->getImageRow();
         return $ret;
     }
 
