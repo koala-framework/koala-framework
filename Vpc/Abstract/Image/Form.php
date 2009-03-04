@@ -1,10 +1,8 @@
 <?php
-class Vpc_Abstract_Image_Form extends Vpc_Abstract_Form
+class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
 {
     protected function _initFields()
     {
-        parent::_initFields();
-
         // Dateiname
         if (Vpc_Abstract::getSetting($this->getClass(), 'editFilename')) {
             $this->add(new Vps_Form_Field_TextField('filename', trlVps('Filename')))
@@ -28,6 +26,9 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Form
             $this->add(new Vpc_Abstract_Image_DimensionField('dimension', trlVps('Dimension')))
                 ->setDimensions($dimensions);
         }
+
+        //absichtlich nicht aufrufen: parent::_initFields();
+        //benötigen wir hier nicht, und abgeleitete komponenten können es noch tun
     }
 
     public function setFieldLabel($label)
