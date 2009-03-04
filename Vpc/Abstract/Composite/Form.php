@@ -5,11 +5,11 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
 
     public function __construct($name, $class)
     {
+        parent::__construct($name, $class);
         if (!$this->getModel()) {
             $this->setModel(new Vps_Model_FnF());
             $this->setCreateMissingRow(true);
         }
-        parent::__construct($name, $class);
     }
 
     protected function _getIdTemplateForChild($key)
@@ -27,7 +27,7 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
         $classes = $generators['child']['component'];
         foreach ($classes as $key => $class) {
             if (!$class) continue;
-            $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), "-$key");
+            $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), "-$key", $key);
             if ($form) {
                 if ($this->_getIdTemplateForChild($key)) {
                     $form->setIdTemplate($this->_getIdTemplateForChild($key));
