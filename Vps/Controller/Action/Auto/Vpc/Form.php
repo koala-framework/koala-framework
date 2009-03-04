@@ -11,7 +11,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
             if (isset($this->_formName)) {
                 $this->_form = new $this->_formName(null, $this->_getParam('class'));
             } else {
-                $this->_form = Vpc_Abstract_Form::createComponentForm($this->_getParam('class'));
+                $this->_form = Vpc_Abstract_Form::createComponentForm($this->_getParam('class'), 'component');
             }
         }
         
