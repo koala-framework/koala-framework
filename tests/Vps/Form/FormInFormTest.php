@@ -1,4 +1,7 @@
  <?php
+ /**
+  * @group Vps_Form
+  */
 class Vps_Form_FormInFormTest extends PHPUnit_Framework_TestCase
 {
     public function testForm()
@@ -8,12 +11,17 @@ class Vps_Form_FormInFormTest extends PHPUnit_Framework_TestCase
             array('id'=>10, 'test1'=>'foo')
         ))));
         $form->add(new Vps_Form_Field_TextField('test1'));
+
+        $textField2 = new Vps_Form_Field_TextField('test2');
         $form->add(new Vps_Form('form2'))
             ->setModel(new Vps_Model_FnF(array('data'=>array(
                 array('id'=>10, 'test2'=>'bar')
             ))))
             ->setIdTemplate('{0}')
-            ->add(new Vps_Form_Field_TextField('test2'));
+            ->add($textField2);
+
+        $this->assertEquals('test2', $textField2->getName());
+        $this->assertEquals('form1_form2_test2', $textField2->getFieldName());
 
         $this->assertNotNull($form->fields['test1']);
         $this->assertNotNull($form->fields['test2']);
