@@ -10,6 +10,7 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
         $ret = parent::getSettings();
         $ret['limit'] = 5;
         $ret['viewCache'] = false;
+        $ret['placeholder']['header'] = trlVps('Latest referer');
         return $ret;
     }
 
@@ -37,8 +38,8 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
             $this->_referersCache = array();
             foreach ($rowset as $row) {
                 $host = parse_url($row->referer_url, PHP_URL_HOST);
-                $component = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
-                    $row->component_id, array('subroot' => $this->getData())
+                $component = Vps_Component_Data_Root::getInstance()->getComponentById(
+                    $row->component_id
                 );
                 $this->_referersCache[] = array(
                     'component' => $component,

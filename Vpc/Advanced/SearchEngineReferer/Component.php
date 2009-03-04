@@ -11,7 +11,6 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
             'Vpc_Advanced_SearchEngineReferer_ViewMyLatest_Component';
         $ret['componentName'] = trlVps('Search engine referer');
         $ret['modelname'] = 'Vpc_Advanced_SearchEngineReferer_Model';
-        $ret['limit'] = 5;
         $ret['saveReferer'] = true;
         $ret['flags']['processInput'] = true;
         return $ret;
@@ -29,7 +28,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
             $model = $this->getModel();
 
             $rowCompare = $model->getRow($model->select()
-                ->whereEquals('component_id', $this->getData()->parent->dbId)
+                ->whereEquals('component_id', $this->getData()->parent->componentId)
                 ->order('id', 'DESC'));
 
             $query = self::getQueryVar($referer);
@@ -43,9 +42,19 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
                 && strpos($query, 'site:') === false
             ) {
                 $row = $model->createRow();
-                $row->component_id = $this->getData()->parent->dbId;
+                $row->component_id = $this->getData()->parent->componentId;
                 $row->referer_url = $referer;
                 $row->save();
+
+                // alte löschen
+                $select = new Vps_Model_Select();
+                $select->whereEquals('component_id', $row->component_id)
+                    ->order('id', 'DESC')
+                    ->limit(20, 10);
+                $deleteRows = $model->getRows($select);
+                foreach ($deleteRows as $deleteRow) {
+                    $deleteRow->delete();
+                }
             }
         }
     }
