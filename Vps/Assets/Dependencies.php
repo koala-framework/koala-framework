@@ -49,7 +49,7 @@ class Vps_Assets_Dependencies
     public function getAssetFiles($assetsType, $fileType = null, $section = 'web')
     {
         if (!isset($this->_files[$assetsType])) {
-            $cacheId = 'dependencies'.$assetsType.Vps_Component_Data_Root::getComponentClass();
+            $cacheId = 'dependencies'.str_replace(':', '_', $assetsType).Vps_Component_Data_Root::getComponentClass();
             $cache = $this->_getCache();
             $this->_files[$assetsType] = $cache->load($cacheId);
             $this->_files[$assetsType] = false;
@@ -57,9 +57,30 @@ class Vps_Assets_Dependencies
                 Vps_Benchmark::count('processing dependencies miss', $assetsType);
                 $this->_files[$assetsType] = array();
                 if (!isset($this->_config->assets->$assetsType)) {
-                    throw new Vps_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
+                    if (strpos($assetsType, ':')) {
+                        $configPath = str_replace('_', '/', substr($assetsType, 0, strpos($assetsType, ':')));
+                        foreach(explode(PATH_SEPARATOR, get_include_path()) as $dir) {
+                            if (file_exists($dir.'/'.$configPath.'/config.ini')) {
+                                $sect = 'vivid';
+                                $configFull = new Zend_Config_Ini($dir.'/'.$configPath.'/config.ini', null);
+                                if (isset($configFull->{Vps_Setup::getConfigSection()})) {
+                                    $sect = Vps_Setup::getConfigSection();
+                                }
+                                $config = clone Vps_Registry::get('config');
+                                $config->merge(new Zend_Config_Ini($dir.'/'.$configPath.'/config.ini', $sect));
+                                break;
+                            }
+                        }
+                        if (!isset($config)) {
+                            throw new Vps_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
+                        }
+//                         $assetsType = substr($assetsType, strpos($assetsType, ':')+1);
+                        $assets = $config->assets->{substr($assetsType, strpos($assetsType, ':')+1)};
+                    }
+                } else {
+                    $assets = $this->_config->assets->$assetsType;
                 }
-                foreach ($this->_config->assets->$assetsType as $d=>$v) {
+                foreach ($assets as $d=>$v) {
                     if ($v) {
                         $this->_processDependency($assetsType, $d);
                     }
@@ -134,14 +155,24 @@ class Vps_Assets_Dependencies
         return $contents;
     }
 
-    private function _getDependenciesConfig()
+    private function _getDependenciesConfig($assetsType)
     {
-        if (!isset($this->_dependenciesConfig)) {
-            $this->_dependenciesConfig = new Zend_Config_Ini(VPS_PATH.'/config.ini', 'dependencies',
+        if (!isset($this->_dependenciesConfig[$assetsType])) {
+            $ret = new Zend_Config_Ini(VPS_PATH.'/config.ini', 'dependencies',
                                                 array('allowModifications'=>true));
-            $this->_dependenciesConfig->merge(new Zend_Config_Ini('application/config.ini', 'dependencies'));
+            $ret->merge(new Zend_Config_Ini('application/config.ini', 'dependencies'));
+            if (strpos($assetsType, ':')) {
+                $configPath = str_replace('_', '/', substr($assetsType, 0, strpos($assetsType, ':')));
+                foreach(explode(PATH_SEPARATOR, get_include_path()) as $dir) {
+                    if (file_exists($dir.'/'.$configPath.'/config.ini')) {
+                        $ret->merge(new Zend_Config_Ini($dir.'/'.$configPath.'/config.ini',  'dependencies'));
+                        break;
+                    }
+                }
+            }
+            $this->_dependenciesConfig[$assetsType] = $ret;
         }
-        return $this->_dependenciesConfig;
+        return $this->_dependenciesConfig[$assetsType];
     }
 
     private function _processDependency($assetsType, $dependency)
@@ -153,10 +184,10 @@ class Vps_Assets_Dependencies
             $this->_processComponentDependency($assetsType, $rootComponent, $dependency == 'ComponentsAdmin');
             return;
         }
-        if (!isset($this->_getDependenciesConfig()->$dependency)) {
-            throw new Vps_Exception("Can't resolve dependency '$dependency'.");
+        if (!isset($this->_getDependenciesConfig($assetsType)->$dependency)) {
+            throw new Vps_Exception("Can't resolve dependency '$dependency'");
         }
-        $deps = $this->_getDependenciesConfig()->$dependency;
+        $deps = $this->_getDependenciesConfig($assetsType)->$dependency;
 
         if (isset($deps->dep)) {
             foreach ($deps->dep as $d) {
@@ -309,7 +340,7 @@ class Vps_Assets_Dependencies
         $ret = array();
         if ($file == 'AllRteStyles.css') {
             $ret = Vpc_Basic_Text_StylesModel::getStylesContents();
-        } else if (preg_match('#^([a-z0-9]+)-All([a-z]+)\\-([a-z]+)\\.(printcss|js|css)$#i', $file, $m)) {
+        } else if (preg_match('#^([a-z0-9]+)-All(.*)\\-([a-z]+)\\.(printcss|js|css)$#i', $file, $m)) {
             $section = $m[1];
             $assetsType = $m[2];
             if (substr($assetsType, -5) == 'Debug' && !$this->_config->debug->menu) {
@@ -325,9 +356,10 @@ class Vps_Assets_Dependencies
             $host = str_replace(array('.', '-'), array('', ''), $host);
             $encoding = Vps_Media_Output::getEncoding();
             $cache = $this->_getCache();
-            $cacheId = str_replace('.', '_', $fileType).$encoding.$assetsType.
-                        Vps_Setup::getConfigSection().$language.$section.$host.
-                        Vps_Component_Data_Root::getComponentClass();
+            $cacheId = str_replace(array('.', ':'), array('_', '_'), $fileType).
+                    $encoding.str_replace(array('.', ':'), array('_', '_'), $section).
+                    Vps_Setup::getConfigSection().$language.$host.
+                    Vps_Component_Data_Root::getComponentClass();
             if (!$cacheData = $cache->load($cacheId)) {
 
                 $cacheData  = array();
@@ -400,7 +432,7 @@ class Vps_Assets_Dependencies
                 }
                 $host = str_replace(array('.', '-'), array('', ''), $host);
                 $cacheId = 'fileContents'.$language.$section.$host.
-                    str_replace(array('/', '.', '-'), array('_', '_', '_'), $file).
+                    str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $file).
                     Vps_Component_Data_Root::getComponentClass();
                 if (!$cacheData = $cache->load($cacheId)) {
                     $cacheData['contents'] = file_get_contents($this->getAssetPath($file));
