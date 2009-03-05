@@ -59,6 +59,7 @@ class Vps_Component_RowObserver
 
     public function process()
     {
+        if (!Vps_Component_Data_Root::getComponentClass()) return;
         $delete = array();
         foreach ($this->_process as $action => $process) {
             foreach ($process as $row) {
