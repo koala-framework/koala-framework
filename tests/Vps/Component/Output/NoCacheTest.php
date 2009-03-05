@@ -69,4 +69,13 @@ class Vps_Component_Output_NoCacheTest extends PHPUnit_Framework_TestCase
         $value = $output->renderMaster(Vps_Component_Data_Root::getInstance());
         $this->assertEquals('bar2', $value);
     }
+
+    public function testDynamic()
+    {
+        $output = new Vps_Component_Output_NoCache();
+
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_Dynamic_Component');
+        $value = $output->renderMaster(Vps_Component_Data_Root::getInstance());
+        $this->assertEquals('dynamic bar2foo', $value);
+    }
 }

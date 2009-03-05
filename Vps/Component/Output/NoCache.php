@@ -16,6 +16,7 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
             $ret = $p->processOutput($ret);
         }
 
+        $ret = $this->_parseDynamic($ret, $componentClass);
         $ret = $this->_parseTemplate($ret);
         return $ret;
     }
@@ -64,6 +65,25 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
             $ret = str_replace($search, $replace, $ret);
         }
 
+        return $ret;
+    }
+
+    protected function _parseDynamic($ret, $componentClass, $info = array())
+    {
+        preg_match_all('/{dynamic: ([^ }]+) }(.*){\/dynamic}/U', $ret, $matches);
+        foreach ($matches[0] as $key => $search) {
+            $class = $matches[1][$key];
+            $args = unserialize($matches[2][$key]);
+            $info['componentClass'] = $componentClass;
+
+            $dynamicClass = Vps_Component_Abstract_Admin::getComponentClass($componentClass, $class);
+            if (!class_exists($dynamicClass)) $dynamicClass = 'Vps_Component_Dynamic_' . $class;
+            $dynamic = new $dynamicClass();
+            $dynamic->setInfo($info);
+            call_user_func_array(array($dynamic, 'setArguments'), $args);
+            $replace = $dynamic->getContent();
+            $ret = str_replace($search, $replace, $ret);
+        }
         return $ret;
     }
 

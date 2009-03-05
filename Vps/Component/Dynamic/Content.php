@@ -5,10 +5,10 @@
  * macht natürlich nur sinn wenn getContent mit irgendwelchen bedingungen
  * überschrieben wird
  */
-class Vps_Component_Dynamic_Content
+class Vps_Component_Dynamic_Content extends Vps_Component_Dynamic_Abstract
 {
     protected $_content;
-    public function __construct($content)
+    public function setArguments($content)
     {
         $this->_content = $content;
     }
