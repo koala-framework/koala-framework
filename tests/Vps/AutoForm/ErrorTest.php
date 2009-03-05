@@ -9,7 +9,7 @@ class Vps_AutoForm_ErrorTest extends Vps_Test_SeleniumTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->setTimeout(120000);
+        $this->setTimeout(300000);
     }
 
     public function testAutoFormAddDisplayErrorsFalse()
