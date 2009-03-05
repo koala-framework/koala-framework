@@ -294,7 +294,9 @@ class Vps_Setup
             exit;
         }
 
-        if (php_sapi_name() != 'cli' && Zend_Registry::get('config')->preLogin && !isset($_COOKIE['unitTest'])) {
+        if (php_sapi_name() != 'cli' && Zend_Registry::get('config')->preLogin && !isset($_COOKIE['unitTest'])
+            && isset($_SERVER['REDIRECT_URL']) && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/vps/test/'
+        ) {
             $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
             if (empty($sessionPhpAuthed->success)) {
                 if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
