@@ -39,7 +39,10 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
 
     public function testEscaping()
     {
-        $values = array(':a\\\'', 'a\'b', '\'?', '?', 'a?b', 'a"b', 'a\\b', 'a\\\'b');
+        $values = array(
+            array(0xfb, 0xc4, 0x4a, 0xde, 0x9d, 0x63, 0x9e, 0x5d, 0x27, 0xa9),
+            ':a\\\'', 'a\'b', '\'?', '?', 'a?b', 'a"b', 'a\\b', 'a\\\'b'
+        );
         $model = new Vps_Model_Db(array(
             'table' => $this->_tableName
         ));
@@ -47,6 +50,13 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
         $this->expectOutputString(str_repeat("WARNING: (? or :) and ' are used together in an sql query value. This is a problem because of an Php bug. ' is ignored.\n", 4));
 
         foreach ($values as $v) {
+            if (is_array($v)) {
+                $vn = '';
+                foreach ($v as $i) {
+                    $vn .= chr($i);
+                }
+                $v = $vn;
+            }
             $s = $model->select()->whereEquals('test1', $v);
             $model->getRow($s);
 
@@ -69,7 +79,7 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
             for($j=0;$j<10;$j++) {
                 $chr = rand(0, 255);
                 $v .= chr($chr);
-                $hex .= "0x".dechex($chr)." ";
+                $hex .= "0x".dechex($chr).", ";
             }
             //echo "\n";
             $s = $model->select()->whereEquals('test1', $v);
