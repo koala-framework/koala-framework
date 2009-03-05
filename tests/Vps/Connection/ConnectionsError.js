@@ -1,7 +1,7 @@
 Ext.namespace('Vps.Test');
 
 Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
-    html: 'test<div id="log" style="color:red"></log>',
+    html: 'test',
     id: 'blub',
     initComponent: function()
     {
@@ -21,25 +21,6 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
                     },
                     success: function() {
                         this.el.overwrite('<div id="testa">success</div>');
-                    },
-                    scope: this
-               });
-            },
-            scope: this
-        }));
-        this.buttons.push(
-            new Ext.Button({
-            text:'testB',
-            handler : function(){
-                Ext.Ajax.request({
-                    timeout: 1000,
-                    params: {test:1},
-                    url: '/vps/test/vps_connection_test/json-success',
-                    failure: function() {
-                        this.el.insertHtml('beforeBegin', "<div id=\"abort\">abort</div>");
-                    },
-                    success: function() {
-                        this.el.insertHtml('beforeBegin', "<div id=\"success\">success</div>");
                     },
                     scope: this
                });
@@ -103,6 +84,3 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
         Vps.Test.ConnectionsError.superclass.initComponent.call(this);
     }
 });
-
-
- /* */
