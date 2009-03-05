@@ -7,17 +7,17 @@ class Vps_Component_Dynamic_NewColumn
 {
     protected $_columns;
     protected $_tag;
-    public function __construct($columns, $tag = 'ul')
+    public function setArguments($columns, $tag = 'ul')
     {
-        $this->_content = $content;
+        $this->_columns = $columns;
         $this->_tag = $tag;
     }
     public function getContent()
     {
-        if ($this->_partialInfo['number'] % ceil($this->_partialInfo['total'] / $this->_columns) == 0) {
-            return "</$this->_tag><$this->_tag class=\"column"
-                    .($this->_partialInfo['number'] / ceil($this->_partialInfo['total'] / $this->_columns) + 1)
-                    .'">';
+        $info = $this->_info['partial'];
+        if ($info['number'] % ceil($info['total'] / $this->_columns) == 0) {
+            $column = $info['number'] / ceil($info['total'] / $this->_columns) + 1;
+            return "</$this->_tag><$this->_tag class=\"column$column\">";
         }
         return '';
     }

@@ -1,0 +1,1 @@
+<?=$this->dynamic('Content', 'dynamic '); ?><?= $this->partials($this->data) ?>

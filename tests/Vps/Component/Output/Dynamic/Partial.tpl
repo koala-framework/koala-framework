@@ -1,0 +1,1 @@
+<?=$this->item?><?=$this->dynamic('Content', 'foo')?>

@@ -99,22 +99,22 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         $this->_output->getCache()->save('foo {nocache: Vps_Component_Output_C1_ChildChild_Component root-child-child Vps_Component_Output_Plugin}', 'root-child-child-hasContent1');
         $this->_output->getCache()->save('child', 'root-child-child');
         $this->_output->getCache()->emptyPreload();
-        $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foo bar foo plugin(child)', $this->_output->renderMaster($this->_root));
         $this->assertEquals(1, $this->_output->getCache()->countPreloadCalls());
 
         // 2x hasContent mit gleicher ComponentClass
-        self::$_templates = array(
-            'root-master' => '{content: Vps_Component_Output_C1_Child_Component root-child 1}{content}{content: Vps_Component_Output_C1_Child_Component root-child 2}{content}',
-            'root-child-hasContent1' => 'foo',
-            'root-child-hasContent2' => 'bar'
-        );
         $this->_output->getCache()->save('{content: Vps_Component_Output_C1_Child_Component root-child 1}{content}{content: Vps_Component_Output_C1_Child_Component root-child 2}{content}', 'root-master');
         $this->_output->getCache()->save('foo', 'root-child-hasContent1');
         $this->_output->getCache()->save('bar', 'root-child-hasContent2');
         $this->_output->getCache()->emptyPreload();
-        $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foobar', $this->_output->renderMaster($this->_root));
+        $this->assertEquals(1, $this->_output->getCache()->countPreloadCalls());
+
+        // dynamic
+        $content = serialize(array('content'));
+        $this->_output->getCache()->save("{dynamic: Content }$content{/dynamic}", 'root-master');
+        $this->_output->getCache()->emptyPreload();
+        $this->assertEquals('content', $this->_output->renderMaster($this->_root));
         $this->assertEquals(1, $this->_output->getCache()->countPreloadCalls());
     }
 

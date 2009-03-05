@@ -1,17 +1,15 @@
 <?php
 abstract class Vps_Component_Dynamic_Abstract
 {
-    protected $_partialInfo;
+    protected $_info;
     protected $_componentInfo;
 
-    public function setPartialInfo($info)
+    public function setInfo($info)
     {
-        $this->_partialInfo = $info;
+        $this->_info = $info;
     }
-    public function setComponentInfo($info)
-    {
-        $this->_componentInfo = $info;
-    }
+
+    public function setArguments() {}
 
     abstract public function getContent();
 }

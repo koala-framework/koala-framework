@@ -512,7 +512,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     if (isset($options['bufferSize']) &&
                         count($this->_importBuffer) > $options['bufferSize'])
                     {
-                        p('written');
                         $this->writeBuffer();
                     }
                 } else {
