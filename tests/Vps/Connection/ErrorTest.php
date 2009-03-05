@@ -80,6 +80,6 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
         $this->click("//button[text()='testD']");
         $this->waitForConnections();
         $text = $this->getText("//div[contains(text(), 'Vps_Exception')]");
-        $this->assertTrue((bool)strpos($text, 'Connection/TestController.php:55'));
+        $this->assertTrue((bool)strpos($text, 'Connection/TestController.php:50'));
     }
 }
