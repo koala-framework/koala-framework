@@ -8,6 +8,7 @@ class Vps_Component_RowObserver
         'delete' => array(),
         'save'   => array()
     );
+    private $_skipFnF = true;
 
     public static function getInstance()
     {
@@ -15,6 +16,12 @@ class Vps_Component_RowObserver
             self::$_instance = new self();
         }
         return self::$_instance;
+    }
+
+    //für tests
+    public function setSkipFnF($v)
+    {
+        $this->_skipFnF = $v;
     }
 
     public function clear()
@@ -69,6 +76,13 @@ class Vps_Component_RowObserver
                     if ($model instanceof Vps_Model_Db) $model = $model->getTable();
                 }
                 if (get_class($model) == 'Vps_Db_Table') continue;
+                if ($this->_skipFnF) {
+                    $m = $model;
+                    while ($m instanceof Vps_Model_Proxy) {
+                        $m = $m->getProxyModel();
+                    }
+                    if ($m instanceof Vps_Model_FnF) continue;
+                }
                 $id = $row->$primaryKey;
                 $delete[get_class($model)][$id] = true;
             }
