@@ -31,7 +31,8 @@ class Vps_Connection_TestController extends Vps_Controller_Action
 
     public function jsonSuccessAction()
     {
-       //do nothing
+//         throw new Vps_ClientException('hä?');
+        $this->view->foo = 'bar';
     }
 
     public function getTimeoutsAction()
