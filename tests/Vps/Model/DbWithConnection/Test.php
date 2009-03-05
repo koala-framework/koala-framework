@@ -40,6 +40,7 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
     public function testEscaping()
     {
         $values = array(
+            array(0x2c, 0x8a, 0x3e, 0x43, 0xb3, 0x9, 0x3d, 0x97, 0x4a, 0x27),
             array(0xfb, 0xc4, 0x4a, 0xde, 0x9d, 0x63, 0x9e, 0x5d, 0x27, 0xa9),
             ':a\\\'', 'a\'b', '\'?', '?', 'a?b', 'a"b', 'a\\b', 'a\\\'b'
         );
