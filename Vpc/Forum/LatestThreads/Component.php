@@ -15,7 +15,6 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['threads'] = array();
-/* auskommentiert, bis Forum umgestellt
         $forum = Vps_Component_Data_Root::getInstance()->getComponentByClass(
             $this->_getSetting('forumClass'),
             array('subroot' => $this->getData())
@@ -56,7 +55,6 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
             }
         }
         $ret['threads'] = $threads;
-        */
         return $ret;
     }
 }
