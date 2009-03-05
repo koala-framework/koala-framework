@@ -582,7 +582,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         $sql = substr($sql, 0, -1);
         // Performance, bei Pdo wird der Adapter umgangen
         if ($this->_table->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $this->_table->getAdapter()->getConnection()->query($sql);
+            $this->_table->getAdapter()->getConnection()->exec($sql);
         } else {
             $this->_table->getAdapter()->query($sql);
         }
