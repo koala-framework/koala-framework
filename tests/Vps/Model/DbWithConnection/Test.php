@@ -65,14 +65,19 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
         ));
         for($i=0;$i<1000;$i++) {
             $v = '';
+            $hex = '';
             for($j=0;$j<10;$j++) {
                 $chr = rand(0, 255);
                 $v .= chr($chr);
-                //echo "0x".dechex($chr)." ";
+                $hex .= "0x".dechex($chr)." ";
             }
             //echo "\n";
             $s = $model->select()->whereEquals('test1', $v);
-            $model->getRow($s);
+            try {
+                $model->getRow($s);
+            } catch (Zend_Db_Statement_Exception $e) {
+                $this->fail("value: '$v' ($hex); ".$e->getMessage());
+            }
         }
     }
 }
