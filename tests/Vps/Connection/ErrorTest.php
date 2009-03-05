@@ -25,6 +25,7 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
     {
         $this->open('/vps/test/vps_connection_test');
         $this->waitForConnections();
+        sleep(2);
         $this->click("//button[text()='testA']");
         $this->waitForConnections();
         if ($errors) $this->runScript('function foo() {Vps.Debug.displayErrors = false; Vps.log("selenium: "+Vps.Debug.displayErrors); }; foo();');
@@ -39,6 +40,7 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
 
         $this->open('/vps/test/vps_connection_test');
         $this->waitForConnections();
+        sleep(2);
         $this->click("//button[text()='testC']");
         $this->waitForConnections();
         $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Retry")."']");
@@ -77,6 +79,7 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
     {
         $this->open('/vps/test/vps_connection_test');
         $this->waitForConnections();
+        sleep(2);
         $this->click("//button[text()='testD']");
         $this->waitForConnections();
         $text = $this->getText("//div[contains(text(), 'Vps_Exception')]");
