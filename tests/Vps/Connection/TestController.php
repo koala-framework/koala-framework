@@ -29,12 +29,6 @@ class Vps_Connection_TestController extends Vps_Controller_Action
         $this->view->success = false;
     }
 
-    public function jsonSuccessAction()
-    {
-//         throw new Vps_ClientException('hä?');
-        $this->view->foo = 'bar';
-    }
-
     public function getTimeoutsAction()
     {
         $connections_counts = new Zend_Session_Namespace('test_connection_count');
