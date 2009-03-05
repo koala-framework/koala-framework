@@ -7,7 +7,7 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
     {
         parent::_initFields();
         $this->add(new Vps_Form_Field_Panel())
-            ->setHtml('<h1>'.trlVps('Please enter your address').'</h1><br />');
+            ->setHtml('<h1>'.trlVps('Please enter your address').'</h1>');
         $this->add(new Vps_Form_Field_Radio('sex', trlcVps('sex', 'Title')))
             ->setValues(array(
                 'male'   => trlVps('Mr.'),
@@ -38,7 +38,7 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
         $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')))
             ->setValues(array(
                 'prepayment'=>trlVps('prepayment'),
-                'cashOnDelivery'=>trlVps('cashOnDelivery'),
+                'cashOnDelivery'=>trlVps('cashOnDelivery').'*',
                 //'paypal'=>trlVps('Paypal'),
             ))
             ->setDefaultValue('prepayment');
