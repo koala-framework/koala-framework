@@ -16,7 +16,8 @@ class Vps_Update_Action_Rrd_AddDsTest extends Vps_Update_Action_Rrd_AbstractTest
             'minimalHeartbeat' => 120,
             'min' => 0,
             'max' => 1000,
-            'backup'=>false
+            'backup'=>false,
+            'silent' => true
         ));
         $action->preUpdate();
         $action->update();

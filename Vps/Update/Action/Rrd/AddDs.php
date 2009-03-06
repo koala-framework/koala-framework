@@ -11,6 +11,10 @@ class Vps_Update_Action_Rrd_AddDs extends Vps_Update_Action_Rrd_Abstract
     {
         if (!file_exists($this->file)) return array();
 
+        if (!$this->silent) {
+            echo "adding rrd field: ".implode($this->name)."\n";
+        }
+
         $sXml = $this->_dump();
 
         foreach ($sXml->rra as $rra) {
@@ -23,7 +27,7 @@ class Vps_Update_Action_Rrd_AddDs extends Vps_Update_Action_Rrd_Abstract
                 $r->addChild('v', 'NaN');
             }
         }
-        
+
         $xml = dom_import_simplexml($sXml);
         $doc = $xml->ownerDocument;
         $ds = $doc->createElement('ds');

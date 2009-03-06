@@ -2,17 +2,18 @@
 /**
  * @group Update_Action
  * @group Update_Action_Rrd
+ * @group Update_Action_Rrd_DropDs
  */
-class Vps_Update_Action_Rrd_RenameDsTest extends Vps_Update_Action_Rrd_AbstractTest
+class Vps_Update_Action_Rrd_DropDsTest extends Vps_Update_Action_Rrd_AbstractTest
 {
+
     public function testRenameRrd()
     {
         $file = $this->_createTestFile();
 
-        $action = new Vps_Update_Action_Rrd_RenameDs(array(
+        $action = new Vps_Update_Action_Rrd_DropDs(array(
             'file' => $file,
             'name' => 'test1',
-            'newName' => 'test3',
             'backup'=>false,
             'silent' => true
         ));
@@ -25,9 +26,8 @@ class Vps_Update_Action_Rrd_RenameDsTest extends Vps_Update_Action_Rrd_AbstractT
 
         $xml = simplexml_load_file($file.'.xml');
 
-        $this->assertEquals(2, count($xml->ds));
-        $this->assertEquals('test3', trim($xml->ds[0]->name));
-        $this->assertEquals('test2', trim($xml->ds[1]->name));
+        $this->assertEquals(1, count($xml->ds));
+        $this->assertEquals('test2', trim($xml->ds[0]->name));
 
         unlink($file);
         unlink($file.'.xml');

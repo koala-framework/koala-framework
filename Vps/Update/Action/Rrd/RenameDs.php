@@ -8,6 +8,10 @@ class Vps_Update_Action_Rrd_RenameDs extends Vps_Update_Action_Rrd_Abstract
     {
         if (!file_exists($this->file)) return array();
 
+        if (!$this->silent) {
+            echo "renaming rrd field: ".implode($this->name)."\n";
+        }
+        
         $xml = $this->_dump();
         $found = false;
         foreach ($xml->ds as $ds) {

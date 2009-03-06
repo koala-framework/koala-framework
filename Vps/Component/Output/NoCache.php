@@ -92,7 +92,7 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         if ($this->_hasViewCache($componentClass)) {
             Vps_Benchmark::count('rendered partial nocache', $componentId);
         } else {
-            Vps_Benchmark::count('rendered partial', $componentId);
+            Vps_Benchmark::count('rendered partial noviewcache', $componentId);
         }
         $output = new Vps_Component_Output_ComponentPartial();
         $output->setIgnoreVisible($this->ignoreVisible());

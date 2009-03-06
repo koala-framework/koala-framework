@@ -1,7 +1,6 @@
 <?php
 abstract class Vps_Update_Action_Db_Abstract extends Vps_Update_Action_Abstract
 {
-    public $silent = false;
     public $model;
     public $table;
 
