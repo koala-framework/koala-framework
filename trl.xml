@@ -3628,7 +3628,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>980</id>
 </text>
 <text>
-<de>Benutzer löschen</de>
+<de>Benutzer l&#xF6;schen</de>
 <en>Delete user</en>
 <id>981</id>
 </text>
@@ -3643,7 +3643,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>983</id>
 </text>
 <text>
-<de>Sind Sie sicher dass Sie diesen Benutzer (ent-)sperrent möchten?</de>
+<de>Sind Sie sicher dass Sie diesen Benutzer (ent-)sperrent m&#xF6;chten?</de>
 <en>Do you really wish to (un)lock this user?</en>
 <id>984</id>
 </text>
@@ -3653,22 +3653,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>985</id>
 </text>
 <text>
-<de>Sind Sie sicher dass Sie diesen Benutzer löschen möchten?</de>
+<de>Sind Sie sicher dass Sie diesen Benutzer l&#xF6;schen m&#xF6;chten?</de>
 <en>Do you really wish to delete this user?</en>
 <id>986</id>
 </text>
 <text>
-<de>Bild vergrößern</de>
+<de>Bild vergr&#xF6;&#xDF;ern</de>
 <en>Enlarge Image</en>
 <id>987</id>
 </text>
 <text>
-<de>Nur für dieses Web</de>
+<de>Nur f&#xFC;r dieses Web</de>
 <en>Only for this web</en>
 <id>988</id>
 </text>
 <text>
-<de>Wenn diese Box aktiv ist kann der Benutzer nur für dieses Web verwendet werden. Wenn Sie den selben Benutzer in einem anderen Web verwenden möchten, dann muss diese Box leer bleiben.</de>
+<de>Wenn diese Box aktiv ist kann der Benutzer nur f&#xFC;r dieses Web verwendet werden. Wenn Sie den selben Benutzer in einem anderen Web verwenden m&#xF6;chten, dann muss diese Box leer bleiben.</de>
 <en>If this box is checked, the account may only be used for this web. If you wish to use the same account for another web, do not check this box.</en>
 <id>989</id>
 </text>
@@ -3683,7 +3683,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>991</id>
 </text>
 <text>
-<de>Gelöscht</de>
+<de>Gel&#xF6;scht</de>
 <en>Deleted</en>
 <id>992</id>
 </text>
@@ -3703,7 +3703,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>995</id>
 </text>
 <text>
-<de>Übergebenes Passwort ist ungültig</de>
+<de>&#xDC;bergebenes Passwort ist ung&#xFC;ltig</de>
 <en>Supplied password is invalid</en>
 <id>996</id>
 </text>
@@ -3717,4 +3717,202 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Weiter</de>
 <id>998</id>
 </text>
+<text>
+<en>Download Tag</en>
+<id>999</id>
+</text>
+<text>
+<en>Marquee</en>
+<id>1000</id>
+</text>
+<text>
+<en>Fade</en>
+<id>1001</id>
+</text>
+<text>
+<en>Latest referer</en>
+<id>1002</id>
+</text>
+<text>
+<en>This entry is classified in:</en>
+<id>1003</id>
+</text>
+<text>
+<en>Company</en>
+<de>Firma</de>
+<id>1004</id>
+</text>
+<text>
+<en>Address</en>
+<de>Adresse</de>
+<id>1005</id>
+</text>
+<text>
+<en>Zipcode</en>
+<de>PLZ</de>
+<id>1006</id>
+</text>
+<text>
+<en>Fon</en>
+<de>Telefon</de>
+<id>1007</id>
+</text>
+<text>
+<en>EMail</en>
+<id>1008</id>
+</text>
+<text>
+<en>Commercial register number</en>
+<de>Firmenbuchnummer</de>
+<id>1009</id>
+</text>
+<text>
+<en>Register court</en>
+<de>Firmenbuchgericht</de>
+<id>1010</id>
+</text>
+<text>
+<en>Court</en>
+<de>Kammer</de>
+<id>1011</id>
+</text>
+<text>
+<en>Bank code</en>
+<de>BLZ</de>
+<id>1014</id>
+</text>
+<text>
+<en>Account number</en>
+<de>Kontonummer</de>
+<id>1015</id>
+</text>
+<text>
+<en>IBAN</en>
+<id>1016</id>
+</text>
+<text>
+<en>BIC / SWIFT</en>
+<id>1017</id>
+</text>
+<text>
+<en>Job title</en>
+<de>Berufsbezeichnung</de>
+<id>1020</id>
+</text>
+<text>
+<en>Agency</en>
+<de>Beh&#xF6;rde</de>
+<id>1021</id>
+</text>
+<text>
+<en>Employment specification</en>
+<de>Berufsrechtliche Vorschriften</de>
+<id>1023</id>
+</text>
+<text>
+<en>Hide webdesign</en>
+<de>Webdesign Verstecken</de>
+<id>1024</id>
+</text>
+<text>
+<en>Disclaimer name</en>
+<de>Haftungsausschluss Name</de>
+<id>1025</id>
+</text>
+<text>
+<en>Disclaimer type</en>
+<de>Haftungsausschluss Typ</de>
+<id>1026</id>
+</text>
+<text>
+<en>Germany</en>
+<de>Deutschland</de>
+<id>1027</id>
+</text>
+<text>
+<en>Details</en>
+<id>1028</id>
+</text>
+<text>
+<en>User '%value%' does already exist</en>
+<id>1029</id>
+</text>
+<text>
+<en>'%value%' does already exist</en>
+<id>1030</id>
+</text>
+<text>
+<en>Imprint</en>
+<de>Impressum</de>
+<id>1031</id>
+</text>
+<text>
+<en>Imprint.Imprint</en>
+<de>Impressum.Impressum</de>
+<id>1032</id>
+</text>
+<text>
+<en>Operating company / responsible person for the content</en>
+<de>Betreiber / Verantwortlicher f&#xFC;r den Inhalt</de>
+<id>1033</id>
+</text>
+<text>
+<en>Disclaimer</en>
+<de>Haftungsausschluss</de>
+<id>1045</id>
+</text>
+<text>
+<en>Purchase tax-identification number</en>
+<de>Umsatzsteuer-Identifikationsnummer</de>
+<id>1037</id>
+</text>
+<text>
+<en>DVR-Number</en>
+<de>DVR-Nummer</de>
+<id>1039</id>
+</text>
+<text>
+<en>Agency accordant &#xA7;5 ECG</en>
+<de>Beh&#xF6;rde gem&#xE4;&#xDF; &#xA7;55 ECG</de>
+<id>1041</id>
+</text>
+<text>
+<en>Entry at WK Austria</en>
+<de>Eintrag bei WK &#xD6;sterreich</de>
+<id>1042</id>
+</text>
+<text>
+<en>Imprint.Vivid-Planet</en>
+<de>Impressum.Vivid-Planet</de>
+<id>1043</id>
+</text>
+<text>
+<en>Webdesign</en>
+<id>1044</id>
+</text>
+<text>
+<en>IsiWeb</en>
+<id>1046</id>
+</text>
+<text>
+<en>Imprint.Disclaimer</en>
+<de>Impressum.Haftungsausschluss</de>
+<id>1047</id>
+</text>
+<text>
+<en>Clubnumber ZVR</en>
+<de>Vereinsnummer ZVR</de>
+<id>1048</id>
+</text>
+<text>
+<en>Programming</en>
+<de>Programmierung</de>
+<id>1049</id>
+</text>
+<text>
+<en>Bank data</en>
+<de>Bankverbindung</de>
+<id>1050</id>
+</text>
 </trl>
+
