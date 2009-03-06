@@ -57,4 +57,22 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
         $ret['threads'] = $threads;
         return $ret;
     }
+
+    public function getCacheVars()
+    {
+        $forum = Vps_Component_Data_Root::getInstance()->getComponentByClass(
+            $this->_getSetting('forumClass'),
+            array('subroot' => $this->getData())
+        );
+        $groupComponentClass = Vpc_Abstract::getChildComponentClass($forum->componentClass, 'groups');
+        $threadComponentClass = Vpc_Abstract::getChildComponentClass($groupComponentClass, 'detail');
+        $postsComponentClass = Vpc_Abstract::getChildComponentClass($threadComponentClass, 'child', 'posts');
+
+        $postGenerator = Vps_Component_Generator_Abstract::getInstance($postsComponentClass, 'detail');
+
+        return array(array(
+            'model' => $postGenerator->getModel(),
+            'id' => null
+        ));
+    }
 }
