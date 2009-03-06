@@ -17,11 +17,11 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
         $select = $m->select();
         $select->whereEquals('Keywords', 'php');
         $select->whereEquals('SearchIndex', 'Books');
-        $select->limit(10);
+        $select->limit(3);
 
         $rows = $m->getRows($select);
         sleep(1);
-        $this->assertEquals(10, count($rows));
+        $this->assertEquals(3, count($rows));
         $nodes = array();
         foreach ($rows as $row) {
             foreach ($row->getChildRows('ProductsToNodes') as $r) {
