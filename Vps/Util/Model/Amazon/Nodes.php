@@ -5,7 +5,7 @@ class Vps_Util_Model_Amazon_Nodes extends Vps_Model_Abstract
         'ProductsToNodes' => 'Vps_Util_Model_Amazon_ProductsToNodes'
     );
 
-    protected $_rowClass = 'Vps_Util_Model_Amazon_Products_Row';
+    protected $_rowClass = 'Vps_Util_Model_Amazon_Nodes_Row';
     protected $_toStringField = 'name';
 
     protected $_responseGroup = 'Small,BrowseNodes';
@@ -74,5 +74,10 @@ class Vps_Util_Model_Amazon_Nodes extends Vps_Model_Abstract
     public function getUniqueIdentifier()
     {
         throw new Vps_Exception_NotYetImplemented();
+    }
+    public function transformColumnName($name)
+    {
+        $name = strtoupper(substr($name, 0, 1)).substr($name, 1);
+        return $name;
     }
 }
