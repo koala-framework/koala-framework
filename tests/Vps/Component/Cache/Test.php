@@ -64,7 +64,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         $rows = $cache->getMetaModel()->getRows()->toArray();
         $this->assertEquals(4, count($rows));
         $this->assertEquals('TestModel', $rows[0]['model']);
-        $this->assertNull($rows[0]['id']);
+        $this->assertEquals('', $rows[0]['id']);
         $this->assertEquals('a', $rows[0]['value']);
         $this->assertEquals('b', $rows[1]['value']);
         $this->assertEquals('c', $rows[2]['value']);

@@ -227,7 +227,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
     private function _checkExpressions(Vps_Model_Select_Expr_Interface $expr, $data)
     {
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
-            if (!($data[$expr->getField()] && $data[$expr->getField()] == $expr->getValue())) {
+            //p($data[$expr->getField()]);
+            if (!($data[$expr->getField()] == $expr->getValue())) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {

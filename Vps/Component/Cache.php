@@ -31,7 +31,11 @@ class Vps_Component_Cache
 
     public function getMetaModel()
     {
-        if (!$this->_metaModel) $this->setMetaModel(new Vps_Component_Cache_MetaModel());
+        if (!$this->_metaModel) {
+            bt();
+            d('A');
+            $this->setMetaModel(new Vps_Component_Cache_MetaModel());
+        }
         return $this->_metaModel;
     }
 
