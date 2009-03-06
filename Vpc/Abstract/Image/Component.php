@@ -151,7 +151,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
     public static function getMediaOutput($id, $type, $className)
     {
-        $row = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('limit'=>1))
+        $row = Vps_Component_Data_Root::getInstance()->getComponentById($id)
             ->getComponent()->getImageRow();
         if ($row) {
             $fileRow = $row->getParentRow('Image');
