@@ -21,6 +21,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
 
         $cache = new Vps_Component_Cache();
         $cache->setModel(new Vps_Component_Cache_CacheModel());
+        $cache->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
         $cache->emptyPreload();
         $this->_output = new Vps_Component_Output_Cache();
         $this->_output->setCache($cache);

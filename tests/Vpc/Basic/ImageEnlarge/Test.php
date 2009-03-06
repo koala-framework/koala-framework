@@ -10,6 +10,8 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
     {
         Vps_Component_Data_Root::setComponentClass('Vpc_Basic_ImageEnlarge_Root');
         $this->_root = Vps_Component_Data_Root::getInstance();
+        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
+        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
     }
 
     public function testWithoutSmallImageComponent()
