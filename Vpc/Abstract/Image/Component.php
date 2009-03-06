@@ -203,6 +203,18 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         } else {
             $ret['mtime'] = filemtime($file);
         }
+        Vps_Component_Cache::getInstance()->saveMeta(
+            get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+        );
+        Vps_Component_Cache::getInstance()->writeBuffer();
         return $ret;
+    }
+
+    public function onCacheCallback($row)
+    {
+        $cacheId = Vps_Media::createCacheId(
+            $this->getData()->componentClass, $this->getData()->dbId, 'default'
+        );
+        Vps_Media::getOutputCache()->remove($cacheId);
     }
 }

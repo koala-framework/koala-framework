@@ -75,11 +75,16 @@ class Vps_Media
         if (!is_instance_of($class, 'Vps_Media_Output_Interface')) {
             throw new Vps_Exception("Invalid class: $class, does not implement Vps_Media_Output_Interface");
         }
-        $cacheId = $class.'_'.str_replace('-', '__', $id).'_'.$type;
+        $cacheId = self::createCacheId($class, $id, $type);
         if (!$output = self::getOutputCache()->load($cacheId)) {
             $output = call_user_func(array($class, 'getMediaOutput'), $id, $type, $class);
             self::getOutputCache()->save($output, $cacheId);
         }
         return $output;
+    }
+
+    public static function createCacheId($class, $id, $type)
+    {
+        return $class . '_' . str_replace('-', '__', $id) . '_' . $type;
     }
 }
