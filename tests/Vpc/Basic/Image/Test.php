@@ -126,10 +126,10 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
 
     public function testClearOutputCache()
     {
-        $this->markTestIncomplete();
-
-        $cache = $this->getMock('Vps_Component_Cache', array('remove'), array(), '', false);
-        Vps_Component_Cache::setInstance($cache);
+        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
+        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
+        Vps_Component_Cache::getInstance()->emptyPreload();
+        Vps_Component_RowObserver::getInstance()->setSkipFnF(false);
         Vps_Media::getOutputCache()->clean();
 
         Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled = 0;
@@ -147,10 +147,12 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $c = $this->_root->getComponentById('1600');
         $row = $c->getComponent()->getImageRow();
         $row->save();
-        Vps_Component_RowObserver::getInstance()->process(false);
+        Vps_Component_RowObserver::getInstance()->process();
         Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
         $this->assertEquals(3, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
+        Vps_Component_RowObserver::getInstance()->clear();
+        Vps_Component_RowObserver::getInstance()->setSkipFnF(true);
     }
 
     public function testBestFitWithZeroHeight()

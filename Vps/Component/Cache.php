@@ -106,6 +106,12 @@ class Vps_Component_Cache
         $this->getMetaModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
+    public function writeBuffer()
+    {
+        $this->getModel()->writeBuffer();
+        $this->getMetaModel()->writeBuffer();
+    }
+
     public function cleanComponentClass($componentClass)
     {
         $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
