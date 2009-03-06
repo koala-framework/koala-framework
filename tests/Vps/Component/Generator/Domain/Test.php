@@ -140,14 +140,4 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $component = $this->_root->getComponentByClass('Vpc_Basic_Image_Component', array('subroot' => $c));
         $this->assertEquals(5, $component->componentId);
     }
-
-    public function testUrl()
-    {
-        $this->markTestIncomplete();
-        $component = $this->_root->getComponentById('6');
-        $this->assertEquals('/home/foo', $component->url);
-
-        $component = $this->_root->getComponentById('6');
-        $this->assertEquals('rotary.ch/home/foo', $component->hosturl);
-    }
 }
