@@ -105,7 +105,8 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 self::_executeUpdate($updates, 'preUpdate');
                 self::_executeUpdate($updates, 'update');
                 self::_executeUpdate($updates, 'postUpdate');
-                echo "\ncleared cache";
+                echo "\n";
+                Vps_Controller_Action_Cli_ClearCacheController::clearCache('all', true);
                 foreach ($updates as $k=>$u) {
                     if (!in_array($u->getRevision(), $updateRevision['done'])) {
                         $updateRevision['done'][] = $u->getRevision();
