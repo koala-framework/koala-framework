@@ -5,7 +5,9 @@ class Vps_Media_Headline
     {
         $ret = array();
         $language = Zend_Registry::get('trl')->getTargetLanguage();
-        foreach ($dep->getAssetFiles('Frontend', 'css') as $file) {
+
+        $files = $dep->getAssetFiles('Frontend', 'css', 'web', Vps_Component_Data_Root::getComponentClass());
+        foreach ($files as $file) {
             if ($file instanceof Vps_Assets_Dynamic) {
                 $file = $file->getFile();
             }

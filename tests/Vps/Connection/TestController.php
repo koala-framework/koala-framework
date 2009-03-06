@@ -4,7 +4,7 @@ class Vps_Connection_TestController extends Vps_Controller_Action
     public function indexAction()
     {
         $this->view->ext('Vps.Test.ConnectionsError', array(
-            'assetsType' => 'AdminTest'
+            'assetsType' => 'Vps_Connection:Test'
         ), 'Vps.Test.Viewport');
         $connections_counts = new Zend_Session_Namespace('test_connection_count');
         $connections_counts->timeouts = 0;

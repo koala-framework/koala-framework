@@ -11,4 +11,12 @@ class Vps_Assets_Cache extends Vps_Cache_Core
         ));
         $this->setBackend($backend);
     }
+    public static function getInstance()
+    {
+        static $cache;
+        if (!isset($cache)) {
+            $cache = new self();
+        }
+        return $cache;
+    }
 }

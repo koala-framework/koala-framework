@@ -137,7 +137,7 @@ class Vps_Benchmark
             }
         }
         self::_outputCounter(self::$_counter);
-        if (self::$benchmarks) {
+        if (self::$benchmarks && PHP_SAPI != 'cli') {
             echo "<br /><b>Benchmarks:</b><br/>";
             foreach (self::$benchmarks as $i) {
                 echo "<a style=\"display:block;\"href=\"#\" onclick=\"if(this.nextSibling.nextSibling.style.display=='none') { this.open=true; this.nextSibling.nextSibling.style.display='block'; this.nextSibling.style.display=''; } else { this.open=false; this.nextSibling.nextSibling.style.display='none';this.nextSibling.style.display='none'; } return(false); }\"
