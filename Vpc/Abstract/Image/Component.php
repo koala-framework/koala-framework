@@ -206,7 +206,6 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         Vps_Component_Cache::getInstance()->saveMeta(
             get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
         );
-        Vps_Component_Cache::getInstance()->writeBuffer();
         return $ret;
     }
 
