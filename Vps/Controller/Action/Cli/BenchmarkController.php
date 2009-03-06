@@ -5,7 +5,6 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
     {
         return "generate benchmark-log statistics";
     }
-
     private function _getFields()
     {
         $ret = array();
@@ -17,15 +16,40 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
             'iccc cache semi-hit', 'iccc cache miss', 'iccc cache hit',
             'Generator::getInst semi-hit', 'Generator::getInst miss', 'Generator::getInst hit',
             'processing dependencies miss', 'rendered noviewcache'
-        );
+         );
         foreach (array('content', 'media', 'admin', 'asset', 'cli', 'unkown') as $t) {
             foreach ($fields as $f) {
                 $ret[] = $t.'-'.$f;
             }
-        }
         return $ret;
-
     }
+    /*
+    neue felder vorerst deaktiviert weil update script nicht gscheit funktioniert
+    private function _getFields()
+    {
+        $ret = array();
+        $contentFields = array(
+            'requests', 'duration', 'queries',
+            'componentDatas', 'generators', 'componentData Pages', 'components',
+            'preload cache', 'rendered nocache', 'rendered cache',
+            'getRecursiveChildComponents', 'getChildComponents uncached', 'getChildComponents cached', 'countChildComponents',
+            'Generator::getInst semi-hit', 'Generator::getInst miss', 'Generator::getInst hit',
+            'processing dependencies miss', 'rendered noviewcache',
+            'rendered partial cache', 'rendered partial nocache', 'rendered partial noviewcache'
+        );
+        foreach ($contentFields as $f) {
+            $ret[] = 'content-'.$f;
+        }
+        $ret[] = 'media-requests';
+        $ret[] = 'admin-requests';
+        $ret[] = 'admin-duration';
+        $ret[] = 'admin-queries';
+        $ret[] = 'asset-requests';
+        $ret[] = 'cli-requests';
+        $ret[] = 'unkown-requests';
+        return $ret;
+    }
+    */
 
     public static function escapeField($f)
     {

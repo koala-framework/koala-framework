@@ -38,6 +38,7 @@ abstract class Vps_Update_Action_Rrd_Abstract extends Vps_Update_Action_Abstract
         $file = tempnam('/tmp', 'rrdupate');
         $this->_tempFiles[] = $file;
         $c = $xml->asXml();
+        file_put_contents('rrdtest.xml', $c);
         $i = "\t";
         $c = str_replace("><name>", ">\n{$i}{$i}<name>", $c);
         $c = str_replace("><type>", ">\n{$i}{$i}<type>", $c);
@@ -57,6 +58,7 @@ abstract class Vps_Update_Action_Rrd_Abstract extends Vps_Update_Action_Abstract
         $c = str_replace("></cdp_prep>", ">\n{$i}{$i}</cdp_prep>", $c);
 
         file_put_contents($file, $c);
+        file_put_contents('debug.xml', $c);
         $this->_systemCheckRet("rrdtool restore $file {$this->file}.new");
         if ($this->backup) {
             copy($this->file, $this->file.'-'.date('Y-m-DH:i:s'));
