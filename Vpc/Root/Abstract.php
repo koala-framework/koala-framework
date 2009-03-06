@@ -22,6 +22,9 @@ class Vpc_Root_Abstract extends Vpc_Abstract
 
     public function formatPath($parsedUrl)
     {
+        if (Zend_Registry::get('config')->server->domain != $parsedUrl['host']) {
+            return null;
+        }
         return $parsedUrl['path'];
     }
 }

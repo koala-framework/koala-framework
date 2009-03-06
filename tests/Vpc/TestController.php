@@ -33,7 +33,8 @@ class Vpc_TestController extends Vps_Controller_Action
             Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
         }
 
-        $data = $root->getPageByUrl($url);
+        $domain = 'http://'.Zend_Registry::get('config')->server->domain;
+        $data = $root->getPageByUrl($domain.$url);
         if (!$data) {
             throw new Vps_Exception_NotFound();
         }

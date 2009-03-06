@@ -354,18 +354,24 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                         $destRow->component = 'mail';
                     }
                 } else {
-                    /*
-                    funktioniert nicht weil getPageByUrl die domain weglöscht
                     if (isset($linkClasses['intern']) && $linkClasses['intern']) {
+                        $url = $part['href'];
+                        $parsedUrl = parse_url($url);
+                        if (!isset($parsedUrl['host'])) {
+                            if (isset($_SERVER['HTTP_HOST'])) {
+                                $url = 'http://'.$_SERVER['HTTP_HOST'].$url;
+                            } else {
+                                $url = 'http://'.Vps_Registry::get('config')->server->domain.$url;
+                            }
+                        }
                         $internLinkPage = Vps_Component_Data_Root::getInstance()
-                            ->getPageByUrl($part['href']);
+                            ->getPageByUrl($url);
                         if ($internLinkPage) {
                             $destRow->component = 'intern';
                         }
                     }
+                    //if (isset($linkClasses['extern']) && $linkClasses['extern']) {
                     if (!$destRow->component && isset($linkClasses['extern']) && $linkClasses['extern']) {
-                    */
-                    if (isset($linkClasses['extern']) && $linkClasses['extern']) {
                         $destRow->component = 'extern';
                     }
                 }

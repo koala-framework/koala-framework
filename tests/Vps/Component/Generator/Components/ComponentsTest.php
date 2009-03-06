@@ -172,7 +172,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
 
     public function testHome()
     {
-        $p = $this->_root->getPageByUrl('/');
+        $p = $this->_root->getPageByUrl('http://'.Zend_Registry::get('config')->server->domain.'/');
         $this->assertEquals($p->componentId, '1');
     }
 

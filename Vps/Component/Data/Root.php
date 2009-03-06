@@ -62,7 +62,16 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getPageByUrl($url)
     {
         $parsedUrl = parse_url($url);
+        if (!isset($parsedUrl['host'])) {
+            throw new Vps_Exception("Host is missing in url '$url'");
+        }
+        if (substr($parsedUrl['host'], 0, 8) == 'preview.') {
+            $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 8);
+        } else if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
+            $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
+        }
         $path = $this->getComponent()->formatPath($parsedUrl);
+        if (is_null($path)) return null;
         $path = trim($path, '/');
         if ($path == '') {
             $ret = $this->getChildPage(array('home' => true));

@@ -49,9 +49,10 @@ class Vps_Component_Generator_Categories_Test extends PHPUnit_Framework_TestCase
 
     public function testByPath()
     {
-        $this->assertEquals('1', $this->_root->getPageByUrl('/')->componentId);
-        $this->assertEquals('2', $this->_root->getPageByUrl('/home/foo')->componentId);
-        $this->assertEquals('4', $this->_root->getPageByUrl('/foo3')->componentId);
+        $domain = 'http://'.Zend_Registry::get('config')->server->domain;
+        $this->assertEquals('1', $this->_root->getPageByUrl($domain.'/')->componentId);
+        $this->assertEquals('2', $this->_root->getPageByUrl($domain.'/home/foo')->componentId);
+        $this->assertEquals('4', $this->_root->getPageByUrl($domain.'/foo3')->componentId);
     }
 
     public function testTitle()
