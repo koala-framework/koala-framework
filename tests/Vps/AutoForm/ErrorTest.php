@@ -43,6 +43,7 @@ class Vps_AutoForm_ErrorTest extends Vps_Test_SeleniumTestCase
         else $button = trlVps('Retry');
 
         $this->click("//button[text()='".$button."']");
+        $this->waitForConnections();
         sleep(1);
 
         $this->open('/vps/test/vps_auto-form_test/get-row-count');

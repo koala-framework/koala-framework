@@ -39,8 +39,11 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditor.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditorTab.js';
+        $ret['assetsAdmin']['dep'][] = 'ExtHtmlEdit';
         $ret['assetsAdmin']['dep'][] = 'ExtWindow';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoForm';
+        $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
+        $ret['assetsAdmin']['dep'][] = 'ExtSimpleStore';
 
         $ret['assets']['dep'][] = 'VpsMailDecode';
 

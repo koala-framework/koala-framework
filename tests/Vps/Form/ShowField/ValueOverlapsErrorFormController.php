@@ -22,21 +22,13 @@ class Vps_Form_ShowField_ValueOverlapsErrorFormController extends Vps_Controller
         if ($form) $card->add($form)->setServiceType('storage');
     }
 
-    /*public function indexAction()
-    {
-        $config = array();
-        $config['baseParams']['id'] = 1;
-        $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $this->view->ext('Vps.Auto.FormPanel', $config);
-
-    }*/
     public function indexAction()
     {
         $config = array();
         $config['baseParams']['id'] = 1;
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
         $this->view->ext('Vps.Test.OverlapsError', array(
-            'assetsType' => 'AdminTest',
+            'assetsType' => 'Vps_Form_ShowField:Test',
             'controllerUrl' => '/vps/test/vps_form_show-field_value-overlaps-error-form',
         ), 'Vps.Test.Viewport');
     }

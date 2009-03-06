@@ -8,10 +8,6 @@ class Vps_View_Ext extends Vps_View
 
     public function ext($class, $config = array(), $viewport = null)
     {
-        if (!$viewport) {
-            $viewport = Zend_Registry::get('config')->ext->defaultViewport;
-        }
-
         //das ist nötig weil wenn $config ein leeres Array ist, kommt sonst []
         //raus aber {} wird benötigt (array als config ist ungültig)
         $config = (object)$config;
@@ -35,7 +31,16 @@ class Vps_View_Ext extends Vps_View
             $ext['assetsType'] = 'Admin';
         }
         $ext['config'] = $config;
+
+        if (!$viewport) {
+            if (isset($config->viewport)) {
+                $viewport = $config->viewport;
+            } else {
+                $viewport = Zend_Registry::get('config')->ext->defaultViewport;
+            }
+        }
         $ext['viewport'] = $viewport;
+
         $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
         $this->ext = $ext;
         $this->extTemplate = 'ext.tpl';

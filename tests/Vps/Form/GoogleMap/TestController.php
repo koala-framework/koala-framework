@@ -20,7 +20,8 @@ class Vps_Form_GoogleMap_TestController extends Vps_Controller_Action_Auto_Form
         $config = array();
         $config['baseParams']['id'] = 1;
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $this->view->ext('Vps.Auto.FormPanel', $config);
+        $config['assetsType'] = 'Vps_Form_GoogleMap:Test';
+        $this->view->ext('Vps.Auto.FormPanel', $config, 'Vps.Test.Viewport');
     }
 }
 

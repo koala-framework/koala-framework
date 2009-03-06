@@ -5,6 +5,13 @@ class Vps_AutoForm_TestController extends Vps_Controller_Action_Auto_Form
     protected $_permissions = array('save', 'add');
     protected $_buttons = array('save');
 
+    public function indexAction()
+    {
+        $this->view->assetsType = 'Vps_Form_ShowField:Test';
+        $this->view->viewport = 'Vps.Test.Viewport';
+        parent::indexAction();
+    }
+
     protected function _initFields()
     {
         $this->_form->add(new Vps_Form_Field_TextField('foo', 'Foo'));

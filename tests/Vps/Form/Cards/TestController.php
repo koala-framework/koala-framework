@@ -33,7 +33,8 @@ class Vps_Form_Cards_TestController extends Vps_Controller_Action_Auto_Form
         $config = array();
         $config['baseParams']['id'] = $this->_getParam('id');
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $this->view->ext('Vps.Auto.FormPanel', $config);
+        $config['assetsType'] = 'Vps_Form_Cards:Test';
+        $this->view->ext('Vps.Auto.FormPanel', $config, 'Vps.Test.Viewport');
     }
 
     public function getModelDataAction()

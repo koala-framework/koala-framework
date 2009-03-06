@@ -6,17 +6,18 @@ class Vps_Assets_Dependencies
     private $_dependenciesConfig;
     private $_processedDependencies = array();
     private $_processedComponents = array();
-    private $_jsLoader;
     /**
-     * @param string Assets-Typ, Frontend od. Admin
+     * @param Zend_Config für tests
      **/
-    public function __construct()
+    public function __construct($config = null)
     {
-        $this->_config = Vps_Registry::get('config');
-        $this->_jsLoader = new Vps_Trl_JsLoader();
+        if (!$config) {
+            $config = Vps_Registry::get('config');
+        }
+        $this->_config = $config;
     }
 
-    public function getAssetUrls($assetsType, $fileType = null, $section = 'web')
+    public function getAssetUrls($assetsType, $fileType, $section, $rootComponent)
     {
         $b = Vps_Benchmark::start();
         if ($this->_config->debug->menu) {
@@ -29,11 +30,13 @@ class Vps_Assets_Dependencies
         if (!$this->_config->debug->assets->$fileType || (isset($session->$fileType) && !$session->$fileType)) {
             $v = $this->_config->application->version;
             $language = Zend_Registry::get('trl')->getTargetLanguage();
-            $ret[] = "/assets/$section-All$assetsType-$language.$fileType?v=$v";
+            $ret[] = "/assets/all/$section/"
+                            .($rootComponent?$rootComponent.'/':'')
+                            ."$language/$assetsType.$fileType?v=$v";
             $allUsed = true;
         }
 
-        foreach ($this->getAssetFiles($assetsType, $fileType, $section) as $file) {
+        foreach ($this->getAssetFiles($assetsType, $fileType, $section, $rootComponent) as $file) {
             if ($file instanceof Vps_Assets_Dynamic) {
                 $file = $file->getFile();
             }
@@ -46,11 +49,11 @@ class Vps_Assets_Dependencies
         return $ret;
     }
 
-    public function getAssetFiles($assetsType, $fileType = null, $section = 'web')
+    public function getAssetFiles($assetsType, $fileType, $section, $rootComponent)
     {
         if (!isset($this->_files[$assetsType])) {
-            $cacheId = 'dependencies'.str_replace(':', '_', $assetsType).Vps_Component_Data_Root::getComponentClass();
-            $cache = $this->_getCache();
+            $cacheId = 'dependencies'.str_replace(':', '_', $assetsType).$rootComponent;
+            $cache = Vps_Assets_Cache::getInstance();
             $this->_files[$assetsType] = $cache->load($cacheId);
             if ($this->_files[$assetsType]===false) {
                 Vps_Benchmark::count('processing dependencies miss', $assetsType);
@@ -73,7 +76,6 @@ class Vps_Assets_Dependencies
                         if (!isset($config)) {
                             throw new Vps_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
                         }
-//                         $assetsType = substr($assetsType, strpos($assetsType, ':')+1);
                         $assets = $config->assets->{substr($assetsType, strpos($assetsType, ':')+1)};
                     }
                 } else {
@@ -81,7 +83,7 @@ class Vps_Assets_Dependencies
                 }
                 foreach ($assets as $d=>$v) {
                     if ($v) {
-                        $this->_processDependency($assetsType, $d);
+                        $this->_processDependency($assetsType, $d, $rootComponent);
                     }
                 }
                 foreach ($this->_files[$assetsType] as $f) {
@@ -120,40 +122,6 @@ class Vps_Assets_Dependencies
         return $files;
     }
 
-    private function _pack($contents, $fileType)
-    {
-        if ($fileType == 'js') {
-            $contents = str_replace("\r", "\n", $contents);
-
-            // remove comments
-            $contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
-            $contents = preg_replace('!//[^\n]*!', '', $contents);
-
-            // remove tabs, spaces, newlines, etc. - funktioniert nicht - da fehlen hinundwider ;
-            //$contents = str_replace(array("\r", "\n", "\t"), "", $contents);
-
-            // multiple whitespaces
-            $contents = str_replace("\t", " ", $contents);
-            $contents = preg_replace('/(\n)\n+/', '$1', $contents);
-            $contents = preg_replace('/(\n)\ +/', '$1', $contents);
-            $contents = preg_replace('/(\ )\ +/', '$1', $contents);
-
-        } else if ($fileType == 'css') {
-
-            $contents = str_replace("\r", "\n", $contents);
-
-            // remove comments
-            $contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
-
-            // multiple whitespaces
-            $contents = str_replace("\t", " ", $contents);
-            $contents = preg_replace('/(\n)\n+/', '$1', $contents);
-            $contents = preg_replace('/(\n)\ +/', '$1', $contents);
-            $contents = preg_replace('/(\ )\ +/', '$1', $contents);
-        }
-        return $contents;
-    }
-
     private function _getDependenciesConfig($assetsType)
     {
         if (!isset($this->_dependenciesConfig[$assetsType])) {
@@ -174,13 +142,12 @@ class Vps_Assets_Dependencies
         return $this->_dependenciesConfig[$assetsType];
     }
 
-    private function _processDependency($assetsType, $dependency)
+    private function _processDependency($assetsType, $dependency, $rootComponent)
     {
         if (in_array($assetsType.$dependency, $this->_processedDependencies)) return;
         $this->_processedDependencies[] = $assetsType.$dependency;
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
-            $rootComponent = Vps_Component_Data_Root::getComponentClass();
-            $this->_processComponentDependency($assetsType, $rootComponent, $dependency == 'ComponentsAdmin');
+            $this->_processComponentDependency($assetsType, $rootComponent, $rootComponent, $dependency == 'ComponentsAdmin');
             return;
         }
         if (!isset($this->_getDependenciesConfig($assetsType)->$dependency)) {
@@ -190,13 +157,13 @@ class Vps_Assets_Dependencies
 
         if (isset($deps->dep)) {
             foreach ($deps->dep as $d) {
-                $this->_processDependency($assetsType, $d);
+                $this->_processDependency($assetsType, $d, $rootComponent);
             }
         }
 
         if (isset($deps->files)) {
             foreach ($deps->files as $file) {
-                $this->_processDependencyFile($assetsType, $file);
+                $this->_processDependencyFile($assetsType, $file, $rootComponent);
             }
         }
         return;
@@ -213,7 +180,7 @@ class Vps_Assets_Dependencies
         return false;
     }
 
-    private function _processComponentDependency($assetsType, $class, $includeAdminAssets)
+    private function _processComponentDependency($assetsType, $class, $rootComponent, $includeAdminAssets)
     {
         if (in_array($assetsType.$class.$includeAdminAssets, $this->_processedComponents)) return;
 
@@ -225,22 +192,22 @@ class Vps_Assets_Dependencies
         $this->_processedComponents[] = $assetsType.$class.$includeAdminAssets;
         if (isset($assets['dep'])) {
             foreach ($assets['dep'] as $dep) {
-                $this->_processDependency($assetsType, $dep);
+                $this->_processDependency($assetsType, $dep, $rootComponent);
             }
         }
         if (isset($assetsAdmin['dep'])) {
             foreach ($assetsAdmin['dep'] as $dep) {
-                $this->_processDependency($assetsType, $dep);
+                $this->_processDependency($assetsType, $dep, $rootComponent);
             }
         }
         if (isset($assets['files'])) {
             foreach ($assets['files'] as $file) {
-                $this->_processDependencyFile($assetsType, $file);
+                $this->_processDependencyFile($assetsType, $file, $rootComponent);
             }
         }
         if (isset($assetsAdmin['files'])) {
             foreach ($assetsAdmin['files'] as $file) {
-                $this->_processDependencyFile($assetsType, $file);
+                $this->_processDependencyFile($assetsType, $file, $rootComponent);
             }
         }
 
@@ -277,7 +244,7 @@ class Vps_Assets_Dependencies
         $classes = array_merge($classes, Vpc_Abstract::getSetting($class, 'plugins'));
         foreach ($classes as $class) {
             if ($class) {
-                $this->_processComponentDependency($assetsType, $class, $includeAdminAssets);
+                $this->_processComponentDependency($assetsType, $class, $rootComponent, $includeAdminAssets);
             }
         }
     }
@@ -334,201 +301,5 @@ class Vps_Assets_Dependencies
         return $p.'/'.$url;
     }
 
-    public function getFileContents($file, $language = null)
-    {
-        $ret = array();
-        if ($file == 'AllRteStyles.css') {
-            $ret = Vpc_Basic_Text_StylesModel::getStylesContents();
-        } else if (preg_match('#^([a-z0-9]+)-All(.*)\\-([a-z]+)\\.(printcss|js|css)$#i', $file, $m)) {
-            $section = $m[1];
-            $assetsType = $m[2];
-            if (substr($assetsType, -5) == 'Debug' && !$this->_config->debug->menu) {
-                throw new Vps_Exception("Debug Assets are not avaliable as the debug menu is disabled");
-            }
-            $language = $m[3];
-            $fileType = $m[4];
-            if (isset($_SERVER['HTTP_HOST'])) {
-                $host = $_SERVER['HTTP_HOST'];
-            } else {
-                $host = Vps_Registry::get('config')->server->domain;
-            }
-            $host = str_replace(array('.', '-'), array('', ''), $host);
-            $encoding = Vps_Media_Output::getEncoding();
-            $cache = $this->_getCache();
-            $cacheId = str_replace(array('.', ':'), array('_', '_'), $fileType).
-                    $encoding.str_replace(array('.', ':'), array('_', '_'), $section).
-                    Vps_Setup::getConfigSection().$language.$host.
-                    Vps_Component_Data_Root::getComponentClass();
-            if (!$cacheData = $cache->load($cacheId)) {
 
-                $cacheData  = array();
-
-                $cacheData['contents'] = '';
-                $cacheData['mtimeFiles'] = array();
-                foreach ($this->getAssetFiles($assetsType, $fileType, $section) as $file) {
-                    if ($file instanceof Vps_Assets_Dynamic) {
-                        $file = $file->getFile();
-                    }
-                    if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
-                        try {
-                            $c = $this->getFileContents($file, $language, $section);
-                        } catch (Vps_Assets_NotFoundException $e) {
-                            throw new Vps_Exception($file.': '.$e->getMessage());
-                        }
-                        $cacheData['contents'] .=  $c['contents']."\n";
-                        $cacheData['mtimeFiles'] = array_merge($cacheData['mtimeFiles'], $c['mtimeFiles']);
-                    }
-                }
-                $cacheData['contents'] = $this->_pack($cacheData['contents'], $fileType);
-                $cacheData['contents'] = Vps_Media_Output::encode($cacheData['contents'], $encoding);
-                $cacheData['version'] = $this->_config->application->version;
-                if ($fileType == 'js') {
-                    $cacheData['mimeType'] = 'text/javascript; charset=utf8';
-                } else if ($fileType == 'css' || $fileType == 'printcss') {
-                    $cacheData['mimeType'] = 'text/css; charset=utf8';
-                }
-                $cache->save($cacheData, $cacheId);
-            }
-            $ret['mtime'] = $cacheData['mtime'];
-            $ret['contents'] = $cacheData['contents'];
-            $ret['mimeType'] = $cacheData['mimeType'];
-            $ret['encoding'] = $encoding;
-        } else {
-            if (substr($file, -4)=='.gif') {
-                $ret['mimeType'] = 'image/gif';
-            } else if (substr($file, -4)=='.png') {
-                $ret['mimeType'] = 'image/png';
-            } else if (substr($file, -4)=='.jpg') {
-                $ret['mimeType'] = 'image/jpeg';
-            } else if (substr($file, -4)=='.css') {
-                $ret['mimeType'] = 'text/css; charset=utf-8';
-            } else if (substr($file, -9)=='.printcss') {
-                $ret['mimeType'] = 'text/css; charset=utf-8';
-            } else if (substr($file, -3)=='.js') {
-                $ret['mimeType'] = 'text/javascript; charset=utf-8';
-            } else if (substr($file, -4)=='.swf') {
-                $ret['mimeType'] = 'application/flash';
-            } else if (substr($file, -4)=='.ico') {
-                $ret['mimeType'] = 'image/x-icon';
-            } else if (substr($file, -5)=='.html') {
-                $ret['mimeType'] = 'text/html; charset=utf-8';
-            } else {
-                throw new Vps_Assets_NotFoundException("Invalid filetype");
-            }
-
-            if (substr($ret['mimeType'], 0, 5) == 'text/') { //nur texte cachen
-                if (!$language) {
-                    $language = Zend_Registry::get('trl')->getTargetLanguage();
-                }
-
-                $cache = $this->_getCache();
-                $section = substr($file, 0, strpos($file, '-'));
-                if (!$section) $section = 'web';
-                if (isset($_SERVER['HTTP_HOST'])) {
-                    $host = $_SERVER['HTTP_HOST'];
-                } else {
-                    $host = Vps_Registry::get('config')->server->domain;
-                }
-                $host = str_replace(array('.', '-'), array('', ''), $host);
-                $cacheId = 'fileContents'.$language.$section.$host.
-                    str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $file).
-                    Vps_Component_Data_Root::getComponentClass();
-                if (!$cacheData = $cache->load($cacheId)) {
-                    $cacheData['contents'] = file_get_contents($this->getAssetPath($file));
-                    $cacheData['mtimeFiles'] = array($this->getAssetPath($file));
-                    if ((substr($file, 0, strlen($section)+5)==$section.'-ext/' || substr($file, 0, 4)=='ext/')
-                        && substr($ret['mimeType'], 0, 5) == 'text/'
-                    ) {
-                        //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
-                        $cacheData['contents'] = str_replace('../images/', '/assets/ext/resources/images/', $cacheData['contents']);
-                    }
-
-                    if (file_exists('application/assetVariables.ini')) {
-                        $cacheData['mtimeFiles'][] = 'application/assetVariables.ini';
-                        static $assetVariables = array();
-                        if (!isset($assetVariables[$section])) {
-                            $assetVariables[$section] = new Zend_Config_Ini('application/assetVariables.ini', $section);
-                        }
-                        foreach ($assetVariables[$section] as $k=>$i) {
-                            $cacheData['contents'] = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $cacheData['contents']);
-                        }
-                    }
-                    if (substr($ret['mimeType'], 0, 8) == 'text/css') {
-                        $cssClass = $file;
-                        if (substr($cssClass, 0, strlen($section)+5) == $section.'-web/') {
-                            $cssClass = substr($cssClass, strlen($section)+5);
-                        }
-                        if (substr($cssClass, 0, strlen($section)+5) == $section.'-vps/') {
-                            $cssClass = substr($cssClass, strlen($section)+5);
-                        }
-                        if (substr($cssClass, -4) == '.css') {
-                            $cssClass = substr($cssClass, 0, -4);
-                        }
-                        if (substr($cssClass, -9) == '.printcss') {
-                            $cssClass = substr($cssClass, 0, -9);
-                        }
-                        if (substr($cssClass, -10) == '/Component') {
-                            $cssClass = substr($cssClass, 0, -10);
-                        }
-                        $cssClass = str_replace('/', '', $cssClass);
-                        $cssClass = strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
-                        $cacheData['contents'] = str_replace('$cssClass', $cssClass, $cacheData['contents']);
-                    }
-
-                    if (substr($ret['mimeType'], 0, 15) == 'text/javascript') {
-                        preg_match_all('#{([A-Za-z0-9_]+)::([A-Za-z0-9_]+)\\(\\)}#', $cacheData['contents'], $m);
-                        foreach (array_keys($m[0]) as $i) {
-                            $c = call_user_func(array($m[1][$i], $m[2][$i]), $this);
-                            $cacheData['contents'] = str_replace($m[0][$i], $c, $cacheData['contents']);
-                            if (method_exists($m[1][$i], 'getMTimeFiles')) {
-                               $cacheData['mtimeFiles'] = array_merge($cacheData['mtimeFiles'],
-                                    call_user_func(array($m[1][$i], 'getMTimeFiles'), $this));
-                            }
-                        }
-
-                        $version = Vps_Registry::get('config')->application->version;
-                        $cacheData['contents'] = str_replace('{$application.version}', $version, $cacheData['contents']);
-
-                        $cacheData['contents'] = $this->_jsLoader->trlLoad($cacheData['contents'], $language);
-                        $cacheData['contents'] = $this->_hlp($cacheData['contents'], $language);
-                    }
-                    $cache->save($cacheData, $cacheId);
-                }
-                $ret['contents'] = $cacheData['contents'];
-                $ret['mtime'] = $cacheData['mtime'];
-                $ret['mtimeFiles'] = $cacheData['mtimeFiles'];
-
-            } else {
-                $cacheData = false;
-                $ret['contents'] = file_get_contents($this->getAssetPath($file));
-                $ret['mtime'] = filemtime($this->getAssetPath($file));
-                $ret['mtimeFiles'] = array($this->getAssetPath($file));
-            }
-        }
-
-        return $ret;
-    }
-
-    private function _hlp($contents, $language)
-    {
-        //TODO 1902 $language verwenden
-        $matches = array();
-        preg_match_all("#hlp\('(.*)'\)#", $contents, $matches);
-        foreach ($matches[0] as $key => $search) {
-            $r = hlp($matches[1][$key]);
-            $r = str_replace(array("\n", "\r", "'"), array('\n', '', "\\'"), $r);
-            $contents = str_replace($search, "'" . $r . "'", $contents);
-        }
-        return $contents;
-    }
-
-
-    private function _getCache()
-    {
-        static $cache;
-        if (!isset($cache)) {
-            $cache = new Vps_Assets_Cache();
-        }
-        return $cache;
-    }
 }
