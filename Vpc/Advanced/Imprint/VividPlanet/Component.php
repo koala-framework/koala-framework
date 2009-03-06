@@ -5,7 +5,8 @@ class Vpc_Advanced_Imprint_VividPlanet_Component extends Vpc_Abstract_Composite_
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlVps('Imprint.Vivid-Planet'),
-            'modelname' => 'Vps_Component_FieldModel'
+            'modelname' => 'Vps_Component_FieldModel',
+            'cssClass' => 'webStandard'
         ));
         $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
         return $ret;
