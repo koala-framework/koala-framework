@@ -27,8 +27,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     public function __destruct()
     {
         if (isset($this->_importBuffer)) {
-            echo 'writeBuffer must be called!'; //echo falls exception nicht richtig angezeigt wird
-            throw new Vps_Exception('writeBuffer must be called!');
+            $this->writeBuffer();
         }
     }
 
