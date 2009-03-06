@@ -15,6 +15,7 @@ class Vpc_Basic_Feed_Test extends PHPUnit_Framework_TestCase
     public function testFeed()
     {
         Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
+        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
         $feed = Vps_Component_Data_Root::getInstance()->getChildComponent('_feed');
         $xml = $feed->getComponent()->getXml();
         $rows = Vps_Component_Cache::getInstance()->getModel()->getRows();
@@ -31,6 +32,7 @@ class Vpc_Basic_Feed_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($xml, $feed->getComponent()->getXml());
         $this->assertEquals(1, count($rows));
         $this->assertEquals($xml, $row->content);
+        p(Vps_Component_Cache::getInstance()->getMetaModel()->getRows()->toArray());
 
         // Cache-Eintrag ändern um festzustellen, ob eh Cache verwendet wird
         $row->content = 'foo';

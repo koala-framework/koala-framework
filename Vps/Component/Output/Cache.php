@@ -43,8 +43,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         }
         // Normal rendern
         $ret = parent::render($component, $masterTemplate, $plugins);
-        $this->getCache()->getModel()->writeBuffer();
-        $this->getCache()->getMetaModel()->writeBuffer();
+        $this->getCache()->writeBuffer();
         return $ret;
     }
 
@@ -205,10 +204,8 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             $meta = $component->getComponent()->getPartialCacheVars($partial);
         }
         foreach ($meta as $m) {
+            if (!isset($m['model'])) throw new Vps_Exception('getCacheVars must deliver model');
             $model = $m['model'];
-            if (!isset($model)) throw new Vps_Exception('getCacheVars must deliver model');
-            if ($model instanceof Vps_Model_Db) $model = get_class($model->getTable());
-            if ($model instanceof Vps_Model_Abstract) $model = get_class($model);
             $id = isset($m['id']) ? $m['id'] : null;
             if (isset($m['callback']) && $m['callback']) {
                 $type = Vps_Component_Cache::META_CALLBACK;

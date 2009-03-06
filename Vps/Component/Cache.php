@@ -92,6 +92,10 @@ class Vps_Component_Cache
 
     public function saveMeta($model, $id, $value, $type = self::META_CACHE_ID)
     {
+        if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+        if ($model instanceof Vps_Model_Abstract) $model = $model;
+        if (!is_string($model)) $model = get_class($model);
+        if (is_null($id)) $id = ''; // Weil mySql ein null-value im index nicht zulässt
         $data = array(
             'model' => $model,
             'id' => $id,
@@ -132,7 +136,7 @@ class Vps_Component_Cache
                 new Vps_Model_Select_Expr_And(array(
                     new Vps_Model_Select_Expr_Equals('model', $value['model']),
                     new Vps_Model_Select_Expr_Or(array(
-                        new Vps_Model_Select_Expr_IsNull('id'),
+                        new Vps_Model_Select_Expr_Equals('id', ''),
                         new Vps_Model_Select_Expr_Equals('id', $value['id'])
                     ))
                 ))
