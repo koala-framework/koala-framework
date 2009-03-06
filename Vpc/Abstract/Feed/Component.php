@@ -2,6 +2,7 @@
 abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
 {
     abstract protected function _getRssEntries();
+
     protected function _getRssTitle()
     {
         return Zend_Registry::get('config')->application->name;
@@ -9,31 +10,38 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
 
     public function sendContent()
     {
-        $cache = Vps_Component_Cache::getInstance();
-        $cacheId = $cache->getCacheIdFromComponentId($this->getData()->componentId);
-        if (!$xml = $cache->load($cacheId)) {
-            $feedArray = array(
-                'title' => $this->_getRssTitle(),
-                'link' => 'http://'.$_SERVER['HTTP_HOST'].$this->getUrl(),
-                //'lastUpdate' => ,
-                'charset' => 'utf-8',
-                'description' => '',
-                //'author' => 'Alexander Netkachev',
-                //'email' => 'alexander.netkachev@gmail.com',
-                'copyright' => Zend_Registry::get('config')->application->name,
-                'generator' => 'Vivid Planet Software GmbH',
-                'language' => 'de', //TODO
-                'entries' => $this->_getRssEntries()
-            );
-            $feed = Zend_Feed::importArray($feedArray, 'rss');
-            $xml = $feed->saveXml();
-            $tags = array(
-                'componentClass' => $this->getData()->componentClass,
-                'pageId' => $cache->getCacheIdFromComponentId($this->getData()->getPage()->componentId)
-            );
-            $cache->save($xml, $cacheId, $tags);
-        }
+        $xml = $this->getXml();
         header('Content-type: application/rss+xml; charset: utf-8');
         echo $xml;
+    }
+
+    public function getXml()
+    {
+        $cache = Vps_Component_Cache::getInstance();
+        if (!$xml = $cache->load($this->getData()->componentId)) {
+            $xml = $this->_getFeedXml();
+            $cache->save($xml, $this->getData()->componentId, $this->getData()->componentClass);
+        }
+        return $xml;
+    }
+
+    private function _getFeedXml()
+    {
+        $host = isset($_SERVER['HTTP_HOST']) ? 'http://' . $_SERVER['HTTP_HOST'] : '';
+        $feedArray = array(
+            'title' => $this->_getRssTitle(),
+            'link' => $host.$this->getUrl(),
+            //'lastUpdate' => ,
+            'charset' => 'utf-8',
+            'description' => '',
+            //'author' => ,
+            //'email' => ,
+            'copyright' => Zend_Registry::get('config')->application->name,
+            'generator' => 'Vivid Planet Software GmbH',
+            'language' => 'de', //TODO
+            'entries' => $this->_getRssEntries()
+        );
+        $feed = Zend_Feed::importArray($feedArray, 'rss');
+        return $feed->saveXml();
     }
 }

@@ -159,6 +159,7 @@ class Vps_Component_Cache
             $select = $this->getModel()->select()->whereEquals('component_class', $value);
             $count = $this->getModel()->countRows($select);
             $this->getModel()->deleteRows($select);
+            $this->emptyPreload();
             Vps_Benchmark::cacheInfo("Cache: $count entries for Component Class '$value' deleted.");
             return true;
 
@@ -168,6 +169,7 @@ class Vps_Component_Cache
             $select = $this->getModel()->select()->whereEquals('id', $value);
             $count = $this->getModel()->countRows($select);
             $this->getModel()->deleteRows($select);
+            $this->emptyPreload();
             Vps_Benchmark::cacheInfo("Cache: $count entries for Component '$value' deleted.");
             return true;
 
@@ -175,6 +177,7 @@ class Vps_Component_Cache
 
             $this->getModel()->deleteRows(array());
             $this->getMetaModel()->deleteRows(array());
+            $this->emptyPreload();
             Vps_Benchmark::cacheInfo("Cache: completely deleted.");
             return true;
 
@@ -207,13 +210,16 @@ class Vps_Component_Cache
 
     public function load($id)
     {
+        if (!$this->isLoaded($id)) {
+            $this->preload(array($id));
+        }
         return $this->_preloadedValues[$id];
     }
 
     public function preload($ids)
     {
         $this->_countPreloadCalls++;
-        $this->_preloadedValues = $this->_preloadedValues + $this->_preload($ids);
+        $this->_preloadedValues = array_merge($this->_preloadedValues, $this->_preload($ids));
         return !empty($this->_preloadedValues);
     }
 
