@@ -29,10 +29,4 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
         }
     }
 
-    public function delete($componentId)
-    {
-        foreach ($this->_getRows($componentId) as $row) {
-            $row->delete();
-        }
-    }
 }
