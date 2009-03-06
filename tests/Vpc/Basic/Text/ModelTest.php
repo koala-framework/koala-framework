@@ -64,7 +64,6 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCreatesInternLinkComponent()
     {
-        $this->markTestIncomplete(); //funtioniert nicht wegen domains
         $c = $this->_root->getComponentById(1014)->getComponent();
         $row = $c->getRow();
         $html = '<p><a href="/foo1">foo</a></p>';

@@ -14,17 +14,11 @@ class Vpc_Root_DomainRoot_Component extends Vpc_Root_Abstract
 
     public function formatPath($parsedUrl)
     {
-        if (!isset($parsedUrl['host']))
-            throw new Vps_Exception("Host is missing in url '$url'");
         $host = $parsedUrl['host'];
-        if (substr($host, 0, 8) == 'preview.') {
-            $host = substr($host, 8);
-        }
         $setting = $this->_getSetting('generators');
         $modelName = $setting['domain']['model'];
         $domain = Vps_Model_Abstract::getInstance($modelName)->getRowByHost($host);
-        if (!$domain)
-            throw new Vps_Exception("Domain $host not found, please enter in config");
+        if (!$domain) return null;
         $path =
             '/' .
             $domain->id .

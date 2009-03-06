@@ -57,7 +57,8 @@ class Vps_Component_Generator_Page_Test extends PHPUnit_Framework_TestCase
 
     public function testHome()
     {
-        $home = $this->_root->getPageByUrl('/');
+        $domain = 'http://'.Zend_Registry::get('config')->server->domain;
+        $home = $this->_root->getPageByUrl($domain.'/');
         $this->assertNotNull($home);
         $this->assertEquals($home->url, '/');
         $child = $home->getChildComponent('-foo');
