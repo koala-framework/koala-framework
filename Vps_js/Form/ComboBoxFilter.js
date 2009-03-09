@@ -32,7 +32,7 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
             if (saveStoreData && saveStoreData.data[this.saveBox.filterField]) {
                 this.filterBox.setValue(saveStoreData.data[this.saveBox.filterField]);
                 this.saveBox.enable();
-            } else if (!this.firstChangeDone) {
+            } else if (!this.firstChangeDone && !this.filterBox.defaultValue) {
                 this.saveBox.disable();
             }
 
