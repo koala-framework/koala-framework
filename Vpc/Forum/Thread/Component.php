@@ -1,6 +1,8 @@
 <?php
 class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
 {
+    private $_threadVars;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -29,6 +31,8 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
 
     public function getThreadVars()
     {
+        if ($this->_threadVars) return $this->_threadVars;
+
         $postsData = $this->getData()->getChildComponent('-posts');
         $select = $postsData->getGenerator('detail')->select($this->getData());
 
@@ -62,6 +66,7 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         $ret['replies'] = $replies;
         $ret['firstPost'] = $firstPost;
         $ret['lastPost'] = $lastPost;
+        $this->_threadVars = $ret;
         return $ret;
     }
 }

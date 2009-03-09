@@ -9,7 +9,7 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
         $ret['numberOfPosts'] = 9;
         return $ret;
     }
-    
+
     protected function _getSelect()
     {
         $select = new Vps_Model_Select();
@@ -36,13 +36,23 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
                     $linktexts[] = $page->name;
                     $page = $page->getParentPage();
                 }
-                $post->linktext = 
-                    $dateHelper->date($post->row->create_time) . 
+                $post->linktext =
+                    $dateHelper->date($post->row->create_time) .
                     ': ' .
                     implode(' &raquo; ', array_reverse($linktexts));
                 $ret['posts'][] = $post;
             }
         }
+        return $ret;
+    }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $ret[] = array(
+            'model' => 'Vpc_Posts_Directory_Model',
+            'id' => null
+        );
         return $ret;
     }
 }
