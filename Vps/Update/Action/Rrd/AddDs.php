@@ -12,7 +12,7 @@ class Vps_Update_Action_Rrd_AddDs extends Vps_Update_Action_Rrd_Abstract
         if (!file_exists($this->file)) return array();
 
         if (!$this->silent) {
-            echo "adding rrd field: ".implode($this->name)."\n";
+            echo "adding rrd field: ".$this->name."\n";
         }
 
         $sXml = $this->_dump();

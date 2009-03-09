@@ -21,6 +21,10 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
             foreach ($fields as $f) {
                 $ret[] = $t.'-'.$f;
             }
+        }
+        $ret[] = 'content-rendered partial cache';
+        $ret[] = 'content-rendered partial nocache';
+        $ret[] = 'content-rendered partial noviewcache';
         return $ret;
     }
     /*
@@ -112,6 +116,18 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                 'content-rendered noviewcache' => array(
                     'color' => '#000000',
                     'label' => 'noviewcache'
+                ),
+                'content-rendered partial cache' => array(
+                    'color' => '#330000',
+                    'label' => 'partial cache'
+                ),
+                'content-rendered partial nocache' => array(
+                    'color' => '#003300',
+                    'label' => 'partial nocache'
+                ),
+                'content-rendered partial noviewcache' => array(
+                    'color' => '#333333',
+                    'label' => 'partial noviewcache'
                 )
             ),
             'duration'=>array(
