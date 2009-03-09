@@ -38,13 +38,4 @@ abstract class Vps_Component_Output_Abstract
         $view->assign($templateVars);
         return $view->render($template);
     }
-
-    protected function _hasViewCache($componentClass)
-    {
-        if (!isset($this->_viewCache[$componentClass])) {
-            $this->_viewCache[$componentClass] = Vpc_Abstract::getSetting($componentClass, 'viewCache');
-        }
-        return $this->_viewCache[$componentClass];
-    }
-
 }

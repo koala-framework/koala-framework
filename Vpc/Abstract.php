@@ -471,9 +471,18 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
         return $ret[0];
     }
+
     public function getViewCacheLifetime()
     {
         return null;
+    }
+
+    public function getViewCacheSettings()
+    {
+        return array(
+            'enabled' => $this->_getSetting('viewCache'),
+            'lifetime' => $this->getViewCacheLifetime()
+        );
     }
 }
 
