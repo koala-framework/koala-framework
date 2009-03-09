@@ -48,9 +48,9 @@
     <? if($this->row->bank_data || $this->row->bank_code || $this->row->account_number || $this->row->iban || $this->row->bic_swift) {?>
         <span class="imprintHeadline"><?=trlVps('Bank data');?></span>
         <p>
-            <? if($this->row->bank_data) echo $this->row->bankData."<br/>";?>
-            <? if($this->row->bank_code) echo trlVps('Bank code').": ".$this->row->bankCode."<br/>";?>
-            <? if($this->row->account_number) echo trlVps('Account number').": ".$this->row->accountNumber."<br/>";?>
+            <? if($this->row->bank_data) echo $this->row->bank_data."<br/>";?>
+            <? if($this->row->bank_code) echo trlVps('Bank code').": ".$this->row->bank_code."<br/>";?>
+            <? if($this->row->account_number) echo trlVps('Account number').": ".$this->row->account_number."<br/>";?>
             <? if($this->row->iban) echo trlVps('IBAN').": ".$this->row->iban."<br/>";?>
             <? if($this->row->bic_swift) echo trlVps('BIC / SWIFT').": ".$this->row->bic_swift;?>
         </p>
