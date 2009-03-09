@@ -202,7 +202,14 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         }
         $id = $this->{$ref['column']};
         if (!$id) return null;
-        return Vps_Model_Abstract::getInstance($ref['refModelClass'])->getRow($id);
+        if (isset($ref['refModelClass'])) {
+            $refModel = Vps_Model_Abstract::getInstance($ref['refModelClass']);
+        } else if (isset($ref['refModel'])) {
+            $refModel = $ref['refModel'];
+        } else {
+            throw new Vps_Exception("refModel or refModelClass for reference '$rule' not set");
+        }
+        return $refModel->getRow($id);
     }
 
     public function toDebug()
