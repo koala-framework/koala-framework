@@ -225,8 +225,12 @@ class Vps_Component_Cache
     public function preload($ids)
     {
         $this->_countPreloadCalls++;
-        $this->_preloadedValues = array_merge($this->_preloadedValues, $this->_preload($ids));
-        return !empty($this->_preloadedValues);
+        $this->_preloadedValues += $this->_preload($ids);
+    }
+
+    public function isEmpty()
+    {
+        return count($this->getModel()->export(Vps_Model_Db::FORMAT_ARRAY)) == 0;
     }
 
     protected function _preload($ids)
