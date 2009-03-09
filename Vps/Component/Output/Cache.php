@@ -25,18 +25,15 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
     public function render($component, $masterTemplate = false, array $plugins = array())
     {
         // Erste Komponente vorausladen
-        $result = $this->getCache()->preload(array($component->componentId));
-        if (!$result) {
+        $this->getCache()->preload(array($component->componentId));
+        if ($this->getCache()->isEmpty()) {
             $meta = array();
             foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
                 $methods = get_class_methods($componentClass);
                 if (in_array('getStaticCacheVars', $methods)) {
                     $vars = call_user_func(array($componentClass, 'getStaticCacheVars'));
                     foreach ($vars as $id => $m) {
-                        $model = $m['model'];
-                        if ($model instanceof Vps_Model_Db) $model = get_class($model->getTable());
-                        if ($model instanceof Vps_Model_Abstract) $model = get_class($model);
-                        $this->getCache()->saveMeta($model, null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
+                        $this->getCache()->saveMeta($m['model'], null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
                     }
                 }
             }
