@@ -36,7 +36,7 @@ Vps.Marquee.Elements.prototype = {
             el = new Ext.Element(el);
             this.elements.push({
                 el: el,
-                size: this._elSize(el),
+                size: this._elSize(el)
             });
             this.sumSize += this._elSize(el);
         }, this);
