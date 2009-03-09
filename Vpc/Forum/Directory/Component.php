@@ -29,7 +29,6 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['flags']['processInput'] = true;
 
-        $ret['clearCacheTable'] = 'Vpc_Posts_Directory_Model';
         return $ret;
     }
 
@@ -102,6 +101,20 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                 $ret[] = $group;
             }
         }
+        return $ret;
+    }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $ret[] = array(
+            'model' => 'Vpc_Posts_Directory_Model',
+            'id' => null
+        );
+        $ret[] = array(
+            'model' => Vps_Registry::get('config')->user->model,
+            'id' => null
+        );
         return $ret;
     }
 }
