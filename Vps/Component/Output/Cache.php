@@ -105,9 +105,6 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
 
     protected function _renderPartial($componentId, $componentClass, $partial, $id, $info)
     {
-        if (!$this->_hasViewCache($componentClass)) {
-            return parent::_renderPartial($componentId, $componentClass, $partial, $id, $info);
-        }
         $ret = false;
         $cacheId = $this->getCache()->getCacheId($componentId, Vps_Component_Cache::TYPE_PARTIAL, $id);
 
@@ -115,10 +112,12 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             Vps_Benchmark::count('rendered partial cache', $cacheId);
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) {
-            $ret = parent::_renderPartial($componentId, $componentClass, $partial, $id, $info);
-            $lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
-            $this->getCache()->save($ret, $cacheId, $componentClass, $lifetime);
-            $this->_saveMeta($componentId, $cacheId, $id);
+            $settings = $this->_getComponent($componentId)->getComponent()->getViewCacheSettings();
+            $ret = parent::_renderPartial($componentId, $componentClass, $partial, $id, $settings['enabled']);
+            if ($settings['enabled']) {
+                $this->getCache()->save($ret, $cacheId, $componentClass, $settings['lifetime']);
+                $this->_saveMeta($componentId, $cacheId);
+            }
         } else {
             $ret = "{partial: $componentId $id}";
             $this->_toLoadPartial[$ret] = array(
@@ -134,9 +133,6 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
 
     protected function _renderContent($componentId, $componentClass, $masterTemplate)
     {
-        if (!$this->_hasViewCache($componentClass)) {
-            return parent::_renderContent($componentId, $componentClass, $masterTemplate);
-        }
         $ret = false;
         $type = $masterTemplate ? Vps_Component_Cache::TYPE_MASTER : Vps_Component_Cache::TYPE_DEFAULT;
         $cacheId = $this->getCache()->getCacheId($componentId, $type);
@@ -145,10 +141,12 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             Vps_Benchmark::count('rendered cache', $cacheId);
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) {
-            $ret = parent::_renderContent($componentId, $componentClass, $masterTemplate);
-            $lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
-            $this->getCache()->save($ret, $cacheId, $componentClass, $lifetime);
-            $this->_saveMeta($componentId, $cacheId);
+            $settings = $this->_getComponent($componentId)->getComponent()->getViewCacheSettings();
+            $ret = parent::_renderContent($componentId, $componentClass, $masterTemplate, $settings['lifetime']);
+            if ($settings['enabled']) {
+                $this->getCache()->save($ret, $cacheId, $componentClass, $settings['lifetime']);
+                $this->_saveMeta($componentId, $cacheId);
+            }
         } else {
             $ret = "{empty: $componentId}";
             $this->_toLoad[$ret] = array(
@@ -162,11 +160,6 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
 
     protected function _renderHasContent($componentId, $componentClass, $content, $counter)
     {
-        // Wenn Komponente keinen View Cache hat, ohne Cache ausgeben
-        if (!$this->_hasViewCache($componentClass)) {
-            return parent::_renderHasContent($componentId, $componentClass, $content, $counter);
-        }
-
         // Komponente aus Cache holen
         $ret = false; // Falls nicht in Cache und sollte noch nicht geladen sein, kann auch false zurückgegeben werden
         $cacheId = $this->getCache()->getCacheId($componentId, Vps_Component_Cache::TYPE_HASCONTENT, $counter);
@@ -175,10 +168,12 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             Vps_Benchmark::count('rendered cache', $cacheId);
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) { // Nicht in Cache, aber sollte in Cache sein -> ohne Cache holen
-            $ret = parent::_renderHasContent($componentId, $componentClass, $content, $counter);
-            $lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
-            $this->getCache()->save($ret, $cacheId, $componentClass, $lifetime);
-            $this->_saveMeta($componentId, $cacheId);
+            $settings = $this->_getComponent($componentId)->getComponent()->getViewCacheSettings();
+            $ret = parent::_renderHasContent($componentId, $componentClass, $content, $counter, $settings['enabled']);
+            if ($settings['enabled']) {
+                $this->getCache()->save($ret, $cacheId, $componentClass, $settings['lifetime']);
+                $this->_saveMeta($componentId, $cacheId);
+            }
         } else {
             $ret = "{hasContent " . $componentId . '#' . $counter . "}";
             $this->_toLoadHasContent[$ret] = array(

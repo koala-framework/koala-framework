@@ -87,36 +87,24 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         return $ret;
     }
 
-    protected function _renderPartial($componentId, $componentClass, $partial, $id, $info)
+    protected function _renderPartial($componentId, $componentClass, $partial, $id, $info, $useCache = false)
     {
-        if ($this->_hasViewCache($componentClass)) {
-            Vps_Benchmark::count('rendered partial nocache', $componentId);
-        } else {
-            Vps_Benchmark::count('rendered partial noviewcache', $componentId);
-        }
+        Vps_Benchmark::count('rendered partial ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
         $output = new Vps_Component_Output_ComponentPartial();
         $output->setIgnoreVisible($this->ignoreVisible());
         return $output->render($this->_getComponent($componentId), $partial, $id, $info);
     }
 
-    protected function _renderHasContent($componentId, $componentClass, $content, $counter)
+    protected function _renderHasContent($componentId, $componentClass, $content, $counter, $useCache = false)
     {
-        if ($this->_hasViewCache($componentClass)) {
-            Vps_Benchmark::count('rendered nocache', $componentId.' (hasContent)');
-        } else {
-            Vps_Benchmark::count('rendered noviewcache', $componentId.' (hasContent)');
-        }
+        Vps_Benchmark::count('rendered partial ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
         $component = $this->_getComponent($componentId);
         return $component->hasContent() ? $content : '';
     }
 
-    protected function _renderContent($componentId, $componentClass, $masterTemplate)
+    protected function _renderContent($componentId, $componentClass, $masterTemplate, $useCache = false)
     {
-        if ($this->_hasViewCache($componentClass)) {
-            Vps_Benchmark::count('rendered nocache', $componentId.($masterTemplate?' (master)':''));
-        } else {
-            Vps_Benchmark::count('rendered noviewcache', $componentId.($masterTemplate?' (master)':''));
-        }
+        Vps_Benchmark::count('rendered partial ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
         if ($masterTemplate) {
             $output = new Vps_Component_Output_Master();
         } else {
