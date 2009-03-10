@@ -70,9 +70,15 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
 
         $postGenerator = Vps_Component_Generator_Abstract::getInstance($postsComponentClass, 'detail');
 
-        return array(array(
+        $ret = parent::getCacheVars();
+        $ret[] = array(
             'model' => $postGenerator->getModel(),
             'id' => null
-        ));
+        );
+        $ret[] = array(
+            'model' => Vps_Registry::get('config')->user->model,
+            'id' => null
+        );
+        return $ret;
     }
 }

@@ -53,6 +53,10 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
             'model' => 'Vpc_Posts_Directory_Model',
             'id' => null
         );
+        $ret[] = array(
+            'model' => Vps_Registry::get('config')->user->model,
+            'id' => null
+        );
         return $ret;
     }
 }

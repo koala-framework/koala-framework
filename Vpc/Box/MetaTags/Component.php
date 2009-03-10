@@ -63,7 +63,7 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
     {
         $ret = parent::getCacheVars();
         foreach ($this->_getMetaTagComponents() as $component) {
-            $ret = array_merge($ret, $component->getComponent()->getCacheVars());
+            $ret = array_merge($ret, $component->getComponent()->getMetaTagCacheVars());
         }
         return $ret;
     }
