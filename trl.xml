@@ -3915,5 +3915,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Bankverbindung</de>
 <id>1050</id>
 </text>
+<text>
+<en>Show my Profile</en>
+<de>Mein Profil anzeigen</de>
+<id>1051</id>
+</text>
 </trl>
-
