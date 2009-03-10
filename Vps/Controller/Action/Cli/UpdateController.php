@@ -98,7 +98,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                     if (!file_exists('bootstrap.php.backup')) {
                         rename('bootstrap.php', 'bootstrap.php.backup');
                         file_put_contents('bootstrap.php', $offlineBootstrap);
-                        echo "\nwrote offline bootstrap.php";
+                        echo "\nwrote offline bootstrap.php\n\n";
                     }
                 }
 
