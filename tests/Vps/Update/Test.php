@@ -55,4 +55,12 @@ class Vps_Update_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(100, $updates[1]->getRevision());
         $this->assertEquals(1000, $updates[2]->getRevision());
     }
+
+    public function testGetUpdatesSql()
+    {
+        $updates = Vps_Update::getUpdatesForDir('Vps/Update/UpdateSql', 1, 1100);
+        $this->assertEquals(1, count($updates));
+        $this->assertEquals(100, $updates[0]->getRevision());
+        $this->assertEquals('foo bar;', $updates[0]->sql);
+    }
 }
