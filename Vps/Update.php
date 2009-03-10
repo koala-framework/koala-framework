@@ -122,17 +122,24 @@ abstract class Vps_Update
             if (is_dir($path)) {
                 $path =  $path . '/Update';
                 if (is_dir($path)) {
-                    foreach (new DirectoryIterator($path) as $f) {
-                        if (!$f->isFile()) continue;
-                        $f = $f->__toString();
-                        if (substr($f, -4) != '.php') continue;
+                    foreach (new DirectoryIterator($path) as $i) {
+                        if (!$i->isFile()) continue;
+                        $f = $i->__toString();
+                        $fileType = substr($f, -4);
+                        if ($fileType != '.php' && $fileType != '.sql') continue;
                         $f = substr($f, 0, -4);
                         if (!is_numeric($f)) continue;
                         $nr = (int)$f;
                         if ($nr >= $from && $nr < $to) {
-                            $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_Update_'.$nr;
-                            if (is_instance_of($n, 'Vps_Update')) {
-                                $ret[] = new $n($nr);
+                            if ($fileType == '.sql') {
+                                $u = new Vps_Update_Sql($nr);
+                                $u->sql = file_get_contents($i->getPathname());
+                                $ret[] = $u;
+                            } else {
+                                $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_Update_'.$nr;
+                                if (is_instance_of($n, 'Vps_Update')) {
+                                    $ret[] = new $n($nr);
+                                }
                             }
                         }
                     }
