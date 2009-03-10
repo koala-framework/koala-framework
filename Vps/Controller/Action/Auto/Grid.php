@@ -89,19 +89,19 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->_primaryKey = $this->_model->getPrimaryKey();
         }
 
-        if (isset($this->_model) && ($info = $this->_getTableInfo())) {
-            if ($this->_position && array_search($this->_position, $info['cols'])) {
-                $columnObject = new Vps_Grid_Column($this->_position);
-                $columnObject->setHeader(' ')
-                             ->setWidth(30)
-                             ->setType('int');
-                if (isset($this->_permissions['save']) && $this->_permissions['save']) {
-                    $columnObject->setEditor('PosField');
-                }
-                $this->_columns->prepend($columnObject);
-                $this->_sortable = false;
-                $this->_defaultOrder = $this->_position;
+        if (isset($this->_model) && $this->_position && in_array($this->_position, $this->_model->getColumns())) {
+            $columnObject = new Vps_Grid_Column($this->_position);
+            $columnObject->setHeader(' ')
+                         ->setWidth(30)
+                         ->setType('int');
+            if (isset($this->_permissions['save']) && $this->_permissions['save']) {
+                $columnObject->setEditor('PosField');
             }
+            $this->_columns->prepend($columnObject);
+            $this->_sortable = false;
+            $this->_defaultOrder = $this->_position;
+        }
+        if (isset($this->_model) && ($info = $this->_getTableInfo())) {
             foreach ($this->_columns as $column) {
                 if (!$column->getType() && isset($info['metadata'][$column->getDataIndex()])) {
                     $column->setType($this->_getTypeFromDbType($info['metadata'][$column->getDataIndex()]['DATA_TYPE']));
