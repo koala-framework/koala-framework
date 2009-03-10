@@ -72,8 +72,9 @@ class Vps_Media
 
     public static function getOutput($class, $id, $type)
     {
-        if (!is_instance_of($class, 'Vps_Media_Output_Interface')) {
-            throw new Vps_Exception("Invalid class: $class, does not implement Vps_Media_Output_Interface");
+        if (!class_exists($class) || !is_instance_of($class, 'Vps_Media_Output_Interface')) {
+            // TODO Ev. Mail senden, wenn Grafik nicht ausgeliefert wird
+            throw new Vps_Exception_NotFound();
         }
         $cacheId = self::createCacheId($class, $id, $type);
         if (!$output = self::getOutputCache()->load($cacheId)) {
