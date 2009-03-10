@@ -37,7 +37,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract_Image_Component
         $ret = parent::getImageUrl();
         if (!$ret && $file = self::_getEmptyImage(get_class($this))) {
             $filename = $this->_getSetting('emptyImage');
-            $id = $this->getData()->dbId;
+            $id = $this->getData()->componentId;
             $ret = Vps_Media::getUrl(get_class($this), $id, 'default', $filename);
         }
         return $ret;

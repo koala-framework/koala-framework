@@ -115,6 +115,10 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             'model' => 'Vps_Component_Model',
             'id' => null
         );
+        $ret[] = array(
+            'model' => Vps_Registry::get('config')->user->model,
+            'id' => null
+        );
         return $ret;
     }
 }

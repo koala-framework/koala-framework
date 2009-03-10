@@ -57,6 +57,10 @@ class Vpc_User_Detail_GeneralCommunity_Rating_Component extends Vpc_Abstract
             'model' => 'Vpc_Forum_Directory_Model',
             'id' => null
         );
+        $ret[] = array(
+            'model' => 'Vpc_Posts_Directory_Model',
+            'id' => null
+        );
         return $ret;
     }
 }
