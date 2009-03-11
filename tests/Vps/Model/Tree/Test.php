@@ -23,30 +23,30 @@ class Vps_Model_Tree_Test extends PHPUnit_Framework_TestCase
     public function testChildCategoryIds()
     {
         $row = $this->_model->getRow(7);
-        $this->assertEquals(array(), $row->getRecursiveChildIds());
+        $this->assertEquals(array(), $row->getRecursiveIds());
 
         $row = $this->_model->getRow(3);
-        $this->assertEquals(array(), $row->getRecursiveChildIds());
+        $this->assertEquals(array(), $row->getRecursiveIds());
 
         $row = $this->_model->getRow(6);
-        $this->assertEquals(array(), $row->getRecursiveChildIds());
+        $this->assertEquals(array(), $row->getRecursiveIds());
 
         $row = $this->_model->getRow(5);
-        $this->assertEquals(array(7), $row->getRecursiveChildIds());
+        $this->assertEquals(array(7), $row->getRecursiveIds());
 
         $row = $this->_model->getRow(4);
-        $this->assertEquals(array(), $row->getRecursiveChildIds());
+        $this->assertEquals(array(), $row->getRecursiveIds());
         
         $row = $this->_model->getRow(3);
-        $this->assertEquals(array(), $row->getRecursiveChildIds());
+        $this->assertEquals(array(), $row->getRecursiveIds());
         
         $row = $this->_model->getRow(2);
-        $ids = $row->getRecursiveChildIds();
+        $ids = $row->getRecursiveIds();
         asort($ids);
         $this->assertEquals(array(5,6,7), array_values($ids));
 
         $row = $this->_model->getRow(1);
-        $ids = $row->getRecursiveChildIds();
+        $ids = $row->getRecursiveIds();
         asort($ids);
         $this->assertEquals(array(2,3,4,5,6,7), array_values($ids));
     }
