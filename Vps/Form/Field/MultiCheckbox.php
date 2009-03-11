@@ -108,11 +108,12 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                 return array();
             }
             $ref = $this->_getReferences($row);
-            $where = array();
+            $select = $this->_model->select();
             foreach (array_keys($ref['columns']) as $k) {
-                $where["{$ref['columns'][$k]} = ?"] = $row->{$ref['refColumns'][$k]};
+                $select->whereEquals($ref['columns'][$k],
+                        $row->{$ref['refColumns'][$k]});
             }
-            $rows = $this->_model->fetchAll($where);
+            $rows = $this->_model->getRows($select);
         }
         return $rows;
     }
