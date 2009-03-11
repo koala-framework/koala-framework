@@ -251,7 +251,7 @@ class Vps_Component_Cache
 
     public function isEmpty()
     {
-        return $this->getModel()->countRows() > 0;
+        return $this->getModel()->countRows() == 0;
     }
 
     protected function _preload($ids)
