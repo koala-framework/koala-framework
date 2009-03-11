@@ -125,7 +125,6 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
 
         $this->_output->getCache()->save('foo {nocache: Vps_Component_Output_C2_Child_Component root-child} {nocache: Vps_Component_Output_C2_ChildNoCache_Component root-childNoCache}', 'root-master');
         $this->_output->getCache()->save('child', 'root-child');
-        $this->_output->getCache()->save('mustNotBeOutput', 'root-childNoCache');
         $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foo child childNoCache', $this->_output->renderMaster($this->_root));
     }
