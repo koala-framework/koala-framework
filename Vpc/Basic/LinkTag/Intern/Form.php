@@ -28,7 +28,7 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vpc_Abstract_Form
     {
         parent::__construct($name, $class, $id);
 
-        $this->add(new Vpc_Basic_LinkTag_Intern_Field('target', 'Target'))
+        $this->add(new Vpc_Basic_LinkTag_Intern_Field('target', trlVps('Target')))
             ->setData(new Vpc_Basic_LinkTag_Intern_TargetData())
             ->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl('Vpc_Basic_LinkTag_Intern_Pages'));
     }
