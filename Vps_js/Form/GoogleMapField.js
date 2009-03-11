@@ -1,7 +1,7 @@
 Vps.Form.GoogleMapsField = Ext.extend(Ext.form.TriggerField,
 {
 	triggerClass : 'x-form-search-trigger',
-	readOnly : true,
+	readOnly : false,
 	width : 200,
 	onTriggerClick : function(){
         var win = Vps.Form.GoogleMapsField.GoogleMapWindow; //statische var, nur ein window erstellen??
