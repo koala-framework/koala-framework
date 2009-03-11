@@ -144,12 +144,15 @@ class Vps_Component_Cache
                 ))
             );
             if ($this->getMetaModel()->getProxyModel() instanceof Vps_Model_Db) {
+                $adapter = $this->getMetaModel()->getProxyModel()->getTable()->getAdapter();
+                $model = $adapter->quote($value['model']);
+                $id = $adapter->quote($value['id']);
                 $sql = "
                     DELETE cache_component
                     FROM cache_component, cache_component_meta m
                     WHERE cache_component.id = m.value
-                        AND ((m.model = '{$value['model']}')
-                        AND ((m.id = '') OR (m.id = {$value['id']})))
+                        AND ((m.model = $model)
+                        AND ((m.id = '') OR (m.id = $id)))
                         AND m.type='cacheId'
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
@@ -157,8 +160,8 @@ class Vps_Component_Cache
                     DELETE cache_component
                     FROM cache_component, cache_component_meta m
                     WHERE cache_component.component_class = m.value
-                        AND ((m.model = '{$value['model']}')
-                        AND ((m.id = '') OR (m.id = {$value['id']})))
+                        AND ((m.model = $model)
+                        AND ((m.id = '') OR (m.id = $id)))
                         AND m.type='componentClass'
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
