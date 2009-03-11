@@ -18,7 +18,8 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
 
     public function __isset($name)
     {
-        $ret = isset($this->_row->$name);
+        $n = $this->_transformColumnName($name);
+        $ret = isset($this->_row->$n);
         if (!$ret) $ret = parent::__isset($name);
         return $ret;
     }
