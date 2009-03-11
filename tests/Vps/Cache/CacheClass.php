@@ -1,5 +1,5 @@
 <?php
-class Vps_Media_CacheClass extends Vps_Cache_Core
+class Vps_Cache_CacheClass extends Vps_Cache_Core
 {
     private $_cacheDir = null;
 

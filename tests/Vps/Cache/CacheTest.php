@@ -18,7 +18,7 @@ class Vps_Cache_CacheTest extends PHPUnit_Framework_TestCase
         );
         $cacheData = $cacheDataOrig;
 
-        $cache = new Vps_Media_CacheClass();
+        $cache = new Vps_Cache_CacheClass();
         $cache->save($cacheData, $cacheId);
         $this->assertEquals($cacheDataOrig, $cacheData);
 
@@ -57,7 +57,7 @@ class Vps_Cache_CacheTest extends PHPUnit_Framework_TestCase
         );
         $cacheData = $cacheDataOrig;
 
-        $cache = new Vps_Media_CacheClass();
+        $cache = new Vps_Cache_CacheClass();
         $cache->save($cacheData, $cacheId);
         $this->assertEquals($cacheDataOrig, $cacheData);
 
