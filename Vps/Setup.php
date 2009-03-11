@@ -442,6 +442,8 @@ class Vps_Setup
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))) {
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
+            Vps_Registry::get('trl')->setUseUserLanguage(false);
+
             $root = Vps_Component_Data_Root::getInstance();
             $data = $root->getPageByUrl($requestUrl);
             if (!$data) {

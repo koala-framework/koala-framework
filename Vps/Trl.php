@@ -4,6 +4,7 @@ class Vps_Trl
     private $_modelWeb;
     private $_modelVps;
     private $_languages; //cache
+    private $_useUserLanguage = true;
 
     const SOURCE_VPS = 'vps';
     const SOURCE_WEB = 'web';
@@ -28,6 +29,11 @@ class Vps_Trl
         else $this->_modelVps = new Vps_Trl_Model_Vps();
         if (isset($config['modelWeb'])) $this->_modelVps = $config['modelWeb'];
         else $this->_modelWeb = new Vps_Trl_Model_Web();
+    }
+
+    public function setUseUserLanguage($useUserLanguage)
+    {
+        $this->_useUserLanguage = $useUserLanguage;
     }
 
     public function setModel($model, $type)
@@ -60,7 +66,7 @@ class Vps_Trl
 
     public function getTargetLanguage()
     {
-        if (php_sapi_name() == 'cli') {
+        if (php_sapi_name() == 'cli' || !$this->_useUserLanguage) {
             return $this->getWebCodeLanguage();
         }
 
