@@ -78,18 +78,18 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     public function afterInsert($row)
     {
-        $id = $this->_getUniqueId($row);
+        $id = $this->_getUniqueId($row->getRow());
         $this->_rows[$id] = $row;
     }
 
-    protected function _getUniqueId($row)
+    protected function _getUniqueId($proxiedRow)
     {
         $keys = $this->getPrimaryKey();
         if (!is_array($keys)) $keys = array($keys);
         $ids = array();
         foreach ($keys as $key) {
             $key = $this->transformColumnName($key);
-            $ids[] = $row->$key;
+            $ids[] = $proxiedRow->$key;
         }
         return implode('_', $ids);
     }
