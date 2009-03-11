@@ -149,7 +149,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $resultLogger->printResult($result);
             $info = new SimpleXMLElement(`svn info --xml`);
 
-            $client = new Zend_Http_Client('http://zeiterfassung.niko.vivid/test_report.php');
+            $client = new Zend_Http_Client('http://zeiterfassung.vivid/test_report.php');
             $client->setMethod(Zend_Http_Client::POST);
             $response = $client->request('POST');
 
