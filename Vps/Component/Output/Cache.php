@@ -116,7 +116,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             $ret = parent::_renderPartial($componentId, $componentClass, $partial, $id, $info, $settings['enabled']);
             if ($settings['enabled']) {
                 $this->getCache()->save($ret, $cacheId, $componentClass, $settings['lifetime']);
-                $this->_saveMeta($componentId, $cacheId);
+                $this->_saveMeta($componentId, $cacheId, $id);
             }
         } else {
             $ret = "{partial: $componentId $id}";
