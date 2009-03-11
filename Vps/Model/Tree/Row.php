@@ -24,8 +24,8 @@ class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row
         return array_reverse($parts);
     }
 
-    public function getRecursiveChildIds()
+    public function getRecursiveIds()
     {
-        return $this->getModel()->getRecursiveChildIds($this->id);
+        return $this->getModel()->getRecursiveIds($this->id);
     }
 }

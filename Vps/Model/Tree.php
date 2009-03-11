@@ -9,26 +9,26 @@ class Vps_Model_Tree extends Vps_Model_Db_Proxy
         parent::_init();
         $this->_referenceMap['Parent'] = array(
             'column' => 'parent_id',
-            'refModel' => $this,
-            'refColumn' => 'id'
+            'refModel' => $this
         );
         $this->_dependentModels['Childs'] = $this;
     }
 
     /**
-     * besser über row aufrufen!
+     * @internal über row aufrufen!
      */
-    public function getRecursiveChildIds($parentId)
+    public function getRecursiveIds($parentId)
     {
         if (!isset($this->_parentIdsCache)) {
-            foreach ($this->export(self::FORMAT_ARRAY) as $row) {
-                $this->_parentIdsCache[$row['id']] = $row['parent_id'];
+            foreach ($this->getRows() as $row) {
+                $this->_parentIdsCache[$row->{$this->getPrimaryKey()}]
+                            = $row->{$this->_referenceMap['Parent']['column']};
             }
         }
-        $ret = array();
+        $ret = array($parentId);
         foreach (array_keys($this->_parentIdsCache, $parentId) as $v) {
             $ret[] = $v;
-            $ret = array_merge($ret, $this->getRecursiveChildIds($v));
+            $ret = array_merge($ret, $this->getRecursiveIds($v));
         }
 
         return array_values(array_unique($ret));
