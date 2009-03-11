@@ -143,6 +143,27 @@ class Vps_Component_Cache
                     ))
                 ))
             );
+            if ($this->getMetaModel()->getProxyModel() instanceof Vps_Model_Db) {
+                $sql = "
+                    DELETE cache_component
+                    FROM cache_component, cache_component_meta m
+                    WHERE cache_component.id = m.value
+                        AND ((m.model = '{$value['model']}')
+                        AND ((m.id = '') OR (m.id = {$value['id']})))
+                        AND m.type='cacheId'
+                ";
+                $this->getModel()->getProxyModel()->executeSql($sql);
+                $sql = "
+                    DELETE cache_component
+                    FROM cache_component, cache_component_meta m
+                    WHERE cache_component.component_class = m.value
+                        AND ((m.model = '{$value['model']}')
+                        AND ((m.id = '') OR (m.id = {$value['id']})))
+                        AND m.type='componentClass'
+                ";
+                $this->getModel()->getProxyModel()->executeSql($sql);
+                $select->whereEquals('type', 'callback');
+            }
             foreach ($this->getMetaModel()->getRows($select) as $row) {
                 if ($row->type == self::META_CACHE_ID) {
                     $this->clean(self::CLEANING_MODE_ID, $row->value);
