@@ -120,12 +120,12 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl));
         $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl));
 
-        echo "Service: Lösche Benutzerzuweisungen zu diesem Web...\n";
+        echo "Service: Loesche Benutzerzuweisungen zu diesem Web...\n";
         $importSelect = new Vps_Model_Select();
         $importSelect->whereEquals('web_id', Vps_Registry::get('config')->application->id);
         $targetModel->deleteRows($importSelect);
 
-        echo "Service: Füge Produktiv-Benutzerzuweisungen hinzu...\n";
+        echo "Service: Fuege Produktiv-Benutzerzuweisungen hinzu...\n";
         $targetModel->import(
             Vps_Model_Interface::FORMAT_ARRAY,
             $sourceModel->export(Vps_Model_Interface::FORMAT_ARRAY, $importSelect)
