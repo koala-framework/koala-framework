@@ -3920,4 +3920,31 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Mein Profil anzeigen</de>
 <id>1051</id>
 </text>
+<text>
+<en>Link.Intern</en>
+<id>1052</id>
+</text>
+<text>
+<en>Target</en>
+<id>1053</id>
+</text>
+<text>
+<en>News</en>
+<id>1054</id>
+</text>
+<text>
+<en>Link.to News</en>
+<id>1055</id>
+</text>
+<text>
+<en>User</en>
+<de>Benutzer</de>
+<id>1056</id>
+</text>
+<text>
+<en>Customer added by {0}</en>
+<de>Kunde hinzugefügt von {0}</de>
+<id>1057</id>
+</text>
 </trl>
+
