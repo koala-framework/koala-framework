@@ -60,6 +60,21 @@ class Vps_Component_RowObserver
     public function process()
     {
         if (!Vps_Component_Data_Root::getComponentClass()) return;
+
+        $cache = Vps_Component_Cache::getInstance();
+        if ($cache->isEmpty()) {
+            $meta = array();
+            foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+                $methods = get_class_methods($componentClass);
+                if (in_array('getStaticCacheVars', $methods)) {
+                    $vars = call_user_func(array($componentClass, 'getStaticCacheVars'));
+                    foreach ($vars as $id => $m) {
+                        $cache->saveMeta($m['model'], null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
+                    }
+                }
+            }
+        }
+
         $delete = array();
         foreach ($this->_process as $action => $process) {
             foreach ($process as $row) {
@@ -85,11 +100,11 @@ class Vps_Component_RowObserver
                     if ($m instanceof Vps_Model_FnF) continue;
                 }
                 $id = $row->$primaryKey;
-                $delete[get_class($model)][$id] = true;
+                $delete[get_class($model)][$id] = $row;
             }
         }
         foreach ($delete as $model => $val) {
-            foreach ($val as $id => $null) {
+            foreach ($val as $id => $row) {
                 Vps_Component_Cache::getInstance()->clean(
                     Vps_Component_Cache::CLEANING_MODE_META,
                     array('model' => $model, 'id' => $id, 'row' => $row)

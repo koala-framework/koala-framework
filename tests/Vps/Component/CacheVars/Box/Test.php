@@ -29,7 +29,10 @@ class Vps_Component_CacheVars_Box_Test extends PHPUnit_Framework_TestCase
             ->getChildComponent('_boxNotOverwritten')
             ->getChildComponent('-box')
             ->getComponent()->getCacheVars();
-        $this->assertEquals(0, count($cacheVars));
+           // p($cacheVars);
+        $this->assertEquals(1, count($cacheVars));
+        $this->assertEquals('Vps_Component_CacheVars_Box_Model', get_class($cacheVars[0]['model']));
+        $this->assertEquals('root_boxNotOverwritten-box', $cacheVars[0]['id']);
 
         $cacheVars = $this->_root
             ->getChildComponent('_boxOverwritten')
