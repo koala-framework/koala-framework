@@ -216,7 +216,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     public function onCacheCallback($row)
     {
         $cacheId = Vps_Media::createCacheId(
-            $this->getData()->componentClass, $this->getData()->dbId, 'default'
+            $this->getData()->componentClass, $this->getData()->componentId, 'default'
         );
         Vps_Media::getOutputCache()->remove($cacheId);
     }
