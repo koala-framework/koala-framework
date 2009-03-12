@@ -36,6 +36,13 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             options.failure = this.vpsFailure;
             options.callback = this.vpsCallback;
             options.scope = this;
+        } else {
+            options.vpsCallback = {
+                callback: options.callback,
+                scope: options.scope
+            };
+            options.callback = this.vpsCallback;
+            options.scope = this;
         }
         if (!options.params) options.params = {};
         options.params.application_version = Vps.application.version;
