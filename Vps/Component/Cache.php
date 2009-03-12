@@ -184,7 +184,7 @@ class Vps_Component_Cache
                     $this->clean(self::CLEANING_MODE_ID, $row->value);
                 } else if ($row->type == self::META_CALLBACK) {
                     $component = Vps_Component_Data_Root::getInstance()
-                        ->getComponentById($row->value);
+                        ->getComponentById($row->value, array('ignoreVisible' => true));
                     if ($component) {
                         $component->getComponent()->onCacheCallback($value['row']);
                         Vps_Benchmark::cacheInfo("Cache: Callback for component {$component->componentId} ({$component->componentClass}) called.");
