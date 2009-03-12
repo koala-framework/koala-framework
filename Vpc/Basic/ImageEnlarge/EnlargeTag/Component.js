@@ -194,6 +194,10 @@ Vpc.Basic.ImageEnlarge.prototype =
             if (imageTopMargin < 0) imageTopMargin = 0;
             img.setStyle('margin-top', imageTopMargin+'px');
         }, this);
+
+        if (Vps.Basic.LinkTag.Extern.processLinks) {
+            Vps.Basic.LinkTag.Extern.processLinks(this.lightbox.dom);
+        }
     },
 
     mask: function()
