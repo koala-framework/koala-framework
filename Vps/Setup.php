@@ -26,16 +26,16 @@ function p($src, $Type = 'LOG')
                 $src instanceof Exception)) {
         xdebug_var_dump($src);
     } else {
-        if (!isset($_SERVER['SHELL'])) echo "<pre>";
+        if (php_sapi_name() != 'cli') echo "<pre>";
         var_dump($src);
-        if (!isset($_SERVER['SHELL'])) echo "</pre>";
+        if (php_sapi_name() != 'cli') echo "</pre>";
     }
     if (function_exists('debug_backtrace')) {
         $bt = debug_backtrace();
         $i = 0;
         if (isset($bt[1]) && isset($bt[1]['function']) && $bt[1]['function'] == 'd') $i = 1;
         echo $bt[$i]['file'].':'.$bt[$i]['line'];
-        if (!isset($_SERVER['SHELL'])) echo "<br />";
+        if (php_sapi_name() != 'cli') echo "<br />";
         echo "\n";
     }
 }
@@ -225,17 +225,17 @@ class Vps_Setup
 
         Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
 
-        if (Zend_Registry::get('config')->debug->firephp && !isset($_SERVER['SHELL'])) {
+        if (Zend_Registry::get('config')->debug->firephp && php_sapi_name() != 'cli') {
             require_once 'FirePHPCore/FirePHP.class.php';
             FirePHP::init();
         }
 
-        if (Zend_Registry::get('config')->debug->querylog && !isset($_SERVER['SHELL'])) {
+        if (Zend_Registry::get('config')->debug->querylog && php_sapi_name() != 'cli') {
             header('X-Vps-RequestNum: '.Zend_Registry::get('requestNum'));
             register_shutdown_function(array('Vps_Setup', 'shutDown'));
         }
         if ((Zend_Registry::get('config')->debug->firephp || Zend_Registry::get('config')->debug->querylog)
-                && !isset($_SERVER['SHELL']))
+                && php_sapi_name() != 'cli')
         {
             ob_start();
         }
@@ -328,7 +328,7 @@ class Vps_Setup
 
     public static function shutDown()
     {
-        if (Zend_Registry::get('config')->debug->querylog && !isset($_SERVER['SHELL'])) {
+        if (Zend_Registry::get('config')->debug->querylog && php_sapi_name() != 'cli') {
             header('X-Vps-DbQueries: '.Vps_Db_Profiler::getCount());
         }
         Vps_Benchmark::shutDown();
@@ -352,9 +352,9 @@ class Vps_Setup
         //www abschneiden damit www.test und www.preview usw auch funktionieren
         if (substr($host, 0, 4)== 'www.') $host = substr($host, 4);
 
-        if (isset($_SERVER['PWD'])) {
+        if (php_sapi_name() == 'cli') {
             //wenn über kommandozeile aufgerufen
-            $path = $_SERVER['PWD'];
+            $path = getcwd();
         } else {
             $path = $_SERVER['SCRIPT_FILENAME'];
         }
