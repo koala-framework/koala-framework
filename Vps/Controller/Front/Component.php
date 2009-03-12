@@ -12,7 +12,7 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
     public function getRouter()
     {
         if (null == $this->_router) {
-            if (isset($_SERVER['SHELL'])) {
+            if (php_sapi_name() == 'cli') {
                 $this->setRouter(new Vps_Controller_Router_Cli());
             } else {
                 $this->setRouter(new Vps_Controller_Router_Component());
