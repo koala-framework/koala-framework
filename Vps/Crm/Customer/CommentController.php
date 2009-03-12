@@ -8,6 +8,8 @@ class Vps_Crm_Customer_CommentController extends Vps_Controller_Action_Auto_Form
     {
         $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Comment')));
 
+        $fs->add(new Vps_Form_Field_ShowField('insert_uid', trlVps('User')))
+            ->setData(new Vps_Data_Table_Parent('InsertUser'));
         $fs->add(new Vps_Form_Field_ShowField('insert_date', trlVps('Date')));
         $fs->add(new Vps_Form_Field_TextArea('value', trlVps('Text')))
             ->setWidth(270)
@@ -18,5 +20,7 @@ class Vps_Crm_Customer_CommentController extends Vps_Controller_Action_Auto_Form
     {
         parent::_beforeInsert($row);
         $row->customer_id = $this->_getParam('customer_id');
+        $authedUser = Vps_Registry::get('userModel')->getAuthedUser();
+        if ($authedUser) $row->insert_uid = $authedUser->id;
     }
 }
