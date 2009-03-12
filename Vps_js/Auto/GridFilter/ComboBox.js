@@ -8,7 +8,7 @@ Vps.Auto.GridFilter.ComboBox = function(config)
         data: config.data
     });
     if (!config['default'] && filterStore.find('id', 0) == -1) {
-        filterStore.insert(0, [new record({id: 0, name: config['defaultText'] ? config['defaultText'] : 'all'})]);
+        filterStore.insert(0, [new record({id: 0, name: config['defaultText'] ? config['defaultText'] : trlVps('all')})]);
 		config['default'] = 0;
     }
     this.combo = new Ext.form.ComboBox({
