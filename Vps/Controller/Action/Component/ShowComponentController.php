@@ -16,7 +16,15 @@ class Vps_Controller_Action_Component_ShowComponentController extends Vps_Contro
         if (!$c) {
             throw new Vps_ClientException("Component with id '$id' not found");
         }
+        /*
+        //deaktivert: funktioniert nicht
         $c->getComponent()->sendContent('views/component-master.tpl', true);
+        */
+
+        //zwischenlösung:
+        //(unschön: keine assets, kein html-header usw)
+        $output = new Vps_Component_Output_NoCache();
+        echo $output->render($c);
 
         Vps_Benchmark::output();
         $this->_helper->viewRenderer->setNoRender(true);
