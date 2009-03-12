@@ -212,10 +212,11 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
     {
         $out = '';
         foreach ($this->_parts as $type=>$p) {
-            $out .= ", $type=>"._btArgString($p);
+            $out .= "\n";
+            $out .= "$type => "._btArgString($p).", ";
         }
         $out = trim($out, ', ');
-        $ret = get_class($this).'('.$out.')';
+        $ret = '<pre>'.get_class($this).'('.$out."\n)</pre>";
         return $ret;
     }
 
