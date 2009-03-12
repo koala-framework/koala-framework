@@ -3921,30 +3921,56 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1051</id>
 </text>
 <text>
-<en>Link.Intern</en>
+<en>Error message</en>
+<de>Fehlermeldung</de>
 <id>1052</id>
 </text>
 <text>
-<en>Target</en>
+<en>404 - File not found</en>
 <id>1053</id>
 </text>
 <text>
-<en>News</en>
+<en>Sorry, that address</en>
+<de>Leider ist die eingegebene Adresse</de>
 <id>1054</id>
 </text>
 <text>
-<en>Link.to News</en>
-<id>1055</id>
-</text>
-<text>
-<en>User</en>
-<de>Benutzer</de>
+<en>Go back to main page</en>
+<de>Zur&#xFC;ck zur Startseite</de>
 <id>1056</id>
 </text>
 <text>
-<en>Customer added by {0}</en>
-<de>Kunde hinzugefügt von {0}</de>
+<en>does not exist at this site</en>
+<de>auf dieser Seite nicht vorhanden</de>
 <id>1057</id>
+</text>
+<text>
+<en>If you typed the address, make sure the spelling is correct.</en>
+<de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
+<id>1058</id>
+</text>
+<text>
+<en>Note: Most addresses are also case sensitive</en>
+<de>Beachten Sie die Gro&#xDF;- und Kleinschreibung</de>
+<id>1059</id>
+</text>
+<text>
+<en>Check the page, you are comming from</en>
+<de>&#xDC;berpr&#xFC;fen Sie die Seite, von der Sie gekommen sind</de>
+<id>1060</id>
+</text>
+<text>
+<en>401 - You are not authorized to view this page</en>
+<id>1061</id>
+</text>
+<text>
+<en>You do not have permission to view this directory or page using the credentials you supplied</en>
+<de>Sie haben nicht die Berechtigung auf das Verzeichnis oder die Seite zuzugreifen</de>
+<id>1062</id>
+</text>
+<text>
+<en>Client Exception</en>
+<id>1063</id>
 </text>
 </trl>
 
