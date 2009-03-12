@@ -9,7 +9,8 @@ Ext.namespace(
 'Vps.Binding',
 'Vpc.Advanced',
 'Vps.Debug',
-'Vps.Switch'
+'Vps.Switch',
+'Vps.Basic.LinkTag.Extern'
 );
 
 Ext.applyIf(Array.prototype, {

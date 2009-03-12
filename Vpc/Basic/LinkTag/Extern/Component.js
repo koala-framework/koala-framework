@@ -1,7 +1,9 @@
-Vps.onContentReady(function()
-{
+Vps.onContentReady(function() {
+    Vps.Basic.LinkTag.Extern.processLinks();
+});
+Vps.Basic.LinkTag.Extern.processLinks = function(root) {
     // links holen und durchgehen
-    var lnks = Ext.query('a');
+    var lnks = Ext.query('a', root || document);
     Ext.each(lnks, function(lnk) {
         // rels von link durchgehen
         lnk = Ext.get(lnk);
@@ -20,4 +22,4 @@ Vps.onContentReady(function()
             }
         });
     });
-});
+};
