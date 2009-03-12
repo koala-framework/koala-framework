@@ -80,7 +80,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->setTable($this->_table);
         }
         if (!isset($this->_model) && isset($this->_modelName)) {
-            $this->_model = new $this->_modelName();
+            $this->_model = Vps_Model_Abstract::getInstance($this->_modelName);
         }
 
         $this->_initColumns();
@@ -214,7 +214,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             if ($field=='text') continue; //handled above
             if (isset($filter['skipWhere']) && $filter['skipWhere']) continue;
             if ($this->_getParam('query_'.$field)) {
-                $ret->where(new Vps_Model_Select_Expr_Equals($field, $this->_getParam('query_'.$field)));
+                $ret->whereEquals($field, $this->_getParam('query_'.$field));
             }
             if ($filter['type'] == 'DateRange' && $this->_getParam($field.'_from')
                                                && $this->_getParam($field.'_to')) {
