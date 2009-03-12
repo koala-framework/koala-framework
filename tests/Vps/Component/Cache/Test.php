@@ -160,7 +160,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         $callbacks = $root->getComponent()->getCallbacks();
         $this->assertEquals(1, count($callbacks));
-        $this->assertEquals($row, $callbacks[0]);
+        $this->assertEquals($row->toArray(), $callbacks[0]->toArray());
     }
 
     public function testPreload()

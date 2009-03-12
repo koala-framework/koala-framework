@@ -345,13 +345,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     protected function _getCacheRow()
     {
         $model = $this->getModel();
-        $ret = null;
-        if ($model instanceof Vps_Model_Interface) {
-            $ret = $model->getRow($this->getDbId());
-        } else if ($model instanceof Vps_Db_Table) {
-            $ret = $model->find($this->getDbId())->current();
-        }
-        return $ret;
+        if ($model) return $this->_getRow();
+        return null;
     }
 
     public function onCacheCallback($row) {}

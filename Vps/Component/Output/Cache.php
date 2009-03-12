@@ -6,38 +6,18 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
     private $_toLoad = array();
     private $_toLoadPartial = array();
 
-    public function setCache(Vps_Component_Cache $cache)
-    {
-        $this->_cache = $cache;
-    }
-
     /**
      * @return Vps_Component_Cache
      */
     public function getCache()
     {
-        if (!$this->_cache) {
-            $this->_cache = Vps_Component_Cache::getInstance();
-        }
-        return $this->_cache;
+        return Vps_Component_Cache::getInstance();
     }
 
     public function render($component, $masterTemplate = false, array $plugins = array())
     {
         // Erste Komponente vorausladen
         $this->getCache()->preload(array($component->componentId));
-        if ($this->getCache()->isEmpty()) {
-            $meta = array();
-            foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
-                $methods = get_class_methods($componentClass);
-                if (in_array('getStaticCacheVars', $methods)) {
-                    $vars = call_user_func(array($componentClass, 'getStaticCacheVars'));
-                    foreach ($vars as $id => $m) {
-                        $this->getCache()->saveMeta($m['model'], null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
-                    }
-                }
-            }
-        }
         // Normal rendern
         $ret = parent::render($component, $masterTemplate, $plugins);
         $this->getCache()->writeBuffer();
