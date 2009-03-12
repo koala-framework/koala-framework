@@ -125,6 +125,18 @@ class Vps_Component_Cache
 
     public function clean($mode = self::CLEANING_MODE_META, $value = null)
     {
+        if ($this->isEmpty()) {
+            foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+                $methods = get_class_methods($componentClass);
+                if (in_array('getStaticCacheVars', $methods)) {
+                    $vars = call_user_func(array($componentClass, 'getStaticCacheVars'));
+                    foreach ($vars as $id => $m) {
+                        $this->saveMeta($m['model'], null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
+                    }
+                }
+            }
+        }
+
         if ($mode == Vps_Component_Cache::CLEANING_MODE_META) {
 
             if (!is_array($value) ||
