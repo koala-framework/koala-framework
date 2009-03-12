@@ -1,7 +1,7 @@
 <?php
 class Vps_View_Helper_Partials
 {
-    public function partials($component, $partialClass = null, $params = null)
+    public function partials($component, $partialClass = null, $params = array())
     {
         if (!$component instanceof Vps_Component_Data ||
             !$component->getComponent() instanceof Vps_Component_Partial_Interface
@@ -15,8 +15,9 @@ class Vps_View_Helper_Partials
         }
         $componentId = $component->componentId;
         $componentClass = $component->componentClass;
-        if (is_null($params))
-            $params = $component->getComponent()->getPartialParams();
+        if (method_exists($component->getComponent(), 'getPartialParams')) {
+            $params = array_merge($component->getComponent()->getPartialParams(), $params);
+        }
         $serializedParams = serialize($params);
         return "{partials: $componentId $componentClass $partialClass $serializedParams }";
     }
