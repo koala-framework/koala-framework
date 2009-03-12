@@ -259,7 +259,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
         if (this.el) this.el.mask(trlVps('Saving...'));
 
-        var params = this.getForm().getValues();
+        var params = Ext.apply({}, this.getBaseParams());
+        params = Ext.apply(params, this.getForm().getValues());
         for (var i in params) {
             if (typeof params[i] == 'object') {
                 params[i] = Ext.encode(params[i]);
@@ -268,10 +269,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             }
         }
 
-        Ext.apply(params, this.getBaseParams());
-		if (!params['id']) {
-		  params['avoid_reinsert_id'] = Math.random();
-		}
+        if (!params['id']) {
+            params['avoid_reinsert_id'] = Math.random();
+        }
         Ext.Ajax.request(Ext.apply(options, {
             params: params,
             url: this.controllerUrl+'/json-save',
