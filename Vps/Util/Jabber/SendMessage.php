@@ -6,6 +6,7 @@ class Vps_Util_Jabber_SendMessage
         require_once 'class_Jabber.php';
         $jab = new Jabber();
 
+        if (!is_array($sendMessageTo)) $sendMessageTo = array($sendMessageTo);
         new self($jab, $sendMessageTo, $message);
 
         if (!$jab->connect("vivid")) {
@@ -50,13 +51,14 @@ class Vps_Util_Jabber_SendMessage
     function handleHeartbeat()
     {
         if (!$this->first_roster_update) {
-            if (!isset($this->jab->roster[$this->sendMessageTo])) {
-                $this->jab->subscribe($this->sendMessageTo);
-            }
-            if (isset($this->jab->roster[$this->sendMessageTo]) && $this->message) {
-                $msg = trim($this->message);
-                $this->jab->message($this->sendMessageTo, "chat", null, $msg);
-                $this->message = false;
+            foreach ($this->sendMessageTo as $k=>$i) {
+                if (!isset($this->jab->roster[$i])) {
+                    $this->jab->subscribe($i);
+                } else {
+                    $msg = trim($this->message);
+                    $this->jab->message($i, "chat", null, $msg);
+                    unset($this->sendMessageTo[$k]);
+                }
             }
         }
     }
