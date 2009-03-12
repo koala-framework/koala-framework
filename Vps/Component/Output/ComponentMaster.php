@@ -6,7 +6,7 @@ class Vps_Component_Output_ComponentMaster extends Vps_Component_Output_NoCache
         // Normaler Output
         $template = $component->getComponent()->getTemplateFile();
         if (!$template) {
-            throw new Vps_Exception("No Component-Template found for '$componentClass'");
+            throw new Vps_Exception("No Component-Template found for '$component->componentClass'");
         }
         $templateVars = $component->getComponent()->getTemplateVars();
         if (is_null($templateVars)) {
