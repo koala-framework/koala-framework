@@ -15,4 +15,11 @@ class Vpc_Basic_LinkTag_News_NewsController extends Vps_Controller_Action_Auto_G
         parent::_initColumns();
         $this->_columns->add(new Vps_Grid_Column('title'));
     }
+
+    protected function _getSelect()
+    {
+        $ret = parent::_getSelect();
+        $ret->whereEquals('visible', 1);
+        return $ret;
+    }
 }
