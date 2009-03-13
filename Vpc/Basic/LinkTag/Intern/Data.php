@@ -20,18 +20,23 @@ class Vpc_Basic_LinkTag_Intern_Data extends Vps_Component_Data
         return false;
     }
 
-    public function __get($var)
+    public final function getLinkedData()
     {
         if (!isset($this->_data)) {
             $this->_data = $this->_getData();
             if (!$this->_data) $this->_data = false;
         }
+        return $this->_data;
+    }
+
+    public function __get($var)
+    {
         if ($var == 'url') {
-            if (!$this->_data) return '';
-            return $this->_data->url;
+            if (!$this->getLinkedData()) return '';
+            return $this->getLinkedData()->url;
         } else if ($var == 'rel') {
-            if (!$this->_data) return '';
-            return $this->_data->rel;
+            if (!$this->getLinkedData()) return '';
+            return $this->getLinkedData()->rel;
         } else {
             return parent::__get($var);
         }
