@@ -43,4 +43,13 @@ abstract class Vpc_Basic_LinkTag_Abstract_Component extends Vpc_Abstract
         }
     }
 
+    public function hasContent()
+    {
+        if ($this->getData()->url) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
