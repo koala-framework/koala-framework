@@ -49,6 +49,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $webVersion = $this->_getParam('web-version');
 
         echo "\n\n*** [00/13] ueberpruefe auf nicht eingecheckte dateien\n";
+
         if ($this->_getParam('skip-check')) {
             echo "(uebersprungen)\n";
         } else {
@@ -79,7 +80,8 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $this->_systemSshVps("import", $testConfig);
 
         echo "\n\n*** [07/13] test: unit-tests laufen lassen\n";
-        if ($this->_getParam('skip-test') || $this->_getParam('skip-tests')) {
+        $skipTest = ($this->_getParam('skip-test') || $this->_getParam('skip-tests'));
+        if ($skipTest) {
             echo "(uebersprungen)\n";
         } else {
             Vps_Controller_Action_Cli_TestController::initForTests();
@@ -106,9 +108,11 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         echo "\n\n*** [09/13] test: vps-version zurueck auf trunk anpassen\n";
         $this->_systemSshVps("tag-checkout vps-use --version=trunk", $testConfig);
 
+        $doneTodos = array();
         if ($this->_getParam('skip-prod')) {
             echo "\n\n*** [10/13] prod: (uebersprungen)\n";
         } else {
+
             echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
             $this->_systemSshVps("import backup-db", $prodConfig);
 
@@ -120,20 +124,69 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
             echo "\n\n*** [13/13] prod: update ausführen\n";
             $this->_systemSshVps("update", $prodConfig);
+
+            $projectIds = array();
+            if (Vps_Registry::get('config')->todo->projectIds) {
+                $projectIds = Vps_Registry::get('config')->todo->projectIds->toArray();
+            }
+            if ($projectIds) {
+                $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Todo');
+                $s = $m->select()
+                        ->whereEquals('project_id', $projectIds)
+                        ->whereNotEquals('status', 'prod');
+                $doneTodos = $m->getRows($s);
+                foreach ($doneTodos as $todo) {
+                    if (!$todo->done_revision) continue;
+                    $project = Vps_Controller_Action_Cli_TagController::getProjectName();
+                    if ($this->_hasRevisionInHistory($project, $webVersion, $todo->done_revision)
+                        || $this->_hasRevisionInHistory('vps', $vpsVersion, $todo->done_revision)
+                    ) {
+                        $todo->status = 'prod';
+                        $todo->prod_date = date('Y-m-d');
+                        $todo->save();
+                        echo "\ntodo #{$todo->id} ({$todo->title}) als auf prod markiert";
+                    }
+                }
+                echo "\n";
+            }
         }
 
         if (!$this->_getParam('skip-prod')) {
+            echo "\n";
             $cfg = Vps_Registry::get('config');
-            $msg = "{$cfg->application->name} ist soeben mit Version $webVersion (Vps $vpsVersion) online gegangen.";
+            $user = ucfirst($_SERVER['user']);
+            $msg = "$user hat soeben {$cfg->application->name} mit Version $webVersion (Vps $vpsVersion) online gestellt.\n";
+            if ($skipTest) {
+                $msg .= "\nUnit-Tests wurden NICHT ausgeführt.";
+            } else {
+                $msg .= "\nUnit-Tests wurden erfolgreich ausgeführt.";
+            }
+            if (count($doneTodos)) {
+                $msg .= "\n\nFolgende Todos wurden erledigt:";
+                foreach ($doneTodos as $todo) {
+                    $msg .= "\ntodo #{$todo->id} ({$todo->title})";
+                }
+            }
+            $jids = array();
             foreach ($cfg->developers as $user) {
                 if ($user->notifyGoOnline && $user->jid) {
-                    Vps_Util_Jabber_SendMessage::send($user->jid, $msg);
+                    echo "\nsende jabber nachricht an $user->jid";
+                    $jids[] = $user->jid;
                 }
+            }
+            if ($jids) {
+                Vps_Util_Jabber_SendMessage::send($jids, $msg);
             }
         }
 
         echo "\n\n\n\033[32mF E R T I G ! ! !\033[0m\n";
 
         exit;
+    }
+    private function _hasRevisionInHistory($project, $version, $revision)
+    {
+        $log = `svn log --xml --revision $revision http://svn/tags/$project/$version`;
+        $log = new SimpleXMLElement($log);
+        if (count($log->logentry)) return true;
     }
 }

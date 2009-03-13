@@ -13,13 +13,40 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
         echo "\nupdating vps\n";
         passthru('svn up '.VPS_PATH);
 
-        echo "\n";
+        $projectIds = array();
+        if (Vps_Registry::get('config')->todo->projectIds) {
+            $projectIds = Vps_Registry::get('config')->todo->projectIds->toArray();
+        }
+        if ($projectIds && Vps_Registry::get('config')->todo->markAsOnTestOnUpdate) {
+            $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Todo');
+            $s = $m->select()
+                    ->whereEquals('project_id', $projectIds)
+                    ->whereEquals('status', 'committed');
+            $doneTodos = $m->getRows($s);
+            foreach ($doneTodos as $todo) {
+                if (!$todo->done_revision) continue;
+                if ($this->_hasRevisionInHistory('.', $todo->done_revision)
+                    || $this->_hasRevisionInHistory(VPS_PATH, $todo->done_revision)
+                ) {
+                    $todo->status = 'test';
+                    $todo->test_date = date('Y-m-d');
+                    $todo->save();
+                    echo "\ntodo #{$todo->id} ({$todo->title}) als auf test markiert";
+                }
+            }
+        }
 
+        echo "\n";
         $this->_forward('index', 'update');
 
         $this->_helper->viewRenderer->setNoRender(true);
     }
-
+    private function _hasRevisionInHistory($path, $revision)
+    {
+        $log = `svn log --xml --revision $revision $path`;
+        $log = new SimpleXMLElement($log);
+        if (count($log->logentry)) return true;
+    }
     public function checkForModifiedFilesAction()
     {
         self::checkForModifiedFiles();
