@@ -38,7 +38,7 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
         }
 
         $linkedData = $this->getData()->getLinkedData();
-        if ($linkedData) {
+        if ($linkedData && isset($linkedData->row) && $linkedData->row) {
             $ret[] = array(
                 'model' => 'Vps_Component_Model',
                 'id' => $linkedData->row->id
