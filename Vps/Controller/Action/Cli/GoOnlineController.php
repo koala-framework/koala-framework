@@ -154,7 +154,11 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         if (!$this->_getParam('skip-prod')) {
             echo "\n";
             $cfg = Vps_Registry::get('config');
-            $user = ucfirst($_SERVER['user']);
+            if (isset($_SERVER['USER'])) {
+                $user = ucfirst($_SERVER['USER']);
+            } else {
+                $user = 'Jemand';
+            }
             $msg = "$user hat soeben {$cfg->application->name} mit Version $webVersion (Vps $vpsVersion) online gestellt.\n";
             if ($skipTest) {
                 $msg .= "\nUnit-Tests wurden NICHT ausgeführt.";
