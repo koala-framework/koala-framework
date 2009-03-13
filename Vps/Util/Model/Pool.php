@@ -2,7 +2,7 @@
 class Vps_Util_Model_Pool extends Vps_Model_Db_Proxy
 {
     protected $_table = 'vps_pools';
-    protected $_rowClass = 'Vps_Dao_Row_Pool';
+    protected $_rowClass = 'Vps_Util_Model_Row_Pool';
 
     protected function _setupFilters()
     {
