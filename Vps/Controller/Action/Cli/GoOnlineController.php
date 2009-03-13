@@ -134,8 +134,8 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 $s = $m->select()
                         ->whereEquals('project_id', $projectIds)
                         ->whereNotEquals('status', 'prod');
-                $doneTodos = $m->getRows($s);
-                foreach ($doneTodos as $todo) {
+                $doneTodos = array();
+                foreach ($m->getRows($s) as $todo) {
                     if (!$todo->done_revision) continue;
                     $project = Vps_Controller_Action_Cli_TagController::getProjectName();
                     if ($this->_hasRevisionInHistory($project, $webVersion, $todo->done_revision)
@@ -145,6 +145,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                         $todo->prod_date = date('Y-m-d');
                         $todo->save();
                         echo "\ntodo #{$todo->id} ({$todo->title}) als auf prod markiert";
+                        $doneTodos[] = $todo;
                     }
                 }
                 echo "\n";
@@ -154,11 +155,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         if (!$this->_getParam('skip-prod')) {
             echo "\n";
             $cfg = Vps_Registry::get('config');
-            if (isset($_SERVER['USER'])) {
-                $user = ucfirst($_SERVER['USER']);
-            } else {
-                $user = 'Jemand';
-            }
+            $user = ucfirst($_SERVER['user']);
             $msg = "$user hat soeben {$cfg->application->name} mit Version $webVersion (Vps $vpsVersion) online gestellt.\n";
             if ($skipTest) {
                 $msg .= "\nUnit-Tests wurden NICHT ausgeführt.";
