@@ -195,6 +195,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     public function addValidator(Zend_Validate_Interface $v)
     {
         $this->_validators[] = $v;
+        return $this;
     }
 
     /**
