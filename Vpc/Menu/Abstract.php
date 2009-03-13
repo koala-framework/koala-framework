@@ -116,6 +116,10 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             'id' => null
         );
         $ret[] = array(
+            'model' => 'Vps_Dao_Pages',
+            'id' => null
+        );
+        $ret[] = array(
             'model' => Vps_Registry::get('config')->user->model,
             'id' => null
         );

@@ -177,6 +177,7 @@ class Vps_Component_Cache
                         AND m.type='componentClass'
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
+                Vps_Benchmark::cacheInfo("Cache: cleared $model with $id");
                 $select->whereEquals('type', 'callback');
             }
             foreach ($this->getMetaModel()->getRows($select) as $row) {
