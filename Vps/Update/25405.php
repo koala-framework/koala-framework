@@ -1,5 +1,5 @@
 <?php
-class Vps_Update_25283 extends Vps_Update
+class Vps_Update_25405 extends Vps_Update
 {
     public function update()
     {
