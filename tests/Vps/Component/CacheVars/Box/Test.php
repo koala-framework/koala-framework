@@ -76,10 +76,12 @@ class Vps_Component_CacheVars_Box_Test extends PHPUnit_Framework_TestCase
     public function testBoxTitle()
     {
         $cacheVars = Vpc_Box_Title_Component::getStaticCacheVars();
-        $this->assertEquals(2, count($cacheVars));
+        $this->assertEquals(3, count($cacheVars));
         $this->assertEquals('Vps_Component_Model', $cacheVars[0]['model']);
         $this->assertEquals(null, $cacheVars[0]['id']);
-        $this->assertEquals(Vps_Registry::get('config')->user->model, $cacheVars[1]['model']);
+        $this->assertEquals('Vps_Dao_Pages', $cacheVars[1]['model']);
         $this->assertEquals(null, $cacheVars[1]['id']);
+        $this->assertEquals(Vps_Registry::get('config')->user->model, $cacheVars[2]['model']);
+        $this->assertEquals(null, $cacheVars[2]['id']);
     }
 }
