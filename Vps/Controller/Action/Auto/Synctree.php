@@ -52,14 +52,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         ));
     }
 
-    private function _getTableInfo()
-    {
-        if (!isset($this->_model) || !($this->_model instanceof Vps_Model_Db)) {
-            return null;
-        }
-        return $this->_model->getTable()->info();
-    }
-
     public function preDispatch()
     {
         parent::preDispatch();
@@ -308,7 +300,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $point  = $this->getRequest()->getParam('point');
 
         $parentField = $this->_parentField;
-        $row = $this->_model->getTable()->find($source)->current();
+        $row = $this->_model->getRow($source);
 
         if ($point == 'append') {
             $row->$parentField = (int)$target == 0 ? null : $target;
@@ -316,7 +308,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $row->pos = '1';
             }
         } else {
-            $targetRow = $this->_model->getTable()->find($target)->current();
+            $targetRow = $this->_model->getRow($target);
             if ($targetRow) {
                 if ($this->_hasPosition) {
                     $targetPosition = $targetRow->pos;
