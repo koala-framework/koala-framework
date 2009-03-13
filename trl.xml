@@ -3940,37 +3940,47 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1056</id>
 </text>
 <text>
+<en>Customer added by {0}</en>
+<de>Kunde hinzugef&#xFC;gt von {0}</de>
+<id>1057</id>
+</text>
+<text>
 <en>does not exist at this site</en>
 <de>auf dieser Seite nicht vorhanden</de>
-<id>1057</id>
+<id>1058</id>
+</text>
+<text>
+<en>Capacity</en>
+<de>Funktion</de>
+<context>career</context>
+<id>1059</id>
 </text>
 <text>
 <en>If you typed the address, make sure the spelling is correct.</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
-<id>1058</id>
+<id>1060</id>
 </text>
 <text>
 <en>Note: Most addresses are also case sensitive</en>
 <de>Beachten Sie die Gro&#xDF;- und Kleinschreibung</de>
-<id>1059</id>
+<id>1061</id>
 </text>
 <text>
 <en>Check the page, you are comming from</en>
 <de>&#xDC;berpr&#xFC;fen Sie die Seite, von der Sie gekommen sind</de>
-<id>1060</id>
+<id>1062</id>
 </text>
 <text>
 <en>401 - You are not authorized to view this page</en>
-<id>1061</id>
+<id>1063</id>
 </text>
 <text>
 <en>You do not have permission to view this directory or page using the credentials you supplied</en>
 <de>Sie haben nicht die Berechtigung auf das Verzeichnis oder die Seite zuzugreifen</de>
-<id>1062</id>
+<id>1064</id>
 </text>
 <text>
 <en>Client Exception</en>
-<id>1063</id>
+<id>1065</id>
 </text>
 </trl>
-
