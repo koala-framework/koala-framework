@@ -32,15 +32,19 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 callback: options.callback,
                 scope: options.scope
             };
-            options.success = this.vpsSuccess;
-            options.failure = this.vpsFailure;
+            options.success = this.vpsJsonSuccess;
+            options.failure = this.vpsJsonFailure;
             options.callback = this.vpsCallback;
             options.scope = this;
         } else {
             options.vpsCallback = {
+                success: options.success,
+                failure: options.failure,
                 callback: options.callback,
                 scope: options.scope
             };
+            options.success = this.vpsNoJsonSuccess;
+            options.failure = this.vpsNoJsonFailure;
             options.callback = this.vpsCallback;
             options.scope = this;
         }
@@ -63,7 +67,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         delete options.vpsIsSuccess;
         Vps.Connection.superclass.request.call(this, options);
     },
-    vpsSuccess: function(response, options)
+    vpsJsonSuccess: function(response, options)
     {
         if (!options.ignoreErrors) {
             options.vpsIsSuccess = false;
@@ -169,8 +173,21 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             });
         };
     },
-
-    vpsFailure: function(response, options)
+    vpsNoJsonSuccess: function(response, options)
+    {
+        options.vpsIsSuccess = true;
+        Vps.callWithErrorHandler(function() {
+            Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options]);
+        });
+    },
+    vpsNoJsonFailure: function(response, options)
+    {
+        options.vpsIsSuccess = false;
+        Vps.callWithErrorHandler(function() {
+            Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options]);
+        });
+    },
+    vpsJsonFailure: function(response, options)
     {
         if (!options.ignoreErrors) {
             options.vpsIsSuccess = false;
