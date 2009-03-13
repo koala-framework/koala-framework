@@ -15,6 +15,7 @@ class Vps_Component_Cache
     const META_CACHE_ID = 'cacheId';
     const META_CALLBACK = 'callback';
     const META_COMPONENT_CLASS = 'componentClass';
+    const META_STATIC = 'static';
 
     const CLEANING_MODE_META = 'default';
     const CLEANING_MODE_COMPONENT_CLASS = 'componentClass';
@@ -125,13 +126,14 @@ class Vps_Component_Cache
 
     public function clean($mode = self::CLEANING_MODE_META, $value = null)
     {
-        if ($this->isEmpty()) {
+        $select = $this->getMetaModel()->select()->whereEquals('type', self::META_STATIC);
+        if ($this->getMetaModel()->countRows($select) == 0) {
             foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
                 $methods = get_class_methods($componentClass);
                 if (in_array('getStaticCacheVars', $methods)) {
                     $vars = call_user_func(array($componentClass, 'getStaticCacheVars'));
                     foreach ($vars as $id => $m) {
-                        $this->saveMeta($m['model'], null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
+                        $this->saveMeta($m['model'], null, $componentClass, Vps_Component_Cache::META_STATIC);
                     }
                 }
             }
@@ -174,7 +176,7 @@ class Vps_Component_Cache
                     WHERE cache_component.component_class = m.value
                         AND ((m.model = $model)
                         AND ((m.id = '') OR (m.id = $id)))
-                        AND m.type='componentClass'
+                        AND (m.type='componentClass' OR m.type='static')
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
                 Vps_Benchmark::cacheInfo("Cache: cleared $model with $id");
@@ -190,7 +192,7 @@ class Vps_Component_Cache
                         $component->getComponent()->onCacheCallback($value['row']);
                         Vps_Benchmark::cacheInfo("Cache: Callback for component {$component->componentId} ({$component->componentClass}) called.");
                     }
-                } else if ($row->type == self::META_COMPONENT_CLASS) {
+                } else if ($row->type == self::META_COMPONENT_CLASS || $row->type == self::META_STATIC) {
                     $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $row->value);
                 }
             }
@@ -263,11 +265,6 @@ class Vps_Component_Cache
     {
         $this->_countPreloadCalls++;
         $this->_preloadedValues += $this->_preload($ids);
-    }
-
-    public function isEmpty()
-    {
-        return $this->getModel()->countRows() == 0;
     }
 
     protected function _preload($ids)
