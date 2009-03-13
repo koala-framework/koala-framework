@@ -36,9 +36,18 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
                 );
             }
         }
-        //zB eine news von der der status geändert wird oder der titel geändert wird
-        $ret = array_merge($ret, $this->getData()->getLinkedData()
-                                            ->getComponent()->getCacheVars());
+
+        $linkedData = $this->getData()->getLinkedData();
+        if ($linkedData) {
+            $ret[] = array(
+                'model' => 'Vps_Component_Model',
+                'id' => $linkedData->row->id
+            );
+            $ret[] = array(
+                'model' => 'Vps_Dao_Pages',
+                'id' => $linkedData->row->id
+            );
+        }
         return $ret;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_LinkTag_News_Component extends Vpc_Basic_LinkTag_Intern_Component
+class Vpc_Basic_LinkTag_News_Component extends Vpc_Basic_LinkTag_Abstract_Component
 {
     public static function getSettings()
     {
@@ -13,10 +13,9 @@ class Vpc_Basic_LinkTag_News_Component extends Vpc_Basic_LinkTag_Intern_Componen
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();
-// echo "-------------------------";
-// var_dump($this->getData()->getLinkedData()->componentId);
-// var_dump($this->getData()->getLinkedData()->componentClass);
-// var_dump($this->getData()->getLinkedData()->getComponent()->getCacheVars());
+        //eine news von der der status geändert wird oder der titel geändert wird
+        $ret = array_merge($ret, $this->getData()->getLinkedData()
+                                            ->getComponent()->getCacheVars());
         return $ret;
     }
 }
