@@ -10,6 +10,7 @@ class Vps_Crm_Customer_CustomersController
 
     public function _initColumns()
     {
+        parent::_initColumns();
         $this->_columns->add(new Vps_Grid_Column('name', trlVps('Name'), 190));
         $this->_columns->add(new Vps_Grid_Column('street', trlVps('Street'), 150))
             ->setHidden(true);
