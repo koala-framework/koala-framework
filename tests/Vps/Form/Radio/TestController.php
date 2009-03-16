@@ -1,6 +1,6 @@
 <?php
 // zum manuell testen; gibt keinen test der den controller verwendet
-// /vps/test/vps_form_radio-test
+// /vps/test/vps_form_radio_test
 class Vps_Form_Radio_TestController extends Vps_Controller_Action_Auto_Form
 {
     protected $_modelName = 'Vps_Form_Radio_TestModel';

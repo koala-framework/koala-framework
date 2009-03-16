@@ -9,22 +9,30 @@ Vps.Form.Cards = Ext.extend(Ext.Panel,
             var cards = this.items.get(1);
             cards.items.each(function(i) {
                 if (i.name != value) {
-					i.hide(); //bugfix kitepowerbuchung muss es ganz verschwinden, nicht nur ausgrauen
-                    i.cascade(function(it) {
-						it.disable();
-                    }, this);
+                    i.hide(); //bugfix kitepowerbuchung muss es ganz verschwinden, nicht nur ausgrauen
+                    i.disableRecursive();
                 } else {
                     cards.getLayout().setActiveItem(i);
-					i.show(); //bugfix für falsche anzeige bei kitepowerbuchung
-                    i.cascade(function(it) {
-                        if (!it.disabledByFieldset) {
-                            it.enable();
-                        }
-                    }, this);
+                    i.show(); //bugfix für falsche anzeige bei kitepowerbuchung
+                    i.enableRecursive();
                 }
             }, this);
         }, this);
-    }
+    },
+
+    enableRecursive: function() {
+        var combobox = this.items.first();
+        combobox.enable();
+        var value = combobox.getValue();
+        var cards = this.items.get(1);
+        cards.items.each(function(i) {
+            if (i.name != value) {
+                i.disableRecursive();
+            } else {
+                i.enableRecursive();
+            }
+        }, this);
+    },
 
 });
 Ext.reg('vps.cards', Vps.Form.Cards);

@@ -10,22 +10,24 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
             this.hiddenCheckboxValue.on('valuechange', function(field, value) {
                 if (value=='0' || !value) {
                     if (this.checkboxCollapse) this.collapse();
+                    this.items.each(function(i) {
+                        if (i != this.hiddenCheckboxValue) {
+                            i.disableRecursive();
+                        }
+                    }, this);
                     this.cascade(function(i) {
                         if (i != this && i != this.hiddenCheckboxValue) {
-                            i.disable();
                             if (i.clearInvalid) {
                                 i.clearInvalid();
                             }
-                            i.disabledByFieldset = true; //hack, Kitepower ServiceDialog aktiviert das feld sonst wida
                         }
                     }, this);
                     this.checkbox.dom.checked = false;
                 } else {
                     if (this.checkboxCollapse) this.expand();
-                    this.cascade(function(i) {
-                        if (i != this && i != this.hiddenCheckboxValue) {
-                            i.enable();
-                            delete i.disabledByFieldset;
+                    this.items.each(function(i) {
+                        if (i != this.hiddenCheckboxValue) {
+                            i.enableRecursive();
                         }
                     }, this);
                     this.checkbox.dom.checked = true;
@@ -40,6 +42,18 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
     onCheckClick : function() {
         this.hiddenCheckboxValue.setValue(this.checkbox.dom.checked ? '1' : '0');
     },
+
+    enableRecursive: function() {
+        if (this.hiddenCheckboxValue && (!this.hiddenCheckboxValue.getValue() || !this.hiddenCheckboxValue.getValue()=='0')) {
+            this.items.each(function(i) {
+                i.disableRecursive();
+            }, this);
+            this.enable();
+        } else {
+            Vps.Form.FieldSet.superclass.enableRecursive.call(this);
+        }
+    },
+
     afterRender: function() {
         Vps.Form.FieldSet.superclass.afterRender.call(this);
         if (this.helpText) {
