@@ -134,7 +134,6 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 $s = $m->select()
                         ->whereEquals('project_id', $projectIds)
                         ->whereNotEquals('status', 'prod');
-                $doneTodos = array();
                 foreach ($m->getRows($s) as $todo) {
                     if (!$todo->done_revision) continue;
                     $project = Vps_Controller_Action_Cli_TagController::getProjectName();
