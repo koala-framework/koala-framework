@@ -1,13 +1,4 @@
 <?php
-class MyIterator extends ArrayIterator
-{
-    public function __construct($array)
-    {
-        parent::__construct($array);
-    }
-}
-
-
 /**
  * @group Model_Tree
  */
@@ -18,15 +9,6 @@ class Vps_Model_Tree_Test extends PHPUnit_Framework_TestCase
     {
         $this->_model = new Vps_Model_Tree_TestModel();
     }
-
-/*
-    public function testMyIterator()
-    {
-        $it = new MyIterator(array(1,2,3));
-        foreach ($it as $i) {
-            echo $i."\n";
-        }
-    }*/
 
     public function testPath()
     {
