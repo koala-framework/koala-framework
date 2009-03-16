@@ -1,8 +1,9 @@
 .$cssClass div.text { display: none; }
 .$cssClass .fromAddress { margin-top:6px; }
-.$cssClass .fromAddress input { }
+.$cssClass .fromAddress input { float: left; }
 .$cssClass .fromAddress input.textBefore { color: #D0D0D0; }
 .$cssClass .fromAddress input.textOn { color: #000000; }
+.$cssClass .fromAddress input.submitOn { float: right; margin-top: -3px; }
 
 .$cssClass .mapDirSuggestParent { display: none; }
 
