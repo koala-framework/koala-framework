@@ -203,7 +203,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $data['leaf'] = false;
         $data['visible'] = true;
         $data['uiProvider'] = 'Vps.Tree.Node';
-        if ($row->visible == '0') {
+        if (isset($row->visible) && $row->visible == '0') { //TODO visible nicht hardcodieren
             $data['visible'] = false;
             $data['bIcon'] = $this->_icons['invisible']->__toString();
         } else {
