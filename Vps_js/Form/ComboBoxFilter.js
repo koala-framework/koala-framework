@@ -54,7 +54,7 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
                     return false;
                 }, this);
             } else {
-                if (this.saveBox.store.data.items.length >= 1) {
+                if (this.filterBox.getValue() && this.saveBox.store.data.items.length >= 1) {
                     this.saveBox.store.reload();
                 }
             }
