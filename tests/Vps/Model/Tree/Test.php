@@ -1,4 +1,13 @@
 <?php
+class MyIterator extends ArrayIterator
+{
+    public function __construct($array)
+    {
+        parent::__construct($array);
+    }
+}
+
+
 /**
  * @group Model_Tree
  */
@@ -10,6 +19,15 @@ class Vps_Model_Tree_Test extends PHPUnit_Framework_TestCase
         $this->_model = new Vps_Model_Tree_TestModel();
     }
 
+/*
+    public function testMyIterator()
+    {
+        $it = new MyIterator(array(1,2,3));
+        foreach ($it as $i) {
+            echo $i."\n";
+        }
+    }*/
+
     public function testPath()
     {
         $row = $this->_model->getRow(7);
@@ -20,6 +38,7 @@ class Vps_Model_Tree_Test extends PHPUnit_Framework_TestCase
         $row = $this->_model->getRow(3);
         $this->assertEquals('root-child2', $row->getTreePath('-'));
     }
+
     public function testChildCategoryIds()
     {
         $row = $this->_model->getRow(7);
@@ -49,5 +68,24 @@ class Vps_Model_Tree_Test extends PHPUnit_Framework_TestCase
         $ids = $row->getRecursiveIds();
         asort($ids);
         $this->assertEquals(array(1,2,3,4,5,6,7), array_values($ids));
+    }
+
+    public function testIterator()
+    {
+        $row = $this->_model->getRow(1);
+        $ids = array();
+        foreach ($row as $r) {
+            $ids[] = $r->id;
+        }
+        $this->assertEquals(array(2,3,4), $ids);
+
+        $row = $this->_model->getRow(1);
+        $ids = array();
+        foreach (new RecursiveIteratorIterator($row, RecursiveIteratorIterator::SELF_FIRST) as $r) {
+            $ids[] = $r->id;
+        }
+        asort($ids);
+        $ids = array_values($ids);
+        $this->assertEquals(array(2,3,4,5,6,7), $ids);
     }
 }
