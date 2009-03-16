@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row
+class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row implements IteratorAggregate
 {
     public function getTreePath($separator = ' » ')
     {
@@ -27,5 +27,10 @@ class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row
     public function getRecursiveIds()
     {
         return $this->getModel()->getRecursiveIds($this->id);
+    }
+
+    public function getIterator()
+    {
+        return new Vps_Model_Tree_RecursiveIterator($this);
     }
 }
