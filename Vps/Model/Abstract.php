@@ -195,7 +195,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
         $ret = array();
         foreach ($this->_referenceMap as $k=>$ref) {
-            if (is_instance_of($modelClassName, $ref['refModelClass'])) {
+            if (isset($ref['refModelClass'])) {
+                $c = $ref['refModelClass'];
+            } else if (isset($ref['refModel'])) {
+                $c = get_class($ref['refModel']);
+            } else {
+                throw new Vps_Exception("refModelClass and refModel not set");
+            }
+            if (is_instance_of($modelClassName, $c)) {
                 $ret[$k] = $ref;
             }
         }
