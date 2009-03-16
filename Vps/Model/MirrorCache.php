@@ -6,8 +6,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     protected $_sourceModel;
     protected $_syncTimeField;
 
-    private $_checkCacheActive = false;
-    private $_checkCacheDone = array();
+    private $_checkCacheDone = false;
 
     public function __construct(array $config = array())
     {
@@ -27,26 +26,26 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
     public function countRows($where = array())
     {
-        $this->checkCache('select');
+        $this->checkCache();
         return parent::countRows($where);
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
-        $this->checkCache('select');
+        $this->checkCache();
         return parent::getIds($where, $order, $limit, $start);
     }
 
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
-        $this->checkCache('select');
+        $this->checkCache();
         return parent::getRows($where, $order, $limit, $start);
     }
 
-    public function checkCache($uniqueKey = null)
+    public function checkCache()
     {
-        if (!$this->_checkCacheActive && (!$uniqueKey || !in_array($uniqueKey, $this->_checkCacheDone))) {
-            $this->_checkCacheDone[] = $uniqueKey;
+        if (!$this->_checkCacheDone) {
+            $this->_checkCacheDone = true; //wegen endlosschleife ganz oben
 
             if (!$this->_syncTimeField) {
                 throw new Vps_Exception("syncTimeField must be set when using MirrorCache");
@@ -54,9 +53,6 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
             Vps_Benchmark::count('mirror sync');
             //$b = Vps_Benchmark::start('mirror sync');
-
-            // ohne dem check -> endlos-schleife
-            $this->_checkCacheActive = true;
 
             $syncField = $this->_syncTimeField;
             $proxyModel = $this->getProxyModel();
@@ -78,8 +74,6 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 $rows = $sourceModel->getRows($select);
                 $cacheTimestamp = $this->_syncRows($rows, $cacheTimestamp);
             }
-
-            $this->_checkCacheActive = false;
 
             //if ($b) $b->stop();
         }
