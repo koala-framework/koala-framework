@@ -48,6 +48,9 @@ class Vps_Model_Service extends Vps_Model_Abstract
         if (isset($row->$pk)) {
             $rowData = $this->_client->rowSave($row->getCleanDataPrimary(), $rowData);
             $this->_data[$row->$pk] = $rowData;
+            foreach ($rowData as $k=>$v) {
+                $row->$k = $v;
+            }
             return $rowData[$pk];
         }
         throw new Vps_Exception("Can't find entry");
@@ -60,7 +63,9 @@ class Vps_Model_Service extends Vps_Model_Abstract
         $pk = $this->getPrimaryKey();
 
         $this->_data[$savedRowData[$pk]] = $savedRowData;
-        $row->$pk = $savedRowData[$pk];
+        foreach ($savedRowData as $k=>$v) {
+            $row->$k = $v;
+        }
         $this->_rows[$savedRowData[$pk]] = $row;
 
         return $rowData[$pk];
