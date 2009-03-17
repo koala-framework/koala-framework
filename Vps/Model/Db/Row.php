@@ -148,9 +148,4 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         }
         return $this->_row->findManyToManyRowset($matchModel, $intersectionModel, $callerRefRule, $matchRefRule, $dbSelect);
     }
-
-    public function getTable()
-    {
-        return $this->_row->getTable();
-    }
 }

@@ -75,4 +75,9 @@ class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
     {
         return $this->_model;
     }
+
+    public function getTable()
+    {
+        return $this->getModel()->getTable();
+    }
 }

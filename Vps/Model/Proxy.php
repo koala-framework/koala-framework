@@ -150,4 +150,9 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     {
         $this->_proxyModel->writeBuffer();
     }
+
+    public function getTable()
+    {
+        return $this->_proxyModel->getTable();
+    }
 }
