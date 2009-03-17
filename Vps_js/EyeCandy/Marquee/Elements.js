@@ -41,14 +41,11 @@ Vps.Marquee.Elements.prototype = {
             this.sumSize += this._elSize(el);
         }, this);
         if (!this.elements.length) return;
-        this.currentPosition = 0;
-        this.doScroll.defer(this.scrollDelay, this);
+        this.currentPosition = parseInt(this.readCookie()) || 0;
+        this.doScroll();
     },
 
     doScroll: function() {
-        this.currentPosition += this.scrollAmount;
-        if (this.currentPosition > this.sumSize) this.currentPosition = 0;
-
         var offset = 0;
         this.elements.each(function(i) {
             var pos = offset - this.currentPosition;
@@ -65,6 +62,31 @@ Vps.Marquee.Elements.prototype = {
             offset += i.size;
         }, this);
 
+        this.currentPosition += this.scrollAmount;
+        if (this.currentPosition > this.sumSize) this.currentPosition = 0;
         this.doScroll.defer(this.scrollDelay, this);
-    }
+
+        this.setCookie(this.currentPosition);
+    },
+
+    // private
+    readCookie : function(){
+        var c = document.cookie + ";";
+        var re = /\s?(.*?)=(.*?);/g;
+        var matches;
+        while((matches = re.exec(c)) != null){
+            var name = matches[1];
+            var value = matches[2];
+            if(name == "vpsMarqueePosition"){
+                return value;
+            }
+        }
+        return null;
+    },
+
+    // private
+    setCookie : function(value){
+        //TODO: möglicherweise mal mehrere marquees auf einer seite ermöglichen
+        document.cookie = "vpsMarqueePosition="+value+"; path=/; domain="+document.location.host+";";
+    },
 };
