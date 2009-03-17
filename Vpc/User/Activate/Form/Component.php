@@ -46,6 +46,7 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
 
         if ($this->_user && $this->isSaved()) {
             $this->_user->setPassword($this->_form->getRow()->password);
+            $this->_user->save();
             $auth = Vps_Auth::getInstance();
             $auth->getStorage()->write(array('userId' => $this->_user->id));
         }
