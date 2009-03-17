@@ -63,7 +63,9 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     {
         if (!isset($this->_fields)) {
             $this->_fields = new Vps_Collection_FormFields();
-            if ($this->getValues() instanceof Zend_Db_Table_Rowset_Abstract) {
+            if ($this->getValues() instanceof Vps_Model_Rowset_Interface) {
+                $pk = $this->getValues()->getModel()->getPrimaryKey();
+            } else if ($this->getValues() instanceof Zend_Db_Table_Rowset_Abstract) {
                 $info = $this->getValues()->getTable()->info();
                 $pk = $info['primary'][1];
             }
@@ -139,10 +141,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         if (!$row) return array();
 
         $selected = $this->_getRowsByRow($row);
-        if (!$key = $this->getColumnName()) {
-            $ref = $this->_model->getTable()->getReference(get_class($this->getValues()->getTable()));
-            $key = $ref['columns'][0];
-        }
+        $key = $this->getColumnName();
 
         $selectedIds = array();
         foreach ($selected as $i) {
@@ -154,6 +153,24 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             $ret[$field->getFieldName()] = in_array($field->getKey(), $selectedIds);
         }
 
+        return $ret;
+    }
+    public function getColumnName()
+    {
+        $ret = parent::getColumnName();
+        if (!$ret) {
+            if (get_class($this->_model) == 'Vps_Model_Db') {
+                if ($this->getValues()->getModel()  instanceof Vps_Util_Model_Pool) {
+                    $tableClass = 'Vps_Dao_Pool';
+                } else {
+                    $tableClass = get_class($this->getValues()->getTable());
+                }
+                $ref = $this->_model->getTable()->getReference($tableClass);
+                $ret = $ref['columns'][0];
+            } else {
+                throw new Vps_Exception_NotYetImplemented();
+            }
+        }
         return $ret;
     }
     public function save(Vps_Model_Row_Interface $row, $postData)
@@ -172,10 +189,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $ref = $this->_getReferences($row);
         $key1 = $ref['columns'][0];
         
-        if (!$key2 = $this->getColumnName()) {
-            $ref = $this->_model->getTable()->getReference(get_class($this->getValues()->getTable()));
-            $key2 = $ref['columns'][0];
-        }
+        $key2 = $this->getColumnName();
 
         $avaliableKeys = array();
         foreach ($this->_getFields() as $field) {
