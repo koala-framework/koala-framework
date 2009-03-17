@@ -61,6 +61,10 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
                 if ($result->getCode() == Zend_Auth_Result::FAILURE_UNCATEGORIZED) {
                     $msgs = $result->getMessages();
                     $this->view->text = $msgs[0];
+                    if (isset($msgs[1])) {
+                        $asset = new Vps_Asset('help.png');
+                        $this->view->text .= ' <img src="'.$asset.'" width="16" height="16" ext:qwidth="140" ext:qtitel="Hilfe" ext:qtip="'.$msgs[1].'" />';
+                    }
                 } else {
                     $this->view->text = trlVps('Login failed');
                 }
