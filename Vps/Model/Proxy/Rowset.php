@@ -61,5 +61,8 @@ class Vps_Model_Proxy_Rowset implements Vps_Model_Rowset_Interface
     {
         return $this->_rowset->toArray();
     }
-
+    public function getTable()
+    {
+        return $this->getModel()->getTable();
+    }
 }

@@ -329,7 +329,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
 
     public function getTable()
     {
-        return null;
+        return $this->getModel()->getTable();
     }
 
     public function toArray()
