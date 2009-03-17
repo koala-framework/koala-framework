@@ -157,7 +157,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     }
     public function getColumnName()
     {
-        $ret = parent::getColumnName();
+        $ret = $this->getProperty('columnName');
         if (!$ret) {
             if (get_class($this->_model) == 'Vps_Model_Db') {
                 if ($this->getValues()->getModel()  instanceof Vps_Util_Model_Pool) {
