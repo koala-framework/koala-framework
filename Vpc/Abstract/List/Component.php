@@ -45,7 +45,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         $ret = parent::getCacheVars();
         $ret[] = array(
             'model' => $this->getModel(),
-            'id' => $this->getData()->componentId,
+            'id' => $this->getData()->dbId,
             'field' => Vps_Component_Cache::META_FIELD_COMPONENT_ID
         );
         return $ret;
