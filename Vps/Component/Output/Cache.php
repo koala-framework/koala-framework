@@ -186,7 +186,10 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
                 $type = Vps_Component_Cache::META_CACHE_ID;
                 $value = $cacheId;
             }
-            $this->getCache()->saveMeta($model, $id, $value, $type);
+            if (!isset($m['field'])) {
+                $m['field'] = Vps_Component_Cache::META_FIELD_PRIMARY;
+            }
+            $this->getCache()->saveMeta($model, $id, $value, $type, $m['field']);
         }
         return $meta;
     }

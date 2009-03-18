@@ -36,7 +36,8 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         $ret = parent::getCacheVars();
         $ret[] = array(
             'model' => $this->getModel(),
-            'id' => null
+            'id' => $this->getData()->componentId,
+            'field' => Vps_Component_Cache::META_FIELD_COMPONENT_ID
         );
         return $ret;
     }

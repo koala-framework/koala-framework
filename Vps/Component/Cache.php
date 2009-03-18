@@ -96,7 +96,7 @@ class Vps_Component_Cache
         return $componentId;
     }
 
-    public function saveMeta($model, $id, $value, $type = self::META_CACHE_ID)
+    public function saveMeta($model, $id, $value, $type = self::META_CACHE_ID, $field = self::META_FIELD_PRIMARY)
     {
         if ($model instanceof Vps_Model_Db) $model = $model->getTable();
         if ($model instanceof Vps_Model_Abstract) $model = $model;
@@ -105,6 +105,7 @@ class Vps_Component_Cache
         $data = array(
             'model' => $model,
             'id' => $id,
+            'field' => $field,
             'value' => $value,
             'type' => $type
         );
@@ -146,29 +147,32 @@ class Vps_Component_Cache
             if (!is_array($value) ||
                 !array_key_exists('model', $value) ||
                 !array_key_exists('id', $value) ||
+                !array_key_exists('componentId', $value) ||
                 !array_key_exists('row', $value)
             ) {
-                throw new Vps_Exception('$value must be an array with "model", "id" and "row"');
+                throw new Vps_Exception('$value must be an array with "model", "id", "componentId" and "row"');
             }
             if ($this->getMetaModel()->getProxyModel() instanceof Vps_Model_Db) {
                 $adapter = $this->getMetaModel()->getProxyModel()->getTable()->getAdapter();
                 $model = $adapter->quote($value['model']);
                 $id = $adapter->quote($value['id']);
+                $componentId = $adapter->quote($value['componentId'] ? $value['componentId'] : '');
                 $sql = "
                     DELETE cache_component
                     FROM cache_component, cache_component_meta m
                     WHERE cache_component.id = m.value
-                        AND m.model = $model
-                        AND ((m.id = '') OR (m.id = $id))
+                        AND ((m.model = $model)
+                        AND ((m.id = '') OR (m.id = $id AND m.field='primary') OR (m.id = $componentId AND m.field='component_id')))
                         AND m.type='cacheId'
                 ";
+                p($sql);
                 $this->getModel()->getProxyModel()->executeSql($sql);
                 $sql = "
                     DELETE cache_component
                     FROM cache_component, cache_component_meta m
                     WHERE cache_component.component_class = m.value
-                        AND m.model = $model
-                        AND (m.id = '' OR m.id = $id)
+                        AND ((m.model = $model)
+                        AND ((m.id = '') OR (m.id = $id AND m.field='primary') OR (m.id = $componentId AND m.field='component_id')))
                         AND (m.type='componentClass' OR m.type='static')
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
@@ -180,7 +184,14 @@ class Vps_Component_Cache
                     new Vps_Model_Select_Expr_Equals('model', $value['model']),
                     new Vps_Model_Select_Expr_Or(array(
                         new Vps_Model_Select_Expr_Equals('id', ''),
-                        new Vps_Model_Select_Expr_Equals('id', $value['id']),
+                        new Vps_Model_Select_Expr_And(array(
+                            new Vps_Model_Select_Expr_Equals('id', $value['id']),
+                            new Vps_Model_Select_Expr_Equals('field', 'primary')
+                        )),
+                        new Vps_Model_Select_Expr_And(array(
+                            new Vps_Model_Select_Expr_Equals('id', $value['componentId']),
+                            new Vps_Model_Select_Expr_Equals('field', 'component_id')
+                        ))
                     ))
                 ))
             );

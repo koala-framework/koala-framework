@@ -35,7 +35,7 @@ class Vpc_Directories_Top_Test extends Vpc_TestAbstract
         $this->assertEquals(6, substr_count($c->render(), 'Foo'));
 
         $row = $model->createRow(
-            array('id' => 9, 'name'=>'Foo6')
+            array('id' => 9, 'name'=>'Foo6', 'component_id'=>'root_directory')
         );
         $row->save();
         $this->_process();
