@@ -14,8 +14,10 @@ class Vpc_Basic_LinkTag_News_Component extends Vpc_Basic_LinkTag_Abstract_Compon
     {
         $ret = parent::getCacheVars();
         //eine news von der der status geändert wird oder der titel geändert wird
-        $ret = array_merge($ret, $this->getData()->getLinkedData()
-                                            ->getComponent()->getCacheVars());
+        if ($this->getData()->getLinkedData()) {
+            $ret = array_merge($ret, $this->getData()->getLinkedData()
+                                                ->getComponent()->getCacheVars());
+        }
         return $ret;
     }
 }
