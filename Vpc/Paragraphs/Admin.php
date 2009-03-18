@@ -53,11 +53,4 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
         }
     }
-
-    public function delete($componentId)
-    {
-        foreach ($this->_getRows($componentId) as $row) {
-            $row->delete();
-        }
-    }
 }
