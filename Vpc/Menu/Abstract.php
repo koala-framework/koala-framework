@@ -119,6 +119,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             'model' => 'Vps_Dao_Pages',
             'id' => null
         );
+        // Falls Nickname geändert wird, ändert sich Url zum User
         $ret[] = array(
             'model' => Vps_Registry::get('config')->user->model,
             'id' => null

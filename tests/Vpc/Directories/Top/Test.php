@@ -1,11 +1,12 @@
 <?php
-class Vpc_Directories_Top_Test extends PHPUnit_Framework_TestCase
+/**
+ * @group Directories_Top
+ */
+class Vpc_Directories_Top_Test extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Directories_Top_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Directories_Top_Root');
     }
 
     public function testDetail()
@@ -24,5 +25,27 @@ class Vpc_Directories_Top_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($vars['partialParams']['count'], 5);
         $paging = $dir->getChildComponent('-view')->getChildComponent('-paging');
         $this->assertEquals($paging->getComponent()->getCount(), 5);
+    }
+
+    public function testCache()
+    {
+        $c = $this->_root->getChildComponent('_directory');
+        $model = $c->getComponent()->getModel();
+
+        $this->assertEquals(6, substr_count($c->render(), 'Foo'));
+
+        $row = $model->createRow(
+            array('id' => 9, 'name'=>'Foo6')
+        );
+        $row->save();
+        $this->_process();
+        $c = $this->_root->getChildComponent('_directory');
+        $this->assertEquals(7, substr_count($c->render(), 'Foo'));
+
+        // Zeile löschen
+        $model->getRow(9)->delete();
+        $this->_process();
+        $c = $this->_root->getChildComponent('_directory');
+        $this->assertEquals(6, substr_count($c->render(), 'Foo'));
     }
 }
