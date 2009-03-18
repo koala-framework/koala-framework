@@ -55,6 +55,11 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public static function setComponentClass($componentClass)
     {
         self::$_rootComponentClass = $componentClass;
+        self::reset();
+    }
+
+    public static function reset()
+    {
         self::$_instance = null;
         Vps_Component_Abstract::resetSettingsCache();
     }

@@ -186,9 +186,6 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                         $this->_row->component_id = $this->getDbId();
                     }
                 }
-                if (get_class($model) == 'Vps_Model_Db' && $this->_row) {
-                    $this->_row = $this->_row->getRow();
-                }
             } else {
                 $this->_row = $model->find($this->getDbId())->current();
             }
@@ -309,37 +306,6 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 'id' => $row->$primaryKey
             );
         }
-
-        if (isset($this->getData()->row) &&
-            $this->getData()->row instanceof Vps_Model_Row_Abstract
-        ) {
-            $row = $this->getData()->row;
-            $model = $row->getModel();
-            $primaryKey = $model->getPrimaryKey();
-
-            $ret[] = array(
-                'model' => $model,
-                'id' => $row->$primaryKey
-            );
-        }
-
-
-        $generatorSettings = $this->_getSetting('generators');
-        if (!isset($generatorSettings['child']['component']['view'])) {
-            $tableGenerators = Vps_Component_Generator_Abstract::getInstances(
-                $this->getData(), array('generatorClass' => 'Vps_Component_Generator_Table')
-            );
-            foreach ($tableGenerators as $key => $generator) {
-                foreach ($generator->getChildData($this->getData()) as $c) {
-                    $model = $c->row->getModel();
-                    $ret[] = array(
-                        'model' => $model,
-                        'id' => $c->row->id
-                    );
-                }
-            }
-        }
-
         return $ret;
     }
 

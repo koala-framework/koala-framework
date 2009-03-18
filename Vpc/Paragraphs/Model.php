@@ -1,8 +1,7 @@
 <?php
-class Vpc_Paragraphs_Model extends Vpc_Table
+class Vpc_Paragraphs_Model extends Vps_Model_Db_Proxy
 {
-    protected $_name = 'vpc_paragraphs';
-    protected $_rowClass = 'Vpc_Paragraphs_Row';
+    protected $_table = 'vpc_paragraphs';
 
     protected function _setupFilters()
     {

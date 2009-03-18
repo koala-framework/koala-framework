@@ -650,5 +650,12 @@ class Vps_Component_Data
     {
         return $this->componentId . ' (' . $this->componentClass . ')';
     }
+
+    // Nur zum Testen!
+    public function render()
+    {
+        $output = new Vps_Component_Output_Cache();
+        return $output->render($this);
+    }
 }
 ?>

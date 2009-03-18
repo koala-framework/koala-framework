@@ -47,7 +47,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $row = $this->_model->createRow();
             $this->_preforeAddParagraph($row);
             $generators = Vpc_Abstract::getSetting($this->_getParam('class'), 'generators');
-            $classes =$generators['paragraphs']['component']; 
+            $classes =$generators['paragraphs']['component'];
             $row->component = array_search($class, $classes);
             $row->visible = 0;
             $row->save();
@@ -57,7 +57,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             // Hack für weiterleiten auf Edit-Seite
             $name = Vpc_Abstract::getSetting($this->_getParam('class'), 'componentName');
             $name = str_replace('.', ' -> ', $name);
-            $data = $this->_model->find($id)->current()->getRow()->toArray();
+            $data = $this->_model->getRow($id)->toArray();
             $this->view->data = $data;
             $this->view->data['component_name'] = $name;
 
