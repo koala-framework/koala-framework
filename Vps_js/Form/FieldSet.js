@@ -44,7 +44,7 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
     },
 
     enableRecursive: function() {
-        if (this.hiddenCheckboxValue && (!this.hiddenCheckboxValue.getValue() || !this.hiddenCheckboxValue.getValue()=='0')) {
+        if (this.hiddenCheckboxValue && (!this.hiddenCheckboxValue.getValue() || this.hiddenCheckboxValue.getValue()=='0')) {
             this.items.each(function(i) {
                 i.disableRecursive();
             }, this);
