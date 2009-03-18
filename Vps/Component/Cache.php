@@ -165,7 +165,6 @@ class Vps_Component_Cache
                         AND ((m.id = '') OR (m.id = $id AND m.field='primary') OR (m.id = $componentId AND m.field='component_id')))
                         AND m.type='cacheId'
                 ";
-                p($sql);
                 $this->getModel()->getProxyModel()->executeSql($sql);
                 $sql = "
                     DELETE cache_component
