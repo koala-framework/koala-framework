@@ -24,7 +24,6 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         $maxVersion = $branchVersion;
         foreach (self::_getSvnDirs("tags/vps") as $v) {
             if ($branchVersion && version_compare($branchVersion, $v)) continue;
-            d($v);
             if (!$maxVersion || version_compare($maxVersion, $v) == -1) {
                 $maxVersion = $v;
             }
