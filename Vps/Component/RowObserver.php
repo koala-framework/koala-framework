@@ -65,12 +65,6 @@ class Vps_Component_RowObserver
         foreach ($this->_process as $action => $process) {
             foreach ($process as $row) {
                 // Cache
-                if ($row->getModel() instanceof Vps_Component_Cache_MetaModel ||
-                    $row->getModel() instanceof Vps_Component_Cache_Model
-                ) {
-                    continue;
-                }
-
                 if ($row instanceof Zend_Db_Table_Row_Abstract) {
                     $model = $row->getTable();
                     $field = current($model->info('primary'));
@@ -78,6 +72,11 @@ class Vps_Component_RowObserver
                     $model = $row->getModel();
                     $field = $model->getPrimaryKey();
                     if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+                    if ($model instanceof Vps_Component_Cache_MetaModel ||
+                        $model instanceof Vps_Component_Cache_Model
+                    ) {
+                        continue;
+                    }
                 }
                 if (isset($row->component_id)) {
                     $field = 'component_id';
