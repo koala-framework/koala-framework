@@ -76,7 +76,6 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
 
     public function indexAction()
     {
-        //set_include_path('/www/public/niko/phpunit:'.get_include_path());
         self::initForTests();
 
         $arguments = array();
@@ -166,6 +165,28 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
                 throw new Vps_Exception("Can't report to zeiterfassung: ".$response->getBody());
             }
         }
+        if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
+            $msg = Vps_Registry::get('config')->application->name.' Tests ';
+            if ($result->wasSuccessful()) {
+                $msg .= 'erfolgreich ausgefuehrt';
+            } else {
+                $msg .= 'NICHT erfolgreich ausgefuehrt';
+            }
+            $msg = str_replace(" ", "\ ", $msg);
+            system("ssh niko export DISPLAY=:0 && /usr/kde/3.5/bin/kdialog --passivepopup $msg 2");
+        }
+
+        if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
+            $msg = Vps_Registry::get('config')->application->name.' Tests ';
+            if ($result->wasSuccessful()) {
+                $msg .= 'erfolgreich ausgeführt';
+            } else {
+                $msg .= 'NICHT erfolgreich ausgeführt';
+            }
+            $msg = str_replace(" ", "\ ", utf8_decode($msg));
+            system("ssh niko \"export DISPLAY=:0 && /usr/kde/3.5/bin/kdialog --passivepopup $msg 2\"");
+        }
+
 
         if ($result->wasSuccessful()) {
             exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
