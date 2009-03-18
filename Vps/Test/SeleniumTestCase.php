@@ -72,7 +72,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
                 $this->assertContainsText($locator.'['.$k.']', $i);
             }
         } else {
-            $this->assertTrue((bool)preg_match('#'.$text.'#', $this->getText($locator)));
+            $this->assertTrue((bool)preg_match('#'.preg_quote($text).'#', $this->getText($locator)));
         }
     }
 
