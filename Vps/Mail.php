@@ -245,15 +245,16 @@ class Vps_Mail
             try {
                 $class = $this->_mailVarsClassName;
                 $mails = new $class();
+                if ($mails) {
+                    $where = array();
+                    $where['template = ? OR ISNULL(template)'] = $this->_templateForDbVars;
+                    $vars = $mails->fetchAll($where, 'template');
+                }
             } catch (Zend_Db_Statement_Exception $e) {
-                $mails = false;
-            }
-            if ($mails) {
-                $where = array();
-                $where['template = ? OR ISNULL(template)'] = $this->_templateForDbVars;
-                $vars = $mails->fetchAll($where, 'template');
+                $vars = false;
             }
         }
+        if (!$vars) $vars = array();
 
         // txt mail
         $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.txt.tpl");
