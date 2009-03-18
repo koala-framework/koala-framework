@@ -35,6 +35,17 @@ class Vps_Form_CheckboxFieldsetInCards_TestController extends Vps_Controller_Act
         $subCard2 = $subCards->add();
         $subCard2->setName('subcard2');
         $subCard2->setTitle('subcard2');
+
+        $card3 = $cards->add();
+        $card3->setName('card4');
+        $card3->setTitle('Card4');
+
+        $fs = $card3->add(new Vps_Form_Container_FieldSet("Bar4"))
+            ->setCheckboxToggle(true)
+            ->setCheckboxName('fs3');
+        $fs->add(new Vps_Form_Field_TextField("text4", "Text4"))
+            ->setAllowBlank(false);
+
     }
 
     public function indexAction()
