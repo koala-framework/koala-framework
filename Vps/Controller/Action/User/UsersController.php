@@ -8,8 +8,8 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
     protected $_paging = 20;
     protected $_queryFields = array('id', 'email', 'firstname', 'lastname');
     protected $_editDialog = array('controllerUrl'=>'/vps/user/user',
-                                   'width'=>520,
-                                   'height'=>500);
+                                   'width'=>600,
+                                   'height'=>550);
     protected $_filters = array('text' => true);
 
     public function preDispatch()
@@ -26,6 +26,21 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
             'icon'      => '/assets/silkicons/user_red.png',
             'cls'       => 'x-btn-icon',
             'tooltip'   => trlVps('Show locked users only')
+        );
+
+        // alle erlaubten haupt-rollen in variable
+        $roles = array();
+        $acl = Vps_Registry::get('acl');
+        $userRole = Vps_Registry::get('userModel')->getAuthedUserRole();
+        foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
+            $roles[] = array($role->getRoleId(), $role->getRoleName());
+        }
+        $this->_filters['role'] = array(
+            'type'=>'ComboBox',
+            'width'=>120,
+            'defaultText' => trlVps('all'),
+            'skipWhere' => true,
+            'data' => $roles
         );
 
         $this->_columns->add(new Vps_Grid_Column_Button('edit', trlVps('Edit')));
@@ -113,11 +128,22 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         }
 
         $select->whereEquals('deleted', 0);
+        if (!$this->_getParam('query_locked')) {
+            $select->whereEquals('locked', 0);
+        }
 
         if ($roles) {
             $select->whereEquals('role', $roles);
         } else {
             $select = null;
+        }
+
+        if ($this->_getParam('query_role')) {
+            if (in_array($this->_getParam('query_role'), $roles)) {
+                $select->whereEquals('role', $this->_getParam('query_role'));
+            } else {
+                return null;
+            }
         }
 
         return $select;
