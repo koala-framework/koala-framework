@@ -411,9 +411,9 @@ class Vps_Setup
         if (preg_match('#tags/vps/([^/]+)/config\\.ini#', $v, $m)) {
             $v = $m[1];
         } else if (preg_match('#branches/vps/([^/]+)/config\\.ini#', $v, $m)) {
-            $v = $m[1];
+            $v = 'Branch '.$m[1];
         } else if (preg_match('#trunk/vps/config\\.ini#', $v, $m)) {
-            $v = 'trunk';
+            $v = 'Trunk';
         }
         $vpsConfig->application->vps->version = $v;
         if (preg_match('/Revision: ([0-9]+)/', $vpsConfig->application->vps->revision, $m)) {
