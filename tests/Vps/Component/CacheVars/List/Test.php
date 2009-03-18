@@ -36,7 +36,7 @@ class Vps_Component_CacheVars_List_Test extends PHPUnit_Framework_TestCase
         $cacheVars = $view->getComponent()->getPartialCacheVars(1);
         $this->assertEquals(1, count($cacheVars));
         $this->assertEquals('Vps_Component_CacheVars_List_Model', get_class($cacheVars[0]['model']));
-        $this->assertEquals(3, $cacheVars[0]['id']);
+        $this->assertEquals(null, $cacheVars[0]['id']);
     }
 
     public function testPaging()
