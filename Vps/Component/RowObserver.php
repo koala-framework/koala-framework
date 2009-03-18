@@ -88,14 +88,15 @@ class Vps_Component_RowObserver
                     if ($m instanceof Vps_Model_FnF) continue;
                 }
                 $id = $row->$primary;
-                $delete[get_class($model)][$id] = $row;
+                $componentId = isset($row->component_id) ? $row->component_id : null;
+                $delete[get_class($model)][$id] = array('row' => $row, 'componentId' => $componentId);
             }
         }
         foreach ($delete as $model => $val) {
-            foreach ($val as $id => $row) {
+            foreach ($val as $id => $v) {
                 Vps_Component_Cache::getInstance()->clean(
                     Vps_Component_Cache::CLEANING_MODE_META,
-                    array('model' => $model, 'id' => $id, 'row' => $row)
+                    array('model' => $model, 'id' => $id, 'componentId' => $v['componentId'], 'row' => $v['row'])
                 );
             }
         }

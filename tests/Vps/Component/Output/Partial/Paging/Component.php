@@ -19,11 +19,6 @@ class Vps_Component_Output_Partial_Paging_Component extends Vpc_Abstract_Composi
         return array();
     }
 
-    public function getPagingModel()
-    {
-        return 'Vps_Component_CacheVars_List_Model';
-    }
-
     public function getPartialParams()
     {
         $paging = $this->getData()->getChildComponent('-paging');
