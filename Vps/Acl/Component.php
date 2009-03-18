@@ -5,6 +5,9 @@ class Vps_Acl_Component extends Vps_Acl
     {
         parent::__construct();
 
+        $this->addRole(new Vps_Acl_Role_Admin('superuser', trlVps('Superuser')));
+        $this->add(new Vps_Acl_Resource_EditRole('edit_role_superuser', 'superuser'), 'edit_role');
+
         $this->add(new Zend_Acl_Resource('vps_debug_classtree'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_component_web'));
         $this->add(new Zend_Acl_Resource('vps_component_media'));
@@ -26,14 +29,20 @@ class Vps_Acl_Component extends Vps_Acl
         $this->allow(null, 'vps_component_media');
         $this->allow(null, 'vps_component_index');
         $this->allow('admin', 'vps_component');
+        $this->allow('superuser', 'vps_component');
+        $this->allow('superuser', 'edit_role_superuser');
 
         $this->allow('admin', 'vps_component_show-component');
         $this->allow('admin', 'vps_component_pages');
         $this->allow('admin', 'vps_component_benchmark');
+        $this->allow('superuser', 'vps_component_show-component');
+        $this->allow('superuser', 'vps_component_pages');
 
         $this->allow(null, 'vps_component_root');
 
         $this->deny('guest', 'vps_component_index');
         $this->deny('guest', 'vps_component_pages');
+
+        // Vps_Component_Acl nicht vergessen für Komponentenrechte!
     }
 }

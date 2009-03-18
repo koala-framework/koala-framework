@@ -36,6 +36,9 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         $name = htmlspecialchars($name);
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $cls = $this->getCls();
+        if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
+            $cls = trim($cls.' vpsClearOnFocus');
+        }
         $ret['html'] = "<input type=\"".$this->getInputType()."\" id=\"$ret[id]\" ".
                         "name=\"$name$fieldNamePostfix\" value=\"$value\" ".
                         "style=\"width: {$this->getWidth()}px\" ".

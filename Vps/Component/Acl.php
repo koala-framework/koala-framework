@@ -29,6 +29,8 @@ class Vps_Component_Acl
     {
         $this->allowTag('admin', null);
         $this->allowComponent('admin', null);
+        $this->allowTag('superuser', null);
+        $this->allowComponent('superuser', null);
     }
 
     /**
