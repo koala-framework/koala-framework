@@ -136,9 +136,19 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (in_array($field, $m->getOwnColumns())) {
                     $ref = $m->getReferenceByModelClass(get_class($siblingOf), $k);
                     $siblingTableName = $m->getTableName();
-                    $dbSelect->joinLeft($siblingTableName,
-                            $this->getTableName().'.'.$this->getPrimaryKey()
-                            .' = '.$siblingTableName.'.'.$ref['column'], array());
+
+                    $joinCondition = $this->getTableName().'.'.$this->getPrimaryKey()
+                        .' = '.$siblingTableName.'.'.$ref['column'];
+                    $alreadyJoined = false;
+                    foreach ($dbSelect->getPart('from') as $join) {
+                        if ($join['tableName'] == $siblingTableName && $join['joinCondition'] == $joinCondition) {
+                            $alreadyJoined = true;
+                            break;
+                        }
+                    }
+                    if (!$alreadyJoined) {
+                        $dbSelect->joinLeft($siblingTableName, $joinCondition, array());
+                    }
                     return $m->getTableName().'.'.$field;
                 }
                 $ret = $m->_formatFieldInternal($field, $dbSelect);

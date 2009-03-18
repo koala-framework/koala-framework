@@ -6,6 +6,32 @@
  */
 class Vps_Model_DbWithConnection_DbSibling_Test extends PHPUnit_Framework_TestCase
 {
+
+    public function testJoinWithWhereAndOrder()
+    {
+        $m = new Vps_Model_DbWithConnection_DbSibling_MasterModel();
+        $m->createRow(array('foo' => 'a1', 'bar' => '0', 'baz' => 'admin'))->save();
+        $m->createRow(array('foo' => 'b1', 'bar' => '0', 'baz' => 'admin'))->save();
+        $m->createRow(array('foo' => 'c1', 'bar' => '0', 'baz' => 'admin'))->save();
+        $m->createRow(array('foo' => 'd1', 'bar' => '0', 'baz' => 'management'))->save();
+        $m->createRow(array('foo' => 'e1', 'bar' => '0', 'baz' => 'management'))->save();
+        $m->createRow(array('foo' => 'f1', 'bar' => '0', 'baz' => 'todo'))->save();
+        $m->createRow(array('foo' => 'g1', 'bar' => '0', 'baz' => 'management'))->save();
+
+        $r = $m->getRows($m->select()
+            ->whereEquals('bar', '0')
+            ->whereEquals('baz', array('admin', 'management', 'todo'))
+        );
+        $this->assertEquals(7, count($r));
+
+        $r = $m->getRows($m->select()
+            ->whereEquals('bar', '0')
+            ->whereEquals('baz', array('admin', 'management', 'todo'))
+            ->order('baz', 'ASC')
+        );
+        $this->assertEquals(7, count($r));
+    }
+
     public function testIt()
     {
         $m = new Vps_Model_DbWithConnection_DbSibling_MasterModel();

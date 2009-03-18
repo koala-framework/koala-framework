@@ -3983,4 +3983,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Client Exception</en>
 <id>1065</id>
 </text>
+<text>
+<en>all</en>
+<de>alle</de>
+<id>1066</id>
+</text>
 </trl>
