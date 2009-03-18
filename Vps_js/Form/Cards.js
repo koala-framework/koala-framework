@@ -21,6 +21,7 @@ Vps.Form.Cards = Ext.extend(Ext.Panel,
     },
 
     enableRecursive: function() {
+        this.enable();
         var combobox = this.items.first();
         combobox.enable();
         var value = combobox.getValue();
@@ -32,7 +33,7 @@ Vps.Form.Cards = Ext.extend(Ext.Panel,
                 i.enableRecursive();
             }
         }, this);
-    },
+    }
 
 });
 Ext.reg('vps.cards', Vps.Form.Cards);
