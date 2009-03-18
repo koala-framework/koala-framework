@@ -21,6 +21,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
 
     protected function _beforeInsert()
     {
+        $this->getModel()->synchronize(true);
         parent::_beforeInsert();
         $sr = $this->_getInsertSourceRow();
         $primaryKey = $this->_primaryKey;
@@ -36,6 +37,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
 
     protected function _beforeUpdate()
     {
+        $this->getModel()->synchronize(true);
         parent::_beforeUpdate();
         $sm = $this->getModel()->getSourceModel();
         $primaryKey = $this->_primaryKey;
