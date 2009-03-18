@@ -106,21 +106,18 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, array(
             'model' => 'Vps_Component_Cache_TestModel',
             'id' => 3,
-            'componentId' => null,
             'row' => null
         ));
         $this->assertEquals(3, $cache->getModel()->countRows());
         $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, array(
             'model' => 'Vps_Component_Cache_TestModel',
             'id' => 2,
-            'componentId' => null,
             'row' => null
         ));
         $this->assertEquals(1, $cache->getModel()->countRows());
         $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, array(
             'model' => 'Vps_Component_Cache_TestModel',
             'id' => 1,
-            'componentId' => null,
             'row' => null
         ));
         $this->assertEquals(0, $cache->getModel()->countRows());

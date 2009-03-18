@@ -6,9 +6,9 @@ class Vps_Component_Cache_CacheMetaModel extends Vps_Component_Cache_MetaModel
         $config['proxyModel'] = new Vps_Model_FnF(array(
             'data' => array(
             ),
-            'columns' => array('model', 'id', 'field', 'value', 'type', 'fakeId'),
+            'columns' => array('model', 'id', 'value', 'type', 'fakeId'),
             'primaryKey' => 'fakeId',
-            'uniqueColumns' => array('model', 'id', 'field', 'value', 'type')
+            'uniqueColumns' => array('model', 'id', 'value', 'type')
         ));
         parent::__construct($config);
     }

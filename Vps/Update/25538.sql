@@ -1,0 +1,1 @@
+ALTER TABLE `cache_component_meta` DROP `field`;
