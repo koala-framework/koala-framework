@@ -22,8 +22,10 @@ Vps.Form.Cards = Ext.extend(Ext.Panel,
 
     enableRecursive: function() {
         this.enable();
+        this.items.each(function(i) {
+            i.enable();
+        }, this);
         var combobox = this.items.first();
-        combobox.enable();
         var value = combobox.getValue();
         var cards = this.items.get(1);
         cards.items.each(function(i) {
