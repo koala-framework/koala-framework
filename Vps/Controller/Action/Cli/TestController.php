@@ -168,17 +168,6 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
             $msg = Vps_Registry::get('config')->application->name.' Tests ';
             if ($result->wasSuccessful()) {
-                $msg .= 'erfolgreich ausgefuehrt';
-            } else {
-                $msg .= 'NICHT erfolgreich ausgefuehrt';
-            }
-            $msg = str_replace(" ", "\ ", $msg);
-            system("ssh niko export DISPLAY=:0 && /usr/kde/3.5/bin/kdialog --passivepopup $msg 2");
-        }
-
-        if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
-            $msg = Vps_Registry::get('config')->application->name.' Tests ';
-            if ($result->wasSuccessful()) {
                 $msg .= 'erfolgreich ausgeführt';
             } else {
                 $msg .= 'NICHT erfolgreich ausgeführt';
