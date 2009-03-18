@@ -12,35 +12,61 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
     {
         $ret = array();
 
-        $values = array('trunk/vps');
-        foreach (self::_getSvnDirs("branches/vps") as $b) {
-            $values[] = 'branches/vps/'.$b;
+        $dir = self::_getCurrentBranchDir(VPS_PATH);
+        if (preg_match('#^branches/vps/([^/]+)#', $dir, $m)) {
+            $branchVersion = $m[1];
+        } else if ($dir == 'trunk/vps') {
+            $branchVersion = false;
+        } else {
+            throw new Vps_Exception("unknown branch!");
         }
-        $ret[] = array(
-            'param' => 'vps-branch',
-            'value' => $values,
-            'valueOptional'=>true
-        );
+        $versions = array();
+        $maxVersion = $branchVersion;
+        foreach (self::_getSvnDirs("tags/vps") as $v) {
+            if ($branchVersion && version_compare($branchVersion, $v)) continue;
+            d($v);
+            if (!$maxVersion || version_compare($maxVersion, $v) == -1) {
+                $maxVersion = $v;
+            }
+        }
+        if (preg_match('#^([0-9]+)\\.([0-9]+)\\.([0-9]+)-?([0-9]*)$#', $maxVersion, $m)) {
+            if (isset($m[4])) {
+                $versions[] = "$m[1].$m[2].$m[3]-".($m[4]+1);
+            }
+            $versions[] = "$m[1].$m[2].".($m[3]+1);
+            $versions[] = "$m[1].".($m[2]+1).".0";
+            $versions[] = ($m[1]+1).".0.0";
+        } else {
+            $versions[] = $maxVersion.".0";
+        }
 
         $ret['vpsVersion'] = array(
             'param'=> 'vps-version',
-            'value' => self::_getNextVersions("tags/vps"),
+            'value' => $versions,
             'help' => 'new version-number',
             'allowBlank' => true
         );
         if ($project = self::getProjectName()) {
-            $values = array("trunk/vps-projekte/$project");
-            foreach (self::_getSvnDirs("branches/$project") as $b) {
-                $values[] = 'branches/'.$project.'/'.$b;
+            $versions = array();
+            $maxVersion = false;
+            foreach (self::_getSvnDirs("tags/$project") as $v) {
+                if (!$maxVersion || version_compare($maxVersion, $v) == -1) {
+                    $maxVersion = $v;
+                }
             }
-            $ret[] = array(
-                'param' => 'web-branch',
-                'value' => $values,
-                'valueOptional'=>true
-            );
+            if (preg_match('#^([0-9]+)\\.([0-9]+)\\.([0-9]+)-?([0-9]*)$#', $maxVersion, $m)) {
+                if (isset($m[4])) {
+                    $versions[] = "$m[1].$m[2].$m[3]-".($m[4]+1);
+                }
+                $versions[] = "$m[1].$m[2].".($m[3]+1);
+                $versions[] = "$m[1].".($m[2]+1).".0";
+                $versions[] = ($m[1]+1).".0.0";
+            } else {
+                $versions = $maxVersion;
+            }
             $ret['webVersion'] = array(
                 'param'=> 'web-version',
-                'value' => self::_getNextVersions("tags/$project"),
+                'value' => $versions,
                 'help' => 'new version-number',
                 'allowBlank' => true
             );
@@ -48,29 +74,7 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
 
         return $ret;
     }
-
-    private static function _getNextVersions($dir)
-    {
-        $ret = array();
-        $maxVersion = false;
-        foreach (self::_getSvnDirs($dir) as $v) {
-            if (!$maxVersion || version_compare($maxVersion, $v) == -1) {
-                $maxVersion = $v;
-            }
-        }
-        if (preg_match('#^([0-9]+)\\.([0-9]+)\\.([0-9]+)-?([0-9]*)$#', $maxVersion, $m)) {
-            if (isset($m[4])) {
-                $ret[] = "$m[1].$m[2].$m[3]-".($m[4]+1);
-            }
-            $ret[] = "$m[1].$m[2].".($m[3]+1);
-            $ret[] = "$m[1].".($m[2]+1).".0";
-            $ret[] = ($m[1]+1).".0.0";
-        } else {
-            $ret = $maxVersion;
-        }
-        return $ret;
-    }
-
+    
     private static function _getSvnDirs($dir)
     {
         $ret = array();
@@ -86,33 +90,43 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         return $ret;
     }
 
+    private static function _getCurrentBranchDir($dir)
+    {
+        $info = new SimpleXMLElement(`svn info --xml $dir`);
+        if (!preg_match('#/((trunk|tags|branches).*)$#', (string)$info->entry->url, $m)) {
+            throw new Vps_Exception("Can't detect current branch");
+        }
+        return $m[1];
+    }
+
     public function indexAction()
     {
         if (!$this->_getParam('web-version') && !$this->_getParam('vps-version')) {
             throw new Vps_ClientException("You must specify one version parameter");
         }
 
-        $branch = $this->_getParam('vps-branch');
         $version = $this->_getParam('vps-version');
         if ($version) {
-            self::createVpsTag($branch, $version);
+            self::createVpsTag($version);
         }
 
-        $branch = $this->_getParam('web-branch');
         $version = $this->_getParam('web-version');
         if ($version) {
-            self::createWebTag($branch, $version);
+            self::createWebTag($version);
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    public static function createWebTag($branch, $version)
+    public static function createWebTag($version)
     {
         $project = self::getProjectName();
         if (in_array($version, self::_getSvnDirs("tags/$project"))) {
             echo "$project Version $version exists already\n";
             return;
         }
+
+        $branch = self::_getCurrentBranchDir('.');
+
         $dir = tempnam('/tmp', 'webtag');
         unlink($dir);
         passthru("svn co --non-recursive ".self::$_svnBase."/$branch/application $dir >/dev/null");
@@ -142,6 +156,8 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
             echo "Vps Version $version exists already\n";
             return;
         }
+
+        $branch = self::_getCurrentBranchDir(VPS_PATH);
         self::_createTag($branch, $version, 'vps');
     }
 

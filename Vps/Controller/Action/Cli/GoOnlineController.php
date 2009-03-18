@@ -11,8 +11,6 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
     public static function getHelpOptions()
     {
         $ret = Vps_Controller_Action_Cli_TagController::getHelpOptions();
-        $ret['vpsVersion']['allowBlank'] = false;
-        $ret['webVersion']['allowBlank'] = false;
         $ret[] = array('param' => 'skip-test');
         $ret[] = array('param' => 'skip-prod');
         $ret[] = array('param' => 'skip-check');
@@ -62,10 +60,10 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         }
 
         echo "\n\n*** [01/13] vps-tag erstellen\n";
-        Vps_Controller_Action_Cli_TagController::createVpsTag($this->_getParam('vps-branch'), $vpsVersion);
+        Vps_Controller_Action_Cli_TagController::createVpsTag($vpsVersion);
 
         echo "\n\n*** [02/13] web-tag erstellen\n";
-        Vps_Controller_Action_Cli_TagController::createWebTag($this->_getParam('web-branch'), $webVersion);
+        Vps_Controller_Action_Cli_TagController::createWebTag($webVersion);
 
         echo "\n\n*** [03/13] vps tag auschecken\n";
         $this->_systemSshVps("tag-checkout vps-checkout --version=$vpsVersion", $testConfig);
