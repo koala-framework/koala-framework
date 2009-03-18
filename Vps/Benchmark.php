@@ -46,6 +46,7 @@ class Vps_Benchmark
     }
     public static function getCounterValue($name)
     {
+        if (!isset(self::$_counter[$name])) return null;
         $ret = self::$_counter[$name];
         if (is_array($ret)) $ret = count($ret);
         return $ret;

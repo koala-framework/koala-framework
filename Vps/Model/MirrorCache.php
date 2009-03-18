@@ -6,76 +6,97 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     protected $_sourceModel;
     protected $_syncTimeField;
 
-    private $_checkCacheDone = false;
+    /**
+     * Max sync delay in seconds. Default is to 5 minutes
+     */
+    protected $_maxSyncDelay = 300;
+
+    private $_synchronizeDone = false;
 
     public function __construct(array $config = array())
     {
         if (isset($config['sourceModel'])) $this->_sourceModel = $config['sourceModel'];
         if (isset($config['syncTimeField'])) $this->_syncTimeField = $config['syncTimeField'];
+        if (isset($config['maxSyncDelay'])) $this->_maxSyncDelay = $config['maxSyncDelay'];
         parent::__construct($config);
     }
 
     public function getSourceModel()
     {
         if (is_string($this->_sourceModel)) {
-            $modelName = $this->_sourceModel;
-            $this->_sourceModel = new $modelName();
+            $this->_sourceModel = Vps_Model_Abstract::getInstance($this->_sourceModel);
         }
         return $this->_sourceModel;
     }
 
     public function countRows($where = array())
     {
-        $this->checkCache();
+        $this->synchronize();
         return parent::countRows($where);
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
-        $this->checkCache();
+        $this->synchronize();
         return parent::getIds($where, $order, $limit, $start);
     }
 
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
-        $this->checkCache();
+        $this->synchronize();
         return parent::getRows($where, $order, $limit, $start);
     }
 
+    /**
+     * @deprecated
+     * Use synchronize instead
+     */
     public function checkCache()
     {
-        if (!$this->_checkCacheDone) {
-            $this->_checkCacheDone = true; //wegen endlosschleife ganz oben
+        $this->synchronize();
+    }
 
-            if (!$this->_syncTimeField) {
-                throw new Vps_Exception("syncTimeField must be set when using MirrorCache");
+    public function synchronize($overrideMaxSyncDelay = false)
+    {
+        if ($this->_synchronizeDone) {
+            return;
+        }
+        if (!$this->_syncTimeField) {
+            throw new Vps_Exception("syncTimeField must be set when using MirrorCache");
+        }
+
+        if ($overrideMaxSyncDelay === false && $this->_getMaxSyncDelay()) {
+            $cache = $this->_getSyncDelayCache();
+            $lastSync = $cache->load($this->_getSyncDelayCacheId());
+            if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
+                return;
             }
+            $cache->save(time(), $this->_getSyncDelayCacheId());
+        }
 
-            Vps_Benchmark::count('mirror sync');
-            //$b = Vps_Benchmark::start('mirror sync');
+        $this->_synchronizeDone = true; //wegen endlosschleife ganz oben
 
-            $syncField = $this->_syncTimeField;
-            $proxyModel = $this->getProxyModel();
-            $pr = $proxyModel->getRow($proxyModel->select()->order($syncField, 'DESC'));
-            $cacheTimestamp = $pr ? $pr->$syncField : null;
+        Vps_Benchmark::count('mirror sync');
 
-            if ($cacheTimestamp && !preg_match('/^[0-9]{4,4}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]$/', $cacheTimestamp)) {
-                throw new Vps_Exception("syncTimeField must be of type datetime (yyyy-mm-dd hh:mm:ss) when using mirror cache");
-            }
+        $syncField = $this->_syncTimeField;
+        $proxyModel = $this->getProxyModel();
+        $pr = $proxyModel->getRow($proxyModel->select()->order($syncField, 'DESC'));
+        $cacheTimestamp = $pr ? $pr->$syncField : null;
 
-            $sourceModel = $this->getSourceModel();
-            if (!$cacheTimestamp) {
-                // kein cache vorhanden, alle kopieren
-                $cacheTimestamp = $this->_syncRows($sourceModel->getRows());
-            } else {
-                $select = $sourceModel->select()->where(
-                    new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
-                );
-                $rows = $sourceModel->getRows($select);
-                $cacheTimestamp = $this->_syncRows($rows, $cacheTimestamp);
-            }
+        if ($cacheTimestamp && !preg_match('/^[0-9]{4,4}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]$/', $cacheTimestamp)) {
+            throw new Vps_Exception("syncTimeField must be of type datetime (yyyy-mm-dd hh:mm:ss) when using mirror cache");
+        }
 
-            //if ($b) $b->stop();
+        $sourceModel = $this->getSourceModel();
+        if (!$cacheTimestamp) {
+            // kein cache vorhanden, alle kopieren
+            $cacheTimestamp = $this->_syncRows($sourceModel->getRows());
+        } else {
+            $select = $sourceModel->select()->where(
+                new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
+            );
+            $rows = $sourceModel->getRows($select);
+            $cacheTimestamp = $this->_syncRows($rows, $cacheTimestamp);
         }
     }
 
@@ -101,5 +122,35 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         }
         if (!$cacheTime) $cacheTime = date('Y-m-d H:i:s', time()-1);
         return $cacheTime;
+    }
+
+    private function _getMaxSyncDelay()
+    {
+        if (!is_int($this->_maxSyncDelay) || $this->_maxSyncDelay < 0) {
+            throw new Vps_Exception("Variable _maxSyncDelay must be of type integer and bigger or equal to 0");
+        }
+        return $this->_maxSyncDelay;
+    }
+
+    private function _getSyncDelayCacheId()
+    {
+        return 'mirrorcache_'.md5(
+            get_class($this->getSourceModel())
+            .get_class($this->getProxyModel())
+            .$this->_syncTimeField
+        );
+    }
+
+    private function _getSyncDelayCache()
+    {
+        return Vps_Cache::factory('Core', 'File',
+            array(
+                'lifetime' => $this->_getMaxSyncDelay(),
+                'automatic_serialization' => true
+            ),
+            array(
+                'cache_dir' => 'application/cache/model'
+            )
+        );
     }
 }
