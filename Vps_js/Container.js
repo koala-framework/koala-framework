@@ -6,15 +6,19 @@ Ext.Component.prototype.enableRecursive = function() {
 };
 
 Ext.Container.prototype.disableRecursive = function() {
-    this.items.each(function(i) {
-        i.disableRecursive();
-    }, this);
+    if (this.items && this.items.each) {
+        this.items.each(function(i) {
+            i.disableRecursive();
+        }, this);
+    }
     Ext.Container.superclass.disableRecursive.call(this);
 };
 Ext.Container.prototype.enableRecursive = function() {
-    this.items.each(function(i) {
-        i.enableRecursive();
-    }, this);
+    if (this.items && this.items.each) {
+        this.items.each(function(i) {
+            i.enableRecursive();
+        }, this);
+    }
     Ext.Container.superclass.enableRecursive.call(this);
 };
 

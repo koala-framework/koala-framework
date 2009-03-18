@@ -81,7 +81,10 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
                 this.helpEl.alignTo(this.el, 'tr', [-30, -2]);
             }, this);
         }
-        this.onCheckClick(); //damit init-value in hiddenCheckboxValue geschrieben wird
+        if (this.hiddenCheckboxValue) {
+            //damit init-value in hiddenCheckboxValue geschrieben wird
+            Vps.Form.FieldSetHiddenCheckboxValue.superclass.setValue.call(this.hiddenCheckboxValue, this.checkbox.dom.checked ? '1' : '0');
+        }
     }
 });
 
