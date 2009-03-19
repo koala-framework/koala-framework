@@ -155,4 +155,9 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     {
         return $this->_proxyModel->getTable();
     }
+
+    public function getSqlForSelect($select)
+    {
+        return $this->_proxyModel->getSqlForSelect($select);
+    }
 }
