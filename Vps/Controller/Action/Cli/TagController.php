@@ -73,7 +73,7 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
 
         return $ret;
     }
-    
+
     private static function _getSvnDirs($dir)
     {
         $ret = array();
@@ -149,7 +149,7 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         }
         return false;
     }
-    public static function createVpsTag($branch, $version)
+    public static function createVpsTag($version)
     {
         if (in_array($version, self::_getSvnDirs("tags/vps"))) {
             echo "Vps Version $version exists already\n";
