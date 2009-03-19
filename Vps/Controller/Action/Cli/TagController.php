@@ -162,7 +162,9 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
 
     private static function _createTag($branch, $version, $project)
     {
-        if (!preg_match('#^(trunk\.)?[0-9]+\.[0-9]+\.[0-9]+-?[0-9]*$#', $version)) {
+        if (!preg_match('#^[0-9]+\.[0-9]+\.[0-9]+-?[0-9]*$#', $version) &&
+            !preg_match('#^trunk\.[0-9]+$#', $version)
+        ) {
             throw new Vps_ClientException("Invalid version number: '$version'");
         }
         $versions = self::_getSvnDirs("tags/$project");
