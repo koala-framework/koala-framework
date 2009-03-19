@@ -85,6 +85,10 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
             'model' => Vps_Registry::get('config')->user->model,
             'id' => $row->user_id
         );
+        $ret[] = array(
+            'model' => $row->getModel(),
+            'id' => $row->id
+        );
         return $ret;
     }
 }
