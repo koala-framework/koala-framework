@@ -1,8 +1,6 @@
 <?php
 class Vps_Model_DbWithConnection_DbSibling_MasterModel extends Vps_Model_Db
 {
-    protected $_siblingModels = array('Vps_Model_DbWithConnection_DbSibling_SiblingModel');
-
     public function __construct($config = array())
     {
         $this->_tableName = 'master'.uniqid();
@@ -16,6 +14,8 @@ class Vps_Model_DbWithConnection_DbSibling_MasterModel extends Vps_Model_Db
                         (id, foo, bar) VALUES ('1', 'aaabbbccc', 'abcd')");
         Vps_Registry::get('db')->query("INSERT INTO {$this->_tableName}
                         (id, foo, bar) VALUES ('2', 'bam', 'bum')");
+
+        $this->_siblingModels[] = new Vps_Model_DbWithConnection_DbSibling_SiblingModel();
         parent::__construct($config);
     }
 
