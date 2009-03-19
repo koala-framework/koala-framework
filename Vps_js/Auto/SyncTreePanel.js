@@ -73,8 +73,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         });
     },
 
-    onMetaChange: function(response) {
-        var meta = Ext.decode(response.responseText);
+    onMetaChange: function(response, options, meta) {
         this.icons = meta.icons;
         for (var i in this.icons) {
             if (i in this.actions) {
@@ -91,7 +90,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
         
         // Tree
-        baseParams = this.baseParams != undefined ? this.baseParams : {};
+        var baseParams = this.baseParams != undefined ? this.baseParams : {};
         if (this.openedId != undefined) { baseParams.openedId = this.openedId; }
         this.tree = new Ext.tree.TreePanel({
             border      : false,
@@ -168,11 +167,12 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     onEdit : function (o, e) {
+        var node = this.tree.getSelectionModel().getSelectedNode();
+        if (!node.id) return;
         if (this.editDialog != undefined) {
-            node = this.tree.getSelectionModel().getSelectedNode();
             this.editDialog.showEdit(node.id);
         } else {
-            this.fireEvent('editaction', this.tree.getSelectionModel().getSelectedNode());
+            this.fireEvent('editaction', node);
         }
     },
 
@@ -192,8 +192,8 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-node-data',
             params: Ext.apply({node:id}, this.getBaseParams()),
-            success: function(r) {
-                this.onSaved(Ext.decode(r.responseText).data);
+            success: function(response, options, result) {
+                this.onSaved(result.data);
             },
             scope: this
         })
@@ -218,11 +218,9 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 if (button == 'yes') {
                     Ext.Ajax.request({
                         url: this.controllerUrl + '/json-delete',
-                        params: {
-                            id: this.tree.getSelectionModel().getSelectedNode().id
-                        },
-                        success: function(r) {
-                            this.onDeleted(Ext.decode(r.responseText));
+                        params: Ext.apply({id:this.getSelectedId()}, this.getBaseParams()),
+                        success: function(response, options, result) {
+                            this.onDeleted(result);
                         },
                         scope: this
                     });
@@ -233,18 +231,17 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     onMove : function(dropEvent){
+        var params = this.getBaseParams()
+        params.source = dropEvent.dropNode.id;
+        params.target = dropEvent.target.id;
+        params.point = dropEvent.point;
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-move',
-            params: {
-                source: dropEvent.dropNode.id,
-                target: dropEvent.target.id,
-                point: dropEvent.point
-            },
-            success: function(r) {
-                response = Ext.decode(r.responseText);
-                var parent = this.tree.getNodeById(response.parent);
-                var node = this.tree.getNodeById(response.node);
-                var before = this.tree.getNodeById(response.before);
+            params: params,
+            success: function(response, options, result) {
+                var parent = this.tree.getNodeById(result.parent);
+                var node = this.tree.getNodeById(result.node);
+                var before = this.tree.getNodeById(result.before);
                 parent.insertBefore(node, before);
                 parent.expand();
             },
@@ -261,7 +258,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     onCollapseNode : function(node) {
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-collapse',
-            params: {id: node.id}
+            params: Ext.apply({id:node.id}, this.getBaseParams())
         });
     },
 
@@ -269,7 +266,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         if (node.attributes.children && node.attributes.children.length > 0) {
             Ext.Ajax.request({
                 url: this.controllerUrl + '/json-expand',
-                params: {id: node.id}
+                params: Ext.apply({id:node.id}, this.getBaseParams())
             });
         }
     },
@@ -277,13 +274,10 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     onVisible : function (o, e) {
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-visible',
-            params: {
-                id: this.tree.getSelectionModel().getSelectedNode().id
-            },
-            success: function(r) {
-                response = Ext.decode(r.responseText);
-                node = this.tree.getNodeById(response.id);
-                node.attributes.visible = response.visible;
+            params: Ext.apply({id:this.getSelectedId()}, this.getBaseParams()),
+            success: function(response, options, result) {
+                node = this.tree.getNodeById(result.id);
+                node.attributes.visible = result.visible;
                 this.setVisible(node);
             },
             scope: this
