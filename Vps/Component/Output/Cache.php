@@ -176,7 +176,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             $meta = $component->getComponent()->getPartialCacheVars($partial);
         }
         foreach ($meta as $m) {
-            if (!isset($m['model'])) throw new Vps_Exception('getCacheVars must deliver model');
+            if (!isset($m['model'])) throw new Vps_Exception('getCacheVars for ' . $component->componentClass . ' must deliver model');
             $model = $m['model'];
             $id = isset($m['id']) ? $m['id'] : null;
             if (isset($m['callback']) && $m['callback']) {
