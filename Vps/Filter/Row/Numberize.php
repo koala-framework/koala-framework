@@ -86,7 +86,11 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
                     $ret->whereNotEquals($field, $values);
                 }
             } else {
-                $ret->whereEquals($field, $row->$field);
+                if (is_null($row->$field)) {
+                    $ret->whereNull($field);
+                } else {
+                    $ret->whereEquals($field, $row->$field);
+                }
             }
         }
         return $ret;
