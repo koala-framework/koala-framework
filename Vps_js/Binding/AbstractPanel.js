@@ -144,7 +144,7 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
                 }
             }, this);
 
-            if (b.item instanceof Vps.Auto.FormPanel) {
+            if (Vps.Auto.FormPanel && b.item instanceof Vps.Auto.FormPanel) {
                 b.item.on('addaction', function(form) {
                     this.activeId = 0;
                     this.selectId(0);
