@@ -140,10 +140,13 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     $joinCondition = $this->getTableName().'.'.$this->getPrimaryKey()
                         .' = '.$siblingTableName.'.'.$ref['column'];
                     $alreadyJoined = false;
-                    foreach ($dbSelect->getPart('from') as $join) {
-                        if ($join['tableName'] == $siblingTableName && $join['joinCondition'] == $joinCondition) {
-                            $alreadyJoined = true;
-                            break;
+                    $fromPart = $dbSelect->getPart('from');
+                    if ($fromPart) {
+                        foreach ($fromPart as $join) {
+                            if ($join['tableName'] == $siblingTableName && $join['joinCondition'] == $joinCondition) {
+                                $alreadyJoined = true;
+                                break;
+                            }
                         }
                     }
                     if (!$alreadyJoined) {
