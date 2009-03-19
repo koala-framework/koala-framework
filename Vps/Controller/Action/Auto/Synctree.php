@@ -122,7 +122,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $this->view->enableDD = $this->_hasPosition;
         } else {
             $this->view->enableDD = $this->_enableDD;
-            if ($this->_enableDD) {
+            if (!$this->_hasPosition) {
                 $this->view->dropConfig = array('appendOnly' => true);
             }
         }
