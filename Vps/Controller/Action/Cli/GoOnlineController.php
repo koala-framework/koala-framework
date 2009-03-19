@@ -52,7 +52,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             echo "(uebersprungen)\n";
         } else {
             echo "lokaler-server:\n";
-            Vps_Controller_Action_Cli_SvnUpController::checkForModifiedFiles();
+            Vps_Controller_Action_Cli_SvnUpController::checkForModifiedFiles(true);
             echo "test-server:\n";
             $this->_systemSshVps("svn-up check-for-modified-files", $testConfig);
             echo "prod-server:\n";

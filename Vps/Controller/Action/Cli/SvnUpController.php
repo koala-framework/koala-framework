@@ -49,21 +49,24 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
     }
     public function checkForModifiedFilesAction()
     {
-        self::checkForModifiedFiles();
+        self::checkForModifiedFiles(false);
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    public static function checkForModifiedFiles()
+    public static function checkForModifiedFiles($checkRemote)
     {
-        self::_check('');
+        self::_check('.', $checkRemote);
         echo "Web OK\n";
-        self::_check(VPS_PATH);
+        self::_check(VPS_PATH, $checkRemote);
         echo "Vps OK\n";
     }
 
-    private static function _check($path)
+    private static function _check($path, $checkRemote)
     {
-        exec('svn st --xml '.$path, $out, $ret);
+        $cmd = 'svn st --xml ';
+        if ($checkRemote) $cmd .= '-u ';
+        $cmd .= $path;
+        exec($cmd, $out, $ret);
         if ($ret) {
             throw new Vps_ClientException("Failed checking for modified files");
         }
@@ -76,12 +79,18 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             $files[(string)$e->{'wc-status'}['item']][] = (string)$e['path'];
         }
         if ($files) {
-            echo "working copy contains ";
-            foreach ($files as $status=>$f) {
-                echo count($f)." $status ";
+            if (!isset($files['normal']) || count($files) > 1) {
+                echo "working copy contains ";
+                foreach ($files as $status=>$f) {
+                    if ($status == 'normal') continue;
+                    echo count($f)." $status ";
+                }
+                echo "files\n";
             }
-            echo "files\n";
-            if ($path == '') $path = getcwd();
+            if (isset($files['normal'])) {
+                echo "working copy is not up to date\n";
+            }
+            if ($path == '.') $path = getcwd();
             throw new Vps_ClientException("You must not have modified files in '$path'");
         }
     }
