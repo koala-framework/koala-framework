@@ -77,6 +77,10 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
     public function indexAction()
     {
         self::initForTests();
+        if ($this->_getParam('report')) {
+            echo "\n\n===================================================\n";
+            echo "Fuehre ".Vps_Registry::get('config')->application->name." Unit-Tests aus\n\n";
+        }
 
         $arguments = array();
         $arguments['colors'] = true;
