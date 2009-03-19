@@ -66,6 +66,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         Vps_Controller_Action_Cli_TagController::createWebTag($webVersion);
 
         echo "\n\n*** [03/13] vps tag auschecken\n";
+        p("tag-checkout vps-checkout --version=$vpsVersion");
         $this->_systemSshVps("tag-checkout vps-checkout --version=$vpsVersion", $testConfig);
 
         echo "\n\n*** [04/13] test: vps-version anpassen\n";
