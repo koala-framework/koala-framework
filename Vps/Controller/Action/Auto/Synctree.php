@@ -149,11 +149,16 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
     }
 
+    /**
+     * @deprecated
+     */
     protected function _getTreeWhere($parentRow = null)
     {
         return $this->_getWhere();
     }
-
+    /**
+     * @deprecated
+     */
     protected function _getWhere()
     {
         return array();
@@ -162,26 +167,40 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected function _formatNodes($parentRow = null)
     {
         $nodes = array();
-        $select = $this->_getSelect($this->_getTreeWhere($parentRow));
-        if (!$parentRow) {
-            if (is_null($this->_rootParentValue)) {
-                $select->whereNull($this->_parentField);
-            } else {
-                $select->whereEquals($this->_parentField, $this->_rootParentValue);
-            }
-        } else {
-            $select->whereEquals($this->_parentField, $parentRow->{$this->_primaryKey});
-        }
-        $rows = $this->_model->fetchAll($select);
+        $rows = $this->_fetchData($parentRow);
         foreach ($rows as $row) {
             $nodes[] = $this->_formatNode($row);
         }
         return $nodes;
     }
 
-    protected function _getSelect($where)
+    protected function _fetchData($parentRow)
     {
-        $select = $this->_model->select($where);
+        if ($this->_model instanceof Vps_Model_Tree_Interface) {
+            if (!$parentRow) {
+                return $this->_model->getRootNodes($this->_getSelect());
+            } else {
+                return $parentRow->getChildNodes($this->_getSelect());
+            }
+        } else {
+            $select = $this->_getSelect();
+            $select->where($this->_getTreeWhere($parentRow));
+            if (!$parentRow) {
+                if (is_null($this->_rootParentValue)) {
+                    $select->whereNull($this->_parentField);
+                } else {
+                    $select->whereEquals($this->_parentField, $this->_rootParentValue);
+                }
+            } else {
+                $select->whereEquals($this->_parentField, $parentRow->{$this->_primaryKey});
+            }
+            return $this->_model->fetchAll($select);
+        }
+    }
+
+    protected function _getSelect()
+    {
+        $select = $this->_model->select();
         if ($this->_hasPosition) {
             $select->order('pos');
         } else if (!$select->hasPart('order') && $this->_defaultOrder) {
