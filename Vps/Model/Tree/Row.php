@@ -1,5 +1,6 @@
 <?php
-class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row implements IteratorAggregate
+class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row
+    implements IteratorAggregate, Vps_Model_Tree_Row_Interface
 {
     public function getTreePath($separator = ' » ')
     {
@@ -18,7 +19,7 @@ class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row implements IteratorAggregat
     {
         $parts = array($this);
         $upperRow = $this;
-        while (!is_null($upperRow = $upperRow->getParentRow('Parent'))) {
+        while (!is_null($upperRow = $upperRow->getParentNode())) {
             $parts[] = $upperRow;
         }
         return array_reverse($parts);
@@ -27,6 +28,16 @@ class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row implements IteratorAggregat
     public function getRecursiveIds()
     {
         return $this->getModel()->getRecursiveIds($this->id);
+    }
+
+    public function getParentNode()
+    {
+        return $this->getParentRow('Parent');
+    }
+
+    public function getChildNodes($select = array())
+    {
+        return $this->getChildRows('Childs', $select);
     }
 
     public function getIterator()

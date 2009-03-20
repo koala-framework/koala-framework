@@ -5,7 +5,7 @@ class Vps_Model_Tree_RecursiveIterator implements RecursiveIterator
 
     public function __construct(Vps_Model_Tree_Row $row)
     {
-        $this->_rowset = $row->getChildRows('Childs');
+        $this->_rowset = $row->getChildNodes();
     }
 
     public function current()
@@ -41,6 +41,6 @@ class Vps_Model_Tree_RecursiveIterator implements RecursiveIterator
 
     public function hasChildren()
     {
-        return $this->current()->getChildRows('Childs')->count() > 0;
+        return $this->current()->getChildNodes()->count() > 0;
     }
 }
