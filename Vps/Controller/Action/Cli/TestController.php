@@ -156,13 +156,18 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $client->setMethod(Zend_Http_Client::POST);
             $response = $client->request('POST');
 
+            $webVersion = $c->application->version;
+            $vpsVersion = $c->application->vps->version.' (Revision ' . $c->application->vps->revision.')';
+
             $client->setParameterPost(array(
                 'svnPath' => (string)$info->entry->url,
                 'tests' => $result->count(),
                 'failures' => $result->failureCount()+$result->errorCount(),
                 'skipped' => $result->skippedCount(),
                 'not_implemented' => $result->notImplementedCount(),
-                'log' => $resultLogger->getContent()
+                'log' => $resultLogger->getContent(),
+                'web_version' => $webVersion,
+                'vps_version' => $vpsVersion
             ));
             $response = $client->request();
             if ($response->getBody() != 'OK') {
