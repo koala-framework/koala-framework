@@ -9,29 +9,18 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         $this->view->ext('Vps.Auto.TreePanel', $config);
     }
 
-    protected function _getTreeWhere($parentId = null)
-    {
-        return $this->_getWhere();
-    }
-
     public function jsonDataAction()
     {
         $parentId = $this->_getParam('node');
-
         $this->_saveSessionNodeOpened($parentId, true);
         $this->_saveNodeOpened();
 
-        $select = $this->_getSelect($this->_getTreeWhere($parentId));
-        if (!$parentId) {
-            if (is_null($this->_rootParentValue)) {
-                $select->whereNull($this->_parentField);
-            } else {
-                $select->whereEquals($this->_parentField, $this->_rootParentValue);
-            }
+        if ($parentId) {
+            $parentRow = $this->_model->getRow($parentId);
         } else {
-            $select->whereEquals($this->_parentField, $parentId);
+            $parentRow = null;
         }
-        $rows = $this->_model->fetchAll($select);
+        $rows = $this->_fetchData($parentRow);
         $nodes = array();
         foreach ($rows as $row) {
             $data = $this->_formatNode($row);
