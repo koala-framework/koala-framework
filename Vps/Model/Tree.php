@@ -1,5 +1,6 @@
 <?php
 class Vps_Model_Tree extends Vps_Model_Db_Proxy
+                        implements Vps_Model_Tree_Interface
 {
     private $_parentIdsCache;
     protected $_rowClass = 'Vps_Model_Tree_Row';
@@ -32,6 +33,12 @@ class Vps_Model_Tree extends Vps_Model_Db_Proxy
         }
 
         return array_values(array_unique($ret));
+    }
+
+    public function getRootNodes($select = array())
+    {
+        $select = $this->select($select);
+        return $this->getRows($select->whereNull('parent_id'));
     }
 
 }
