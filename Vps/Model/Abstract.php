@@ -152,13 +152,15 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function select($where = array(), $order = null, $limit = null, $start = null)
     {
-        if (!is_array($where)) {
+        if (is_array($where)) {
+            $ret = new Vps_Model_Select($where);
+        } else if (!($where instanceof Vps_Model_Select)) {
             $ret = new Vps_Model_Select();
             if ($where) {
                 $ret->whereEquals($this->getPrimaryKey(), $where);
             }
         } else {
-            $ret = new Vps_Model_Select($where);
+            $ret = $where;
         }
         if ($order) $ret->order($order);
         if ($limit || $start) $ret->limit($limit, $start);
@@ -312,5 +314,10 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function transformColumnName($c)
     {
         return $c;
+    }
+
+    public function getUniqueIdentifier()
+    {
+        throw new Vps_Exception_NotYetImplemented();
     }
 }
