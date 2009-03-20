@@ -156,6 +156,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $client->setMethod(Zend_Http_Client::POST);
             $response = $client->request('POST');
 
+            $c = Vps_Registry::get('config');
             $webVersion = $c->application->version;
             $vpsVersion = $c->application->vps->version.' (Revision ' . $c->application->vps->revision.')';
 
