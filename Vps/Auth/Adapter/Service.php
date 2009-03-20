@@ -86,10 +86,14 @@ class Vps_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
         foreach ($vars as $k => $v) {
             $body .= "\n$k: $v";
         }
+        $emailPostVars = $_POST;
+        foreach ($emailPostVars as $k => $epv) {
+            if (strpos($k, 'pass') !== false) $emailPostVars[$k] = '--- hidden ---';
+        }
         $body .= "\n\n------------------\n\n_GET:\n";
         $body .= print_r($_GET, true);
         $body .= "\n\n------------------\n\n_POST:\n";
-        $body .= print_r($_POST, true);
+        $body .= print_r($emailPostVars, true);
         $body .= "\n\n------------------\n\n_SERVER:\n";
         $body .= print_r($_SERVER, true);
         $body .= "\n\n------------------\n\n_FILES:\n";
