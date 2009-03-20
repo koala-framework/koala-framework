@@ -88,5 +88,5 @@ Vps.Marquee.Elements.prototype = {
     setCookie : function(value){
         //TODO: möglicherweise mal mehrere marquees auf einer seite ermöglichen
         document.cookie = "vpsMarqueePosition="+value+"; path=/; domain="+document.location.host+";";
-    },
+    }
 };
