@@ -8,8 +8,8 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
     protected $_paging = 20;
     protected $_queryFields = array('id', 'email', 'firstname', 'lastname');
     protected $_editDialog = array('controllerUrl'=>'/vps/user/user',
-                                   'width'=>600,
-                                   'height'=>550);
+                                   'width'=>550,
+                                   'height'=>520);
     protected $_filters = array('text' => true);
 
     public function preDispatch()
