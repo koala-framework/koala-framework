@@ -239,6 +239,8 @@ abstract class Vps_Component_Generator_Abstract
         }
         $cachedGenerators[$cacheId] = $generators;
 
+        $selectParts = $select->getParts();
+
         $ret = array();
         foreach ($generators as $g) {
             if ($component && $g instanceof Vps_Component_Generator_Page &&
@@ -250,21 +252,25 @@ abstract class Vps_Component_Generator_Abstract
             ) {
                 continue;
             }
-            if ($value = $select->getPart(Vps_Component_Select::WHERE_GENERATOR_CLASS)) {
+            if (isset($selectParts[Vps_Component_Select::WHERE_GENERATOR_CLASS])) {
+                $value = $selectParts[Vps_Component_Select::WHERE_GENERATOR_CLASS];
                 if (!$g instanceof $value) {
                     continue;
                 }
             }
-            if ($value = $select->getPart(Vps_Component_Select::WHERE_GENERATOR)) {
+            if (isset($selectParts[Vps_Component_Select::WHERE_GENERATOR])) {
+                $value = $selectParts[Vps_Component_Select::WHERE_GENERATOR];
                 if ($g->_class != $componentClass || $value != $g->_settings['generator']) {
                     continue;
                 }
             }
-            if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
-                if (!$select->hasPart(Vps_Component_Select::WHERE_PSEUDO_PAGE)) {
-                    $select->wherePseudoPage();
+            if (isset($selectParts[Vps_Component_Select::WHERE_FILENAME])) {
+                if (!isset($selectParts[Vps_Component_Select::WHERE_PSEUDO_PAGE])) {
+                    $selectParts[Vps_Component_Select::WHERE_PSEUDO_PAGE] = true;
                 }
             }
+
+
             $interfaces = array(
                 Vps_Component_Select::WHERE_PAGE_GENERATOR => 'Vps_Component_Generator_Page',
                 Vps_Component_Select::WHERE_PAGE => 'Vps_Component_Generator_Page_Interface',
@@ -274,8 +280,8 @@ abstract class Vps_Component_Generator_Abstract
             );
 
             foreach ($interfaces as $part=>$interface) {
-                if ($select->hasPart($part)) {
-                    $value = $select->getPart($part);
+                if (isset($selectParts[$part])) {
+                    $value = $selectParts[$part];
                     if ($g instanceof $interface) {
                         if (!$value) continue 2;
                     } else {
@@ -284,8 +290,8 @@ abstract class Vps_Component_Generator_Abstract
                 }
             }
 
-            if ($select->hasPart(Vps_Component_Select::WHERE_UNIQUE)) {
-                $value = $select->getPart(Vps_Component_Select::WHERE_UNIQUE);
+            if (isset($selectParts[Vps_Component_Select::WHERE_UNIQUE])) {
+                $value = $selectParts[Vps_Component_Select::WHERE_UNIQUE];
                 if (isset($g->_settings['unique']) && $g->_settings['unique']) {
                     if (!$value) continue;
                 } else {
@@ -293,23 +299,23 @@ abstract class Vps_Component_Generator_Abstract
                 }
             }
 
-            if ($select->hasPart(Vps_Component_Select::WHERE_INHERIT)) {
-                $value = $select->getPart(Vps_Component_Select::WHERE_INHERIT);
+            if (isset($selectParts[Vps_Component_Select::WHERE_INHERIT])) {
+                $value = $selectParts[Vps_Component_Select::WHERE_INHERIT];
                 if (isset($g->_settings['inherit']) && $g->_settings['inherit']) {
                     if (!$value) continue;
                 } else {
                     if ($value) continue;
                 }
             }
-            if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
-                $value = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
+            if (isset($selectParts[Vps_Component_Select::WHERE_SHOW_IN_MENU])) {
+                $value = $selectParts[Vps_Component_Select::WHERE_SHOW_IN_MENU];
                 if (isset($g->_settings['showInMenu']) && $g->_settings['showInMenu']) {
                     if (!$value) continue;
                 } else {
                     if ($value) continue;
                 }
             }
-            if ($select->getPart(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS)) {
+            if (isset($selectParts[Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS]) && $selectParts[Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS]) {
                 if (!Vpc_Abstract::hasSetting($g->_class, 'editComponents')) {
                     continue;
                 }
@@ -331,8 +337,8 @@ abstract class Vps_Component_Generator_Abstract
                     if ($g->_class != $componentClass) continue;
                 }
             }
-            if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-                $componentClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+            if (isset($selectParts[Vps_Component_Select::WHERE_COMPONENT_CLASSES])) {
+                $componentClasses = $selectParts[Vps_Component_Select::WHERE_COMPONENT_CLASSES];
                 $generatorComponentClasses = $g->_settings['component'];
                 if (!is_array($generatorComponentClasses)) {
                     $generatorComponentClasses = array($generatorComponentClasses);
@@ -346,7 +352,7 @@ abstract class Vps_Component_Generator_Abstract
                 }
                 if ($continue) { continue; }
             }
-            if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
+            if (isset($selectParts[Vps_Component_Select::WHERE_HOME]) && $selectParts[Vps_Component_Select::WHERE_HOME]) {
                 if (!$g instanceof Vps_Component_Generator_Page) continue;
             }
             if (!$g->getChildComponentClasses($select)) continue;
