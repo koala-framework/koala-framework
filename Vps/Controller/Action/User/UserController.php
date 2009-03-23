@@ -95,11 +95,13 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
                             unset($addRoles[$roleId][$addRoleId]);
                         }
                     }
-
-                    $editor = new Vps_Form_Field_MultiCheckbox('Vps_Model_User_AdditionalRoles', trlVps('Additional rights'));
-                    $editor->setColumnName('additional_role');
-                    $editor->setValues($addRoles[$roleId]);
-
+                    $editor = new Vps_Form_Field_MultiCheckbox('Vps_User_AdditionalRoles', trlVps('Additional rights'));
+                    $editor->setColumnName('additional_role')
+                        ->setValues($addRoles[$roleId])
+                        ->setReferences(array(
+                            'columns' => array('user_id'),
+                            'refColumns' => array('id')
+                        ));
                     $card->add($editor);
                 }
             }
