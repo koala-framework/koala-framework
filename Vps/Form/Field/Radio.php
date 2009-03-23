@@ -8,6 +8,7 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('radiogroup');
+        $this->setOutputType('horizontal');
     }
 
     // $this->setOutputType($type)
@@ -43,23 +44,22 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
         $name = $this->getFieldName();
         $value = $values[$name];
 
-        //todo: escapen
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $store = $this->_getStoreData();
         if ($this->getShowNoSelection()) {
             array_unshift($store['data'], array('', '('.trlVps('no selection').')'));
         }
-        $ret['html'] = '';
+        $ret['html'] = '<div class="vpsFormFieldRadio vpsFormFieldRadio'.ucfirst($this->getOutputType()).'">';
         $k = 0;
         foreach ($store['data'] as $i) {
-            $ret['html'] .= '<input type="radio" class="radio" id="'.$ret['id'].$k++.'" '
-                .'name="'.$name.$fieldNamePostfix.'" value="'.$i[0].'"';
+            $ret['html'] .= '<span class="value'.htmlspecialchars(ucfirst($i[0])).'">';
+            $ret['html'] .= '<input type="radio" class="radio" id="'.$ret['id'].++$k.'" '
+                .'name="'.$name.$fieldNamePostfix.'" value="'.htmlspecialchars($i[0]).'"';
             if ($i[0] == $value) $ret['html'] .= ' checked="checked"';
-            $ret['html'] .= ' /> '.htmlspecialchars($i[1]);
-            if ($this->getOutputType() == 'vertical' && $k < count($store['data'])) {
-                $ret['html'] .= '<br />';
-            }
+            $ret['html'] .= ' /> <label for="'.$ret['id'].$k.'">'.htmlspecialchars($i[1]).'</label>';
+            $ret['html'] .= '</span>';
         }
+        $ret['html'] .= '</div>';
         return $ret;
     }
     public static function getSettings()
