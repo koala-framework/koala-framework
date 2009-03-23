@@ -194,6 +194,9 @@ class Vps_Component_Cache
                     ))
                 ))
             );
+            if ($this->getMetaModel()->getProxyModel() instanceof Vps_Model_Db) {
+                $select->whereNotEquals('type', array(self::META_CACHE_ID, self::META_STATIC, self::META_COMPONENT_CLASS));
+            }
             foreach ($this->getMetaModel()->getRows($select) as $row) {
                 if ($row->type == self::META_CACHE_ID) {
                     $this->clean(self::CLEANING_MODE_ID, $row->value);
