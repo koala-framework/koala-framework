@@ -11,9 +11,8 @@ class Vpc_Directories_CategoryTree_View_Component
         ));
     }
 
-    public function getCacheVars()
+    public function getCacheStaticVars()
     {
-        $ret = parent::getCacheVars();
         $ret[] = array(
             'model' => 'Vpc_Directories_CategoryTree_Directory_ItemsToCategoriesModel',
             'id' => null,
