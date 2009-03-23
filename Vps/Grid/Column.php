@@ -58,12 +58,6 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
         return $this;
     }
 
-    public function setProperty($name, $value)
-    {
-        $this->_properties[$name] = $value;
-        return $this;
-    }
-
     public function getProperty($name)
     {
         if (isset($this->_properties[$name])) {
