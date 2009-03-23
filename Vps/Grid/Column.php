@@ -38,6 +38,13 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
         }
     }
 
+    public function setEditor($ed)
+    {
+        $ret = $this->setProperty('editor', $ed);
+        $this->getProperty('editor')->setData($this->getData());
+        return $ret;
+    }
+
     public function setProperty($name, $value)
     {
         if ($name == 'editor' && is_string($value)) {
@@ -163,6 +170,9 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
     {
         $this->_data = $data;
         $data->setFieldname($this->getDataIndex());
+        if ($this->getEditor()) {
+            $this->getEditor()->setData($data);
+        }
         return $this;
     }
 }
