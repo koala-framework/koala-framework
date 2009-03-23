@@ -5,7 +5,7 @@ class Vps_Acl_Component extends Vps_Acl
     {
         parent::__construct();
 
-        $this->addRole(new Vps_Acl_Role_Admin('superuser', trlVps('Superuser')));
+        $this->addRole(new Vps_Acl_Role('superuser', trlVps('Superuser')));
         $this->add(new Vps_Acl_Resource_EditRole('edit_role_superuser', 'superuser'), 'edit_role');
 
         $this->add(new Zend_Acl_Resource('vps_debug_classtree'), 'vps_debug');
