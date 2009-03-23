@@ -20,6 +20,11 @@ class Vpc_User_Edit_Form_Component extends Vpc_Form_Component
         }
         $this->_form->setId($user->id);
 
+        $this->_initUserForm();
+    }
+
+    protected function _initUserForm()
+    {
         $detailClass = Vpc_Abstract::getChildComponentClass($this->getData()->parent->parent->componentClass, 'detail');
         $forms = Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'forms');
         $this->_form->addUserForms($detailClass, $forms);
