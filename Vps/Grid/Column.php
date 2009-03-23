@@ -40,20 +40,26 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
 
     public function setEditor($ed)
     {
+        if (is_string($ed)) {
+            $ed = 'Vps_Form_Field_'.$ed;
+            $ed = new $ed();
+        }
         $ret = $this->setProperty('editor', $ed);
-        $this->getProperty('editor')->setData($this->getData());
+        if ($ed) {
+            if (!$ed->getName()) $ed->setName($this->getDataIndex());
+            $ed->setData($this->getData());
+        }
         return $ret;
     }
 
     public function setProperty($name, $value)
     {
-        if ($name == 'editor' && is_string($value)) {
-            $value = 'Vps_Form_Field_'.$value;
-            $value = new $value();
-        }
-        if ($name == 'editor') {
-            if (!$value->getName()) $value->setName($this->getDataIndex());
-        }
+        $this->_properties[$name] = $value;
+        return $this;
+    }
+
+    public function setProperty($name, $value)
+    {
         $this->_properties[$name] = $value;
         return $this;
     }
