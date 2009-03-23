@@ -25,7 +25,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     public function init()
     {
-        $this->_model = new Vps_Component_Model();
+        $this->_model = Vps_Model_Abstract::getInstance('Vps_Component_Model');
         parent::init();
     }
 
