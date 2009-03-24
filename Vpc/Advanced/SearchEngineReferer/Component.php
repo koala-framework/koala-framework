@@ -12,6 +12,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         $ret['componentName'] = trlVps('Search engine referer');
         $ret['modelname'] = 'Vpc_Advanced_SearchEngineReferer_Model';
         $ret['saveReferer'] = true;
+        $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
         return $ret;
     }
