@@ -19,7 +19,7 @@ Vps.Marquee.Elements = function(cfg) {
 };
 
 Vps.Marquee.Elements.prototype = {
-
+    paused: false,
     _elSize: function(el)
     {
         if (this.scrollDirection == 'down' || this.scrollDirection == 'up') {
@@ -41,29 +41,37 @@ Vps.Marquee.Elements.prototype = {
             this.sumSize += this._elSize(el);
         }, this);
         if (!this.elements.length) return;
+        this.selectorRoot.on('mouseover', function() {
+            this.paused = true;
+        }, this);
+        this.selectorRoot.on('mouseout', function() {
+            this.paused = false;
+        }, this);
         this.currentPosition = parseInt(this.readCookie()) || 0;
         this.doScroll();
     },
 
     doScroll: function() {
-        var offset = 0;
-        this.elements.each(function(i) {
-            var pos = offset - this.currentPosition;
-            if (pos < -i.size) {
-                pos = pos + this.sumSize;
-            }
-            if (this.scrollDirection == 'up') {
-                i.el.setY(pos + this.selectorRoot.getY());
-            } else if (this.scrollDirection == 'left') {
-                i.el.setX(pos + this.selectorRoot.getX());
-            } else {
-                //TODO
-            }
-            offset += i.size;
-        }, this);
+        if (!this.paused) {
+            var offset = 0;
+            this.elements.each(function(i) {
+                var pos = offset - this.currentPosition;
+                if (pos < -i.size) {
+                    pos = pos + this.sumSize;
+                }
+                if (this.scrollDirection == 'up') {
+                    i.el.setY(pos + this.selectorRoot.getY());
+                } else if (this.scrollDirection == 'left') {
+                    i.el.setX(pos + this.selectorRoot.getX());
+                } else {
+                    //TODO
+                }
+                offset += i.size;
+            }, this);
 
-        this.currentPosition += this.scrollAmount;
-        if (this.currentPosition > this.sumSize) this.currentPosition = 0;
+            this.currentPosition += this.scrollAmount;
+            if (this.currentPosition > this.sumSize) this.currentPosition = 0;
+        }
         this.doScroll.defer(this.scrollDelay, this);
 
         this.setCookie(this.currentPosition);
