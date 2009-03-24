@@ -160,3 +160,9 @@ Ext.util.Format.notEditable = function(v, p)
     return v;
 };
 
+Ext.util.Format.image = function(v, p, record){
+    if (!v) return '';
+    p.css += 'vps-cell-icon';
+    p.attr += 'style="background-image:url('+v+');"';
+    return '';
+};
