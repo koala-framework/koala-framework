@@ -30,12 +30,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
             $return['filesize'] = null;
         }
 
-        $icon = $this->getIcon();
-        $return['iconname'] = $icon;
-        if ($icon) {
-            $icon = '/assets/silkicons/' . $icon . '.png';
-        }
-        $return['icon'] = $icon;
+        $return['icon'] = $this->getIcon();
         return $return;
     }
 
@@ -53,32 +48,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
     {
         $fileRow = $this->_getFileRow()->getParentRow('File');
         if (!$fileRow) return 'page_white_get';
-        $extension = $fileRow->extension;
-        switch ($extension) {
-            case 'pdf':
-                return 'page_white_acrobat';
-            case 'doc':
-            case 'docx':
-                return 'page_white_word';
-            case 'xls':
-            case 'xlsx':
-                return 'page_white_excel';
-            case 'ppt':
-            case 'pptx':
-                return 'page_white_powerpoint';
-            case 'zip':
-            case 'rar':
-                return 'page_white_compressed';
-            case 'exe':
-                return 'page_white_gear';
-            case 'jpg':
-            case 'gif':
-            case 'png':
-            case 'psd':
-                return 'page_white_picture';
-            default:
-                return 'page_white_get';
-        }
+        return Vps_Util_FileIcon::getFileIcon($fileRow->extension);
     }
 
     public function getSearchContent()
