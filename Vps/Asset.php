@@ -26,6 +26,14 @@ class Vps_Asset
                 $filename = $paths->silkicons.'/'.$icon.'.png';
                 $type = 'silkicons';
                 $icon .= '.png';
+            } else if (file_exists($paths->vps.'/images/fileicons/'.$icon.'.png')) {
+                $filename = $paths->vps.'/images/fileicons/'.$icon.'.png';
+                $type = 'vps/images/fileicons';
+                $icon .= '.png';
+            } else if (file_exists($paths->vps.'/images/fileicons/'.$icon.'.jpg')) {
+                $filename = $paths->vps.'/images/fileicons/'.$icon.'.jpg';
+                $type = 'vps/images/fileicons';
+                $icon .= '.jpg';
             } else {
                 throw new Vps_Exception("Asset '$icon' not found");
             }
