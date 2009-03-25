@@ -19,6 +19,7 @@ class Vpc_Abstract_List_Form extends Vps_Form_NonTableForm
         if (Vpc_Abstract::getSetting($this->getClass(), 'showVisible')) {
             $multifields->fields->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
         }
+        $multifields->setPosition(Vpc_Abstract::getSetting($this->getClass(), 'showPosition'));
 
         $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), 'child');
         $form->setIdTemplate('{component_id}-{id}');
