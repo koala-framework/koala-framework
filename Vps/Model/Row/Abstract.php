@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
+abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serializable
 {
     private $_skipFilters = false; //für saveSkipFilters
     /**
@@ -8,6 +8,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     protected $_model;
     private $_internalId;
     protected $_siblingRows;
+    static $_internalIdCounter = 0;
 
     public function __construct(array $config)
     {
@@ -15,10 +16,31 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
             $this->_siblingRows = (array)$config['siblingRows'];
         }
         $this->_model = $config['model'];
-        static $internalId = 0;
-        $this->_internalId = $internalId++;
+        $this->_internalId = self::$_internalIdCounter++;
 
         $this->_init();
+
+        //Vps_Benchmark::count('Model_Row', get_class($this->_model).' '.$this->{$this->_model->getPrimaryKey()});
+    }
+
+    public function serialize()
+    {
+        if (Vps_Model_Abstract::getInstance(get_class($this->getModel())) !== $this->getModel()) {
+            throw new Vps_Exception("You can only serialize rows of models that where created with Vps_Model_Abstract::getInstance()");
+        }
+        $data = array(
+            'model' => get_class($this->getModel()),
+            'siblingRows' => $this->_siblingRows
+        );
+        return serialize($data);
+    }
+
+    public function unserialize($str)
+    {
+        $data = unserialize($str);
+        $this->_siblingRows = $data['siblingRows'];
+        $this->_model = Vps_Model_Abstract::getInstance($data['model']);
+        $this->_internalId = self::$_internalIdCounter++;
     }
 
     protected function _init()
