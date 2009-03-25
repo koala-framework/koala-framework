@@ -3,7 +3,7 @@ class Vps_Util_FileIcon
 {
     public static function getFileIcon($extension)
     {
-        switch ($extension) {
+        switch (strltolower($extension)) {
             case 'pdf':
                 $icon = 'page_white_acrobat';
                 break;
