@@ -4,26 +4,12 @@ class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
     public function getExtConfig()
     {
         $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
-        $classes = Vpc_Abstract::getChildComponentClasses($detail);
-        $classes = array_merge($classes, Vpc_Abstract::getChildComponentClasses($this->_class));
-
-        $generators = Vpc_Abstract::getSetting($detail, 'generators');
-        $contentClass = $generators['child']['component']['content'];
-
-        $plugins = array();
-        foreach ($classes as $class) {
-            $plugin = Vpc_Admin::getComponentFile(
-                $class, 'Plugin', 'js', true
-            );
-            if ($plugin) {
-                $plugins[] = str_replace('_', '.', $plugin);
-            }
-        }
+        $contentClass = Vpc_Abstract::getChildComponentClass($detail, 'child', 'content');
 
         return array_merge(parent::getExtConfig(), array(
             'xtype'=>'vpc.directories.item.directory',
             'contentClass' => $contentClass,
-            'componentPlugins' => $plugins,
+            'componentPlugins' => $this->_getChildComponentPlugins(array($details, $this->_class)),
             'idTemplate' => 'news_{0}-content'
         ));
     }
