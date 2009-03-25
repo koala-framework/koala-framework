@@ -63,12 +63,15 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
 
         // automatische verlinkung
         $truncate = new Vps_View_Helper_Truncate();
-        $pattern = '/((http:\/\/)|(www\.)|(http:\/\/www\.)){1,1}([a-z0-9äöü;\/?:@=&!*~#%\'+$.,_-]+)/i';
+        $pattern = '/((https?:\/\/www\.)|(https?:\/\/)|(www\.)){1,1}([a-z0-9äöü;\/?:@=&!*~#%\'+$.,_-]+)/i';
         $offset = 0;
         while (preg_match($pattern, $content, $matches, PREG_OFFSET_CAPTURE, $offset)) {
-            $showUrl = $truncate->truncate($matches[5][0], 60, '...', true);
-            $replace = "<a href=\"http://{$matches[3][0]}{$matches[5][0]}\" "
-                ."title=\"{$matches[3][0]}{$matches[5][0]}\" rel=\"popup_blank\">{$matches[3][0]}$showUrl</a>";
+            if (!preg_match('/^http/', $matches[1][0])) $matches[1][0] = 'http://'.$matches[1][0];
+            $showUrl = preg_replace('/https?:\/\//', '', $matches[1][0])
+                .$truncate->truncate($matches[5][0], 60, '...', true);
+
+            $replace = "<a href=\"{$matches[1][0]}{$matches[5][0]}\" "
+                ."title=\"{$matches[1][0]}{$matches[5][0]}\" rel=\"popup_blank\">$showUrl</a>";
             $content = substr($content, 0, $matches[0][1])
                 .$replace.substr($content, $matches[0][1] + strlen($matches[0][0]));
             $offset = $matches[0][1] + strlen($replace);
