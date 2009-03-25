@@ -34,6 +34,12 @@ class Vps_Util_FileIcon
             case 'psd':
                 $icon = 'page_white_picture';
                 break;
+            case 'dwg':
+                $icon = 'page_white_dwg';
+                break;
+            case 'dxf':
+                $icon = 'page_white_dxf';
+                break;
             default:
                 $icon = 'page_white_get';
                 break;
