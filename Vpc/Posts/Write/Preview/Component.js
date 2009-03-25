@@ -77,18 +77,19 @@ Vpc.PostsWritePreview.replaceText = function(v)
 
     // automatische verlinkung
     var offset = 0;
-    var pattern = /((http:\/\/)|(www\.)|(http:\/\/www\.)){1,1}([A-Za-z0-9äöüÄÖÜ;\/?:@=&!*~#%\'+$.,_-]+)/;
+    var pattern = /((https?:\/\/www\.)|(https?:\/\/)|(www\.)){1,1}([A-Za-z0-9äöüÄÖÜ;\/?:@=&!*~#%\'+$.,_-]+)/;
     while (v.substr(offset).match(pattern)) {
         offset += v.substr(offset).search(pattern);
         var matches = v.substr(offset).match(pattern);
-        if (typeof matches[3] == 'undefined') matches[3] = '';
+
+        if (!matches[1].match(/^http/)) matches[1] = 'http:/'+'/'+matches[1];
 
         var showUrl = matches[5];
         if (showUrl.length > 60) showUrl = showUrl.substr(0, 57) + '...';
 
-        var rplc = "<a href=\"http:/"+"/" + matches[3] + matches[5] + "\" "
-            + "title=\"" + matches[3] + matches[5] + "\" "
-            + "target=\"blank\">" + matches[3] + showUrl + "</a>";
+        var rplc = "<a href=\"" + matches[1] + matches[5] + "\" "
+            + "title=\"" + matches[1] + matches[5] + "\" "
+            + "target=\"blank\">" + matches[1].replace(/https?:\/\/{1,1}/, '') + showUrl + "</a>";
 
         v = v.substr(0, offset) + rplc + v.substr(offset + matches[0].length);
 
