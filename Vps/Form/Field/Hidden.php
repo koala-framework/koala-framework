@@ -1,9 +1,10 @@
 <?php
 class Vps_Form_Field_Hidden extends Vps_Form_Field_SimpleAbstract
 {
-    public function getMetaData()
+    public function __construct($field_name = null)
     {
-        return null;
+        parent::__construct($field_name);
+        $this->setXtype('hidden');
     }
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
