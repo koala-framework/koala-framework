@@ -1,8 +1,9 @@
 <?php
-class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
+class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface, Serializable
 {
     protected $_pointer = 0;
-    protected $_dataKeys;
+    protected $_dataKeys; //wenn objekt normal erstellt wurde
+    protected $_rows; //wenn objekt deseralisiert wurde
     protected $_model;
 
     public function __construct($config)
@@ -10,6 +11,20 @@ class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
         $this->_init();
         $this->_dataKeys = $config['dataKeys'];
         $this->_model = $config['model'];
+    }
+
+    public function serialize()
+    {
+        $rows = array();
+        foreach ($this as $row) {
+            $rows[] = $row;
+        }
+        return serialize($rows);
+    }
+
+    public function unserialize($str)
+    {
+        $this->_rows = unserialize($str);
     }
 
     public function toArray()
@@ -36,7 +51,15 @@ class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
         if ($this->valid() === false) {
             return null;
         }
+        if (isset($this->_rows)) {
+            return $this->_rows[$this->_pointer];
+        }
         $key = $this->_dataKeys[$this->_pointer];
+        return $this->_getRowByDataKey($key);
+    }
+
+    protected function _getRowByDataKey($key)
+    {
         return $this->getModel()->getRowByDataKey($key);
     }
 
@@ -57,7 +80,11 @@ class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
 
     public function count()
     {
-        return count($this->_dataKeys);
+        if (isset($this->_rows)) {
+            return count($this->_rows);
+        } else {
+            return count($this->_dataKeys);
+        }
     }
 
     public function seek($position)

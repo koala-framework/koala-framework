@@ -8,12 +8,8 @@ class Vps_Model_Rowset_ParentRow extends Vps_Model_Rowset_Abstract
         parent::__construct($config);
     }
 
-    public function current()
+    protected function _getRowByDataKey($key)
     {
-        if ($this->valid() === false) {
-            return null;
-        }
-        $key = $this->_dataKeys[$this->_pointer];
         return $this->getModel()->getRowByDataKey($key, $this->_parentRow);
     }
 }

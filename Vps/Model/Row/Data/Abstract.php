@@ -11,6 +11,21 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         parent::__construct($config);
     }
 
+    public function serialize()
+    {
+        return serialize(array(
+            'parent' => parent::serialize(),
+            'data' => $this->_data
+        ));
+    }
+    public function unserialize($str)
+    {
+        $data = unserialize($str);
+        $this->_data = $data['data'];
+        $this->_cleanData = $this->_data;
+        parent::unserialize($data['parent']);
+    }
+
     public function __isset($name)
     {
         if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
