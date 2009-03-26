@@ -50,16 +50,14 @@ class Vpc_User_Detail_GeneralCommunity_Rating_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getCacheVars()
+    public function getStaticCacheVars()
     {
-        $ret = parent::getCacheVars();
+        $ret = array();
         $ret[] = array(
-            'model' => 'Vpc_Forum_Directory_Model',
-            'id' => null
+            'model' => 'Vpc_Forum_Directory_Model'
         );
         $ret[] = array(
-            'model' => 'Vpc_Posts_Directory_Model',
-            'id' => null
+            'model' => 'Vpc_Posts_Directory_Model'
         );
         return $ret;
     }

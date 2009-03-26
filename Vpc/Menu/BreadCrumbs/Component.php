@@ -35,14 +35,12 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
                 $model = $generator->getModel();
                 if ($model instanceof Vps_Model_Db) $model = $model->getTable();
                 $ret[] = array(
-                    'model' => get_class($model),
-                    'id' => null
+                    'model' => get_class($model)
                 );
             }
         }
         $ret[] = array(
-            'model' => 'Vps_Component_Model',
-            'id' => null
+            'model' => 'Vps_Component_Model'
         );
         return $ret;
     }

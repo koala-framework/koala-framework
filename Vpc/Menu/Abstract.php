@@ -106,23 +106,19 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                     $componentClass, array('generator' => $key))
                 );
                 $ret[] = array(
-                    'model' => $generator->getModel(),
-                    'id' => null
+                    'model' => $generator->getModel()
                 );
             }
         }
         $ret[] = array(
-            'model' => 'Vps_Component_Model',
-            'id' => null
+            'model' => 'Vps_Component_Model'
         );
         $ret[] = array(
-            'model' => 'Vps_Dao_Pages',
-            'id' => null
+            'model' => 'Vps_Dao_Pages'
         );
         // Falls Nickname geändert wird, ändert sich Url zum User
         $ret[] = array(
-            'model' => Vps_Registry::get('config')->user->model,
-            'id' => null
+            'model' => Vps_Registry::get('config')->user->model
         );
         return $ret;
     }

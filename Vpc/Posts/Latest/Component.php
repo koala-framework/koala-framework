@@ -46,16 +46,14 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getCacheVars()
+    public function getStaticCacheVars()
     {
-        $ret = parent::getCacheVars();
+        $ret = array();
         $ret[] = array(
-            'model' => 'Vpc_Posts_Directory_Model',
-            'id' => null
+            'model' => 'Vpc_Posts_Directory_Model'
         );
         $ret[] = array(
-            'model' => Vps_Registry::get('config')->user->model,
-            'id' => null
+            'model' => Vps_Registry::get('config')->user->model
         );
         return $ret;
     }

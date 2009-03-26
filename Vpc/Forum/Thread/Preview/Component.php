@@ -12,10 +12,6 @@ class Vpc_Forum_Thread_Preview_Component extends Vpc_Abstract
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();
-        $ret[] = array(
-            'model' => 'Vpc_Posts_Directory_Model',
-            'id' => null
-        );
         $threadVars = $this->getData()->parent->getComponent()->getThreadVars();
         if ($threadVars['lastPost']->user) {
             $ret[] = array(
@@ -29,6 +25,15 @@ class Vpc_Forum_Thread_Preview_Component extends Vpc_Abstract
                 'id' => $threadVars['firstPost']->user->row->id
             );
         }
+        return $ret;
+    }
+
+    public function getStaticCacheVars()
+    {
+        $ret = array();
+        $ret[] = array(
+            'model' => 'Vpc_Posts_Directory_Model'
+        );
         return $ret;
     }
 }
