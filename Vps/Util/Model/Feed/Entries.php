@@ -38,8 +38,15 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
         $this->_data[$pId] = array();
 
         if ($parentRow->format == Vps_Util_Model_Feed_Row_Feed::FORMAT_RSS) {
-            foreach ($xml->channel->item as $item) {
-                $this->_data[$pId][] = $item;
+            if (in_array('http://purl.org/rss/1.0/', $xml->getNamespaces(true))) {
+                $xml->registerXPathNamespace('rss', 'http://purl.org/rss/1.0/');
+                foreach ($xml->xpath('//rss:item') as $item) {
+                    $this->_data[$pId][] = $item;
+                }
+            } else {
+                foreach ($xml->channel->item as $item) {
+                    $this->_data[$pId][] = $item;
+                }
             }
         } else {
             foreach ($xml->entry as $item) {

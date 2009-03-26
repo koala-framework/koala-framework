@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="http://rss.orf.at/main.xsl"?>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+        xmlns="http://purl.org/rss/1.0/"
+        >
+    
+    <channel rdf:about="http://news.orf.at">
+        <title>news.ORF.at</title>
+        <link>http://news.orf.at</link>
+        <description>Mehr als 30 Mal am Tag aktualisiert die ORF.at-Redaktion Nachrichten aus Österreich und aller Welt. Aktuelles rund um die Uhr in optimaler Mischung aus Text, Bild und Ton.</description>
+        <dc:publisher>ORF Österreichischer Rundfunk, Wien</dc:publisher>
+        <dc:creator>ORF Online und Teletext GmbH &amp; Co KG</dc:creator>
+        <dc:date>2009-03-26T17:20:00+01:00</dc:date>
+        <dc:language>de</dc:language>
+        <dc:rights>Copyright &#169; 2009 ORF Online und Teletext GmbH &amp; Co KG</dc:rights>
+        <sy:updatePeriod>hourly</sy:updatePeriod>
+        <sy:updateFrequency>1</sy:updateFrequency>
+        <sy:updateBase>2000-01-01T00:00:00Z</sy:updateBase>
+        
+        <image rdf:resource="http://orf.at/images/orf.at-small.gif" />
+        
+        <items>
+            <rdf:Seq>
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322523.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322522.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322521.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322520.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322519.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322518.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322516.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322515.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322514.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322513.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322512.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322511.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322510.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322509.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322508.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322507.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322506.html" />
+                <rdf:li rdf:resource="http://news.orf.at/090326-36540/" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322505.html" />
+                <rdf:li rdf:resource="http://news.orf.at/090326-36537/" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322501.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322499.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322496.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322494.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322493.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322492.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322489.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322484.html" />
+                <rdf:li rdf:resource="http://news.orf.at/090326-36531/" />
+                <rdf:li rdf:resource="http://news.orf.at/090323-36438/" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322482.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322478.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322475.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322471.html" />
+                <rdf:li rdf:resource="http://news.orf.at/ticker/322459.html" />
+                
+            </rdf:Seq>
+        </items>
+    </channel>
+    
+    <image rdf:about="http://rss.orf.at/images/orf.at-small.gif">
+        <title>ORF.at</title>
+        <url>http://rss.orf.at/images/orf.at-small.gif</url>
+        <link>http://rss.orf.at</link>
+    </image>
+    
+    <item rdf:about="http://news.orf.at/ticker/322523.html">
+        <title>TA muss 1,5 Millionen Euro Strafe zahlen</title>
+        <link>http://news.orf.at/ticker/322523.html</link>
+        
+        
+        <dc:subject>WIRTSCHAFT</dc:subject>
+        <dc:date>2009-03-26T17:17:20+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322522.html">
+        <title>Magna &quot;wirbt&quot; bei Angestellten um Gehaltsverzicht</title>
+        <link>http://news.orf.at/ticker/322522.html</link>
+        
+        
+        <dc:subject>WIRTSCHAFT</dc:subject>
+        <dc:date>2009-03-26T17:02:54+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322521.html">
+        <title>Geithner will Kontrolle des Finanzsektors ausweiten</title>
+        <link>http://news.orf.at/ticker/322521.html</link>
+        
+        
+        <dc:subject>AUSLAND</dc:subject>
+        <dc:date>2009-03-26T17:01:02+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322520.html">
+        <title>Erste Gespräche NATO - Iran seit 30 Jahren</title>
+        <link>http://news.orf.at/ticker/322520.html</link>
+        
+        
+        <dc:subject>AUSLAND</dc:subject>
+        <dc:date>2009-03-26T16:51:02+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322519.html">
+        <title>Deutschland: Laufzeiten für zwei AKWs nicht verlängert</title>
+        <link>http://news.orf.at/ticker/322519.html</link>
+        
+        
+        <dc:subject>AUSLAND</dc:subject>
+        <dc:date>2009-03-26T16:48:22+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322518.html">
+        <title>Kapitalspritzen für Volksbank AG fixiert</title>
+        <link>http://news.orf.at/ticker/322518.html</link>
+        
+        
+        <dc:subject>WIRTSCHAFT</dc:subject>
+        <dc:date>2009-03-26T16:40:43+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322516.html">
+        <title>Urheber von Dubliner Aktbildern stellt sich der Polizei</title>
+        <link>http://news.orf.at/ticker/322516.html</link>
+        
+        
+        <dc:subject>AUSLAND</dc:subject>
+        <dc:date>2009-03-26T16:31:44+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322515.html">
+        <title>EU-Wahl: Ernst Strasser neuer ÖVP-Spitzenkandidat?</title>
+        <link>http://news.orf.at/ticker/322515.html</link>
+        
+        
+        <dc:subject>INLAND</dc:subject>
+        <dc:date>2009-03-26T16:23:28+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322514.html">
+        <title>Nicole Kidman spielt erstmals in Woody-Allen-Film</title>
+        <link>http://news.orf.at/ticker/322514.html</link>
+        
+        
+        <dc:subject>LEUTE</dc:subject>
+        <dc:date>2009-03-26T16:17:15+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322513.html">
+        <title>Life Ball sucht Debütanten</title>
+        <link>http://news.orf.at/ticker/322513.html</link>
+        
+        
+        <dc:subject>LIFESTYLE</dc:subject>
+        <dc:date>2009-03-26T16:12:15+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322512.html">
+        <title>EU-Parlament für Grundrechte im Internet</title>
+        <link>http://news.orf.at/ticker/322512.html</link>
+        
+        
+        <dc:subject>IT</dc:subject>
+        <dc:date>2009-03-26T15:18:04+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322511.html">
+        <title>Handys wichtig für Österreichs Kinder</title>
+        <link>http://news.orf.at/ticker/322511.html</link>
+        
+        
+        <dc:subject>IT</dc:subject>
+        <dc:date>2009-03-26T15:16:58+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322510.html">
+        <title>Standing Ovations bei Gasteiner Snowjazz-Festival</title>
+        <link>http://news.orf.at/ticker/322510.html</link>
+        
+        
+        <dc:subject>KULTUR</dc:subject>
+        <dc:date>2009-03-26T15:16:06+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322509.html">
+        <title>Stieftöchter missbraucht: Mutter sah zu</title>
+        <link>http://news.orf.at/ticker/322509.html</link>
+        
+        
+        <dc:subject>CHRONIK</dc:subject>
+        <dc:date>2009-03-26T15:10:11+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322508.html">
+        <title>Zilk-Akt: Tschechien sieht kein Problem mit Österreich</title>
+        <link>http://news.orf.at/ticker/322508.html</link>
+        
+        
+        <dc:subject>INLAND</dc:subject>
+        <dc:date>2009-03-26T15:09:01+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322507.html">
+        <title>Heimische Hotels die teuersten der Euro-Zone</title>
+        <link>http://news.orf.at/ticker/322507.html</link>
+        
+        
+        <dc:subject>LIFESTYLE</dc:subject>
+        <dc:date>2009-03-26T15:08:09+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322506.html">
+        <title>Trotz Krise: Raiffeisen strebt 2009 Gewinn an</title>
+        <link>http://news.orf.at/ticker/322506.html</link>
+        
+        
+        <dc:subject>WIRTSCHAFT</dc:subject>
+        <dc:date>2009-03-26T15:04:40+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/090326-36540/">
+        <title>Große Reform 2010 angekündigt: Schmied will Schulen umkrempeln</title>
+        <link>http://news.orf.at/090326-36540/</link>
+        
+        
+        <dc:subject>INLAND</dc:subject>
+        <dc:date>2009-03-26T14:53:34+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322505.html">
+        <title>Formel 1: Protest gegen Diffusoren abgelehnt </title>
+        <link>http://news.orf.at/ticker/322505.html</link>
+        
+        
+        <dc:subject>SPORT</dc:subject>
+        <dc:date>2009-03-26T14:42:52+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/090326-36537/">
+        <title>Wattestäbchen verunreinigt? &quot;Phantom-Mörderin&quot; löst sich in Luft auf      </title>
+        <link>http://news.orf.at/090326-36537/</link>
+        
+        
+        <dc:subject>CHRONIK</dc:subject>
+        <dc:date>2009-03-26T14:15:55+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322501.html">
+        <title>Bangkok: Erneut Proteste gegen Regierung</title>
+        <link>http://news.orf.at/ticker/322501.html</link>
+        
+        
+        <dc:subject>AUSLAND</dc:subject>
+        <dc:date>2009-03-26T14:12:33+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322499.html">
+        <title>100-Mio.-Euro-Paket für thermische Sanierung</title>
+        <link>http://news.orf.at/ticker/322499.html</link>
+        
+        
+        <dc:subject>WIRTSCHAFT</dc:subject>
+        <dc:date>2009-03-26T13:49:39+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322496.html">
+        <title>Politikergehälter: Grüne fordern Solidarbeitrag</title>
+        <link>http://news.orf.at/ticker/322496.html</link>
+        
+        
+        <dc:subject>INLAND</dc:subject>
+        <dc:date>2009-03-26T13:31:34+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322494.html">
+        <title>Kontrollamt zerpflückt Wiener-Wohnen-Firmen</title>
+        <link>http://news.orf.at/ticker/322494.html</link>
+        
+        
+        <dc:subject>INLAND</dc:subject>
+        <dc:date>2009-03-26T13:26:20+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322493.html">
+        <title>Absturz bei Abseilübung: Kursleiter verurteilt</title>
+        <link>http://news.orf.at/ticker/322493.html</link>
+        
+        
+        <dc:subject>CHRONIK</dc:subject>
+        <dc:date>2009-03-26T13:23:54+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322492.html">
+        <title>Video-Abstandsmessung seit heute wieder erlaubt</title>
+        <link>http://news.orf.at/ticker/322492.html</link>
+        
+        
+        <dc:subject>INLAND</dc:subject>
+        <dc:date>2009-03-26T13:22:41+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322489.html">
+        <title>Ein Jahr Haft für Alkofahrt mit Todesopfer</title>
+        <link>http://news.orf.at/ticker/322489.html</link>
+        
+        
+        <dc:subject>CHRONIK</dc:subject>
+        <dc:date>2009-03-26T12:53:38+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322484.html">
+        <title>Wanzen-Affäre: Darabos-Telefon offenbar manipuliert</title>
+        <link>http://news.orf.at/ticker/322484.html</link>
+        
+        
+        <dc:subject>INLAND</dc:subject>
+        <dc:date>2009-03-26T12:29:03+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/090326-36531/">
+        <title>UNO-Appell an G-20: Ärmsten helfen</title>
+        <link>http://news.orf.at/090326-36531/</link>
+        
+        
+        <dc:subject>WIRTSCHAFT</dc:subject>
+        <dc:date>2009-03-26T12:27:36+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/090323-36438/">
+        <title>Vie de merde: Ein Facebook für Loser   </title>
+        <link>http://news.orf.at/090323-36438/</link>
+        
+        
+        <dc:subject>KULTUR</dc:subject>
+        <dc:date>2009-03-26T12:27:36+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322482.html">
+        <title>Langes Leiden mit chronischen Schmerzen</title>
+        <link>http://news.orf.at/ticker/322482.html</link>
+        
+        
+        <dc:subject>GESUNDHEIT</dc:subject>
+        <dc:date>2009-03-26T12:23:31+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322478.html">
+        <title>Klangforum Wien feiert 25er mit 25 Uraufführungen</title>
+        <link>http://news.orf.at/ticker/322478.html</link>
+        
+        
+        <dc:subject>KULTUR</dc:subject>
+        <dc:date>2009-03-26T12:03:40+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322475.html">
+        <title>Bundesliga: KSV im Abstiegskampf praktisch gerettet</title>
+        <link>http://news.orf.at/ticker/322475.html</link>
+        
+        
+        <dc:subject>SPORT</dc:subject>
+        <dc:date>2009-03-26T11:53:05+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322471.html">
+        <title>Polizei erschoss wild gewordenen Stier</title>
+        <link>http://news.orf.at/ticker/322471.html</link>
+        
+        
+        <dc:subject>CHRONIK</dc:subject>
+        <dc:date>2009-03-26T11:39:14+01:00</dc:date>
+    </item>
+    <item rdf:about="http://news.orf.at/ticker/322459.html">
+        <title>&quot;Club 2&quot;: Schlagabtausch über die Zukunft des ORF</title>
+        <link>http://news.orf.at/ticker/322459.html</link>
+        
+        
+        <dc:subject>MEDIEN</dc:subject>
+        <dc:date>2009-03-26T10:07:52+01:00</dc:date>
+    </item>
+    
+    
+</rdf:RDF>
