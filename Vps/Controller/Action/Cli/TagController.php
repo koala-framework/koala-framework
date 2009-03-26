@@ -23,7 +23,9 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         $versions = array();
         $maxVersion = $branchVersion;
         foreach (self::_getSvnDirs("tags/vps") as $v) {
-            if ($branchVersion && version_compare($branchVersion, $v)) continue;
+            if ($branchVersion && version_compare($branchVersion, $v) == 1) {
+                continue;
+            }
             if (!$maxVersion || version_compare($maxVersion, $v) == -1) {
                 $maxVersion = $v;
             }
@@ -33,11 +35,12 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
                 $versions[] = "$m[1].$m[2].$m[3]-".($m[4]+1);
             }
             $versions[] = "$m[1].$m[2].".($m[3]+1);
-            $versions[] = "$m[1].".($m[2]+1).".0";
-            $versions[] = ($m[1]+1).".0.0";
+            //$versions[] = "$m[1].".($m[2]+1).".0";
+            //$versions[] = ($m[1]+1).".0.0";
         } else {
             $versions[] = $maxVersion.".0";
         }
+
 
         $ret['vpsVersion'] = array(
             'param'=> 'vps-version',
