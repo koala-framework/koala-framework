@@ -83,10 +83,10 @@
 .ext-ie .$cssClass .form_title input {
     margin-bottom: 0px;
 }
-.$cssClass .error {
+.$cssClass .vpcFormError {
     padding: 10px;
 }
-.$cssClass .error h1 {
+.$cssClass .vpcFormError h1 {
     font-weight: bold;
     font-size: 12px;
 }
