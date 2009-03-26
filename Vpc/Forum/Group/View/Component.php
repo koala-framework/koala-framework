@@ -1,12 +1,11 @@
 <?php
 class Vpc_Forum_Group_View_Component extends Vpc_Directories_List_ViewPage_Component
 {
-    public function getPartialCacheVars($nr)
+    public function getStaticCacheVars()
     {
-        $ret = parent::getPartialCacheVars($nr);
+        $ret = array();
         $ret[] = array(
-            'model' => 'Vpc_Posts_Directory_Model',
-            'id' => null
+            'model' => 'Vpc_Posts_Directory_Model'
         );
         return $ret;
     }

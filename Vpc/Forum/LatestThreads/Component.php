@@ -58,26 +58,22 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getCacheVars()
+    public function getStaticCacheVars()
     {
+        $ret = array();
         $forum = Vps_Component_Data_Root::getInstance()->getComponentByClass(
             $this->_getSetting('forumClass'),
             array('subroot' => $this->getData())
         );
-        $groupComponentClass = Vpc_Abstract::getChildComponentClass($forum->componentClass, 'groups');
-        $threadComponentClass = Vpc_Abstract::getChildComponentClass($groupComponentClass, 'detail');
-        $postsComponentClass = Vpc_Abstract::getChildComponentClass($threadComponentClass, 'child', 'posts');
-
-        $postGenerator = Vps_Component_Generator_Abstract::getInstance($postsComponentClass, 'detail');
-
-        $ret = parent::getCacheVars();
+        $class = Vpc_Abstract::getChildComponentClass($forum->componentClass, 'groups');
+        $class = Vpc_Abstract::getChildComponentClass($class, 'detail');
+        $class = Vpc_Abstract::getChildComponentClass($class, 'child', 'posts');
+        $postsModel = Vpc_Abstract::createModel($class);
         $ret[] = array(
-            'model' => $postGenerator->getModel(),
-            'id' => null
+            'model' => $postsModel
         );
         $ret[] = array(
-            'model' => Vps_Registry::get('config')->user->model,
-            'id' => null
+            'model' => Vps_Registry::get('config')->user->model
         );
         return $ret;
     }

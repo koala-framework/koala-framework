@@ -13,6 +13,7 @@ class Vpc_Directories_CategoryTree_View_Component
 
     public function getCacheStaticVars()
     {
+        // TODO: Cache löschen komplett neu
         $ret[] = array(
             'model' => 'Vpc_Directories_CategoryTree_Directory_ItemsToCategoriesModel',
             'id' => null,

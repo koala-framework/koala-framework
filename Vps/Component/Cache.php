@@ -135,7 +135,7 @@ class Vps_Component_Cache
             foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
                 $methods = get_class_methods($componentClass);
                 if (in_array('getStaticCacheVars', $methods)) {
-                    $vars = call_user_func(array($componentClass, 'getStaticCacheVars'));
+                    $vars = call_user_func(array($componentClass, 'getStaticCacheVars'), $componentClass);
                     foreach ($vars as $id => $m) {
                         $this->saveMeta($m['model'], null, $componentClass, Vps_Component_Cache::META_STATIC);
                     }
