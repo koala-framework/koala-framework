@@ -12,7 +12,11 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
         if ($feed->format == Vps_Util_Model_Feed_Row_Feed::FORMAT_RSS) {
             $data['link'] = (string)$xml->link;
             $data['description'] = (string)$xml->description;
-            $date = (string)$xml->pubDate;
+            if ($xml->pubDate) {
+                $date = (string)$xml->pubDate;
+            } else {
+                $date = (string)$xml->children('http://purl.org/dc/elements/1.1/')->date;
+            }
         } else {
             $data['link'] = (string)$xml->link['href'];
             $data['description'] = (string)$xml->summary;

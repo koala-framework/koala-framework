@@ -20,15 +20,26 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $this->assertContains('Jobvermittler und Immobilienmakler haben einiges gemein', $entries->current()->description);
         $this->assertEquals('http://www.vivid-planet.com/news/aktuelle_news/2009/03/prosalzburg_at_jobvermittler_und_immobilienmakler_/', $entries->current()->link);
         $this->assertEquals('2009-03-02 00:00:00', $entries->current()->date);
-
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
-            ->getRow('http://www.vivid-planet.com/news/aktuelle_news/rss/');
-        $this->assertNotNull($feed);
-        $entries = $feed->getChildRows('Entries');
-        $this->assertTrue(count($entries) > 3);
-
-        
     }
+
+    public function testRss10()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('file://'.dirname(__FILE__).'/rss1.0.xml');
+        $this->assertNotNull($feed);
+        $this->assertEquals('file://'.dirname(__FILE__).'/rss1.0.xml', $feed->url);
+        $this->assertEquals('news.ORF.at', $feed->title);
+        $this->assertEquals('http://news.orf.at', $feed->link);
+        $this->assertEquals('Mehr als 30 Mal am Tag aktualisiert die ORF.at-Redaktion Nachrichten aus Österreich und aller Welt. Aktuelles rund um die Uhr in optimaler Mischung aus Text, Bild und Ton.', $feed->description);
+
+        $entries = $feed->getChildRows('Entries');
+        $this->assertEquals(35, count($entries));
+        $this->assertEquals('TA muss 1,5 Millionen Euro Strafe zahlen', $entries->current()->title);
+        $this->assertEquals('', $entries->current()->description);
+        $this->assertEquals('http://news.orf.at/ticker/322523.html', $entries->current()->link);
+        $this->assertEquals('2009-03-26 17:17:20', $entries->current()->date);
+    }
+
     public function testAtom()
     {
         $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
@@ -52,6 +63,7 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
     public function testRandomFeeds()
     {
         $urls = array();
+        $urls[] = 'http://rss.orf.at/news.xml';
         $urls[] = 'http://www.csmonitor.com/rss/top.rss';
         $urls[] = 'http://productnews.userland.com/newsItems/departments/radioUserland.xml';
         $urls[] = 'http://planetkde.org/rss20.xml';
