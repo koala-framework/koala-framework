@@ -43,7 +43,7 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
             }
             if (substr($url, -10) == '/trunk/vps') {
                 $url = substr($url, 0, -10);
-            } else if (preg_match('#^(.+)/tags/vps/[^/]+$#', $url, $m)) {
+            } else if (preg_match('#^(.+)/(tags|branches)/vps/[^/]+$#', $url, $m)) {
                 $url = $m[1];
             } else {
                 throw new Vps_ClientException("Can't detect vps base url");
