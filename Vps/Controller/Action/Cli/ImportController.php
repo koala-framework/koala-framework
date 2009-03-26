@@ -25,7 +25,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-update-revision";
         } else {
-            $cmd = "sudo -u www-data sshvps $this->_sshHost $this->_sshDir import get-update-revision";
+            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-update-revision";
         }
         exec($cmd, $onlineRevision, $ret);
         if ($ret != 0) throw new Vps_ClientException();
@@ -59,7 +59,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import create-dump";
         } else {
-            $cmd = "sudo -u www-data sshvps $this->_sshHost $this->_sshDir import create-dump";
+            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import create-dump";
         }
         exec($cmd, $dumpname, $ret);
         if ($ret != 0) throw new Vps_ClientException();
@@ -150,7 +150,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     {
         if (!$dir) $dir = $this->_sshDir;
         $cmd = "sshvps $this->_sshHost $dir $cmd";
-        $cmd = "sudo -u www-data $cmd";
+        $cmd = "sudo -u vps $cmd";
         return $this->_systemCheckRet($cmd);
     }
     public static function getHelp()

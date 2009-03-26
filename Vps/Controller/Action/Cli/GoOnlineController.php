@@ -23,7 +23,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $sshHost = $config->server->user.'@'.$config->server->host;
         $sshDir = $config->server->dir;
         $cmd = "sshvps $sshHost $sshDir $cmd";
-        $cmd = "sudo -u www-data $cmd";
+        $cmd = "sudo -u vps $cmd";
         return $this->_systemCheckRet($cmd);
     }
 

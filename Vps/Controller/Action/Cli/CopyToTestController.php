@@ -26,7 +26,7 @@ class Vps_Controller_Action_Cli_CopyToTestController extends Vps_Controller_Acti
     private function _systemSshVps($cmd)
     {
         $cmd = "sshvps $this->_sshHost $this->_sshDir $cmd";
-        $cmd = "sudo -u www-data $cmd";
+        $cmd = "sudo -u vps $cmd";
         return $this->_systemCheckRet($cmd);
     }
 
