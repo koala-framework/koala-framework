@@ -18,7 +18,6 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['decorator'] = 'Vpc_Form_Decorator_Label';
         $ret['viewCache'] = false;
         $ret['method'] = 'post';
-        $ret['cssClass'] = 'webStandard webForm';
 
         //todo: wenn mehrere verbessern
         $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
@@ -66,12 +65,14 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             if (!$this->_errors) {
                 $this->_form->prepareSave(null, $postData);
                 $this->_beforeSave($this->_form->getRow());
+                $isInsert = false;
                 if (!$this->_form->getRow()->{$this->_form->getModel()->getPrimaryKey()}) {
+                    $isInsert = true;
                     $this->_beforeInsert($this->_form->getRow());
                 }
                 $this->_form->save(null, $postData);
                 $this->_afterSave($this->_form->getRow());
-                if (!$this->_form->getRow()->{$this->_form->getModel()->getPrimaryKey()}) {
+                if ($isInsert) {
                     $this->_afterInsert($this->_form->getRow());
                 }
                 $this->_isSaved = true;

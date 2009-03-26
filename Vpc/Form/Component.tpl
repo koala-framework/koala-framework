@@ -4,7 +4,7 @@ if ($this->showSuccess) {
     echo $this->component($this->success);
 } else {
     if ($this->errors) {
-        echo '<div class="error">';
+        echo '<div class="webStandard vpcFormError webFormError">';
         echo '<h1>'.$this->placeholder['error'].':</h1>';
         echo '<ul>';
         foreach ($this->errors as $error) {
@@ -14,6 +14,7 @@ if ($this->showSuccess) {
         echo '</div>';
     }
     ?>
+    <div class="webStandard webForm vpcForm">
     <form action="<?= $this->action ?>" method="<?=$this->method?>"<? if($this->isUpload) { ?> enctype="multipart/form-data"<? } ?>>
         <?php $this->formField($this->form) ?>
         <div class="submitWrapper">
@@ -29,6 +30,7 @@ if ($this->showSuccess) {
         <? /* damit wir wissen ob gepostet wurde und ob wir laden sollen */ ?>
         <input type="hidden" name="<?= $this->formName ?>-post" value="post" />
     </form>
+    </div>
     <?php
 }
 ?>
