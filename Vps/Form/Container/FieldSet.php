@@ -17,7 +17,7 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
      */
     public function setCheckboxName($name)
     {
-        $this->_checkboxHiddenField = new Vps_Form_Field_Hidden($name);
+        $this->_checkboxHiddenField = new Vps_Form_Container_FieldSet_Hidden($name);
         $this->fields->add($this->_checkboxHiddenField);
         return $this;
     }
