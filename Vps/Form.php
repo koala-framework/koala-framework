@@ -29,7 +29,6 @@ class Vps_Form extends Vps_Form_NonTableForm
         }
     }
 
-
     public function prepareSave($parentRow, $postData)
     {
         $row = $this->_getRowByParentRow($parentRow);
