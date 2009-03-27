@@ -1,5 +1,6 @@
 <?php
 class Vps_Model_FnF extends Vps_Model_Data_Abstract
+    implements Serializable
 {
     protected $_uniqueIdentifier;
 
@@ -29,6 +30,23 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
             return $this->_uniqueIdentifier;
         } else {
             throw new Vps_Exception("no uniqueIdentifier set");
+        }
+    }
+
+    public function serialize()
+    {
+        $ret = array();
+        foreach (array_keys(get_object_vars($this)) as $v) {
+            if ($v == '_rows') continue;
+            $ret[$v] = $this->$v;
+        }
+        return serialize($ret);
+    }
+
+    public function unserialize($str)
+    {
+        foreach (unserialize($str) as $i=>$v) {
+            $this->$i = $v;
         }
     }
 }
