@@ -4,10 +4,10 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
     initComponent: function() {
         this.monitorResize = true;
         if (this.checkboxToggle && this.checkboxName) {
-            this.hiddenCheckboxValue = new Vps.Form.FieldSetHiddenCheckboxValue({
+            this.hiddenCheckboxValue = new Vps.Form.Hidden({
                 name: this.checkboxName
             });
-            this.hiddenCheckboxValue.on('valuechange', function(field, value) {
+            this.hiddenCheckboxValue.on('changevalue', function(value) {
                 if (value=='0' || !value) {
                     if (this.checkboxCollapse) this.collapse();
                     this.items.each(function(i) {
@@ -83,19 +83,8 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
         }
         if (this.hiddenCheckboxValue) {
             //damit init-value in hiddenCheckboxValue geschrieben wird
-            Vps.Form.FieldSetHiddenCheckboxValue.superclass.setValue.call(this.hiddenCheckboxValue, this.checkbox.dom.checked ? '1' : '0');
+            Vps.Form.Hidden.superclass.setValue.call(this.hiddenCheckboxValue, this.checkbox.dom.checked ? '1' : '0');
         }
-    }
-});
-
-Vps.Form.FieldSetHiddenCheckboxValue = Ext.extend(Ext.form.Hidden, {
-    initComponent: function() {
-        this.addEvents('valuechange');
-        Vps.Form.FieldSetHiddenCheckboxValue.superclass.initComponent.call(this);
-    },
-    setValue : function(v) {
-        Vps.Form.FieldSetHiddenCheckboxValue.superclass.setValue.call(this, v);
-        this.fireEvent('valuechange', this, v);
     }
 });
 
