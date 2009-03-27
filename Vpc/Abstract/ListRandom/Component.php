@@ -35,6 +35,6 @@ class Vpc_Abstract_ListRandom_Component extends Vpc_Abstract_List_Component
 
     public function getPartialCacheVars($nr)
     {
-        return array();
+        return array($this->_getCacheVars());
     }
 }
