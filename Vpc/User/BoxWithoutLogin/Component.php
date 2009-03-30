@@ -29,12 +29,14 @@ class Vpc_User_BoxWithoutLogin_Component extends Vpc_User_BoxAbstract_Component
                             array('subroot' => $this->getData())
                         );
         if ($ret['authedUser']) {
-            $ret['myProfile'] = Vps_Component_Data_Root::getInstance()
+            $userDir = Vps_Component_Data_Root::getInstance()
                 ->getComponentByClass(
                     'Vpc_User_Directory_Component',
                     array('subroot' => $this->getData())
-                )
-                ->getChildComponent('_' . $ret['authedUser']->id);
+                );
+            if ($userDir) {
+                $ret['myProfile'] = $userDir->getChildComponent('_' . $ret['authedUser']->id);
+            }
             $ret['links'] = $this->_getLinks();
         }
 
