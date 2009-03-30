@@ -49,6 +49,11 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
             $this->_user->save();
             $auth = Vps_Auth::getInstance();
             $auth->getStorage()->write(array('userId' => $this->_user->id));
+            $this->_afterLogin(Vps_Registry::get('userModel')->getAuthedUser());
         }
+    }
+
+    protected function _afterLogin(Vps_User_Row $user)
+    {
     }
 }

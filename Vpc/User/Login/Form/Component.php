@@ -36,14 +36,19 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
         $result = $this->_getAuthenticateResult($row->email, $row->password);
 
         if ($result->isValid()) {
+            $authedUser = Vps_Registry::get('userModel')->getAuthedUser();
             if ($row->auto_login) {
-                $authedUser = Vps_Registry::get('userModel')->getAuthedUser();
                 $cookieValue = $authedUser->id.'.'.md5($authedUser->password);
                 setcookie('feAutologin', $cookieValue, time() + (100*24*60*60));
             }
+            $this->_afterLogin($authedUser);
         } else {
             $this->_errors[] = trlVps('Invalid E-Mail or password, please try again.');
         }
+    }
+
+    protected function _afterLogin(Vps_User_Row $user)
+    {
     }
 
     private function _getAuthenticateResult($identity, $credential)
