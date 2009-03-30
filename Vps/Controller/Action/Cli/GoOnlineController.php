@@ -95,7 +95,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             $result = $runner->doRun($suite, $arguments);
             if (!$result->wasSuccessful()) {
                 $this->_systemSshVps("tag-checkout web-switch --version=trunk", $testConfig);
-                $this->_systemSshVps("tag-checkout vps-use --version=trunk", $testConfig);
+                $this->_systemSshVps("tag-checkout vps-use --version=branch", $testConfig);
                 throw new Vps_ClientException("Tests failed");
             }
         }
@@ -104,7 +104,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $this->_systemSshVps("tag-checkout web-switch --version=trunk", $testConfig);
 
         echo "\n\n*** [09/13] test: vps-version zurueck auf trunk anpassen\n";
-        $this->_systemSshVps("tag-checkout vps-use --version=trunk", $testConfig);
+        $this->_systemSshVps("tag-checkout vps-use --version=branch", $testConfig);
 
         $doneTodos = array();
         if ($this->_getParam('skip-prod')) {
