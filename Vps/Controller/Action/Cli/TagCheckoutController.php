@@ -67,10 +67,14 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
     public function vpsUseAction()
     {
         if (!file_exists("application/include_path")) {
-            throw new Vps_ClientException("stange application/include_path does not exist");
+            throw new Vps_ClientException("stange, application/include_path does not exist");
         }
         $path = substr(VPS_PATH, 0, strrpos(VPS_PATH, '/'));
-        $path .= '/'.$this->_getParam('version');
+        if ($this->_getParam('version') == 'branch') {
+            $path .= '/%vps_branch%';
+        } else {
+            $path .= '/'.$this->_getParam('version');
+        }
         if (!file_exists($path)) {
             throw new Vps_ClientException("Path '$path' does not exist");
         }
