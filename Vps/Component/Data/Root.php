@@ -217,9 +217,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
             if (is_numeric(substr($dbId, 0, 1)) || substr($dbId, 0, 4)=='root') {
                 $idSelect = clone $select;
-                if ($idSelect->hasPart('whereSubroot')) {
-                    $subroot = $idSelect->getPart('whereSubroot');
-                    $idSelect->unsetPart('whereSubroot');
+                if ($idSelect->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+                    $subroot = $idSelect->getPart(Vps_Component_Select::WHERE_SUBROOT);
+                    $idSelect->unsetPart(Vps_Component_Select::WHERE_SUBROOT);
                     $idComponent = $this->getComponentById($dbId, $select);
                 }
                 $data = $this->getComponentById($dbId, $select);
