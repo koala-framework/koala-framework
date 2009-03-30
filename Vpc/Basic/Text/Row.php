@@ -333,12 +333,19 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                         $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
                         $srcLinkRow = $linkModel->getRow($part['componentId'].'-link');
                         if ($srcLinkRow) {
-                            $destRow = $model->createRow();
+                            $destRow = $this->_getChildComponentRow('link', $model);
                             $destRow->component = $srcRow->component;
-                            $this->addChildComponentRow('link', $destRow);
                             $destRow->save();
-                            $destLinkRow = $linkModel->createRow($srcLinkRow->toArray());
-                            $destLinkRow->component_id = $destRow->component_id.'-link';
+                            $destLinkRow = $linkModel->getRow($destRow->component_id.'-link');
+                            if (!$destLinkRow) {
+                                $destLinkRow = $linkModel->createRow();
+                                $destLinkRow->component_id = $destRow->component_id.'-link';
+                            }
+                            foreach ($srcLinkRow->toArray() as $k=>$i) {
+                                if ($k != 'component_id') {
+                                    $destLinkRow->$k = $i;
+                                }
+                            }
                             $destLinkRow->save();
                             $newContent .= "<a href=\"{$destRow->component_id}\">";
                             continue;
@@ -370,7 +377,6 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                             $destRow->component = 'intern';
                         }
                     }
-                    //if (isset($linkClasses['extern']) && $linkClasses['extern']) {
                     if (!$destRow->component && isset($linkClasses['extern']) && $linkClasses['extern']) {
                         $destRow->component = 'extern';
                     }
@@ -437,5 +443,18 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $childComponentRow->component_id = $this->component_id.'-'.substr($type, 0, 1).$r->nr;
         }
         return $r;
+    }
+
+    private function _getChildComponentRow($type, $model)
+    {
+        $r = $this->addChildComponentRow($type);
+
+        $componentId = $this->component_id.'-'.substr($type, 0, 1).$r->nr;
+        $ret = $model->getRow($componentId);
+        if (!$ret) {
+            $ret = $model->createRow();
+            $ret->component_id = $componentId;
+        }
+        return $ret;
     }
 }
