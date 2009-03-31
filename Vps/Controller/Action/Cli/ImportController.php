@@ -13,14 +13,14 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         // -> scheiß mysql
         //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
 
-        if (Vps_Registry::get('config')->application->id != 'service') {
-            $this->_copyServiceUsers();
-        }
-
         $server = $this->_getParam('server');
         $config = new Zend_Config_Ini('application/config.ini', $server);
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
+
+        if (Vps_Registry::get('config')->application->id != 'service') {
+            $this->_copyServiceUsers();
+        }
 
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-update-revision";
@@ -40,7 +40,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             if ($ownConfig->uploads == $config->uploads) {
                 throw new Vps_ClientException("Uplodas-Pfade für beide Server sind gleich!");
             }
-            $this->_systemCheckRet("rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads} {$ownConfig->uploads}");
+            $this->_systemCheckRet("rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads}/ {$ownConfig->uploads}/");
         } else {
             $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
         }
@@ -56,17 +56,21 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_systemCheckRet("mysqldump $mysqlLocalOptions {$dbConfig->dbname} > $p");
 
         echo "erstelle datenbank dump ($server)...\n";
+        $cmd = "import create-dump";
+        if ($this->_getParam('include-cache')) {
+            $cmd .= " --include-cache";
+        }
         if ($ownConfig->server->host == $config->server->host) {
-            $cmd = "cd {$config->server->dir} && php bootstrap.php import create-dump";
+            $cmd = "cd {$config->server->dir} && php bootstrap.php $cmd";
         } else {
-            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import create-dump";
+            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir $cmd";
         }
         exec($cmd, $dumpname, $ret);
         if ($ret != 0) throw new Vps_ClientException();
         $dumpname = implode('', $dumpname);
 
         if ($ownConfig->server->host != $config->server->host) {
-            echo "kopiere datenbank dump...\n";
+            echo "kopiere datenbank dump $dumpname...\n";
             $this->_systemSshVps('copy-dump '.$dumpname);
         } else {
             $this->_systemCheckRet("bunzip2 $dumpname");
@@ -82,10 +86,15 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $dumpname = substr($dumpname, 0, -4);
         $this->_systemCheckRet("mysql $mysqlLocalOptions {$dbConfig->dbname} < $dumpname");
 
-        echo "schreibe application/update...\n";
-        file_put_contents('application/update', $onlineRevision);
+        if (!$this->_getParam('include-cache')) {
 
-        Vps_Controller_Action_Cli_UpdateController::update();
+            echo "schreibe application/update...\n";
+            file_put_contents('application/update', $onlineRevision);
+
+            Vps_Controller_Action_Cli_UpdateController::update();
+        } else {
+            echo "update uebersprungen, da include-cache aktiv\n";
+        }
 
         echo "\n\nfertig!\n";
 
@@ -159,7 +168,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     }
     public static function getHelpOptions()
     {
-        return array(
+        $ret = array(
             array(
                 'param'=> 'server',
                 'value'=> self::_getConfigSections(),
@@ -167,6 +176,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 'help' => 'what to import'
             )
         );
+        $ret[] = array('param' => 'include-cache');
+        return $ret;
     }
 
     public function backupDbAction()
@@ -190,11 +201,15 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     public function createDumpAction()
     {
         $dumpname = tempnam('/tmp', 'vpsimport');
-        $this->_createDump($dumpname);
+        $skipCacheTables = true;
+        if ($this->_getParam('include-cache')) {
+            $skipCacheTables = false;
+        }
+        $this->_createDump($dumpname, $skipCacheTables);
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    private function _createDump($dumpname)
+    private function _createDump($dumpname, $skipCacheTables = true)
     {
         $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
         $dbConfig = $dbConfig->web;
@@ -206,15 +221,19 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $mysqlDir = '/usr/local/mysql/bin/';
         }
 
-        $cacheTables = Vps_Controller_Action_Cli_ClearCacheController::getDbCacheTables();
         $ignoreTables = '';
-        foreach ($cacheTables as $t) {
-            $ignoreTables .= " --ignore-table={$dbConfig->dbname}.{$t}";
+        if ($skipCacheTables) {
+            $cacheTables = Vps_Controller_Action_Cli_ClearCacheController::getDbCacheTables();
+            foreach ($cacheTables as $t) {
+                $ignoreTables .= " --ignore-table={$dbConfig->dbname}.{$t}";
+            }
         }
 
         $this->_systemCheckRet("{$mysqlDir}mysqldump{$ignoreTables} $mysqlOptions {$dbConfig->dbname} > $dumpname");
-        foreach ($cacheTables as $t) {
-            $this->_systemCheckRet("{$mysqlDir}mysqldump --no-data $mysqlOptions {$dbConfig->dbname} $t >> $dumpname");
+        if ($skipCacheTables) {
+            foreach ($cacheTables as $t) {
+                $this->_systemCheckRet("{$mysqlDir}mysqldump --no-data $mysqlOptions {$dbConfig->dbname} $t >> $dumpname");
+            }
         }
 
         $this->_systemCheckRet("bzip2 --fast $dumpname");
