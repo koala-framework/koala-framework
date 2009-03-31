@@ -3,7 +3,7 @@ class Vps_Crm_Customer_CommentsController extends Vps_Controller_Action_Auto_Gri
 {
     protected $_defaultOrder = array('field'=>'id', 'direction'=>'DESC');
     protected $_modelName = 'Vps_Crm_Customer_Model_Comments';
-    protected $_paging = 6;
+    protected $_paging = 10;
     protected $_buttons = array('add', 'delete');
 
     public function _initColumns()
