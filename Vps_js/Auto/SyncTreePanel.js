@@ -239,7 +239,11 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             url: this.controllerUrl + '/json-move',
             params: params,
             success: function(response, options, result) {
-                var parent = this.tree.getNodeById(result.parent);
+                if (result.parent) {
+                    var parent = this.tree.getNodeById(result.parent);
+                } else {
+                    var parent = this.tree.getRootNode();
+                }
                 var node = this.tree.getNodeById(result.node);
                 var before = this.tree.getNodeById(result.before);
                 parent.insertBefore(node, before);
