@@ -44,7 +44,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         $fs->setLabelWidth(100);
         $fs->add(new Vps_Form_Field_ShowField('logins', trlVps('Logins')));
         $fs->add(new Vps_Form_Field_ShowField('last_login', trlVps('Last login')))
-            ->setData(new Vps_Data_Date('last_login', 'datetime'));
+            ->setTpl('{value:localizedDatetime}');
     }
 
     private function _getPermissionFieldset()
