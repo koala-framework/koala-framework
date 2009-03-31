@@ -42,6 +42,9 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
         $ret[] = array(
             'model' => 'Vps_Component_Model'
         );
+        $ret[] = array(
+            'model' => 'Vps_Dao_Pages'
+        );
         return $ret;
     }
 }
