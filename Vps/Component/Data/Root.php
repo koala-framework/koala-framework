@@ -216,12 +216,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $benchmark = Vps_Benchmark::start();
 
             if (is_numeric(substr($dbId, 0, 1)) || substr($dbId, 0, 4)=='root') {
-                $idSelect = clone $select;
-                if ($idSelect->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
-                    $subroot = $idSelect->getPart(Vps_Component_Select::WHERE_SUBROOT);
-                    $idSelect->unsetPart(Vps_Component_Select::WHERE_SUBROOT);
-                    $idComponent = $this->getComponentById($dbId, $select);
-                }
                 $data = $this->getComponentById($dbId, $select);
                 if ($data) {
                     return array($data);
