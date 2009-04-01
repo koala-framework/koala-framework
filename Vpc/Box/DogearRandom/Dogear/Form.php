@@ -5,7 +5,7 @@ class Vpc_Box_DogearRandom_Dogear_Form extends Vpc_Abstract_Composite_Form
     {
         parent::_initFields();
         $fs = $this->add(new Vps_Form_Container_FieldSet(trlVps('Colors')))
-            ->setHelpText(hlpVps('Color values in Hex code without a leading # (e.g. fa5500)'));
+            ->setHelpText(trlVps('Color values in Hex code without a leading # (e.g. fa5500)'));
 
         $fs->add(new Vps_Form_Field_TextField('color_small_1', trlVps('Color small 1')))
             ->setWidth(80)
