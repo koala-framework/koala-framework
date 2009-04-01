@@ -1,17 +1,22 @@
 <?xml version="1.0"?>
 <hlp>
-                    <text key="vps_download_filename" file="Vpc/Basic/DownloadTag/Form.php">
-                        <en></en>
-                        <de>
-                Geben Sie hier den Namen ein (ohne Dateierweiterung!), den die Datei nach dem Download haben sollte.</de>
-                    </text>
-                    <text key="vpc_download_linktext" file="Vpc/Basic/Download/Form.php">
-                        <en></en>
-                        <de>
-                Das ist jener Text, der hinter dem Dateisymbol steht (wird automatisch erzeugt) und als Link zum Downloaden der Datei Verwendung findet.</de>
-                    </text>
-            <text key="Color values in Hex code without a leading # (e.g. fa5500)" file="Vpc/Box/DogearRandom/Dogear/Form.php">
-                <en></en>
-            </text>
+    <text key="vps_download_filename" file="Vpc/Basic/DownloadTag/Form.php">
+        <en></en>
+        <de>
+            Geben Sie hier den Namen ein (ohne Dateierweiterung!), den die Datei nach dem Download haben sollte.
+        </de>
+    </text>
+    <text key="vpc_download_linktext" file="Vpc/Basic/Download/Form.php">
+        <en></en>
+        <de>
+        Das ist jener Text, der hinter dem Dateisymbol steht (wird automatisch erzeugt) und als Link zum Downloaden der Datei Verwendung findet.
+        </de>
+    </text>
+    <text key="vpc_basic_linktag_extern_target" file="Vpc/Basic/LinkTag/Extern/Form.php">
+        <de>
+        Bitte geben Sie hier die gewünschte Internetadresse mit voranstehendem "http://" ein.
+        Wenn Sie beispielsweise auf Google.com linken möchten, tippen Sie bitte
+        "http://www.google.com" in das Textfeld ein.
+        </de>
+    </text>
 </hlp>
-        
