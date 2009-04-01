@@ -26,7 +26,9 @@ class Vps_View_Helper_Image
         if ($image instanceof Vpc_Abstract_Image_Component) {
             $image = $image->getData();
         }
-        if (is_string($image)){
+        if (!$image) {
+            $url = false;
+        } else if (is_string($image)){
             $image = str_replace(VPS_PATH, '/assets/vps', $image);
             $image = str_replace(getcwd(), '/assets', $image);
             $url = $image;
