@@ -14,6 +14,8 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
     // $this->setOutputType($type)
     //    $type = 'vertical', otherwise horizontal
 
+    // setColumns()
+
     public function getMetaData()
     {
         $ret = parent::getMetaData();
@@ -23,6 +25,8 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
         if (isset($ret['outputType']) && $ret['outputType'] == 'vertical') {
             unset($ret['outputType']);
             $ret['vertical'] = true;
+        } else {
+            $ret['vertical'] = false;
         }
         $store = $this->_getStoreData();
         foreach ($store['data'] as $d) {
