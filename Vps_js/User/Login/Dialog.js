@@ -3,7 +3,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
 {
     initComponent: function()
     {
-        this.height = 240;
+        this.height = 255;
         this.width = 310;
         this.modal = true;
         this.title = 'Login';

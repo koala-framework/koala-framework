@@ -5,6 +5,7 @@
 .vps-welcome div#welcomeImg {
     border: 2px solid #a9bfd4;
     border-bottom: none;
+    height: 100px;
 }
 .vps-welcome .welcomeBox {
     border: 2px solid #a9bfd4;
