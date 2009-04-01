@@ -59,7 +59,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
     public function loadClass($className)
     {
-        if (substr($className, 0, 4) == 'Vpc_' || substr($className, 0, 4) == 'Vps_') {
+        if (substr($className, 0, 4) == 'Vpc_' || substr($className, 0, 4) == 'Vps_' || $this->_curModule == 'web_test') {
             try {
                 Zend_Loader::loadClass($className);
             } catch (Zend_Exception $e) {

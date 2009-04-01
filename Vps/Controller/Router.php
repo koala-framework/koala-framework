@@ -68,5 +68,11 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                     array('module' => 'component_test',
                           'controller' => 'component_test',
                           'action' => 'index')));
+
+        //für selenium-tests von sachen die im web liegen
+        $this->AddRoute('vps_test', new Zend_Controller_Router_Route(
+                    '/vps/webtest/:controller/:action',
+                    array('module'     => 'web_test',
+                          'action'     =>'index')));
     }
 }
