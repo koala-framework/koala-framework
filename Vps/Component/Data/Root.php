@@ -27,6 +27,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         $this->_uniqueParentDatas = array();
     }
 
+    /**
+     * @return Vps_Component_Data_Root
+     */
     public static function getInstance()
     {
         if (is_null(self::$_instance)) {
