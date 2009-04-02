@@ -44,7 +44,8 @@ class Vpc_Directories_Top_Test extends Vpc_TestAbstract
 
         // Zeile löschen
         $model->getRow(9)->delete();
-        $this->_process();
+        Vps_Component_Data_Root::reset();
+        $this->_root = Vps_Component_Data_Root::getInstance();
         $c = $this->_root->getChildComponent('_directory');
         $this->assertEquals(6, substr_count($c->render(), 'Foo'));
     }

@@ -9,6 +9,7 @@ class Vps_Component_RowObserver
         'save'   => array()
     );
     private $_skipFnF = true;
+    private $_processed = array();
 
     public static function getInstance()
     {
@@ -29,6 +30,7 @@ class Vps_Component_RowObserver
         foreach (array_keys($this->_process) as $i) {
             $this->_process[$i] = array();
         }
+        $this->_processed = array();
     }
 
 
@@ -49,57 +51,57 @@ class Vps_Component_RowObserver
 
     public function delete($row)
     {
-        /* Das clone vor der $row is zwar bisserl eine verarsche, aber da hier
-           nur gesammelt und später erst ausgeführt ist,
-           wär sonst die row (bzw. dessen Daten) in einer onRowDelete() methode
-           einer Admin.php nicht mehr verfügbar
-        */
-        $this->_process['delete'][] = clone $row;
+        // Wird hier direkt aufgerufen, weil wenn später aufgerufen, ist row schon gelöscht
+        $this->_processCache($row);
+    }
+
+    protected function _processCache($row)
+    {
+        if ($row instanceof Zend_Db_Table_Row_Abstract) {
+            $model = $row->getTable();
+            $primary = current($model->info('primary'));
+        } else {
+            $model = $row->getModel();
+            $primary = $model->getPrimaryKey();
+            if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+            if ($model instanceof Vps_Component_Cache_MetaModel ||
+                $model instanceof Vps_Component_Cache_Model
+            ) {
+                return false;
+            }
+        }
+        if (get_class($model) == 'Vps_Db_Table') return false;
+        if ($this->_skipFnF) {
+            $m = $model;
+            while ($m instanceof Vps_Model_Proxy) {
+                $m = $m->getProxyModel();
+            }
+            if ($m instanceof Vps_Model_FnF) return false;
+        }
+        $id = $row->$primary;
+        $componentId = isset($row->component_id) ? $row->component_id : null;
+        $modelname = get_class($model);
+        if (!isset($this->_processed[$modelname][$id])) {
+            $this->_processed[$modelname][$id] = true;
+            Vps_Component_Cache::getInstance()->clean(
+                Vps_Component_Cache::CLEANING_MODE_META,
+                array('model' => $modelname, 'id' => $id, 'componentId' => $componentId, 'row' => $row)
+            );
+            return true;
+        }
+        return false;
     }
 
     public function process()
     {
+        // View Cache
         if (!Vps_Component_Data_Root::getComponentClass()) return;
-
-        $delete = array();
         foreach ($this->_process as $action => $process) {
-            foreach ($process as $row) {
-                // Cache
-                if ($row instanceof Zend_Db_Table_Row_Abstract) {
-                    $model = $row->getTable();
-                    $primary = current($model->info('primary'));
-                } else {
-                    $model = $row->getModel();
-                    $primary = $model->getPrimaryKey();
-                    if ($model instanceof Vps_Model_Db) $model = $model->getTable();
-                    if ($model instanceof Vps_Component_Cache_MetaModel ||
-                        $model instanceof Vps_Component_Cache_Model
-                    ) {
-                        continue;
-                    }
-                }
-
-                if (get_class($model) == 'Vps_Db_Table') continue;
-                if ($this->_skipFnF) {
-                    $m = $model;
-                    while ($m instanceof Vps_Model_Proxy) {
-                        $m = $m->getProxyModel();
-                    }
-                    if ($m instanceof Vps_Model_FnF) continue;
-                }
-                $id = $row->$primary;
-                $componentId = isset($row->component_id) ? $row->component_id : null;
-                $delete[get_class($model)][$id] = array('row' => $row, 'componentId' => $componentId);
+            foreach (array_reverse($process) as $row) {
+                $this->_processCache($row);
             }
         }
-        foreach ($delete as $model => $val) {
-            foreach ($val as $id => $v) {
-                Vps_Component_Cache::getInstance()->clean(
-                    Vps_Component_Cache::CLEANING_MODE_META,
-                    array('model' => $model, 'id' => $id, 'componentId' => $v['componentId'], 'row' => $v['row'])
-                );
-            }
-        }
+        // Suchindex
         Vps_Dao_Index::process();
     }
 }
