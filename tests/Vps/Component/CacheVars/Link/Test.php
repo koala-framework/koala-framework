@@ -16,20 +16,23 @@ class Vps_Component_CacheVars_Link_Test extends PHPUnit_Framework_TestCase
     {
         $cacheVars = $this->_root
             ->getChildComponent('_link')
+            ->getChildComponent('-link')
             ->getComponent()->getCacheVars();
-        $this->assertEquals(0, count($cacheVars));
+        $this->assertEquals(1, count($cacheVars));
+        $this->assertEquals('Vps_Component_CacheVars_Link_InternModel', get_class($cacheVars[0]['model']));
+        $this->assertEquals('root_link-link', $cacheVars[0]['id']);
 
         $cacheVars = $this->_root
             ->getChildComponent('_link')
-            ->getChildComponent('-link')
             ->getComponent()->getCacheVars();
         $this->assertEquals(3, count($cacheVars));
-        $this->assertEquals('Vps_Component_CacheVars_Link_InternModel', get_class($cacheVars[0]['model']));
-        $this->assertEquals('root_link-link', $cacheVars[0]['id']);
+        $this->assertEquals('Vps_Component_CacheVars_Link_Model', get_class($cacheVars[0]['model']));
+        $this->assertEquals('root_link', $cacheVars[0]['id']);
         $this->assertEquals('Vps_Component_CacheVars_Link_Model', get_class($cacheVars[1]['model']));
         $this->assertEquals('root_link', $cacheVars[1]['id']);
+        $this->assertTrue($cacheVars[1]['callback']);
         $this->assertEquals('Vps_Component_CacheVars_Link_Model', get_class($cacheVars[2]['model']));
         $this->assertEquals('root_link', $cacheVars[2]['id']);
-        $this->assertTrue($cacheVars[2]['callback']);
+        $this->assertEquals('root_link-link', $cacheVars[2]['componentId']);
     }
 }

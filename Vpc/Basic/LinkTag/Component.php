@@ -46,6 +46,35 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
 
     public function getCacheVars()
     {
-        return array();
+        $ret = parent::getCacheVars();
+        $row = $this->_getCacheRow();
+        $ret[] = array(
+            'model' => $row->getModel(),
+            'id' => $row->component_id,
+            'callback' => true
+        );
+        // der typ vom link-tag kann sich ändern und hat die gleiche cache-id,
+        // deshalb unterkomponente gleich mitlöschen
+        $link = $this->getData()->getChildComponent('-link');
+        if ($link) {
+            $ret[] = array(
+                'model' => $row->getModel(),
+                'id' => $row->component_id,
+                'componentId' => $link->componentId
+            );
+        }
+        return $ret;
     }
+
+    public function onCacheCallback($row)
+    {
+        if ($this->getData()->isPage) {
+            foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+                if (is_instance_of($componentClass, 'Vpc_Menu_Abstract')) {
+                    Vps_Component_Cache::getInstance()->cleanComponentClass($componentClass);
+                }
+            }
+        }
+    }
+
 }

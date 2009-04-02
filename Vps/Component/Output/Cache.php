@@ -186,6 +186,9 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
                 $type = Vps_Component_Cache::META_CACHE_ID;
                 $value = $cacheId;
             }
+            if (isset($m['componentId'])) {
+                $value = $this->getCache()->getCacheId($m['componentId']);
+            }
             if (!isset($m['field'])) {
                 $m['field'] = Vps_Component_Cache::META_FIELD_PRIMARY;
             }
