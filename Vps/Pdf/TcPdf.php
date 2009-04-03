@@ -92,7 +92,7 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->SetFont($this->getFont(), $fontweight, $this->getFontsize());
         $xtmp = $this->GetX();
         $this->SetX($this->GetX()+$indent);
-        $this->MultiCell($this->getMaxTextWidth(), $height, $this->decodeText($text), $border, $align, 0, $ln);
+        $this->MultiCell($this->getMaxTextWidth() - $indent, $height, $this->decodeText($text), $border, $align, 0, $ln);
         $this->SetX($xtmp);
         $this->SetFont($this->getFont(), "", $this->getFontsize());
     }
@@ -110,7 +110,7 @@ class Vps_Pdf_TcPdf extends TCPDF
                 $e->getMessage()
             );
         }
-        $this->MultiCell($this->getMaxTextWidth(), $height, $html, 0, $align, 0);
+        $this->MultiCell($this->getMaxTextWidth() - $indent, $height, $html, 0, $align, 0);
         $this->SetX($xtmp);
     }
 
