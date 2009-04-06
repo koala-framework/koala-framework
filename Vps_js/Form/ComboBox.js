@@ -124,6 +124,16 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         Vps.Form.ComboBox.superclass.initComponent.call(this);
     },
 
+    initList : function(){
+        if (!this.listWidth) {
+            //fixt bug wenn combobox in einem tab ist
+            //ext verwendet this.wrap.getWidth() was ja eingentlich korrekt ist
+            //das funktioniert aber im FF da nicht
+            this.listWidth = this.el.getWidth()+this.trigger.getWidth();
+        }
+        Vps.Form.ComboBox.superclass.initList.call(this);
+    },
+
     addNoSelection : function() {
         if (this.showNoSelection && this.store.find('id', '') == -1) {
             var data = {};
