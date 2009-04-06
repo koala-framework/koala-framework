@@ -19,8 +19,7 @@
  * <pre><code>
 var cf = new Ext.form.ColorField({
     fieldLabel: 'Color',
-    hiddenName:'pref_sales',
-    showHexValue:true
+    hiddenName:'pref_sales'
 });
 </code></pre>
  * @param {Object} config
@@ -44,14 +43,7 @@ Vps.Form.ColorField =  Ext.extend(function(config){
     Vps.Form.ColorField.superclass.constructor.call(this, config);
   
 },Ext.form.TriggerField,  {
-    
-    /**
-     * @cfg {Boolean} showHexValue
-     * True to display the HTML Hexidecimal Color Value in the field
-     * so it is manually editable.
-     */
-    showHexValue : true,
-    
+
     /**
        * @cfg {String} triggerClass
        * An additional CSS class used to style the trigger button.  The trigger will always get the
@@ -93,14 +85,20 @@ Vps.Form.ColorField =  Ext.extend(function(config){
     curColor: 'ffffff',
 
     width: 50,
+
+    onRender: function(ct, position) {
+        Vps.Form.ColorField.superclass.onRender.apply(this, arguments);
+        this.colorPreview = this.wrap.createChild({
+            tag: 'div',
+            cls: 'vps-form-color-preview',
+            style: 'left: '+(this.width+10+15)+'px'
+        });
+    },
     
     // private
     validateValue : function(value){
-        if(!this.showHexValue) {
-            return true;
-        }
         if(value.length<1) {
-            this.el.setStyle({
+            this.colorPreview.setStyle({
                 'background-color':'#' + this.defaultColor
             });
             if(!this.allowBlank) {
@@ -126,8 +124,8 @@ Vps.Form.ColorField =  Ext.extend(function(config){
     // was previously cleared so the color would show through.
     markInvalid : function( msg ) {
         Vps.Form.ColorField.superclass.markInvalid.call(this, msg);
-        this.el.setStyle({
-            'background-image': 'url(../lib/resources/images/default/grid/invalid_line.gif)'
+        this.colorPreview.setStyle({
+            'background-image': 'url(/assets/ext/resources/images/default/grid/invalid_line.gif)'
         });
     },
 
@@ -157,20 +155,10 @@ Vps.Form.ColorField =  Ext.extend(function(config){
     setColor : function(hex) {
         this.curColor = hex;
         
-        this.el.setStyle( {
+        this.colorPreview.setStyle( {
             'background-color': '#' + hex,
             'background-image': 'none'
         });
-        if(!this.showHexValue) {
-            this.el.setStyle({
-                'text-indent': '-100px'
-            });
-            if(Ext.isIE) {
-                this.el.setStyle({
-                    'margin-left': '100px'
-                });
-            }
-        }
     },
 
   // private
