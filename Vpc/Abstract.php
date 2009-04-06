@@ -391,9 +391,9 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         if ($isDomain) {
             $pos = strpos($url, '/', 1);
             $domain = substr($url, 0, $pos);
-            $url = substr($url, $pos);
+            $url = substr($url, $pos + 1);
         }
-        $shortcut = substr($url, 1, strpos($url, '/', 1) - 1);
+        $shortcut = substr($url, 0, strpos($url, '/', 1));
         if ($shortcut != $sc) return false;
         if ($isDomain) {
             $components = Vps_Component_Data_Root::getInstance()->
@@ -405,7 +405,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $component = Vps_Component_Data_Root::getInstance()
             ->getComponentBySameClass($componentClass, $constraints);
         if ($component) {
-            return $component->getChildPageByPath(substr($url, strlen($sc) + 2));
+            return $component->getChildPageByPath(substr($url, strlen($sc) + 1));
         }
         return false;
     }
