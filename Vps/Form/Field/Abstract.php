@@ -8,9 +8,9 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
 
     public function __construct($fieldName = null, $fieldLabel = null)
     {
-        if ($fieldName) $this->setName($fieldName);
-        if ($fieldLabel) $this->setFieldLabel($fieldLabel);
         $this->setLabelSeparator(':');
+        $this->setName($fieldName);
+        $this->setFieldLabel($fieldLabel);
         $this->_init();
     }
 

@@ -6,14 +6,15 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
     public function __construct($name = null, $fieldLabel = null)
     {
         $this->fields = new Vps_Collection_FormFields(null, 'Vps_Form_Container_Card');
-        parent::__construct();
-        $this->setBaseCls('x-plain');
-        $this->setXtype('vps.cards');
-        $this->setLayout('form');
 
         $this->_combobox = new Vps_Form_Field_Select($name, $fieldLabel);
         $this->_combobox->setWidth(150)
             ->setListWidth(150);
+
+        parent::__construct();
+        $this->setBaseCls('x-plain');
+        $this->setXtype('vps.cards');
+        $this->setLayout('form');
     }
 
     public function setNamePrefix($v)
