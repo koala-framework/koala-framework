@@ -8,7 +8,7 @@ class Vps_Controller_Action_Cli_HlpParseController extends Vps_Controller_Action
 
     public function indexAction()
     {
-        $maskedTexts = $this->_findMaskedTexts('./application');
+        $maskedTexts = $this->_findMaskedTexts('./');
         $this->_createXmlFromTexts($maskedTexts, 'application/hlp.xml', Vps_Trl::getLanguages());
 
         $vpsLanguages = array_unique(array_merge(array('en'), Vps_Trl::getLanguages()));
@@ -25,7 +25,7 @@ class Vps_Controller_Action_Cli_HlpParseController extends Vps_Controller_Action
         $iterator = new RecursiveDirectoryIterator($directory);
         foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as $file) {
             $extension = end(explode('.', $file->getFileName()));
-            if ($extension == 'php' || $extension == 'js') {
+            if ($extension == 'php' || $extension == 'js' || $extension == 'tpl') {
                 $m = array();
                 $vps = $isVps ? 'Vps' : '';
                 preg_match_all("#hlp$vps\('(.*)'\)#", implode("", file($file)), $m);
@@ -94,7 +94,7 @@ class Vps_Controller_Action_Cli_HlpParseController extends Vps_Controller_Action
         // XML in Datei schreiben
         file_put_contents($targetFile, $result);
 
-        echo("Datei $targetFile erstellt.");
+        echo("Datei $targetFile erstellt.\n");
     }
 
 }
