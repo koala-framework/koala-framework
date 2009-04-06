@@ -2,3 +2,9 @@
     background:transparent url(/assets/vps/images/colorTrigger.gif);
     cursor:pointer;
 }
+.vps-form-color-preview {
+    border: 1px solid #B5B8C8;
+    width: 20px; height: 20px;
+    position: absolute;
+    top: 0; left: 60px;
+}
