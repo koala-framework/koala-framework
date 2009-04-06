@@ -47,7 +47,7 @@ Ext.form.Field.override({
             }
         }
         if (this.comment){
-            var wrapDiv = this.getEl().up('div.x-form-item');
+            var wrapDiv = this.getEl().up('div.x-form-element');
             if (wrapDiv) {
                 var commentEl = wrapDiv.createChild({
                     html: this.comment,
