@@ -32,6 +32,8 @@ class Vps_Media_Image
         if (isset($size['width'])) $size[0] = $size['width'];
         if (isset($size['height'])) $size[1] = $size['height'];
 
+        if (!$size[0] || !$size[1]) return false;
+
         if ($scale != self::SCALE_ORIGINAL) {
             if ($width == 0) {
                 $width = round($height * ($size[0]/$size[1]));
