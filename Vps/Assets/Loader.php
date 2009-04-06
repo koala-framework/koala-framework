@@ -229,7 +229,7 @@ class Vps_Assets_Loader
     {
         //TODO 1902 $language verwenden
         $matches = array();
-        preg_match_all("#hlp\('(.*)'\)#", $contents, $matches);
+        preg_match_all("#hlp\(['\"](.+?)['\"]\)#", $contents, $matches);
         foreach ($matches[0] as $key => $search) {
             $r = hlp($matches[1][$key]);
             $r = str_replace(array("\n", "\r", "'"), array('\n', '', "\\'"), $r);
