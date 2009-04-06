@@ -44,18 +44,34 @@ Ext.form.Field.override({
                     helpWindow.show();
                 }, this);
                 this.helpEl = Ext.get(helpEl);
-                this.alignHelpTextIcon();
-
-                //re-align when tab is shown
-                this.ownerCt.bubble(function(c) {
-                    if (c.ownerCt instanceof Ext.TabPanel) {
-                        c.on('show', this.alignHelpTextIcon, this);
-                    }
-                }, this);
             }
         }
+        if (this.comment){
+            var wrapDiv = this.getEl().up('div.x-form-item');
+            if (wrapDiv) {
+                var commentEl = wrapDiv.createChild({
+                    html: this.comment,
+                    tag: 'span'
+                });
+                this.commentEl = Ext.get(commentEl);
+            }
+        }
+        this.alignHelpAndComment();
+        this.alignHelpAndComment.defer(10, this);
+
+        //re-align when tab is shown
+        this.ownerCt.bubble(function(c) {
+            if (c.ownerCt instanceof Ext.TabPanel) {
+                c.on('show', this.alignHelpAndComment, this);
+            }
+        }, this);
     },
-    alignHelpTextIcon: function() {
-        this.helpEl.alignTo(this.getEl(), 'tr', this.helpTextOffset);
+    alignHelpAndComment: function() {
+        if (this.helpEl) {
+            this.helpEl.alignTo(this.getEl(), 'tr', this.helpTextOffset);
+        }
+        if (this.commentEl) {
+            this.commentEl.alignTo(this.getEl(), 'tr', [5, 3]);
+        }
     }
 });
