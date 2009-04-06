@@ -31,6 +31,17 @@ class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testAvoidDivideByZero()
+    {
+        $dimension = array('width' => 300, 'height' => 400, 'scale' => Vps_Media_Image::SCALE_BESTFIT);
+        $ret = Vps_Media_Image::calculateScaleDimensions(false, $dimension);
+        $this->assertEquals($ret, false);
+        $ret = Vps_Media_Image::calculateScaleDimensions(array(0, 300), $dimension);
+        $this->assertEquals($ret, false);
+        $ret = Vps_Media_Image::calculateScaleDimensions(array(300, 0), $dimension);
+        $this->assertEquals($ret, false);
+    }
+
     private function _testBestFit($imageSize, $dimension, $expectedSize)
     {
         $dimension = array('width' => $dimension[0], 'height' => $dimension[1], 'scale' => Vps_Media_Image::SCALE_BESTFIT);
