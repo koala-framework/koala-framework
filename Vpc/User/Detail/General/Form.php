@@ -1,6 +1,7 @@
 <?php
 class Vpc_User_Detail_General_Form extends Vpc_Abstract_Composite_Form
 {
+    protected $_useFieldset = true;
     protected $_generalFieldset;
     protected function _init()
     {
@@ -15,25 +16,31 @@ class Vpc_User_Detail_General_Form extends Vpc_Abstract_Composite_Form
 
     protected function _initFields()
     {
-        $this->_generalFieldset = $this->add(new Vps_Form_Container_FieldSet(trlVps('General')));
-        $this->_generalFieldset->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
+        if ($this->_useFieldset) {
+            $this->_generalFieldset = $this->add(new Vps_Form_Container_FieldSet(trlVps('General')));
+            $fieldsContainer = $this->_generalFieldset;
+        } else {
+            $fieldsContainer = $this;
+        }
+
+        $fieldsContainer->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
                     ->setVType('email')
                     ->setAllowBlank(false)
                     ->setWidth(250)
                     ->addValidator(new Vpc_User_Detail_General_Validate_UniqueEmail());
 
-        $this->_generalFieldset->add(new Vps_Form_Field_TextField('firstname', trlVps('Firstname')))
+        $fieldsContainer->add(new Vps_Form_Field_TextField('firstname', trlVps('Firstname')))
                     ->setAllowBlank(false)
                     ->setWidth(250);
 
-        $this->_generalFieldset->add(new Vps_Form_Field_TextField('lastname', trlVps('Lastname')))
+        $fieldsContainer->add(new Vps_Form_Field_TextField('lastname', trlVps('Lastname')))
                     ->setAllowBlank(false)
                     ->setWidth(250);
 
-        $this->_generalFieldset->add(new Vps_Form_Field_TextField('title', trlVps('Title')))
+        $fieldsContainer->add(new Vps_Form_Field_TextField('title', trlVps('Title')))
                     ->setWidth(250);
 
-        $this->_generalFieldset->add(new Vps_Form_Field_Select('gender', trlVps('Gender')))
+        $fieldsContainer->add(new Vps_Form_Field_Select('gender', trlVps('Gender')))
                     ->setValues(array(
                             'female' => trlVps('Female'),
                             'male'   => trlVps('Male')
