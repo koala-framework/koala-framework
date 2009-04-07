@@ -60,11 +60,13 @@ Ext.form.Field.override({
         this.alignHelpAndComment.defer(10, this);
 
         //re-align when tab is shown
-        this.ownerCt.bubble(function(c) {
-            if (c.ownerCt instanceof Ext.TabPanel) {
-                c.on('show', this.alignHelpAndComment, this);
-            }
-        }, this);
+        if (this.ownerCt) {
+            this.ownerCt.bubble(function(c) {
+                if (c.ownerCt instanceof Ext.TabPanel) {
+                    c.on('show', this.alignHelpAndComment, this);
+                }
+            }, this);
+        }
     },
     alignHelpAndComment: function() {
         if (this.helpEl) {
