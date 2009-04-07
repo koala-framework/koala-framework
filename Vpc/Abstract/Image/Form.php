@@ -33,7 +33,9 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
 
     public function setFieldLabel($label)
     {
-        $this->fields['Image']->setFieldLabel($label);
+        if ($label) {
+            $this->fields['Image']->setFieldLabel($label);
+        }
         return $this;
     }
 }
