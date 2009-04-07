@@ -8,7 +8,7 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
 
     public function getOwnColumns()
     {
-        return array('url', 'title', 'link', 'description', 'format');
+        return array('url', 'title', 'link', 'description', 'format', 'encoding');
     }
 
     public function getPrimaryKey()

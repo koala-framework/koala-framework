@@ -8,8 +8,70 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
     public function __construct($config)
     {
         $data['url'] = $config['url'];
-        $this->_xml = simplexml_load_file($config['url']);
+        $encoding = false;
+
+        $opts = array('http' =>
+            array(
+                'header' => "User-Agent: RSSIncludeBot/1.0 (http://www.rssinclude.com/spider)\r\n"
+            )
+        );
+        $context = stream_context_create($opts);
+        $str = file_get_contents($config['url'], false, $context);
+        $str = trim($str);
+        if (preg_match('#<?xml[^>]* encoding=["\']([^"\']*)["\']#', $str, $m)) {
+            $encoding = trim(strtolower($m[1]));
+            if ($encoding != 'utf8' && $encoding != 'utf-8') {
+                $str = iconv($encoding, 'utf-8', $str);
+                $str = preg_replace('#(<?xml[^>]* encoding=["\'])([^"\']*)(["\'])#', '\1utf-8\3', $str);
+            }
+        } else {
+            foreach ($http_response_header as $h) {
+                if (substr(strtolower($h), 0, 14) == 'content-type: ') {
+                    if (preg_match('#charset=([^;]*)#', strtolower($h), $m)) {
+                        $encoding = trim($m[1]);
+                        if ($encoding != 'utf8' && $encoding != 'utf-8') {
+                            $str = iconv($encoding, 'utf-8', $str);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        if (!$encoding) {
+            $encoding = 'iso-8859-1';
+            $str = iconv($encoding, 'utf-8', $str);
+        }
+
         Vps_Benchmark::count('loaded feed');
+        //$this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
+        $this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
+        if (!$this->_xml) {
+            //try with another encoding
+            $this->_xml = simplexml_load_string(iconv('iso-8859-1', 'utf-8', $str), 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
+            if ($this->_xml) {
+                $encoding = 'iso-8859-1';
+            }
+        }
+
+        if (!$this->_xml) {
+            $c = array(
+                    'indent'         => true,
+                    'input-xml' => true,
+                    'output-xml' => true,
+                    'wrap'           => '86',
+                    'char-encoding'  =>'utf8',
+                    'newline'        =>'LF',
+                    );
+            $tidy = new tidy;
+            $tidy->parseString($str, $c, 'utf8');
+            $tidy->cleanRepair();
+            $str = $tidy->value;
+            $this->_xml = simplexml_load_string($str, 'SimpleXMLElement');
+        }
+
+        if (!$this->_xml) {
+            throw new Vps_Exception('Can\'t load feed.');
+        }
         if ($this->_xml->channel) {
             $data['format'] = self::FORMAT_RSS;
         } else if ($this->_xml->getName() == 'feed') {
@@ -17,7 +79,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         } else {
             throw new Vps_Exception_NotYetImplemented();
         }
-
+        $data['encoding'] = $encoding;
         if ($data['format'] == self::FORMAT_RSS) {
             $data['title'] = (string)$this->_xml->channel->title;
             $data['link'] = (string)$this->_xml->channel->link;
