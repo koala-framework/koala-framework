@@ -33,6 +33,13 @@ class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
             $this->_model->createDbSelect($select)->__toString());
     }
 
+    public function testExprEqualsIn()
+    {
+        $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Equals('foo', array('aaa', "bb'b")));
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (testtable.foo IN ('aaa','bb\'b'))",
+            $this->_model->createDbSelect($select)->__toString());
+    }
+
     public function testExprEqualsEscaping()
     {
         $select = $this->_model->select()->where(new Vps_Model_Select_Expr_Equals('foo', 'a\'aa'));
