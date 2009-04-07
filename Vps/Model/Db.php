@@ -253,8 +253,15 @@ class Vps_Model_Db extends Vps_Model_Abstract
     {
         if ($expr instanceof Vps_Model_Select_Expr_CompareField_Abstract) {
             $quotedValue = $expr->getValue();
-            $quotedValue = $this->_fixStupidQuoteBug($quotedValue);
-            $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
+            if (is_array($quotedValue)) {
+                foreach ($quotedValue as &$v) {
+                    $v = $this->_fixStupidQuoteBug($v);
+                    $v = $this->_table->getAdapter()->quote($v);
+                }
+            } else {
+                $quotedValue = $this->_fixStupidQuoteBug($quotedValue);
+                $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
+            }
         }
         if ($expr instanceof Vps_Model_Select_Expr_CompareField_Abstract ||
             $expr instanceof Vps_Model_Select_Expr_IsNull
@@ -262,7 +269,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $field = $this->_formatField($expr->getField(), $dbSelect);
         }
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
-            return $field." = ".$quotedValue;
+            if (is_array($quotedValue)) {
+                return $field." IN (".implode(',', $quotedValue).")";
+            } else {
+                return $field." = ".$quotedValue;
+            }
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
             return $field." IS NULL";
         } else if ($expr instanceof Vps_Model_Select_Expr_Smaller
