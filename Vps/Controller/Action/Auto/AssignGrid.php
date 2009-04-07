@@ -1,42 +1,38 @@
 <?php
 abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Action_Auto_Grid
 {
+    protected $_textAssignField = null;
 
-    protected $_assignTable = null;
+    private function _getAssignModel()
+    {
+        return Vps_Model_Abstract::getInstance($this->_modelName);
+    }
 
     public function jsonAssignAction()
     {
         $this->_checkNecessaryProperties();
 
         $ids = Zend_Json::decode($this->_getParam('foreign_keys'));
-        if (!count($ids)) throw new Vps_ClientException("There's no row selected");
+        if (!count($ids)) throw new Vps_ClientException(trlVps("There's no row selected"));
 
-        $this->_assignTable = new $this->_tableName();
+        $assignModel = $this->_getAssignModel();
 
-        $assignToColumns = $this->_getAssignColumns('To');
-        $assignFromColumns = $this->_getAssignColumns('From');
-
-        // where vorbereiten für suche ob bereits zugewiesen
-        $where = array();
-        foreach ($assignToColumns as $toColumn) {
-            $where["$toColumn = ?"] = $this->_getParam($toColumn);
-        }
+        $assignToRef = $assignModel->getReference($this->_assignToReference);
+        $assignToColumn = $assignToRef['column'];
+        $assignFromRef = $assignModel->getReference($this->_assignFromReference);
+        $assignFromColumn = $assignFromRef['column'];
 
         $this->_model->getAdapter()->beginTransaction();
         foreach ($ids as $id) {
-            foreach ($assignFromColumns as $fromColumn) {
-                $where["$fromColumn = ?"] = $id;
-            }
-            $row = $this->_assignTable->fetchRow($where);
+            $row = $assignModel->getRow($assignModel->select()
+                ->whereEquals($assignToColumn, $this->_getParam($assignToColumn))
+                ->whereEquals($assignFromColumn, $id)
+            );
 
             if (!$row) {
-                $row = $this->_assignTable->createRow();
-                foreach ($assignToColumns as $toColumn) {
-                    $row->$toColumn = $this->_getParam($toColumn);
-                }
-                foreach ($assignFromColumns as $fromColumn) {
-                    $row->$fromColumn = $id;
-                }
+                $row = $assignModel->createRow();
+                $row->$assignToColumn = $this->_getParam($assignToColumn);
+                $row->$assignFromColumn = $id;
                 $row->save();
             }
         }
@@ -46,63 +42,60 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
     public function jsonTextAssignAction()
     {
         $this->_checkNecessaryProperties();
+        if (!$this->_textAssignField) {
+            throw new Vps_Exception('$this->_textAssignField not set');
+        }
 
         $text = $this->_getParam('assignText');
         if (!trim($text)) {
             throw new Vps_ClientException('Textinput was empty');
         }
 
-        $this->_assignTable = new $this->_tableName();
-        $refMap = $this->_getRefMap($this->_assignTable);
+        $assignModel = $this->_getAssignModel();
 
-        $assignToColumns = $this->_getAssignColumns('To');
-        $assignFromColumns = $this->_getAssignColumns('From');
+        $assignToRef = $assignModel->getReference($this->_assignToReference);
+        $assignToColumn = $assignToRef['column'];
+        $assignFromRef = $assignModel->getReference($this->_assignFromReference);
+        $assignFromColumn = $assignFromRef['column'];
 
-        $dataTable = new $refMap[$this->_assignFromReference]['refTableClass']();
+        $dataModel = Vps_Model_Abstract::getInstance($assignFromRef['refModelClass']);
 
-        $this->_table->getAdapter()->beginTransaction();
+        $this->_model->getAdapter()->beginTransaction();
         $items = preg_split("(\n|\r)", $text);
         foreach ($items as $item) {
             $item = trim($item);
             if (!$item) continue;
 
-            $dataRow = $dataTable->fetchRow(array("{$this->_textAssignField} = ?" => $item));
+            $dataRow = $dataModel->getRow($dataModel->select()
+                ->whereEquals($this->_textAssignField, $item)
+            );
             if (!$dataRow) {
-                $insertId = $dataTable->insert(array($this->_textAssignField => $item));
-
-                $dataRow = $dataTable->fetchRow(array(
-                    $refMap[$this->_assignFromReference]['refColumns'].' = ?' => $insertId
+                $dataRow = $dataModel->createRow(array(
+                    $this->_textAssignField => $item
                 ));
+                $dataRow->save();
             }
 
             if ($dataRow) {
-                $dataWhere = array();
-                foreach ($assignToColumns as $toColumn) {
-                    $dataWhere["$toColumn = ?"] = $this->_getParam($toColumn);
-                }
-                foreach ($assignFromColumns as $fromColumn) {
-                    $dataWhere["$fromColumn = ?"] = $dataRow->id;
-                }
-                $assignRow = $this->_assignTable->fetchRow($dataWhere);
+                $assignRow = $assignModel->getRow($assignModel->select()
+                    ->whereEquals($assignToColumn, $this->_getParam($assignToColumn))
+                    ->whereEquals($assignFromColumn, $dataRow->id)
+                );
                 if (!$assignRow) {
-                    $insData = array();
-                    foreach ($assignToColumns as $toColumn) {
-                        $insData[$toColumn] = $this->_getParam($toColumn);
-                    }
-                    foreach ($assignFromColumns as $fromColumn) {
-                        $insData[$fromColumn] = $dataRow->id;
-                    }
-                    $this->_assignTable->insert($insData);
+                    $row = $assignModel->createRow();
+                    $row->$assignToColumn = $this->_getParam($assignToColumn);
+                    $row->$assignFromColumn = $dataRow->id;
+                    $row->save();
                 }
             }
         }
-        $this->_table->getAdapter()->commit();
+        $this->_model->getAdapter()->commit();
     }
 
     protected function _checkNecessaryProperties()
     {
-        if (!$this->_tableName) {
-            throw new Vps_Exception('$this->_tableName not set');
+        if (!$this->_modelName) {
+            throw new Vps_Exception('$this->_modelName not set');
         }
         if (!$this->_assignToReference) {
             throw new Vps_Exception('$this->_assignToReference not set');
@@ -111,23 +104,4 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
             throw new Vps_Exception('$this->_assignFromReference not set');
         }
     }
-
-    protected function _getRefMap($model)
-    {
-        $refMap = $model->info();
-        return $refMap['referenceMap'];
-    }
-
-    protected function _getAssignColumns($fromOrTo)
-    {
-        $assignReference = "_assign{$fromOrTo}Reference";
-
-        $refMap = $this->_getRefMap($this->_assignTable);
-
-        if (!$refMap[$this->$assignReference]) throw new Vps_Exception('$this->'.$assignReference.' does not exist');
-        $assignColumns = $refMap[$this->$assignReference]['columns'];
-        if (!is_array($assignColumns)) $assignColumns = array($assignColumns);
-        return $assignColumns;
-    }
-
 }
