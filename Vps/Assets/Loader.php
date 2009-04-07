@@ -245,7 +245,7 @@ class Vps_Assets_Loader
 
             // remove comments
             $contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
-            $contents = preg_replace('!//[^\n]*!', '', $contents);
+            // deaktiviert wg. urls mit http:// in hilfetexten $contents = preg_replace('!//[^\n]*!', '', $contents);
 
             // remove tabs, spaces, newlines, etc. - funktioniert nicht - da fehlen hinundwider ;
             //$contents = str_replace(array("\r", "\n", "\t"), "", $contents);
