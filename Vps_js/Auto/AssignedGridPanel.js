@@ -2,7 +2,7 @@ Vps.Auto.AssignedGridPanel = Ext.extend(Vps.Auto.GridPanel,
 {
     initComponent: function() {
         this.actions.textAssign = new Ext.Action({
-            text    : 'Assign by text input',
+            text    : trlVps('Assign by text input'),
             icon    : '/assets/silkicons/table_multiple.png',
             cls     : 'x-btn-text-icon',
             handler : this.onTextAssign,
@@ -39,5 +39,4 @@ Vps.Auto.AssignedGridPanel = Ext.extend(Vps.Auto.GridPanel,
             scope: this
         });
     }
-
 });
