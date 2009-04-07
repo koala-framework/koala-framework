@@ -1,4 +1,5 @@
 <?php
+// /vps/test/vps_form_color-field_test
 class Vps_Form_ColorField_TestController extends Vps_Controller_Action_Auto_Form
 {
     protected $_modelName = 'Vps_Form_ColorField_TestModel';
