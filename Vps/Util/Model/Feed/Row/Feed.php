@@ -54,19 +54,21 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         }
 
         if (!$this->_xml) {
-            $c = array(
-                    'indent'         => true,
-                    'input-xml' => true,
-                    'output-xml' => true,
-                    'wrap'           => '86',
-                    'char-encoding'  =>'utf8',
-                    'newline'        =>'LF',
-                    );
-            $tidy = new tidy;
-            $tidy->parseString($str, $c, 'utf8');
-            $tidy->cleanRepair();
-            $str = $tidy->value;
-            $this->_xml = simplexml_load_string($str, 'SimpleXMLElement');
+            if (class_exists('tidy')) {
+                $c = array(
+                        'indent'         => true,
+                        'input-xml' => true,
+                        'output-xml' => true,
+                        'wrap'           => '86',
+                        'char-encoding'  =>'utf8',
+                        'newline'        =>'LF',
+                        );
+                $tidy = new tidy;
+                $tidy->parseString($str, $c, 'utf8');
+                $tidy->cleanRepair();
+                $str = $tidy->value;
+                $this->_xml = simplexml_load_string($str, 'SimpleXMLElement');
+            }
         }
 
         if (!$this->_xml) {
