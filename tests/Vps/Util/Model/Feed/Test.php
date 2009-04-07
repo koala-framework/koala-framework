@@ -57,6 +57,24 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://example.org/2003/12/13/atom03', $entries->current()->link);
         $this->assertEquals('2003-12-13 19:30:02', $entries->current()->date);
     }
+
+    public function testBug1()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('file://'.dirname(__FILE__).'/bug1.xml');
+        $this->assertNotNull($feed);
+        $this->assertEquals('file://'.dirname(__FILE__).'/bug1.xml', $feed->url);
+        $this->assertEquals('Flux des offres issues de la base de données Emploi Local', $feed->title);
+        $this->assertEquals('http://www.bae-78.com', $feed->link);
+        $this->assertEquals('Les offres d\'emploi locales collectées ces 2 derniers mois par les Antennes Emploi des communes de Carrières-sur-Seine, Chatou, Croissy-sur-Seine, Le Pecq, Le Vésinet, Montesson, et par leur partenaire l\'Association Boucle Accueil Emploi (BAE).', $feed->description);
+
+        $entries = $feed->getChildRows('Entries');
+        $this->assertEquals(41, count($entries));
+        $this->assertEquals('Conseillers de vente H/F', $entries->current()->title);
+        $this->assertContains('impression numérique et', $entries->current()->description);
+        $this->assertEquals('', $entries->current()->link);
+        $this->assertEquals('2009-04-01 12:00:00', $entries->current()->date);
+    }
     /**
      * @group slow
      */
@@ -65,7 +83,6 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $urls = array();
         $urls[] = 'http://rss.orf.at/news.xml';
         $urls[] = 'http://www.csmonitor.com/rss/top.rss';
-        $urls[] = 'http://productnews.userland.com/newsItems/departments/radioUserland.xml';
         $urls[] = 'http://planetkde.org/rss20.xml';
         $urls[] = 'http://aseigo.blogspot.com/feeds/posts/default';
         $urls[] = 'http://aseigo.blogspot.com/feeds/posts/default?alt=rss';
@@ -144,4 +161,56 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($feeds));
         $this->assertEquals('http://rss.orf.at/news.xml', $feeds[0]->url);
     }
+
+    /**
+     * @group slow
+     * @group really_slow
+     * Auskommentiert weil wirklich langsam
+     *
+    public function testALotOfRandomFeeds()
+    {
+        $urls = file(dirname(__FILE__).'/feedUrls.txt');
+        foreach ($urls as $u) {
+            $u = trim($u);
+            echo "\n".$u."\n";
+            $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+                ->getRow($u);
+            echo $feed->encoding.' ';
+            if ($u != 'http://www.ds-girls.com/forum/syndication.php?type=rss.php?count=3&fid=4'
+                && $u != 'http://www.nst.com.my/Current_News/NST/rss/allSec') {
+                $this->assertNotEquals('', $feed->title);
+            }
+            $this->assertNotEquals('', $feed->url);
+            if ($u != 'http://feeds.feedburner.com/aol/movies/newintheaters'
+                && $u != 'http://feeds.feedburner.com/beehive-govt-nz/updates'
+                && $u != 'http://stop.hu/dumps/?format=rss&type=all'
+                && $u != 'http://www.google.com/alerts/feeds/02158335529507078511/15158246043646228330'
+                && $u != 'http://www.google.com/trends/hottrends/atom/hourly'
+                && $u != 'http://www.game4fun.it/rss.xml'
+                && $u != 'http://www.pcguru.hu/pcguru/rss/rss.xml'
+                && $u != 'http://www.veoliawater.com/atom/news.php'
+                && $u != 'http://www.wasterecyclingnews.com/rss.php') {
+                $this->assertNotEquals('', $feed->link);
+            }
+            $entries = $feed->getChildRows('Entries');
+            $this->assertTrue(count($entries) > 0);
+            $numWithoutTitle = 0;
+            foreach ($entries as $e) {
+                echo ".";
+                if (trim($e->title) == '') {
+                    $numWithoutTitle++;
+                }
+                if ($e->title == 'Unable to read blog post') continue;
+                if ($u != 'http://emplocal.fdeho.com/arss.php?x=cr32'
+                   && $u != 'http://www.google.com/trends/hottrends/atom/hourly'
+                   && $u != 'http://www.surgeryvaluer.co.uk/intranetnews.xml') {
+                    $this->assertNotEquals('', $e->link);
+                }
+            }
+            if ($numWithoutTitle > 1 && $u != 'http://antwrp.gsfc.nasa.gov/apod.rss') {
+                $this->fail("$numWithoutTitle entries without title");
+            }
+        }
+    }
+    */
 }
