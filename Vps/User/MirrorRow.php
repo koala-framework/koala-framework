@@ -23,7 +23,15 @@ class Vps_User_MirrorRow extends Vps_Model_MirrorCache_Row
                     ->whereEquals('webcode', '')
                     ->whereEquals('deleted', 0)
                 );
-                if ($row) return $row;
+
+                if ($row) {
+                    $this->created = $row->created;
+                    $this->deleted = $row->deleted;
+                    $this->locked = $row->locked;
+                    $this->password = $row->password;
+                    $this->password_salt = $row->password_salt;
+                    return $row;
+                }
             }
         }
         return parent::_getInsertSourceRow();
