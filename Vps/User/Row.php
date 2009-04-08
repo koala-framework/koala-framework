@@ -68,18 +68,16 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
                 trlVps('An account with this email address already exists')
             );
         }
+
         $this->created = date('Y-m-d H:i:s');
         $this->deleted = 0;
         $this->locked = 0;
+        $this->password = '';
+        $this->password_salt = '';
         if (!$this->gender) $this->gender = '';
 
         if (is_null($this->webcode)) {
             $this->webcode = self::getWebcode();
-        }
-
-        if (!$this->password && !$this->password_salt) {
-            $this->password = '';
-            $this->generatePasswordSalt();
         }
     }
 
@@ -103,7 +101,12 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
     protected function _afterInsert()
     {
         parent::_afterInsert();
-        $this->sendActivationMail();
+        if (!$this->password && !$this->password_salt) {
+            $this->generatePasswordSalt();
+            $this->save();
+
+            $this->sendActivationMail();
+        }
     }
 
     public function save()
