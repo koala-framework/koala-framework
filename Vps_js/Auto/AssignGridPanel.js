@@ -121,13 +121,13 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
     setBaseParams: function(bp) {
         this.gridAssigned.setBaseParams(bp);
         this.gridData.setBaseParams(bp);
-        return Vpc.Forum.Panel.superclass.setBaseParams.call(this, bp);
+        return Vps.Auto.AssignGridPanel.superclass.setBaseParams.call(this, bp);
     },
 
     applyBaseParams: function(bp) {
         this.gridAssigned.applyBaseParams(bp);
         this.gridData.applyBaseParams(bp);
-        return Vpc.Forum.Panel.superclass.applyBaseParams.call(this, bp);
+        return Vps.Auto.AssignGridPanel.superclass.applyBaseParams.call(this, bp);
     }
 
 });
