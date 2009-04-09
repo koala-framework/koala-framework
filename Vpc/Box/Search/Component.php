@@ -43,13 +43,28 @@ abstract class Vpc_Box_Search_Component extends Vpc_Abstract_Composite_Component
         if (!isset($form->fields['query'])) {
             throw new Vps_Exception("The Form returned by _getSearchForm must have a field named 'query'");
         }
-        return array(
+        $ret = array(
             'queryParam' => $form->fields['query']->getFieldName(),
             'submitParam' => $fc->componentId,
-            'searchPageUrl' => $fc->url
+            'searchPageUrl' => $fc->url,
+            'queryValue' => null
         );
+        if ($fc->getComponent()->isProcessed()) {
+            $ret['queryValue'] = $fc->getComponent()->getFormRow()->query;
+        }
+        return $ret;
     }
 
-    abstract public function getSearchComponents();
-    abstract protected function _getSearchForm();
+    /**
+     * Überschreiben, um Views, die eine SearchForm haben (müssen alle die gleiche
+     * haben) zurückgibt.
+     *
+     * @return array mit Views, kann assoziativ sein (mit Titel der List)
+     */
+    abstract public function getSearchViews();
+
+    protected function _getSearchForm()
+    {
+        return current($this->getSearchViews())->getComponent()->getSearchForm();
+    }
 }

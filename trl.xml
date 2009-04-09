@@ -3988,4 +3988,71 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>alle</de>
 <id>1066</id>
 </text>
+<text>
+<en>Color hex values must be either 3 or 6 characters.</en>
+<id>1067</id>
+</text>
+<text>
+<en>Must have a hexidecimal value in the format ABCDEF.</en>
+<id>1068</id>
+</text>
+<text>
+<en>Link.Intern</en>
+<id>1069</id>
+</text>
+<text>
+<en>Target</en>
+<id>1070</id>
+</text>
+<text>
+<en>News</en>
+<id>1071</id>
+</text>
+<text>
+<en>Link.to News</en>
+<id>1072</id>
+</text>
+<text>
+<en>Color values in Hex code without a leading # (e.g. fa5500)</en>
+<id>1073</id>
+</text>
+<text>
+<en>No entries found for search term &amp;quot;{0}&amp;quot;.</en>
+<de>Für den Suchbegriff &amp;quot;{0}&amp;quot; wurden keine Einträge gefunden.</de>
+<id>1074</id>
+</text>
+<text>
+<en>Show All</en>
+<de>Alle anzeigen</de>
+<id>1075</id>
+</text>
+<text>
+<en>User</en>
+<id>1076</id>
+</text>
+<text>
+<en>Statistics</en>
+<id>1077</id>
+</text>
+<text>
+<en>Logins</en>
+<id>1078</id>
+</text>
+<text>
+<en>Last login</en>
+<id>1079</id>
+</text>
+<text>
+<en>Superuser</en>
+<id>1080</id>
+</text>
+<text>
+<en>Too many wrong logins.</en>
+<id>1081</id>
+</text>
+<text>
+<en>There were too many wrong logins from your connection. Please try again in 5 minutes.</en>
+<id>1082</id>
+</text>
 </trl>
+
