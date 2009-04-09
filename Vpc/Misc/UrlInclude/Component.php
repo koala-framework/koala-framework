@@ -8,4 +8,9 @@ class Vpc_Misc_UrlInclude_Component extends Vpc_Abstract
         $ret['modelname'] = 'Vps_Component_FieldModel';
         return $ret;
     }
+
+    public function getViewCacheLifetime()
+    {
+        return 60*60;
+    }
 }
