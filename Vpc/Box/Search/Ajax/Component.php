@@ -10,21 +10,30 @@ class Vpc_Box_Search_Ajax_Component extends Vpc_Abstract_Ajax_Component
 
     public function getTemplateVars()
     {
+        $parent = $this->getData()->parent->getComponent();
         $ret = parent::getTemplateVars();
-        $ret['qry'] = '';
-        if (isset($_REQUEST['query'])) {
-            $ret['qry'] = $_REQUEST['query'];
-        }
-        $searchComponents = $this->getData()->parent->getComponent()->getSearchComponents();
-        foreach ($searchComponents as $key => $val) {
+        $searchViews = $parent->getSearchViews();
+        $formData = $parent->getSearchFormData();
+        $ret['queryValue'] = $formData['queryValue'];
+        $ret['foundNothing'] = true;
+        foreach ($searchViews as $key => $view) {
             $addList = array();
-            if (is_array($val)) {
-                $addList['component'] = $val['component'];
-                $addList['title'] = $val['title'];
-            } else if (is_object($val)) {
-                $addList['component'] = $val;
-                $addList['title'] = $key;
-                if (is_numeric($addList['title'])) $addList['title'] = '';
+            $addList['component'] = $view;
+            $addList['title'] = is_numeric($key) ? null : $key;
+            if ($addList['component']->getComponent()->getPagingCount() > 0) {
+                $ret['foundNothing'] = false;
+            } else {
+                continue;
+            }
+
+            if ($addList['component']->getComponent()->moreItemsAvailable()) {
+                $ret['queryValue'] = $formData['queryValue'];
+                $addList['showAllHref'] =
+                    $formData['searchPageUrl'] . '?' .
+                    $formData['queryParam'] . '=' . $ret['queryValue'] . '&' .
+                    $formData['submitParam'] . '=submit';
+            } else {
+                $addList['showAllHref'] = null;
             }
             $ret['lists'][] = $addList;
         }

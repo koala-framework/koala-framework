@@ -215,11 +215,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $this->_pdfWriter;
     }
 
-    public function sendContent($masterTemplate = null, $ignoreVisible = false)
+    protected function _callProcessInput()
     {
-
-        header('Content-Type: text/html; charset=utf-8');
-
         $process = $this->getData()
             ->getRecursiveChildComponents(array(
                     'page' => false,
@@ -266,15 +263,25 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             }
         }
         Vps_Component_RowObserver::getInstance()->process(false);
+        return $process;
+    }
 
-        echo Vps_View_Component::renderMasterComponent($this->getData(), $masterTemplate, $ignoreVisible);
-
+    protected function _callPostProcessInput($process)
+    {
         foreach ($process as $i) {
             if (method_exists($i->getComponent(), 'postProcessInput')) {
                 $i->getComponent()->postProcessInput($postData);
             }
         }
         Vps_Component_RowObserver::getInstance()->process();
+    }
+
+    public function sendContent($masterTemplate = null, $ignoreVisible = false)
+    {
+        header('Content-Type: text/html; charset=utf-8');
+        $process = $this->_callProcessInput();
+        echo Vps_View_Component::renderMasterComponent($this->getData(), $masterTemplate, $ignoreVisible);
+        $this->_callPostProcessInput($process);
     }
 
     /**

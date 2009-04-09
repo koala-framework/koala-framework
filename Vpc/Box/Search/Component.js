@@ -6,7 +6,8 @@ Vps.onContentReady(function() {
         var els = {
             searchField  : Ext.get(Ext.DomQuery.select('.searchField', searchBox)[0]),
             searchResult : Ext.get(Ext.DomQuery.select('.searchResult', searchBox)[0]),
-            ajaxUrl      : Ext.get(Ext.DomQuery.select('.ajaxUrl', searchBox)[0])
+            ajaxUrl      : Ext.get(Ext.DomQuery.select('.ajaxUrl', searchBox)[0]),
+            submitParam  : Ext.get(Ext.DomQuery.select('.submitParam', searchBox)[0])
         };
         els.searchResult.alignTo(els.searchField, 'tl-bl');
         els.searchResult.hide();
@@ -15,11 +16,12 @@ Vps.onContentReady(function() {
             if (this.searchField.getValue().length < 2) return;
             this.searchField.rel;
             var mgr = this.searchResult.getUpdater();
+            var params = {}
+            params[this.submitParam.dom.name] = this.submitParam.getValue();
+            params[this.searchField.dom.name] = this.searchField.getValue();
             mgr.update({
                 url: this.ajaxUrl.getValue(),
-                params: {
-                    query: this.searchField.getValue()
-                }
+                params: params
             });
         }, els, { buffer: 250 });
 
