@@ -4,22 +4,23 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
     protected $_defaultOrder = 'lastname';
     protected $_paging = 10;
 
-    protected function _getWhere()
+    protected function _getSelect()
     {
-        $where = parent::_getWhere();
+        $ret = parent::_getSelect();
         $authedChangedRole = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
         $acl = Zend_Registry::get('acl');
         if (!($acl->getRole($authedChangedRole) instanceof Vps_Acl_Role_Admin)) {
             //wenn nicht superuser
-            foreach($acl->getRoles() as $role) {
-                if($role instanceof Vps_Acl_Role && !($role instanceof Vps_Acl_Role_Admin)) {
+            foreach ($acl->getRoles() as $role) {
+                if ($role instanceof Vps_Acl_Role && !($role instanceof Vps_Acl_Role_Admin)) {
                     $roles[] = $role->getRoleId();
                 }
             }
-            $roles = array_unique($roles);
-            $where[] = "role IN ('".implode("', '", $roles)."')";
+            $roles = array_values(array_unique($roles));
+            $ret->whereEquals('role', $roles);
         }
-        return $where;
+        $ret->whereEquals('deleted', 0);
+        return $ret;
     }
 
     public function init()
@@ -35,6 +36,7 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
         $this->_columns->add(new Vps_Grid_Column('role'))
              ->setData(new Vps_Controller_Action_User_Users_RoleData());
         $this->_columns->add(new Vps_Grid_Column('email'));
+        $this->_columns->add(new Vps_Grid_Column('locked'));
     }
 
     public function jsonChangeUserAction()

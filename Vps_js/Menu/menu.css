@@ -1,0 +1,13 @@
+
+.x-combo-list div.changeuser-locked {
+    background-image: url(/assets/silkicons/lock.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+.changeuser-list-item { color: #444; }
+.changeuser-list-item h3 { color: #000; }
+.changeuser-list-item span.changeuser-role { color: #888; }
+
+.changeuser-locked { color: #944; }
+.changeuser-locked h3 { color: #900; }
+.changeuser-locked span.changeuser-role { color: #a88; }
