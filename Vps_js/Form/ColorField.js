@@ -81,9 +81,6 @@ Vps.Form.ColorField =  Ext.extend(function(config){
     // These regexes limit input and validation to hex values
     regex: /[a-f0-9]/i,
 
-    //private
-    curColor: 'ffffff',
-
     width: 50,
 
     onRender: function(ct, position) {
@@ -93,14 +90,13 @@ Vps.Form.ColorField =  Ext.extend(function(config){
             cls: 'vps-form-color-preview',
             style: 'left: '+(this.width+10+15)+'px'
         });
+        this.setColor(this.value);
     },
     
     // private
     validateValue : function(value){
         if(value.length<1) {
-            this.colorPreview.setStyle({
-                'background-color':'#' + this.defaultColor
-            });
+            this.setColor(this.defaultColor);
             if(!this.allowBlank) {
                 this.markInvalid(String.format(this.blankText, value));
                 return false
@@ -153,12 +149,12 @@ Vps.Form.ColorField =  Ext.extend(function(config){
      * @param {String} hex The color value.
      */
     setColor : function(hex) {
-        this.curColor = hex;
-        
-        this.colorPreview.setStyle( {
-            'background-color': '#' + hex,
-            'background-image': 'none'
-        });
+        if (hex) {
+            this.colorPreview.dom.style.backgroundColor = '#' + hex;
+        } else {
+            this.colorPreview.dom.style.backgroundColor = 'transparent';
+        }
+        this.colorPreview.dom.style.backgroundImage = 'none';
     },
 
   // private
