@@ -74,9 +74,9 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
             $path .= '/%vps_branch%';
         } else {
             $path .= '/'.$this->_getParam('version');
-        }
-        if (!file_exists($path)) {
-            throw new Vps_ClientException("Path '$path' does not exist");
+            if (!file_exists($path)) {
+                throw new Vps_ClientException("Path '$path' does not exist");
+            }
         }
         file_put_contents('application/include_path', $path);
         echo "switched to vps version ".$this->_getParam('version')."\n";
