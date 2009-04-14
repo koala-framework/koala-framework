@@ -112,14 +112,6 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
             ),
             'duration'=>array(
                 'verticalLabel' => 'processing time / request [s]',
-                'asset-duration' => array(
-                    'cmd' => 'CDEF:perrequestx0=perrequest0,1000,/',
-                    'line' => 'LINE2:perrequestx0#000000:"asset" ',
-                ),
-                'media-duration' => array(
-                    'cmd' => 'CDEF:perrequestx1=perrequest1,1000,/',
-                    'line' => 'LINE2:perrequestx1#00FF00:"media" ',
-                ),
                 'admin-duration' => array(
                     'cmd' => 'CDEF:perrequestx2=perrequest2,1000,/',
                     'line' => 'LINE2:perrequestx2#0000FF:"admin" ',
