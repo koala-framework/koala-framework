@@ -52,6 +52,7 @@ class Vps_Component_RowObserver
     public function delete($row)
     {
         // Wird hier direkt aufgerufen, weil wenn später aufgerufen, ist row schon gelöscht
+        if (!Vps_Component_Data_Root::getComponentClass()) return;
         $this->_processCache($row);
     }
 

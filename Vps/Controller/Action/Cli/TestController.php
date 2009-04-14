@@ -68,6 +68,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         Zend_Registry::get('config')->hasIndex = false; //zwischenlösung bis index auf models umgestellt wurde und auch getestet werden muss
         Zend_Registry::get('config')->debug->errormail = false;
 
+        Vps_Component_Data_Root::setComponentClass(false);
         Zend_Registry::set('db', Vps_Test::getTestDb());
 
         set_time_limit(0);
