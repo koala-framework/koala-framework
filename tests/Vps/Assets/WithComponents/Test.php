@@ -75,16 +75,16 @@
         $type = 'Vps_Assets_OwnConfig:Test';
         $files = $dep->getAssetUrls($type, 'js', 'web', $rootComponent);
         $expected = array(
-            "/assets/all/web/$rootComponent/de/Vps_Assets_OwnConfig:Test.js?v=1.0",
+            "/assets/all/web/$rootComponent/".Zend_Registry::get('trl')->getTargetLanguage()."/Vps_Assets_OwnConfig:Test.js?v=1.0",
         );
         $this->assertEquals($expected, $files);
 
         $loader = new Vps_Assets_Loader($config);
 
-        $c = $loader->getFileContents("all/web/$rootComponent/de/Vps_Assets_OwnConfig:Test.js?v=1.0");
+        $c = $loader->getFileContents("all/web/$rootComponent/".Zend_Registry::get('trl')->getTargetLanguage()."/Vps_Assets_OwnConfig:Test.js?v=1.0");
         $this->assertContains("file2\nfile1\n", $c['contents']);
 
-        $c = $loader->getFileContents("all/web/$rootComponent/de/Vps_Assets_OwnConfig:Test.js?v=1.0");
+        $c = $loader->getFileContents("all/web/$rootComponent/".Zend_Registry::get('trl')->getTargetLanguage()."/Vps_Assets_OwnConfig:Test.js?v=1.0");
         $this->assertContains("file2\nfile1\n", $c['contents']);
     }
 }

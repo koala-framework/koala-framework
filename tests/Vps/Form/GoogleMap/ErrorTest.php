@@ -19,5 +19,4 @@ class Vps_Form_GoogleMap_ErrorTest extends Vps_Test_SeleniumTestCase
         $this->click("//input[@name='mapSelected']/../..//img");
         $this->assertElementNotPresent("//span[text()='".trlVps('enter address')."']");
     }
-
 }
