@@ -5,31 +5,13 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
     {
         return "generate benchmark-log statistics";
     }
-    private function _getFields()
+
+    public static function getFields()
     {
-        $ret = array();
-        $fields = array(
-            'requests', 'duration', 'queries',
-            'componentDatas', 'generators', 'componentData Pages', 'components',
-            'preload cache', 'rendered nocache', 'rendered cache',
-            'getRecursiveChildComponents', 'getChildComponents uncached', 'getChildComponents cached', 'countChildComponents',
-            'iccc cache semi-hit', 'iccc cache miss', 'iccc cache hit',
-            'Generator::getInst semi-hit', 'Generator::getInst miss', 'Generator::getInst hit',
-            'processing dependencies miss', 'rendered noviewcache'
-         );
-        foreach (array('content', 'media', 'admin', 'asset', 'cli', 'unkown') as $t) {
-            foreach ($fields as $f) {
-                $ret[] = $t.'-'.$f;
-            }
-        }
-        $ret[] = 'content-rendered partial cache';
-        $ret[] = 'content-rendered partial nocache';
-        $ret[] = 'content-rendered partial noviewc';
-        return $ret;
+        return self::_getFields();
     }
-    /*
-    neue felder vorerst deaktiviert weil update script nicht gscheit funktioniert
-    private function _getFields()
+
+    private static function _getFields()
     {
         $ret = array();
         $contentFields = array(
@@ -39,7 +21,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
             'getRecursiveChildComponents', 'getChildComponents uncached', 'getChildComponents cached', 'countChildComponents',
             'Generator::getInst semi-hit', 'Generator::getInst miss', 'Generator::getInst hit',
             'processing dependencies miss', 'rendered noviewcache',
-            'rendered partial cache', 'rendered partial nocache', 'rendered partial noviewcache'
+            'rendered partial cache', 'rendered partial nocache', 'rendered partial noviewc'
         );
         foreach ($contentFields as $f) {
             $ret[] = 'content-'.$f;
@@ -53,7 +35,6 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         $ret[] = 'unkown-requests';
         return $ret;
     }
-    */
 
     public static function escapeField($f)
     {
@@ -101,14 +82,9 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                     'color' => '#000000',
                     'label' => 'content'
                 ),
-
             ),
             'cache'=>array(
                 'verticalLabel' => 'components rendered / request',
-                'content-rendered nocache' => array(
-                    'color' => '#FF0000',
-                    'label' => 'nocache'
-                ),
                 'content-rendered cache' => array(
                     'color' => '#00FF00',
                     'label' => 'cache'
@@ -128,7 +104,11 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                 'content-rendered partial noviewc' => array(
                     'color' => '#FF00FF',
                     'label' => 'partial noviewcache'
-                )
+                ),
+                'content-rendered nocache' => array(
+                    'color' => '#FF0000',
+                    'label' => 'nocache'
+                ),
             ),
             'duration'=>array(
                 'verticalLabel' => 'processing time / request [s]',
@@ -162,18 +142,6 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                 ),
                 'content-components' => array(
                     'color' => '#00FFFF',
-                ),
-            ),
-            'iccc' => array(
-                'verticalLabel' => 'calls / request',
-                'content-iccc cache semi-hit' => array(
-                    'color' => '#00FF00'
-                ),
-                'content-iccc cache miss' => array(
-                    'color' => '#FF0000'
-                ),
-                'content-iccc cache hit' => array(
-                    'color' => '#0000FF'
                 ),
             ),
             'getChildComponents' => array(
@@ -236,25 +204,32 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         return $graphs;
     }
 
+    public static function createBenchmark($start)
+    {
+        $interval = 60;
+        $cmd = "rrdtool create benchmark.rrd ";
+        $cmd .= "--start ".$start." ";
+        $cmd .= "--step ".($interval)." ";
+        $cmd .= "DS:load:ABSOLUTE:".($interval*2).":0:1000 ";
+        $cmd .= "DS:bytesRead:COUNTER:".($interval*2).":0:".(2^64)." ";
+        $cmd .= "DS:bytesWritten:COUNTER:".($interval*2).":0:".(2^64)." ";
+        $cmd .= "DS:getHits:COUNTER:".($interval*2).":0:".(2^31)." ";
+        $cmd .= "DS:getMisses:COUNTER:".($interval*2).":0:".(2^31)." ";
+        foreach (self::_getFields() as $field) {
+            $cmd .= "DS:".self::escapeField($field).":COUNTER:".($interval*2).":0:".(2^31)." ";
+        }
+        $cmd .= "RRA:AVERAGE:0.6:1:2016 "; //1 woche
+        $cmd .= "RRA:AVERAGE:0.6:7:1500 "; //1 Monat
+        $cmd .= "RRA:AVERAGE:0.6:50:2500 "; //1 Jahr
+
+        system($cmd, $ret);
+        if ($ret != 0) throw new Vps_ClientException("Command failed");
+    }
+
     public function recordAction()
     {
         if (!file_exists('benchmark.rrd')) {
-            $interval = 60;
-            $cmd = "rrdtool create benchmark.rrd ";
-            $cmd .= "--start ".(time()-1)." ";
-            $cmd .= "--step ".($interval)." ";
-            $cmd .= "DS:load:ABSOLUTE:".($interval*2).":0:1000 ";
-            $cmd .= "DS:bytesRead:COUNTER:".($interval*2).":0:".(2^64)." ";
-            $cmd .= "DS:bytesWritten:COUNTER:".($interval*2).":0:".(2^64)." ";
-            $cmd .= "DS:getHits:COUNTER:".($interval*2).":0:".(2^31)." ";
-            $cmd .= "DS:getMisses:COUNTER:".($interval*2).":0:".(2^31)." ";
-            foreach ($this->_getFields() as $field) {
-                $cmd .= "DS:".self::escapeField($field).":COUNTER:".($interval*2).":0:".(2^31)." ";
-            }
-            $cmd .= "RRA:AVERAGE:0.6:1:2016 "; //1 woche
-            $cmd .= "RRA:AVERAGE:0.6:7:1500 "; //1 Monat
-            $cmd .= "RRA:AVERAGE:0.6:50:2500 "; //1 Jahr
-            $this->_systemCheckRet($cmd);
+            self::createBenchmark(time()-1);
         }
 
         $values = array();
@@ -271,7 +246,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         $values[] = $stats['get_misses'];
         $prefix = Zend_Registry::get('config')->application->id.'-'.
                             Vps_Setup::getConfigSection().'-bench-';
-        foreach ($this->_getFields() as $field) {
+        foreach (self::_getFields() as $field) {
             $value = $memcache->get($prefix.$field);
             if ($value===false) $value = 'U';
             $values[] = $value;
@@ -311,11 +286,12 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         if (isset($graph['verticalLabel'])) {
             $cmd .= "--vertical-label \"$graph[verticalLabel]\" ";
         }
+
         $cmd .= "DEF:requests=benchmark.rrd:".self::escapeField('content-requests').":AVERAGE ";
         $i = 0;
         foreach ($graph as $field=>$settings) {
             if ($field == 'verticalLabel') continue;
-            $cmd .= "DEF:line$i=benchmark.rrd:".self::escapeField($field).":AVERAGE ";
+            $cmd .= "DEF:line{$i}=benchmark.rrd:".self::escapeField($field).":AVERAGE ";
             $cmd .= "CDEF:perrequest$i=line$i,requests,/ ";
             if (isset($settings['cmd'])) $cmd .= $settings['cmd'].' ';
             if (isset($settings['line'])) {
@@ -337,9 +313,10 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
             $i++;
         }
         $cmd .= " 2>&1";
+//         d($cmd);
         exec($cmd, $out, $ret);
         if ($ret) {
-            throw new Vps_ClientException(implode('', $out));
+            throw new Vps_ClientException(implode('', $out)."\n".$cmd);
         }
         $ret = file_get_contents($tmpFile);
         unlink($tmpFile);
