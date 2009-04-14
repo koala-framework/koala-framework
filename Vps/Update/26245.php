@@ -77,7 +77,7 @@ class Vps_Update_26245 extends Vps_Update
             $progress->finish();
 
             //create new rrd
-            Vps_Controller_Action_Cli_BenchmarkController::createBenchmark(time()-60*60*24*7);
+            Vps_Controller_Action_Cli_BenchmarkController::createBenchmark(time());
 
             $cmd = "LC_ALL=C rrdtool dump benchmark.rrd";
             $out = array();
