@@ -1,16 +1,13 @@
 <?php
 class Vps_Update_26245 extends Vps_Update
 {
-    private static $_fields;
-    private static $_progress;
-    private static $_curProgress;
     public function update()
     {
         if (file_exists('benchmark.rrd')) {
             $fileName = 'benchmark-'.time().'.rrd';
-            //$fileName = 'benchmark-old.rrd';
             rename('benchmark.rrd', $fileName);
-            /*
+
+            //nur zum felder holen, könnte auch effizienter gemacht werden
             $start = trim(`rrdtool first $fileName`);
             $end = trim(`rrdtool last $fileName`);
             $cmd = "LC_ALL=C rrdtool fetch $fileName AVERAGE -s $start -e $end 2>&1";
@@ -21,20 +18,82 @@ class Vps_Update_26245 extends Vps_Update
             foreach (explode(' ', $out[0]) as $f) {
                 $fields[] = trim($f);
             }
-            self::$_fields = $fields;
 
             $cmd = "LC_ALL=C rrdtool dump $fileName";
-            $out = '';
+            $out = array();
             exec($cmd, $out, $ret);
             if ($ret) throw new Vps_Exception(implode("\n", $out));
             $out = implode("\n", $out);
 
+            echo "\n";
             preg_match_all('#<row>#', $out, $m);
-            self::$_progress = new Zend_ProgressBar(new Zend_ProgressBar_Adapter_Console(), 0, count($m[0]));
-            $out = preg_replace_callback('#<row><v>(.*?)</v></row>#',
-                    "Vps_Update_26245::_dbCallback",
-                    $out);
-            self::$_progress->finish();
+            $progress = new Zend_ProgressBar(new Zend_ProgressBar_Adapter_Console(), 0, count($m[0]));
+
+
+            $databases = array();
+            while (strpos($out, '<database>') !== false) {
+                $databases[] = substr($out, strpos($out, '<database>')+10, strpos($out, '</database>')-strpos($out, '<database>')-10);
+                $out = substr($out, strpos($out, '</database>')+11);
+            }
+
+
+            $newFields = Vps_Controller_Action_Cli_BenchmarkController::getFields();
+            $newFields = array_merge(array('load', 'bytesRead', 'bytesWritten', 'getHits', 'getMisses'), $newFields);
+            foreach ($newFields as &$f) {
+                $f = Vps_Controller_Action_Cli_BenchmarkController::escapeField($f);
+            }
+
+            foreach ($databases as &$database) {
+
+                $pos = 0;
+                $i = 0;
+                while (($startPos = strpos($database, '<row>', $pos)) !== false) {
+                    $progress->next();
+                    $endPos = strpos($database, '</row>', $startPos);
+                    $data = array();
+                    $row = substr($database, $startPos+5+3, $endPos-$startPos-5-3-4);
+                    foreach (explode('</v><v>', $row) as $i=>$v) {
+                        $data[$fields[$i]] = $v;
+                    }
+
+                    $newData = array();
+                    foreach ($newFields as $f) {
+                        if (isset($data[$f]) && strtolower($data[$f]) != 'nan') {
+                            $i = $data[$f];
+                        } else {
+                            $i = 'NaN';
+                        }
+                        $newData[] = $i;
+                    }
+
+                    $newRow = '<v>'.implode('</v><v>', $newData).'</v>';
+                    $database = substr($database, 0, $startPos+5)
+                        . $newRow
+                        . substr($database, $endPos);
+                    $pos = $startPos+strlen($newRow)+5;
+                    $i++;
+                }
+            }
+            $progress->finish();
+
+            //create new rrd
+            Vps_Controller_Action_Cli_BenchmarkController::createBenchmark(time()-60*60*24*7);
+
+            $cmd = "LC_ALL=C rrdtool dump benchmark.rrd";
+            $out = array();
+            exec($cmd, $out, $ret);
+            if ($ret) throw new Vps_Exception(implode("\n", $out));
+            $out = implode("\n", $out);
+
+            $pos = 0;
+            $i = 0;
+            while (strpos($out, '<database>', $pos) !== false) {
+                $out = substr($out, 0, strpos($out, '<database>', $pos)+10)
+                    . $databases[$i]
+                    . substr($out, strpos($out, '</database>', $pos));
+                $pos = strpos($out, '</database>', $pos)+11;
+                $i++;
+            }
 
             $tmpFile = tempnam('/tmp', 'rrdupdate');
             $tmpFile = 'benchmark.xml';
@@ -45,37 +104,7 @@ class Vps_Update_26245 extends Vps_Update
             if ($ret) throw new Vps_Exception(implode("\n", $out));
 
 //             unlink($tmpFile);
-            */
+
         }
     }
-    /*
-    static public function _dbCallback($m)
-    {
-        self::$_curProgress++;
-        if (self::$_curProgress % 20) {
-            self::$_progress->update(self::$_curProgress);
-        }
-        $newFields = Vps_Controller_Action_Cli_BenchmarkController::getFields();
-        $newFields = array_merge(array('load', 'bytesRead', 'bytesWritten', 'getHits', 'getMisses'), $newFields);
-
-        $data = array();
-        foreach (explode('</v><v>', $m[1]) as $i) {
-            foreach (self::$_fields as $f) {
-                $data[$f] = $i;
-            }
-        }
-
-        $newData = array();
-        foreach ($newFields as $f) {
-            $f = Vps_Controller_Action_Cli_BenchmarkController::escapeField($f);
-            if (isset($data[$f]) && strtolower($data[$f]) != 'nan') {
-                $i = $data[$f];
-            } else {
-                $i = 'NaN';
-            }
-            $newData[] = $i;
-        }
-        return '<row><v>'.implode('</v><v>', $newData).'</v></row>';
-    }
-    */
 }
