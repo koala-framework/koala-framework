@@ -24,7 +24,7 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
         }
         $ret[] = 'content-rendered partial cache';
         $ret[] = 'content-rendered partial nocache';
-        $ret[] = 'content-rendered partial noviewcache';
+        $ret[] = 'content-rendered partial noviewc';
         return $ret;
     }
     /*
@@ -118,15 +118,15 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
                     'label' => 'noviewcache'
                 ),
                 'content-rendered partial cache' => array(
-                    'color' => '#330000',
+                    'color' => '#FFFF00',
                     'label' => 'partial cache'
                 ),
                 'content-rendered partial nocache' => array(
-                    'color' => '#003300',
+                    'color' => '#00FFFF',
                     'label' => 'partial nocache'
                 ),
-                'content-rendered partial noviewcache' => array(
-                    'color' => '#333333',
+                'content-rendered partial noviewc' => array(
+                    'color' => '#FF00FF',
                     'label' => 'partial noviewcache'
                 )
             ),
