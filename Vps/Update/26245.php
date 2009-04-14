@@ -96,14 +96,13 @@ class Vps_Update_26245 extends Vps_Update
             }
 
             $tmpFile = tempnam('/tmp', 'rrdupdate');
-            $tmpFile = 'benchmark.xml';
             file_put_contents($tmpFile, $out);
 
             $cmd = "LC_ALL=C rrdtool restore --force-overwrite $tmpFile benchmark.rrd 2>&1";
             exec($cmd, $out, $ret);
             if ($ret) throw new Vps_Exception(implode("\n", $out));
 
-//             unlink($tmpFile);
+            unlink($tmpFile);
 
         }
     }
