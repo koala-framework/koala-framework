@@ -63,7 +63,7 @@ class Vps_Util_PayPal_Ipn
                 $row->save();
 
             } else if (strcmp ($res, "INVALID") == 0) {
-                throw new Vps_Exception("Ipn validation received INVALID");
+                throw new Vps_Exception("Ipn validation received INVALID $domain");
             }
         }
         echo 'OK';
