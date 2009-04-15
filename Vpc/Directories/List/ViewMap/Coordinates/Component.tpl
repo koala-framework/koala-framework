@@ -1,0 +1,1 @@
+<?= Zend_Json::encode($this->response); ?>
