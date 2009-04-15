@@ -51,6 +51,17 @@ class Vps_Util_PayPal_Ipn
                     $emailtext .= $key . " = " .$value ."\n\n";
                 }
                 mail($email, "Live-VERIFIED IPN", $emailtext . "\n\n" . $req);
+
+                $m = Vps_Model_Abstract::getInstance('Vps_Util_PayPal_Ipn_LogModel');
+                $row = $m->createRow();
+                if (isset($_GET['sandbox'])) {
+                    $row->sandbox = 1;
+                }
+                foreach ($_POST as $key => $value) {
+                    $row->$key = $value;
+                }
+                $row->save();
+
             } else if (strcmp ($res, "INVALID") == 0) {
                 throw new Vps_Exception("Ipn validation received INVALID");
             }
