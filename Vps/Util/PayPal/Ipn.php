@@ -28,9 +28,9 @@ class Vps_Util_PayPal_Ipn
         $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
         $header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
         if (isset($_GET['sandbox'])) {
-            $domain = 'www.paypal.com';
-        } else {
             $domain = 'www.sandbox.paypal.com';
+        } else {
+            $domain = 'www.paypal.com';
         }
         $fp = fsockopen($domain, 80);
         if (!$fp) {
