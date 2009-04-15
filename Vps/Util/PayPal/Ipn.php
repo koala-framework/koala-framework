@@ -9,6 +9,16 @@ class Vps_Util_PayPal_Ipn
         }
         if ($url != '/paypal_ipn') return;
 
+        $m = Vps_Model_Abstract::getInstance('Vps_Util_PayPal_Ipn_LogModel');
+        $row = $m->createRow();
+        if (isset($_GET['sandbox'])) {
+            $row->sandbox = 1;
+        }
+        foreach ($_POST as $key => $value) {
+            $row->$key = $value;
+        }
+        $row->save();
+
         $email = 'ns@vivid-planet.com';
         $header = "";
         $emailtext = "";
