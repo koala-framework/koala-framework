@@ -18,12 +18,12 @@ abstract class Vpc_Advanced_GoogleMapView_Component extends Vpc_Abstract_Composi
         $ret = parent::getTemplateVars();
 
         $options = $this->_getOptions();
-        if (!isset($options['coordinates'])) {
+        if (!isset($options['coordinates']) || empty($options['coordinates'])) {
             throw new Vps_Exception("You must return coordinates in _getOptions");
         }
-        $pos = strpos($options['coordinates'], ";");
-        $options['longitude'] = substr($options['coordinates'], 0, $pos);
-        $options['latitude'] = substr($options['coordinates'], $pos + 1, strlen($options['coordinates']) - 1);
+        $split = explode(';', $options['coordinates']);
+        $options['latitude'] = $split[0];
+        $options['longitude'] = $spilt[1];
         $options['coordinates'] = str_replace(';', ',', $options['coordinates']);
 
         $defaults = array(
