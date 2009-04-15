@@ -50,5 +50,7 @@ class Vps_Util_PayPal_Ipn
                 throw new Vps_Exception("Ipn validation received INVALID");
             }
         }
+        echo 'OK';
+        exit;
     }
 }
