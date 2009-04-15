@@ -27,7 +27,7 @@ class Vps_Util_PayPal_Ipn
         $header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
         $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
         $header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
-        if (isset($_GET['sandbox'])) {
+        if (isset($_POST['test_ipn']) && $_POST['test_ipn']) {
             $domain = 'www.sandbox.paypal.com';
         } else {
             $domain = 'www.paypal.com';
@@ -54,9 +54,6 @@ class Vps_Util_PayPal_Ipn
 
                 $m = Vps_Model_Abstract::getInstance('Vps_Util_PayPal_Ipn_LogModel');
                 $row = $m->createRow();
-                if (isset($_GET['sandbox'])) {
-                    $row->sandbox = 1;
-                }
                 foreach ($_POST as $key => $value) {
                     $row->$key = $value;
                 }
