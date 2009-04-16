@@ -17,27 +17,27 @@ class Vps_Mail_Test extends PHPUnit_Framework_TestCase
 
         $c = $this->_root->getChildComponent('-both');
         $m = new Vps_Mail($c);
-        $this->assertEquals($path.'/Both/Component.txt.tpl', $m->getTxtTemplate());
-        $this->assertEquals($path.'/Both/Component.html.tpl', $m->getHtmlTemplate());
+        $this->assertEquals($path.'/Both/Component.txt.tpl', realpath($m->getTxtTemplate()));
+        $this->assertEquals($path.'/Both/Component.html.tpl', realpath($m->getHtmlTemplate()));
         $this->assertEquals($c->componentClass, $m->getTemplateForDbVars());
 
         $c = $this->_root->getChildComponent('-both');
         $m = new Vps_Mail($c->getComponent());
-        $this->assertEquals($path.'/Both/Component.txt.tpl', $m->getTxtTemplate());
-        $this->assertEquals($path.'/Both/Component.html.tpl', $m->getHtmlTemplate());
+        $this->assertEquals($path.'/Both/Component.txt.tpl', realpath($m->getTxtTemplate()));
+        $this->assertEquals($path.'/Both/Component.html.tpl', realpath($m->getHtmlTemplate()));
         $this->assertEquals($c->componentClass, $m->getTemplateForDbVars());
 
         $c = $this->_root->getChildComponent('-both');
         $classname = get_class($c->getComponent());
         $m = new Vps_Mail($classname);
-        $this->assertEquals($path.'/Both/Component.txt.tpl', $m->getTxtTemplate());
-        $this->assertEquals($path.'/Both/Component.html.tpl', $m->getHtmlTemplate());
+        $this->assertEquals($path.'/Both/Component.txt.tpl', realpath($m->getTxtTemplate()));
+        $this->assertEquals($path.'/Both/Component.html.tpl', realpath($m->getHtmlTemplate()));
         $this->assertEquals($c->componentClass, $m->getTemplateForDbVars());
 
 
         $c = $this->_root->getChildComponent('-txtonly');
         $m = new Vps_Mail($c);
-        $this->assertEquals($path.'/TxtOnly/Component.txt.tpl', $m->getTxtTemplate());
+        $this->assertEquals($path.'/TxtOnly/Component.txt.tpl', realpath($m->getTxtTemplate()));
         $this->assertEquals(null, $m->getHtmlTemplate());
         $this->assertEquals($c->componentClass, $m->getTemplateForDbVars());
     }
