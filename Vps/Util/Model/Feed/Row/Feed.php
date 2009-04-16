@@ -12,6 +12,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
 
         $opts = array('http' =>
             array(
+                //TODO: aus config auslesen!
                 'header' => "User-Agent: RSSIncludeBot/1.0 (http://www.rssinclude.com/spider)\r\n"
             )
         );
@@ -41,9 +42,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             $encoding = 'iso-8859-1';
             $str = iconv($encoding, 'utf-8', $str);
         }
-
         Vps_Benchmark::count('loaded feed');
-        //$this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
         $this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
         if (!$this->_xml) {
             //try with another encoding
