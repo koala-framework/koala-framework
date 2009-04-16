@@ -1,7 +1,7 @@
 <?php
 class Vps_Util_PayPal_Ipn
 {
-    public function dispatch()
+    public function dispatch($logModel = 'Vps_Util_PayPal_Ipn_LogModel')
     {
         $url = '';
         if (isset($_SERVER['REDIRECT_URL'])) {
@@ -52,7 +52,7 @@ class Vps_Util_PayPal_Ipn
                 }
                 mail($email, "Live-VERIFIED IPN", $emailtext . "\n\n" . $req);
 
-                $m = Vps_Model_Abstract::getInstance('Vps_Util_PayPal_Ipn_LogModel');
+                $m = Vps_Model_Abstract::getInstance($logModel);
                 $row = $m->createRow();
                 foreach ($_POST as $key => $value) {
                     $row->$key = $value;
