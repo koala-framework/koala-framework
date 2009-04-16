@@ -32,8 +32,8 @@ class Vpc_Advanced_GoogleMapView_Test extends PHPUnit_Framework_TestCase
         $this->assertTrue($c->hasContent());
         $vars = $c->getTemplateVars();
         $this->assertEquals('12,13', $vars['options']['coordinates']);
-        $this->assertEquals('12', $vars['options']['longitude']);
-        $this->assertEquals('13', $vars['options']['latitude']);
+        $this->assertEquals('12', $vars['options']['latitude']);
+        $this->assertEquals('13', $vars['options']['longitude']);
         $this->assertEquals('0', $vars['options']['zoom_properties']);
         $this->assertEquals('10', $vars['options']['zoom']);
         $this->assertEquals('1', $vars['options']['routing']);
@@ -57,7 +57,7 @@ class Vpc_Advanced_GoogleMapView_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, preg_match('#value="([^"]+)"#', $html, $m));
         $options = Zend_Json::decode((str_replace("'", '"', $m[1])));
         $this->assertNotNull($options);
-        $this->assertEquals(12, $options['longitude']);
+        $this->assertEquals(13, $options['longitude']);
         $this->assertEquals(1, $options['routing']);
     }
 }
