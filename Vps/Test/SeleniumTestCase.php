@@ -100,8 +100,6 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             $this->assertTextNotPresent('Exception');
             $this->assertTextNotPresent('Fatal error');
             $this->assertTextNotPresent('Parse error');
-            $this->assertTextNotPresent('warning');
-            $this->assertTextNotPresent('notice');
         }
     }
 
