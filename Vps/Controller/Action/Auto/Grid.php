@@ -501,6 +501,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         $data = Zend_Json::decode($this->getRequest()->getParam("data"));
         $addedIds = array();
+        ignore_user_abort(true);
         Zend_Registry::get('db')->beginTransaction();
         foreach ($data as $submitRow) {
             $id = $submitRow[$this->_primaryKey];
@@ -559,6 +560,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
 
+        ignore_user_abort(true);
         Zend_Registry::get('db')->beginTransaction();
         foreach ($ids as $id) {
             $row = $this->_model->find($id)->current();
@@ -583,6 +585,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $ids = explode(';', $ids);
 
         $this->view->data = array('duplicatedIds' => array());
+        ignore_user_abort(true);
         Zend_Registry::get('db')->beginTransaction();
         foreach ($ids as $id) {
             $row = $this->_model->find($id)->current();
