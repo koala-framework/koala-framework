@@ -101,6 +101,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
     public function jsonSaveAction()
     {
+        ignore_user_abort(true);
         Zend_Registry::get('db')->beginTransaction();
 
         $row = $this->_form->getRow();

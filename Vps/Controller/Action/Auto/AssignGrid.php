@@ -22,6 +22,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
         $assignFromRef = $assignModel->getReference($this->_assignFromReference);
         $assignFromColumn = $assignFromRef['column'];
 
+        ignore_user_abort(true);
         $this->_model->getAdapter()->beginTransaction();
         foreach ($ids as $id) {
             $row = $assignModel->getRow($assignModel->select()
@@ -60,6 +61,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
 
         $dataModel = Vps_Model_Abstract::getInstance($assignFromRef['refModelClass']);
 
+        ignore_user_abort(true);
         $this->_model->getAdapter()->beginTransaction();
         $items = preg_split("(\n|\r)", $text);
         foreach ($items as $item) {
