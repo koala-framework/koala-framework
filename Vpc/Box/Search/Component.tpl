@@ -7,6 +7,8 @@
         <button type="submit" class="submit"><?= $this->placeholder['searchButton']; ?></button>
     </form>
     <div class="searchResult">
-        <?= $this->placeholder['initialResultText']; ?>
+        <div class="initialResultText">
+            <?= $this->placeholder['initialResultText']; ?>
+        </div>
     </div>
 </div>
