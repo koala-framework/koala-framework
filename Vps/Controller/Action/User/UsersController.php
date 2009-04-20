@@ -10,7 +10,6 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
     protected $_editDialog = array('controllerUrl'=>'/vps/user/user',
                                    'width'=>550,
                                    'height'=>520);
-    protected $_filters = array('text' => true);
 
     public function preDispatch()
     {
@@ -21,11 +20,16 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
     protected function _initColumns()
     {
         parent::_initColumns();
-        $this->_filters['locked'] = array(
+        $this->_filters['text'] = array(
+            'type'=>'TextField',
+            'width' => 85
+        );
+        $this->_filters['lockedtoo'] = array(
             'type'      => 'Button',
+            'skipWhere' => true,
             'icon'      => '/assets/silkicons/user_red.png',
             'cls'       => 'x-btn-icon',
-            'tooltip'   => trlVps('Show locked users only')
+            'tooltip'   => trlVps('Show locked users too')
         );
 
         // alle erlaubten haupt-rollen in variable
@@ -38,6 +42,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         $this->_filters['role'] = array(
             'type'=>'ComboBox',
             'width'=>120,
+            'label' => trlVps('Rights').':',
             'defaultText' => trlVps('all'),
             'skipWhere' => true,
             'data' => $roles
@@ -128,7 +133,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         }
 
         $select->whereEquals('deleted', 0);
-        if (!$this->_getParam('query_locked')) {
+        if (!$this->_getParam('query_lockedtoo')) {
             $select->whereEquals('locked', 0);
         }
 
