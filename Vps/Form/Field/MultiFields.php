@@ -90,6 +90,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             foreach (array_keys($ref['columns']) as $k) {
                 $where["{$ref['columns'][$k]} = ?"] = $row->{$ref['refColumns'][$k]};
             }
+            if ($this->_model->hasColumn('pos')) $where['order'] = 'pos';
             $rows = $this->_model->fetchAll($where);
         }
         return $rows;
