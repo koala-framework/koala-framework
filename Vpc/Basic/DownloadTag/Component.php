@@ -71,9 +71,20 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
         if (!$file || !file_exists($file)) {
             return null;
         }
+        Vps_Component_Cache::getInstance()->saveMeta(
+            get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+        );
         return array(
             'file' => $file,
             'mimeType' => $mimeType
         );
+    }
+
+    public function onCacheCallback($row)
+    {
+        $cacheId = Vps_Media::createCacheId(
+            $this->getData()->componentClass, $this->getData()->componentId, 'default'
+        );
+        Vps_Media::getOutputCache()->remove($cacheId);
     }
 }
