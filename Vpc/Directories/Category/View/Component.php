@@ -9,6 +9,11 @@ class Vpc_Directories_Category_View_Component
         return $ret;
     }
 
+    public function getViewCacheLifetime()
+    {
+        return 3600;
+    }
+
     public function getPartialVars($partial, $nr, $info)
     {
         $ret = parent::getPartialVars($partial, $nr, $info);
