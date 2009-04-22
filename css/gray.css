@@ -45,7 +45,7 @@ td.x-grid3-hd-over,td.sort-desc,td.sort-asc,td.x-grid3-hd-menu-open{border-left:
 .x-grid3-hd-btn{background:#d7d7d7 url(/assets/vps/images/gray/grid/grid3-hd-btn.gif) no-repeat left center;}
 .x-grid3-body .x-grid3-td-expander{background:transparent url(/assets/vps/images/gray/grid/grid3-special-col-bg.gif) repeat-y right;}
 .x-grid3-body .x-grid3-td-numberer{background:transparent url(/assets/vps/images/gray/grid/grid3-special-col-bg.gif) repeat-y right;}
-.x-grid3-body .x-grid3-row-selected .x-grid3-td-numberer,.x-grid3-body .x-grid3-row-selected .x-grid3-td-checker,.x-grid3-body .x-grid3-row-selected .x-grid3-td-expander{background:transparent url(img/graygrid/grid3-special-col-sel-bg.gif) repeat-y right;}
+.x-grid3-body .x-grid3-row-selected .x-grid3-td-numberer,.x-grid3-body .x-grid3-row-selected .x-grid3-td-checker,.x-grid3-body .x-grid3-row-selected .x-grid3-td-expander{background:transparent url(/assets/vps/images/gray/grid/grid3-special-col-sel-bg.gif) repeat-y right;}
 .x-grid-group-hd div{color:#626262;}
 .x-grid-group-hd{border-bottom:2px solid #d7d7d7}
 .x-grid-group-hd div{background:color: #616161;font:bold 11px arial,helvetica,sans-serif;}
