@@ -873,7 +873,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     },
     onXls : function()
     {
-        window.open(this.controllerUrl+'/xls?'+Ext.urlEncode(this.getStore().baseParams));
+        var win = new Vps.Auto.Grid.ExportWindow({
+            controllerUrl : this.controllerUrl,
+            exportParams  : Ext.urlEncode(this.getStore().baseParams)
+        });
+        win.showExport();
     },
     getSelected: function() {
         return this.getSelectionModel().getSelected();
