@@ -73,6 +73,12 @@ Vps.Auto.Grid.ExportWindow = Ext.extend(Ext.Window,
             success: function(response, options, r) {
                 var ret = Ext.decode(response.responseText);
 
+                if (ret.status.count > 2000) {
+                    this.close();
+                    Ext.Msg.alert(trlVps('Too many rows'), trlVps('It is currently not possible to export more than 2000 rows. Please use a filter to export less rows.'));
+                    return ;
+                }
+
                 var excelSaved = 0;
                 if (ret.status.collected != ret.status.count) {
                     var stat = ret.status.collected / ret.status.count;
