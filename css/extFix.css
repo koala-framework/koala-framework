@@ -1,5 +1,5 @@
 .ext-el-mask {
-    z-index:14000
+    z-index:9000;
 }
 .comboboxtext .x-form-field-wrap .x-form-trigger {
    background-image:url(/assets/vps/images/gray/form/combo-box-text.gif);
