@@ -85,8 +85,7 @@ class Vps_Component_RowObserver
         if (!isset($this->_processed[$modelname][$id])) {
             $this->_processed[$modelname][$id] = true;
             Vps_Component_Cache::getInstance()->clean(
-                Vps_Component_Cache::CLEANING_MODE_META,
-                array('model' => $modelname, 'id' => $id, 'componentId' => $componentId, 'row' => $row)
+                Vps_Component_Cache::CLEANING_MODE_META, $row
             );
             return true;
         }

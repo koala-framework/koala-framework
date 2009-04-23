@@ -53,7 +53,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         return array(
             'model' => $this->getModel(),
             'id' => $this->getData()->dbId,
-            'field' => Vps_Component_Cache::META_FIELD_COMPONENT_ID
+            'field' => 'component_id'
         );
     }
 }
