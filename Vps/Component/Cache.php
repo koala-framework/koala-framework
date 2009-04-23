@@ -6,6 +6,7 @@ class Vps_Component_Cache
     private $_model;
     private $_metaModel;
     private $_countPreloadCalls = 0;
+    private $_fieldCache;
 
     const TYPE_DEFAULT = '';
     const TYPE_MASTER = 'master';
@@ -15,10 +16,6 @@ class Vps_Component_Cache
     const META_CACHE_ID = 'cacheId';
     const META_CALLBACK = 'callback';
     const META_COMPONENT_CLASS = 'componentClass';
-    const META_STATIC = 'static';
-
-    const META_FIELD_PRIMARY = 'primary';
-    const META_FIELD_COMPONENT_ID = 'component_id';
 
     const CLEANING_MODE_META = 'default';
     const CLEANING_MODE_COMPONENT_CLASS = 'componentClass';
@@ -96,12 +93,14 @@ class Vps_Component_Cache
         return $componentId;
     }
 
-    public function saveMeta($model, $id, $value, $type = self::META_CACHE_ID, $field = self::META_FIELD_PRIMARY)
+    public function saveMeta($model, $id, $value, $type = self::META_CACHE_ID, $field = 'id')
     {
         if ($model instanceof Vps_Model_Db) $model = $model->getTable();
         if ($model instanceof Vps_Model_Abstract) $model = $model;
+        if (!$type) $type = self::META_CACHE_ID;
         if (!is_string($model)) $model = get_class($model);
         if (is_null($id)) $id = ''; // Weil mySql ein null-value im index nicht zulässt
+        if ($id == '') $field = '';
         $data = array(
             'model' => $model,
             'id' => $id,
@@ -115,6 +114,23 @@ class Vps_Component_Cache
             'replace' => true
         );
         $this->getMetaModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+        if ($field != '') {
+            $fields = $this->_getFieldCache()->load($model);
+            if (!$fields) $fields = array();
+            $fields[] = $field;
+            $this->_getFieldCache()->save(array_unique($fields), $model);
+        }
+    }
+
+    private function _getFieldCache()
+    {
+        if (!$this->_fieldCache) {
+            $this->_fieldCache = Vps_Cache::factory('Core', 'Memcached', array(
+                'lifetime'=>null,
+                'automatic_cleaning_factor' => false,
+                'automatic_serialization'=>true));
+        }
+        return $this->_fieldCache;
     }
 
     public function writeBuffer()
@@ -128,41 +144,76 @@ class Vps_Component_Cache
         $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
     }
 
+    public function _getStaticCacheId()
+    {
+        $domain = Vps_Registry::get('config')->server->domain;
+        return '_' . str_replace(array('.', '-') , '', $domain) . '_meta';
+    }
+
+    public function deleteStaticCache()
+    {
+        $this->_getFieldCache()->save(false, $this->_getStaticCacheId());
+    }
+
     public function clean($mode = self::CLEANING_MODE_META, $value = null)
     {
-        $select = $this->getMetaModel()->select()->whereEquals('type', self::META_STATIC);
-        if ($this->getMetaModel()->countRows($select) == 0) {
+        $cacheId = $this->_getStaticCacheId();
+        if (!$this->_getFieldCache()->load($cacheId)) {
+            $count = 0;
             foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
                 $methods = get_class_methods($componentClass);
                 if (in_array('getStaticCacheVars', $methods)) {
                     $vars = call_user_func(array($componentClass, 'getStaticCacheVars'), $componentClass);
-                    foreach ($vars as $id => $m) {
-                        $this->saveMeta($m['model'], null, $componentClass, Vps_Component_Cache::META_STATIC);
+                    foreach ($vars as $id => $model) {
+                        if (is_array($model)) $model = $model['model'];
+                        $this->saveMeta($model, null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
                     }
+                    $count += count($vars);
                 }
             }
+            Vps_Benchmark::cacheInfo("Cache: written $count static entries.");
+            $this->_getFieldCache()->save(true, $cacheId);
         }
 
         if ($mode == Vps_Component_Cache::CLEANING_MODE_META) {
-            if (!is_array($value) ||
-                !array_key_exists('model', $value) ||
-                !array_key_exists('id', $value) ||
-                !array_key_exists('componentId', $value) ||
-                !array_key_exists('row', $value)
-            ) {
-                throw new Vps_Exception('$value must be an array with "model", "id", "componentId" and "row"');
+            $row = $value;
+            if (!$row instanceof Vps_Model_Row_Abstract && !$row instanceof Zend_Db_Table_Row_Abstract) {
+                throw new Vps_Exception('$value must be instance of Vps_Model_Row_Abstract or Zend_Db_Table_Row_Abstract');
             }
+            if ($row instanceof Zend_Db_Table_Row_Abstract) {
+                $model = $row->getTable();
+            } else {
+                $model = $row->getModel();
+                if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+            }
+            $model = get_class($model);
+            $fields = $this->_getFieldCache()->load($model);
+            if (!$fields) $fields = array('id');
+            $or = array(new Vps_Model_Select_Expr_Equals('id', ''));
+            $sqlOr = '';
+            foreach ($fields as $field) {
+                $id = $row->$field;
+                $sqlOr .= "OR (m.id='$id' AND m.field='$field')";
+                $or[] = new Vps_Model_Select_Expr_And(array(
+                    new Vps_Model_Select_Expr_Equals('id', $id),
+                    new Vps_Model_Select_Expr_Equals('field', $field)
+                ));
+            }
+            $select = $this->getMetaModel()->select()->where(
+                new Vps_Model_Select_Expr_And(array(
+                    new Vps_Model_Select_Expr_Equals('model', $model),
+                    new Vps_Model_Select_Expr_Or($or)
+                ))
+            );
+
             if ($this->getMetaModel()->getProxyModel() instanceof Vps_Model_Db) {
                 $adapter = $this->getMetaModel()->getProxyModel()->getTable()->getAdapter();
-                $model = $adapter->quote($value['model']);
-                $id = $adapter->quote($value['id']);
-                $componentId = $adapter->quote($value['componentId'] ? $value['componentId'] : '');
                 $sql = "
                     DELETE cache_component
                     FROM cache_component, cache_component_meta m
                     WHERE cache_component.id = m.value
-                        AND ((m.model = $model)
-                        AND ((m.id = '') OR (m.id = $id AND m.field='primary') OR (m.id = $componentId AND m.field='component_id')))
+                        AND m.model = '$model'
+                        AND (m.id = '' $sqlOr)
                         AND m.type='cacheId'
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
@@ -170,45 +221,27 @@ class Vps_Component_Cache
                     DELETE cache_component
                     FROM cache_component, cache_component_meta m
                     WHERE cache_component.component_class = m.value
-                        AND ((m.model = $model)
-                        AND ((m.id = '') OR (m.id = $id AND m.field='primary') OR (m.id = $componentId AND m.field='component_id')))
-                        AND (m.type='componentClass' OR m.type='static')
+                        AND m.model = '$model'
+                        AND (m.id = '' $sqlOr)
+                        AND m.type='componentClass'
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
                 Vps_Benchmark::cacheInfo("Cache: cleared $model with $id");
                 $select->whereEquals('type', 'callback');
             }
-            $select = $this->getMetaModel()->select()->where(
-                new Vps_Model_Select_Expr_And(array(
-                    new Vps_Model_Select_Expr_Equals('model', $value['model']),
-                    new Vps_Model_Select_Expr_Or(array(
-                        new Vps_Model_Select_Expr_Equals('id', ''),
-                        new Vps_Model_Select_Expr_And(array(
-                            new Vps_Model_Select_Expr_Equals('id', $value['id']),
-                            new Vps_Model_Select_Expr_Equals('field', 'primary')
-                        )),
-                        new Vps_Model_Select_Expr_And(array(
-                            new Vps_Model_Select_Expr_Equals('id', $value['componentId']),
-                            new Vps_Model_Select_Expr_Equals('field', 'component_id')
-                        ))
-                    ))
-                ))
-            );
-            if ($this->getMetaModel()->getProxyModel() instanceof Vps_Model_Db) {
-                $select->whereNotEquals('type', array(self::META_CACHE_ID, self::META_STATIC, self::META_COMPONENT_CLASS));
-            }
-            foreach ($this->getMetaModel()->getRows($select) as $row) {
-                if ($row->type == self::META_CACHE_ID) {
-                    $this->clean(self::CLEANING_MODE_ID, $row->value);
-                } else if ($row->type == self::META_CALLBACK) {
+
+            foreach ($this->getMetaModel()->getRows($select) as $metaRow) {
+                if ($metaRow->type == self::META_CACHE_ID) {
+                    $this->clean(self::CLEANING_MODE_ID, $metaRow->value);
+                } else if ($metaRow->type == self::META_CALLBACK) {
                     $component = Vps_Component_Data_Root::getInstance()
-                        ->getComponentById($row->value, array('ignoreVisible' => true));
+                        ->getComponentById($metaRow->value, array('ignoreVisible' => true));
                     if ($component) {
-                        $component->getComponent()->onCacheCallback($value['row']);
+                        $component->getComponent()->onCacheCallback($row);
                         Vps_Benchmark::cacheInfo("Cache: Callback for component {$component->componentId} ({$component->componentClass}) called.");
                     }
-                } else if ($row->type == self::META_COMPONENT_CLASS || $row->type == self::META_STATIC) {
-                    $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $row->value);
+                } else if ($metaRow->type == self::META_COMPONENT_CLASS) {
+                    $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $metaRow->value);
                 }
             }
             return true;

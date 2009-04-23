@@ -94,35 +94,38 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
     public function testDeleteByMeta()
     {
         $cache = Vps_Component_Cache::getInstance();
-        $cache->saveMeta('Vps_Component_Cache_TestModel', null, 'a');
-        $cache->saveMeta('Vps_Component_Cache_TestModel', 1, 'b');
-        $cache->saveMeta('Vps_Component_Cache_TestModel', 2, 'Vpc_Foo', Vps_Component_Cache::META_COMPONENT_CLASS);
+        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_TestModel');
+        $cache->saveMeta($model, null, 'a');
+        $cache->saveMeta($model, 1, 'b');
+        $cache->saveMeta($model, 2, 'Vpc_Foo', Vps_Component_Cache::META_COMPONENT_CLASS);
         $cache->save('', 'a', 'Vpc_Bar');
         $cache->save('', 'b', 'Vpc_Bar');
         $cache->save('', 'c1', 'Vpc_Foo');
         $cache->save('', 'c2', 'Vpc_Foo');
 
         $this->assertEquals(4, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, array(
-            'model' => 'Vps_Component_Cache_TestModel',
-            'id' => 3,
-            'componentId' => null,
-            'row' => null
-        ));
+        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model->getRow(3));
         $this->assertEquals(3, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, array(
-            'model' => 'Vps_Component_Cache_TestModel',
-            'id' => 2,
-            'componentId' => null,
-            'row' => null
-        ));
+        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model->getRow(2));
         $this->assertEquals(1, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, array(
-            'model' => 'Vps_Component_Cache_TestModel',
-            'id' => 1,
-            'componentId' => null,
-            'row' => null
-        ));
+        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model->getRow(1));
+        $this->assertEquals(0, $cache->getModel()->countRows());
+    }
+
+    public function testDeleteByMetaField()
+    {
+        $cache = Vps_Component_Cache::getInstance();
+        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_TestModelField');
+
+        $cache->saveMeta($model, 7, 'a', Vps_Component_Cache::META_CACHE_ID, 'foo');
+        $cache->saveMeta($model, null, 'b', Vps_Component_Cache::META_CACHE_ID, 'foo');
+        $cache->save('', 'a', 'Vpc_Bar');
+        $cache->save('', 'b', 'Vpc_Bar');
+
+        $this->assertEquals(2, $cache->getModel()->countRows());
+        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model->getRow(2));
+        $this->assertEquals(1, $cache->getModel()->countRows());
+        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model->getRow(1));
         $this->assertEquals(0, $cache->getModel()->countRows());
     }
 

@@ -314,7 +314,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             );
         }
         // Seite im Seitanbaum wird gelöscht, wenn Eigenschaften im Admin geändert werden
-        if ($this->getData()->isPage && (int)$this->getData()->componentId > 0) {
+        if ($this->getData()->isPage && is_numeric($this->getData()->componentId)) {
             $ret[] = array(
                 'model' => 'Vps_Dao_Pages',
                 'id' => $this->getData()->componentId
