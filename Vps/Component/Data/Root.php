@@ -70,6 +70,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getPageByUrl($url)
     {
         $parsedUrl = parse_url($url);
+        if (!isset($parsedUrl['path'])) return null;
         if (!isset($parsedUrl['host'])) {
             throw new Vps_Exception("Host is missing in url '$url'");
         }
