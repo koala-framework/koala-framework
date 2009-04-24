@@ -206,7 +206,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             if (isset($m['componentId'])) {
                 $value = $this->getCache()->getCacheId($m['componentId']);
             }
-            $field = isset($m['field']) ? $m['field'] : 'id';
+            $field = isset($m['field']) ? $m['field'] : '';
             $this->getCache()->saveMeta($model, $id, $value, $type, $field);
         }
         return $meta;
