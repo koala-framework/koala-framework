@@ -6,8 +6,6 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract_Image_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Image');
         $ret['componentIcon'] = new Vps_Asset('picture');
-        $ret['pdfMaxWidth'] = 0;
-        $ret['pdfMaxDpi'] = 150;
         $ret['imgCssClass'] = '';
         $ret['emptyImage'] = false;
         $ret['useParentImage'] = false;

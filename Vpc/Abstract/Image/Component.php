@@ -15,6 +15,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             'scale' => Vps_Media_Image::SCALE_BESTFIT
         ));
 
+        $ret['pdfMaxWidth'] = 0;
+        $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;

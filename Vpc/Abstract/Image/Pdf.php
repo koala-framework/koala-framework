@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Image_Pdf extends Vpc_Abstract_Pdf
+class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
 {
     public function writeContent()
     {
@@ -51,8 +51,6 @@ class Vpc_Basic_Image_Pdf extends Vpc_Abstract_Pdf
             $this->SetY($this->getY() + $height + 2);
             unlink($tempFilename);
         }
-
-
     }
 
     private function _calculateDpi ($mm)
