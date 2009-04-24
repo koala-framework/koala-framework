@@ -322,6 +322,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             } else if ($part['type'] == 'invalidLink') {
 
                 $model = Vpc_Abstract::createModel($classes['link']);
+                $destRow = $this->_getChildComponentRow('link', $model);
                 if (isset($part['componentId'])) {
                     try {
                         $srcRow = $model->getRow($part['componentId']);
@@ -333,7 +334,6 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                         $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
                         $srcLinkRow = $linkModel->getRow($part['componentId'].'-link');
                         if ($srcLinkRow) {
-                            $destRow = $this->_getChildComponentRow('link', $model);
                             $destRow->component = $srcRow->component;
                             $destRow->save();
                             $destLinkRow = $linkModel->getRow($destRow->component_id.'-link');
@@ -352,7 +352,10 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                         }
                     }
                 }
-                $destRow = $model->createRow();
+                if (!$destRow) {
+                    $destRow = $model->createRow();
+                    $this->addChildComponentRow('link', $destRow);
+                }
                 $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
 
                 $destRow->component = null;
@@ -383,7 +386,6 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                 }
 
                 if (!$destRow->component) continue; //kein solcher-link möglich
-                $this->addChildComponentRow('link', $destRow);
                 $destRow->save();
                 $destClasses =  Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
 
