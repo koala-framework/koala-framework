@@ -93,7 +93,7 @@ class Vps_Component_Cache
         return $componentId;
     }
 
-    public function saveMeta($model, $id, $value, $type = self::META_CACHE_ID, $field = 'id')
+    public function saveMeta($model, $id, $value, $type = self::META_CACHE_ID, $field = '')
     {
         if ($model instanceof Vps_Model_Db) $model = $model->getTable();
         if ($model instanceof Vps_Model_Abstract) $model = $model;
@@ -114,7 +114,7 @@ class Vps_Component_Cache
             'replace' => true
         );
         $this->getMetaModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
-        if ($field != '') {
+        if ($id != '') {
             $fields = $this->_getFieldCache()->load($model);
             if (!$fields) $fields = array();
             $fields[] = $field;
@@ -182,17 +182,19 @@ class Vps_Component_Cache
             }
             if ($row instanceof Zend_Db_Table_Row_Abstract) {
                 $model = $row->getTable();
+                $primaryKey = current($model->info('primary'));
             } else {
                 $model = $row->getModel();
+                $primaryKey = $model->getPrimaryKey();
                 if ($model instanceof Vps_Model_Db) $model = $model->getTable();
             }
             $model = get_class($model);
             $fields = $this->_getFieldCache()->load($model);
-            if (!$fields) $fields = array('id');
+            if (!$fields) $fields = array('');
             $or = array(new Vps_Model_Select_Expr_Equals('id', ''));
             $sqlOr = '';
             foreach ($fields as $field) {
-                $id = $row->$field;
+                $id = $field != '' ? $row->$field : $row->$primaryKey;
                 $sqlOr .= "OR (m.id='$id' AND m.field='$field')";
                 $or[] = new Vps_Model_Select_Expr_And(array(
                     new Vps_Model_Select_Expr_Equals('id', $id),
