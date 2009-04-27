@@ -30,4 +30,8 @@ Ext.form.BasicForm.override({
 });
 
 //E-Mail Validierung darf ab Ext 2.2 keine Bindestriche mehr haben, jetzt schon wieder
-Ext.form.VTypes.email = /^([\w]+)(.[\w]+)*@([\w-]+\.){1,5}([A-Za-z]){2,4}$/;
+Ext.apply(Ext.form.VTypes, {
+	email:  function(v) {
+        return /^([\w]+)(.[\w]+)*@([\w-]+\.){1,5}([A-Za-z]){2,4}$/.test(v);
+    }
+});
