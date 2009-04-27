@@ -39,6 +39,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
             $row = $this->getImageRow();
             $filename = $row->filename;
             $fRow = $row->getParentRow('Image');
+            if (!$fRow) return $ret;
             if (!$filename && $fRow) {
                 $filename = $fRow->filename;
             }
