@@ -107,6 +107,7 @@ class Vps_Util_Rrd_Graph
             $i++;
         }
         $cmd .= " 2>&1";
+//         d($cmd);
         exec($cmd, $out, $ret);
         if ($ret) {
             throw new Vps_Exception(implode('', $out)."\n".$cmd);
