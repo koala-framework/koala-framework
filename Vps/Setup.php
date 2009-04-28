@@ -205,12 +205,12 @@ class Vps_Setup
         require_once 'Vps/Loader.php';
         require_once 'Vps/Registry.php';
         Zend_Registry::setClassName('Vps_Registry');
-        if (Zend_Registry::get('config')->debug->benchmark) {
+        if ($config->debug->benchmark) {
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enable();
         }
-        if (Zend_Registry::get('config')->debug->benchmarkLog) {
+        if ($config->debug->benchmarkLog) {
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enableLog();
@@ -224,24 +224,26 @@ class Vps_Setup
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
 
+        $config = Zend_Registry::get('config');
+
         $ip = get_include_path();
-        foreach (Zend_Registry::get('config')->includepath as $p) {
+        foreach ($config->includepath as $p) {
             $ip .= PATH_SEPARATOR . $p;
         }
         set_include_path($ip);
 
         Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
 
-        if (Zend_Registry::get('config')->debug->firephp && php_sapi_name() != 'cli') {
+        if ($config->debug->firephp && php_sapi_name() != 'cli') {
             require_once 'FirePHPCore/FirePHP.class.php';
             FirePHP::init();
         }
 
-        if (Zend_Registry::get('config')->debug->querylog && php_sapi_name() != 'cli') {
+        if ($config->debug->querylog && php_sapi_name() != 'cli') {
             header('X-Vps-RequestNum: '.Zend_Registry::get('requestNum'));
             register_shutdown_function(array('Vps_Setup', 'shutDown'));
         }
-        if ((Zend_Registry::get('config')->debug->firephp || Zend_Registry::get('config')->debug->querylog)
+        if (($config->debug->firephp || $config->debug->querylog)
                 && php_sapi_name() != 'cli')
         {
             ob_start();
@@ -253,15 +255,15 @@ class Vps_Setup
         }
 
         if (isset($_COOKIE['unitTest'])) {
-            Zend_Registry::get('config')->debug->benchmark = false;
+            $config->debug->benchmark = false;
         }
 
         // Falls redirectToDomain eingeschalten ist, umleiten
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
-        if ($host && Zend_Registry::get('config')->server->redirectToDomain) {
+        if ($host && $config->server->redirectToDomain) {
             $redirect = false;
-            if (Zend_Registry::get('config')->vpc->domains) {
-                $domains = Zend_Registry::get('config')->vpc->domains;
+            if ($config->vpc->domains) {
+                $domains = $config->vpc->domains;
                 $noRedirect = false;
                 foreach ($domains as $domain) {
                     if ($domain->domain == $host) {
@@ -279,10 +281,11 @@ class Vps_Setup
                         }
                     }
                 }
-            } else if (Zend_Registry::get('config')->server->domain
-                && $host != Zend_Registry::get('config')->server->domain
+            } else if ($config->server->domain
+                && $host != $config->server->domain
+                && (!$config->server->noRedirectPattern || !preg_match('/'.$config->server->noRedirectPattern.'/', $host))
             ) {
-                $redirect = Zend_Registry::get('config')->server->domain;
+                //$redirect = $config->server->domain;
             }
             if ($redirect) {
                 header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
@@ -290,8 +293,8 @@ class Vps_Setup
             }
         }
 
-        if (Zend_Registry::get('config')->showPlaceholder
-                && !Zend_Registry::get('config')->ignoreShowPlaceholder
+        if ($config->showPlaceholder
+                && !$config->ignoreShowPlaceholder
                 && php_sapi_name() != 'cli'
                 && isset($_SERVER['REQUEST_URI'])
                 && substr($_SERVER['REQUEST_URI'], 0, 8)!='/assets/'
@@ -301,7 +304,7 @@ class Vps_Setup
             exit;
         }
 
-        if (php_sapi_name() != 'cli' && Zend_Registry::get('config')->preLogin && !isset($_COOKIE['unitTest'])
+        if (php_sapi_name() != 'cli' && $config->preLogin && !isset($_COOKIE['unitTest'])
             && isset($_SERVER['REDIRECT_URL']) && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/vps/test/'
              && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/testoutput'
              && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
@@ -330,7 +333,7 @@ class Vps_Setup
         $cache = Vps_Cache::factory('Core', 'Memcached', $frontendOptions);
         Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
 
-        if ($tl = Zend_Registry::get('config')->debug->timeLimit) {
+        if ($tl = $config->debug->timeLimit) {
             set_time_limit($tl);
         }
     }
