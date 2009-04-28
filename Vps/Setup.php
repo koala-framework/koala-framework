@@ -205,6 +205,7 @@ class Vps_Setup
         require_once 'Vps/Loader.php';
         require_once 'Vps/Registry.php';
         Zend_Registry::setClassName('Vps_Registry');
+        $config = Zend_Registry::get('config');
         if ($config->debug->benchmark) {
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
@@ -223,8 +224,6 @@ class Vps_Setup
         mb_internal_encoding('UTF-8');
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
-
-        $config = Zend_Registry::get('config');
 
         $ip = get_include_path();
         foreach ($config->includepath as $p) {
