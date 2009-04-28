@@ -7,6 +7,8 @@ class Vps_Update_26245 extends Vps_Update
             $fileName = 'benchmark-'.time().'.rrd';
             rename('benchmark.rrd', $fileName);
 
+            $rrd = new Vps_Benchmark_Rrd();
+
             //nur zum felder holen, könnte auch effizienter gemacht werden
             $start = trim(`rrdtool first $fileName`);
             $end = trim(`rrdtool last $fileName`);
@@ -37,10 +39,9 @@ class Vps_Update_26245 extends Vps_Update
             }
 
 
-            $newFields = Vps_Controller_Action_Cli_BenchmarkController::getFields();
-            $newFields = array_merge(array('load', 'bytesRead', 'bytesWritten', 'getHits', 'getMisses'), $newFields);
-            foreach ($newFields as &$f) {
-                $f = Vps_Controller_Action_Cli_BenchmarkController::escapeField($f);
+            $newFields = array();
+            foreach ($rrd->getFields() as $f) {
+                $newFields[] = $f->getName();
             }
 
             foreach ($databases as &$database) {
@@ -77,7 +78,7 @@ class Vps_Update_26245 extends Vps_Update
             $progress->finish();
 
             //create new rrd
-            Vps_Controller_Action_Cli_BenchmarkController::createBenchmark(time());
+            $rrd->createFile(time());
 
             $cmd = "LC_ALL=C rrdtool dump benchmark.rrd";
             $out = array();
