@@ -26,7 +26,7 @@ class Vps_Util_Rrd_Field
         if (isset($settings['min'])) $this->_min = $settings['min'];
     }
 
-    private function _escapeField($f)
+    public static function escapeField($f)
     {
         if (in_array($f, array('getHits', 'getMisses', 'bytesRead', 'bytesWritten'))) return $f;
 
@@ -35,6 +35,11 @@ class Vps_Util_Rrd_Field
             $ret = substr($ret, 0, 10).substr($ret, -9);
         }
         return $ret;
+    }
+
+    private function _escapeField($f)
+    {
+        return self::escapeField($f);
     }
 
     public function nameEquals($name)
