@@ -20,6 +20,13 @@ class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Actio
     {
         foreach ($this->_rrds as $rrd) {
             $rrd->record();
+            if ($this->_getParam('debug')) {
+                $values = array_values($rrd->getRecordValues());
+                foreach (array_values($rrd->getFields()) as $k=>$i) {
+                    echo $i->getText().": ".$values[$k]."\n";
+                }
+            }
+            echo "\n";
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }

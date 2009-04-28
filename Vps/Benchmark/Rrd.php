@@ -49,7 +49,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         return $fields;
     }
 
-    public function record()
+    public function getRecordValues()
     {
         $values = array();
         $load = @file_get_contents('/proc/loadavg');
@@ -64,7 +64,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         foreach ($this->_getFieldNames() as $field) {
             $values[] = $this->_getMemcacheValue($field);
         }
-        parent::record($values);
+        return $values;
     }
 
     public function getGraphs()
