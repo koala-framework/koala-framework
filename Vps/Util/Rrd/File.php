@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Rrd_File
+abstract class Vps_Util_Rrd_File
 {
     private $_fields = array();
     private $_fileName;
@@ -27,6 +27,11 @@ class Vps_Util_Rrd_File
             if ($f->nameEquals($name)) return $f;
         }
         return null;
+    }
+
+    public function getFields()
+    {
+        return $this->_fields;
     }
 
     public function createFile($start)
@@ -68,8 +73,12 @@ class Vps_Util_Rrd_File
         return $value;
     }
 
-    public function record(array $values)
+    abstract public function getRecordValues();
+
+    public function record()
     {
+        $values = $this->getRecordValues();
+
         if (!file_exists($this->_fileName)) {
             $this->createFile(time()-1);
         }

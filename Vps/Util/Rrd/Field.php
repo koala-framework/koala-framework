@@ -5,6 +5,7 @@ class Vps_Util_Rrd_Field
     private $_text;
     private $_type = 'COUNTER';
     private $_min = 0;
+    private $_max;
 
     public function __construct($settings)
     {
@@ -21,7 +22,7 @@ class Vps_Util_Rrd_Field
         if (isset($settings['max'])) {
             $this->_max = $settings['max'];
         } else {
-            $this->_max = 2^31;
+            $this->_max = pow(2, 31);
         }
         if (isset($settings['min'])) $this->_min = $settings['min'];
     }
