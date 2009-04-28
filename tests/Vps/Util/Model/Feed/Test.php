@@ -75,6 +75,21 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $entries->current()->link);
         $this->assertEquals('2009-04-01 12:00:00', $entries->current()->date);
     }
+
+    public function testBug2()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('file://'.dirname(__FILE__).'/bug2.xml');
+        $this->assertNotNull($feed);
+        $this->assertEquals('file://'.dirname(__FILE__).'/bug2.xml', $feed->url);
+        $this->assertEquals('Cultural Anthropology', $feed->title);
+
+        $entries = $feed->getChildRows('Entries');
+        $this->assertEquals(14, count($entries));
+        $this->assertEquals('Assignments DUE - April 30, 2009', $entries->current()->title);
+        $this->assertContains('Whether you\'ve opted to do Service Learning, an Ethnography', $entries->current()->description);
+    }
+
     /**
      * @group slow
      */
