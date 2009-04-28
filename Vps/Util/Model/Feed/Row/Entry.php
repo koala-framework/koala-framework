@@ -19,7 +19,15 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
             }
         } else {
             $data['link'] = (string)$xml->link['href'];
-            $data['description'] = (string)$xml->summary;
+            $data['description'] = '';
+            foreach ($xml->content as $i) {
+                if (!$data['description'] || $i['type'] == 'html') {
+                    $data['description'] = (string)$i;
+                }
+            }
+            if (!$data['description']) {
+                $data['description'] = (string)$xml->summary;
+            }
             $date = (string)$xml->updated;
         }
         if (!$date) {
