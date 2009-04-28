@@ -6,7 +6,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         parent::__construct('benchmark.rrd');
         $this->addField(array(
             'name'=>'load',
-            'type'=>'ABSOLUTE',
+            'type'=>'GAUGE',
             'max'=>1000,
         ));
         $this->addField(array(
