@@ -21,24 +21,34 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
             throw new Vps_Exception("unknown branch!");
         }
         $versions = array();
-        $maxVersion = $branchVersion;
-        foreach (self::_getSvnDirs("tags/vps") as $v) {
-            if ($branchVersion && version_compare($branchVersion, $v) == 1) {
-                continue;
+        if ($branchVersion) {
+            $maxVersion = $branchVersion;
+            foreach (self::_getSvnDirs("tags/vps") as $v) {
+                if ($branchVersion && version_compare($branchVersion, $v) == 1) {
+                    continue;
+                }
+                if (!$maxVersion || version_compare($maxVersion, $v) == -1) {
+                    $maxVersion = $v;
+                }
             }
-            if (!$maxVersion || version_compare($maxVersion, $v) == -1) {
-                $maxVersion = $v;
+            if (preg_match('#^([0-9]+)\\.([0-9]+)\\.([0-9]+)-?([0-9]*)$#', $maxVersion, $m)) {
+                if (isset($m[4])) {
+                    $versions[] = "$m[1].$m[2].$m[3]-".($m[4]+1);
+                }
+                $versions[] = "$m[1].$m[2].".($m[3]+1);
+                //$versions[] = "$m[1].".($m[2]+1).".0";
+                //$versions[] = ($m[1]+1).".0.0";
+            } else {
+                $versions[] = $maxVersion.".0";
             }
-        }
-        if (preg_match('#^([0-9]+)\\.([0-9]+)\\.([0-9]+)-?([0-9]*)$#', $maxVersion, $m)) {
-            if (isset($m[4])) {
-                $versions[] = "$m[1].$m[2].$m[3]-".($m[4]+1);
-            }
-            $versions[] = "$m[1].$m[2].".($m[3]+1);
-            //$versions[] = "$m[1].".($m[2]+1).".0";
-            //$versions[] = ($m[1]+1).".0.0";
         } else {
-            $versions[] = $maxVersion.".0";
+            $maxVersion = 0;
+            foreach (self::_getSvnDirs("tags/vps") as $v) {
+                if (substr($v, 0, 6) == 'trunk.') {
+                    $maxVersion = max($maxVersion, substr($v, 6));
+                }
+            }
+            $versions[] = "trunk.".($maxVersion+1);
         }
 
 
