@@ -69,10 +69,6 @@ class Vps_Util_Rrd_Graph
         if (is_string($start)) {
             $start = strtotime($start);
         }
-        if (!$start || $start > time() || (time()-$start) < 1*24*60*60) {
-            $start = time()-1*24*60*60;
-        }
-        $start = max($start, mktime(17,0,0,12,4,2008));
 
         $tmpFile = tempnam('/tmp', 'graph');
         $cmd = "rrdtool graph $tmpFile -h 300 -w 600 ";
