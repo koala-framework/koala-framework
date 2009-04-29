@@ -284,7 +284,7 @@ class Vps_Setup
                 && $host != $config->server->domain
                 && (!$config->server->noRedirectPattern || !preg_match('/'.$config->server->noRedirectPattern.'/', $host))
             ) {
-                //$redirect = $config->server->domain;
+                $redirect = $config->server->domain;
             }
             if ($redirect) {
                 header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
