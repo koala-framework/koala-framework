@@ -24,7 +24,7 @@ class Vpc_User_Detail_General_Form extends Vpc_Abstract_Composite_Form
         }
 
         $fieldsContainer->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
-                    ->setVType('email')
+                    ->setVtype('email')
                     ->setAllowBlank(false)
                     ->setWidth(250)
                     ->addValidator(new Vpc_User_Detail_General_Validate_UniqueEmail());

@@ -8,17 +8,28 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         $this->setInputType('text');
     }
 
+    public function __call($n, $v)
+    {
+        if ($n == 'setVType') {
+            bt();
+            $e = new Vps_Exception('use setVtype instead of setVType');
+            $e->notify();
+            $n = 'setVtype';
+        }
+        return parent::__call($n, $v);
+    }
+
     protected function _addValidators()
     {
         parent::_addValidators();
 
-        if ($this->getVType() === 'email') {
+        if ($this->getVtype() === 'email') {
             $this->addValidator(new Vps_Validate_EmailAddressSimple());
-        } else if ($this->getVType() === 'url') {
+        } else if ($this->getVtype() === 'url') {
             //todo, reuse Zend_Uri::check
-        } else if ($this->getVType() === 'alpha') {
+        } else if ($this->getVtype() === 'alpha') {
             $this->addValidator(new Vps_Validate_Alpha());
-        } else if ($this->getVType() === 'alphanum') {
+        } else if ($this->getVtype() === 'alphanum') {
             $this->addValidator(new Vps_Validate_Alnum());
         }
         if ($this->getMaxLength()) {

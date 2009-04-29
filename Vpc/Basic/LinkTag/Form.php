@@ -7,7 +7,7 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
 
         $gen = Vpc_Abstract::getSetting($this->getClass(), 'generators');
         $classes = $gen['link']['component'];
-        $cards = $this->add(new Vps_Form_Container_Cards('component', trlVps('Linktype')))
+        $cards = $this->add(new Vps_Form_Container_Cards('component', trlVps('Link-Action')))
             ->setDefaultValue(key($classes));
 
         foreach ($classes as $name => $class) {

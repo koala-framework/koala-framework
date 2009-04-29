@@ -3569,7 +3569,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Click on Preview Image</en>
-<de>Hier klicken f&#xFC;r Bildvorschau</de>
+<de>Aktion bei Klick auf Bild</de>
 <id>969</id>
 </text>
 <text>
@@ -3608,13 +3608,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>976</id>
 </text>
 <text>
-<en>Layout</en>
+<en>Alignment</en>
 <de>Anordnung</de>
-<id>977</id>
-</text>
-<text>
-<en>Position Image</en>
-<de>Bildposition</de>
 <id>978</id>
 </text>
 <text>
@@ -4053,6 +4048,16 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>There were too many wrong logins from your connection. Please try again in 5 minutes.</en>
 <id>1082</id>
+</text>
+<text>
+<en>Link-Action</en>
+<de>Link-Aktion</de>
+<id>1067</id>
+</text>
+<text>
+    <en>Text/Image - Alignment</en>
+    <de>Text/Bild - Ausrichtung</de>
+    <id>1068</id>
 </text>
 </trl>
 

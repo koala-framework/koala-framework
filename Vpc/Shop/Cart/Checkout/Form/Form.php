@@ -29,7 +29,7 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
             ->setDefaultValue('AT')
             ->setAllowBlank(false);
         $this->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
-            ->setVType('email')
+            ->setVtype('email')
             ->setAllowBlank(false);
         $this->add(new Vps_Form_Field_TextField('phone', trlVps('Phone')));
 
