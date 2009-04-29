@@ -14,6 +14,7 @@ if ($this->showSuccess) {
         echo '</div>';
     }
     ?>
+    <? if ($this->form) { ?>
     <div class="webStandard webForm vpcForm">
     <form action="<?= $this->action ?>" method="<?=$this->method?>"<? if($this->isUpload) { ?> enctype="multipart/form-data"<? } ?>>
         <?php $this->formField($this->form) ?>
@@ -31,6 +32,7 @@ if ($this->showSuccess) {
         <input type="hidden" name="<?= $this->formName ?>-post" value="post" />
     </form>
     </div>
+    <? } ?>
     <?php
 }
 ?>
