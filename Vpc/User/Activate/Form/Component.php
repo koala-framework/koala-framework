@@ -2,6 +2,8 @@
 class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
 {
     private $_user = null;
+    private $_hideForm = false;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -17,6 +19,13 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         $this->_form->add(new Vps_Form_Field_Hidden('code'));
     }
 
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        if ($this->_hideForm) $ret['form'] = null;
+        return $ret;
+    }
+
     public function processInput(array $postData)
     {
         parent::processInput($postData);
@@ -24,12 +33,16 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         if (isset($postData['code'])) {
             $code = $postData['code'];
             $this->_form->getRow()->code = $code;
+        } else if (isset($postData['form_code'])) {
+            $code = $postData['form_code'];
+            $this->_form->getRow()->code = $code;
         } else {
             $code = $this->_form->getRow()->code;
         }
         $code = explode('-', $code);
         if (count($code) != 2 || empty($code[0]) || empty($code[1])) {
             $this->_errors[] = trlVps('Data was not sent completely. Please copy the complete address out of the email.');
+            $this->_hideForm = true;
         } else {
             $userId = (int)$code[0];
             $code = $code[1];
@@ -37,8 +50,10 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
             $this->_user = $userModel->getRow($userModel->select()->whereEquals('id', $userId));
             if (!$this->_user) {
                 $this->_errors[] = trlVps('Data was not sent completely. Please copy the complete address out of the email.');
+                $this->_hideForm = true;
             } else if ($this->_user->getActivationCode() != $code) {
                 $this->_errors[] = trlVps('Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.');
+                $this->_hideForm = true;
             }
         }
 
