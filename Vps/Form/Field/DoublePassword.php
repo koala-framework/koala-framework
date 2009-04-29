@@ -8,7 +8,6 @@ class Vps_Form_Field_DoublePassword extends Vps_Form_Field_Abstract
         $this->_passwordField1 = new Vps_Form_Field_Password($fieldName, $fieldLabel);
         $this->_passwordField1->setAllowBlank(false);
         $this->_passwordField2 = new Vps_Form_Field_Password($fieldName.'_repeat', trlVps('repeat {0}', $fieldLabel));
-        $this->_passwordField2->setAllowBlank(false);
         $this->_passwordField2->setSave(false);
         parent::__construct(null, null);
     }
