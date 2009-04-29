@@ -41,7 +41,7 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
             ->setCheckboxToggle(true);
         $fs->add(new Vps_Form_Field_TextField('filename', trlVps('Filename')))
             ->setAllowBlank(false)
-            ->setVType('alphanum');
+            ->setVtype('alphanum');
 
         $fields->add(new Vps_Form_Field_Select('component',  trlVps('Pagetype')))
             ->setStore(array('data' => $data, 'fields' => array('id', 'name', 'domain')))

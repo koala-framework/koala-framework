@@ -7,7 +7,7 @@ class Vpc_User_Login_Form_Form extends Vps_Form
         $this->_model = new Vps_Model_FnF();
 
         $this->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
-                    ->setVType('email')
+                    ->setVtype('email')
                     ->setAllowBlank(false);
 
         $this->add(new Vps_Form_Field_Password('password', trlVps('Password')))

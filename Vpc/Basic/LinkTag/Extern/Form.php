@@ -7,8 +7,9 @@ class Vpc_Basic_LinkTag_Extern_Form extends Vpc_Abstract_Form
 
         $this->add(new Vps_Form_Field_TextField('target', trlVps('Url')))
             ->setWidth(450)
+            ->setHelpText(hlpVps('vpc_basic_linktag_extern_target'))
             ->setAllowBlank(false)
-            ->setHelpText(hlpVps('vpc_basic_linktag_extern_target'));
+            ->setVtype('url');
 
         if (Vpc_Abstract::getSetting($class, 'hasPopup')) {
 

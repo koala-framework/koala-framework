@@ -14,12 +14,12 @@ class Vpc_TextImage_Form extends Vpc_Abstract_Form
         $image = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), "-image");
         $fs->add($image);
 
-        $fs = $fs->add(new Vps_Form_Container_FieldSet(trlVps('Layout')));
-        $fs->add(new Vps_Form_Field_Radio('position', trlVps('Position Image')))
+        $fs = $fs->add(new Vps_Form_Container_FieldSet(trlVps('Text/Image - Alignment')));
+        $fs->add(new Vps_Form_Field_Radio('position', trlVps('Alignment')))
             ->setValues(array(
-                'alternate' => trlVps('Alternate'),
                 'left' => trlVps('Left'),
-                'right' => trlVps('Right')
+                'right' => trlVps('Right'),
+                'alternate' => trlVps('Alternate'),
             ));
         $fs->add(new Vps_Form_Field_Checkbox('flow', trlVps('Text flows around Image')));
     }
