@@ -31,8 +31,28 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         echo "<br /><br />";
         foreach ($this->_rrds as $name=>$rrd) {
             foreach (array_keys($rrd->getGraphs()) as $gName) {
-                echo "<img src=\"/admin/component/benchmark/graph?rrd=$name&name=$gName&start=$start\" />";
+                echo "<a href=\"/admin/component/benchmark/detail?rrd=$name&name=$gName\">";
+                echo "<img style=\"border:none\" src=\"/admin/component/benchmark/graph?rrd=$name&name=$gName&start=$start\" />";
+                echo "</a>";
             }
+        }
+        $this->_helper->viewRenderer->setNoRender(true);
+    }
+
+
+    public function detailAction()
+    {
+        $rrd = $this->_getParam('rrd');
+        $name = $this->_getParam('name');
+        echo "<a href=\"/admin/component/benchmark\">overview</a><br /><br />";
+        $startDates = array(
+            'last day' => time()-24*60*60,
+            'last week' => time()-7*24*60*60,
+            'last month' => strtotime('-1 month'),
+            'last year' => strtotime('-1 year')
+        );
+        foreach ($startDates as $d) {
+            echo "<img src=\"/admin/component/benchmark/graph?rrd=$rrd&name=$name&start=$d\" />";
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
@@ -56,6 +76,6 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
             }
             echo "<br />";
         }
-        exit;
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 }
