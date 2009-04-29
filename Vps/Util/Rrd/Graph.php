@@ -4,6 +4,7 @@ class Vps_Util_Rrd_Graph
     private static $_defaultColors = array('#00FF00', '#999999', '#FF0000', '#00FFFF', '#0000FF', '#000000');
     private $_rrd;
     private $_verticalLabel = null;
+    private $_title = null;
     private $_devideBy = null;
     private $_fields = array();
 
@@ -15,6 +16,11 @@ class Vps_Util_Rrd_Graph
     public function setVerticalLabel($l)
     {
         $this->_verticalLabel = $l;
+    }
+
+    public function setTitle($l)
+    {
+        $this->_title = $l;
     }
 
     public function setDevideBy($f)
@@ -76,6 +82,9 @@ class Vps_Util_Rrd_Graph
         $cmd .= "-e $end ";
         if ($this->_verticalLabel) {
             $cmd .= "--vertical-label \"$this->_verticalLabel\" ";
+        }
+        if ($this->_title) {
+            $cmd .= "--title \"$this->_title\" ";
         }
 
         $rrdFile = $this->_rrd->getFileName();
