@@ -237,10 +237,12 @@ class Vps_Component_Cache
                     $this->clean(self::CLEANING_MODE_ID, $metaRow->value);
                 } else if ($metaRow->type == self::META_CALLBACK) {
                     $component = Vps_Component_Data_Root::getInstance()
-                        ->getComponentById($metaRow->value, array('ignoreVisible' => true));
+                        ->getComponentByDbId($metaRow->value, array('ignoreVisible' => true));
                     if ($component) {
                         $component->getComponent()->onCacheCallback($row);
                         Vps_Benchmark::cacheInfo("Cache: Callback for component {$component->componentId} ({$component->componentClass}) called.");
+                    } else {
+                        Vps_Benchmark::cacheInfo("Cache-ERROR: Callback for component {$metaRow->value} not found.");
                     }
                 } else if ($metaRow->type == self::META_COMPONENT_CLASS) {
                     $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $metaRow->value);
