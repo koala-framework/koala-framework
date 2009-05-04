@@ -308,7 +308,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected function _fetchCount()
     {
         if (!isset($this->_model)) {
-            throw new Vps_Exception("Either _model has to be set or _fetchData has to be overwritten.");
+            return count($this->_fetchData($this->_getOrder(null), 0, 0));
         }
 
         $select = $this->_getSelect();
