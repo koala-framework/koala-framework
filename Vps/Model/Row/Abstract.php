@@ -90,7 +90,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     protected function _transformColumnName($name)
     {
-        return $this->getModel()->transformColumnName($name);
+        return $this->_model->transformColumnName($name);
     }
 
     public function __isset($name)
