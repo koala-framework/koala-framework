@@ -2,20 +2,11 @@
 class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
 {
     protected $_data;
+    private $_tableLoaded = false;
 
     public function __construct(array $config)
     {
         $this->_data = $config['data'];
-/*
-        $m = new Vps_Dao_Pages();
-        if (isset($this->_data->row) && $row = $m->find($this->_data->row->id)->current()) {
-            $this->parent_id = $row->parent_id;
-            $this->pos = $row->pos;
-            $this->visible = $row->visible;
-            $this->name = $row->name;
-            $this->is_home = $row->is_home;
-        }
-*/
         parent::__construct($config);
     }
 
@@ -31,6 +22,19 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
+        $fields = array('parent_id', 'pos', 'visible', 'name', 'is_home');
+        if (!$this->_tableLoaded &&
+            in_array($name, $fields) &&
+            is_numeric($this->componentId)
+        ) {
+            $m = new Vps_Dao_Pages();
+            if (isset($this->_data->row) && $row = $m->find($this->_data->row->id)->current()) {
+                foreach ($fields as $field) {
+                    $this->_data->$field = $row->$field;
+                }
+            }
+            $this->_tableLoaded = true;
+        }
         if (isset($this->_data->$name)) {
             $ret = $this->_data->$name;
             if ($name == 'tags') $ret = implode(',', $ret);
@@ -61,11 +65,11 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
             $this->_beforeInsert();
             $row = $m->createRow();
         }
-        if (isset($this->parent_id)) $row->parent_id = $this->parent_id;
-        if (isset($this->pos)) $row->pos = $this->pos;
-        if (isset($this->visible)) $row->visible = $this->visible;
-        if (isset($this->name)) $row->name = $this->name;
-        if (isset($this->is_home)) $row->is_home = $this->is_home;
+        if (isset($this->_data->parent_id)) $row->parent_id = $this->_data->parent_id;
+        if (isset($this->_data->pos)) $row->pos = $this->_data->pos;
+        if (isset($this->_data->visible)) $row->visible = $this->_data->visible;
+        if (isset($this->_data->name)) $row->name = $this->_data->name;
+        if (isset($this->_data->is_home)) $row->is_home = $this->_data->is_home;
         $ret = $row->save();
         if ($id) {
             $this->_afterUpdate();
@@ -74,6 +78,13 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
         }
         $this->_afterSave();
         return $ret;
+    }
+
+    protected function _afterSave()
+    {
+        parent::_afterSave();
+        Vps_Component_Data_Root::reset();
+        Vps_Component_Generator_Abstract::clearInstances();
     }
 
     public function delete()
