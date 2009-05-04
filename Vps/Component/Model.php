@@ -74,6 +74,8 @@ class Vps_Component_Model extends Vps_Model_Abstract
             $rowset = array_merge($rowset, array_values($page->getChildComponents($constraints)));
             $constraints['generator'] = 'domain';
             $rowset = array_merge($rowset, array_values($page->getChildComponents($constraints)));
+        } else if (isset($where['componentId'])) {
+            $rowset = array(Vps_Component_Data_Root::getInstance()->getComponentById($where['componentId'], array('ignoreVisible' => true)));
         } else {
             throw new Vps_Exception('Cannot return all pages');
         }
