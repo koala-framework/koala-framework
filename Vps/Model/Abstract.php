@@ -24,6 +24,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     protected $_rows = array();
 
     private static $_instances = array();
+    private $_hasColumnsCache = array();
 
     public function __construct(array $config = array())
     {
@@ -167,7 +168,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $ret;
     }
 
-    public function hasColumn($col)
+    private function _hasColumn($col)
     {
         if (!$this->getOwnColumns()) return true;
         if (in_array($col, $this->getOwnColumns())) return true;
@@ -175,6 +176,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             if ($m->hasColumn($col)) return true;
         }
         return false;
+    }
+
+    public function hasColumn($col)
+    {
+        if (!isset($this->_hasColumnsCache[$col])) {
+            $this->_hasColumnsCache[$col] = $this->_hasColumn($col);
+        }
+        return $this->_hasColumnsCache[$col];
     }
 
     abstract public function getOwnColumns();
