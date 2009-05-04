@@ -11,6 +11,8 @@ class Vps_Update_Action_Rrd_AddDs extends Vps_Update_Action_Rrd_Abstract
     {
         if (!file_exists($this->file)) return array();
 
+        $this->name = Vps_Util_Rrd_Field::escapeField($this->name);
+
         if (!$this->silent) {
             echo "adding rrd field: ".$this->name."\n";
         }
