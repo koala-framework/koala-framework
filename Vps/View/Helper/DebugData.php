@@ -1,11 +1,11 @@
 <?php
-class Vps_View_Helper_DebugData 
+class Vps_View_Helper_DebugData
 {
     public function debugData()
     {
         $ret = '';
         $config = Zend_Registry::get('config')->debug;
-        if ($config->menu || !$config->errormail) {
+        if ($config->menu || !$config->error->log) {
             $session = new Zend_Session_Namespace('debug');
             if ($session->enable) {
                 $indent = str_repeat(' ', 8);
