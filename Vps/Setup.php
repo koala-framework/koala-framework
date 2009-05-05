@@ -305,7 +305,7 @@ class Vps_Setup
 
         if (php_sapi_name() != 'cli' && $config->preLogin && !isset($_COOKIE['unitTest'])
             && isset($_SERVER['REDIRECT_URL']) && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/vps/test/'
-             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' /*hack für rssinclude*/
+             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' /*hack für rssinclude-test*/
              && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
         ) {
             $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
