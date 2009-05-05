@@ -170,7 +170,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private function _fixStupidQuoteBug($v)
     {
         if ((strpos($v, '?') !== false || strpos($v, ':') !== false) && strpos($v, '\'') !== false) {
-            $e = new Vps_Exception("(? or :) and ' are used together in an sql query value. This is a problem because of an Php bug. ' is ignored.");
+            $e = new Vps_Exception("(? or :) and a single quote are used together in an sql query value. This is a problem because of an Php bug. The single quote is ignored.");
             $e->notify();
             $v = str_replace('\'', '', $v);
         }

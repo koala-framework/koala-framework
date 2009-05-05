@@ -1,88 +1,56 @@
 <?php
-class Vps_Exception extends Vps_Exception_NoMail
+class Vps_Exception extends Vps_Exception_NoLog
 {
-    private $_mail;
-
-    public function setMail(Zend_Mail $mail)
-    {
-        $this->_mail = $mail;
-    }
-
-    public function getMail()
-    {
-        if (!$this->_mail) $this->_mail = new Zend_Mail('utf-8');
-        return $this->_mail;
-    }
-
     /**
-     * Informiert den Entwickler über diese Exception
+     * Informiert den Entwickler Ã¼ber diese Exception
      */
     public function notify()
     {
-        if ($this->sendErrorMail()) {
+        if ($this->log()) {
             return;
         }
         if (php_sapi_name() == 'cli') {
             echo 'WARNING: '.$this->getMessage()."\n";
-        } else if (Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
+        } else if (
+            Zend_Registry::get('config')->debug->firephp &&
+            class_exists('FirePHP') &&
+            FirePHP::getInstance() &&
+            FirePHP::getInstance()->detectClientExtension()
+        ) {
             p($this->getMessage(), 'WARNING');
         }
     }
 
-    public function sendErrorMail()
+    public function log()
     {
-        $requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '' ;
-        $address = Zend_Registry::get('config')->debug->errormail;
-
-        if (!self::isDebug()
-            && $address
-            && substr($requestUri, -12) != '/favicon.ico'
-            && substr($requestUri, -10) != '/robots.txt')
-        {
-            $type = get_class($this->getException());
-            $body = $this->getException()->__toString();
-            $body .= "\n";
-            if (isset($_SERVER['REQUEST_URI'])) {
-                $body .= "\nREQUEST_URI: ".$_SERVER['REQUEST_URI'];
-            }
-            $body .= "\nHTTP_REFERER: ".(isset($_SERVER['HTTP_REFERER'])
-                                            ? $_SERVER['HTTP_REFERER'] : '(none)');
-            $u = Zend_Registry::get('userModel')->getAuthedUser();
-            $body .= "\nUser: ";
-            if ($u) {
-                $body .= "$u, id $u->id, $u->role";
-            } else {
-                $body .= "guest";
-            }
-            $body .= "\n\n------------------\n\n_GET:\n";
-            $body .= print_r($_GET, true);
-            $body .= "\n\n------------------\n\n_POST:\n";
-            $body .= print_r($_POST, true);
-            $body .= "\n\n------------------\n\n_SERVER:\n";
-            $body .= print_r($_SERVER, true);
-            $body .= "\n\n------------------\n\n_FILES:\n";
-            $body .= print_r($_FILES, true);
-            $body .= "\n\n------------------\n\n_SESSION:\n";
-            $body .= print_r($_SESSION, true);
-            $body = substr($body, 0, 5000);
-            $subject = isset($_SERVER['HTTP_HOST']) ?
-                $_SERVER['HTTP_HOST'] . ': ' . $type : $type;
-            if ($requestUri) $subject .= ' - '.$requestUri;
-
-            $mail = $this->getMail();
-            $mail->setBodyText($body)
-                ->setSubject($subject);
-            $mail->addTo('vperror@vivid-planet.com');
-            if (is_string($address)) $address = array($address);
-            foreach ($address as $i) {
-                if (is_string($i) && $i != 'vperror@vivid-planet.com') {
-                    $mail->addCc($i);
-                }
-            }
-            $mail->send();
-            return true;
+        $user = "guest";
+        if ($u = Zend_Registry::get('userModel')->getAuthedUser()) {
+            $user = "$u, id $u->id, $u->role";
         }
-        return false;
-    }
+        $exception = $this->getException()->__toString();
+        $thrown = substr($exception,
+            strpos($exception, ' in ') + 4,
+            strpos($exception, 'Stack trace:') - strpos($exception, ' in ') - 5
+        );
 
+        $body = '';
+        $body .= $this->_format('Exception', get_class($this->getException()));
+        $body .= $this->_format('Thrown', $thrown);
+        $body .= $this->_format('Message', $exception);
+        $body .= $this->_format('REQUEST_URI', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '(none)');
+        $body .= $this->_format('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '(none)');
+        $body .= $this->_format('User', $user);
+        $body .= $this->_format('Time', date('H:i:s'));
+        $body .= $this->_format('_GET', print_r($_GET, true));
+        $body .= $this->_format('_POST', print_r($_POST, true));
+        $body .= $this->_format('_SERVER', print_r($_SERVER, true));
+        $body .= $this->_format('_FILES', print_r($_FILES, true));
+        $body .= $this->_format('_SESSION', print_r($_SESSION, true));
+
+        $path = 'application/log/error/' . date('Y-m-d');
+
+        $filename = date('H_i_s') . ' ' . uniqid() . '.txt';
+
+        return $this->_writeLog($path, $filename, $body);
+    }
 }
