@@ -88,7 +88,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function defaultAssertions($command)
     {
-        if ($command == 'waitForPageToLoad' || $command == 'open') {
+        if ($command == 'waitForPageToLoad' || $command == 'open' || $command == 'waitForConnections') {
             if ($this->isElementPresent('css=#exception')) {
                 $exception = $this->getText('css=#exception');
                 $exception = unserialize(base64_decode($exception));
@@ -120,6 +120,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     protected function waitForConnections()
     {
         $this->waitForCondition('selenium.browserbot.getCurrentWindow().Vps.Connection.runningRequests==0');
+        $this->defaultAssertions('waitForConnections');
     }
 
     //kopiert von PhpUnit, nur um eigenen Driver verwenden zu können
