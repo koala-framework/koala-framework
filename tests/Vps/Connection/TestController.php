@@ -46,7 +46,7 @@ class Vps_Connection_TestController extends Vps_Controller_Action
 
     public function jsonRealExceptionAction()
     {
-        Zend_Registry::get('config')->debug->errormail = false;
+        Zend_Registry::get('config')->debug->error->log = false;
         throw new Vps_Exception("Exception");
     }
 }
