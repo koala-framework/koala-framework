@@ -52,4 +52,9 @@ class Vps_Dao
         }
         return $this->_db[$db];
     }
+
+    public function hasDb($db = 'web')
+    {
+        return isset($this->_db[$db]);
+    }
 }
