@@ -33,19 +33,26 @@ class Vps_Util_Rrd_Graph
 
     public function addField($field, $color = null, $text = null)
     {
-        if (is_string($field)) {
-            $field = $this->_rrd->getField($field);
-        }
-        if (is_array($color)) {
-            $f = $color;
-            $f['field'] = $field;
-            if ($text) throw new Vps_Exception("so ned");
+        if (is_array($field)) {
+            $f = $field;
+            $field = false;
+            if (isset($f['field'])) $field = $f['field'];
+            if ($color || $text) throw new Vps_Exception("so ned");
         } else {
-            $f = array(
-                'field' => $field,
-                'color' => $color,
-                'text' => $text
-            );
+            if (is_string($field)) {
+                $field = $this->_rrd->getField($field);
+            }
+            if (is_array($color)) {
+                $f = $color;
+                $f['field'] = $field;
+                if ($text) throw new Vps_Exception("so ned");
+            } else {
+                $f = array(
+                    'field' => $field,
+                    'color' => $color,
+                    'text' => $text
+                );
+            }
         }
         if (!isset($f['color']) || !$f['color']) {
             foreach (self::$_defaultColors as $c) {
@@ -62,7 +69,7 @@ class Vps_Util_Rrd_Graph
         if (!$f['color']) {
             throw new Vps_Exception("no more avaliable default colors");
         }
-        if (!isset($f['text']) || !$f['text']) {
+        if ((!isset($f['text']) || !$f['text']) && $field) {
             $f['text'] = $field->getText();
         }
         $this->_fields[] = $f;
@@ -93,10 +100,12 @@ class Vps_Util_Rrd_Graph
         }
         $i = 0;
         foreach ($this->_fields as $settings) {
-            $field = $settings['field']->getName();
-            $cmd .= "DEF:line{$i}=$rrdFile:$field:AVERAGE ";
-            if ($this->_devideBy) {
-                $cmd .= "CDEF:perrequest$i=line$i,requests,/ ";
+            if (isset($settings['field'])) {
+                $field = $settings['field']->getName();
+                $cmd .= "DEF:line{$i}=$rrdFile:$field:AVERAGE ";
+                if ($this->_devideBy) {
+                    $cmd .= "CDEF:perrequest$i=line$i,requests,/ ";
+                }
             }
             if (isset($settings['cmd'])) $cmd .= $settings['cmd'].' ';
             if (isset($settings['line'])) {
