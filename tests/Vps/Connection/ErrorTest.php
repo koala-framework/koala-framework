@@ -11,6 +11,11 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
         parent::setUp();
         $this->setTimeout(300000);
     }
+
+    protected function defaultAssertions($command)
+    {
+    }
+
     public function testConnectionErrorDisplayErrorsFalse()
     {
         $this->_testError(false);
