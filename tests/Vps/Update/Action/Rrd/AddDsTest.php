@@ -11,7 +11,7 @@ class Vps_Update_Action_Rrd_AddDsTest extends Vps_Update_Action_Rrd_AbstractTest
 
         $action = new Vps_Update_Action_Rrd_AddDs(array(
             'file' => $file,
-            'name' => 'test3',
+            'name' => 'testxxx',
             'type' => 'ABSOLUTE',
             'minimalHeartbeat' => 120,
             'min' => 0,
@@ -29,9 +29,9 @@ class Vps_Update_Action_Rrd_AddDsTest extends Vps_Update_Action_Rrd_AbstractTest
         $xml = simplexml_load_file($file.'.xml');
 
         $this->assertEquals(3, count($xml->ds));
-        $this->assertEquals('test1', trim($xml->ds[0]->name));
-        $this->assertEquals('test2', trim($xml->ds[1]->name));
-        $this->assertEquals('test3', trim($xml->ds[2]->name));
+        $this->assertEquals('testx', trim($xml->ds[0]->name));
+        $this->assertEquals('testxx', trim($xml->ds[1]->name));
+        $this->assertEquals('testxxx', trim($xml->ds[2]->name));
 
         unlink($file);
         unlink($file.'.xml');

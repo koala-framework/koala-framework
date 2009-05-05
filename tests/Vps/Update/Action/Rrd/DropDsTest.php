@@ -13,7 +13,7 @@ class Vps_Update_Action_Rrd_DropDsTest extends Vps_Update_Action_Rrd_AbstractTes
 
         $action = new Vps_Update_Action_Rrd_DropDs(array(
             'file' => $file,
-            'name' => 'test1',
+            'name' => 'testx',
             'backup'=>false,
             'silent' => true
         ));
@@ -27,7 +27,7 @@ class Vps_Update_Action_Rrd_DropDsTest extends Vps_Update_Action_Rrd_AbstractTes
         $xml = simplexml_load_file($file.'.xml');
 
         $this->assertEquals(1, count($xml->ds));
-        $this->assertEquals('test2', trim($xml->ds[0]->name));
+        $this->assertEquals('testxx', trim($xml->ds[0]->name));
 
         unlink($file);
         unlink($file.'.xml');

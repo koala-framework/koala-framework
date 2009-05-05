@@ -8,6 +8,9 @@ class Vps_Update_Action_Rrd_RenameDs extends Vps_Update_Action_Rrd_Abstract
     {
         if (!file_exists($this->file)) return array();
 
+        $this->name = Vps_Util_Rrd_Field::escapeField($this->name);
+        $this->newName = Vps_Util_Rrd_Field::escapeField($this->newName);
+
         if (!$this->silent) {
             echo "renaming rrd field: ".$this->name."\n";
         }
