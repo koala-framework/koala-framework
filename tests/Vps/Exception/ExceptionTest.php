@@ -16,58 +16,40 @@ class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
     {
         // Ohne Mail
         $exception = new Vps_Exception();
-        $mail = $this->getMock('Zend_Mail', array('send'));
-        $mail->expects($this->never())->method('send');
-        $exception->setMail($mail);
-
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
         $this->assertTrue($view->debug);
         $this->assertEquals($view->template, 'error.tpl');
 
         // Mit Mail
-        Zend_Registry::get('config')->debug->errormail = 'foo';
+        Zend_Registry::get('config')->debug->error->log = true;
         $exception = new Vps_Exception();
-        $mail = $this->getMock('Zend_Mail', array('send'));
-        $mail->expects($this->once())->method('send');
-        $exception->setMail($mail);
-
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
         $this->assertFalse($view->debug);
-        $headers = $mail->getHeaders();
-        $this->assertEquals($headers['To'][0], 'vperror@vivid-planet.com');
-        $this->assertEquals($headers['Cc'][0], 'foo');
         $this->assertEquals($view->template, 'error.tpl');
 
         // Nicht-Vps_Exception mit Mail
-        Zend_Registry::get('config')->debug->errormail = 'foo';
+        Zend_Registry::get('config')->debug->error->log = true;
         $e = new Zend_Exception();
         $exception = new Vps_Exception_Other($e);
-        $mail = $this->getMock('Zend_Mail', array('send'));
-        $mail->expects($this->once())->method('send');
-        $exception->setMail($mail);
-
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $e->getMessage());
         $this->assertFalse($view->debug);
-        $headers = $mail->getHeaders();
-        $this->assertEquals($headers['To'][0], 'vperror@vivid-planet.com');
-        $this->assertEquals($headers['Cc'][0], 'foo');
         $this->assertEquals($view->template, 'error.tpl');
-        Zend_Registry::get('config')->debug->errormail = false;
+        Zend_Registry::get('config')->debug->error->log = false;
 
-        // Vps_Exception_NoMail mit Debug
-        Zend_Registry::get('config')->debug->errormail = 'foo';
-        $exception = new Vps_Exception_NoMail();
+        // Vps_Exception_NoLog mit Debug
+        Zend_Registry::get('config')->debug->error->log = true;
+        $exception = new Vps_Exception_NoLog();
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
         $this->assertFalse($view->debug);
-        Zend_Registry::get('config')->debug->errormail = false;
+        Zend_Registry::get('config')->debug->error->log = false;
         $this->assertEquals($view->template, 'error.tpl');
 
-        // Vps_Exception_NoMail ohne Debug
-        $exception = new Vps_Exception_NoMail();
+        // Vps_Exception_NoLog ohne Debug
+        $exception = new Vps_Exception_NoLog();
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
         $this->assertTrue($view->debug);

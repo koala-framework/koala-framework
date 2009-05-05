@@ -12,7 +12,7 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
         $sql = "CREATE TABLE $this->_tableName (
             `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
             `test1` VARCHAR( 200 ) NOT NULL,
-            `test2` VARCHAR( 200 ) NOT NULL  
+            `test2` VARCHAR( 200 ) NOT NULL
         ) ENGINE = INNODB";
         Vps_Registry::get('db')->query($sql);
         $m = new Vps_Model_Db(array(
@@ -48,7 +48,7 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
             'table' => $this->_tableName
         ));
 
-        $this->expectOutputString(str_repeat("WARNING: (? or :) and ' are used together in an sql query value. This is a problem because of an Php bug. ' is ignored.\n", 4));
+        $this->expectOutputString(str_repeat("WARNING: (? or :) and a single quote are used together in an sql query value. This is a problem because of an Php bug. The single quote is ignored.\n", 4));
 
         foreach ($values as $v) {
             if (is_array($v)) {
