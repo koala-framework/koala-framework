@@ -6,6 +6,7 @@ class Vps_Util_ClearCache
         static $i;
         if (!isset($i)) {
             $c = Vps_Registry::get('config')->clearCacheClass;
+            if (!$c) $c = 'Vps_Util_ClearCache';
             $i = new $c();
         }
         return $i;
