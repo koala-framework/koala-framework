@@ -21,8 +21,8 @@ abstract class Vps_Update_Action_Rrd_AbstractTest extends PHPUnit_Framework_Test
         $cmd = "rrdtool create $file ";
         $cmd .= "--start ".(time()-($testSteps*60)-1)." ";
         $cmd .= "--step ".($interval)." ";
-        $cmd .= "DS:test1:ABSOLUTE:".($interval*2).":0:1000 ";
-        $cmd .= "DS:test2:COUNTER:".($interval*2).":0:".(2^64)." ";
+        $cmd .= "DS:testx:ABSOLUTE:".($interval*2).":0:1000 ";
+        $cmd .= "DS:testxx:COUNTER:".($interval*2).":0:".(2^64)." ";
         $cmd .= "RRA:AVERAGE:0.6:1:2016 "; //1 woche
         $this->_systemCheckRet($cmd);
 
