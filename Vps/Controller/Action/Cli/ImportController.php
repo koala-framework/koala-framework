@@ -234,7 +234,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         $ignoreTables = '';
         if ($skipCacheTables) {
-            $cacheTables = Vps_Controller_Action_Cli_ClearCacheController::getDbCacheTables();
+            $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
             foreach ($cacheTables as $t) {
                 $ignoreTables .= " --ignore-table={$dbConfig->dbname}.{$t}";
             }
