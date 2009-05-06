@@ -27,6 +27,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         } else {
             $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-update-revision";
         }
+        if ($this->_getParam('debug')) {
+            echo $cmd."\n";
+        }
         exec($cmd, $onlineRevision, $ret);
         if ($ret != 0) throw new Vps_ClientException();
         $onlineRevision = implode('', $onlineRevision);
@@ -103,6 +106,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     private function _copyServiceUsers()
     {
+        $tables = Vps_Registry::get('db')->fetchCol('SHOW TABLES');
+        if (!in_array('vps_users', $tables)) return;
+        if (!in_array('cache_users', $tables)) return;
+
         // copy users table
         $targetUrl = $this->_getConfig('web')->service->usersAll->url;
         $sourceConfig = $this->_getConfig('production');
