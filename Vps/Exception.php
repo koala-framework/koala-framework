@@ -49,7 +49,7 @@ class Vps_Exception extends Vps_Exception_NoLog
 
         $path = 'application/log/error/' . date('Y-m-d');
 
-        $filename = date('H_i_s') . ' ' . uniqid() . '.txt';
+        $filename = date('H_i_s') . '_' . uniqid() . '.txt';
 
         return $this->_writeLog($path, $filename, $body);
     }
