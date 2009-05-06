@@ -1,5 +1,5 @@
 <?php
-class Vps_Exception_AccessDenied extends Vps_Exception_NoLog
+class Vps_Exception_AccessDenied extends Vps_Exception_Abstract
 {
     public function getHeader()
     {

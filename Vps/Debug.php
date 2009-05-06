@@ -12,7 +12,7 @@ class Vps_Debug
 
     public static function handleException($exception)
     {
-        if (!$exception instanceof Vps_Exception_NoLog) {
+        if (!$exception instanceof Vps_Exception_Abstract) {
             $exception = new Vps_Exception_Other($exception);
         }
 
@@ -26,7 +26,7 @@ class Vps_Debug
         $header = $exception->getHeader();
         $template = $exception->getTemplate();
         $template = strtolower(Zend_Filter::get($template, 'Word_CamelCaseToDash').'.tpl');
-        if ($exception instanceof Vps_Exception_NoLog) $exception->log();
+        if ($exception instanceof Vps_Exception_Abstract) $exception->log();
 
         if (!headers_sent()) header($header);
         try {
