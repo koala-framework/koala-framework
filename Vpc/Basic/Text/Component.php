@@ -24,6 +24,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'enableTidy'        => true,
             'stylesIdPattern'   => false, //zB: '^company_[0-9]+',
             'enableStyles'      => true,
+            'enableStylesEditor'=> true,
             'enableTagsWhitelist'=> true
         ));
         $ret['generators']['child'] = array(
