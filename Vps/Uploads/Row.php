@@ -28,7 +28,6 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
         $this->mime_type = $mimeType;
         $this->save();
         file_put_contents($this->getFileSource(), $contents);
-        chmod($this->getFileSource(), 0664);
         return $this;
     }
 
@@ -157,7 +156,6 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
         $new = parent::duplicate($data);
         if (file_exists($this->getFileSource())) {
             copy($this->getFileSource(), $new->getFileSource());
-            chmod($new->getFileSource(), 0664);
         }
         return $new;
     }

@@ -32,11 +32,10 @@ abstract class Vps_Exception_Abstract extends Exception
             return false;
         }
         $this->_logFilename = $filename;
-        if (!is_dir($path)) mkdir($path, 0777);
+        if (!is_dir($path)) mkdir($path);
         $fp = fopen("$path/$filename", 'a');
         fwrite($fp, $content);
         fclose($fp);
-        chmod("$path/$filename", 0777);
         return true;
     }
 

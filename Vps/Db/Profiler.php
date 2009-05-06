@@ -107,7 +107,6 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
             $f = fopen($filename, 'a');
             fwrite($f, "\nquerylog\n".serialize($d));
             fclose($f);
-            chmod($filename, 0660);
 
         } else {
             throw new Vps_Exception('Query not found');
