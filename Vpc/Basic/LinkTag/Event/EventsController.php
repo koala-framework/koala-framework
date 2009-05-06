@@ -1,8 +1,8 @@
 <?php
-class Vpc_Basic_LinkTag_News_NewsController extends Vps_Controller_Action_Auto_Grid
+class Vpc_Basic_LinkTag_Event_EventsController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_tableName = 'Vpc_News_Directory_Model';
-    protected $_defaultOrder = array('field'=>'publish_date', 'direction'=>'DESC');
+    protected $_tableName = 'Vpc_Events_Directory_Model';
+    protected $_defaultOrder = array('field'=>'start_date', 'direction'=>'DESC');
     protected $_paging = 20;
 
     protected function _isAllowedComponent()
@@ -14,7 +14,7 @@ class Vpc_Basic_LinkTag_News_NewsController extends Vps_Controller_Action_Auto_G
     {
         parent::_initColumns();
         $this->_columns->add(new Vps_Grid_Column('title'));
-        $this->_columns->add(new Vps_Grid_Column('publish_date'));
+        $this->_columns->add(new Vps_Grid_Column('start_date'));
     }
 
     protected function _getSelect()
