@@ -128,14 +128,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
 
                         $added = true;
                     }
-                    $st = simplexml_load_string(`svn st --xml $d/*.$x`);
-                    foreach ($st->target as $t) {
-                        if ($t->entry->{'wc-status'}['item'] == 'ignored') continue;
-                        if ($t->entry->{'wc-status'}['item'] == 'unversioned') continue;
-                        $cmd = "svn rm --force ".escapeshellarg((string)$t['path']);
-                        echo $cmd."\n";
-                        $this->_systemCheckRet($cmd);
-                    }
+                    $this->_removeFromSvn("$d/*.$x");
                 }
                 if ($added) {
                     $this->_setSvnIgnore($d, $ignore);
@@ -150,6 +143,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
                         $ignore[] = '*';
                         $this->_setSvnIgnore($d, $ignore);
                     }
+                    $this->_removeFromSvn("$d/*");
                 } else {
                     foreach ($nonNumeric as $i) {
                         if ($i == 'Thumbs.db') {
@@ -167,6 +161,19 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
         }
         exit;
     }
+
+    private function _removeFromSvn($pattern)
+    {
+        $st = simplexml_load_string(`svn st --xml $pattern`);
+        foreach ($st->target as $t) {
+            if ($t->entry->{'wc-status'}['item'] == 'ignored') continue;
+            if ($t->entry->{'wc-status'}['item'] == 'unversioned') continue;
+            $cmd = "svn rm --force ".escapeshellarg((string)$t['path']);
+            echo $cmd."\n";
+            $this->_systemCheckRet($cmd);
+        }
+    }
+
     public function getIgnoresAction()
     {
         $dir = $this->_getParam('dir');
