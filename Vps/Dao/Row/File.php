@@ -7,12 +7,10 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
     {
         $uploadDir = Vps_Dao_Row_File::getUploadDir();
         if (!is_dir($uploadDir . '/cache')) {
-            mkdir($uploadDir . '/cache', 0775);
-            chmod($uploadDir . '/cache', 0775);
+            mkdir($uploadDir . '/cache');
         }
         if (!is_dir(dirname($target))) {
-            mkdir(dirname($target), 0775);
-            chmod(dirname($target), 0775);
+            mkdir(dirname($target));
         }
     }
 

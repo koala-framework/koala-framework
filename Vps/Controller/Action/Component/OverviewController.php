@@ -63,7 +63,6 @@ class Vps_Controller_Action_Component_OverviewController extends Vps_Controller_
         if (!copy($srcFile, $path.'.'.$type)) {
             throw new Vps_Exception("Can't copy '$srcFile' to '$path.$type'");
         }
-        chmod($path.'.'.$type, 0770);
         $this->view->path = $path.'.'.$type;
     }
 
@@ -80,11 +79,10 @@ class Vps_Controller_Action_Component_OverviewController extends Vps_Controller_
         if (file_exists($path.'.php')) {
             throw new Vps_ClientException("File does allready exist.");
         }
-        mkdir(substr($path, 0, strrpos($path, '/')), 0770, true);
+        mkdir(substr($path, 0, strrpos($path, '/')), 0777, true);
         if (!file_put_contents($path.'.php', $content)) {
             throw new Vps_Exception("Can't create '$path.php'");
         }
-        chmod($path.'.php', 0770);
         $this->view->path = $path.'.php';
 
         Vpc_Admin::getInstance($name)->setup();
