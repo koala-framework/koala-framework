@@ -46,7 +46,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
                 $this->view->error = trlVps('An error has occurred. Please try again later.');
             }
         }
-        if ($exception instanceof Vps_Exception_NoLog) $exception->log();
+        if ($exception instanceof Vps_Exception_Abstract) $exception->log();
     }
 
     public function jsonMailAction()
