@@ -254,6 +254,8 @@ class Vps_Benchmark
 
     protected function _shutDown()
     {
+        if (!class_exists('Memcache')) return;
+
         $memcache = new Memcache;
         $memcacheSettings = Vps_Registry::get('config')->server->memcache;
         $memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
