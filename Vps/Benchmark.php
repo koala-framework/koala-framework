@@ -7,6 +7,16 @@ class Vps_Benchmark
     private static $_counter = array();
     public static $benchmarks = array();
 
+    private static function _getInstance()
+    {
+        static $i;
+        if (!isset($i)) {
+            $c = Vps_Registry::get('config')->benchmarkClass;
+            $i = new $c();
+        }
+        return $i;
+    }
+
     /**
      * Startet eine Sequenz
      *
@@ -212,7 +222,7 @@ class Vps_Benchmark
         }
     }
 
-    public static function shutDown()
+    final public static function shutDown()
     {
         if (!self::$_logEnabled) return;
 
@@ -220,11 +230,11 @@ class Vps_Benchmark
         if ($wasCalled) return;
         $wasCalled = true;
 
-        $memcache = new Memcache;
-        $memcacheSettings = Vps_Registry::get('config')->server->memcache;
-        $memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
-        $prefix = Zend_Registry::get('config')->application->id.'-'.
-                            Vps_Setup::getConfigSection().'-bench-';
+        self::_getInstance()->_shutDown();
+    }
+
+    protected function _getUrlType()
+    {
         if (!isset($_SERVER['REQUEST_URI'])) {
             if (php_sapi_name() == 'cli') $urlType = 'cli';
             else $urlType = 'unknown';
@@ -239,7 +249,17 @@ class Vps_Benchmark
         } else {
             $urlType = 'content';
         }
-        $prefix .= $urlType.'-';
+        return $urlType;
+    }
+
+    protected function _shutDown()
+    {
+        $memcache = new Memcache;
+        $memcacheSettings = Vps_Registry::get('config')->server->memcache;
+        $memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
+        $prefix = Zend_Registry::get('config')->application->id.'-'.
+                            Vps_Setup::getConfigSection().'-bench-';
+        $prefix .= $this->_getUrlType().'-';
         if (!$memcache->increment($prefix.'requests', 1)) {
             $memcache->set($prefix.'requests', 1, 0, 0);
         }
