@@ -8,8 +8,10 @@ class Vpc_Basic_Text_InlineStyleController extends Vps_Controller_Action_Auto_Fo
 
     public function init()
     {
-        if (!Vpc_Abstract::getSetting($this->_getParam('componentClass'),
-                                                            'enableStyles')) {
+        $class = $this->_getParam('componentClass');
+        if (!Vpc_Abstract::getSetting($class, 'enableStyles') ||
+            !Vpc_Abstract::getSetting($class, 'enableStylesEditor')
+        ) {
             throw new Vps_Exception("Styles are disabled");
         }
         parent::init();

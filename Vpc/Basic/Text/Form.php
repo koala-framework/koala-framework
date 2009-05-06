@@ -32,9 +32,11 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
             $c = Vpc_Admin::getInstance($classes['download'])->getExtConfig();
             $field->setDownloadComponentConfig($c);
         }
-        $field->setStylesEditorConfig(array(
-            'xtype' => 'vpc.basic.text.styleseditor'
-        ));
+        if (Vpc_Abstract::getSetting($this->getClass(), 'enableStylesEditor')) {
+            $field->setStylesEditorConfig(array(
+                'xtype' => 'vpc.basic.text.styleseditor'
+            ));
+        }
 
         $t = new Vpc_Basic_Text_StylesModel();
         $styles = $t->getStyles();
