@@ -20,7 +20,7 @@ class Vps_Exception_NotFound extends Vps_Exception_Abstract
 
         $path = 'application/log/notfound/' . date('Y-m-d');
 
-        $filename = date('H_i_s') . ' ' . uniqid() . '.txt';
+        $filename = date('H_i_s') . '_' . uniqid() . '.txt';
 
         return $this->_writeLog($path, $filename, $body);
     }
