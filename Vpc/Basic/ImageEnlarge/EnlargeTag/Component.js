@@ -85,7 +85,7 @@ Vpc.Basic.ImageEnlarge.prototype =
 
         var data = {};
 
-        data.title = linkEl.dom.title ? linkEl.dom.title : '&nbsp;';
+        data.title = linkEl.dom.title ? linkEl.dom.title : false;
 
         linkEl.query('> .vpsEnlargeTagData').each(function(i) {
             var name = i.className.replace('vpsEnlargeTagData', '').trim();
@@ -106,6 +106,9 @@ Vpc.Basic.ImageEnlarge.prototype =
             options = Ext.decode(options.value);
         } else {
             options = {};
+        }
+        if (options.title && !data.title) {
+        	data.title = options.title;
         }
         if (options.fullSizeUrl) {
             data.fullSizeLink = '<a href="'+options.fullSizeUrl+'" class="fullSizeLink" title="'+trlVps('image in originalsize')+'" target="_blank"></a> ';
@@ -146,6 +149,7 @@ Vpc.Basic.ImageEnlarge.prototype =
         data.header = tpls.tplHeader.apply(data);
         data.footer = tpls.tplFooter.apply(data);
         data.body = tpls.tplBody.apply(data);
+        if (!data.title) data.title = '&nbsp;';
 
         tpls.tpl.overwrite(this.lightbox, data);
 
