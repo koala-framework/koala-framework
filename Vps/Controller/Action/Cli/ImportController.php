@@ -27,9 +27,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         } else {
             $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-update-revision";
         }
-        if ($this->_getParam('debug')) {
-            echo $cmd."\n";
-        }
+        if ($this->_getParam('debug')) echo $cmd."\n";
         exec($cmd, $onlineRevision, $ret);
         if ($ret != 0) throw new Vps_ClientException();
         $onlineRevision = implode('', $onlineRevision);
@@ -38,46 +36,57 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             throw new Vps_ClientException("Can't get onlineRevision");
         }
 
-        echo "kopiere uploads...\n";
-        if ($ownConfig->server->host == $config->server->host) {
-            if ($ownConfig->uploads == $config->uploads) {
-                throw new Vps_ClientException("Uplodas-Pfade für beide Server sind gleich!");
+        if ($config->uploads && $ownConfig->uploads) {
+            echo "kopiere uploads...\n";
+            if ($ownConfig->server->host == $config->server->host) {
+                if ($ownConfig->uploads == $config->uploads) {
+                    throw new Vps_ClientException("Uplodas-Pfade für beide Server sind gleich!");
+                }
+                $this->_systemCheckRet("rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads} {$ownConfig->uploads}");
+            } else {
+                $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
             }
-            $this->_systemCheckRet("rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads} {$ownConfig->uploads}");
-        } else {
-            $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
         }
 
-        if (file_exists("/var/backups/vpsimport/")) {
-            $p = "/var/backups/vpsimport/";
-        } else {
-            $p = getcwd().'/../backup/';
-            if (!file_exists($p)) mkdir($p);
-        }
-        $p .= date("Y-m-d_H:i:s_U")."_{$dbConfig->dbname}.sql";
-        echo "erstelle datenbank-backup in $p...\n";
-        $this->_systemCheckRet("mysqldump $mysqlLocalOptions {$dbConfig->dbname} > $p");
+        if ($config->server->import && $config->server->import->dirs) {
+            foreach ($config->server->import->dirs as $dir) {
+                echo "importing $dir...\n";
+                $ig = simplexml_load_string(`svn propget --recursive --xml svn:ignore $dir`);
+                $ignores = array();
+                foreach ($ig->target as $t) {
+                    $p = explode("\n", trim((string)$t->property));
+                    foreach ($p as $i) {
+                        $ignores[] = (string)$t['path'] . '/' . trim($i);
+                    }
+                }
+                if (!$ignores) continue;
 
-        echo "erstelle datenbank dump ($server)...\n";
-        $cmd = "import create-dump";
-        if ($this->_getParam('include-cache')) {
-            $cmd .= " --include-cache";
-        }
-        if ($ownConfig->server->host == $config->server->host) {
-            $cmd = "cd {$config->server->dir} && php bootstrap.php $cmd";
-        } else {
-            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir $cmd";
-        }
-        exec($cmd, $dumpname, $ret);
-        if ($ret != 0) throw new Vps_ClientException();
-        $dumpname = implode('', $dumpname);
+                $includes = array();
+                foreach ($ignores as $i) {
+                    $p = '';
+                    foreach (explode('/', $i) as $j) {
+                        $p .= $j.'/';
+                        $e = trim($p, '/');
+                        if (substr($e, -1) == '*') $e .= '*';
+                        if (!in_array($e, $includes)) {
+                            $includes[] = $e;
+                        }
+                    }
+                }
 
-        if ($ownConfig->server->host != $config->server->host) {
-            echo "kopiere datenbank dump $dumpname...\n";
-            $this->_systemSshVps('copy-dump '.$dumpname);
-        } else {
-            $this->_systemCheckRet("bunzip2 $dumpname");
+                $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir copy-files";
+                $cmd .= " --includes=\"".implode(',', $includes)."\"";
+                if ($this->_getParam('debug')) $cmd .= " --debug";
+                if ($this->_getParam('debug')) echo $cmd."\n";
+                passthru($cmd);
+            }
         }
+
+        echo "erstelle datenbank-backup...\n";
+        $dumpname = $this->_backupDb();
+        $backupSize = filesize($dumpname);
+        $this->_systemCheckRet("bzip2 --fast $dumpname");
+        echo $dumpname.".bz2\n";
 
         echo "loesche lokale datenbank...\n";
         $this->_systemCheckRet("echo \"DROP DATABASE \`{$dbConfig->dbname}\`\" | mysql $mysqlLocalOptions");
@@ -85,9 +94,56 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         echo "erstelle neue datenbank...\n";
         $this->_systemCheckRet("echo \"CREATE DATABASE \`{$dbConfig->dbname}\`\" | mysql $mysqlLocalOptions");
 
-        echo "spiele dump in lokale datenbank ein...\n";
-        $dumpname = substr($dumpname, 0, -4);
-        $this->_systemCheckRet("mysql $mysqlLocalOptions {$dbConfig->dbname} < $dumpname");
+
+        if ($ownConfig->server->host == $config->server->host) {
+            d('TODO');
+        } else {
+            echo "importiere datenbank...\n";
+            $ignoreTables = '';
+            if (!$this->_getParam('include-cache')) {
+                $ignoreTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
+                if ($config->server->import && $config->server->import->ignoreTables) {
+                    foreach ($config->server->import->ignoreTables as $t) {
+                        $ignoreTables[] = $t;
+                    }
+                }
+                $ignoreTables = implode(',', $ignoreTables);
+                if ($ignoreTables) $ignoreTables = " --ignore-tables=$ignoreTables";
+            }
+            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir db-dump";
+            $cmd .= "$ignoreTables";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+            $cmd .= " | gunzip";
+            $descriptorspec = array(
+                1 => array("pipe", "w")
+            );
+            if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
+            $procDump = new Vps_Util_Proc($cmd, $descriptorspec);
+
+            $cmd = "mysql $mysqlLocalOptions {$dbConfig->dbname}";
+            $descriptorspec = array(
+                0 => array("pipe", "r")
+            );
+            $procImport = new Vps_Util_Proc($cmd, $descriptorspec);
+
+            $c = new Zend_ProgressBar_Adapter_Console();
+            $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                 Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
+                                 Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+            $progress = new Zend_ProgressBar($c, 0, $backupSize);
+            $size = 0;
+            while (!feof($procDump->pipe(1))) {
+                $buffer = fgets($procDump->pipe(1), 4096);
+                fputs($procImport->pipe(0), $buffer);
+                $size += strlen($buffer);
+                $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
+            }
+            fclose($procDump->pipe(1));
+            fclose($procImport->pipe(0));
+            $procImport->close();
+            $procDump->close();
+        }
 
         if (!$this->_getParam('include-cache')) {
 
@@ -200,6 +256,16 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     public function backupDbAction()
     {
+        echo "erstelle backup...\n";
+        $dumpname = $this->_backupDb();
+        $this->_systemCheckRet("bzip2 --fast $dumpname");
+        echo $dumpname.".bz2";
+        echo "\n";
+        $this->_helper->viewRenderer->setNoRender(true);
+    }
+
+    private function _backupDb()
+    {
         $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
         $dbConfig = $dbConfig->web;
 
@@ -210,25 +276,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             if (!file_exists($dumpname)) mkdir($dumpname);
         }
         $dumpname .= date("Y-m-d_H:i:s_U")."_{$dbConfig->dbname}.sql";
-        echo "erstelle backup...\n";
-        $this->_createDump($dumpname);
-        echo "\n";
-        $this->_helper->viewRenderer->setNoRender(true);
-    }
 
-    public function createDumpAction()
-    {
-        $dumpname = tempnam('/tmp', 'vpsimport');
-        $skipCacheTables = true;
-        if ($this->_getParam('include-cache')) {
-            $skipCacheTables = false;
-        }
-        $this->_createDump($dumpname, $skipCacheTables);
-        $this->_helper->viewRenderer->setNoRender(true);
-    }
-
-    private function _createDump($dumpname, $skipCacheTables = true)
-    {
         $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
         $dbConfig = $dbConfig->web;
         $mysqlOptions = "--host={$dbConfig->host} --user={$dbConfig->username} --password={$dbConfig->password} ";
@@ -240,23 +288,22 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
 
         $ignoreTables = '';
-        if ($skipCacheTables) {
-            $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
-            foreach ($cacheTables as $t) {
-                $ignoreTables .= " --ignore-table={$dbConfig->dbname}.{$t}";
+        $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
+        if ($config->import && $config->import->ignoreTables) {
+            foreach ($config->import->ignoreTables as $t) {
+                $cacheTables[] = $t;
             }
+        }
+        foreach ($cacheTables as $t) {
+            $ignoreTables .= " --ignore-table={$dbConfig->dbname}.{$t}";
         }
 
         $this->_systemCheckRet("{$mysqlDir}mysqldump{$ignoreTables} $mysqlOptions {$dbConfig->dbname} > $dumpname");
-        if ($skipCacheTables) {
-            foreach ($cacheTables as $t) {
-                $this->_systemCheckRet("{$mysqlDir}mysqldump --no-data $mysqlOptions {$dbConfig->dbname} $t >> $dumpname");
-            }
+        foreach ($cacheTables as $t) {
+            $this->_systemCheckRet("{$mysqlDir}mysqldump --no-data $mysqlOptions {$dbConfig->dbname} $t >> $dumpname");
         }
 
-        $this->_systemCheckRet("bzip2 --fast $dumpname");
-
-        echo $dumpname.".bz2";
+        return $dumpname;
     }
 
     public function getUpdateRevisionAction()

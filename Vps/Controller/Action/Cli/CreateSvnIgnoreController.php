@@ -174,6 +174,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
         }
     }
 
+    /*
     public function getIgnoresAction()
     {
         $dir = $this->_getParam('dir');
@@ -211,6 +212,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
         passthru($cmd);
         exit;
     }
+    */
 
     private function _getSvnIgnore($dir)
     {
