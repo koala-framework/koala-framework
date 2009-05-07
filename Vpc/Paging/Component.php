@@ -17,7 +17,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
     {
         $ret = parent::getViewCacheSettings();
         if ($this->getData()->parent->getComponent() instanceof Vpc_Directories_List_View_Component &&
-            $this->getData()->parent->getComponent()->hasSearchForm())
+            is_instance_of($this->getData()->parent->getComponent()->getPartialClass(), 'Vps_Component_Partial_Id'))
         {
             $ret['enabled'] = false;
         }
