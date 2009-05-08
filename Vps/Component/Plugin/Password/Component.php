@@ -40,6 +40,7 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_Abstr
         $templateVars['loginForm'] = Vps_Component_Data_Root::getInstance()
             ->getComponentById($this->_componentId)->getChildComponent('-loginForm');
         $templateVars['wrongLogin'] = isset($_POST['login_password']);
+        $templateVars['placeholder'] = $this->_getSetting('placeholder');
 
         $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
         $view = new Vps_View_Component();
