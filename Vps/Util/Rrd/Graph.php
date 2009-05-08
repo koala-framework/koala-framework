@@ -7,6 +7,8 @@ class Vps_Util_Rrd_Graph
     private $_title = null;
     private $_devideBy = null;
     private $_fields = array();
+    private $_lowerLimit = null;
+    private $_upperLimit = null;
 
     public function __construct(Vps_Util_Rrd_File $rrd)
     {
@@ -29,6 +31,16 @@ class Vps_Util_Rrd_Graph
             $f = $this->_rrd->getField($f);
         }
         $this->_devideBy = $f;
+    }
+
+    public function setLowerLimit($l)
+    {
+        $this->_lowerLimit = $l;
+    }
+
+    public function setUpperLimit($l)
+    {
+        $this->_upperLimit = $l;
     }
 
     public function addField($field, $color = null, $text = null)
@@ -92,6 +104,12 @@ class Vps_Util_Rrd_Graph
         }
         if ($this->_title) {
             $cmd .= "--title \"$this->_title\" ";
+        }
+        if ($this->_upperLimit) {
+            $cmd .= "--upper-limit \"$this->_upperLimit\" ";
+        }
+        if ($this->_lowerLimit) {
+            $cmd .= "--lower-limit \"$this->_lowerLimit\" ";
         }
 
         $rrdFile = $this->_rrd->getFileName();
