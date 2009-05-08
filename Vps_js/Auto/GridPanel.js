@@ -94,7 +94,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         //autoLoad kann in der zwischenzeit abgeschaltet werden, zB wenn
         //wir in einem Binding sind
         if (!this.autoLoad) return;
-        if (typeof this.initialConfig.autoLoadId != 'undefined') {
+        if (typeof this.initialConfig.autoLoadId != 'undefined' && this.initialConfig.autoLoadId) {
             this.autoLoadIdLoaded = false;
             this.load({ query: 'id:'+this.initialConfig.autoLoadId });
             this.on('load', function() {
