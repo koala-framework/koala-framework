@@ -15,6 +15,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         $server = $this->_getParam('server');
         $config = new Zend_Config_Ini('application/config.ini', $server);
+        if (!$config->server || !$config->server->host) {
+            throw new Vps_ClientException("kein server konfiguriert");
+        }
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
 
@@ -95,10 +98,12 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_systemCheckRet("echo \"CREATE DATABASE \`{$dbConfig->dbname}\`\" | mysql $mysqlLocalOptions");
 
 
+        echo "importiere datenbank...\n";
         if ($ownConfig->server->host == $config->server->host) {
-            d('TODO');
+            $otherDbConfig = new Zend_Config_Ini($config->server->dir.'/application/config.db.ini', 'database');
+            $otherDbConfig = $otherDbConfig->web;
+            $cmd = $this->_getDumpCommand($otherDbConfig);
         } else {
-            echo "importiere datenbank...\n";
             $ignoreTables = '';
             if (!$this->_getParam('include-cache')) {
                 $ignoreTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
@@ -114,36 +119,36 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $cmd .= "$ignoreTables";
             if ($this->_getParam('debug')) $cmd .= " --debug";
             $cmd .= " | gunzip";
-            $descriptorspec = array(
-                1 => array("pipe", "w")
-            );
-            if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
-            $procDump = new Vps_Util_Proc($cmd, $descriptorspec);
-
-            $cmd = "mysql $mysqlLocalOptions {$dbConfig->dbname}";
-            $descriptorspec = array(
-                0 => array("pipe", "r")
-            );
-            $procImport = new Vps_Util_Proc($cmd, $descriptorspec);
-
-            $c = new Zend_ProgressBar_Adapter_Console();
-            $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
-                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
-                                 Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
-                                 Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
-            $progress = new Zend_ProgressBar($c, 0, $backupSize);
-            $size = 0;
-            while (!feof($procDump->pipe(1))) {
-                $buffer = fgets($procDump->pipe(1), 4096);
-                fputs($procImport->pipe(0), $buffer);
-                $size += strlen($buffer);
-                $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
-            }
-            fclose($procDump->pipe(1));
-            fclose($procImport->pipe(0));
-            $procImport->close();
-            $procDump->close();
         }
+        $descriptorspec = array(
+            1 => array("pipe", "w")
+        );
+        if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
+        $procDump = new Vps_Util_Proc($cmd, $descriptorspec);
+
+        $cmd = "mysql $mysqlLocalOptions {$dbConfig->dbname}";
+        $descriptorspec = array(
+            0 => array("pipe", "r")
+        );
+        $procImport = new Vps_Util_Proc($cmd, $descriptorspec);
+
+        $c = new Zend_ProgressBar_Adapter_Console();
+        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+        $progress = new Zend_ProgressBar($c, 0, $backupSize);
+        $size = 0;
+        while (!feof($procDump->pipe(1))) {
+            $buffer = fgets($procDump->pipe(1), 4096);
+            fputs($procImport->pipe(0), $buffer);
+            $size += strlen($buffer);
+            $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
+        }
+        fclose($procDump->pipe(1));
+        fclose($procImport->pipe(0));
+        $procImport->close();
+        $procDump->close();
 
         if (!$this->_getParam('include-cache')) {
 
@@ -264,21 +269,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    private function _backupDb()
+    private function _getDumpCommand($dbConfig)
     {
-        $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
-        $dbConfig = $dbConfig->web;
+        $ret = '';
 
-        if (file_exists("/var/backups/vpsimport/")) {
-            $dumpname = "/var/backups/vpsimport/";
-        } else {
-            $dumpname = getcwd().'/../backup/';
-            if (!file_exists($dumpname)) mkdir($dumpname);
-        }
-        $dumpname .= date("Y-m-d_H:i:s_U")."_{$dbConfig->dbname}.sql";
-
-        $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
-        $dbConfig = $dbConfig->web;
         $mysqlOptions = "--host={$dbConfig->host} --user={$dbConfig->username} --password={$dbConfig->password} ";
         $config = Zend_Registry::get('config');
 
@@ -297,11 +291,30 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         foreach ($cacheTables as $t) {
             $ignoreTables .= " --ignore-table={$dbConfig->dbname}.{$t}";
         }
-
-        $this->_systemCheckRet("{$mysqlDir}mysqldump{$ignoreTables} $mysqlOptions {$dbConfig->dbname} > $dumpname");
+        $ret = "{ {$mysqlDir}mysqldump{$ignoreTables} $mysqlOptions {$dbConfig->dbname}";
         foreach ($cacheTables as $t) {
-            $this->_systemCheckRet("{$mysqlDir}mysqldump --no-data $mysqlOptions {$dbConfig->dbname} $t >> $dumpname");
+            $ret .= " && {$mysqlDir}mysqldump --no-data $mysqlOptions {$dbConfig->dbname} $t";
         }
+        $ret .= "; }";
+
+        return $ret;
+    }
+
+    private function _backupDb()
+    {
+        if (file_exists("/var/backups/vpsimport/")) {
+            $dumpname = "/var/backups/vpsimport/";
+        } else {
+            $dumpname = getcwd().'/../backup/';
+            if (!file_exists($dumpname)) mkdir($dumpname);
+        }
+
+        $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
+        $dbConfig = $dbConfig->web;
+        $dumpname .= date("Y-m-d_H:i:s_U")."_{$dbConfig->dbname}.sql";
+
+        $cmd = $this->_getDumpCommand($dbConfig)." > $dumpname";
+        $this->_systemCheckRet($cmd);
 
         return $dumpname;
     }
