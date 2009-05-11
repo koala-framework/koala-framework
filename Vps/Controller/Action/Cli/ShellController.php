@@ -22,8 +22,10 @@ class Vps_Controller_Action_Cli_ShellController extends Vps_Controller_Action_Cl
 
         $host = $config->server->user.'@'.$config->server->host;
         $dir = $config->server->dir;
-        $cmd = "ssh -t $host \"cd $dir && exec bash\"";
-        echo $cmd."\n";
+
+        $cmd = "sudo -u vps sshvps $host $dir shell";
+        if ($this->_getParam('debug')) $cmd .= " --debug";
+        if ($this->_getParam('debug')) echo $cmd."\n";
         passthru($cmd);
         $this->_helper->viewRenderer->setNoRender(true);
     }
