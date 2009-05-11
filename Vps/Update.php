@@ -85,6 +85,8 @@ abstract class Vps_Update
 
         $u = self::getUpdatesForDir(VPS_PATH.'/Vps', $from, $to);
         $ret = array_merge($ret, $u);
+        $u = self::getUpdatesForDir('./update', $from, $to);
+        $ret = array_merge($ret, $u);
         $ret = self::_sortByRevision($ret);
         return $ret;
     }
