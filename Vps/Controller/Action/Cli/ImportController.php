@@ -13,8 +13,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         // -> scheiß mysql
         //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
 
-        $server = $this->_getParam('server');
-        $config = new Zend_Config_Ini('application/config.ini', $server);
+        $configClass = get_class(Vps_Registry::get('config'));
+        $config = new $configClass($this->_getParam('server'));
         if (!$config->server || !$config->server->host) {
             throw new Vps_ClientException("kein server konfiguriert");
         }

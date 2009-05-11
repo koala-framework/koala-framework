@@ -18,7 +18,14 @@ class Vps_Controller_Action_Cli_ShellController extends Vps_Controller_Action_Cl
     }
     public function indexAction()
     {
-        $config = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
+        $section = $this->_getParam('server');
+
+        $configClass = get_class(Vps_Registry::get('config'));
+        $config = new $configClass($section);
+
+        if (!$config->server->host) {
+            throw new Vps_ClientException("No host configured for $section server");
+        }
 
         $host = $config->server->user.'@'.$config->server->host;
         $dir = $config->server->dir;
