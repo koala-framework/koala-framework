@@ -32,7 +32,7 @@ class Vps_Controller_Action_Cli_CopyToTestController extends Vps_Controller_Acti
 
     public function indexAction()
     {
-        $config = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
+        $config = Vps_Config_Web::getInstance($this->_getParam('server'));
 
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;

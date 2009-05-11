@@ -31,4 +31,13 @@ class Vps_Config_Cache extends Zend_Cache_Frontend_File {
         }
         return false;
     }
+
+    public static function getInstance()
+    {
+        static $cache;
+        if (!isset($cache)) {
+            $cache = new self();
+        }
+        return $cache;
+    }
 }
