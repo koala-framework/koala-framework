@@ -212,6 +212,7 @@ class Vps_Setup
         $cacheId = 'config_'.self::getConfigSection();
         require_once 'Zend/Config/Ini.php';
         $mtime = $cache->test($cacheId);
+        require_once str_replace('_', '/', $configClass).'.php';
         if(!$mtime) {
             $config = new $configClass(self::getConfigSection());
             $mtime = time();
