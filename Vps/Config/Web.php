@@ -48,12 +48,14 @@ class Vps_Config_Web extends Zend_Config_Ini
 
     protected final function _mergeFile($file, $section)
     {
-        $webSection = 'vivid';
         $webConfigFull = new Zend_Config_Ini($file, null);
         if (isset($webConfigFull->$section)) {
             $webSection = $section;
+        } else if (isset($webConfigFull->vivid)) {
+            $webSection = 'vivid';
+        } else {
+            $webSection = 'production';
         }
-        $webConfig = new Zend_Config_Ini($file, $webSection);
-        return $this->merge($webConfig);
+        return $this->merge(new Zend_Config_Ini($file, $webSection));
     }
 }
