@@ -27,11 +27,10 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             $allowed = $acl->isAllowed($role, $resource, 'view');
         } else if ($this->_getUserRole() == 'cli') {
             $allowed = $acl->isAllowed('cli', $resource, 'view');
+        } else if ($resource == 'vps_component') {
+            $allowed = $this->_isAllowedComponent();
         } else {
             $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
-        }
-        if ($allowed) {
-            $allowed = $this->_isAllowedComponent();
         }
         if ($allowed) {
             if ($this->_getUserRole() == 'cli') {
@@ -67,36 +66,57 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
     protected function _isAllowedComponent()
     {
         $allowed = true;
-        $resource = $this->getRequest()->getResourceName();
-        if ($resource == 'vps_component') {
-            $a = $this->getRequest()->getActionName();
-            if ($a != 'json-index' && $a != 'index') {
-                if (!$this->_getParam('componentId')) {
-                    $allowed = false;
-                    foreach (Vps_Registry::get('acl')->getAllResources() as $r) {
-                        if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {
-                            if ($this->_getParam('class') == $r->getComponentClass()) {
-                                $allowed = Vps_Registry::get('acl')->getComponentAcl()
-                                    ->isAllowed($this->_getAuthData(), $this->_getParam('class'));
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    $components = Vps_Component_Data_Root::getInstance()
-                        ->getComponentsByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
-                    if (empty($components)) {
-                        throw new Vps_Exception("Can't find component to check permissions");
-                    }
-                    $allowed = false;
-                    foreach ($components as $component) {
-                        if (Vps_Registry::get('acl')->getComponentAcl()
-                            ->isAllowed($this->_getAuthData(), $component)
-                        ) {
-                            $allowed = true;
+        $actionName = $this->getRequest()->getActionName();
+        if ($actionName != 'json-index' && $actionName != 'index') {
+            if (!$this->_getParam('componentId')) {
+                $allowed = false;
+                $class = $this->_getParam('class');
+                if (($pos = strpos($class, '!')) !== false) $class = substr($class, 0, $pos);
+
+                foreach (Vps_Registry::get('acl')->getAllResources() as $r) {
+                    if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {
+                        p($r->getComponentClass());
+                        if ($class == $r->getComponentClass()) {
+                            $allowed = Vps_Registry::get('acl')->getComponentAcl()
+                                ->isAllowed($this->_getAuthData(), $this->_getParam('class'));
+                            break;
                         }
                     }
                 }
+            } else {
+
+                $allowed = false;
+
+                $class = $this->_getParam('class');
+                if (($pos = strpos($class, '!')) !== false) $class = substr($class, 0, $pos);
+
+                $component = Vps_Component_Data_Root::getInstance()
+                    ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
+                if (!$component) {
+                    throw new Vps_Exception("Can't find component to check permissions");
+                }
+
+                // Checken, ob übergebene componentClass auf der aktuellen Page vorkommen kann
+                $allowCheck = false;
+                if ($component->componentClass == $class) $allowCheck = true;
+                $c = $component->parent;
+                $stopComponent = $component->getPage()->parent;
+                while (!$allowCheck && $c && !$c->componentId != $stopComponent->componentId) {
+                    $allowedComponentClasses = Vpc_Abstract::getChildComponentClasses(
+                        $c->componentClass, array('page' => false)
+                    );
+                    if (in_array($class, $allowedComponentClasses))
+                        $allowCheck = true;
+                    $c = $c->parent;
+                }
+
+                if ($allowCheck &&
+                    Vps_Registry::get('acl')->getComponentAcl()
+                        ->isAllowed($this->_getAuthData(), $component)
+                ) {
+                    $allowed = true;
+                }
+
             }
         }
         return $allowed;

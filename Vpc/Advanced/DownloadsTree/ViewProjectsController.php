@@ -20,5 +20,4 @@ class Vpc_Advanced_DownloadsTree_ViewProjectsController extends Vps_Controller_A
     {
         return true;
     }
-
 }

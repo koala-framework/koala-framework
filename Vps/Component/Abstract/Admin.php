@@ -13,6 +13,9 @@ class Vps_Component_Abstract_Admin
     {
     }
 
+    /**
+     * @return $this
+     */
     public static function getInstance($componentClass)
     {
         static $instances = array();
@@ -67,11 +70,9 @@ class Vps_Component_Abstract_Admin
 
     public function getControllerUrl($class = null)
     {
-        if (is_null($class)) $class = $this->_class;
-        if (substr($class, -10) == 'Controller') {
-            $class = substr($class, 0, -10);
-        }
-        return '/admin/component/edit/' . $class;
+        $componentClass = $this->_class;
+        if ($class) $componentClass .= '!' . $class;
+        return '/admin/component/edit/' . $componentClass;
     }
     public function setup()
     {

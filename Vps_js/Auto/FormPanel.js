@@ -129,7 +129,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }, this);
         this.add(this.formPanel);
         this.doLayout();
-        this.getForm().baseParams = this.baseParams;
+        this.setBaseParams(this.baseParams);
     },
 
     isDirty : function() {
@@ -393,17 +393,26 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     getFormPanel : function() {
         return this.formPanel;
     },
+    _setFieldBaseParams: function() {
+        if (this.getForm()) {
+            this.getForm().items.each(function(field) {
+            	field.setFormBaseParams(this.getForm().baseParams);
+            }, this);
+        }
+    },
     setBaseParams : function(baseParams) {
         this.baseParams = baseParams;
         if (this.getForm()) {
             this.getForm().baseParams = baseParams;
         }
+        this._setFieldBaseParams();
     },
     applyBaseParams : function(baseParams) {
         Ext.apply(this.baseParams, baseParams);
         if (this.getForm()) {
             Ext.apply(this.getForm().baseParams, baseParams);
         }
+        this._setFieldBaseParams();
     },
     getBaseParams : function() {
         return this.baseParams;

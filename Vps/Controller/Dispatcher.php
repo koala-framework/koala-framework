@@ -13,31 +13,14 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 Vps_Component_Data_Root::setComponentClass($request->getParam('root'));
             }
 
-            $className = '';
             $class = $request->getParam('class');
-
-            // Zuerst direkt Controller zu Klasse suchen
-            if (Vps_Loader::classExists($class . 'Controller')) {
-                $className = $class . 'Controller';
+            $controller = 'Controller';
+            if (($pos = strpos($class, '!')) !== false) {
+                $controller = substr($class, $pos + 1) . 'Controller';
+                $class = substr($class, 0, $pos);
             }
-
-            // Wenn nicht gefunden, Vererbungshierarchie durchlaufen
-            if ($className == '') {
-                Zend_Loader::loadClass($class);
-                while (is_subclass_of($class, 'Vps_Component_Abstract')) {
-
-                    $cc = $class;
-                    if (substr($cc, -10) == '_Component') {
-                        $cc = substr($cc, 0, -10);
-                    }
-                    $cc .= '_Controller';
-                    if (Vps_Loader::classExists($cc)) {
-                        $className = $cc;
-                        break;
-                    }
-                    $class = get_parent_class($class);
-                }
-            }
+            $className = Vpc_Admin::getComponentClass($class, $controller);
+            Zend_Loader::loadClass($className);
 
         } else {
 

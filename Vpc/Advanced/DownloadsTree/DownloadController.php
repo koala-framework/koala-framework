@@ -19,8 +19,4 @@ class Vpc_Advanced_DownloadsTree_DownloadController extends Vps_Controller_Actio
     {
         $row->project_id = $this->_getParam('project_id');
     }
-    protected function _isAllowedComponent()
-    {
-        return true;
-    }
 }

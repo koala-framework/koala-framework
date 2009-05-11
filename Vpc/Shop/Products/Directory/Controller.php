@@ -3,7 +3,7 @@ class Vpc_Shop_Products_Directory_Controller extends Vps_Controller_Action_Auto_
 {
     protected $_buttons = array('add', 'delete', 'save');
     protected $_editDialog = array(
-        'controllerUrl' => '/admin/component/edit/Vpc_Shop_Products_Directory_Form',
+        'controllerUrl' => '/admin/component/edit/Vpc_Shop_Products_Directory_Component!Form',
         'width' => 600,
         'height' => 500
     );

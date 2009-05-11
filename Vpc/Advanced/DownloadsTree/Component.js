@@ -4,11 +4,11 @@ Vps.onContentReady(function() {
         var projectsClass = Ext.get(i).down('.projectsClass').dom.value;
         var downloadsClass = Ext.get(i).down('.downloadsClass').dom.value;
         this.downloads = new Vps.Auto.GridPanel({
-            controllerUrl: '/admin/component/edit/' + downloadsClass,
+            controllerUrl: downloadsUrl,
             region: 'center'
         });
         this.projects = new Vps.Auto.TreePanel({
-            controllerUrl: '/admin/component/edit/' + projectsClass,
+            controllerUrl: projectsUrl,
             region: 'north',
             height: 220,
             baseParams: {
