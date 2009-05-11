@@ -5,9 +5,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     {
         $ownConfig = Vps_Registry::get('config');
 
-        $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
-        $dbConfig = $dbConfig->web;
-        $mysqlLocalOptions = "--host={$dbConfig->host} ";
+        $dbConfig = Zend_Registry::get('db')->getConfig();
+
+        $mysqlLocalOptions = "--host=$dbConfig[host] ";
         //auskommentiert weil: es muss in ~/.my.cnf ein benutzer der das machen darf eingestellt sein!
         //ansonsten gibt es probleme für das erstellen von triggers, dazu benötigt man SUPER priviliges
         // -> scheiß mysql
@@ -86,23 +86,56 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
 
         echo "erstelle datenbank-backup...\n";
-        $dumpname = $this->_backupDb();
+
+        $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
+        if ($config->import && $config->import->ignoreTables) {
+            foreach ($config->import->ignoreTables as $t) {
+                $cacheTables[] = $t;
+            }
+        }
+
+        $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
+        $keepTables = array();
+        if ($config->server->import && $config->server->import->keepTables) {
+            foreach ($config->server->import->keepTables as $t) {
+                if (substr($t, -1) == '*') {
+                    foreach ($tables as $table) {
+                        if (substr($table, 0, strlen($t)-1) == substr($t, 0, -1)) {
+                            $keepTables[] = $table;
+                        }
+                    }
+                } else {
+                    $keepTables[] = $t;
+                }
+            }
+        }
+
+        $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
         $backupSize = filesize($dumpname);
         $this->_systemCheckRet("bzip2 --fast $dumpname");
         echo $dumpname.".bz2\n";
 
+
+        if ($keepTables) {
+            echo "erstelle dump f�r KeepTables...\n";
+            $keepTablesDump = tempnam('/tmp', 'importkeep');
+            $cmd = "mysqldump --add-drop-table=false --no-create-info=true $mysqlLocalOptions $dbConfig[dbname] ".implode(' ', $keepTables).">> $keepTablesDump";
+            if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
+            $this->_systemCheckRet($cmd);
+        }
+
         echo "loesche lokale datenbank...\n";
-        $this->_systemCheckRet("echo \"DROP DATABASE \`{$dbConfig->dbname}\`\" | mysql $mysqlLocalOptions");
+        $this->_systemCheckRet("echo \"DROP DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
 
         echo "erstelle neue datenbank...\n";
-        $this->_systemCheckRet("echo \"CREATE DATABASE \`{$dbConfig->dbname}\`\" | mysql $mysqlLocalOptions");
+        $this->_systemCheckRet("echo \"CREATE DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
 
 
         echo "importiere datenbank...\n";
         if ($ownConfig->server->host == $config->server->host) {
             $otherDbConfig = new Zend_Config_Ini($config->server->dir.'/application/config.db.ini', 'database');
             $otherDbConfig = $otherDbConfig->web;
-            $cmd = $this->_getDumpCommand($otherDbConfig);
+            $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
         } else {
             $ignoreTables = '';
             if (!$this->_getParam('include-cache')) {
@@ -112,7 +145,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                         $ignoreTables[] = $t;
                     }
                 }
-                $ignoreTables = implode(',', $ignoreTables);
+                $ignoreTables = implode(',', array_merge($ignoreTables, $keepTables));
                 if ($ignoreTables) $ignoreTables = " --ignore-tables=$ignoreTables";
             }
             $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir db-dump";
@@ -126,7 +159,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
         $procDump = new Vps_Util_Proc($cmd, $descriptorspec);
 
-        $cmd = "mysql $mysqlLocalOptions {$dbConfig->dbname}";
+        $cmd = "mysql $mysqlLocalOptions $dbConfig[dbname]";
         $descriptorspec = array(
             0 => array("pipe", "r")
         );
@@ -149,6 +182,14 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         fclose($procImport->pipe(0));
         $procImport->close();
         $procDump->close();
+
+        if ($keepTables) {
+            echo "spiele KeepTables ein...\n";
+            $cmd = "mysql $mysqlLocalOptions $dbConfig[dbname] < $keepTablesDump";
+            if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
+            $this->_systemCheckRet($cmd);
+            unlink($keepTablesDump);
+        }
 
         if (!$this->_getParam('include-cache')) {
 
@@ -262,18 +303,18 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     public function backupDbAction()
     {
         echo "erstelle backup...\n";
-        $dumpname = $this->_backupDb();
+        $dumpname = $this->_backupDb(Vps_Util_ClearCache::getInstance()->getDbCacheTables());
         $this->_systemCheckRet("bzip2 --fast $dumpname");
         echo $dumpname.".bz2";
         echo "\n";
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    private function _getDumpCommand($dbConfig)
+    private function _getDumpCommand($dbConfig, array $cacheTables)
     {
         $ret = '';
 
-        $mysqlOptions = "--host={$dbConfig->host} --user={$dbConfig->username} --password={$dbConfig->password} ";
+        $mysqlOptions = "--host=$dbConfig[host] --user=$dbConfig[username] --password=$dbConfig[password] ";
         $config = Zend_Registry::get('config');
 
         $mysqlDir = '';
@@ -282,25 +323,19 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
 
         $ignoreTables = '';
-        $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
-        if ($config->import && $config->import->ignoreTables) {
-            foreach ($config->import->ignoreTables as $t) {
-                $cacheTables[] = $t;
-            }
-        }
         foreach ($cacheTables as $t) {
-            $ignoreTables .= " --ignore-table={$dbConfig->dbname}.{$t}";
+            $ignoreTables .= " --ignore-table=$dbConfig[dbname].{$t}";
         }
-        $ret = "{ {$mysqlDir}mysqldump{$ignoreTables} $mysqlOptions {$dbConfig->dbname}";
+        $ret = "{ {$mysqlDir}mysqldump{$ignoreTables} $mysqlOptions $dbConfig[dbname]";
         foreach ($cacheTables as $t) {
-            $ret .= " && {$mysqlDir}mysqldump --no-data $mysqlOptions {$dbConfig->dbname} $t";
+            $ret .= " && {$mysqlDir}mysqldump --no-data $mysqlOptions $dbConfig[dbname] $t";
         }
         $ret .= "; }";
 
         return $ret;
     }
 
-    private function _backupDb()
+    private function _backupDb($ignoreTables)
     {
         if (file_exists("/var/backups/vpsimport/")) {
             $dumpname = "/var/backups/vpsimport/";
@@ -309,11 +344,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             if (!file_exists($dumpname)) mkdir($dumpname);
         }
 
-        $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
-        $dbConfig = $dbConfig->web;
-        $dumpname .= date("Y-m-d_H:i:s_U")."_{$dbConfig->dbname}.sql";
-
-        $cmd = $this->_getDumpCommand($dbConfig)." > $dumpname";
+        $dbConfig = Zend_Registry::get('db')->getConfig();
+        $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
+        $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";
         $this->_systemCheckRet($cmd);
 
         return $dumpname;
@@ -334,5 +367,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             echo $onlineRevision;
         }
         $this->_helper->viewRenderer->setNoRender(true);
+    }
+
+    public function getDbConfigAction()
+    {
+        echo serialize(Zend_Registry::get('db')->getConfig());
+        exit;
     }
 }
