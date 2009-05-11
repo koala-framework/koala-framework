@@ -13,8 +13,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         // -> scheiß mysql
         //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
 
-        $configClass = get_class(Vps_Registry::get('config'));
-        $config = new $configClass($this->_getParam('server'));
+        $config = Vps_Config_Web::getInstance($this->_getParam('server'));
         if (!$config->server || !$config->server->host) {
             throw new Vps_ClientException("kein server konfiguriert");
         }

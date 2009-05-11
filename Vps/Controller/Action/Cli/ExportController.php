@@ -27,8 +27,8 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
 
     public function indexAction()
     {
-        $configClass = get_class(Vps_Registry::get('config'));
-        $config = new $configClass($this->_getParam('server'));
+        $config = Vps_Config_Web::getInstance($this->_getParam('server'));
+
 
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;

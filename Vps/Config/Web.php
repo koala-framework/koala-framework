@@ -3,6 +3,28 @@ require_once 'Zend/Config/Ini.php';
 
 class Vps_Config_Web extends Zend_Config_Ini
 {
+    public static function getInstance($section)
+    {
+        require_once 'Vps/Config/Cache.php';
+        $cache = Vps_Config_Cache::getInstance();
+        $cacheId = 'config_'.$section;
+        $configClass = Vps_Setup::$configClass;
+        require_once str_replace('_', '/', $configClass).'.php';
+        if(!$ret = $cache->load($cacheId)) {
+            $ret = new $configClass($section);
+            $mtime = time();
+            $cache->save($ret, $cacheId);
+        }
+        return $ret;
+    }
+
+    public static function getInstanceMtime($section)
+    {
+        require_once 'Vps/Config/Cache.php';
+        $cache = Vps_Config_Cache::getInstance();
+        return $cache->test('config_'.$section);
+    }
+
     public function __construct($section)
     {
         $vpsSection = 'vivid';

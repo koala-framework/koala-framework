@@ -20,8 +20,8 @@ class Vps_Controller_Action_Cli_ShellController extends Vps_Controller_Action_Cl
     {
         $section = $this->_getParam('server');
 
-        $configClass = get_class(Vps_Registry::get('config'));
-        $config = new $configClass($section);
+        $config = Vps_Config_Web::getInstance($section);
+
 
         if (!$config->server->host) {
             throw new Vps_ClientException("No host configured for $section server");

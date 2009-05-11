@@ -200,27 +200,17 @@ function is_instance_of($sub, $super)
 
 class Vps_Setup
 {
+    public static $configClass;
     public static function setUp($configClass = 'Vps_Config_Web')
     {
         require_once 'Vps/Loader.php';
         require_once 'Vps/Registry.php';
         Zend_Registry::setClassName('Vps_Registry');
 
+        self::$configClass = $configClass;
         require_once 'Vps/Config/Web.php';
-        require_once 'Vps/Config/Cache.php';
-        $cache = new Vps_Config_Cache();
-        $cacheId = 'config_'.self::getConfigSection();
-        require_once 'Zend/Config/Ini.php';
-        $mtime = $cache->test($cacheId);
-        require_once str_replace('_', '/', $configClass).'.php';
-        if(!$mtime) {
-            $config = new $configClass(self::getConfigSection());
-            $mtime = time();
-            $cache->save($config, $cacheId);
-        } else {
-            $config = $cache->load($cacheId);
-        }
-        Vps_Registry::set('configMtime', $mtime);
+        Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(self::getConfigSection()));
+        $config = Vps_Config_Web::getInstance(self::getConfigSection());
         Vps_Registry::set('config', $config);
 
 
