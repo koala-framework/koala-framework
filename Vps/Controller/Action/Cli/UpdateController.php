@@ -22,11 +22,11 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
     }
     public function indexAction()
     {
-        self::update($this->_getParam('rev'), $this->_getParam('current'));
+        self::update($this->_getParam('rev'), $this->_getParam('current'), $this->_getParam('debug'));
         exit;
     }
 
-    public static function update($rev = false, $current = false)
+    public static function update($rev = false, $current = false, $debug = false)
     {
         echo "Update\n";
         $currentRevision = false;
@@ -87,9 +87,9 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             }
             echo " found ".count($updates)."\n\n";
 
-            if (self::_executeUpdate($updates, 'checkSettings')) {
+            if (self::_executeUpdate($updates, 'checkSettings', $debug)) {
 
-                if (Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
+                if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
                     $offlineBootstrap  = "<?php\nheader(\"HTTP/1.0 503 Service Unavailable\");\n";
                     $offlineBootstrap .= "echo \"<html><head><title>503 Service Unavailable</title></head><body>\";\n";
                     $offlineBootstrap .= "echo \"<h1>Service Unavailable</h1>\";\n";
@@ -102,9 +102,9 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                     }
                 }
 
-                self::_executeUpdate($updates, 'preUpdate');
-                self::_executeUpdate($updates, 'update');
-                self::_executeUpdate($updates, 'postUpdate');
+                self::_executeUpdate($updates, 'preUpdate', $debug);
+                self::_executeUpdate($updates, 'update', $debug);
+                self::_executeUpdate($updates, 'postUpdate', $debug);
                 echo "\n";
                 Vps_Util_ClearCache::getInstance()->clearCache('all', true);
                 foreach ($updates as $k=>$u) {
@@ -115,7 +115,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 file_put_contents('application/update', serialize($updateRevision));
                 echo "\n\033[32mupdate finished\033[0m\n";
 
-                if (Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
+                if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
                     if (file_get_contents('bootstrap.php') == $offlineBootstrap) {
                         rename('bootstrap.php.backup', 'bootstrap.php');
                         echo "\nrestored bootstrap.php\n";
@@ -128,7 +128,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         }
     }
 
-    private static function _executeUpdate($updates, $method)
+    private static function _executeUpdate($updates, $method, $debug = false)
     {
         $ret = true;
         foreach ($updates as $update) {
@@ -141,6 +141,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             try {
                 $res = $update->$method();
             } catch (Exception $e) {
+                if ($debug) throw $e;
                 if ($method == 'checkSettings') {
                     echo get_class($update);
                 }
