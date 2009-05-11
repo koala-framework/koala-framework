@@ -143,7 +143,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         echo "importiere datenbank...\n";
         if ($ownConfig->server->host == $config->server->host) {
             $otherDbConfig = new Zend_Config_Ini($config->server->dir.'/application/config.db.ini', 'database');
-            $otherDbConfig = $otherDbConfig->web;
+            $otherDbConfig = $otherDbConfig->web->toArray();
             $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
         } else {
             $ignoreTables = '';
