@@ -350,7 +350,7 @@ class Vps_Setup
 
     public static function createDao()
     {
-        return new Vps_Dao(new Zend_Config_Ini('application/config.db.ini', 'database'));
+        return new Vps_Dao();
     }
 
     public static function getConfigSection()

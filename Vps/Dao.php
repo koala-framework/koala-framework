@@ -6,8 +6,12 @@ class Vps_Dao
     private $_db = array();
     private $_pageData = array();
 
-    public function __construct(Zend_Config $config)
+    public function __construct(array $config = null)
     {
+        if (is_null($config)) {
+            $config = new Zend_Config_Ini('application/config.db.ini', 'database');
+            $config = $config->toArray();
+        }
         $this->_config = $config;
     }
 
@@ -20,14 +24,23 @@ class Vps_Dao
         return $tables[$tablename];
     }
 
+    public function getDbConfig($db)
+    {
+        if (!isset($this->_config[$db])) {
+            throw new Vps_Dao_Exception("Connection \"$db\" in config.db.ini not found.
+                    Please add $db.host, $db.username, $db.password and $db.dbname under the sction [database].");
+        }
+        return $this->_config[$db];
+    }
+
     public function getDb($db = 'web')
     {
         if (!isset($this->_db[$db])) {
-            if (!isset($this->_config->$db)) {
-                throw new Vps_Dao_Exception("Connection \"$db\" in config.db.ini not found.
-                        Please add $db.host, $db.username, $db.password and $db.dbname under the sction [database].");
-            }
-            $dbConfig = $this->_config->$db->toArray();
+            $dbConfig = $this->getDbConfig($db);
+            if (!isset($dbConfig['username']) && isset($dbConfig['user'])) $dbConfig['username'] = $dbConfig['user'];
+            if (!isset($dbConfig['password']) && isset($dbConfig['pass'])) $dbConfig['password'] = $dbConfig['pass'];
+            if (!isset($dbConfig['dbname']) && isset($dbConfig['name'])) $dbConfig['dbname'] = $dbConfig['name'];
+
             $this->_db[$db] = Zend_Db::factory('PDO_MYSQL', $dbConfig);
             $this->_db[$db]->query('SET names UTF8');
 
