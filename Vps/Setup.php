@@ -200,12 +200,29 @@ function is_instance_of($sub, $super)
 
 class Vps_Setup
 {
-    public static function setUp()
+    public static function setUp($configClass = 'Vps_Config_Web')
     {
         require_once 'Vps/Loader.php';
         require_once 'Vps/Registry.php';
         Zend_Registry::setClassName('Vps_Registry');
-        $config = Zend_Registry::get('config');
+
+        require_once 'Vps/Config/Web.php';
+        require_once 'Vps/Config/Cache.php';
+        $cache = new Vps_Config_Cache();
+        $cacheId = 'config_'.self::getConfigSection();
+        require_once 'Zend/Config/Ini.php';
+        $mtime = $cache->test($cacheId);
+        if(!$mtime) {
+            $config = new Vps_Config_Web(self::getConfigSection());
+            $mtime = time();
+            $cache->save($config, $cacheId);
+        } else {
+            $config = $cache->load($cacheId);
+        }
+        Vps_Registry::set('configMtime', $mtime);
+        Vps_Registry::set('config', $config);
+
+
         if ($config->debug->benchmark) {
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
@@ -390,54 +407,6 @@ class Vps_Setup
         } else {
             return 'production';
         }
-    }
-
-    public static function createConfig()
-    {
-        $section = self::getConfigSection();
-
-        $vpsSection = $webSection = 'vivid';
-
-        require_once 'Zend/Config/Ini.php';
-        $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
-        if (isset($webConfigFull->$section)) {
-            $webSection = $section;
-        }
-
-        $vpsConfigFull = new Zend_Config_Ini(VPS_PATH.'/config.ini', null);
-        if (isset($vpsConfigFull->$section)) {
-            $vpsSection = $section;
-        }
-
-        $webConfig = new Zend_Config_Ini('application/config.ini', $webSection);
-
-        $vpsConfig = new Zend_Config_Ini(VPS_PATH.'/config.ini', $vpsSection,
-                        array('allowModifications'=>true));
-        $vpsConfig->merge($webConfig);
-
-        $v = $vpsConfig->application->vps->version;
-        if (preg_match('#tags/vps/([^/]+)/config\\.ini#', $v, $m)) {
-            $v = $m[1];
-        } else if (preg_match('#branches/vps/([^/]+)/config\\.ini#', $v, $m)) {
-            $v = 'Branch '.$m[1];
-        } else if (preg_match('#trunk/vps/config\\.ini#', $v, $m)) {
-            $v = 'Trunk';
-        }
-        $vpsConfig->application->vps->version = $v;
-        if (preg_match('/Revision: ([0-9]+)/', $vpsConfig->application->vps->revision, $m)) {
-            $vpsConfig->application->vps->revision = (int)$m[1];
-        }
-        foreach ($vpsConfig->path as $k=>$i) {
-            $vpsConfig->path->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
-                                            array($vpsConfig->libraryPath, VPS_PATH),
-                                            $i);
-        }
-        foreach ($vpsConfig->includepath as $k=>$i) {
-            $vpsConfig->includepath->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
-                                            array($vpsConfig->libraryPath, VPS_PATH),
-                                            $i);
-        }
-        return $vpsConfig;
     }
 
     public static function dispatchVpc()
