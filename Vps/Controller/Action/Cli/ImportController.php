@@ -87,14 +87,24 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         echo "erstelle datenbank-backup...\n";
 
+        $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
+
         $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
-        if ($config->import && $config->import->ignoreTables) {
-            foreach ($config->import->ignoreTables as $t) {
-                $cacheTables[] = $t;
+
+        if ($config->server->import && $config->server->import->ignoreTables) {
+            foreach ($config->server->import->ignoreTables as $t) {
+                if (substr($t, -1) == '*') {
+                    foreach ($tables as $table) {
+                        if (substr($table, 0, strlen($t)-1) == substr($t, 0, -1)) {
+                            $cacheTables[] = $table;
+                        }
+                    }
+                } else {
+                    $cacheTables[] = $t;
+                }
             }
         }
 
-        $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
         $keepTables = array();
         if ($config->server->import && $config->server->import->keepTables) {
             foreach ($config->server->import->keepTables as $t) {
@@ -139,13 +149,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         } else {
             $ignoreTables = '';
             if (!$this->_getParam('include-cache')) {
-                $ignoreTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
-                if ($config->server->import && $config->server->import->ignoreTables) {
-                    foreach ($config->server->import->ignoreTables as $t) {
-                        $ignoreTables[] = $t;
-                    }
-                }
-                $ignoreTables = implode(',', array_merge($ignoreTables, $keepTables));
+                $ignoreTables = implode(',', array_merge($cacheTables, $keepTables));
                 if ($ignoreTables) $ignoreTables = " --ignore-tables=$ignoreTables";
             }
             $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir db-dump";
