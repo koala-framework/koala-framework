@@ -37,7 +37,9 @@ class Vps_Util_ClearCache
 
     public function getTypes()
     {
-        $types = array('all', 'memcache');
+        
+        $types = array('all');
+        if (class_exists('Memcache')) $types[] = 'memcache';
         $types = array_merge($types, $this->_getCacheDirs());
         $types = array_merge($types, $this->getDbCacheTables());
         return $types;
@@ -46,9 +48,7 @@ class Vps_Util_ClearCache
     public final function clearCache($types = 'all', $output = false)
     {
         if ($types == 'all') {
-            $types = array('memcache');
-            $types = array_merge($types, $this->_getCacheDirs());
-            $types = array_merge($types, $this->getDbCacheTables());
+            $types = $this->getTypes();
         } else {
             if (!is_array($types)) {
                 $types = explode(',', $types);
