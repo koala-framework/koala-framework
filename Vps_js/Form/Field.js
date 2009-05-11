@@ -75,5 +75,7 @@ Ext.form.Field.override({
         if (this.commentEl) {
             this.commentEl.alignTo(this.getEl(), 'tr', [5, 3]);
         }
+    },
+    setFormBaseParams: function(params) {
     }
 });

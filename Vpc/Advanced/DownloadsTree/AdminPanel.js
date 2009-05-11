@@ -40,11 +40,11 @@ Vpc.Advanced.DownloadsTree.AdminPanelProjects = Ext.extend(Vps.Auto.TreePanel, {
 Vpc.Advanced.DownloadsTree.AdminPanel = Ext.extend(Vps.Binding.ProxyPanel, {
     initComponent: function() {
         this.downloads = new Vps.Auto.GridPanel({
-            controllerUrl: '/admin/component/edit/' + this.downloadsClass,
+            controllerUrl: this.downloadsUrl,
             region: 'center'
         });
         this.projects = new Vpc.Advanced.DownloadsTree.AdminPanelProjects({
-            controllerUrl: '/admin/component/edit/' + this.projectsClass,
+            controllerUrl: this.projectsClassUrl,
             region: 'west',
             width: 300,
             split: true,
@@ -53,7 +53,7 @@ Vpc.Advanced.DownloadsTree.AdminPanel = Ext.extend(Vps.Binding.ProxyPanel, {
                 queryParam: 'project_id'
             }],
             editDialog: new Vps.Auto.Form.Window({
-                controllerUrl: '/admin/component/edit/' + this.projectClass,
+                controllerUrl: this.projectClassUrl,
                 width: 400,
                 height: 400
             })

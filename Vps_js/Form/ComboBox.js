@@ -195,7 +195,11 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 scope: this
             });
         }
+    },
+    setFormBaseParams: function(params) {
+    	this.store.baseParams = params;
     }
+
 
 });
 Ext.reg('combobox', Vps.Form.ComboBox);

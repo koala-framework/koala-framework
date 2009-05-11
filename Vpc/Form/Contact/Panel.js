@@ -14,7 +14,7 @@ Vpc.Formular.Contact.Panel = Ext.extend(Vpc.Paragraphs.Panel,
                         height: 200,
                         title:  trlVps('Settings'),
                         modal:  true,
-                        controllerUrl: '/admin/component/edit/Vpc_Formular_Contact_Settings'
+                        controllerUrl: '/admin/component/edit/Vpc_Formular_Contact_Component!Settings'
                         });
                 }
                 this.settingsWindow.showEdit(this.getBaseParams());

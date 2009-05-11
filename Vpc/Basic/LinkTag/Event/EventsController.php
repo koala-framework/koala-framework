@@ -5,11 +5,6 @@ class Vpc_Basic_LinkTag_Event_EventsController extends Vps_Controller_Action_Aut
     protected $_defaultOrder = array('field'=>'start_date', 'direction'=>'DESC');
     protected $_paging = 20;
 
-    protected function _isAllowedComponent()
-    {
-        return true;
-    }
-
     protected function _initColumns()
     {
         parent::_initColumns();

@@ -5,7 +5,7 @@ class Vpc_Advanced_DownloadsTree_DownloadsController extends Vps_Controller_Acti
     protected $_modelName = 'Vpc_Advanced_DownloadsTree_Downloads';
     protected $_buttons = array('save', 'add', 'edit', 'delete');
     protected $_editDialog = array(
-        'controllerUrl' => '/admin/component/edit/Vpc_Advanced_DownloadsTree_Download',
+        'controllerUrl' => '/admin/component/edit/Vpc_Advanced_DownloadsTree_Component!Download',
         'width' => 500,
         'height' => 240
     );

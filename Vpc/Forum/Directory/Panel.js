@@ -3,8 +3,8 @@ Vpc.Forum.Panel = Ext.extend(Vps.Auto.TreePanel,
 {
     initComponent: function() {
         this.modAssignGrid = new Vps.Auto.AssignGridPanel({
-            gridAssignedControllerUrl : '/admin/component/edit/Vpc_Forum_Directory_ModeratorsToGroup',
-            gridDataControllerUrl     : '/admin/component/edit/Vpc_Forum_Directory_Moderators',
+            gridAssignedControllerUrl : '/admin/component/edit/Vpc_Forum_Directory_Component!ModeratorsToGroup',
+            gridDataControllerUrl     : '/admin/component/edit/Vpc_Forum_Directory_Component!Moderators',
             gridDataHeight            : 300
         });
 

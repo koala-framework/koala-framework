@@ -22,10 +22,9 @@ class Vpc_Advanced_DownloadsTree_Component extends Vpc_Abstract_Composite_Compon
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['projectsClass'] = Vpc_Admin::getComponentClass(get_class($this), 'ViewProjectsController');
-        $ret['downloadsClass'] = Vpc_Admin::getComponentClass(get_class($this), 'ViewDownloadsController');
-        $ret['projectsClass'] = str_replace('Controller', '', $ret['projectsClass']);
-        $ret['downloadsClass'] = str_replace('Controller', '', $ret['downloadsClass']);
+
+        $ret['projectsUrl'] = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('ViewProjects');
+        $ret['downloadsUrl'] = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('ViewDownloads');
         return $ret;
     }
 

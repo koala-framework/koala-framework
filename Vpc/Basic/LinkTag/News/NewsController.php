@@ -5,11 +5,6 @@ class Vpc_Basic_LinkTag_News_NewsController extends Vps_Controller_Action_Auto_G
     protected $_defaultOrder = array('field'=>'publish_date', 'direction'=>'DESC');
     protected $_paging = 20;
 
-    protected function _isAllowedComponent()
-    {
-        return true;
-    }
-
     protected function _initColumns()
     {
         parent::_initColumns();
