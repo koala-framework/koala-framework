@@ -31,12 +31,13 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
     {
         Zend_Session::start(); //wegen tests
 
-        $prodConfig = new Zend_Config_Ini('application/config.ini', 'production');
+        $configClass = get_class(Vps_Registry::get('config'));
+        $prodConfig = new $configClass('production');
         if (!$prodConfig || !$prodConfig->server->host || !$prodConfig->server->dir) {
             throw new Vps_ClientException("Prod-Server not configured");
         }
 
-        $testConfig = new Zend_Config_Ini('application/config.ini', 'test');
+        $testConfig = new $configClass('test');
         if (!$testConfig || !$testConfig->server->host || !$testConfig->server->dir) {
             throw new Vps_ClientException("Test-Server not configured");
         }

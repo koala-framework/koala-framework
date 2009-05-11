@@ -27,7 +27,8 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
 
     public function indexAction()
     {
-        $config = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
+        $configClass = get_class(Vps_Registry::get('config'));
+        $config = new $configClass($this->_getParam('server'));
 
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
