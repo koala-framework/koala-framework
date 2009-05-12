@@ -16,18 +16,28 @@ class Vpc_Advanced_DownloadsTree_Component extends Vpc_Abstract_Composite_Compon
 
         $ret['plugins'] = array('Vpc_Rotary_Password_Component');
         $ret['flags']['hasResources'] = true;
+        
+        $ret['panelWidth'] = 490;
+        $ret['panelHeight'] = 500;
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-
-        $ret['projectsUrl'] = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('ViewProjects');
-        $ret['downloadsUrl'] = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('ViewDownloads');
+        $ret['options'] = $this->_getOptions();
         return $ret;
     }
 
+    protected function _getOptions()
+    {
+        $ret['componentId'] = $this->getData()->componentId;
+        $ret['projectsUrl'] = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('ViewProjects');
+        $ret['downloadsUrl'] = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('ViewDownloads');
+        $ret['width'] = $this->_getSetting('panelWidth');
+        $ret['height'] = $this->_getSetting('panelHeight');        
+        return $ret;
+    }
     public function hasContent()
     {
         $projects = new Vpc_Advanced_DownloadsTree_Projects();

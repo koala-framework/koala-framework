@@ -1,18 +1,16 @@
 Vps.onContentReady(function() {
     Ext.query('.vpcAdvancedDownloadsTree .content').each(function(i) {
-        var componentId = Ext.get(i).down('.componentId').dom.value;
-        var projectsClass = Ext.get(i).down('.projectsClass').dom.value;
-        var downloadsClass = Ext.get(i).down('.downloadsClass').dom.value;
+        var options = Ext.decode(Ext.get(i).down('.options').dom.value);
         this.downloads = new Vps.Auto.GridPanel({
-            controllerUrl: downloadsUrl,
+            controllerUrl: options.downloadsUrl,
             region: 'center'
         });
         this.projects = new Vps.Auto.TreePanel({
-            controllerUrl: projectsUrl,
+            controllerUrl: options.projectsUrl,
             region: 'north',
             height: 220,
             baseParams: {
-                component_id: componentId
+                component_id: options.componentId
             },
             bindings: [{
                 item: this.downloads,
@@ -30,8 +28,8 @@ Vps.onContentReady(function() {
 
         new Ext.Panel({
             border: true,
-            width: 490,
-            height: 500,
+            width: options.width,
+            height: options.height,
             renderTo: i,
             layout: 'border',
             items: [downloads, projects]
