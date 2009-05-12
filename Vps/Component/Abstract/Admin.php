@@ -135,13 +135,13 @@ class Vps_Component_Abstract_Admin
             foreach ($components as $c) {
                 $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
                         array('text'=>$c->getTitle(), 'icon'=>$icon),
-                        '/admin/component/edit/'.$c->componentClass.'?componentId='.$c->dbId), 'vpc_news');
+                        Vpc_Admin::getInstance($c->componentClass)->getControllerUrl().'?componentId='.$c->dbId), 'vpc_news');
             }
         } else if (count($components) == 1) {
             $c = $components[0];
             $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
                     array('text'=>$name, 'icon'=>$icon),
-                    '/admin/component/edit/'.$c->componentClass.'?componentId='.$c->dbId), 'vps_component_root');
+                    Vpc_Admin::getInstance($c->componentClass)->getControllerUrl().'?componentId='.$c->dbId), 'vps_component_root');
 
         }
     }

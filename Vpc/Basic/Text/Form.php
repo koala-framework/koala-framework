@@ -33,8 +33,12 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
             $field->setDownloadComponentConfig($c);
         }
         if (Vpc_Abstract::getSetting($this->getClass(), 'enableStylesEditor')) {
+            $admin = Vpc_Admin::getInstance($class);
             $field->setStylesEditorConfig(array(
-                'xtype' => 'vpc.basic.text.styleseditor'
+                'xtype' => 'vpc.basic.text.styleseditor',
+                'blockStyleUrl' => $admin->getControllerUrl('BlockStyle'),
+                'inlineStyleUrl' => $admin->getControllerUrl('InlineStyle'),
+                'masterStyleUrl' => $admin->getControllerUrl('MasterStyle')
             ));
         }
 

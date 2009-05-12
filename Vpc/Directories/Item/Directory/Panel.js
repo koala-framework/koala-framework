@@ -5,8 +5,10 @@ Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
         if (this.componentPlugins) {
             this.plugins = [ ];
             this.componentPlugins.each(function(v) {
-                var pluginClass = eval(v);
-                this.plugins.push(new pluginClass());
+                var pluginClass = eval(v.class);
+                var plugin = new pluginClass();
+                plugin.setSettings(v.settings);
+                this.plugins.push(plugin);
             }, this);
         }
 
