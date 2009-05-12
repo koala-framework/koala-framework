@@ -11,15 +11,15 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
     {
         this.block = new Vpc.Basic.Text.StylesEditorTab({
                 title: trlVps('Block-Styles'),
-                controllerUrl: '/admin/component/edit/Vpc_Basic_Text_Component!BlockStyle'
+                controllerUrl: this.blockStyleUrl
             });
         this.inline = new Vpc.Basic.Text.StylesEditorTab({
                 title: trlVps('Inline-Styles'),
-                controllerUrl: '/admin/component/edit/Vpc_Basic_Text_Component!InlineStyle'
+                controllerUrl: this.inlineStyleUrl
             });
         this.master = new Vpc.Basic.Text.StylesEditorTab({
                 title: trlVps('Master-Styles'),
-                controllerUrl: '/admin/component/edit/Vpc_Basic_Text_Component!MasterStyle'
+                controllerUrl: this.masterStyleUrl
             });
         this.items = new Ext.TabPanel({
             items: [this.block, this.inline/*, this.master*/],

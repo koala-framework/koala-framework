@@ -2,13 +2,18 @@
 class Vpc_Shop_Products_Directory_Controller extends Vps_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('add', 'delete', 'save');
-    protected $_editDialog = array(
-        'controllerUrl' => '/admin/component/edit/Vpc_Shop_Products_Directory_Component!Form',
-        'width' => 600,
-        'height' => 500
-    );
     protected $_modelName = 'Vpc_Shop_Products';
     protected $_position = 'pos';
+
+    public function init()
+    {
+        $this->editDialog = array(
+            'controllerUrl' => Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form'),
+            'width' => 600,
+            'height' => 500
+        );
+        parent::init();
+    }
 
     protected function _initColumns()
     {

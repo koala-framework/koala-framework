@@ -17,6 +17,6 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
     {
         parent::preDispatch();
         $url = Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form');
-        $this->_editDialog['controllerUrl'] = '/admin/component/edit/'.$url;
+        $this->_editDialog['controllerUrl'] = $url;
     }
 }

@@ -14,7 +14,7 @@ Vps.Form.Container.FieldSet.Panel = Ext.extend(Vpc.Paragraphs.Panel,
                         height: 200,
                         title:  trlVps('Settings'),
                         modal:  true,
-                        controllerUrl: '/admin/component/edit/Vps_Form_Container_FieldSet_Settings'
+                        controllerUrl: this.controllerUrl + '!Settings'
                         });
                 }
                 this.settingsWindow.showEdit(this.getBaseParams());

@@ -4,12 +4,17 @@ class Vpc_Advanced_DownloadsTree_DownloadsController extends Vps_Controller_Acti
 {
     protected $_modelName = 'Vpc_Advanced_DownloadsTree_Downloads';
     protected $_buttons = array('save', 'add', 'edit', 'delete');
-    protected $_editDialog = array(
-        'controllerUrl' => '/admin/component/edit/Vpc_Advanced_DownloadsTree_Component!Download',
-        'width' => 500,
-        'height' => 240
-    );
     protected $_defaultOrder = array('field'=>'date', 'direction'=>'DESC');
+
+    public function init()
+    {
+        $this->_editDialog = array(
+            'controllerUrl'=> Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form'),
+            'width'=>500,
+            'height'=>240
+        );
+        parent::init();
+    }
     protected function _initColumns()
     {
         parent::_initColumns();

@@ -7,9 +7,16 @@ class Vpc_Forum_Directory_Controller extends Vps_Controller_Action_Auto_Vpc_Tree
     );
     protected $_rootVisible = true;
     protected $_textField = 'name';
-    protected $_editDialog = array('controllerUrl'=>'/admin/component/edit/Vpc_Forum_Directory_Component!Form',
-                                   'width'=>450,
-                                   'height'=>200);
+
+    public function init()
+    {
+        $this->_editDialog = array(
+            'controllerUrl'=> Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form'),
+            'width'=>450,
+            'height'=>200
+        );
+        parent::init();
+    }
 
     public function jsonDeleteAction()
     {
