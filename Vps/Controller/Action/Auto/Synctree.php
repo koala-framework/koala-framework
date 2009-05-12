@@ -185,8 +185,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         } else {
             $select = $this->_getSelect();
             $where = $this->_getTreeWhere($parentRow);
-            if ($where) {
-                $select->where($where);
+            foreach ($where as $w) {
+                $select->where($w);
             }
             if (!$parentRow) {
                 if (is_null($this->_rootParentValue)) {
