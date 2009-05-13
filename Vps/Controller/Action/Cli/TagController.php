@@ -104,9 +104,14 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
 
     private static function _getCurrentBranchDir($dir)
     {
-        $info = new SimpleXMLElement(`svn info --xml $dir`);
-        if (!preg_match('#/((trunk|tags|branches).*)$#', (string)$info->entry->url, $m)) {
-            throw new Vps_Exception("Can't detect current branch");
+        try {
+            $cmd = "cd $dir && svn info --xml";
+            $info = new SimpleXMLElement(`$cmd`);
+            if (!preg_match('#/((trunk|tags|branches).*)$#', (string)$info->entry->url, $m)) {
+                throw new Vps_Exception("Can't detect current branch");
+            }
+        } catch (Exception $e) {
+            throw new Vps_Exception("Can't detect current branch: $cmd");
         }
         return $m[1];
     }
