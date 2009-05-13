@@ -126,7 +126,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
 
         if ($keepTables) {
-            echo "erstelle dump für KeepTables...\n";
+            echo "erstelle dump fuer KeepTables...\n";
             $keepTablesDump = tempnam('/tmp', 'importkeep');
             $cmd = "mysqldump --add-drop-table=false --no-create-info=true $mysqlLocalOptions $dbConfig[dbname] ".implode(' ', $keepTables).">> $keepTablesDump";
             if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
@@ -162,7 +162,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
         $procDump = new Vps_Util_Proc($cmd, $descriptorspec);
 
-        $cmd = "mysql $mysqlLocalOptions $dbConfig[dbname]";
+        $cmd = "mysql $mysqlLocalOptions --default-character-set=utf8 $dbConfig[dbname]";
         $descriptorspec = array(
             0 => array("pipe", "r")
         );
