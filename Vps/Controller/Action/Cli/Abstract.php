@@ -79,6 +79,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
         $sections = array();
         $processedDomains = array();
         foreach ($webConfigFull as $k=>$i) {
+            if ($k == 'dependencies') continue;
             $config = Vps_Config_Web::getInstance($k);
             if ($config->server && $config->server->domain) {
                 if ( !in_array($config->server->domain, $processedDomains)) {
