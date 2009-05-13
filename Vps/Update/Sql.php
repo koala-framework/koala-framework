@@ -8,7 +8,7 @@ class Vps_Update_Sql extends Vps_Update
         $mysqlOptions = "--host={$dbConfig['host']} --user={$dbConfig['username']} --password={$dbConfig['password']} {$dbConfig['dbname']} ";
         $mysqlBinary = 'mysql';
 
-        exec("which $mysqlBinary", $out, $ret);
+        exec("which $mysqlBinary >/dev/null 2>&1", $out, $ret);
         if (!$ret) {
 
             $descriptorspec = array(
