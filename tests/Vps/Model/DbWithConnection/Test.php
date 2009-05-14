@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Model_Db
  * @group Model_DbWithConnection
  */

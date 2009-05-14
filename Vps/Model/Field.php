@@ -40,7 +40,7 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
         return null;
     }
 
-    public function getOwnColumns()
+    protected function _getOwnColumns()
     {
         return $this->_columns;
     }

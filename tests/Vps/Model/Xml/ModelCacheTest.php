@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group xmlModel
  */
 class Vps_Model_Xml_ModelCacheTest extends PHPUnit_Framework_TestCase

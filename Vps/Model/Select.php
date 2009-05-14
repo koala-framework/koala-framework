@@ -10,6 +10,7 @@ class Vps_Model_Select
     const ORDER = 'order';
     const LIMIT_COUNT = 'limitCount';
     const LIMIT_OFFSET = 'limitOffset';
+    const EXPR = 'expr';
     const OTHER = 'other';
 
     const ORDER_RAND = 'orderRand';
@@ -175,6 +176,11 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
         return $this;
     }
 
+    public function expr($field)
+    {
+        $this->_parts[self::EXPR][] = $field;
+        return $this;
+    }
     public function getParts()
     {
         return $this->_parts;

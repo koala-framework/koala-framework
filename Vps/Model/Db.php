@@ -8,7 +8,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private $_tableName;
     private $_columns;
 
-    private $_indirectSiblingModels = array();
+    private $_proxyContainerModels = array();
 
     private $_importBuffer;
     private $_importBufferOptions;
@@ -32,10 +32,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
     }
 
     //kann gesetzt werden von proxy
-    public function addIndirectSiblingModels($m)
+    public function addProxyContainerModel($m)
     {
-        $this->_indirectSiblingModels = array_merge($this->_indirectSiblingModels, $m);
+        $this->_proxyContainerModels[] = $m;
     }
+
     protected function _init()
     {
         parent::_init();
@@ -56,7 +57,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
     }
 
-    public function getOwnColumns()
+    protected function _getOwnColumns()
     {
         if (!$this->_columns)
             $this->_columns = $this->_table->info(Zend_Db_Table_Abstract::COLS);
@@ -98,9 +99,17 @@ class Vps_Model_Db extends Vps_Model_Abstract
     {
         $id = $this->_getUniqueId($proxiedRow);
         if (!isset($this->_rows[$id])) {
+            $proxiedRow->setReadOnly(false);
+            $exprValues = array();
+            foreach (array_keys($this->_exprs) as $k) {
+                if (isset($proxiedRow->$k)) {
+                    $exprValues[$k] = $proxiedRow->$k;
+                }
+            }
             $this->_rows[$id] = new $this->_rowClass(array(
                 'row' => $proxiedRow,
-                'model' => $this
+                'model' => $this,
+                'exprValues' => $exprValues
             ));
         }
         return $this->_rows[$id];
@@ -121,44 +130,88 @@ class Vps_Model_Db extends Vps_Model_Abstract
     }
     private function _formatFieldInternal($field, $dbSelect)
     {
-        $sm = array_merge($this->_siblingModels, $this->_indirectSiblingModels);
-        foreach ($sm as $k=>$m) {
-            if (is_array($m)) {
-                $siblingOf = $m['siblingOf'];
-                $m = $m['sibling'];
-            } else {
-                $siblingOf = $this;
-            }
-            while ($m instanceof Vps_Model_Proxy) {
-                $m = $m->getProxyModel();
-            }
-            if ($m instanceof Vps_Model_Db) {
-                if (in_array($field, $m->getOwnColumns())) {
-                    $ref = $m->getReferenceByModelClass(get_class($siblingOf), $k);
-                    $siblingTableName = $m->getTableName();
+        $siblingOfModels = $this->_proxyContainerModels;
+        $siblingOfModels[] = $this;
+        foreach ($siblingOfModels as $siblingOf) {
+            foreach ($siblingOf->getSiblingModels() as $k=>$m) {
+                while ($m instanceof Vps_Model_Proxy) {
+                    $m = $m->getProxyModel();
+                }
+                if ($m instanceof Vps_Model_Db) {
+                    if (in_array($field, $m->getOwnColumns())) {
+                        $ref = $m->getReferenceByModelClass(get_class($siblingOf), $k);
+                        $siblingTableName = $m->getTableName();
 
-                    $joinCondition = $this->getTableName().'.'.$this->getPrimaryKey()
-                        .' = '.$siblingTableName.'.'.$ref['column'];
-                    $alreadyJoined = false;
-                    $fromPart = $dbSelect->getPart('from');
-                    if ($fromPart) {
-                        foreach ($fromPart as $join) {
-                            if ($join['tableName'] == $siblingTableName && $join['joinCondition'] == $joinCondition) {
-                                $alreadyJoined = true;
-                                break;
+                        $joinCondition = $this->getTableName().'.'.$this->getPrimaryKey()
+                            .' = '.$siblingTableName.'.'.$ref['column'];
+                        $alreadyJoined = false;
+                        $fromPart = $dbSelect->getPart('from');
+                        if ($fromPart) {
+                            foreach ($fromPart as $join) {
+                                if ($join['tableName'] == $siblingTableName && $join['joinCondition'] == $joinCondition) {
+                                    $alreadyJoined = true;
+                                    break;
+                                }
                             }
                         }
+                        if (!$alreadyJoined) {
+                            $dbSelect->joinLeft($siblingTableName, $joinCondition, array());
+                        }
+                        return $m->getTableName().'.'.$field;
                     }
-                    if (!$alreadyJoined) {
-                        $dbSelect->joinLeft($siblingTableName, $joinCondition, array());
-                    }
-                    return $m->getTableName().'.'.$field;
+                    $ret = $m->_formatFieldInternal($field, $dbSelect);
+                    if ($ret) return $ret;
                 }
-                $ret = $m->_formatFieldInternal($field, $dbSelect);
-                if ($ret) return $ret;
             }
         }
-        return false;
+
+        return $this->_formatFieldExpr($field, $dbSelect);
+    }
+
+    private function _formatFieldExpr($field, $dbSelect)
+    {
+        $expr = false;
+
+        $depOfModels = $this->_proxyContainerModels;
+        $depOfModels[] = $this;
+        foreach ($depOfModels as $depOf) {
+            if (isset($depOf->_exprs[$field])) {
+                $expr = $depOf->_exprs[$field];
+                $depM = $depOf->getDependentModel($expr->getChild());
+                break;
+            }
+        }
+        if (!$expr) return false;
+        if ($expr instanceof Vps_Model_Select_Expr_Child) {
+            $depM = Vps_Model_Abstract::getInstance($depM);
+            $dbDepM = $depM;
+            while ($dbDepM instanceof Vps_Model_Proxy) {
+                $dbDepM = $dbDepM->getProxyModel();
+            }
+            if (!$dbDepM instanceof Vps_Model_Db) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
+            $dbDepOf = $depOf;
+            while ($dbDepOf instanceof Vps_Model_Proxy) {
+                $dbDepOf = $dbDepOf->getProxyModel();
+            }
+            if (!$dbDepOf instanceof Vps_Model_Db) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
+            $depTableName = $dbDepM->getTableName();
+            $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
+            $exprStr = $this->_createDbSelectExpression($expr->getExpr(), $dbSelect);
+            //TODO: das funktioniert nicht immer korrekt weil es ein subselect ist.
+            //mögliche lösung: für das subselect ein eigenes dbSelect objekt erstellen
+            //vom korrekten child-model.
+            //das könnte dann alles nötige machen...
+            //ABER: das mach ich erst wenn benötigt wird :D
+            $col = "(SELECT $exprStr FROM $depTableName WHERE $depTableName.$ref[column]={$dbDepOf->getTableName()}.{$dbDepOf->getPrimaryKey()})";
+        } else {
+            throw new Vps_Exception_NotYetImplemented();
+        }
+        $dbSelect->from(null, array($field=>$col));
+        return $field;
     }
 
     /**
@@ -189,6 +242,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     private function _applySelect($dbSelect, $select)
     {
+        if ($dbSelect instanceof Zend_Db_Table_Select) {
+            $dbSelect->setIntegrityCheck(false);
+        }
+
         if ($whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
             foreach ($whereEquals as $field=>$value) {
                 if (is_array($value)) {
@@ -245,6 +302,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
             foreach ($whereExpression as $expr) {
                 $expr->validate();
                 $dbSelect->where($this->_createDbSelectExpression($expr, $dbSelect));
+            }
+        }
+
+        if ($exprs = $select->getPart(Vps_Model_Select::EXPR)) {
+            foreach ($exprs as $field) {
+                if (!$this->_formatFieldExpr($field, $dbSelect)) {
+                    throw new Vps_Exception("Expression '$field' not found");
+                }
             }
         }
     }
@@ -312,6 +377,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
             }
             return implode(" AND ", $sqlExpressions);
+        } else if ($expr instanceof Vps_Model_Select_Expr_Count) {
+            return 'COUNT(*)';
+        } else if ($expr instanceof Vps_Model_Select_Expr_Sum) {
+            $field = $this->_formatField($expr->getField(), $dbSelect);
+            return "SUM($field)";
         }
     }
 

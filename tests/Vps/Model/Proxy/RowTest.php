@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Model_Proxy
  */
 class Vps_Model_Proxy_RowTest extends PHPUnit_Framework_TestCase

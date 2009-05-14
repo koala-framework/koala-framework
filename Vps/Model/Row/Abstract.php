@@ -8,13 +8,19 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     protected $_model;
     private $_internalId;
     protected $_siblingRows;
-    static $_internalIdCounter = 0;
+    protected $_exprValues = array();
+    static private $_internalIdCounter = 0;
 
     public function __construct(array $config)
     {
         if (isset($config['siblingRows'])) {
             $this->_siblingRows = (array)$config['siblingRows'];
         }
+
+        if (isset($config['exprValues'])) {
+            $this->_exprValues = (array)$config['exprValues'];
+        }
+
         $this->_model = $config['model'];
         $this->_internalId = self::$_internalIdCounter++;
 
@@ -95,18 +101,16 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     public function __isset($name)
     {
-        foreach ($this->_getSiblingRows() as $r) {
-            if ($r->getModel()->hasColumn($name)) {
-                return isset($r->$name);
-            }
-        }
-        return false;
+        return $this->_model->hasColumn($name);
     }
 
     public function __unset($name)
     {
+        if (in_array($name, $this->_model->getExprColumns())) {
+            throw new Vps_Exception("Expr Columns are read only");
+        }
         foreach ($this->_getSiblingRows() as $r) {
-            if ($r->getModel()->hasColumn($name)) {
+            if ($r->hasColumn($name)) {
                 unset($r->$name);
                 return;
             }
@@ -116,8 +120,14 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     public function __get($name)
     {
+        if (in_array($name, $this->_model->getExprColumns())) {
+            if (!isset($this->_exprValues[$name])) {
+                $this->_exprValues[$name] = $this->_model->getExprValue($this, $name);
+            }
+            return $this->_exprValues[$name];
+        }
         foreach ($this->_getSiblingRows() as $r) {
-            if ($r->getModel()->hasColumn($name)) {
+            if ($r->hasColumn($name)) {
                 return $r->$name;
             }
         }
@@ -126,9 +136,12 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     public function __set($name, $value)
     {
+        if (in_array($name, $this->_model->getExprColumns())) {
+            throw new Vps_Exception("Expr Columns are read only");
+        }
         if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
             foreach ($this->_getSiblingRows() as $r) {
-                if ($r->getModel()->hasColumn($name)) {
+                if ($r->hasColumn($name)) {
                     $r->$name = $value;
                     return;
                 }
@@ -361,5 +374,10 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             $ret = array_merge($ret, $r->toArray());
         }
         return $ret;
+    }
+
+    public function hasColumn($col)
+    {
+        return $this->_model->hasColumn($col);
     }
 }

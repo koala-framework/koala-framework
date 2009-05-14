@@ -13,7 +13,9 @@ class Vps_Model_ParentRow_TestModel extends Vps_Model_FnF
     );
 }
 
-
+/**
+ * @group Model
+ */
 class Vps_Model_ParentRow_Test extends PHPUnit_Framework_TestCase
 {
     public function testParentRow()
