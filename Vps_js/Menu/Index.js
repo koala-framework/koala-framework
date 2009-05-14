@@ -177,7 +177,8 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         }
         if (result.showLogout) {
             this.add({
-                text: trlVps('Logout'),
+                text: trlVps('Logout')
+                    + ((result.fullname && !result.userSelfControllerUrl) ? ' ('+result.fullname+')' : ''),
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/door_out.png',
                 handler: function() {
