@@ -5,7 +5,7 @@ abstract class Vps_Component_Plugin_Abstract extends Vps_Component_Abstract
 
     public function __construct($componentId)
     {
-        parent::__construct($componentId);
         $this->_componentId = $componentId;
+        parent::__construct($componentId);
     }
 }
