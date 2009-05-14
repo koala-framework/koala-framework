@@ -118,13 +118,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             if ($credential == md5($row->password)
                 || $row->encodePassword($credential) == $row->password
             ) {
-                if (!$row->logins) $row->logins = 0;
-                $row->logins = $row->logins + 1;
-                $row->last_login = date('Y-m-d H:i:s');
-                if (isset($userRow->last_login_web)) {
-                    $userRow->last_login_web = date('Y-m-d H:i:s');
-                }
-                $row->save();
+                $this->_realLoginModifyRow($row);
             }
 
             return array(
@@ -140,6 +134,18 @@ class Vps_User_Model extends Vps_Model_Proxy
                 'messages'           => array(trlVps('Supplied password is invalid'))
             );
         }
+    }
+
+    // wird nur aufgerufen, wenn man sich mit den richtigen Daten eingeloggt hat
+    protected function _realLoginModifyRow($row)
+    {
+        if (!$row->logins) $row->logins = 0;
+        $row->logins = $row->logins + 1;
+        $row->last_login = date('Y-m-d H:i:s');
+        if (isset($userRow->last_login_web)) {
+            $userRow->last_login_web = date('Y-m-d H:i:s');
+        }
+        $row->save();
     }
 
     public function lostPassword($email)
