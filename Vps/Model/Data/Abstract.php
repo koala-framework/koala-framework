@@ -141,13 +141,15 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         }
 
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
-            //TODO: implement Multiple Order fields
+            if (count($order) > 1) {
+                //TODO: implement Multiple Order fields
+                throw new Vps_Exception_NotYetImplemented();
+            }
             $order = current($order);
             $orderData = array();
             foreach ($dataKeys as $key) {
                 if ($order['field'] instanceof Zend_Db_Expr) {
-                    //NOT IMPLEMENTED!
-                    $orderData[$inData[$key]['id']] = '';
+                    throw new Vps_Exception_NotYetImplemented();
                 } else if ($order['field'] == Vps_Model_Select::ORDER_RAND) {
                     $orderData[$inData[$key]['id']] = rand();
                 } else {
@@ -316,7 +318,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         return $this->_primaryKey;
     }
 
-    public function getOwnColumns()
+    protected function _getOwnColumns()
     {
         return $this->_columns;
     }
@@ -368,4 +370,5 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             throw new Vps_Exception_NotYetImplemented();
         }
     }
+
 }

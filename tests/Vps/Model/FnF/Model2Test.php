@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Model_FnF
  */
 class Vps_Model_FnF_Model2Test extends PHPUnit_Framework_TestCase

@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Service
  * @group Model_Service
  */

@@ -20,6 +20,8 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
      */
     protected $_filters = array();
 
+    protected $_exprs = array();
+
 
     protected $_rows = array();
 
@@ -34,6 +36,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         if (isset($config['referenceMap'])) $this->_referenceMap = (array)$config['referenceMap'];
         if (isset($config['filters'])) $this->_filters = (array)$config['filters'];
         if (isset($config['toStringField'])) $this->_toStringField = (string)$config['toStringField'];
+        if (isset($config['exprs'])) $this->_exprs = (array)$config['exprs'];
         $this->_init();
     }
 
@@ -172,6 +175,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
         if (!$this->getOwnColumns()) return true;
         if (in_array($col, $this->getOwnColumns())) return true;
+        if (in_array($col, $this->getExprColumns())) return true;
         foreach ($this->getSiblingModels() as $m) {
             if ($m->hasColumn($col)) return true;
         }
@@ -186,11 +190,23 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $this->_hasColumnsCache[$col];
     }
 
-    abstract public function getOwnColumns();
+    public final function getExprColumns()
+    {
+        return array_keys($this->_exprs);
+    }
+
+    public final function getOwnColumns()
+    {
+        $ret = $this->_getOwnColumns();
+        return $ret;
+    }
+
+    abstract protected function _getOwnColumns();
 
     public function getColumns()
     {
         $ret = $this->getOwnColumns();
+        $ret = array_merge($ret, $this->getExprColumns());
         foreach ($this->getSiblingModels() as $m) {
             $ret = array_merge($ret, $m->getColumns());
         }
@@ -233,7 +249,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function getReference($rule)
     {
         if (!isset($this->_referenceMap[$rule])) {
-            throw new Vps_Exception("Reference '$rule' for model '".get_class($this)."' not set, set is '".implode(', ', array_keys($this->_referenceMap))."'");
+            throw new Vps_Exception("Reference '$rule' for model '".get_class($this)."' not set, set are '".implode(', ', array_keys($this->_referenceMap))."'");
         }
         return $this->_referenceMap[$rule];
     }
@@ -328,5 +344,25 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function getUniqueIdentifier()
     {
         throw new Vps_Exception_NotYetImplemented();
+    }
+
+    public function getExprValue(Vps_Model_Row_Interface $row, $name)
+    {
+        $expr = $this->_exprs[$name];
+        if ($expr instanceof Vps_Model_Select_Expr_Child) {
+            $childs = $row->getChildRows($expr->getChild());
+            if ($expr->getExpr() instanceof Vps_Model_Select_Expr_Count) {
+                return $childs->count();
+            } else if ($expr->getExpr() instanceof Vps_Model_Select_Expr_Sum) {
+                $f = $expr->getExpr()->getField();
+                $ret = 0;
+                foreach ($childs as $c) {
+                    $ret += $c->$f;
+                }
+                return $ret;
+            }
+        } else {
+            throw new Vps_Exception_NotYetImplemented();
+        }
     }
 }

@@ -19,9 +19,8 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
     public function __isset($name)
     {
         $n = $this->_transformColumnName($name);
-        $ret = isset($this->_row->$n);
-        if (!$ret) $ret = parent::__isset($name);
-        return $ret;
+        if (isset($this->_row->$n)) return true;
+        return parent::__isset($name);
     }
 
     public function __unset($name)
@@ -147,5 +146,10 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
             $intersectionTable = $intersectionTable->getTable();
         }
         return $this->_row->findManyToManyRowset($matchModel, $intersectionModel, $callerRefRule, $matchRefRule, $dbSelect);
+    }
+
+    public function hasColumn($col)
+    {
+        return $this->_model->hasColumn($col);
     }
 }

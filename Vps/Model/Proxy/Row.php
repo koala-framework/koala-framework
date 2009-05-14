@@ -9,10 +9,15 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
         parent::__construct($config);
     }
 
+    public function getProxiedRow()
+    {
+        return $this->_row;
+    }
+
     public function __isset($name)
     {
-        if ($this->_row->getModel()->hasColumn($name)) {
-            return isset($this->_row->$name);
+        if ($this->_row->hasColumn($name)) {
+            return true;
         } else {
             return parent::__isset($name);
         }
@@ -20,7 +25,7 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
 
     public function __unset($name)
     {
-        if ($this->_row->getModel()->hasColumn($name)) {
+        if ($this->_row->hasColumn($name)) {
             $this->_row->__unset($name);
         } else {
             parent::__unset($name);
@@ -29,7 +34,7 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        if ($this->_row->getModel()->hasColumn($name)) {
+        if ($this->_row->hasColumn($name)) {
             return $this->_row->$name;
         } else {
             return parent::__get($name);
@@ -38,7 +43,7 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
 
     public function __set($name, $value)
     {
-        if ($this->_row->getModel()->hasColumn($name)) {
+        if ($this->_row->hasColumn($name)) {
             $this->_row->$name = $value;
         } else {
             parent::__set($name, $value);

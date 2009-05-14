@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Model_Session
  * @group selenium
  * @group slow

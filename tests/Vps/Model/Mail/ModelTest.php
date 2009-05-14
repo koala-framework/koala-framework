@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Model_Mail
  * @group Mail
  */

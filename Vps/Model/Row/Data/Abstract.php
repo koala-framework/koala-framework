@@ -26,15 +26,6 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         parent::unserialize($data['parent']);
     }
 
-    public function __isset($name)
-    {
-        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
-            return parent::__isset($name);
-        } else {
-            return true;
-        }
-    }
-
     public function __unset($name)
     {
         if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {

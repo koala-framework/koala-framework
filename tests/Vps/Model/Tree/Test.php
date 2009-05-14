@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Model_Tree
  */
 class Vps_Model_Tree_Test extends PHPUnit_Framework_TestCase

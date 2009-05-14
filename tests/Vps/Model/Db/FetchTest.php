@@ -99,6 +99,10 @@ class Vps_Model_Db_FetchTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($r1 === $r2);
     }
 
+    /**
+     * Testet ob es eh noch funktioniert wenn in der Zend_Db_Table_Row isset und get
+     * überschrieben sind, nur wg. rückwärtskompatibilität notwendig.
+     */
     public function testValuesNotInModel()
     {
         $this->_table->expects($this->any())
@@ -107,7 +111,7 @@ class Vps_Model_Db_FetchTest extends PHPUnit_Framework_TestCase
                     array('id'=>1, 'foo'=>'foo', 'bar'=>null)
                 )));
         $row = $this->_model->getRows()->current();
-        $this->assertTrue(isset($row->foobar));
+        $this->assertTrue(isset($row->foobar)); //foobar kommt aus überschriebenem __isset/__get in row
         $this->assertFalse(isset($row->foobar1));
         $this->assertEquals('foo', $row->foo);
         $this->assertEquals('foobar', $row->foobar);

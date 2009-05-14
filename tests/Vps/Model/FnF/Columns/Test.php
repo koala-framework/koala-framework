@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Model
+ */
 class Vps_Model_FnF_Columns_Test extends PHPUnit_Framework_TestCase
 {
     private $_model;

@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group SiblingModel
  */
 class Vps_Model_FnF_SiblingModelTest extends PHPUnit_Framework_TestCase

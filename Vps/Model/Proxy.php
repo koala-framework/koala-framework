@@ -21,24 +21,17 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         if ($this->_proxyModel instanceof Vps_Model_Db
             || $this->_proxyModel instanceof Vps_Model_Proxy
         ) {
-            $is = array();
-            foreach ($this->_siblingModels as $m) {
-                $is[] = array(
-                    'siblingOf' => $this,
-                    'sibling' => $m
-                );
-            }
-            if ($is) $this->_proxyModel->addIndirectSiblingModels($is);
+            $this->_proxyModel->addProxyContainerModel($this);
         }
     }
 
     //kann gesetzt werden von proxy (rekursiv bei proxys)
-    public function addIndirectSiblingModels($m)
+    public function addProxyContainerModel($m)
     {
         if ($this->_proxyModel instanceof Vps_Model_Db
             || $this->_proxyModel instanceof Vps_Model_Proxy
         ) {
-            $this->_proxyModel->addIndirectSiblingModels($m);
+            $this->_proxyModel->addProxyContainerModel($m);
         }
     }
 
@@ -66,9 +59,25 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     {
         $id = $proxiedRow->getInternalId();
         if (!isset($this->_rows[$id])) {
+            $exprValues = array();
+            if ($this->_exprs) {
+                $r = $proxiedRow;
+                while ($r instanceof Vps_Model_Proxy_Row) {
+                    $r = $r->getProxiedRow();
+                }
+                if ($r instanceof Vps_Model_Db_Row) {
+                    $r = $r->getRow();
+                    foreach (array_keys($this->_exprs) as $k) {
+                        if (isset($r->$k)) {
+                            $exprValues[$k] = $r->$k;
+                        }
+                    }
+                }
+            }
             $this->_rows[$id] = new $this->_rowClass(array(
                 'row' => $proxiedRow,
-                'model' => $this
+                'model' => $this,
+                'exprValues' => $exprValues
             ));
         }
         return $this->_rows[$id];
@@ -89,7 +98,7 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         return false;
     }
 
-    public function getOwnColumns()
+    protected function _getOwnColumns()
     {
         return $this->_proxyModel->getColumns();
     }
@@ -97,6 +106,7 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     public function hasColumn($col)
     {
         if ($this->_proxyModel->hasColumn($col)) return true;
+        if (in_array($col, $this->getExprColumns())) return true;
         foreach ($this->getSiblingModels() as $m) {
             if ($m->hasColumn($col)) return true;
         }
