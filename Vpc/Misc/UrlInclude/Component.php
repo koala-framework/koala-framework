@@ -13,4 +13,16 @@ class Vpc_Misc_UrlInclude_Component extends Vpc_Abstract
     {
         return 60*60;
     }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $row = $this->getRow();
+        $ret['content'] = '';
+        if ($row->url && preg_match('#^https?\\:/#', $row->url)) {
+            $ret['content'] = @file_get_contents($this->row->url);
+        }
+        return $ret;
+
+    }
 }
