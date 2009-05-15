@@ -122,6 +122,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $index = $column->getDataIndex();
                 if ($info = $this->_getTableInfo()) {
                     if (!isset($info['metadata'][$index])) continue;
+                } else {
+                    if (!in_array($index, $this->_model->getColumns())) continue;
                 }
                 $this->_queryFields[] = $index;
             }
@@ -467,7 +469,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->view->metaData['buttons'] = (object)$this->_buttons;
         $this->view->metaData['permissions'] = (object)$this->_permissions;
         $this->view->metaData['paging'] = $this->_paging;
-        $this->view->metaData['filters'] = (object)$this->_filters;
+        $filters = array();
+        foreach ($this->_filters as $k=>$f) {
+            if (isset($f['field'])) $f['field'] = $f['field']->getMetaData();
+            $filters[$k] = $f;
+        }
+        $this->view->metaData['filters'] = (object)$filters;
         $this->view->metaData['sortable'] = $this->_sortable;
         $this->view->metaData['editDialog'] = $this->_editDialog;
         $this->view->metaData['grouping'] = $this->_grouping;
