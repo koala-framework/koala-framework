@@ -21,16 +21,18 @@ class Vps_Model_DbWithConnection_SelectExpr_Model2 extends Vps_Model_Db
         Vps_Registry::get('db')->query("CREATE TABLE IF NOT EXISTS {$this->_tableName} (
             `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
             `model1_id` INT NOT NULL ,
-            `foo` VARCHAR( 200 ) NOT NULL ,
+            `foo2` INT NULL ,
             `bar` VARCHAR( 200 ) NOT NULL
         ) ENGINE = INNODB");
         Vps_Registry::get('db')->query("TRUNCATE TABLE {$this->_tableName}");
         Vps_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, model1_id, foo, bar) VALUES ('1', 1, 'aaabbbccc', 'abcd')");
+                        (id, model1_id, foo2, bar) VALUES ('1', 1, 10, 'abcd')");
         Vps_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, model1_id, foo, bar) VALUES ('2', 1, 'bam', 'bum')");
+                        (id, model1_id, foo2, bar) VALUES ('2', 1, 10, 'bam')");
         Vps_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, model1_id, foo, bar) VALUES ('3', 2, 'bam', 'bum')");
+                        (id, model1_id, foo2, bar) VALUES ('3', 1, NULL, 'bam')");
+        Vps_Registry::get('db')->query("INSERT INTO {$this->_tableName}
+                        (id, model1_id, foo2, bar) VALUES ('4', 2, 10, 'bam')");
     }
 
 
