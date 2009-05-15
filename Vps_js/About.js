@@ -1,7 +1,7 @@
 Vps.About = Ext.extend(Ext.Window, {
     initComponent: function() {
         this.title = 'About';
-        this.width = 300;
+        this.width = 350;
         this.height = 200;
         this.resizable = false;
         this.layout = 'fit';

@@ -6,7 +6,7 @@
 .vps-about .footer {
     position: absolute;
     z-index: 0px;
-    width: 264px; _width: 284px;
+    width: 314px; _width: 334px;
     bottom: 1px; left: 1px;
     _bottom: 0px; _left: 0px;
     border-top: 2px solid #a9bfd4;
@@ -20,5 +20,5 @@
     bottom: 0px; right: 0px;
 }
 
-.vps-about {position:relative; width: 300px; }
+.vps-about {position:relative; width: 350px; }
 .vps-about .x-panel-body {background-color: #e2ebf5;}
