@@ -13,14 +13,20 @@ class Vps_Data_Table extends Vps_Data_Abstract
 
     public function load($row)
     {
+        $name = $this->getField();
+        return $row->$name;
+    }
+
+    public function getField()
+    {
         $name = $this->_dataIndex;
         if (!$name) $name = $this->getFieldname();
-        return $row->$name;
+        return $name;
     }
 
     public function save(Vps_Model_Row_Interface $row, $data)
     {
-        $name = $this->getFieldname();
+        $name = $this->getField();
         $row->$name = $data;
     }
 }
