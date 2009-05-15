@@ -179,6 +179,16 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     {
         $ret = $this->_model->select();
 
+        $exprColumns = $this->_model->getExprColumns();
+        foreach ($this->_columns as $column) {
+            $d = $column->getData();
+            if ($d instanceof Vps_Data_Table) {
+                if (in_array($d->getField(), $exprColumns)) {
+                    $ret->expr($d->getField());
+                }
+            }
+        }
+
         $query = $this->getRequest()->getParam('query');
         $sk = isset($this->_filters['text']['skipWhere']) &&
             $this->_filters['text']['skipWhere'];
