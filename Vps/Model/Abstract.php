@@ -350,9 +350,21 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
         $expr = $this->_exprs[$name];
         if ($expr instanceof Vps_Model_Select_Expr_Child) {
-            $childs = $row->getChildRows($expr->getChild());
+            $childs = $row->getChildRows($expr->getChild(), $expr->getSelect());
             if ($expr->getExpr() instanceof Vps_Model_Select_Expr_Count) {
-                return $childs->count();
+                if ($expr->getExpr()->getField() != '*') {
+                    $f = $expr->getExpr()->getField();
+                    $values = array();
+                    foreach ($childs as $c) {
+                        if (!is_null($c->$f)) $values[] = $c->$f;
+                    }
+                    if ($expr->getExpr()->getDistinct()) {
+                        $values = array_unique($values);
+                    }
+                    return count($values);
+                } else {
+                    return $childs->count();
+                }
             } else if ($expr->getExpr() instanceof Vps_Model_Select_Expr_Sum) {
                 $f = $expr->getExpr()->getField();
                 $ret = 0;

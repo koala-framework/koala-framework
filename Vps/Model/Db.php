@@ -200,13 +200,19 @@ class Vps_Model_Db extends Vps_Model_Abstract
             }
             $depTableName = $dbDepM->getTableName();
             $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
-            $exprStr = $this->_createDbSelectExpression($expr->getExpr(), $dbSelect);
-            //TODO: das funktioniert nicht immer korrekt weil es ein subselect ist.
-            //mögliche lösung: für das subselect ein eigenes dbSelect objekt erstellen
-            //vom korrekten child-model.
-            //das könnte dann alles nötige machen...
-            //ABER: das mach ich erst wenn benötigt wird :D
-            $col = "(SELECT $exprStr FROM $depTableName WHERE $depTableName.$ref[column]={$dbDepOf->getTableName()}.{$dbDepOf->getPrimaryKey()})";
+            $depSelect = $expr->getSelect();
+            if (!$depSelect) {
+                $depSelect = $dbDepM->select();
+            } else {
+                //wir führen unten ein where aus, das darf nicht im original select bleiben
+                $depSelect = clone $depDbSelect;
+            }
+            $depSelect->where("$depTableName.$ref[column]={$dbDepOf->getTableName()}.{$dbDepOf->getPrimaryKey()}");
+            $depDbSelect = $dbDepM->createDbSelect($depSelect);
+            $exprStr = $dbDepM->_createDbSelectExpression($expr->getExpr(), $depDbSelect);
+            $depDbSelect->reset(Zend_Db_Select::COLUMNS);
+            $depDbSelect->from(null, $exprStr);
+            $col = "($depDbSelect)";
         } else {
             throw new Vps_Exception_NotYetImplemented();
         }
@@ -378,7 +384,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
             }
             return implode(" AND ", $sqlExpressions);
         } else if ($expr instanceof Vps_Model_Select_Expr_Count) {
-            return 'COUNT(*)';
+            $field = $expr->getField();
+            if ($field != '*') {
+                $field = $this->_formatField($field, $dbSelect);
+            }
+            if ($expr->getDistinct()) $field = "DISTINCT $field";
+            return "COUNT($field)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Sum) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
             return "SUM($field)";
