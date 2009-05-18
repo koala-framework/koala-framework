@@ -34,7 +34,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController_IgnoredFilter
     {
         if (!parent::accept()) return false;
         $p = $this->it->getPathname();
-        $st = simplexml_load_string(`svn st --depth empty  --xml $p`);
+        $st = simplexml_load_string(`svn st --non-recursive --xml $p`);
         $st = (string)$st->target->entry->{'wc-status'}['item'];
         if ($st == 'unversioned') {
             return false;
@@ -85,7 +85,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
                     continue;
                 }
                 $x .= '/'.$i;
-                $st = simplexml_load_string(`svn st --depth empty  --xml $x`);
+                $st = simplexml_load_string(`svn st --non-recursive --xml $x`);
                 $st = (string)$st->target->entry->{'wc-status'}['item'];
                 if ($st == 'unversioned') {
                     $this->_systemCheckRet("svn add --non-recursive $x");
@@ -168,6 +168,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
         foreach ($st->target as $t) {
             if ($t->entry->{'wc-status'}['item'] == 'ignored') continue;
             if ($t->entry->{'wc-status'}['item'] == 'unversioned') continue;
+            if (substr((string)$t['path'], -1) == '*') continue;
             $cmd = "svn rm --force ".escapeshellarg((string)$t['path']);
             echo $cmd."\n";
             $this->_systemCheckRet($cmd);
@@ -216,17 +217,13 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
 
     private function _getSvnIgnore($dir)
     {
-        $prop = simplexml_load_string(`svn propget svn:ignore $dir --xml`);
-        if ($prop->target->property['name'] != 'svn:ignore') return array();
-        $ret = array();
-        foreach (explode("\n", (string)$prop->target->property) as $i) {
+        exec("svn propget svn:ignore $dir", $ret);
+        foreach ($ret as &$i) {
             $i = trim($i);
-            if ($i) {
-                $ret[] = $i;
-            }
         }
         return $ret;
     }
+    
     private function _setSvnIgnore($dir, $ignore)
     {
         if (in_array('*', $ignore)) $ignore = array('*');
