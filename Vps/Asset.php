@@ -34,6 +34,13 @@ class Vps_Asset
                 $filename = $paths->vps.'/images/fileicons/'.$icon.'.jpg';
                 $type = 'vps/images/fileicons';
                 $icon .= '.jpg';
+            } else if (file_exists($paths->web.'/images/icons/'.$icon)) {
+                $filename = $paths->web.'/images/icons/'.$icon;
+                $type = 'web/images/icons/';
+            } else if (file_exists($paths->web.'/images/icons/'.$icon.'.png')) {
+                $filename = $paths->web.'/images/icons/'.$icon;
+                $type = 'web/images/icons/';
+                $icon .= '.png';
             } else {
                 throw new Vps_Exception("Asset '$icon' not found");
             }
@@ -41,7 +48,7 @@ class Vps_Asset
         $this->_type = $type;
         $this->_icon = $icon;
     }
-    
+
     public function getFilename()
     {
         $paths = Zend_Registry::get('config')->path;
