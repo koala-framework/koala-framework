@@ -353,6 +353,7 @@ class Vps_Setup
     public static function createDb()
     {
         $dao = Zend_Registry::get('dao');
+        if (!$dao) return false;
         return $dao->getDb();
     }
 
