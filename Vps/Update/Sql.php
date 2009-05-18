@@ -38,7 +38,7 @@ class Vps_Update_Sql extends Vps_Update
             //regexp von http://www.dev-explorer.com/articles/multiple-mysql-queries
             $queries = preg_split("/;+(?=([^'|^\\\']*['|\\\'][^'|^\\\']*['|\\\'])*[^'|^\\\']*[^'|^\\\']$)/", $this->sql); 
             foreach ($queries as $query){ 
-                if (trim($query) > 0) {
+                if (trim($query)) {
                     Vps_Registry::get('db')->getConnection()->query($query);
                 }
             }
