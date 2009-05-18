@@ -5,14 +5,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     {
         $ownConfig = Vps_Registry::get('config');
 
-        $dbConfig = Zend_Registry::get('db')->getConfig();
-
-        $mysqlLocalOptions = "--host=$dbConfig[host] ";
-        //auskommentiert weil: es muss in ~/.my.cnf ein benutzer der das machen darf eingestellt sein!
-        //ansonsten gibt es probleme für das erstellen von triggers, dazu benötigt man SUPER priviliges
-        // -> scheiß mysql
-        //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
-
         $config = Vps_Config_Web::getInstance($this->_getParam('server'));
         if (!$config->server || !$config->server->host) {
             throw new Vps_ClientException("kein server konfiguriert");
@@ -84,114 +76,126 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
         }
 
-        echo "erstelle datenbank-backup...\n";
 
-        $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
+        if (Zend_Registry::get('db')) {
+            $dbConfig = Zend_Registry::get('db')->getConfig();
 
-        $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
+            $mysqlLocalOptions = "--host=$dbConfig[host] ";
+            //auskommentiert weil: es muss in ~/.my.cnf ein benutzer der das machen darf eingestellt sein!
+            //ansonsten gibt es probleme für das erstellen von triggers, dazu benötigt man SUPER priviliges
+            // -> scheiß mysql
+            //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
 
-        if ($config->server->import && $config->server->import->ignoreTables) {
-            foreach ($config->server->import->ignoreTables as $t) {
-                if (substr($t, -1) == '*') {
-                    foreach ($tables as $table) {
-                        if (substr($table, 0, strlen($t)-1) == substr($t, 0, -1)) {
-                            $cacheTables[] = $table;
+
+            echo "erstelle datenbank-backup...\n";
+
+            $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
+
+            $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
+
+            if ($config->server->import && $config->server->import->ignoreTables) {
+                foreach ($config->server->import->ignoreTables as $t) {
+                    if (substr($t, -1) == '*') {
+                        foreach ($tables as $table) {
+                            if (substr($table, 0, strlen($t)-1) == substr($t, 0, -1)) {
+                                $cacheTables[] = $table;
+                            }
                         }
+                    } else {
+                        $cacheTables[] = $t;
                     }
-                } else {
-                    $cacheTables[] = $t;
                 }
             }
-        }
 
-        $keepTables = array();
-        if ($config->server->import && $config->server->import->keepTables) {
-            foreach ($config->server->import->keepTables as $t) {
-                if (substr($t, -1) == '*') {
-                    foreach ($tables as $table) {
-                        if (substr($table, 0, strlen($t)-1) == substr($t, 0, -1)) {
-                            $keepTables[] = $table;
+            $keepTables = array();
+            if ($config->server->import && $config->server->import->keepTables) {
+                foreach ($config->server->import->keepTables as $t) {
+                    if (substr($t, -1) == '*') {
+                        foreach ($tables as $table) {
+                            if (substr($table, 0, strlen($t)-1) == substr($t, 0, -1)) {
+                                $keepTables[] = $table;
+                            }
                         }
+                    } else {
+                        $keepTables[] = $t;
                     }
-                } else {
-                    $keepTables[] = $t;
                 }
             }
-        }
 
-        $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
-        $backupSize = filesize($dumpname);
-        $this->_systemCheckRet("bzip2 --fast $dumpname");
-        echo $dumpname.".bz2\n";
-
-
-        if ($keepTables) {
-            echo "erstelle dump fuer KeepTables...\n";
-            $keepTablesDump = tempnam('/tmp', 'importkeep');
-            $cmd = "mysqldump --add-drop-table=false --no-create-info=true $mysqlLocalOptions $dbConfig[dbname] ".implode(' ', $keepTables).">> $keepTablesDump";
-            if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
-            $this->_systemCheckRet($cmd);
-        }
-
-        echo "loesche lokale datenbank...\n";
-        $this->_systemCheckRet("echo \"DROP DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
-
-        echo "erstelle neue datenbank...\n";
-        $this->_systemCheckRet("echo \"CREATE DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
+            $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
+            $backupSize = filesize($dumpname);
+            $this->_systemCheckRet("bzip2 --fast $dumpname");
+            echo $dumpname.".bz2\n";
 
 
-        echo "importiere datenbank...\n";
-        if ($ownConfig->server->host == $config->server->host) {
-            $otherDbConfig = new Zend_Config_Ini($config->server->dir.'/application/config.db.ini', 'database');
-            $otherDbConfig = $otherDbConfig->web->toArray();
-            $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
-        } else {
-            $ignoreTables = '';
-            if (!$this->_getParam('include-cache')) {
-                $ignoreTables = implode(',', array_merge($cacheTables, $keepTables));
-                if ($ignoreTables) $ignoreTables = " --ignore-tables=$ignoreTables";
+            if ($keepTables) {
+                echo "erstelle dump fuer KeepTables...\n";
+                $keepTablesDump = tempnam('/tmp', 'importkeep');
+                $cmd = "mysqldump --add-drop-table=false --no-create-info=true $mysqlLocalOptions $dbConfig[dbname] ".implode(' ', $keepTables).">> $keepTablesDump";
+                if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
+                $this->_systemCheckRet($cmd);
             }
-            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir db-dump";
-            $cmd .= "$ignoreTables";
-            if ($this->_getParam('debug')) $cmd .= " --debug";
-            $cmd .= " | gunzip";
-        }
-        $descriptorspec = array(
-            1 => array("pipe", "w")
-        );
-        if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
-        $procDump = new Vps_Util_Proc($cmd, $descriptorspec);
 
-        $cmd = "mysql $mysqlLocalOptions --default-character-set=utf8 $dbConfig[dbname]";
-        $descriptorspec = array(
-            0 => array("pipe", "r")
-        );
-        $procImport = new Vps_Util_Proc($cmd, $descriptorspec);
+            echo "loesche lokale datenbank...\n";
+            $this->_systemCheckRet("echo \"DROP DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
 
-        $c = new Zend_ProgressBar_Adapter_Console();
-        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
-                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
-                                Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
-                                Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
-        $progress = new Zend_ProgressBar($c, 0, $backupSize);
-        $size = 0;
-        while (!feof($procDump->pipe(1))) {
-            $buffer = fgets($procDump->pipe(1), 4096);
-            fputs($procImport->pipe(0), $buffer);
-            $size += strlen($buffer);
-            $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
-        }
-        fclose($procDump->pipe(1));
-        fclose($procImport->pipe(0));
-        $procImport->close();
-        $procDump->close();
+            echo "erstelle neue datenbank...\n";
+            $this->_systemCheckRet("echo \"CREATE DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
 
-        if ($keepTables) {
-            echo "spiele KeepTables ein...\n";
-            $cmd = "mysql $mysqlLocalOptions $dbConfig[dbname] < $keepTablesDump";
+
+            echo "importiere datenbank...\n";
+            if ($ownConfig->server->host == $config->server->host) {
+                $otherDbConfig = new Zend_Config_Ini($config->server->dir.'/application/config.db.ini', 'database');
+                $otherDbConfig = $otherDbConfig->web->toArray();
+                $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
+            } else {
+                $ignoreTables = '';
+                if (!$this->_getParam('include-cache')) {
+                    $ignoreTables = implode(',', array_merge($cacheTables, $keepTables));
+                    if ($ignoreTables) $ignoreTables = " --ignore-tables=$ignoreTables";
+                }
+                $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir db-dump";
+                $cmd .= "$ignoreTables";
+                if ($this->_getParam('debug')) $cmd .= " --debug";
+                $cmd .= " | gunzip";
+            }
+            $descriptorspec = array(
+                1 => array("pipe", "w")
+            );
             if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
-            $this->_systemCheckRet($cmd);
-            unlink($keepTablesDump);
+            $procDump = new Vps_Util_Proc($cmd, $descriptorspec);
+
+            $cmd = "mysql $mysqlLocalOptions --default-character-set=utf8 $dbConfig[dbname]";
+            $descriptorspec = array(
+                0 => array("pipe", "r")
+            );
+            $procImport = new Vps_Util_Proc($cmd, $descriptorspec);
+
+            $c = new Zend_ProgressBar_Adapter_Console();
+            $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                    Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                    Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
+                                    Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+            $progress = new Zend_ProgressBar($c, 0, $backupSize);
+            $size = 0;
+            while (!feof($procDump->pipe(1))) {
+                $buffer = fgets($procDump->pipe(1), 4096);
+                fputs($procImport->pipe(0), $buffer);
+                $size += strlen($buffer);
+                $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
+            }
+            fclose($procDump->pipe(1));
+            fclose($procImport->pipe(0));
+            $procImport->close();
+            $procDump->close();
+
+            if ($keepTables) {
+                echo "spiele KeepTables ein...\n";
+                $cmd = "mysql $mysqlLocalOptions $dbConfig[dbname] < $keepTablesDump";
+                if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
+                $this->_systemCheckRet($cmd);
+                unlink($keepTablesDump);
+            }
         }
 
         if (!$this->_getParam('include-cache')) {
@@ -211,6 +215,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     private function _copyServiceUsers()
     {
+        if (!Vps_Registry::get('db')) return;
         $tables = Vps_Registry::get('db')->fetchCol('SHOW TABLES');
         if (!in_array('vps_users', $tables)) return;
         if (!in_array('cache_users', $tables)) return;

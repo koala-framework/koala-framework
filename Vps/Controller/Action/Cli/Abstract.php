@@ -57,13 +57,13 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
     protected static function _getConfigSections()
     {
         $configClass = get_class(Vps_Registry::get('config'));
-        $configFull = new Zend_Config_Ini(VPS_PATH.'/config.ini', null);
+        $configFull = new Zend_Config_Ini('application/config.ini', null);
         $sections = array();
         $processedServers = array();
         foreach ($configFull as $k=>$i) {
             if ($k == 'dependencies') continue;
             $config = Vps_Config_Web::getInstance($k);
-            if ($config->server) {
+            if ($config->server && $config->server->host) {
                 $s = $config->server->host.':'.$config->server->dir;
                 if (/*$i->server->host != 'vivid' &&*/ !in_array($s, $processedServers)) {
                     $sections[] = $k;
