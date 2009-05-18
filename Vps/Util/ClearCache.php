@@ -88,9 +88,9 @@ class Vps_Util_ClearCache
         }
         foreach ($this->_getCacheDirs() as $d) {
             if (in_array($d, $types)) {
-                if (is_file("application/cache/$d")) {
+                if (is_dir("application/cache/$d")) {
                     $this->_removeDirContents("application/cache/$d");
-                } else {
+                } else if (is_dir($d)) {
                     $this->_removeDirContents($d);
                 }
                 if ($output) echo "cleared dir: $d cache...\n";
