@@ -5,7 +5,7 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
     protected $_rowsetClass = 'Vps_Model_Rowset_ParentRow';
     protected $_rowClass = 'Vps_Util_Model_Feed_Row_Entry';
 
-    public function getOwnColumns()
+    protected function _getOwnColumns()
     {
         return array('title', 'link', 'description', 'date');
     }
