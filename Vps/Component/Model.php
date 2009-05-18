@@ -113,7 +113,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
         return new Vps_Dao_Pages();
     }
 
-    public function getOwnColumns()
+    protected function _getOwnColumns()
     {
         return array('componentId', 'parent_id', 'pos', 'visible', 'name', 'is_home');
     }
