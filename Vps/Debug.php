@@ -12,6 +12,8 @@ class Vps_Debug
 
     public static function handleException($exception)
     {
+        if (php_sapi_name() == 'cli') d($exception);
+
         if (!$exception instanceof Vps_Exception_Abstract) {
             $exception = new Vps_Exception_Other($exception);
         }
