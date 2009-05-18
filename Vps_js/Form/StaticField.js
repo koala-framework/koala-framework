@@ -19,6 +19,7 @@ Vps.Form.StaticField = Ext.extend(Ext.BoxComponent, {
     setValue: function() {},
     resetDirty: function() {},
     clearValue: function() {},
-    validate: function() { return true; }
+    validate: function() { return true; },
+    setFormBaseParams: function() { }
 });
 Ext.reg('staticfield', Vps.Form.StaticField);
