@@ -2,15 +2,14 @@
 
 
 <?= trlVps('Your account at {0}
-has just been created.', $this->webUrl); ?>
+has successfully been created.', $this->webUrl); ?>
 
-<?= trlVps('Please use the following link to choose yourself a password and to login'); ?>
+<?= trlVps('Please use the following link to activate your account and choose yourself a password:'); ?>
 
 <?= $this->activationUrl; ?>
 
 
-<?= $this->applicationName; ?>
-
+Your RSSinclude.com team
 
 --
 <?= trlVps('This email has been generated automatically. There may be no recipient if you answer to this email.'); ?>
