@@ -20,6 +20,19 @@ class Vps_Util_ClearCache
                 $ret[] = $d->getFilename();
             }
         }
+        if (Vps_Registry::get('config')->server->cacheDirs) {
+            foreach (Vps_Registry::get('config')->server->cacheDirs as $d) {
+                if (substr($d, -2)=='/*') {
+                    foreach (new DirectoryIterator(substr($d, 0, -1)) as $i) {
+                        if ($i->isDir() && substr($i->getFilename(), 0, 1) != '.') {
+                            $ret[] = substr($d, 0, -1).$i->getFilename();
+                        }
+                    }
+                } else {
+                    $ret[] = $d;
+                }
+            }
+        }
         return $ret;
     }
 
@@ -75,7 +88,11 @@ class Vps_Util_ClearCache
         }
         foreach ($this->_getCacheDirs() as $d) {
             if (in_array($d, $types)) {
-                $this->_removeDirContents("application/cache/$d");
+                if (is_file("application/cache/$d")) {
+                    $this->_removeDirContents("application/cache/$d");
+                } else {
+                    $this->_removeDirContents($d);
+                }
                 if ($output) echo "cleared dir: $d cache...\n";
             }
         }
