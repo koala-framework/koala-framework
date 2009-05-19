@@ -50,7 +50,12 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
     //und so umgebaut dass kein Http_Client verwendet wird
     public function findFeeds($uri)
     {
-        $contents = file_get_contents($uri);
+        $client = new Zend_Http_Client($uri);
+        $response = $client->request();
+        if ($response->getStatus() != 200) {
+            throw new Vps_Exception("invalid status response");
+        }
+        $contents = $response->getBody();
 
         // Parse the contents for appropriate <link ... /> tags
         @ini_set('track_errors', 1);
