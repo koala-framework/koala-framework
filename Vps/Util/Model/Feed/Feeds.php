@@ -78,8 +78,14 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
                 if (!isset($attributes['rel']) || !@preg_match('~^(?:alternate|service\.feed)~i', $attributes['rel'])) {
                     continue;
                 }
-                if (!isset($attributes['type']) ||
-                        !@preg_match('~^application/(?:atom|rss|rdf)\+xml~', $attributes['type'])) {
+                $type = false;
+                if (isset($attributes['type'])) {
+                    $type = $attributes['type'];
+                } else if (isset($attributes['TYPE'])) {
+                    $type = $attributes['TYPE'];
+                }
+                if (!$type ||
+                        !@preg_match('~^application/(?:atom|rss|rdf)\+xml~', $type)) {
                     continue;
                 }
                 if (!isset($attributes['href'])) {
