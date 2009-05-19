@@ -10,14 +10,19 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         $data['url'] = $config['url'];
         $encoding = false;
 
-        $opts = array('http' =>
-            array(
+        if (substr($data['url'], 0, 7)=='file://') {
+            $str = file_get_contents($data['url']);
+        } else {
+            $client = new Zend_Http_Client($data['url'], array(
                 //TODO: aus config auslesen!
-                'header' => "User-Agent: RSSIncludeBot/1.0 (http://www.rssinclude.com/spider)\r\n"
-            )
-        );
-        $context = stream_context_create($opts);
-        $str = file_get_contents($config['url'], false, $context);
+                'useragent' => 'User-Agent: RSSIncludeBot/1.0 (http://www.rssinclude.com/spider)'
+            ));
+            $response = $client->request();
+            if ($response->getStatus() != 200) {
+                throw new Vps_Exception("invalid status response");
+            }
+            $str = $response->getBody();
+        }
         $str = trim($str);
         if (preg_match('#<?xml[^>]* encoding=["\']([^"\']*)["\']#', $str, $m)) {
             $encoding = trim(strtolower($m[1]));
