@@ -12,6 +12,9 @@ class Vps_Benchmark
         static $i;
         if (!isset($i)) {
             $c = Vps_Registry::get('config')->benchmarkClass;
+            if (!class_exists($c)) {
+                $c = 'Vps_Benchmark';
+            }
             $i = new $c();
         }
         return $i;
