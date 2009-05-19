@@ -78,7 +78,7 @@ class Vps_Exception_ExceptionTest extends PHPUnit_Framework_TestCase
     {
         $view = new Vps_Exception_TestView();
         Vps_Debug::setView($view);
-        Vps_Debug::handleException($exception);
+        Vps_Debug::handleException($exception, true);
         return $view;
     }
     /**

@@ -10,9 +10,12 @@ class Vps_Debug
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
-    public static function handleException($exception)
+    public static function handleException($exception, $ignoreCli = false)
     {
-        if (php_sapi_name() == 'cli') d($exception);
+        if (!$ignoreCli && php_sapi_name() == 'cli') {
+            file_put_contents('php://stderr', $exception->__toString()."\n");
+            exit(1);
+        }
 
         if (!$exception instanceof Vps_Exception_Abstract) {
             $exception = new Vps_Exception_Other($exception);
