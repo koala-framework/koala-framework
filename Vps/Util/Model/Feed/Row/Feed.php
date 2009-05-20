@@ -18,6 +18,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
                 'useragent' => 'User-Agent: RSSIncludeBot/1.0 (http://www.rssinclude.com/spider)'
             ));
             $response = $client->request();
+
             if ($response->getStatus() != 200) {
                 throw new Vps_Exception("invalid status response");
             }
@@ -30,23 +31,23 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
                 $str = iconv($encoding, 'utf-8', $str);
                 $str = preg_replace('#(<?xml[^>]* encoding=["\'])([^"\']*)(["\'])#', '\1utf-8\3', $str);
             }
-        } else {
-            foreach ($http_response_header as $h) {
-                if (substr(strtolower($h), 0, 14) == 'content-type: ') {
-                    if (preg_match('#charset=([^;]*)#', strtolower($h), $m)) {
-                        $encoding = trim($m[1]);
-                        if ($encoding != 'utf8' && $encoding != 'utf-8') {
-                            $str = iconv($encoding, 'utf-8', $str);
-                        }
+        } else if (isset($response)) {
+            $ct = $response->getHeader('Content-Type');
+            if ($ct) {
+                if (preg_match('#charset=([^;]*)#', strtolower($ct), $m)) {
+                    $encoding = trim($m[1]);
+                    if ($encoding != 'utf8' && $encoding != 'utf-8') {
+                        $str = iconv($encoding, 'utf-8', $str);
                     }
-                    break;
                 }
             }
         }
+
         if (!$encoding) {
             $encoding = 'iso-8859-1';
             $str = iconv($encoding, 'utf-8', $str);
         }
+
         Vps_Benchmark::count('loaded feed');
         $this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
         if (!$this->_xml) {
