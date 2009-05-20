@@ -15,7 +15,8 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         } else {
             $client = new Zend_Http_Client($data['url'], array(
                 //TODO: aus config auslesen!
-                'useragent' => 'User-Agent: RSSIncludeBot/1.0 (http://www.rssinclude.com/spider)'
+                'useragent' => 'User-Agent: RSSIncludeBot/1.0 (http://www.rssinclude.com/spider)',
+                'timeout' => 20
             ));
             $response = $client->request();
 
