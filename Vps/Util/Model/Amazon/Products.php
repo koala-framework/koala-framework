@@ -159,7 +159,7 @@ class Vps_Util_Model_Amazon_Products extends Vps_Model_Abstract
         return 'asin';
     }
 
-    public function getOwnColumns()
+    protected function _getOwnColumns()
     {
         return array('asin', 'title', 'detailPageURL', 'currencyCode', 'amount', 'formattedPrice',
                      'salesRank', 'averageRating', 'author');
