@@ -19,7 +19,7 @@ class Vps_Model_DbWithConnection_SelectExpr_WithModel1AsProxy_Test extends Vps_M
 
         $this->assertTrue($row->hasColumn('count_model2'));
         $this->assertEquals($row->id, 1);
-        $this->assertEquals($row->count_model2, 2);
+        $this->assertEquals($row->count_model2, 3);
 
         $row->foo = 'a';
         $row->save();
