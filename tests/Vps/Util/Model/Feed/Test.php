@@ -96,6 +96,7 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
     public function testRandomFeeds()
     {
         $urls = array();
+        $urls[] = 'http://recombinomics.com/feed.xml';
         $urls[] = 'http://rss.orf.at/news.xml';
         $urls[] = 'http://www.csmonitor.com/rss/top.rss';
         $urls[] = 'http://planetkde.org/rss20.xml';
@@ -103,7 +104,7 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $urls[] = 'http://aseigo.blogspot.com/feeds/posts/default?alt=rss';
         $urls[] = 'http://ec.europa.eu/economy_finance/rssecfin.xml';
         foreach ($urls as $u) {
-            //echo "\n".$u."\n";
+//             echo "\n".$u."\n";
             $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
                 ->getRow($u);
             $this->assertNotEquals('', $feed->title);
@@ -112,10 +113,12 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
             $entries = $feed->getChildRows('Entries');
             $this->assertTrue(count($entries) > 4);
             foreach ($entries as $e) {
-                //echo ".";
+//                 echo ".";
                 $this->assertNotEquals('', $e->title);
                 $this->assertNotEquals('', $e->link);
-                $this->assertNotEquals('', $e->date);
+                if ($u != 'http://recombinomics.com/feed.xml') {
+                    $this->assertNotEquals('', $e->date);
+                }
             }
         }
     }
