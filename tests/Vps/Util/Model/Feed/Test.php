@@ -101,6 +101,7 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $urls[] = 'http://planetkde.org/rss20.xml';
         $urls[] = 'http://aseigo.blogspot.com/feeds/posts/default';
         $urls[] = 'http://aseigo.blogspot.com/feeds/posts/default?alt=rss';
+        $urls[] = 'http://ec.europa.eu/economy_finance/rssecfin.xml';
         foreach ($urls as $u) {
             //echo "\n".$u."\n";
             $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
@@ -218,7 +219,8 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
                 if ($e->title == 'Unable to read blog post') continue;
                 if ($u != 'http://emplocal.fdeho.com/arss.php?x=cr32'
                    && $u != 'http://www.google.com/trends/hottrends/atom/hourly'
-                   && $u != 'http://www.surgeryvaluer.co.uk/intranetnews.xml') {
+                   && $u != 'http://www.surgeryvaluer.co.uk/intranetnews.xml'
+                   && $u != 'http://208.112.114.232/XML/AdkReviewBoard.xml') {
                     $this->assertNotEquals('', $e->link);
                 }
             }
