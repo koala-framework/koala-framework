@@ -49,7 +49,7 @@ class Vps_Util_PayPal_Ipn
             // Check that receiver_email is your Primary PayPal email
             // Check that payment_amount/payment_currency are correct
             // Process payment
-            mail('ns@vivid-planet.com', "Live-VERIFIED IPN", print_r($_POST, true));
+            //mail('ns@vivid-planet.com', "Live-VERIFIED IPN", print_r($_POST, true));
 
             $m = Vps_Model_Abstract::getInstance($logModel);
             $row = $m->createRow();
