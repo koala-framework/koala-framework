@@ -3,6 +3,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     border: false,
     maskDisabled: true,
     layout: 'fit',
+    timeout: 30000,
 
     initComponent: function()
     {
@@ -164,6 +165,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             mask: !this.el, //globale mask wenn kein el vorhanden
             loadOptions: options,
             url: this.controllerUrl+'/json-load',
+            timeout: this.timeout,
             params: params,
             success: function(response, options, result) {
                 if (result.meta) {
@@ -274,6 +276,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
         Ext.Ajax.request(Ext.apply(options, {
             params: params,
+            timeout: this.timeout,
             url: this.controllerUrl+'/json-save',
             success: function() {
                 this.onSubmitSuccess.apply(this, arguments);
