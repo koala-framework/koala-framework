@@ -61,16 +61,26 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                     foreach (explode('/', $i) as $j) {
                         $p .= $j.'/';
                         $e = trim($p, '/');
-                        if (substr($e, -1) == '*') $e .= '*';
+                        //if (substr($e, -1) == '*') $e .= '*';
                         if (!in_array($e, $includes)) {
                             $includes[] = $e;
                         }
                     }
                 }
-
-                $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir copy-files";
-                $cmd .= " --includes=\"".implode(',', $includes)."\"";
-                if ($this->_getParam('debug')) $cmd .= " --debug";
+                if ($ownConfig->server->host == $config->server->host) {
+                    $cmd  = "cd {$config->server->dir} && ";
+                    $cmd .= "rsync --omit-dir-times --progress --delete --times --recursive ";
+                    $cmd .= "--exclude='.svn' ";
+                    foreach ($includes as $i) {
+                        $cmd .= "--include='$i' ";
+                    }
+                    $cmd .= "--exclude='*' ";
+                    $cmd .= ". {$ownConfig->server->dir}";
+                } else {
+                    $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir copy-files";
+                    $cmd .= " --includes=\"".implode(',', $includes)."\"";
+                    if ($this->_getParam('debug')) $cmd .= " --debug";
+                }
                 if ($this->_getParam('debug')) echo $cmd."\n";
                 passthru($cmd);
             }
@@ -145,8 +155,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
             echo "importiere datenbank...\n";
             if ($ownConfig->server->host == $config->server->host) {
-                $otherDbConfig = new Zend_Config_Ini($config->server->dir.'/application/config.db.ini', 'database');
-                $otherDbConfig = $otherDbConfig->web->toArray();
+                $otherDbConfig = unserialize(`cd {$config->server->dir} && php bootstrap.php import get-db-config`);
                 $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
             } else {
                 $ignoreTables = '';
