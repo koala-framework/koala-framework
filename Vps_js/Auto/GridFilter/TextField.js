@@ -6,7 +6,12 @@ Vps.Auto.GridFilter.TextField = function(config)
         width: config.width
     });
     this.textField.on('render', function() {
-        this.textField.getEl().on('keypress', function() {
+        // TODO:
+        // event darf nicht "keypress" sein, da sonst zB backspace und del tasten
+        // nicht funktionieren. Was jetzt noch das Problem ist: Was ist wenn man
+        // per rechter Maustaste etwas einfügt? Man müsste sich merken was drin
+        // steht und bei allen events prüfen ob was daherkommt...
+        this.textField.getEl().on('keyup', function() {
             this.fireEvent('filter', this, this.getParams());
         }, this, {buffer: 500});
     }, this);
