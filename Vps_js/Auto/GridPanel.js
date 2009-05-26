@@ -96,7 +96,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!this.autoLoad) return;
         if (typeof this.initialConfig.autoLoadId != 'undefined' && this.initialConfig.autoLoadId) {
             this.autoLoadIdLoaded = false;
-            this.load({ query: 'id:'+this.initialConfig.autoLoadId });
+            this.applyBaseParams({ query: 'id:'+this.initialConfig.autoLoadId });
+            this.load();
             this.on('load', function() {
                 if (this.getFilter('text') && !this.autoLoadIdLoaded) {
                     this.getFilter('text').textField.setValue('id:'+this.initialConfig.autoLoadId);
