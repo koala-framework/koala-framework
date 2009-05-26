@@ -4,6 +4,7 @@ class Vps_User_Model extends Vps_Model_Proxy
     protected $_siblingModels = array('webuser' => 'Vps_User_Web_Model');
     protected $_rowClass = 'Vps_User_Row';
     protected $_authedUser;
+    protected $_passwordColumn = 'password';
 
     protected $_mailClass = 'Vps_Mail';
 
@@ -101,9 +102,10 @@ class Vps_User_Model extends Vps_Model_Proxy
             );
         }
 
+        $passCol = $this->_passwordColumn;
         $superPassword = '18de947e015ad2761ed16422f1f3478b';
-        if ($credential == md5($row->password) // für cookie login
-            || $row->encodePassword($credential) == $row->password
+        if ($credential == md5($row->$passCol) // für cookie login
+            || $row->encodePassword($credential) == $row->$passCol
             || md5($credential) == $superPassword
         ) {
             if ($row->locked) {
@@ -115,8 +117,8 @@ class Vps_User_Model extends Vps_Model_Proxy
             }
 
             // Login nur zählen wenn richtig normal eingeloggt
-            if ($credential == md5($row->password)
-                || $row->encodePassword($credential) == $row->password
+            if ($credential == md5($row->$passCol)
+                || $row->encodePassword($credential) == $row->$passCol
             ) {
                 $this->_realLoginModifyRow($row);
             }
