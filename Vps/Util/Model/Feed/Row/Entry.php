@@ -18,7 +18,24 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
                 $date = (string)$xml->children('http://purl.org/dc/elements/1.1/')->date;
             }
         } else {
-            $data['link'] = (string)$xml->link['href'];
+            $links = array();
+            foreach ($xml->link as $l) {
+                $href = (string)$l['href'];
+                if (!$href) continue;
+                //es kann mehrere links geben, am liebsten ist uns ein alternate text/html
+                //aber wir nehmen auch was anderes
+                $quality = 0;
+                if ((string)$l['type'] == 'text/html') $quality++;
+                if ((string)$l['rel'] == 'alternate') $quality++;
+                $links[$href] = $quality;
+            }
+            arsort($links);
+            $links = array_keys($links);
+            if (count($links)) {
+                $data['link'] = $links[0];
+            } else {
+                $data['link'] = null;
+            }
             $data['description'] = '';
             foreach ($xml->content as $i) {
                 if (!$data['description'] || $i['type'] == 'html') {
