@@ -28,12 +28,10 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
 
     public function indexAction()
     {
-        $c = array(
-            'xtype' => 'vps.component',
-            'mainComponentClass' => $this->_getParam('class'),
-            'baseParams' => array('id' => $this->_getParam('componentId'))
-        );
-        $this->view->vpc($c);
+        parent::indexAction();
+        $this->view->xtype = 'vps.component';
+        $this->view->mainComponentClass = $this->_getParam('class');
+        $this->view->baseParams = array('id' => $this->_getParam('componentId'));
     }
 
     public function jsonInsertAction()

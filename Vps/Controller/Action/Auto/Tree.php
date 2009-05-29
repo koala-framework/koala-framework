@@ -3,10 +3,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
 {
     public function indexAction()
     {
-        $config = array(
-            'controllerUrl' => $this->getRequest()->getPathInfo()
-        );
-        $this->view->ext('Vps.Auto.TreePanel', $config);
+        parent::indexAction();
+        $this->view->xtype = 'vps.autotree';
     }
 
     public function jsonDataAction()

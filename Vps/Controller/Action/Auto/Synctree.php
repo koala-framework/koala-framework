@@ -39,10 +39,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
     public function indexAction()
     {
-        $config = array(
-            'controllerUrl' => $this->getRequest()->getPathInfo()
-        );
-        $this->view->ext('Vps.Auto.SyncTreePanel', $config);
+        $this->view->controllerUrl = $this->getRequest()->getPathInfo();
+        $this->view->xtype = 'vps.autotreesync';
     }
 
     public function setTable($table)

@@ -21,14 +21,14 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
     }
     public function indexAction()
     {
-        $config = Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig();
-        $config['baseParams']['componentId'] = $this->_getParam('componentId');
+        parent::indexAction();
+        $this->view->apply(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
+        $this->view->baseParams = array('id' => $this->_getParam('componentId'));
         if ($this->getRequest()->module == 'component_test' && isset($config['controllerUrl'])) {
-            $config['controllerUrl'] = str_replace('/admin/component/edit/',
+            $this->view->controllerUrl = str_replace('/admin/component/edit/',
                         '/vps/componentedittest/'.Vps_Component_Data_Root::getComponentClass().'/',
-                        $config['controllerUrl']);
+                        $this->view->controllerUrl);
         }
-        $this->view->vpc($config);
     }
 
     public function jsonIndexAction()
