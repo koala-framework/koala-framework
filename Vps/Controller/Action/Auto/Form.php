@@ -9,15 +9,9 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
     public function indexAction()
     {
-        $config = $this->_form->getProperties();
-        if (!$config) { $config = array(); }
-        $config = array_merge(
-            $config,
-            array(
-                'controllerUrl' => $this->getRequest()->getPathInfo()
-            )
-        );
-        $this->view->ext('Vps.Auto.FormPanel', $config);
+        $this->view->assign($this->_form->getProperties());
+        $this->view->controllerUrl = $this->getRequest()->getPathInfo();
+        $this->view->xtype = 'vps.autoform';
     }
 
     protected function _initFields()

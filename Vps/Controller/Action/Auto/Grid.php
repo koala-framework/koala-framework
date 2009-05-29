@@ -30,10 +30,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     public function indexAction()
     {
-        $config = array(
-            'controllerUrl' => $this->getRequest()->getPathInfo()
-        );
-        $this->view->ext('Vps.Auto.GridPanel', $config);
+        $this->view->controllerUrl = $this->getRequest()->getPathInfo();
+        $this->view->xtype = 'vps.autogrid';
     }
 
     public function jsonIndexAction()

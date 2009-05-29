@@ -1,6 +1,14 @@
 <?php
 class Vps_View_Ext extends Vps_View
 {
+    public function render($name)
+    {
+        if (isset($this->xtype) && !isset($this->ext)) {
+            $this->ext(null);
+        }
+        return parent::render($name);
+    }
+
     public function vpc($config)
     {
         $this->ext(null, $config);

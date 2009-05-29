@@ -33,6 +33,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action
 
     public function indexAction()
     {
-        $this->view->ext('Vps.Auto.TreePanel', Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
+        parent::indexAction();
+        $this->view->apply(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
     }
 }
