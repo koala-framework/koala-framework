@@ -117,6 +117,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     private function _formatField($field, $select)
     {
+        if ($field instanceof Zend_Db_Expr) return $field->__toString();
+
         if (in_array($field, $this->getOwnColumns())) {
             $f = $this->transformColumnName($field);
             return $this->getTableName().'.'.$f;
