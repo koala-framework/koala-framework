@@ -27,6 +27,13 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
         }
     }
 
+    protected function _getValueFromPostData($postData)
+    {
+        $fieldName = $this->getFieldName();
+        if (!isset($postData[$fieldName])) $postData[$fieldName] = null;
+        if ($postData[$fieldName] == '') $postData[$fieldName] = null;
+        return $postData[$fieldName];
+    }
 
     public static function getSettings()
     {
