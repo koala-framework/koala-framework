@@ -99,6 +99,9 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
     }
     public function __toString()
     {
+        if ($this->_model->getToStringField()) {
+            return $this->{$this->_model->getToStringField()};
+        }
         return $this->_row->__toString();
     }
 
