@@ -205,6 +205,18 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
             },
             scope: this
         });
+        if (result.hasFrontend) {
+            this.add({
+                tooltip:trlVps('Open frontend in a new window'),
+                text:trlVps('Web'),
+                cls: 'x-btn-text-icon',
+                icon: '/assets/silkicons/world.png',
+                handler: function() {
+                    window.open('/');
+                },
+                scope: this
+            });
+        }
 
         if (Vps.Debug.showMenu) {
             this.add('-');
