@@ -31,24 +31,28 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
             $size['height'] = $this->_calculateDpi($height);
 
             $content = Vps_Media_Image::scale($source, $size);
-            $tempFilename = 'temp_'.$file->filename;
+            $filter = new Vps_Filter_Ascii();
+            $tempFilename = 'temp_'.$filter->filter($file->filename);
             $handle = fopen($tempFilename, 'wb');
             fwrite($handle, $content);
             fclose($handle);
-            $pageExclBorders = $this->getPageHeight()
-                                - $this->getBottomMargin();
+            $data = getimagesize($tempFilename);
+            if ($data[2] == 2) { // nur jpgs ausgeben
+                $pageExclBorders = $this->getPageHeight()
+                                    - $this->getBottomMargin();
 
-            if (($this->getY() + $height) > ($pageExclBorders)) {
-                if ($this->PageNo() == $this->getNumPages()) {
-                    $this->AddPage();
-                } else {
-                    $this->SetPage($this->PageNo() + 1);
+                if (($this->getY() + $height) > ($pageExclBorders)) {
+                    if ($this->PageNo() == $this->getNumPages()) {
+                        $this->AddPage();
+                    } else {
+                        $this->SetPage($this->PageNo() + 1);
+                    }
+                    $this->SetY($this->getTopMargin());
                 }
-                $this->SetY($this->getTopMargin());
+                $this->_pdf->Image($tempFilename, $this->getLeftMargin(),
+                                        $this->getY(), $width, $height, $file->extension);
+                $this->SetY($this->getY() + $height + 2);
             }
-            $this->_pdf->Image($tempFilename, $this->getLeftMargin(),
-                                    $this->getY(), $width, $height, $file->extension);
-            $this->SetY($this->getY() + $height + 2);
             unlink($tempFilename);
         }
     }
