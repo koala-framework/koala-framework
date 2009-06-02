@@ -99,16 +99,16 @@ class Vps_Util_Rrd_Graph
         $cmd = "rrdtool graph $tmpFile -h 300 -w 600 ";
         $cmd .= "-s $start ";
         $cmd .= "-e $end ";
-        if ($this->_verticalLabel) {
+        if (!is_null($this->_verticalLabel)) {
             $cmd .= "--vertical-label \"$this->_verticalLabel\" ";
         }
-        if ($this->_title) {
+        if (!is_null($this->_title)) {
             $cmd .= "--title \"$this->_title\" ";
         }
-        if ($this->_upperLimit) {
+        if (!is_null($this->_upperLimit)) {
             $cmd .= "--upper-limit \"$this->_upperLimit\" ";
         }
-        if ($this->_lowerLimit) {
+        if (!is_null($this->_lowerLimit)) {
             $cmd .= "--lower-limit \"$this->_lowerLimit\" ";
         }
 
@@ -139,7 +139,6 @@ class Vps_Util_Rrd_Graph
             $i++;
         }
         $cmd .= " 2>&1";
-//         d($cmd);
         exec($cmd, $out, $ret);
         if ($ret) {
             throw new Vps_Exception(implode('', $out)."\n".$cmd);
