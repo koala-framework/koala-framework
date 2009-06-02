@@ -205,4 +205,9 @@ class Vps_User_Model extends Vps_Model_Proxy
         return $role;
     }
 
+    public function synchronize($overrideMaxSyncDelay = false)
+    {
+        $this->_proxyModel->synchronize($overrideMaxSyncDelay);
+    }
+
 }
