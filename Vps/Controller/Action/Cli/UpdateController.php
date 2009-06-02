@@ -80,7 +80,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             echo "Looking for update-scripts from revision $from to {$to}...";
             $updates = Vps_Update::getUpdates($from, $to);
             foreach ($updates as $k=>$u) {
-                if (in_array($u->getRevision(), $updateRevision['done']) && !$rev) {
+                if ($u->getRevision() && in_array($u->getRevision(), $updateRevision['done']) && !$rev) {
                     if ($current && $u->getRevision() == $to-1) continue;
                     unset($updates[$k]);
                 }
@@ -107,6 +107,8 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 self::_executeUpdate($updates, 'postUpdate', $debug);
                 echo "\n";
                 Vps_Util_ClearCache::getInstance()->clearCache('all', true);
+                echo "\n";
+                self::_executeUpdate($updates, 'postClearCache', $debug);
                 foreach ($updates as $k=>$u) {
                     if (!in_array($u->getRevision(), $updateRevision['done'])) {
                         $updateRevision['done'][] = $u->getRevision();
@@ -133,9 +135,13 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         $ret = true;
         foreach ($updates as $update) {
             if ($method != 'checkSettings') {
-                Vps_Util_ClearCache::getInstance()->clearCache();
+                if ($method != 'postClearCache') {
+                    Vps_Util_ClearCache::getInstance()->clearCache();
+                }
                 Vps_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
-                echo "executing $method ".get_class($update)." (".$update->getRevision().")... ";
+                echo "executing $method ".get_class($update);
+                if ($update->getRevision()) echo " (".$update->getRevision().")";
+                echo "... ";
             }
             $e = false;
             try {

@@ -26,5 +26,9 @@ abstract class Vps_Update_Action_Abstract
     {
     }
 
+    public function postClearCache()
+    {
+    }
+
     abstract public function update();
 }

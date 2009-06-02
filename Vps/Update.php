@@ -43,6 +43,17 @@ abstract class Vps_Update
         return $ret;
     }
 
+    public function postClearCache()
+    {
+        $ret = array();
+        foreach ($this->_actions as $a) {
+            $res = $a->postClearCache();
+            if ($res) {
+                $ret[] = $res;
+            }
+        }
+        return $ret;
+    }
     public function checkSettings()
     {
         $ret = array();
@@ -146,6 +157,20 @@ abstract class Vps_Update
                         }
                     }
                 }
+                $path = $path . '/Always';
+                if (is_dir($path)) {
+                    foreach (new DirectoryIterator($path) as $i) {
+                        if (!$i->isFile()) continue;
+                        $f = $i->__toString();
+                        $fileType = substr($f, -4);
+                        if ($fileType != '.php' && $fileType != '.sql') continue;
+                        $f = substr($f, 0, -4);
+                        $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_Update_Always_'.$f;
+                        if (is_instance_of($n, 'Vps_Update')) {
+                            $ret[] = new $n(null);
+                        }
+                    }
+                }
                 break;
             }
         }
@@ -158,6 +183,9 @@ abstract class Vps_Update
         $revisions = array();
         foreach ($updates as $k=>$u) {
             $revisions[$k] = $u->getRevision();
+            if (is_null($revisions[$k])) {
+                $revisions[$k] = 99999999;
+            }
         }
         asort($revisions, SORT_NUMERIC);
         $ret = array();
