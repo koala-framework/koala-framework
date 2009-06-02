@@ -22,9 +22,9 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
     public function indexAction()
     {
         parent::indexAction();
-        $this->view->apply(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
+        $this->view->assign(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
         $this->view->baseParams = array('id' => $this->_getParam('componentId'));
-        if ($this->getRequest()->module == 'component_test' && isset($config['controllerUrl'])) {
+        if ($this->getRequest()->module == 'component_test' && isset($this->view->controllerUrl)) {
             $this->view->controllerUrl = str_replace('/admin/component/edit/',
                         '/vps/componentedittest/'.Vps_Component_Data_Root::getComponentClass().'/',
                         $this->view->controllerUrl);
