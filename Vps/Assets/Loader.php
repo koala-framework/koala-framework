@@ -56,6 +56,8 @@ class Vps_Assets_Loader
                 $language = $m[4];
                 $assetsType = $m[5];
                 $fileType = $m[6];
+                Vps_Component_Data_Root::setComponentClass($rootComponent);
+
                 if (substr($assetsType, -5) == 'Debug' && !$this->_getConfig()->debug->menu) {
                     throw new Vps_Exception("Debug Assets are not avaliable as the debug menu is disabled");
                 }
