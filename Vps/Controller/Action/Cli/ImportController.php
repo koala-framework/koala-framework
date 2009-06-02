@@ -207,6 +207,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
         }
 
+        
+
         if (!$this->_getParam('include-cache')) {
 
             echo "schreibe application/update...\n";
@@ -389,6 +391,31 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     public function getDbConfigAction()
     {
         echo serialize(Zend_Registry::get('db')->getConfig());
+        exit;
+    }
+
+    public function getLogsAction()
+    {
+        $z = '';
+        if ($this->_getParam('compress')) {
+            $z = 'z';
+        }
+        $cmd = "tar c$z application/log/*";
+        $this->_systemCheckRet($cmd);
+        exit;
+    }
+
+    public function getRrdAction()
+    {
+        $out = array();
+        foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
+            $rrd = new $n;
+            $file = $rrd->getFileName();
+            if (file_exists($file)) {
+                $out[$file] = `rrdtool dump $file | gzip`;
+            }
+        }
+        echo serialize($out);
         exit;
     }
 }
