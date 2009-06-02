@@ -210,9 +210,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         echo "importiere logs...\n";
         if ($ownConfig->server->host == $config->server->host) {
-            $cmd = "cd {$config->server->dir} && php bootstrap.php import get-logs | tar xvzm";
+            $cmd = "cd {$config->server->dir} && php bootstrap.php import get-logs | tar xzm";
         } else {
-            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-logs | tar xvzm";
+            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-logs | tar xzm";
         }
         if ($this->_getParam('debug')) echo $cmd."\n";
         $this->_systemCheckRet($cmd);
