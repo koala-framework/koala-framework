@@ -12,9 +12,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
 
-        if (Vps_Registry::get('config')->application->id != 'service') {
-            $this->_copyServiceUsers();
-        }
 
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-update-revision";
@@ -28,6 +25,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         if (!$onlineRevision) {
             throw new Vps_ClientException("Can't get onlineRevision");
+        }
+
+        if (Vps_Registry::get('config')->application->id != 'service') {
+            $this->_copyServiceUsers();
         }
 
         if ($config->uploads && $ownConfig->uploads) {
@@ -206,8 +207,18 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 unlink($keepTablesDump);
             }
         }
-
-        
+/*
+        echo "importiere logs...\n";
+        if ($ownConfig->server->host == $config->server->host) {
+            $cmd = "cd {$config->server->dir} && php bootstrap.php import get-logs | tar xz";
+        } else {
+            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-logs | tar xz";
+        }
+        if ($this->_getParam('debug')) echo $cmd."\n";
+        exec($cmd, $onlineRevision, $ret);
+        if ($ret != 0) throw new Vps_ClientException();
+        $onlineRevision = implode('', $onlineRevision);
+*/
 
         if (!$this->_getParam('include-cache')) {
 
@@ -396,11 +407,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     public function getLogsAction()
     {
-        $z = '';
-        if ($this->_getParam('compress')) {
-            $z = 'z';
-        }
-        $cmd = "tar c$z application/log/*";
+        $cmd = "tar cz application/log/*";
         $this->_systemCheckRet($cmd);
         exit;
     }
