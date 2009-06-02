@@ -239,7 +239,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             if (file_exists($file)) {
                 rename($file, $file.'-'.date('Y-m-DH:i:s'));
             }
-            $cmd = "rrdtool restore $f.xml $file";
+            $cmd = "LC_ALL=C rrdtool restore $f.xml $file";
             if ($this->_getParam('debug')) echo $cmd."\n";
             $this->_systemCheckRet($cmd);
             unlink($f);
@@ -247,7 +247,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
         echo "\n";
 
-/*
+
         if (!$this->_getParam('include-cache')) {
 
             echo "schreibe application/update...\n";
@@ -257,7 +257,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         } else {
             echo "update uebersprungen, da include-cache aktiv\n";
         }
-*/
+
         echo "\n\nfertig!\n";
 
         $this->_helper->viewRenderer->setNoRender(true);
@@ -447,7 +447,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $rrd = new $n;
             $file = $rrd->getFileName();
             if (file_exists($file)) {
-                $out[$file] = `rrdtool dump $file | gzip`;
+                $out[$file] = `LC_ALL=C rrdtool dump $file | gzip`;
             }
         }
         echo serialize($out);
