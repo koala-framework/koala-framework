@@ -12,7 +12,7 @@ class Vps_Util_ClearCache
         return $i;
     }
 
-    private function _getCacheDirs()
+    protected function _getCacheDirs()
     {
         $ret = array();
         foreach (new DirectoryIterator('application/cache') as $d) {
