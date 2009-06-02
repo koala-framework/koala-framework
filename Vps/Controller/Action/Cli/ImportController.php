@@ -12,7 +12,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
 
-
+/*
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-update-revision";
         } else {
@@ -207,19 +207,48 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 unlink($keepTablesDump);
             }
         }
-/*
+        echo "\n";
+*/
         echo "importiere logs...\n";
         if ($ownConfig->server->host == $config->server->host) {
-            $cmd = "cd {$config->server->dir} && php bootstrap.php import get-logs | tar xz";
+            $cmd = "cd {$config->server->dir} && php bootstrap.php import get-logs | tar xzm";
         } else {
-            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-logs | tar xz";
+            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-logs | tar xzm";
         }
         if ($this->_getParam('debug')) echo $cmd."\n";
-        exec($cmd, $onlineRevision, $ret);
-        if ($ret != 0) throw new Vps_ClientException();
-        $onlineRevision = implode('', $onlineRevision);
-*/
+        $this->_systemCheckRet($cmd);
+        echo "\n";
 
+        echo "importiere rrds...\n";
+        if ($ownConfig->server->host == $config->server->host) {
+            $cmd = "cd {$config->server->dir} && php bootstrap.php import get-rrd";
+        } else {
+            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-rrd";
+        }
+        if ($this->_getParam('debug')) echo $cmd."\n";
+        $data = unserialize(`$cmd`);
+        if (!is_array($data)) {
+            throw new Vps_Exception("importing rrd failed, invalid data");
+        }
+        foreach ($data as $file=>$dump) {
+            echo "   $file\n";
+            $f = tempnam('/tmp', 'rrdimport');
+            file_put_contents($f, $dump);
+            $cmd = "gunzip -c $f > $f.xml";
+            if ($this->_getParam('debug')) echo $cmd."\n";
+            $this->_systemCheckRet($cmd);
+            if (file_exists($file)) {
+                rename($file, $file.'-'.date('Y-m-DH:i:s'));
+            }
+            $cmd = "rrdtool restore $f.xml $file";
+            if ($this->_getParam('debug')) echo $cmd."\n";
+            $this->_systemCheckRet($cmd);
+            unlink($f);
+            unlink($f.".xml");
+        }
+        echo "\n";
+
+/*
         if (!$this->_getParam('include-cache')) {
 
             echo "schreibe application/update...\n";
@@ -229,7 +258,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         } else {
             echo "update uebersprungen, da include-cache aktiv\n";
         }
-
+*/
         echo "\n\nfertig!\n";
 
         $this->_helper->viewRenderer->setNoRender(true);
@@ -407,7 +436,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     public function getLogsAction()
     {
-        $cmd = "tar cz application/log/*";
+        $cmd = "tar cz application/log/*/*";
         $this->_systemCheckRet($cmd);
         exit;
     }
