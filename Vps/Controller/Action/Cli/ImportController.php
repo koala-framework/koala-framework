@@ -12,7 +12,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
 
-/*
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-update-revision";
         } else {
@@ -208,12 +207,12 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
         }
         echo "\n";
-*/
+
         echo "importiere logs...\n";
         if ($ownConfig->server->host == $config->server->host) {
-            $cmd = "cd {$config->server->dir} && php bootstrap.php import get-logs | tar xzm";
+            $cmd = "cd {$config->server->dir} && php bootstrap.php import get-logs | tar xvzm";
         } else {
-            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-logs | tar xzm";
+            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-logs | tar xvzm";
         }
         if ($this->_getParam('debug')) echo $cmd."\n";
         $this->_systemCheckRet($cmd);
