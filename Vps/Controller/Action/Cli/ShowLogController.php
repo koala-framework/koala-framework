@@ -15,6 +15,7 @@ class Vps_Controller_Action_Cli_ShowLogController extends Vps_Controller_Action_
             if (!$dir->isDir()) continue;
             if ($dir->isDot()) continue;
             if ($dir == '.svn') continue;
+            if ($this->_getParam('type') && $dir != $this->_getParam('type')) continue;
             foreach (new DirectoryIterator($dir->getPathname()) as $date) {
                 if (!$date->isDir()) continue;
                 if ($date->isDot()) continue;
