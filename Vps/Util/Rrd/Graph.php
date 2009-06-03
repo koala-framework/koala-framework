@@ -106,7 +106,7 @@ class Vps_Util_Rrd_Graph
             $cmd .= "--title \"$this->_title\" ";
         }
         if (!is_null($this->_upperLimit)) {
-            $cmd .= "--upper-limit \"$this->_upperLimit\" ";
+            $cmd .= "--upper-limit \"$this->_upperLimit\" --rigid ";
         }
         if (!is_null($this->_lowerLimit)) {
             $cmd .= "--lower-limit \"$this->_lowerLimit\" ";
