@@ -22,14 +22,15 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
     {
         parent::_addValidators();
 
+        // Verwendet bis auf email die Regex von ext/from/VTypes.js
         if ($this->getVtype() === 'email') {
             $this->addValidator(new Vps_Validate_EmailAddressSimple());
         } else if ($this->getVtype() === 'url') {
-            //todo, reuse Zend_Uri::check
+            $this->addValidator(new Zend_Validate_Regex('/(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i'));
         } else if ($this->getVtype() === 'alpha') {
-            $this->addValidator(new Vps_Validate_Alpha());
+            $this->addValidator(new Zend_Validate_Regex('/^[a-zA-Z_]+$/'));
         } else if ($this->getVtype() === 'alphanum') {
-            $this->addValidator(new Vps_Validate_Alnum());
+            $this->addValidator(new Zend_Validate_Regex('/^[a-zA-Z0-9_]+$/'));
         }
         if ($this->getMaxLength()) {
             $this->addValidator(new Zend_Validate_StringLength(0, $this->getMaxLength()));
