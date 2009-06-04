@@ -62,6 +62,7 @@
     private function _testNoDebug()
     {
         $rootComponent = 'Vps_Assets_WithComponents_Root_Component';
+        Vps_Component_Data_Root::setComponentClass($rootComponent);
 
         $this->assertEquals('none', Vps_Media_Output::getEncoding());
         $config = clone Zend_Registry::get('config');
@@ -86,5 +87,7 @@
 
         $c = $loader->getFileContents("all/web/$rootComponent/".Zend_Registry::get('trl')->getTargetLanguage()."/Vps_Assets_OwnConfig:Test.js?v=1.0");
         $this->assertContains("file2\nfile1\n", $c['contents']);
+
+        Vps_Component_Data_Root::setComponentClass(null);
     }
 }
