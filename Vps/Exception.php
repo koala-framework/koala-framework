@@ -27,16 +27,13 @@ class Vps_Exception extends Vps_Exception_NoLog
         if ($u = Zend_Registry::get('userModel')->getAuthedUser()) {
             $user = "$u, id $u->id, $u->role";
         }
-        $exception = $this->getException()->__toString();
-        $thrown = substr($exception,
-            strpos($exception, ' in ') + 4,
-            strpos($exception, 'Stack trace:') - strpos($exception, ' in ') - 5
-        );
+        $exception = $this->getException();
 
         $body = '';
-        $body .= $this->_format('Exception', get_class($this->getException()));
-        $body .= $this->_format('Thrown', $thrown);
-        $body .= $this->_format('Message', $exception);
+        $body .= $this->_format('Exception', get_class($exception));
+        $body .= $this->_format('Thrown', $exception->getFile().':'.$exception->getLine());
+        $body .= $this->_format('Message', $exception->getMessage());
+        $body .= $this->_format('ExceptionDetail', $exception->__toString());
         $body .= $this->_format('REQUEST_URI', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '(none)');
         $body .= $this->_format('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '(none)');
         $body .= $this->_format('User', $user);
