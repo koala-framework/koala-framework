@@ -120,11 +120,14 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
                         $uri->setQuery($query);
                         $uri->setFragment($fragment);
                     }
-                    $feed = $this->getRow((string)$uri);
                 } catch (Exception $e) {
                     continue;
                 }
-                $feeds[] = $feed;
+                $title = '';
+                if (isset($attributes['title'])) {
+                    $title = (string)$attributes['title'];
+                }
+                $feeds[(string)$uri] = $title;
             }
         }
 
