@@ -178,16 +178,19 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds');
         $feeds = $m->findFeeds('http://www.vivid-planet.com');
         $this->assertEquals(1, count($feeds));
-        $this->assertEquals('http://www.vivid-planet.com/news/aktuelle_news/rss/', $feeds[0]->url);
+        $feeds = array_keys($feeds);
+        $this->assertEquals('http://www.vivid-planet.com/news/aktuelle_news/rss/', $feeds[0]);
 
         $feeds = $m->findFeeds('http://www.prosalzburg.at');
         $this->assertEquals(2, count($feeds));
-        $this->assertEquals('http://www.prosalzburg.at/news/feed', $feeds[1]->url);
-        $this->assertEquals('http://www.prosalzburg.at/forum/feed', $feeds[0]->url);
+        $feeds = array_keys($feeds);
+        $this->assertEquals('http://www.prosalzburg.at/news/feed', $feeds[1]);
+        $this->assertEquals('http://www.prosalzburg.at/forum/feed', $feeds[0]);
 
         $feeds = $m->findFeeds('http://www.orf.at');
         $this->assertEquals(1, count($feeds));
-        $this->assertEquals('http://rss.orf.at/news.xml', $feeds[0]->url);
+        $feeds = array_keys($feeds);
+        $this->assertEquals('http://rss.orf.at/news.xml', $feeds[0]);
     }
 
     /**
