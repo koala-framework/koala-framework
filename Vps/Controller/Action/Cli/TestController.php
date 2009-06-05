@@ -203,4 +203,9 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
 
         $this->_helper->viewRenderer->setNoRender(true);
     }
+
+    public function forwardAction()
+    {
+        $this->_forward($this->_getParam('action'), $this->_getParam('controller'), 'vps_test');
+    }
 }
