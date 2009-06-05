@@ -2,9 +2,14 @@
 class Vps_Model_MirrorCache extends Vps_Model_Proxy
 {
     protected $_rowClass = 'Vps_Model_MirrorCache_Row';
+    protected $_lockTables = true;
 
     protected $_sourceModel;
     protected $_syncTimeField;
+
+    const SYNC_AFTER_DELAY = false;
+    const SYNC_ONCE = true;
+    const SYNC_ALWAYS = 2;
 
     /**
      * Max sync delay in seconds. Default is to 5 minutes
@@ -27,6 +32,11 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             $this->_sourceModel = Vps_Model_Abstract::getInstance($this->_sourceModel);
         }
         return $this->_sourceModel;
+    }
+
+    public function getLockTables()
+    {
+        return $this->_lockTables;
     }
 
     public function countRows($where = array())
@@ -56,16 +66,18 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $this->synchronize();
     }
 
-    public function synchronize($overrideMaxSyncDelay = false)
+    public function synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
     {
         if ($this->_synchronizeDone) {
-            return;
+            if ($overrideMaxSyncDelay !== self::SYNC_ALWAYS) {
+                return;
+            }
         }
         if (!$this->_syncTimeField) {
             throw new Vps_Exception("syncTimeField must be set when using MirrorCache");
         }
 
-        if ($overrideMaxSyncDelay === false && $this->_getMaxSyncDelay()) {
+        if ($overrideMaxSyncDelay === self::SYNC_AFTER_DELAY && $this->_getMaxSyncDelay()) {
             $cache = $this->_getSyncDelayCache();
             $lastSync = $cache->load($this->_getSyncDelayCacheId());
             if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
@@ -77,6 +89,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $this->_synchronizeDone = true; //wegen endlosschleife ganz oben
 
         Vps_Benchmark::count('mirror sync');
+        echo ':';
 
         $syncField = $this->_syncTimeField;
         $proxyModel = $this->getProxyModel();

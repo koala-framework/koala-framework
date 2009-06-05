@@ -52,13 +52,13 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
 
     public function save()
     {
+        $this->_beforeSave();
         $id = $this->{$this->_getPrimaryKey()};
         if (!$id) {
             $this->_beforeInsert();
         } else {
             $this->_beforeUpdate();
         }
-        $this->_beforeSave();
         $this->_beforeSaveSiblingMaster();
         $ret = $this->_row->save();
         if (!$id) {
