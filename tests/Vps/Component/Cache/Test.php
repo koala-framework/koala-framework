@@ -6,8 +6,10 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        Vps_Component_Data_Root::setComponentClass('Vpc_Root_Component');
         Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
         Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
+        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
         Vps_Component_Cache::getInstance()->emptyPreload();
         Vps_Component_RowObserver::getInstance()->setSkipFnF(false);
     }

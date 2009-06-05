@@ -5,6 +5,7 @@ class Vps_Component_Cache
     private $_preloadedValues = array();
     private $_model;
     private $_metaModel;
+    private $_fieldsModel;
     private $_countPreloadCalls = 0;
     private $_fieldCache;
 
@@ -41,6 +42,19 @@ class Vps_Component_Cache
     public function setMetaModel(Vps_Component_Cache_MetaModel $model)
     {
         $this->_metaModel = $model;
+    }
+
+    public function getFieldsModel()
+    {
+        if (!$this->_fieldsModel) {
+            $this->setFieldsModel(new Vps_Component_Cache_FieldsModel());
+        }
+        return $this->_fieldsModel;
+    }
+
+    public function setFieldsModel(Vps_Component_Cache_FieldsModel $model)
+    {
+        $this->_fieldsModel = $model;
     }
 
     public function getModel()
@@ -115,22 +129,31 @@ class Vps_Component_Cache
         );
         $this->getMetaModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
         if ($id != '') {
-            $fields = $this->_getFieldCache()->load($model);
+            $fields = $this->_getFields($model);
             if (!$fields) $fields = array();
-            $fields[] = $field;
-            $this->_getFieldCache()->save(array_unique($fields), $model);
+            if (!in_array($field, $fields)) $this->_addField($model, $field);
         }
     }
 
-    private function _getFieldCache()
+    private function _addField($model, $field)
+    {
+        $this->getFieldsModel()->import(
+            Vps_Model_Abstract::FORMAT_ARRAY,
+            array(array('model' => $model, 'field' => $field)),
+            array('replace' => true)
+        );
+        $this->_fieldCache[$model][] = $field;
+    }
+
+    private function _getFields($model)
     {
         if (!$this->_fieldCache) {
-            $this->_fieldCache = Vps_Cache::factory('Core', 'Memcached', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
+            foreach ($this->getFieldsModel()->export(Vps_Model_Abstract::FORMAT_ARRAY) as $row) {
+                $this->_fieldCache[$row['model']][] = $row['field'];
+            }
         }
-        return $this->_fieldCache;
+        if (!isset($this->_fieldCache[$model])) return null;
+        return $this->_fieldCache[$model];
     }
 
     public function writeBuffer()
@@ -144,21 +167,17 @@ class Vps_Component_Cache
         $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
     }
 
-    public function _getStaticCacheId()
-    {
-        $domain = Vps_Registry::get('config')->server->domain;
-        return '_' . str_replace(array('.', '-') , '', $domain) . '_meta';
-    }
-
     public function deleteStaticCache()
     {
-        $this->_getFieldCache()->save(false, $this->_getStaticCacheId());
+        $m = $this->getFieldsModel();
+        $m->deleteRows($m->select()->whereEquals('model', '_static'));
+        if (isset($this->_fieldCache['_static']))
+            unset($this->_fieldCache['_static']);
     }
 
     public function clean($mode = self::CLEANING_MODE_META, $value = null)
     {
-        $cacheId = $this->_getStaticCacheId();
-        if (!$this->_getFieldCache()->load($cacheId)) {
+        if (!$this->_getFields('_static')) {
             $count = 0;
             foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
                 $methods = get_class_methods($componentClass);
@@ -172,7 +191,7 @@ class Vps_Component_Cache
                 }
             }
             Vps_Benchmark::cacheInfo("Cache: written $count static entries.");
-            $this->_getFieldCache()->save(true, $cacheId);
+            $this->_addField('_static', '');
         }
 
         if ($mode == Vps_Component_Cache::CLEANING_MODE_META) {
@@ -189,7 +208,7 @@ class Vps_Component_Cache
                 if ($model instanceof Vps_Model_Db) $model = $model->getTable();
             }
             $model = get_class($model);
-            $fields = $this->_getFieldCache()->load($model);
+            $fields = $this->_getFields($model);
             if (!$fields) $fields = array('');
             $or = array(new Vps_Model_Select_Expr_Equals('id', ''));
             $sqlOr = '';
@@ -303,6 +322,7 @@ class Vps_Component_Cache
     {
         $this->_preloadedValues = array();
         $this->_countPreloadCalls = 0;
+        $this->_fieldCache = null;
     }
 
     public function load($id)

@@ -12,9 +12,9 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
         $this->_tableName = 'test'.uniqid();
         $sql = "CREATE TABLE $this->_tableName (
             `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-            `test1` VARCHAR( 200 ) NOT NULL,
-            `test2` VARCHAR( 200 ) NOT NULL
-        ) ENGINE = INNODB";
+            `test1` VARCHAR( 200 ) character set utf8 NOT NULL,
+            `test2` VARCHAR( 200 ) character set utf8 NOT NULL
+        ) ENGINE = INNODB DEFAULT CHARSET=utf8";
         Vps_Registry::get('db')->query($sql);
         $m = new Vps_Model_Db(array(
             'table' => $this->_tableName
