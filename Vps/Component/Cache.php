@@ -167,33 +167,22 @@ class Vps_Component_Cache
         $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
     }
 
-    public function deleteStaticCache()
+    public static function refreshStaticCache()
     {
-        $m = $this->getFieldsModel();
-        $m->deleteRows($m->select()->whereEquals('model', '_static'));
-        if (isset($this->_fieldCache['_static']))
-            unset($this->_fieldCache['_static']);
+        foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+            $methods = get_class_methods($componentClass);
+            if (in_array('getStaticCacheVars', $methods)) {
+                $vars = call_user_func(array($componentClass, 'getStaticCacheVars'), $componentClass);
+                foreach ($vars as $id => $model) {
+                    if (is_array($model)) $model = $model['model'];
+                    Vps_Component_Cache::getInstance()->saveMeta($model, null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
+                }
+            }
+        }
     }
 
     public function clean($mode = self::CLEANING_MODE_META, $value = null)
     {
-        if (!$this->_getFields('_static')) {
-            $count = 0;
-            foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
-                $methods = get_class_methods($componentClass);
-                if (in_array('getStaticCacheVars', $methods)) {
-                    $vars = call_user_func(array($componentClass, 'getStaticCacheVars'), $componentClass);
-                    foreach ($vars as $id => $model) {
-                        if (is_array($model)) $model = $model['model'];
-                        $this->saveMeta($model, null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
-                    }
-                    $count += count($vars);
-                }
-            }
-            Vps_Benchmark::cacheInfo("Cache: written $count static entries.");
-            $this->_addField('_static', '');
-        }
-
         if ($mode == Vps_Component_Cache::CLEANING_MODE_META) {
             $row = $value;
             if (!$row instanceof Vps_Model_Row_Abstract && !$row instanceof Zend_Db_Table_Row_Abstract) {

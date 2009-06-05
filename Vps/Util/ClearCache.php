@@ -51,7 +51,7 @@ class Vps_Util_ClearCache
 
     public function getTypes()
     {
-        
+
         $types = array('all');
         if (class_exists('Memcache')) $types[] = 'memcache';
         $types = array_merge($types, $this->_getCacheDirs());
@@ -69,6 +69,11 @@ class Vps_Util_ClearCache
             }
         }
         $this->_clearCache($types, $output);
+        if (in_array('component', $types) || in_array('cache_component_meta', $types)) {
+            echo "Refresh static cache...";
+            Vps_Component_Cache::refreshStaticCache();
+            echo "done\n";
+        }
     }
     protected function _clearCache(array $types, $output)
     {
@@ -81,7 +86,9 @@ class Vps_Util_ClearCache
             if ($output) echo "cleared:     memcache...\n";
         }
         foreach ($this->getDbCacheTables() as $t) {
-            if (in_array($t, $types)) {
+            if (in_array($t, $types) ||
+                (in_array('component', $types) && substr($t, 0, 15) == 'cache_component')
+            ) {
                 Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
                 if ($output) echo "cleared db:  $t...\n";
             }
