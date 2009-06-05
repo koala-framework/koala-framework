@@ -19,9 +19,45 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
         return $this->getModel()->getSourceModel()->createRow();
     }
 
+    protected function _beforeSave()
+    {
+        parent::_beforeSave();
+        if ($this->getModel()->getLockTables()) {
+            $tableNames = array();
+            $models = array($this->getModel());
+            $models = array_merge($models, $this->getModel()->getSiblingModels());
+            foreach ($models as $m) {
+                while ($m instanceof Vps_Model_Proxy) {
+                    $m = $m->getProxyModel();
+                }
+                if ($m instanceof Vps_Model_Db) {
+                    $tableNames[] = $m->getTableName();
+                }
+            }
+            if ($tableNames) {
+                $m->executeSql("LOCK TABLES ".implode(" WRITE, ", $tableNames)." WRITE");
+            }
+        }
+    }
+
+    protected function _afterSave()
+    {
+        parent::_afterSave();
+        if ($this->getModel()->getLockTables()) {
+            $m = $this->getModel();
+            while ($m instanceof Vps_Model_Proxy) {
+                $m = $m->getProxyModel();
+            }
+            if ($m instanceof Vps_Model_Db) {
+                $m->executeSql("UNLOCK TABLES");
+            }
+        }
+    }
+
     protected function _beforeInsert()
     {
-        $this->getModel()->synchronize(true);
+        $this->getModel()->synchronize(Vps_Model_MirrorCache::SYNC_ONCE);
+
         parent::_beforeInsert();
         $sr = $this->_getInsertSourceRow();
         $primaryKey = $this->_primaryKey;
@@ -37,7 +73,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
 
     protected function _beforeUpdate()
     {
-        $this->getModel()->synchronize(true);
+        $this->getModel()->synchronize(Vps_Model_MirrorCache::SYNC_ONCE);
         parent::_beforeUpdate();
         $sm = $this->getModel()->getSourceModel();
         $primaryKey = $this->_primaryKey;

@@ -63,6 +63,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface
     protected function _beforeInsert()
     {
         parent::_beforeInsert();
+
         if ($this->getModel()->mailExists($this->email)) {
             throw new Vps_ClientException(
                 trlVps('An account with this email address already exists')
@@ -101,6 +102,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface
     protected function _afterInsert()
     {
         parent::_afterInsert();
+
         if (!$this->password && !$this->password_salt) {
             $this->generatePasswordSalt();
             $this->save();
@@ -111,7 +113,32 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface
 
     public function save()
     {
-        parent::save();
+        $tableNames = array();
+        $models = array($this->getModel());
+        $models = array_merge($models, $this->getModel()->getSiblingModels());
+        foreach ($models as $m) {
+            while ($m instanceof Vps_Model_Proxy) {
+                $m = $m->getProxyModel();
+            }
+            if ($m instanceof Vps_Model_Db) {
+                $tableNames[] = $m->getTableName();
+            }
+        }
+        if ($tableNames) {
+            $m->executeSql("LOCK TABLES ".implode(" WRITE, ", $tableNames)." WRITE");
+        }
+
+        $this->_beforeSave();
+        $id = $this->{$this->_getPrimaryKey()};
+        if (!$id) {
+            $this->_beforeInsert();
+        } else {
+            $this->_beforeUpdate();
+        }
+        $this->_beforeSaveSiblingMaster();
+        $ret = $this->_row->save();
+
+        Vps_Model_Row_Abstract::save();
 
         // wenn ein globaler account als gelöscht markiert wird,
         // zuordnung im service löschen und zeile aus cache-tabelle entfernen
@@ -138,6 +165,21 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface
                 if ($sr) $sr->delete();
             }
         }
+
+        $m = $this->getModel();
+        while ($m instanceof Vps_Model_Proxy) {
+            $m = $m->getProxyModel();
+        }
+        if ($m instanceof Vps_Model_Db) {
+            $m->executeSql("UNLOCK TABLES");
+        }
+
+        if (!$id) {
+            $this->_afterInsert();
+        } else {
+            $this->_afterUpdate();
+        }
+        $this->_afterSave();
     }
 
     public function sendActivationMail()
