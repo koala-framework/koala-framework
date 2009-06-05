@@ -89,7 +89,6 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $this->_synchronizeDone = true; //wegen endlosschleife ganz oben
 
         Vps_Benchmark::count('mirror sync');
-        echo ':';
 
         $syncField = $this->_syncTimeField;
         $proxyModel = $this->getProxyModel();
