@@ -9,6 +9,7 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         $this->_root = Vps_Component_Data_Root::getInstance();
         Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
         Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
+        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
         Vps_Component_RowObserver::getInstance()->clear();
         Vps_Component_RowObserver::getInstance()->setSkipFnF(false);
     }

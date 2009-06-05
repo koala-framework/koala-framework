@@ -97,14 +97,14 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
 
     protected function _renderHasContent($componentId, $componentClass, $content, $counter, $useCache = false)
     {
-        Vps_Benchmark::count('rendered partial ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
+        Vps_Benchmark::count('rendered hascontent ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
         $component = $this->_getComponent($componentId);
         return $component->hasContent() ? $content : '';
     }
 
     protected function _renderContent($componentId, $componentClass, $masterTemplate, $useCache = false)
     {
-        Vps_Benchmark::count('rendered partial ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
+        Vps_Benchmark::count('rendered ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
         if ($masterTemplate) {
             $output = new Vps_Component_Output_Master();
         } else {
