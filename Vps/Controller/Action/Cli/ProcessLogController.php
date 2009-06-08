@@ -1,9 +1,9 @@
 <?php
-class Vps_Controller_Action_Cli_ShowLogController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_ProcessLogController extends Vps_Controller_Action
 {
     public static function getHelp()
     {
-        return "show error log";
+        return "process error log";
     }
 
     public static function getHelpOptions()
@@ -12,7 +12,7 @@ class Vps_Controller_Action_Cli_ShowLogController extends Vps_Controller_Action_
             array(
                 'param'=> 'type',
                 'value'=> array('error', 'accessdenied', 'notfound'),
-                'valueOptional' => true,
+                'valueOptional' => true
             )
         );
     }
@@ -43,7 +43,8 @@ class Vps_Controller_Action_Cli_ShowLogController extends Vps_Controller_Action_
                         'type' => $dir->__toString(),
                         'time' => $timestamp,
                         'thrown' => $this->_getValueFromLogContents('Thrown', $c),
-                        'uri' => $this->_getValueFromLogContents('REQUEST_URI', $c)
+                        'uri' => $this->_getValueFromLogContents('REQUEST_URI', $c),
+                        'message' => $this->_getValueFromLogContents('Message', $c)
                     );
                 }
             }
@@ -52,9 +53,30 @@ class Vps_Controller_Action_Cli_ShowLogController extends Vps_Controller_Action_
         arsort($times);
         foreach (array_keys($times) as $k) {
             $i++;
+            echo "\nprocessing log entry $i/".count($entries).":\n";
             $entry = $entries[$k];
-            echo substr($entry['file'], strlen($logDir)+1).' '.$entry['uri'].' '.$entry['thrown']."\n";
-            //echo $i.": ".date("Y-m-d H:i:s", $entry['time']).' '.$entry['type']."\n";
+            echo "Time: ".date("Y-m-d H:i:s", $entry['time'])."\n";
+            echo "Uri: $entry[uri]\n";
+            echo "Trown: $entry[thrown]\n";
+            echo "Message: $entry[message]\n";
+            while (true) {
+                echo "(d)elete (s)how (i)gnore (q)uit";
+                $stdin = fopen('php://stdin', 'r');
+                $input = fgets($stdin, 2);
+                fclose($stdin);
+                echo "\n";
+                if ($input == 'd') {
+                    unlink($entry['file']);
+                    break;
+                } else if ($input == 's') {
+                    echo "\n\n".str_repeat('-', 80)."\n";
+                    echo file_get_contents($entry['file']);
+                } else if ($input == 'i') {
+                    break;
+                } else if ($input == 'q') {
+                    exit;
+                }
+            }
         }
         exit;
     }
