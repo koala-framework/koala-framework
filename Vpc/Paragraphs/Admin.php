@@ -14,6 +14,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
     public function getExtConfig()
     {
         $componentList = array();
+        $componentIcons = array();
         foreach ($this->_getComponents() as $component) {
             if (!Vpc_Abstract::hasSetting($component, 'componentName')) continue;
             $name = Vpc_Abstract::getSetting($component, 'componentName');

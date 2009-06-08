@@ -51,7 +51,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             item.load();
         } else {
             Ext.Ajax.request({
-                url: '/admin/component/edit/' + data.componentClass + '/json-index',
+                url: this.componentEditUrl + '/' + data.componentClass + '/json-index',
                 success: function(r, options, response) {
                     Ext.applyIf(response.config, {
                         autoScroll : true,
