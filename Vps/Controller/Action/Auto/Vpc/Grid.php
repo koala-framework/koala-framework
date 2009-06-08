@@ -9,29 +9,41 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
         parent::preDispatch();
     }
 
-    protected function _getWhere()
+    protected function _getSelect()
     {
-        $where = parent::_getWhere();
-        $where['component_id = ?'] = $this->_getParam('componentId');
-        return $where;
+        $ret = parent::_getSelect();
+        $ret->whereEquals('component_id', $this->_getParam('componentId'));
+        return $ret;
     }
 
     protected function _beforeSave($row)
     {
+        parent::_beforeSave($row);
         $row->component_id = $this->_getParam('componentId');
     }
 
     public function jsonIndexAction()
     {
-        $this->view->vpc(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
+        $conf = Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig();
+        if ($this->getRequest()->module == 'component_test' && isset($conf['controllerUrl'])) {
+            $conf['controllerUrl'] = str_replace('/admin/component/edit/',
+                        '/vps/componentedittest/'.Vps_Component_Data_Root::getComponentClass().'/',
+                        $conf['controllerUrl']);
+        }
+        $this->view->vpc($conf);
     }
 
     public function indexAction()
     {
-        parent::indexAction();
+        //nicht: parent::indexAction();
         $this->view->xtype = 'vps.component';
         $this->view->mainComponentClass = $this->_getParam('class');
         $this->view->baseParams = array('id' => $this->_getParam('componentId'));
+        if ($this->getRequest()->module == 'component_test') {
+            $this->view->componentEditUrl = '/vps/componentedittest/'.Vps_Component_Data_Root::getComponentClass();
+        } else {
+            $this->view->componentEditUrl = '/admin/component/edit';
+        }
     }
 
     public function jsonInsertAction()
