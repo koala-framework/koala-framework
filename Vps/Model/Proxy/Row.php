@@ -61,12 +61,12 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
         }
         $this->_beforeSaveSiblingMaster();
         $ret = $this->_row->save();
+        $this->_afterSave();
         if (!$id) {
             $this->_afterInsert();
         } else {
             $this->_afterUpdate();
         }
-        $this->_afterSave();
         parent::save();
         return $ret;
     }
