@@ -1,6 +1,9 @@
 Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
     allowOnlyImages: false,
     fileSizeLimit: 0,
+    showPreview: true,
+    showDeleteButton: true,
+    infoPosition: 'south',
     defaultAutoCreate : {
         tag: 'div',
         style: 'width: 300px; height: 53px'
@@ -15,6 +18,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
     },
     previewTpl: ['<a href="{href}" target="_blank" ',
                  'style="width: 40px; height: 40px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
+    // also usable in infoTpl: {href}
     infoTpl: ['{filename}.{extension}<br />',
               '{fileSize:fileSize}',
               '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl>'],
@@ -22,10 +26,13 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
 
     initComponent: function() {
         this.addEvents(['uploaded']);
-        if (!(this.previewTpl instanceof Ext.XTemplate)) {
-            this.previewTpl = new Ext.XTemplate(this.previewTpl);
+
+        if (this.showPreview) {
+            if (!(this.previewTpl instanceof Ext.XTemplate)) {
+                this.previewTpl = new Ext.XTemplate(this.previewTpl);
+            }
+            this.previewTpl.compile();
         }
-        this.previewTpl.compile();
 
         if (!(this.infoTpl instanceof Ext.XTemplate)) {
             this.infoTpl = new Ext.XTemplate(this.infoTpl);
@@ -37,12 +44,17 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
     },
     afterRender: function() {
         Vps.Form.SwfUploadField.superclass.afterRender.call(this);
-        this.previewImage = this.el.createChild({
-            style: 'margin-right: 10px; padding: 5px; float: left; border: 1px solid #b5b8c8;'+
-                   'background-color: white;'
-        });
 
-        this.previewImage.update(this.emptyTpl); //bild wird in der richtigen größe angezeigt
+        if (this.showPreview) {
+            this.previewImage = this.el.createChild({
+                style: 'margin-right: 10px; padding: 5px; float: left; border: 1px solid #b5b8c8;'+
+                    'background-color: white;'
+            });
+
+            this.previewImage.update(this.emptyTpl); //bild wird in der richtigen größe angezeigt
+        }
+
+        if (this.infoPosition == 'west') this.createInfoContainer();
 
         this.uploadButtonContainer = this.el.createChild({
                                          style: 'float:left; margin-right: 5px; '
@@ -50,19 +62,19 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
 
         this.uploadButtonContainerChildId = 'uploadButton'+Ext.id();
         this.createUploadButton(false);
-        this.deleteButton = new Ext.Button({
-            text: trlVps('Delete File'),
-            cls: 'x-btn-text-icon',
-            icon: '/assets/silkicons/delete.png',
-            renderTo: this.el.createChild({}),
-            scope: this,
-            handler: function() {
-                this.setValue('');
-            }
-        });
-        this.infoContainer = this.el.createChild({
-            style: 'margin-top: 3px;'
-        });
+        if (this.showDeleteButton) {
+            this.deleteButton = new Ext.Button({
+                text: trlVps('Delete File'),
+                cls: 'x-btn-text-icon',
+                icon: '/assets/silkicons/delete.png',
+                renderTo: this.el.createChild({}),
+                scope: this,
+                handler: function() {
+                    this.setValue('');
+                }
+            });
+        }
+        if (this.infoPosition == 'south') this.createInfoContainer();
 
         //return; // Flash Uploader deaktiviert
         if (this.allowOnlyImages) {
@@ -224,6 +236,12 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
 
     },
 
+    createInfoContainer: function() {
+        this.infoContainer = this.el.createChild({
+            style: 'margin-top: 3px;'+((this.infoPosition == 'west') ? ' float: left; margin-right: 3px;' : '')
+        });
+    },
+
     createUploadButton : function (check) {
         if (check == true) {
             this.uploadButtonContainer.first().remove();
@@ -269,21 +287,30 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         }
         if (v != this.value) {
             this.fireEvent('change', this, value, this.value);
+
             var icon = false;
+            var href = '/vps/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
             if (value.mimeType) {
-                if (value.mimeType.match(/(^image\/)/)) {
-                    icon = '/vps/media/upload/preview?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
-                } else {
-                    icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
-                    icon = '/assets/silkicons/' + icon + '.png';
+                if (this.showPreview) {
+                    if (value.mimeType.match(/(^image\/)/)) {
+                        icon = '/vps/media/upload/preview?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
+                    } else {
+                        icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
+                        icon = '/assets/silkicons/' + icon + '.png';
+                    }
+                    this.previewTpl.overwrite(this.previewImage, {
+                        preview: icon,
+                        href: href
+                    });
                 }
-                this.previewTpl.overwrite(this.previewImage, {
-                    preview: icon,
-                    href: '/vps/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey
-                });
-                this.infoTpl.overwrite(this.infoContainer, value);
+
+                var infoVars = Vps.clone(value);
+                infoVars.href = href;
+                this.infoTpl.overwrite(this.infoContainer, infoVars);
             } else {
-                this.previewImage.update(this.emptyTpl);
+                if (this.showPreview) {
+                    this.previewImage.update(this.emptyTpl);
+                }
                 this.infoContainer.update('');
             }
         }
