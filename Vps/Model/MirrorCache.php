@@ -118,22 +118,54 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     private function _syncRows($data, $cacheTime = null)
     {
         if (!is_array($data)) $data = $data->toArray();
+        $db = Vps_Registry::get('db');
         $primaryKey = $this->getSourceModel()->getPrimaryKey();
         $proxyModel = $this->getProxyModel();
+        $insDatas = array();
         foreach ($data as $row) {
-            $r = $proxyModel->getRow($row[$primaryKey]);
-            if (!$r) $r = $proxyModel->createRow();
-            foreach ($row as $column => $value) {
-                $r->$column = $value;
+            if (!($proxyModel instanceof Vps_Model_Db)) {
+                $r = $proxyModel->getRow($row[$primaryKey]);
+                if (!$r) $r = $proxyModel->createRow();
+                foreach ($row as $column => $value) {
+                    $r->$column = $value;
+                }
+                $r->save();
+            } else {
+                $insColumns = $insData = array();
+                foreach ($row as $column => $value) {
+                    $insColumns[] = $column;
+                    $insData[] = $db->quote($value);
+                }
+                $insDatas[] = '('.implode(',', $insData).')';
+
+                if (count($insDatas) >= 100) {
+                    self::_directMultiInsert($proxyModel->getTableName(), $insColumns, $insDatas);
+                    $insDatas = array();
+                }
             }
-            $r->save();
 
             if (!$cacheTime || $row[$this->_syncTimeField] > $cacheTime) {
                 $cacheTime = $row[$this->_syncTimeField];
             }
         }
+
+        if (count($insDatas)) {
+            self::_directMultiInsert($proxyModel->getTableName(), $insColumns, $insDatas);
+        }
+
         if (!$cacheTime) $cacheTime = date('Y-m-d H:i:s', time()-1);
         return $cacheTime;
+    }
+
+    private static function _directMultiInsert($table, $columns, $insDatas)
+    {
+        $db = Vps_Registry::get('db');
+        $sql = "REPLACE INTO $table (`".implode('`,`', $columns)."`) VALUES ".implode(',', $insDatas);
+        if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $db->getConnection()->exec($sql);
+        } else {
+            $db->query($sql);
+        }
     }
 
     private function _getMaxSyncDelay()
