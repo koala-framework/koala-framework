@@ -32,10 +32,17 @@ abstract class Vps_Exception_Abstract extends Exception
             return false;
         }
         $this->_logFilename = $filename;
-        if (!is_dir($path)) mkdir($path);
-        $fp = fopen("$path/$filename", 'a');
-        fwrite($fp, $content);
-        fclose($fp);
+	try {
+            if (!is_dir($path)) mkdir($path);
+            $fp = fopen("$path/$filename", 'a');
+            fwrite($fp, $content);
+            fclose($fp);
+	} catch(Exception $e) {
+            mail('ufx@vivid-planet.com; ns@vivid-planet.com; mh@vivid-planet.com',
+	        'Error while trying to write error file',
+		$e->__toString()."\n\n---------------------------\n\nOriginal Exception:\n\n".$content
+            );
+	}
         return true;
     }
 

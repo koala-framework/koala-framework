@@ -32,7 +32,7 @@ class Vpc_Directories_List_ViewMap_Coordinates_Component extends Vpc_Abstract_Aj
                 'latitude'  => $item->row->latitude,
                 'longitude' => $item->row->longitude,
                 'infoHtml'  => call_user_func_array(
-                    $parentComponentClass.'::getInfoWindowHtml', array($item)
+                    array($parentComponentClass, 'getInfoWindowHtml'), array($item)
                 )
             );
         }
