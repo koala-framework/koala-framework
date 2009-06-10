@@ -31,7 +31,8 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
         return array_merge(parent::getExtConfig(), array(
             'xtype'=>'vpc.paragraphs',
             'components' => $componentList,
-            'componentIcons' => $componentIcons
+            'componentIcons' => $componentIcons,
+            'previewWidth' => Vpc_Abstract::getSetting($this->_class, 'previewWidth')
         ));
     }
 

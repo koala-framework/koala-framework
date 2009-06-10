@@ -12,18 +12,18 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     protected function _initColumns()
     {
+        $this->_columns->add(new Vps_Grid_Column('pos'));
         $this->_columns->add(new Vps_Grid_Column('component_class'))
             ->setData(new Vps_Data_Vpc_ComponentClass($this->_getParam('class')));
-        $this->_columns->add(new Vps_Grid_Column('component_name'), 'Component')
+        $this->_columns->add(new Vps_Grid_Column('component_name'))
             ->setData(new Vps_Data_Vpc_ComponentName($this->_getParam('class')));
+        $this->_columns->add(new Vps_Grid_Column('component_icon'))
+            ->setData(new Vps_Data_Vpc_ComponentIcon($this->_getParam('class')));
 
-        $this->_columns->add(new Vps_Grid_Column('preview', trlVps('Preview'), 500))
+        $this->_columns->add(new Vps_Grid_Column('preview'))
             ->setData(new Vps_Data_Vpc_Frontend($this->_getParam('class')))
             ->setRenderer('component');
         $this->_columns->add(new Vps_Grid_Column_Visible());
-        $this->_columns->add(new Vps_Grid_Column_Button())
-            ->setButtonIcon(new Vps_Asset('paragraph_edit'))
-            ->setTooltip(trlVps('Edit Paragraph'));
     }
 
     public function preDispatch()
@@ -38,6 +38,15 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         }
     }
 
+    protected function _getSelect()
+    {
+        $ret = parent::_getSelect();
+        if ($this->_getParam('filter_visible')) {
+            $ret->whereEquals('visible', $this->_getParam('filter_visible'));
+        }
+        return $ret;
+    }
+
     public function jsonAddParagraphAction()
     {
         $class = $this->_getParam('component');
@@ -50,6 +59,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $classes =$generators['paragraphs']['component'];
             $row->component = array_search($class, $classes);
             $row->visible = 0;
+            $row->pos = $this->_getParam('pos');
             $row->save();
             $id = $row->id;
             $where['component_id = ?'] = $this->_getParam('componentId');
