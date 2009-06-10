@@ -190,7 +190,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             title       : data.text,
             region      : 'center',
             closable    : true,
-            autoLoad    : false
+            autoLoad    : false,
+            componentEditUrl : this.componentEditUrl
         });
         return panel;
     },
@@ -297,3 +298,4 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     }
 
 });
+Ext.reg('vps.component.pages', Vps.Component.Pages);
