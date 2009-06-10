@@ -59,7 +59,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
         if ($this->sex == 'male') {
             $ret .= trlVps('Mr.');
         } else {
-            $ret .= trlVps('Mrs.');
+            $ret .= trlVps('Ms.');
         }
         $ret .= ' '.trim($this->title.' '.$this->lastname);
         return $ret;

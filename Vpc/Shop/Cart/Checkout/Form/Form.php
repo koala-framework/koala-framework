@@ -11,7 +11,7 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
         $this->add(new Vps_Form_Field_Radio('sex', trlcVps('sex', 'Title')))
             ->setValues(array(
                 'male'   => trlVps('Mr.'),
-                'female' => trlVps('Mrs.')
+                'female' => trlVps('Ms.')
             ))
             ->setAllowBlank(false);
         $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')));
