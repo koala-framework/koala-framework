@@ -14,7 +14,7 @@ class Vps_Crm_Customer_ContactpersonController extends Vps_Controller_Action_Aut
             ->setWidth(250)
             ->setValues(array(
                 'male'   => trlVps('Mr.'),
-                'female' => trlVps('Mrs.')
+                'female' => trlVps('Ms.')
             ));
         $fs->add(new Vps_Form_Field_TextField('title', trlVps('Title')))
             ->setWidth(250);
