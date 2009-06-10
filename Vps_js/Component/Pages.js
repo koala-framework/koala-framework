@@ -303,3 +303,5 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     }
 
 });
+
+Ext.reg('vps.component.pages', Vps.Component.Pages);
