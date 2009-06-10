@@ -73,7 +73,6 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                     scope: this,
                     changevalue: function(v, combo) {
                         if (v && combo.record.get('pos') != v) {
-                            debugger;
                             this.fireEvent('changePos', combo.record, v);
                             combo.blur();
                             combo.hasFocus = false; //ansonsten wird die list angezeigt nachdem daten geladen wurden
