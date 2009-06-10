@@ -2,47 +2,8 @@ Ext.namespace('Vps.Component');
 Vps.Component.Pages = Ext.extend(Ext.Panel, {
     initComponent : function()
     {
-        this.treePanel = new Vps.Auto.SyncTreePanel({
-            controllerUrl: '/admin/component/pages',
-            title       : 'Seitenbaum',
-            region      : 'west',
-            split       : true,
-            width       : 300,
-            collapsible : true,
-            minSize     : 200,
-            maxSize     : 600,
-            tbar        : []
-        });
-        this.contentTabPanel = new Ext.TabPanel({
-            region      : 'center'
-        });
-
-        this.layout = 'border';
         this.actions = {};
-        this.items = [this.treePanel, this.contentTabPanel];
-        Vps.Component.Pages.superclass.initComponent.call(this);
 
-        this.treePanel.on('loaded', this.onTreePanelLoaded, this);
-        this.on('editcomponent', this.loadComponent, this);
-        this.setupEditform();
-
-        this.editActions = {};
-    },
-
-    setupEditform : function ()
-    {
-    	this.editDialog = new Vps.Component.PageEdit({
-            width: 400,
-            height: 400,
-            controllerUrl: '/admin/component/pageEdit'
-        });
-        this.editDialog.on('datachange', function(test) {
-            this.treePanel.tree.root.reload();
-        }, this);
-    },
-
-    onTreePanelLoaded : function(tree)
-    {
         this.pageButtonMenu = new Ext.menu.Menu({
             items    : [
                 '-',
@@ -62,12 +23,52 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             disabled: true
         });
 
-        this.treePanel.getTopToolbar().add(
-            this.pageButton,
-            '->',
-            this.treePanel.getAction('reload')
-        );
+        this.treePanel = new Vps.Auto.SyncTreePanel({
+            controllerUrl: '/admin/component/pages',
+            title       : trlVps('Seitenbaum'),
+            region      : 'west',
+            split       : true,
+            width       : 300,
+            collapsible : true,
+            minSize     : 200,
+            maxSize     : 600,
+            autoScroll: true,
+            tbar: [this.pageButton, '->']
+        });
+        this.treePanel.getTopToolbar().add(this.treePanel.getAction('reload'));
 
+        this.contentTabPanel = new Ext.TabPanel({
+            region      : 'center'
+        });
+        this.contentTabPanel.on('render', function() {
+            this.contentTabPanel.strip.setHeight(24);
+        }, this);
+
+        this.layout = 'border';
+        this.items = [this.treePanel, this.contentTabPanel];
+
+        Vps.Component.Pages.superclass.initComponent.call(this);
+
+        this.treePanel.on('loaded', this.onTreePanelLoaded, this);
+        this.on('editcomponent', this.loadComponent, this);
+        this.setupEditform();
+
+        this.editActions = {};
+    },
+    setupEditform : function ()
+    {
+       this.editDialog = new Vps.Component.PageEdit({
+            width: 400,
+            height: 400,
+            controllerUrl: '/admin/component/pageEdit'
+        });
+        this.editDialog.on('datachange', function(test) {
+            this.treePanel.tree.root.reload();
+        }, this);
+    },
+
+    onTreePanelLoaded : function(tree)
+    {
         this.contextMenu = new Ext.menu.Menu({
              items: [
                 '-',
@@ -103,6 +104,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 				}
         	}
         }, this);
+
     },
 
     treeSelectionchange : function (node) {
@@ -188,7 +190,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         var panel = new Vps.Component.ComponentPanel({
             id          : 'page'+data.id,
             title       : data.text,
-            region      : 'center',
             closable    : true,
             autoLoad    : false,
             componentEditUrl : this.componentEditUrl
@@ -229,18 +230,22 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         } else if (type == 'delete') {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Delete selected Page'),
-                handler : this.treePanel.onDelete,
+                handler : function() {
+                    this.treePanel.onDelete();
+                },
                 icon    : '/assets/silkicons/page_delete.png',
                 cls     : 'x-btn-text-icon',
-                scope   : this.treePanel
+                scope   : this
             });
         } else if (type == 'visible') {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Toggle Visibility of selected Page'),
-                handler : this.treePanel.onVisible,
+                handler : function() {
+                    this.treePanel.onVisible();
+                },
                 icon    : '/assets/silkicons/page_red.png',
                 cls     : 'x-btn-text-icon',
-                scope   : this.treePanel
+                scope   : this
             });
         } else if (type == 'makeHome') {
             this.actions[type] = new Ext.Action({
@@ -298,4 +303,3 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     }
 
 });
-Ext.reg('vps.component.pages', Vps.Component.Pages);
