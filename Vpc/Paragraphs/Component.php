@@ -13,12 +13,16 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         ));
         $ret['modelname'] = 'Vpc_Paragraphs_Model';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/DataView.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/AddParagraphButton.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.css';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
         $ret['generators']['paragraphs'] = array(
             'class' => 'Vps_Component_Generator_Table',
             'component' => array('text' => 'Vpc_Basic_Text_Component',
                                  'image' => 'Vpc_Basic_Image_Component')
         );
+        $ret['previewWidth'] = 600;
         $ret['default'] = array();
         return $ret;
     }

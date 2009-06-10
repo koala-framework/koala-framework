@@ -1,69 +1,273 @@
 Ext.namespace('Vpc.Paragraphs');
-Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
+Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 {
+    layout:'fit',
+    cls: 'vpc-paragraphs',
     initComponent : function()
     {
         this.addEvents('editcomponent');
 
-        var componentMenu = new Ext.menu.Menu({id: 'componentMenu'});
-        this.addComponents(this.components, componentMenu);
-        this.actions.addparagraph = new Ext.Action({
-            text : trlVps('Add Paragraph'),
-            icon : '/assets/vps/images/paragraphAdd.png',
-            cls  : 'x-btn-text-icon',
-            menu : componentMenu
+        if (this.autoLoad !== false) {
+            this.autoLoad = true;
+        } else {
+            delete this.autoLoad;
+        }
+
+        this.dataView = new Vpc.Paragraphs.DataView({
+            components: this.components,
+            componentIcons: this.componentIcons,
+            width: this.previewWidth,
+            listeners: {
+                scope: this,
+                'delete': this.onDelete,
+                edit: this.onEdit,
+                changeVisible: this.onChangeVisible,
+                changePos: this.onChangePos,
+                addParagraphMenuShow: this.onAddParagraphMenuShow,
+                addParagraph: this.onParagraphAdd
+            }
         });
 
+        this.items = [ this.dataView ];
+
+        this.actions.showVisible = new Ext.Action({
+            text : trlVps('Show'),
+            icon : '/assets/silkicons/monitor.png',
+            cls  : 'x-btn-text-icon',
+            menu : [{
+                text: trlVps('all paragraphs'),
+                group: 'showVisible',
+                checked: true,
+                handler: function() {
+                    this.applyBaseParams({
+                        filter_visible: null
+                    });
+                    this.load();
+                },
+                scope: this
+            }, {
+                text: trlVps('visible paragraphs'),
+                group: 'showVisible',
+                checked: false,
+                handler: function() {
+                    this.applyBaseParams({
+                        filter_visible: 1
+                    });
+                    this.load();
+                },
+                scope: this
+            }]
+        });
+        this.actions.addparagraph = new Vpc.Paragraphs.AddParagraphButton({
+            components: this.components,
+            componentIcons: this.componentIcons,
+            listeners: {
+                scope: this,
+                menushow: function() {
+                    this.addParagraphPos = this.store.getAt(this.store.getCount()-1).get('pos')+1;
+                },
+                addParagraph: function(component) {
+                    this.onParagraphAdd(component);
+                }
+            }
+        });
+
+        this.tbar = [ this.actions.showVisible, '-', this.actions.addparagraph ];
+
+
         Vpc.Paragraphs.Panel.superclass.initComponent.call(this);
-
-        this.actions.edit.icon = '/assets/vps/images/paragraphEdit.png';
-        this.actions['delete'].icon = '/assets/vps/images/paragraphDelete.png';
-
-        this.on('beforerendergrid', function() {
-            this.getStore().on('load', function() {
-                Ext.each(Vps.contentReadyHandlers, function(i) {
-                    i.fn.call(i.scope | window);
-                }, this);
-            }, this);
-        }, this);
     },
 
-    addComponents : function(components, addToItem)
+    doAutoLoad : function()
     {
-        if (components.length == 0) { return; }
-        for (var i in components) {
-            if (typeof components[i] == 'string') {
-                addToItem.addItem(
-                    new Ext.menu.Item({
-                        id: components[i],
-                        text: i,
-                        handler: this.onParagraphAdd,
-                        icon: this.componentIcons[components[i]],
-                        scope: this
-                    })
-                );
-            } else {
-                var item = new Ext.menu.Item({text: i, menu: []});
-                addToItem.addItem(item);
-                this.addComponents(components[i], addToItem.items.items[addToItem.items.length - 1].menu);
+        //autoLoad kann in der zwischenzeit abgeschaltet werden, zB wenn
+        //wir in einem Binding sind
+        if (!this.autoLoad) return;
+        this.load();
+    },
+
+    load: function(params, options) {
+        if (!params) params = {};
+        if (!this.store) {
+            Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
+            Ext.Ajax.request({
+                mask: true,
+                url: this.controllerUrl+'/json-data',
+                params: params,
+                success: function(response, options, r) {
+                    this.onMetaLoad(r);
+                },
+                scope: this
+            });
+        } else {
+            if (this.pagingType && this.pagingType != 'Date' && !params.start) {
+                params.start = 0;
             }
+            this.store.load({
+                params: params
+            });
         }
     },
 
-    edit : function(row) {
-        var bp = this.getBaseParams();
-        this.fireEvent('editcomponent', {
-            componentClass: row.data.component_class,
-            componentId: bp.componentId + '-' + row.data.id,
-            text: row.data.component_name
+    onMetaLoad : function(result)
+    {
+        var meta = result.metaData;
+        this.metaData = meta;
+
+        var storeConfig = {
+            proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
+            reader: new Ext.data.JsonReader({
+                totalProperty: meta.totalProperty,
+                root: meta.root,
+                id: meta.id,
+                sucessProperty: meta.successProperty,
+                fields: meta.fields
+            }),
+            sortInfo: meta.sortInfo
+        };
+        this.store = new Ext.data.Store(storeConfig);
+        if (this.baseParams) {
+            this.setBaseParams(this.baseParams);
+            delete this.baseParams;
+        }
+        this.dataView.setStore(this.store);
+        this.loadMask = new Ext.LoadMask(this.bwrap,
+                Ext.apply({store:this.store}, this.loadMask));
+
+        if (result.rows) {
+            this.store.loadData(result);
+        }
+    },
+    getStore : function() {
+        return this.store;
+    },
+    getBaseParams : function() {
+        if (this.getStore()) {
+            return this.getStore().baseParams;
+        } else {
+            return this.baseParams || {};
+        }
+    },
+    setBaseParams : function(baseParams) {
+        if (this.getStore()) {
+            this.getStore().baseParams = baseParams;
+        } else {
+            //no store yet, apply them later
+            this.baseParams = baseParams;
+        }
+    },
+    applyBaseParams : function(baseParams) {
+        if (this.getStore()) {
+            Ext.apply(this.getStore().baseParams, baseParams);
+        } else {
+            //no store yet, apply them later
+            if (!this.baseParams) this.baseParams = {};
+            Ext.apply(this.baseParams, baseParams);
+        }
+    },
+
+    //protected, zum überschreiben in unterklassen um zusäztliche daten zu speichern
+    getSaveParams : function()
+    {
+        var data = [];
+        var modified = this.store.getModifiedRecords();
+        if (!modified.length) return {};
+        modified.each(function(r) {
+            data.push(r.data);
+        }, this);
+        var params = this.getBaseParams() || {};
+        params.data = Ext.util.JSON.encode(data);
+        return params;
+    },
+
+    submit : function()
+    {
+        var params = this.getSaveParams();
+
+        //gibts da keine bessere l�sung?
+        var empty = true;
+        for (var i in params) {
+            empty = false;
+            break;
+        }
+        if (empty) return;
+
+        this.el.mask(trlVps('Saving...'));
+
+        Ext.Ajax.request({
+            url: this.controllerUrl+'/json-save',
+            params: params,
+            success: function(response, options, r) {
+                //geänderte und neue zurücksetzen, damit isDirty false ist
+                this.store.modified = [];
+                this.reload();
+                this.fireEvent('datachange', r);
+            },
+            callback: function() {
+                this.el.unmask();
+            },
+            scope  : this
         });
     },
 
-    onParagraphAdd : function(o, e)
+    onChangeVisible: function(record) {
+        record.set('visible', !record.get('visible'));
+        this.submit();
+    },
+
+    onChangePos: function(record, pos) {
+        record.set('pos', pos);
+        this.submit();
+    },
+
+    onDelete : function(record) {
+        Ext.Msg.show({
+            title: trlVps('Delete'),
+            msg: trlVps('Do you really wish to remove this paragraph?'),
+            buttons: Ext.Msg.YESNO,
+            scope: this,
+            fn: function(button) {
+                if (button == 'yes') {
+                    this.el.mask(trlVps('Deleting...'));
+                    var params = this.getBaseParams();
+                    params.id = record.get('id');
+                    Ext.Ajax.request({
+                        url: this.controllerUrl+'/json-delete',
+                        params: params,
+                        success: function(response, options, r) {
+                            this.reload();
+                        },
+                        callback: function() {
+                            this.el.unmask();
+                        },
+                        scope : this
+                    });
+                }
+            }
+        });
+    },
+
+    onEdit : function(record) {
+        var bp = this.getBaseParams();
+        this.fireEvent('editcomponent', {
+            componentClass: record.get('component_class'),
+            componentId: bp.componentId + '-' + record.get('id'),
+            text: record.get('component_name')
+        });
+    },
+
+    onAddParagraphMenuShow: function(record) {
+        this.addParagraphPos = record.get('pos')+1;
+    },
+
+    onParagraphAdd : function(component)
     {
+        var params = this.getBaseParams();
+        params.pos = this.addParagraphPos;
+        params.component = component;
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-add-paragraph',
-            params: Ext.apply ({ component : o.id}, this.getBaseParams()),
+            params: params,
             success: function(r) {
                 response = Ext.decode(r.responseText);
                 if (response.hasController) {
@@ -79,6 +283,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
             scope: this
         });
     }
+
 });
 
 Ext.reg('vpc.paragraphs', Vpc.Paragraphs.Panel);
