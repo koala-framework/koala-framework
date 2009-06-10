@@ -4,7 +4,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     mainComponentId: '{0}',
     mainComponentText: 'Content',
     mainComponentIcon: '/assets/vps/images/paragraph_page.gif',
-    componentEditUrl: '/admin/component/edit',
+
     initComponent: function() {
         if (this.autoLoad !== false) {
             this.autoLoad = true;
