@@ -123,7 +123,8 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
                 sucessProperty: meta.successProperty,
                 fields: meta.fields
             }),
-            sortInfo: meta.sortInfo
+            sortInfo: meta.sortInfo,
+            remoteSort: true
         };
         this.store = new Ext.data.Store(storeConfig);
         if (this.baseParams) {
