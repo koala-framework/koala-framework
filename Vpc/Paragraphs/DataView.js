@@ -123,7 +123,6 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                 listeners: {
                     scope: this,
                     menushow: function(btn) {
-                        console.log(btn.record.data);
                         this.fireEvent('addParagraphMenuShow', btn.record);
                     },
                     addParagraph: function(component) {
