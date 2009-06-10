@@ -111,7 +111,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                                 $cacheTables[] = $table;
                             }
                         }
-                    } else {
+                    } else if (in_array($t, $tables)){
                         $cacheTables[] = $t;
                     }
                 }
