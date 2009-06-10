@@ -55,6 +55,10 @@ Vps.GoogleMap.maps = [];
  *                { longitude: 47.802594, latitude: 13.0433173, infoHtml: 'Text 1' },
  *                { coordinates: '46.1234,12.321', infoHtml: 'Text 2' }
  *            ]
+ *     markerSrc (optional): An url to an image that should be used as marker.
+ *     lightMarkers (optional): An object of one marker or an array of markers.
+ *            Markers at these positions will have another marker color.
+ *     lightMarkerSrc (optional): An url to an image that should be used as light marker.
  *     zoom (optional): The initial zoom value. Either an integer or an array of
  *            longitude / latitude values that should be visible in the map.
  *            Default value for zoom is 13.
@@ -83,9 +87,11 @@ Vps.GoogleMap.Map = function(config) {
     if (typeof this.config.zoom_properties == 'undefined') this.config.zoom_properties = 0;
     if (typeof this.config.overview == 'undefined') this.config.overview = 1;
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
+    if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
+    if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/vps/images/googlemap/markerBlue.png';
 
     if (!this.config.markers) this.config.markers = [ ];
-    if (typeof this.markers[0] == 'undefined' &&
+    if (typeof this.config.markers[0] == 'undefined' &&
         (this.config.markers.longitude || this.config.markers.coordinates)
     ) {
         this.config.markers = [ this.config.markers ];
@@ -100,6 +106,26 @@ Vps.GoogleMap.Map = function(config) {
             if (typeof this.config.markers[i].longitude == 'undefined') {
                 var splits = this.config.markers[i].coordinates.split(',');
                 this.config.markers[i].longitude = splits[1];
+            }
+        }
+    }
+
+    if (!this.config.lightMarkers) this.config.lightMarkers = [ ];
+    if (typeof this.config.lightMarkers[0] == 'undefined' &&
+        (this.config.lightMarkers.longitude || this.config.lightMarkers.coordinates)
+    ) {
+        this.config.lightMarkers = [ this.config.lightMarkers ];
+    }
+
+    for (var i = 0; i < this.config.lightMarkers.length; i++) {
+        if (this.config.lightMarkers[i].coordinates) {
+            if (typeof this.config.lightMarkers[i].latitude == 'undefined') {
+                var splits = this.config.lightMarkers[i].coordinates.split(',');
+                this.config.lightMarkers[i].latitude = splits[0];
+            }
+            if (typeof this.config.lightMarkers[i].longitude == 'undefined') {
+                var splits = this.config.lightMarkers[i].coordinates.split(',');
+                this.config.lightMarkers[i].longitude = splits[1];
             }
         }
     }
@@ -126,6 +152,10 @@ Vps.GoogleMap.Map = function(config) {
             e.stopEvent();
         }, this);
     }
+
+    this.ajax = new Vps.Connection({
+        autoAbort : true
+    });
 
     var container = this.mapContainer.down(".container");
     container.setWidth(parseInt(this.config.width));
@@ -222,7 +252,7 @@ Vps.GoogleMap.Map.prototype = {
         params.highestLng = bounds.getNorthEast().lng();
         params.highestLat = bounds.getNorthEast().lat();
 
-        Ext.Ajax.request({
+        this.lastReloadMarkersRequestId = this.ajax.request({
             url: this.config.markers,
             success: function(response, options) {
                 var ret = Ext.decode(response.responseText);
@@ -244,11 +274,24 @@ Vps.GoogleMap.Map.prototype = {
         });
     },
 
-    addMarker : function(markerConfig) {
+    addMarker : function(markerConfig)
+    {
+        var gmarkCfg = { draggable: false };
+        if (this._isLightMarker(markerConfig.latitude, markerConfig.longitude)
+            && this.config.lightMarkerSrc
+        ) {
+            var lightIcon = new GIcon(G_DEFAULT_ICON);
+            lightIcon.image = this.config.lightMarkerSrc;
+            gmarkCfg.icon = lightIcon;
+        } else if (this.config.markerSrc) {
+            var icon = new GIcon(G_DEFAULT_ICON);
+            icon.image = this.config.markerSrc;
+            gmarkCfg.icon = icon;
+        }
         var marker = new GMarker(
             new GLatLng(parseFloat(markerConfig.latitude),
-            parseFloat(markerConfig.longitude)),
-            { draggable: false }
+                parseFloat(markerConfig.longitude)),
+            gmarkCfg
         );
         marker.vpsConfig = markerConfig;
         this.markers.push(marker);
@@ -259,6 +302,16 @@ Vps.GoogleMap.Map.prototype = {
                 this, [ marker ]
             ));
         }
+    },
+
+    _isLightMarker : function(lat, lng) {
+        for (var i = 0; i < this.config.lightMarkers.length; i++) {
+            var m = this.config.lightMarkers[i];
+            if (m.latitude == lat && m.longitude == lng) {
+                return true;
+            }
+        }
+        return false;
     },
 
     /**
