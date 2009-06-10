@@ -71,8 +71,14 @@ class Vps_Util_ClearCache
         $this->_clearCache($types, $output);
         if (in_array('component', $types) || in_array('cache_component_meta', $types)) {
             if ($output) echo "Refresh static cache...";
-            Vps_Component_Cache::refreshStaticCache();
-            if ($output) echo "done\n";
+            try {
+                Vps_Component_Cache::refreshStaticCache();
+                if ($output) echo "done\n";
+            } catch (Exception $e) {
+                if ($output) {
+                    echo "errors!!\n";
+                }
+            }
         }
     }
     protected function _clearCache(array $types, $output)
