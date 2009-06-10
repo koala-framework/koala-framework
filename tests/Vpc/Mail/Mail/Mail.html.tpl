@@ -1,0 +1,1 @@
+htmlmail %firstname% <?= $this->username ?>

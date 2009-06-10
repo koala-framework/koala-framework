@@ -301,6 +301,11 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $ret;
     }
 
+    public function getMailVars($user = null)
+    {
+        return $this->getTemplateVars();
+    }
+
     public function getCacheVars()
     {
         $ret = array();
