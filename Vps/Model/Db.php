@@ -395,6 +395,19 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else if ($expr instanceof Vps_Model_Select_Expr_Sum) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
             return "SUM($field)";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Area) {
+            $lat1 = $this->_formatField('latitude', $dbSelect);
+            $lat2 = $expr->getLatitude();
+            $long1 = $this->_formatField('longitude', $dbSelect);
+            $long2 = $expr->getLongitude();
+            $radius = $expr->getRadius();
+            return "
+                (ACOS(
+                    SIN($lat1) * SIN($lat2) +
+                    COS($lat1) * COS($lat2) *
+                    COS($long2 - $long1)
+                ) / 180 * PI() * 6378.137) <= $radius
+            ";
         }
     }
 
