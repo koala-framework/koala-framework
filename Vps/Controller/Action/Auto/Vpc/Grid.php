@@ -16,9 +16,8 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
         return $ret;
     }
 
-    protected function _beforeSave($row, $submitRow)
+    protected function _beforeSave($row)
     {
-        parent::_beforeSave($row, $submitRow);
         $row->component_id = $this->_getParam('componentId');
     }
 
