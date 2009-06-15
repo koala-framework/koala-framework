@@ -9,14 +9,30 @@ class Vpc_Directories_Item_Detail_AssignedCategories_View_Component
         return $ret;
     }
 
+    public function getPartialCacheVars($nr)
+    {
+        $ret = parent::getPartialCacheVars($nr);
+        return $this->_doClearCache();
+    }
+
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();
-        // TODO: Nur bei eigener ID löschen, dazu müsste man das Feld angeben können
+        return $this->_doClearCache();
+    }
+
+    private function _doClearCache()
+    {
         $c = $this->getData()->parent->getComponent()->getItemDirectory()->getComponent();
+        $modelName = Vpc_Abstract::getSetting(get_class($c), 'categoryToItemTableName');
+
+        $itemRef = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
+            $modelName, 'Item'
+        );
         $ret[] = array(
-            'model' => Vpc_Abstract::getSetting(get_class($c), 'categoryToItemTableName'),
-            'id' => null
+            'model' => $modelName,
+            'id' => $this->getData()->parent->getComponent()->getItemDetail()->getRow()->{$itemRef['refItemColumn']},
+            'field' => $itemRef['itemColumn']
         );
         return $ret;
     }

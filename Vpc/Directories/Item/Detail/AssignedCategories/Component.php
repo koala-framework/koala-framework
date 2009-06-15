@@ -21,6 +21,11 @@ class Vpc_Directories_Item_Detail_AssignedCategories_Component
         return $this->getData()->parent;
     }
 
+    public function getItemDetail()
+    {
+        return $this->_getItemDetail();
+    }
+
     public function getSelect()
     {
         $ret = parent::getSelect();
