@@ -106,9 +106,13 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
         // Checken, ob übergebene componentClass auf der aktuellen Page vorkommen kann
         $allowCheck = false;
+
         if ($component->componentClass == $class) $allowCheck = true;
         $c = $component->parent;
-        $stopComponent = $component->getPage()->parent;
+
+        $stopComponent = $component->getPage();
+        if (!is_null($stopComponent)) $stopComponent = $stopComponent->parent;
+
         while (!$allowCheck && $c && !$c->componentId != $stopComponent->componentId) {
             $allowedComponentClasses = Vpc_Abstract::getChildComponentClasses(
                 $c->componentClass, array('page' => false)
