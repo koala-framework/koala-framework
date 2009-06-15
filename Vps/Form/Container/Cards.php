@@ -12,6 +12,7 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
             ->setListWidth(150);
 
         parent::__construct();
+        $this->setFieldLabel($fieldLabel);
         $this->setBaseCls('x-plain');
         $this->setXtype('vps.cards');
         $this->setLayout('form');
