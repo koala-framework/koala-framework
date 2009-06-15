@@ -26,7 +26,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         if ($this->getVtype() === 'email') {
             $this->addValidator(new Vps_Validate_EmailAddressSimple());
         } else if ($this->getVtype() === 'url') {
-            $this->addValidator(new Zend_Validate_Regex('/(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i'));
+            $this->addValidator(new Zend_Validate_Regex('/(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i'));
         } else if ($this->getVtype() === 'alpha') {
             $this->addValidator(new Zend_Validate_Regex('/^[a-zA-Z_]+$/'));
         } else if ($this->getVtype() === 'alphanum') {
