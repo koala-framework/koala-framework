@@ -11,14 +11,12 @@ class Vpc_Directories_Item_Detail_AssignedCategories_View_Component
 
     public function getPartialCacheVars($nr)
     {
-        $ret = parent::getPartialCacheVars($nr);
-        return $this->_doClearCache();
+        return array_merge(parent::getPartialCacheVars($nr), $this->_doClearCache());
     }
 
     public function getCacheVars()
     {
-        $ret = parent::getCacheVars();
-        return $this->_doClearCache();
+        return array_merge(parent::getCacheVars(), $this->_doClearCache());
     }
 
     private function _doClearCache()
@@ -29,6 +27,7 @@ class Vpc_Directories_Item_Detail_AssignedCategories_View_Component
         $itemRef = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
             $modelName, 'Item'
         );
+        $ret = array();
         $ret[] = array(
             'model' => $modelName,
             'id' => $this->getData()->parent->getComponent()->getItemDetail()->getRow()->{$itemRef['refItemColumn']},
