@@ -28,12 +28,17 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
             }
         }
 
-        return array_merge(parent::getExtConfig(), array(
-            'xtype'=>'vpc.paragraphs',
-            'components' => $componentList,
-            'componentIcons' => $componentIcons,
-            'previewWidth' => Vpc_Abstract::getSetting($this->_class, 'previewWidth')
-        ));
+        return array(
+            'paragraphs' => array(
+                'xtype'=>'vpc.paragraphs',
+                'controllerUrl' => $this->getControllerUrl(),
+                'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
+                'icon' => $this->_getSetting('componentIcon')->__toString(),
+                'components' => $componentList,
+                'componentIcons' => $componentIcons,
+                'previewWidth' => $this->_getSetting('previewWidth')
+            )
+        );
     }
 
     protected function _getComponents()

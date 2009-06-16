@@ -3,8 +3,8 @@ class Vps_Component_Model extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Component_Model_Row';
     protected $_constraints = array(
-        'pageGenerator' => true,
-        'ignoreVisible' => true
+        'ignoreVisible' => true,
+        'flags' => array('showInPageTreeAdmin' => true)
     );
     protected $_primaryKey = 'componentId';
     private $_root;
@@ -23,7 +23,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
     public function createRow(array $data=array()) {
         throw new Vps_Exception('Not implemented yet.');
     }
-
+/*
     public function find($id)
     {
         return new $this->_rowsetClass(array(
@@ -31,7 +31,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
             'rowClass' => $this->_rowClass,
             'model' => $this
         ));
-    }
+    }*/
 
     public function isEqual(Vps_Model_Interface $other) {
         if ($other instanceof Vps_Component_Model &&
@@ -66,14 +66,15 @@ class Vps_Component_Model extends Vps_Model_Abstract
             if (!$page) {
                 throw new Vps_Exception("Can't find page with parent_id '{$where['parent_id']}'");
             }
-            $rowset = array_values($page->getChildComponents($this->_constraints));
-
-            $constraints = $this->_constraints;
-            unset($constraints['pageGenerator']);
-            $constraints['generator'] = 'category';
-            $rowset = array_merge($rowset, array_values($page->getChildComponents($constraints)));
-            $constraints['generator'] = 'domain';
-            $rowset = array_merge($rowset, array_values($page->getChildComponents($constraints)));
+            $rowset = $page->getChildComponents(array(
+                'ignoreVisible' => true,
+                'flags' => array('showInPageTreeAdmin' => true)
+            ));
+            $rowset = array_merge($rowset, $page->getChildComponents(array(
+                'ignoreVisible' => true,
+                'pageGenerator' => true
+            )));
+            $rowset = array_values($rowset);
         } else if (isset($where['componentId'])) {
             $rowset = array(Vps_Component_Data_Root::getInstance()->getComponentById($where['componentId'], array('ignoreVisible' => true)));
         } else {

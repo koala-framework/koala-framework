@@ -16,6 +16,7 @@ class Vpc_Root_Category_Component extends Vpc_Abstract
             'table' => 'Vps_Dao_Pages'
         );
         $ret['componentName'] = trlVps('Category');
+        $ret['flags']['showInPageTreeAdmin'] = true;
         return $ret;
     }
 }

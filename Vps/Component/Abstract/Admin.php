@@ -58,14 +58,24 @@ class Vps_Component_Abstract_Admin
 
     public function getExtConfig()
     {
-        $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
-        $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
-        return array(
-            'xtype'         => 'vps.autoform',
-            'controllerUrl' => $this->getControllerUrl(),
-            'componentName' => $name,
-            'componentIcon' => $icon->__toString()
+        if (!self::getComponentFile($this->_class, 'Controller')) {
+            return array();
+        }
+        if (!Vpc_Abstract::hasSetting($this->_class, 'componentName')
+            || !Vpc_Abstract::getSetting($this->_class, 'componentName'))
+        {
+            //wenn das probleme verursact ignorieren - aber es erspart lange fehlersuche warum eine komp. nicht angezeigt wird :D
+            throw new Vps_Exception("Component '$cc->componentClass' does have no componentName but must have one for editing");
+        }
+        $ret = array(
+            'form' => array(
+                'xtype' => 'vps.autoform',
+                'controllerUrl' => $this->getControllerUrl(),
+                'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
+                'icon' => $this->_getSetting('componentIcon')->__toString()
+            )
         );
+        return $ret;
     }
 
     public function getControllerUrl($class = null)
@@ -144,5 +154,10 @@ class Vps_Component_Abstract_Admin
                     Vpc_Admin::getInstance($c->componentClass)->getControllerUrl().'?componentId='.$c->dbId), 'vps_component_root');
 
         }
+    }
+
+    protected final function _getSetting($name)
+    {
+        return Vpc_Abstract::getSetting($this->_class, $name);
     }
 }
