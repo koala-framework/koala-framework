@@ -1,7 +1,9 @@
 .vpc-paragraphs-preview { padding-left: 10px; padding-right: 10px; }
 
+/*
 .vpc-paragraphs .vpc-paragraphs-toolbar { opacity: 0.3; }
 .vpc-paragraphs .x-view-over .vpc-paragraphs-toolbar { opacity: 1; }
+*/
 
 .vpc-paragraphs-pos-list .visible { color: green; }
 
