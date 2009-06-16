@@ -252,6 +252,13 @@ Vps.GoogleMap.Map.prototype = {
         params.highestLng = bounds.getNorthEast().lng();
         params.highestLat = bounds.getNorthEast().lat();
 
+        if (!this.gmapLoader) {
+            this.gmapLoader = Ext.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
+            this.gmapLoader.dom.innerHTML = trlVps('Loading...');
+            this.gmapLoader.alignTo(this.mapContainer, 'tr-tr', [ -10, 50 ]);
+        }
+        this.gmapLoader.show();
+
         this.lastReloadMarkersRequestId = this.ajax.request({
             url: this.config.markers,
             success: function(response, options) {
@@ -268,6 +275,7 @@ Vps.GoogleMap.Map.prototype = {
                     }
                     if (doAdd) this.addMarker(m);
                 }, this);
+                this.gmapLoader.hide();
             },
             params: params,
             scope: this
