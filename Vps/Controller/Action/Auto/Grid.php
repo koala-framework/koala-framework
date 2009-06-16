@@ -723,11 +723,11 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     {
         $status = $this->_getExportStatus();
 
+        $cache = $this->_getExportCache();
         $rowSet = $this->_fetchData($this->_defaultOrder, $this->_exportRowsPerRequest('collect'), $status['collected']);
         if (!$rowSet || !count($rowSet)) {
             $status['collected'] = $status['count'];
         } else {
-            $cache = $this->_getExportCache();
             $exportData = $cache->load($this->_getParam('uniqueExportKey').'data');
             // Index 0 reserved for column headers
             if (!$exportData) $exportData = array(0 => array());
