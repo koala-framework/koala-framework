@@ -18,6 +18,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     protected $_buttons = array();
     protected $_hasPosition = true;
 
+    private $_componentConfigs = array();
+
     public function indexAction()
     {
         $this->view->xtype = 'vps.component.pages';
@@ -81,34 +83,47 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         if (!$data['allowed']) {
             $data['bIcon'] = $this->_icons['allowed']->__toString();
         }
+        $data['data']['editComponents'] = array();
 
         $component = $row->getData();
         $editComponents = $component->getRecursiveChildComponents(
             array(
                 'hasEditComponents' => true,
-                'pageGenerator' => false
+                'ignoreVisible' => true,
+                'flags' => array('showInPageTreeAdmin' => false)
+            ), array(
+                'flags' => array('showInPageTreeAdmin' => false)
             )
         );
         if ($component->isPage) {
             $editComponents[] = $component;
         }
-        $data['data']['editComponents'] = array();
+        $ec = array();
         foreach ($editComponents as $cc) {
-            if (!Vpc_Abstract::hasSetting($cc->componentClass, 'componentName')
-                || !Vpc_Abstract::getSetting($cc->componentClass, 'componentName'))
-            {
-                //wenn das probleme verursact ignorieren - aber es erspart lange fehlersuche warum eine komp. nicht angezeigt wird :D
-                throw new Vps_Exception("Component '$cc->componentClass' does have no componentName but must have one for editing");
+            $cfg = Vpc_Admin::getInstance($cc->componentClass)->getExtConfig();
+            if (isset($cfg['xtype'])) { //test for legacy
+                throw new Vps_Exception("getExtConfig for $cc->componentClass doesn't return an array of configs");
             }
-
-            $data['data']['editComponents'][] = array(
-                'componentClass' => $cc->componentClass,
-                'componentName' => Vpc_Abstract::getSetting($cc->componentClass, 'componentName'),
-                'dbId' => $cc->dbId,
-                'componentIcon' => Vpc_Abstract::getSetting($cc->componentClass, 'componentIcon')->__toString()
-            );
+            foreach ($cfg as $type=>$c) {
+                $k = $cc->componentClass.'-'.$type;
+                if (!isset($this->_componentConfigs[$k])) {
+                    $this->_componentConfigs[$k] = $c;
+                }
+                $ec[] = array(
+                    'componentClass' => $cc->componentClass,
+                    'type' => $type,
+                    'dbId' => $cc->dbId
+                );
+            }
         }
+        $data['data']['editComponents'] = $ec;
         return $data;
+    }
+
+    public function jsonDataAction()
+    {
+        parent::jsonDataAction();
+        $this->view->componentConfigs = $this->_componentConfigs;
     }
 
     public function jsonMakeHomeAction()

@@ -30,10 +30,4 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
                         $this->view->controllerUrl);
         }
     }
-
-    public function jsonIndexAction()
-    {
-        $config = Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig();
-        $this->view->vpc($config);
-    }
 }

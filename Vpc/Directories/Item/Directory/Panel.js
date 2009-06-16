@@ -21,6 +21,7 @@ Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
                 scope: this
             }
         };
+        this.fireEvent('gotComponentConfigs', this.componentConfigs);
 
         Vpc.Directories.Item.Directory.Panel.superclass.initComponent.call(this);
     },
@@ -29,6 +30,8 @@ Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
     {
         this.fireEvent('editcomponent', {
             componentClass: this.contentClass,
+            type: this.contentType,
+            editComponents: this.contentEditComponents,
             componentId: this.idTemplate.replace('{0}', row.data.id),
             text: trlVps('Details')
         });

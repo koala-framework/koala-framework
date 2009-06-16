@@ -5,7 +5,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
     cls: 'vpc-paragraphs',
     initComponent : function()
     {
-        this.addEvents('editcomponent');
+        this.addEvents('editcomponent', 'gotComponentConfigs');
 
         if (this.autoLoad !== false) {
             this.autoLoad = true;
@@ -111,6 +111,9 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 
     onMetaLoad : function(result)
     {
+        this.fireEvent('gotComponentConfigs', result.componentConfigs);
+        Ext.applyIf(this.dataView.componentConfigs, result.componentConfigs);
+
         var meta = result.metaData;
         this.metaData = meta;
 
@@ -248,13 +251,11 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         });
     },
 
-    onEdit : function(record) {
+    onEdit : function(record, editComponent) {
         var bp = this.getBaseParams();
-        this.fireEvent('editcomponent', {
-            componentClass: record.get('component_class'),
-            componentId: bp.componentId + '-' + record.get('id'),
-            text: record.get('component_name')
-        });
+        editComponent.componentId = bp.componentId + '-' + record.get('id');
+        editComponent.editComponents = record.get('edit_components');
+        this.fireEvent('editcomponent', editComponent);
     },
 
     onAddParagraphMenuShow: function(record) {

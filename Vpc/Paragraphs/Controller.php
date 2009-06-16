@@ -1,4 +1,39 @@
 <?php
+class Vpc_Paragraphs_Controller_EditComponentsData extends Vps_Data_Abstract
+{
+    private $_componentClass;
+    private $_componentConfigs = array();
+
+    public function __construct($componentClass)
+    {
+        $this->_componentClass = $componentClass;
+    }
+
+    public function load($row)
+    {
+        $generators = Vpc_Abstract::getSetting($this->_componentClass, 'generators');
+        $classes = $generators['paragraphs']['component']; 
+        $admin = Vpc_Admin::getInstance($classes[$row->component]);
+        $ret = array();
+        foreach ($admin->getExtConfig() as $k=>$cfg) {
+            $cls = $classes[$row->component];
+            if (!isset($this->_componentConfigs[$cls.'-'.$k])) {
+                $this->_componentConfigs[$cls.'-'.$k] = $cfg;
+            }
+            $ret[] = array(
+                'componentClass' => $cls,
+                'type' => $k
+            );
+        }
+        return $ret;
+    }
+
+    public function getComponentConfigs()
+    {
+        return $this->_componentConfigs;
+    }
+}
+
 class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
     protected $_buttons = array(
@@ -24,6 +59,15 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             ->setData(new Vps_Data_Vpc_Frontend($this->_getParam('class')))
             ->setRenderer('component');
         $this->_columns->add(new Vps_Grid_Column_Visible());
+        $this->_columns->add(new Vps_Grid_Column('edit_components'))
+            ->setData(new Vpc_Paragraphs_Controller_EditComponentsData($this->_getParam('class')));
+    }
+
+    public function jsonDataAction()
+    {
+        parent::jsonDataAction();
+        $this->view->componentConfigs = $this->_columns['edit_components']
+                                ->getData()->getComponentConfigs();
     }
 
     public function preDispatch()

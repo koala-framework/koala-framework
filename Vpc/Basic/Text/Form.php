@@ -22,15 +22,15 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
         $classes = $generators['child']['component'];
         if ($classes['link']) {
             $c = Vpc_Admin::getInstance($classes['link'])->getExtConfig();
-            $field->setLinkComponentConfig($c);
+            $field->setLinkComponentConfig($c['form']);
         }
         if ($classes['image']) {
             $c = Vpc_Admin::getInstance($classes['image'])->getExtConfig();
-            $field->setImageComponentConfig($c);
+            $field->setImageComponentConfig($c['form']);
         }
         if ($classes['download']) {
             $c = Vpc_Admin::getInstance($classes['download'])->getExtConfig();
-            $field->setDownloadComponentConfig($c);
+            $field->setDownloadComponentConfig($c['form']);
         }
         if (Vpc_Abstract::getSetting($this->getClass(), 'enableStylesEditor')) {
             $admin = Vpc_Admin::getInstance($class);

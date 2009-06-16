@@ -6,6 +6,8 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
     width: 600,
     initComponent: function()
     {
+        this.componentConfigs = {};
+
         this.addEvents('delete', 'edit', 'changeVisible', 'changePos', 'addParagraphMenuShow', 'addParagraph');
         this.tpl = new Ext.XTemplate(
             '<tpl for=".">',
@@ -53,6 +55,18 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
             });
             var record = this.getRecord(node);
 
+            tb.add({
+                //text: record.get('visible') ? trlVps('visible') : trlVps('invisible'),
+                tooltip: trlVps('visibility'),
+                scope: this,
+                record: record,
+                handler: function(btn) {
+                    this.fireEvent('changeVisible', btn.record);
+                },
+                icon : '/assets/silkicons/'+(record.get('visible') ? 'tick' : 'cross') + '.png',
+                cls  : 'x-btn-icon'
+            });
+
             var posCombo = new Vps.Form.ComboBox({
                 listClass: 'vpc-paragraphs-pos-list',
                 tpl: '<tpl for=".">' +
@@ -83,38 +97,51 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
             posCombo.setValue(record.get('pos'));
 
             tb.add(posCombo);
-            tb.add('-');
             tb.add({
-                text: trlVps('delete'),
+                tooltip: trlVps('delete'),
                 scope: this,
                 record: record,
                 handler: function(btn) {
                     this.fireEvent('delete', btn.record);
                 },
-                icon : '/assets/silkicons/delete.png',
-                cls  : 'x-btn-text-icon'
-            });
-            tb.add({
-                text: trlVps('edit'),
-                scope: this,
-                record: record,
-                handler: function(btn) {
-                    this.fireEvent('edit', btn.record);
-                },
-                icon : '/assets/silkicons/application_edit.png',
-                cls  : 'x-btn-text-icon'
-            });
-            tb.add({
-                text: record.get('visible') ? trlVps('visible') : trlVps('invisible'),
-                scope: this,
-                record: record,
-                handler: function(btn) {
-                    this.fireEvent('changeVisible', btn.record);
-                },
-                icon : '/assets/silkicons/'+(record.get('visible') ? 'tick' : 'cross') + '.png',
-                cls  : 'x-btn-text-icon'
+                icon : '/assets/silkicons/bin.png',
+                cls  : 'x-btn-icon'
             });
             tb.add('-');
+            if (record.get('edit_components').length == 1) {
+                tb.add({
+                    text: trlVps('edit'),
+                    scope: this,
+                    record: record,
+                    handler: function(btn) {
+                        this.fireEvent('edit', btn.record, Vps.clone(record.get('edit_components')[0]));
+                    },
+                    icon : '/assets/silkicons/application_edit.png',
+                    cls  : 'x-btn-text-icon'
+                });
+            } else if (record.get('edit_components').length > 1) {
+                var menu = [];
+                record.get('edit_components').forEach(function(ec) {
+                    var cfg = this.componentConfigs[ec.componentClass+'-'+ec.type];
+                    menu.push({
+                        text: cfg.title,
+                        icon: cfg.icon,
+                        scope: this,
+                        record: record,
+                        editComponent: ec,
+                        handler: function(menu) {
+                            this.fireEvent('edit', menu.record, Vps.clone(menu.editComponent));
+                        }
+                    });
+                }, this);
+                tb.add({
+                    text: trlVps('edit'),
+                    menu: menu,
+                    icon : '/assets/silkicons/application_edit.png',
+                    cls  : 'x-btn-text-icon'
+                });
+                tb.add('-');
+            }
             tb.add(new Vpc.Paragraphs.AddParagraphButton({
                 record: record,
                 components: this.components,

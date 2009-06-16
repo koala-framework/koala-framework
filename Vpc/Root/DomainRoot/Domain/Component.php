@@ -12,6 +12,7 @@ class Vpc_Root_DomainRoot_Domain_Component extends Vpc_Abstract
         $ret['dataClass'] = 'Vpc_Root_DomainRoot_Domain_Data';
         $ret['componentName'] = trlVps('Domain');
         $ret['flags']['subroot'] = 'domain';
+        $ret['flags']['showInPageTreeAdmin'] = true;
         return $ret;
     }
 

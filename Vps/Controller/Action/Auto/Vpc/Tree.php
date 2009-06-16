@@ -26,11 +26,6 @@ abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action
         $row->component_id = $this->_getParam('componentId');
     }
 
-    public function jsonIndexAction()
-    {
-        $this->view->vpc(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
-    }
-
     public function indexAction()
     {
         parent::indexAction();

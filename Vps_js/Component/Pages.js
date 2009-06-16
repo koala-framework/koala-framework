@@ -3,6 +3,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     initComponent : function()
     {
         this.actions = {};
+        this.componentConfigs = {};
 
         this.pageButtonMenu = new Ext.menu.Menu({
             items    : [
@@ -50,7 +51,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         Vps.Component.Pages.superclass.initComponent.call(this);
 
         this.treePanel.on('loaded', this.onTreePanelLoaded, this);
-        this.on('editcomponent', this.loadComponent, this);
         this.setupEditform();
 
         this.editActions = {};
@@ -69,6 +69,11 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     onTreePanelLoaded : function(tree)
     {
+        tree.loader.on('load', function(tree, node, response) {
+            var result = Ext.decode(response.responseText);
+            Ext.applyIf(this.componentConfigs, result.componentConfigs);
+        }, this);
+
         this.contextMenu = new Ext.menu.Menu({
              items: [
                 '-',
@@ -137,33 +142,37 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 			if (node.attributes.type == 'category' && node.attributes.allowed) {
 				this.getAction('add').enable();
 			}
-            node.attributes.data.editComponents.each(function(component) {
-                if (!this.editActions[component.componentClass]) {
-                    this.editActions[component.componentClass] = new Ext.Action({
-                        text    : trlVps('Edit {0}', [component.componentName]),
+            node.attributes.data.editComponents.each(function(editComponent) {
+                var actionKey = editComponent.componentClass+'-'+editComponent.type;
+                if (!this.editActions[actionKey]) {
+                    this.editActions[actionKey] = new Ext.Action({
+                        text    : this.componentConfigs[actionKey].title,
                         handler : function (o, e) {
                             var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
-                            node.attributes.data.editComponents.each(function(component) {
-                                if (component.componentClass == o.componentClass) {
-                                    this.fireEvent('editcomponent', {
-                                        id: component.dbId,
-                                        cls: component.componentClass,
-                                        text: node.text + ' - ' + component.componentName
+                            node.attributes.data.editComponents.each(function(editComponent) {
+                                if (editComponent.componentClass+'-'+editComponent.type == o.actionKey) {
+                                    this.loadComponent({
+                                        id: editComponent.dbId,
+                                        componentClass: editComponent.componentClass,
+                                        type: editComponent.type,
+                                        text: node.text,
+                                        icon: node.attributes.bIcon,
+                                        editComponents: node.attributes.data.editComponents
                                     });
                                     return false;
                                 }
                             }, this);
                         },
-                        icon    : component.componentIcon,
+                        icon    : this.componentConfigs[actionKey].icon,
                         cls     : 'x-btn-text-icon',
                         scope   : this,
                         disabled : !node.attributes.allowed,
-                        componentClass: component.componentClass
+                        actionKey: actionKey
                     });
-                    this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
-                    this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
+                    this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
+                    this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
                 }
-                this.editActions[component.componentClass].show();
+                this.editActions[actionKey].show();
             }, this);
         }
     },
@@ -181,7 +190,11 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             id: data.id
         });
         panel.load({
-            componentClass: data.cls
+            componentClass: data.componentClass,
+            type: data.type,
+            text: data.text,
+            icon: data.icon,
+            editComponents: data.editComponents
         });
     },
 
@@ -192,7 +205,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             title       : data.text,
             closable    : true,
             autoLoad    : false,
-            componentEditUrl : this.componentEditUrl
+            componentEditUrl : this.componentEditUrl,
+            componentConfigs : this.componentConfigs
         });
         return panel;
     },

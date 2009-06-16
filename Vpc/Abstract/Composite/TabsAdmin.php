@@ -5,25 +5,21 @@ class Vpc_Abstract_Composite_TabsAdmin extends Vpc_Abstract_Composite_Admin
     {
         $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'child');
 
-        $config = parent::getExtConfig();
+        $config = array(
+            'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
+            'icon' => $this->_getSetting('componentIcon')->__toString(),
+            'activeTab' => '0',
+            'xtype' => 'vps.tabpanel'
+        );
 
         foreach ($classes as $id=>$cls) {
-            $c = Vpc_Admin::getInstance($cls)->getExtConfig();
-            $config['tabs'][$c['componentName']] = $c;
-            $config['tabs'][$c['componentName']]['componentIdSuffix'] = '-'.$id;
+            $c = array_values(Vpc_Admin::getInstance($cls)->getExtConfig());
+            foreach ($c as $i) {
+                //TODO: hier nicht den titel als index verwenden, das stinkt
+                $config['tabs'][$i['title']] = $i;
+                $config['tabs'][$i['title']]['componentIdSuffix'] = '-'.$id;
+            }
         }
-        $config['activeTab'] = '0';
-        $config['xtype'] = 'vps.tabpanel';
-
-        return $config;
-    }
-
-    public function delete($componentId)
-    {
-        $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'child');
-        foreach ($classes as $key => $class) {
-            Vpc_Admin::getInstance($class)->delete($componentId . '-' . $key);
-        }
-        parent::delete($componentId);
+        return array('tabs' => $config);
     }
 }

@@ -4,12 +4,21 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
     public function getExtConfig()
     {
         $class = Vpc_Abstract::getChildComponentClass($this->_class, 'child');
-        $childConfig = Vpc_Admin::getInstance($class)->getExtConfig();
+        $childConfig = array_values(Vpc_Admin::getInstance($class)->getExtConfig());
+        if (count($childConfig) > 1) {
+            //wenn das mal benötigt wird möglicherwesie mit tabs
+            throw new Vps_Exception("Vpc_Abstract_List can only have childs with one Controller");
+        }
 
-        return array_merge(parent::getExtConfig(), array(
-            'xtype'=>'vpc.list',
-            'childConfig'=>$childConfig
-        ));
+        return array(
+            'list' => array(
+                'xtype'=>'vpc.list',
+                'controllerUrl' => $this->getControllerUrl(),
+                'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
+                'icon' => $this->_getSetting('componentIcon')->__toString(),
+                'childConfig'=>$childConfig[0]
+            )
+        );
     }
     public function setup()
     {
