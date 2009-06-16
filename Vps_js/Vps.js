@@ -64,7 +64,7 @@ Ext.applyIf(Function.prototype, {
 
 //http://extjs.com/forum/showthread.php?t=26644
 Vps.clone = function(o) {
-    if('object' !== typeof o) {
+    if('object' !== typeof o || o === null) {
         return o;
     }
     var c = 'function' === typeof o.pop ? [] : {};
@@ -72,7 +72,7 @@ Vps.clone = function(o) {
     for(p in o) {
         if(o.hasOwnProperty(p)) {
             v = o[p];
-            if('object' === typeof v) {
+            if('object' === typeof v && v !== null) {
                 c[p] = Vps.clone(v);
             }
             else {
