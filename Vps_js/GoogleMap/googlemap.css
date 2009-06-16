@@ -1,0 +1,12 @@
+#gmapLoader {
+    background-color: #b00;
+    font-weight: bold;
+    color: #fff;
+    border: 2px solid #fff;
+    position: absolute;
+    z-index: 10;
+    text-align: left;
+    font-size: 14px;
+    font-family: Verdana,Geneva,Arial,Helvetica,sans-serif;
+    padding: 2px 6px;
+}

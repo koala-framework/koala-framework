@@ -81,13 +81,16 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
                 $this->_noMarkersOptions()
             );
         } else {
-            $ret['options'] = array_merge($ret['options'], array(
-                'zoom' => array($highestLat, $highestLng, $lowestLat, $lowestLng),
-                'longitude' => ($lowestLng + $highestLng) / 2,
-                'latitude' => ($lowestLat + $highestLat) / 2,
-                'markers' => $markers,
-                'lightMarkers' => $lightMarkers
-            ));
+            $ret['options'] = array_merge(
+                array(
+                    'zoom' => array($highestLat, $highestLng, $lowestLat, $lowestLng),
+                    'longitude' => ($lowestLng + $highestLng) / 2,
+                    'latitude' => ($lowestLat + $highestLat) / 2,
+                    'markers' => $markers,
+                    'lightMarkers' => $lightMarkers
+                ),
+                $ret['options']
+            );
         }
         return $ret;
     }
