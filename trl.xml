@@ -4013,7 +4013,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>No entries found for search term &amp;quot;{0}&amp;quot;.</en>
-<de>Für den Suchbegriff &amp;quot;{0}&amp;quot; wurden keine Einträge gefunden.</de>
+<de>F&#xFC;r den Suchbegriff &amp;quot;{0}&amp;quot; wurden keine Eintr&#xE4;ge gefunden.</de>
 <id>1074</id>
 </text>
 <text>
@@ -4055,9 +4055,122 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1067</id>
 </text>
 <text>
-    <en>Text/Image - Alignment</en>
-    <de>Text/Bild - Ausrichtung</de>
-    <id>1068</id>
+<en>Text/Image - Alignment</en>
+<de>Text/Bild - Ausrichtung</de>
+<id>1068</id>
+</text>
+<text>
+<en>Seitenbaum</en>
+<id>1083</id>
+</text>
+<text>
+<en>Open frontend in a new window</en>
+<id>1084</id>
+</text>
+<text>
+<en>Web</en>
+<id>1085</id>
+</text>
+<text>
+<en>Export</en>
+<id>1086</id>
+</text>
+<text>
+<en>Data Export</en>
+<id>1087</id>
+</text>
+<text>
+<en>Current step</en>
+<id>1088</id>
+</text>
+<text>
+<en>Overall</en>
+<id>1089</id>
+</text>
+<text>
+<en>Download export file</en>
+<id>1090</id>
+</text>
+<text>
+<en>Too many rows</en>
+<id>1091</id>
+</text>
+<text>
+<en>It is currently not possible to export more than 2000 rows. Please use a filter to export less rows.</en>
+<id>1092</id>
+</text>
+<text>
+<en>Collecting data: {0} of {1} ({2}%)</en>
+<id>1093</id>
+</text>
+<text>
+<en>Creating Excel file: {0} of {1} ({2}%)</en>
+<id>1094</id>
+</text>
+<text>
+<en>Saving Excel file...</en>
+<id>1095</id>
+</text>
+<text>
+<en>Excel file saved</en>
+<id>1096</id>
+</text>
+<text>
+<en>Link-Action</en>
+<id>1097</id>
+</text>
+<text>
+<en>Event</en>
+<id>1098</id>
+</text>
+<text>
+<en>Link.to Event</en>
+<id>1099</id>
+</text>
+<text>
+<en>all paragraphs</en>
+<id>1100</id>
+</text>
+<text>
+<en>visible paragraphs</en>
+<id>1101</id>
+</text>
+<text>
+<en>Do you really wish to remove this paragraph?</en>
+<id>1102</id>
+</text>
+<text>
+<en>visible</en>
+<id>1103</id>
+</text>
+<text>
+<en>invisible</en>
+<id>1104</id>
+</text>
+<text>
+<en>Google Maps</en>
+<id>1105</id>
+</text>
+<text>
+<en>Imprint.Google-Analytics</en>
+<de>Impressum.Google-Analytics</de>
+<id>1106</id>
+</text>
+<text>
+<en>Text/Image - Alignment</en>
+<id>1107</id>
+</text>
+<text>
+<en>Url include</en>
+<id>1108</id>
+</text>
+<text>
+<en>There's no row selected</en>
+<id>1109</id>
+</text>
+<text>
+<en>Show locked users too</en>
+<id>1110</id>
 </text>
 </trl>
 
