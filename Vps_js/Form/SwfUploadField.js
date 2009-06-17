@@ -119,6 +119,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             button_text_style: ".theFont { font-size: 11; font-family:tahoma,verdana, helvetica;}",
             button_text_left_padding: 28,
             button_text_top_padding: 2,
+            button_window_mode: SWFUpload.WINDOW_MODE.OPAQUE,
 
             file_queued_handler: function(file) {
                 this.checkSwf = true;
