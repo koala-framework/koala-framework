@@ -11,6 +11,8 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 Zend_Registry::get('config')->debug->settingsCache = false;
                 Zend_Registry::get('config')->debug->componentCache->disable = true;
                 Vps_Component_Data_Root::setComponentClass($request->getParam('root'));
+
+                //hick hack, für Vps_Component_Abstract_Admin::getControllerUrl
                 Zend_Registry::set('testRootComponentClass', $request->getParam('root'));
             }
 
