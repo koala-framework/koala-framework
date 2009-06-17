@@ -80,9 +80,14 @@ class Vps_Component_Abstract_Admin
 
     public function getControllerUrl($class = null)
     {
+        if (Zend_Registry::isRegistered('testRootComponentClass')) {
+            $url = '/vps/componentedittest/'.Vps_Component_Data_Root::getComponentClass();
+        } else {
+            $url = '/admin/component/edit';
+        }
         $componentClass = $this->_class;
         if ($class) $componentClass .= '!' . $class;
-        return '/admin/component/edit/' . $componentClass;
+        return $url . '/' . $componentClass;
     }
     public function setup()
     {
