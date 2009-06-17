@@ -286,7 +286,9 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function find($id)
     {
-        return $this->getRows(array('equals'=>array($this->getPrimaryKey()=>$id)));
+        $s = $this->select();
+        $s->whereEquals($this->getPrimaryKey(), $id);
+        return $this->getRows($s);
     }
 
     public function fetchAll($where=null, $order=null, $limit=null, $start=null)

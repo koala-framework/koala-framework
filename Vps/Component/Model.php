@@ -23,15 +23,6 @@ class Vps_Component_Model extends Vps_Model_Abstract
     public function createRow(array $data=array()) {
         throw new Vps_Exception('Not implemented yet.');
     }
-/*
-    public function find($id)
-    {
-        return new $this->_rowsetClass(array(
-            'dataKeys' => array(Vps_Component_Data_Root::getInstance()->getComponentById($id, $this->_constraints)),
-            'rowClass' => $this->_rowClass,
-            'model' => $this
-        ));
-    }*/
 
     public function isEqual(Vps_Model_Interface $other) {
         if ($other instanceof Vps_Component_Model &&
