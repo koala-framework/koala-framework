@@ -2,6 +2,7 @@
 /*
  * hier gibt es nur einen test controller da der fileupload nicht per selenium test überprüft werden
  * kann
+ * /vps/test/vps_form_file-upload_test
  */
 class Vps_Form_FileUpload_TestController extends Vps_Controller_Action_Auto_Form
 {
