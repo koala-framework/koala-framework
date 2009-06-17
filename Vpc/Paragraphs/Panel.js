@@ -89,7 +89,8 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
     load: function(params, options) {
         if (!params) params = {};
         if (!this.store) {
-            Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
+            Ext.applyIf(params, this.baseParams);
+            params.meta = true;
             Ext.Ajax.request({
                 mask: true,
                 url: this.controllerUrl+'/json-data',
@@ -270,14 +271,13 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-add-paragraph',
             params: params,
-            success: function(r) {
-                response = Ext.decode(r.responseText);
-                if (response.hasController) {
-                    this.fireEvent('editcomponent', {
-                        componentClass: response.data.component_class,
-                        componentId: this.getBaseParams().componentId + '-' + response.data.id,
-                        text: response.data.component_name
-                    });
+            success: function(response, options, result) {
+                this.fireEvent('gotComponentConfigs', result.componentConfigs);
+                if (result.editComponents.length) {
+                    var data = Vps.clone(result.editComponents[0]);
+                    data.componentId = this.getBaseParams().componentId + '-' + result.id;
+                    data.editComponents = result.editComponents;
+                    this.fireEvent('editcomponent', data);
                 } else {
                     this.reload();
                 }
