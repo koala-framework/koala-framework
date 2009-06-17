@@ -39,7 +39,6 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     loadComponent: function(data) {
         var componentConfig = this.componentConfigs[data.componentClass+'-'+data.type];
         if (!componentConfig) {
-            debugger;
             throw "couldn't find componentConfig";
         }
         var params;
