@@ -259,7 +259,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
     },
 
     onAddParagraphMenuShow: function(record) {
-        this.addParagraphPos = record.get('pos')+1;
+        this.addParagraphPos = parseInt(record.get('pos'))+1;
     },
 
     onParagraphAdd : function(component)
