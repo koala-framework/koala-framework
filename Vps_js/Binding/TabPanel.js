@@ -28,7 +28,7 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 baseParams  : b,
                 autoLoad    : this.autoLoad
             }));
-            this.relayEvents(item, ['editcomponent']);
+            this.relayEvents(item, ['editcomponent', 'gotComponentConfigs']);
             this.tabPanel.add(item);
             this.tabItems.push(item);
         }
