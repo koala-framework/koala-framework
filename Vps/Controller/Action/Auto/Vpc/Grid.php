@@ -42,12 +42,6 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
             );
         }
         $this->view->mainType = $this->view->mainEditComponents[0]['type'];
-
-        if ($this->getRequest()->module == 'component_test') {
-            $this->view->componentEditUrl = '/vps/componentedittest/'.Vps_Component_Data_Root::getComponentClass();
-        } else {
-            $this->view->componentEditUrl = '/admin/component/edit';
-        }
     }
 
     public function jsonInsertAction()

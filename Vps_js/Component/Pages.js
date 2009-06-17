@@ -205,7 +205,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             title       : data.text,
             closable    : true,
             autoLoad    : false,
-            componentEditUrl : this.componentEditUrl,
             componentConfigs : this.componentConfigs
         });
         return panel;
