@@ -201,9 +201,9 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.FILE_VALIDATION_FAILED) {
                     message = "Call to uploadStart return false. Not uploading file.";
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.FILE_CANCELLED) {
-                    message = "File Upload Cancelled.";
+                    message = trlVps("File Upload Cancelled.");
                 } else if (errorCode == SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED) {
-                    message = "Upload Stopped";
+                    message = trlVps("Upload Stopped");
                 }
                 if (errorCode != SWFUpload.UPLOAD_ERROR.FILE_CANCELLED) {
                     //Vps.handleError(errorMessage, 'Upload Error');
@@ -211,7 +211,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
                 }
             },
             file_queue_error_handler: function(file, errorCode, errorMessage) {
-                var message = "File is zero bytes or cannot be accessed and cannot be uploaded.";
+                var message = trlVps("File is zero bytes or cannot be accessed and cannot be uploaded.");
                 if (errorCode == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
                     message = trlVps("File size exceeds allowed limit.");
                 } else if (errorCode == SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
