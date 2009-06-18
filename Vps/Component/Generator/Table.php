@@ -127,6 +127,9 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
                 $constraints['subroot'] = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
             }
+            if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+                $constraints['ignoreVisible'] = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+            }
             $ret = Vps_Component_Data_Root::getInstance()
                 ->getComponentsByDbId($row->component_id, $constraints);
         } else {
