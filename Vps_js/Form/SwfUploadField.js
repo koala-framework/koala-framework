@@ -116,7 +116,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             button_height: "21",
             button_placeholder_id: this.uploadButtonContainerChildId,
             button_text: '<span class="theFont">'+trlVps('Upload File')+'</span>',
-            button_text_style: ".theFont { font-size: 11; font-family:tahoma,verdana, helvetica;}",
+            button_text_style: ".theFont { font-size: 11px; font-family:tahoma,verdana, helvetica;}",
             button_text_left_padding: 28,
             button_text_top_padding: 2,
             button_window_mode: SWFUpload.WINDOW_MODE.OPAQUE,
