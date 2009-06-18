@@ -98,7 +98,7 @@ Vps.GoogleMap.Map = function(config) {
     }
 
     for (var i = 0; i < this.config.markers.length; i++) {
-        if (this.config.markers[i].coordinates) {
+        if (this.config.markers[i] && typeof this.config.markers[i].coordinates != 'undefined') {
             if (typeof this.config.markers[i].latitude == 'undefined') {
                 var splits = this.config.markers[i].coordinates.split(',');
                 this.config.markers[i].latitude = splits[0];
