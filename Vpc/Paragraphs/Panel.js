@@ -64,7 +64,11 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             listeners: {
                 scope: this,
                 menushow: function() {
-                    this.addParagraphPos = this.store.getAt(this.store.getCount()-1).get('pos')+1;
+                    if (this.store.getCount() == 0) {
+                        this.addParagraphPos = 1;
+                    } else {
+                        this.addParagraphPos = this.store.getAt(this.store.getCount()-1).get('pos')+1;
+                    }
                 },
                 addParagraph: function(component) {
                     this.onParagraphAdd(component);
