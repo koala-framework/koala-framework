@@ -405,7 +405,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 $ids[] = $c->componentId;
             }
             $e = new Vps_Exception('getComponentByXxx must not get more than one component but got these: ' . implode(', ', $ids));
-            $e->notify();
+            $e->logOrThrow();
         }
     }
 
