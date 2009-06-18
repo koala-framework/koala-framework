@@ -20,6 +20,17 @@ class Vps_Exception extends Vps_Exception_NoLog
             p($this->getMessage(), 'WARNING');
         }
     }
+    /**
+     * Online: Schreibt die Exception nur ins log
+     * Lokal: wirft die exception
+     */
+    public function logOrThrow()
+    {
+        if ($this->log()) {
+            return;
+        }
+        throw $this;
+    }
 
     public function log()
     {

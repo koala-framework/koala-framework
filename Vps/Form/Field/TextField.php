@@ -12,7 +12,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
     {
         if ($n == 'setVType') {
             $e = new Vps_Exception('use setVtype instead of setVType');
-            $e->notify();
+            $e->logOrThrow();
             $n = 'setVtype';
         }
         return parent::__call($n, $v);
