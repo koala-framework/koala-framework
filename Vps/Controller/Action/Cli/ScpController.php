@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_ScpController extends Vps_Controller_Action
+class Vps_Controller_Action_Cli_ScpController extends Vps_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
