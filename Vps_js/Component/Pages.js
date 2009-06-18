@@ -189,11 +189,11 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         panel.applyBaseParams({
             id: data.id
         });
+        panel.mainComponentText = data.text;
+        panel.mainComponentIcon = data.icon;
         panel.load({
             componentClass: data.componentClass,
             type: data.type,
-            text: data.text,
-            icon: data.icon,
             editComponents: data.editComponents
         });
     },

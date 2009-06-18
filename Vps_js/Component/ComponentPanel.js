@@ -3,8 +3,8 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     mainComponentClass: 'Vpc_Paragraphs_Component',
     mainType: 'content',
     mainComponentId: '{0}',
-    mainComponentText: 'Content',
-    mainComponentIcon: '/assets/vps/images/paragraph_page.gif',
+    mainComponentText: null,
+    mainComponentIcon: null,
     //mainEditComponents
     //componentConfigs
 
@@ -38,9 +38,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     loadComponent: function(data) {
         var componentConfig = this.componentConfigs[data.componentClass+'-'+data.type];
-        if (!componentConfig) {
-            throw "couldn't find componentConfig";
-        }
+        if (!componentConfig) throw "couldn't find componentConfig";
         var params;
         if (data.componentId) {
             params = { componentId: data.componentId };
@@ -52,7 +50,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
         var item;
         this.items.each(function(i) {
-            if (i.componentClass+'-'+i.type == data.componentClass+'-'+data.type) {
+            if (i.componentClass == data.componentClass && i.type == data.type) {
                 item = i;
                 return false; //break each
             }
@@ -70,6 +68,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             var config = {
                 autoScroll : true,
                 componentClass: data.componentClass,
+                type: data.type,
                 baseParams: params,
                 listeners: {
                     scope: this,
@@ -98,82 +97,76 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             }, this);
             this.add(item);
             this.doLayout();
-
-            if (!data.icon) {
-                data.icon = componentConfig.icon;
-            }
-            if (!data.text) {
-                data.text = componentConfig.text;
-            }
         }
-
         this.componentsStack.push(data);
-        this.addToolbarButton(item, data, componentConfig);
+        this.updateToolbar();
         this.getLayout().setActiveItem(item);
     },
 
-    addToolbarButton: function(item, data, componentConfig) {
+    updateToolbar: function() {
+        this.clearToolbar();
         var toolbar = this.getTopToolbar();
 
-        var count = toolbar.items.getCount();
-        del = count;
-        for (var x=0; x<count; x++){
-            var i = toolbar.items.itemAt(x);
-            if (i.componentId == data.componentId) {
-                del = x > 0 ? x - 1 : x;
-                x = count;
-            }
-        }
-        for (var x=count-1; x>=del; x--){
-            var i = toolbar.items.itemAt(x);
-            toolbar.items.removeAt(x);
-            i.destroy();
-        }
-        var menuButton = {};
-        if (toolbar.items.getCount() >= 1) {
-            var lastButton = toolbar.items.last();
-            menuButton.text = lastButton.text;
-            menuButton.icon = lastButton.icon;
-            toolbar.items.remove(lastButton);
-            lastButton.destroy();
-        } else {
-            menuButton.text = data.text;
-            menuButton.icon = data.icon;
-        }
-        menuButton.cls = 'x-btn-text-icon';
-        menuButton.menu = [];
-        data.editComponents.each(function(ec) {
-            var cfg = this.componentConfigs[ec.componentClass+'-'+ec.type];
-            menuButton.menu.push({
-                text: cfg.title,
-                icon: cfg.icon,
-                editComponent: ec,
-                data: data,
-                handler: function(o) {
-                    var data = Vps.clone(o.editComponent);
-                    if (o.data.text) data.text = o.data.text;
-                    if (o.data.icon) data.icon = o.data.icon;
-                    data.editComponents = o.data.editComponents;
-                    if (o.data.componentId) data.componentId = o.data.componentId;
+        for (var i=0; i < this.componentsStack.length; i++) {
+            var data = this.componentsStack[i];
+            var b = {};
+            if (i > 0) {
+                b.xtype = 'splitbutton';
+                var cfg = this.componentConfigs[this.componentsStack[i-1].componentClass
+                                                +'-'+this.componentsStack[i-1].type];
+                b.text = cfg.title;
+                b.icon = cfg.icon;
+                b.scope = this;
+                b.stackIndex = i-1;
+                b.handler = function(o) {
+                    var data = this.componentsStack[o.stackIndex];
+                    this.componentsStack = this.componentsStack.slice(0, o.stackIndex);
                     this.loadComponent(data);
-                },
-                scope: this
-            });
-        }, this);
-        toolbar.addButton(menuButton);
-        toolbar.add('»');
+                };
+            } else {
+                if (!this.mainComponentText) {
+                    //zB bei news wenn als eigener controller angezeigt
+                    continue;
+                }
+                b.xtype = 'button';
+                b.text = this.mainComponentText;
+                b.icon = this.mainComponentIcon;
+            }
+            b.cls = 'x-btn-text-icon';
+            b.menu = [];
+            data.editComponents.each(function(ec) {
+                var cfg = this.componentConfigs[ec.componentClass+'-'+ec.type];
+                b.menu.push({
+                    text: cfg.title,
+                    icon: cfg.icon,
+                    stackIndex: i,
+                    componentClass: ec.componentClass,
+                    type: ec.type,
+                    handler: function(o) {
+                        var data = Vps.clone(this.componentsStack[o.stackIndex]);
+                        data.componentClass = o.componentClass;
+                        data.type = o.type;
+                        this.componentsStack = this.componentsStack.slice(0, o.stackIndex);
+                        this.loadComponent(data);
+                    },
+                    scope: this
+                });
+            }, this);
+
+            toolbar.add(b);
+            toolbar.add('»');
+        }
+
+        var data = this.componentsStack[this.componentsStack.length-1]
         var cfg = this.componentConfigs[data.componentClass+'-'+data.type];
-        toolbar.addButton({
-            text    : cfg.title,
-            icon    : cfg.icon,
-            cls     : 'x-btn-text-icon',
-            handler : function (o) {
-                o.item.reload();
-            },
-            scope   : this,
-            data    : data,
-            componentId: data.componentId,
-            item: item
+        toolbar.add({
+            cls: 'x-btn-text-icon',
+            text: cfg.title,
+            icon: cfg.icon,
+            scope: this,
+            handler: function() {
+                this.getLayout().activeItem.reload();
+            }
         });
     },
 
@@ -187,7 +180,6 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     load: function(data) {
         this.componentsStack = [];
-        this.clearToolbar();
         if (!data) { data = {}; }
         Ext.applyIf(data, {
             componentClass: this.mainComponentClass,
