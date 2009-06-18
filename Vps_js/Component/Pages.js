@@ -97,17 +97,17 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }, this);
 
         tree.on('dblclick', function (o, e) {
-        	if (o.attributes.allowed) {
-				var action;
-	            for (var i in this.editActions) {
-	                if (!this.editActions[i].isHidden()) {
-	                    action = this.editActions[i];
-	                }
-	            }
-				if (action) {
-					action.execute(action.initialConfig);
-				}
-        	}
+            if (o.attributes.allowed) {
+                var action;
+                for (var i in this.editActions) {
+                    if (!this.editActions[i].isHidden()) {
+                        action = this.editActions[i];
+                    }
+                }
+                if (action) {
+                    action.execute(action.initialConfig);
+                }
+            }
         }, this);
 
     },
@@ -119,11 +119,11 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.editActions[i].hide();
             }
             if (!node.attributes.allowed) {
-            	this.pageButton.disable();
+                this.pageButton.disable();
             } else {
-            	this.pageButton.enable();
+                this.pageButton.enable();
             }
-            	
+
             if (node.attributes.type != 'default' || !node.attributes.allowed) {
                 this.getAction('properties').disable();
                 this.getAction('delete').disable();
@@ -139,9 +139,9 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('add').enable();
                 this.getAction('preview').enable();
             }
-			if (node.attributes.type == 'category' && node.attributes.allowed) {
-				this.getAction('add').enable();
-			}
+            if (node.attributes.type == 'category' && node.attributes.allowed) {
+                this.getAction('add').enable();
+            }
             node.attributes.data.editComponents.each(function(editComponent) {
                 var actionKey = editComponent.componentClass+'-'+editComponent.type;
                 if (!this.editActions[actionKey]) {
