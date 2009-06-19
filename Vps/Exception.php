@@ -35,8 +35,12 @@ class Vps_Exception extends Vps_Exception_NoLog
     public function log()
     {
         $user = "guest";
-        if ($u = Zend_Registry::get('userModel')->getAuthedUser()) {
-            $user = "$u, id $u->id, $u->role";
+        try {
+            if ($u = Zend_Registry::get('userModel')->getAuthedUser()) {
+                $user = "$u, id $u->id, $u->role";
+            }
+        } catch (Exception $e) {
+            $user = "error getting user";
         }
         $exception = $this->getException();
 
@@ -53,7 +57,9 @@ class Vps_Exception extends Vps_Exception_NoLog
         $body .= $this->_format('_POST', print_r($_POST, true));
         $body .= $this->_format('_SERVER', print_r($_SERVER, true));
         $body .= $this->_format('_FILES', print_r($_FILES, true));
-        $body .= $this->_format('_SESSION', print_r($_SESSION, true));
+        if (isset($_SESSION)) {
+            $body .= $this->_format('_SESSION', print_r($_SESSION, true));
+        }
 
         $path = 'application/log/error/' . date('Y-m-d');
 
