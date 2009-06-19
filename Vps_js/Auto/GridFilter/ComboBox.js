@@ -5,7 +5,7 @@ Vps.Auto.GridFilter.ComboBox = function(config)
     if (config.field) {
         this.combo = Ext.ComponentMgr.create(config.field);
     } else {
-        var record = Ext.data.Record.create(['id', 'name'])
+        var record = Ext.data.Record.create(['id', 'name']);
         var filterStore = new Ext.data.Store({
             reader: new Ext.data.ArrayReader({}, record),
             data: config.data
