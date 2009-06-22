@@ -25,19 +25,31 @@ class Vps_Config_Web extends Zend_Config_Ini
         return $cache->test('config_'.$section);
     }
 
-    public function __construct($section)
+    public function __construct($section, $options = array())
     {
+        if (isset($options['vpsPath'])) {
+            $vpsPath = $options['vpsPath'];
+        } else {
+            $vpsPath = VPS_PATH;
+        }
+        if (isset($options['webPath'])) {
+            $webPath = $options['webPath'];
+        } else {
+            $webPath = '.';
+        }
         $vpsSection = 'vivid';
 
-        $vpsConfigFull = new Zend_Config_Ini(VPS_PATH.'/config.ini', null);
+        $vpsConfigFull = new Zend_Config_Ini($vpsPath.'/config.ini', null);
         if (isset($vpsConfigFull->$section)) {
             $vpsSection = $section;
         }
 
-        parent::__construct(VPS_PATH.'/config.ini', $vpsSection,
+        parent::__construct($vpsPath.'/config.ini', $vpsSection,
                         array('allowModifications'=>true));
 
-        $this->_mergeWebConfig($section);
+
+
+        $this->_mergeWebConfig($webPath.'/application/config.ini', $section);
 
         $v = $this->application->vps->version;
         if (preg_match('#tags/vps/([^/]+)/config\\.ini#', $v, $m)) {
@@ -53,19 +65,19 @@ class Vps_Config_Web extends Zend_Config_Ini
         }
         foreach ($this->path as $k=>$i) {
             $this->path->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
-                                            array($this->libraryPath, VPS_PATH),
+                                            array($this->libraryPath, $vpsPath),
                                             $i);
         }
         foreach ($this->includepath as $k=>$i) {
             $this->includepath->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
-                                            array($this->libraryPath, VPS_PATH),
+                                            array($this->libraryPath, $vpsPath),
                                             $i);
         }
     }
 
-    protected function _mergeWebConfig($section)
+    protected function _mergeWebConfig($path, $section)
     {
-        $this->_mergeFile('application/config.ini', $section);
+        $this->_mergeFile($path, $section);
     }
 
     protected final function _mergeFile($file, $section)
