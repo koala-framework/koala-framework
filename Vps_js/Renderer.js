@@ -166,3 +166,8 @@ Ext.util.Format.image = function(v, p, record){
     p.attr += 'style="background-image:url('+v+');"';
     return '';
 };
+
+Ext.util.Format.clickableLink = function(v, p, record){
+    if (!v) return '';
+    return '<a href="'+v+'">'+v+'</a>';
+};
