@@ -143,6 +143,7 @@ Vps.callWithErrorHandler = function(fn, scope) {
     }
 };
 
+//wird gesetzt in Vps.Connection
 Vps.requestSentSinceLastKeepAlive = false;
 Vps.keepAlive = function() {
     if (!Vps.requestSentSinceLastKeepAlive) {
@@ -155,8 +156,16 @@ Vps.keepAlive = function() {
     }
     Vps.keepAlive.defer(1000 * 60 * 5);
 };
-if (Vps.isApp) {
+
+Vps.keepAliveActivated = false;
+Vps.activateKeepAlive = function() {
+    if (Vps.keepAliveActivated) return;
+    Vps.keepAliveActivated = true;
     Vps.keepAlive.defer(1000 * 60 * 5);
+}
+
+if (Vps.isApp) {
+    Vps.activateKeepAlive();
 }
 
 Vps.contentReadyHandlers = [];
