@@ -145,15 +145,15 @@ Vps.callWithErrorHandler = function(fn, scope) {
 
 Vps.requestSentSinceLastKeepAlive = false;
 Vps.keepAlive = function() {
-       if (!Vps.requestSentSinceLastKeepAlive) {
-           Ext.Ajax.request({
-               url: '/vps/user/login/json-keep-alive',
-               ignoreErrors: true
-           });
-       } else {
-           Vps.requestSentSinceLastKeepAlive = false;
-       }
-       Vps.keepAlive.defer(1000 * 60 * 5);
+    if (!Vps.requestSentSinceLastKeepAlive) {
+        Ext.Ajax.request({
+            url: '/vps/user/login/json-keep-alive',
+            ignoreErrors: true
+        });
+    } else {
+        Vps.requestSentSinceLastKeepAlive = false;
+    }
+    Vps.keepAlive.defer(1000 * 60 * 5);
 };
 if (Vps.isApp) {
     Vps.keepAlive.defer(1000 * 60 * 5);
