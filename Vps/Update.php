@@ -149,7 +149,11 @@ abstract class Vps_Update
                                 $u->sql = file_get_contents($i->getPathname());
                                 $ret[] = $u;
                             } else {
-                                $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_Update_'.$nr;
+                                $n = '';
+                                if ($file != './update') {
+                                    $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_';
+                                }
+                                $n .= 'Update_'.$nr;
                                 if (is_instance_of($n, 'Vps_Update')) {
                                     $ret[] = new $n($nr);
                                 }
