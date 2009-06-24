@@ -309,10 +309,15 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     private function _getTableInfo()
     {
-        if (!isset($this->_model) || !($this->_model instanceof Vps_Model_Db)) {
+        $m = $this->_model;
+        while ($m instanceof Vps_Model_Proxy) {
+            $m = $m->getProxyModel();
+        }
+
+        if (!isset($this->_model) || !($m instanceof Vps_Model_Db)) {
             return null;
         }
-        return $this->_model->getTable()->info();
+        return $m->getTable()->info();
     }
 
     protected function _fetchCount()
@@ -744,9 +749,22 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 foreach ($this->_columns as $column) {
                     if (!($column->getShowIn() & $onlyShowIn)) continue;
                     $currentColumnHeader = $column->getHeader();
+
                     if (!is_null($currentColumnHeader)) {
-                        $columnsHeader[] = $currentColumnHeader;
-                        $columns[] = $column->load($row, Vps_Grid_Column::ROLE_EXPORT);
+                        $columnsHeader[] = (string)$currentColumnHeader;
+                        $colVal = $column->load($row, Vps_Grid_Column::ROLE_EXPORT);
+                        $setTypeTo = 'string';
+                        if ($column->getType()) {
+                            if ($column->getType() == 'boolean'
+                             || $column->getType() == 'bool') $setTypeTo = 'bool';
+                            if ($column->getType() == 'integer'
+                             || $column->getType() == 'int') $setTypeTo = 'int';
+                            if ($column->getType() == 'double'
+                             || $column->getType() == 'float') $setTypeTo = 'float';
+                            if ($column->getType() == 'null') $setTypeTo = 'null';
+                        }
+                        settype($colVal, $setTypeTo);
+                        $columns[] = $colVal;
                     }
                 }
                 $exportData[] = $columns;
@@ -913,8 +931,16 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                         if ($row == 0) {
                             $sheet->getStyle($cell)->getFont()->setBold(true);
                         }
-                        //TODO Zeilenumbrüche
-                        $sheet->setCellValueExplicit($cell, $text);
+                        // TODO: Zeilenumbrüche
+                        $textType = gettype($text);
+                        $cellType = PHPExcel_Cell_DataType::TYPE_STRING;
+                        if ($textType == 'boolean') $cellType = PHPExcel_Cell_DataType::TYPE_BOOL;
+                        if ($textType == 'integer'
+                         || $textType == 'double'
+                         || $textType == 'float') $cellType = PHPExcel_Cell_DataType::TYPE_NUMERIC;
+                        if ($textType == 'NULL') $cellType = PHPExcel_Cell_DataType::TYPE_NULL;
+
+                        $sheet->setCellValueExplicit($cell, $text, $cellType);
                     }
                     if ($status['done'] + $this->_exportRowsPerRequest('done') <= $row) break;
                 }
