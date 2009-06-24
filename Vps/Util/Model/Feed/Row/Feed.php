@@ -21,10 +21,11 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             $response = $client->request();
 
             if ($response->getStatus() != 200) {
-                throw new Vps_Exception("invalid status response");
+                throw new Vps_Exception("invalid status response from server: ".$response->getStatus());
             }
             $str = $response->getBody();
         }
+        $originalContent = $str;
         $str = trim($str);
         if (preg_match('#<?xml[^>]* encoding=["\']([^"\']*)["\']#', $str, $m)) {
             $encoding = trim(strtolower($m[1]));
@@ -78,14 +79,14 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         }
 
         if (!$this->_xml) {
-            throw new Vps_Exception('Can\'t load feed.');
+            throw new Vps_Exception('Can\'t load feed: '.$originalContent);
         }
         if ($this->_xml->channel) {
             $data['format'] = self::FORMAT_RSS;
         } else if ($this->_xml->getName() == 'feed') {
             $data['format'] = self::FORMAT_ATOM;
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Vps_Exception('Can\'t load feed, unknown format: '.$originalContent);
         }
         $data['encoding'] = $encoding;
         if ($data['format'] == self::FORMAT_RSS) {
