@@ -27,6 +27,7 @@ class Vpc_TextImage_SeleniumTest extends Vps_Test_SeleniumTestCase
     public function testAdmin()
     {
         $this->openVpcEdit('Vpc_TextImage_TestComponent', 'root_textImage1');
+        $this->waitForConnections();
         //test könnte natürlich verbessert werden, aber zumindest testen ob kein fehler kommt
     }
 }
