@@ -275,7 +275,7 @@ class Vps_Assets_Dependencies
                     }
                 }
             }
-        } else {
+        } else if ($file) {
             if (!$this->_hasFile($assetsType, $file)) {
                 $this->_files[$assetsType][] = $file;
             }
