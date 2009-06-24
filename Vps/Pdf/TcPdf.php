@@ -15,7 +15,7 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->SetFont($this->_font, "B", 16);
         $this->SetAuthor("Vivid Planet Software GmbH");
         $this->SetCreator("Vivid Planet Software GmbH mit FPDF");
-        $this->SetTitle("Wochenbericht");
+        $this->SetTitle("");
         $this->setLIsymbol(utf8_encode(chr(0x95))); // = •
         $this->setListIndentWidth($this->getStringWidth("00"));
     }
