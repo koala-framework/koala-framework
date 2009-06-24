@@ -23,7 +23,12 @@ Ext.extend(Vps.Auto.GridFilter.TextField, Vps.Auto.GridFilter.Abstract, {
         this.textField.reset();
     },
     getParams: function() {
-        return { query: this.textField.getValue() };
+        var key = 'query';
+        if (this.id != 'text') key = 'query_'+this.id;
+
+        var params = {};
+        params[key] = this.textField.getValue();
+        return params;
     },
     setValue: function(v) {
         this.textField.setValue(v);
