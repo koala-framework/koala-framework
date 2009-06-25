@@ -114,7 +114,7 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                     scope: this,
                     record: record,
                     handler: function(btn) {
-                        this.fireEvent('edit', btn.record, Vps.clone(record.get('edit_components')[0]));
+                        this.fireEvent('edit', btn.record, Vps.clone(btn.record.get('edit_components')[0]));
                     },
                     icon : '/assets/silkicons/application_edit.png',
                     cls  : 'x-btn-text-icon'
