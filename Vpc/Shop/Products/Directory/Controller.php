@@ -1,19 +1,15 @@
 <?php
-class Vpc_Shop_Products_Directory_Controller extends Vps_Controller_Action_Auto_Grid
+class Vpc_Shop_Products_Directory_Controller extends Vpc_Directories_Item_Directory_Controller
 {
-    protected $_buttons = array('add', 'delete', 'save');
-    protected $_modelName = 'Vpc_Shop_Products';
-    protected $_position = 'pos';
+    protected $_hasComponentId = false;
 
-    public function init()
-    {
-        $this->editDialog = array(
-            'controllerUrl' => Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form'),
-            'width' => 600,
-            'height' => 500
-        );
-        parent::init();
-    }
+    protected $_buttons = array('add', 'delete', 'save');
+    //protected $_modelName = 'Vpc_Shop_Products';
+    protected $_position = 'pos';
+    protected $_editDialog = array(
+        'width' =>  620,
+        'height' =>  500
+    );
 
     protected function _initColumns()
     {
@@ -27,18 +23,5 @@ class Vpc_Shop_Products_Directory_Controller extends Vps_Controller_Action_Auto_
         $this->_columns->add(new Vps_Grid_Column_Button('edit', ' ', 20))
             ->setButtonIcon('/assets/silkicons/newspaper_go.png')
             ->setToolTip('Edit Product');
-    }
-    public function jsonIndexAction()
-    {
-        $this->view->vpc(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
-    }
-
-    public function indexAction()
-    {
-        $c = array(
-            'xtype' => 'vps.component',
-            'mainComponentClass' => $this->_getParam('class')
-        );
-        $this->view->vpc($c);
     }
 }
