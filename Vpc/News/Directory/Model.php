@@ -1,6 +1,6 @@
 <?php
-class Vpc_News_Directory_Model extends Vps_Db_Table_Abstract
+class Vpc_News_Directory_Model extends Vps_Model_Db
 {
-    protected $_name = 'vpc_news';
+    protected $_table = 'vpc_news';
     protected $_rowClass = 'Vpc_News_Directory_Row';
 }

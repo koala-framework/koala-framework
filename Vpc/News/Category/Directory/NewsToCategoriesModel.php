@@ -2,15 +2,14 @@
 class Vpc_News_Category_Directory_NewsToCategoriesModel
     extends Vpc_Directories_Category_Directory_ItemsToCategoriesModel
 {
-    protected $_name = 'vpc_news_to_categories';
+    protected $_table = 'vpc_news_to_categories';
 
-    protected function _setup()
+    protected function _init()
     {
         $this->_referenceMap['Item'] = array(
-            'columns'           => array('news_id'),
-            'refTableClass'     => 'Vpc_News_Directory_Model',
-            'refColumns'        => array('id')
+            'column'           => 'news_id',
+            'refModelClass'     => 'Vpc_News_Directory_Model'
         );
-        parent::_setup();
+        parent::_init();
     }
 }

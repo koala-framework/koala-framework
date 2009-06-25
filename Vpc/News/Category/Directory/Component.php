@@ -5,7 +5,7 @@ class Vpc_News_Category_Directory_Component extends Vpc_Directories_Category_Dir
     {
         $ret = parent::getSettings();
         $ret['pool'] = 'Newskategorien';
-        $ret['categoryToItemTableName'] = 'Vpc_News_Category_Directory_NewsToCategoriesModel';
+        $ret['categoryToItemModelName'] = 'Vpc_News_Category_Directory_NewsToCategoriesModel';
         return $ret;
     }
 }

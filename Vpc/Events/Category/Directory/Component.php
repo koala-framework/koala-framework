@@ -5,7 +5,7 @@ class Vpc_Events_Category_Directory_Component extends Vpc_News_Category_Director
     {
         $ret = parent::getSettings();
         $ret['pool'] = 'Eventcategories';
-        $ret['categoryToItemTableName'] = 'Vpc_Events_Category_Directory_EventsToCategoriesModel';
+        $ret['categoryToItemModelName'] = 'Vpc_Events_Category_Directory_EventsToCategoriesModel';
         return $ret;
     }
 }

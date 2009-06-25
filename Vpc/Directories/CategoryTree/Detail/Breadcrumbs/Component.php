@@ -20,7 +20,7 @@ class Vpc_Directories_CategoryTree_Detail_Breadcrumbs_Component
 
         $breadcrumbs = array();
 
-        foreach ($detail->row->getRow()->getTreePathRows() as $row) {
+        foreach ($detail->row->getTreePathRows() as $row) {
             $breadcrumbs[] = $directory->getChildComponent('_'.$row->id);
         }
         $ret['root'] = $this->_getCategoryTreeRoot();

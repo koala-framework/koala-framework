@@ -6,7 +6,7 @@ class Vpc_News_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('News.News');
         $ret['componentIcon'] = new Vps_Asset('newspaper');
-        $ret['tablename'] = 'Vpc_News_Directory_Model';
+        $ret['modelname'] = 'Vpc_News_Directory_Model';
 
         $ret['generators']['detail']['component'] = 'Vpc_News_Detail_Component';
         $ret['generators']['detail']['nameColumn'] = 'title';

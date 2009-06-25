@@ -22,7 +22,7 @@ class Vpc_Directories_Item_Detail_AssignedCategories_View_Component
     private function _doClearCache()
     {
         $c = $this->getData()->parent->getComponent()->getItemDirectory()->getComponent();
-        $modelName = Vpc_Abstract::getSetting(get_class($c), 'categoryToItemTableName');
+        $modelName = Vpc_Abstract::getSetting(get_class($c), 'categoryToItemModelName');
 
         $itemRef = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
             $modelName, 'Item'

@@ -4,12 +4,12 @@ class Vpc_Directories_CategoryTree_Directory_Component extends Vpc_Directories_C
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['tablename'] = 'Vpc_Directories_CategoryTree_Directory_Model';
+        $ret['modelname'] = 'Vpc_Directories_CategoryTree_Directory_Model';
         $ret['generators']['detail']['class'] = 'Vpc_Directories_CategoryTree_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Vpc_Directories_CategoryTree_Detail_Component';
         $ret['generators']['child']['component']['view'] = 'Vpc_Directories_CategoryTree_View_Component';
 
-        $ret['categoryToItemTableName'] = null;
+        $ret['categoryToItemModelName'] = null;
 
         return $ret;
     }
@@ -17,7 +17,7 @@ class Vpc_Directories_CategoryTree_Directory_Component extends Vpc_Directories_C
     public function getSelect()
     {
         $select = parent::getSelect();
-        $select->where('parent_id IS NULL');
+        $select->whereNull('parent_id');
         return $select;
     }
 }

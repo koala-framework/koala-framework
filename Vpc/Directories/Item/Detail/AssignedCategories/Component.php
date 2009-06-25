@@ -32,7 +32,7 @@ class Vpc_Directories_Item_Detail_AssignedCategories_Component
         $categoryDirectory = $this->getItemDirectory()->getComponent();
 
         $refData = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
-            Vpc_Abstract::getSetting(get_class($categoryDirectory), 'categoryToItemTableName'),
+            Vpc_Abstract::getSetting(get_class($categoryDirectory), 'categoryToItemModelName'),
             'Category'
         );
 
@@ -42,7 +42,8 @@ class Vpc_Directories_Item_Detail_AssignedCategories_Component
         );
 
         $refDataItem = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
-            Vpc_Abstract::getSetting(get_class($categoryDirectory), 'categoryToItemTableName')
+            Vpc_Abstract::getSetting(get_class($categoryDirectory), 'categoryToItemModelName'),
+            'Item'
         );
 
         $ret->where(
