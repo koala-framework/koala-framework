@@ -1,6 +1,8 @@
 <?php
 abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action_Auto_Grid
 {
+    protected $_hasComponentId = true;
+
     public function preDispatch()
     {
         if (!isset($this->_model) && !isset($this->_tableName)) {
@@ -12,13 +14,17 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
-        $ret->whereEquals('component_id', $this->_getParam('componentId'));
+        if ($this->_hasComponentId) {
+            $ret->whereEquals('component_id', $this->_getParam('componentId'));
+        }
         return $ret;
     }
 
     protected function _beforeSave($row)
     {
-        $row->component_id = $this->_getParam('componentId');
+        if ($this->_hasComponentId) {
+            $row->component_id = $this->_getParam('componentId');
+        }
     }
 
     public function indexAction()
