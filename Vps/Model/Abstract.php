@@ -353,28 +353,41 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         $expr = $this->_exprs[$name];
         if ($expr instanceof Vps_Model_Select_Expr_Child) {
             $childs = $row->getChildRows($expr->getChild(), $expr->getSelect());
-            if ($expr->getExpr() instanceof Vps_Model_Select_Expr_Count) {
-                if ($expr->getExpr()->getField() != '*') {
-                    $f = $expr->getExpr()->getField();
-                    $values = array();
-                    foreach ($childs as $c) {
-                        if (!is_null($c->$f)) $values[] = $c->$f;
-                    }
-                    if ($expr->getExpr()->getDistinct()) {
-                        $values = array_unique($values);
-                    }
-                    return count($values);
-                } else {
-                    return $childs->count();
+            return self::_evaluateExprForRowset($childs, $expr->getExpr());
+        } else {
+            throw new Vps_Exception_NotYetImplemented();
+        }
+    }
+
+    public function evaluateExpr(Vps_Model_Select_Expr_Interface $expr, Vps_Model_Select $select = null)
+    {
+        $rows = $this->getRows($select);
+        return self::_evaluateExprForRowset($rows, $expr);
+    }
+
+    private static function _evaluateExprForRowset($rowset, Vps_Model_Select_Expr_Interface $expr)
+    {
+        if ($expr instanceof Vps_Model_Select_Expr_Count) {
+            if ($expr->getField() != '*') {
+                $f = $expr->getField();
+                $values = array();
+                foreach ($rowset as $r) {
+                    if (!is_null($r->$f)) $values[] = $r->$f;
                 }
-            } else if ($expr->getExpr() instanceof Vps_Model_Select_Expr_Sum) {
-                $f = $expr->getExpr()->getField();
-                $ret = 0;
-                foreach ($childs as $c) {
-                    $ret += $c->$f;
+                if ($expr->getDistinct()) {
+                    $values = array_unique($values);
                 }
-                return $ret;
+                return count($values);
+            } else {
+                return $rowset->count();
             }
+        } else if ($expr instanceof Vps_Model_Select_Expr_Sum) {
+            $f = $expr->getField();
+            $ret = 0;
+            foreach ($rowset as $r) {
+                $ret += $r->$f;
+            }
+            return $ret;
         } else {
             throw new Vps_Exception_NotYetImplemented();
         }

@@ -523,6 +523,16 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $this->_table->getAdapter()->query($dbSelect)->fetchColumn();
     }
 
+    public function evaluateExpr(Vps_Model_Select_Expr_Interface $expr, Vps_Model_Select $select = null)
+    {
+        if (is_null($select)) $select = $this->select();
+        $dbSelect = $this->createDbSelect($select);
+        $dbSelect->reset(Zend_Db_Select::COLUMNS);
+        $dbSelect->setIntegrityCheck(false);
+        $dbSelect->from(null, $this->_createDbSelectExpression($expr, $dbSelect));
+        return $this->_table->getAdapter()->query($dbSelect)->fetchColumn();
+    }
+
     public function getPrimaryKey()
     {
         $ret = $this->_table->info('primary');
