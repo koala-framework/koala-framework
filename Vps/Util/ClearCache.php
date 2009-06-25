@@ -39,7 +39,11 @@ class Vps_Util_ClearCache
     public function getDbCacheTables()
     {
         $ret = array();
-        if (!Zend_Registry::get('db')) return $ret;
+        try {
+            if (!Zend_Registry::get('db')) return $ret;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            return $ret;
+        }
         $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
         foreach ($tables as $table) {
             if (substr($table, 0, 6) == 'cache_') {
