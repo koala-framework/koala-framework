@@ -11,7 +11,7 @@ class Vpc_Abstract_Form extends Vps_Form
             }
             $this->setCreateMissingRow(true);
         }
-        parent::__construct($name, $class);
+        parent::__construct($name);
     }
 
     /**
