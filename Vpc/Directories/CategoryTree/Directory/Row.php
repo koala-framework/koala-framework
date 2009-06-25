@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_CategoryTree_Directory_Row extends Vps_Db_Table_Row_Abstract
+class Vpc_Directories_CategoryTree_Directory_Row extends Vps_Model_Db_Row
 {
     public function __toString()
     {
@@ -8,7 +8,7 @@ class Vpc_Directories_CategoryTree_Directory_Row extends Vps_Db_Table_Row_Abstra
 
     protected function _delete()
     {
-        if (count($this->findDependentRowset(get_class($this->getTable())))) {
+        if (count($this->getChildRows('Child'))) {
             throw new Vps_ClientException(
                 trlVps("This category can't be deleted, because there exist sub-categories in it.")
             );
@@ -32,27 +32,24 @@ class Vpc_Directories_CategoryTree_Directory_Row extends Vps_Db_Table_Row_Abstra
     {
         $parts = array($this);
         $upperRow = $this;
-        while (!is_null($upperRow = $upperRow->findParentRow(get_class($this->_getTable())))) {
+        while (!is_null($upperRow = $upperRow->getParentRow('Parent'))) {
             $parts[] = $upperRow;
         }
         return array_reverse($parts);
     }
 
-    public function getRecursiveChildCategoryIds(array $where = array(), $parentId = null)
+    public function getRecursiveChildCategoryIds($select = null, $parentId = null)
     {
         static $branchCache = array();
         if (!$branchCache) {
-            $select = new Vps_Db_Table_Select($this->getTable());
-            $select->from($this->getTable(), array('id', 'parent_id'));
-            foreach ($where as $k => $v) {
-                if (is_string($k)) {
-                    $select->where($k, $v);
-                } else {
-                    $select->where($v);
-                }
+            if (is_null($select)) $select = new Vps_Model_Select();
+            if (!$select instanceof Vps_Model_Select) {
+                throw new Vps_Exception("First argument must be an object that instantiates 'Vps_Model_Select'");
             }
-            foreach ($select->query()->fetchAll() as $row) {
-                $branchCache[$row['id']] = $row['parent_id'];
+
+            $rows = $this->getModel()->getRows($select);
+            foreach ($rows as $row) {
+                $branchCache[$row->id] = $row->parent_id;
             }
         }
 
@@ -61,7 +58,7 @@ class Vpc_Directories_CategoryTree_Directory_Row extends Vps_Db_Table_Row_Abstra
         $ret = array($parentId);
         foreach (array_keys($branchCache, $parentId) as $v) {
             $ret[] = $v;
-            $ret = array_merge($ret, $this->getRecursiveChildCategoryIds($where, $v));
+            $ret = array_merge($ret, $this->getRecursiveChildCategoryIds($select, $v));
         }
 
         return array_values(array_unique($ret));

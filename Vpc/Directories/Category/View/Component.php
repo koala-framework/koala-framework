@@ -38,8 +38,10 @@ class Vpc_Directories_Category_View_Component
             $cacheClassId = $highestSubRoot->componentId;
         }
 
-        if ($row instanceof Vps_Model_Row_Interface) $row = $row->getRow();
-        return preg_replace('/[^a-zA-Z0-9_]/', '_', $cacheClassId).'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getTable()).$row->id.'_itemCount';
+        if (!$row instanceof Vps_Model_Row_Interface) {
+            throw new Vps_Exception('Tables are not allowed anymore when using directories');
+        }
+        return preg_replace('/[^a-zA-Z0-9_]/', '_', $cacheClassId).'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getModel()).$row->id.'_itemCount';
     }
 
     public static function getItemCountCache()
@@ -69,10 +71,10 @@ class Vpc_Directories_Category_View_Component
                 }
                 if (!isset($connectData)) {
                     $tableName = Vpc_Abstract::getSetting(
-                        $itemDirectory->componentClass, 'categoryToItemTableName'
+                        $itemDirectory->componentClass, 'categoryToItemModelName'
                     );
                     $connectData = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
-                        $tableName
+                        $tableName, 'Item'
                     );
                 }
                 if (!isset($directoryComponent)) {

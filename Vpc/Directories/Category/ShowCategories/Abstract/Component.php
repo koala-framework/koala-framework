@@ -10,7 +10,7 @@ abstract class Vpc_Directories_Category_ShowCategories_Abstract_Component extend
 
         $tableName = Vpc_Abstract::getSetting(
             $this->getItemDirectory()->getChildComponent('_categories')->componentClass,
-            'categoryToItemTableName'
+            'categoryToItemModelName'
         );
         $refData = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData($tableName);
 

@@ -18,7 +18,7 @@ class Vpc_Directories_CategoryTree_Detail_CategoryList_Component
     public function getSelect()
     {
         $ret = parent::getSelect();
-        $ret->where('parent_id = ?', $this->getData()->parent->row->id);
+        $ret->whereEquals('parent_id', $this->getData()->parent->row->id);
         return $ret;
     }
 }
