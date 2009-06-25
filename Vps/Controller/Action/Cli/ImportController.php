@@ -26,6 +26,25 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             throw new Vps_ClientException("Can't get onlineRevision");
         }
 
+        try {
+            Vps_Registry::get('db');
+        } catch (Zend_Db_Adapter_Exception $e) {
+            $dbConfig = Vps_Registry::get('dao')->getDbConfig();
+            $dbConfig['dbname'] = 'test';
+            $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
+            $databases = array();
+            foreach ($db->query("SHOW DATABASES")->fetchAll() as $r) {
+                $databases[] = $r['Database'];
+            }
+
+            $dbConfig = Vps_Registry::get('dao')->getDbConfig();
+            if (!in_array($dbConfig['dbname'], $databases)) {
+                echo "Datenbank {$dbConfig['dbname']} nicht vorhanden, versuche sie zu erstellen...\n";
+                $db->query("CREATE DATABASE {$dbConfig['dbname']}");
+                echo "OK\n";
+            }
+        }
+
         if (Vps_Registry::get('config')->application->id != 'service') {
             $this->_copyServiceUsers();
         }
@@ -208,6 +227,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
         echo "\n";
 
+        /*
         echo "importiere logs...\n";
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-logs | tar xzm";
@@ -217,6 +237,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($this->_getParam('debug')) echo $cmd."\n";
         $this->_systemCheckRet($cmd);
         echo "\n";
+        */
 
         echo "importiere rrds...\n";
         if ($ownConfig->server->host == $config->server->host) {
