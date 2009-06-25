@@ -2,10 +2,10 @@
 class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
     protected $_buttons = array(
-        'save' => true,
-        'delete' => true,
-        'reload' => true,
-        'add'   => true
+        'save',
+        'delete',
+        'reload',
+        'add'
     );
 
     protected $_editDialog = array(

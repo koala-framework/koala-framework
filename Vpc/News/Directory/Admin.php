@@ -1,29 +1,21 @@
 <?php
 class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
 {
+    protected function _getContentClass()
+    {
+        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
+        return Vpc_Abstract::getChildComponentClass($detail, 'child', 'content');
+    }
 
     public function getExtConfig()
     {
         $ret = parent::getExtConfig();
 
-        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
-        $contentClass = Vpc_Abstract::getChildComponentClass($detail, 'child', 'content');
-
         $ret['items']['idTemplate'] = 'news_{0}-content';
-        $ret['items']['contentClass'] = $contentClass;
+
+        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
         $ret['items']['componentPlugins'] = $this->_getChildComponentPlugins(array($detail, $this->_class));
-        $ret['items']['componentConfigs'] = array();
-        $ret['items']['contentEditComponents'] = array();
-        $cfg = Vpc_Admin::getInstance($contentClass)->getExtConfig();
-        foreach ($cfg as $k=>$c) {
-            $ret['items']['componentConfigs'][$contentClass.'-'.$k] = $c;
-            $ret['items']['contentEditComponents'][] = array(
-                'componentClass' => $contentClass,
-                'type' => $k
-            );
-        }
-        $cfgKeys = array_keys($cfg);
-        $ret['items']['contentType'] = $cfgKeys[0];
+
         return $ret;
     }
 
