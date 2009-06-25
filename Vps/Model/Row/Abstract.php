@@ -196,6 +196,10 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     public function getChildRows($rule, $select = array())
     {
+        // TODO: getDependetModel soll array zurückgeben können, wo zusätzlich
+        // die referenz vom Relationsmodel steht (ist nötig wenn zwei relationen
+        // zur selben Tabelle gehen (getDependetModel ist dann vllt. die falsche
+        // bezeichnung)
         $m = $this->_model->getDependentModel($rule);
 
 //         if ($m instanceof Vps_Model_RowsSubModel_Interface) { geht aus irgendeinen komischen grund ned
@@ -205,7 +209,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             if (!$select instanceof Vps_Model_Select) {
                 $select = $m->select($select);
             }
-            $ref = $m->getReferenceByModelClass(get_class($this->_model), $rule);
+            $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
             if (!$this->{$this->_getPrimaryKey()}) {
                 throw new Vps_Exception("row does not yet have a primary id");
             }
@@ -223,7 +227,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             return $m->createRowByParentRow($this, $data);
         } else {
             $ret = $m->createRow();
-            $ref = $m->getReferenceByModelClass(get_class($this->_model), $rule);
+            $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
             $ret->{$ref['column']} = $this->{$this->_getPrimaryKey()};
             return $ret;
         }
