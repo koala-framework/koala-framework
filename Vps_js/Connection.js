@@ -107,7 +107,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 } else {
                     p = Ext.urlEncode(options.params);
                 }
-                errorMsg = r.exception;
+                errorMsg = '<pre>'+r.exception+'</pre>';
                 var errorMsgTitle = 'PHP Exception';
             }
             if (errorMsg && !options.ignoreErrors) {
