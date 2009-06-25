@@ -69,9 +69,10 @@
 .$cssClass .vpsFormFieldRadio {
     margin-left: -10px;
 }
-.$cssClass .vpsFormFieldRadio label{
+.$cssClass form .vpsFormFieldRadio label{
     margin-left: 10px;
     margin-right: 20px;
+    clear: none;
 }
 .ext-ie .$cssClass .form_title {
     margin-top: -5px;
