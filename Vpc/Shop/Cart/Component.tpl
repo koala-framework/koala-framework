@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?>">
-    <h1><?=trlVps('Your cart contain');?></h1><br />
+    <h1><?=trlVps('Your cart contains');?></h1><br />
     <form action="<?= $this->data->url ?>" method="post">
         <?=$this->component($this->view)?>
         <div class="back"><?=$this->componentLink($this->data->getParentPage(),trlVps('Back to shop'));?></div>

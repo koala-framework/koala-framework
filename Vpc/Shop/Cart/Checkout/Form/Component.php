@@ -16,5 +16,12 @@ class Vpc_Shop_Cart_Checkout_Form_Component extends Vpc_Form_Component
             throw new Vps_Exception_AccessDenied("No Order exists");
         }
         $this->_form->setId(Vpc_Shop_Cart_Orders::getCartOrderId());
+
+        $cc = Vpc_Abstract::getChildComponentClasses($this->getData()->parent->componentClass, 'payment');
+        $payments = array();
+        foreach ($cc as $k=>$c) {
+            $payments[$k] = Vpc_Abstract::getSetting($c, 'componentName');
+        }
+        $this->_form->setPayments($payments);
     }
 }

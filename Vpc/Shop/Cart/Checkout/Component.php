@@ -5,10 +5,13 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['form'] = 'Vpc_Shop_Cart_Checkout_Form_Component';
-        $ret['generators']['confirm'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Shop_Cart_Checkout_Confirm_Component',
-            'name' => trlVps('Send order')
+        
+        $ret['generators']['payment'] = array(
+            'class' => 'Vps_Component_Generator_PseudoPage_Static',
+            'component' => array(
+                'prePayment' => 'Vpc_Shop_Cart_Checkout_Payment_PrePayment_Component',
+                'payPal' => 'Vpc_Shop_Cart_Checkout_Payment_PayPal_Component',
+            )
         );
         $ret['cssClass'] = 'webForm webStandard';
         return $ret;

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
+class Vpc_Shop_Cart_Checkout_Form_Form extends Vpc_Abstract_Form
 {
     protected $_modelName = 'Vpc_Shop_Cart_Orders';
 
@@ -35,16 +35,16 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
 
         $this->add(new Vps_Form_Field_Panel())
             ->setHtml(trlVps('What type of payment do you wish?'));
-        $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')))
-            ->setValues(array(
-                'prepayment'=>trlVps('prepayment'),
-                'cashOnDelivery'=>trlVps('cashOnDelivery').'*',
-                //'paypal'=>trlVps('Paypal'),
-            ))
-            ->setDefaultValue('prepayment');
+        $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')));
 
         $this->add(new Vps_Form_Field_TextArea('comment', trlVps('Other comments, questions or suggestions')))
             ->setHeight(80)
             ->setWidth(200);
+    }
+
+    public function setPayments($payments)
+    {
+        $this->fields['payment']->setValues($payments);
+        return $this;
     }
 }
