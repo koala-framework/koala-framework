@@ -22,6 +22,26 @@ class Vps_Model_DbWithConnection_SelectExpr_Test extends Vps_Model_DbWithConnect
         $row->save();
     }
 
+    public function testEvaluateExpr()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SelectExpr_Model2');
+
+        $this->assertEquals(30, $m->evaluateExpr(new Vps_Model_Select_Expr_Sum('foo2')));
+        $this->assertEquals(4, $m->evaluateExpr(new Vps_Model_Select_Expr_Count()));
+        $this->assertEquals(3, $m->evaluateExpr(new Vps_Model_Select_Expr_Count('foo2')));
+        $this->assertEquals(1, $m->evaluateExpr(new Vps_Model_Select_Expr_Count('foo2', true)));
+        $this->assertEquals(2, $m->evaluateExpr(new Vps_Model_Select_Expr_Count('model1_id', true)));
+
+        $s = $m->select();
+        $s->whereEquals('model1_id', 1);
+
+        $this->assertEquals(20, $m->evaluateExpr(new Vps_Model_Select_Expr_Sum('foo2'), $s));
+        $this->assertEquals(3, $m->evaluateExpr(new Vps_Model_Select_Expr_Count(), $s));
+        $this->assertEquals(2, $m->evaluateExpr(new Vps_Model_Select_Expr_Count('foo2'), $s));
+        $this->assertEquals(1, $m->evaluateExpr(new Vps_Model_Select_Expr_Count('foo2', true), $s));
+        $this->assertEquals(1, $m->evaluateExpr(new Vps_Model_Select_Expr_Count('model1_id', true), $s));
+    }
+
     public function testWithOrder()
     {
         $m1 = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SelectExpr_Model1');
