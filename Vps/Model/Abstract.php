@@ -234,7 +234,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             }
         }
         if (count($ret) > 1) {
-            if (isset($ret[$rule])) {
+            if ($rule && isset($ret[$rule])) {
                 return $ret[$rule];
             } else {
                 throw new Vps_Exception("Multiple references from '".get_class($this)."' to '$modelClassName' found, but none with rule-name '$rule'");
