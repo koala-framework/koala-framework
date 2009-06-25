@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Confirm_Component extends Vpc_Abstract
+class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Abstract_Composite_Component
 {
     private $_order;
     public static function getSettings()

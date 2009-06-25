@@ -5,6 +5,7 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['form'] = 'Vpc_Shop_Cart_Form_Component';
+        $ret['generators']['child']['component']['view'] = 'Vpc_Shop_Cart_View_Component';
         $ret['generators']['detail']['class'] = 'Vpc_Shop_Cart_Generator';
         $ret['generators']['detail']['component'] = 'Vpc_Shop_Cart_Detail_Component';
         $ret['generators']['detail']['model'] = 'Vpc_Shop_Cart_OrderProducts';
