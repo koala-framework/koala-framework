@@ -14,24 +14,14 @@
                 <div class="clear"></div>
             </div>
         <? } ?>
-        <div class="moneyInfo">
-            <div class="shippingText">
-                <?=trlVps('Shipping and Handling')?>:
-            </div>
-            <div class="shippingPrice">
-                <?=trlVps('EUR')?> <?=$this->money($this->order->getShipping(),'')?>
-            </div><br />
-            <? if($this->order->payment == 'cashOnDelivery') { ?>
-            <div class="shippingText">
-                <?=trlVps('Cash on Delivery Charge')?>:
-            </div>
-            <div class="shippingPrice">
-                <?=trlVps('EUR')?> <?=$this->money($this->order->getCashOnDeliveryCharge(),'')?>
-            </div><br />
-            <? } ?>
-            <div class="amountText"><?=trlVps('Total Amount')?>:</div><div class="amountPrice"><strong><?=trlVps('EUR')?> <?=$this->money($this->order->getTotal(),'')?></strong></div>
-            <div class="clear"></div>
-        </div>
+        <ul class="moneyInfo">
+        <? foreach ($this->sumRows as $row) { ?>
+            <li<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
+                <span class="text"><?=$row['text']?></span>
+                <span class="price"><?=trlVps('EUR')?> <?=$this->money($row['amount'],'')?></span>
+            </li>
+        <? } ?>
+        </ul>
     </div>
     <div class="cartOrder">
         <div class="cart"><?=$this->componentLink($this->cart, trlVps('To cart'))?></div>
