@@ -366,7 +366,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     var className = selector[1];
                     if (className
                         && (!tag || el.tagName.toLowerCase() == tag)
-                        && el.className.toLowerCase() == className) {
+                        && el.className == className) {
                         if(i != this.blockStylesSelect.dom.value){
                             this.blockStylesSelect.dom.value = i;
                         }
@@ -382,7 +382,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                         var tag = selector[0];
                         var className = selector[1];
                         if ((!tag || el.tagName.toLowerCase() == tag)
-                            && (!className || el.className.toLowerCase() == className)) {
+                            && (!className || el.className == className)) {
                             if(i != this.blockStylesSelect.dom.value){
                                 this.blockStylesSelect.dom.value = i;
                             }
@@ -407,7 +407,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     var tag = selector[0];
                     var className = selector[1];
                     if (i != 'span' && (!tag || el.tagName.toLowerCase() == tag)
-                        && (!className || el.className.toLowerCase() == className)) {
+                        && (!className || el.className == className)) {
                         if(i != this.inlineStylesSelect.dom.value){
                             this.inlineStylesSelect.dom.value = i;
                         }
