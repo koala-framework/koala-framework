@@ -27,10 +27,32 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
             )
             ->getChildComponent('_checkout');
 
-        $ret['order'] = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
-                            ->getCartOrder();
+        $ret['order'] = $this->_getOrder();
         $ret['orderProducts'] = $ret['order']->getChildRows('Products');
 
+        $ret['sumRows'] = $this->_getSumRows();
+
+        $ret['paymentTypeText'] = $this->_getSetting('componentName');
+
         return $ret;
+    }
+
+    protected function _getOrder()
+    {
+        return Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
+                            ->getCartOrder();
+    }
+
+    //kann überschrieben werden um zeilen pro payment zu ändern
+    protected function _getSumRows()
+    {
+        return $this->getData()->parent->getComponent()->getSumRows($this->_getOrder());
+    }
+
+    //da kann zB eine Nachnahmegebühr zurückgegeben werden
+    //darf nur von Vpc_Shop_Cart_Checkout_Component::getAdditionalSumRows() aufgerufen werden!
+    public function getAdditionalSumRows()
+    {
+        return array();
     }
 }

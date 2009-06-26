@@ -4,11 +4,10 @@ Sie haben auf www.babytuch.com folgende Artikel bestellt:
 <? foreach ($this->products as $p) { ?>
 <?=$p->amount?> Babytuch, <?=$p->getParentRow('Product')?>, Größe <?=$p->size?>: EUR <?=$this->money($p->getTotal())?>
 <? } ?>
-
-Versandkosten: EUR <?=$this->money($this->order->getShipping())?>
-
-          ---------------
-            EUR <?=$this->money($this->order->getTotal())?>
+<? foreach ($this->sumRows as $row) { ?>
+    <?=$row['text']?>
+    <?=trlVps('EUR')?> <?=$this->money($row['amount'],'')?>
+<? } ?>
 
 
 Bitte überweisen Sie EUR <?=$this->money($this->order->getTotal())?> auf folgendes Konto:

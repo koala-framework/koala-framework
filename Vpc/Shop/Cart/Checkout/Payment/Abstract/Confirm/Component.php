@@ -31,6 +31,10 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Abst
         $mail = new Vps_Mail($this);
         $mail->order = $this->_order;
         $mail->products = $this->_order->getChildRows('Products');
+        $mail->sumRows = $this->getData()->parent->parent
+            ->getComponent()->getSumRows($this->_order);
+
+
         $mail->addTo($this->_order->email);
         return $mail;
     }
@@ -38,10 +42,6 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Abst
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-
-        $ret['order'] = $this->_order;
-        $ret['orderProducts'] = $this->_order->getChildRows('Products');
-
         return $ret;
     }
 }

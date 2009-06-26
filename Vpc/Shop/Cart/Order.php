@@ -8,7 +8,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
             Vpc_Shop_Cart_Orders::resetCartOrderId();
         }
     }
-
+/*
     public function getShipping()
     {
         return Vps_Component_Data_Root::getInstance()
@@ -21,7 +21,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
         return Vps_Component_Data_Root::getInstance()
             ->getComponentByClass('Vpc_Shop_Cart_Component')
             ->getComponent()->getCashOnDeliveryCharge($this);
-    }
+    }*/
 
     public function getSubTotal()
     {
@@ -44,8 +44,10 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
 
     public function getTotal()
     {
-        return $this->getShipping() + $this->getCashOnDeliveryCharge() + $this->getSubTotal();
-
+        return Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_Shop_Cart_Component')
+            ->getChildComponent('_checkout')
+            ->getComponent()->getTotal($this);
     }
 
     public function getOrderNumber()
