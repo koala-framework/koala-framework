@@ -18,6 +18,11 @@ class Vps_Form extends Vps_Form_NonTableForm
         }
     }
 
+    public function getMetaData()
+    {
+        return parent::getMetaData($this->getModel());
+    }
+
     //kann überschrieben werden wenn wir eine anderen row haben wollen
     //aber besser getRow überschreiben!!!
     protected function _getRowByParentRow($parentRow)

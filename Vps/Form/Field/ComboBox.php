@@ -42,9 +42,9 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     //setListWidth
         
 
-    public function getMetaData()
+    public function getMetaData($model)
     {
-        $ret = parent::getMetaData();
+        $ret = parent::getMetaData($model);
 
 
         $ret['store'] = $this->_getStoreData();

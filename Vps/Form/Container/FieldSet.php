@@ -37,9 +37,9 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         return parent::validate($row, $postData);
     }
 
-    public function getMetaData()
+    public function getMetaData($model)
     {
-        $ret = parent::getMetaData();
+        $ret = parent::getMetaData($model);
         if ($this->_checkboxHiddenField) {
             $ret['checkboxName'] = $this->_checkboxHiddenField->getFieldName();
         }

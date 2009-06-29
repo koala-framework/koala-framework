@@ -65,9 +65,9 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
     {
         $this->_id = $id;
     }
-    public function getMetaData()
+    public function getMetaData($model)
     {
-        $ret = parent::getMetaData();
+        $ret = parent::getMetaData($model);
         unset($ret['idTemplate']);
         return $ret;
     }

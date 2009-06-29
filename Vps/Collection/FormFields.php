@@ -29,11 +29,11 @@ class Vps_Collection_FormFields extends Vps_Collection
         return $this->_formName;
     }
 
-    public function getMetaData()
+    public function getMetaData($model)
     {
         $ret = array();
         foreach ($this as $field) {
-            $data = $field->getMetaData();
+            $data = $field->getMetaData($model);
             if (!is_null($data)) $ret[] = $data;
         }
         return $ret;

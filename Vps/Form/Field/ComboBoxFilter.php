@@ -15,12 +15,12 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
     //setFilteredCombo(combo)
 
 
-    public function getMetaData()
+    public function getMetaData($model)
     {
-        $ret = parent::getMetaData();
+        $ret = parent::getMetaData($model);
 
         $saveCombo = $this->getFilteredCombo();
-        $saveMetaData = $saveCombo->getMetaData();
+        $saveMetaData = $saveCombo->getMetaData($model);
 
         $filterMetaData = $ret;
         $filterMetaData['xtype'] = 'combobox';

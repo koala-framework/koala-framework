@@ -62,9 +62,9 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return $this;
     }
 
-    public function getMetaData()
+    public function getMetaData($model)
     {
-        $ret = parent::getMetaData();
+        $ret = parent::getMetaData($model);
 
         $comboboxData = array();
         foreach ($this->fields as $card) {
@@ -74,14 +74,14 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         }
         $this->_combobox->setValues($comboboxData);
 
-        $cardItems = $this->fields->getMetaData();
+        $cardItems = $this->fields->getMetaData($model);
         $cardItems = array_values($cardItems);
         foreach ($cardItems as $k => $v) {
             unset($cardItems[$k]['title']);
         }
 
         $ret['items'] = array(
-            $this->_combobox->getMetaData(),
+            $this->_combobox->getMetaData($model),
             array(
                 'layout' => 'card',
                 'baseCls' => 'x-plain',

@@ -72,7 +72,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         }
     }
 
-    public function getMetaData()
+    public function getMetaData($model)
     {
         $ret = $this->_properties;
         if (isset($ret['name'])) {

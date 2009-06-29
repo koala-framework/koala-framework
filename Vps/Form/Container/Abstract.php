@@ -28,7 +28,7 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
     
     protected function _initFields(){}
 
-    public function getMetaData()
+    public function getMetaData($model)
     {
         $iterator = new RecursiveIteratorIterator(new Vps_Collection_Iterator_Recursive($this->fields));
         foreach ($iterator as $field) {
@@ -36,8 +36,8 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
                 $this->setLoadAfterSave(true);
             }
         }
-        $ret = parent::getMetaData();
-        $ret['items'] = $this->fields->getMetaData();
+        $ret = parent::getMetaData($model);
+        $ret['items'] = $this->fields->getMetaData($model);
         if (!count($ret['items'])) unset($ret['items']);
         return $ret;
     }
