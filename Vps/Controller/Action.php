@@ -71,8 +71,6 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             if (!$this->_getParam('componentId')) {
                 $allowed = false;
                 $class = $this->_getParam('class');
-                if (($pos = strpos($class, '!')) !== false) $class = substr($class, 0, $pos);
-
                 foreach (Vps_Registry::get('acl')->getAllResources() as $r) {
                     if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {
                         if ($class == $r->getComponentClass()) {

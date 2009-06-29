@@ -78,7 +78,7 @@ class Vps_Component_Abstract_Admin
         return $ret;
     }
 
-    public function getControllerUrl($class = null)
+    public function getControllerUrl($class = 'Index')
     {
         if (Zend_Registry::isRegistered('testRootComponentClass')) {
             //hick hack
@@ -87,7 +87,7 @@ class Vps_Component_Abstract_Admin
             $url = '/admin/component/edit';
         }
         $componentClass = $this->_class;
-        if ($class) $componentClass .= '!' . $class;
+        $componentClass .= '/' . $class;
         return $url . '/' . $componentClass;
     }
     public function setup()

@@ -17,7 +17,9 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             }
 
             $class = $request->getParam('class');
-            $controller = 'Controller';
+            $controller = $request->getParam('componentController');
+            $controller .= 'Controller';
+            if ($controller == 'IndexController') $controller = 'Controller';
             if (($pos = strpos($class, '!')) !== false) {
                 $controller = substr($class, $pos + 1) . 'Controller';
                 $class = substr($class, 0, $pos);

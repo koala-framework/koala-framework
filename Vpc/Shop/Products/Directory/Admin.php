@@ -11,11 +11,13 @@ class Vpc_Shop_Products_Directory_Admin extends Vpc_Directories_Item_Directory_A
     {
         $ret = parent::getExtConfig();
         $ret['items']['idTemplate'] = 'shopProducts_{0}-content';
-
-        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
-        $ret['items']['componentPlugins'] = $this->_getChildComponentPlugins(array($detail, $this->_class));
-
         return $ret;
+    }
+
+    protected function _getPluginParentComponents()
+    {
+        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
+        return array($detail, $this->_class);
     }
 
     public function addResources(Vps_Acl $acl)
@@ -26,6 +28,10 @@ class Vpc_Shop_Products_Directory_Admin extends Vpc_Directories_Item_Directory_A
                     array('text'=>trlVps('Shop'), 'icon'=>'cart.png')), 'vps_component_root');
             $acl->add(new Vps_Acl_Resource_ComponentClass_MenuUrl($this->_class,
                     array('text'=>trlVps('Products'), 'icon'=>'application_view_list.png'),
-                    Vpc_Admin::getInstance($this->_class)->getControllerUrl()), 'vpc_shop');
+                    $this->getControllerUrl()), 'vpc_shop');
+            foreach ($this->_getPluginAdmins() as $pluginAdmin) {
+                $c = $pluginAdmin->_class;
+                $acl->add(new Vps_Acl_Resource_ComponentClass($c), 'vpc_'.$this->_class);
+            }
     }
 }
