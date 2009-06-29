@@ -3,35 +3,40 @@
 class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
 {
     protected $_fields;
-    private $_references;
-    private $_model;
+    private $_relations = array();
+    private $_dataModel;
+    private $_relModel;
+    private $_valuesModel;
+    private $_valuesSelect;
 
-    //Einstellungen:
-    //setColumnName('id')
-       //- wenn bei setValues() kein rowset übergeben wird
-    //setReferences
-       //- wenn ned über innoDb ermittelt werden können
+    /**
+     * @see setPool()
+     */
+    protected $_pool = null;
 
-    public function __construct($tableName = null, $title = null)
+    /**
+     * Zeigt mehrere Checkboxes an und speichert diese in einer Relationstabelle
+     *
+     * @param string|Vps_Model_Abstract $dependetModelRule Kann folgendes sein:
+     *               - Die rule vom Datenmodel zur Relationstabelle (string)
+     *               - oder das RelationsModel selbst (Vps_Model_Abstract)
+     * @param string $relationToValuesRule Die rule vom Relationsmodel zum Values-model
+     */
+    public function __construct($dependetModelRule, $relationToValuesRule, $title = null)
     {
-        parent::__construct();
-
-        if (is_object($tableName)) {
-            $model = $tableName;
-        } else if (class_exists($tableName)) {
-            $model = new $tableName();
-        } else {
-            throw new Vps_Exception("'$tableName' does not exist");
+        if (!is_string($dependetModelRule)) {
+            if (is_object($dependetModelRule) && !($dependetModelRule instanceof Vps_Model_Abstract)) {
+                throw new Vps_Exception("dependetModelRule must be of type string (Rule) or Vps_Model_Abstract (RelationModel)");
+            }
+        }
+        $this->setRelModel($dependetModelRule);
+        $this->setValuesModel($relationToValuesRule);
+        $this->_relations['relationToValue'] = $relationToValuesRule;
+        if (is_string($dependetModelRule)) {
+            $this->_relations['dataToRelation'] = $dependetModelRule;
         }
 
-        parent::__construct(get_class($model));
-        if ($model instanceof Zend_Db_Table_Abstract) {
-            $model = new Vps_Model_Db(array(
-                'table' => $model
-            ));
-        }
-        $this->setModel($model);
-
+        parent::__construct($relationToValuesRule);
         if ($title) $this->setTitle($title);
         $this->setHideLabels(true);
         $this->setAutoHeight(true);
@@ -39,37 +44,130 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $this->setXtype('fieldset');
     }
 
-    public function setModel($model)
+    private function _getRelationRule($index)
     {
-        $this->_model = $model;
+        if (!isset($this->_relations[$index])) {
+            if ($index == 'dataToRelation') {
+                return null;
+            } else if ($index == 'relationToData') {
+                // wenn hier mehr zurückkommen (exception), eine set methode machen
+                // für $this->_relations['relationToData']
+                $this->_relations[$index] = $this->getRelModel()
+                    ->getReferenceRuleByModelClass(get_class($this->getDataModel()));
+            } else {
+                throw new Vps_Exception("relation for index '$index' is not set");
+            }
+        }
+        return $this->_relations[$index];
     }
 
-    public function getModel()
+    public function setValuesModel($valModel)
     {
-        return $this->_model;
+        $this->_valuesModel = $valModel;
+        return $this;
     }
 
-    public function getMetaData()
+    public function setDataModel($dataModel)
     {
-        $ret = parent::getMetaData();
-        $ret['items'] = $this->_getFields()->getMetaData();
+        $this->_dataModel = $dataModel;
+        return $this;
+    }
+
+    public function getDataModel()
+    {
+        if (is_string($this->_dataModel)) {
+            $this->_dataModel = Vps_Model_Abstract::getInstance($this->_dataModel);
+        }
+        return $this->_dataModel;
+    }
+
+    public function getValuesModel()
+    {
+        if (is_string($this->_valuesModel)) {
+            $relModel = $this->getRelModel();
+            if (!$relModel) {
+                throw new Vps_Exception("RelationModel must be set first");
+            }
+            $ref = $relModel->getReference($this->_valuesModel);
+            if ($ref && isset($ref['refModel'])) {
+                $this->_valuesModel = $ref['refModel'];
+            } else if ($ref && isset($ref['refModelClass'])) {
+                $this->_valuesModel = Vps_Model_Abstract::getInstance($ref['refModelClass']);
+            } else {
+                throw new Vps_Exception("Values model cannot be found by reference '{$this->_valuesModel}'");
+            }
+        }
+        return $this->_valuesModel;
+    }
+
+    public function setRelModel($relModel)
+    {
+        $this->_relModel = $relModel;
+        return $this;
+    }
+
+    public function getRelModel()
+    {
+        if (is_string($this->_relModel)) {
+            $m = $this->getDataModel();
+            $this->_relModel = $m->getDependentModel($this->_relModel);
+        }
+        return $this->_relModel;
+    }
+
+    public function getMetaData($model)
+    {
+        $ret = parent::getMetaData($model);
+        if ($model) $this->setDataModel($model);
+        $ret['items'] = $this->_getFields()->getMetaData($model);
         if (!$ret['items']) unset($ret['items']);
         if (isset($ret['tableName'])) unset($ret['tableName']);
+        if (isset($ret['modelName'])) unset($ret['modelName']);
         if (isset($ret['values'])) unset($ret['values']);
         return $ret;
+    }
+
+    private function _getValues()
+    {
+        if ($this->getValues()) {
+            return $this->getValues();
+        } else {
+            return $this->getValuesModel()->getRows($this->getValuesSelect());
+        }
+    }
+
+    public function setValuesSelect(Vps_Model_Select $select)
+    {
+        $this->_valuesSelect = $select;
+        return $this;
+    }
+
+    public function getValuesSelect()
+    {
+        if (is_null($this->_valuesSelect)) {
+            $this->_valuesSelect = $this->getValuesModel()->select();
+        }
+        if ($this->getPool()) {
+            if ($this->getValuesModel() instanceof Vps_Util_Model_Pool) {
+                $this->_valuesSelect
+                    ->whereEquals('pool', $this->getPool())
+                    ->whereEquals('visible', 1)
+                    ->order('pos', 'ASC');
+            } else {
+                throw new Vps_Exception("setPool with MultiCheckbox only works if relationToValues references to an instance of Vps_Util_Model_Pool");
+            }
+        }
+        return $this->_valuesSelect;
     }
 
     protected function _getFields()
     {
         if (!isset($this->_fields)) {
             $this->_fields = new Vps_Collection_FormFields();
-            if ($this->getValues() instanceof Vps_Model_Rowset_Interface) {
-                $pk = $this->getValues()->getModel()->getPrimaryKey();
-            } else if ($this->getValues() instanceof Zend_Db_Table_Rowset_Abstract) {
-                $info = $this->getValues()->getTable()->info();
-                $pk = $info['primary'][1];
+            if ($this->_getValues() instanceof Vps_Model_Rowset_Interface) {
+                $pk = $this->_getValues()->getModel()->getPrimaryKey();
             }
-            foreach ($this->getValues() as $key => $i) {
+            foreach ($this->_getValues() as $key => $i) {
                 if (isset($pk)) {
                     $key = $i->$pk;
                 }
@@ -84,67 +182,49 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
 
     public function hasChildren()
     {
-        return sizeof($this->_fields) > 0;
+        return count($this->_fields) > 0;
     }
     public function getChildren()
     {
         return $this->_fields;
     }
 
-    public function getName()
-    {
-        $name = parent::getName();
-        if (!$name) {
-            $name = $this->getTableName();
-        }
-        return $name;
-    }
     protected function _getRowsByRow(Vps_Model_Row_Interface $row)
     {
-        if ($this->_model instanceof Vps_Model_FieldRows) {
-            $rows = $this->_model->fetchByParentRow($row);
-        } else {
+        $dataToRel = $this->_getRelationRule('dataToRelation');
+        if (is_null($dataToRel)) {
+            $relModel = $this->getRelModel();
+            $relToData = $relModel->getReference($this->_getRelationRule('relationToData'));
             $pk = $row->getModel()->getPrimaryKey();
-            if (!$row->$pk) {
-                //neuer eintrag (noch keine id)
-                return array();
-            }
-            $ref = $this->_getReferences($row);
-            $select = $this->_model->select();
-            foreach (array_keys($ref['columns']) as $k) {
-                $select->whereEquals($ref['columns'][$k],
-                        $row->{$ref['refColumns'][$k]});
-            }
-            $rows = $this->_model->getRows($select);
-        }
-        return $rows;
-    }
-    protected function _getReferences($row)
-    {
-        if ($this->_references) {
-            return $this->_references;
-        } else if ($this->_model instanceof Vps_Model_Db && $row instanceof Vps_Model_Db_Row) {
-            return $this->_model->getTable()
-                        ->getReference(get_class($row->getRow()->getTable()));
+            return $relModel->getRows($relModel->select()->whereEquals($relToData['column'], $row->$pk));
         } else {
-            throw new Vps_Exception('Couldn\'t read references for Multifields. Either use Vps_Model_FieldRows/Vps_Model_Db or set the References by setReferences().');
+            return $row->getChildRows($dataToRel);
         }
     }
-    public function setReferences($references)
+
+    public function setPool($pool)
     {
-        $this->_references = $references;
+        $this->_pool = $pool;
         return $this;
     }
-    
+
+    public function getPool()
+    {
+        return $this->_pool;
+    }
+
     public function load(Vps_Model_Row_Interface $row)
     {
         if (!$row) return array();
 
-        $selected = $this->_getRowsByRow($row);
-        $key = $this->getColumnName();
+        $dataModel = $row->getModel();
+        if ($dataModel) $this->setDataModel($dataModel);
+
+        $ref = $this->getRelModel()->getReference($this->_getRelationRule('relationToValue'));
+        $key = $ref['column'];
 
         $selectedIds = array();
-        foreach ($selected as $i) {
+        foreach ($this->_getRowsByRow($row) as $i) {
             $selectedIds[] = $i->$key;
         }
 
@@ -155,26 +235,12 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
 
         return $ret;
     }
-    public function getColumnName()
-    {
-        $ret = $this->getProperty('columnName');
-        if (!$ret) {
-            if (get_class($this->_model) == 'Vps_Model_Db') {
-                if ($this->getValues()->getModel()  instanceof Vps_Util_Model_Pool) {
-                    $tableClass = 'Vps_Dao_Pool';
-                } else {
-                    $tableClass = get_class($this->getValues()->getTable());
-                }
-                $ref = $this->_model->getTable()->getReference($tableClass);
-                $ret = $ref['columns'][0];
-            } else {
-                throw new Vps_Exception_NotYetImplemented();
-            }
-        }
-        return $ret;
-    }
+
     public function save(Vps_Model_Row_Interface $row, $postData)
     {
+        $dataModel = $row->getModel();
+        if ($dataModel) $this->setDataModel($dataModel);
+
         $new = array();
         if ($postData[$this->getFieldName()]) {
             foreach ($postData[$this->getFieldName()] as $key=>$value) {
@@ -184,20 +250,19 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         if ($this->getAllowBlank() === false && $new == array()) {
             throw new Vps_ClientException("Please select at least one ".$this->getTitle().".");
         }
-        $saved = $this->_getRowsByRow($row);
-
-        $ref = $this->_getReferences($row);
-        $key1 = $ref['columns'][0];
-        
-        $key2 = $this->getColumnName();
 
         $avaliableKeys = array();
         foreach ($this->_getFields() as $field) {
             $avaliableKeys[] = $field->getKey();
         }
 
-        foreach ($saved as $savedRow) {
-            $id = $savedRow->$key2;
+        $ref = $this->getRelModel()->getReference($this->_getRelationRule('relationToValue'));
+        $valueKey = $ref['column'];
+        $ref = $this->getRelModel()->getReference($this->_getRelationRule('relationToData'));
+        $dataKey = $ref['column'];
+
+        foreach ($this->_getRowsByRow($row) as $savedRow) {
+            $id = $savedRow->$valueKey;
             if (in_array($id, $avaliableKeys)) {
                 if (!in_array($id, $new)) {
                     $savedRow->delete();
@@ -208,12 +273,12 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             }
         }
 
-        $ref = $this->_getReferences($row);
+        $dataPrimaryKey = $this->getDataModel()->getPrimaryKey();
         foreach ($new as $id) {
             if (in_array($id, $avaliableKeys)) {
-                $i = $this->_model->createRow();
-                $i->$key1 = $row->{$ref['refColumns'][0]};
-                $i->$key2 = $id;
+                $i = $this->getRelModel()->createRow();
+                $i->$dataKey = $row->$dataPrimaryKey;
+                $i->$valueKey = $id;
                 $i->save();
             }
         }

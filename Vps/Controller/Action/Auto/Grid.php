@@ -444,7 +444,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->view->metaData['fields'] = array();
         foreach ($this->_columns as $column) {
             if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID)) continue;
-            $data = $column->getMetaData($this->_getTableInfo());
+            $data = $column->getMetaData($this->_getModel(), $this->_getTableInfo());
             if ($data) {
                 $this->view->metaData['columns'][] = $data;
 
@@ -474,7 +474,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->view->metaData['paging'] = $this->_paging;
         $filters = array();
         foreach ($this->_filters as $k=>$f) {
-            if (isset($f['field'])) $f['field'] = $f['field']->getMetaData();
+            if (isset($f['field'])) $f['field'] = $f['field']->getMetaData($this->_getModel());
             $filters[$k] = $f;
         }
         $this->view->metaData['filters'] = (object)$filters;

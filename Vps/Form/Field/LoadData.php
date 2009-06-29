@@ -1,7 +1,7 @@
 <?php
 class Vps_Form_Field_LoadData extends Vps_Form_Field_SimpleAbstract
 {
-    public function getMetaData()
+    public function getMetaData($model)
     {
         return null;
     }

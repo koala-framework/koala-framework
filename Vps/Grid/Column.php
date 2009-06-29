@@ -67,7 +67,7 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
         }
     }
 
-    public function getMetaData($tableInfo = null)
+    public function getMetaData($model, $tableInfo = null)
     {
         $ret = $this->_properties;
 
@@ -77,7 +77,7 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
                 if ($i instanceof Vps_Asset) {
                     $ret[$k] = $i->__toString();
                 } else {
-                    $ret[$k] = $i->getMetaData();
+                    $ret[$k] = $i->getMetaData($model);
                 }
             }
         }

@@ -16,9 +16,9 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
 
     // setColumns()
 
-    public function getMetaData()
+    public function getMetaData($model)
     {
-        $ret = parent::getMetaData();
+        $ret = parent::getMetaData($model);
         unset($ret['store']);
         unset($ret['editable']);
         unset($ret['triggerAction']);

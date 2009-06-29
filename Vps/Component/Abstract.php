@@ -37,7 +37,7 @@ class Vps_Component_Abstract
         //& für performance
         $s =& self::_getSettingsCached();
         if (!isset($s[$class])) {
-            throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
+            throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses. Requested setting: $setting");
         }
         return array_key_exists($setting, $s[$class]);
     }

@@ -17,9 +17,9 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         $this->setXtype('swfuploadfield');
     }
 
-    public function getMetaData()
+    public function getMetaData($model)
     {
-        $ret = parent::getMetaData();
+        $ret = parent::getMetaData($model);
         unset($ret['ruleKey']);
         $maxSize = ini_get('upload_max_filesize');
         if (strtolower(substr($maxSize, -1))=='k') {

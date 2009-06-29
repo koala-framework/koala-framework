@@ -218,7 +218,20 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $this->_siblingModels;
     }
 
-    public function getReferenceByModelClass($modelClassName, $rule)
+    public function getReferenceRuleByModelClass($modelClassName)
+    {
+        $rules = $this->getReferenceRulesByModelClass($modelClassName);
+        if (count($rules) > 1) {
+            throw new Vps_Exception("there exist more than one rule with modelclass '$modelClassName'. "
+                ."Try getReferenceRulesByModelClass(\$modelClassName) to get all matching rules.");
+        } else if (count($rules) == 0) {
+            throw new Vps_Exception("there is no rule with modelclass '$modelClassName'.");
+        } else {
+            return $rules[0];
+        }
+    }
+
+    public function getReferenceRulesByModelClass($modelClassName)
     {
         $ret = array();
         foreach ($this->_referenceMap as $k=>$ref) {
@@ -233,14 +246,25 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 $ret[$k] = $ref;
             }
         }
-        if (count($ret) > 1) {
-            if ($rule && isset($ret[$rule])) {
-                return $ret[$rule];
+        if (count($ret) >= 1) {
+            return array_keys($ret);
+        } else {
+            throw new Vps_Exception("No reference from '".get_class($this)."' to '$modelClassName'");
+        }
+    }
+
+    public function getReferenceByModelClass($modelClassName, $rule)
+    {
+        $matchingRules = $this->getReferenceRulesByModelClass($modelClassName);
+
+        if (count($matchingRules) > 1) {
+            if ($rule && in_array($rule, $matchingRules)) {
+                return $this->_referenceMap[$rule];
             } else {
                 throw new Vps_Exception("Multiple references from '".get_class($this)."' to '$modelClassName' found, but none with rule-name '$rule'");
             }
-        } else if (count($ret) == 1) {
-            return array_pop($ret);
+        } else if (count($matchingRules) == 1) {
+            return $this->_referenceMap[$matchingRules[0]];
         } else {
             throw new Vps_Exception("No reference from '".get_class($this)."' to '$modelClassName'");
         }
@@ -260,6 +284,30 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             throw new Vps_Exception("No Reference from '".get_class($this)."' with rule '$rule'");
         }
         return self::getInstance($this->_referenceMap[$rule]['refModelClass']);
+    }
+
+    public function getDependentRuleByModelClass($modelClassName)
+    {
+        $rules = $this->getDependentRulesByModelClass($modelClassName);
+        if (count($rules) > 1) {
+            throw new Vps_Exception("there exist more than one rule with modelclass '$modelClassName'. "
+                ."Try getDependentRulesByModelClass(\$modelClassName) to get all matching rules.");
+        } else if (count($rules) == 0) {
+            throw new Vps_Exception("there is no rule with modelclass '$modelClassName'.");
+        } else {
+            return $rules[0];
+        }
+    }
+
+    public function getDependentRulesByModelClass($modelClassName)
+    {
+        $ret = array();
+        foreach ($this->_dependentModels as $k => $m) {
+            if (is_instance_of($modelClassName, $m)) {
+                $ret[] = $k;
+            }
+        }
+        return $ret;
     }
 
     public function getDependentModel($rule)
