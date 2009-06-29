@@ -31,7 +31,7 @@ class Vps_Controller_Router_Component extends Vps_Controller_Router
                           'controller' => 'components',
                           'action' => 'jsonshow')));
         $this->AddRoute('componentedit', new Zend_Controller_Router_Route(
-                    '/admin/component/edit/:class/:action',
+                    '/admin/component/edit/:class/:componentController/:action',
                     array('module' => 'component',
                           'controller' => 'component',
                           'action' => 'index')));
