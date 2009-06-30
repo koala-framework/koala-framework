@@ -94,37 +94,42 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
         $allowed = false;
 
         if (!$class) $class = $this->_getParam('class');
-        if (($pos = strpos($class, '!')) !== false) $class = substr($class, 0, $pos);
 
-        $component = Vps_Component_Data_Root::getInstance()
-            ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
-        if (!$component) {
+        $components = Vps_Component_Data_Root::getInstance()
+            ->getComponentsByDbId($componentId, array('ignoreVisible'=>true));
+        if (!$components) {
             throw new Vps_Exception("Can't find component to check permissions");
         }
 
-        // Checken, ob übergebene componentClass auf der aktuellen Page vorkommen kann
-        $allowCheck = false;
+        // sobald man eine bearbeiten darf, darf man alle bearbeiten
+        // zB wenn man bei proSalzburg und proPona gleichzeitig drin ist
+        foreach ($components as $component) {
+            // Checken, ob übergebene componentClass auf der aktuellen Page vorkommen kann
+            $allowCheck = false;
 
-        if ($component->componentClass == $class) $allowCheck = true;
-        $c = $component->parent;
+            if ($component->componentClass == $class) $allowCheck = true;
+            $c = $component->parent;
 
-        $stopComponent = $component->getPage();
-        if (!is_null($stopComponent)) $stopComponent = $stopComponent->parent;
+            $stopComponent = $component->getPage();
+            if (!is_null($stopComponent)) $stopComponent = $stopComponent->parent;
 
-        while (!$allowCheck && $c && !$c->componentId != $stopComponent->componentId) {
-            $allowedComponentClasses = Vpc_Abstract::getChildComponentClasses(
-                $c->componentClass, array('page' => false)
-            );
-            if (in_array($class, $allowedComponentClasses))
-                $allowCheck = true;
-            $c = $c->parent;
-        }
+            while (!$allowCheck && $c && !$c->componentId != $stopComponent->componentId) {
+                $allowedComponentClasses = Vpc_Abstract::getChildComponentClasses(
+                    $c->componentClass, array('page' => false)
+                );
+                if (in_array($class, $allowedComponentClasses))
+                    $allowCheck = true;
+                $c = $c->parent;
+            }
 
-        if ($allowCheck &&
-            Vps_Registry::get('acl')->getComponentAcl()
-                ->isAllowed($this->_getAuthData(), $component)
-        ) {
-            $allowed = true;
+            if ($allowCheck &&
+                Vps_Registry::get('acl')->getComponentAcl()
+                    ->isAllowed($this->_getAuthData(), $component)
+            ) {
+                $allowed = true;
+            }
+
+            if ($allowed) return $allowed;
         }
         return $allowed;
     }
