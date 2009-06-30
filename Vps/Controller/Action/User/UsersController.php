@@ -28,7 +28,8 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
             'type'      => 'Button',
             'skipWhere' => true,
             'icon'      => '/assets/silkicons/user_red.png',
-            'cls'       => 'x-btn-icon',
+            'cls'       => 'x-btn-text-icon',
+            'text'      => trlVps('Show locked users'),
             'tooltip'   => trlVps('Show locked users too')
         );
 
