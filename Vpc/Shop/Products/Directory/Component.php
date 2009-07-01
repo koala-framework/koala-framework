@@ -25,11 +25,13 @@ class Vpc_Shop_Products_Directory_Component extends Vpc_Directories_ItemPage_Dir
 
     public function processInput(array $postData)
     {
-        $items = $this->getData()->getChildComponent('-view')
-            ->getComponent()->getItems();
-        foreach ($items as $i) {
-            $this->getData()->getChildComponent('-'.$i->row->id)
-                ->getComponent()->processInput($postData);
+        $view = $this->getData()->getChildComponent('-view');
+        if ($view) {
+            $items = $view->getComponent()->getItems();
+            foreach ($items as $i) {
+                $this->getData()->getChildComponent('-'.$i->row->id)
+                    ->getComponent()->processInput($postData);
+            }
         }
     }
 }
