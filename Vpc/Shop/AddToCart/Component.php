@@ -18,16 +18,6 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
         return $ret;
     }
 
-    protected function _initForm()
-    {
-        parent::_initForm();
-        $this->_form->fields['size']
-            ->setShowNoSelection(true)
-            ->setEmptyText("-")
-            ->setAllowBlank(false);
-
-    }
-
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
