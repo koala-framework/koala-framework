@@ -886,11 +886,17 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     },
     onXls : function()
     {
-        var win = new Vps.Auto.Grid.ExportWindow({
-            controllerUrl : this.controllerUrl,
-            exportParams  : Ext.urlEncode(this.getStore().baseParams)
+        Ext.Ajax.request({
+            url : this.controllerUrl+'/json-xls',
+            params  : this.getStore().baseParams,
+            title : trlVps('Excel export'),
+            timeout: 600000, // 10 minuten
+            progress: true/*,
+            success: function(response, opt, r) {
+                window.open(this.controllerUrl+'/download-export-file?downloadkey='+r.downloadkey, '_blank');
+            },
+            scope: this*/
         });
-        win.showExport();
     },
     getSelected: function() {
         return this.getSelectionModel().getSelected();

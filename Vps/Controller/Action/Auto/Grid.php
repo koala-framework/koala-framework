@@ -21,6 +21,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     protected $_pdf = array();
 
+    protected $_progressBar = null;
+
     const PDF_ORIENTATION_PORTRAIT  = 'P';
     const PDF_ORIENTATION_LANDSCAPE = 'L';
     const PDF_FORMAT_A3 = 'A3';
@@ -724,18 +726,23 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->_helper->viewRenderer->setNoRender();
     }
 
-    private function _createExportData($onlyShowIn)
+    private function _getExportData($onlyShowIn, $maxRows = null)
     {
-        $status = $this->_getExportStatus();
+        $sel = $this->_getSelect();
+        if (is_null($sel)) return array();
+        if (!is_null($maxRows) && $this->_model->countRows($sel) > $maxRows) {
+            throw new Vps_ClientException(trlVps("This export is limited to {0} rows.", $maxRows));
+        }
+        $rowSet = $this->_model->getRows($sel);
 
-        $cache = $this->_getExportCache();
-        $rowSet = $this->_fetchData($this->_defaultOrder, $this->_exportRowsPerRequest('collect'), $status['collected']);
-        if (!$rowSet || !count($rowSet)) {
-            $status['collected'] = $status['count'];
-        } else {
-            $exportData = $cache->load($this->_getParam('uniqueExportKey').'data');
+        if ($rowSet && count($rowSet)) {
+            $this->_progressBar = new Zend_ProgressBar(
+                new Vps_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
+                0, (count($rowSet) * 1.05) * 3
+            );
+
             // Index 0 reserved for column headers
-            if (!$exportData) $exportData = array(0 => array());
+            $exportData = array(0 => array());
 
             $columns = $columnsHeader = array();
             foreach ($rowSet as $row) {
@@ -768,13 +775,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     }
                 }
                 $exportData[] = $columns;
+
+                $this->_progressBar->next(2, trlVps('Collecting data'));
             }
             $exportData[0] = $columnsHeader;
-            $cache->save($exportData, $this->_getParam('uniqueExportKey').'data');
-
-            $status['collected'] = count($exportData) - 1;
+            return $exportData;
         }
-        $cache->save($status, $this->_getParam('uniqueExportKey').'status');
+        return array();
     }
 
     public function csvAction()
@@ -824,139 +831,80 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
     }
 
-    private function _getExportCache()
-    {
-        return Vps_Cache::factory('Core', 'File',
-            array(
-                'lifetime' => 900,
-                'automatic_serialization' => true
-            ),
-            array(
-                'cache_dir' => 'application/cache/model'
-            )
-        );
-    }
-
-    protected function _getExportStatus()
-    {
-        $cache = $this->_getExportCache();
-        $status = $cache->load($this->_getParam('uniqueExportKey').'status');
-        if (!$status) {
-            $status = array(
-                'count'     => $this->_fetchCount(),
-                'collected' => 0,
-                'done'      => 0,
-                'downloadkey' => ''
-            );
-        }
-        return $status;
-    }
-
-    protected function _exportRowsPerRequest($type = 'collect')
-    {
-        if ($type == 'done') {
-            return mt_rand(80, 120);
-        } else {
-            return mt_rand(40, 60);
-        }
-    }
-
-    private function _getXlsObject()
-    {
-        require_once 'PHPExcel.php';
-        require_once 'PHPExcel/IOFactory.php';
-
-        $cache = $this->_getExportCache();
-        $xls = $cache->load($this->_getParam('uniqueExportKey').'xlsObject');
-        if (!$xls) {
-            $xls = new PHPExcel();
-            $xls->getProperties()->setCreator("Vivid Planet Software GmbH");
-            $xls->getProperties()->setLastModifiedBy("Vivid Planet Software GmbH");
-            $xls->getProperties()->setTitle("VPS Excel Export");
-            $xls->getProperties()->setSubject("VPS Excel Export");
-            $xls->getProperties()->setDescription("VPS Excel Export");
-            $xls->getProperties()->setKeywords("VPS Excel Export");
-            $xls->getProperties()->setCategory("VPS Excel Export");
-
-            $xls->setActiveSheetIndex(0);
-
-            $colIndex = 0;
-            $sheet = $xls->getActiveSheet();
-            foreach ($this->_columns as $column) {
-                if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_XLS)) continue;
-                if (is_null($column->getHeader())) continue;
-
-                if ($column->getXlsWidth()) {
-                    $width = $column->getXlsWidth();
-                } else if ($column->getWidth()) {
-                    $width = round($column->getWidth() / 6, 1);
-                } else {
-                    $width = 15;
-                }
-
-                $sheet->getColumnDimension($this->_getColumnLetterByIndex($colIndex))->setWidth($width);
-                $colIndex++;
-            }
-            $cache->save($xls, $this->_getParam('uniqueExportKey').'xlsObject');
-        }
-        return $xls;
-    }
-
     public function jsonXlsAction()
     {
         // e.g.: Stargate customer export: 128M memory_limit exhaust at 1500 lines
         ini_set('memory_limit', "768M");
+        set_time_limit(600); // 10 minuten
         if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
             throw new Vps_Exception("XLS is not allowed.");
         }
 
-        $status = $this->_getExportStatus();
-        if ($status['collected'] < $status['count']) {
-            $this->_createExportData(Vps_Grid_Column::SHOW_IN_XLS);
-            $status = $this->_getExportStatus();
-        } else if ($status['done'] < $status['count']) {
-            $cache = $this->_getExportCache();
-            $data = $cache->load($this->_getParam('uniqueExportKey').'data');
-            if (isset($data) && !is_null($data) && $data) {
-                $xls = $this->_getXlsObject();
-                $sheet = $xls->getActiveSheet();
-                foreach ($data as $row => $cols) {
-                    // row ist index, das andre nicht, passt aber trotzdem so
-                    // da ja in der ersten Zeile der Header steht
-                    if ($status['done'] != 0 && $status['done'] >= $row) continue;
-                    foreach ($cols as $col => $text) {
-                        $cell = $this->_getColumnLetterByIndex($col).($row+1);
-                        if (is_array($text)) $text = implode(', ', $text);
-                        // make header bold
-                        if ($row == 0) {
-                            $sheet->getStyle($cell)->getFont()->setBold(true);
-                        }
-                        // TODO: Zeilenumbrüche
-                        $textType = gettype($text);
-                        $cellType = PHPExcel_Cell_DataType::TYPE_STRING;
-                        if ($textType == 'boolean') $cellType = PHPExcel_Cell_DataType::TYPE_BOOL;
-                        if ($textType == 'integer'
-                         || $textType == 'double'
-                         || $textType == 'float') $cellType = PHPExcel_Cell_DataType::TYPE_NUMERIC;
-                        if ($textType == 'NULL') $cellType = PHPExcel_Cell_DataType::TYPE_NULL;
+        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_XLS, 3000);
 
-                        $sheet->setCellValueExplicit($cell, $text, $cellType);
-                    }
-                    if ($status['done'] + $this->_exportRowsPerRequest('done') <= $row) break;
-                }
-                $status['done'] = $row;
-                $cache->save($status, $this->_getParam('uniqueExportKey').'status');
-                $cache->save($xls, $this->_getParam('uniqueExportKey').'xlsObject');
+        $xls = new PHPExcel();
+        $xls->getProperties()->setCreator("Vivid Planet Software GmbH");
+        $xls->getProperties()->setLastModifiedBy("Vivid Planet Software GmbH");
+        $xls->getProperties()->setTitle("VPS Excel Export");
+        $xls->getProperties()->setSubject("VPS Excel Export");
+        $xls->getProperties()->setDescription("VPS Excel Export");
+        $xls->getProperties()->setKeywords("VPS Excel Export");
+        $xls->getProperties()->setCategory("VPS Excel Export");
+
+        $xls->setActiveSheetIndex(0);
+        $sheet = $xls->getActiveSheet();
+
+        // setting width for each column
+        $colIndex = 0;
+        foreach ($this->_columns as $column) {
+            if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_XLS)) continue;
+            if (is_null($column->getHeader())) continue;
+
+            if ($column->getXlsWidth()) {
+                $width = $column->getXlsWidth();
+            } else if ($column->getWidth()) {
+                $width = round($column->getWidth() / 6, 1);
+            } else {
+                $width = 15;
             }
-        } else {
-            $cache = $this->_getExportCache();
-            $status['downloadkey'] = uniqid();
-            $cache->save($status, $this->_getParam('uniqueExportKey').'status');
-            $objWriter = PHPExcel_IOFactory::createWriter($this->_getXlsObject(), 'Excel5');
-            $objWriter->save('application/cache/model/'.$status['downloadkey'].'.xls');
+
+            $sheet->getColumnDimension($this->_getColumnLetterByIndex($colIndex))->setWidth($width);
+            $colIndex++;
         }
 
-        $this->view->status = $status;
+        foreach ($data as $row => $cols) {
+            // row ist index, das andre nicht, passt aber trotzdem so
+            // da ja in der ersten Zeile der Header steht
+            foreach ($cols as $col => $text) {
+                $cell = $this->_getColumnLetterByIndex($col).($row+1);
+                if (is_array($text)) $text = implode(', ', $text);
+                // make header bold
+                if ($row == 0) {
+                    $sheet->getStyle($cell)->getFont()->setBold(true);
+                }
+                // TODO: Zeilenumbrüche
+                $textType = gettype($text);
+                $cellType = PHPExcel_Cell_DataType::TYPE_STRING;
+                if ($textType == 'boolean') $cellType = PHPExcel_Cell_DataType::TYPE_BOOL;
+                if ($textType == 'integer'
+                    || $textType == 'double'
+                    || $textType == 'float') $cellType = PHPExcel_Cell_DataType::TYPE_NUMERIC;
+                if ($textType == 'NULL') $cellType = PHPExcel_Cell_DataType::TYPE_NULL;
+
+                $sheet->setCellValueExplicit($cell, $text, $cellType);
+            }
+
+            $this->_progressBar->next(1, trlVps('Writing data'));
+        }
+
+        // write the file
+        $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+        $downloadkey = uniqid();
+        $objWriter->save('application/temp/'.$downloadkey.'.xls');
+
+        $this->_progressBar->finish();
+
+        $this->view->downloadkey = $downloadkey;
     }
 
     public function downloadExportFileAction()
@@ -964,12 +912,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
             throw new Vps_Exception("XLS is not allowed.");
         }
-        if (!file_exists('application/cache/model/'.$this->_getParam('downloadkey').'.xls')) {
+        if (!file_exists('application/temp/'.$this->_getParam('downloadkey').'.xls')) {
             throw new Vps_Exception('Wrong downloadkey submitted');
         }
 
         $file = array(
-            'contents' => file_get_contents('application/cache/model/'.$this->_getParam('downloadkey').'.xls'),
+            'contents' => file_get_contents('application/temp/'.$this->_getParam('downloadkey').'.xls'),
             'mimeType' => 'application/msexcel',
             'downloadFilename' => 'export_'.date('Ymd-Hi').'.xls'
         );
