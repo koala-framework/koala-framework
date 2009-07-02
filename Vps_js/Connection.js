@@ -1,4 +1,6 @@
 Vps.Connection = Ext.extend(Ext.data.Connection, {
+    _progressData    : { },
+
     /**
      * Options:
      * - mask (true für body, sonst element)
@@ -60,12 +62,150 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 options.url = u + '/' + options.url;
             }
         }
+
+        if (options.progress) {
+            var progressNum = Math.floor(Math.random() * 1000000000) + 1;
+            options.params.progressNum = progressNum;
+        }
+
         Vps.Connection.superclass.request.call(this, options);
+
+        if (options.progress) {
+            this._showProgress(options);
+        }
     },
+
+    _showProgress: function(options)
+    {
+        var progressNum = options.params.progressNum;
+
+        this._progressData[progressNum] = {
+            progressBar: this._createProgressDialog({
+                title: options.progressTitle || trlVps('Progress'),
+                transId: this.transId,
+                requestOptions: options
+            }),
+            breakStatusRequests: false
+        }
+        this._progressData[progressNum].progressBar.updateProgress(0, '0%', '');
+
+        this._doProgressStatusRequest.defer(1500, this, [ progressNum ]);
+    },
+
+    _doProgressStatusRequest: function(progressNum)
+    {
+        this.request({
+            url: '/vps/json-progress-status',
+            params: { progressNum: progressNum },
+            success: function(response, options, r) {
+                var progressNum = options.params.progressNum;
+                if (!this._progressData[progressNum]) return;
+
+                if (typeof r.finished != 'undefined') {
+                    if (r.finished) {
+                        this._progressData[progressNum].progressBar.updateProgress(
+                            1, '100%', trlVps('Finished')
+                        );
+                        return;
+                    }
+
+                    this._progressData[progressNum].progressBar.updateProgress(
+                        r.percent / 100,
+                        Math.floor(r.percent)+'%',
+                        r.text ? r.text : ''
+                    );
+                }
+
+                if (!this._progressData[progressNum].breakStatusRequests) {
+                    // recursing
+                    this._doProgressStatusRequest.defer(500, this, [ progressNum ]);
+                }
+            },
+            scope: this
+        });
+    },
+
+    _createProgressDialog: function(cfg)
+    {
+        var progressBar = new Ext.ProgressBar({
+            text:'0%',
+            animate: true
+        });
+        cfg = Ext.applyIf(cfg, {
+            title: trlVps('Progress'),
+            autoCreate : true,
+            resizable:false,
+            constrain:true,
+            constrainHeader:true,
+            minimizable : false,
+            maximizable : false,
+            stateful: false,
+            modal: true,
+            shim:true,
+            buttonAlign:"center",
+            width:400,
+            plain:true,
+            footer:true,
+            closable:false
+        });;
+        var dlg = new Ext.Window(cfg);
+
+        if (typeof cfg.showCancel == 'undefined' || cfg.showCancel) {
+            dlg.addButton(
+                { text: trlVps('Cancel') },
+                (function(dialog) {
+                    Ext.Ajax.abort(dialog.transId);
+
+                    var responseObject = Ext.lib.Ajax.createExceptionObject(
+                        dialog.transId, null, true
+                    );
+                    Ext.callback(
+                        dialog.requestOptions.vpsCallback.failure,
+                        dialog.requestOptions.vpsCallback.scope,
+                        [responseObject, dialog.requestOptions]
+                    );
+                    dialog.requestOptions.callback.call(
+                        this,
+                        dialog.requestOptions,
+                        false,
+                        responseObject
+                    );
+                }).createDelegate(this, [ dlg ])
+            );
+        }
+
+        dlg.render(document.body);
+        dlg.myEls = { };
+        dlg.myEls.bodyEl = dlg.body.createChild({
+            html:'<div class="vps-progress-content"><span class="vps-progress-text"></span><br /></div>'
+        });
+        dlg.myEls.bodyEl.addClass('vps-progress-window');
+        dlg.myEls.msgEl = Ext.get(dlg.myEls.bodyEl.dom.childNodes[0].firstChild);
+
+        dlg.progressBar = new Ext.ProgressBar({
+            renderTo:dlg.myEls.bodyEl,
+            text: '0%',
+            animate: true
+        });
+        dlg.myEls.bodyEl.createChild({cls:'x-clear'});
+
+        dlg.updateProgress = function(num, progressBarText, text)
+        {
+            this.progressBar.updateProgress(num, progressBarText, true);
+            this.myEls.msgEl.update(text || '&#160;');
+        }
+
+        dlg.show();
+        return dlg;
+    },
+
     repeatRequest: function(options) {
         Vps.Connection.runningRequests++;
         delete options.vpsIsSuccess;
         Vps.Connection.superclass.request.call(this, options);
+        if (options.progress) {
+            this._showProgress(options);
+        }
     },
     vpsJsonSuccess: function(response, options)
     {
@@ -239,6 +379,11 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                     }
                 }
             }
+        }
+
+        if (options.progress) {
+            this._progressData[options.params.progressNum].progressBar.hide();
+            delete this._progressData[options.params.progressNum];
         }
 
         if(success && !options.vpsIsSuccess) {

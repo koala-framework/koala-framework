@@ -204,7 +204,22 @@ class Vps_Setup
     public static function setUp($configClass = 'Vps_Config_Web')
     {
         require_once 'Vps/Loader.php';
+        if (isset($_SERVER['REQUEST_URI']) &&
+            substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/json-progress-status' &&
+            !empty($_REQUEST['progressNum'])
+        ) {
+            Vps_Loader::registerAutoload();
+            $pbarAdapter = new Vps_Util_ProgressBar_Adapter_Cache($_REQUEST['progressNum']);
+            $pbarStatus = $pbarAdapter->getStatus();
+            if (!$pbarStatus) {
+                $pbarStatus = array();
+            }
+            $pbarStatus['success'] = true;
+            echo Zend_Json::encode($pbarStatus);
+            exit;
+        }
         require_once 'Vps/Registry.php';
+
         Zend_Registry::setClassName('Vps_Registry');
 
         self::$configClass = $configClass;
