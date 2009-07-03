@@ -43,7 +43,6 @@
                     <td colspan="4">&nbsp;</td>
                 </tr>
             <? } ?>
-            <? echo "<pre>"; print_r($p); echo "</pre>"; ?>
             <tr class="products<?=($i%2==1 ? ' row1' : ' row2');?>">
                 <td class="product"><?=$p?></td>
                 <td class="unitPrice"><?=trlVps('EUR')?> <?=$this->money($p->price,'')?></td>

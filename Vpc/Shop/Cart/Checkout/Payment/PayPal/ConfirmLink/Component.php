@@ -11,6 +11,8 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Vpc_Ab
 
     private function _getPaypalButton()
     {
+        $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->getCartOrder();
+
         $params = array(
             'cmd' => '_xclick',
             'business' => 'N5CLQYARCKGVE',
@@ -23,9 +25,14 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Vpc_Ab
             'no_shipping' => '2',
             'rm' => '1',
             'return' => $this->getData()->parent->getChildComponent('_confirm')->url,
-            'cancel_return' => $this->getData()->parent->parent->parent->parent->url,
+            'cancel_return' => $this->getData()->parent->parent->parent->url,
             'bn' => 'PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted',
-            'custom' => 'xxx',
+            'custom' => Vps_Util_PayPal_Ipn_LogModel::getEncodedCallback(
+                            $this->getData()->parent->componentClass,
+                            'processIpn',
+                            array(
+                                'orderId' => $order->id
+                            )),
         );
         $ret = "<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">\n";
         foreach ($params as $k=>$i) {

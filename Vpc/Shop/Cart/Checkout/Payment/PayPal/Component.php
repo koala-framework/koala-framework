@@ -11,4 +11,36 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
         return $ret;
     }
 
+    public function confirmOrder($order)
+    {
+        $mail = $this->getConfirmMail($this->_order);
+        $mail->send();
+
+        $this->_order->status = 'ordered';
+        $this->_order->date = new Zend_Db_Expr('NOW()');
+        $this->_order->save();
+    }
+    public static function processIpn(Vps_Util_PayPal_Ipn_LogModel_Row $row, $param)
+    {
+        if ($row->txn_type == 'payment') {
+            $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
+                ->getRow($param['orderId']);
+            if (!$order) {
+                throw new Vps_Exception("Order not found!");
+            }
+
+            $mail = $this->getConfirmMail($order);
+            $mail->send();
+
+            $order->status = 'payed';
+            $order->date = new Zend_Db_Expr('NOW()');
+            $order->save();
+        } else {
+            $mail = new Zend_Mail('utf-8');
+            $mail->setBodyText(print_r($row->toArray(), true))
+                ->setSubject('shop paypal: unbekannte notification');
+            $mail->addTo('ns@vivid-planet.com');
+            $mail->send();
+        }
+    }
 }

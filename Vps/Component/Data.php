@@ -607,6 +607,15 @@ class Vps_Component_Data
         return null;
     }
 
+    public function getParentByClass($cls)
+    {
+        $d = $this;
+        while ($d && !is_instance_of($d->componentClass, $cls)) {
+            $d = $d->parent;
+        }
+        return $d;
+    }
+
     public function getTitle()
     {
         $title = array();
