@@ -29,7 +29,7 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
                 'row' => $i
             );
         }
-        $ret['sumRows'] = $ret['checkout']->getComponent()->getSumRows();
+        $ret['sumRows'] = $ret['checkout']->getComponent()->getSumRows($ret['order']);
 
         return $ret;
     }
