@@ -3,6 +3,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
 {
     protected $_data;
     private $_tableLoaded = false;
+    private $_setValues = array();
 
     public function __construct(array $config)
     {
@@ -47,6 +48,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function __set($name, $value)
     {
         $this->_data->$name = $value;
+        $this->_setValues[] = $name;
     }
 
 
@@ -65,11 +67,9 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
             $this->_beforeInsert();
             $row = $m->createRow();
         }
-        if (isset($this->_data->parent_id)) $row->parent_id = $this->_data->parent_id;
-        if (isset($this->_data->pos)) $row->pos = $this->_data->pos;
-        if (isset($this->_data->visible)) $row->visible = $this->_data->visible;
-        if (isset($this->_data->name)) $row->name = $this->_data->name;
-        if (isset($this->_data->is_home)) $row->is_home = $this->_data->is_home;
+        foreach ($this->_setValues as $key) {
+            $row->$key = $this->_data->$key;
+        }
         $ret = $row->save();
         if ($id) {
             $this->_afterUpdate();

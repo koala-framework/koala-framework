@@ -321,6 +321,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
         $parentField = $this->_parentField;
         $row = $this->_model->getRow($source);
+        $this->_beforeSaveMove($row);
 
         if ($point == 'append') {
             $row->$parentField = (int)$target == 0 ? null : $target;
@@ -359,6 +360,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $select->whereNull($this->_parentField);
             } else {
                 $select->whereEquals($this->_parentField, $this->_rootParentValue);
+                $parentValue = $this->_rootParentValue;
             }
         } else {
             $select->whereEquals($this->_parentField, $parentValue);
@@ -371,10 +373,12 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
         if ($before === true) $before = null;
 
-        $this->view->parent = $row->$parentField;
+        $this->view->parent = $parentValue;
         $this->view->node = $source;
         $this->view->before = $before;
     }
+
+    protected function _beforeSaveMove($row) {}
 
     public function jsonCollapseAction()
     {

@@ -59,6 +59,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['expanded'] = true;
             $data['type'] = 'root';
             $data['domain'] = null;
+            $data['allowDrop'] = false;
         } else if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_Category_Component')) {
             $data['bIcon'] = $this->_icons['folder']->__toString();
             $data['expanded'] = $data['allowed'];
@@ -74,6 +75,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['type'] = 'root';
             $data['expanded'] = $data['allowed'];
             $data['domain'] = $row->getData()->row->id;
+            $data['allowDrop'] = false;
         } else {
             $data['domain'] = $row->getData()->row->domain;
             $data['category'] = $row->getData()->row->category;
@@ -150,6 +152,31 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $this->view->oldhomeVisible = $oldVisible;
         } else {
             $this->view->error = 'Page not found';
+        }
+    }
+
+    public function jsonMoveAction()
+    {
+        $target = $this->getRequest()->getParam('target');
+        $component = Vps_Component_Data_Root::getInstance()->getComponentByDbId($target, array('ignoreVisible' => true));
+        if ($component) {
+            while ($component && !$this->_rootParentValue) {
+                if (!$component->isPage) $this->_rootParentValue = $component->dbId;
+                $component = $component->parent;
+            }
+        }
+        parent::jsonMoveAction();
+
+        $this->_rootParentValue = null;
+    }
+
+    protected function _beforeSaveMove($row) {
+        $sourceRow = $this->_model->getTable()->find($this->getRequest()->getParam('source'))->current();
+        $targetRow = $this->_model->getTable()->find($this->getRequest()->getParam('target'))->current();
+        if ($sourceRow && $targetRow) {
+            $sourceRow->category = $targetRow->category;
+            $sourceRow->domain = $targetRow->domain;
+            $sourceRow->save();
         }
     }
 
