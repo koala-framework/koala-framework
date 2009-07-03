@@ -17,6 +17,13 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $select;
     }
 
+    final public function getFormattedSelect($parentData)
+    {
+        $ret = $this->select($parentData);
+        $ret = $this->_formatSelect($parentData, $ret);
+        return $ret;
+    }
+
     public function joinWithChildGenerator($select, $childGenerator)
     {
         $table = $this->_getModel()->getTable()->info('name');
@@ -253,6 +260,11 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     protected function _getIdFromRow($row)
     {
         return $row->{$this->_idColumn};
+    }
+
+    public function hasMultipleComponents()
+    {
+        return (count($this->_settings['component']) > 1);
     }
 
 }
