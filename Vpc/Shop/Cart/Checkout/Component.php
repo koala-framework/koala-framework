@@ -15,6 +15,7 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
             )
         );
         $ret['cssClass'] = 'webForm webStandard';
+        $ret['placeholder']['backToCart'] = trlVps('Back to cart');
         return $ret;
     }
 

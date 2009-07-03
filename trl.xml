@@ -4172,5 +4172,60 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Show locked users too</en>
 <id>1110</id>
 </text>
+<text>
+<en>File Upload Cancelled.</en>
+<id>1111</id>
+</text>
+<text>
+<en>Upload Stopped</en>
+<id>1112</id>
+</text>
+<text>
+<en>File is zero bytes or cannot be accessed and cannot be uploaded.</en>
+<id>1113</id>
+</text>
+<text>
+<en>Please choose</en>
+<id>1114</id>
+</text>
+<text>
+<en>Root</en>
+<id>1115</id>
+</text>
+<text>
+<en>visibility</en>
+<id>1116</id>
+</text>
+<text>
+<en>Edit Product</en>
+<id>1117</id>
+</text>
+<text>
+<en>To Checkout</en>
+<de>Zur Kasse</de>
+<id>1118</id>
+</text>
+<text>
+<en>Cash on Delivery</en>
+<de>Nachnahme</de>
+<id>1119</id>
+</text>
+<text>
+<en>Pre Payment</en>
+<de>Vorauskasse</de>
+<id>1120</id>
+</text>
+<text>
+<en>PayPal</en>
+<id>1121</id>
+</text>
+<text>
+<en>done</en>
+<id>1122</id>
+</text>
+<text>
+<en>Show locked users</en>
+<id>1123</id>
+</text>
 </trl>
 

@@ -6,40 +6,38 @@
     </div>
         <? } else { ?>
             <div class="countProducts">
-                <?=trlVps('You cart contains {0} products','<strong>'.$this->order->getTotalAmount().'</strong>')?>
+                <p>
+                    <?=trlVps('You cart contains {0} products','<strong>'.$this->order->getTotalAmount().'</strong>')?>
+                </p>
             </div>
-            <? foreach ($this->items as $i) { ?>
-                <div class="cartProduct">
-                    <div class="cartName">
-                        <?=$this->componentLink($i->product)?>
-                    </div>
-                    <div class="cartAmount">
-                        <?=trlVps('Amount')?>: <?=$i->row->amount?>
-                    </div>
-                    <div class="cartSize">
-                        <?=trlVps('Size')?>: <?=$i->row->size?>
-                    </div>
-                    <div class="cartPrice">
-                        <?=trlVps('EUR')?> <?=$this->money($i->product->row->price*$i->row->amount, '')?>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-            <? } ?>
-            <ul class="moneyInfo">
+            <table class="tblBoxCart" cellspacing="0" cellpadding="0">
+            <?
+            $c=0;
+            foreach ($this->items as $i) { ?>
+                <tr class="products<?=($c%2==0 ? ' row1' : ' row2');?>">
+                    <td class="amount"><?=$i->row->amount?>x</td>
+                    <td class="product"><?=$this->componentLink($i->product)?></td>
+                    <td class="price"><?=trlVps('EUR')?> <?=$this->money($i->product->row->price*$i->row->amount, '')?></td>
+                </tr>
+                <? $c++;
+            } ?>
+            </table>
+            <ul class="moneyInfo webListNone">
                 <? foreach ($this->sumRows as $row) { ?>
                     <li<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
                         <span class="text"><?=$row['text']?></span>
                         <span class="price"><?=trlVps('EUR')?> <?=$this->money($row['amount'],'')?></span>
+                        <div class="clear"></div>
                     </li>
                 <? } ?>
             </ul>
         </div>
         <div class="cartOrder">
             <div class="cart">
-                <?=$this->componentLink($this->cart, trlVps('To cart'))?>
+                <?=$this->componentLink($this->cart, $this->placeholder['toCart'])?>
             </div>
             <div class="checkout">
-                <?=$this->componentLink($this->checkout, trlVps('To checkout'))?>
+                <?=$this->componentLink($this->checkout, $this->placeholder['toCheckout'])?>
             </div>
         </div>
     <? } ?>

@@ -1,0 +1,5 @@
+.$cssClass .tblCheckout .unitPrice { text-align: right; }
+.$cssClass .tblCheckout .amount { text-align: center; }
+.$cssClass .tblCheckout .price { text-align: right; }
+.$cssClass .tblCheckout .tblCheckoutPrice { float: right; }
+.$cssClass .tblCheckout .tblCheckoutPrice .totalAmount td { font-weight: bold; }

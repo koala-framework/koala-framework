@@ -34,12 +34,11 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vpc_Abstract_Form
         $this->add(new Vps_Form_Field_TextField('phone', trlVps('Phone')));
 
         $this->add(new Vps_Form_Field_Panel())
-            ->setHtml(trlVps('What type of payment do you wish?'));
+            ->setHtml('<p class="formText">'.trlVps('What type of payment do you wish?').'</p>');
         $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')));
 
         $this->add(new Vps_Form_Field_TextArea('comment', trlVps('Other comments, questions or suggestions')))
-            ->setHeight(80)
-            ->setWidth(200);
+            ->setHeight(80);
     }
 
     public function setPayments($payments)
