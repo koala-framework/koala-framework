@@ -889,9 +889,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         Ext.Ajax.request({
             url : this.controllerUrl+'/json-xls',
             params  : this.getStore().baseParams,
-            title : trlVps('Excel export'),
             timeout: 600000, // 10 minuten
             progress: true,
+            progressTitle : trlVps('Excel export'),
             success: function(response, opt, r) {
                 if (Ext.isIE) {
                     Ext.Msg.show({
