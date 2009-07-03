@@ -15,27 +15,8 @@
     cursor: pointer;
 }
 
-/* style for export panel */
-.vps-export-panel {
-    font-size: 12px; color: #568;
-}
-.vps-export-panel strong { font-weight: bold; }
-.vps-export-panel #exportStatusbarStep {
-    margin-bottom: 15px;
-}
-.vps-export-panel #exportStatusbarOverall {
-    margin-bottom: 30px;
-}
-.vps-export-panel .exportDownloadLinkWrapper {
-    text-align: center;
-}
-.vps-export-panel #exportDownloadLink {
-    display: none;
+a.xlsExportLink {
     background: url(/assets/silkicons/page_excel.png) 0px 0px no-repeat;
     padding-left: 21px; font-size: 16px; font-weight: bold;
     text-decoration: none; color: #417e2d;
-}
-.vps-export-panel h1 {
-    font-size: 18px;
-    margin-bottom: 25px; margin-top: 5px;
 }

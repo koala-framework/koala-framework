@@ -872,6 +872,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $colIndex++;
         }
 
+        $helperDate = new Vps_View_Helper_Date();
+        $helperDateTime = new Vps_View_Helper_DateTime();
         foreach ($data as $row => $cols) {
             // row ist index, das andre nicht, passt aber trotzdem so
             // da ja in der ersten Zeile der Header steht
@@ -890,6 +892,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     || $textType == 'double'
                     || $textType == 'float') $cellType = PHPExcel_Cell_DataType::TYPE_NUMERIC;
                 if ($textType == 'NULL') $cellType = PHPExcel_Cell_DataType::TYPE_NULL;
+
+                // datum umformatieren
+                if (strlen($text) == 10 && preg_match('/^[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}$/', $text)) {
+                    $text = $helperDate->date($text);
+                } else if (strlen($text) == 19 && preg_match('/^[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2} [0-9]{2,2}:[0-9]{2,2}:[0-9]{2,2}$/', $text)) {
+                    $text = $helperDateTime->dateTime($text);
+                }
 
                 $sheet->setCellValueExplicit($cell, $text, $cellType);
             }

@@ -891,11 +891,25 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             params  : this.getStore().baseParams,
             title : trlVps('Excel export'),
             timeout: 600000, // 10 minuten
-            progress: true/*,
+            progress: true,
             success: function(response, opt, r) {
-                window.open(this.controllerUrl+'/download-export-file?downloadkey='+r.downloadkey, '_blank');
+                if (Ext.isIE) {
+                    Ext.Msg.show({
+                        title: trlVps('Your download is ready'),
+                        msg: trlVps('Please click on the following link to download your Excel file.')
+                            +'<br /><br />'
+                            +'<a class="xlsExportLink" href="'+this.controllerUrl+'/download-export-file?downloadkey='+r.downloadkey+'" target="_blank">'
+                            +trlVps('Excel export file')+'</a>',
+                        icon: Ext.Msg.INFO,
+                        buttons: { ok: trlVps('Close') }
+                    });
+                } else {
+                    Ext.getBody().createChild({
+                        html: '<iframe width="0" height="0" src="'+this.controllerUrl+'/download-export-file?downloadkey='+r.downloadkey+'"></iframe>'
+                    });
+                }
             },
-            scope: this*/
+            scope: this
         });
     },
     getSelected: function() {
