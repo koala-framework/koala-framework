@@ -1,6 +1,6 @@
 <?php
 
-class Vps_Model_Mail_MockMail extends Vps_Mail
+class Vps_Model_Mail_MockMail extends Vps_Mail_Template
 {
     public static $sendCalled = 0;
     public static $addToCalled = array();
