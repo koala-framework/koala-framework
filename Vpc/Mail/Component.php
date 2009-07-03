@@ -42,6 +42,26 @@ class Vpc_Mail_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function send(Vpc_Mail_Recipient_Interface $recipient, $data = null)
+    {
+        $this->_mailData = $data;
+
+        $mail = new Vps_Mail();
+        if ($recipient->getMailFormat() == Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) {
+            $this->getHtml($recipient);
+        }
+        $this->getText($recipient);
+        $this->getSubject($recipient);
+        $this->getRow()->from_email;
+        $this->getRow()->from_name;
+        $this->getRow()->reply_email;
+    }
+
+    public function getMailData()
+    {
+        return $this->_mailData;
+    }
+
     /**
      * Gibt den personalisierten Quelltext der Mail zurück
      *

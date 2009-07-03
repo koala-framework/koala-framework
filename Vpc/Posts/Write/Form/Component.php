@@ -24,7 +24,7 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
                 $guestbook = $this->getData()->parent->parent;
                 $userRow = $this->getData()->parent->parent->parent->row;
 
-                $mail = new Vps_Mail($guestbook);
+                $mail = new Vps_Mail_Template($guestbook);
                 $mail->subject = trlVps('New entry in your guestbook');
                 $mail->addTo($userRow->email, $userRow->__toString());
                 $mail->name = $userRow->nickname;
@@ -54,7 +54,7 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
 
     private function _sendObserveMail($userRow, $thread, $observe)
     {
-        $mail = new Vps_Mail($observe);
+        $mail = new Vps_Mail_Template($observe);
         $mail->subject = trlVps('New post in observed thread');
         $mail->addTo($userRow->email, $userRow->__toString());
         $mail->threadUrl = 'http://' . $_SERVER['HTTP_HOST'] . $thread->getUrl();
