@@ -1,5 +1,5 @@
 <?php
-class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface
+class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface, Vpc_Mail_Recipient_Interface
 {
     protected $_changedPasswordData = array();
     protected $_changedOldMail = null;
@@ -302,5 +302,38 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface
         }
 
         return $this->_additionalRolesCache;
+    }
+
+    // interface Vpc_Mail_Recipient_Interface
+    public function getMailGender()
+    {
+        return $this->gender == 'male' ?
+            Vpc_Mail_Recipient_Interface::MAIL_GENDER_MALE :
+            Vpc_Mail_Recipient_Interface::MAIL_GENDER_FEMALE;
+    }
+
+    public function getMailTitle()
+    {
+        return $this->title;
+    }
+
+    public function getMailFirstname()
+    {
+        return $this->firstname;
+    }
+
+    public function getMailLastname()
+    {
+        return $this->lastname;
+    }
+
+    public function getMailEmail()
+    {
+        return $this->email;
+    }
+
+    public function getMailFormat()
+    {
+        return Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
     }
 }
