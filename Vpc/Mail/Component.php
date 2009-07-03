@@ -1,6 +1,8 @@
 <?php
 class Vpc_Mail_Component extends Vpc_Abstract
 {
+    private $_mailData;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -48,15 +50,22 @@ class Vpc_Mail_Component extends Vpc_Abstract
 
         $mail = new Vps_Mail();
         if ($recipient->getMailFormat() == Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) {
-            $this->getHtml($recipient);
+            $mail->setBodyHtml($this->getHtml($recipient));
         }
-        $this->getText($recipient);
-        $this->getSubject($recipient);
-        $this->getRow()->from_email;
-        $this->getRow()->from_name;
-        $this->getRow()->reply_email;
+        $mail->setBodyText($this->getText($recipient));
+        $mail->setSubject($this->getSubject($recipient));
+        if ($this->getRow()->from_email) {
+            $mail->setFrom($this->getRow()->from_email, $this->getRow()->from_name);
+        }
+        if ($this->getRow()->reply_email) {
+            $mail->addHeader('Reply-To', $this->getRow()->reply_email);
+        }
+        //TODO: attachments, inline images
+        $mail->send();
     }
 
+    //kann von einer mail-content komponente aufgerufen werden
+    //hier können mail spezifische daten drinstehen
     public function getMailData()
     {
         return $this->_mailData;

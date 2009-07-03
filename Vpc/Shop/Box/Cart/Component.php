@@ -19,7 +19,7 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
 
         $ret['order'] = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
                             ->getCartOrder();
-        $items = $ret['order']->getChildRows('Products'); //$ret['cart']->getChildComponents(array('generator'=>'detail'));
+        $items = $ret['order']->getChildRows('Products');
         $ret['items'] = array();
         foreach ($items as $i) {
             $ret['items'][] = (object)array(

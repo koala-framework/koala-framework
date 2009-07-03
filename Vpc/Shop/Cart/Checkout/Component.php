@@ -60,23 +60,23 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
     }
 
     //kann überschrieben werden um zeilen für alle payments zu ändern
-    public function getSumRows()
+    public function getSumRows($order)
     {
         $ret = array();
         $ret[] = array(
             'class' => 'subtotal',
             'text' => trlVps('Subtotal').':',
-            'amount' => $this->_getOrder()->getSubTotal()
+            'amount' => $order->getSubTotal()
         );
         $ret[] = array(
             'text' => trlVps('Shipping and Handling').':',
-            'amount' => $this->getShipping($this->_getOrder())
+            'amount' => $this->getShipping($order)
         );
-        $ret = array_merge($ret, $this->_getAdditionalSumRows($this->_getOrder()));
+        $ret = array_merge($ret, $this->_getAdditionalSumRows($order));
         $ret[] = array(
             'class' => 'totalAmount',
             'text' => trlVps('Total Amount').':',
-            'amount' => $this->getTotal($this->_getOrder())
+            'amount' => $this->getTotal($order)
         );
         return $ret;
     }

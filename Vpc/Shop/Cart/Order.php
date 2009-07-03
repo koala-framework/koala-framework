@@ -1,5 +1,6 @@
 <?php
 class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
+    implements Vpc_Mail_Recipient_Interface
 {
     protected function _afterSave()
     {
@@ -8,6 +9,31 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
             Vpc_Shop_Cart_Orders::resetCartOrderId();
         }
     }
+    public function getMailGender()
+    {
+        return $this->sex;
+    }
+    public function getMailTitle()
+    {
+        return $this->title;
+    }
+    public function getMailFirstname()
+    {
+        return $this->firstname;
+    }
+    public function getMailLastname()
+    {
+        return $this->lastname;
+    }
+    public function getMailEmail()
+    {
+        return $this->email;
+    }
+    public function getMailFormat()
+    {
+        return Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
+    }
+    
 /*
     public function getShipping()
     {
