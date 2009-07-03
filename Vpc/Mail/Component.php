@@ -4,18 +4,19 @@ class Vpc_Mail_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['mail'] = array(
+        $ret['generators']['content'] = array(
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vpc_Paragraphs_Component'
         );
         $ret['modelname'] = 'Vpc_Mail_Model';
+        $ret['componentName'] = 'Mail';
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['mail'] = $this->getData()->getChildComponent('-mail');
+        $ret['content'] = $this->getData()->getChildComponent('-content');
         return $ret;
     }
 
@@ -27,7 +28,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
      *   <li>%Text bei Mann:Text bei Frau%</li>
      *   <li>%gender%</li>Durch "Mr." oder "Ms."
      *   <li>%title%</li>Falls leer, wird nachfolgendes Leerzeichen gelöscht
-     *   <li>%firstname%</li>
+     *   <li>%firstname%</li>Falls leer, wird nachfolgendes Leerzeichen gelöscht
      *   <li>%lastname%</li>
      * </ul>
      */
@@ -36,7 +37,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $output = new Vps_Component_Output_Mail();
         $output->setType(Vps_Component_Output_Mail::TYPE_HTML);
         $output->setRecipient($recipient);
-        $ret = $output->render($this->getData()->getChildComponent('-mail'));
+        $ret = $output->render($this->getData()->getChildComponent('-content'));
         if ($recipient) $ret = $this->_replacePlaceholders($ret, $recipient);
         return $ret;
     }
@@ -51,7 +52,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $output = new Vps_Component_Output_Mail();
         $output->setType(Vps_Component_Output_Mail::TYPE_TXT);
         $output->setRecipient($recipient);
-        $ret = $output->render($this->getData()->getChildComponent('-mail'));
+        $ret = $output->render($this->getData()->getChildComponent('-content'));
         if ($recipient) $ret = $this->_replacePlaceholders($ret, $recipient);
         return $ret;
     }
@@ -70,6 +71,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
 
     protected function _replacePlaceholders($text, Vpc_Mail_Recipient_Interface $recipient)
     {
+        // gender
         $pattern = '/\%(.*)\:(.*)\%/U';
         if ($recipient->getMailGender() == Vpc_Mail_Recipient_Interface::MAIL_GENDER_MALE) {
             $text = preg_replace($pattern, '$1', $text);
@@ -79,10 +81,15 @@ class Vpc_Mail_Component extends Vpc_Abstract
             $gender = trlVps('Ms.');
         }
         $text = str_replace('%gender%', $gender, $text);
+        // title
         $title = $recipient->getMailTitle();
         $search = $title == '' ? '%title% ' : '%title%';
         $text = str_replace($search, $title, $text);
-        $text = str_replace('%firstname%', $recipient->getMailFirstname(), $text);
+        // firstname
+        $firstname = $recipient->getMailFirstname();
+        $search = $firstname == '' ? '%firstname% ' : '%firstname%';
+        $text = str_replace($search, $firstname, $text);
+        // lastname
         $text = str_replace('%lastname%', $recipient->getMailLastname(), $text);
         return $text;
     }
