@@ -13,5 +13,11 @@ class Vpc_Newsletter_Detail_MailController extends Vps_Controller_Action
             ->getChildComponent('-mail');
 
         $this->view->html = $component->getComponent()->getHtml($recipient);
+        $this->view->subject = $component->getComponent()->getSubject($recipient);
+    }
+
+    public function jsonSendMailAction()
+    {
+        p('foo');
     }
 }
