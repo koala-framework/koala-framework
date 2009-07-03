@@ -6,7 +6,7 @@ class Vps_User_Model extends Vps_Model_Proxy
     protected $_authedUser;
     protected $_passwordColumn = 'password';
 
-    protected $_mailClass = 'Vps_Mail';
+    protected $_mailClass = 'Vps_Mail_Template';
 
     public function __construct(array $config = array())
     {
