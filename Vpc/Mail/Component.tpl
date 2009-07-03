@@ -1,3 +1,3 @@
 <div class="<?=$this->cssClass?>">
-    <?php echo $this->component($this->mail) ?>
+    <?php echo $this->component($this->content) ?>
 </div>
