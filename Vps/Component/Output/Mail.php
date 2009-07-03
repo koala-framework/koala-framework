@@ -19,6 +19,7 @@ class Vps_Component_Output_Mail extends Vps_Component_Output_NoCache
 
     protected function _renderContent($componentId, $componentClass, $masterTemplate, $useCache = false)
     {
+        $this->setIgnoreVisible(true);
         $output = new Vps_Component_Output_ComponentMail();
         $output->setIgnoreVisible($this->ignoreVisible());
         return $output->render($this->_getComponent($componentId), $this->_type, $this->_recipient);
