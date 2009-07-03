@@ -39,7 +39,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $output = new Vps_Component_Output_Mail();
         $output->setType(Vps_Component_Output_Mail::TYPE_HTML);
         $output->setRecipient($recipient);
-        $ret = $output->render($this->getData()->getChildComponent('-content'));
+        $ret = $output->render($this->getData());
         if ($recipient) $ret = $this->_replacePlaceholders($ret, $recipient);
         return $ret;
     }
@@ -81,7 +81,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $output = new Vps_Component_Output_Mail();
         $output->setType(Vps_Component_Output_Mail::TYPE_TXT);
         $output->setRecipient($recipient);
-        $ret = $output->render($this->getData()->getChildComponent('-content'));
+        $ret = $output->render($this->getData());
         if ($recipient) $ret = $this->_replacePlaceholders($ret, $recipient);
         return $ret;
     }
