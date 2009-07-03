@@ -137,6 +137,7 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
             $i = trim(trim($i), '/');
         }
         array_unshift($out, 'vps');
+        return array('vps');
         return $out;
     }
 
@@ -194,14 +195,37 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
 
     private function _loc($path)
     {
-        exec("/home/niko/ohcount-1.0.2/bin/ohcount $path", $output);
-                         //lang   files     code
+        $paths = '';
+        foreach (new DirectoryIterator($path) as $p) {
+            if ($p->isDot()) continue;
+            if ($p == '.svn') continue;
+            if ($p == 'Zend') continue;
+            if ($p == 'Smarty') continue;
+            if ($p == 'ext') continue;
+            if ($p == 'YUI') continue;
+            if ($p == 'images') continue;
+            if ($p == 'tcpdf') continue;
+            if ($p == 'library') {
+                foreach (new DirectoryIterator($path.'/'.$p) as $p2) {
+                    if ($p2 == 'Vps' || $p2 == 'files') {
+                        $paths .= " $path/$p/$p2";
+                    }
+                }
+                continue;
+            }
+            $paths .= " $path/$p";
+        }
+        $cmd = "/home/niko/ohcount-1.0.2/bin/ohcount $paths";
+        //echo $cmd."\n";
+        exec($cmd, $output);
+                        //lang   files     code
         preg_match_all('#^([^ ]+) +([0-9]+) +([0-9]+)#m', implode("\n", $output), $m);
         $locs = array();
         foreach($m[1] as $i=>$l) {
             $l = strtolower($l);
             if ($l == 'javascript') $l = 'js';
-            $locs[$l] = $m[3][$i];
+            if (!isset($locs[$l])) $locs[$l] = 0;
+            $locs[$l] += $m[3][$i];
         }
         return $locs;
     }
@@ -239,7 +263,7 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
             }
         }
 
-        $cmd = "rrdtool graph svnstats-".implode('', $webs)."-".implode('', $types).".png -h 768 -w 1024 ";
+        $cmd = "rrdtool graph svnstats-".implode('', $webs)."-".implode('', $types).".png --full-size-mode -h 600 -w 900 ";
         $cmd .= "-s ".strtotime($this->_getParam('start'))." ";
         $cmd .= "-e ".$end." ";
         foreach ($lines as $i=>$l) {
