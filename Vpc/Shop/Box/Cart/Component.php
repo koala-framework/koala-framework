@@ -6,6 +6,8 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
         $ret['cssClass'] = 'webStandard';
+        $ret['placeholder']['toCart'] = trlVps('To cart');
+        $ret['placeholder']['toCheckout'] = trlVps('To Checkout');
         return $ret;
     }
 

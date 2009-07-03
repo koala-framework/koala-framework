@@ -1,0 +1,8 @@
+.$cssClass .tblBoxCart { width: 100%; }
+.$cssClass .products { color: $typo; }
+.$cssClass .products td { vertical-align: top; }
+.$cssClass .products td.amount { text-align: left; padding-right: 5px; }
+.$cssClass .products td.price { text-align: right; white-space: nowrap; }
+.$cssClass .moneyInfo .text { float: left; }
+.$cssClass .moneyInfo .price { float: right; }
+.$cssClass li.totalAmount span { font-weight: bold; }

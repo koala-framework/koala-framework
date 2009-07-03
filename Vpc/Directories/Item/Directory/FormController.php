@@ -6,16 +6,13 @@ class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Actio
 
     public function _initFields()
     {
-        $data = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible' => true));
-
         $this->_form = Vpc_Abstract_Form::createChildComponentForm(
-                $data->componentClass, '-detail', $data->componentClass);
+                $this->_getParam('class'), '-detail', $this->_getParam('class'));
         $this->_form->setIdTemplate(null);
 
-        $this->_form->setModel(Vpc_Abstract::createModel($data->componentClass));
+        $this->_form->setModel(Vpc_Abstract::createModel($this->_getParam('class')));
 
-        $classes = Vpc_Abstract::getChildComponentClasses($data->componentClass);
+        $classes = Vpc_Abstract::getChildComponentClasses($this->_getParam('class'));
         foreach ($classes as $class) {
             $formName = Vpc_Admin::getComponentClass($class, 'ItemEditForm');
             if ($formName) {

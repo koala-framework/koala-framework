@@ -17,6 +17,8 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         $ret['viewCache'] = false;
         $ret['cssClass'] = 'webStandard webForm';
         $ret['componentName'] = trlVps('Shop.Cart');
+        $ret['placeholder']['backToShop'] = trlVps('Back to shop');
+        $ret['placeholder']['checkout'] = trlVps('To checkout');
         return $ret;
     }
 

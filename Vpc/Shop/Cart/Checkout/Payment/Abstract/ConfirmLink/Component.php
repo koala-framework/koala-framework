@@ -5,6 +5,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_ConfirmLink_Component extends Vpc_
     {
         $ret = parent::getTemplateVars();
         $ret['confirm'] = $this->getData()->parent->getChildComponent('_confirm');
+        $ret['placeholder']['confirm'] = trlVps('Send order');
         return $ret;
     }
 }

@@ -5,6 +5,6 @@
             <div class="price"><p><?=trlVps('EUR')?> <?=$this->money($this->data->row->price,'')?></p></div>
             <?=$this->component($this->addToCart)?>
         </div>
-        <div class="back"><?=$this->componentLink($this->data->getParentPage(),trlVps('Back to shop'));?></div>
+        <div class="back"><?=$this->componentLink($this->data->getParentPage(), $this->placeholder['backToShop']);?></div>
     </div>
 </div>
