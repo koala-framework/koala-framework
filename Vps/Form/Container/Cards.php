@@ -62,6 +62,12 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return $this;
     }
 
+    public function setAllowBlank($value)
+    {
+        $this->_combobox->setAllowBlank($value);
+        return $this;
+    }
+
     public function getMetaData($model)
     {
         $ret = parent::getMetaData($model);
@@ -91,6 +97,12 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         );
 
         return $ret;
+    }
+
+    public function setInternalSave($v)
+    {
+        $this->_combobox->setInternalSave($v);
+        return parent::setInternalSave($v);
     }
 
     public function validate($row, $postData)

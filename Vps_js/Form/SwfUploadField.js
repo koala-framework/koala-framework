@@ -99,9 +99,8 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         if (!(navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"])){
             return;
         }
-        /*this.uploadChild = this.uploadButtonContainer.createChild({
-            id: 'uploadButton'+Ext.id()
-        });*/
+        if (Ext.isLinux) return; //für markus deaktivert
+
         this.checkSwf = false;
         this.swfu = new SWFUpload({
             custom_settings: {field: this},
@@ -146,7 +145,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
                 try {
                     var r = Ext.util.JSON.decode(response);
                 } catch(e) {
-                    Vps.handleError(response, 'Upload Error');
+                    Vps.handleError('Upload Error');
                     return;
                 }
                 if (r.success) {

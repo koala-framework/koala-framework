@@ -6,10 +6,7 @@ class Vpc_Directories_CategoryTree_View_Component
 
     protected function _getCountCategoryIds($item)
     {
-        $ret = $item->row->getRecursiveChildCategoryIds(array(
-            'visible = 1'
-        ));
-        return $ret;
+        return $item->row->getRecursiveChildCategoryIds();
     }
 
     public function getCacheStaticVars()
