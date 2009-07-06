@@ -61,7 +61,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         $ret = parent::getMetaData($model);
         $ret['multiItems'] = $this->fields->getMetaData($model);
         if (!isset($ret['position'])) {
-            $ret['position'] = in_array('pos', $this->_model->getColumns());
+            $ret['position'] = in_array('pos', $model->getColumns());
         }
         return $ret;
     }
