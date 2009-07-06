@@ -7,7 +7,7 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
         $childConfig = array_values(Vpc_Admin::getInstance($class)->getExtConfig());
         if (count($childConfig) > 1) {
             //wenn das mal benötigt wird möglicherwesie mit tabs
-            throw new Vps_Exception("Vpc_Abstract_List can only have childs with one Controller");
+            throw new Vps_Exception("Vpc_Abstract_List can only have childs with one Controller '$class'");
         }
 
         return array(

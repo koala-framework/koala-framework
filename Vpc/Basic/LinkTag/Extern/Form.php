@@ -14,8 +14,8 @@ class Vpc_Basic_LinkTag_Extern_Form extends Vpc_Abstract_Form
         if (Vpc_Abstract::getSetting($class, 'hasPopup')) {
 
             // cards container erstellen und zu form hinzufügen
-            $cards = $this->add(new Vps_Form_Container_Cards('open_type', trlVps('Open in')))
-                ->setAllowBlank(false);
+            $cards = $this->add(new Vps_Form_Container_Cards('open_type', trlVps('Open in')));
+            $cards->getCombobox()->setAllowBlank(false);
             $card = $cards->add();
                 $card->setTitle(trlVps('Own window'));
                 $card->setName('self');
