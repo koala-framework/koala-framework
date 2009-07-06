@@ -5,7 +5,7 @@ class Vpc_Advanced_Amazon_Nodes_Component extends Vpc_Directories_ItemPage_Direc
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Amazon.Nodes');
-        $ret['modelname'] = 'Vps_Component_FieldModel';
+        $ret['modelname'] = 'Vpc_Advanced_Amazon_Nodes_FieldModel';
 
         $ret['generators']['detail']['component'] = 'Vpc_Advanced_Amazon_Nodes_Detail_Component';
         $ret['generators']['detail']['model'] = 'Vpc_Advanced_Amazon_Nodes_NodesModel';
