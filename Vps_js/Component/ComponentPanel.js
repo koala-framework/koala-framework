@@ -84,7 +84,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             var item = Ext.ComponentMgr.create(config);
             item.on('savebackaction', function() {
                 this.componentsStack.pop();
-                var data = this.componentsStack[this.componentsStack.length-1];
+                var data = this.componentsStack.pop();
                 this.loadComponent(data);
             }, this);
             item.on('loaded', function() {
