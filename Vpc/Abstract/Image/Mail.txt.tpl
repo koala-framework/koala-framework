@@ -1,1 +1,0 @@
-<div class="<?=$this->cssClass?>"><?=$this->image($this->data, 'default', '', $this->imgCssClass)?></div>
