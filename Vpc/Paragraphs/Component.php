@@ -19,8 +19,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
         $ret['generators']['paragraphs'] = array(
             'class' => 'Vps_Component_Generator_Table',
-            'component' => array('text' => 'Vpc_Basic_Text_Component',
-                                 'image' => 'Vpc_Basic_Image_Component')
+            'component' => array('textImage' => 'Vpc_TextImage_Component')
         );
         $ret['previewWidth'] = 600;
         $ret['default'] = array();
