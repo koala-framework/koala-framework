@@ -6,6 +6,8 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
 
+        $ret['generators']['child']['component']['orderHeader'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Component';
+        $ret['generators']['child']['component']['orderTable'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component';
         $ret['generators']['child']['component']['confirmLink'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_ConfirmLink_Component';
 
         $ret['generators']['confirm'] = array(
@@ -25,20 +27,10 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $checkout = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass(
-                'Vpc_Shop_Cart_Component',
-                array('subroot' => $this->getData())
-            )
-            ->getChildComponent('_checkout');
-
         $ret['order'] = $this->_getOrder();
         $ret['orderProducts'] = $ret['order']->getChildRows('Products');
-
         $ret['sumRows'] = $this->_getSumRows($this->_getOrder());
-
         $ret['paymentTypeText'] = $this->_getSetting('componentName');
-
         return $ret;
     }
 
@@ -83,7 +75,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
     {
         $this->sendConfirmMail($order);
 
-//         $order->status = 'ordered';
+        $order->status = 'ordered';
         $order->date = new Zend_Db_Expr('NOW()');
         $order->save();
     }
