@@ -55,16 +55,16 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
         $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Retry")."']");
         $this->waitForConnections();
 
-        $this->click("//div[contains(text(),'exceptionError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlVps("Retry")."']");
         $this->waitForConnections();
-        $this->click("//div[contains(text(),'exceptionError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlVps("Retry")."']");
         $this->waitForConnections();
-        $this->click("//div[contains(text(),'exceptionError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlVps("Retry")."']");
         $this->waitForConnections();
-        $this->click("//div[contains(text(),'exceptionError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlVps("Retry")."']");
         $this->waitForConnections();
 
-        $this->click("//div[contains(text(),'exceptionError')]/../../../..//button[text()='".trlVps("Abort")."']");
+        $this->click("//*[contains(text(),'exceptionError')]/../../../../..//button[text()='".trlVps("Abort")."']");
         $this->waitForConnections();
 
         $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Abort")."']");
