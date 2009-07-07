@@ -109,7 +109,7 @@ class Vps_Component_Cache
 
     public function saveMeta($model, $id, $value, $type = self::META_CACHE_ID, $field = '')
     {
-        if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+        if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
         if ($model instanceof Vps_Model_Abstract) $model = $model;
         if (!$type) $type = self::META_CACHE_ID;
         if (!is_string($model)) $model = get_class($model);
