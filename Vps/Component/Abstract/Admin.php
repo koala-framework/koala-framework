@@ -65,7 +65,7 @@ class Vps_Component_Abstract_Admin
             || !Vpc_Abstract::getSetting($this->_class, 'componentName'))
         {
             //wenn das probleme verursact ignorieren - aber es erspart lange fehlersuche warum eine komp. nicht angezeigt wird :D
-            throw new Vps_Exception("Component '$cc->componentClass' does have no componentName but must have one for editing");
+            throw new Vps_Exception("Component '$this->_class' does have no componentName but must have one for editing");
         }
         $ret = array(
             'form' => array(
