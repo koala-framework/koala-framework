@@ -184,7 +184,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             if (is_object($m)) {
                 if ($m instanceof Vps_Model_Row_Abstract) {
                     $model = $m->getModel();
-                    if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+                    if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
                 } else if ($m instanceof Zend_Db_Table_Row_Abstract) {
                     $model = $m->getTable();
                 }
