@@ -64,7 +64,7 @@ class Vps_Component_RowObserver
         } else {
             $model = $row->getModel();
             $primary = $model->getPrimaryKey();
-            if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+            if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
             if ($model instanceof Vps_Component_Cache_MetaModel ||
                 $model instanceof Vps_Component_Cache_Model
             ) {

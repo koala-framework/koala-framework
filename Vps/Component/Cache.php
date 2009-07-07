@@ -194,7 +194,7 @@ class Vps_Component_Cache
             } else {
                 $model = $row->getModel();
                 $primaryKey = $model->getPrimaryKey();
-                if ($model instanceof Vps_Model_Db) $model = $model->getTable();
+                if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
             }
             $model = get_class($model);
             $fields = $this->_getFields($model);
