@@ -27,11 +27,16 @@ Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
 
     fireEditComponent : function(row)
     {
+    	if (!this.idTemplate) {
+    		componentId = this.initialConfig.baseParams.componentId + this.idSeparator + row.data.id;
+    	} else {
+    		componentId = this.idTemplate.replace('{0}', row.data.id);
+    	}
         this.fireEvent('editcomponent', {
             componentClass: this.contentClass,
             type: this.contentType,
             editComponents: this.contentEditComponents,
-            componentId: this.idTemplate.replace('{0}', row.data.id),
+            componentId: componentId,
             text: trlVps('Details')
         });
     }
