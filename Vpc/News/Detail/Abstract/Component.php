@@ -7,4 +7,11 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Directories_Item_D
         $ret['generators']['child']['component']['content'] = 'Vpc_Paragraphs_Component';
         return $ret;
     }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['title'] = $this->getData()->row->title;
+        return $ret;
+    }
 }
