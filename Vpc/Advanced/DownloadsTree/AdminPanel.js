@@ -44,7 +44,7 @@ Vpc.Advanced.DownloadsTree.AdminPanel = Ext.extend(Vps.Binding.ProxyPanel, {
             region: 'center'
         });
         this.projects = new Vpc.Advanced.DownloadsTree.AdminPanelProjects({
-            controllerUrl: this.projectsClassUrl,
+            controllerUrl: this.projectsUrl,
             region: 'west',
             width: 300,
             split: true,
@@ -53,7 +53,7 @@ Vpc.Advanced.DownloadsTree.AdminPanel = Ext.extend(Vps.Binding.ProxyPanel, {
                 queryParam: 'project_id'
             }],
             editDialog: new Vps.Auto.Form.Window({
-                controllerUrl: this.projectClassUrl,
+                controllerUrl: this.projectUrl,
                 width: 400,
                 height: 400
             })
