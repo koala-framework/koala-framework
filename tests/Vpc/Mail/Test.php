@@ -24,13 +24,13 @@ class Vpc_Mail_Test extends Vpc_TestAbstract
         );
         $this->assertEquals('htmlmail Franz Unger', $c->getHtml($recipient));
         $this->assertEquals('textmail Franz Unger', $c->getText($recipient));
-        $this->assertEquals('Sehr geehrter Herr Mag. Unger', $c->getSubject($recipient));
+        $this->assertEquals('Sehr geehrter ' . trlVps('Mr.') . ' Mag. Unger', $c->getSubject($recipient));
 
         $recipient = $recipients->getRow(
             $recipients->select()->whereEquals('email', 'ar@vivid-planet.com')
         );
         $this->assertEquals('htmlmail Alexandra Rainer', $c->getHtml($recipient));
         $this->assertEquals('textmail Alexandra Rainer', $c->getText($recipient));
-        $this->assertEquals('Sehr geehrte Frau Rainer', $c->getSubject($recipient));
+        $this->assertEquals('Sehr geehrte ' . trlVps('Ms.') . ' Rainer', $c->getSubject($recipient));
     }
 }
