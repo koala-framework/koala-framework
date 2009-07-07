@@ -21,8 +21,7 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
                     url : this.controllerUrl + '/json-send-mail',
                     params: this.baseParams,
                     success: function(response, options, r) {
-	    				console.log(this.baseParams);
-                        Ext.MessageBox.alert(trlVps('Status'), trlVps('foo'));
+                        Ext.MessageBox.alert(trlVps('Status'), r.message);
                     },
                     scope: this
                 });
@@ -64,6 +63,9 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
             },
             scope: this
         });
-	}
+	},
+	applyBaseParams : function(baseParams) {
+        this.baseParams = baseParams;
+    }
 });
 Ext.reg('vpc.newsletter.mailpanel', Vpc.Newsletter.Detail.MailPanel);

@@ -44,6 +44,32 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
 			handler: this.load,
 			scope   : this
 		});
+		this.actions.deleteAll = new Ext.Action({
+            text    : trlVps('Delete All'),
+            icon    : '/assets/silkicons/bin_empty.png',
+            cls     : 'x-btn-text-icon',
+            handler : function(){
+				Ext.Msg.confirm(
+					trlVps('Are you sure?'),
+				    trlVps('Do you really want to delete all receivers with status "queued"?.'),
+				    function(result) {
+						if (result == 'yes') {
+				    		Ext.Ajax.request({
+				                url : this.controllerUrl + '/json-delete-all',
+				                params: this.initialConfig.baseParams,
+				                success: function(response, options, r) {
+				                    Ext.MessageBox.alert(trlVps('Status'), r.message);
+				                    this.reload();
+				                },
+				                scope: this
+				            });
+						}
+				    },
+				    this
+				);
+			},
+            scope	: 	this
+        });
 
         this.on('load', function(r, s, t) {
         	var info = r.reader.jsonData.info;
@@ -115,3 +141,4 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
         });
     }
 });
+Ext.reg('vpc.newsletter.mailing', Vpc.Newsletter.Detail.MailingPanel);
