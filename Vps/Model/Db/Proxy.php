@@ -25,9 +25,4 @@ class Vps_Model_Db_Proxy extends Vps_Model_Proxy
         }
         parent::__construct($config);
     }
-
-    public function afterInsert($row)
-    {
-        $this->_proxyModel->afterInsert($row);
-    }
 }
