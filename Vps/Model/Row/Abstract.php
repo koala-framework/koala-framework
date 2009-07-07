@@ -290,12 +290,17 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         $this->_updateFilters(false);
     }
 
+    protected function _callObserver($fn)
+    {
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            Vps_Component_RowObserver::getInstance()->$fn($this);
+        }
+    }
+
     protected function _afterSave()
     {
         $this->_updateFilters(true);
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_RowObserver::getInstance()->save($this);
-        }
+        $this->_callObserver('save');
     }
 
     protected function _beforeUpdate()
@@ -305,9 +310,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     protected function _afterUpdate()
     {
         $this->_updateFilters(true);
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_RowObserver::getInstance()->update($this);
-        }
+        $this->_callObserver('update');
     }
 
     protected function _beforeInsert()
@@ -316,9 +319,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     protected function _afterInsert()
     {
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_RowObserver::getInstance()->insert($this);
-        }
+        $this->_callObserver('insert');
     }
 
     protected function _beforeDelete()
@@ -329,9 +330,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                 $f->onDeleteRow($this);
             }
         }
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_RowObserver::getInstance()->delete($this);
-        }
+        $this->_callObserver('delete');
     }
 
     protected function _afterDelete()

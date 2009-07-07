@@ -36,4 +36,8 @@ class Vps_User_MirrorRow extends Vps_Model_MirrorCache_Row
         }
         return parent::_getInsertSourceRow();
     }
+
+    protected function _callObserver($fn)
+    {
+    }
 }
