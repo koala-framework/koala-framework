@@ -7,6 +7,8 @@ class Vpc_Shop_Cart_Detail_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component']['form'] = 'Vpc_Shop_Cart_Detail_Form_Component';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
+        $ret['placeholder']['product'] = trlVps('Product').': ';
+        $ret['placeholder']['unitPrice'] = '';
         return $ret;
     }
 
