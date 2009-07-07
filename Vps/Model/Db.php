@@ -77,6 +77,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $ret;
     }
 
+    /**
+     * wird aufgerufen von row
+     */
     public function afterInsert($row)
     {
         $id = $this->_getUniqueId($row->getRow());
