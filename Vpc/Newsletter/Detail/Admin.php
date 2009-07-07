@@ -5,27 +5,44 @@ class Vpc_Newsletter_Detail_Admin extends Vpc_Admin
     {
         $ret = parent::getExtConfig();
         $mailClass = Vpc_Abstract::getChildComponentClass($this->_class, 'mail');
-        $mailClass = Vpc_Abstract::getChildComponentClass($mailClass, 'content');
-        $jsClass = Vpc_Admin::getComponentFile($this->_class, 'RecipientsPanel', 'js', true);
-        $jsClass = str_replace('_', '.', $jsClass);
+        $mailContentClass = Vpc_Abstract::getChildComponentClass($mailClass, 'content');
+        $cfg = Vpc_Admin::getInstance($mailContentClass)->getExtConfig();
 
         $ret['form'] = array_merge($ret['form'], array(
-            'xtype'=>'vpc.newsletter.panel',
-            'mailComponentClass' => $mailClass,
-            'recipientsControllerUrl' => Vpc_Admin::getInstance($this->_class)->getControllerUrl('Recipients'),
-            'mailingControllerUrl' => Vpc_Admin::getInstance($this->_class)->getControllerUrl('Mailing'),
-            'recipientsClass' => $jsClass
+            'xtype' => 'vps.tabpanel',
+            'tabs' => array(
+                'settings' => array(
+                    'xtype'                 => 'vps.autoform',
+                    'controllerUrl'         => $this->getControllerUrl(),
+                    'title'                 => trlVps('Settings')
+                ),
+                'mail' => array(
+                    'xtype'                 => 'vps.component',
+                    'componentEditUrl'      => '/admin/component/edit',
+                    'mainComponentClass'    => $mailContentClass,
+                    'componentIdSuffix'     => '-mail-content',
+                    'componentConfigs'      => array($mailContentClass . '-paragraphs' => $cfg['paragraphs']),
+                    'mainEditComponents'    => array(array(
+                        'componentClass' => $mailContentClass,
+                        'type' => 'paragraphs'
+                    )),
+                    'mainType'              => 'paragraphs',
+                    'title'                 => trlVps('Mail')
+                ),
+                'recipients' => array(
+                    'xtype'                 => 'vpc.newsletter.recipients',
+                    'controllerUrl'         => $this->getControllerUrl('Recipients'),
+                    'title'                 => trlVps('Recipients')
+                ),
+                'mailing' => array(
+                    'xtype'                 => 'vpc.newsletter.mailing',
+                    'controllerUrl'         => $this->getControllerUrl('Mailing'),
+                    'title'                 => trlVps('Mailing'),
+                    'tbar'                  => array()
+                )
+            )
         ));
 
-        $cfg = Vpc_Admin::getInstance($mailClass)->getExtConfig();
-        foreach ($cfg as $k=>$c) {
-            $ret['form']['componentConfigs'][$mailClass.'-'.$k] = $c;
-            $ret['form']['mainEditComponents'][] = array(
-                'componentClass' => $mailClass,
-                'type' => $k
-            );
-            $ret['form']['mainType'] = $k;
-        }
         return $ret;
     }
 }

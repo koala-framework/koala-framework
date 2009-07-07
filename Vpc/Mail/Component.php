@@ -50,11 +50,18 @@ class Vpc_Mail_Component extends Vpc_Abstract
      *        Komponenten per $this->getData()->getParentByClass('Vpc_Mail_Component')->getComponent()->getMailData();
      *        ausgelesen werden
      */
-    public function send(Vpc_Mail_Recipient_Interface $recipient, $data = null)
+    public function send(Vpc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null)
     {
         $this->_mailData = $data;
 
         $mail = new Vps_Mail();
+        $name = $recipient->getMailFirstname() . ' ' . $recipient->getMailLastname();
+        if (!$name == ' ') $name = null;
+        if ($toAddress) {
+            $mail->addTo($toAddress, $name);
+        } else {
+            $mail->addTo($recipient->getMailEmail(), $name);
+        }
         if ($recipient->getMailFormat() == Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) {
             $mail->setBodyHtml($this->getHtml($recipient));
         }
@@ -67,7 +74,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
             $mail->addHeader('Reply-To', $this->getRow()->reply_email);
         }
         //TODO: attachments, inline images
-        $mail->send();
+        return $mail->send();
     }
 
     //kann von einer mail-content komponente aufgerufen werden

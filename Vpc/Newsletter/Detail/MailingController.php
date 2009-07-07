@@ -1,7 +1,7 @@
 <?php
 class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_buttons = array();
+    protected $_buttons = array('delete', 'deleteAll');
     protected $_defaultOrder = 'id';
     protected $_paging = 20;
     protected $_modelName = 'Vpc_Newsletter_QueueModel';
@@ -15,8 +15,8 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
             'baseParams' => array(
                 'componentId' => $this->_getParam('componentId')
             ),
-            'width' => 300,
-            'height' => 300
+            'width' => 500,
+            'height' => 400
         );
         parent::preDispatch();
     }
@@ -44,9 +44,39 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
         $this->_columns->add(new Vps_Grid_Column('format', trlVps('Format'), 60))
             ->setData(new Vpc_Newsletter_Detail_UserData('format'));
         $this->_columns->add(new Vps_Grid_Column('status', trlVps('Status'), 60));
-        $this->_columns->add(new Vps_Grid_Column('sent_date', trlVps('Date Sent'), 80));
+        $this->_columns->add(new Vps_Grid_Column('sent_date', trlVps('Date Sent'), 120));
         $this->_columns->add(new Vps_Grid_Column_Button('show'))
             ->setButtonIcon(new Vps_Asset('email_open.png'));
+    }
+
+    protected function _getSelect()
+    {
+        $select = parent::_getSelect();
+        $select->whereEquals('newsletter_id', $this->_getNewsletterRow()->id);
+        return $select;
+    }
+
+    public function jsonDeleteAllAction()
+    {
+        $select = $this->_model->select()
+            ->whereEquals('newsletter_id', $this->_getNewsletterRow()->id);
+        $count = $this->_model->countRows($select);
+
+        $select->whereEquals('status', 'queued');
+        $count2 = $this->_model->countRows($select);
+        $this->_model->deleteRows($select);
+        $this->view->message = trlVps(
+            '{0} of {1} queued users deleted.',
+            array($count2, $count)
+        );
+    }
+
+    protected function _hasPermissions($row, $action)
+    {
+        if ($action == 'delete' && $row->status != 'queued') {
+            throw new Vps_ClientException(trlVps('Can only delete queued recipients'));
+        }
+        return parent::_hasPermissions($row, $action);
     }
 
     private function _getNewsletterRow()

@@ -10,10 +10,10 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vpc_Mail_Component'
         );
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/Panel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/MailingPanel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/MailPanel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/RecipientsPanel.js';
+        $ret['assetsAdmin']['files'][] = 'ext/src/widgets/StatusBar.js';
         $ret['componentName'] = 'Newsletter';
         return $ret;
     }
@@ -43,7 +43,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         $model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_QueueModel');
         $select = $model->select()->whereEquals('newsletter_id', $newsletter->id);
         $ret['before'] = $model->countRows($select);
-        $model->import(Vps_Model_Db::FORMAT_ARRAY, $this->_toImport, array('replace' => true));
+        $model->import(Vps_Model_Db::FORMAT_ARRAY, $this->_toImport, array('ignore' => true));
         $ret['after'] = $model->countRows($select);
         $ret['added'] = $ret['after'] - $ret['before'];
         return $ret;

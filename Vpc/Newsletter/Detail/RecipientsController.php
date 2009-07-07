@@ -39,6 +39,8 @@ class Vpc_Newsletter_Detail_RecipientsController extends Vps_Controller_Action_A
 
     public function jsonSaveRecipientsAction()
     {
+        set_time_limit(60*10);
+
         $component = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
             $this->_getParam('componentId'), array('ignoreVisible'=>true)
         );
@@ -53,8 +55,19 @@ class Vpc_Newsletter_Detail_RecipientsController extends Vps_Controller_Action_A
         $select = $this->_getSelect();
         if (is_null($select)) return null;
         $select->order($order);
-        foreach ($this->_model->getRows($select) as $row) {
+        $rowset = $this->_model->getRows($select);
+        $count = count($rowset);
+
+        $progressBar = new Zend_ProgressBar(
+            new Vps_Util_ProgressBar_Adapter_Cache(
+                $this->_getParam('progressNum')
+            ), 0, $count
+        );
+        $x = 0;
+        foreach ($rowset as $row) {
+            $x++;
             $component->getComponent()->addToQueue($row);
+            $progressBar->next(1, "$x / $count");
         }
         $this->view->assign($component->getComponent()->saveQueue());
     }
