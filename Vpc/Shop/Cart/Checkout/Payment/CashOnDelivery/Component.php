@@ -8,18 +8,24 @@ class Vpc_Shop_Cart_Checkout_Payment_CashOnDelivery_Component extends Vpc_Shop_C
         $ret['cashOnDeliveryCharge'] = 6.5;
         return $ret;
     }
+
+    protected function _getCashOnDeliveryCharge($order)
+    {
+        return $this->_getSetting('cashOnDeliveryCharge');
+    }
+
     public function getAdditionalSumRows($order)
     {
         $ret = parent::getAdditionalSumRows($order);
         $ret[] = array(
             'text' => trlVps('Cash on Delivery Charge').':',
-            'amount' => $this->getCashOnDeliveryCharge($order)
+            'amount' => $this->_getCashOnDeliveryCharge($order)
         );
         return $ret;
     }
-
-    public function getCashOnDeliveryCharge($order)
+    public function getAdditionalSum($order)
     {
-        return $this->_getSetting('cashOnDeliveryCharge');
+        return $this->_getCashOnDeliveryCharge($order);
     }
+
 }
