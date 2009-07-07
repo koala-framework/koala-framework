@@ -7,25 +7,29 @@ class Vps_Controller_Action_Trl_VpsEditController extends Vps_Controller_Action_
 
     protected function _initFields()
     {
-
-        $this->_form->add(new Vps_Form_Field_ShowField('id', trlVps('Id')));
+        $lang = $this->_getLanguage();
         $this->_form->add(new Vps_Form_Field_ShowField('context', trlVps('Context')));
-        $this->_form->add(new Vps_Form_Field_ShowField('en', trlVps('English Singular')));
-        $this->_form->add(new Vps_Form_Field_ShowField('en_plural', trlVps('English Plural')));
+        $this->_form->add(new Vps_Form_Field_ShowField($lang, $lang.' '.trlVps('Singular')));
+        $this->_form->add(new Vps_Form_Field_ShowField($lang.'_plural', $lang.' '.trlVps('Plural')));
 
-        $config = Zend_Registry::get('config');
-        if ($config->languages) {
-            foreach ($config->languages as $lang) {
-                if ($lang != 'en') {
+        $langs = Vps_Controller_Action_Trl_VpsController::getLanguages();
+        if ($langs) {
+            foreach ($langs as $lang) {
+                if ($lang != $this->_getLanguage()) {
                     $this->_form->add(new Vps_Form_Field_TextField($lang, $lang." ".trlVps("Singular")))->setWidth(400);
                     $this->_colNames[] = $lang;
 
-                    $this->_form->add(new Vps_Form_Field_TextField("$lang._plural", $lang." ".trlVps("Plural")))->setWidth(400);
-                    $this->_colNames[] = "$lang._plural";
+                    $this->_form->add(new Vps_Form_Field_TextField($lang."_plural", $lang." ".trlVps("Plural")))->setWidth(400);
+                    $this->_colNames[] = $lang."_plural";
                 }
             }
         }
-     }
+    }
+
+    protected function _getLanguage()
+    {
+        return 'en';
+    }
 
     protected function _beforeSave(Vps_Model_Row_Interface $row)
     {
