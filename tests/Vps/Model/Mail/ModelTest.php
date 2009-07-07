@@ -79,7 +79,6 @@ class Vps_Model_Mail_ModelTest extends PHPUnit_Framework_TestCase
         $row->addTo('markus@vivid.vps');
         $row->addTo('markus2@vivid.vps', 'm2');
         $row->setFrom('from@vivid.vps', 'Vps');
-        $row->setReturnPath('return@vivid.vps');
         $row->addCc('cc@vivid.vps', 'cc');
         $row->addBcc('bcc@vivid.vps', 'bcc');
         $row->addHeader('X-MyHeader', '321');
@@ -103,10 +102,6 @@ class Vps_Model_Mail_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             array('from@vivid.vps', 'Vps'),
             Vps_Model_Mail_MockMail::$setFromCalled
-        );
-
-        $this->assertEquals(
-            'return@vivid.vps', Vps_Model_Mail_MockMail::$returnPathCalled
         );
 
         $this->assertEquals(array(

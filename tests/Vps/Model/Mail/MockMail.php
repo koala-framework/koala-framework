@@ -5,7 +5,6 @@ class Vps_Model_Mail_MockMail extends Vps_Mail_Template
     public static $sendCalled = 0;
     public static $addToCalled = array();
     public static $setFromCalled = array();
-    public static $returnPathCalled = null;
     public static $addCcCalled = array();
     public static $addBccCalled = array();
     public static $addHeaderCalled = array();
@@ -16,7 +15,6 @@ class Vps_Model_Mail_MockMail extends Vps_Mail_Template
         self::$addToCalled = array();
         self::$setFromCalled = array();
         self::$sendCalled = 0;
-        self::$returnPathCalled = null;
         self::$addCcCalled = array();
         self::$addBccCalled = array();
         self::$addHeaderCalled = array();
@@ -44,12 +42,6 @@ class Vps_Model_Mail_MockMail extends Vps_Mail_Template
     {
         self::$setFromCalled = array($email, $name);
         return parent::setFrom($email, $name);
-    }
-
-    public function setReturnPath($email)
-    {
-        self::$returnPathCalled = $email;
-        return parent::setReturnPath($email);
     }
 
     public function addCc($email, $name = '')
