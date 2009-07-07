@@ -4,7 +4,7 @@ class Vps_Model_Mail extends Vps_Model_Db_Proxy
     protected $_table = 'vps_enquiries';
     protected $_rowClass = 'Vps_Model_Mail_Row';
 
-    protected $_mailerClass = 'Vps_Mail';
+    protected $_mailerClass = 'Vps_Mail_Template';
     protected $_mailTemplate;
     protected $_mailMasterTemplate;
     protected $_additionalStore = null;
