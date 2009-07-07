@@ -23,7 +23,7 @@
     </div>
     <div class="orderInfo">
         <p>
-            <?=trlVps('You pay by')?> <?=$this->paymentTypeText?>
+            <?=trlVps('You pay by')?> <strong><?=$this->paymentTypeText?></strong>.
         </p>
     </div>
     <table class="tblCheckout" cellspacing="0" cellpadding="0">
@@ -33,16 +33,14 @@
             <th class="amount"><?=trlVps('Amount')?></th>
             <th class="price"><?=trlVps('Price')?></th>
         </tr>
+        <tr class="empty first">
+            <td colspan="4">&nbsp;</td>
+        </tr>
         <?
         $c = count($this->orderProducts);
         $i = 1;
         foreach ($this->orderProducts as $op) { ?>
             <? $p = $op->getParentRow('Product') ?>
-            <? if($i==1) { ?>
-                <tr class="empty">
-                    <td colspan="4">&nbsp;</td>
-                </tr>
-            <? } ?>
             <tr class="products<?=($i%2==1 ? ' row1' : ' row2');?>">
                 <td class="product"><?=$p?></td>
                 <td class="unitPrice"><?=trlVps('EUR')?> <?=$this->money($p->price,'')?></td>
@@ -50,7 +48,7 @@
                 <td class="price"><?=trlVps('EUR')?> <?=$this->money($p->price * $op->amount,'')?></td>
             </tr>
             <? if($c==$i) { ?>
-                <tr class="empty">
+                <tr class="empty last">
                     <td colspan="4">&nbsp;</td>
                 </tr>
             <? }

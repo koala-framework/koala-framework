@@ -61,6 +61,14 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
         return array();
     }
 
+
+    //da kann zB eine Nachnahmegebühr zurückgegeben werden
+    //darf nur von Vpc_Shop_Cart_Checkout_Component::getAdditionalSum() aufgerufen werden!
+    public function getAdditionalSum($order)
+    {
+        return 0;
+    }
+
     public function sendConfirmMail($order)
     {
         $mail = $this->getData()->getChildComponent('-mail')->getComponent();
