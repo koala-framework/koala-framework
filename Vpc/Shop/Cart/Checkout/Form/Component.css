@@ -1,5 +1,7 @@
 .$cssClass label { width: 140px; }
 .$cssClass .vpsFormFieldRadioHorizontal label { float: none !important; margin-left: 0px !important; }
+.ext-ie7 .$cssClass .vpsFormFieldRadioHorizontal label { position: relative; top: -5px; }
+.ext-ie7 .$cssClass .vpsFormFieldRadioHorizontal span { margin-left: -13px; }
 .$cssClass .vpsFormFieldRadioHorizontal input { margin-left: 0px; }
 .$cssClass .vpsFormFieldTextField input,
 .$cssClass .vpsFormFieldTextArea textarea { width: 300px; }
