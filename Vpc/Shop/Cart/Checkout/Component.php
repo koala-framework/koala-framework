@@ -46,6 +46,7 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = $order->getSubTotal();
         $ret += $this->getShipping($order);
+        $ret += $this->_getAdditionalSum($order);
         return $ret;
     }
 
@@ -58,7 +59,16 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
         }
         return $ret;
     }
-
+ 
+    //kann überschrieben werden um summe für alle payments zu ändern
+    protected function _getAdditionalSum($order)
+    {
+        $ret = 0;
+        if ($c = $this->_getPaymentComponent($order)) {
+            $ret += $c->getAdditionalSum($order);
+        }
+        return $ret;
+    }
     //kann überschrieben werden um zeilen für alle payments zu ändern
     public function getSumRows($order)
     {
