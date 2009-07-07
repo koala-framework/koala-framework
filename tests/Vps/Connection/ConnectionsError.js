@@ -67,7 +67,6 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
             handler : function(){
                 Vps.Debug.displayErrors = true;
                 Ext.Ajax.request({
-                    timeout: 1000,
                     params: {test:1},
                     url: '/vps/test/vps_connection_test/json-real-exception',
                     failure: function() {
