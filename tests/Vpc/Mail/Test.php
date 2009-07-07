@@ -15,8 +15,6 @@ class Vpc_Mail_Test extends Vpc_TestAbstract
         $c = $mail->getComponent();
         $recipients = Vps_Model_Abstract::getInstance('Vpc_Mail_Recipients');
 
-        $this->assertEquals('foo', $mail->render());
-
         $this->assertEquals('htmlmail %firstname% noname', $c->getHtml());
         $this->assertEquals('textmail %firstname% noname', $c->getText());
         $this->assertEquals('Sehr geehrte%r:% %gender% %title% %lastname%', $c->getSubject());
