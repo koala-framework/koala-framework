@@ -12,7 +12,7 @@ class Vpc_Shop_Cart_Detail_Component extends Vpc_Abstract_Composite_Component
 
     public function preProcessInput($data)
     {
-        if (isset($data[$this->getData()->componentId]) && $data[$this->getData()->componentId] == 'delete') {
+        if (isset($data[$this->getData()->componentId.'-delete'])) {
             $this->getData()->row->delete();
         }
     }
