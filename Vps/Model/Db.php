@@ -694,6 +694,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else {
             $sql = 'INSERT';
         }
+        foreach ($fields as &$f) {
+            $f = $this->transformColumnName($f);
+        }
         if (isset($options['ignore']) && $options['ignore'])
             $sql .= ' IGNORE';
         $sql .= ' INTO '.$this->getTableName().' ('.implode(', ', $fields).') VALUES ';
