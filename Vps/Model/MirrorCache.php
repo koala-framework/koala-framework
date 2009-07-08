@@ -133,7 +133,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             } else {
                 $insColumns = $insData = array();
                 foreach ($row as $column => $value) {
-                    $insColumns[] = $column;
+                    $insColumns[] = $proxyModel->transformColumnName($column);
                     $insData[] = $db->quote($value);
                 }
                 $insDatas[] = '('.implode(',', $insData).')';
