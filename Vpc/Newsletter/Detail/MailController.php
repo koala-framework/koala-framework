@@ -1,35 +1,28 @@
 <?php
 class Vpc_Newsletter_Detail_MailController extends Vps_Controller_Action
 {
-    private function _getRecipient()
+    private function _getNewsletterRow()
     {
         $model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_QueueModel');
-        $row = $model->getRow($this->_getParam('id'));
-        $mailModel = Vps_Model_Abstract::getInstance($row->recipient_model);
-        return $mailModel->getRow($row->recipient_id);
-    }
-
-    private function _getMailComponent()
-    {
-        return Vps_Component_Data_Root::getInstance()
-            ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible' => true))
-            ->getChildComponent('-mail')->getComponent();
+        return $model->getRow($this->_getParam('id'));
     }
 
     public function jsonDataAction()
     {
-        $component = $this->_getMailComponent();
-        $recipient = $this->_getRecipient();
+        $row = $this->_getNewsletterRow();
+        $recipient = Vpc_Newsletter_Queue::getRecipient($row);
+        $mail = Vpc_Newsletter_Queue::getMailComponent($row);
 
-        $this->view->html = $component->getHtml($recipient);
-        $this->view->subject = $component->getSubject($recipient);
+        $this->view->html = $mail->getHtml($recipient);
+        $this->view->subject = $mail->getSubject($recipient);
     }
 
     public function jsonSendMailAction()
     {
-        $component = $this->_getMailComponent();
-        $recipient = $this->_getRecipient();
-        $this->view->message = $component->send($recipient) ?
+        $row = $this->_getNewsletterRow();
+        $recipient = Vpc_Newsletter_Queue::getRecipient($row);
+        $mail = Vpc_Newsletter_Queue::getMailComponent($row);
+        $this->view->message = $mail->send($recipient, null) ? // TODO: richtige Mail
             trlVps('E-Mail successfully sent.') :
             trlVps('Error while sending E-Mail.');
     }
