@@ -12,4 +12,8 @@ class Vps_Db_TableFieldsModel_Row extends Vps_Model_Row_Data_Abstract
     {
         return $this->_parentRow;
     }
+
+    protected function _callObserver($fn)
+    {
+    }
 }
