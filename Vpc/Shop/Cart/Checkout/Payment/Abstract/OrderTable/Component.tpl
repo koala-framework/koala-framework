@@ -20,6 +20,11 @@
                 <td class="amount"><?=$op->amount?></td>
                 <td class="price"><?=trlVps('EUR')?> <?=$this->money($p->price * $op->amount,'')?></td>
             </tr>
+            <tr class="<?=($c==$i ? 'lastline' : 'line');?>">
+                <td colspan="4">
+                    <div class="line"></div>
+                </td>
+            </tr>
             <? if($c==$i) { ?>
                 <tr class="empty last">
                     <td colspan="4">&nbsp;</td>
