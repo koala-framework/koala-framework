@@ -21,6 +21,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Abst
 
     public function processInput($data)
     {
+        Vpc_Shop_Cart_Orders::resetCartOrderId();
         $this->getData()->parent->getComponent()->confirmOrder($this->_getOrder());
     }
 }

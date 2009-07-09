@@ -1,18 +1,23 @@
 <?php
 class Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Vpc_Abstract
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['viewCache'] = false;
+        return $ret;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
         $ret['paypalButton'] = $this->_getPaypalButton();
-        $ret['viewCache'] = false;
         return $ret;
     }
 
     private function _getPaypalButton()
     {
         $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->getCartOrder();
-
         $total = $this->getData()->parent->parent->getComponent()->getTotal($order);
         $domain = 'http://'.Vps_Registry::get('config')->server->domain;
         $params = array(
@@ -32,8 +37,10 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Vpc_Ab
             'notify_url' => $domain.'/paypal_ipn',
             'bn' => 'PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted',
             'custom' => Vps_Util_PayPal_Ipn_LogModel::getEncodedCallback(
-                            $this->getData()->parent->componentClass,
-                            'processIpn',
+                            array(
+                                $this->getData()->parent->componentClass,
+                                'processIpn'
+                            ),
                             array(
                                 'orderId' => $order->id
                             )),
