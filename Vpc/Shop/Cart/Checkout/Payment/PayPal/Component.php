@@ -25,7 +25,7 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
     }
     public static function processIpn(Vps_Util_PayPal_Ipn_LogModel_Row $row, $param)
     {
-        if ($row->txn_type == 'payment') {
+        if ($row->txn_type == 'web_accept') {
             $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
                 ->getRow($param['orderId']);
             if (!$order) {
