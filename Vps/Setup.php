@@ -268,7 +268,7 @@ class Vps_Setup
         mb_internal_encoding('UTF-8');
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
-        umask(000);
+        umask(002);
 
         $ip = get_include_path();
         foreach ($config->includepath as $p) {
