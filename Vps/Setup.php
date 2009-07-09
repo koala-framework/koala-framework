@@ -47,6 +47,27 @@ function d($src)
     exit;
 }
 
+function pHex($s)
+{
+    $terminalSize = explode(' ', `stty size`);
+    $breakAt = (int)($terminalSize[1]/3);
+    while (strlen($s) > $breakAt) {
+        dmp(substr($s, 0, $breakAt));
+        $s = substr($s, $breakAt);
+    }
+    for($i=0;$i<strlen($s);$i++) {
+        echo $s[$i].'  ';
+        if ($s[$i] == "\0") echo " ";
+    }
+    echo "\n";
+    for($i=0;$i<strlen($s);$i++) {
+        $h = dechex(ord($s[$i]));
+        if (strlen($h)==1) $h = "0$h";
+        echo $h.' ';
+    }
+    echo "\n";
+}
+
 function _btString($bt)
 {
     $ret = '';
