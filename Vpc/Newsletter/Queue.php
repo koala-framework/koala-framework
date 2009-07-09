@@ -29,7 +29,7 @@ class Vpc_Newsletter_Queue
             // Wenn Newsletter auf "sending" ist, aber seit mehr als 5 Minuten
             // nichts mehr gesendet wurde, auf "start" stellen
             if ($r->status == 'sending') {
-                $lastRow = $this->_getLastRow($r->id);
+                $lastRow = $this->_getLastRow($r->id, 'Vpc_Newsletter_QueueModel');
                 if ($lastRow && time() - strtotime($lastRow->sent_date) > 5*60) {
                     $r->status = 'start';
                     $r->save();
@@ -116,24 +116,9 @@ class Vpc_Newsletter_Queue
             $average = floor($count/($stop-$start)*60);
             echo "\n";
             echo "$count Newsletters sent ($average/minute), $countErrors errors, $countNoUser user not found.\n";
-            extract($this->getStat($nlRow->id));
-            echo "Overall: total $total, $sent sent, $notFound not found, $error sending error, $queued waiting to send.\n";
+            echo $this->getInfo() . "\n";
             if ($nlRow->status == 'finished') echo "Newsletter finished.\n";
         }
-    }
-
-    public function getStat($newsletterId)
-    {
-        $model = Vps_Model_Abstract::getInstance($this->_model);
-        $select = $model->select()->whereEquals('newsletter_id', $newsletterId);
-        $ret = array();
-        $ret['total'] = $model->countRows($select);
-        $ret['sent'] = $model->countRows($select->whereEquals('status', 'sent'));
-        $ret['notFound'] = $model->countRows($select->whereEquals('status', 'userNotFound'));
-        $ret['error'] = $model->countRows($select->whereEquals('status', 'sendingError'));
-        $ret['queued'] = $model->countRows($select->whereEquals('status', 'queued'));
-        $ret['lastSentDate'] = $this->_getLastRow($newsletterId);
-        return $ret;
     }
 
     protected function sendMail($nlRow, $recipient)
@@ -153,15 +138,60 @@ class Vpc_Newsletter_Queue
         return $model->getRow($select);
     }
 
-    private function _getLastRow($newsletterId)
+    private static function _getLastRow($newsletterId, $model)
     {
-        $model = Vps_Model_Abstract::getInstance($this->_model);
+        $model = Vps_Model_Abstract::getInstance($model);
         $select = $model->select()
             ->whereEquals('status', 'sent')
             ->whereEquals('newsletter_id', $newsletterId)
             ->order('id', 'DESC')
             ->limit(1);
         return $model->getRow($select);
+    }
+
+    public function getInfo($newsletterRow)
+    {
+        $model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_QueueModel');
+        $select = $model->select()->whereEquals('newsletter_id', $newsletterRow->id);
+        $lastRow = self::_getLastRow($newsletterRow->id, 'Vpc_Newsletter_QueueModel');
+        $ret = array();
+        $ret['total']    = $model->countRows($select);
+        $ret['sent']     = $model->countRows($select->whereEquals('status', 'sent'));
+        $ret['notFound'] = $model->countRows($select->whereEquals('status', 'userNotFound'));
+        $ret['errors']   = $model->countRows($select->whereEquals('status', 'sendingError'));
+        $ret['queued']   = $model->countRows($select->whereEquals('status', 'queued'));
+        $ret['lastSentDate'] = $lastRow ? strtotime($lastRow->sent_date) : null;
+
+        $text = '';
+        switch ($newsletterRow->status) {
+            case 'stop': $text = trlVps('Newsletter stopped, cannot start again.'); break;
+            case 'pause': $text = trlVps('Newsletter paused.'); break;
+            case 'start': case 'sending': $text = trlVps('Newsletter sending.'); break;
+            case 'finished': $text = trlVps('Newsletter finished.'); break;
+            default: $text = trlVps('Newsletter waiting for start.'); break;
+        }
+        $ret['shortText'] = $text;
+        $text .= ' ';
+
+        $text .= trlVps(
+            '{0} total, {1} sent, {2} waiting to send.',
+            array($ret['total'], $ret['sent'], $ret['queued'])
+        );
+        if ($ret['notFound'] > 0) {
+            $text .= ' ' . trlpVps('{0} receiver not found.', '{0} receivers not found.', $ret['notFound']);
+        }
+        if ($ret['errors'] > 0) {
+            $text .= ' ' . trlVps('{0} errors while sending mail.', $ret['error']);
+        }
+        if ($ret['lastSentDate']) {
+            $time = date(trlVps('Y-m-d H:i'), $ret['lastSentDate']);
+            $t = ' ' . trlVps('Last mail sent: {0}', $time);;
+            $text .= $t;
+            $ret['shortText'] .= $t;
+        }
+        $ret['text'] = $text;
+
+        return $ret;
     }
 
     public static function getRecipient($row)

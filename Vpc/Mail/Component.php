@@ -50,7 +50,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
      *        Komponenten per $this->getData()->getParentByClass('Vpc_Mail_Component')->getComponent()->getMailData();
      *        ausgelesen werden
      */
-    public function send(Vpc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null)
+    public function send(Vpc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
     {
         $this->_mailData = $data;
 
@@ -62,7 +62,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
         } else {
             $mail->addTo($recipient->getMailEmail(), $name);
         }
-        if ($recipient->getMailFormat() == Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) {
+
+        if ((!$format && $recipient->getMailFormat() == Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) ||
+            $format == Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML)
+        {
             $mail->setBodyHtml($this->getHtml($recipient));
         }
         $mail->setBodyText($this->getText($recipient));

@@ -73,7 +73,12 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
 
         this.on('load', function(r, s, t) {
         	var info = r.reader.jsonData.info;
-        	if (info.state) {
+        	if (info.state == 'finished') {
+        		this.button['pause'].disable();
+        		this.button['start'].disable();
+        		this.button['stop'].disable();
+        	} else if (info.state) {
+        		if (info.state == 'sending') info.state = 'start';
         		this.button[info.state].toggle(true);
         	}
         	this.status.setStatus({ text: info.statusText });

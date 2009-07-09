@@ -2,7 +2,31 @@ Ext.ns('Vpc.Newsletter.Detail');
 Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
     initComponent : function()
     {
-		this.title = trlVps('Newsletter Preview');
+		this.button = [];
+		this.button['html'] = new Ext.Toolbar.Button ({
+	        icon    : '/assets/silkicons/html.png',
+	        cls     : 'x-btn-text-icon',
+	        text	: trlVps('HTML'),
+	        enableToggle: true,
+	        toggleGroup: 'format',
+	        pressed : false,
+	        toggleHandler: this.toggleButton,
+	        scope: this,
+	        name : 'html'
+	    });
+	    this.button['text'] = new Ext.Toolbar.Button ({
+	        icon    : '/assets/silkicons/page_white_text.png',
+	        cls     : 'x-btn-text-icon',
+	        text	: trlVps('Text'),
+	        enableToggle: true,
+	        toggleGroup: 'format',
+	        pressed : false,
+	        toggleHandler: this.toggleButton,
+	        scope: this,
+	        name: 'text'
+	    });
+
+    	this.title = trlVps('Newsletter Preview');
 		this.buttons = [new Ext.Action({
             text    : trlVps('Close'),
             handler : function() {
@@ -19,7 +43,10 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
             handler : function(a, b, c) {
 	    		Ext.Ajax.request({
                     url : this.controllerUrl + '/json-send-mail',
-                    params: this.baseParams,
+                    params: Ext.apply(this.baseParams, {
+                    	address: this.address.getValue(),
+                    	format: this.button['html'].pressed ? 'html' : 'text'
+                    }) ,
                     success: function(response, options, r) {
                         Ext.MessageBox.alert(trlVps('Status'), r.message);
                     },
@@ -29,7 +56,7 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
 	        scope   : this
         });
 		
-		var address = new Ext.form.TextField({
+		this.address = new Ext.form.TextField({
 	        width: 200,
 	        vtype: 'email'
 	    });
@@ -42,9 +69,10 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
 		this.items = [this.mailPanel];
 		this.autoScroll = true;
 		
-		this.tbar.add(address, send);
+		this.tbar.add(this.button['html'], this.button['text'], '|', this.address, send);
 		Vpc.Newsletter.Detail.MailPanel.superclass.initComponent.call(this);
     },
+    
 	showEdit : function(id, record)
 	{
 	    this.show(trlVps('Loading...'));
@@ -57,15 +85,30 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
 	        	id : id
             }),
             success: function(r, options, data) {
-        	    this.mailPanel.body.dom.innerHTML = data.html;
+        		this.currentId = id;
+        		this.html = data.html;
+        		this.text = data.text;
+        		this.button[data.format].toggle(true);
         	    this.subject.clearStatus();
         	    this.subject.setText(data.subject);
             },
             scope: this
         });
 	},
+	
 	applyBaseParams : function(baseParams) {
         this.baseParams = baseParams;
-    }
+    },
+
+    toggleButton : function(button, pressed)
+    {
+    	if (pressed) {
+    		if (button.name == 'html') {
+    			this.mailPanel.body.dom.innerHTML = this.html;
+    		} else {
+    			this.mailPanel.body.dom.innerHTML = this.text;
+    		}
+    	}
+	}
 });
 Ext.reg('vpc.newsletter.mailpanel', Vpc.Newsletter.Detail.MailPanel);

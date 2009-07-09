@@ -93,7 +93,9 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
         if ($row->status != $status) {
             if ($row->status == 'stop') {
                 $this->view->error = trlVps('Newsletter stopped, cannot change status.');
-            } else if (in_array($status, array('start', 'pause', 'stop'))) {
+            } else if (in_array($status, array('start', 'pause', 'stop')) &&
+                ($row->status != 'sending' || $status != 'start'))
+            {
                 $row->status = $status;
                 $row->save();
             } else {
@@ -112,23 +114,10 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
     public function jsonStatusAction()
     {
         $row = $this->_getNewsletterRow();
-        $model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_QueueModel');
-        $select = $model->select()->whereEquals('newsletter_id', $row->id);
-        $count = $model->countRows($select);
-        $countSent = $model->countRows($select->whereEquals('status', 'sent'));
-        $countQueued = $model->countRows($select->whereEquals('status', 'queued'));
-        $countErrors = $count - $countQueued - $countSent;
-        switch ($row->status) {
-            case 'stop': $text = trlVps('Newsletter stopped, cannot start again.'); break;
-            case 'pause': $text = trlVps('Newsletter paused.'); break;
-            case 'start': $text = trlVps('Newsletter sending.'); break;
-            default: $text = trlVps('Newsletter waiting for start.'); break;
-        }
-        $info['statusText'] = trlVps(
-            '{0} {1} e-mails sent, {2} recipients total. {3} errors.',
-            array($text, $countSent, $count, $countErrors)
+        $stat = Vpc_Newsletter_Queue::getInfo($row);
+        $this->view->info = array(
+            'statusText' => $stat['text'],
+            'state' => $row->status
         );
-        $info['state'] = $row->status;
-        $this->view->info = $info;
     }
 }
