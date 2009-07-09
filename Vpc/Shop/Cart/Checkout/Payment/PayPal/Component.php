@@ -8,6 +8,9 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
         $ret['generators']['child']['component']['confirmLink'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component';
         $ret['generators']['confirm']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component';
         $ret['generators']['confirm']['name'] = trlVps('done');
+
+        $ret['business'] = '';
+        $ret['itemName'] = trlVps('Order at {0}', Vps_Registry::get('config')->application->name);
         return $ret;
     }
 
