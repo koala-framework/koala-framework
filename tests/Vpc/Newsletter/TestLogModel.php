@@ -1,5 +1,5 @@
 <?php
-class Vpc_Newsletter_TestQueueLogModel extends Vpc_Newsletter_QueueLogModel
+class Vpc_Newsletter_TestLogModel extends Vpc_Newsletter_LogModel
 {
     public function __construct($config = array())
     {
@@ -9,4 +9,4 @@ class Vpc_Newsletter_TestQueueLogModel extends Vpc_Newsletter_QueueLogModel
         ));
         parent::__construct($config);
     }
-    }
+}
