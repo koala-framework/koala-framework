@@ -97,6 +97,7 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
 	},
 	
 	applyBaseParams : function(baseParams) {
+		console.log(baseParams);
         this.baseParams = baseParams;
     },
 
