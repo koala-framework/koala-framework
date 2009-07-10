@@ -23,7 +23,7 @@ class Vpc_Mail_Editable_ComponentsController extends Vps_Controller_Action_Auto_
     protected function _initColumns()
     {
         parent::_initColumns();
-        $this->_columns->add(new Vps_Grid_Column('name', trlVps('Name'), 150));
+        $this->_columns->add(new Vps_Grid_Column('name', trlVps('Name'), 190));
         $this->_columns->add(new Vps_Grid_Column('settings_controller_url'));
         $this->_columns->add(new Vps_Grid_Column('edit_components'))
             ->setData(new Vpc_Mail_Editable_ComponentsController_EditComponentsData());
