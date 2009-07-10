@@ -16,12 +16,7 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
 
     public function confirmOrder($order)
     {
-        $mail = $this->getConfirmMail($this->_order);
-        $mail->send();
-
-        $this->_order->status = 'ordered';
-        $this->_order->date = new Zend_Db_Expr('NOW()');
-        $this->_order->save();
+        throw new Vps_Exception("Not valid for PayPal");
     }
 
     public function processIpn(Vps_Util_PayPal_Ipn_LogModel_Row $row, $param)
@@ -33,12 +28,13 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
                 throw new Vps_Exception("Order not found!");
             }
 
-            $mail = $this->getConfirmMail($order);
-            $mail->send();
+            $this->sendConfirmMail($order);
 
             $order->status = 'payed';
             $order->date = new Zend_Db_Expr('NOW()');
             $order->save();
+
+            return true;
         } else {
             $mail = new Zend_Mail('utf-8');
             $mail->setBodyText(print_r($row->toArray(), true))
@@ -46,5 +42,6 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
             $mail->addTo('ns@vivid-planet.com');
             $mail->send();
         }
+        return false;
     }
 }
