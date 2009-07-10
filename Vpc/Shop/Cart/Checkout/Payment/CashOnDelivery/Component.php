@@ -24,9 +24,4 @@ class Vpc_Shop_Cart_Checkout_Payment_CashOnDelivery_Component extends Vpc_Shop_C
         );
         return $ret;
     }
-    public function getAdditionalSum($order)
-    {
-        return $this->_getCashOnDeliveryCharge($order);
-    }
-
 }
