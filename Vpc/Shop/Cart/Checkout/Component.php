@@ -60,15 +60,15 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
         return $ret;
     }
  
-    //kann überschrieben werden um summe für alle payments zu ändern
-    protected function _getAdditionalSum($order)
+    private final function _getAdditionalSum($order)
     {
         $ret = 0;
-        if ($c = $this->_getPaymentComponent($order)) {
-            $ret += $c->getAdditionalSum($order);
+        foreach ($this->_getAdditionalSumRows($order) as $r) {
+            $ret += $r['amount'];
         }
         return $ret;
     }
+
     //kann überschrieben werden um zeilen für alle payments zu ändern
     public function getSumRows($order)
     {
