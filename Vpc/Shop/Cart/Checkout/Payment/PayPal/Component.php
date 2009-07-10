@@ -23,7 +23,8 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
         $this->_order->date = new Zend_Db_Expr('NOW()');
         $this->_order->save();
     }
-    public static function processIpn(Vps_Util_PayPal_Ipn_LogModel_Row $row, $param)
+
+    public function processIpn(Vps_Util_PayPal_Ipn_LogModel_Row $row, $param)
     {
         if ($row->txn_type == 'web_accept') {
             $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
