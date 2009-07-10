@@ -153,9 +153,14 @@ Vps.GoogleMap.Map = function(config) {
         }, this);
     }
 
-    this.ajax = new Vps.Connection({
-        autoAbort : true
-    });
+    if (typeof this.config.markers == 'string') {
+        if (typeof Vps.Connection == 'undefined') {
+            alert('Dependency ExtConnection (that includes Vps.Connection object) must be set when you wish to reload markers in an google map');
+        }
+        this.ajax = new Vps.Connection({
+            autoAbort : true
+        });
+    }
 
     var container = this.mapContainer.down(".container");
     container.setWidth(parseInt(this.config.width));
