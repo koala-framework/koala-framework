@@ -26,6 +26,7 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Vpc_Ab
             'business' => Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'business'),
             'lc' => 'AT',
             'item_name' => Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'itemName'),
+            //'cbt' => trlVps('back to ...'), //eigener zurück zu Text könnte so gesetzt werden
             'amount' => $total,
             'currency_code' => 'EUR',
             'button_subtype' => 'products',
