@@ -31,4 +31,9 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
     {
         return $this->getData()->parent->row;
     }
+
+    public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
+    {
+        return array();
+    }
 }

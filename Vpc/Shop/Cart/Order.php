@@ -33,21 +33,6 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     {
         return Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
     }
-    
-/*
-    public function getShipping()
-    {
-        return Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Shop_Cart_Component')
-            ->getComponent()->getShipping($this);
-    }
-
-    public function getCashOnDeliveryCharge()
-    {
-        return Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Shop_Cart_Component')
-            ->getComponent()->getCashOnDeliveryCharge($this);
-    }*/
 
     public function getSubTotal()
     {

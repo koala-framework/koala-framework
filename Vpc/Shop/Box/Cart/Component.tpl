@@ -17,6 +17,9 @@
                 <tr class="products<?=($c%2==0 ? ' row1' : ' row2');?>">
                     <td class="amount"><?=$i->row->amount?>x</td>
                     <td class="product"><?=$this->componentLink($i->product)?></td>
+                    <? foreach($i->additionalOrderData as $d) { ?>
+                        <td class="<?=$d['class']?>"><?=$d['name']?>: <?=$d['value']?></td>
+                    <? } ?>
                     <td class="price"><?=trlVps('EUR')?> <?=$this->money($i->product->row->price*$i->row->amount, '')?></td>
                 </tr>
                 <? $c++;

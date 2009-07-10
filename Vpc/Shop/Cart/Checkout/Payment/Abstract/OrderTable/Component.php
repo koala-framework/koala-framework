@@ -12,7 +12,29 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Vpc_A
     {
         $ret = parent::getTemplateVars();
         $ret['order'] = $this->_getOrder();
-        $ret['orderProducts'] = $ret['order']->getChildRows('Products');
+
+        $items = $ret['order']->getChildRows('Products');
+        $ret['items'] = array();
+        $ret['additionalOrderDataHeaders'] = array();
+        foreach ($items as $i) {
+            $addComponent = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByDbId($i->add_component_id);
+            $additionalOrderData = $addComponent->getComponent()->getAdditionalOrderData($i);
+            foreach ($additionalOrderData as $d) {
+                if (!isset($ret['additionalOrderDataHeaders'][$d['name']])) {
+                    $ret['additionalOrderDataHeaders'][$d['name']] = array(
+                        'class' => $d['class'],
+                        'text' => $d['name']
+                    );
+                }
+            }
+            $ret['items'][] = (object)array(
+                'product' => $addComponent->parent,
+                'row' => $i,
+                'additionalOrderData' => $additionalOrderData
+            );
+        }
+
         $ret['sumRows'] = $this->_getSumRows($this->_getOrder());
         return $ret;
     }
