@@ -53,7 +53,7 @@ class Vps_Util_PayPal_Ipn
 
             $m = Vps_Model_Abstract::getInstance($logModel);
             $row = $m->createRow();
-            foreach ($_POST as $key => $value) {
+            foreach ($_REQUEST as $key => $value) {
                 $row->$key = $value;
             }
             $row->save();
