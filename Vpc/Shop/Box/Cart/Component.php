@@ -22,11 +22,12 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
         $items = $ret['order']->getChildRows('Products');
         $ret['items'] = array();
         foreach ($items as $i) {
+            $addComponent = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByDbId($i->add_component_id);
             $ret['items'][] = (object)array(
-                'product' => Vps_Component_Data_Root::getInstance()
-                                ->getComponentByDbId($i->add_component_id)
-                                ->parent,
-                'row' => $i
+                'product' => $addComponent->parent,
+                'row' => $i,
+                'additionalOrderData' => $addComponent->getComponent()->getAdditionalOrderData($i)
             );
         }
         $ret['sumRows'] = $ret['checkout']->getComponent()->getSumRows($ret['order']);
