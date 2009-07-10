@@ -13,7 +13,9 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component extends Vpc_Shop_C
                 UPDATE vpc_shop_orders SET status='ordered', date=NOW()
                 WHERE id='$order->id' AND status='cart'
             ");
-            Vpc_Shop_Cart_Orders::resetCartOrderId();
+            if (Vpc_Shop_Cart_Orders::getCartOrderId() == $order->id) {
+                Vpc_Shop_Cart_Orders::resetCartOrderId();
+            }
         }
     }
 }
