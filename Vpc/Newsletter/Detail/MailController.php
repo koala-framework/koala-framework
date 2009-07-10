@@ -10,8 +10,8 @@ class Vpc_Newsletter_Detail_MailController extends Vps_Controller_Action
     public function jsonDataAction()
     {
         $row = $this->_getQueueRow();
-        $recipient = Vpc_Newsletter_Queue::getRecipient($row);
-        $mail = Vpc_Newsletter_Queue::getMailComponent($row->getParentRow('Newsletter'));
+        $recipient = $row->getRecipient();
+        $mail = $row->getParentRow('Newsletter')->getMailComponent();
 
         $this->view->html = $mail->getHtml($recipient);
         $this->view->text = $mail->getText($recipient);
@@ -22,8 +22,8 @@ class Vpc_Newsletter_Detail_MailController extends Vps_Controller_Action
     public function jsonSendMailAction()
     {
         $row = $this->_getQueueRow();
-        $recipient = Vpc_Newsletter_Queue::getRecipient($row);
-        $mail = Vpc_Newsletter_Queue::getMailComponent($row->getParentRow('Newsletter'));
+        $recipient = $row->getRecipient();
+        $mail = $row->getParentRow('Newsletter')->getMailComponent();
         $this->view->message = $mail->send($recipient, null, $this->_getParam('address'), $this->_getParam('format')) ?
             trlVps('E-Mail successfully sent.') :
             trlVps('Error while sending E-Mail.');

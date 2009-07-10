@@ -21,7 +21,9 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
     public function addToQueue(Vpc_Mail_Recipient_Interface $recipient)
     {
         $newsletter = $this->getData()->row;
-        if ($newsletter->status == 'start') throw new Vps_ClientException('Cannot add recipients while sending a newsletter');
+        if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
+            throw new Vps_ClientException('Cannot only add users to a paused newsletter');
+        }
         $this->_toImport[] = array(
             'newsletter_id' => $newsletter->id,
             'recipient_model' => get_class($recipient->getModel()),
@@ -40,7 +42,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
     {
         $ret = array();
         $newsletter = $this->getData()->row;
-        $model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_QueueModel');
+        $model = $this->getData()->parent->getComponent()->getModel()->getDependentModel('Queue');
         $select = $model->select()->whereEquals('newsletter_id', $newsletter->id);
         $ret['before'] = $model->countRows($select);
         $model->import(Vps_Model_Db::FORMAT_ARRAY, $this->_toImport, array('ignore' => true));
