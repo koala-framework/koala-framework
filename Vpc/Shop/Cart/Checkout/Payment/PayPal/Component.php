@@ -31,7 +31,7 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
             $this->sendConfirmMail($order);
 
             $order->status = 'payed';
-            $order->date = new Zend_Db_Expr('NOW()');
+            $order->date = date('Y-m-d H:i:s');
             $order->save();
 
             return true;
