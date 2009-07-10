@@ -44,7 +44,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Vpc_A
         return Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
                             ->getCartOrder();
     }
-    
+
     protected function _getSumRows($order)
     {
         return $this->getData()->parent->parent->getComponent()->getSumRows($order);
