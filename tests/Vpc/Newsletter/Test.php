@@ -6,12 +6,12 @@ class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase
 {
     public function testMailSending()
     {
-        $queue = new Vpc_Newsletter_TestQueue();
-        $logModel = Vps_Model_Abstract::getInstance('Vpc_Newsletter_TestQueueLogModel');
-        $queueModel = Vps_Model_Abstract::getInstance('Vpc_Newsletter_TestQueueModel');
+        $model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_TestModel');
+        $logModel = $model->getDependentModel('Log');
+        $queueModel = $model->getDependentModel('Queue');
 
         // Vom Newsletter mit der ID 2 sollten zwei Einträge gesendet werden
-        $queue->send(6);
+        $model->send(6);
         $this->assertEquals(1, $logModel->countRows());
         $this->assertEquals(2, $logModel->getRow(1)->count);
         $this->assertEquals(0, $logModel->getRow(1)->countErrors);
@@ -27,7 +27,7 @@ class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase
         ));
 
         // Vom Newsletter mit der ID 1 sollte ein Eintrag gesendet werden
-        $queue->send(6);
+        $model->send(6);
         $this->assertEquals(2, $logModel->countRows());
         $this->assertEquals(1, $logModel->getRow(2)->count);
         $this->assertEquals(1, $logModel->getRow(2)->newsletter_id);
@@ -40,7 +40,7 @@ class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase
         ));
 
         // Nichts mehr zu senden
-        $queue->send(6);
+        $model->send(6);
         $this->assertEquals(2, $logModel->countRows());
     }
 }

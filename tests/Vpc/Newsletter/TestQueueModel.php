@@ -16,5 +16,6 @@ class Vpc_Newsletter_TestQueueModel extends Vpc_Newsletter_QueueModel
             )
         ));
         parent::__construct($config);
+        $this->_referenceMap['Newsletter']['refModelClass'] = 'Vpc_Newsletter_TestModel';
     }
 }
