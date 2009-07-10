@@ -16,7 +16,7 @@ class Vps_Controller_Action_Cli_NewsletterController extends Vps_Controller_Acti
             ),
             array(
                 'param'=> 'mailsPerMinute',
-                'value'=> 40,
+                'value'=> 20,
                 'valueOptional' => true,
             ),
             array(
@@ -29,8 +29,8 @@ class Vps_Controller_Action_Cli_NewsletterController extends Vps_Controller_Acti
 
     public function indexAction()
     {
-        $queue = new Vpc_Newsletter_Queue();
-        $queue->send($this->_getParam('timeLimit'), $this->_getParam('mailsPerMinute'), $this->_getParam('debugOutput'));
+        $model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_Model');
+        $model->send($this->_getParam('timeLimit'), $this->_getParam('mailsPerMinute'), $this->_getParam('debugOutput'));
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }
