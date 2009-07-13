@@ -20,6 +20,13 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
      */
     protected $_filters = array();
 
+    /**
+     * Unterstützte Import / Export Formate
+     *
+     * Reihenfolge: Bevorzugtes Format muss als erstes stehen.
+     */
+    protected $_supportedImportExportFormats = array(self::FORMAT_ARRAY);
+
     protected $_exprs = array();
 
 
@@ -352,6 +359,34 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function getToStringField()
     {
         return $this->_toStringField;
+    }
+
+    public function getSupportedImportExportFormats()
+    {
+        if (!$this->_supportedImportExportFormats) return null;
+        return $this->_supportedImportExportFormats;
+    }
+
+    public function copyDataFromModel(Vps_Model_Interface $sourceModel, $select = null, $format = null)
+    {
+        if (is_null($select)) $select = $this->select();
+        if (!$select instanceof Vps_Model_Select) {
+            throw new Vps_Exception("Select must be an instance of Vps_Model_Select");
+        }
+
+        if (is_null($format)) {
+            $formats = array_values(array_intersect(
+                $this->getSupportedImportExportFormats(),
+                $sourceModel->getSupportedImportExportFormats()
+            ));
+            if (!$formats || !$formats[0]) {
+                throw new Vps_Exception("Model '".get_class($this)."' cannot copy data "
+                    ."from model '".get_class($sourceModel)."'. Import / Export Formats are not compatible.");
+            }
+            $format = $formats[0];
+        }
+
+        $this->import($format, $sourceModel->export($format, $select));
     }
 
     public function export($format, $select = array())

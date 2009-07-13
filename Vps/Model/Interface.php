@@ -22,6 +22,8 @@ interface Vps_Model_Interface
     public function getRows($where=null, $order=null, $limit=null, $start=null);
     public function countRows($where = array());
 
+    public function getSupportedImportExportFormats();
+    public function copyDataFromModel(Vps_Model_Interface $sourceModel, $select = null, $format = null);
     public function export($format, $select = array());
     public function import($format, $data, $options = array());
     public function writeBuffer();

@@ -168,6 +168,11 @@ class Vps_Model_Service extends Vps_Model_Abstract
         return $this->_client->deleteRows($where);
     }
 
+    public function getSupportedImportExportFormats()
+    {
+        return $this->_client->getSupportedImportExportFormats();
+    }
+
     public function export($format, $select = array())
     {
         return $this->_client->export($format, $select);

@@ -8,6 +8,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private $_tableName;
     private $_columns;
 
+    protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_ARRAY);
+
     private $_proxyContainerModels = array();
 
     private $_importBuffer;
@@ -595,12 +597,22 @@ class Vps_Model_Db extends Vps_Model_Abstract
     public function export($format, $select = array())
     {
         if ($format == self::FORMAT_SQL) {
+            $wherePart = '';
             if ($select) {
-                throw new Vps_Exception("Select object may not be used when using SQL-Export");
+                if (!is_object($select)) {
+                    if (is_string($select)) $where = array($select);
+                    $select = $this->select($select);
+                }
+                $whereParts = $this->createDbSelect($select)->getPart(Zend_Db_Select::WHERE);
+                $wherePart = implode(' ', $whereParts);
             }
+            if ($wherePart) {
+                $wherePart = '--where="'.$wherePart.'" ';
+            }
+
             $systemData = $this->_getSystemData();
             $filename = tempnam('/tmp', 'modelimport');
-            $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false --no-create-info=true "
+            $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false --no-create-info=true ".$wherePart
                 ."$systemData[mysqlOptions] $systemData[tableName] | sed -e \"s|INSERT INTO|REPLACE INTO|\" | gzip -c > $filename";
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL export failed");
