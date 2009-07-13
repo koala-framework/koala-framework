@@ -99,6 +99,16 @@ class Vps_Srpc_Handler_Model
         return $this->getModel()->deleteRows($where);
     }
 
+    public function getSupportedImportExportFormats()
+    {
+        return $this->getModel()->getSupportedImportExportFormats();
+    }
+
+    public function copyDataFromModel(Vps_Model_Interface $sourceModel, $select = null, $format = null)
+    {
+        return $this->getModel()->copyDataFromModel($sourceModel, $select, $format);
+    }
+
     public function export($format, $select = array())
     {
         return $this->getModel()->export($format, $select);
