@@ -4,6 +4,8 @@ class Vps_User_Form extends Vps_Form
     protected $_permissions = array('save', 'add');
     protected $_userDataFormName = 'Vpc_User_Edit_Form_Form';
 
+    protected $_newUserRow = null;
+
     protected function _init()
     {
         parent::_init();
@@ -41,5 +43,36 @@ class Vps_User_Form extends Vps_Form
             $this->fields->add(new Vps_Form_Field_Select('language', trlVps('Language')))
             ->setValues($data);
         }
+    }
+
+    public function getRow($parentRow = null)
+    {
+        $id = $this->_getIdByParentRow($parentRow);
+        if (($id === 0 || $id === '0' || is_null($id)) && $this->_newUserRow) {
+            return $this->_newUserRow;
+        } else {
+            return parent::getRow($parentRow);
+        }
+    }
+
+    public function processInput($parentRow, $postData = array())
+    {
+        $id = $this->_getIdByParentRow($parentRow);
+        if ($id === 0 || $id === '0' || is_null($id)) {
+            $webcode = $this->getByName('webcode');
+            if ($webcode && $postData[$webcode->getFieldName()]) {
+                // webcode setzt sich von selbst wenn er gewünscht ist
+                $webcode = null;
+            } else {
+                // global user
+                $webcode = '';
+            }
+            $this->_newUserRow = $this->_model->createUserRow(
+                $postData[$this->getByName('email')->getFieldName()],
+                $webcode
+            );
+        }
+
+        return parent::processInput($parentRow, $postData);
     }
 }

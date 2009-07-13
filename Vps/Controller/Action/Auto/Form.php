@@ -100,15 +100,22 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         ignore_user_abort(true);
         Zend_Registry::get('db')->beginTransaction();
 
-        $row = $this->_form->getRow();
+        // zuvor war statt diesem kommentar das $row = $this->_form->getRow();
+        // drin und wurde bei processInput und validate übergeben, aber die form
+        // weiß selbst das model, deshalb passt NULL
+        // Runtergeschoben wurde das $this->_form->getRow() weil bei der Vps_User_Form
+        // die row im processInput gefaket wird, da hier ->createUserRow() aufgerufen
+        // wird anstatt ->createRow() und diese dann im _form->getRow() zurück kommt
 
-        $postData = $this->_form->processInput($row, $this->getRequest()->getParams());
-        $invalid = $this->_form->validate($row, $postData);
+        $postData = $this->_form->processInput(null, $this->getRequest()->getParams());
+        $invalid = $this->_form->validate(null, $postData);
         if ($invalid) {
             throw new Vps_ClientException(implode("<br />", $invalid));
         }
 
         $data = $this->_form->prepareSave(null, $postData);
+
+        $row = $this->_form->getRow();
 
         $insert = false;
 
