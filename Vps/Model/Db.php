@@ -126,7 +126,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
         if (in_array($field, $this->getOwnColumns())) {
             $f = $this->transformColumnName($field);
-            return $this->getTableName().'.'.$f;
+            return $this->_fieldWithTableName($f);
         }
         $ret = $this->_formatFieldInternal($field, $select);
         if (!$ret) {
@@ -135,6 +135,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
         return $ret;
     }
+
+    protected function _fieldWithTableName($field)
+    {
+        return $this->getTableName().'.'.$field;
+    }
+
     private function _formatFieldInternal($field, $dbSelect)
     {
         $siblingOfModels = $this->_proxyContainerModels;
@@ -164,6 +170,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
                         if (!$alreadyJoined) {
                             $dbSelect->joinLeft($siblingTableName, $joinCondition, array());
                         }
+                        // TODO: Eigentlich wäre _fieldWithTableName korrekt
+                        // aber dann müsste auch der join über diese funktion laufen
                         return $m->getTableName().'.'.$field;
                     }
                     $ret = $m->_formatFieldInternal($field, $dbSelect);
@@ -253,7 +261,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $dbSelect;
     }
 
-    private function _applySelect($dbSelect, $select)
+    protected function _applySelect(Zend_Db_Select $dbSelect, Vps_Model_Select $select)
     {
         if ($dbSelect instanceof Zend_Db_Table_Select) {
             $dbSelect->setIntegrityCheck(false);
