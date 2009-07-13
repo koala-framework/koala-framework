@@ -146,6 +146,11 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         }
     }
 
+    public function getSupportedImportExportFormats()
+    {
+        return $this->_proxyModel->getSupportedImportExportFormats();
+    }
+
     public function export($format, $select = array())
     {
         return $this->_proxyModel->export($format, $select);
