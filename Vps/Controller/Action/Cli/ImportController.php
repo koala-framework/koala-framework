@@ -301,12 +301,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl));
 
         echo "\n*** Service: source=$sourceUrl target=$targetUrl\n";
-        echo "Service: Kopiere 'users' tabelle...\n";
+        echo "Service: Kopiere 'users' tabelle (neu)...\n";
 
-        $targetModel->import(
-            Vps_Model_Interface::FORMAT_SQL,
-            $sourceModel->export(Vps_Model_Interface::FORMAT_SQL)
-        );
+        $targetModel->copyDataFromModel($sourceModel);
 
         // copy users_to_web
         $targetUrl = $this->_getConfig('web')->service->usersRelation->url;
@@ -317,27 +314,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl));
         $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl));
 
-        echo "Service: Loesche Benutzerzuweisungen zu diesem Web...\n";
-        $importSelect = new Vps_Model_Select();
+        echo "Service: Fuege Produktiv-Benutzerzuweisungen hinzu (neu)...\n";
+        $importSelect = $sourceModel->select();
         $importSelect->whereEquals('web_id', Vps_Registry::get('config')->application->id);
         $targetModel->deleteRows($importSelect);
-
-        $sourceData = $sourceModel->export(Vps_Model_Interface::FORMAT_ARRAY, $importSelect);
-        $toDeleteIds = array();
-        $tdIndex = 0;
-        foreach ($sourceData as $d) {
-            if (empty($toDeleteIds[$tdIndex])) $toDeleteIds[$tdIndex] = array();
-            $toDeleteIds[$tdIndex][] = $d['id'];
-            if (count($toDeleteIds[$tdIndex]) >= 500) ++$tdIndex;
-        }
-        foreach ($toDeleteIds as $delArray) {
-            $targetModel->deleteRows($targetModel->select()->whereEquals('id', $delArray));
-        }
-        echo "Service: Fuege Produktiv-Benutzerzuweisungen hinzu...\n";
-        $targetModel->import(
-            Vps_Model_Interface::FORMAT_ARRAY,
-            $sourceData
-        );
+        $targetModel->copyDataFromModel($sourceModel, $importSelect);
     }
 
     private function _getConfig($type = 'web')
