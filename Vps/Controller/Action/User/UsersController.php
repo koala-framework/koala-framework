@@ -86,12 +86,17 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
 
+        $ownUserRow = Vps_Registry::get('userModel')->getAuthedUser();
+        if (in_array($ownUserRow->id, $ids)) {
+            throw new Vps_ClientException(trlVps("You cannot delete your own account."));
+        }
+
         foreach ($ids as $id) {
             $row = $this->_model->getRow($id);
             if (!$row) {
                 throw new Vps_ClientException("Can't find row with id '$id'.");
             }
-            if (!$this->_hasPermissions($row, 'userlock')) {
+            if (!$this->_hasPermissions($row, 'userdelete')) {
                 throw new Vps_Exception("You don't have the permissions to delete this user.");
             }
             $row->deleted = 1;
@@ -106,6 +111,11 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         }
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
+
+        $ownUserRow = Vps_Registry::get('userModel')->getAuthedUser();
+        if (in_array($ownUserRow->id, $ids)) {
+            throw new Vps_ClientException(trlVps("You cannot lock your own account."));
+        }
 
         foreach ($ids as $id) {
             $row = $this->_model->getRow($id);

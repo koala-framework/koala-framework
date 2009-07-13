@@ -24,6 +24,86 @@ class Vps_User_Model extends Vps_Model_Proxy
         return $this->_mailClass;
     }
 
+    // wenn createRow benötigt wird weil man ein anderes userModel (db?) hat,
+    // dann kann man diese hier überschreiben und return Vps_Model_Proxy::createRow($data);
+    // zurückgeben
+    public function createRow(array $data=array())
+    {
+        throw new Vps_Exception("createRow is not allowed in Vps_User_Model. Use createUserRow() instead.");
+    }
+
+    public function createUserRow($email, $webcode = null)
+    {
+        if (is_null($webcode)) {
+            $webcode = self::getWebcode();
+        }
+
+        if (empty($webcode) && !is_null($webcode)) {
+            $row = $this->getRow($this->select()
+                ->whereEquals('email', $email)
+                ->whereEquals('webcode', '')
+            );
+            if ($row) {
+                // global user wurde gelöscht und wird wieder angelegt
+                $row->locked = 0;
+                $row->deleted = 0;
+                $this->_resetPermissions($row);
+                return $row;
+            } else {
+                // globaler benutzer existiert im web noch nicht. schauen, ob
+                // es ihn bereits gibt, sonst komplett neu anlegen
+                $allModel = Vps_Model_Abstract::getInstance('Vps_User_All_Model');
+                $allRow = $allModel->getRow($allModel->select()
+                    ->whereEquals('email', $email)
+                    ->whereEquals('webcode', '')
+                );
+                if ($allRow) {
+                    $relationModel = Vps_Model_Abstract::getInstance('Vps_User_Relation_Model');
+                    $relRow = $relationModel->createRow();
+                    $relRow->user_id = $allRow->id;
+                    $relRow->locked = 0;
+                    $relRow->deleted = 0;
+                    $relRow->save();
+
+                    $allRow->save(); // damit last_modified geschrieben wird
+
+                    $this->getProxyModel()->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
+
+                    $row = $this->getRow($this->select()
+                        ->whereEquals('email', $email)
+                        ->whereEquals('webcode', '')
+                    );
+                    $this->_resetPermissions($row);
+                    $row->setNotifyGlobalUserAdded(true);
+                    return $row;
+                }
+            }
+        }
+
+        $row = parent::createRow(array('email' => $email, 'webcode' => $webcode));
+        $this->_resetPermissions($row);
+        return $row;
+    }
+
+    /**
+     * Setzt die rechte eines neuen users zurück. Meistens wird dies beim Anlegen
+     * aus einer Form sowieso überschrieben, aber sicher ist sicher. Hier könnte
+     * man zB auch additionalRoles löschen.
+     */
+    protected function _resetPermissions($row)
+    {
+        $row->role = 'guest';
+    }
+
+    public static function getWebcode()
+    {
+        $webCode = Vps_Registry::get('config')->service->users->webcode;
+        if (is_null($webCode)) {
+            throw new Vps_Exception("'service.users.webcode' not defined in config");
+        }
+        return $webCode;
+    }
+
     /**
      * @deprecated
      * @see getRowByIdentity

@@ -5,6 +5,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface,
     protected $_changedOldMail = null;
     protected $_sendDeletedMail = null;
     protected $_additionalRolesCache = null;
+    protected $_notifyGlobalUserAdded = false;
 
     public static function getWebcode()
     {
@@ -24,6 +25,12 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface,
         $ret = trim($ret);
         if (!$ret) $ret = $this->email;
         return $ret;
+    }
+
+    public function setNotifyGlobalUserAdded($val)
+    {
+        $this->_notifyGlobalUserAdded = $val;
+        return $this;
     }
 
     public function getActivationCode()
@@ -111,6 +118,16 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface,
         }
     }
 
+    protected function _afterSave()
+    {
+        parent::_afterSave();
+
+        if ($this->_notifyGlobalUserAdded) {
+            $this->sendGlobalUserActivated();
+            $this->_notifyGlobalUserAdded = false;
+        }
+    }
+
     public function save()
     {
         $tableNames = array();
@@ -127,7 +144,6 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface,
         if ($tableNames) {
             $m->executeSql("LOCK TABLES ".implode(" WRITE, ", $tableNames)." WRITE");
         }
-
         $this->_beforeSave();
         $id = $this->{$this->_getPrimaryKey()};
         if (!$id) {
@@ -137,34 +153,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface,
         }
         $this->_beforeSaveSiblingMaster();
         $ret = $this->_row->save();
-
         Vps_Model_Row_Abstract::save();
-
-        // wenn ein globaler account als gelöscht markiert wird,
-        // zuordnung im service löschen und zeile aus cache-tabelle entfernen
-        if (!$this->webcode && $this->deleted) {
-            $id = $this->id;
-            $proxyModel = $this->getModel()->getProxyModel();
-
-            if ($proxyModel instanceof Vps_Model_MirrorCache) {
-                $sourceRow = $proxyModel->getSourceModel()->getRow($id);
-                if ($sourceRow) {
-                    $sourceRow->deleted = 0;
-                    $sourceRow->save();
-                }
-
-                $cacheRow = $proxyModel->getProxyModel()->getRow($id);
-                if ($cacheRow) $cacheRow->delete();
-            }
-
-            $relationModel = Vps_Model_Abstract::getInstance('Vps_User_Relation_Model');
-            $relRow = $relationModel->getRow($relationModel->select()->whereEquals('user_id', $id));
-            if ($relRow) $relRow->delete();
-
-            foreach ($this->_getSiblingRows() as $sr) {
-                if ($sr) $sr->delete();
-            }
-        }
 
         $m = $this->getModel();
         while ($m instanceof Vps_Model_Proxy) {
@@ -173,13 +162,20 @@ class Vps_User_Row extends Vps_Model_Proxy_Row implements Vps_User_RowInterface,
         if ($m instanceof Vps_Model_Db) {
             $m->executeSql("UNLOCK TABLES");
         }
-
         if (!$id) {
             $this->_afterInsert();
         } else {
             $this->_afterUpdate();
         }
         $this->_afterSave();
+    }
+
+    // a global user that exists already in service, but not in web
+    public function sendGlobalUserActivated()
+    {
+        $subject = Zend_Registry::get('config')->application->name;
+        $subject .= ' - '.trlVps('Useraccount activated');
+        return $this->_sendMail('GlobalUserActivation', $subject);
     }
 
     public function sendActivationMail()
