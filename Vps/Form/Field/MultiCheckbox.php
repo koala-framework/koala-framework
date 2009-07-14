@@ -9,6 +9,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     private $_valuesModel;
     private $_valuesSelect;
 
+    static private $_multiCheckboxes = array();
+
     /**
      * @see setPool()
      */
@@ -36,7 +38,14 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             $this->_relations['dataToRelation'] = $dependetModelRule;
         }
 
-        parent::__construct($relationToValuesRule);
+        $fieldKey = $relationToValuesRule;
+        $i = 2;
+        while (in_array($fieldKey, self::$_multiCheckboxes)) {
+            $fieldKey = $relationToValuesRule.$i;
+        }
+        self::$_multiCheckboxes[] = $fieldKey;
+
+        parent::__construct($fieldKey);
         if ($title) $this->setTitle($title);
         $this->setHideLabels(true);
         $this->setAutoHeight(true);
