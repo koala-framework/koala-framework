@@ -38,7 +38,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             $webcode = self::getWebcode();
         }
 
-        if (empty($webcode) && !is_null($webcode)) {
+        if (empty($webcode) && !is_null($webcode) && $email) {
             $row = $this->getRow($this->select()
                 ->whereEquals('email', $email)
                 ->whereEquals('webcode', '')
