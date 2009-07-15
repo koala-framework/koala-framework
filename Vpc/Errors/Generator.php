@@ -5,10 +5,5 @@
  */
 class Vpc_Errors_Generator extends Vps_Component_Generator_Static
 {
-    protected function _formatConfig($parentData, $componentKey)
-    {
-        $data = parent::_formatConfig($parentData, $componentKey);
-        $data['inherits'] = true;
-        return $data;
-    }
+    protected $_inherits = true;
 }

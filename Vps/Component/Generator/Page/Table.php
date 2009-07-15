@@ -3,6 +3,7 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoP
     implements Vps_Component_Generator_Page_Interface, Vps_Component_Generator_PseudoPage_Interface
 {
     protected $_idSeparator = '_';
+    protected $_inherits = true;
     protected $_maxNameLength;
     protected function _init()
     {
@@ -18,7 +19,6 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoP
     {
         $data = parent::_formatConfig($parentData, $row);
         $data['isPage'] = true;
-        $data['inherits'] = true;
 
         $data['name'] = $this->_getNameFromRow($row);
 

@@ -9,6 +9,7 @@ abstract class Vps_Component_Generator_Abstract
 
     private $_dataCache = array();
     protected $_idSeparator;
+    protected $_inherits = false;
     private $_model;
 
     private static $instances = array();
@@ -524,6 +525,12 @@ abstract class Vps_Component_Generator_Abstract
                 throw new Vps_Exception("no componentClass set (id $parentData->componentId $id)");
             }
             $config['id'] = $id;
+            if (isset($config['inherits'])) {
+                throw new Vps_Exception("You must set Generator::_inherits instead of magically modifying the config");
+            }
+            if ($this->_inherits) {
+                $config['inherits'] = true;
+            }
             $pageDataClass = $this->_getDataClass($config, $row);
             $this->_dataCache[$parentData->componentId][$id] = new $pageDataClass($config);
         }
@@ -570,6 +577,11 @@ abstract class Vps_Component_Generator_Abstract
     public function getPluginBaseComponentClass()
     {
         return $this->_pluginBaseComponentClass;
+    }
+
+    public function getInherits()
+    {
+        return $this->_inherits;
     }
 
 }

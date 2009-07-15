@@ -5,6 +5,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
     protected $_componentClass = 'row';
     protected $_idSeparator = false;
     protected $_loadTableFromComponent = false;
+    protected $_inherits = true;
 
     protected $_pageData = array();
     protected $_pageParent = array();
@@ -249,7 +250,6 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         $data['rel'] = '';
         $data['name'] = $page['name'];
         $data['isPage'] = true;
-        $data['inherits'] = true;
         $data['isPseudoPage'] = true;
         $data['componentId'] = $page['id'];
         $data['componentClass'] = $this->_getChildComponentClass($page['component']);
