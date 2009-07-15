@@ -1,6 +1,7 @@
 <?php
 /**
  * @group jstrl
+ * @group trl
  *
  */
 class Vps_Trl_JsLoaderTest extends PHPUnit_Framework_TestCase
