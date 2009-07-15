@@ -14,8 +14,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-update-revision";
-        } else {
+        } else if (file_exists('/usr/local/bin/sshvps')) {
             $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-update-revision";
+        } else {
+            $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-update-revision");
         }
         if ($this->_getParam('debug')) echo $cmd."\n";
         exec($cmd, $onlineRevision, $ret);
@@ -55,9 +57,15 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 if ($ownConfig->uploads == $config->uploads) {
                     throw new Vps_ClientException("Uplodas-Pfade für beide Server sind gleich!");
                 }
-                $this->_systemCheckRet("rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads} {$ownConfig->uploads}");
-            } else {
+                $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads} {$ownConfig->uploads}";
+                if ($this->_getParam('debug')) echo "$cmd\n";
+                $this->_systemCheckRet($cmd);
+            } else if (file_exists('/usr/local/bin/sshvps')) {
                 $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
+            } else {
+                $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads} {$ownConfig->uploads}";
+                if ($this->_getParam('debug')) echo "$cmd\n";
+                $this->_systemCheckRet($cmd);
             }
         }
 
@@ -95,10 +103,18 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                     }
                     $cmd .= "--exclude='*' ";
                     $cmd .= ". {$ownConfig->server->dir}";
-                } else {
+                } else if (file_exists('/usr/local/bin/sshvps')) {
                     $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir copy-files";
                     $cmd .= " --includes=\"".implode(',', $includes)."\"";
                     if ($this->_getParam('debug')) $cmd .= " --debug";
+                } else {
+                    $cmd = "rsync --omit-dir-times --progress --delete --times --recursive ";
+                    $cmd .= "--exclude='.svn' ";
+                    foreach ($includes as $i) {
+                        $cmd .= "--include='$i' ";
+                    }
+                    $cmd .= "--exclude='*' ";
+                    $cmd .= "{$this->_sshHost}:{$this->_sshDir} {$ownConfig->server->dir}";
                 }
                 if ($this->_getParam('debug')) echo $cmd."\n";
                 passthru($cmd);
@@ -176,7 +192,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             if ($ownConfig->server->host == $config->server->host) {
                 $otherDbConfig = unserialize(`cd {$config->server->dir} && php bootstrap.php import get-db-config`);
                 $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
-            } else {
+            } else if (file_exists('/usr/local/bin/sshvps')) {
                 $ignoreTables = '';
                 if (!$this->_getParam('include-cache')) {
                     $ignoreTables = implode(',', array_merge($cacheTables, $keepTables));
@@ -186,6 +202,12 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 $cmd .= "$ignoreTables";
                 if ($this->_getParam('debug')) $cmd .= " --debug";
                 $cmd .= " | gunzip";
+            } else {
+                $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-db-config");
+                if ($this->_getParam('debug')) echo "$cmd\n";
+                $otherDbConfig = unserialize(`$cmd`);
+                $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
+                $cmd = "ssh $this->_sshHost ".escapeshellarg($cmd);
             }
             $descriptorspec = array(
                 1 => array("pipe", "w")
@@ -242,8 +264,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         echo "importiere rrds...\n";
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-rrd";
-        } else {
+        } else if (file_exists('/usr/local/bin/sshvps')) {
             $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-rrd";
+        } else {
+            $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-rrd");
         }
         if ($this->_getParam('debug')) echo $cmd."\n";
         $data = unserialize(`$cmd`);
