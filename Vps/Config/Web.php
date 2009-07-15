@@ -7,7 +7,7 @@ class Vps_Config_Web extends Zend_Config_Ini
     {
         require_once 'Vps/Config/Cache.php';
         $cache = Vps_Config_Cache::getInstance();
-        $cacheId = 'config_'.$section;
+        $cacheId = 'config_'.str_replace('-', '_', $section);
         $configClass = Vps_Setup::$configClass;
         require_once str_replace('_', '/', $configClass).'.php';
         if(!$ret = $cache->load($cacheId)) {
