@@ -234,18 +234,20 @@ class Vps_Trl
         }
     }
 
-    private function _getExpressions($content, $prevnr = 0)
+    private function _getExpressions($content)
     {
-        $pattern = "#(.*?)((trl|trlVps|trlc|trlcVps|trlp|trlpVps|trlcp|trlcpVps) *\(['|\"].*)#s";
-        preg_match($pattern, $content, $m);
-        if ($m) {
+        $linenumber = 0;
+        $parts = array();
+        while (true) {
+            $pattern = "#(.*?)((trl|trlVps|trlc|trlcVps|trlp|trlpVps|trlcp|trlcpVps) *\(['|\"].*)#s";
+            preg_match($pattern, $content, $m);
+            if (!$m) break;
             $text = $m[2];
-            $linenumber = $prevnr + $this->_getLineNumber($m[1]);
+            $linenumber = $linenumber + $this->_getLineNumber($m[1]);
             $content = '';
             $countMarksDouble = 0;
             $countMarksSingle = 0;
             $write = false;
-            $parts = array();
             for ($i = 0; $i < strlen($text); $i++) {
                 if ($text[$i] == '"' && ($i == 0 || $text[$i-1] != "\\") && ($countMarksSingle == 0 || $countMarksDouble != 0)) {
                     $countMarksDouble++;
@@ -255,12 +257,13 @@ class Vps_Trl
                 if ($text[$i] == ')' && (($countMarksSingle % 2 == 0 && $countMarksSingle != 0)
                         || ($countMarksDouble % 2 == 0 && $countMarksDouble != 0))) {
                     $parts[] = array('expr' => (substr($text, 0, ++$i)), 'linenr' => $linenumber);
-                    $newContent = substr($text, $i);
-                    return array_merge($parts, $this->_getExpressions($newContent, $linenumber-1));
+                    $linenumber--; //whyever
+                    $content = substr($text, $i);
+                    break;
                 }
             }
-          }
-          return array();
+        }
+        return $parts;
     }
 
     private function _getLineNumber($text) {
