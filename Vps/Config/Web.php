@@ -22,7 +22,7 @@ class Vps_Config_Web extends Zend_Config_Ini
     {
         require_once 'Vps/Config/Cache.php';
         $cache = Vps_Config_Cache::getInstance();
-        return $cache->test('config_'.$section);
+        return $cache->test('config_'.str_replace('-', '_', $section));
     }
 
     public function __construct($section, $options = array())
