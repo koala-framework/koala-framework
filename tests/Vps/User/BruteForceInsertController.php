@@ -8,11 +8,10 @@ class Vps_User_BruteForceInsertController extends Vps_Controller_Action
         $prefix = uniqid('usr');
         for($i=0;$i<10;$i++) {
             $model->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
-            $row = $model->createRow();
+            $row = $model->createUserRow($prefix.'.'.$i.'@vivid-planet.com');
             $row->title = '';
             $row->firstname = 'n';
             $row->lastname = 's';
-            $row->email = $prefix.'.'.$i.'@vivid-planet.com';
             $row->save();
             echo ".";
         }
@@ -24,11 +23,10 @@ class Vps_User_BruteForceInsertController extends Vps_Controller_Action
     {
         $model = Vps_Registry::get('userModel');
         $prefix = $this->_getParam('prefix');
-        $row = $model->createRow();
+        $row = $model->createUserRow($prefix.'@vivid-planet.com');
         $row->title = '';
         $row->firstname = 'n';
         $row->lastname = 's';
-        $row->email = $prefix.'@vivid-planet.com';
         try {
             $row->save();
         } catch (Vps_ClientException $e) {
