@@ -95,7 +95,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
 
     protected function _getPages()
     {
-        return ceil($this->getCount() / $this->_getSetting('pagesize'));
+        return ceil($this->getCount() / $this->_getPageSize());
     }
 
     protected function _getCurrentPage()
@@ -127,8 +127,8 @@ class Vpc_Paging_Component extends Vpc_Abstract
     public function getLimit()
     {
         $ret = array();
-        $ret['limit'] = $this->_getSetting('pagesize');
-        $ret['start'] = ($this->_getCurrentPage()-1)*$this->_getSetting('pagesize');
+        $ret['limit'] = $this->_getPageSize();
+        $ret['start'] = ($this->_getCurrentPage()-1)*$this->_getPageSize();
         return $ret;
     }
 
@@ -150,9 +150,14 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['pages'] = $this->_getPages();
         $ret['currentPage'] = $this->_getCurrentpage();
-        $ret['show'] = $this->getCount() > $this->_getSetting('pagesize');
+        $ret['show'] = $this->getCount() > $this->_getPageSize();
         $ret['partialParams'] = $this->getPartialParams();
         return $ret;
+    }
+
+    protected function _getPageSize()
+    {
+        return $this->_getSetting('pagesize');
     }
 
     public function getPartialParams()
@@ -160,7 +165,8 @@ class Vpc_Paging_Component extends Vpc_Abstract
         return array(
             'class' => get_class($this),
             'paramName' => $this->_getParamName(),
-            'pages' => $this->_getPages()
+            'pages' => $this->_getPages(),
+            'pagesize' => $this->_getPageSize()
         );
     }
 
