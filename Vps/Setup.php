@@ -416,7 +416,7 @@ class Vps_Setup
         }
         if (file_exists('/var/www/vivid-test-server') {
             return 'vivid-test-server';
-        } if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
+        } else if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
             if ($m[2]=='vps-projekte') return 'vivid';
             return $m[2];
         } else if (substr($host, 0, 9)=='dev.test.') {
