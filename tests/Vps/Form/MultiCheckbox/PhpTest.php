@@ -9,12 +9,12 @@ class Vps_Form_MultiCheckbox_PhpTest extends PHPUnit_Framework_TestCase
         $m1 = new Vps_Form_MultiCheckbox_DataModel();
         $form = new Vps_Form();
         $form->setModel($m1);
-        $form->add(new Vps_Form_Field_MultiCheckbox(
+        $mcb = $form->add(new Vps_Form_Field_MultiCheckbox(
             'Relation', 'Value', 'MultiCheck'
         ));
 
         $post = array(
-            'Value' => array(1 => 0, 2 => 1, 3 => 1)
+            $mcb->getFieldName() => array(1 => 0, 2 => 1, 3 => 1)
         );
         $post = $form->processInput($form->getRow(), $post);
         $form->validate($form->getRow(), $post);
@@ -40,12 +40,12 @@ class Vps_Form_MultiCheckbox_PhpTest extends PHPUnit_Framework_TestCase
         $m2 = new Vps_Form_MultiCheckbox_RelationModelNoRel();
         $form = new Vps_Form();
         $form->setModel($m1);
-        $form->add(new Vps_Form_Field_MultiCheckbox(
+        $mcb = $form->add(new Vps_Form_Field_MultiCheckbox(
             $m2, 'Value', 'MultiCheck2'
         ));
 
         $post = array(
-            'Value' => array(1 => 1, 2 => 0, 3 => 0)
+            $mcb->getFieldName() => array(1 => 1, 2 => 0, 3 => 0)
         );
         $post = $form->processInput($form->getRow(), $post);
         $form->validate($form->getRow(), $post);
