@@ -11,11 +11,11 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         ));
         $this->addField(array(
             'name'=>'bytesRead',
-            'max'=>2^64,
+            'max'=>pow(2, 64),
         ));
         $this->addField(array(
             'name'=>'bytesWritten',
-            'max'=>2^64,
+            'max'=>pow(2, 64),
         ));
         $this->addField('getHits');
         $this->addField('getMisses');
