@@ -1,0 +1,108 @@
+#!/usr/bin/php
+<?php
+
+$baseDir = "/var/www";
+//$baseDir = "/www/public";
+
+$websDir = $baseDir;
+//$websDir = $baseDir.'/vps-projekte';
+
+$excludeGroup = 'reallySlow';
+//$excludeGroup = 'slow';
+
+set_include_path("$baseDir/library/zend/1.7.5");
+require_once 'Zend/Loader.php';
+Zend_Loader::registerAutoload();
+
+exec('ps aux', $out);
+foreach ($out as $o) {
+    //USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+    if (preg_match('#^www-data\s+([0-9]+)\s+#', $o, $m)) {
+        $pid = $m[1];
+        if (getmypid() == $pid) continue;
+        if (strpos($o,'run-vivid-test-server-tests')===false) continue;
+        echo "There is already a run_test_report process running:\n";
+        echo $o."\n\n\n";
+        echo "getmypid: ".getmypid()."\n";
+        echo "ps aux | grep run_test:\n";
+        system("ps aux | grep run_test");
+        exit;
+    }
+}
+function execGetOutput($cmd, &$out)
+{
+    $out = '';
+    $descriptorspec = array(
+        0 => array("pipe", "r"),
+        1 => array("pipe", "w"),
+        2 => array("pipe", "w")
+    );
+    $process = proc_open($cmd, $descriptorspec, $pipes);
+    if (!is_resource($process)) return 255;
+    fclose($pipes[0]);
+    stream_set_blocking($pipes[1], 0);
+    stream_set_blocking($pipes[2], 0);
+    while(!feof($pipes[1]) && !feof($pipes[2])) {
+        if (!feof($pipes[1])) {
+            $o = fgets($pipes[1]);
+            if ($o) {
+                echo $o;
+                $out .= $o;
+            }
+        }
+        if (!feof($pipes[2])) {
+            $o = fgets($pipes[2]);
+            if ($o) {
+                echo $o;
+                $out .= $o;
+            }
+        }
+        usleep(500);
+    }
+    return proc_close($process);
+}
+foreach (new DirectoryIterator($websDir) as $p) {
+    if ($p->isDot()) continue;
+    if (!$p->isDir()) continue;
+    if ($p == 'library') continue;
+    if ($p == 'uploads') continue;
+    if ($p == '.svn') continue;
+    echo $p."\n";
+    chdir($p->getPathname());
+    $out = '';
+    execGetOutput("php bootstrap.php svn-up", $out);
+    $postData = array(
+        'tests' => 0,
+        'failures' => 1,
+        'skipped' => 0,
+        'not_implemented' => 0,
+        'log' => '',
+        'web_version' => '?',
+        'vps_version' => '?'
+    );
+    if ($ret) {
+        $postData['log'] = "UPDATE FAILED\n\n\n".$out;
+    } else {
+        $ret = execGetOutput("php bootstrap.php test --report --exclude-group=$excludeGroup", $out);
+        if (preg_match("#===REPORT===(.*?)===/REPORT===#m", $out, $m)) {
+            $postData = @unserialize($m[1]);
+            if (!$postData) {
+                $postData['log'] = "TESTS FAILED\n\n\n(can't unserialize result)\n".$out;
+            } else {
+                $postData['log'] = $out;
+            }
+        } else {
+            $postData['log'] = "TESTS FAILED\n\n\n(can't get result)\n".$out;
+        }
+    }
+    $info = new SimpleXMLElement(`svn info --xml`);
+    $postData['svnPath'] = (string)$info->entry->url;
+
+    $client = new Zend_Http_Client('http://zeiterfassung.vivid/test_report.php');
+    $client->setMethod(Zend_Http_Client::POST);
+    $client->setParameterPost($postData);
+    $response = $client->request();
+    if ($response->getBody() != 'OK') {
+        echo "Can't report to zeiterfassung: ".$response->getBody()."\n";
+    }
+}
