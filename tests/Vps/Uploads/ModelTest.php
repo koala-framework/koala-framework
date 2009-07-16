@@ -102,7 +102,7 @@ class Vps_Uploads_ModelTest extends PHPUnit_Framework_TestCase
 
         $row = $this->_uploadsModel->createRow();
         $row->writeFile(utf8_decode('bäm oida'), 'fooobar', 'txt');
-        $this->assertEquals('text/plain', $row->mime_type);
+        $this->assertContains('text/plain', $row->mime_type);
 
         $row = $this->_uploadsModel->createRow();
         $row->writeFile('<html><head></head><body></body></html>', 'foo', 'html');
