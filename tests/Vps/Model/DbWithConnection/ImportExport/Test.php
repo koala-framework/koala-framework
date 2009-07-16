@@ -28,7 +28,7 @@ class Vps_Model_DbWithConnection_ImportExport_Test extends PHPUnit_Framework_Tes
     public function testServiceFormatSql()
     {
         $d = Zend_Registry::get('testDomain');
-        if (substr($d, -6) != '.vivid') {
+        if (substr($d, -6) != '.vivid' && substr($d, -18) != '.vivid-test-server') {
             //online gibts keine test-datenbank
             $this->markTestSkipped();
         }
