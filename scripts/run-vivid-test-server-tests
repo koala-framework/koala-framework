@@ -17,21 +17,23 @@ Zend_Loader::registerAutoload();
 exec('ps aux', $out);
 foreach ($out as $o) {
     //USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-    if (preg_match('#^www-data\s+([0-9]+)\s+#', $o, $m)) {
+    if (preg_match('#^\S+\s+([0-9]+)\s+#', $o, $m)) {
         $pid = $m[1];
         if (getmypid() == $pid) continue;
         if (strpos($o,'run-vivid-test-server-tests')===false) continue;
+        /*
         echo "There is already a run_test_report process running:\n";
         echo $o."\n\n\n";
+        echo $pid."\n";
         echo "getmypid: ".getmypid()."\n";
         echo "ps aux | grep run_test:\n";
-        system("ps aux | grep run_test");
+        system("ps aux | grep run-vivid-test-server-tests");
+        */
         exit;
     }
 }
 function execGetOutput($cmd, &$out)
 {
-    $out = '';
     $descriptorspec = array(
         0 => array("pipe", "r"),
         1 => array("pipe", "w"),
@@ -67,10 +69,12 @@ foreach (new DirectoryIterator($websDir) as $p) {
     if ($p == 'library') continue;
     if ($p == 'uploads') continue;
     if ($p == '.svn') continue;
+    if ($p == 'backup') continue;
+    if (!file_exists($p->getPathname().'/.svn')) continue;
     echo $p."\n";
     chdir($p->getPathname());
     $out = '';
-    execGetOutput("php bootstrap.php svn-up", $out);
+    $ret = execGetOutput("php bootstrap.php svn-up", $out);
     $postData = array(
         'tests' => 0,
         'failures' => 1,
@@ -105,4 +109,5 @@ foreach (new DirectoryIterator($websDir) as $p) {
     if ($response->getBody() != 'OK') {
         echo "Can't report to zeiterfassung: ".$response->getBody()."\n";
     }
+    echo "\n\n";
 }
