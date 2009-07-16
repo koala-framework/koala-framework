@@ -130,6 +130,8 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         }
 
         $suite = new Vps_Test_TestSuite();
+        $suite->setBackupGlobals(false);
+
         $runner = new PHPUnit_TextUI_TestRunner;
 
         try {
