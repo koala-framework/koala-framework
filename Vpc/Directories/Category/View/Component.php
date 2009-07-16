@@ -6,6 +6,7 @@ class Vpc_Directories_Category_View_Component
     {
         $ret = parent::getSettings();
         $ret['placeholder']['linkPrefix'] = '';
+        $ret['hideCategoriesWithoutEntries'] = false;
         return $ret;
     }
 
@@ -18,6 +19,7 @@ class Vpc_Directories_Category_View_Component
     {
         $ret = parent::getPartialVars($partial, $nr, $info);
         $ret['placeholder'] = $this->_getSetting('placeholder');
+        $ret['hideCategoriesWithoutEntries'] = $this->_getSetting('hideCategoriesWithoutEntries');
         return $ret;
     }
 
