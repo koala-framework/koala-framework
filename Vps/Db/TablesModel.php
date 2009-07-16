@@ -6,6 +6,7 @@ class Vps_Db_TablesModel extends Vps_Model_Data_Abstract
     );
     private $_db;
     protected $_primaryKey = 'table';
+    protected $_rowClass = 'Vps_Db_TablesModel_Row';
 
     public function __construct(array $options = array())
     {
