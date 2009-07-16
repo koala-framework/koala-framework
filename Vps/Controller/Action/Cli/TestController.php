@@ -78,11 +78,6 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
     public function indexAction()
     {
         self::initForTests();
-        if ($this->_getParam('report')) {
-            echo "\n\n===================================================\n";
-            echo "Fuehre ".Vps_Registry::get('config')->application->name." Unit-Tests aus\n\n";
-        }
-
         $arguments = array();
         $arguments['colors'] = true;
         if ($this->_getParam('filter')) {
@@ -151,30 +146,23 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         }
         if ($this->_getParam('report')) {
             $resultLogger->printResult($result);
-            $info = new SimpleXMLElement(`svn info --xml`);
-
-            $client = new Zend_Http_Client('http://zeiterfassung.vivid/test_report.php');
-            $client->setMethod(Zend_Http_Client::POST);
-            $response = $client->request('POST');
 
             $c = Vps_Registry::get('config');
             $webVersion = $c->application->version;
             $vpsVersion = $c->application->vps->version.' (Revision ' . $c->application->vps->revision.')';
 
-            $client->setParameterPost(array(
-                'svnPath' => (string)$info->entry->url,
+            $reportData = array(
                 'tests' => $result->count(),
                 'failures' => $result->failureCount()+$result->errorCount(),
                 'skipped' => $result->skippedCount(),
                 'not_implemented' => $result->notImplementedCount(),
-                'log' => $resultLogger->getContent(),
+                //'log' => $resultLogger->getContent(),
                 'web_version' => $webVersion,
                 'vps_version' => $vpsVersion
-            ));
-            $response = $client->request();
-            if ($response->getBody() != 'OK') {
-                throw new Vps_Exception("Can't report to zeiterfassung: ".$response->getBody());
-            }
+            );
+            echo "===REPORT===";
+            echo serialize($reportData);
+            echo "===/REPORT===";
         }
         if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
             $msg = Vps_Registry::get('config')->application->name.' Tests ';
