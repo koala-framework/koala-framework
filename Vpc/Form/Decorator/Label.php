@@ -7,9 +7,9 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
             foreach ($item['items'] as $k=>$i) {
                 $item['items'][$k] = $this->processItem($i);
             }
-        } else if (isset($item['html'])) {
-            if (!isset($item['preHtml'])) $item['preHtml'] = '';
-            if (!isset($item['postHtml'])) $item['postHtml'] = '';
+        }
+        // Kein else und auch bei preHtml - Cards hat zB. items und preHtml, hier sollte das Label aber auch funktionieren
+        if (isset($item['html']) || isset($item['preHtml']) || isset($item['postHtml'])) {
             $errors = false;
             if ($item['item']) {
 //todo: nicht nochmal fragen, vorallem nicht mit $_REQUEST (problem bei File+MultiFields)
@@ -37,13 +37,13 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
             if (isset($item['id'])) {
                 $class .= ' '.$item['id'];
             }
-            $item['preHtml'] .= '<div class="'.$class.'">';
+            $preHtml = '<div class="'.$class.'">';
             if ($item['item'] && !$item['item']->getHideLabels() && $item['item']->getFieldLabel()) {
-                $item['preHtml'] .= '<label for="'
+                $preHtml .= '<label for="'
                     .(isset($item['id']) ? $item['id'] : $item['item']->getFieldName()).'"'
                     .($item['item']->getLabelWidth() ? ' style="width:'.$item['item']->getLabelWidth().'px"' : '')
                 .'>';
-                $item['preHtml'] .= $item['item']->getFieldLabel();
+                $preHtml .= $item['item']->getFieldLabel();
                 if ($item['item']->getAllowBlank()===false) {
                     /* TODO: wenn wir hier einmal andere Zeichen benötigen oder an einer anderen
                      * Position, dann machen wir eine reine CSS-Lösung:
@@ -52,15 +52,20 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                      * das CSS parsen und daraus generieren welche Zeichen an welcher Stelle
                      * eingefügt werden müssen.
                      */
-                    $item['preHtml'] .= '<span class="requiredSign">*</span>';
+                    $preHtml .= '<span class="requiredSign">*</span>';
                 }
-                $item['preHtml'] .= $item['item']->getLabelSeparator();
-                $item['preHtml'] .= '</label>';
+                $preHtml .= $item['item']->getLabelSeparator();
+                $preHtml .= '</label>';
             }
+            $postHtml = '';
             if ($item['item']->getComment()) {
-                $item['postHtml'] .= '<span class="comment">'.$item['item']->getComment().'</span>';
+                $postHtml .= '<span class="comment">'.$item['item']->getComment().'</span>';
             }
-            $item['postHtml'] .= '</div>';
+            $postHtml .= '</div>';
+            if (!isset($item['preHtml'])) $item['preHtml'] = '';
+            if (!isset($item['postHtml'])) $item['postHtml'] = '';
+            $item['preHtml'] = $preHtml . $item['preHtml'];
+            $item['postHtml'] = $item['postHtml'] . $postHtml;
         }
         return $item;
     }
