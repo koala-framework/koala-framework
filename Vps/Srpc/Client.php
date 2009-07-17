@@ -37,7 +37,9 @@ class Vps_Srpc_Client
 
     protected function _performRequest(array $params)
     {
-        $httpClient = new Zend_Http_Client($this->getServerUrl());
+        $httpClient = new Zend_Http_Client($this->getServerUrl(), array(
+            'timeout' => 25 // standard 10, aber wenn user synchronisiert werden braucht das importieren länger
+        ));
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost($params);
         return $httpClient->request()->getBody();
