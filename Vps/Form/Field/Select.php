@@ -17,11 +17,15 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
         $name = $this->getFieldName();
-        $value = $values[$name];
+        $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
 
+        $onchange = '';
+        if ($this->getSubmitOnChange())
+            $onchange= " onchange=\"this.form.submit();\"";
+            
         //todo: escapen
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
-        $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\">";
+        $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\"$onchange>";
         //todo: andere values varianten ermöglichen
         //todo: html wählt ersten wert vor-aus - ext galub ich nicht
         //      => sollte sich gleich verhalten.
@@ -37,8 +41,11 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
             $ret['html'] .= '>'.htmlspecialchars($i[1]).'</option>';
         }
         $ret['html'] .= "</select>\n";
+        if ($this->getSubmitOnChange())
+            $ret['html'] .= '<input type="submit" value="»" />';
         return $ret;
     }
+    
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(

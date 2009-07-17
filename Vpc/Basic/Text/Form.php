@@ -61,7 +61,9 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
 
     public function setHtmlEditorLabel($title)
     {
-        $this->getHtmlEditor()->setFieldLabel($title);
+        $this->getHtmlEditor()
+            ->setFieldLabel($title)
+            ->setHideLabel(false);
         return $this;
     }
     public function setHtmlEditorHeight($height)

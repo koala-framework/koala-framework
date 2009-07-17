@@ -16,4 +16,13 @@ class Vps_Form_Field_Static extends Vps_Form_Field_Abstract
         return $this->setProperty('fieldLabel', $v);
     }
 
+    public function getTemplateVars($values, $fieldNamePostfix = '')
+    {
+        $ret = parent::getTemplateVars($values);
+        $ret['id'] = $this->getFieldName().$fieldNamePostfix;
+        $cls = $this->getCls();
+        $ret['html'] = "<div class=\"$cls\">" . $this->getText() . "</div>";
+        return $ret;
+    }
+
 }

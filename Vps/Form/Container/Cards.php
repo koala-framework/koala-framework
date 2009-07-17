@@ -7,7 +7,7 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
     {
         $this->fields = new Vps_Collection_FormFields(null, 'Vps_Form_Container_Card');
 
-        $this->_combobox = new Vps_Form_Field_Select($name, $fieldLabel);
+        $this->_combobox = new Vps_Form_Field_Select($name);
         $this->_combobox->setWidth(150)
             ->setListWidth(150);
 
@@ -125,7 +125,10 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
                 if ($field instanceof Vps_Form_Container_Card) {
-                    if ($field->getName() == $row->{$this->_combobox->getName()}) {
+                    $name = $this->_combobox->getName();
+                    if ($field->getName() == $row->$name ||
+                        (isset($postData[$name]) && $field->getName() == $postData[$name])
+                    ) {
                         $ret = array_merge($ret, $field->load($row, $postData));
                     }
                 } else {
@@ -133,6 +136,33 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
                 }
             }
         }
+        return $ret;
+    }
+    
+    public function getTemplateVars($values)
+    {
+        $ret = array();
+        
+        $name = $this->getCombobox()->getFieldName();
+        $value = isset($values[$name]) ? $values[$name] : $this->getCombobox()->getDefaultValue();
+        
+        $comboboxData = array();
+        foreach ($this->fields as $card) {
+            if ($card instanceof Vps_Form_Container_Card) {
+                $comboboxData[$card->getName()] = $card->getTitle();
+            }
+        }
+        $this->getCombobox()->setValues($comboboxData);
+        $this->getCombobox()->setSubmitOnChange(true);
+        $r = $this->getCombobox()->getTemplateVars($values);
+        $ret['preHtml'] = $r['html'];
+        $ret['item'] = $r['item'];
+        
+        foreach ($this->fields as $card) {
+            if ($card->getName() != $value) continue;
+            $ret['items'][] = $card->getTemplateVars($values);
+        }
+        
         return $ret;
     }
 }
