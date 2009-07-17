@@ -74,13 +74,7 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
 
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
-        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
-
-        //TODO: Wenn wir mal Ext-Forms im Frontend haben das hier entfernen
-        $onclick = "onchange=\"this.form.submit();\"";
-        $ret['html'] = str_replace("<select ", "<select $onclick ", $ret['html']);
-
-        $ret['html'] .= '<input type="submit" value="»" />';
-        return $ret;
+        $this->setSubmitOnChange(true);
+        return parent::getTemplateVars($values, $fieldNamePostfix);
     }
 }
