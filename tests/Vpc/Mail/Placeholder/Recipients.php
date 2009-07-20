@@ -1,7 +1,7 @@
 <?php
-class Vpc_Mail_Recipients extends Vps_Model_FnF
+class Vpc_Mail_Placeholder_Recipients extends Vps_Model_FnF
 {
-    protected $_rowClass = 'Vpc_Mail_Recipient';
+    protected $_rowClass = 'Vpc_Mail_Placeholder_Recipient';
     protected $_data = array(
         array(
             'id'=>1, 'gender' => 'male', 'title'=>'Mag.',

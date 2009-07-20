@@ -11,7 +11,7 @@ class Vps_Mail_Template
 
     public function __construct($template, $masterTemplate = 'Master')
     {
-        $this->_view = new Vps_View_Mail();
+        $this->_view = new Vps_View();
 
         if (is_object($template) || (class_exists($template) && is_instance_of($template, 'Vpc_Abstract'))) {
             if (is_object($template)) {

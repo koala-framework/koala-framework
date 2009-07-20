@@ -2,18 +2,18 @@
 /**
  * @group Vpc_Mail
  */
-class Vpc_Mail_Test extends Vpc_TestAbstract
+class Vpc_Mail_Placeholder_Test extends Vpc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vpc_Mail_Mail');
+        parent::setUp('Vpc_Mail_Placeholder_Mail');
     }
 
     public function testMail()
     {
         $mail = $this->_root;
         $c = $mail->getComponent();
-        $recipients = Vps_Model_Abstract::getInstance('Vpc_Mail_Recipients');
+        $recipients = Vps_Model_Abstract::getInstance('Vpc_Mail_Placeholder_Recipients');
 
         $this->assertEquals('htmlmail %firstname% noname', $c->getHtml());
         $this->assertEquals('textmail %firstname% noname', $c->getText());

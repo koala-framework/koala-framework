@@ -1,5 +1,5 @@
 <?php
-class Vpc_Mail_Content_Component extends Vpc_Abstract
+class Vpc_Mail_Placeholder_Content_Component extends Vpc_Abstract
 {
     public function getMailVars($user = null)
     {

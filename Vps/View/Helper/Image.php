@@ -56,21 +56,24 @@ class Vps_View_Helper_Image
 
         if ($url) {
             //bei vps_view_mail soll das image als attachment hinzugefügt werden
-            if ($this->_view instanceof Vps_View_Mail) {
+            if ($this->_view instanceof Vps_View_MailInterface) {
                 if (is_string($image)){
-                    $fileContents = $this->_dep->getFileContents($depUrl);
+                    $loader = new Vps_Assets_Loader();
+                    $path = $this->_dep->getAssetPath($depUrl);
+                    $fileContents = $loader->getFileContents($path);
                     $mimeType = $fileContents['mimeType'];
                     $content = $fileContents['contents'];
                 } else {
-                    $content = file_get_contents($row->getFileSource($rule, $type));
-                    $mimeType = $row->getFileRow($rule)->mime_type;
+                    $row = $c->getImageRow()->getParentRow('Image');
+                    $content = file_get_contents($row->getFileSource());
+                    $mimeType = $row->mime_type;
                 }
                 $img = new Zend_Mime_Part($content);
                 $img->type = $mimeType;
                 $img->disposition = Zend_Mime::DISPOSITION_INLINE;
                 $img->encoding = Zend_Mime::ENCODING_BASE64;
                 $img->filename = substr(strrchr($url, '/'), 1); //filename wird gesucht
-                $img->id = Vps_View_Mail::getCid($url);
+                $img->id = md5($url);
                 $this->_view->addImage($img);
                 $url = "cid:".$img->id;
             }
