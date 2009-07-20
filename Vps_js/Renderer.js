@@ -19,7 +19,13 @@ Ext.util.Format.euroMoney = function(v, p)
 
 Ext.util.Format.decimal = function(v, p)
 {
-    if (p) p.css = 'vps-renderer-decimal';
+    if (p) {
+        if (p.css) {
+            p.css += ' vps-renderer-decimal';
+        } else {
+            p.css = 'vps-renderer-decimal';
+        }
+    }
     if (v === null || v == undefined) return "";
 
     v = v.toString().replace(",", ".");
