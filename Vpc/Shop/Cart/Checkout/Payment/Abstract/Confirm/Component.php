@@ -1,12 +1,14 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Abstract
+class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Editable_Component
 {
     private $_order;
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['generators']['content']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Component';
         $ret['flags']['processInput'] = true;
         $ret['cssClass'] = 'webStandard';
+        $ret['componentName'] = trlVps('Shop Conformation Text');
         return $ret;
     }
 
