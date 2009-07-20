@@ -22,16 +22,4 @@ class Vpc_Shop_Products_Directory_Component extends Vpc_Directories_ItemPage_Dir
         $ret['flags']['hasResources'] = true;
         return $ret;
     }
-
-    public function processInput(array $postData)
-    {
-        $view = $this->getData()->getChildComponent('-view');
-        if ($view) {
-            $items = $view->getComponent()->getItems();
-            foreach ($items as $i) {
-                $this->getData()->getChildComponent('-'.$i->row->id)
-                    ->getComponent()->processInput($postData);
-            }
-        }
-    }
 }

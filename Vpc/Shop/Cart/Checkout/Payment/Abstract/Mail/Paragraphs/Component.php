@@ -6,6 +6,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['paragraphs']['component']['products'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Products_Component';
+        $ret['generators']['paragraphs']['component']['address'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Address_Component';
         return $ret;
     }
 }

@@ -9,6 +9,5 @@
     </div>
     <div class="orderStuff">
         <div class="productPrice"><?=$this->money($this->item->row->price)?></div>
-        <?=$this->component($this->item->addToCart);?>
     </div>
 </div>

@@ -40,7 +40,7 @@
                     </li>
                 <? } ?>
             </ul>
-        </div>
+    </div>
         <div class="cartOrder">
             <div class="cart">
                 <?=$this->componentLink($this->cart, $this->placeholder['toCart'])?>
