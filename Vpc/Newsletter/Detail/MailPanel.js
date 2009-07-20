@@ -88,6 +88,7 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
         		this.currentId = id;
         		this.html = data.html;
         		this.text = data.text;
+        		this.mailPanel.body.dom.innerHTML = this.html;
         		this.button[data.format].toggle(true);
         	    this.subject.clearStatus();
         	    this.subject.setText(data.subject);
@@ -97,7 +98,6 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
 	},
 	
 	applyBaseParams : function(baseParams) {
-		console.log(baseParams);
         this.baseParams = baseParams;
     },
 

@@ -15,7 +15,7 @@ class Vpc_Newsletter_Detail_MailController extends Vps_Controller_Action
 
         $this->view->html = $mail->getHtml($recipient);
         $this->view->text = $mail->getText($recipient);
-        $this->view->format = $recipient->getMailFormat();
+        $this->view->format = $recipient ? $recipient->getMailFormat() : Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
         $this->view->subject = $mail->getSubject($recipient);
     }
 
@@ -23,6 +23,7 @@ class Vpc_Newsletter_Detail_MailController extends Vps_Controller_Action
     {
         $row = $this->_getQueueRow();
         $recipient = $row->getRecipient();
+        if (!$recipient) throw new Vps_ClientException(trlVps('User not found, cannot send testmail.'));
         $mail = $row->getParentRow('Newsletter')->getMailComponent();
         $this->view->message = $mail->send($recipient, null, $this->_getParam('address'), $this->_getParam('format')) ?
             trlVps('E-Mail successfully sent.') :
