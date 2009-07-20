@@ -1,8 +1,6 @@
 <?php
 class Vpc_User_Register_Form_Form extends Vpc_User_Edit_Form_Form
 {
-    protected $_newUserRow;
-
     public function initFields()
     {
         parent::initFields();
@@ -30,32 +28,5 @@ class Vpc_User_Register_Form_Form extends Vpc_User_Edit_Form_Form
                 $this->_setHidden2($i);
             }
         }
-    }
-
-    public function getRow($parentRow = null)
-    {
-        $id = $this->_getIdByParentRow($parentRow);
-        if (($id === 0 || $id === '0' || is_null($id)) && $this->_newUserRow) {
-            return $this->_newUserRow;
-        } else {
-            return parent::getRow($parentRow);
-        }
-    }
-
-    public function processInput($parentRow, $postData = array())
-    {
-        $id = $this->_getIdByParentRow($parentRow);
-        if ($id === 0 || $id === '0' || is_null($id)) {
-            $email = null;
-            if (isset($postData[$this->getByName('email')->getFieldName()])) {
-                $email = $postData[$this->getByName('email')->getFieldName()];
-            }
-
-            $this->_newUserRow = $this->_model->createUserRow(
-                $email, null
-            );
-        }
-
-        return parent::processInput($parentRow, $postData);
     }
 }
