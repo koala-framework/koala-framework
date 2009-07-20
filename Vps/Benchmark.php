@@ -257,27 +257,39 @@ class Vps_Benchmark
 
     protected function _shutDown()
     {
-        if (!class_exists('Memcache')) return;
-
-        $memcache = new Memcache;
-        $memcacheSettings = Vps_Registry::get('config')->server->memcache;
-        $memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
-        $prefix = Zend_Registry::get('config')->application->id.'-'.
-                            Vps_Setup::getConfigSection().'-bench-';
-        $prefix .= $this->_getUrlType().'-';
-        if (!$memcache->increment($prefix.'requests', 1)) {
-            $memcache->set($prefix.'requests', 1, 0, 0);
-        }
+        $this->_memcacheCount('requests', 1);
         foreach (self::$_counter as $name=>$value) {
             if (is_array($value)) $value = count($value);
-            if (!$memcache->increment($prefix.$name, $value)) {
-                $memcache->set($prefix.$name, $value, 0, 0);
-            }
+            $this->_memcacheCount($name, $value);
         }
         $value = (int)((microtime(true) - self::$_startTime)*1000);
-        if (!$memcache->increment($prefix.'duration', $value)) {
-            $memcache->set($prefix.'duration', $value, 0, 0);
+        $this->_memcacheCount('duration', $value);
+    }
+
+    private function _memcacheCount($name, $value)
+    {
+        static $prefix;
+        if (!isset($prefix)) {
+            $prefix = Zend_Registry::get('config')->application->id.'-'.
+                                Vps_Setup::getConfigSection().'-bench-';
+            $prefix .= $this->_getUrlType().'-';
         }
+
+        static $memcache;
+        if (!isset($memcache)) {
+            $memcache = new Memcache;
+            $memcacheSettings = Vps_Registry::get('config')->server->memcache;
+            $memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
+        }
+
+        if (!$memcache->increment($prefix.$name, $value)) {
+            $memcache->set($prefix.$name, $value, 0, 0);
+        }
+    }
+
+    public static function memcacheCount($name, $value = 1)
+    {
+        self::_getInstance()->_memcacheCount($name, $value);
     }
 
 }
