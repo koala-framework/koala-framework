@@ -1,9 +1,6 @@
 <?php
 class Vps_View_Component extends Vps_View
 {
-    private static $_loadedIds = array();
-    private static $_componentCache = array();
-   
     public function init()
     {
         parent::init();

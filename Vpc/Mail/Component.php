@@ -2,6 +2,7 @@
 class Vpc_Mail_Component extends Vpc_Abstract
 {
     private $_mailData;
+    protected $_images = array();
 
     public static function getSettings()
     {
@@ -34,11 +35,12 @@ class Vpc_Mail_Component extends Vpc_Abstract
      *   <li>%lastname%</li>
      * </ul>
      */
-    public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null)
+    public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null, $forMail = false)
     {
         $output = new Vps_Component_Output_Mail();
         $output->setType(Vps_Component_Output_Mail::TYPE_HTML);
         $output->setRecipient($recipient);
+        $output->setViewClass($forMail ? 'Vps_View_ComponentMail' : 'Vps_View_Component');
         $ret = $output->render($this->getData());
         if ($recipient) $ret = $this->_replacePlaceholders($ret, $recipient);
         return $ret;
@@ -66,7 +68,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
         if ((!$format && $recipient->getMailFormat() == Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) ||
             $format == Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML)
         {
-            $mail->setBodyHtml($this->getHtml($recipient));
+            $mail->setBodyHtml($this->getHtml($recipient, true));
         }
         $mail->setBodyText($this->getText($recipient));
         $mail->setSubject($this->getSubject($recipient));
@@ -76,10 +78,18 @@ class Vpc_Mail_Component extends Vpc_Abstract
         if ($this->getRow()->reply_email) {
             $mail->addHeader('Reply-To', $this->getRow()->reply_email);
         }
-        //TODO: attachments, inline images
+        
+        if ($this->_images){
+            $mail->setType(Zend_Mime::MULTIPART_RELATED);
+            foreach ($this->_images as $image) {
+                $mail->addAttachment($image);
+            }
+        }
+        
+        //TODO: attachments
         return $mail->send();
     }
-
+    
     //kann von einer mail-content komponente aufgerufen werden
     //hier können mail spezifische daten drinstehen
     public function getMailData()
@@ -137,5 +147,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
         // lastname
         $text = str_replace('%lastname%', $recipient->getMailLastname(), $text);
         return $text;
+    }
+    
+    public function addImage(Zend_Mime_Part $image)
+    {
+        $this->_images[] = $image;
     }
 }

@@ -1,6 +1,11 @@
 <?php
 class Vps_Component_Output_ComponentMail extends Vps_Component_Output_ComponentMaster
 {
+    public function __construct($viewClass)
+    {
+        $this->_viewClass = $viewClass;
+    }    
+    
     public function render($component, $type, Vpc_Mail_Recipient_Interface $recipient = null)
     {
         $this->setIgnoreVisible(true);

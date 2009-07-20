@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Mail extends Vps_View
+class Vps_View_Mail extends Vps_View implements Vps_View_MailInterface
 {
     private $_images = array();
 
@@ -12,10 +12,4 @@ class Vps_View_Mail extends Vps_View
     {
         return $this->_images;
     }
-
-    public static function getCid($image)
-    {
-        return md5($image);
-    }
-
 }

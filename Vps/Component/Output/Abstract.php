@@ -3,6 +3,7 @@ abstract class Vps_Component_Output_Abstract
 {
     private $_ignoreVisible = false;
     private $_viewCache = array();
+    protected $_viewClass = 'Vps_View_Component';
 
     public function renderMaster($component, array $plugins = array())
     {
@@ -34,7 +35,8 @@ abstract class Vps_Component_Output_Abstract
 
     protected function _renderView($template, $templateVars)
     {
-        $view = new Vps_View_Component();
+        $viewClass = $this->_viewClass;
+        $view = new $viewClass();
         $view->assign($templateVars);
         return $view->render($template);
     }
