@@ -9,7 +9,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component extends Vpc_Mail_Ed
         return $ret;
     }
 
-    protected function _getPlaceholders(Vpc_Mail_Recipient_Interface $recipient)
+    protected function _replacePlaceholders($text, Vpc_Mail_Recipient_Interface $recipient)
     {
         $text = parent::_replacePlaceholders($text, $recipient);
         $text = str_replace('%orderNumber%', $recipient->getOrderNumber(), $text);

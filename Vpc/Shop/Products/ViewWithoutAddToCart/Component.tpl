@@ -1,6 +1,4 @@
 <div class="<?=$this->cssClass?>">
-    <h1><?=trlVps('Welcome to our shop');?>!</h1>
-    <p></p>
     <? if (isset($this->searchForm)) echo $this->component($this->searchForm); ?>
     <? if (isset($this->paging)) echo $this->component($this->paging); ?>
     <? if ($this->formSaved && !count($this->items)) { ?>
