@@ -222,7 +222,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 //wir führen unten ein where aus, das darf nicht im original select bleiben
                 $depSelect = clone $depSelect;
             }
-            $depSelect->where("$depTableName.$ref[column]={$dbDepOf->getTableName()}.{$dbDepOf->getPrimaryKey()}");
+            $col1 = $dbDepM->transformColumnName($ref['column']);
+            $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
+            $depSelect->where("$depTableName.$col1={$dbDepOf->getTableName()}.$col2");
             $depDbSelect = $dbDepM->createDbSelect($depSelect);
             $exprStr = $dbDepM->_createDbSelectExpression($expr->getExpr(), $depDbSelect);
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
