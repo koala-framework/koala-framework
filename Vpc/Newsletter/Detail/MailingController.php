@@ -93,9 +93,7 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
         if ($row->status != $status) {
             if ($row->status == 'stop') {
                 $this->view->error = trlVps('Newsletter stopped, cannot change status.');
-            } else if (in_array($status, array('start', 'pause', 'stop')) &&
-                ($row->status != 'sending' || $status != 'start'))
-            {
+            } else if (in_array($status, array('start', 'pause', 'stop'))) {
                 $row->status = $status;
                 $row->save();
             } else {

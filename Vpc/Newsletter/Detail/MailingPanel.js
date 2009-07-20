@@ -136,6 +136,7 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
     		}),
             success: function(response, options, r) {
     			this.pressedButton = button.name;
+    			if (r.info.state == 'sending') r.info.state = 'start';
     			if (r.info.state != this.pressedButton) this.button[r.info.state].toggle(true);
             	this.status.setStatus({ text: r.info.statusText });
             },
