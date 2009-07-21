@@ -1,7 +1,7 @@
 <?php
 class Vps_Component_Output_ComponentMail extends Vps_Component_Output_ComponentMaster
 {
-    private Vpc_Mail_Recipient_Interface $_currentRecipient;
+    private $_currentRecipient;
 
     public function __construct($viewClass)
     {
