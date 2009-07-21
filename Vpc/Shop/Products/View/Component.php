@@ -18,7 +18,8 @@ class Vpc_Shop_Products_View_Component extends Vpc_Shop_Products_ViewWithoutAddT
     {
         parent::processInput($postData);
         foreach ($this->getItems() as $i) {
-            $addToCart = $this->getData()->parent->getComponent()->getItemDirectory()->getChildComponent('-'.$i->row->id);
+            $addToCart = $this->getData()->parent->getComponent()->getItemDirectory()
+                ->getChildComponent('-'.$i->row->id);
             $addToCart->getComponent()->processInput($postData);
         }
     }
