@@ -12,7 +12,7 @@ class Vps_Component_Plugin_Placeholders extends Vps_Component_Plugin_View_Abstra
             ->getComponent()->getPlaceholders();
     }
 
-    public function processMailOutput($output, Vpc_Mail_Recipient_Interface $recipient)
+    public function processMailOutput($output, Vpc_Mail_Recipient_Interface $recipient = null)
     {
         return processOutput($output);
     }
