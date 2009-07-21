@@ -31,6 +31,8 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         $ret = $this->_parseTemplate($ret);
         foreach ($afterPlugins as $plugin) {
             $ret = $this->_executeOutputPlugin($plugin, $ret);
+            $ret = $this->_parseDynamic($ret, $componentClass);
+            $ret = $this->_parseTemplate($ret);
         }
         return $ret;
     }
