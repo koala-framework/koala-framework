@@ -25,7 +25,8 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'stylesIdPattern'   => false, //zB: '^company_[0-9]+',
             'enableStyles'      => true,
             'enableStylesEditor'=> true,
-            'enableTagsWhitelist'=> true
+            'enableTagsWhitelist'=> true,
+            'emailStyles'       => array()
         ));
         $ret['generators']['child'] = array(
             'class' => 'Vpc_Basic_Text_Generator',
@@ -119,6 +120,13 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
                 $ret .= ' '.$part;
             }
         }
+        return $ret;
+    }
+
+    public function getMailVars($user)
+    {
+        $ret = parent::getMailVars($user);
+        $ret['styles'] = $this->_getSetting('emailStyles');
         return $ret;
     }
 }
