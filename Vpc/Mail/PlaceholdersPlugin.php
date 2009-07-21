@@ -1,7 +1,7 @@
 <?php
 class Vpc_Mail_PlaceholdersPlugin extends Vps_Component_Plugin_Placeholders
 {
-    public function processMailOutput($text, Vpc_Mail_Recipient_Interface $recipient)
+    public function processMailOutput($text, Vpc_Mail_Recipient_Interface $recipient = null)
     {
         // gender
         $pattern = '/\%(.*)\:(.*)\%/U';
