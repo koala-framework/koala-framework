@@ -20,7 +20,7 @@ class Vps_Component_Plugin_Placeholders extends Vps_Component_Plugin_View_Abstra
     public function processOutput($output)
     {
         foreach ($this->_getPlaceholders() as $p=>$v) {
-            $output = str_replace($p, $v, $output);
+            $output = str_replace("%$p%", $v, $output);
         }
         return $output;
     }
