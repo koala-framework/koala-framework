@@ -5,6 +5,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     private $_properties;
     protected $_validators = array();
     private $_data;
+    private $_mask;
 
     public function __construct($fieldName = null, $fieldLabel = null)
     {
@@ -224,9 +225,15 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     {
         $ret = array();
         $ret['item'] = $this;
+        $ret['mask'] = $this->_mask;
         return $ret;
     }
-
+    
+    public function mask($name)
+    {
+        $this->_mask = $name;
+    }
+    
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
