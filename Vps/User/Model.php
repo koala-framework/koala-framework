@@ -19,6 +19,11 @@ class Vps_User_Model extends Vps_Model_Proxy
         parent::__construct($config);
     }
 
+    public static function version()
+    {
+        return Zend_Registry::get('config')->application->vps->version;
+    }
+
     public function getMailClass()
     {
         return $this->_mailClass;
