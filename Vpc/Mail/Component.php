@@ -11,6 +11,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vpc_Paragraphs_Component'
         );
+        $ret['plugins']['placeholders'] = 'Vpc_Mail_PlaceholdersPlugin';
         $ret['modelname'] = 'Vpc_Mail_Model';
         $ret['componentName'] = 'Mail';
         return $ret;
@@ -34,6 +35,8 @@ class Vpc_Mail_Component extends Vpc_Abstract
      *   <li>%firstname%</li>Falls leer, wird nachfolgendes Leerzeichen gelöscht
      *   <li>%lastname%</li>
      * </ul>
+     *
+     * @param bool forMail: ob images als attachment angehängt werden sollen oder nicht
      */
     public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null, $forMail = false)
     {
@@ -42,7 +45,6 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $output->setRecipient($recipient);
         $output->setViewClass($forMail ? 'Vps_View_ComponentMail' : 'Vps_View_Component');
         $ret = $output->render($this->getData());
-        if ($recipient) $ret = $this->_replacePlaceholders($ret, $recipient);
         return $ret;
     }
 
@@ -108,14 +110,16 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $output->setType(Vps_Component_Output_Mail::TYPE_TXT);
         $output->setRecipient($recipient);
         $ret = $output->render($this->getData());
-        if ($recipient) $ret = $this->_replacePlaceholders($ret, $recipient);
         return $ret;
     }
 
     public function getSubject(Vpc_Mail_Recipient_Interface $recipient = null)
     {
         $ret = $this->getRow()->subject;
-        if ($recipient) $ret = $this->_replacePlaceholders($ret, $recipient);
+        $plugins = $this->_getSetting('plugins');
+        $p = $plugins['placeholders'];
+        $p = new $p($this->getData()->componentId);
+        $ret = $p->processMailOutput($ret, $recipient);
         return $ret;
     }
 
@@ -124,31 +128,6 @@ class Vpc_Mail_Component extends Vpc_Abstract
         throw new Vps_Exception('Not implemented yet.');
     }
 
-    protected function _replacePlaceholders($text, Vpc_Mail_Recipient_Interface $recipient)
-    {
-        // gender
-        $pattern = '/\%(.*)\:(.*)\%/U';
-        if ($recipient->getMailGender() == Vpc_Mail_Recipient_Interface::MAIL_GENDER_MALE) {
-            $text = preg_replace($pattern, '$1', $text);
-            $gender = trlVps('Mr.');
-        } else {
-            $text = preg_replace($pattern, '$2', $text);
-            $gender = trlVps('Ms.');
-        }
-        $text = str_replace('%gender%', $gender, $text);
-        // title
-        $title = $recipient->getMailTitle();
-        $search = $title == '' ? '%title% ' : '%title%';
-        $text = str_replace($search, $title, $text);
-        // firstname
-        $firstname = $recipient->getMailFirstname();
-        $search = $firstname == '' ? '%firstname% ' : '%firstname%';
-        $text = str_replace($search, $firstname, $text);
-        // lastname
-        $text = str_replace('%lastname%', $recipient->getMailLastname(), $text);
-        return $text;
-    }
-    
     public function addImage(Zend_Mime_Part $image)
     {
         $this->_images[] = $image;

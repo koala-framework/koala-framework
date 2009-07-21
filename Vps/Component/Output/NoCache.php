@@ -17,22 +17,27 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
             $p = new $p($componentId);
             if (!$p instanceof Vps_Component_Plugin_Abstract)
                 throw Vps_Exception('Plugin must be Instanceof Vps_Component_Plugin_Abstract');
-            if ($p->type == Vps_Component_Output_Plugin::EXECUTE_BEFORE) {
+            if ($p->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
                 $beforePlugins[] = $p;
-            } else if ($p->type == Vps_Component_Output_Plugin::EXECUTE_AFTER) {
+            } else if ($p->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_AFTER) {
                 $afterPlugins[] = $p;
             }
         }
 
         foreach ($beforePlugins as $plugin) {
-            $ret = $plugin->processOutput($ret);
+            $ret = $this->_executeOutputPlugin($plugin, $ret);
         }
         $ret = $this->_parseDynamic($ret, $componentClass);
         $ret = $this->_parseTemplate($ret);
         foreach ($afterPlugins as $plugin) {
-            $ret = $plugin->processOutput($ret);
+            $ret = $this->_executeOutputPlugin($plugin, $ret);
         }
         return $ret;
+    }
+
+    protected function _executeOutputPlugin($plugin, $output)
+    {
+        return $plugin->processOutput($output);
     }
 
     protected function _parseTemplate($ret)

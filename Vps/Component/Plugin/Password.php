@@ -1,6 +1,5 @@
 <?php
-class Vps_Component_Plugin_Password extends Vps_Component_Plugin_Abstract
-    implements Vps_Component_Plugin_Interface_View
+class Vps_Component_Plugin_Password extends Vps_Component_Plugin_View_Abstract
 {
     protected $_password = 'planet';
 
