@@ -9,6 +9,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Edit
         $ret['flags']['processInput'] = true;
         $ret['cssClass'] = 'webStandard';
         $ret['componentName'] = trlVps('Shop Conformation Text');
+        $ret['plugins']['placeholders'] = 'Vps_Component_Plugin_Placeholders';
         return $ret;
     }
 
@@ -24,5 +25,14 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Edit
     public function processInput($data)
     {
         $this->getData()->parent->getComponent()->confirmOrder($this->_getOrder());
+    }
+
+    public function getPlaceholders()
+    {
+        $o = $this->_getOrder();
+        $ret = $o->toArray();
+        $ret['total'] = $o->getTotal();
+        $ret['orderNumber'] = $o->getOrderNumber();
+        return $ret;
     }
 }
