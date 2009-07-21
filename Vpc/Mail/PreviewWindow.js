@@ -1,5 +1,5 @@
-Ext.ns('Vpc.Newsletter.Detail');
-Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
+Ext.ns('Vpc.Mail');
+Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
     initComponent : function()
     {
 		this.button = [];
@@ -70,7 +70,7 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
 		this.autoScroll = true;
 		
 		this.tbar.add(this.button['html'], this.button['text'], '|', this.address, send);
-		Vpc.Newsletter.Detail.MailPanel.superclass.initComponent.call(this);
+		Vpc.Mail.PreviewWindow.superclass.initComponent.call(this);
     },
     
 	showEdit : function(id, record)
@@ -112,4 +112,4 @@ Vpc.Newsletter.Detail.MailPanel = Ext.extend(Ext.Window, {
     	}
 	}
 });
-Ext.reg('vpc.newsletter.mailpanel', Vpc.Newsletter.Detail.MailPanel);
+Ext.reg('vpc.mail.preview', Vpc.Mail.PreviewWindow);

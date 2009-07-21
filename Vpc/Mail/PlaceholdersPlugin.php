@@ -3,6 +3,8 @@ class Vpc_Mail_PlaceholdersPlugin extends Vps_Component_Plugin_Placeholders
 {
     public function processMailOutput($text, Vpc_Mail_Recipient_Interface $recipient = null)
     {
+        if (!$recipient) return $text;
+
         // gender
         $pattern = '/\%(.*)\:(.*)\%/U';
         if ($recipient->getMailGender() == Vpc_Mail_Recipient_Interface::MAIL_GENDER_MALE) {
