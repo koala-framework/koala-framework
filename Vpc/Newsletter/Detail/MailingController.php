@@ -10,8 +10,8 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
     public function preDispatch()
     {
         $this->_editDialog = array(
-            'type' => 'Vpc.Newsletter.Detail.MailPanel',
-            'controllerUrl' => Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Mail'),
+            'type' => 'Vpc.Mail.PreviewWindow',
+            'controllerUrl' => Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Preview'),
             'baseParams' => array(
                 'componentId' => $this->_getParam('componentId')
             ),

@@ -6,6 +6,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         $errors = $this->getRequest()->getParam('error_handler');
         if ($errors->exception && !($errors->exception instanceof Vps_ClientException)
              && class_exists('FirePHP') && FirePHP::getInstance()) {
+            //throw $errors->exception;
             FirePHP::getInstance()->fb($errors->exception);
         }
 
