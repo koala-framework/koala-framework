@@ -9,7 +9,7 @@ class Vps_User_Relation_Model extends Vps_Model_Proxy
             $client = new Vps_Srpc_Client(array(
                 'serverUrl' => Vps_Registry::get('config')->service->usersRelation->url,
                 'extraParams' => array(
-                    'applicationId' => $this->getApplicationId()),
+                    'applicationId' => $this->getApplicationId(),
                     'version'       => Vps_User_Model::version()
                 )
             ));
