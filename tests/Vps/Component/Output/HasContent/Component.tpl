@@ -1,0 +1,1 @@
+root <?=$this->ifHasNoContent($this->child)?><?=$this->component($this->child)?><?=$this->ifHasNoContent()?>

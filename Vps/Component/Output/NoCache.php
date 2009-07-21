@@ -43,13 +43,14 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
     protected function _parseTemplate($ret)
     {
         // hasContent-Tags ersetzen
-        preg_match_all("/{content: ([^ }]+) ([^ }]+) ([^ }]+)}(.*){content}/imsU", $ret, $matches);
+        preg_match_all("/{content(No)?: ([^ }]+) ([^ }]+) ([^ }]+)}(.*){content(No)?}/imsU", $ret, $matches);
         foreach ($matches[0] as $key => $search) {
-            $componentId = $matches[2][$key];
-            $componentClass = $matches[1][$key];
-            $counter = $matches[3][$key];
-            $content = $matches[4][$key];
-            $replace = $this->_renderHasContent($componentId, $componentClass, $content, $counter);
+            $inverse = $matches[1][$key] == 'No';
+            $componentId = $matches[3][$key];
+            $componentClass = $matches[2][$key];
+            $counter = $matches[4][$key];
+            $content = $matches[5][$key];
+            $replace = $this->_renderHasContent($componentId, $componentClass, $content, $counter, $inverse);
             $ret = str_replace($search, $replace, $ret);
         }
 
@@ -114,11 +115,12 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         return $output->render($this->_getComponent($componentId), $partial, $id, $info);
     }
 
-    protected function _renderHasContent($componentId, $componentClass, $content, $counter, $useCache = false)
+    protected function _renderHasContent($componentId, $componentClass, $content, $counter, $inverse, $useCache = false)
     {
         Vps_Benchmark::count('rendered hascontent ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
         $component = $this->_getComponent($componentId);
-        return $component->hasContent() ? $content : '';
+        $hasContent = $component->hasContent();
+        return ($hasContent && !$inverse) || (!$hasContent && $inverse) ? $content : '';
     }
 
     protected function _renderContent($componentId, $componentClass, $masterTemplate, $useCache = false)
