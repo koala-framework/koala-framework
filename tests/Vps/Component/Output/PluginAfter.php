@@ -1,8 +1,6 @@
 <?php
 class Vps_Component_Output_PluginAfter extends Vps_Component_Output_Plugin
 {
-    public $type = self::EXECUTE_AFTER;
-    
     public function processOutput($output)
     {
         // Da das Plugin nach dem Rendern ausgeführt wird, muss schon der
@@ -12,6 +10,10 @@ class Vps_Component_Output_PluginAfter extends Vps_Component_Output_Plugin
         } else {
             return $output;
         }
+    }
+    public function getExecutionPoint()
+    {
+        return Vps_Component_Plugin_Interface_View::EXECUTE_AFTER;
     }
 }
 ?>
