@@ -6,6 +6,14 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
         'Entries' => 'Vps_Util_Model_Feed_Entries'
     );
 
+    /**
+     * @return Vps_Http_Requestor
+     */
+    public function getHttpRequestor()
+    {
+        return new Vps_Http_Requestor;
+    }
+
     protected function _getOwnColumns()
     {
         return array('url', 'title', 'link', 'description', 'format', 'encoding');

@@ -13,15 +13,9 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         if (substr($data['url'], 0, 7)=='file://') {
             $str = file_get_contents($data['url']);
         } else {
-            $client = new Zend_Http_Client($data['url'], array(
-                //TODO: aus config auslesen!
-                'useragent' => 'RSSIncludeBot/1.0 (http://www.rssinclude.com/spider)',
-                'timeout' => 20
-            ));
-            $response = $client->request();
-
-            if ($response->getStatus() != 200) {
-                throw new Vps_Exception("invalid status response from server: ".$response->getStatus());
+            $response = $config['model']->getHttpRequestor()->request($data['url']);
+            if ($response->getStatusCode() != 200) {
+                throw new Vps_Exception("invalid status response from server: ".$response->getStatusCode());
             }
             $str = $response->getBody();
         }
@@ -34,9 +28,9 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
                 $str = preg_replace('#(<?xml[^>]* encoding=["\'])([^"\']*)(["\'])#', '\1utf-8\3', $str);
             }
         } else if (isset($response)) {
-            $ct = $response->getHeader('Content-Type');
+            $ct = $response->getContentType();
             if ($ct) {
-                if (preg_match('#charset=([^;]*)#', strtolower($ct), $m)) {
+                if (preg_match('#charset=([^;]*)#i', strtolower($ct), $m)) {
                     $encoding = trim($m[1]);
                     if ($encoding != 'utf8' && $encoding != 'utf-8') {
                         $str = iconv($encoding, 'utf-8', $str);
