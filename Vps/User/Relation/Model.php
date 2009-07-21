@@ -8,7 +8,10 @@ class Vps_User_Relation_Model extends Vps_Model_Proxy
         if (!isset($config['proxyModel'])) {
             $client = new Vps_Srpc_Client(array(
                 'serverUrl' => Vps_Registry::get('config')->service->usersRelation->url,
-                'extraParams' => array('applicationId' => $this->getApplicationId())
+                'extraParams' => array(
+                    'applicationId' => $this->getApplicationId()),
+                    'version'       => Vps_User_Model::version()
+                )
             ));
             $config['proxyModel'] = new Vps_User_Relation_ServiceModel(array('client' => $client));
         }
