@@ -65,7 +65,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
 
         // Nochmal durchgehen und ersetzen
         foreach ($toLoadHasContent as $search => $val) {
-            $content = $this->_renderHasContent($val['componentId'], $val['componentClass'], $val['content'], $val['counter']);
+            $content = $this->_renderHasContent($val['componentId'], $val['componentClass'], $val['content'], $val['counter'], $val['inverse']);
             $childRenderData = $this->_parseTemplate($content);
             $replace = $this->_processComponent2($childRenderData);
             $ret = str_replace($search, $replace, $ret);
@@ -138,7 +138,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         return $ret;
     }
 
-    protected function _renderHasContent($componentId, $componentClass, $content, $counter)
+    protected function _renderHasContent($componentId, $componentClass, $content, $counter, $inverse)
     {
         // Komponente aus Cache holen
         $ret = false; // Falls nicht in Cache und sollte noch nicht geladen sein, kann auch false zurückgegeben werden
@@ -149,7 +149,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) { // Nicht in Cache, aber sollte in Cache sein -> ohne Cache holen
             $settings = $this->_getComponent($componentId)->getComponent()->getViewCacheSettings();
-            $ret = parent::_renderHasContent($componentId, $componentClass, $content, $counter, $settings['enabled']);
+            $ret = parent::_renderHasContent($componentId, $componentClass, $content, $counter, $inverse, $settings['enabled']);
             if ($settings['enabled']) {
                 $this->getCache()->save($ret, $cacheId, $componentClass, $settings['lifetime']);
                 $this->_saveMeta($componentId, $cacheId);
@@ -160,7 +160,8 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
                 'componentId' => $componentId,
                 'componentClass' => $componentClass,
                 'content' => $content,
-                'counter' => $counter
+                'counter' => $counter,
+                'inverse' => $inverse
             );
         }
 
