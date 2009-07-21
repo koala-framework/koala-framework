@@ -63,6 +63,14 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('plugin(foo)', $this->_output->renderMaster($this->_root, $plugins));
         $this->assertEquals(1, $this->_output->getCache()->countPreloadCalls());
 
+        // After Plugin im Root
+        $this->_output->getCache()->save('root plugin(plugin({nocache: Vps_Component_Output_C1_Child_Component root-child}))', 'root-master');
+        $this->_output->getCache()->save('master2 child child2', 'root-child');
+        $this->_output->getCache()->emptyPreload();
+        $plugins = array('Vps_Component_Output_PluginAfter');
+        $this->assertEquals('root plugin(plugin(master2 child child2))', $this->_output->renderMaster($this->_root, $plugins));
+        $this->assertEquals(1, $this->_output->getCache()->countPreloadCalls());
+
         // 2 Plugins im Child
         $this->_output->getCache()->save('foo {nocache: Vps_Component_Output_C1_Child_Component root-child Vps_Component_Output_Plugin Vps_Component_Output_Plugin}', 'root-master');
         $this->_output->getCache()->save('bar', 'root-child');

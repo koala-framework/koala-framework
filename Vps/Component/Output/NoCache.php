@@ -10,14 +10,28 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
     {
         $ret = $this->_renderContent($componentId, $componentClass, $masterTemplate);
 
+        $beforePlugins = array();
+        $afterPlugins = array();
         foreach ($plugins as $p) {
             if (!$p) throw new Vps_Exception("Invalid Plugin specified '$p'");
             $p = new $p($componentId);
-            $ret = $p->processOutput($ret);
+            if (!$p instanceof Vps_Component_Plugin_Abstract)
+                throw Vps_Exception('Plugin must be Instanceof Vps_Component_Plugin_Abstract');
+            if ($p->type == Vps_Component_Output_Plugin::EXECUTE_BEFORE) {
+                $beforePlugins[] = $p;
+            } else if ($p->type == Vps_Component_Output_Plugin::EXECUTE_AFTER) {
+                $afterPlugins[] = $p;
+            }
         }
 
+        foreach ($beforePlugins as $plugin) {
+            $ret = $plugin->processOutput($ret);
+        }
         $ret = $this->_parseDynamic($ret, $componentClass);
         $ret = $this->_parseTemplate($ret);
+        foreach ($afterPlugins as $plugin) {
+            $ret = $plugin->processOutput($ret);
+        }
         return $ret;
     }
 
