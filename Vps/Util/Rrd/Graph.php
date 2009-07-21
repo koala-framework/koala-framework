@@ -51,9 +51,6 @@ class Vps_Util_Rrd_Graph
             if (isset($f['field'])) $field = $f['field'];
             if ($color || $text) throw new Vps_Exception("so ned");
         } else {
-            if (is_string($field)) {
-                $field = $this->_rrd->getField($field);
-            }
             if (is_array($color)) {
                 $f = $color;
                 $f['field'] = $field;
@@ -65,6 +62,9 @@ class Vps_Util_Rrd_Graph
                     'text' => $text
                 );
             }
+        }
+        if (isset($f['field']) && is_string($f['field'])) {
+            $f['field'] = $this->_rrd->getField($f['field']);
         }
         if (!isset($f['color']) || !$f['color']) {
             foreach (self::$_defaultColors as $c) {
@@ -81,8 +81,8 @@ class Vps_Util_Rrd_Graph
         if (!$f['color']) {
             throw new Vps_Exception("no more avaliable default colors");
         }
-        if ((!isset($f['text']) || !$f['text']) && $field) {
-            $f['text'] = $field->getText();
+        if ((!isset($f['text']) || !$f['text']) && isset($f['field'])) {
+            $f['text'] = $f['field']->getText();
         }
         $this->_fields[] = $f;
     }
@@ -120,7 +120,32 @@ class Vps_Util_Rrd_Graph
         foreach ($this->_fields as $settings) {
             if (isset($settings['field'])) {
                 $field = $settings['field']->getName();
-                $cmd .= "DEF:line{$i}=$rrdFile:$field:AVERAGE ";
+                if (isset($settings['addFields'])) {
+                    $j = 0;
+                    $cmd .= "DEF:line{$i}x{$j}=$rrdFile:$field:AVERAGE ";
+                    foreach ($settings['addFields'] as $f) {
+                        $j++;
+                        $addField = $f['field'];
+                        if (is_string($addField)) $addField = $this->_rrd->getField($addField);
+                        $addField = $addField->getName();
+                        $cmd .= "DEF:line{$i}x{$j}=$rrdFile:$addField:AVERAGE ";
+                    }
+                    $j = 0;
+                    $cmd .= "CDEF:line{$i}=";
+                    foreach ($settings['addFields'] as $f) {
+                        $j++;
+                        if ($j > 1) $cmd .= ",";
+                        if (isset($f['defaultValue'])) {
+                            $nextField = "line{$i}x{$j},line{$i}x{$j},0,IF";
+                        } else {
+                            $nextField = "line{$i}x{$j}";
+                        }
+                        $cmd .= "line{$i}x".($j-1).",$nextField,+";
+                    }
+                    $cmd .= " ";
+                } else {
+                    $cmd .= "DEF:line{$i}=$rrdFile:$field:AVERAGE ";
+                }
                 if ($this->_devideBy) {
                     $cmd .= "CDEF:perrequest$i=line$i,requests,/ ";
                 }
@@ -138,6 +163,7 @@ class Vps_Util_Rrd_Graph
             }
             $i++;
         }
+//         d($cmd);
         $cmd .= " 2>&1";
         exec($cmd, $out, $ret);
         if ($ret) {
