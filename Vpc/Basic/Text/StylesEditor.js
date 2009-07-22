@@ -3,7 +3,7 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
 {
     title: trlVps('Edit Styles'),
     modal: true,
-    width: 600,
+    width: 650,
     height: 400,
     layout: 'fit',
     closeAction: 'hide',
