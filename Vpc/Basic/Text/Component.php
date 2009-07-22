@@ -46,6 +46,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
         $ret['assetsAdmin']['dep'][] = 'VpsAutoForm';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
         $ret['assetsAdmin']['dep'][] = 'ExtSimpleStore';
+        $ret['assetsAdmin']['dep'][] = 'VpsColorField';
 
         $ret['assets']['dep'][] = 'VpsMailDecode';
 
