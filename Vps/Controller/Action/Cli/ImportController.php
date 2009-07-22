@@ -325,6 +325,12 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl));
 
         echo "\n*** Service: source=$sourceUrl target=$targetUrl\n";
+
+        if (strpos($targetUrl, 'http://service.vivid-planet.com') !== false) {
+            echo "Service: !!! ACHTUNG !!! Service Import verhindert, nach online wird nicht importiert!!!\n";
+            return;
+        }
+
         echo "Service: Kopiere 'users' tabelle (neu)...\n";
 
         $targetModel->copyDataFromModel($sourceModel);
