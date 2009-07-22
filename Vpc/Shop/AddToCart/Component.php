@@ -29,6 +29,10 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
 
     protected function _getProduct()
     {
+        if (isset($this->getData()->row)) {
+            //wenn direkt von table generator erstellt
+            return $this->getData()->row;
+        }
         return $this->getData()->parent->row;
     }
 

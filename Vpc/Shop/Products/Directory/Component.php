@@ -18,7 +18,6 @@ class Vpc_Shop_Products_Directory_Component extends Vpc_Directories_ItemPage_Dir
         $ret['modelname'] = 'Vpc_Shop_Products';
 
         $ret['componentName'] = trlVps('Shop.Products');
-        $ret['flags']['processInput'] = true;
         $ret['flags']['hasResources'] = true;
         return $ret;
     }

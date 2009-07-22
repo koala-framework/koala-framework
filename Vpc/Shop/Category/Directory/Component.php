@@ -6,6 +6,7 @@ class Vpc_Shop_Category_Directory_Component extends Vpc_Directories_Category_Dir
         $ret = parent::getSettings();
         $ret['pool'] = 'productcategories';
         $ret['categoryToItemModelName'] = 'Vpc_Shop_Category_Directory_ProductsToCategoriesModel';
+        $ret['generators']['detail']['component'] = 'Vpc_Shop_Category_Detail_Component';
         return $ret;
     }
 }
