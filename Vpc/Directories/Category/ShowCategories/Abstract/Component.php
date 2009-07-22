@@ -12,7 +12,7 @@ abstract class Vpc_Directories_Category_ShowCategories_Abstract_Component extend
             $this->getItemDirectory()->getChildComponent('_categories')->componentClass,
             'categoryToItemModelName'
         );
-        $refData = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData($tableName);
+        $refData = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData($tableName, 'Item');
 
         $select->join($refData['tableName'],
                       $refData['tableName'].'.'.$refData['itemColumn'].'='
