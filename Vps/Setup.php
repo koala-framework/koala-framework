@@ -505,4 +505,15 @@ class Vps_Setup
             Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
         }
     }
+
+    public static function getHost($includeProtocol = true)
+    {
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = Vps_Registry::get('config')->server->domain;
+        }
+        if ($includeProtocol) $host = 'http://' . $host;
+        return $host;
+    }
 }
