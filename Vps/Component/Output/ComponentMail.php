@@ -15,7 +15,7 @@ class Vps_Component_Output_ComponentMail extends Vps_Component_Output_ComponentM
         // Normaler Output
         $template = Vpc_Admin::getComponentFile($component->componentClass, "Mail.$type", 'tpl');
         if (!$template) {
-            throw new Vps_Exception("No Mail-Template found for '$component->componentClass'");
+            $template = Vpc_Admin::getComponentFile($component->componentClass, 'Component', 'tpl');
         }
         $templateVars = $component->getComponent()->getMailVars($recipient);
         if (is_null($templateVars)) {
