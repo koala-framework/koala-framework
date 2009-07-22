@@ -8,7 +8,7 @@ class Vpc_Events_Category_Directory_EventsToCategoriesModel
     {
         $this->_referenceMap['Item'] = array(
             'column'           => 'event_id',
-            'refTableClass'     => 'Vpc_Events_Directory_Model',
+            'refModelClass'     => 'Vpc_Events_Directory_Model',
             'refColumns'        => array('id')
         );
         parent::_init();

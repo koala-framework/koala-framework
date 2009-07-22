@@ -79,15 +79,6 @@ class Vpc_Mail_Component extends Vpc_Abstract
     /**
      * Gibt den personalisierten HTML-Quelltext der Mail zurück
      *
-     * Ersetzt folgende Platzhalter:
-     * <ul>
-     *   <li>%Text bei Mann:Text bei Frau%</li>
-     *   <li>%gender%</li>Durch "Mr." oder "Ms."
-     *   <li>%title%</li>Falls leer, wird nachfolgendes Leerzeichen gelöscht
-     *   <li>%firstname%</li>Falls leer, wird nachfolgendes Leerzeichen gelöscht
-     *   <li>%lastname%</li>
-     * </ul>
-     *
      * @param bool forMail: ob images als attachment angehängt werden sollen oder nicht
      */
     public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null, $forMail = false)
