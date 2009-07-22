@@ -24,7 +24,7 @@ class Vpc_User_Edit_Form_Form extends Vps_Form
         $id = $this->_getIdByParentRow($parentRow);
         if ($id === 0 || $id === '0' || is_null($id)) {
             $email = null;
-            if (isset($postData[$this->getByName('email')->getFieldName()])) {
+            if ($this->getByName('email') && isset($postData[$this->getByName('email')->getFieldName()])) {
                 $email = $postData[$this->getByName('email')->getFieldName()];
             }
 
