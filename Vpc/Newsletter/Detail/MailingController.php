@@ -30,11 +30,6 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
             'width' => 85
         );
 
-        $this->_columns->add(new Vps_Grid_Column('gender', trlVps('Gender'), 80))
-            ->setData(new Vpc_Newsletter_Detail_UserData('gender'))
-            ->setRenderer('genderIcon');
-        $this->_columns->add(new Vps_Grid_Column('title', trlVps('Title'), 80))
-            ->setData(new Vpc_Newsletter_Detail_UserData('title'));
         $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('Firstname'), 140))
             ->setData(new Vpc_Newsletter_Detail_UserData('firstname'));
         $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Lastname'), 140))
