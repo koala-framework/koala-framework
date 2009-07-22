@@ -9,14 +9,6 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
             Vpc_Shop_Cart_Orders::resetCartOrderId();
         }
     }
-    public function getMailGender()
-    {
-        return $this->sex;
-    }
-    public function getMailTitle()
-    {
-        return $this->title;
-    }
     public function getMailFirstname()
     {
         return $this->firstname;

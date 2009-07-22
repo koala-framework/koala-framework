@@ -5,7 +5,7 @@ class Vpc_Mail_Placeholder_MailModel extends Vpc_Mail_Model
     {
         $config['proxyModel'] = new Vps_Model_FnF(array(
             'data' => array(
-                array('component_id' => 'root', 'subject' => 'Sehr geehrte%r:% %gender% %title% %lastname%')
+                array('component_id' => 'root', 'subject' => '%sehr_geehrt%')
             ),
             'primaryKey' => 'component_id',
             'columns' => array('component_id', 'subject')
