@@ -9,7 +9,7 @@ class Vpc_Mail_Image_Test extends Vpc_TestAbstract
         parent::setUp('Vpc_Mail_Image_Mail');
     }
 
-    public function testMail()
+    public function testImage()
     {
         $mail = $this->_root;
         $c = $mail->getComponent();

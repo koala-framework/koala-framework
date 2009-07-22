@@ -121,12 +121,22 @@ class Vpc_Mail_Component extends Vpc_Abstract
         return $this->processPlaceholder($ret, $recipient);
     }
 
-    protected function processPlaceholder($ret, $recipient)
+    protected function processPlaceholder($ret, Vpc_Mail_Recipient_Interface $recipient = null)
     {
         $plugins = $this->_getSetting('plugins');
         $p = $plugins['placeholders'];
         $p = new $p($this->getData()->componentId);
         return $p->processMailOutput($ret, $recipient);
+    }
+
+    public function getPlaceholders(Vpc_Mail_Recipient_Interface $recipient = null)
+    {
+        $ret = array();
+        if ($recipient) {
+            $ret['firstname'] = $recipient->getMailFirstname();
+            $ret['lastname'] = $recipient->getMailLastname();
+        }
+        return $ret;
     }
 
     public function getLinks()
