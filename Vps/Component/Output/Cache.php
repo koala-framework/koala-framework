@@ -116,7 +116,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         return $ret;
     }
 
-    protected function _renderContent($componentId, $componentClass, $masterTemplate, $afterPlugins)
+    protected function _renderContent($componentId, $componentClass, $masterTemplate, $afterPlugins = array())
     {
         $ret = false;
         $type = $masterTemplate ? Vps_Component_Cache::TYPE_MASTER : Vps_Component_Cache::TYPE_DEFAULT;

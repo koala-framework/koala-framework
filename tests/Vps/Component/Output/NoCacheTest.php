@@ -86,9 +86,9 @@ class Vps_Component_Output_NoCacheTest extends PHPUnit_Framework_TestCase
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_Plugin_Component');
         $value = $output->renderMaster(Vps_Component_Data_Root::getInstance());
         // Eigentlicher Code zur Kontrolle in PluginAfter!
-        $this->assertEquals('master  root plugin(plugin(master2 child child2))', $value);
+        $this->assertEquals('master  afterPlugin(root plugin(plugin(master2 child child2)))', $value);
     }
-    
+
     public function testHasContent()
     {
         $output = new Vps_Component_Output_NoCache();
