@@ -79,6 +79,11 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         foreach ($toLoad as $search => $val) {
             $replace = $this->_render($val['componentId'], $val['componentClass'], $val['masterTemplate']);
             $ret = str_replace($search, $replace, $ret);
+            foreach ($val['afterPlugins'] as $plugin) {
+                $ret = $this->_executeOutputPlugin($plugin, $ret);
+                $ret = $this->_parseTemplate($ret);
+                $ret = $this->_processComponent2($ret);
+            }
         }
         return $this->_parseTemplate($ret);
     }
@@ -111,7 +116,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         return $ret;
     }
 
-    protected function _renderContent($componentId, $componentClass, $masterTemplate)
+    protected function _renderContent($componentId, $componentClass, $masterTemplate, $afterPlugins)
     {
         $ret = false;
         $type = $masterTemplate ? Vps_Component_Cache::TYPE_MASTER : Vps_Component_Cache::TYPE_DEFAULT;
@@ -122,7 +127,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) {
             $settings = $this->_getComponent($componentId)->getComponent()->getViewCacheSettings();
-            $ret = parent::_renderContent($componentId, $componentClass, $masterTemplate, $settings['lifetime']);
+            $ret = parent::_renderContent($componentId, $componentClass, $masterTemplate, $afterPlugins, $settings['lifetime']);
             if ($settings['enabled']) {
                 $this->getCache()->save($ret, $cacheId, $componentClass, $settings['lifetime']);
                 $this->_saveMeta($componentId, $cacheId);
@@ -132,7 +137,8 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             $this->_toLoad[$ret] = array(
                 'componentClass' => $componentClass,
                 'componentId' => $componentId,
-                'masterTemplate' => $masterTemplate
+                'masterTemplate' => $masterTemplate,
+                'afterPlugins' => $afterPlugins
             );
         }
         return $ret;
