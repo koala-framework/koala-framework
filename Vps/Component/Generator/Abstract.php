@@ -476,7 +476,6 @@ abstract class Vps_Component_Generator_Abstract
         if (is_null($select)) return null;
         $select = $this->_formatSelectHome($select);
         if (is_null($select)) return null;
-
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS) || $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)) {
             $classes = $this->getChildComponentClasses($select);
             $select->whereComponentClasses($classes);

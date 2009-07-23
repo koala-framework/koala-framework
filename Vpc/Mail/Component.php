@@ -126,6 +126,39 @@ class Vpc_Mail_Component extends Vpc_Abstract
         if ($recipient) {
             $ret['firstname'] = $recipient->getMailFirstname();
             $ret['lastname'] = $recipient->getMailLastname();
+            if ($recipient instanceof Vpc_Mail_Recipient_TitleInterface) {
+                $replace = array(
+                    $recipient->getMailTitle(),
+                    $recipient->getMailLastname()
+                );
+                $politeM = trlVps('Dear Mr. {0} {1}', $replace);
+                $politeF = trlVps('Dear Mrs. {0} {1}', $replace);
+                if ($recipient->getMailGender() == 'male') {
+                    $t = trlVps('Dear Mr. {0} {1}', $replace);
+                } else if ($recipient->getMailGender() == 'female') {
+                    $t = trlVps('Dear Mrs. {0} {1}', $replace);
+                } else {
+                    $t = trlVps('Dear {0} {1}', $replace);
+                }
+                $ret['salutation_polite'] = str_replace('  ', ' ', $t);
+            }
+            if ($recipient instanceof Vpc_Mail_Recipient_GenderInterface) {
+                $replace = array($recipient->getMailLastname());
+                if ($recipient->getMailGender() == 'male') {
+                    $ret['salutation_polite_notitle'] = trlVps('Dear Mr. {0}', $replace);
+                    $ret['salutation_hello'] = trlVps('Hello Mr. {0}', $replace);
+                } else if ($recipient->getMailGender() == 'female') {
+                    $ret['salutation_polite_notitle'] = trlVps('Dear Mrs. {0}', $replace);
+                    $ret['salutation_hello'] = trlVps('Hello Mrs. {0}', $replace);
+                } else {
+                    $replace = array(
+                        $recipient->getMailFirstname(),
+                        $recipient->getMailLastname()
+                    );
+                    $ret['salutation_polite_notitle'] = trlVps('Dear {0} {1}', $replace);
+                    $ret['salutation_hello'] = trlVps('Hello {0} {1}', $replace);
+                }
+            }
         }
         return $ret;
     }
