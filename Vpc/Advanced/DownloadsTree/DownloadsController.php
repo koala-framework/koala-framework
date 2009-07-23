@@ -9,9 +9,8 @@ class Vpc_Advanced_DownloadsTree_DownloadsController extends Vps_Controller_Acti
     public function init()
     {
         $class = $this->_getParam('class');
-        $class = substr($class, 0, strpos($class, '!'));
         $this->_editDialog = array(
-            'controllerUrl'=> Vpc_Admin::getInstance($class)->getControllerUrl('Form'),
+            'controllerUrl'=> Vpc_Admin::getInstance($class)->getControllerUrl('Download'),
             'width'=>500,
             'height'=>240
         );
