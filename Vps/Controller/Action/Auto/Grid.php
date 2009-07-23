@@ -122,7 +122,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $index = $column->getDataIndex();
                 if ($info = $this->_getTableInfo()) {
                     if (!isset($info['metadata'][$index])) continue;
-                } else {
+                } else if ($this->_model) {
                     if (!in_array($index, $this->_model->getColumns())) continue;
                 }
                 $this->_queryFields[] = $index;

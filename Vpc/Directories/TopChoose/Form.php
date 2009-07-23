@@ -12,10 +12,14 @@ class Vpc_Directories_TopChoose_Form extends Vpc_Abstract_Form
 
         $values = array();
         foreach ($directories as $directory) {
-            $values[$directory->dbId] = $directory->getTitle();
+            $title = $directory->getTitle();
+            $name = Vpc_Abstract::getSetting($directory->componentClass, 'componentName');
+            if (strpos($name, '.') !== false) $name = substr(strrchr($name, '.'), 1);
+            if ($title != $name) $title .= ' - ' . $name;
+            $values[$directory->dbId] = $title;
         }
 
-        $this->fields->add(new Vps_Form_Field_Select('directory_component_id', trlVps('Show')))
+        $this->fields->add(new Vps_Form_Field_Select('directory_component_id', trlVps('Show')), 300)
             ->setValues($values);
     }
 }
