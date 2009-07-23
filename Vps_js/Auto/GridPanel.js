@@ -882,7 +882,31 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     },
     onCsv : function()
     {
-        window.open(this.controllerUrl+'/csv?'+Ext.urlEncode(this.getStore().baseParams));
+        Ext.Ajax.request({
+            url : this.controllerUrl+'/json-csv',
+            params  : this.getStore().baseParams,
+            timeout: 600000, // 10 minuten
+            progress: true,
+            progressTitle : trlVps('CSV export'),
+            success: function(response, opt, r) {
+                if (Ext.isIE) {
+                    Ext.Msg.show({
+                        title: trlVps('Your download is ready'),
+                        msg: trlVps('Please click on the following link to download your CSV file.')
+                            +'<br /><br />'
+                            +'<a class="xlsExportLink" href="'+this.controllerUrl+'/download-csv-export-file?downloadkey='+r.downloadkey+'" target="_blank">'
+                            +trlVps('CSV export file')+'</a>',
+                        icon: Ext.Msg.INFO,
+                        buttons: { ok: trlVps('Close') }
+                    });
+                } else {
+                    Ext.getBody().createChild({
+                        html: '<iframe width="0" height="0" src="'+this.controllerUrl+'/download-csv-export-file?downloadkey='+r.downloadkey+'"></iframe>'
+                    });
+                }
+            },
+            scope: this
+        });
     },
     onXls : function()
     {

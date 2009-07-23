@@ -437,6 +437,10 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         if ($expr instanceof Vps_Model_Select_Expr_Child) {
             $childs = $row->getChildRows($expr->getChild(), $expr->getSelect());
             return self::_evaluateExprForRowset($childs, $expr->getExpr());
+        } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
+            $parent = $row->getParentRow($expr->getParent());
+            $field = $expr->getField();
+            return $parent->$field;
         } else {
             throw new Vps_Exception_NotYetImplemented();
         }
