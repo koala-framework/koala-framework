@@ -10,7 +10,7 @@ Vps.onContentReady(function() {
             region: 'north',
             height: 220,
             baseParams: {
-                component_id: options.componentId
+                componentId: options.componentId
             },
             bindings: [{
                 item: this.downloads,

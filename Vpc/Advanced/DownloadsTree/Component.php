@@ -16,7 +16,7 @@ class Vpc_Advanced_DownloadsTree_Component extends Vpc_Abstract_Composite_Compon
 
         $ret['plugins'] = array('Vpc_Rotary_Password_Component');
         $ret['flags']['hasResources'] = true;
-        
+
         $ret['panelWidth'] = 490;
         $ret['panelHeight'] = 500;
         return $ret;
@@ -35,7 +35,7 @@ class Vpc_Advanced_DownloadsTree_Component extends Vpc_Abstract_Composite_Compon
         $ret['projectsUrl'] = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('ViewProjects');
         $ret['downloadsUrl'] = Vpc_Admin::getInstance(get_class($this))->getControllerUrl('ViewDownloads');
         $ret['width'] = $this->_getSetting('panelWidth');
-        $ret['height'] = $this->_getSetting('panelHeight');        
+        $ret['height'] = $this->_getSetting('panelHeight');
         return $ret;
     }
     public function hasContent()

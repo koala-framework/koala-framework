@@ -8,11 +8,10 @@ class Vpc_Advanced_DownloadsTree_ProjectsController extends Vps_Controller_Actio
     protected $_enableDD = true;
     protected $_hasPosition = true;
 
-    protected function _getWhere()
+    protected function _getSelect()
     {
-        $ret = parent::_getWhere();
-        $ret['component_id = ?'] = $this->_getParam('componentId');
+        $ret = parent::_getSelect();
+        $ret->whereEquals('component_id', $this->_getParam('componentId'));
         return $ret;
     }
-
 }
