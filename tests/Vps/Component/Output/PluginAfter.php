@@ -8,7 +8,7 @@ class Vps_Component_Output_PluginAfter extends Vps_Component_Output_Plugin
         if ($output != 'root plugin(plugin(master2 child child2))') {
             return 'not ok from plugin';
         } else {
-            return $output;
+            return "afterPlugin($output)";
         }
     }
     public function getExecutionPoint()

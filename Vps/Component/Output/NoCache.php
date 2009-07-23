@@ -28,6 +28,10 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         }
         $ret = $this->_parseDynamic($ret, $componentClass);
         $ret = $this->_parseTemplate($ret);
+        foreach ($afterPlugins as $plugin) {
+            $ret = $this->_executeOutputPlugin($plugin, $ret);
+            $ret = $this->_parseTemplate($ret);
+        }
         return $ret;
     }
 
@@ -119,7 +123,7 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         return ($hasContent && !$inverse) || (!$hasContent && $inverse) ? $content : '';
     }
 
-    protected function _renderContent($componentId, $componentClass, $masterTemplate, $afterPlugins, $useCache = false)
+    protected function _renderContent($componentId, $componentClass, $masterTemplate, $afterPlugins = array(), $useCache = false)
     {
         Vps_Benchmark::count('rendered ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
         if ($masterTemplate) {
@@ -129,9 +133,6 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         }
         $output->setIgnoreVisible($this->ignoreVisible());
         $ret = $output->render($this->_getComponent($componentId));
-        foreach ($afterPlugins as $plugin) {
-            $ret = $this->_executeOutputPlugin($plugin, $ret);
-        }
         return $ret;
     }
 }
