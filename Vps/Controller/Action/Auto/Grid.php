@@ -728,12 +728,16 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     private function _getExportData($onlyShowIn, $maxRows = null)
     {
-        $sel = $this->_getSelect();
-        if (is_null($sel)) return array();
-        if (!is_null($maxRows) && $this->_model->countRows($sel) > $maxRows) {
-            throw new Vps_ClientException(trlVps("This export is limited to {0} rows.", $maxRows));
+        if (!isset($this->_model)) {
+            $rowSet = $this->_fetchData(null, null, null);
+        } else {
+            $sel = $this->_getSelect();
+            if (is_null($sel)) return array();
+            if (!is_null($maxRows) && $this->_model->countRows($sel) > $maxRows) {
+                throw new Vps_ClientException(trlVps("This export is limited to {0} rows.", $maxRows));
+            }
+            $rowSet = $this->_model->getRows($sel);
         }
-        $rowSet = $this->_model->getRows($sel);
 
         if ($rowSet && count($rowSet)) {
             $this->_progressBar = new Zend_ProgressBar(
@@ -784,14 +788,14 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         return array();
     }
 
-    public function csvAction()
+    public function jsonCsvAction()
     {
         if (!isset($this->_permissions['csv']) || !$this->_permissions['csv']) {
             throw new Vps_Exception("CSV is not allowed.");
         }
 
-        throw new Vps_Exception_NotYetImplemented('Excel Export has been converted'
-            .' to view a progress bar and csv has not yet been converted.');
+        ini_set('memory_limit', "384M");
+        set_time_limit(600); // 10 minuten
 
         $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_CSV);
 
@@ -800,23 +804,36 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             foreach ($data as $row => $cols) {
                 $cols = str_replace('"', '""', $cols);
                 $csvRows[] = '"'. implode('";"', $cols) .'"';
+                $this->_progressBar->next(1, trlVps('Writing data'));
             }
 
             $csvReturn = implode("\r\n", $csvRows);
         }
 
-        $this->_helper->viewRenderer->setNoRender();
-        $this->getResponse()->setHeader('Content-Type', "application/vnd-ms-excel")
-                            ->setHeader('Content-Disposition', 'attachment; filename="csv_export_'.date('Y-m-d_Hi').'.csv"')
-                            ->setHeader('ETag', '1253859135') //muss für IE 7 mitgegeben werden
-                            ->setHeader('Last-Modified', gmdate("D, d M Y H:i:s \G\M\T", time() - 60*60*24))
-                            ->setHeader('Accept-Ranges', 'none')
-                            ->setHeader('Content-Length', strlen($csvReturn))
-                            ->setHeader('Pragma', 0, true) //muss für IE 7 überschrieben werden
-                            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true) //muss für IE 7 überschrieben werden
-                            ->setBody($csvReturn);
+        $downloadkey = uniqid();
+        file_put_contents('application/temp/'.$downloadkey.'.csv', $csvReturn);
 
-                            $datei = "filename.xls";
+        $this->_progressBar->finish();
+
+        $this->view->downloadkey = $downloadkey;
+    }
+
+    public function downloadCsvExportFileAction()
+    {
+        if (!isset($this->_permissions['csv']) || !$this->_permissions['csv']) {
+            throw new Vps_Exception("CSV is not allowed.");
+        }
+        if (!file_exists('application/temp/'.$this->_getParam('downloadkey').'.csv')) {
+            throw new Vps_Exception('Wrong downloadkey submitted');
+        }
+
+        $file = array(
+            'contents' => file_get_contents('application/temp/'.$this->_getParam('downloadkey').'.csv'),
+            'mimeType' => 'text/comma-separated-values',
+            'downloadFilename' => 'export_'.date('Ymd-Hi').'.csv'
+        );
+        Vps_Media_Output::output($file);
+        $this->_helper->viewRenderer->setNoRender();
     }
 
     private function _getColumnLetterByIndex($idx)
