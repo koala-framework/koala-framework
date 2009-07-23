@@ -31,7 +31,8 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
         $path .= '/'.$this->_getParam('version');
 
         if (file_exists($path)) {
-            echo "$path exists already.\n";
+            echo "$path exists already.\nupadting...\n";
+            $this->_systemCheckRet("svn up $path");
         } else {
 
             try {
