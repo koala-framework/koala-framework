@@ -1,6 +1,6 @@
 <?php
 class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
-    implements Vpc_Mail_Recipient_Interface
+    implements Vpc_Mail_Recipient_TitleInterface
 {
     protected function _afterSave()
     {
@@ -8,6 +8,14 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
         if (Vpc_Shop_Cart_Orders::getCartOrderId() == $this->id && $this->status != 'cart') {
             Vpc_Shop_Cart_Orders::resetCartOrderId();
         }
+    }
+    public function getMailGender()
+    {
+        return $this->sex;
+    }
+    public function getMailTitle()
+    {
+        return $this->title;
     }
     public function getMailFirstname()
     {

@@ -168,11 +168,6 @@ wurde soeben erstellt.</de>
 <id>52</id>
 </text>
 <text>
-<en>File (optional)</en>
-<de>Datei (optional)</de>
-<id>53</id>
-</text>
-<text>
 <en>Comment</en>
 <de>Kommentar</de>
 <id>55</id>
@@ -181,11 +176,6 @@ wurde soeben erstellt.</de>
 <en>Size</en>
 <de>Gr&#xF6;&#xDF;e</de>
 <id>56</id>
-</text>
-<text>
-<en>Scaling</en>
-<de>Skalierung</de>
-<id>57</id>
 </text>
 <text>
 <en>Preview</en>
@@ -348,11 +338,6 @@ wurde soeben erstellt.</de>
 <id>130</id>
 </text>
 <text>
-<en>News Categories</en>
-<de>Neue Kategorien</de>
-<id>134</id>
-</text>
-<text>
 <en>Publish Date</en>
 <de>Datum der Ver&#xF6;ffentlichung</de>
 <id>135</id>
@@ -448,11 +433,6 @@ wurde soeben erstellt.</de>
 <id>185</id>
 </text>
 <text>
-<en>New password couldn\'t be set</en>
-<de>Das neue Passwort kann nicht gesetzt werden</de>
-<id>186</id>
-</text>
-<text>
 <en>Change password</en>
 <de>Passwort &#xE4;ndern</de>
 <id>190</id>
@@ -486,11 +466,6 @@ wurde soeben erstellt.</de>
 <en>Create, Delete and E-Mail change</en>
 <de>Hinzuf&#xFC;gen, L&#xF6;schen und E-Mail-&#xC4;nderungen</de>
 <id>197</id>
-</text>
-<text>
-<en>Webcode</en>
-<de>Webcode</de>
-<id>199</id>
 </text>
 <text>
 <en>Rights</en>
@@ -1413,11 +1388,6 @@ wurde soeben erstellt.</de>
 <id>418</id>
 </text>
 <text>
-<en>TextImage</en>
-<de>Text-Bild</de>
-<id>419</id>
-</text>
-<text>
 <en>Reload</en>
 <de>Neu laden</de>
 <id>421</id>
@@ -1448,11 +1418,6 @@ wurde soeben erstellt.</de>
 <id>441</id>
 </text>
 <text>
-<en>Original Size</en>
-<de>Originalgr&#xF6;e</de>
-<id>443</id>
-</text>
-<text>
 <en>By</en>
 <de>Von</de>
 <id>444</id>
@@ -1476,11 +1441,6 @@ wurde soeben erstellt.</de>
 <en>add new entry</en>
 <de>neuen Eintrag hinzuf&#xFC;gen</de>
 <id>450</id>
-</text>
-<text>
-<en>Edit Paragraph</en>
-<de>Absatz bearbeiten</de>
-<id>451</id>
 </text>
 <text>
 <en>There is no editing for this component.</en>
@@ -1613,11 +1573,6 @@ wurde soeben erstellt.</de>
 <id>493</id>
 </text>
 <text>
-<en>Small Image</en>
-<de>Kleines Bild</de>
-<id>494</id>
-</text>
-<text>
 <en>Margin top</en>
 <de>Abstand oben</de>
 <id>495</id>
@@ -1743,11 +1698,6 @@ wurde soeben erstellt.</de>
 <id>525</id>
 </text>
 <text>
-<en>Linktype</en>
-<de>Linktyp</de>
-<id>527</id>
-</text>
-<text>
 <en>Settings</en>
 <de>Einstellungen</de>
 <id>528</id>
@@ -1756,11 +1706,6 @@ wurde soeben erstellt.</de>
 <en>Link Image</en>
 <de>Bild Link</de>
 <id>533</id>
-</text>
-<text>
-<en>Text Image enlarge</en>
-<de>Text Bildvergr&#xF6;&#xDF;erung</de>
-<id>534</id>
 </text>
 <text>
 <en>Text Image Link</en>
@@ -2503,11 +2448,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>718</id>
 </text>
 <text>
-<en>'%value%' does allready exist</en>
-<de>'%value%' existiert bereits</de>
-<id>719</id>
-</text>
-<text>
 <en>Useraccount created</en>
 <de>Account erfolgreich erstellt</de>
 <id>720</id>
@@ -2911,11 +2851,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>807</id>
 </text>
 <text>
-<en>Paypal</en>
-<de>Paypal</de>
-<id>809</id>
-</text>
-<text>
 <en>Order successfully sent.</en>
 <de>Die Bestellung wurde erfolgreich abgeschickt.</de>
 <id>810</id>
@@ -3022,11 +2957,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>835</id>
 </text>
 <text>
-<en>Order</en>
-<de>Bestellen</de>
-<id>836</id>
-</text>
-<text>
 <en>Please enter your address</en>
 <de>Bitte geben Sie Ihre Adressdaten ein</de>
 <id>837</id>
@@ -3052,24 +2982,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>841</id>
 </text>
 <text>
-<en>Welcome to our shop</en>
-<de>Willkommen zu unserem Shop</de>
-<id>842</id>
-</text>
-<text>
 <en>You pay by</en>
 <de>Sie zahlen per</de>
 <id>844</id>
-</text>
-<text>
-<en>cashOnDelivery</en>
-<de>Nachnahme</de>
-<id>845</id>
-</text>
-<text>
-<en>prepayment</en>
-<de>Vorauskasse</de>
-<id>846</id>
 </text>
 <text>
 <en>Ok</en>
@@ -3342,24 +3257,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>920</id>
 </text>
 <text>
-<en>Id</en>
-<de>Id</de>
-<id>922</id>
-</text>
-<text>
 <en>Context</en>
 <de>Kontext</de>
 <id>923</id>
-</text>
-<text>
-<en>English Singular</en>
-<de>Englisch Einzahl</de>
-<id>924</id>
-</text>
-<text>
-<en>English Plural</en>
-<de>Englisch Mehrzahl</de>
-<id>925</id>
 </text>
 <text>
 <en>(offline hidden)</en>
@@ -3395,11 +3295,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Mobile</en>
 <de>Mobiltelefon</de>
 <id>933</id>
-</text>
-<text>
-<en>Capacity</en>
-<de>Kapazit&#xE4;t</de>
-<id>934</id>
 </text>
 <text>
 <en>File successfully created: </en>
@@ -3475,14 +3370,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>949</id>
 </text>
 <text>
-<en>Vivid Planet Software GmbH</en>
-<id>950</id>
-</text>
-<text>
-<en>Fehler</en>
-<id>951</id>
-</text>
-<text>
 <en>product description</en>
 <de>Produktbeschreibung</de>
 <id>952</id>
@@ -3556,11 +3443,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>None</en>
 <de>keine</de>
 <id>966</id>
-</text>
-<text>
-<en>Enlarge Image</en>
-<en>Bild vergr&#xF6;&#xDF;ern</en>
-<id>967</id>
 </text>
 <text>
 <en>Alternative Preview Image</en>
@@ -3668,19 +3550,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>989</id>
 </text>
 <text>
-<de>Zeige nur gesperrte Benutzer</de>
-<en>Show locked users only</en>
-<id>990</id>
-</text>
-<text>
 <de>Gesperrt</de>
 <en>Locked</en>
 <id>991</id>
-</text>
-<text>
-<de>Gel&#xF6;scht</de>
-<en>Deleted</en>
-<id>992</id>
 </text>
 <text>
 <de>Account ist gesperrt</de>
@@ -3711,10 +3583,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Next</en>
 <de>Weiter</de>
 <id>998</id>
-</text>
-<text>
-<en>Download Tag</en>
-<id>999</id>
 </text>
 <text>
 <en>Marquee</en>
@@ -3838,11 +3706,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1030</id>
 </text>
 <text>
-<en>Imprint</en>
-<de>Impressum</de>
-<id>1031</id>
-</text>
-<text>
 <en>Imprint.Imprint</en>
 <de>Impressum.Impressum</de>
 <id>1032</id>
@@ -3914,11 +3777,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Show my Profile</en>
 <de>Mein Profil anzeigen</de>
 <id>1051</id>
-</text>
-<text>
-<en>Error message</en>
-<de>Fehlermeldung</de>
-<id>1052</id>
 </text>
 <text>
 <en>404 - File not found</en>
@@ -4072,50 +3930,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1085</id>
 </text>
 <text>
-<en>Export</en>
-<id>1086</id>
-</text>
-<text>
-<en>Data Export</en>
-<id>1087</id>
-</text>
-<text>
-<en>Current step</en>
-<id>1088</id>
-</text>
-<text>
-<en>Overall</en>
-<id>1089</id>
-</text>
-<text>
-<en>Download export file</en>
-<id>1090</id>
-</text>
-<text>
-<en>Too many rows</en>
-<id>1091</id>
-</text>
-<text>
-<en>It is currently not possible to export more than 2000 rows. Please use a filter to export less rows.</en>
-<id>1092</id>
-</text>
-<text>
-<en>Collecting data: {0} of {1} ({2}%)</en>
-<id>1093</id>
-</text>
-<text>
-<en>Creating Excel file: {0} of {1} ({2}%)</en>
-<id>1094</id>
-</text>
-<text>
-<en>Saving Excel file...</en>
-<id>1095</id>
-</text>
-<text>
-<en>Excel file saved</en>
-<id>1096</id>
-</text>
-<text>
 <en>Link-Action</en>
 <id>1097</id>
 </text>
@@ -4226,6 +4040,307 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Show locked users</en>
 <id>1123</id>
+</text>
+<text>
+<en>Dear Mr. {0} {1}</en>
+<de>Sehr geehrter Herr {0} {1}</de>
+<id>1124</id>
+</text>
+<text>
+<en>Dear Mrs. {0}</en>
+<de>Sehr geehrte Frau {0}</de>
+<id>1125</id>
+</text>
+<text>
+<en>Excel export</en>
+<id>1126</id>
+</text>
+<text>
+<en>Your download is ready</en>
+<id>1127</id>
+</text>
+<text>
+<en>Please click on the following link to download your Excel file.</en>
+<id>1128</id>
+</text>
+<text>
+<en>Excel export file</en>
+<id>1129</id>
+</text>
+<text>
+<en>Progress</en>
+<id>1130</id>
+</text>
+<text>
+<en>Finished</en>
+<id>1131</id>
+</text>
+<text>
+<en>Flash</en>
+<id>1132</id>
+</text>
+<text>
+<en>Flash file</en>
+<id>1133</id>
+</text>
+<text>
+<en>Flash variables</en>
+<id>1134</id>
+</text>
+<text>
+<en>Variable name</en>
+<id>1135</id>
+</text>
+<text>
+<en>Mail Texts</en>
+<id>1136</id>
+</text>
+<text>
+<en>Dear Mrs. {0} {1}</en>
+<de>Sehr geehrte Frau {0} {1}</de>
+<id>1137</id>
+</text>
+<text>
+<en>Dear Mr. {0}</en>
+<de>Sehr geehrter Herr {0}</de>
+<id>1138</id>
+</text>
+<text>
+<en>Hello Mr. {0}</en>
+<de>Hallo Herr {0}</de>
+<id>1139</id>
+</text>
+<text>
+<en>Hello Mrs. {0}</en>
+<de>Hallo Frau {0}</de>
+<id>1140</id>
+</text>
+<text>
+<en>From Address</en>
+<id>1141</id>
+</text>
+<text>
+<en>From Name</en>
+<id>1142</id>
+</text>
+<text>
+<en>Reply Address</en>
+<id>1143</id>
+</text>
+<text>
+<en>HTML</en>
+<id>1144</id>
+</text>
+<text>
+<en>Newsletter Preview</en>
+<id>1145</id>
+</text>
+<text>
+<en>Send</en>
+<id>1146</id>
+</text>
+<text>
+<en>User not found, cannot send testmail.</en>
+<id>1147</id>
+</text>
+<text>
+<en>E-Mail successfully sent.</en>
+<id>1148</id>
+</text>
+<text>
+<en>Error while sending E-Mail.</en>
+<id>1149</id>
+</text>
+<text>
+<en>Creation Date</en>
+<id>1150</id>
+</text>
+<text>
+<en>Save Recipients</en>
+<id>1151</id>
+</text>
+<text>
+<en>{0} recipients added, total {1} recipients.</en>
+<id>1152</id>
+</text>
+<text>
+<en>Format</en>
+<id>1153</id>
+</text>
+<text>
+<en>Date Sent</en>
+<id>1154</id>
+</text>
+<text>
+<en>Can only delete queued recipients</en>
+<id>1155</id>
+</text>
+<text>
+<en>Newsletter stopped, cannot change status.</en>
+<id>1156</id>
+</text>
+<text>
+<en>Unknown status.</en>
+<id>1157</id>
+</text>
+<text>
+<en>Stop</en>
+<id>1158</id>
+</text>
+<text>
+<en>Pause</en>
+<id>1159</id>
+</text>
+<text>
+<en>Start</en>
+<id>1160</id>
+</text>
+<text>
+<en>Delete All</en>
+<id>1161</id>
+</text>
+<text>
+<en>Are you sure?</en>
+<id>1162</id>
+</text>
+<text>
+<en>Do you really want to delete all receivers with status "queued"?.</en>
+<id>1163</id>
+</text>
+<text>
+<en>If you press yes, the mailing will be stopped an can\'t be restarted again.</en>
+<id>1164</id>
+</text>
+<text>
+<en>Mail</en>
+<id>1165</id>
+</text>
+<text>
+<en>Recipients</en>
+<id>1166</id>
+</text>
+<text>
+<en>Mailing</en>
+<id>1167</id>
+</text>
+<text>
+<en>Newsletter</en>
+<id>1168</id>
+</text>
+<text>
+<en>Edit and/or send Newsletter</en>
+<id>1169</id>
+</text>
+<text>
+<en>Newsletter stopped, cannot start again.</en>
+<id>1170</id>
+</text>
+<text>
+<en>Newsletter paused.</en>
+<id>1171</id>
+</text>
+<text>
+<en>Newsletter sending.</en>
+<id>1172</id>
+</text>
+<text>
+<en>Newsletter finished.</en>
+<id>1173</id>
+</text>
+<text>
+<en>Newsletter waiting for start.</en>
+<id>1174</id>
+</text>
+<text>
+<en>{0} receiver not found.</en>
+<en_plural>{0} receivers not found.</en_plural>
+<id>1175</id>
+</text>
+<text>
+<en>{0} errors while sending mail.</en>
+<id>1176</id>
+</text>
+<text>
+<en>Last mail sent: {0}</en>
+<id>1177</id>
+</text>
+<text>
+<en>Order Products</en>
+<id>1178</id>
+</text>
+<text>
+<en>Address Header</en>
+<id>1179</id>
+</text>
+<text>
+<en>Shop Conformation Mail</en>
+<id>1180</id>
+</text>
+<text>
+<en>Shop Conformation Text</en>
+<id>1181</id>
+</text>
+<text>
+<en>back to ...</en>
+<id>1182</id>
+</text>
+<text>
+<en>Order at {0}</en>
+<id>1183</id>
+</text>
+<text>
+<en>Texts</en>
+<id>1184</id>
+</text>
+<text>
+<en>Useraccount activated</en>
+<id>1185</id>
+</text>
+<text>
+<en>This export is limited to {0} rows.</en>
+<id>1186</id>
+</text>
+<text>
+<en>Collecting data</en>
+<id>1187</id>
+</text>
+<text>
+<en>Writing data</en>
+<id>1188</id>
+</text>
+<text>
+<en>You cannot delete your own account.</en>
+<id>1189</id>
+</text>
+<text>
+<en>You cannot lock your own account.</en>
+<id>1190</id>
+</text>
+<text>
+<en>Your account at {0}&lt;br /&gt;has just been set active.</en>
+<id>1191</id>
+</text>
+<text>
+<en>You may now log in to your account.</en>
+<id>1192</id>
+</text>
+<text>
+<en>If you lost your password, you may use the Lost Password? service.</en>
+<id>1193</id>
+</text>
+<text>
+<en>Your account at {0} has just been set active.</en>
+<id>1194</id>
+</text>
+<text>
+<en>Dear {0} {1}</en>
+<de>Guten Tag {0} {1}</de>
+<id>1195</id>
+</text>
+<text>
+<en>Hello {0} {1}</en>
+<de>Hallo {0} {1}</de>
+<id>1199</id>
 </text>
 </trl>
 

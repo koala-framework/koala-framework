@@ -1,7 +1,7 @@
 <?= trlVps('Hello {0}!', $this->fullname); ?>
 
 
-<?= trlVps("Your account at {0}\nhas just been set active.", $this->webUrl); ?>
+<?= trlVps("Your account at {0} has just been set active.", $this->webUrl); ?>
 
 <?= trlVps('You may now log in to your account.'); ?>
 
