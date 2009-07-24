@@ -396,7 +396,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
             }
             return $pad."($field, {$expr->getPadLength()}, {$expr->getPadStr()})";
         } else if ($expr instanceof Vps_Model_Select_Expr_String) {
-            return "'".$expr->getString()."'";
+            $quotedString = $this->_fixStupidQuoteBug($expr->getString());
+            $quotedString = $this->_table->getAdapter()->quote($quotedString);
+            return $quotedString;
         } else if ($expr instanceof Vps_Model_Select_Expr_Count) {
             $field = $expr->getField();
             if ($field != '*') {
