@@ -33,6 +33,11 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     public function indexAction()
     {
         $this->view->controllerUrl = $this->getRequest()->getPathInfo();
+        if ($this->_getParam('componentId')) {
+            $this->view->baseParams = array(
+                'componentId' => $this->_getParam('componentId')
+            );
+        }
         $this->view->xtype = 'vps.autogrid';
     }
 
@@ -350,17 +355,16 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 }
             }
 
-            $order = $this->_defaultOrder;
-            if ($this->getRequest()->getParam('sort')) {
-                $order['field'] = $this->getRequest()->getParam('sort');
-            }
-            if ($this->_getParam("direction") && $this->_getParam('direction') != 'undefined') {
-                $order['direction'] = $this->_getParam('direction');
-            }
-
 // wird vermutlich nicht benötigt, da beim ersten laden 'sortInfo' in den metadaten drin ist
 // falls es irgendwo benötigt wird wieder einkommentieren
 //             $this->view->order = $order;
+        }
+        $order = $this->_defaultOrder;
+        if ($this->getRequest()->getParam('sort')) {
+            $order['field'] = $this->getRequest()->getParam('sort');
+        }
+        if ($this->_getParam("direction") && $this->_getParam('direction') != 'undefined') {
+            $order['direction'] = $this->_getParam('direction');
         }
 
         $primaryKey = $this->_primaryKey;
