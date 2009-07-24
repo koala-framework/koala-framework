@@ -15,7 +15,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         } else {
             $response = $config['model']->getHttpRequestor()->request($data['url']);
             if ($response->getStatusCode() != 200) {
-                throw new Vps_Exception("invalid status response from server: ".$response->getStatusCode());
+                throw new Vps_Exception("invalid status response from server: ".$response->getStatusCode()." for '$data[url]'");
             }
             $str = $response->getBody();
         }
