@@ -4,7 +4,7 @@ class Vps_Benchmark
     private static $_startTime;
     private static $_enabled = false;
     private static $_logEnabled = false;
-    private static $_counter = array();
+    protected static $_counter = array();
     public static $benchmarks = array();
 
     private static function _getInstance()
@@ -257,13 +257,14 @@ class Vps_Benchmark
 
     protected function _shutDown()
     {
-        $this->_memcacheCount('requests', 1);
+        $prefix = $this->_getUrlType().'-';
+        $this->_memcacheCount($prefix.'requests', 1);
         foreach (self::$_counter as $name=>$value) {
             if (is_array($value)) $value = count($value);
-            $this->_memcacheCount($name, $value);
+            $this->_memcacheCount($prefix.$name, $value);
         }
         $value = (int)((microtime(true) - self::$_startTime)*1000);
-        $this->_memcacheCount('duration', $value);
+        $this->_memcacheCount($prefix.'duration', $value);
     }
 
     private function _memcacheCount($name, $value)
@@ -272,7 +273,6 @@ class Vps_Benchmark
         if (!isset($prefix)) {
             $prefix = Zend_Registry::get('config')->application->id.'-'.
                                 Vps_Setup::getConfigSection().'-bench-';
-            $prefix .= $this->_getUrlType().'-';
         }
 
         static $memcache;
