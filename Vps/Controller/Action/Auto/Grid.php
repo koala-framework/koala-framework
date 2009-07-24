@@ -784,6 +784,11 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
             $exportData[0] = $columnsHeader;
             return $exportData;
+        } else {
+            $this->_progressBar = new Zend_ProgressBar(
+                new Vps_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
+                0, 4
+            );
         }
         return array();
     }
