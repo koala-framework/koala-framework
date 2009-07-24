@@ -4,7 +4,7 @@ class Vps_Test
     public static function getTestDb()
     {
         $db = Zend_Db::factory('PDO_MYSQL', array(
-            'host'=>'vivid',
+            'host'=>'localhost',
             'username'=>'test',
             'password'=>'test',
             'dbname'=>'test'
