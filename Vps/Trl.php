@@ -26,9 +26,7 @@ class Vps_Trl
     public function __construct($config = array())
     {
         if (isset($config['modelVps'])) $this->_modelVps = $config['modelVps'];
-        else $this->_modelVps = new Vps_Trl_Model_Vps();
         if (isset($config['modelWeb'])) $this->_modelVps = $config['modelWeb'];
-        else $this->_modelWeb = new Vps_Trl_Model_Web();
     }
 
     public function setUseUserLanguage($useUserLanguage)
@@ -95,7 +93,13 @@ class Vps_Trl
 
     private function _getModel($type)
     {
-         return $type == self::SOURCE_WEB ? $this->_modelWeb : $this->_modelVps;
+        if ($type == self::SOURCE_WEB) {
+            if (!isset($this->_modelWeb)) $this->_modelWeb = new Vps_Trl_Model_Web();
+            return $this->_modelWeb;
+        } else {
+            if (!isset($this->_modelVps)) $this->_modelVps = new Vps_Trl_Model_Vps();
+            return $this->_modelVps;
+        }
     }
 
     public function trl($string, $params, $source, $language = null)
