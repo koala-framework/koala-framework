@@ -102,6 +102,8 @@ class Vps_Component_RowObserver
             }
         }
         // Suchindex
-        Vps_Dao_Index::process();
+        if (class_exists('Vps_Dao_Index', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Vps_Dao_Index::process();
+        }
     }
 }
