@@ -110,6 +110,7 @@ Vpc.Basic.ImageEnlarge.prototype =
         if (options.title && !data.title) {
         	data.title = options.title;
         }
+        if (data.title == '') data.title = ' ';
         if (options.fullSizeUrl) {
             data.fullSizeLink = '<a href="'+options.fullSizeUrl+'" class="fullSizeLink" title="'+trlVps('image in originalsize')+'" target="_blank"></a> ';
         } else {
