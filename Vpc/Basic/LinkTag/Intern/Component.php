@@ -28,6 +28,17 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
                 'model' => 'Vps_Dao_Pages',
                 'id' => $linkedData->row->id
             );
+            if ($linkedData instanceof Vpc_Basic_LinkTag_FirstChildPage_Data) {
+                $childData = $linkedData->_getFirstChildPage();
+                $ret[] = array(
+                    'model' => 'Vps_Component_Model',
+                    'id' => $childData->row->id
+                );
+                $ret[] = array(
+                    'model' => 'Vps_Dao_Pages',
+                    'id' => $childData->row->id
+                );
+            }
         }
         return $ret;
     }
