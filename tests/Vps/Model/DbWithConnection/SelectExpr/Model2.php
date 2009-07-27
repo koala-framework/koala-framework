@@ -13,6 +13,41 @@ class Vps_Model_DbWithConnection_SelectExpr_Model2 extends Vps_Model_Db
     {
         $this->_tableName = uniqid('dbtest2');
         $config['table'] = $this->_tableName;
+
+        $config['exprs'] = array();
+
+        $config['exprs']['model1_bar'] =
+            new Vps_Model_Select_Expr_Parent('Model1', 'bar');
+        $config['exprs']['model1_bar_concat_foo2'] =
+            new Vps_Model_Select_Expr_Concat(array(
+                new Vps_Model_Select_Expr_Parent('Model1', 'bar'),
+                'foo2'
+            ));
+        $config['exprs']['model1_bar_concat_string'] =
+            new Vps_Model_Select_Expr_Concat(array(
+                new Vps_Model_Select_Expr_Parent('Model1', 'bar'),
+                new Vps_Model_Select_Expr_String('_string')
+            ));
+        $config['exprs']['model1_bar_concat_foo2_bar_string'] =
+            new Vps_Model_Select_Expr_Concat(array(
+                new Vps_Model_Select_Expr_Parent('Model1', 'bar'),
+                'foo2',
+                'bar',
+                new Vps_Model_Select_Expr_String('_string')
+            ));
+        $config['exprs']['strpad_3_right'] =
+            new Vps_Model_Select_Expr_StrPad('bar', 3, '0');
+        $config['exprs']['strpad_4_right'] =
+            new Vps_Model_Select_Expr_StrPad('bar', 4, '0');
+        $config['exprs']['strpad_6_right'] =
+            new Vps_Model_Select_Expr_StrPad('bar', 6, '0');
+        $config['exprs']['strpad_3_left'] =
+            new Vps_Model_Select_Expr_StrPad('bar', 3, '0', Vps_Model_Select_Expr_StrPad::LEFT);
+        $config['exprs']['strpad_4_left'] =
+            new Vps_Model_Select_Expr_StrPad('bar', 4, '0', Vps_Model_Select_Expr_StrPad::LEFT);
+        $config['exprs']['strpad_6_left'] =
+            new Vps_Model_Select_Expr_StrPad('bar', 6, '0', Vps_Model_Select_Expr_StrPad::LEFT);
+
         parent::__construct($config);
     }
 
