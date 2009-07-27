@@ -262,7 +262,9 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 $i->getComponent()->processInput($postData);
             }
         }
-        Vps_Component_RowObserver::getInstance()->process(false);
+        if (class_exists('Vps_Component_RowObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Vps_Component_RowObserver::getInstance()->process(false);
+        }
         return $process;
     }
 
