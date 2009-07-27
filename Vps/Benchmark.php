@@ -257,6 +257,7 @@ class Vps_Benchmark
 
     protected function _shutDown()
     {
+        if ($this->_getUrlType() == 'asset' && !self::$_counter) return;
         $prefix = $this->_getUrlType().'-';
         $this->_memcacheCount($prefix.'requests', 1);
         foreach (self::$_counter as $name=>$value) {
