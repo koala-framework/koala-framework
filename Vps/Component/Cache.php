@@ -158,8 +158,8 @@ class Vps_Component_Cache
 
     public function writeBuffer()
     {
-        $this->getModel()->writeBuffer();
-        $this->getMetaModel()->writeBuffer();
+        if ($this->_model) $this->_model->writeBuffer();
+        if ($this->_metaModel) $this->_metaModel->writeBuffer();
     }
 
     public function cleanComponentClass($componentClass)
@@ -330,25 +330,48 @@ class Vps_Component_Cache
 
     protected function _preload($ids)
     {
-        $or = array();
-        $values = array();
-        foreach ($ids as $id) {
-            $pageId = $this->_getPageIdFromComponentId($id);
-            $or[] = new Vps_Model_Select_Expr_And(array(
-                new Vps_Model_Select_Expr_Like('id', $id . '%'),
-                new Vps_Model_Select_Expr_Equals('page_id', $pageId)
-            ));
-            $values[$id] = null;
-        }
-        $select = $this->getModel()->select()->where(
-            new Vps_Model_Select_Expr_Or($or)
-        );
-        if ($values) {
-            Vps_Benchmark::count('preload cache', implode(', ', $ids));
-            $rows = $this->getModel()->export(Vps_Model_Db::FORMAT_ARRAY, $select);
-            foreach ($rows as $row) {
-                if ($row['expire'] == 0 || $row['expire'] > time()) {
-                    $values[(string)$row['id']] = $row['content'];
+        if (!$this->_model || $this->getModel()->getProxyModel() instanceof Vps_Model_Db) {
+            $db = Vps_Registry::get('db');
+
+            $or = array();
+            $values = array();
+            foreach ($ids as $id) {
+                $pageId = $this->_getPageIdFromComponentId($id);
+                $or[] = 'id LIKE '.$db->quote("$id%").' AND page_id='.$db->quote($pageId);
+                $values[$id] = null;
+            }
+            if ($values) {
+                $sql = "SELECT id, content, expire FROM cache_component WHERE ".implode(' OR ', $or);
+                Vps_Benchmark::count('preload cache', implode(', ', $ids));
+                $rows = $db->query($sql)->fetchAll();
+                foreach ($rows as $row) {
+                    if ($row['expire'] == 0 || $row['expire'] > time()) {
+                        $values[(string)$row['id']] = $row['content'];
+                    }
+                }
+            }
+            return $values;
+        } else {
+            $or = array();
+            $values = array();
+            foreach ($ids as $id) {
+                $pageId = $this->_getPageIdFromComponentId($id);
+                $or[] = new Vps_Model_Select_Expr_And(array(
+                    new Vps_Model_Select_Expr_Like('id', $id . '%'),
+                    new Vps_Model_Select_Expr_Equals('page_id', $pageId)
+                ));
+                $values[$id] = null;
+            }
+            $select = $this->getModel()->select()->where(
+                new Vps_Model_Select_Expr_Or($or)
+            );
+            if ($values) {
+                Vps_Benchmark::count('preload cache', implode(', ', $ids));
+                $rows = $this->getModel()->export(Vps_Model_Db::FORMAT_ARRAY, $select);
+                foreach ($rows as $row) {
+                    if ($row['expire'] == 0 || $row['expire'] > time()) {
+                        $values[(string)$row['id']] = $row['content'];
+                    }
                 }
             }
         }
