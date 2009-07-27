@@ -433,7 +433,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function getExprValue(Vps_Model_Row_Interface $row, $name)
     {
-        $expr = $this->_exprs[$name];
+        if ($name instanceof Vps_Model_Select_Expr_Interface) {
+            $expr = $name;
+        } else {
+            $expr = $this->_exprs[$name];
+        }
+
         if ($expr instanceof Vps_Model_Select_Expr_Child) {
             $childs = $row->getChildRows($expr->getChild(), $expr->getSelect());
             return self::_evaluateExprForRowset($childs, $expr->getExpr());
@@ -441,8 +446,38 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             $parent = $row->getParentRow($expr->getParent());
             $field = $expr->getField();
             return $parent->$field;
+        } else if ($expr instanceof Vps_Model_Select_Expr_Concat) {
+            $ret = '';
+            foreach ($expr->getExpressions() as $e) {
+                if ($e instanceof Vps_Model_Select_Expr_Interface) {
+                    $ret .= $this->getExprValue($row, $e);
+                } else {
+                    $ret .= $row->$e;
+                }
+            }
+            return $ret;
+        } else if ($expr instanceof Vps_Model_Select_Expr_String) {
+            return $expr->getString();
+        } else if ($expr instanceof Vps_Model_Select_Expr_StrPad) {
+            $f = $expr->getField();
+            $v = $row->$f;
+            // faking mysql's implementation of LPAD / RPAD
+            // mysql cuts always right when the string is too long, it does not
+            // depend on the pad-type
+            if ($expr->getPadLength() < mb_strlen($v)) {
+                return substr($v, 0, $expr->getPadLength());
+            }
+            $padType = STR_PAD_RIGHT;
+            if ($expr->getPadType() == Vps_Model_Select_Expr_StrPad::LEFT) {
+                $padType = STR_PAD_LEFT;
+            } else if ($expr->getPadType() == Vps_Model_Select_Expr_StrPad::RIGHT) {
+                $padType = STR_PAD_RIGHT;
+            }
+            return str_pad($v, $expr->getPadLength(), $expr->getPadStr(), $padType);
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Vps_Exception_NotYetImplemented(
+                "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
+            );
         }
     }
 

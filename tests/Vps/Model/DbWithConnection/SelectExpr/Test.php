@@ -15,8 +15,8 @@ class Vps_Model_DbWithConnection_SelectExpr_Test extends Vps_Model_DbWithConnect
         $s->order('id');
         $s->expr('count_model2');
         $row = $m1->getRow($s);
-        $this->assertEquals($row->id, 1);
-        $this->assertEquals($row->count_model2, 3);
+        $this->assertEquals(1, $row->id);
+        $this->assertEquals(3, $row->count_model2);
 
         $row->foo = 'a';
         $row->save();
@@ -49,8 +49,8 @@ class Vps_Model_DbWithConnection_SelectExpr_Test extends Vps_Model_DbWithConnect
         $s = $m1->select();
         $s->order('count_model2');
         $row = $m1->getRow($s);
-        $this->assertEquals($row->id, 2);
-        $this->assertEquals($row->count_model2, 1);
+        $this->assertEquals(2, $row->id);
+        $this->assertEquals(1, $row->count_model2);
     }
 
     public function testWithOrderAndExpr()
@@ -61,8 +61,8 @@ class Vps_Model_DbWithConnection_SelectExpr_Test extends Vps_Model_DbWithConnect
         $s->expr('count_model2');
         $s->order('count_model2');
         $row = $m1->getRow($s);
-        $this->assertEquals($row->id, 2);
-        $this->assertEquals($row->count_model2, 1);
+        $this->assertEquals(2, $row->id);
+        $this->assertEquals(1, $row->count_model2);
     }
 
     public function testExprsLazy()
@@ -72,14 +72,14 @@ class Vps_Model_DbWithConnection_SelectExpr_Test extends Vps_Model_DbWithConnect
         $s = $m1->select();
         $s->order('id');
         $row = $m1->getRow($s);
-        $this->assertEquals($row->id, 1);
-        $this->assertEquals($row->count_model2, 3);
-        $this->assertEquals($row->count_model2_field, 2);
-        $this->assertEquals($row->count_model2_distinct, 1);
-        $this->assertEquals($row->sum_model2, 20);
-        $this->assertEquals($row->count_model2_bam, 2);
-        $this->assertEquals($row->count_model2_bam_distinct, 1);
-        $this->assertEquals($row->sum_model2_bam, 10);
+        $this->assertEquals(1, $row->id);
+        $this->assertEquals(3, $row->count_model2);
+        $this->assertEquals(2, $row->count_model2_field);
+        $this->assertEquals(1, $row->count_model2_distinct);
+        $this->assertEquals(20, $row->sum_model2);
+        $this->assertEquals(2, $row->count_model2_bam);
+        $this->assertEquals(1, $row->count_model2_bam_distinct);
+        $this->assertEquals(10, $row->sum_model2_bam);
 
     }
 
@@ -97,14 +97,69 @@ class Vps_Model_DbWithConnection_SelectExpr_Test extends Vps_Model_DbWithConnect
         $s->expr('sum_model2_bam');
         $s->order('id');
         $row = $m1->getRow($s);
-        $this->assertEquals($row->id, 1);
-        $this->assertEquals($row->count_model2, 3);
-        $this->assertEquals($row->count_model2_field, 2);
-        $this->assertEquals($row->count_model2_distinct, 1);
-        $this->assertEquals($row->sum_model2, 20);
-        $this->assertEquals($row->count_model2_bam, 2);
-        $this->assertEquals($row->count_model2_bam_distinct, 1);
-        $this->assertEquals($row->sum_model2_bam, 10);
+        $this->assertEquals(1, $row->id);
+        $this->assertEquals(3, $row->count_model2);
+        $this->assertEquals(2, $row->count_model2_field);
+        $this->assertEquals(1, $row->count_model2_distinct);
+        $this->assertEquals(20, $row->sum_model2);
+        $this->assertEquals(2, $row->count_model2_bam);
+        $this->assertEquals(1, $row->count_model2_bam_distinct);
+        $this->assertEquals(10, $row->sum_model2_bam);
+    }
 
+    public function testParentExprLazy()
+    {
+        $m2 = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SelectExpr_Model2');
+
+        $s = $m2->select();
+        $s->order('id');
+        $row = $m2->getRow($s);
+
+        $this->assertEquals(1, $row->id);
+        $this->assertEquals('abcd', $row->model1_bar);
+        $this->assertEquals('abcd10', $row->model1_bar_concat_foo2);
+        $this->assertEquals('abcd_string', $row->model1_bar_concat_string);
+        $this->assertEquals('abcd10abcd_string', $row->model1_bar_concat_foo2_bar_string);
+
+        $this->assertEquals('abc', $row->strpad_3_right);
+        $this->assertEquals('abcd', $row->strpad_4_right);
+        $this->assertEquals('abcd00', $row->strpad_6_right);
+
+        $this->assertEquals('abc', $row->strpad_3_left);
+        $this->assertEquals('abcd', $row->strpad_4_left);
+        $this->assertEquals('00abcd', $row->strpad_6_left);
+    }
+
+    public function testParentExprWithSelect()
+    {
+        $m2 = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SelectExpr_Model2');
+
+        $s = $m2->select();
+        $s->expr('model1_bar');
+        $s->expr('model1_bar_concat_foo2');
+        $s->expr('model1_bar_concat_string');
+        $s->expr('model1_bar_concat_foo2_bar_string');
+        $s->expr('strpad_3_right');
+        $s->expr('strpad_4_right');
+        $s->expr('strpad_6_right');
+        $s->expr('strpad_3_left');
+        $s->expr('strpad_4_left');
+        $s->expr('strpad_6_left');
+        $s->order('id');
+        $row = $m2->getRow($s);
+
+        $this->assertEquals(1, $row->id);
+        $this->assertEquals('abcd', $row->model1_bar);
+        $this->assertEquals('abcd10', $row->model1_bar_concat_foo2);
+        $this->assertEquals('abcd_string', $row->model1_bar_concat_string);
+        $this->assertEquals('abcd10abcd_string', $row->model1_bar_concat_foo2_bar_string);
+
+        $this->assertEquals('abc', $row->strpad_3_right);
+        $this->assertEquals('abcd', $row->strpad_4_right);
+        $this->assertEquals('abcd00', $row->strpad_6_right);
+
+        $this->assertEquals('abc', $row->strpad_3_left);
+        $this->assertEquals('abcd', $row->strpad_4_left);
+        $this->assertEquals('00abcd', $row->strpad_6_left);
     }
 }
