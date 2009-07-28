@@ -19,6 +19,9 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             }
             $str = $response->getBody();
         }
+	if (!$str) {
+	    throw new Vps_Exception("Can't load feed '$data[url]', response is empty");
+	}
         $originalContent = $str;
         $str = trim($str);
         if (preg_match('#<?xml[^>]* encoding=["\']([^"\']*)["\']#', $str, $m)) {
@@ -73,14 +76,14 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         }
 
         if (!$this->_xml) {
-            throw new Vps_Exception('Can\'t load feed: '.$originalContent);
+            throw new Vps_Exception("Can't load feed: '$data[url]' ".$originalContent);
         }
         if ($this->_xml->channel) {
             $data['format'] = self::FORMAT_RSS;
         } else if ($this->_xml->getName() == 'feed') {
             $data['format'] = self::FORMAT_ATOM;
         } else {
-            throw new Vps_Exception('Can\'t load feed, unknown format: '.$originalContent);
+            throw new Vps_Exception("Can't load feed '$data[url]', unknown format: ".$originalContent);
         }
         $data['encoding'] = $encoding;
         if ($data['format'] == self::FORMAT_RSS) {
