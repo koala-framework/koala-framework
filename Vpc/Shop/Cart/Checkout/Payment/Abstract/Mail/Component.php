@@ -9,10 +9,12 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component extends Vpc_Mail_Ed
         return $ret;
     }
 
-    protected function _replacePlaceholders($text, Vpc_Mail_Recipient_Interface $recipient)
+    public function getPlaceholders(Vpc_Mail_Recipient_Interface $o = null)
     {
-        $text = parent::_replacePlaceholders($text, $recipient);
-        $text = str_replace('%orderNumber%', $recipient->getOrderNumber(), $text);
-        return $text;
+        $ret = parent::getPlaceholders($o);
+        $m = new Vps_View_Helper_Money();
+        $ret['total'] = $m->money($o->getTotal());
+        $ret['orderNumber'] = $o->getOrderNumber();
+        return $ret;
     }
 }

@@ -1,1 +1,1 @@
-(products)
+<p><?=trlVps('Productlist');?></p>

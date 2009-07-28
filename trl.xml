@@ -4266,18 +4266,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Order Products</en>
+<de>Bestell&#xFC;bersicht</de>
 <id>1178</id>
 </text>
 <text>
 <en>Address Header</en>
+<de>Adresskopf</de>
 <id>1179</id>
 </text>
 <text>
 <en>Shop Conformation Mail</en>
+<de>Shop Best&#xE4;tigungsmail</de>
 <id>1180</id>
 </text>
 <text>
 <en>Shop Conformation Text</en>
+<de>Shop Best&#xE4;tigungstext</de>
 <id>1181</id>
 </text>
 <text>
@@ -4341,6 +4345,62 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Hello {0} {1}</en>
 <de>Hallo {0} {1}</de>
 <id>1199</id>
+</text>
+<text>
+<en>CSV export</en>
+<id>1200</id>
+</text>
+<text>
+<en>Please click on the following link to download your CSV file.</en>
+<id>1201</id>
+</text>
+<text>
+<en>CSV export file</en>
+<id>1202</id>
+</text>
+<text>
+<en>Productlist</en>
+<de>Produktliste</de>
+<id>1205</id>
+</text>
+<text>
+<en>Max Mustermann...</en>
+<id>1206</id>
+</text>
+<text>
+<en>Message</en>
+<de>Mitteilung</de>
+<id>1207</id>
+</text>
+<text>
+<en>You ordert following product</en>
+<de>Sie haben folgenden Artikel bestellt</de>
+<id>1208</id>
+</text>
+<text>
+<en>You ordert following products</en>
+<de>Sie haben folgende Artikel bestellt</de>
+<id>1209</id>
+</text>
+<text>
+<en>Mr. {0}</en>
+<de>Herr {0}</de>
+<id>1210</id>
+</text>
+<text>
+<en>Mrs. {0}</en>
+<de>Frau {0}</de>
+<id>1211</id>
+</text>
+<text>
+<en>Mrs.</en>
+<de>Frau</de>
+<id>1212</id>
+</text>
+<text>
+<en>Your message to {0}</en>
+<de>Ihre Mitteilung an {0}</de>
+<id>1213</id>
 </text>
 </trl>
 

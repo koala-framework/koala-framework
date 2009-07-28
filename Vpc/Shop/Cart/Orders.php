@@ -5,6 +5,7 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
     protected $_rowClass = 'Vpc_Shop_Cart_Order';
     protected $_siblingModels = array('Vpc_Shop_Cart_Checkout_Model');
     protected $_dependentModels = array('Products'=>'Vpc_Shop_Cart_OrderProducts');
+    private static $_cartOrderId; //order-id falls sie schon ge-resetted wurde
 
     public function getCartOrderAndSave()
     {
@@ -21,9 +22,9 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
     public function getCartOrder()
     {
         $ret = null;
-        $session = new Zend_Session_Namespace('vpcShopCart');
-        if ($session->orderId) {
-            $ret = $this->find($session->orderId)->current();
+        $orderId = self::getCartOrderId();
+        if ($orderId) {
+            $ret = $this->find($orderId)->current();
         }
         if (!$ret) {
             $ret = $this->createRow();
@@ -31,14 +32,24 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
         return $ret;
     }
 
+    /**
+     * Gibt die cart order id zurück, auch wenn sie in diesem request 
+     * schon per resetCartOrderId zurück gesetzt wurde.
+     */
     public static function getCartOrderId()
     {
+        if (isset(self::$_cartOrderId)) {
+            return self::$_cartOrderId;
+        }
         $session = new Zend_Session_Namespace('vpcShopCart');
         return $session->orderId;
     }
 
     public static function resetCartOrderId()
     {
+        //merken damit wir noch auf die order zugreifen können
+        self::$_cartOrderId = $session->orderId;
+
         $session = new Zend_Session_Namespace('vpcShopCart');
         $session->orderId = null;
     }
