@@ -82,7 +82,8 @@ class Vps_Component_Abstract_Admin
     {
         $urlOptions = array(
             'class' => $this->_class,
-            'componentController' => $class
+            'componentController' => $class,
+            'action' => ''
         );
         $router = Zend_Controller_Front::getInstance()->getRouter();
 
