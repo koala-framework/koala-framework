@@ -141,15 +141,28 @@ class Vpc_Mail_Component extends Vpc_Abstract
                     $t = trlVps('Dear {0} {1}', $replace);
                 }
                 $ret['salutation_polite'] = str_replace('  ', ' ', $t);
+
+                if ($recipient->getMailGender() == 'male') {
+                    $t = trlVps('Mr. {0}', $recipient->getMailTitle());
+                } else if ($recipient->getMailGender() == 'female') {
+                    $t = trlVps('Mrs. {0}', $recipient->getMailTitle());
+                } else {
+                    $t = $recipient->getMailTitle();
+                }
+                $ret['salutation_title'] = str_replace('  ', ' ', $t);
+
+                $ret['title'] = $recipient->getMailTitle();
             }
             if ($recipient instanceof Vpc_Mail_Recipient_GenderInterface) {
                 $replace = array($recipient->getMailLastname());
                 if ($recipient->getMailGender() == 'male') {
                     $ret['salutation_polite_notitle'] = trlVps('Dear Mr. {0}', $replace);
                     $ret['salutation_hello'] = trlVps('Hello Mr. {0}', $replace);
+                    $ret['salutation'] = trlVps('Mr.');
                 } else if ($recipient->getMailGender() == 'female') {
                     $ret['salutation_polite_notitle'] = trlVps('Dear Mrs. {0}', $replace);
                     $ret['salutation_hello'] = trlVps('Hello Mrs. {0}', $replace);
+                    $ret['salutation'] = trlVps('Mrs.');
                 } else {
                     $replace = array(
                         $recipient->getMailFirstname(),
