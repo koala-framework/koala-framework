@@ -1,10 +1,12 @@
 <?php
 class Vps_View_Helper_Money
 {
-    public function money($amount, $valuta = ' €')
+    //TODO: währung übergebbar machen wenns mal benötigt wird
+    public function money($amount)
     {
-        if (!$valuta) $valuta = '';
-        $ret = number_format($amount, 2, ",", ".").$valuta;
-        return $ret;
+                                          //TODO: übersetzung für , und .
+        $ret = number_format($amount, 2, ",", ".");
+        $format = Vps_Registry::get('config')->moneyFormat;
+        return str_replace('{0}', $ret, $format);
     }
 }
