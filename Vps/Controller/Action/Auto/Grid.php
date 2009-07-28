@@ -300,7 +300,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $select = $this->_getSelect();
         if (is_null($select)) return null; //wenn _getSelect null zurückliefert nichts laden
         $select->limit($limit, $start);
-        $select->order($this->_getOrder($order));
+        $order = $this->_getOrder($order);
+        if ($order) $select->order($order);
         return $this->_model->getRows($select);
     }
 
