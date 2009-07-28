@@ -79,7 +79,11 @@ class Vps_Media
         $cacheId = self::createCacheId($class, $id, $type);
         if (!$output = self::getOutputCache()->load($cacheId)) {
             $output = call_user_func(array($class, 'getMediaOutput'), $id, $type, $class);
-            self::getOutputCache()->save($output, $cacheId);
+            $specificLifetime = false;
+            if (isset($output['lifetime'])) {
+                $specificLifetime = $output['lifetime'];
+            }
+            self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
         }
         return $output;
     }
