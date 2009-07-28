@@ -17,9 +17,14 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         echo "<a href=\"/admin/component/benchmark/values\">current values</a><br />";
         $start = $this->_getParam('start');
         $startDates = array(
+            'last 3 hours' => time()-3*60*60,
+            'last 6 hours' => time()-6*60*60,
+            'last 12 hours' => time()-12*60*60,
             'last day' => time()-24*60*60,
             'last week' => time()-7*24*60*60,
             'last month' => strtotime('-1 month'),
+            'last 3 months' => strtotime('-3 month'),
+            'last 6 months' => strtotime('-6 month'),
             'last year' => strtotime('-1 year')
         );
         if (!$start) $start = $startDates['last week'];
@@ -46,9 +51,14 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         $name = $this->_getParam('name');
         echo "<a href=\"/admin/component/benchmark\">overview</a><br /><br />";
         $startDates = array(
+            'last 3 hours' => time()-3*60*60,
+            'last 6 hours' => time()-6*60*60,
+            'last 12 hours' => time()-12*60*60,
             'last day' => time()-24*60*60,
             'last week' => time()-7*24*60*60,
             'last month' => strtotime('-1 month'),
+            'last 3 months' => strtotime('-3 month'),
+            'last 6 months' => strtotime('-6 month'),
             'last year' => strtotime('-1 year')
         );
         foreach ($startDates as $d) {
