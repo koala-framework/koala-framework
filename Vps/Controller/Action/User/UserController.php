@@ -101,7 +101,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
                             unset($addRoles[$roleId][$addRoleId]);
                         }
                     }
-                    $editor = new Vps_Form_Field_MultiCheckbox('Vps_User_AdditionalRoles', trlVps('Additional rights'));
+                    $editor = new Vps_Form_Field_MultiCheckboxLegacy('Vps_User_AdditionalRoles', trlVps('Additional rights'));
                     $editor->setColumnName('additional_role')
                         ->setValues($addRoles[$roleId])
                         ->setReferences(array(
