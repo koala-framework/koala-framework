@@ -21,7 +21,7 @@
                     <? foreach($i->additionalOrderData as $d) { ?>
                         <td class="<?=$d['class']?>"><?=$d['name']?>: <?=$d['value']?></td>
                     <? } ?>
-                    <td class="price"><?=trlVps('EUR')?> <?=$this->money($i->product->row->price*$i->row->amount, '')?></td>
+                    <td class="price"><?=$this->money($i->product->row->price*$i->row->amount, '')?></td>
                 </tr>
                 <tr class="<?=($c==$j ? 'lastline' : 'line');?>">
                     <td colspan="<?=(4+count($i->additionalOrderData))?>">
@@ -35,7 +35,7 @@
                 <? foreach ($this->sumRows as $row) { ?>
                     <li<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
                         <span class="text"><?=$row['text']?></span>
-                        <span class="price"><?=trlVps('EUR')?> <?=$this->money($row['amount'],'')?></span>
+                        <span class="price"><?=$this->money($row['amount'],'')?></span>
                         <div class="clear"></div>
                     </li>
                 <? } ?>

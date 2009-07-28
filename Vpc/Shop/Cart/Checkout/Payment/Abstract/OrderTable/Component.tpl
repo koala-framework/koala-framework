@@ -18,12 +18,12 @@
         foreach ($this->items as $item) { ?>
             <tr class="products<?=($i%2==1 ? ' row1' : ' row2');?>">
                 <td class="product"><?=$item->product->name?></td>
-                <td class="unitPrice"><?=trlVps('EUR')?> <?=$this->money($item->product->row->price,'')?></td>
+                <td class="unitPrice"><?=$this->money($item->product->row->price,'')?></td>
                 <td class="amount"><?=$item->row->amount?></td>
                 <? foreach($item->additionalOrderData as $d) { ?>
                     <td class="<?=$d['class']?>"><?=$d['value']?></td>
                 <? } ?>
-                <td class="price"><?=trlVps('EUR')?> <?=$this->money($item->product->row->price * $item->row->amount,'')?></td>
+                <td class="price"><?=$this->money($item->product->row->price * $item->row->amount,'')?></td>
             </tr>
             <tr class="<?=($c==$i ? 'lastline' : 'line');?>">
                 <td colspan="<?=(4+count($this->additionalOrderDataHeaders))?>">
@@ -43,7 +43,7 @@
                     <? foreach ($this->sumRows as $row) { ?>
                         <tr<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
                             <td><?=$row['text']?></td>
-                            <td class="price"><?=trlVps('EUR')?> <?=$this->money($row['amount'],'')?></td>
+                            <td class="price"><?=$this->money($row['amount'],'')?></td>
                         </tr>
                     <? } ?>
                 </table>
