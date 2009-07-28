@@ -61,7 +61,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
         return self::$_instance;
     }
 
-    public function getRouter()
+    public final function getRouter()
     {
         if (null == $this->_router) {
             if (php_sapi_name() == 'cli') {
