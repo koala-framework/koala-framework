@@ -1,2 +1,1 @@
-Max Mustermann
-...
+<p><?=trlVps('Max Mustermann...');?></p>
