@@ -1,9 +1,9 @@
 <?php
 class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
 {
-    public function __construct(array $params = array())
+    public function __construct($prefix)
     {
-        parent::__construct($params);
+        parent::__construct();
         $this->AddRoute('vps_welcome', new Zend_Controller_Router_Route(
                     '/vps/welcome/:controller/:action',
                     array('module'     => 'vps_controller_action_welcome',
@@ -74,5 +74,41 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/vps/webtest/:controller/:action',
                     array('module'     => 'web_test',
                           'action'     =>'index')));
+
+        //Komponenten routes
+        if ($prefix) {
+            $prefix = '/'.$prefix;
+            $this->AddRoute('admin', new Zend_Controller_Router_Route(
+                    $prefix.'/:module/:controller/:action',
+                    array('module'=>'vps_controller_action_component',
+                          'controller' => 'index',
+                          'action' => 'index')));
+        }
+        $this->AddRoute('component', new Zend_Controller_Router_Route(
+                    $prefix.'/component/:controller/:action',
+                    array('module'=>'vps_controller_action_component',
+                          'action' => 'index')));
+        $this->AddRoute('components', new Zend_Controller_Router_Route(
+                    $prefix.'/components/:action',
+                    array('module' => 'vps_controller_action_component',
+                          'controller' => 'components',
+                          'action' => 'index')));
+        $this->AddRoute('componentshow', new Zend_Controller_Router_Route(
+                    $prefix.'/component/show/:class/:componentId',
+                    array('componentId'=>null,
+                          'module' => 'vps_controller_action_component',
+                          'controller' => 'components',
+                          'action' => 'show')));
+        $this->AddRoute('componentjsonshow', new Zend_Controller_Router_Route(
+                    $prefix.'/component/json-show/:class/:componentId',
+                    array('componentId'=>null,
+                          'module' => 'vps_controller_action_component',
+                          'controller' => 'components',
+                          'action' => 'jsonshow')));
+        $this->AddRoute('componentedit', new Zend_Controller_Router_Route(
+                    $prefix.'/component/edit/:class/:componentController/:action',
+                    array('module' => 'component',
+                          'controller' => 'component',
+                          'action' => 'index')));
     }
 }

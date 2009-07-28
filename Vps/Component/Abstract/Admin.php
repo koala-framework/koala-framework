@@ -80,20 +80,24 @@ class Vps_Component_Abstract_Admin
 
     public function getControllerUrl($class = 'Index')
     {
+        $urlOptions = array(
+            'class' => $this->_class,
+            'componentController' => $class
+        );
+        $router = Zend_Controller_Front::getInstance()->getRouter();
+
         if (Zend_Registry::isRegistered('testRootComponentClass')) {
-            //hick hack
-            $url = '/vps/componentedittest/'.Vps_Component_Data_Root::getComponentClass();
+            $urlOptions['root'] = Zend_Registry::get('testRootComponentClass');
+            $name = 'vps_test_componentedit';
         } else {
-            $url = '/admin/component/edit';
+            $name = 'componentedit';
         }
-        $componentClass = $this->_class;
-        $componentClass .= '/' . $class;
-        return $url . '/' . $componentClass;
+        return $router->assemble($urlOptions, $name);
     }
+
     public function setup()
     {
     }
-
 
     public static function getComponentFile($class, $filename = '', $ext = 'php', $returnClass = false)
     {

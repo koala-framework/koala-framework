@@ -4,6 +4,8 @@ Zend_Controller_Action_HelperBroker::addHelper(new Vps_Controller_Action_Helper_
 
 class Vps_Controller_Front extends Zend_Controller_Front
 {
+    private $_webRouter;
+
     protected function _init()
     {
         $this->setDispatcher(new Vps_Controller_Dispatcher());
@@ -37,6 +39,9 @@ class Vps_Controller_Front extends Zend_Controller_Front
         if (file_exists('application/controllers/Cli')) {
             $this->addControllerDirectory('application/controllers/Cli', 'cli');
         }
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Component',
+                                        'vps_controller_action_component');
+
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
         $plugin->setErrorHandlerModule('vps_controller_action_error');
@@ -62,11 +67,30 @@ class Vps_Controller_Front extends Zend_Controller_Front
             if (php_sapi_name() == 'cli') {
                 $this->setRouter(new Vps_Controller_Router_Cli());
             } else {
-                $this->setRouter(new Vps_Controller_Router());
+                $this->setRouter($this->getWebRouter());
             }
         }
 
         return $this->_router;
+    }
+
+    public function getWebRouter()
+    {
+        if (isset($this->_webRouter)) {
+            return $this->_webRouter;
+        } else {
+            return $this->_getDefaultWebRouter();
+        }
+    }
+
+    protected function _getDefaultWebRouter()
+    {
+        return new Vps_Controller_Router('');
+    }
+
+    public function setWebRouter(Zend_Controller_Router_Interface $router)
+    {
+        $this->_webRouter = $router;
     }
 
     public function dispatch(Zend_Controller_Request_Abstract $request = null, Zend_Controller_Response_Abstract $response = null)
