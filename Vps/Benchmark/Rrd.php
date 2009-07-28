@@ -1,6 +1,11 @@
 <?php
 class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
 {
+    public function getTitle()
+    {
+        return trlVps('Vps Benchmark');
+    }
+
     public function __construct()
     {
         parent::__construct('benchmark.rrd');

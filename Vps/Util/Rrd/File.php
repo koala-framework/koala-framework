@@ -3,9 +3,17 @@ abstract class Vps_Util_Rrd_File
 {
     private $_fields = array();
     private $_fileName;
+    private $_interval = 60;
+    private $_timeZone = null;
+
     public function __construct($fileName)
     {
         $this->_fileName = $fileName;
+    }
+
+    public function getTitle()
+    {
+        return $this->getFileName();
     }
 
     public function getFileName()
@@ -34,22 +42,59 @@ abstract class Vps_Util_Rrd_File
         return $this->_fields;
     }
 
+    public function setInterval($i)
+    {
+        $this->_interval = $i;
+    }
+
+    //im moment nur für graph
+    public function setTimeZone($i)
+    {
+        $this->_timeZone = $i;
+    }
+
+    public function getTimeZone()
+    {
+        return $this->_timeZone;
+    }
+
+    protected function getRRAs()
+    {
+        return array(
+            array(
+                //1 woche (bei interval von 60)
+                'steps' => 1,
+                'rows' => 2016
+            ),
+            array(
+                //1 monat (bei interval von 60)
+                'steps' => 7,
+                'rows' => 1500
+            ),
+            array(
+                //1 jahr (bei interval von 60)
+                'steps' => 50,
+                'rows' => 2500
+            ),
+        );
+    }
+
     public function createFile($start)
     {
         if (file_exists($this->_fileName)) {
             throw new Vps_Exception("$this->_fileName already exists");
         }
-        $interval = 60;
         $cmd = "rrdtool create $this->_fileName ";
         $cmd .= "--start ".$start." ";
-        $cmd .= "--step ".($interval)." ";
+        $cmd .= "--step ".($this->_interval)." ";
         foreach ($this->_fields as $field) {
-            $cmd .= "DS:".$field->getName().":".$field->getType().":".($interval*2).":".$field->getMin().":".($field->getMax())." ";
+            $cmd .= "DS:".$field->getName().":".$field->getType().":".($this->_interval*2).":".$field->getMin().":".($field->getMax())." ";
         }
-        $cmd .= "RRA:AVERAGE:0.6:1:2016 "; //1 woche
-        $cmd .= "RRA:AVERAGE:0.6:7:1500 "; //1 Monat
-        $cmd .= "RRA:AVERAGE:0.6:50:2500 "; //1 Jahr
-
+        foreach ($this->getRRAs() as $rra) {
+            if (!isset($rra['method'])) $rra['method'] = 'AVERAGE';
+            if (!isset($rra['xff'])) $rra['xff'] = '0.6';
+            $cmd .= "RRA:$rra[method]:$rra[xff]:$rra[steps]:$rra[rows] ";
+        }
         system($cmd, $ret);
         if ($ret != 0) throw new Vps_Exception("Command failed");
     }

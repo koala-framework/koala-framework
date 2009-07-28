@@ -25,6 +25,11 @@ class Vps_Util_Rrd_Graph
         $this->_title = $l;
     }
 
+    public function getTitle()
+    {
+        return $this->_title;
+    }
+
     public function setDevideBy($f)
     {
         if (is_string($f)) {
@@ -81,7 +86,7 @@ class Vps_Util_Rrd_Graph
         if (!$f['color']) {
             throw new Vps_Exception("no more avaliable default colors");
         }
-        if ((!isset($f['text']) || !$f['text']) && isset($f['field'])) {
+        if ((!isset($f['text'])) && isset($f['field'])) {
             $f['text'] = $f['field']->getText();
         }
         $this->_fields[] = $f;
@@ -89,6 +94,15 @@ class Vps_Util_Rrd_Graph
 
     public function getContents($start, $end = null)
     {
+        if (is_array($start)) {
+            $end = null;
+            if (isset($start['height'])) $height = $start['height'];
+            if (isset($start['width'])) $width = $start['width'];
+            if (isset($start['end'])) $end = $start['end'];
+            $start = $start['start'];
+        }
+        if (!isset($height)) $height = 320;
+        if (!isset($width)) $width = 620;
         if (!$end) $end = time();
 
         if (is_string($start)) {
@@ -96,7 +110,8 @@ class Vps_Util_Rrd_Graph
         }
 
         $tmpFile = tempnam('/tmp', 'graph');
-        $cmd = "rrdtool graph $tmpFile -h 300 -w 600 ";
+        $cmd = "rrdtool graph $tmpFile -h $height -w $width ";
+        //$cmd .= "--full-size-mode "; broken
         $cmd .= "-s $start ";
         $cmd .= "-e $end ";
         if (!is_null($this->_verticalLabel)) {
@@ -118,17 +133,22 @@ class Vps_Util_Rrd_Graph
         }
         $i = 0;
         foreach ($this->_fields as $settings) {
+            if (isset($settings['method'])) {
+                $method = $settings['method'];
+            } else {
+                $method = 'AVERAGE';
+            }
             if (isset($settings['field'])) {
                 $field = $settings['field']->getName();
                 if (isset($settings['addFields'])) {
                     $j = 0;
-                    $cmd .= "DEF:line{$i}x{$j}=$rrdFile:$field:AVERAGE ";
+                    $cmd .= "DEF:line{$i}x{$j}=$rrdFile:$field:$method ";
                     foreach ($settings['addFields'] as $f) {
                         $j++;
                         $addField = $f['field'];
                         if (is_string($addField)) $addField = $this->_rrd->getField($addField);
                         $addField = $addField->getName();
-                        $cmd .= "DEF:line{$i}x{$j}=$rrdFile:$addField:AVERAGE ";
+                        $cmd .= "DEF:line{$i}x{$j}=$rrdFile:$addField:$method ";
                     }
                     $j = 0;
                     $cmd .= "CDEF:line{$i}=";
@@ -144,7 +164,7 @@ class Vps_Util_Rrd_Graph
                     }
                     $cmd .= " ";
                 } else {
-                    $cmd .= "DEF:line{$i}=$rrdFile:$field:AVERAGE ";
+                    $cmd .= "DEF:line{$i}=$rrdFile:$field:$method ";
                 }
                 if ($this->_devideBy) {
                     $cmd .= "CDEF:perrequest$i=line$i,requests,/ ";
@@ -163,8 +183,10 @@ class Vps_Util_Rrd_Graph
             }
             $i++;
         }
-//         d($cmd);
         $cmd .= " 2>&1";
+        if ($this->_rrd->getTimeZone()) {
+            $cmd = "TZ=".$this->_rrd->getTimeZone()." ".$cmd;
+        }
         exec($cmd, $out, $ret);
         if ($ret) {
             throw new Vps_Exception(implode('', $out)."\n".$cmd);
@@ -176,10 +198,9 @@ class Vps_Util_Rrd_Graph
 
     public function output($start, $end = null)
     {
-        $c = $this->getContents($start, $end);
-        header('Content-Type: image/png');
-        echo $c;
-        exit;
+        Vps_Media_Output::output(array(
+            'contents' => $this->getContents($start, $end),
+            'mimeType' => 'image/png'
+        ));
     }
-
 }
