@@ -5,7 +5,7 @@ class Vps_Component_Output_ComponentPartial extends Vps_Component_Output_NoCache
     {
         // Normaler Output
         $componentClass = $component->componentClass;
-        $template = Vpc_Admin::getComponentFile($componentClass, 'Partial', 'tpl');
+        $template = Vpc_Abstract::getTemplateFile($componentClass, 'Partial');
         if (!$template) {
             throw new Vps_Exception("No Partial-Template found for '$componentClass'");
         }

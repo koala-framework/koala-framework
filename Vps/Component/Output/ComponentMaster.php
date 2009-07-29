@@ -4,7 +4,7 @@ class Vps_Component_Output_ComponentMaster extends Vps_Component_Output_NoCache
     public function render($component)
     {
         // Normaler Output
-        $template = $component->getComponent()->getTemplateFile();
+        $template = Vpc_Abstract::getTemplateFile($component->componentClass);
         if (!$template) {
             throw new Vps_Exception("No Component-Template found for '$component->componentClass'");
         }
@@ -15,7 +15,7 @@ class Vps_Component_Output_ComponentMaster extends Vps_Component_Output_NoCache
         $ret = $this->_renderView($template, $templateVars);
 
         // Falls es ein Master-Template gibt und wir nicht bei der Root sind, das Master-Template dazurendern
-        $template = $component->getComponent()->getTemplateFile('Master');
+        $template = Vpc_Abstract::getTemplateFile($component->componentClass, 'Master');
         if ($template && Vps_Component_Data_Root::getInstance()->componentId != $component->componentId) {
             $templateVars = array();
             $templateVars['component'] = $component;
