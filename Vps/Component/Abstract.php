@@ -114,15 +114,43 @@ class Vps_Component_Abstract
                     } catch (Vps_Exception $e) {
                         throw new Vps_Exception("$c: ".$e->getMessage());
                     }
+
+                    //*** templates
                     self::$_settings[$c]['templates'] = array(
                         'Master' => Vpc_Admin::getComponentFile($c, 'Master', 'tpl'),
                         'Component' => Vpc_Admin::getComponentFile($c, 'Component', 'tpl')
                     );
+
+                    //*** parentClasses
                     $p = $c;
                     self::$_settings[$c]['parentClasses'] = array();
                     do {
                         self::$_settings[$c]['parentClasses'][] = $p;
                     } while ($p = get_parent_class($p));
+
+                    //*** processedCssClass
+                    self::$_settings[$c]['processedCssClass'] = '';
+                    if (isset(self::$_settings[$c]['cssClass'])) {
+                        self::$_settings[$c]['processedCssClass'] .= self::$_settings[$c]['cssClass'].' ';
+                    }
+                    $cssClass = array(self::_formatCssClass($c));
+                    $dirs = explode(PATH_SEPARATOR, get_include_path());
+                    foreach (self::$_settings[$c]['parentClasses'] as $i) {
+                        $file = str_replace('_', '/', $i);
+                        if (substr($file, -10) != '/Component') {
+                            $file .= '/Component';
+                        }
+                        foreach ($dirs as $dir) {
+                            if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.printcss')) {
+                                $cssClass[] = self::_formatCssClass($i);
+                                break;
+                            }
+                        }
+                    }
+                    self::$_settings[$c]['processedCssClass'] .= implode(' ', array_reverse($cssClass));
+                    self::$_settings[$c]['processedCssClass'] = trim(self::$_settings[$c]['processedCssClass']);
+
+                    //*** mtimeFiles
                     $p = $c;
                     do {
                         $file = str_replace('_', DIRECTORY_SEPARATOR, $p);
@@ -143,6 +171,15 @@ class Vps_Component_Abstract
             }
         }
         return self::$_settings;
+    }
+
+    static private function _formatCssClass($cls)
+    {
+        if (substr($cls, -10) == '_Component') {
+            $cls = substr($cls, 0, -10);
+        }
+        $cls = str_replace('_', '', $cls);
+        return strtolower(substr($cls, 0, 1)) . substr($cls, 1);
     }
 
     public static function getParentClasses($c)

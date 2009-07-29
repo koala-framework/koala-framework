@@ -351,37 +351,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     static public function getCssClass($component)
     {
         if (!is_string($component)) $component = get_class($component);
-
-        $ret = '';
-        if (Vpc_Abstract::hasSetting($component, 'cssClass')) {
-            $ret .= Vpc_Abstract::getSetting($component, 'cssClass').' ';
-        }
-
-        $cssClass = array(self::_formatCssClass($component));
-        $dirs = explode(PATH_SEPARATOR, get_include_path());
-        foreach (self::getParentClasses($component) as $c) {
-            $file = str_replace('_', '/', $c);
-            if (substr($file, -10) != '/Component') {
-                $file .= '/Component';
-            }
-            foreach ($dirs as $dir) {
-                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.printcss')) {
-                    $cssClass[] = self::_formatCssClass($c);
-                    break;
-                }
-            }
-        }
-        $ret .= implode(' ', array_reverse($cssClass));
-        return trim($ret);
-    }
-
-    static private function _formatCssClass($cls)
-    {
-        if (substr($cls, -10) == '_Component') {
-            $cls = substr($cls, 0, -10);
-        }
-        $cls = str_replace('_', '', $cls);
-        return strtolower(substr($cls, 0, 1)) . substr($cls, 1);
+        return self::getSetting($component, 'processedCssClass');
     }
 
     static public function getShortcutUrl($componentClass, Vps_Component_Data $data)
