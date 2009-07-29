@@ -21,7 +21,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
     {
         $newsletter = $this->getData()->row;
         if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
-            throw new Vps_ClientException('Cannot only add users to a paused newsletter');
+            throw new Vps_ClientException(trlVps('Can only add users to a paused newsletter'));
         }
         $this->_toImport[] = array(
             'newsletter_id' => $newsletter->id,
@@ -29,7 +29,6 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
             'recipient_id' => $recipient->id,
             'status' => 'queued',
             'searchtext' =>
-                $recipient->getMailTitle() . ' ' .
                 $recipient->getMailFirstname() . ' ' .
                 $recipient->getMailLastname() . ' ' .
                 $recipient->getMailEmail()
