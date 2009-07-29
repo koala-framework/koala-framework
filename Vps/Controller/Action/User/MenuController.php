@@ -35,7 +35,8 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
 
         $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
         $this->view->changeUser = $acl->isAllowed($role, 'vps_user_changeuser', 'view');
-        if (Vps_Registry::get('config')->vpc->rootComponent) {
+
+        if (Vps_Registry::get('acl')->has('vps_component_pages')) {
             $this->view->hasFrontend = true;
         } else {
             $this->view->hasFrontend = false;
