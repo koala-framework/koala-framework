@@ -1,5 +1,5 @@
 <? if (isset($this->items)) { ?>
-    <p><?=trlpVps('You ordert following product', 'You ordert following products', count($this->items));?>:</p>
+    <p><?=trlpVps('You ordered following product', 'You ordered following products', count($this->items));?>:</p>
     <table class="tblBoxCart" cellspacing="0" cellpadding="0">
     <?
     $c=0;
