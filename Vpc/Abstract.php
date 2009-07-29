@@ -339,13 +339,12 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     public function onCacheCallback($row) {}
 
-    public function getTemplateFile($filename = 'Component')
+    public static function getTemplateFile($componentClass, $filename = 'Component')
     {
-        if ($this->_hasSetting('templates')) {
-            $templates = $this->_getSetting('templates');
-            if (isset($templates[$filename])) return $templates[$filename];
-        }
-        return Vpc_Admin::getComponentFile(get_class($this), $filename, 'tpl');
+        $templates = self::getSetting($componentClass, 'templates');
+        if (array_key_exists($filename, $templates)) return $templates[$filename];
+        throw new Vps_Exception("Invalid TemplateFile '$filename'");
+        //return Vpc_Admin::getComponentFile(get_class($this), $filename, 'tpl');
     }
 
     static public function getCssClass($component)

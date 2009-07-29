@@ -10,7 +10,7 @@ class Vps_Component_Output_Master extends Vps_Component_Output_NoCache
             $component = $component->parent;
         }
         while ($component) {
-            $master = $component->getComponent()->getTemplateFile('Master');
+            $master = Vpc_Abstract::getTemplateFile($component->componentClass, 'Master');
             if ($master) {
                 $this->_masterTemplates[] = array(
                     'component' => $c,

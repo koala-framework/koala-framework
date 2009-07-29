@@ -118,7 +118,8 @@ class Vps_Component_Abstract
                     //*** templates
                     self::$_settings[$c]['templates'] = array(
                         'Master' => Vpc_Admin::getComponentFile($c, 'Master', 'tpl'),
-                        'Component' => Vpc_Admin::getComponentFile($c, 'Component', 'tpl')
+                        'Component' => Vpc_Admin::getComponentFile($c, 'Component', 'tpl'),
+                        'Partial' => Vpc_Admin::getComponentFile($c, 'Partial', 'tpl')
                     );
 
                     //*** parentClasses
