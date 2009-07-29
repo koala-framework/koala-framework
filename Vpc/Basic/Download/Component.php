@@ -20,7 +20,6 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['infotext'] = $this->_getRow()->infotext;
 
         $fileRow = $this->_getFileRow();
         $parentRow = $fileRow->getParentRow('File');
@@ -29,6 +28,9 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
         } else {
             $return['filesize'] = null;
         }
+        $return['infotext'] = $this->_getRow()->infotext;
+        if ($return['infotext'] == '' && $parentRow)
+            $return['infotext'] = $parentRow->filename;
 
         $return['icon'] = $this->getIcon();
         return $return;
