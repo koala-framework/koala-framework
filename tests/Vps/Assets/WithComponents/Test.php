@@ -16,6 +16,7 @@
         Vps_Benchmark::reset();
 
         $rootComponent = 'Vps_Assets_WithComponents_Root_Component';
+        Vps_Component_Data_Root::setComponentClass($rootComponent);
 
         $config = clone Zend_Registry::get('config');
         $config->debug->menu = false;
@@ -41,6 +42,8 @@
 
         $loader->getFileContents('web-vps/tests/Vps/Assets/OwnConfig/file2.js');
         $this->assertEquals(1, Vps_Benchmark::getCounterValue('load asset'));
+
+        Vps_Component_Data_Root::setComponentClass(null);
     }
 
     public function testNoDebug()
