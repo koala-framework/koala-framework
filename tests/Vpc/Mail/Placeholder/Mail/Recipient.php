@@ -1,5 +1,5 @@
 <?php
-class Vpc_Mail_Placeholder_Recipient extends Vps_Model_Row_Data_Abstract
+class Vpc_Mail_Placeholder_Mail_Recipient extends Vps_Model_Row_Data_Abstract
     implements Vpc_Mail_Recipient_TitleInterface
 {
     public function getMailGender()

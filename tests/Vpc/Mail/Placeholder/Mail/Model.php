@@ -1,5 +1,5 @@
 <?php
-class Vpc_Mail_Placeholder_MailModel extends Vpc_Mail_Model
+class Vpc_Mail_Placeholder_Mail_Model extends Vpc_Mail_Model
 {
     public function __construct(array $config = array())
     {
