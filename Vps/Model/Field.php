@@ -52,7 +52,13 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
             if (substr($data, 0, 13) == 'vpsSerialized') {
                 $data = substr($data, 13);
             }
-            $data = unserialize($data);
+            try {
+                $data = unserialize($data);
+            } catch (Exception $e) {
+                $e = new Vps_Exception($e->getMessage(). " $data");
+                $e->logOrThrow();
+                $data = false;
+            }
         }
         if (!$data) {
             $data = $this->getDefault();
