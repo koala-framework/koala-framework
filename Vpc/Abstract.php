@@ -344,7 +344,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $templates = self::getSetting($componentClass, 'templates');
         if (array_key_exists($filename, $templates)) return $templates[$filename];
         throw new Vps_Exception("Invalid TemplateFile '$filename'");
-        //return Vpc_Admin::getComponentFile(get_class($this), $filename, 'tpl');
+        //return Vpc_Admin::getComponentFile($componentClass, $filename, 'tpl');
     }
 
     static public function getCssClass($component)
