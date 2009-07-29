@@ -93,7 +93,7 @@ class Vps_Component_Abstract_Admin
         } else {
             $name = 'componentedit';
         }
-        return $router->assemble($urlOptions, $name);
+        return $router->assemble($urlOptions, $name, true);
     }
 
     public function setup()
