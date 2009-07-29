@@ -4373,16 +4373,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1207</id>
 </text>
 <text>
-<en>You ordert following product</en>
-<de>Sie haben folgenden Artikel bestellt</de>
-<id>1208</id>
-</text>
-<text>
-<en>You ordert following products</en>
-<de>Sie haben folgende Artikel bestellt</de>
-<id>1209</id>
-</text>
-<text>
 <en>Mr. {0}</en>
 <de>Herr {0}</de>
 <id>1210</id>
@@ -4401,6 +4391,33 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Your message to {0}</en>
 <de>Ihre Mitteilung an {0}</de>
 <id>1213</id>
+</text>
+<text>
+<en>You ordered following product</en>
+<de>Sie haben folgenden Artikel bestellt</de>
+<en_plural>You ordered following products</en_plural>
+<de_plural>Sie haben folgende Artikel bestellt</de_plural>
+<id>1214</id>
+</text>
+<text>
+<en>Rrd Graph</en>
+<id>1215</id>
+</text>
+<text>
+<en>Graph</en>
+<id>1216</id>
+</text>
+<text>
+<en>duration (days)</en>
+<id>1217</id>
+</text>
+<text>
+<en>Cache lifetime (minutes)</en>
+<id>1218</id>
+</text>
+<text>
+<en>Vps Benchmark</en>
+<id>1219</id>
 </text>
 </trl>
 

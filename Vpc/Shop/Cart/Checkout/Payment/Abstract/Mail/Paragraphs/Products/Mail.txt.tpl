@@ -1,4 +1,4 @@
-<?=trlVps('You ordert following product', 'You ordert following products', count($this->items));?>:
+<?=trlVps('You ordered following product', 'You ordered following products', count($this->items));?>:
 <? foreach ($this->items as $i) { ?>
     <?=$i->row->amount?>x <?=$i->product->name?> <?=$this->money($i->product->row->price*$i->row->amount, '')?>
 <? } ?>

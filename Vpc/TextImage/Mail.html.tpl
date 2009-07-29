@@ -1,13 +1,17 @@
-<div class="<?=$this->cssClass?>">
-    <div class="<?=$this->propCssClass?>">
-        <div class="<? if($this->row->flow){?>flow<?}else{?>noFlow<?}?>">
+<table width="600" cellspacing="0" cellpadding="0">
+    <? if($this->position=='left') { ?>
+        <tr>
             <? if ($this->image) { ?>
-                <div class="image"><?=$this->component($this->image)?></div>
+                <td><?=$this->component($this->image)?></td>
             <? } ?>
-            <div class="text"<? if(!$this->row->flow) {?> style="margin-<?=$this->position?>: <?=$this->imageWidth?>px"<?}?>>
-            <?=$this->component($this->text)?>
-            </div>
-            <div class="clear"></div>
-        </div>
-    </div>
-</div>
+            <td><?=$this->component($this->text)?></td>
+        </tr>
+    <? } else { ?>
+        <tr>
+            <td><?=$this->component($this->text)?></td>
+            <? if ($this->image) { ?>
+                <td align="right"><?=$this->component($this->image)?></td>
+            <? } ?>
+        </tr>
+    <? } ?>
+</table>
