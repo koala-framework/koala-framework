@@ -15,6 +15,8 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $ret['plugins']['placeholders'] = 'Vpc_Mail_PlaceholdersPlugin';
         $ret['modelname'] = 'Vpc_Mail_Model';
         $ret['componentName'] = 'Mail';
+
+        $ret['mailHtmlStyles'] = array();
         return $ret;
     }
 
@@ -88,7 +90,12 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $output->setRecipient($recipient);
         $output->setViewClass($forMail ? 'Vps_View_ComponentMail' : 'Vps_View_Component');
         $ret = $output->render($this->getData());
-        return $this->processPlaceholder($ret, $recipient);
+        $ret = $this->processPlaceholder($ret, $recipient);
+        if ($this->_getSetting('mailHtmlStyles')) {
+            $p = new Vpc_Mail_HtmlParser($this->_getSetting('mailHtmlStyles'));
+            $ret = $p->parse($ret);
+        }
+        return $ret;
     }
 
     /**
