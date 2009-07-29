@@ -7,7 +7,13 @@ class Vpc_Newsletter_Detail_Form extends Vpc_Abstract_Form
     {
         parent::_initFields();
 
-        $form = Vpc_Abstract_Form::createChildComponentForm('Vpc_Newsletter_Detail_Component', '-mail');
+        $class = $this->getClass();
+        if (is_instance_of($class, 'Vpc_Newsletter_Component')) {
+            $class = Vpc_Abstract::getSetting($this->getClass(), 'generators');
+            $class = $class['detail']['component'];
+        }
+
+        $form = Vpc_Abstract_Form::createChildComponentForm($class, '-mail');
         $form->setIdTemplate('{component_id}_{id}-mail');
         $this->add($form);
 
