@@ -278,13 +278,19 @@ class Vps_Benchmark
 
         static $memcache;
         if (!isset($memcache)) {
-            $memcache = new Memcache;
-            $memcacheSettings = Vps_Registry::get('config')->server->memcache;
-            $memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
+            if (!class_exists('Memcache')) {
+                $memcache = false;
+            } else {
+                $memcache = new Memcache;
+                $memcacheSettings = Vps_Registry::get('config')->server->memcache;
+                $memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
+            }
         }
 
-        if (!$memcache->increment($prefix.$name, $value)) {
-            $memcache->set($prefix.$name, $value, 0, 0);
+        if ($memcache) {
+            if (!$memcache->increment($prefix.$name, $value)) {
+                $memcache->set($prefix.$name, $value, 0, 0);
+            }
         }
     }
 
