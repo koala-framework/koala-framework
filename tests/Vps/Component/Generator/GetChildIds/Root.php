@@ -7,7 +7,7 @@ class Vps_Component_Generator_GetChildIds_Root extends Vps_Component_NoCategorie
         unset($ret['generators']['page']);
         $ret['generators']['table'] = array(
             'class' => 'Vps_Component_Generator_Table',
-            'component' => 'Vps_Basic_Empty_Component',
+            'component' => 'Vpc_Basic_Empty_Component',
             'model' => new Vps_Model_FnF(array('data'=>array(
                 array('id'=>1, 'component_id'=>'root'),
                 array('id'=>2, 'component_id'=>'root'),

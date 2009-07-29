@@ -67,6 +67,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
 
     public function testPlugin()
     {
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Components_PluginTest'); //ist eigentlich keine root, aber wegen settings cache trotzdem setzen
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_PluginTest');
         $this->assertEquals(1, count($generators));
     }
@@ -140,6 +141,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
 
     public function testRecursiveComponentClasses()
     {
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Components_Recursive'); //ist eigentlich keine root, aber wegen settings cache trotzdem setzen
         $this->_assertRec(array(), 2);
         $this->_assertRec(array('page' => false), 2);
         $this->_assertRec(array('box' => true), 1);
