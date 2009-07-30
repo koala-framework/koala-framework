@@ -8,7 +8,6 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             || ($module == 'component_test' && $request->getControllerName() == 'component_test')
         ) {
             if ($module == 'component_test') {
-                Zend_Registry::get('config')->debug->settingsCache = false;
                 Zend_Registry::get('config')->debug->componentCache->disable = true;
                 Vps_Component_Data_Root::setComponentClass($request->getParam('root'));
 
