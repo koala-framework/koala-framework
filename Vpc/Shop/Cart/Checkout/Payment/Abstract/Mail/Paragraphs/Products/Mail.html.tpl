@@ -9,7 +9,7 @@
             <? foreach($i->additionalOrderData as $d) { ?>
                 <td class="<?=$d['class']?>"><?=$d['name']?>: <?=$d['value']?></td>
             <? } ?>
-            <td width="200" align="right" class="price">
+            <td width="100" align="right" class="price">
                 <?=$this->money($i->product->row->price*$i->row->amount, '')?>
             </td>
         </tr>
@@ -20,8 +20,9 @@
 <table width="600" class="moneyInfo" cellspacing="0" cellpadding="0">
     <? foreach ($this->sumRows as $row) { ?>
         <tr>
-            <td><?=$row['text']?></td>
-            <td width="200" align="right"><?=$this->money($row['amount'],'')?></td>
+            <td align="right"><?=$row['text']?></td>
+            <td width="20"> </td>
+            <td width="100" align="right"><?=$this->money($row['amount'],'')?></td>
         </tr>
     <? } ?>
 </table>

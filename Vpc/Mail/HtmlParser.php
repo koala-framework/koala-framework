@@ -2,12 +2,14 @@
 class Vpc_Mail_HtmlParser
 {
     //aktueller zustand von parser währen des parsens
-    protected $_parser;
-    protected $_stack;
-    protected $_ret;
+    private $_parser;
+    private $_stack;
+    private $_ret;
 
     //einstellungen für parser
-    protected $_styles;
+    private $_styles;
+    
+    private $_noCloseTags = array('br', 'img', 'hr');
 
 
     public function __construct(array $styles)
@@ -23,7 +25,9 @@ class Vpc_Mail_HtmlParser
         foreach (array_reverse($stackItem['appendedTags']) as $t) {
             $this->_ret .= "</$t>";
         }
-        $this->_ret .= "</$stackItem[tag]>";
+        if (!in_array($stackItem['tag'], $this->_noCloseTags)) {
+            $this->_ret .= "</$stackItem[tag]>";
+        }
     }
 
     protected function startElement($parser, $tag, $attributes)
@@ -63,6 +67,9 @@ class Vpc_Mail_HtmlParser
         foreach ($attributes as $n=>$v) {
             $n= strtolower($n);
             $this->_ret .= " $n=\"$v\"";
+        }
+        if (in_array($tag, $this->_noCloseTags)) {
+            $this->_ret .= " /";
         }
         $this->_ret .= ">";
 

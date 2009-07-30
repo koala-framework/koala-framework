@@ -1,7 +1,20 @@
-<?= $this->order->firstname; ?> <?= $this->order->lastname; ?><br/>
-<?= $this->order->street; ?><br/>
-<?= $this->order->zip; ?> <?= $this->order->city; ?><br/>
-<?= $this->order->country; ?><br/>
-<br/>
-<?= $this->order->email; ?><br/>
-<?= $this->order->phone; ?>
+<table width="600" cellspacing="0" cellpadding="0">
+    <tr>
+        <td><?= $this->order->firstname; ?> <?= $this->order->lastname; ?></td>
+    </tr>
+    <tr>
+        <td><?= $this->order->street; ?></td>
+    </tr>
+    <tr>
+        <td><?= $this->order->zip; ?> <?= $this->order->city; ?></td>
+    </tr>
+    <tr>
+        <td><?= $this->order->country; ?><br/></td>
+    </tr>
+    <tr>
+        <td><?= $this->order->email; ?></td>
+    </tr>
+    <tr>
+        <td><?= $this->order->phone; ?><br/></td>
+    </tr>
+</table>

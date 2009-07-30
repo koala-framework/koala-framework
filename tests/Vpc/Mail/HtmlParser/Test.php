@@ -56,5 +56,13 @@ class Vpc_Mail_HtmlParser_Test extends PHPUnit_Framework_TestCase
         $html = '<strong foo="bar">Lorem Ipsum</strong>';
         $html = $p->parse($html);
         $this->assertEquals('<b>Lorem Ipsum</b>', $html);
+
+        $html = 'Lorem<br />Ipsum';
+        $html = $p->parse($html);
+        $this->assertEquals('Lorem<br />Ipsum', $html);
+
+        $html = 'Lorem<br>Ipsum';
+        $html = $p->parse($html);
+        $this->assertEquals('Lorem<br />Ipsum', $html);
     }
 }
