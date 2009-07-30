@@ -75,7 +75,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
     {
         $this->sendConfirmMail($order);
 
-        //$order->status = 'ordered';
+        $order->status = 'ordered';
         $order->date = date('Y-m-d H:i:s');
         $order->save();
     }
