@@ -20,7 +20,6 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
             for (var i=0; i<imgs.length; ++i) {
                 var img = imgs[i];
                 img.src = img.src.replace(/&t=.+/, '')+'&t='+ (new Date()).getTime();
-                console.log(img.src);
             }
         }, 1000*60*3);\n";
         echo "</script>\n";
