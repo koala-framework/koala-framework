@@ -136,4 +136,54 @@ abstract class Vps_Util_Rrd_File
         system($cmd, $ret);
         if ($ret != 0) throw new Vps_Exception("Command failed");
     }
+
+    public function getAverageValues($fields, $start, $end)
+    {
+        if (!file_exists('stats.rrd')) {
+            $ret = array();
+            foreach ($fields as $f) {
+                $ret[$f] = 0;
+            }
+        }
+        $cmd = "rrdtool fetch stats.rrd AVERAGE --start $start --end $end 2>&1";
+        exec($cmd, $rows);
+
+        foreach ($fields as $f) {
+            $sum[$f] = 0;
+            $cnt[$f] = 0;
+        }
+
+        foreach ($rows as $k=>$r) {
+            preg_match_all('#[^ ]+#', $r, $m);
+            $r = $m[0];
+            if ($k == 0) {
+                $fileFields = $r;
+            } else if ($k == 1) {
+                //leerzeile
+            } else {
+                if (count($fileFields)+1 != count($r)) {
+                    throw new Vps_Exception("invalid row?!");
+                }
+                $time = array_shift($r);
+                $time = (int)substr($time, 0, -1);
+                foreach ($fields as $f) {
+                    $v = $r[array_search(Vps_Util_Rrd_Field::escapeField($f), $fileFields)];
+                    if (preg_match('#^([0-9]\\.[0-9]+)e([+-])([0-9]{2})$#', $v, $m)) {
+                        $v = (float)$m[1] * ($m[2]=='-' ? -1 : 1) * pow(10, (int)$m[3]);
+                        $sum[$f] += $v;
+                        $cnt[$f]++;
+                    }
+                }
+            }
+        }
+        $ret = array();
+        foreach ($fields as $f) {
+            if ($cnt[$f]) {
+                $ret[$f] = $sum[$f] / $cnt[$f];
+            } else {
+                $ret[$f] = 0;
+            }
+        }
+        return $ret;
+    }
 }
