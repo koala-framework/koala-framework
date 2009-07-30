@@ -74,9 +74,25 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     public static function getChildComponentClasses($class, $select = array())
     {
         if (is_string($select)) {
-            $select = array('generator' => $select);
-        }
-        if (is_array($select)) {
+            $g = Vpc_Abstract::getSetting($class, 'generators');
+            $ret = $g[$select]['component'];
+            if (!is_array($ret)) $ret = array($ret);
+            foreach ($ret as $k=>$i) {
+                if (!$i) unset($ret[$k]);
+            }
+            return $ret;
+        } else if (!$select) {
+            foreach (Vpc_Abstract::getSetting($class, 'generators') as $g) {
+                if (is_array($g['component'])) {
+                    foreach ($g['component'] as $c) {
+                        if ($c) $ret[] = $c;
+                    }
+                } else if ($g['component']) {
+                    $ret[] = $g['component'];
+                }
+            }
+            return array_unique($ret);
+        } else if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
         $ret = array();
