@@ -12,8 +12,23 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         $this->_rrds = array_reverse($this->_rrds);
     }
 
+    private function _printReloadJs()
+    {
+        echo "<script type=\"text/javascript\">\n";
+        echo "setInterval(function() {
+            var imgs = document.getElementsByTagName('img');
+            for (var i=0; i<imgs.length; ++i) {
+                var img = imgs[i];
+                img.src = img.src.replace(/&t=.+/, '')+'&t='+ (new Date()).getTime();
+                console.log(img.src);
+            }
+        }, 1000*60*3);\n";
+        echo "</script>\n";
+    }
+
     public function indexAction()
     {
+        $this->_printReloadJs();
         echo "<a href=\"/admin/component/benchmark/values\">current values</a><br />";
         $start = $this->_getParam('start');
         $startDates = array(
@@ -47,6 +62,7 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
 
     public function detailAction()
     {
+        $this->_printReloadJs();
         $rrd = $this->_getParam('rrd');
         $name = $this->_getParam('name');
         echo "<a href=\"/admin/component/benchmark\">overview</a><br /><br />";
