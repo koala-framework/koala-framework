@@ -59,7 +59,9 @@ abstract class Vps_Update_Action_Rrd_Abstract extends Vps_Update_Action_Abstract
         file_put_contents($file, $c);
         $this->_systemCheckRet("rrdtool restore $file {$this->file}.new");
         if ($this->backup) {
-            copy($this->file, $this->file.'-'.date('Y-m-DH:i:s'));
+            $backupDir = '../backup/';
+            if (!file_exists($backupDir)) mkdir($backupDir);
+            copy($this->file, $this->file.'-'.date('Y-m-d_H:i:s_').rand(1000,9999);
         }
         rename($this->file.'.new', $this->file);
     }
