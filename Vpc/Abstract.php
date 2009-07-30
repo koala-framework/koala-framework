@@ -82,6 +82,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             }
             return $ret;
         } else if (!$select) {
+            $ret = array();
             foreach (Vpc_Abstract::getSetting($class, 'generators') as $g) {
                 if (is_array($g['component'])) {
                     foreach ($g['component'] as $c) {
