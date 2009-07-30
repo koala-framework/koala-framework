@@ -21,8 +21,7 @@
     <? foreach ($this->sumRows as $row) { ?>
         <tr>
             <td align="right"><?=$row['text']?></td>
-            <td width="20"> </td>
-            <td width="100" align="right"><?=$this->money($row['amount'],'')?></td>
+            <td width="120" align="right"><?=$this->money($row['amount'],'')?></td>
         </tr>
     <? } ?>
 </table>
