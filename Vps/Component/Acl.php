@@ -119,8 +119,8 @@ class Vps_Component_Acl
                     }
                 }
             }
-            $component = $component->parent;
             if ($component && $component->isPage) break;
+            $component = $component->parent;
         }
         if (!$allowed) {
             $rules = $this->_getRules('Tag', null, $role);
