@@ -11,6 +11,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
     public static function getHelpOptions()
     {
         $ret = Vps_Controller_Action_Cli_TagController::getHelpOptions();
+        $ret[] = array('param' => 'skip-copy-to-test');
         $ret[] = array('param' => 'skip-test');
         $ret[] = array('param' => 'skip-prod');
         $ret[] = array('param' => 'skip-check');
@@ -75,7 +76,12 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $this->_systemSshVps("tag-checkout web-switch --version=$webVersion", $testConfig);
 
         echo "\n\n*** [06/13] prod daten auf test uebernehmen\n";
-        $this->_systemSshVps("import", $testConfig);
+        $skipCopyToTest = ($this->_getParam('skip-copy-to-test') || $this->_getParam('skip-copy-to-test'));
+        if ($skipCopyToTest) {
+            echo "(uebersprungen)\n";
+        } else {
+            $this->_systemSshVps("import", $testConfig);
+        }
 
         echo "\n\n*** [07/13] test: unit-tests laufen lassen\n";
         $skipTest = ($this->_getParam('skip-test') || $this->_getParam('skip-tests'));
