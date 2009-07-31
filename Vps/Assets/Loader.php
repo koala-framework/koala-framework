@@ -49,7 +49,7 @@ class Vps_Assets_Loader
                     $file = substr($file, 0, strpos($file, '?'));
                 }
                 if (!preg_match('#^all/([a-z0-9]+)/(([a-z0-9_]+)/)?([a-z]+)/([a-z0-9_:]+)\\.(printcss|js|css)$#i', $file, $m)) {
-                    throw new Vps_Exception("Invalid Url $file");
+                    throw new Vps_Exception_NotFound("Invalid Url '$file'");
                 }
                 $section = $m[1];
                 $rootComponent = $m[3];
