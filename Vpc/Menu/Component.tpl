@@ -14,5 +14,6 @@
         <? } ?>
     </li>
     <?php } ?>
+    <div class="clear"></div>
 </ul>
 <? } ?>
