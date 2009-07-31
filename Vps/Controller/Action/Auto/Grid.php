@@ -837,6 +837,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             throw new Vps_Exception('Wrong downloadkey submitted');
         }
 
+        Vps_Util_TempCleaner::clean();
+
         $file = array(
             'contents' => file_get_contents('application/temp/'.$this->_getParam('downloadkey').'.csv'),
             'mimeType' => 'text/comma-separated-values',
@@ -951,6 +953,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (!file_exists('application/temp/'.$this->_getParam('downloadkey').'.xls')) {
             throw new Vps_Exception('Wrong downloadkey submitted');
         }
+
+        Vps_Util_TempCleaner::clean();
 
         $file = array(
             'contents' => file_get_contents('application/temp/'.$this->_getParam('downloadkey').'.xls'),
