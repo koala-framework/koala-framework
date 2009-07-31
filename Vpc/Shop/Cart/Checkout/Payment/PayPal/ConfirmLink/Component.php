@@ -31,7 +31,7 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Vpc_Ab
             'currency_code' => 'EUR',
             'button_subtype' => 'products',
             'no_note' => '1',
-            'no_shipping' => '2',
+            'no_shipping' => '1',
             'rm' => '1',
             'return' => $domain.$this->getData()->parent->getChildComponent('_confirm')->url,
             'cancel_return' => $domain.$this->getData()->parent->parent->parent->url,
