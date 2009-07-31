@@ -352,16 +352,20 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 throw new Vps_Exception('You must set uniqueColumns for this model if you use replace');
             }
             foreach ($data as $k => $v) {
-                $s = $this->select();
-                foreach ($this->_uniqueColumns as $c) {
-                    if (is_null($v[$c])) {
-                        $s->whereNull($c);
-                    } else {
-                        $s->whereEquals($c, $v[$c]);
+                if (isset($options['replace']) && $options['replace']) {
+                    $s = $this->select();
+                    foreach ($this->_uniqueColumns as $c) {
+                        if (is_null($v[$c])) {
+                            $s->whereNull($c);
+                        } else {
+                            $s->whereEquals($c, $v[$c]);
+                        }
                     }
-                }
-                $row = $this->getRow($s);
-                if (!$row) {
+                    $row = $this->getRow($s);
+                    if (!$row) {
+                        $row = $this->createRow();
+                    }
+                } else {
                     $row = $this->createRow();
                 }
                 foreach ($v as $k=>$i) {
