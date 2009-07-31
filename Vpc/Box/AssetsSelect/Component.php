@@ -15,4 +15,9 @@ class Vpc_Box_AssetsSelect_Component extends Vpc_Box_Assets_Component
         if (!$ret) $ret = 'web';
         return $ret;
     }
+    
+    public function hasContent()
+    {
+        return (bool)$this->getRow()->section;
+    }
 }
