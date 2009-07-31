@@ -102,69 +102,12 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $sourceModel = $this->getSourceModel();
         if (!$cacheTimestamp) {
             // kein cache vorhanden, alle kopieren
-            $cacheTimestamp = $this->_syncRows($sourceModel->getRows());
+            $this->getProxyModel()->copyDataFromModel($sourceModel);
         } else {
             $select = $sourceModel->select()->where(
                 new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
             );
-            $rows = $sourceModel->getRows($select);
-            $cacheTimestamp = $this->_syncRows($rows, $cacheTimestamp);
-        }
-    }
-
-    /**
-     * @return mixed $updatedToTime The updated cache time
-     */
-    private function _syncRows($data, $cacheTime = null)
-    {
-        if (!is_array($data)) $data = $data->toArray();
-        $db = Vps_Registry::get('db');
-        $primaryKey = $this->getSourceModel()->getPrimaryKey();
-        $proxyModel = $this->getProxyModel();
-        $insDatas = array();
-        foreach ($data as $row) {
-            if (!($proxyModel instanceof Vps_Model_Db)) {
-                $r = $proxyModel->getRow($row[$primaryKey]);
-                if (!$r) $r = $proxyModel->createRow();
-                foreach ($row as $column => $value) {
-                    $r->$column = $value;
-                }
-                $r->save();
-            } else {
-                $insColumns = $insData = array();
-                foreach ($row as $column => $value) {
-                    $insColumns[] = $proxyModel->transformColumnName($column);
-                    $insData[] = $db->quote($value);
-                }
-                $insDatas[] = '('.implode(',', $insData).')';
-
-                if (count($insDatas) >= 100) {
-                    self::_directMultiInsert($proxyModel->getTableName(), $insColumns, $insDatas);
-                    $insDatas = array();
-                }
-            }
-
-            if (!$cacheTime || $row[$this->_syncTimeField] > $cacheTime) {
-                $cacheTime = $row[$this->_syncTimeField];
-            }
-        }
-
-        if (count($insDatas)) {
-            self::_directMultiInsert($proxyModel->getTableName(), $insColumns, $insDatas);
-        }
-
-        if (!$cacheTime) $cacheTime = date('Y-m-d H:i:s', time()-1);
-        return $cacheTime;
-    }
-
-    private static function _directMultiInsert($table, $columns, $insDatas)
-    {
-        $db = Vps_Registry::get('db');
-        $sql = "REPLACE INTO $table (`".implode('`,`', $columns)."`) VALUES ".implode(',', $insDatas);
-        if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $db->getConnection()->exec($sql);
-        } else {
-            $db->query($sql);
+            $this->getProxyModel()->copyDataFromModel($sourceModel, $select);
         }
     }
 
