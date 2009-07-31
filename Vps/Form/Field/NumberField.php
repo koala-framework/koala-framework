@@ -31,7 +31,11 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
     {
         $fieldName = $this->getFieldName();
         if (!isset($postData[$fieldName])) $postData[$fieldName] = null;
-        if ($postData[$fieldName] == '') $postData[$fieldName] = null;
+        if ($postData[$fieldName] == ''
+            && !(is_int($postData[$fieldName]) && $postData[$fieldName] === 0)
+        ) {
+            $postData[$fieldName] = null;
+        }
         return $postData[$fieldName];
     }
 
