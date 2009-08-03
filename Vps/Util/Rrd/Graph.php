@@ -154,13 +154,17 @@ class Vps_Util_Rrd_Graph
                     $cmd .= "CDEF:line{$i}=";
                     foreach ($settings['addFields'] as $f) {
                         $j++;
-                        if ($j > 1) $cmd .= ",";
+                        if ($j > 1) {
+                            $cmd .= ",";
+                        } else {
+                            $cmd .= "line{$i}x".($j-1).",";
+                        }
                         if (isset($f['defaultValue'])) {
-			    $nextField = "line{$i}x{$j},UN,0,line{$i}x{$j},IF";
+                            $nextField = "line{$i}x{$j},UN,0,line{$i}x{$j},IF";
                         } else {
                             $nextField = "line{$i}x{$j}";
                         }
-                        $cmd .= "line{$i}x".($j-1).",$nextField,+";
+                        $cmd .= "$nextField,+";
                     }
                     $cmd .= " ";
                 } else {
