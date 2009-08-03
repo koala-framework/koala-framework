@@ -107,12 +107,11 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $urls = array();
         $urls[] = 'http://recombinomics.com/feed.xml';
         $urls[] = 'http://rss.orf.at/news.xml';
-        $urls[] = 'http://www.csmonitor.com/rss/top.rss';
         $urls[] = 'http://planetkde.org/rss20.xml';
         $urls[] = 'http://aseigo.blogspot.com/feeds/posts/default';
         $urls[] = 'http://aseigo.blogspot.com/feeds/posts/default?alt=rss';
         foreach ($urls as $u) {
-//             echo "\n".$u."\n";
+            //echo "\n".$u."\n";
             $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
                 ->getRow($u);
             $this->assertNotEquals('', $feed->title);
