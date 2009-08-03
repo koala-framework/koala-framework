@@ -156,7 +156,7 @@ class Vps_Util_Rrd_Graph
                         $j++;
                         if ($j > 1) $cmd .= ",";
                         if (isset($f['defaultValue'])) {
-                            $nextField = "line{$i}x{$j},line{$i}x{$j},0,IF";
+			    $nextField = "line{$i}x{$j},UN,0,line{$i}x{$j},IF";
                         } else {
                             $nextField = "line{$i}x{$j}";
                         }
