@@ -15,6 +15,7 @@ class Vps_Model_MirrorCache_ModelDelayTest extends PHPUnit_Framework_TestCase
         $this->_sourceModel = new Vps_Model_FnF(array(
             'uniqueIdentifier' => 'unique',
             'columns' => array('id', 'firstname', 'lastname', 'timefield'),
+            'uniqueColumns' => array('id'),
             'data' => array(
                 array('id' => 1, 'firstname' => 'Max', 'timefield' => '2008-06-09 00:00:00'),
                 array('id' => 2, 'firstname' => 'Susi', 'timefield' => '2008-07-09 10:00:00'),
@@ -24,6 +25,7 @@ class Vps_Model_MirrorCache_ModelDelayTest extends PHPUnit_Framework_TestCase
         $this->_mirrorModel = new Vps_Model_FnF(array(
             'uniqueIdentifier' => 'unique',
             'columns' => array('id', 'firstname', 'lastname', 'timefield'),
+            'uniqueColumns' => array('id'),
             'data' => array(
                 array('id' => 1, 'firstname' => 'Max', 'timefield' => '2008-06-09 00:00:00'),
                 array('id' => 2, 'firstname' => 'Susi', 'timefield' => '2008-07-09 10:00:00')
