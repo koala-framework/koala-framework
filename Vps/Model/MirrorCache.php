@@ -102,12 +102,12 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $sourceModel = $this->getSourceModel();
         if (!$cacheTimestamp) {
             // kein cache vorhanden, alle kopieren
-            $this->getProxyModel()->copyDataFromModel($sourceModel);
+            $this->getProxyModel()->copyDataFromModel($sourceModel, null, array('replace'=>true));
         } else {
             $select = $sourceModel->select()->where(
                 new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
             );
-            $this->getProxyModel()->copyDataFromModel($sourceModel, $select);
+            $this->getProxyModel()->copyDataFromModel($sourceModel, $select, array('replace'=>true));
         }
     }
 

@@ -687,6 +687,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
             $systemData = $this->_getSystemData();
             $filename = tempnam('/tmp', 'modelimport');
+
+            //TODO: diesen sed aufruf beim import machen, abhängig von $options[replace]
             $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false --no-create-info=true ".$wherePart
                 ."$systemData[mysqlOptions] $systemData[tableName] | sed -e \"s|INSERT INTO|REPLACE INTO|\" | gzip -c > $filename";
             exec($cmd, $output, $ret);
