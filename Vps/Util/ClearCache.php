@@ -73,18 +73,31 @@ class Vps_Util_ClearCache
             }
         }
         $this->_clearCache($types, $output);
+        echo "\n";
         if (in_array('component', $types) || in_array('cache_component_meta', $types)) {
             if ($output) echo "Refresh static cache...";
             try {
                 Vps_Component_Cache::refreshStaticCache();
-                if ($output) echo "done\n";
+                if ($output) system('echo -e " [\e[00;32mOK\e[00m"]');
             } catch (Exception $e) {
-                if ($output) {
-                    echo "errors!!\n";
+                if ($output) system('echo -e " [\e[01;31mERROR\e[00m"]');
+            }
+        }
+
+        if ((in_array('cache_users', $types) || in_array('model', $types)) && Vps_Registry::get('db')) {
+            $tables = Vps_Registry::get('db')->fetchCol('SHOW TABLES');
+            if (in_array('vps_users', $tables) && in_array('cache_users', $tables)) {
+                if ($output) echo "Synchronize users......";
+                try {
+                    Vps_Registry::get('userModel')->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
+                    if ($output) system('echo -e " [\e[00;32mOK\e[00m"]');
+                } catch (Exception $e) {
+                    if ($output) system('echo -e " [\e[01;31mERROR\e[00m"]');
                 }
             }
         }
     }
+
     protected function _clearCache(array $types, $output)
     {
         if (in_array('memcache', $types)) {
@@ -93,14 +106,14 @@ class Vps_Util_ClearCache
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));
             $cache->clean();
-            if ($output) echo "cleared:     memcache...\n";
+            if ($output) echo "cleared:     memcache\n";
         }
         foreach ($this->getDbCacheTables() as $t) {
             if (in_array($t, $types) ||
                 (in_array('component', $types) && substr($t, 0, 15) == 'cache_component')
             ) {
                 Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
-                if ($output) echo "cleared db:  $t...\n";
+                if ($output) echo "cleared db:  $t\n";
             }
         }
         foreach ($this->_getCacheDirs() as $d) {
@@ -110,7 +123,7 @@ class Vps_Util_ClearCache
                 } else if (is_dir($d)) {
                     $this->_removeDirContents($d);
                 }
-                if ($output) echo "cleared dir: $d cache...\n";
+                if ($output) echo "cleared dir: $d cache\n";
             }
         }
     }

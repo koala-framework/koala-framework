@@ -290,7 +290,7 @@ class Vps_User_Model extends Vps_Model_Proxy
         return $role;
     }
 
-    public function synchronize($overrideMaxSyncDelay = false)
+    public function synchronize($overrideMaxSyncDelay = Vps_Model_MirrorCache::SYNC_AFTER_DELAY)
     {
         $this->_proxyModel->synchronize($overrideMaxSyncDelay);
     }
