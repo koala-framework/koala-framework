@@ -78,9 +78,9 @@ class Vps_Util_ClearCache
             if ($output) echo "Refresh static cache...";
             try {
                 Vps_Component_Cache::refreshStaticCache();
-                if ($output) system('echo -e " [\e[00;32mOK\e[00m"]');
+                if ($output) echo " [\033[00;32mOK\033[00m]\n";
             } catch (Exception $e) {
-                if ($output) system('echo -e " [\e[01;31mERROR\e[00m"]');
+                if ($output) echo " [\033[01;31mERROR\033[00m]\n";
             }
         }
 
@@ -90,9 +90,9 @@ class Vps_Util_ClearCache
                 if ($output) echo "Synchronize users......";
                 try {
                     Vps_Registry::get('userModel')->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
-                    if ($output) system('echo -e " [\e[00;32mOK\e[00m"]');
+                    if ($output) echo " [\033[00;32mOK\033[00m]\n";
                 } catch (Exception $e) {
-                    if ($output) system('echo -e " [\e[01;31mERROR\e[00m"]');
+                    if ($output) echo " [\033[01;31mERROR\033[00m]\n";
                 }
             }
         }
