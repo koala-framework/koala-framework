@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group skipGoOnline
  * @group slow
  * @group User
  * @group UserServiceConn
@@ -8,8 +9,8 @@ class Vps_User_ServiceConnTest extends PHPUnit_Framework_TestCase
 {
     public function testBruteServiceConnection()
     {
-        $debugOutput = false;
-        $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 l�uft der server hei�
+        $debugOutput = true;
+        $numProcesses = 30; //mind. 10 damit der test sinn macht, bei >50 l�uft der server hei�
 
         $cmd = "php bootstrap.php test forward --controller=vps_user_service-conn";
         $descriptorspec = array(

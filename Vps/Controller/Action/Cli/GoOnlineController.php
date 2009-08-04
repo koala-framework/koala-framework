@@ -98,6 +98,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             $arguments = array();
             $arguments['colors'] = true;
             $arguments['stopOnFailure'] = true;
+            $arguments['excludeGroups'] = array('skipGoOnline');
             $result = $runner->doRun($suite, $arguments);
             if (!$result->wasSuccessful()) {
                 $this->_systemSshVps("tag-checkout web-switch --version=trunk", $testConfig);

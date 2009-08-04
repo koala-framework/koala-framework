@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group skipGoOnline
  * @group slow
  * @group reallySlow
  * @group User
