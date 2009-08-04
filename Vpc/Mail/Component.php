@@ -17,6 +17,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $ret['componentName'] = 'Mail';
 
         $ret['mailHtmlStyles'] = array();
+        $ret['bcc'] = false;
         return $ret;
     }
 
@@ -65,6 +66,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
             foreach ($this->_images as $image) {
                 $mail->addAttachment($image);
             }
+        }
+
+        if ($this->_getSetting('bcc')) {
+            $mail->addBcc($this->_getSetting('bcc'));
         }
 
         //TODO: attachments
