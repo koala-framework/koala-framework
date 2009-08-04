@@ -32,7 +32,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         return $ret;
     }
 
-    private function _getOptions()
+    protected function _getOptions()
     {
         $ret = array();
         if ($this->_getSetting('fullSizeDownloadable')) {
