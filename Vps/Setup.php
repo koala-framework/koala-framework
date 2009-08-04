@@ -225,9 +225,24 @@ function is_instance_of($sub, $super)
 class Vps_Setup
 {
     public static $configClass;
+
     public static function setUp($configClass = 'Vps_Config_Web')
     {
+        if (file_exists(VPS_PATH.'/include_path')) {
+            $zendPath = trim(file_get_contents(VPS_PATH.'/include_path'));
+            $zendPath = str_replace(
+                '%version%',
+                file_get_contents(VPS_PATH.'/include_path_version'),
+                $zendPath);
+        } else {
+            die ('zend not found');
+        }
+        $includePath  = get_include_path();
+        $includePath .= PATH_SEPARATOR . $zendPath;
+        set_include_path($includePath);
+
         require_once 'Vps/Loader.php';
+        require_once 'Zend/Loader/Autoloader.php';
         if (isset($_SERVER['REQUEST_URI']) &&
             substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/json-progress-status' &&
             !empty($_REQUEST['progressNum'])
@@ -263,7 +278,9 @@ class Vps_Setup
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enableLog();
         }
+
         Vps_Loader::registerAutoload();
+
 
         ini_set('memory_limit', '128M');
         error_reporting(E_ALL);
