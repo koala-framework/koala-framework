@@ -17,7 +17,10 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
         $ret['cssClass'] = 'webForm webStandard';
         $ret['placeholder']['backToCart'] = trlVps('Back to cart');
 
-        $ret['shipping'] = 4.5;
+        $ret['shipping'] = 0;
+
+        $ret['flags']['hasResources'] = true;
+
         return $ret;
     }
 
@@ -37,7 +40,7 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
 
     public function getShipping($order)
     {
-        $this->_getSetting('shipping');
+        return $this->_getSetting('shipping');
     }
 
     public function getTotal($order)
