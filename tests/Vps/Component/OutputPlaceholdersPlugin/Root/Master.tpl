@@ -1,0 +1,1 @@
+x<?=$this->component($this->component)?>y

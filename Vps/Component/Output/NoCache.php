@@ -3,7 +3,20 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
 {
     protected function _render($componentId, $componentClass, $masterTemplate = false, array $plugins = array())
     {
-        return $this->_processComponent($componentId, $componentClass, $masterTemplate, $plugins);
+        $ret = $this->_processComponent($componentId, $componentClass, $masterTemplate, $plugins);
+        $ret = $this->_processAfterPlugins($ret);
+        return $ret;
+    }
+
+    protected final function _processAfterPlugins($ret)
+    {
+        while (preg_match('#^(.*){afterPlugin ([^ ]+) ([^ ]+)}(.*){/afterPlugin}(.*)$#ms', $ret, $m)) {
+            $plugin = new $m[2]($m[3]);
+            $output = $m[4];
+            $output= $this->_executeOutputPlugin($plugin, $output);
+            $ret = $m[1] . $output . $m[5];
+        }
+        return $ret;
     }
 
     protected function _processComponent($componentId, $componentClass, $masterTemplate = false, array $plugins = array())
@@ -29,8 +42,7 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         $ret = $this->_parseDynamic($ret, $componentClass);
         $ret = $this->_parseTemplate($ret);
         foreach ($afterPlugins as $plugin) {
-            $ret = $this->_executeOutputPlugin($plugin, $ret);
-            $ret = $this->_parseTemplate($ret);
+            $ret = "{afterPlugin ".get_class($plugin)." $componentId}".$ret."{/afterPlugin}";
         }
         return $ret;
     }

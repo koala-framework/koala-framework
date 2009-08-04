@@ -27,7 +27,10 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
     protected function _render($componentId, $componentClass, $masterTemplate = false, array $plugins = array())
     {
         $ret = $this->_processComponent($componentId, $componentClass, $masterTemplate, $plugins);
-        return $this->_processComponent2($ret);
+        $ret = $this->_processComponent2($ret);
+        $ret = $this->_processAfterPlugins($ret);
+        return $ret;
+
     }
 
     protected function _processComponent2($ret)
