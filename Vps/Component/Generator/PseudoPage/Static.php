@@ -31,7 +31,7 @@ class Vps_Component_Generator_PseudoPage_Static extends Vps_Component_Generator_
         if (!$ret) {
             $ret = $componentKey;
         }
-        return Vps_Filter::get($ret, 'Ascii');
+        return Vps_Filter::filterStatic($ret, 'Ascii');
     }
 
     protected function _formatConfig($parentData, $componentKey)
