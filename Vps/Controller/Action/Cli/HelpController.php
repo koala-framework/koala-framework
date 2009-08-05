@@ -72,12 +72,9 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
             $class = ucwords($class);
             $class = str_replace(' ', '_', $class);
             $file = substr($file, 0, -(strlen('Controller.php')));
-            $cmd = strtolower(Zend_Filter::get($file, 'Word_CamelCaseToDash'));
+            $cmd = strtolower(Zend_Filter::filterStatic($file, 'Word_CamelCaseToDash'));
             $ret[$cmd] = $class;
         }
         return $ret;
     }
 }
-//php bootstrap.php trl-parse --type=all
-//php bootstrap.php trl-parse --type=web
-//php bootstrap.php trl-parse --type=vps
