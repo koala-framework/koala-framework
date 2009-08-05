@@ -17,24 +17,15 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
     public function itemSearch(array $options)
     {
         Vps_Benchmark::countBt('Service Amazon request', 'itemSearch'.print_r($options, true));
-
-        $client = $this->getRestClient();
-        $client->setUri($this->_baseUri);
-
         $defaultOptions = array('ResponseGroup' => 'Small');
         $options = $this->_prepareOptions('ItemSearch', $options, $defaultOptions);
-        $client->getHttpClient()->resetParameters();
-        $response = $client->restGet('/onca/xml', $options);
+        $this->_rest->getHttpClient()->resetParameters();
+        $response = $this->_rest->restGet('/onca/xml', $options);
 
         if ($response->isError()) {
-            /**
-             * @see Zend_Service_Exception
-             */
-            require_once 'Zend/Service/Exception.php';
             throw new Zend_Service_Exception('An error occurred sending request. Status code: '
                                            . $response->getStatus());
         }
-
         $dom = new DOMDocument();
         $dom->loadXML($response->getBody());
         self::_checkErrors($dom);
@@ -56,23 +47,19 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
     {
         Vps_Benchmark::count('Service Amazon request', 'itemLookup '.$asin);
 
-        $client = $this->getRestClient();
-        $client->setUri($this->_baseUri);
-        $client->getHttpClient()->resetParameters();
-
-        $defaultOptions = array('ResponseGroup' => 'Small');
+        $defaultOptions = array('IdType' => 'ASIN', 'ResponseGroup' => 'Small');
         $options['ItemId'] = (string) $asin;
         $options = $this->_prepareOptions('ItemLookup', $options, $defaultOptions);
-        $response = $client->restGet('/onca/xml', $options);
+        $this->_rest->getHttpClient()->resetParameters();
+        $response = $this->_rest->restGet('/onca/xml', $options);
 
         if ($response->isError()) {
             /**
              * @see Zend_Service_Exception
              */
             require_once 'Zend/Service/Exception.php';
-            throw new Zend_Service_Exception(
-                'An error occurred sending request. Status code: ' . $response->getStatus()
-            );
+            throw new Zend_Service_Exception('An error occurred sending request. Status code: '
+                                           . $response->getStatus());
         }
 
         $dom = new DOMDocument();
@@ -102,14 +89,11 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
     {
         Vps_Benchmark::count('Service Amazon request', 'browseNodeLookup');
 
-        $client = $this->getRestClient();
-        $client->setUri($this->_baseUri);
-        $client->getHttpClient()->resetParameters();
-
         $defaultOptions = array('IdType' => 'ASIN', 'ResponseGroup' => 'BrowseNodeInfo');
         $options['BrowseNodeId'] = (string) $nodeId;
         $options = $this->_prepareOptions('BrowseNodeLookup', $options, $defaultOptions);
-        $response = $client->restGet('/onca/xml', $options);
+        $this->_rest->getHttpClient()->resetParameters();
+        $response = $this->_rest->restGet('/onca/xml', $options);
 
         if ($response->isError()) {
             /**

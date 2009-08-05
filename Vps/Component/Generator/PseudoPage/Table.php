@@ -81,7 +81,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         if (!$this->_settings['uniqueFilename']) {
             $data['filename'] .= $this->_getIdFromRow($row).'_';
         }
-        $data['filename'] .= Vps_Filter::filterStatic($this->_getFilenameFromRow($row), 'Ascii');
+        $data['filename'] .= Vps_Filter::get($this->_getFilenameFromRow($row), 'Ascii');
         if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
             $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
         }

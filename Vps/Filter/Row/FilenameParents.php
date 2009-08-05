@@ -18,7 +18,7 @@ class Vps_Filter_Row_FilenameParents extends Vps_Filter_Row_Abstract
             if ($ret != '') {
                 $ret = $this->_separator . $ret;
             }
-            $ret = Vps_Filter::filterStatic($row->__toString(), $this->_filter)
+            $ret = Vps_Filter::get($row->__toString(), $this->_filter)
                 . $ret;
             if ($row instanceof Vps_Model_Row_Interface) {
                 $row = $row->getParentRow($this->_parentRule);
