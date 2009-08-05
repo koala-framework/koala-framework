@@ -11,10 +11,21 @@ class Vpc_Mail_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vpc_Paragraphs_Component'
         );
+        $ret['generators']['redirect'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'component' => 'Vpc_Mail_Redirect_Component',
+            'name' => 'r'
+        );
+
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/PreviewWindow.js';
         $ret['plugins']['placeholders'] = 'Vpc_Mail_PlaceholdersPlugin';
         $ret['modelname'] = 'Vpc_Mail_Model';
         $ret['componentName'] = 'Mail';
+
+        // set shorter source keys for recepient models
+        // key = sourceShortcut, value = modelClass
+        // e.g. array('user' => 'Vps_User_Model')
+        $ret['recepientSources'] = array();
 
         $ret['mailHtmlStyles'] = array();
         $ret['bcc'] = false;
@@ -95,7 +106,8 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $output->setRecipient($recipient);
         $output->setViewClass($forMail ? 'Vps_View_ComponentMail' : 'Vps_View_Component');
         $ret = $output->render($this->getData());
-        $ret = $this->processPlaceholder($ret, $recipient);
+        $ret = $this->_processPlaceholder($ret, $recipient);
+        $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
         if ($this->_getSetting('mailHtmlStyles')) {
             $p = new Vpc_Mail_HtmlParser($this->_getSetting('mailHtmlStyles'));
             $ret = $p->parse($ret);
@@ -115,16 +127,19 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $output->setRecipient($recipient);
         $ret = $output->render($this->getData());
         $ret = str_replace('&nbsp;', ' ', $ret);
-        return $this->processPlaceholder($ret, $recipient);
+        $ret = $this->_processPlaceholder($ret, $recipient);
+        $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
+        return $ret;
     }
 
     public function getSubject(Vpc_Mail_Recipient_Interface $recipient = null)
     {
         $ret = $this->getRow()->subject;
-        return $this->processPlaceholder($ret, $recipient);
+        $ret = $this->_processPlaceholder($ret, $recipient);
+        return $ret;
     }
 
-    protected function processPlaceholder($ret, Vpc_Mail_Recipient_Interface $recipient = null)
+    protected function _processPlaceholder($ret, Vpc_Mail_Recipient_Interface $recipient = null)
     {
         $plugins = $this->_getSetting('plugins');
         $p = $plugins['placeholders'];
@@ -186,11 +201,6 @@ class Vpc_Mail_Component extends Vpc_Abstract
             }
         }
         return $ret;
-    }
-
-    public function getLinks()
-    {
-        throw new Vps_Exception('Not implemented yet.');
     }
 
     public function addImage(Zend_Mime_Part $image)

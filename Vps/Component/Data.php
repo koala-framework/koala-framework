@@ -51,7 +51,8 @@ class Vps_Component_Data
                     if ($page->filename) $filenames[] = $page->filename;
                 }
             } while ($page = $page->getParentPseudoPageOrRoot());
-            return '/'.implode('/', array_reverse($filenames));
+            $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+            return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse($filenames));
         } else if ($var == 'rel') {
             /*
             $childs = $this->getPage()->getRecursiveChildComponents(array(

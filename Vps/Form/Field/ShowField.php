@@ -15,8 +15,14 @@ class Vps_Form_Field_ShowField extends Vps_Form_Field_SimpleAbstract
         $ret = parent::getTemplateVars($values);
         //todo: escapen
         $ret['id'] = $name.$fieldNamePostfix;
-        if (!$this->getShowText()) $this->setShowText('&nbsp;');
-        $ret['html'] = $this->getShowText();
+        if ($this->getShowText()) {
+            throw new Vps_Exception("ShowField shows a field of a row, but no static text set by 'setShowText'. Use Vps_Form_Field_Panel instead.");
+        }
+
+        $ret['html'] = '&nbsp;';
+        if (isset($values[$name]) && $values[$name] != '') {
+            $ret['html'] = $values[$name];
+        }
         return $ret;
     }
 

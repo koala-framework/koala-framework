@@ -8,7 +8,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         $ret = parent::getSettings();
         $ret['generators']['mail'] = array(
             'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Mail_Component'
+            'component' => 'Vpc_Newsletter_Detail_Mail_Component'
         );
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/MailingPanel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/RecipientsPanel.js';
@@ -23,6 +23,15 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
             throw new Vps_ClientException(trlVps('Can only add users to a paused newsletter'));
         }
+
+        // check if the necessary modelShortcut is set in 'mail' childComponent
+        $generators = $this->_getSetting('generators');
+        // this function checks if everything neccessary is set
+        Vpc_Mail_Redirect_Component::getRecepientModelShortcut(
+            $generators['mail']['component'],
+            get_class($recipient->getModel())
+        );
+
         $this->_toImport[] = array(
             'newsletter_id' => $newsletter->id,
             'recipient_model' => get_class($recipient->getModel()),
