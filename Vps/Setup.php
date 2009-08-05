@@ -468,7 +468,12 @@ class Vps_Setup
         $uri = substr($_SERVER['REDIRECT_URL'], 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
-        if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))) {
+        $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+
+        if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))
+            && (!$urlPrefix || substr($_SERVER['REDIRECT_URL'], 0, strlen($urlPrefix)) == $urlPrefix)
+        ) {
+
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
             Vps_Registry::get('trl')->setUseUserLanguage(false);

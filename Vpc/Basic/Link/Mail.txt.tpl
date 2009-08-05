@@ -1,0 +1,1 @@
+<?=$this->text?>: <?=$this->component($this->linkTag)?>

@@ -26,6 +26,20 @@ class Vpc_Basic_LinkTag_Mail_Data extends Vps_Component_Data
             if ($row->text && $row->subject) $ret .= '&';
             if ($row->text) $ret .= 'body='.$row->text;
             return $ret;
+        } else if ($var == 'url_mail_html') {
+            $row = $this->_getLinkRow();
+            if (!$row || !$row->mail) return '';
+            $ret = 'mailto:';
+
+            $ret .= $row->mail;
+            if ($row->text || $row->subject) $ret .= '?';
+            if ($row->subject) $ret .= 'subject='.$row->subject;
+            if ($row->text && $row->subject) $ret .= '&';
+            if ($row->text) $ret .= 'body='.$row->text;
+            return $ret;
+        } else if ($var == 'url_mail_txt') {
+            $row = $this->_getLinkRow();
+            return ((!$row || !$row->mail) ? '' : $row->mail);
         } else if ($var == 'rel') {
             return '';
         } else {
