@@ -215,6 +215,13 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $config['drop-font-tags'] = false;
         }
         if (class_exists('tidy') && $enableTidy) {
+
+            //woraround für tidy bug wo er zwei class-attribute in einen
+            //tag schreibt wenn eins davon leer ist
+            //siehe Vpc_Basic_Text_ModelContentTest::testTidyRemovesSomeText
+            //einfach leere klassen löschen
+            $html = preg_replace('#<(.[a-z]+) ([^>]*)class=""([^>]*)>#', '<\1 \2 \3>', $html);
+
             $tidy = new tidy;
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
             $tidy->parseString($html, $config, 'utf8');
