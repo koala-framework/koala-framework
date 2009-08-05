@@ -27,15 +27,13 @@ class Vpc_Newsletter_Detail_Form extends Vpc_Abstract_Form
      */
     public function getRow($parentRow = null)
     {
-        $id = $this->getId();
-        $pos = strpos($id, '_');
-        if ($pos) {
-            $id = (int)substr($id, $pos + 1);
-            $row = $this->_model->getRow($id);
+        $componentId = $this->getId();
+        if (preg_match('/_([0-9]+)$/', $componentId, $matches)) {
+            return $this->_model->getRow($matches[1]);
         } else {
-            $row = $this->_model->createRow();
-            $row->component_id = $id;
+            return $this->_model->createRow(array(
+                'component_id' => $componentId
+            ));
         }
-        return $row;
     }
 }

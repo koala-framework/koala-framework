@@ -15,7 +15,7 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
             'baseParams' => array(
                 'componentId' => $this->_getParam('componentId')
             ),
-            'width' => 500,
+            'width' => 700,
             'height' => 400
         );
         parent::preDispatch();

@@ -1,0 +1,1 @@
+<? /* wird nur in mails eingebunden */ ?>
