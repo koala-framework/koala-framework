@@ -17,12 +17,12 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         }
 
         $prefix = substr($this->_getParam('action'), 0, 4);
-        $isHttpRequest =
+        $isXmlHttpRequest =
             (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']== 'POST') ||
             isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
             $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
         if ($prefix == 'json' &&
-            ($isHttpRequest || $errors->exception instanceof Vps_Exception_Client)) {
+            ($isXmlHttpRequest || $errors->exception instanceof Vps_Exception_Client)) {
             $this->_forward('json-error');
         } else {
             throw $errors->exception; // wird von Vps_Debug::handleException behandelt
