@@ -2,6 +2,7 @@
 /**
  * @group skipGoOnline
  * @group slow
+ * @group reallySlow
  * @group User
  * @group UserServiceConn
  */
@@ -9,7 +10,7 @@ class Vps_User_ServiceConnTest extends PHPUnit_Framework_TestCase
 {
     public function testBruteServiceConnection()
     {
-        $debugOutput = true;
+        $debugOutput = false;
         $numProcesses = 30; //mind. 10 damit der test sinn macht, bei >50 l�uft der server hei�
 
         $cmd = "php bootstrap.php test forward --controller=vps_user_service-conn";
