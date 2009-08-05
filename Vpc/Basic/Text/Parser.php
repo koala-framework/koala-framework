@@ -6,8 +6,6 @@ class Vpc_Basic_Text_Parser
     protected $_stack;
     protected $_finalHTML;
     protected $_deleteContent;
-    protected $_strongTagAllowed = true;
-    protected $_emTagAllowed = true;
 
     //einstellungen für parser
     protected $_row;
@@ -40,20 +38,11 @@ class Vpc_Basic_Text_Parser
     {
         $tag = array_pop($this->_stack);
         if ($tag && !$this->_deleteContent) {
-            if (($tag == 'strong' || $tag == 'em') && !in_array($tag, $this->_stack)) {
-                $this->_finalHTML .= '</'.$tag.'>';
-                $this->_strongTagAllowed = true;
-                $this->_emTagAllowed = true;
-            } elseif ($tag != 'strong' && $tag != 'em') {
-                $this->_finalHTML .= '</'.$tag.'>';
-            }
-
+            $this->_finalHTML .= '</'.$tag.'>';
         }
         if ($element == "SCRIPT") {
             $this->_deleteContent--;
         }
-
-
     }
 
     protected function startElement($parser, $element, $attributes)
@@ -66,9 +55,8 @@ class Vpc_Basic_Text_Parser
                 $style = '';
             }
             if (preg_match('# *font-weight *: *bold *; *#', $style, $matches)){
-                 array_push($this->_stack, 'strong');
+                array_push($this->_stack, 'strong');
                 $this->_finalHTML .= '<strong>';
-                $this->_strongTagAllowed = false;
             } elseif (preg_match('# *font-style *: *italic *; *#', $style, $matches)){
                  array_push($this->_stack, 'em');
                  $this->_finalHTML .= '<em>';
@@ -143,16 +131,7 @@ class Vpc_Basic_Text_Parser
                 && !in_array(strtolower($element), array_keys($this->_tagsWhitelist))) {
                 //ignore this tag
                 array_push($this->_stack, false);
-            } else if ((!$this->_strongTagAllowed && $element == 'STRONG') ||
-                    (!$this->_emTagAllowed && $element == 'EM')) {
-                array_push($this->_stack, strtolower($element));
             } else {
-                if ($element == 'STRONG') {
-                    $this->_strongTagAllowed = false;
-                } elseif ($element == 'EM') {
-                    $this->_emTagAllowed = false;
-                }
-
                 $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
                     if (in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
@@ -212,7 +191,7 @@ class Vpc_Basic_Text_Parser
         $this->_tagsWhitelist = array(
             'p'=>array(), 'a'=>array('href'),
             'img'=>array('src'), 'br'=>array(), 'strong'=>array(), 'em'=>array(),
-            'u'=>array(), 'ul'=>array(), 'ol'=>array(), 'li'=>array()
+            'u'=>array(), 'strike'=>array(), 'ul'=>array(), 'ol'=>array(), 'li'=>array()
         );
         if ($this->_enableStyles) {
             $this->_tagsWhitelist = array_merge($this->_tagsWhitelist,

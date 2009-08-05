@@ -48,6 +48,23 @@ class Vpc_Basic_Text_ModelContentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("<p>\n  aaa\n</p>", $html);
     }
 
+    public function testTidyRemovesDoubleStrong()
+    {
+        $c = $this->_root->getComponentById(1002)->getComponent();
+        $row = $c->getRow();
+        $html = '<strong>a<strong>b</strong></strong>';
+        $html = $row->tidy($html);
+        $this->assertEquals("<p>\n  <strong>a</strong>b\n</p>", $html);
+    }
+
+    public function testTidyRemovesSomeText()
+    {
+        $c = $this->_root->getComponentById(1002)->getComponent();
+        $row = $c->getRow();
+        $html = '<span class=""><span class="fooTest2">xx</span></span>';
+        $html = $row->tidy($html);
+        $this->assertEquals("<p>\n  xx\n</p>", $html);
+    }
     public function testMaxChildComponentNr()
     {
         $c = $this->_root->getComponentById(1000)->getComponent();
