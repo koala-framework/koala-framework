@@ -35,7 +35,7 @@ class Vps_Filter_Row_UniqueAscii extends Vps_Filter_Row_Abstract
             $f = $this->_sourceField;
             $value = $row->$f;
         }
-        $value = Vps_Filter::filterStatic($value, 'Ascii');
+        $value = Vps_Filter::get($value, 'Ascii');
 
         if ($row instanceof Vps_Model_Row_Interface) {
             $select = new Vps_Model_Select();

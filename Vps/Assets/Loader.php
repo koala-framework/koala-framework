@@ -8,6 +8,7 @@ class Vps_Assets_Loader
     {
         if (!isset($_SERVER['REQUEST_URI'])) return;
         require_once 'Vps/Loader.php';
+        Vps_Loader::registerAutoload();
         if (substr($_SERVER['REQUEST_URI'], 0, 8)=='/assets/') {
             $url = substr($_SERVER['REQUEST_URI'], 8);
             if (strpos($url, '?') !== false) {

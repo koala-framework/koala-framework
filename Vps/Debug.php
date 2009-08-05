@@ -30,7 +30,7 @@ class Vps_Debug
 
         $header = $exception->getHeader();
         $template = $exception->getTemplate();
-        $template = strtolower(Zend_Filter::filterStatic($template, 'Word_CamelCaseToDash').'.tpl');
+        $template = strtolower(Zend_Filter::get($template, 'Word_CamelCaseToDash').'.tpl');
         if ($exception instanceof Vps_Exception_Abstract) $exception->log();
 
         if (!headers_sent()) header($header);
