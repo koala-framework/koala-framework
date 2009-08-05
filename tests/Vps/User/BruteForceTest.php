@@ -8,8 +8,6 @@
  */
 class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
 {
-    /*
-    deaktiviert, funktioniert manchmal ned korrekt
     public function testCreateManyAndSync()
     {
         $debugOutput = false;
@@ -124,5 +122,4 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
             $this->fail("No user created");
         }
     }
-    */
 }
