@@ -294,7 +294,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
 
                 $path = explode('?', $part['src']);
                 if (preg_match('#([^/]*)\\.[a-z]+$#U', $path[0], $m)) {
-                    $srcFileName = Zend_Filter::get($m[1], 'Alnum', array(ENT_QUOTES));
+                    $srcFileName = Zend_Filter::filterStatic($m[1], 'Alnum', array(ENT_QUOTES));
                 }
                 if (!isset($srcFileName) || !$srcFileName) {
                     $srcFileName = 'download';
