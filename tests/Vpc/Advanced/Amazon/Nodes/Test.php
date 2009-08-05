@@ -17,6 +17,7 @@ class Vpc_Advanced_Amazon_Nodes_Test extends Vps_Test_SeleniumTestCase
 
     public function testIt()
     {
+        $this->markTestIncomplete();
         $this->openVpc('/amazon');
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesTestComponent", "Php");
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesTestComponent", "JavaScript");
