@@ -6,6 +6,7 @@ class Vpc_Mail_Placeholder_Mail_Component extends Vpc_Mail_Component
         $ret = parent::getSettings();
         $ret['generators']['content']['component'] = 'Vpc_Mail_Placeholder_Content_Component';
         $ret['modelname'] = 'Vpc_Mail_Placeholder_Mail_Model';
+        $ret['recepientSources']['test'] = 'Vpc_Mail_Placeholder_Mail_Recipients';
         return $ret;
     }
 }

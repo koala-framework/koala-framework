@@ -98,34 +98,44 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
     }
 
 
-    public function replaceLinks($mailText, Vpc_Mail_Recipient_Interface $recipient)
+    public function replaceLinks($mailText, Vpc_Mail_Recipient_Interface $recipient = null)
     {
-        $recepientSource = self::getRecepientModelShortcut(
-            $this->getData()->parent->componentClass,
-            get_class($recipient->getModel())
-        );
+        if ($recipient) {
+            $recepientSource = self::getRecepientModelShortcut(
+                $this->getData()->parent->componentClass,
+                get_class($recipient->getModel())
+            );
 
-        $m = $this->getModel();
-        $recipientPrimary = $recipient->getModel()->getPrimaryKey();
+            $m = $this->getModel();
+            $recipientPrimary = $recipient->getModel()->getPrimaryKey();
+        }
 
         while (preg_match('/\*(.+?)\*(.+?)\*/', $mailText, $matches)) {
-            $r = $m->getRow($m->select()->whereEquals('value', $matches[2]));
-            if (!$r) {
-                $r = $m->createRow(array(
-                    'value' => $matches[2],
-                    'type' => $matches[1]
-                ));
-                $r->save();
+            if (!$recipient) {
+                $mailText = str_replace(
+                    $matches[0],
+                    'http://'.Vps_Registry::get('config')->server->domain.$matches[2],
+                    $mailText
+                );
+            } else {
+                $r = $m->getRow($m->select()->whereEquals('value', $matches[2]));
+                if (!$r) {
+                    $r = $m->createRow(array(
+                        'value' => $matches[2],
+                        'type' => $matches[1]
+                    ));
+                    $r->save();
+                }
+
+                // $recepientSource muss immer dabei sein, auch wenn es nur ein
+                // model gibt. Würde später eines dazukommen, funktionierten die alten
+                // Links nicht mehr
+
+                // linkId_userId_userSource_hash
+                $newLink = 'http://'.Vps_Registry::get('config')->server->domain
+                    .$this->_getRedirectUrl(array($r->id, $recipient->$recipientPrimary, $recepientSource));
+                $mailText = str_replace($matches[0], $newLink, $mailText);
             }
-
-            // $recepientSource muss immer dabei sein, auch wenn es nur ein
-            // model gibt. Würde später eines dazukommen, funktionierten die alten
-            // Links nicht mehr
-
-            // linkId_userId_userSource_hash
-            $newLink = 'http://'.Vps_Registry::get('config')->server->domain
-                .$this->_getRedirectUrl(array($r->id, $recipient->$recipientPrimary, $recepientSource));
-            $mailText = str_replace($matches[0], $newLink, $mailText);
         }
         return $mailText;
     }
