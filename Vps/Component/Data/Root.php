@@ -81,6 +81,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         $path = $this->getComponent()->formatPath($parsedUrl);
         if (is_null($path)) return null;
+        $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+        if ($urlPrefix) {
+            if (substr($path, 0, strlen($urlPrefix)) != $urlPrefix) {
+                return null;
+            } else {
+                $path = substr($path, strlen($urlPrefix));
+            }
+        }
         $path = trim($path, '/');
         if ($path == '') {
             $ret = $this->getChildPage(array('home' => true));

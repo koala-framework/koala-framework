@@ -18,7 +18,7 @@ class Vpc_Mail_PreviewController extends Vps_Controller_Action
         $recipient = $this->_getRecipient();
         $mail = $this->_getMailComponent();
         $this->view->html = $mail->getHtml($recipient);
-        $this->view->text = $mail->getText($recipient);
+        $this->view->text = nl2br($mail->getText($recipient));
         $this->view->format = $recipient ? $recipient->getMailFormat() : Vpc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
         $this->view->subject = $mail->getSubject($recipient);
     }
