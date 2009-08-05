@@ -28,6 +28,7 @@ class Vps_Loader extends Zend_Loader
         $autoloader = Zend_Loader_Autoloader::getInstance();
         $autoloader->setDefaultAutoloader(array($class, 'loadClass'));
         $autoloader->setFallbackAutoloader(true);
+        $autoloader->suppressNotFoundWarnings(true);
     }
 
     public static function loadClass($class)
@@ -36,7 +37,8 @@ class Vps_Loader extends Zend_Loader
             require_once 'tcpdf.php';
         } else {
             $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
-            require_once $file;
+            include_once $file;
+//             return parent::loadClass($class);
         }
     }
 }
