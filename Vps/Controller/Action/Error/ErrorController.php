@@ -22,7 +22,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
             isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
             $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
         if ($prefix == 'json' &&
-            ($isHttpRequest || $errors->exception instanceof Vps_ClientException)) {
+            ($isHttpRequest || $errors->exception instanceof Vps_Exception_Client)) {
             $this->_forward('json-error');
         } else {
             throw $errors->exception; // wird von Vps_Debug::handleException behandelt
@@ -33,7 +33,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
     {
         $errors = $this->getRequest()->getParam('error_handler');
         $exception = $errors->exception;
-        if ($exception instanceof Vps_ClientException) {
+        if ($exception instanceof Vps_Exception_Client) {
             $this->view->error = $exception->getMessage();
         } else if ($exception instanceof Vps_Exception_NotFound) {
             $this->view->error = trlVps('There is no editing for this component.');
