@@ -175,5 +175,5 @@ Ext.util.Format.image = function(v, p, record){
 
 Ext.util.Format.clickableLink = function(v, p, record){
     if (!v) return '';
-    return '<a href="'+v+'">'+v+'</a>';
+    return '<a href="'+v+'" target="_blank">'+v+'</a>';
 };
