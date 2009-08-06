@@ -11,7 +11,7 @@ class Vps_Util_Country {
         $masterFile = VPS_PATH . '/Vps/Form/Field/SelectCountry/countries.xml';
         $cacheId = "countries_{$language}_{$what}";
         
-        $cache = Zend_Cache::factory(
+        $cache = Vps_Cache::factory(
             'File',
             'File',
             array(
