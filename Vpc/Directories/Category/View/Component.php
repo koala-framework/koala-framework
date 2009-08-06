@@ -50,7 +50,7 @@ class Vpc_Directories_Category_View_Component
     {
         $frontendOptions = array('lifetime' => 3600);
         $backendOptions = array('cache_dir' => 'application/cache/component/');
-        return Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        return Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
     }
 
     protected function _getCountCategoryIds($item)
