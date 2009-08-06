@@ -77,11 +77,13 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             throw new Vps_Exception("syncTimeField must be set when using MirrorCache");
         }
 
-        if ($overrideMaxSyncDelay === self::SYNC_AFTER_DELAY && $this->_getMaxSyncDelay()) {
+        if ($this->_getMaxSyncDelay()) {
             $cache = $this->_getSyncDelayCache();
-            $lastSync = $cache->load($this->_getSyncDelayCacheId());
-            if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
-                return;
+            if ($overrideMaxSyncDelay === self::SYNC_AFTER_DELAY) {
+                $lastSync = $cache->load($this->_getSyncDelayCacheId());
+                if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
+                    return;
+                }
             }
             $cache->save(time(), $this->_getSyncDelayCacheId());
         }
