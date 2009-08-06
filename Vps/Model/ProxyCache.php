@@ -119,7 +119,7 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
         if (!$this->_cache) {
             $frontendOptions = array('lifetime' => 3600, 'automatic_serialization' => true);
             $backendOptions = array('cache_dir' => 'application/cache/model');
-            $this->_cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+            $this->_cache = Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
         }
 
         return $this->_cache;
