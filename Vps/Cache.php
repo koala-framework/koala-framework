@@ -12,6 +12,10 @@ class Vps_Cache extends Zend_Cache
             ));
             $backendClass = 'Vps_Cache_Backend_' . $backend;
         }
+        if ($backend == 'File') {
+            $backendOptions['cache_file_umask'] = 0666;
+            $backendOptions['hashed_directory_umask'] = 0777;
+        }
         $frontendObject = new $frontendClass($frontendOptions);
         $backendObject = new $backendClass($backendOptions);
         $frontendObject->setBackend($backendObject);
