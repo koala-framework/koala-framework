@@ -124,8 +124,8 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     private function _getSyncDelayCacheId()
     {
         return 'mirrorcache_'.md5(
-            get_class($this->getSourceModel())
-            .get_class($this->getProxyModel())
+            $this->getSourceModel()->getUniqueIdentifier()
+            .$this->getUniqueIdentifier()
             .$this->_syncTimeField
         );
     }
