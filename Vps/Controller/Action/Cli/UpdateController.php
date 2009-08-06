@@ -136,7 +136,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         foreach ($updates as $update) {
             if ($method != 'checkSettings') {
                 if ($method != 'postClearCache') {
-                    Vps_Util_ClearCache::getInstance()->clearCache();
+                    Vps_Util_ClearCache::getInstance()->clearCache('all', false, false);
                 }
                 Vps_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
                 Vps_Component_Generator_Abstract::clearInstances();

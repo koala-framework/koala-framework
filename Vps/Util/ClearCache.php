@@ -63,7 +63,7 @@ class Vps_Util_ClearCache
         return $types;
     }
 
-    public final function clearCache($types = 'all', $output = false)
+    public final function clearCache($types = 'all', $output = false, $refresh = true)
     {
         if ($types == 'all') {
             $types = $this->getTypes();
@@ -73,26 +73,29 @@ class Vps_Util_ClearCache
             }
         }
         $this->_clearCache($types, $output);
-        echo "\n";
-        if (in_array('component', $types) || in_array('cache_component_meta', $types)) {
-            if ($output) echo "Refresh static cache...";
-            try {
-                Vps_Component_Cache::refreshStaticCache();
-                if ($output) echo " [\033[00;32mOK\033[00m]\n";
-            } catch (Exception $e) {
-                if ($output) echo " [\033[01;31mERROR\033[00m]\n";
-            }
-        }
 
-        if ((in_array('cache_users', $types) || in_array('model', $types)) && Vps_Registry::get('db')) {
-            $tables = Vps_Registry::get('db')->fetchCol('SHOW TABLES');
-            if (in_array('vps_users', $tables) && in_array('cache_users', $tables)) {
-                if ($output) echo "Synchronize users......";
+        if ($refresh) {
+            if ($output) echo "\n";
+            if (in_array('component', $types) || in_array('cache_component_meta', $types)) {
+                if ($output) echo "Refresh static cache...";
                 try {
-                    Vps_Registry::get('userModel')->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
+                    Vps_Component_Cache::refreshStaticCache();
                     if ($output) echo " [\033[00;32mOK\033[00m]\n";
                 } catch (Exception $e) {
                     if ($output) echo " [\033[01;31mERROR\033[00m]\n";
+                }
+            }
+
+            if ((in_array('cache_users', $types) || in_array('model', $types)) && Vps_Registry::get('db')) {
+                $tables = Vps_Registry::get('db')->fetchCol('SHOW TABLES');
+                if (in_array('vps_users', $tables) && in_array('cache_users', $tables)) {
+                    if ($output) echo "Synchronize users......";
+                    try {
+                        Vps_Registry::get('userModel')->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
+                        if ($output) echo " [\033[00;32mOK\033[00m]\n";
+                    } catch (Exception $e) {
+                        if ($output) echo " [\033[01;31mERROR\033[00m]\n";
+                    }
                 }
             }
         }
