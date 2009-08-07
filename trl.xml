@@ -4419,5 +4419,104 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Vps Benchmark</en>
 <id>1219</id>
 </text>
+<text>
+<en>testWord</en>
+<id>1220</id>
+</text>
+<text>
+<en>testWord</en>
+<en_plural>testWords</en_plural>
+<context>testContext</context>
+<id>1221</id>
+</text>
+<text>
+<en>Foo</en>
+<id>1222</id>
+</text>
+<text>
+<en>lala</en>
+<id>1223</id>
+</text>
+<text>
+<en>Location</en>
+<context>forum</context>
+<id>1224</id>
+</text>
+<text>
+<en>ago</en>
+<id>1225</id>
+</text>
+<text>
+<en>from now</en>
+<id>1226</id>
+</text>
+<text>
+<en>less than a minute</en>
+<id>1227</id>
+</text>
+<text>
+<en>about a minute</en>
+<id>1228</id>
+</text>
+<text>
+<en>{0} minutes</en>
+<id>1229</id>
+</text>
+<text>
+<en>about an hour</en>
+<id>1230</id>
+</text>
+<text>
+<en>about {0} hours</en>
+<id>1231</id>
+</text>
+<text>
+<en>a day</en>
+<id>1232</id>
+</text>
+<text>
+<en>{0} days</en>
+<id>1233</id>
+</text>
+<text>
+<en>about a month</en>
+<id>1234</id>
+</text>
+<text>
+<en>{0} months</en>
+<id>1235</id>
+</text>
+<text>
+<en>about a year</en>
+<id>1236</id>
+</text>
+<text>
+<en>{0} years</en>
+<id>1237</id>
+</text>
+<text>
+<en>Standard</en>
+<id>1238</id>
+</text>
+<text>
+<en>Unsubscribe</en>
+<id>1239</id>
+</text>
+<text>
+<en>Can only add users to a paused newsletter</en>
+<id>1240</id>
+</text>
+<text>
+<en>Edit or send Newsletter</en>
+<id>1241</id>
+</text>
+<text>
+<en>Unsubscribe newsletter</en>
+<id>1242</id>
+</text>
+<text>
+<en>You have been successfully unsubscribed from the newsletter.</en>
+<id>1243</id>
+</text>
 </trl>
 
