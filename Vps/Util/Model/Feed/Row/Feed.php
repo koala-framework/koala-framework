@@ -47,7 +47,6 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             $str = iconv($encoding, 'utf-8', $str);
         }
 
-        Vps_Benchmark::count('loaded feed');
         $this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
         if (!$this->_xml) {
             //try with another encoding
@@ -101,6 +100,8 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             }
         }
         $config['data'] = $data;
+        Vps_Benchmark::count('loaded feed');
+
         parent::__construct($config);
     }
 
