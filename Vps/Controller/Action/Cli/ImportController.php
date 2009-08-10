@@ -321,8 +321,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $sourceUrl = $sourceConfig->service->usersAll->url;
         if ($targetUrl == $sourceUrl) return;
 
-        $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl));
-        $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl));
+        $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl, 'timeout' => 120));
+        $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl, 'timeout' => 120));
 
         echo "\n*** Service: source=$sourceUrl target=$targetUrl\n";
 
