@@ -6,6 +6,7 @@ class Vps_Srpc_Client
 {
     protected $_serverUrl;
     protected $_extraParams = array();
+    protected $_timeout = 10; // standard von Zend ist 10
 
     public function __construct(array $config = array())
     {
@@ -20,6 +21,15 @@ class Vps_Srpc_Client
             }
             $this->_extraParams = $config['extraParams'];
         }
+        if (!empty($config['timeout']) && is_integer($config['timeout'])) {
+            $this->setTimeout($config['timeout']);
+        }
+    }
+
+    public function setTimeout($timeout)
+    {
+        $this->_timeout = $timeout;
+        return $this;
     }
 
     public function setServerUrl($serverUrl)
@@ -38,7 +48,7 @@ class Vps_Srpc_Client
     protected function _performRequest(array $params)
     {
         $httpClient = new Zend_Http_Client($this->getServerUrl(), array(
-            'timeout' => 25 // standard 10, aber wenn user synchronisiert werden braucht das importieren länger
+            'timeout' => $this->_timeout
         ));
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost($params);

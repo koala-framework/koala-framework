@@ -36,6 +36,10 @@ class Vps_Model_Service extends Vps_Model_Abstract
         } else if (!($this->_client instanceof Vps_Srpc_Client)) {
             throw new Vps_Exception("Client must be of type 'Vps_Srpc_Client' in '".get_class($this)."'");
         }
+
+        if (!empty($config['timeout']) && is_integer($config['timeout'])) {
+            $this->_client->setTimeout($config['timeout']);
+        }
     }
 
     protected function _init()
