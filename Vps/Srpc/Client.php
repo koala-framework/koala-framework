@@ -6,7 +6,7 @@ class Vps_Srpc_Client
 {
     protected $_serverUrl;
     protected $_extraParams = array();
-    protected $_timeout = 10; // standard von Zend ist 10
+    protected $_timeout = 20; // standard von Zend ist 10
 
     public function __construct(array $config = array())
     {
