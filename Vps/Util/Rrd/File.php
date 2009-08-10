@@ -114,7 +114,7 @@ abstract class Vps_Util_Rrd_File
         $prefix = Zend_Registry::get('config')->application->id.'-'.
                             Vps_Setup::getConfigSection().'-bench-';
         $value = $this->_getMemcache()->get($prefix.$field);
-        if ($value===false) $value = 'U';
+        if ($value===false) $value = '0';
         return $value;
     }
 
