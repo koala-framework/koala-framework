@@ -3,7 +3,7 @@ class Vps_Http_Requestor_Response implements Vps_Http_Requestor_Response_Interfa
 {
     private $_response;
 
-    public function __construct(Zend_Http_Response $response)
+    public function __construct(Zend_Http_Response $response = null)
     {
         $this->_response = $response;
     }
@@ -24,5 +24,17 @@ class Vps_Http_Requestor_Response implements Vps_Http_Requestor_Response_Interfa
     {
         if (!$this->_response) return '';
         return $this->_response->getHeader('Content-Type');
+    }
+
+    public function getHeader($h)
+    {
+        if (!$this->_response) return '';
+        return $this->_response->getHeader($h);
+    }
+
+    public function __toString()
+    {
+        if (!$this->_response) return '';
+        return $this->_response->getHeadersAsString(true, "\n") . "\n" . $this->getBody();
     }
 }
