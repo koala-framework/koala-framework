@@ -123,8 +123,6 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
 
     public function prepareSave($row, $postData)
     {
-        $this->_addValidators();
-
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
                 $field->prepareSave($row, $postData);
