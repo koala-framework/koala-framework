@@ -17,7 +17,9 @@ class Vps_Config_Cache extends Zend_Cache_Frontend_File {
         
         require_once 'Zend/Cache/Backend/File.php';
         $backend = new Zend_Cache_Backend_File(array(
-            'cache_dir' => 'application/cache/config'
+            'cache_dir' => 'application/cache/config',
+            'hashed_directory_umask' => 0777,
+            'cache_file_umask' => 0666,
         ));
         
         $this->setBackend($backend);
