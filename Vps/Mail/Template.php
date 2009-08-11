@@ -13,8 +13,10 @@ class Vps_Mail_Template
     {
         $this->_view = new Vps_View_Mail();
 
-        // das substr mit Vpc_ muss sein weil auf prosalzburg test server sonst nur eine weiße seite kommt
-        if (is_object($template) || (substr($template, 0, 4) == 'Vpc_' && class_exists($template) && is_instance_of($template, 'Vpc_Abstract'))) {
+        // das substr mit Vpc_ muss sein weil auf prosalzburg test server sonst nur eine weiÃŸe seite kommt
+        if (is_object($template) || ((substr($template, 0, 4) == 'Vpc_' || substr($template, 0, 4) == 'Vps_')
+            && class_exists($template) && is_instance_of($template, 'Vpc_Abstract'))
+        ) {
             if (is_object($template)) {
                 if ($template instanceof Vpc_Abstract) {
                     $template = $template->getData();
