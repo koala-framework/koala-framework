@@ -1,9 +1,9 @@
 <?php
 class Vps_Service_Amazon extends Zend_Service_Amazon
 {
-    public function __construct($appId = '0CJ03620WGKVWMR2F3R2', $countryCode = 'DE')
+    public function __construct($appId = '0CJ03620WGKVWMR2F3R2', $countryCode = 'DE', $secretKey = 'NRwK5Caas29k4JopHLytMAxtA+WKn5fiFjnWGEhD')
     {
-        parent::__construct($appId, $countryCode);
+        parent::__construct($appId, $countryCode, $secretKey);
     }
 
     /**

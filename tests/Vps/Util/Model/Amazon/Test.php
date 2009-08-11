@@ -12,8 +12,6 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
     }
     public function testNodes()
     {
-        $this->markTestIncomplete();
-
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
 
         $select = $m->select();
@@ -37,8 +35,6 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
     }
     public function testPaging()
     {
-        $this->markTestIncomplete();
-
         $m = new Vps_Util_Model_Amazon_Products;
 
         $select = $m->select();
@@ -65,8 +61,6 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
 
     public function testPaging2()
     {
-        $this->markTestIncomplete();
-
         Vps_Benchmark::enable();
         Vps_Benchmark::reset();
         $m = new Vps_Util_Model_Amazon_Products;
@@ -103,8 +97,6 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
 
     public function testGetRow()
     {
-        $this->markTestIncomplete();
-
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
         $this->assertNotNull($m->getRow('3772369197'));
         $this->assertNotNull($m->getRows($m->select()->whereId('3772369197')));
@@ -113,8 +105,6 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
 
     public function testInvalidLimit()
     {
-        $this->markTestIncomplete();
-
         $this->setExpectedException("Vps_Exception");
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
         $select = $m->select();
@@ -125,8 +115,6 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
     }
     public function testMultipleOrder()
     {
-        $this->markTestIncomplete();
-
         $this->setExpectedException("Vps_Exception");
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
         $select = $m->select();
@@ -139,8 +127,6 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
     }
     public function testOrderDesc()
     {
-        $this->markTestIncomplete();
-
         $this->setExpectedException("Vps_Exception");
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
         $select = $m->select();
@@ -153,8 +139,6 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
 
     public function testPerformance()
     {
-        $this->markTestIncomplete();
-
         Vps_Benchmark::enable();
         Vps_Benchmark::reset();
         $m = new Vps_Util_Model_Amazon_Products();
