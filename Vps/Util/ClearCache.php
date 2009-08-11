@@ -41,7 +41,7 @@ class Vps_Util_ClearCache
         $ret = array();
         try {
             if (!Zend_Registry::get('db')) return $ret;
-        } catch (Zend_Db_Adapter_Exception $e) {
+        } catch (Exception $e) {
             return $ret;
         }
         $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
