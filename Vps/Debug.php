@@ -38,7 +38,9 @@ class Vps_Debug
             echo $view->render($template);
         } catch (Exception $e) {
             echo '<pre>';
-            print_r($e->__toString());
+            echo $exception->getException()->__toString();
+            echo "\n\n\nError happened while handling exception:";
+            echo $e->__toString();
             echo '</pre>';
         }
         Vps_Benchmark::shutDown();
