@@ -87,7 +87,7 @@ foreach (new DirectoryIterator($websDir) as $p) {
     if ($ret) {
         $postData['log'] = "UPDATE FAILED\n\n\n".$out;
     } else {
-        $ret = execGetOutput("php bootstrap.php test --no-progress --exclude-group=$excludeGroup", $out);
+        $ret = execGetOutput("php bootstrap.php test --no-progress --report --exclude-group=$excludeGroup", $out);
         if (preg_match("#===REPORT===(.*?)===/REPORT===#m", $out, $m)) {
             $postData = @unserialize($m[1]);
             if (!$postData) {
