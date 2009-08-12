@@ -46,6 +46,13 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         }
         $vpsVersion = $this->_getParam('vps-version');
         $webVersion = $this->_getParam('web-version');
+        if (!$vpsVersion || !$webVersion) {
+            $msg = "Parameters --vps-version and --web-version are required.\n";
+            $o = Vps_Controller_Action_Cli_TagController::getHelpOptions();
+            $msg .= "--web-version=".implode(' --web-version=', $o['webVersion']['value'])."\n";
+            $msg .= "--vps-version=".implode(' --vps-version=', $o['vpsVersion']['value'])."";
+            throw new Vps_ClientException($msg);
+        }
 
         echo "\n\n*** [00/13] ueberpruefe auf nicht eingecheckte dateien\n";
 
