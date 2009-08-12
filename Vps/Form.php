@@ -136,7 +136,13 @@ class Vps_Form extends Vps_Form_NonTableForm
         return $this;
     }
 
-    private function _rowIsParentRow($parentRow)
+    /**
+     * Damit bei verschachtelten Forms die das selben Model verwenden
+     * nicht zwei unterschiedliche rows verwendet werden, was beim hinzufügen ein problem ist.
+     *
+     * Wird aufgerufen von getRow, in Vpc_User_Edit_Form_Form wirds auch verwendet
+     */
+    protected final function _rowIsParentRow($parentRow)
     {
         $id = $this->_getIdByParentRow($parentRow);
         if ($parentRow && !$parentRow instanceof Vps_Model_FnF_Row
