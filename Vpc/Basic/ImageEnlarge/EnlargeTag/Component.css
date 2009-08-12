@@ -90,11 +90,11 @@
 }
 .webZoom {
     display: block;
-    position: relative;
-    top: -25px;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
     width: 15px;
     height: 15px;
-    margin-left: 5px;
     background-image: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/zoom.png);
     background-repeat: no-repeat;
 }
