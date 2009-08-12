@@ -9,6 +9,8 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
 
     private function _getProgressBar()
     {
+        if (!$this->_expectedTimes) return null;
+
         if (!isset($this->_progressBar)) {
             $adapter = new Zend_ProgressBar_Adapter_Console();
             $adapter->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
@@ -60,10 +62,14 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
 
     protected function writeProgress($progress)
     {
-        if ($progress != '.') {
-            echo "\n".$progress;
+        if ($this->_getProgressBar()) {
+            if ($progress != '.') {
+                echo "\n".$progress;
+            }
+            $this->_getProgressBar()->update($this->_currentProgress,
+                round($this->_currentProgress, 1).'/'.round(array_sum($this->_expectedTimes), 1).' s');
+        } else {
+            return parent::writeProgress($progress);
         }
-        $this->_getProgressBar()->update($this->_currentProgress,
-            round($this->_currentProgress, 1).'/'.round(array_sum($this->_expectedTimes), 1).' s');
     }
 }

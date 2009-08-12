@@ -131,11 +131,18 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $arguments['listeners'][] = $resultLogger;
         }
 
+        $runner = new Vps_Test_TestRunner();
+        $handlesArguments = $arguments;
+        $runner->handleConfiguration($handlesArguments);
+
         $suite = new Vps_Test_TestSuite();
         $suite->setBackupGlobals(false);
         $expectedTimes = array();
         $unknownTimes = 0;
-        $tests = $suite->getFilteredTests($arguments['filter'], $arguments['groups'], $arguments['excludeGroups']);
+        $tests = $suite->getFilteredTests(
+                        $handlesArguments['filter'],
+                        $handlesArguments['groups'],
+                        $handlesArguments['excludeGroups']);
         foreach ($tests as $test) {
             $app = Vps_Registry::get('config')->application->id;
             $f = "/www/testtimes/$app/{$test->toString()}";
@@ -154,11 +161,9 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             }
         }
 
-        $runner = new PHPUnit_TextUI_TestRunner;
-        if ($unknownTimes < 5) {
-            $printer = new Vps_Test_ProgressResultPrinter($expectedTimes, null, (bool)$this->_getParam('verbose'), true);
-            $runner->setPrinter($printer);
-        }
+        if ($unknownTimes >= 5) $expectedTimes = array();
+        $printer = new Vps_Test_ProgressResultPrinter($expectedTimes, null, (bool)$this->_getParam('verbose'), true);
+        $runner->setPrinter($printer);
 
         try {
             $result = $runner->doRun(
