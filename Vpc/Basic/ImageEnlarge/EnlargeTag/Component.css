@@ -89,6 +89,7 @@
     opacity: 0.8; -moz-opacity: 0.8; filter: alpha(opacity=80);
 }
 .webZoom {
+    display: block;
     position: absolute;
     bottom: 10px;
     left: 10px;

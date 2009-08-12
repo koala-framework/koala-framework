@@ -9,6 +9,11 @@ Vps.onContentReady(function() {
                 e.stopEvent();
             }, els[i], { stopEvent: true });
         }
+        if (els[i].className.match(/vpcEnlargeTag/)) {
+            Ext.DomHelper.append(els[i],
+                { tag: 'span', cls: 'webZoom' }
+            );
+        }
     }
 });
 
