@@ -53,8 +53,10 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
         $app = Vps_Registry::get('config')->application->id;
         if (!file_exists("/www/testtimes/$app")) mkdir("/www/testtimes/$app");
         file_put_contents("/www/testtimes/$app/{$test->toString()}", $time);
-        $this->_currentProgress += $this->_expectedTimes[$test->toString()];
-        $this->_currentTest++;
+        if ($this->_expectedTimes) {
+            $this->_currentProgress += $this->_expectedTimes[$test->toString()];
+            $this->_currentTest++;
+        }
         return parent::endTest($test, $time);
     }
     public function startTest(PHPUnit_Framework_Test $test)
