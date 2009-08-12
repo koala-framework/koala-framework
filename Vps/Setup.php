@@ -374,6 +374,7 @@ class Vps_Setup
              && substr($_SERVER['REDIRECT_URL'], 0, 13) != '/vps/webtest/'
              && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' /*hack für rssinclude-test*/
              && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
+             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
         ) {
             $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
             if (empty($sessionPhpAuthed->success)) {
