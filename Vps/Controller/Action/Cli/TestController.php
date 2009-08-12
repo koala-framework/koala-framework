@@ -134,12 +134,13 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
 
         $runner = new Vps_Test_TestRunner();
 
+        $suite = new Vps_Test_TestSuite();
+        $suite->setBackupGlobals(false);
+
         if (!$this->_getParam('no-progress')) {
             $handlesArguments = $arguments;
             $runner->handleConfiguration($handlesArguments);
 
-            $suite = new Vps_Test_TestSuite();
-            $suite->setBackupGlobals(false);
             $expectedTimes = array();
             $unknownTimes = 0;
             $tests = $suite->getFilteredTests(
