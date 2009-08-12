@@ -88,7 +88,12 @@ abstract class Vps_Util_Rrd_File
         $cmd .= "--start ".$start." ";
         $cmd .= "--step ".($this->_interval)." ";
         foreach ($this->_fields as $field) {
-            $cmd .= "DS:".$field->getName().":".$field->getType().":".($this->_interval*2).":".$field->getMin().":".($field->getMax())." ";
+            if (!is_null($field->getHeartbeat())) {
+                $heartbeat = $field->getHeartbeat();
+            } else {
+                $heartbeat = ($this->_interval*2);
+            }
+            $cmd .= "DS:".$field->getName().":".$field->getType().":".$heartbeat.":".$field->getMin().":".($field->getMax())." ";
         }
         foreach ($this->getRRAs() as $rra) {
             if (!isset($rra['method'])) $rra['method'] = 'AVERAGE';
