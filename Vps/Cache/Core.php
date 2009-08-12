@@ -11,9 +11,9 @@ class Vps_Cache_Core extends Zend_Cache_Core
         parent::__construct($options);
     }
 
-    public function load($cacheId)
+    public function load($cacheId, $doNotTestCacheValidity = false, $doNotUnserialize = false)
     {
-        $ret = parent::load($cacheId);
+        $ret = parent::load($cacheId, $doNotTestCacheValidity, $doNotUnserialize);
 
         if ($ret && isset($ret['mtimeFilesCheckAlways']) && $ret['mtimeFilesCheckAlways']) {
             foreach ($ret['mtimeFilesCheckAlways'] as $f) {
@@ -47,7 +47,7 @@ class Vps_Cache_Core extends Zend_Cache_Core
         return $ret;
     }
 
-    public function save(&$cacheData, $cacheId)
+    public function save(&$data, $cacheId = null, $tags = array(), $specificLifetime = false, $priority = 8)
     {
         $mtime = 0;
         if (isset($cacheData['mtimeFiles'])) {
@@ -63,6 +63,6 @@ class Vps_Cache_Core extends Zend_Cache_Core
         $mtime = max($mtime, Vps_Registry::get('configMtime'));
         if (!isset($cacheData['mtime'])) $cacheData['mtime'] = 0;
         $cacheData['mtime'] = max($mtime, $cacheData['mtime']);
-        return parent::save($cacheData, $cacheId);
+        return parent::save($cacheData, $cacheId, $tags, $specificLifetime, $priority);
     }
 }
