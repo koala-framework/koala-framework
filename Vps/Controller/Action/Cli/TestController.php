@@ -41,6 +41,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             array('param'=> 'coverage-xml'),
             array('param'=> 'coverage-html'),
             array('param'=> 'report'),
+            array('param'=> 'no-progress'),
         );
         $value = self::_getConfigSectionsWithTestDomain();
         if (in_array('production', $value)) {
@@ -132,38 +133,41 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         }
 
         $runner = new Vps_Test_TestRunner();
-        $handlesArguments = $arguments;
-        $runner->handleConfiguration($handlesArguments);
 
-        $suite = new Vps_Test_TestSuite();
-        $suite->setBackupGlobals(false);
-        $expectedTimes = array();
-        $unknownTimes = 0;
-        $tests = $suite->getFilteredTests(
-                        $handlesArguments['filter'],
-                        $handlesArguments['groups'],
-                        $handlesArguments['excludeGroups']);
-        foreach ($tests as $test) {
-            $app = Vps_Registry::get('config')->application->id;
-            $f = "/www/testtimes/$app/{$test->toString()}";
-            if (isset($expectedTimes[$test->toString()])) {
-                throw new Vps_Exception("same test exists twice?!");
-            }
-            if (file_exists($f)) {
-                $expectedTimes[$test->toString()] = (float)file_get_contents($f);
-            } else {
-                if ($test instanceof PHPUnit_Extensions_SeleniumTestCase) {
-                    $expectedTimes[$test->toString()] = 15;
-                } else {
-                    $expectedTimes[$test->toString()] = 1;
+        if (!$this->_getParam('no-progress')) {
+            $handlesArguments = $arguments;
+            $runner->handleConfiguration($handlesArguments);
+
+            $suite = new Vps_Test_TestSuite();
+            $suite->setBackupGlobals(false);
+            $expectedTimes = array();
+            $unknownTimes = 0;
+            $tests = $suite->getFilteredTests(
+                            $handlesArguments['filter'],
+                            $handlesArguments['groups'],
+                            $handlesArguments['excludeGroups']);
+            foreach ($tests as $test) {
+                $app = Vps_Registry::get('config')->application->id;
+                $f = "/www/testtimes/$app/{$test->toString()}";
+                if (isset($expectedTimes[$test->toString()])) {
+                    throw new Vps_Exception("same test exists twice?!");
                 }
-                $unknownTimes++;
+                if (file_exists($f)) {
+                    $expectedTimes[$test->toString()] = (float)file_get_contents($f);
+                } else {
+                    if ($test instanceof PHPUnit_Extensions_SeleniumTestCase) {
+                        $expectedTimes[$test->toString()] = 15;
+                    } else {
+                        $expectedTimes[$test->toString()] = 1;
+                    }
+                    $unknownTimes++;
+                }
             }
-        }
 
-        if ($unknownTimes >= 5) $expectedTimes = array();
-        $printer = new Vps_Test_ProgressResultPrinter($expectedTimes, null, (bool)$this->_getParam('verbose'), true);
-        $runner->setPrinter($printer);
+            if ($unknownTimes >= 5) $expectedTimes = array();
+            $printer = new Vps_Test_ProgressResultPrinter($expectedTimes, null, (bool)$this->_getParam('verbose'), true);
+            $runner->setPrinter($printer);
+        }
 
         try {
             $result = $runner->doRun(
