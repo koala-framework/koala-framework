@@ -37,6 +37,10 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
         return self::_getFilteredTests($this, $filter, $groups, $excludeGroups);
     }
 
+
+    //code kopiert von PHPUnit_Framework_TestSuite::run
+    //nicht ganz perfekt weil theoretisch eine TestSuite run überschreiben könnte
+    //aber für uns reichts
     private static function _getFilteredTests($testSuite, $filter, array $groups, array $excludeGroups)
     {
         $ret = array();
