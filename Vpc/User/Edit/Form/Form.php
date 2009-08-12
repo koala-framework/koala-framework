@@ -11,6 +11,9 @@ class Vpc_User_Edit_Form_Form extends Vps_Form
 
     public function getRow($parentRow = null)
     {
+        if ($this->_rowIsParentRow($parentRow)) {
+            return $parentRow;
+        }
         $id = $this->_getIdByParentRow($parentRow);
         if (($id === 0 || $id === '0' || is_null($id)) && $this->_newUserRow) {
             return $this->_newUserRow;
