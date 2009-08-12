@@ -282,7 +282,7 @@ class Vps_User_Model extends Vps_Model_Proxy
         } else {
             $userId = $loginData['userId'];
         }
-        if ($user = $this->getRow($this->select($userId))) {
+        if ($userId && ($user = $this->getRow($userId))) {
             $role = $user->role;
         } else {
             $role = 'guest';
