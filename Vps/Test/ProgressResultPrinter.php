@@ -5,6 +5,7 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
     private $_progressBar;
     private $_expectedTimes;
     private $_currentProgress;
+    private $_currentTest;
 
 
     private function _getProgressBar()
@@ -22,6 +23,7 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
                 array_sum($this->_expectedTimes)
             );
             $this->_currentProgress = 0;
+            $this->_currentTest = 0;
         }
         return $this->_progressBar;
     }
@@ -52,6 +54,7 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
         if (!file_exists("/www/testtimes/$app")) mkdir("/www/testtimes/$app");
         file_put_contents("/www/testtimes/$app/{$test->toString()}", $time);
         $this->_currentProgress += $this->_expectedTimes[$test->toString()];
+        $this->_currentTest++;
         return parent::endTest($test, $time);
     }
     public function startTest(PHPUnit_Framework_Test $test)
@@ -67,7 +70,8 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
                 echo "\n".$progress;
             }
             $this->_getProgressBar()->update($this->_currentProgress,
-                round($this->_currentProgress, 1).'/'.round(array_sum($this->_expectedTimes), 1).' s');
+                $this->_currentTest.'/'.count($this->_expectedTimes).' noch '.
+                round(array_sum($this->_expectedTimes)-$this->_currentProgress, 1).' s');
         } else {
             return parent::writeProgress($progress);
         }
