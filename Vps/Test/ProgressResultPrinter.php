@@ -69,7 +69,7 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
     {
         if ($this->_getProgressBar()) {
             if ($progress != '.') {
-                echo "\n".$progress;
+                echo $progress."\n";
             }
             $this->_getProgressBar()->update($this->_currentProgress,
                 $this->_currentTest.'/'.count($this->_expectedTimes).' noch '.
