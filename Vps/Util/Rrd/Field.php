@@ -6,6 +6,7 @@ class Vps_Util_Rrd_Field
     private $_type = 'COUNTER';
     private $_min = 0;
     private $_max;
+    private $_heartbeat = null;
 
     public function __construct($settings)
     {
@@ -25,6 +26,7 @@ class Vps_Util_Rrd_Field
             $this->_max = pow(2, 31);
         }
         if (isset($settings['min'])) $this->_min = $settings['min'];
+        if (isset($settings['heartbeat'])) $this->_heartbeat = $settings['heartbeat'];
     }
 
     public static function escapeField($f)
@@ -72,5 +74,10 @@ class Vps_Util_Rrd_Field
     public function getMax()
     {
         return $this->_max;
+    }
+
+    public function getHeartbeat()
+    {
+        return $this->_heartbeat;
     }
 }
