@@ -17,16 +17,21 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 'value' => '12300[:12305]',
                 'allowBlank' => true,
                 'help' => 'Executes update for a given revision'
+            ),
+            array(
+                'param'=> 'skip-clear-cache',
+                'help' => 'Don\'t clear cache after update'
             )
         );
     }
     public function indexAction()
     {
-        self::update($this->_getParam('rev'), $this->_getParam('current'), $this->_getParam('debug'));
+        self::update($this->_getParam('rev'), $this->_getParam('current'),
+            $this->_getParam('debug'), $this->_getParam('skip-clear-cache'));
         exit;
     }
 
-    public static function update($rev = false, $current = false, $debug = false)
+    public static function update($rev = false, $current = false, $debug = false, $skipClearCache = false)
     {
         echo "Update\n";
         $currentRevision = false;
@@ -87,7 +92,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             }
             echo " found ".count($updates)."\n\n";
 
-            if (self::_executeUpdate($updates, 'checkSettings', $debug)) {
+            if (self::_executeUpdate($updates, 'checkSettings', $debug, $skipClearCache)) {
 
                 if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
                     $offlineBootstrap  = "<?php\nheader(\"HTTP/1.0 503 Service Unavailable\");\n";
@@ -102,13 +107,15 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                     }
                 }
 
-                self::_executeUpdate($updates, 'preUpdate', $debug);
-                self::_executeUpdate($updates, 'update', $debug);
-                self::_executeUpdate($updates, 'postUpdate', $debug);
-                echo "\n";
-                Vps_Util_ClearCache::getInstance()->clearCache('all', true);
-                echo "\n";
-                self::_executeUpdate($updates, 'postClearCache', $debug);
+                self::_executeUpdate($updates, 'preUpdate', $debug, $skipClearCache);
+                self::_executeUpdate($updates, 'update', $debug, $skipClearCache);
+                self::_executeUpdate($updates, 'postUpdate', $debug, $skipClearCache);
+                if (!$skipClearCache) {
+                    echo "\n";
+                    Vps_Util_ClearCache::getInstance()->clearCache('all', true);
+                    echo "\n";
+                }
+                self::_executeUpdate($updates, 'postClearCache', $debug, $skipClearCache);
                 foreach ($updates as $k=>$u) {
                     if (!in_array($u->getRevision(), $updateRevision['done'])) {
                         $updateRevision['done'][] = $u->getRevision();
@@ -130,12 +137,12 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         }
     }
 
-    private static function _executeUpdate($updates, $method, $debug = false)
+    private static function _executeUpdate($updates, $method, $debug = false, $skipClearCache = false)
     {
         $ret = true;
         foreach ($updates as $update) {
             if ($method != 'checkSettings') {
-                if ($method != 'postClearCache') {
+                if ($method != 'postClearCache' && !$skipClearCache) {
                     Vps_Util_ClearCache::getInstance()->clearCache('all', false, false);
                 }
                 Vps_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
