@@ -47,7 +47,7 @@ class Vps_Cache_Core extends Zend_Cache_Core
         return $ret;
     }
 
-    public function save(&$data, $cacheId = null, $tags = array(), $specificLifetime = false, $priority = 8)
+    public function save(&$cacheData, $cacheId = null, $tags = array(), $specificLifetime = false, $priority = 8)
     {
         $mtime = 0;
         if (isset($cacheData['mtimeFiles'])) {
