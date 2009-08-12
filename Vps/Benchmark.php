@@ -236,6 +236,11 @@ class Vps_Benchmark
         self::_getInstance()->_shutDown();
     }
 
+    final public static function getUrlType()
+    {
+        return self::_getInstance()->_getUrlType();
+    }
+
     protected function _getUrlType()
     {
         if (!isset($_SERVER['REQUEST_URI'])) {
