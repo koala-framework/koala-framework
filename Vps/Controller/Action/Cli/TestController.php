@@ -79,12 +79,15 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         self::initForTests();
         $arguments = array();
         $arguments['colors'] = true;
+        $arguments['filter'] = false;
         if ($this->_getParam('filter')) {
             $arguments['filter'] = $this->_getParam('filter');
         }
+        $arguments['groups'] = array();
         if ($this->_getParam('group')) {
             $arguments['groups'] = explode(',', $this->_getParam('group'));
         }
+        $arguments['excludeGroups'] = array();
         if ($this->_getParam('exclude-group')) {
             $arguments['excludeGroups'] = explode(',', $this->_getParam('exclude-group'));
         }
@@ -130,8 +133,32 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
 
         $suite = new Vps_Test_TestSuite();
         $suite->setBackupGlobals(false);
+        $expectedTimes = array();
+        $unknownTimes = 0;
+        $tests = $suite->getFilteredTests($arguments['filter'], $arguments['groups'], $arguments['excludeGroups']);
+        foreach ($tests as $test) {
+            $app = Vps_Registry::get('config')->application->id;
+            $f = "/www/testtimes/$app/{$test->toString()}";
+            if (isset($expectedTimes[$test->toString()])) {
+                throw new Vps_Exception("same test exists twice?!");
+            }
+            if (file_exists($f)) {
+                $expectedTimes[$test->toString()] = (float)file_get_contents($f);
+            } else {
+                if ($test instanceof PHPUnit_Extensions_SeleniumTestCase) {
+                    $expectedTimes[$test->toString()] = 15;
+                } else {
+                    $expectedTimes[$test->toString()] = 1;
+                }
+                $unknownTimes++;
+            }
+        }
 
         $runner = new PHPUnit_TextUI_TestRunner;
+        if ($unknownTimes < 5) {
+            $printer = new Vps_Test_ProgressResultPrinter($expectedTimes, null, (bool)$this->_getParam('verbose'), true);
+            $runner->setPrinter($printer);
+        }
 
         try {
             $result = $runner->doRun(

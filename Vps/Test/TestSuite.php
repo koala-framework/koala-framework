@@ -31,4 +31,67 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
             }
         }
     }
+
+    public function getFilteredTests($filter = FALSE, array $groups = array(), array $excludeGroups = array())
+    {
+        return self::_getFilteredTests($this, $filter, $groups, $excludeGroups);
+    }
+
+    private static function _getFilteredTests($testSuite, $filter, array $groups, array $excludeGroups)
+    {
+        $ret = array();
+
+        if (empty($groups)) {
+            $tests = $testSuite->tests;
+        } else {
+            $tests = array();
+
+            foreach ($groups as $group) {
+                if (isset($testSuite->groups[$group])) {
+                    $tests = array_merge($tests, $testSuite->groups[$group]);
+                }
+            }
+        }
+
+        foreach ($tests as $test) {
+            if ($test instanceof PHPUnit_Framework_TestSuite) {
+                $ret = array_merge($ret, self::_getFilteredTests($test, $filter, $groups, $excludeGroups));
+            } else {
+                $runTest = TRUE;
+
+                if ($filter !== FALSE ) {
+                    $tmp = PHPUnit_Util_Test::describe($test, FALSE);
+
+                    if ($tmp[0] != '') {
+                        $name = join('::', $tmp);
+                    } else {
+                        $name = $tmp[1];
+                    }
+
+                    if (preg_match($filter, $name) == 0) {
+                        $runTest = FALSE;
+                    }
+                }
+
+                if ($runTest && !empty($excludeGroups)) {
+                    foreach ($testSuite->groups as $_group => $_tests) {
+                        if (in_array($_group, $excludeGroups)) {
+                            foreach ($_tests as $_test) {
+                                if ($test === $_test) {
+                                    $runTest = FALSE;
+                                    break 2;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if ($runTest) {
+                    $ret[] = $test;
+                }
+            }
+        }
+
+        return $ret;
+    }
 }
