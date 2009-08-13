@@ -14,7 +14,7 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
             if ($config->server->useVpsForUpdate) {
                 $sshHost = $config->server->user.'@'.$config->server->host;
                 $sshDir = $config->server->dir;
-                $cmd = "sshvps $sshHost $sshDir $cmd";
+                $cmd = "sshvps $sshHost $sshDir clear-cache";
                 $cmd = "sudo -u vps $cmd";
                 $this->_systemCheckRet($cmd);
             } else {
@@ -43,8 +43,8 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
             array(
                 'param'=> 'server',
                 'value'=> self::_getConfigSectionsWithHost(),
-                'valueOptional' => true,
-                'help' => 'server'
+                'help' => 'server',
+                'allowBlank' => true
             )
         );
     }
