@@ -155,7 +155,7 @@ class Vps_Util_ClearCache
                 if ($fileinfo->isFile()) {
                     unlink($fileinfo->getPathName());
                 } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
-                    $this->_removeDirContents($fileinfo->getPathName());
+                    $this->_removeDirContents($fileinfo->getPathName(), $server);
                     @rmdir($fileinfo->getPathName());
                 }
             }
