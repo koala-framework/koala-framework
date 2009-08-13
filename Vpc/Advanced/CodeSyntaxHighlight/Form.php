@@ -18,6 +18,7 @@ class Vpc_Advanced_CodeSyntaxHighlight_Form extends Vpc_Abstract_Form
             $i = substr($i->__toString(), 0, -4);
             $values[$i] = $i;
         }
+        asort($values);
         $this->add(new Vps_Form_Field_Select('language'))
             ->setFieldLabel(trlVps('Language'))
             ->setValues($values);
