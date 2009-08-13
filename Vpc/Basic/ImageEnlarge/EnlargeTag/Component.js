@@ -31,9 +31,9 @@ Vpc.Basic.ImageEnlarge = function()
 
 Vpc.Basic.ImageEnlarge.tpl = new Ext.XTemplate(
     '<div class="lightboxHeader">{header}</div>',
-    '<div class="lightboxBody">{body}</div',
-    '<div Class="clear"></div>',
-    '<div class="lightboxFooter">{footer}</div'
+    '<div class="lightboxBody">{body}</div>',
+    '<div class="clear"></div>',
+    '<div class="lightboxFooter">{footer}</div>'
 );
 
 Vpc.Basic.ImageEnlarge.tplHeader = new Ext.XTemplate(
@@ -79,12 +79,17 @@ Vpc.Basic.ImageEnlarge.prototype =
         this.unmask();
     },
 
+    // May be overwritten
+    alignBox: function() {
+        this.lightbox.center();
+    },
+
     show: function(linkEl)
     {
         this.mask();
 
         this.lightbox.applyStyles('display: block;');
-        this.lightbox.center();
+        this.alignBox();
 
         var m = linkEl.dom.rel.match(/enlarge_([0-9]+)_([0-9]+)/);
 
@@ -112,15 +117,24 @@ Vpc.Basic.ImageEnlarge.prototype =
         } else {
             options = {};
         }
-        if (options.title && !data.title) {
-        	data.title = options.title;
+
+        for (var i in options) {
+            if (i == 'title') {
+                if (options.title && !data.title) {
+                    data.title = options.title;
+                }
+            } else if (i == 'fullSizeUrl') {
+                if (options.fullSizeUrl) {
+                    data.fullSizeLink = '<a href="'+options.fullSizeUrl+'" class="fullSizeLink" title="'+trlVps('image in originalsize')+'" target="_blank"></a> ';
+                } else {
+                    data.fullSizeLink = '';
+                }
+            } else {
+                data[i] = options[i];
+            }
         }
         if (data.title == '') data.title = ' ';
-        if (options.fullSizeUrl) {
-            data.fullSizeLink = '<a href="'+options.fullSizeUrl+'" class="fullSizeLink" title="'+trlVps('image in originalsize')+'" target="_blank"></a> ';
-        } else {
-            data.fullSizeLink = '';
-        }
+
         data.image = {
             src: linkEl.dom.href,
             width: parseInt(m[1]),
@@ -147,10 +161,16 @@ Vpc.Basic.ImageEnlarge.prototype =
         if (data.nextImage) {
             data.nextImageButton = tpls.tplSwitchButton.apply(data.nextImage);
             data.nextImageBig = tpls.tplSwitchBig.apply(data.nextImage);
+        } else {
+            data.nextImageButton = '&nbsp;';
+            data.nextImageBig = '&nbsp;';
         }
         if (data.previousImage) {
             data.previousImageButton = tpls.tplSwitchButton.apply(data.previousImage);
             data.previousImageBig = tpls.tplSwitchBig.apply(data.previousImage);
+        } else {
+            data.previousImageButton = '&nbsp;';
+            data.previousImageBig = '&nbsp;';
         }
         data.header = tpls.tplHeader.apply(data);
         data.footer = tpls.tplFooter.apply(data);
@@ -159,7 +179,7 @@ Vpc.Basic.ImageEnlarge.prototype =
 
         tpls.tpl.overwrite(this.lightbox, data);
 
-        var applyNexPreviousEvents = function(imageLink, type) {
+        var applyNextPreviousEvents = function(imageLink, type) {
             // preload next image
             var tmpNextImage = new Image();
             tmpNextImage.src = imageLink.dom.href;
@@ -187,10 +207,10 @@ Vpc.Basic.ImageEnlarge.prototype =
         };
 
         if (linkEl.nextImage) {
-            applyNexPreviousEvents.call(this, linkEl.nextImage, 'next');
+            applyNextPreviousEvents.call(this, linkEl.nextImage, 'next');
         }
         if (linkEl.previousImage) {
-            applyNexPreviousEvents.call(this, linkEl.previousImage, 'previous');
+            applyNextPreviousEvents.call(this, linkEl.previousImage, 'previous');
         }
 
         this.lightbox.query('.closeButton').each(function(el) {
