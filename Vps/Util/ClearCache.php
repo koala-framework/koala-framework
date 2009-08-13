@@ -63,7 +63,7 @@ class Vps_Util_ClearCache
         return $types;
     }
 
-    public final function clearCache($types = 'all', $output = false, $refresh = true)
+    public final function clearCache($types = 'all', $output = false, $refresh = true, $server = null)
     {
         if ($types == 'all') {
             $types = $this->getTypes();
@@ -72,7 +72,7 @@ class Vps_Util_ClearCache
                 $types = explode(',', $types);
             }
         }
-        $this->_clearCache($types, $output);
+        $this->_clearCache($types, $output, $server);
 
         if ($refresh) {
             if ($output) echo "\n";
@@ -101,45 +101,63 @@ class Vps_Util_ClearCache
         }
     }
 
-    protected function _clearCache(array $types, $output)
+    protected function _clearCache(array $types, $output, $server)
     {
         if (in_array('memcache', $types)) {
-            $cache = Vps_Cache::factory('Core', 'Memcached', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
-            $cache->clean();
-            if ($output) echo "cleared:     memcache\n";
+            if ($server) {
+                if ($output) echo "ignored:     memcache\n";
+            } else {
+                $cache = Vps_Cache::factory('Core', 'Memcached', array(
+                    'lifetime'=>null,
+                    'automatic_cleaning_factor' => false,
+                    'automatic_serialization'=>true));
+                $cache->clean();
+                if ($output) echo "cleared:     memcache\n";
+            }
         }
         foreach ($this->getDbCacheTables() as $t) {
-            if (in_array($t, $types) ||
-                (in_array('component', $types) && substr($t, 0, 15) == 'cache_component')
-            ) {
-                Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
-                if ($output) echo "cleared db:  $t\n";
+            if ($server) {
+                if ($output) echo "ignored db:  $t\n";
+            } else {
+                if (in_array($t, $types) ||
+                    (in_array('component', $types) && substr($t, 0, 15) == 'cache_component')
+                ) {
+                    Zend_Registry::get('db')->query("TRUNCATE TABLE $t");
+                    if ($output) echo "cleared db:  $t\n";
+                }
             }
         }
         foreach ($this->_getCacheDirs() as $d) {
             if (in_array($d, $types)) {
                 if (is_dir("application/cache/$d")) {
-                    $this->_removeDirContents("application/cache/$d");
+                    $this->_removeDirContents("application/cache/$d", $server);
                 } else if (is_dir($d)) {
-                    $this->_removeDirContents($d);
+                    $this->_removeDirContents($d, $server);
                 }
-                if ($output) echo "cleared dir: $d cache\n";
+                if ($output) echo "cleared remote dir: $d cache\n";
             }
         }
     }
 
-    private function _removeDirContents($path)
+    private function _removeDirContents($path, $server)
     {
-        $dir = new DirectoryIterator($path);
-        foreach ($dir as $fileinfo) {
-            if ($fileinfo->isFile()) {
-                unlink($fileinfo->getPathName());
-            } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
-                $this->_removeDirContents($fileinfo->getPathName());
-                @rmdir($fileinfo->getPathName());
+        if ($server) {
+            $cmd = "clear-cache-dir --path=$path";
+            $cmd = "sshvps $server->user@$server->host $server->dir $cmd";
+            $cmd = "sudo -u vps $cmd";
+            passthru($cmd, $ret);
+            if ($ret != 0) {
+                throw new Vps_ClientException("Clearing remote cache '$path' failed");
+            }
+        } else {
+            $dir = new DirectoryIterator($path);
+            foreach ($dir as $fileinfo) {
+                if ($fileinfo->isFile()) {
+                    unlink($fileinfo->getPathName());
+                } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
+                    $this->_removeDirContents($fileinfo->getPathName());
+                    @rmdir($fileinfo->getPathName());
+                }
             }
         }
     }

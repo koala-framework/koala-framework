@@ -8,7 +8,25 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
 
     public function indexAction()
     {
-        Vps_Util_ClearCache::getInstance()->clearCache($this->_getParam('type'), true);
+        if ($this->_getParam('server')) {
+            $config = Vps_Config_Web::getInstance($this->_getParam('server'));
+
+            if ($config->server->useVpsForUpdate) {
+                $sshHost = $config->server->user.'@'.$config->server->host;
+                $sshDir = $config->server->dir;
+                $cmd = "sshvps $sshHost $sshDir $cmd";
+                $cmd = "sudo -u vps $cmd";
+                $this->_systemCheckRet($cmd);
+            } else {
+                Vps_Util_ClearCache::getInstance()->clearCache(
+                    $this->_getParam('type'),
+                    true,
+                    true,
+                    $config->server);
+            }
+        } else {
+            Vps_Util_ClearCache::getInstance()->clearCache($this->_getParam('type'), true);
+        }
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
@@ -21,6 +39,12 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
                 'value'=> $types,
                 'valueOptional' => true,
                 'help' => 'what to clear'
+            ),
+            array(
+                'param'=> 'server',
+                'value'=> self::_getConfigSectionsWithHost(),
+                'valueOptional' => true,
+                'help' => 'server'
             )
         );
     }
