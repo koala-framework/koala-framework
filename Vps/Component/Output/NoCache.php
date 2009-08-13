@@ -10,13 +10,16 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
 
     protected final function _processAfterPlugins($ret)
     {
-        while (preg_match('#^(.*){afterPlugin ([^ ]+) ([^ ]+)}(.*){/afterPlugin}(.*)$#ms', $ret, $m)) {
-            $plugin = new $m[2]($m[3]);
-            $output = $m[4];
-            $output= $this->_executeOutputPlugin($plugin, $output);
-            $ret = $m[1] . $output . $m[5];
-        }
+        $ret = preg_replace_callback('#{afterPlugin ([^ ]+) ([^ ]+)}(.*){/afterPlugin}#ms',
+                    array($this, '_processAfterPluginsCallback'), $ret);
         return $ret;
+    }
+
+    private function _processAfterPluginsCallback($m)
+    {
+        $plugin = new $m[1]($m[2]);
+        $output = $m[4];
+        return $this->_executeOutputPlugin($plugin, $output);
     }
 
     protected function _processComponent($componentId, $componentClass, $masterTemplate = false, array $plugins = array())
