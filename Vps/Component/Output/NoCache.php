@@ -18,7 +18,7 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
     private function _processAfterPluginsCallback($m)
     {
         $plugin = new $m[1]($m[2]);
-        $output = $m[4];
+        $output = $m[3];
         return $this->_executeOutputPlugin($plugin, $output);
     }
 
