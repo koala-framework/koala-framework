@@ -35,7 +35,9 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
             $this->_systemCheckRet("svn up $path");
         } else {
 
+            $url = false;
             try {
+                $vpsPath = realpath($vpsPath);
                 $info = new SimpleXMLElement(`svn info --xml $vpsPath`);
                 $url = (string)$info->entry->url;
             } catch (Exception $e) {}
