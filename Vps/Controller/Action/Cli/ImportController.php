@@ -38,6 +38,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         try {
             Vps_Registry::get('db');
+	} catch (Vps_Dao_Exception $e) {
+	    //ignore
         } catch (Zend_Db_Adapter_Exception $e) {
             $dbConfig = Vps_Registry::get('dao')->getDbConfig();
             $dbConfig['dbname'] = 'test';
@@ -128,10 +130,13 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 passthru($cmd);
             }
         }
-
-
-        if (Zend_Registry::get('db')) {
-            $dbConfig = Zend_Registry::get('db')->getConfig();
+        try {
+            $db = Zend_Registry::get('db');
+	} catch (Exception $e) {
+	    $db = false;
+	}
+        if ($db) {
+            $dbConfig = $db->getConfig();
 
             $mysqlLocalOptions = "--host=$dbConfig[host] ";
             //auskommentiert weil: es muss in ~/.my.cnf ein benutzer der das machen darf eingestellt sein!
@@ -142,7 +147,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
             echo "erstelle datenbank-backup...\n";
 
-            $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
+            $tables = $db->fetchCol('SHOW TABLES');
 
             $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
 
@@ -318,8 +323,13 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     private function _copyServiceUsers()
     {
-        if (!Vps_Registry::get('db')) return;
-        $tables = Vps_Registry::get('db')->fetchCol('SHOW TABLES');
+        try {
+            $db = Vps_Registry::get('db');
+	} catch (Exception $e) {
+	    return;
+	}
+        if (!$db) return;
+        $tables = $db->fetchCol('SHOW TABLES');
         if (!in_array('vps_users', $tables)) return;
         if (!in_array('cache_users', $tables)) return;
 
