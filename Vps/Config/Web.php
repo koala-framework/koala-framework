@@ -5,17 +5,21 @@ class Vps_Config_Web extends Zend_Config_Ini
 {
     public static function getInstance($section)
     {
-        require_once 'Vps/Config/Cache.php';
-        $cache = Vps_Config_Cache::getInstance();
-        $cacheId = 'config_'.str_replace('-', '_', $section);
-        $configClass = Vps_Setup::$configClass;
-        require_once str_replace('_', '/', $configClass).'.php';
-        if(!$ret = $cache->load($cacheId)) {
-            $ret = new $configClass($section);
-            $mtime = time();
-            $cache->save($ret, $cacheId);
+        static $instances = array();
+        if (!isset($instances[$section])) {
+            require_once 'Vps/Config/Cache.php';
+            $cache = Vps_Config_Cache::getInstance();
+            $cacheId = 'config_'.str_replace('-', '_', $section);
+            $configClass = Vps_Setup::$configClass;
+            require_once str_replace('_', '/', $configClass).'.php';
+            if(!$ret = $cache->load($cacheId)) {
+                $ret = new $configClass($section);
+                $mtime = time();
+                $cache->save($ret, $cacheId);
+            }
+            $instances[$section] = $ret;
         }
-        return $ret;
+        return $instances[$section];
     }
 
     public static function getInstanceMtime($section)
