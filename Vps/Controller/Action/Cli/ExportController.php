@@ -18,30 +18,12 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
         );
     }
 
-    private function _systemSshVps($cmd)
-    {
-        $cmd = "sshvps $this->_sshHost $this->_sshDir $cmd";
-        $cmd = "sudo -u vps $cmd";
-        return $this->_systemCheckRet($cmd);
-    }
-
     public function indexAction()
     {
         $config = Vps_Config_Web::getInstance($this->_getParam('server'));
+        echo "updating ".$this->_getParam('server')."....\n";
+        $this->_update($config);
 
-
-        $this->_sshHost = $config->server->user.'@'.$config->server->host;
-        $this->_sshDir = $config->server->dir;
-
-        if (!$config->server->useVpsForUpdate) {
-            echo "updating $this->_sshHost:$this->_sshDir\n";
-            $cmd = "svn up";
-            $cmd = "sshvps $this->_sshHost $this->_sshDir $cmd";
-            $cmd = "sudo -u vps $cmd";
-            $this->_systemCheckRet($cmd);
-        } else {
-            $this->_systemSshVps("svn-up");
-        }
 
         if (isset($config->server->subWebs)) {
             foreach ($config->server->subWebs as $web) {
@@ -55,7 +37,38 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
                 }
             }
         }
+        if (isset($config->server->subSections)) {
+            foreach ($config->server->subSections as $section) {
+                $config = Vps_Config_Web::getInstance($section);
+                echo "\nupdating $section...\n";
+                $this->_update($config);
+            }
+        }
         exit;
     }
 
+    private function _update($config)
+    {
+        $sshHost = $config->server->user.'@'.$config->server->host;
+        $sshDir = $config->server->dir;
+
+        if (!$config->server->useVpsForUpdate) {
+            echo "updating $sshHost:$sshDir\n";
+            $cmd = "svn up";
+            $cmd = "sshvps $sshHost $sshDir $cmd";
+            $cmd = "sudo -u vps $cmd";
+            if ($this->_getParam('debug')) {
+                echo $cmd."\n";
+            }
+            $this->_systemCheckRet($cmd);
+        } else {
+            $cmd = "svn-up";
+            $cmd = "sshvps $sshHost $sshDir $cmd";
+            $cmd = "sudo -u vps $cmd";
+            if ($this->_getParam('debug')) {
+                echo $cmd."\n";
+            }
+            $this->_systemCheckRet($cmd);
+        }
+    }
 }
