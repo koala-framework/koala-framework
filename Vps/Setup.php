@@ -434,8 +434,8 @@ class Vps_Setup
         } else {
             $path = $_SERVER['SCRIPT_FILENAME'];
         }
-        if (file_exists('application/config_secion')) {
-            return trim(file_get_contents('application/config_secion'));
+        if (file_exists('application/config_section')) {
+            return trim(file_get_contents('application/config_section'));
         } if (file_exists('/var/www/vivid-test-server')) {
             return 'vivid-test-server';
         } else if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
