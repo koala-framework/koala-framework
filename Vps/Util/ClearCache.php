@@ -85,8 +85,12 @@ class Vps_Util_ClearCache
                     if ($output) echo " [\033[01;31mERROR\033[00m]\n";
                 }
             }
-
-            if ((in_array('cache_users', $types) || in_array('model', $types)) && Vps_Registry::get('db')) {
+	    try {
+                $db = Vps_Registry::get('db')
+	    } catch (Exception $e) {
+	        $db = false;
+	    }
+            if ((in_array('cache_users', $types) || in_array('model', $types)) && $db) {
                 $tables = Vps_Registry::get('db')->fetchCol('SHOW TABLES');
                 if (in_array('vps_users', $tables) && in_array('cache_users', $tables)) {
                     if ($output) echo "Synchronize users......";
