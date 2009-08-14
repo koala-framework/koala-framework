@@ -5,7 +5,15 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     {
         $ownConfig = Vps_Registry::get('config');
 
-        $config = Vps_Config_Web::getInstance($this->_getParam('server'));
+        $server = $this->_getParam('server');
+        if (!$server) {
+            if ($ownConfig->server->testOf) {
+                $server = $ownConfig->server->testOf;
+            } else {
+                $server = 'production';
+            }
+        }
+        $config = Vps_Config_Web::getInstance($server);
         if (!$config->server || !$config->server->host) {
             throw new Vps_ClientException("kein server konfiguriert");
         }
@@ -382,7 +390,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             array(
                 'param'=> 'server',
                 'value'=> self::_getConfigSections(),
-                'valueOptional' => true,
+                'allowBlank' => true,
                 'help' => 'what to import'
             )
         );
