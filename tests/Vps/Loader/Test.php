@@ -23,7 +23,7 @@ class Vps_Loader_Test extends PHPUnit_Framework_TestCase
      * ...hab ich schon erwäht dass php scheiße ist?
     public function testInstanciateClassNotExisting()
     {
-        new Vps_Loader_TestClassNotExisting()
+        new Vps_Loader_TestClassNotExisting();
     }
     */
 }
