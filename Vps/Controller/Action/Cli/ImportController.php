@@ -38,8 +38,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         try {
             Vps_Registry::get('db');
-	} catch (Vps_Dao_Exception $e) {
-	    //ignore
+        } catch (Vps_Dao_Exception $e) {
+            //ignore
         } catch (Zend_Db_Adapter_Exception $e) {
             $dbConfig = Vps_Registry::get('dao')->getDbConfig();
             $dbConfig['dbname'] = 'test';
@@ -58,7 +58,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
 
         if (Vps_Registry::get('config')->application->id != 'service') {
-            $this->_copyServiceUsers();
+            $this->_copyServiceUsers($server);
         }
 
         if ($config->uploads && $ownConfig->uploads) {
@@ -132,9 +132,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
         try {
             $db = Zend_Registry::get('db');
-	} catch (Exception $e) {
-	    $db = false;
-	}
+        } catch (Exception $e) {
+            $db = false;
+        }
         if ($db) {
             $dbConfig = $db->getConfig();
 
@@ -321,22 +321,23 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    private function _copyServiceUsers()
+    private function _copyServiceUsers($server)
     {
         try {
             $db = Vps_Registry::get('db');
-	} catch (Exception $e) {
-	    return;
-	}
+        } catch (Exception $e) {
+            return;
+        }
         if (!$db) return;
         $tables = $db->fetchCol('SHOW TABLES');
         if (!in_array('vps_users', $tables)) return;
         if (!in_array('cache_users', $tables)) return;
 
         // copy users table
-        $targetUrl = $this->_getConfig('web')->service->usersAll->url;
-        $sourceConfig = $this->_getConfig('production');
+        $targetUrl = Vps_Registry::get('config')->service->usersAll->url;
+        $sourceConfig = Vps_Config_Web::getInstance($server);
         $sourceUrl = $sourceConfig->service->usersAll->url;
+
         if ($targetUrl == $sourceUrl) return;
 
         $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl, 'timeout' => 120));
@@ -354,8 +355,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $targetModel->copyDataFromModel($sourceModel);
 
         // copy users_to_web
-        $targetUrl = $this->_getConfig('web')->service->usersRelation->url;
-        $sourceConfig = $this->_getConfig('production');
+        $targetUrl = Vps_Registry::get('config')->service->usersRelation->url;
+        $sourceConfig = Vps_Config_Web::getInstance($server);
         $sourceUrl = $sourceConfig->service->usersRelation->url;
         if ($targetUrl == $sourceUrl) return;
 
@@ -367,20 +368,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $importSelect->whereEquals('web_id', Vps_Registry::get('config')->application->id);
         $targetModel->deleteRows($importSelect);
         $targetModel->copyDataFromModel($sourceModel, $importSelect);
-    }
-
-    private function _getConfig($type = 'web')
-    {
-        if ($type == 'web') {
-            return Vps_Registry::get('config');
-        } else if ($type == 'production') {
-            $webConfig = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
-            $vpsConfig = new Zend_Config_Ini(VPS_PATH.'/config.ini', $this->_getParam('server'),
-                            array('allowModifications'=>true));
-            $vpsConfig->merge($webConfig);
-            return $vpsConfig;
-        }
-        return null;
     }
 
     private function _systemSshVps($cmd, $dir = null)
