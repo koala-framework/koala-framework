@@ -85,7 +85,7 @@ class Vps_Component_Abstract_Admin
             'componentController' => $class,
             'action' => ''
         );
-        $router = Zend_Controller_Front::getInstance()->getRouter();
+        $router = Vps_Controller_Front::getInstance()->getRouter();
 
         if (Zend_Registry::isRegistered('testRootComponentClass')) {
             $urlOptions['root'] = Zend_Registry::get('testRootComponentClass');
