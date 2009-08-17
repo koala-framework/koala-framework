@@ -27,21 +27,54 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
 
     public function indexAction()
     {
+        $active = array();
+        if (isset($_REQUEST['submit'])) {
+        } else if (isset($_COOKIE['benchmark-active'])) {
+            $active = explode('**', $_COOKIE['benchmark-active']);
+        }
         $this->_printReloadJs();
+        echo "<form action=\"\" method=\"post\" style=\"position: absolute; right:0; top:0; text-align:right; margin-right:10px;\">";
         echo "<a href=\"/admin/component/benchmark/values\">current values</a><br />";
-        $start = $this->_getParam('start');
+        foreach ($this->_rrds as $name=>$rrd) {
+            $title = $rrd->getTitle();
+            if (!$title) $title = $name;
+            echo "<strong>$title:</strong><br />";
+            foreach ($rrd->getGraphs() as $gName=>$g) {
+                $title = $g->getTitle();
+                if (!$title) $title = $gName;
+                $n = "{$name}_{$gName}";
+                echo "<label for=\"$n\">$title</label>";
+                echo "<input id=\"$n\" name=\"$n\" type=\"checkbox\" ";
+                if (isset($_REQUEST[$n])) {
+                    if (!in_array($n, $active)) {
+                        $active[] = $n;
+                    }
+                }
+                if (in_array($n, $active)) {
+                    echo "checked=\"checked\" ";
+                }
+                echo "/><br />";
+            }
+        }
+        setcookie('benchmark-active', implode('**', $active), time()+60*60*24*14);
+        echo "<input type=\"submit\" name=\"submit\">\n";
+        echo "</form>\n";
         $startDates = array(
-            'last 3 hours' => time()-3*60*60,
-            'last 6 hours' => time()-6*60*60,
-            'last 12 hours' => time()-12*60*60,
-            'last day' => time()-24*60*60,
-            'last week' => time()-7*24*60*60,
-            'last month' => strtotime('-1 month'),
-            'last 3 months' => strtotime('-3 month'),
-            'last 6 months' => strtotime('-6 month'),
-            'last year' => strtotime('-1 year')
+            'last 3 hours' => '-3 hours',
+            'last 6 hours' => '-6 hours',
+            'last 12 hours' => '-12 hours',
+            'last day' => '-1 day',
+            'last week' => '-1 week',
+            'last month' => '-1 month',
+            'last 3 months' => '-3 month',
+            'last 6 months' => '-6 month',
+            'last year' => '-1 year'
         );
-        if (!$start) $start = $startDates['last week'];
+        $start = $this->_getParam('start');
+        if (!$start && isset($_COOKIE['start'])) $start = $_COOKIE['start'];
+        if (!$start) $start = '-1 week';
+        setcookie('benchmark-start', $start, time()+60*60*24*14);
+
         foreach ($startDates as $k=>$i) {
             echo "<a href=\"/admin/component/benchmark?start=$i\"";
             if ($i == $start) echo " style=\"font-weight: bold\"";
@@ -50,9 +83,12 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         echo "<br /><br />";
         foreach ($this->_rrds as $name=>$rrd) {
             foreach (array_keys($rrd->getGraphs()) as $gName) {
-                echo "<a href=\"/admin/component/benchmark/detail?rrd=$name&name=$gName\">";
-                echo "<img style=\"border:none\" src=\"/admin/component/benchmark/graph?rrd=$name&name=$gName&start=$start\" />";
-                echo "</a>";
+                $n = "{$name}_{$gName}";
+                if (in_array($n, $active)) {
+                    echo "<a href=\"/admin/component/benchmark/detail?rrd=$name&name=$gName\">";
+                    echo "<img style=\"border:none\" src=\"/admin/component/benchmark/graph?rrd=$name&name=$gName&start=".urlencode($start)."\" />";
+                    echo "</a>";
+                }
             }
         }
         $this->_helper->viewRenderer->setNoRender(true);
@@ -66,18 +102,19 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         $name = $this->_getParam('name');
         echo "<a href=\"/admin/component/benchmark\">overview</a><br /><br />";
         $startDates = array(
-            'last 3 hours' => time()-3*60*60,
-            'last 6 hours' => time()-6*60*60,
-            'last 12 hours' => time()-12*60*60,
-            'last day' => time()-24*60*60,
-            'last week' => time()-7*24*60*60,
-            'last month' => strtotime('-1 month'),
-            'last 3 months' => strtotime('-3 month'),
-            'last 6 months' => strtotime('-6 month'),
-            'last year' => strtotime('-1 year')
+            'last 3 hours' => '-3 hours',
+            'last 6 hours' => '-6 hours',
+            'last 12 hours' => '-12 hours',
+            'last day' => '-1 day',
+            'last week' => '-1 week',
+            'last month' => '-1 month',
+            'last 3 months' => '-3 month',
+            'last 6 months' => '-6 month',
+            'last year' => '-1 year'
+
         );
         foreach ($startDates as $d) {
-            echo "<img src=\"/admin/component/benchmark/graph?rrd=$rrd&name=$name&start=$d\" />";
+            echo "<img src=\"/admin/component/benchmark/graph?rrd=$rrd&name=$name&start=".urlencode($d)."\" />";
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
@@ -92,14 +129,14 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
             'cache_dir' => 'application/cache/benchmark/'
         );
         $cache = Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-        $cacheId = 'graph_'.$this->_getParam('rrd').'_'.$this->_getParam('name')
-                    .'_'.$this->_getParam('start');
+        $cacheId = md5('graph_'.$this->_getParam('rrd').'_'.$this->_getParam('name')
+                    .'_'.$this->_getParam('start'));
         if (!$output = $cache->load($cacheId)) {
             $rrd = $this->_rrds[$this->_getParam('rrd')];
             $graphs = $rrd->getGraphs();
             $g = $graphs[$this->_getParam('name')];
             $output = array();
-            $output['contents'] = $g->getContents((int)$this->_getParam('start'));
+            $output['contents'] = $g->getContents(strtotime($this->_getParam('start')));
             $output['mimeType'] = 'image/png';
             $cache->save($output, $cacheId);
         }
