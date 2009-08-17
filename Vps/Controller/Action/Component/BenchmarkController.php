@@ -85,14 +85,15 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
     public function graphAction()
     {
         $frontendOptions = array(
-            'lifetime' => 60*5
+            'lifetime' => 60*5,
+            'automatic_serialization' => true
         );
         $backendOptions = array(
             'cache_dir' => 'application/cache/benchmark/'
         );
         $cache = Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-        $cacheId = 'graph-'.$this->_getParam('rrd').'-'.$this->_getParam('name')
-                    .'-'.$this->_getParam('start');
+        $cacheId = 'graph_'.$this->_getParam('rrd').'_'.$this->_getParam('name')
+                    .'_'.$this->_getParam('start');
         if (!$output = $cache->load($cacheId)) {
             $rrd = $this->_rrds[$this->_getParam('rrd')];
             $graphs = $rrd->getGraphs();
@@ -101,9 +102,6 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
             $output['contents'] = $g->getContents((int)$this->_getParam('start'));
             $output['mimeType'] = 'image/png';
             $cache->save($output, $cacheId);
-            p('uncached');
-        } else {
-            p('cached');
         }
         Vps_Media_Output::output($output);
     }
