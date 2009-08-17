@@ -53,8 +53,9 @@ class Vps_Controller_Front extends Zend_Controller_Front
 
     public static function getInstance()
     {
+        $class = Vps_Registry::get('config')->frontControllerClass;
         if (null === self::$_instance) {
-            self::$_instance = new self();
+            self::$_instance = new $class();
             self::$_instance->_init();
         }
 
