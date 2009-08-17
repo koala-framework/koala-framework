@@ -305,8 +305,8 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
     public function getMailGender()
     {
         return $this->gender == 'male' ?
-            Vpc_Mail_Recipient_Interface::MAIL_GENDER_MALE :
-            Vpc_Mail_Recipient_Interface::MAIL_GENDER_FEMALE;
+            Vpc_Mail_Recipient_GenderInterface::MAIL_GENDER_MALE :
+            Vpc_Mail_Recipient_GenderInterface::MAIL_GENDER_FEMALE;
     }
 
     public function getMailTitle()
