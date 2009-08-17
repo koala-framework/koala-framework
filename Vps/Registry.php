@@ -13,7 +13,8 @@ class Vps_Registry extends Zend_Registry
             $this->offsetSet('dao', $v);
             return $v;
         } else if ($index == 'acl' && !parent::offsetExists($index)) {
-            $v = new Vps_Acl();
+            $class = Vps_Registry::get('config')->aclClass;
+            $v = new $class();
             $this->offsetSet('acl', $v);
             return $v;
         } else if ($index == 'userModel' && !parent::offsetExists($index)) {
