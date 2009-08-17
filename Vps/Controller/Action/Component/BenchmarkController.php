@@ -21,7 +21,7 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
                 var img = imgs[i];
                 img.src = img.src.replace(/&t=.+/, '')+'&t='+ (new Date()).getTime();
             }
-        }, 1000*60*3);\n";
+        }, 1000*60*5+10);\n";
         echo "</script>\n";
     }
 
@@ -84,9 +84,28 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
 
     public function graphAction()
     {
-        $rrd = $this->_rrds[$this->_getParam('rrd')];
-        $graphs = $rrd->getGraphs();
-        $graphs[$this->_getParam('name')]->output((int)$this->_getParam('start'));
+        $frontendOptions = array(
+            'lifetime' => 60*5
+        );
+        $backendOptions = array(
+            'cache_dir' => 'application/cache/benchmark/'
+        );
+        $cache = Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        $cacheId = 'graph-'.$this->_getParam('rrd').'-'.$this->_getParam('name')
+                    .'-'.$this->_getParam('start');
+        if (!$output = $cache->load($cacheId)) {
+            $rrd = $this->_rrds[$this->_getParam('rrd')];
+            $graphs = $rrd->getGraphs();
+            $g = $graphs[$this->_getParam('name')];
+            $output = array();
+            $output['contents'] = $g->getContents((int)$this->_getParam('start'));
+            $output['mimeType'] = 'image/png';
+            $cache->save($output, $cacheId);
+            p('uncached');
+        } else {
+            p('cached');
+        }
+        Vps_Media_Output::output($output);
     }
 
     public function valuesAction()
