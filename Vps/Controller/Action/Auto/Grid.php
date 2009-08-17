@@ -615,14 +615,14 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         ignore_user_abort(true);
         Zend_Registry::get('db')->beginTransaction();
         foreach ($ids as $id) {
-            $row = $this->_model->find($id)->current();
+            $row = $this->_model->getRow($id);
             if (!$row) {
                 throw new Vps_Exception("Can't find row with id '$id'.");
             }
             if (!$this->_hasPermissions($row, 'duplicate')) {
                 throw new Vps_Exception("You don't have the permissions to duplicate this row.");
             }
-            $new = $row->getRow()->duplicate();
+            $new = $row->duplicate();
             $this->view->data['duplicatedIds'][] = $new->{$this->_primaryKey};
         }
         Zend_Registry::get('db')->commit();

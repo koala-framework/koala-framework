@@ -176,6 +176,29 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         return null;
     }
 
+    /**
+     * Hilfsfunktion die von duplicate aufgerufen werden kann
+     */
+    protected final function _duplicateDependentModel($newRow, $rule)
+    {
+        $rowset = $this->getChildRows($rule);
+        foreach ($rowset as $row) {
+            $ref = $row->getModel()->getReferenceByModelClass(get_class($this->getModel()), null);
+            $data = array();
+            $data[$ref['column']] = $newRow->{$this->_getPrimaryKey()};
+            $row->duplicate($data);
+        }
+    }
+
+    public function duplicate($data = array())
+    {
+        $data = array_merge($this->toArray(), $data);
+        unset($data[$this->getModel()->getPrimaryKey()]);
+        $new = $this->getModel()->createRow($data);
+        $new->save();
+        return $new;
+    }
+
     protected function _postInsert()
     {
     }
