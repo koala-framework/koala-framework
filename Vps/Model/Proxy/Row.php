@@ -81,10 +81,10 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
 
     public function toArray()
     {
-        $ret = $this->_row->toArray();
-        foreach ($this->_getSiblingRows() as $row) {
-            $ret = array_merge($row->toArray(), $ret);
-        }
+        $ret = array_merge(
+            parent::toArray(),
+            $this->_row->toArray()
+        );
         return $ret;
     }
 }
