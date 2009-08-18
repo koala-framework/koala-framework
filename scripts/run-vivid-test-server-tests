@@ -99,6 +99,8 @@ foreach (new DirectoryIterator($websDir) as $p) {
             $postData['log'] = "TESTS FAILED\n\n\n(can't get result)\n".$out;
         }
     }
+    $postData['log'] = "$p\n\n".$postData['log'];
+
     $info = new SimpleXMLElement(`svn info --xml`);
     $postData['svnPath'] = (string)$info->entry->url;
 
