@@ -26,8 +26,8 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
                 array('test2' => 'bab')
             )
         );
-        $post = $form->processInput($form->getRow(), $post);
-        $form->validate($form->getRow(), $post);
+        $post = $form->processInput(null, $post);
+        $form->validate(null, $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
 
@@ -66,8 +66,8 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
                 array('test2' => 'bab')
             )
         );
-        $post = $form->processInput($form->getRow(), $post);
-        $this->assertEquals(1, count($form->validate($form->getRow(), $post)));
+        $post = $form->processInput(null, $post);
+        $this->assertEquals(1, count($form->validate(null, $post)));
     }
 
     public function testWithRelations()
@@ -84,8 +84,8 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
                 array('foo' => 'bab')
             )
         );
-        $post = $form->processInput($form->getRow(), $post);
-        $form->validate($form->getRow(), $post);
+        $post = $form->processInput(null, $post);
+        $form->validate(null, $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
 
