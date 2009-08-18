@@ -5,7 +5,13 @@ class Vps_Asset
     private $_type;
     public function __construct($icon, $type = null)
     {
-        if (!$type) {
+        $this->_icon = $icon;
+        $this->_type = $type;
+    }
+
+    private function _getIconAndType()
+    {
+        if (!$this->_type) {
             $paths = Zend_Registry::get('config')->path;
             if (file_exists($paths->vps.'/images/'.$icon.'.png')) {
                 $filename = $paths->vps.'/images/'.$icon.'.png';
@@ -45,18 +51,22 @@ class Vps_Asset
                 throw new Vps_Exception("Asset '$icon' not found");
             }
         }
-        $this->_type = $type;
-        $this->_icon = $icon;
+        return array(
+            'type' => $type,
+            'icon' => $icon
+        );
     }
 
     public function getFilename()
     {
+        $d = $this->_getIconAndType();
         $paths = Zend_Registry::get('config')->path;
-        return $paths->{$this->_type}.'/'.$this->_icon;
+        return $paths->{$d['type']}.'/'.$d['icon'];
     }
 
     public function __toString()
     {
-        return '/assets/'.$this->_type.'/'.$this->_icon;
+        $d = $this->_getIconAndType();
+        return '/assets/'.$d['type'].'/'.$d['icon'];
     }
 }
