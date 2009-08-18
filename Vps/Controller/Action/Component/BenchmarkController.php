@@ -149,7 +149,7 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         foreach ($this->_rrds as $rrd) {
             $values = array_values($rrd->getRecordValues());
             foreach (array_values($rrd->getFields()) as $k=>$i) {
-                if ($values[$k] == 'U') continue;
+                if ($values[$k] == 'U') $values[$k] = '?';
                 echo $i->getText().": ".$values[$k];
                 echo "<br />";
             }
