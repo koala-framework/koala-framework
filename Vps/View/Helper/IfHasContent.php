@@ -2,14 +2,15 @@
 class Vps_View_Helper_IfHasContent
 {
     protected $_tag = 'content';
-    
+
     public function ifHasContent(Vps_Component_Data $component = null)
     {
         static $componentId;
         static $counter;
         if (!$counter) $counter = array();
 
-        if ($component && $component->componentId != $componentId) {
+        $ret = '';
+        if ($component) {
             if ($componentId) {
                 throw new Vps_Exception("Helper IfHasContent must end component with id {$componentId} before creating a new one.");
             }
@@ -17,7 +18,8 @@ class Vps_View_Helper_IfHasContent
             if (!isset($counter[$componentClass])) $counter[$componentClass] = 0;
             $counter[$componentClass]++;
             $ret = "{{$this->_tag}: {$componentClass} {$component->componentId} {$counter[$componentClass]}}";
-        } else {
+            $componentId = $component->componentId;
+        } else if ($componentId) {
             $ret = "{{$this->_tag}}";
             $componentId = null;
         }
