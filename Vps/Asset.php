@@ -11,7 +11,9 @@ class Vps_Asset
 
     private function _getIconAndType()
     {
-        if (!$this->_type) {
+        $icon = $this->_icon;
+        $type = $this->_type;
+        if (!$type) {
             $paths = Zend_Registry::get('config')->path;
             if (file_exists($paths->vps.'/images/'.$icon.'.png')) {
                 $filename = $paths->vps.'/images/'.$icon.'.png';
