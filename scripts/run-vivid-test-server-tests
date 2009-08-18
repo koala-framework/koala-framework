@@ -70,6 +70,8 @@ foreach (new DirectoryIterator($websDir) as $p) {
     if ($p == 'uploads') continue;
     if ($p == '.svn') continue;
     if ($p == 'backup') continue;
+    if ($p == 'rssinclude-updater') continue;
+    if ($p == 'test.rssinclude-updater') continue;
     if (!file_exists($p->getPathname().'/.svn')) continue;
     echo $p."\n";
     chdir($p->getPathname());
