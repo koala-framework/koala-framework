@@ -19,7 +19,9 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
     {
         $plugin = new $m[1]($m[2]);
         $output = $m[3];
-        return $this->_executeOutputPlugin($plugin, $output);
+        $output = $this->_executeOutputPlugin($plugin, $output);
+        $output = $this->_parseTemplate($output);
+        return $output;
     }
 
     protected function _processComponent($componentId, $componentClass, $masterTemplate = false, array $plugins = array())
