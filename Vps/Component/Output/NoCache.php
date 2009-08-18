@@ -13,7 +13,8 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         while (preg_match('#^(.*){afterPlugin ([^ ]+) ([^ ]+)}(.*){/afterPlugin}(.*)$#ms', $ret, $m)) {
             $plugin = new $m[2]($m[3]);
             $output = $m[4];
-            $output= $this->_executeOutputPlugin($plugin, $output);
+            $output = $this->_executeOutputPlugin($plugin, $output);
+            $output = $this->_parseTemplate($output);
             $ret = $m[1] . $output . $m[5];
         }
         return $ret;
