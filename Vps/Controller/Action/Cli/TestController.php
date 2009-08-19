@@ -165,7 +165,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
                 }
             }
 
-            if ($unknownTimes >= 5) $expectedTimes = array();
+            if ($unknownTimes/count($expectedTimes) > 0.2) $expectedTimes = array();
             $printer = new Vps_Test_ProgressResultPrinter($expectedTimes, null, (bool)$this->_getParam('verbose'), true);
             $runner->setPrinter($printer);
         }
