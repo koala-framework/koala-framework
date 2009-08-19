@@ -27,6 +27,10 @@ class Vps_Controller_Action_Cli_CopyToTestController extends Vps_Controller_Acti
     {
         $cmd = "sshvps $this->_sshHost $this->_sshDir $cmd";
         $cmd = "sudo -u vps $cmd";
+        if ($this->_getParam('debug')) {
+            $cmd .= " --debug";
+            echo $cmd."\n";
+        }
         return $this->_systemCheckRet($cmd);
     }
 
