@@ -443,7 +443,12 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             if (!file_exists($dumpname)) mkdir($dumpname);
         }
 
-        $dbConfig = Zend_Registry::get('db')->getConfig();
+        try {
+            $db = Zend_Registry::get('db');
+        } catch (Exception $e) {
+            return;
+        }
+        $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
         $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";
         $this->_systemCheckRet($cmd);
