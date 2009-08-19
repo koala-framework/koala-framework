@@ -17,6 +17,7 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
             $adapter->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                  Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
                                  Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+            $adapter->setTextWidth(30);
             $this->_progressBar = new Zend_ProgressBar(
                 $adapter,
                 0,
@@ -61,7 +62,10 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
     }
     public function startTest(PHPUnit_Framework_Test $test)
     {
-        $this->_getProgressBar(); //erstellt sie beim ersten aufruf, nicht im kostruktor machen da sonst zu früh was rausgeschrieben wird
+        if ($this->_getProgressBar()) {
+            //erstellt sie beim ersten aufruf, nicht im kostruktor machen da sonst zu früh was rausgeschrieben wird
+            $this->writeProgress('.');
+        }
         return parent::startTest($test);
     }
 
@@ -71,9 +75,12 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
             if ($progress != '.') {
                 echo $progress."\n";
             }
+            $t = round(array_sum($this->_expectedTimes)-$this->_currentProgress, 1);
+            if ($t > 120) {
+                $t = floor($t/60).' min '.($t%60).' sec';
+            }
             $this->_getProgressBar()->update($this->_currentProgress,
-                $this->_currentTest.'/'.count($this->_expectedTimes).' noch '.
-                round(array_sum($this->_expectedTimes)-$this->_currentProgress, 1).' s');
+                $this->_currentTest.'/'.count($this->_expectedTimes).' noch '.$t);
         } else {
             return parent::writeProgress($progress);
         }
