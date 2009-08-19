@@ -11,7 +11,7 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $this->assertNotNull($feed);
         $this->assertEquals('file://'.dirname(__FILE__).'/rss2.0.xml', $feed->url);
         $this->assertEquals('Internet Agentur Salzburg - Vivid Planet Software News', $feed->title);
-        $this->assertEquals(substr($feed->link, 'vivid-planet.com/news/aktuelle_news/') !== false);
+        $this->assertTrue(strpos($feed->link, 'vivid-planet.com/news/aktuelle_news/') !== false);
         $this->assertEquals('Die aktuellen News der Vivid Planet Software GmbH', $feed->description);
 
         $entries = $feed->getChildRows('Entries');
