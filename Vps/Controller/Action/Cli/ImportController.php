@@ -296,7 +296,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 if ($this->_getParam('debug')) echo $cmd."\n";
                 $this->_systemCheckRet($cmd);
                 if (file_exists($file)) {
-                    rename($file, $file.'-'.date('Y-m-DH:i:s'));
+                    $backupDir = '../backup/';
+                    if (!file_exists($backupDir)) mkdir($backupDir);
+                    rename($file, $backupDir.$file.'-import-'.date('Y-m-d_H:i:s_').rand(1000,9999));
                 }
                 $cmd = "LC_ALL=C rrdtool restore $f.xml $file";
                 if ($this->_getParam('debug')) echo $cmd."\n";

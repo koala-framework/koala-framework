@@ -61,7 +61,7 @@ abstract class Vps_Update_Action_Rrd_Abstract extends Vps_Update_Action_Abstract
         if ($this->backup) {
             $backupDir = '../backup/';
             if (!file_exists($backupDir)) mkdir($backupDir);
-            copy($this->file, $backupDir.$this->file.'-'.date('Y-m-d_H:i:s_').rand(1000,9999));
+            copy($this->file, $backupDir.$this->file.'-update-'.date('Y-m-d_H:i:s_').rand(1000,9999));
         }
         rename($this->file.'.new', $this->file);
     }
