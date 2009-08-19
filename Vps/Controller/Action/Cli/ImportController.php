@@ -79,7 +79,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
         }
 
-        if ($config->server->import && $config->server->import->dirs) {
+        if ($config->server->import->dirs) {
             foreach ($config->server->import->dirs as $dir) {
                 echo "importing $dir...\n";
                 $ig = simplexml_load_string(`svn propget --recursive --xml svn:ignore $dir`);
@@ -151,7 +151,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
             $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
 
-            if ($config->server->import && $config->server->import->ignoreTables) {
+            if ($config->server->import->ignoreTables) {
                 foreach ($config->server->import->ignoreTables as $t) {
                     if (substr($t, -1) == '*') {
                         foreach ($tables as $table) {
@@ -166,7 +166,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
 
             $keepTables = array();
-            if ($config->server->import && $config->server->import->keepTables) {
+            if ($config->server->import->keepTables) {
                 foreach ($config->server->import->keepTables as $t) {
                     if (substr($t, -1) == '*') {
                         foreach ($tables as $table) {
@@ -274,36 +274,38 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         echo "\n";
         */
 
-        echo "importiere rrds...\n";
-        if ($ownConfig->server->host == $config->server->host) {
-            $cmd = "cd {$config->server->dir} && php bootstrap.php import get-rrd";
-        } else if (file_exists('/usr/local/bin/sshvps')) {
-            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-rrd";
-        } else {
-            $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-rrd");
-        }
-        if ($this->_getParam('debug')) echo $cmd."\n";
-        $data = unserialize(`$cmd`);
-        if (!is_array($data)) {
-            throw new Vps_Exception("importing rrd failed, invalid data");
-        }
-        foreach ($data as $file=>$dump) {
-            echo "   $file\n";
-            $f = tempnam('/tmp', 'rrdimport');
-            file_put_contents($f, $dump);
-            $cmd = "gunzip -c $f > $f.xml";
-            if ($this->_getParam('debug')) echo $cmd."\n";
-            $this->_systemCheckRet($cmd);
-            if (file_exists($file)) {
-                rename($file, $file.'-'.date('Y-m-DH:i:s'));
+        if (!$ownConfig->server->import->ignoreRrd) {
+            echo "importiere rrds...\n";
+            if ($ownConfig->server->host == $config->server->host) {
+                $cmd = "cd {$config->server->dir} && php bootstrap.php import get-rrd";
+            } else if (file_exists('/usr/local/bin/sshvps')) {
+                $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-rrd";
+            } else {
+                $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-rrd");
             }
-            $cmd = "LC_ALL=C rrdtool restore $f.xml $file";
             if ($this->_getParam('debug')) echo $cmd."\n";
-            $this->_systemCheckRet($cmd);
-            unlink($f);
-            unlink($f.".xml");
+            $data = unserialize(`$cmd`);
+            if (!is_array($data)) {
+                throw new Vps_Exception("importing rrd failed, invalid data");
+            }
+            foreach ($data as $file=>$dump) {
+                echo "   $file\n";
+                $f = tempnam('/tmp', 'rrdimport');
+                file_put_contents($f, $dump);
+                $cmd = "gunzip -c $f > $f.xml";
+                if ($this->_getParam('debug')) echo $cmd."\n";
+                $this->_systemCheckRet($cmd);
+                if (file_exists($file)) {
+                    rename($file, $file.'-'.date('Y-m-DH:i:s'));
+                }
+                $cmd = "LC_ALL=C rrdtool restore $f.xml $file";
+                if ($this->_getParam('debug')) echo $cmd."\n";
+                $this->_systemCheckRet($cmd);
+                unlink($f);
+                unlink($f.".xml");
+            }
+            echo "\n";
         }
-        echo "\n";
 
 
         if (!$this->_getParam('include-cache')) {
