@@ -380,8 +380,15 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         return $ret;
     }
 
+    //kopiert von model, da in row _getSiblingRows überschrieben sein kann
     public function hasColumn($col)
     {
-        return $this->_model->hasColumn($col);
+        if (!$this->getModel()->getOwnColumns()) return true;
+        if (in_array($col, $this->getModel()->getOwnColumns())) return true;
+        if (in_array($col, $this->getModel()->getExprColumns())) return true;
+        foreach ($this->_getSiblingRows() as $r) {
+            if ($r->hasColumn($col)) return true;
+        }
+        return false;
     }
 }
