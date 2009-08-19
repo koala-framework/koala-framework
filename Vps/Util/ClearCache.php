@@ -140,7 +140,7 @@ class Vps_Util_ClearCache
                 } else if (is_dir($d)) {
                     $this->_removeDirContents($d, $server);
                 }
-                if ($output) echo "cleared remote dir: $d cache\n";
+                if ($output) echo "cleared dir: $d cache\n";
             }
         }
     }
