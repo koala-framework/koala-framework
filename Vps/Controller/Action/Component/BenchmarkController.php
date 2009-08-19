@@ -27,6 +27,8 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
 
     public function indexAction()
     {
+        ob_start(); //wegen setcookie
+
         $active = array();
         if (isset($_REQUEST['submit'])) {
         } else if (isset($_COOKIE['benchmark-active'])) {
