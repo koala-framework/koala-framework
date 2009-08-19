@@ -101,7 +101,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     public function __isset($name)
     {
-        return $this->_model->hasColumn($name);
+        return $this->hasColumn($name);
     }
 
     public function __unset($name)
