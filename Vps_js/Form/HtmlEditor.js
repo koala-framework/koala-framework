@@ -908,6 +908,15 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 this.blockStylesSeparator.hide();
             }
         }
+    },
+
+    //syncValue schreibt den inhalt vom iframe in die textarea
+    //das darf aber nur gemacht werden wenn wir nicht in der html-code ansicht sind!
+    //behebt also einen bug von ext
+    syncValue : function(){
+        if (!this.sourceEditMode) {
+            Vps.Form.HtmlEditor.superclass.syncValue.call(this);
+        }
     }
 });
 Ext.reg('htmleditor', Vps.Form.HtmlEditor);
