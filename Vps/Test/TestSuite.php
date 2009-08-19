@@ -4,6 +4,7 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
     public function __construct($name = 'Vps Framework')
     {
         parent::__construct($name);
+        $this->setBackupGlobals(false);
         $this->_addDirectory(VPS_PATH.'/tests', true);
         $this->_addDirectory('./tests', false);
     }

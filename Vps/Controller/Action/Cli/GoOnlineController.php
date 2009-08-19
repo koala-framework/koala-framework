@@ -108,7 +108,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         } else {
             Vps_Controller_Action_Cli_TestController::initForTests();
             $suite = new Vps_Test_TestSuite();
-            $runner = new PHPUnit_TextUI_TestRunner;
+            $runner = new Vps_Test_TestRunner();
 
             Vps_Registry::set('testDomain', $testConfig->server->domain);
             Vps_Registry::set('testServerConfig', $testConfig);
