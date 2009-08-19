@@ -211,4 +211,12 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         $this->assertNotContains($title, $this->getTitle(), $message);
     }
+
+    public function assertValidHtml($uri = null)
+    {
+        if (is_null($uri)) {
+            $uri = $this->getLocation();
+        }
+        Vps_Test_TestCase::assertValidHtml($uri);
+    }
 }
