@@ -181,9 +181,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
 
             $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
-            $backupSize = filesize($dumpname);
-            $this->_systemCheckRet("bzip2 --fast $dumpname");
-            echo $dumpname.".bz2\n";
+            if ($dumpname) {
+                $backupSize = filesize($dumpname);
+                $this->_systemCheckRet("bzip2 --fast $dumpname");
+                echo $dumpname.".bz2\n";
+            }
 
 
             if ($keepTables) {
@@ -403,9 +405,13 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     {
         echo "erstelle backup...\n";
         $dumpname = $this->_backupDb(Vps_Util_ClearCache::getInstance()->getDbCacheTables());
-        $this->_systemCheckRet("bzip2 --fast $dumpname");
-        echo $dumpname.".bz2";
-        echo "\n";
+        if ($dumpname) {
+            $this->_systemCheckRet("bzip2 --fast $dumpname");
+            echo $dumpname.".bz2";
+            echo "\n";
+        } else {
+            echo "uebersprungen...\n";
+        }
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
@@ -446,7 +452,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         try {
             $db = Zend_Registry::get('db');
         } catch (Exception $e) {
-            return;
+            return null;
         }
         $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
