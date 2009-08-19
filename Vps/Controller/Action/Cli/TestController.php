@@ -131,44 +131,12 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $resultLogger = new Vps_Test_ResultLogger(true/*verbose*/);
             $arguments['listeners'][] = $resultLogger;
         }
+        if ($this->_getParam('no-progress')) {
+            $arguments['noProgress'] = true;
+        }
 
         $runner = new Vps_Test_TestRunner();
-
         $suite = new Vps_Test_TestSuite();
-        $suite->setBackupGlobals(false);
-
-        if (!$this->_getParam('no-progress')) {
-            $handlesArguments = $arguments;
-            $runner->handleConfiguration($handlesArguments);
-
-            $expectedTimes = array();
-            $unknownTimes = 0;
-            $tests = $suite->getFilteredTests(
-                            $handlesArguments['filter'],
-                            $handlesArguments['groups'],
-                            $handlesArguments['excludeGroups']);
-            foreach ($tests as $test) {
-                $app = Vps_Registry::get('config')->application->id;
-                $f = "/www/testtimes/$app/{$test->toString()}";
-                if (isset($expectedTimes[$test->toString()])) {
-                    throw new Vps_Exception("same test exists twice?!");
-                }
-                if (file_exists($f)) {
-                    $expectedTimes[$test->toString()] = (float)file_get_contents($f);
-                } else {
-                    if ($test instanceof PHPUnit_Extensions_SeleniumTestCase) {
-                        $expectedTimes[$test->toString()] = 15;
-                    } else {
-                        $expectedTimes[$test->toString()] = 1;
-                    }
-                    $unknownTimes++;
-                }
-            }
-
-            if ($unknownTimes/count($expectedTimes) > 0.2) $expectedTimes = array();
-            $printer = new Vps_Test_ProgressResultPrinter($expectedTimes, null, (bool)$this->_getParam('verbose'), true);
-            $runner->setPrinter($printer);
-        }
 
         try {
             $result = $runner->doRun(

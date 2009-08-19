@@ -78,6 +78,8 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
             $t = round(array_sum($this->_expectedTimes)-$this->_currentProgress, 1);
             if ($t > 120) {
                 $t = floor($t/60).' min '.($t%60).' sec';
+            } else {
+                $t = $t.' sec';
             }
             $this->_getProgressBar()->update($this->_currentProgress,
                 $this->_currentTest.'/'.count($this->_expectedTimes).' noch '.$t);
