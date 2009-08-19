@@ -76,7 +76,9 @@ class Vps_Util_ClearCache
 
         if ($refresh) {
             if ($output) echo "\n";
-            if (in_array('component', $types) || in_array('cache_component_meta', $types)) {
+            if (in_array('cache_component_meta', $this->getDbCacheTables())
+                && (in_array('component', $types) || in_array('cache_component_meta', $types))
+            ) {
                 if ($output) echo "Refresh static cache...";
                 try {
                     Vps_Component_Cache::refreshStaticCache();
