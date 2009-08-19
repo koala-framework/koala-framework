@@ -30,7 +30,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
     private function _systemSshVpsWithSubSections($cmd, $section)
     {
-        echo "$section-server...\n";
+        echo "$section...\n";
         $config = Vps_Config_Web::getInstance($section);
         $this->_systemSshVps($cmd, $config);
         if ($config->server->subSections) {
