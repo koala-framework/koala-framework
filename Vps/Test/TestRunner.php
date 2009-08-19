@@ -1,16 +1,28 @@
 <?php
 class Vps_Test_TestRunner extends PHPUnit_TextUI_TestRunner
 {
+    private $_retryOnError;
     protected function handleConfiguration(array &$arguments)
     {
         parent::handleConfiguration($arguments);
         if (!isset($arguments['noProgress'])) $arguments['noProgress'] = false;
+        if (!isset($arguments['retryOnError'])) $arguments['retryOnError'] = false;
+    }
+
+    protected function createTestResult()
+    {
+        $ret = new Vps_Test_TestResult;
+        $ret->setRetryOnError($this->_retryOnError);
+        return $ret;
     }
 
     public function doRun(PHPUnit_Framework_Test $suite, array $arguments = array())
     {
         $handlesArguments = $arguments;
         $this->handleConfiguration($handlesArguments);
+
+        $this->_retryOnError = $handlesArguments['retryOnError'];
+
         if (!$handlesArguments['noProgress'] && file_exists('/www/testtimes')) {
             $expectedTimes = array();
             $unknownTimes = 0;
