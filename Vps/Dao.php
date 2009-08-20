@@ -38,6 +38,7 @@ class Vps_Dao
         if (!isset($dbConfig['username']) && isset($dbConfig['user'])) $dbConfig['username'] = $dbConfig['user'];
         if (!isset($dbConfig['password']) && isset($dbConfig['pass'])) $dbConfig['password'] = $dbConfig['pass'];
         if (!isset($dbConfig['dbname']) && isset($dbConfig['name'])) $dbConfig['dbname'] = $dbConfig['name'];
+        $dbConfig['persistent'] = true;
         return $dbConfig;
     }
 
