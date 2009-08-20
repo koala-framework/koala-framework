@@ -77,6 +77,8 @@ class Vps_Assets_Dependencies
                             throw new Vps_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
                         }
                         $assets = $config->assets->{substr($assetsType, strpos($assetsType, ':')+1)};
+                    } else {
+                        throw new Vps_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
                     }
                 } else {
                     $assets = $this->_config->assets->$assetsType;
