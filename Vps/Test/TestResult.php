@@ -36,14 +36,14 @@ class Vps_Test_TestResult extends PHPUnit_Framework_TestResult
         }
         return false;
     }
-    public function addFailure(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
         if (!$this->_askForRetry($test, $e, $time)) {
             parent::addFailure($test, $e, $time);
         }
     }
 
-    public function addError(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
+    public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
         if (!$this->_askForRetry($test, $e, $time)) {
             parent::addError($test, $e, $time);
