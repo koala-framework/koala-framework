@@ -152,6 +152,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
                 break;
             }
         }
+        $ret['message'] = null;
 
         return $ret;
     }

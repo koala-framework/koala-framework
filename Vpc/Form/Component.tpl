@@ -2,6 +2,10 @@
 <?php
 if ($this->showSuccess) {
     echo $this->component($this->success);
+} else if ($this->message) {
+    echo '<div class="webStandard webForm vpcForm">';
+    echo $this->message;
+    echo '</div>';
 } else {
     if ($this->errors) {
         echo '<div class="webStandard vpcFormError webFormError">';
