@@ -272,6 +272,7 @@ class Vps_Setup
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
+        Zend_Date::setOptions(array('format_type' => 'php'));
 
         $ip = get_include_path();
         foreach ($config->includepath as $p) {
