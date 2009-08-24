@@ -113,7 +113,10 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             $stopComponent = $component->getPage();
             if (!is_null($stopComponent)) $stopComponent = $stopComponent->parent;
 
-            while (!$allowCheck && $c && !$c->componentId != $stopComponent->componentId) {
+            while (!$allowCheck &&
+                $c &&
+                (!$stopComponent || $c->componentId != $stopComponent->componentId)
+            ) {
                 $allowedComponentClasses = Vpc_Abstract::getChildComponentClasses(
                     $c->componentClass, array('page' => false)
                 );
