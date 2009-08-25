@@ -1,5 +1,5 @@
 <?php
-//todo: validators
+// TODO: validators
 class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
 {
     protected $_fields;
@@ -181,7 +181,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                     $key = $i->$pk;
                 }
                 if (!is_string($i)) $i = $i->__toString();
-                $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName()."[$key]"))
+                $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName().$key))
                     ->setKey($key)
                     ->setBoxLabel($i);
             }
@@ -222,7 +222,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         return $this->_pool;
     }
 
-    public function load(Vps_Model_Row_Interface $row)
+    public function load(Vps_Model_Row_Interface $row, $postData = array())
     {
         if (!$row) return array();
 
@@ -233,15 +233,20 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $key = $ref['column'];
 
         $selectedIds = array();
-        foreach ($this->_getRowsByRow($row) as $i) {
-            $selectedIds[] = $i->$key;
+        if ($this->getSave() !== false && $this->getInternalSave() !== false) {
+            foreach ($this->_getRowsByRow($row) as $i) {
+                $selectedIds[] = $i->$key;
+            }
         }
 
         $ret = array();
         foreach ($this->_getFields() as $field) {
-            $ret[$field->getFieldName()] = in_array($field->getKey(), $selectedIds);
+            if (isset($postData[$field->getFieldName()]) && $postData[$field->getFieldName()]) {
+                $ret[$field->getFieldName()] = true;
+            } else {
+                $ret[$field->getFieldName()] = in_array($field->getKey(), $selectedIds);
+            }
         }
-
         return $ret;
     }
 
@@ -251,13 +256,10 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         if ($dataModel) $this->setDataModel($dataModel);
 
         $new = array();
-        if ($postData[$this->getFieldName()]) {
-            foreach ($postData[$this->getFieldName()] as $key=>$value) {
-                if ($value) $new[] = $key;
+        foreach ($this->_getFields() as $f) {
+            if (isset($postData[$f->getFieldName()]) && $postData[$f->getFieldName()]) {
+                $new[] = substr($f->getFieldName(), strlen($this->getFieldName()));
             }
-        }
-        if ($this->getAllowBlank() === false && $new == array()) {
-            throw new Vps_ClientException("Please select at least one ".$this->getTitle().".");
         }
 
         $avaliableKeys = array();
@@ -291,5 +293,12 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                 $i->save();
             }
         }
+    }
+
+    public function getTemplateVars($values, $fieldNamePostfix = '')
+    {
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
+        $ret['items'] = $this->_getFields()->getTemplateVars($values, $fieldNamePostfix);
+        return $ret;
     }
 }
