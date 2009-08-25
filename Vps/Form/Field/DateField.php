@@ -19,8 +19,9 @@ class Vps_Form_Field_DateField extends Vps_Form_Field_SimpleAbstract
         if ($ret == trlVps('yyyy-mm-dd')) $ret = null;
         if ($ret == '') $ret = null;
         if ($ret) {
-            $date = new Zend_Date($ret);
-            $ret = $date->toString('Y-m-d');
+            $ret = str_replace('"', '', $ret);
+            $datetime = new DateTime($ret);
+            $ret = $datetime->format('Y-m-d');
         }
         return $ret;
     }
