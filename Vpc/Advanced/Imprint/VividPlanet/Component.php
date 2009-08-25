@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_Imprint_VividPlanet_Component extends Vpc_Abstract_Composite_Component
+class Vpc_Advanced_Imprint_VividPlanet_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
@@ -8,7 +8,6 @@ class Vpc_Advanced_Imprint_VividPlanet_Component extends Vpc_Abstract_Composite_
             'modelname' => 'Vps_Component_FieldModel',
             'cssClass' => 'webStandard'
         ));
-        $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
         return $ret;
     }
 }
