@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_Imprint_Disclaimer_Component extends Vpc_Abstract_Composite_Component
+class Vpc_Advanced_Imprint_Disclaimer_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
@@ -9,7 +9,6 @@ class Vpc_Advanced_Imprint_Disclaimer_Component extends Vpc_Abstract_Composite_C
             'cssClass' => 'webStandard'
         ));
         $ret['assets']['dep'][] = 'VpsSwitchDisplay';
-        $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
         return $ret;
     }
 }
