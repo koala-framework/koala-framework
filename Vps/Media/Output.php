@@ -51,11 +51,17 @@ class Vps_Media_Output
         }
         $lifetime = (24*60*60);
         if (isset($file['lifetime'])) {
-            $lifetime = $file['lifetime'];
+            if ($file['lifetime'] === false) {
+                $lifetime = false;
+            } else {
+                $lifetime = $file['lifetime'];
+            }
         }
-        $ret['headers'][] = 'Cache-Control: public, max-age='.$lifetime;
-        $ret['headers'][] = 'Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime);
-        $ret['headers'][] = 'Pragma: public';
+        if ($lifetime) {
+            $ret['headers'][] = 'Cache-Control: public, max-age='.$lifetime;
+            $ret['headers'][] = 'Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime);
+            $ret['headers'][] = 'Pragma: public';
+        }
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
                 $headers['If-Modified-Since'] == $lastModifiedString) {
             $ret['headers'][] = array('Not Modified', true, 304);
