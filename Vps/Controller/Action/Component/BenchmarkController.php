@@ -150,10 +150,13 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         echo "<a href=\"/admin/component/benchmark\">graphs</a><br /><br />";
         foreach ($this->_rrds as $rrd) {
             $values = array_values($rrd->getRecordValues());
+            $cnt = 0;
             foreach (array_values($rrd->getFields()) as $k=>$i) {
                 if ($values[$k] == 'U') $values[$k] = '?';
+                echo $cnt.': ';
                 echo $i->getText().": ".$values[$k];
                 echo "<br />";
+                $cnt++;
             }
             echo "<br />";
         }
