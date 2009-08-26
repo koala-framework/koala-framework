@@ -76,14 +76,20 @@ class Vps_Media
             // TODO Ev. Mail senden, wenn Grafik nicht ausgeliefert wird
             throw new Vps_Exception_NotFound();
         }
+
         $cacheId = self::createCacheId($class, $id, $type);
-        if (!$output = self::getOutputCache()->load($cacheId)) {
+        if (!Vps_Registry::get('config')->debug->mediaCache || !($output = self::getOutputCache()->load($cacheId))) {
             $output = call_user_func(array($class, 'getMediaOutput'), $id, $type, $class);
             $specificLifetime = false;
             if (isset($output['lifetime'])) {
                 $specificLifetime = $output['lifetime'];
             }
-            self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
+            if (Vps_Registry::get('config')->debug->mediaCache) {
+                self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
+            } else {
+                //browser cache deaktivieren
+                $output['lifetime'] = false;
+            }
         }
         return $output;
     }
