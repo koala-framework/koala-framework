@@ -36,7 +36,7 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
             'redirectId' => $params[0],
             'recipientId' => $params[1],
             'recipientModelShortcut' => $params[2],
-            'recipientModelClass' => $this->_getRecepientModelClass($params[2]),
+            'recipientModelClass' => $this->_getRecipientModelClass($params[2]),
             'hash' => $params[3]
         );
         $this->_params = $params;
@@ -101,13 +101,22 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
     public function replaceLinks($mailText, Vpc_Mail_Recipient_Interface $recipient = null)
     {
         if ($recipient) {
-            $recepientSource = self::getRecepientModelShortcut(
+            if ($recipient instanceof Zend_Db_Table_Row_Abstract) {
+                $class = get_class($recipient->getTable());
+                $recipientPrimary = $recipient->getTable()->info(Zend_Db_Table_Abstract::PRIMARY);
+                $recipientPrimary = $recipientPrimary[1];
+            } else if ($recipient instanceof Vps_Model_Row_Abstract) {
+                $class = get_class($recipient->getModel());
+                $recipientPrimary = $recipient->getModel()->getPrimaryKey();
+            } else {
+                throw new Vps_Exception('Only models or tables are supported.');
+            }
+            $recipientSource = self::getRecipientModelShortcut(
                 $this->getData()->parent->componentClass,
-                get_class($recipient->getModel())
+                $class
             );
 
             $m = $this->getModel();
-            $recipientPrimary = $recipient->getModel()->getPrimaryKey();
         }
 
         while (preg_match('/\*(.+?)\*(.+?)\*/', $mailText, $matches)) {
@@ -127,13 +136,13 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
                     $r->save();
                 }
 
-                // $recepientSource muss immer dabei sein, auch wenn es nur ein
+                // $recipientSource muss immer dabei sein, auch wenn es nur ein
                 // model gibt. Würde später eines dazukommen, funktionierten die alten
                 // Links nicht mehr
 
                 // linkId_userId_userSource_hash
                 $newLink = 'http://'.Vps_Registry::get('config')->server->domain
-                    .$this->_getRedirectUrl(array($r->id, $recipient->$recipientPrimary, $recepientSource));
+                    .$this->_getRedirectUrl(array($r->id, $recipient->$recipientPrimary, $recipientSource));
                 $mailText = str_replace($matches[0], $newLink, $mailText);
             }
         }
@@ -147,33 +156,33 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
             .'_'.$this->_getHash($parameters);
     }
 
-    public static function getRecepientModelShortcut($recepientSourcesComponentClass, $recipientModelClass)
+    public static function getRecipientModelShortcut($recipientSourcesComponentClass, $recipientModelClass)
     {
-        $recipientSources = Vpc_Abstract::getSetting($recepientSourcesComponentClass, 'recepientSources');
+        $recipientSources = Vpc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
         if (!in_array($recipientModelClass, $recipientSources)) {
-            throw new Vps_Exception("'$recipientModelClass' is not set in setting 'recepientSources' in '$recepientSourcesComponentClass'");
+            throw new Vps_Exception("'$recipientModelClass' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
         }
 
-        $recepientSource = array_keys($recipientSources, $recipientModelClass);
-        if (count($recepientSource) >= 2) {
-            throw new Vps_Exception("'$recipientModelClass' exists ".count($recepientSource)." times in setting 'recepientSources' in '$recepientSourcesComponentClass'. It may only have 1 shortcut.");
+        $recipientSource = array_keys($recipientSources, $recipientModelClass);
+        if (count($recipientSource) >= 2) {
+            throw new Vps_Exception("'$recipientModelClass' exists ".count($recipientSource)." times in setting 'recipientSources' in '$recipientSourcesComponentClass'. It may only have 1 shortcut.");
         }
 
-        return $recepientSource[0];
+        return $recipientSource[0];
     }
 
-    public static function getRecepientModelClass($recepientSourcesComponentClass, $recipientShortcut)
+    public static function getRecipientModelClass($recipientSourcesComponentClass, $recipientShortcut)
     {
-        $recipientSources = Vpc_Abstract::getSetting($recepientSourcesComponentClass, 'recepientSources');
+        $recipientSources = Vpc_Abstract::getSetting($recipientSourcesComponentClass, 'recipientSources');
         if (!isset($recipientSources[$recipientShortcut])) {
-            throw new Vps_Exception("Source key '$recipientShortcut' is not set in setting 'recepientSources' in '$recepientSourcesComponentClass'");
+            throw new Vps_Exception("Source key '$recipientShortcut' is not set in setting 'recipientSources' in '$recipientSourcesComponentClass'");
         }
         return $recipientSources[$recipientShortcut];
     }
 
-    protected function _getRecepientModelClass($recipientShortcut)
+    protected function _getRecipientModelClass($recipientShortcut)
     {
-        return self::getRecepientModelClass(
+        return self::getRecipientModelClass(
             $this->getData()->parent->componentClass, $recipientShortcut
         );
     }

@@ -12,6 +12,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         );
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/MailingPanel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/RecipientsPanel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/RecipientsAction.js';
         $ret['assetsAdmin']['files'][] = 'ext/src/widgets/StatusBar.js';
         $ret['componentName'] = 'Newsletter';
         return $ret;
@@ -24,17 +25,25 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
             throw new Vps_ClientException(trlVps('Can only add users to a paused newsletter'));
         }
 
+        if ($recipient instanceof Zend_Db_Table_Row_Abstract) {
+            $class = get_class($recipient->getTable());
+        } else if ($recipient instanceof Vps_Model_Row_Abstract) {
+            $class = get_class($recipient->getModel());
+        } else {
+            throw new Vps_Exception('Only models or tables are supported.');
+        }
+
         // check if the necessary modelShortcut is set in 'mail' childComponent
         $generators = $this->_getSetting('generators');
         // this function checks if everything neccessary is set
-        Vpc_Mail_Redirect_Component::getRecepientModelShortcut(
+        Vpc_Mail_Redirect_Component::getRecipientModelShortcut(
             $generators['mail']['component'],
-            get_class($recipient->getModel())
+            $class
         );
 
         $this->_toImport[] = array(
             'newsletter_id' => $newsletter->id,
-            'recipient_model' => get_class($recipient->getModel()),
+            'recipient_model' => $class,
             'recipient_id' => $recipient->id,
             'status' => 'queued',
             'searchtext' =>
