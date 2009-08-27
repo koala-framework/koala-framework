@@ -17,6 +17,12 @@ class Vpc_Mail_Component extends Vpc_Abstract
             'name' => 'r'
         );
 
+        $ret['default'] = array(
+            'from_email' => 'el@vivid-planet.com',
+            'from_name' => 'Erich Lechenauer',
+            'reply_email' => 'el@vivid-planet.com'
+        );
+
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/PreviewWindow.js';
         $ret['plugins']['placeholders'] = 'Vpc_Mail_PlaceholdersPlugin';
         $ret['modelname'] = 'Vpc_Mail_Model';

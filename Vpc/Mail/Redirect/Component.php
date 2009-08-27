@@ -101,13 +101,22 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
     public function replaceLinks($mailText, Vpc_Mail_Recipient_Interface $recipient = null)
     {
         if ($recipient) {
+            if ($recipient instanceof Zend_Db_Table_Row_Abstract) {
+                $class = get_class($recipient->getTable());
+                $recipientPrimary = $recipient->getTable()->info(Zend_Db_Table_Abstract::PRIMARY);
+                $recipientPrimary = $recipientPrimary[1];
+            } else if ($recipient instanceof Vps_Model_Row_Abstract) {
+                $class = get_class($recipient->getModel());
+                $recipientPrimary = $recipient->getModel()->getPrimaryKey();
+            } else {
+                throw new Vps_Exception('Only models or tables are supported.');
+            }
             $recepientSource = self::getRecepientModelShortcut(
                 $this->getData()->parent->componentClass,
-                get_class($recipient->getModel())
+                $class
             );
 
             $m = $this->getModel();
-            $recipientPrimary = $recipient->getModel()->getPrimaryKey();
         }
 
         while (preg_match('/\*(.+?)\*(.+?)\*/', $mailText, $matches)) {
