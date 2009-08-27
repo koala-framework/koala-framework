@@ -1,10 +1,19 @@
 <?php
 class Vps_View_Helper_Date
 {
-    public function date($date)
+    public function date($date, $format = null)
     {
+        if (!$format) $format = trlVps('Y-m-d');
+
         if (!$date) return '';
+
+        $d = new Vps_Date();
+        return $d->toString($format);
+
+        /*
+        Das ist schneller, kann aber keine übersetzung bei Monatsnamen etc
         $datetime = new DateTime($date);
-        return $datetime->format(trlVps('Y-m-d'));
+        return $datetime->format($format);
+        */
     }
 }
