@@ -58,7 +58,7 @@ Vpc.Basic.ImageEnlarge.tplSwitchBig = new Ext.XTemplate(
     '<div class="switchBig {type}SwitchBig">',
         '<div class="lightboxContent">',
             '<p><tpl if="type==\'previous\'">« </tpl>{text}<tpl if="type==\'next\'"> »</tpl></p>',
-            '<img width="185px" src="{src}" />',
+            '<img width="185" src="{src}" />',
         '</div>',
     '</div>'
 );
