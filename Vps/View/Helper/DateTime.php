@@ -1,10 +1,9 @@
 <?php
-class Vps_View_Helper_DateTime
+class Vps_View_Helper_DateTime extends Vps_View_Helper_Date
 {
-    public function dateTime($date)
+    public function dateTime($date, $format = null)
     {
-        if (!$date) return '';
-        $datetime = new DateTime($date);
-        return $datetime->format(trlVps('Y-m-d H:i'));
+        if (!$format) $format = trlVps('Y-m-d H:i');
+        return $this->date($date, $format);
     }
 }

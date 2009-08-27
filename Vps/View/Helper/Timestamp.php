@@ -1,4 +1,7 @@
 <?php
+/**
+ * @deprecated
+ */
 class Vps_View_Helper_Timestamp
 {
     public function timestamp($date)
