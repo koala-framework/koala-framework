@@ -41,6 +41,11 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
             $class
         );
 
+        // break here if the receiver has unsubscribed
+        if ($recipient instanceof Vpc_Mail_Recipient_UnsubscribableInterface) {
+            if ($recipient->getMailUnsubscribe()) return false;
+        }
+
         $this->_toImport[] = array(
             'newsletter_id' => $newsletter->id,
             'recipient_model' => $class,
