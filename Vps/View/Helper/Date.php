@@ -7,7 +7,7 @@ class Vps_View_Helper_Date
 
         if (!$date) return '';
 
-        $d = new Vps_Date();
+        $d = new Vps_Date($date);
         return $d->toString($format);
 
         /*
