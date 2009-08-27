@@ -28,10 +28,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $ret['modelname'] = 'Vpc_Mail_Model';
         $ret['componentName'] = 'Mail';
 
-        // set shorter source keys for recepient models
+        // set shorter source keys for recipient models
         // key = sourceShortcut, value = modelClass
         // e.g. array('user' => 'Vps_User_Model')
-        $ret['recepientSources'] = array();
+        $ret['recipientSources'] = array();
 
         $ret['mailHtmlStyles'] = array();
         $ret['bcc'] = false;
