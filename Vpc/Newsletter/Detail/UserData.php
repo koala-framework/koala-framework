@@ -10,9 +10,7 @@ class Vpc_Newsletter_Detail_UserData extends Vps_Data_Abstract
 
     public function load($row)
     {
-        $modelname = $row->recipient_model;
-        $model = Vps_Model_Abstract::getInstance($modelname);
-        $recipient = $model->getRow($row->recipient_id);
+        $recipient = $row->getRecipient();
         if (!$recipient) {
             $row->status = 'userNotFound';
             $row->save();

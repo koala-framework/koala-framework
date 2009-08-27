@@ -7,6 +7,17 @@ class Vpc_Newsletter_Detail_Admin extends Vpc_Admin
         $mailClass = Vpc_Abstract::getChildComponentClass($this->_class, 'mail');
         $mailContentClass = Vpc_Abstract::getChildComponentClass($mailClass, 'content');
         $cfg = Vpc_Admin::getInstance($mailContentClass)->getExtConfig();
+        $configs = array();
+        $editComponents = array();
+        $mainType = null;
+        foreach ($cfg as $key => $c) {
+            $configs[$mailContentClass . '-' . $key] = $c;
+            $editComponents[] = array(
+                'componentClass' => $mailContentClass,
+                'type' => $key
+            );
+            if (!$mainType) $mainType = $key;
+        }
 
         $ret['form'] = array_merge($ret['form'], array(
             'xtype' => 'vps.tabpanel',
@@ -21,12 +32,9 @@ class Vpc_Newsletter_Detail_Admin extends Vpc_Admin
                     'componentEditUrl'      => '/admin/component/edit',
                     'mainComponentClass'    => $mailContentClass,
                     'componentIdSuffix'     => '-mail-content',
-                    'componentConfigs'      => array($mailContentClass . '-paragraphs' => $cfg['paragraphs']),
-                    'mainEditComponents'    => array(array(
-                        'componentClass' => $mailContentClass,
-                        'type' => 'paragraphs'
-                    )),
-                    'mainType'              => 'paragraphs',
+                    'componentConfigs'      => $configs,
+                    'mainEditComponents'    => $editComponents,
+                    'mainType'              => $mainType,
                     'title'                 => trlVps('Mail')
                 ),
                 'recipients' => array(

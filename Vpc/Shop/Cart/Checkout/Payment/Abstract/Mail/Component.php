@@ -6,7 +6,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component extends Vpc_Mail_Ed
         $ret = parent::getSettings();
         $ret['generators']['content']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Component';
         $ret['componentName'] = trlVps('Shop Conformation Mail');
-        $ret['recepientSources'] = array(
+        $ret['recipientSources'] = array(
             'ord' => 'Vpc_Shop_Cart_Orders'
         );
         return $ret;

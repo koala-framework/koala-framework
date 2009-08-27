@@ -17,15 +17,21 @@ class Vpc_Mail_Component extends Vpc_Abstract
             'name' => 'r'
         );
 
+        $ret['default'] = array(
+            'from_email' => 'el@vivid-planet.com',
+            'from_name' => 'Erich Lechenauer',
+            'reply_email' => 'el@vivid-planet.com'
+        );
+
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/PreviewWindow.js';
         $ret['plugins']['placeholders'] = 'Vpc_Mail_PlaceholdersPlugin';
         $ret['modelname'] = 'Vpc_Mail_Model';
         $ret['componentName'] = 'Mail';
 
-        // set shorter source keys for recepient models
+        // set shorter source keys for recipient models
         // key = sourceShortcut, value = modelClass
         // e.g. array('user' => 'Vps_User_Model')
-        $ret['recepientSources'] = array();
+        $ret['recipientSources'] = array();
 
         $ret['mailHtmlStyles'] = array();
         $ret['bcc'] = false;
