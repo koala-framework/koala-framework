@@ -36,7 +36,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         // check if the necessary modelShortcut is set in 'mail' childComponent
         $generators = $this->_getSetting('generators');
         // this function checks if everything neccessary is set
-        Vpc_Mail_Redirect_Component::getRecepientModelShortcut(
+        Vpc_Mail_Redirect_Component::getRecipientModelShortcut(
             $generators['mail']['component'],
             $class
         );
