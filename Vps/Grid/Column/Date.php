@@ -14,6 +14,7 @@ class Vps_Grid_Column_Date extends Vps_Grid_Column
     {
         $ret = parent::load($row, $role);
         $ret = substr($ret, 0, 10);
+        if ($ret == '0000-00-00') $ret = null;
         //todo: datum formatieren wenn export; übersetzung berücksichtigen
         return $ret;
     }
