@@ -78,13 +78,13 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 echo "OK\n";
             }
         }
-
         if (Vps_Registry::get('config')->application->id != 'service') {
             if (Vps_Setup::getConfigSection() == 'production') {
                 echo "\nAuf Production wird der user service NICHT importiert, das haette fatale Folgen.\n";
                 echo "Moeglicherweise muss 'vps create-users' ausgefuehrt werden\n\n";
             } else {
-                if (!in_array($ownConfig->server->host, $localHosts) && substr($config->service->usersAll->url, 0, 6) == '.vivid') {
+                $isLocalServiceUrl = preg_match('#^http://[^/]+\\.vivid/#', $config->service->usersAll->url);
+                if (!in_array($ownConfig->server->host, $localHosts) && $isLocalServiceUrl) {
                     echo "\nKann user nicht importieren da diese von einem lokalen service sind.\n";
                     echo "Moeglicherweise muss 'vps create-users' ausgefuehrt werden\n\n";
                 } else {
