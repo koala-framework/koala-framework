@@ -3,18 +3,46 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 {
     public function indexAction()
     {
+        $useSshVps = file_exists('/usr/local/bin/sshvps');
+        $localHosts = array(
+            'vivid',
+            'vivid-test-server'
+        );
+
         $ownConfig = Vps_Registry::get('config');
+
+        if (Vps_Setup::getConfigSection() == $this->_getParam('server')) {
+            throw new Vps_ClientException("Von dir selbst importieren ist natuerlich nicht moeglich.");
+        }
+        if (true || Vps_Setup::getConfigSection() == 'production') {
+            echo "ACHTUNG!!!!\n";
+            echo "Du willst auf production importieren, dabei werden alle Daten auf production ueberschrieben.\n";
+            echo "Bist du dir wirklich, wirklich sicher?\n";
+            echo "[N/j]";
+            $stdin = fopen('php://stdin', 'r');
+            $input = trim(strtolower(fgets($stdin, 2)));
+            fclose($stdin);
+            if ($input != 'j' && $input != 'y') {
+                exit;
+            }
+        }
 
         $config = Vps_Config_Web::getInstance($this->_getParam('server'));
         if (!$config->server || !$config->server->host) {
-            throw new Vps_ClientException("kein server konfiguriert");
+            throw new Vps_ClientException("kein server host konfiguriert");
+        }
+        if (in_array($config->server->host, $localHosts) && !in_array($ownConfig->server->host, $localHosts)) {
+            if ($config->server->host != 'vivid') {
+                throw new Vps_ClientException("Nur von vivid kann nach online importiert werden");
+            }
+            $config->server->host = 'intern.vivid-planet.com';
         }
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
 
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-update-revision";
-        } else if (file_exists('/usr/local/bin/sshvps')) {
+        } else if ($useSshVps) {
             $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-update-revision";
         } else {
             $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-update-revision");
@@ -57,15 +85,19 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         if ($config->uploads && $ownConfig->uploads) {
             echo "kopiere uploads...\n";
-            if ($ownConfig->server->host == $config->server->host) {
+            if (false && $ownConfig->server->host == $config->server->host) {
                 if ($ownConfig->uploads == $config->uploads) {
                     throw new Vps_ClientException("Uplodas-Pfade für beide Server sind gleich!");
                 }
                 $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
-            } else if (file_exists('/usr/local/bin/sshvps')) {
+            } else if ($useSshVps) {
                 $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
+            } else if (true || $config->server->host == 'vivid' && !in_array($ownConfig->server->host, $localHosts)) {
+                $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
+                if ($this->_getParam('debug')) echo "$cmd\n";
+                $this->_systemCheckRet($cmd);
             } else {
                 $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
@@ -107,7 +139,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                     }
                     $cmd .= "--exclude='*' ";
                     $cmd .= ". {$ownConfig->server->dir}";
-                } else if (file_exists('/usr/local/bin/sshvps')) {
+                } else if ($useSshVps) {
                     $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir copy-files";
                     $cmd .= " --includes=\"".implode(',', $includes)."\"";
                     if ($this->_getParam('debug')) $cmd .= " --debug";
@@ -198,7 +230,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
                 $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
-            } else if (file_exists('/usr/local/bin/sshvps')) {
+            } else if ($useSshVps) {
                 $ignoreTables = '';
                 if (!$this->_getParam('include-cache')) {
                     $ignoreTables = implode(',', array_merge($cacheTables, $keepTables));
@@ -270,7 +302,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         echo "importiere rrds...\n";
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-rrd";
-        } else if (file_exists('/usr/local/bin/sshvps')) {
+        } else if ($useSshVps) {
             $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-rrd";
         } else {
             $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-rrd");
