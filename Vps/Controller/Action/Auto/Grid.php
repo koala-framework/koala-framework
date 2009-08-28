@@ -382,6 +382,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     throw new Vps_Exception("You don't have the permissions to load this row");
                 }
                 foreach ($this->_columns as $column) {
+                    if ($column instanceof Vps_Grid_Column_RowNumberer) continue;
                     if ($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID) {
                         $data = $column->load($row, Vps_Grid_Column::ROLE_DISPLAY);
                         $r[$column->getDataIndex()] = $data;
@@ -454,6 +455,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $data = $column->getMetaData($this->_getModel(), $this->_getTableInfo());
             if ($data) {
                 $this->view->metaData['columns'][] = $data;
+                if ($column instanceof Vps_Grid_Column_RowNumberer) continue;
 
                 $d = array();
                 if (isset($data['dataIndex'])) {
