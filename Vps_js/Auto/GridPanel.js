@@ -241,7 +241,10 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             var column = meta.columns[i];
             if (column.header == null) continue;
 
-            if (typeof column.renderer == 'function') {
+            if (column['class'] && column['class'] != '') {
+            	var cl = eval(column['class']);
+            	column = new cl(Ext.apply({'header' : column.header}, column.config));
+            } else if (typeof column.renderer == 'function') {
                 //do nothing
             } else if (Ext.util.Format[column.renderer]) {
                 column.renderer = Ext.util.Format[column.renderer];
