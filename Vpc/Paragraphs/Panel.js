@@ -30,6 +30,17 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 
         this.items = [ this.dataView ];
 
+        this.actions.showPreview = new Ext.Action({
+            text : trlVps('Preview'),
+            icon : '/assets/silkicons/zoom.png',
+            cls  : 'x-btn-text-icon',
+            enableToggle: true,
+            handler: function(b) {
+                this.dataView.showToolbars = !b.pressed;
+                this.dataView.refresh();
+            },
+            scope: this
+        });
         this.actions.showVisible = new Ext.Action({
             text : trlVps('Show'),
             icon : '/assets/silkicons/monitor.png',
@@ -76,7 +87,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             }
         });
 
-        this.tbar = [ this.actions.showVisible, '-', this.actions.addparagraph ];
+        this.tbar = [ this.actions.showPreview, '-', this.actions.showVisible, '-', this.actions.addparagraph ];
 
 
         Vpc.Paragraphs.Panel.superclass.initComponent.call(this);
