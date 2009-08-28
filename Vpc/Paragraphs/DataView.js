@@ -4,6 +4,7 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
     overClass: 'x-view-over',
     itemSelector: 'div.paragraph-wrap',
     width: 600,
+    showToolbars: true,
     initComponent: function()
     {
         this.componentConfigs = {};
@@ -42,6 +43,8 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
         Ext.each(Vps.contentReadyHandlers, function(i) {
             i.fn.call(i.scope | window);
         }, this);
+
+        if (!this.showToolbars) return;
 
         var nodes = this.getNodes();
         for (var i=0; i< nodes.length; i++) {
