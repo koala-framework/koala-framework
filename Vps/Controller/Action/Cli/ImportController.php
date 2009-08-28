@@ -14,7 +14,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if (Vps_Setup::getConfigSection() == $this->_getParam('server')) {
             throw new Vps_ClientException("Von dir selbst importieren ist natuerlich nicht moeglich.");
         }
-        if (true || Vps_Setup::getConfigSection() == 'production') {
+        if (Vps_Setup::getConfigSection() == 'production') {
             echo "ACHTUNG!!!!\n";
             echo "Du willst auf production importieren, dabei werden alle Daten auf production ueberschrieben.\n";
             echo "Bist du dir wirklich, wirklich sicher?\n";
@@ -80,7 +80,17 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
 
         if (Vps_Registry::get('config')->application->id != 'service') {
-            $this->_copyServiceUsers();
+            if (Vps_Setup::getConfigSection() == 'production') {
+                echo "\nAuf Production wird der user service NICHT importiert, das haette fatale Folgen.\n";
+                echo "Moeglicherweise muss 'vps create-users' ausgefuehrt werden\n\n";
+            } else {
+                if (!in_array($ownConfig->server->host, $localHosts) && substr($config->service->usersAll->url, 0, 6) == '.vivid') {
+                    echo "\nKann user nicht importieren da diese von einem lokalen service sind.\n";
+                    echo "Moeglicherweise muss 'vps create-users' ausgefuehrt werden\n\n";
+                } else {
+                    $this->_copyServiceUsers();
+                }
+            }
         }
 
         if ($config->uploads && $ownConfig->uploads) {
