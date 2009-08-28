@@ -529,6 +529,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $success = false;
 
         $data = Zend_Json::decode($this->getRequest()->getParam("data"));
+        if (!$data) $data = array();
         $addedIds = array();
         ignore_user_abort(true);
         Zend_Registry::get('db')->beginTransaction();
