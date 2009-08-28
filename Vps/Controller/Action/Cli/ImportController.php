@@ -190,7 +190,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
             echo "importiere datenbank...\n";
             if ($ownConfig->server->host == $config->server->host) {
-                $otherDbConfig = unserialize(`cd {$config->server->dir} && php bootstrap.php import get-db-config`);
+                $cmd = "cd {$config->server->dir} && php bootstrap.php import get-db-config";
+                if ($this->_getParam('debug')) echo "$cmd\n";
+                $otherDbConfig = unserialize(`$cmd`);
                 $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
             } else if (file_exists('/usr/local/bin/sshvps')) {
                 $ignoreTables = '';
