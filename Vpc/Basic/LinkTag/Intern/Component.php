@@ -30,14 +30,7 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
             );
             if ($linkedData instanceof Vpc_Basic_LinkTag_FirstChildPage_Data) {
                 $childData = $linkedData->_getFirstChildPage();
-                $ret[] = array(
-                    'model' => 'Vps_Component_Model',
-                    'id' => $childData->row->id
-                );
-                $ret[] = array(
-                    'model' => 'Vps_Dao_Pages',
-                    'id' => $childData->row->id
-                );
+                $ret = array_merge($ret, $childData->getComponent()->getCacheVars());
             }
         }
         return $ret;
