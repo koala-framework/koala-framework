@@ -95,7 +95,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         if ($config->uploads && $ownConfig->uploads) {
             echo "kopiere uploads...\n";
-            if (false && $ownConfig->server->host == $config->server->host) {
+            if ($ownConfig->server->host == $config->server->host) {
                 if ($ownConfig->uploads == $config->uploads) {
                     throw new Vps_ClientException("Uplodas-Pfade für beide Server sind gleich!");
                 }
@@ -104,7 +104,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 $this->_systemCheckRet($cmd);
             } else if ($useSshVps) {
                 $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
-            } else if (true || $config->server->host == 'vivid' && !in_array($ownConfig->server->host, $localHosts)) {
+            } else if ($config->server->host == 'vivid' && !in_array($ownConfig->server->host, $localHosts)) {
                 $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
