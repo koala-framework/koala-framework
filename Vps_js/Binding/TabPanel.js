@@ -25,9 +25,15 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 autoScroll  : true,
                 closable    : false,
                 title       : i,
-                baseParams  : b,
+                // das funktioniert nicht. wenn seitentyp eine composite mit TabsAdmin
+                // ist dann wird immer der parameter der ersten angeklickten seite
+                // dieses typs verwendet. wenn es direkt darunter mit setBaseParams
+                // gemacht wird ist alles ok
+//                 baseParams  : b,
                 autoLoad    : this.autoLoad
             }));
+            item.setBaseParams(b);
+
             this.relayEvents(item, ['editcomponent', 'gotComponentConfigs']);
             this.tabPanel.add(item);
             this.tabItems.push(item);
