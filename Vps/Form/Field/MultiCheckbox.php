@@ -46,8 +46,10 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         self::$_multiCheckboxes[] = $fieldKey;
 
         parent::__construct($fieldKey);
-        if ($title) $this->setTitle($title);
-        $this->setHideLabels(true);
+        if ($title) {
+            $this->setTitle($title);
+            $this->setFieldLabel($title);
+        }
         $this->setAutoHeight(true);
         $this->setLayout('form');
         $this->setXtype('fieldset');
@@ -183,7 +185,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                 if (!is_string($i)) $i = $i->__toString();
                 $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName().$key))
                     ->setKey($key)
-                    ->setBoxLabel($i);
+                    ->setBoxLabel($i)
+                    ->setHideLabel(true);
             }
         }
         return $this->_fields;
@@ -298,7 +301,14 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
-        $ret['items'] = $this->_getFields()->getTemplateVars($values, $fieldNamePostfix);
+        $helper = new Vps_View_Helper_FormField();
+        $ret['html'] = '';
+        $fields = $this->_getFields()->getTemplateVars($values, $fieldNamePostfix);
+        $i = 0;
+        foreach ($fields as $field) {
+            $ret['html'] .= '<div class="checkboxItem'.($i==0?' first':'').'">'.$helper->returnFormField($field).'</div>';
+            $i++;
+        }
         return $ret;
     }
 }
