@@ -3,19 +3,31 @@ class Vps_View_Helper_FormField
 {
     public function formField($vars)
     {
+        echo $this->returnFormField($vars);
+    }
+
+    /**
+     * Diese Methode returned. Die eigentliche (obere) funktion wurde aus
+     * rückwärtskompatibilität belassen. Diese Methode wird zB im
+     * getTemplateVars der MultiCheckbox verwendet.
+     */
+    public function returnFormField($vars)
+    {
         extract($vars);
-        if (isset($mask)) echo '{' . $mask . '}';
-        if (isset($preHtml)) { echo $preHtml; }
+        $ret = '';
+        if (isset($mask)) $ret .= '{' . $mask . '}';
+        if (isset($preHtml)) { $ret .= $preHtml; }
         if (isset($html)) {
-            echo $html;
+            $ret .= $html;
         } elseif (isset($items)) {
             foreach ($items as $i) {
-                $this->formField($i);
+                $ret .= $this->returnFormField($i);
             }
         } elseif (isset($component)) {
-            echo Vps_View_Component::renderComponent($component);
+            $ret .= Vps_View_Component::renderComponent($component);
         }
-        if (isset($postHtml)) { echo $postHtml; }
-        if (isset($mask)) echo '{/' . $mask . '}';
+        if (isset($postHtml)) { $ret .= $postHtml; }
+        if (isset($mask)) $ret .= '{/' . $mask . '}';
+        return $ret;
     }
 }
