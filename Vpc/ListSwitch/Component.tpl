@@ -10,8 +10,9 @@
                 break; ?>
             <? } ?>
         </div>
-        <a href="#" class="listSwitchPrevious"><?= trlVps('previous'); ?></a>
-        <a href="#" class="listSwitchNext"><?= trlVps('next'); ?></a>
+        <a href="#" class="listSwitchPrevious"><?=$this->placeholder['prev'];?></a>
+        <a href="#" class="listSwitchNext"><?=$this->placeholder['next'];?></a>
+        <div class="clear"></div>
     </div>
 
     <div class="listSwitchPreviewWrapper">
