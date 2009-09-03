@@ -7,6 +7,8 @@ class Vpc_ListSwitch_Component extends Vpc_Abstract_List_Component
         $ret['assets']['files'][] = 'vps/Vpc/ListSwitch/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['generators']['child']['component'] = 'Vpc_ListSwitch_Preview_Component';
+        $ret['placeholder']['prev'] = trlVps('previous');
+        $ret['placeholder']['next'] = trlVps('next');
         return $ret;
     }
 }
