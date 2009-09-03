@@ -57,9 +57,6 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
         $row = $this->_model->createRow();
         $this->_beforeInsert($row);
         $this->_beforeSave($row);
-        if ($this->_position) {
-            $row->pos = 0;
-        }
         $this->view->id = $row->save();
 
         Zend_Registry::get('db')->commit();
