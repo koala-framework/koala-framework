@@ -26,7 +26,7 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             echo "\nupdating library\n";
             passthru('svn up '.Vps_Registry::get('config')->libraryPath);
         } else {
-            echo "\n[\033[01;33mlibrary skipped\033[00m]: use --with-library if you wish to update library as well\n";
+            echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
         }
 
         $projectIds = array();
