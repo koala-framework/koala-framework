@@ -14,6 +14,10 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
                 'value'=> self::_getConfigSections(),
                 'valueOptional' => false,
                 'help' => 'where to update'
+            ),
+            array(
+                'param'=> 'with-library',
+                'help' => 'updates library as well'
             )
         );
     }
@@ -33,7 +37,12 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
 
-        $this->_systemSshVps("svn-up");
+        $params = '';
+        if ($this->_getParam('with-library')) {
+            $params .= ' --with-library';
+        }
+        die("svn-up{$params}"."\n\n");
+        $this->_systemSshVps("svn-up{$params}");
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }
