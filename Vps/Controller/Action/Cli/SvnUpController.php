@@ -6,14 +6,28 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
         return "svn update web+vps";
     }
 
+    public static function getHelpOptions()
+    {
+        return array(
+            array(
+                'param'=> 'with-library',
+                'help' => 'updates library as well'
+            )
+        );
+    }
+
     public function indexAction()
     {
         echo "updating web\n";
         passthru('svn up');
         echo "\nupdating vps\n";
         passthru('svn up '.VPS_PATH);
-        echo "\nupdating library\n";
-        passthru('svn up '.Vps_Registry::get('config')->libraryPath);
+        if ($this->_getParam('with-library')) {
+            echo "\nupdating library\n";
+            passthru('svn up '.Vps_Registry::get('config')->libraryPath);
+        } else {
+            echo "\nlibrary skipped: use --with-library if you wish to update library as well\n";
+        }
 
         $projectIds = array();
         if (Vps_Registry::get('config')->todo->projectIds) {
