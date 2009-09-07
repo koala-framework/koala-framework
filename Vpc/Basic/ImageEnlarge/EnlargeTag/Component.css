@@ -1,18 +1,38 @@
 .vpsEnlargeTagData { display: none; }
 
-.lightbox { position:absolute; background-color: #fff; width: 680px; height: 542px; z-index: 100; display: none; }
+.lightbox {
+    position: absolute;
+    width: 680px;
+    height: 590px;
+    display: none;
+    background-color: #fff;
+    z-index: 100;
+}
 
 .lightbox .lightboxHeader {
     height: 20px;
-    margin:  0px 10px 5px 10px;
-    padding: 5px 10px 3px 10px;
-    font-weight:bold; color: #555; border-bottom:1px solid #aaa;
+    margin: 0px 10px 5px 10px;
+    padding: 7px 10px 0px 10px;
+    font-weight:bold;
+    color: #555;
+    border-bottom: 1px solid #aaa;
 }
+.lightbox .lightboxHeader span { float: left; }
+
 .lightbox .fullSizeLink {
-    display: block; float: left; width: 16px; height: 16px; padding-right: 10px;
+    float: left;
+    width: 16px;
+    height: 16px;
+    display: block;
+    padding-right: 10px;
     background: url(/assets/silkicons/picture_save.png) left top no-repeat;
 }
-.lightbox .lightboxBody { text-align: center; position: relative; height: 475px; }
+.lightbox .lightboxBody {
+    position: relative;
+    height: 540px;
+    text-align: center;
+}
+.lightbox .lightboxBody .switchBig { display: none; }
 .lightbox .lightboxFooter {
     margin:  -10px 10px 0px 10px;
     padding: 3px 10px 5px 10px;
@@ -24,18 +44,20 @@
 }
 
 .lightbox .lightboxFooter .prevBtn {
-    width: 60px;
+    width: auto;
     float: left;
     margin-top: 1px;
 }
-.lightbox .lightboxFooter .title {
+.lightbox .lightboxFooter div.title {
+    float: left;
+    position: absolute;
+    left: 85px;
     width: 515px;
     height: 30px;
-    overflow: hidden;
-    float: left;
-    font-weight: bold;
     font-size: 11px;
+    font-weight: bold;
     text-align: center;
+    overflow: hidden;
 }
 .lightbox .lightboxFooter .nextBtn {
     float: right;

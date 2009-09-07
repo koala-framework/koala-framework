@@ -15,9 +15,12 @@
     height: 25px;
 }
 /*styling für buttons, die eine variable länge haben, aber zb. abgerundet sind*/
+.$cssClass .submitWrapper {
+    margin-top: 20px;
+    text-align: center;
+}
 .$cssClass .submitWrapper span {
     display: block;
-    float: left;
 }
 .$cssClass input,
 .$cssClass textarea,
@@ -45,9 +48,11 @@
 }
 .$cssClass label {
     float: left;
+    width: 120px;
     margin-right: 20px;
     text-align: right;
 }
+.$cssClass .vpsFieldRequired label { font-weight: bold; }
 .$cssClass .vpsFieldLabelAlignTop label {
     width: auto;
     margin: 0px;
@@ -74,6 +79,7 @@
     margin-right: 20px;
     clear: none;
 }
+.$cssClass form .vpsFormFieldRadioHorizontal label { float: none; width: auto; }
 .ext-ie .$cssClass .form_title {
     margin-top: -5px;
     padding-bottom: 5px;
@@ -85,10 +91,13 @@
     margin-bottom: 0px;
 }
 .$cssClass .vpcFormError {
-    padding: 10px;
+    border: 1px dashed $mainColor;
+    margin-bottom: 20px;
+    padding: 10px 10px 0px 10px !important;
 }
 .$cssClass .vpcFormError h1 {
     font-weight: bold;
     font-size: 12px;
+    margin-bottom: 10px;
 }
 .$cssClass span.comment { margin-left: 10px; color: #999; }
