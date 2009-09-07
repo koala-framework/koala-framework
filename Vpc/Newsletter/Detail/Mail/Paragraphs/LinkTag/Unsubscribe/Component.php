@@ -11,9 +11,8 @@ class Vpc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    protected function _getNewsletterComponent()
     {
-        $ret = parent::getTemplateVars();
         $nlData = null;
         $d = $this->getData()->parent;
         while ($d) {
@@ -28,8 +27,14 @@ class Vpc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
         if (!$nlData) {
             throw new Vps_Exception("Newsletter component can not be found");
         }
+        return $nlData;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $nlData = $this->_getNewsletterComponent();
         $ret['unsubscribe'] = $nlData->getChildComponent('-unsubscribe');
         return $ret;
     }
-
 }

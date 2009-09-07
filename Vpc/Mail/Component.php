@@ -41,7 +41,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['content'] = $this->getData()->getChildComponent('-content');
+        $c = $this->getData()->getChildComponent('-content');
+        if ($c) {
+            $ret['content'] = $c;
+        }
         return $ret;
     }
 

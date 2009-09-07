@@ -9,7 +9,7 @@ class Vpc_Newsletter_Detail_RecipientsController extends Vps_Controller_Action_A
 
     public function preDispatch()
     {
-        $this->_model = Zend_Registry::get('userModel');
+        $this->_model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_Subscribe_Model');
         parent::preDispatch();
     }
 
@@ -24,10 +24,14 @@ class Vpc_Newsletter_Detail_RecipientsController extends Vps_Controller_Action_A
         $this->_columns->add(new Vps_Grid_Column('email', trlVps('Email'), 200));
         $this->_columns->add(new Vps_Grid_Column('gender', trlVps('Gender'), 70))
             ->setRenderer('genderIcon');
-        $this->_columns->add(new Vps_Grid_Column('title', trlVps('Title'), 80));
 
+        $this->_columns->add(new Vps_Grid_Column('title', trlVps('Title'), 80));
         $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('First name'), 110));
         $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Last name'), 110));
+
+        $this->_columns->add(new Vps_Grid_Column('subscribe_date', trlVps('Subscribe date'), 110));
+
+        $this->_columns->add(new Vps_Grid_Column_Checkbox('unsubscribed', trlVps('Unsubscribed')));
     }
 
     public function indexAction()
