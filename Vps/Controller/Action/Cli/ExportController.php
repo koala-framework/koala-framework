@@ -56,9 +56,14 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
         $sshHost = $config->server->user.'@'.$config->server->host;
         $sshDir = $config->server->dir;
 
+        $params = '';
+        if ($this->_getParam('with-library')) {
+            $params .= ' --with-library';
+        }
+
         if (!$config->server->useVpsForUpdate) {
             echo "updating $sshHost:$sshDir\n";
-            $cmd = "svn up";
+            $cmd = "svn up{$params}";
             $cmd = "sshvps $sshHost $sshDir $cmd";
             $cmd = "sudo -u vps $cmd";
             if ($this->_getParam('debug')) {
@@ -66,7 +71,7 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
             }
             $this->_systemCheckRet($cmd);
         } else {
-            $cmd = "svn-up";
+            $cmd = "svn-up{$params}";
             $cmd = "sshvps $sshHost $sshDir $cmd";
             $cmd = "sudo -u vps $cmd";
             if ($this->_getParam('debug')) {
@@ -74,13 +79,6 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
             }
             $this->_systemCheckRet($cmd);
         }
-
-        $params = '';
-        if ($this->_getParam('with-library')) {
-            $params .= ' --with-library';
-        }
-
-        $this->_systemSshVps("svn-up{$params}");
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }
