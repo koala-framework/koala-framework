@@ -1,7 +1,7 @@
 <?php
 class Vps_Util_Rrd_Graph
 {
-    private static $_defaultColors = array('#00FF00', '#999999', '#FF0000', '#00FFFF', '#0000FF', '#000000');
+    private static $_defaultColors = array('#00FF00', '#999999', '#FF0000', '#00FFFF', '#0000FF', '#000000', '#FFFF00');
     private $_rrd;
     private $_verticalLabel = null;
     private $_title = null;
@@ -83,7 +83,7 @@ class Vps_Util_Rrd_Graph
                 }
             }
         }
-        if (!$f['color']) {
+        if (!isset($f['color']) || !$f['color']) {
             throw new Vps_Exception("no more avaliable default colors");
         }
         if ((!isset($f['text'])) && isset($f['field'])) {
