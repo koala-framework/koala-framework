@@ -1,3 +1,3 @@
 <div class="<?=$this->cssClass?>">
-    <?php echo $this->component($this->content) ?>
+    <?php if (isset($this->content)) { echo $this->component($this->content); } ?>
 </div>

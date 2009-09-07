@@ -13,6 +13,12 @@ class Vpc_Newsletter_Component extends Vpc_Directories_ItemPage_Directory_Compon
             'component' => 'Vpc_Newsletter_Unsubscribe_Component',
             'name' => trlVps('Unsubscribe')
         );
+        // wird von der Mail_Redirect gerendered
+        $ret['generators']['editSubscriber'] = array(
+            'class' => 'Vps_Component_Generator_Static',
+            'component' => 'Vpc_Newsletter_EditSubscriber_Component',
+            'name' => trlVps('Edit subscriber')
+        );
 
         $ret['modelname'] = 'Vpc_Newsletter_Model';
         $ret['flags']['hasResources'] = true;
