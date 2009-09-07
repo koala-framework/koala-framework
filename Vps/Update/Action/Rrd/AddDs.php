@@ -5,7 +5,14 @@ class Vps_Update_Action_Rrd_AddDs extends Vps_Update_Action_Rrd_Abstract
     public $type = 'COUNTER';
     public $minimalHeartbeat = 120;
     public $min = 0;
-    public $max = 1000;
+    public $max;
+
+    protected function _init()
+    {
+        if (!isset($this->max)) {
+            $this->max = pow(2, 31);
+        }
+    }
 
     public function update()
     {
