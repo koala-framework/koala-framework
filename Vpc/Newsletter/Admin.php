@@ -59,6 +59,21 @@ class Vpc_Newsletter_Admin extends Vpc_Directories_Item_Directory_Admin
 
             ALTER TABLE `vpc_newsletter_queue`
               ADD CONSTRAINT `vpc_newsletter_queue_ibfk_1` FOREIGN KEY (`newsletter_id`) REFERENCES `vpc_newsletter` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+            CREATE TABLE IF NOT EXISTS `vpc_newsletter_subscribers` (
+            `id` int(10) unsigned NOT NULL auto_increment,
+            `gender` enum('','female','male') NOT NULL,
+            `title` varchar(255) NOT NULL,
+            `firstname` varchar(255) NOT NULL,
+            `lastname` varchar(255) NOT NULL,
+            `email` varchar(255) NOT NULL,
+            `format` enum('','html','text') NOT NULL,
+            `subscribe_date` datetime NOT NULL,
+            `unsubscribed` tinyint(1) NOT NULL,
+            `activated` tinyint( 1 ) NOT NULL DEFAULT '0',
+            PRIMARY KEY  (`id`)
+            ) ENGINE=InnoDB ;
+
         ";
         //Vps_Registry::get('db')->query($sql);
     }
