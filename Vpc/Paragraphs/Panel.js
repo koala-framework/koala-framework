@@ -37,38 +37,20 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             enableToggle: true,
             handler: function(b) {
                 this.dataView.showToolbars = !b.pressed;
-                this.dataView.refresh();
-            },
-            scope: this
-        });
-        this.actions.showVisible = new Ext.Action({
-            text : trlVps('Show'),
-            icon : '/assets/silkicons/monitor.png',
-            cls  : 'x-btn-text-icon',
-            menu : [{
-                text: trlVps('all paragraphs'),
-                group: 'showVisible',
-                checked: true,
-                handler: function() {
-                    this.applyBaseParams({
-                        filter_visible: null
-                    });
-                    this.load();
-                },
-                scope: this
-            }, {
-                text: trlVps('visible paragraphs'),
-                group: 'showVisible',
-                checked: false,
-                handler: function() {
+                if (b.pressed) {
                     this.applyBaseParams({
                         filter_visible: 1
                     });
-                    this.load();
-                },
-                scope: this
-            }]
+                } else {
+                    this.applyBaseParams({
+                        filter_visible: null
+                    });
+                }
+                this.load();
+            },
+            scope: this
         });
+
         this.actions.addparagraph = new Vpc.Paragraphs.AddParagraphButton({
             components: this.components,
             componentIcons: this.componentIcons,
@@ -87,7 +69,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             }
         });
 
-        this.tbar = [ this.actions.showPreview, '-', this.actions.showVisible, '-', this.actions.addparagraph ];
+        this.tbar = [ this.actions.showPreview, '-', this.actions.addparagraph ];
 
 
         Vpc.Paragraphs.Panel.superclass.initComponent.call(this);
