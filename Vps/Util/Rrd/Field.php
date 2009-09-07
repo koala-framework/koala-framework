@@ -33,7 +33,7 @@ class Vps_Util_Rrd_Field
     {
         if (in_array($f, array('getHits', 'getMisses', 'bytesRead', 'bytesWritten'))) return $f;
 
-        $ret = strtolower(preg_replace('#[^a-zA-Z]#', '', $f));
+        $ret = strtolower(preg_replace('#[^a-zA-Z0-9]#', '', $f));
         if (strlen($ret) > 19) {
             $ret = substr($ret, 0, 10).substr($ret, -9);
         }
