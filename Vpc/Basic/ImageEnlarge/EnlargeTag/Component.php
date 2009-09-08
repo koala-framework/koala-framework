@@ -35,6 +35,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
     protected function _getOptions()
     {
         $ret = array();
+        $ret['title'] = $this->getRow()->title;
         if ($this->_getSetting('fullSizeDownloadable')) {
             $row = $this->getImageRow();
             $filename = $row->filename;
