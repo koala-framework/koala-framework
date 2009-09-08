@@ -9,11 +9,31 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $ret['modelname'] = 'Vpc_Abstract_Image_Model';
 
         $ret['dimensions'] = array(
-        'default'=>array(
-            'width' => 300,
-            'height' => 200,
-            'scale' => Vps_Media_Image::SCALE_BESTFIT
-        ));
+            'default'=>array(
+                'text' => trlVps('default'),
+                'width' => 300,
+                'height' => 200,
+                'scale' => Vps_Media_Image::SCALE_BESTFIT
+            ),
+            'original'=>array(
+                'text' => trlVps('original'),
+                'width' => 0,
+                'height' => 0,
+                'scale' => Vps_Media_Image::SCALE_ORIGINAL
+            ),
+            'custombestfit'=>array(
+                'text' => trlVps('user-defined bestfit'),
+                'width' => self::USER_SELECT,
+                'height' => self::USER_SELECT,
+                'scale' => Vps_Media_Image::SCALE_BESTFIT
+            ),
+            'customcrop'=>array(
+                'text' => trlVps('user-defined crop'),
+                'width' => self::USER_SELECT,
+                'height' => self::USER_SELECT,
+                'scale' => Vps_Media_Image::SCALE_CROP
+            ),
+        );
 
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;

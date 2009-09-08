@@ -6,16 +6,7 @@ class Vpc_Basic_ImageEnlarge_Component extends Vpc_Abstract_Image_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Image Enlarge');
         $ret['componentIcon'] = new Vps_Asset('imageEnlarge');
-        $ret['dimensions'] = array(
-            array(
-                'width'=> 100,
-                'height' => 75,
-                'scale' => Vps_Media_Image::SCALE_CROP
-            )
-        );
-
         $ret['generators']['child']['component']['linkTag'] = 'Vpc_Basic_ImageEnlarge_EnlargeTag_Component';
-
         return $ret;
     }
 

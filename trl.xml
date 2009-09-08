@@ -3809,7 +3809,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1059</id>
 </text>
 <text>
-<en>If you typed the address, make sure the spelling is correct.</en>
+<en>If you typed the address, make sure the spelling is correct</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
 <id>1060</id>
 </text>
@@ -4420,103 +4420,151 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1219</id>
 </text>
 <text>
-<en>testWord</en>
+<en>ago</en>
 <id>1220</id>
 </text>
 <text>
-<en>testWord</en>
-<en_plural>testWords</en_plural>
-<context>testContext</context>
+<en>from now</en>
 <id>1221</id>
 </text>
 <text>
-<en>Foo</en>
+<en>less than a minute</en>
 <id>1222</id>
 </text>
 <text>
-<en>lala</en>
+<en>about a minute</en>
 <id>1223</id>
 </text>
 <text>
-<en>Location</en>
-<context>forum</context>
+<en>{0} minutes</en>
 <id>1224</id>
 </text>
 <text>
-<en>ago</en>
+<en>about an hour</en>
 <id>1225</id>
 </text>
 <text>
-<en>from now</en>
+<en>about {0} hours</en>
 <id>1226</id>
 </text>
 <text>
-<en>less than a minute</en>
+<en>a day</en>
 <id>1227</id>
 </text>
 <text>
-<en>about a minute</en>
+<en>{0} days</en>
 <id>1228</id>
 </text>
 <text>
-<en>{0} minutes</en>
+<en>about a month</en>
 <id>1229</id>
 </text>
 <text>
-<en>about an hour</en>
+<en>{0} months</en>
 <id>1230</id>
 </text>
 <text>
-<en>about {0} hours</en>
+<en>about a year</en>
 <id>1231</id>
 </text>
 <text>
-<en>a day</en>
+<en>{0} years</en>
 <id>1232</id>
 </text>
 <text>
-<en>{0} days</en>
+<en>Standard</en>
 <id>1233</id>
 </text>
 <text>
-<en>about a month</en>
+<en>Can only add users to a paused newsletter</en>
 <id>1234</id>
 </text>
 <text>
-<en>{0} months</en>
+<en>Unsubscribe</en>
 <id>1235</id>
 </text>
 <text>
-<en>about a year</en>
+<en>Edit or send Newsletter</en>
 <id>1236</id>
 </text>
 <text>
-<en>{0} years</en>
+<en>You have been successfully unsubscribed from the newsletter.</en>
 <id>1237</id>
 </text>
 <text>
-<en>Standard</en>
+<en>Unsubscribe newsletter</en>
 <id>1238</id>
 </text>
 <text>
-<en>Unsubscribe</en>
+<en>default</en>
+<de>Standard</de>
 <id>1239</id>
 </text>
 <text>
-<en>Can only add users to a paused newsletter</en>
+<en>original</en>
+<de>Original</de>
 <id>1240</id>
 </text>
 <text>
-<en>Edit or send Newsletter</en>
+<en>user-defined bestfit</en>
+<de>Benutzerdefiniert Bestfit</de>
 <id>1241</id>
 </text>
 <text>
-<en>Unsubscribe newsletter</en>
+<en>user-defined crop</en>
+<de>Benutzerdefiniert Crop</de>
 <id>1242</id>
 </text>
 <text>
-<en>You have been successfully unsubscribed from the newsletter.</en>
+<en>If you typed the address, make sure the spelling is correct.</en>
+<de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
 <id>1243</id>
 </text>
+<text>
+<en>Errormessage</en>
+<de>Fehlermeldung</de>
+<id>1244</id>
+</text>
+<text>
+<en>You got a requst on {0}</en>
+<de>Es wurde eine Anfrage auf {0} gestellt</de>
+<id>1245</id>
+</text>
+<text>
+<en>Enquiry</en>
+<de>Anfrage</de>
+<id>1246</id>
+</text>
+<text>
+<en>This enquiry was sent by</en>
+<de>Die Anfrage wurde gesendet von</de>
+<id>1247</id>
+</text>
+<text>
+<en>ZIP / City</en>
+<de>PLZ / Ort</de>
+<id>1248</id>
+</text>
+<text>
+<en>Contactform</en>
+<de>Kontaktformular</de>
+<id>1249</id>
+</text>
+<text>
+<en>Send message</en>
+<de>Nachricht absenden</de>
+<id>1250</id>
+</text>
+<text>
+<en>Enquiry on {0}</en>
+<de>Anfrage auf {0}</de>
+<id>1251</id>
+</text>
+<text>
+<en>Note</en>
+<de>Anmerkung</de>
+<id>1252</id>
+</text>
 </trl>
+
 
