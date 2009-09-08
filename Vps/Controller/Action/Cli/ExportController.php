@@ -29,7 +29,7 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
         $this->_update($config);
 
 
-        if (isset($config->server->subWebs)) {
+        if (isset($config->server->subWebs) && $config->server->subWebs) {
             foreach ($config->server->subWebs as $web) {
                 chdir($web);
                 $ret = null;
@@ -41,7 +41,7 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
                 }
             }
         }
-        if (isset($config->server->subSections)) {
+        if (isset($config->server->subSections) && $config->server->subSections) {
             foreach ($config->server->subSections as $section) {
                 $config = Vps_Config_Web::getInstance($section);
                 echo "\nupdating $section...\n";
