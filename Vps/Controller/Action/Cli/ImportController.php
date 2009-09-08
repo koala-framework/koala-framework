@@ -109,6 +109,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 if ($ownConfig->uploads == $config->uploads) {
                     throw new Vps_ClientException("Uplodas-Pfade für beide Server sind gleich!");
                 }
+                if (!file_exists($ownConfig->uploads)) {
+                    mkdir($ownConfig->uploads);
+                }
                 $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
