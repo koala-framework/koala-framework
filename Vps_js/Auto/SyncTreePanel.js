@@ -168,7 +168,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     onEdit : function (o, e) {
         var node = this.tree.getSelectionModel().getSelectedNode();
-        if (!node.id) return;
+        if (!node.id || node.id === 0 || node.id === '0') return;
         if (this.editDialog != undefined) {
             this.editDialog.showEdit(node.id);
         } else {
