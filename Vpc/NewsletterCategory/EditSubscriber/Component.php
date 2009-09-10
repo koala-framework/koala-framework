@@ -1,0 +1,4 @@
+<?php
+class Vpc_NewsletterCategory_EditSubscriber_Component extends Vpc_Newsletter_EditSubscriber_Component
+{
+}
