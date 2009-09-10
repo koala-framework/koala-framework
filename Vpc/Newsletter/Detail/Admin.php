@@ -40,6 +40,7 @@ class Vpc_Newsletter_Detail_Admin extends Vpc_Admin
                 'recipients' => array(
                     'xtype'                 => 'vpc.newsletter.recipients',
                     'controllerUrl'         => $this->getControllerUrl('Recipients'),
+                    'formControllerUrl'     => $this->getControllerUrl('Recipient'),
                     'title'                 => trlVps('Recipients')
                 ),
                 'mailing' => array(

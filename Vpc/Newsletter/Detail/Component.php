@@ -13,6 +13,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/MailingPanel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/RecipientsPanel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/RecipientsAction.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/Recipients.css';
         $ret['assetsAdmin']['files'][] = 'ext/src/widgets/StatusBar.js';
         $ret['componentName'] = 'Newsletter';
         return $ret;
