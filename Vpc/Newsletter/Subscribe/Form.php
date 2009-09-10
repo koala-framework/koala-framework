@@ -12,7 +12,8 @@ class Vpc_Newsletter_Subscribe_Form extends Vps_Form
             ->setValues(array(
                 'female' => trlVps('Female'),
                 'male'   => trlVps('Male')
-            ));
+            ))
+            ->setCls('vps-radio-group-transparent');
         $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')))
             ->setWidth(255);
         $this->add(new Vps_Form_Field_TextField('firstname', trlVps('Firstname')))
@@ -31,6 +32,7 @@ class Vpc_Newsletter_Subscribe_Form extends Vps_Form
             ->setValues(array(
                 'html' => trlVps('HTML-Format'),
                 'text' => trlVps('Text-Format')
-            ));
+            ))
+            ->setCls('vps-radio-group-transparent');
     }
 }
