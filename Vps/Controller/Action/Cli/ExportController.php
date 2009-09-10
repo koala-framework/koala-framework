@@ -18,6 +18,10 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
             array(
                 'param'=> 'with-library',
                 'help' => 'updates library as well'
+            ),
+            array(
+                'param'=> 'skip-update',
+                'help' => 'skip update scripts and so don\'t clear caches'
             )
         );
     }
@@ -59,6 +63,9 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
         $params = '';
         if ($this->_getParam('with-library')) {
             $params .= ' --with-library';
+        }
+        if ($this->_getParam('skip-update')) {
+            $params .= ' --skip-update';
         }
 
         if (!$config->server->useVpsForUpdate) {
