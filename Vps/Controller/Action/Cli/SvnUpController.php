@@ -12,6 +12,10 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             array(
                 'param'=> 'with-library',
                 'help' => 'updates library as well'
+            ),
+            array(
+                'param'=> 'skip-update',
+                'help' => 'skip update scripts and so don\'t clear caches'
             )
         );
     }
@@ -53,7 +57,11 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
         }
 
         echo "\n";
-        $this->_forward('index', 'update');
+        if ($this->_getParam('skip-update')) {
+            echo "\n\033[01;33update skipped\033[00m\n";
+        } else {
+            $this->_forward('index', 'update');
+        }
 
         $this->_helper->viewRenderer->setNoRender(true);
     }
