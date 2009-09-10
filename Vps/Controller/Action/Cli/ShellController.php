@@ -11,7 +11,7 @@ class Vps_Controller_Action_Cli_ShellController extends Vps_Controller_Action_Cl
             array(
                 'param'=> 'server',
                 'value'=> self::_getConfigSections(),
-                'valueOptional' => false,
+                'allowBlank' => true,
                 'help' => 'which server'
             )
         );
@@ -19,6 +19,21 @@ class Vps_Controller_Action_Cli_ShellController extends Vps_Controller_Action_Cl
     public function indexAction()
     {
         $section = $this->_getParam('server');
+        if (!$section) {
+            echo "Choose a server:\n";
+            $sections = self::_getConfigSections();
+            foreach ($sections as $k=>$i) {
+                echo ($k+1).": ".$i."\n";
+            }
+            $stdin = fopen('php://stdin', 'r');
+            $input = fgets($stdin, 3);
+            fclose($stdin);
+            $input = $input-1;
+            if (!isset($sections[$input])) {
+                throw new Vps_Exception("Invalid server number");
+            }
+            $section = $sections[$input];
+        }
 
         $config = Vps_Config_Web::getInstance($section);
 
