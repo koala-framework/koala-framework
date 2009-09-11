@@ -1,35 +1,45 @@
 <?php
-class Vpc_Posts_Directory_Model extends Vps_Db_Table
+class Vpc_Posts_Directory_Model extends Vps_Model_Db
 {
-    protected $_name = 'vpc_posts';
+    protected $_table = 'vpc_posts';
     protected $_rowClass = 'Vpc_Posts_Directory_Row';
 
-    protected function _setup()
+    protected $_referenceMap = array(
+        'User' => array(
+            'column' => 'user_id',
+            'refModelClass' => ''
+        )
+    );
+
+    protected function _init()
     {
-        $this->_referenceMap['User'] = array(
-            'columns'           => array('user_id'),
-            'refTableClass'     => get_class(Vps_Registry::get('userModel')),
-            'refColumns'        => array('id')
+        $userModelClass = get_class(Vps_Registry::get('userModel'));
+        $this->_referenceMap['User']['refModelClass']  = $userModelClass;
+
+        $this->_siblingModels = array(
+            new Vps_Model_Field(array(
+                'fieldName' => 'data'
+            ))
         );
-        parent::_setup();
+
+        parent::_init();
     }
 
     public function getLastPost($dbId)
     {
-        $where = array();
-        $where['component_id = ?'] = $dbId;
-        $where[] = 'visible = 1';
-        return $this->fetchAll($where, 'id DESC', 1)->current();
+        $sel = $this->select()
+            ->whereEquals('component_id', $dbId)
+            ->whereEquals('visible', 1)
+            ->order('id', 'DESC');
+        return $this->getRow($sel);
     }
-    
+
     public function getNumPosts($dbId)
     {
-        $info = $this->info();
-        $select = new Zend_Db_Select($this->getAdapter());
-        $select->from($info['name'], 'COUNT(*)');
-        $select->where('component_id = ?', $dbId);
-        $select->where('visible = 1');
-        return $select->query()->fetchColumn();
+        $sel = $this->select()
+            ->whereEquals('component_id', $dbId)
+            ->whereEquals('visible', 1);
+        return $this->countRows($sel);
     }
 
     public function getNumReplies($dbId)

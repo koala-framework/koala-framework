@@ -5,7 +5,7 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Posts.Last Posts');
-        $ret['tablename'] = 'Vpc_Posts_Directory_Model';
+        $ret['modelname'] = 'Vpc_Posts_Directory_Model';
         $ret['numberOfPosts'] = 9;
         return $ret;
     }

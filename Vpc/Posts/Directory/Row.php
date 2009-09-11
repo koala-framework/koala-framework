@@ -1,5 +1,5 @@
 <?php
-class Vpc_Posts_Directory_Row extends Vps_Db_Table_Row
+class Vpc_Posts_Directory_Row extends Vps_Model_Db_Row
 {
     protected function _insert()
     {
