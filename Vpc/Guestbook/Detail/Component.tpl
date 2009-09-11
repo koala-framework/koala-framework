@@ -14,6 +14,9 @@
                     <?=$this->component($this->user->getChildComponent('-general')->getChildComponent('-rating'))?>
                 </div>
             <? } ?>
+            <? if ($this->data->row->name) { ?>
+                <div class="user"><?= $this->data->row->name; ?></div>
+            <? } ?>
             <strong>#<?= $this->postNumber ?></strong>
             <em>
                 <?=trlVps('on') ?> <?=$this->date($this->data->row->create_time)?>

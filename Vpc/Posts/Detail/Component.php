@@ -15,12 +15,20 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
         $data = $this->getData();
 
         $ret['content'] = self::replaceCodes($data->row->content);
-        $ret['user'] = Vps_Component_Data_Root::getInstance()
+        $ret['user'] = null;
+
+        $userDir = Vps_Component_Data_Root::getInstance()
             ->getComponentByClass(
                 'Vpc_User_Directory_Component',
                 array('subroot' => $this->getData())
-            )
-            ->getChildComponent('_'.$data->row->user_id);
+            );
+        if ($userDir) {
+            $userComponent = $userDir->getChildComponent('_'.$data->row->user_id);
+            if ($userComponent) {
+                $ret['user'] = $userComponent;
+            }
+        }
+
         $select = $data->parent->getGenerator('detail')->select($data->parent)
             ->where('create_time <= ?', $data->row->create_time);
         $ret['postNumber'] = $data->parent->countChildComponents($select);
