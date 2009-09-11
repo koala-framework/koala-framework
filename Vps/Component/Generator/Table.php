@@ -181,7 +181,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $select = $this->_formatSelectId($select);
         if (is_null($select)) return null;
 
-        if ($this->_getModel()->hasColumn('pos') && !$select->hasPart(Vps_Component_Select::ORDER)) {
+        if (in_array('pos', $this->_getModel()->getOwnColumns()) && !$select->hasPart(Vps_Component_Select::ORDER)) {
             $select->order("pos");
         }
 
