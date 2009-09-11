@@ -11,7 +11,8 @@ class Vps_Model_Service_RowTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_client = $this->getMock('Vps_Srpc_Client',
-            array('rowSave', 'rowDelete', 'getPrimaryKey', 'getColumns'), array(), '', false
+            array('rowSave', 'rowDelete', 'getPrimaryKey', 'getColumns'),
+            array(array('serverUrl' => 'invalid'.uniqid())), '', true
         );
         $this->_client->expects($this->any())
             ->method('getColumns')
