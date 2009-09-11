@@ -82,7 +82,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         $this->deleted = 0;
         $this->locked = 0;
         $this->password = '';
-        $this->password_salt = '';
+        $this->generatePasswordSalt();
         if (!$this->gender) $this->gender = '';
 
         if (is_null($this->webcode)) {
@@ -111,10 +111,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
     {
         parent::_afterInsert();
 
-        if (!$this->password && !$this->password_salt) {
-            $this->generatePasswordSalt();
-            $this->save();
-
+        if (!$this->password) {
             $this->sendActivationMail();
         }
     }
@@ -143,6 +140,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
             }
         }
         if ($tableNames) {
+            Vps_Benchmark::count('lock tables');
             $m->executeSql("LOCK TABLES ".implode(" WRITE, ", $tableNames)." WRITE");
         }
         $this->_beforeSave();

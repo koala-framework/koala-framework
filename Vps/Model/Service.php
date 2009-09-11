@@ -7,8 +7,9 @@ class Vps_Model_Service extends Vps_Model_Abstract
     protected $_serverConfig;
     protected $_data = array();
 
-    protected $_primaryKey;
-    protected $_columns;
+    private $_primaryKey;
+    private $_columns;
+    private $_supportedImportExportFormatsCache;
 
     public function __construct(array $config = array())
     {
@@ -44,6 +45,19 @@ class Vps_Model_Service extends Vps_Model_Abstract
 
     protected function _init()
     {
+    }
+
+    private static function _getMetadataCache()
+    {
+        static $ret;
+        if (!isset($ret)) {
+            $frontendOptions = array(
+                'automatic_serialization' => true,
+                'write_control' => false,
+            );
+            $ret = Vps_Cache::factory('Core', 'Memcached', $frontendOptions);
+        }
+        return $ret;
     }
 
     public function update(Vps_Model_Row_Interface $row, $rowData)
@@ -135,7 +149,12 @@ class Vps_Model_Service extends Vps_Model_Abstract
     protected function _getOwnColumns()
     {
         if (!$this->_columns) {
-            $this->_columns = $this->_client->getColumns();
+            $cache = self::_getMetadataCache();
+            $cacheId = md5($this->getUniqueIdentifier()).'_columns';
+            if (!$this->_columns = $cache->load($cacheId)) {
+                $this->_columns = $this->_client->getColumns();
+                $cache->save($this->_columns, $cacheId);
+            }
         }
         return $this->_columns;
     }
@@ -143,7 +162,12 @@ class Vps_Model_Service extends Vps_Model_Abstract
     public function getPrimaryKey()
     {
         if (!$this->_primaryKey) {
-            $this->_primaryKey = $this->_client->getPrimaryKey();
+            $cache = self::_getMetadataCache();
+            $cacheId = md5($this->getUniqueIdentifier()).'_primaryKey';
+            if (!$this->_primaryKey = $cache->load($cacheId)) {
+                $this->_primaryKey = $this->_client->getPrimaryKey();
+                $cache->save($this->_primaryKey, $cacheId);
+            }
         }
         return $this->_primaryKey;
     }
@@ -158,7 +182,8 @@ class Vps_Model_Service extends Vps_Model_Abstract
         return false;
     }
 
-    public function getUniqueIdentifier() {
+    public function getUniqueIdentifier()
+    {
         $url = $this->_client->getServerUrl();
         if (!empty($url)) {
             return $url;
@@ -174,7 +199,15 @@ class Vps_Model_Service extends Vps_Model_Abstract
 
     public function getSupportedImportExportFormats()
     {
-        return $this->_client->getSupportedImportExportFormats();
+        if (!$this->_supportedImportExportFormatsCache) {
+            $cache = self::_getMetadataCache();
+            $cacheId = md5($this->getUniqueIdentifier()).'_supportedImportExportFormats';
+            if (!$this->_supportedImportExportFormatsCache = $cache->load($cacheId)) {
+                $this->_supportedImportExportFormatsCache = $this->_client->getSupportedImportExportFormats();
+                $cache->save($this->_supportedImportExportFormatsCache, $cacheId);
+            }
+        }
+        return $this->_supportedImportExportFormatsCache;
     }
 
     public function export($format, $select = array())

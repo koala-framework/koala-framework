@@ -57,6 +57,7 @@ class Vps_Srpc_Client
 
     public function __call($method, $args)
     {
+        Vps_Benchmark::count('srpc call', $method);
         $params = array(
             'method' => $method,
             'arguments' => array(),
@@ -73,11 +74,13 @@ class Vps_Srpc_Client
         $params['extraParams'] = serialize($params['extraParams']);
 
         $response = $this->_performRequest($params);
+
         if (@unserialize($response) === false) {
             throw new Vps_Exception('Srpc Server Response is not serialized: '.$response);
         } else {
             $result = unserialize($response);
         }
+
 
         // result könnte eine Exception sein, wenn ja wird sie weitergeschmissen
         if ($result instanceof Vps_Exception_Serializable) {
