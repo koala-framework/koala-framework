@@ -48,7 +48,8 @@ class Vps_Srpc_Client
     protected function _performRequest(array $params)
     {
         $httpClient = new Zend_Http_Client($this->getServerUrl(), array(
-            'timeout' => $this->_timeout
+            'timeout' => $this->_timeout,
+            'persistent' => true
         ));
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost($params);
