@@ -85,9 +85,24 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
                     continue;
                 }
                 $x .= '/'.$i;
-                $st = simplexml_load_string(`svn st --non-recursive --xml $x`);
-                $st = (string)$st->target->entry->{'wc-status'}['item'];
+                $s = simplexml_load_string(`svn st --verbose --non-recursive --xml $x/..`);
+                $st = false;
+                foreach ($s->target->entry as $e) {
+                    if ($e['path'] == $x) {
+                       $st = $e->{'wc-status'}['item'];
+                    }
+                }
+                if (!$st) {
+                    $s = simplexml_load_string(`svn st --verbose --non-recursive --xml $x`);
+                    if ($s->target->entry['path']==$x) {
+                        $st = $s->target->entry->{'wc-status'}['item'];
+                    }
+                }
+                if (!$st) {
+                    throw new Vps_Exception("can't find out status");
+                }
                 if ($st == 'unversioned') {
+                    echo "svn add --non-recursive $x\n";
                     $this->_systemCheckRet("svn add --non-recursive $x");
                 }
                 if ($st == 'ignored') {
@@ -128,7 +143,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
 
                         $added = true;
                     }
-                    $this->_removeFromSvn("$d/*.$x");
+                    $this->_removeFromSvn($d, "*.$x");
                 }
                 if ($added) {
                     $this->_setSvnIgnore($d, $ignore);
@@ -143,7 +158,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
                         $ignore[] = '*';
                         $this->_setSvnIgnore($d, $ignore);
                     }
-                    $this->_removeFromSvn("$d/*");
+                    $this->_removeFromSvn($d, "*");
                 } else {
                     foreach ($nonNumeric as $i) {
                         if ($i == 'Thumbs.db') {
@@ -162,16 +177,27 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
         exit;
     }
 
-    private function _removeFromSvn($pattern)
+    private function _removeFromSvn($dir, $pattern)
     {
-        $st = simplexml_load_string(`svn st --xml $pattern`);
-        foreach ($st->target as $t) {
-            if ($t->entry->{'wc-status'}['item'] == 'ignored') continue;
-            if ($t->entry->{'wc-status'}['item'] == 'unversioned') continue;
-            if (substr((string)$t['path'], -1) == '*') continue;
-            $cmd = "svn rm --force ".escapeshellarg((string)$t['path']);
-            echo $cmd."\n";
-            $this->_systemCheckRet($cmd);
+        $php = "foreach(glob('$dir/$pattern') as \$i) echo \$i.\"\\0\";";
+        $cmd = "php -r ".escapeshellarg($php)." | xargs -0 svn st --xml";
+        echo $cmd."\n";
+        exec($cmd, $out, $ret);
+        if ($ret != 0) throw new Vps_Exception("Status failed");
+        $out = implode("\n", $out);
+        $out = substr($out, strlen('<?xml version="1.0"?>'));
+        $out = explode('<?xml version="1.0"?>', $out);
+        foreach ($out as $o) {
+            $o = '<?xml version="1.0"?>'.$o;
+            $st = simplexml_load_string($o);
+            foreach ($st->target as $t) {
+                if ($t->entry->{'wc-status'}['item'] == 'ignored') continue;
+                if ($t->entry->{'wc-status'}['item'] == 'unversioned') continue;
+                if (substr((string)$t['path'], -1) == '*') continue;
+                $cmd = "svn rm --force ".escapeshellarg((string)$t['path']);
+                echo $cmd."\n";
+                $this->_systemCheckRet($cmd);
+            }
         }
     }
 
