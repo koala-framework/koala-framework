@@ -15,6 +15,7 @@ class Vps_Component_Partial_Id extends
             $count = $this->getParam('pagesize');
             $offset = (($page - 1) * $count);
         }
+        if (!$component) return array();
         return $component->getComponent()->getItemIds($count, $offset);
     }
 
