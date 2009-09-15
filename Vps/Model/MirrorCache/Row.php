@@ -77,25 +77,28 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
     {
         if ($this->_doSyncOnUpdate) {
             $this->getModel()->synchronize(Vps_Model_MirrorCache::SYNC_ONCE);
-            $this->_doSyncOnUpdate = false;
         }
 
         parent::_beforeUpdate();
 
-        $sm = $this->getModel()->getSourceModel();
-        $primaryKey = $this->_primaryKey;
-        $sr = $sm->getRow($this->$primaryKey);
-        if (!$sr) {
-            throw new Vps_Exception("MirrorCache Datenintegritätsfehler. Bei einem Update konnte die Row im SourceModel nicht gefunden werden.");
+        if ($this->_doSyncOnUpdate) {
+            $sm = $this->getModel()->getSourceModel();
+            $primaryKey = $this->_primaryKey;
+            $sr = $sm->getRow($this->$primaryKey);
+            if (!$sr) {
+                throw new Vps_Exception("MirrorCache Datenintegritätsfehler. Bei einem Update konnte die Row im SourceModel nicht gefunden werden.");
+            }
+            foreach ($this->_row->toArray() as $k => $v) {
+                if ($k != $primaryKey) $sr->$k = $v;
+            }
+            $sr->save();
+            foreach ($sr->toArray() as $k=>$v) {
+                if ($k != $primaryKey) $this->$k = $v;
+            }
+            $this->_overrideSetPrimaryKey($sr->$primaryKey);
+
+            $this->_doSyncOnUpdate = false;
         }
-        foreach ($this->_row->toArray() as $k => $v) {
-            if ($k != $primaryKey) $sr->$k = $v;
-        }
-        $sr->save();
-        foreach ($sr->toArray() as $k=>$v) {
-            if ($k != $primaryKey) $this->$k = $v;
-        }
-        $this->_overrideSetPrimaryKey($sr->$primaryKey);
     }
 
     /**
