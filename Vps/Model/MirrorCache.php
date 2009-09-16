@@ -155,13 +155,16 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     {
         $select = $this->_getSynchronizeSelect(self::SYNC_ONCE);
 
-        $format = self::_optimalImportExportFormat($this->getSourceModel(), $this->getProxyModel());
-
-        $r = $this->getSourceModel()->callMultiple(array(
-            'export' => array($format, $select),
-            'updateRow' => array($data)
-        ));
-        $this->getProxyModel()->import($format, $r['export'], array('replace' => true));
+        $call = array();
+        if ($select !== false) {
+            $format = self::_optimalImportExportFormat($this->getSourceModel(), $this->getProxyModel());
+            $call['export'] = array($format, $select);
+        }
+        $call['updateRow'] = array($data);
+        $r = $this->getSourceModel()->callMultiple($call);
+        if ($select !== false) {
+            $this->getProxyModel()->import($format, $r['export'], array('replace' => true));
+        }
         return $r['updateRow'];
     }
 
@@ -169,13 +172,16 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     {
         $select = $this->_getSynchronizeSelect(self::SYNC_ONCE);
 
-        $format = self::_optimalImportExportFormat($this->getSourceModel(), $this->getProxyModel());
-
-        $r = $this->getSourceModel()->callMultiple(array(
-            'export' => array($format, $select),
-            'insertRow' => array($data)
-        ));
-        $this->getProxyModel()->import($format, $r['export'], array('replace' => true));
+        $call = array();
+        if ($select !== false) {
+            $format = self::_optimalImportExportFormat($this->getSourceModel(), $this->getProxyModel());
+            $call['export'] = array($format, $select);
+        }
+        $call['insertRow'] = array($data);
+        $r = $this->getSourceModel()->callMultiple($call);
+        if ($select !== false) {
+            $this->getProxyModel()->import($format, $r['export'], array('replace' => true));
+        }
         return $r['insertRow'];
     }
 }
