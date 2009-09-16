@@ -1,7 +1,6 @@
 <?php
 class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
 {
-    private $_overrideSetPrimaryException = false;
     protected $_primaryKey;
     private $_doSyncOnUpdate = false;
 
@@ -58,9 +57,10 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
 
     protected function _beforeInsert()
     {
+        parent::_beforeInsert();
+
         $this->getModel()->synchronize(Vps_Model_MirrorCache::SYNC_ONCE);
 
-        parent::_beforeInsert();
         $sr = $this->_getInsertSourceRow();
         $primaryKey = $this->_primaryKey;
         foreach ($this->_row->toArray() as $k => $v) {
@@ -68,20 +68,17 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
         }
         $sr->save();
         foreach ($sr->toArray() as $k=>$v) {
-            if ($k != $primaryKey) $this->$k = $v;
+            parent::__set($k, $v);
         }
-        $this->_overrideSetPrimaryKey($sr->$primaryKey);
     }
 
     protected function _beforeUpdate()
     {
-        if ($this->_doSyncOnUpdate) {
-            $this->getModel()->synchronize(Vps_Model_MirrorCache::SYNC_ONCE);
-        }
-
         parent::_beforeUpdate();
 
         if ($this->_doSyncOnUpdate) {
+            $this->getModel()->synchronize(Vps_Model_MirrorCache::SYNC_ONCE);
+
             $sm = $this->getModel()->getSourceModel();
             $primaryKey = $this->_primaryKey;
             $sr = $sm->getRow($this->$primaryKey);
@@ -93,9 +90,10 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
             }
             $sr->save();
             foreach ($sr->toArray() as $k=>$v) {
-                if ($k != $primaryKey) $this->$k = $v;
+                //parent aufrufen da die primaryKey exception ignoriert werden soll
+                //und doSynOnUpdate nicht ben�tigt wird
+                parent::__set($k, $v);
             }
-            $this->_overrideSetPrimaryKey($sr->$primaryKey);
 
             $this->_doSyncOnUpdate = false;
         }
@@ -110,24 +108,9 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
         throw new Vps_Exception_NotYetImplemented("MirrorCacheModel is not able to delete yet");
     }
 
-    /**
-     * Diese Funktion darf nur kontrolliert aufgerufen werden!
-     * Wenn der Primary gesetzt werden
-     * soll, muss das über __set() laufen und dort implementiert werden.
-     * Ist aber bei User-Mirroring zu gefährlich, deshalb wird bei einem set
-     * von außen eine Exception geworfen.
-     */
-    protected function _overrideSetPrimaryKey($primaryValue)
-    {
-        $this->_overrideSetPrimaryException = true;
-        $primaryKey = $this->_primaryKey;
-        $this->$primaryKey = $primaryValue;
-        $this->_overrideSetPrimaryException = false;
-    }
-
     public function __set($name, $value)
     {
-        if ($name == $this->_primaryKey && !$this->_overrideSetPrimaryException) {
+        if ($name == $this->_primaryKey) {
             // wenn das implementiert wird vorsicht wegen user-model. bei dem
             // darf der primary key zB wirklich (!) nicht geändert werden
             throw new Vps_Exception_NotYetImplemented("Primary key may not be changed when using a MirrorCache");
