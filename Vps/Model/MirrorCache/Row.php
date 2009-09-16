@@ -1,23 +1,7 @@
 <?php
 class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
 {
-    protected $_primaryKey;
     private $_doSyncOnUpdate = false;
-
-    protected function _init()
-    {
-        parent::_init();
-        $this->_primaryKey = $this->getModel()->getPrimaryKey();
-    }
-
-    /**
-     * Wird zB im Usermodel √ºberschrieben, da globale Benutzer nicht neu
-     * angelegt werden, sondern die vom Service verwendet werden.
-     */
-    protected function _getInsertSourceRow()
-    {
-        return $this->getModel()->getSourceModel()->createRow();
-    }
 
     protected function _beforeSave()
     {
@@ -59,15 +43,13 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
     {
         parent::_beforeInsert();
 
-        $this->getModel()->synchronize(Vps_Model_MirrorCache::SYNC_ONCE);
+        //$this->_row->toArray() statt $this->toArray() da sonst sibling felder zuviel dabei sind
+        $data = $this->_row->toArray();
 
-        $sr = $this->_getInsertSourceRow();
-        $primaryKey = $this->_primaryKey;
-        foreach ($this->_row->toArray() as $k => $v) {
-            if ($k != $primaryKey) $sr->$k = $v;
-        }
-        $sr->save();
-        foreach ($sr->toArray() as $k=>$v) {
+        $returnedData = $this->getModel()->synchronizeAndInsertRow($data);
+        foreach ($returnedData as $k=>$v) {
+            //parent aufrufen da die primaryKey exception ignoriert werden soll
+            //und doSynOnUpdate nicht benˆtigt wird
             parent::__set($k, $v);
         }
     }
@@ -77,19 +59,12 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
         parent::_beforeUpdate();
 
         if ($this->_doSyncOnUpdate) {
-            $this->getModel()->synchronize(Vps_Model_MirrorCache::SYNC_ONCE);
 
-            $sm = $this->getModel()->getSourceModel();
-            $primaryKey = $this->_primaryKey;
-            $sr = $sm->getRow($this->$primaryKey);
-            if (!$sr) {
-                throw new Vps_Exception("MirrorCache Datenintegrit√§tsfehler. Bei einem Update konnte die Row im SourceModel nicht gefunden werden.");
-            }
-            foreach ($this->_row->toArray() as $k => $v) {
-                if ($k != $primaryKey) $sr->$k = $v;
-            }
-            $sr->save();
-            foreach ($sr->toArray() as $k=>$v) {
+            //$this->_row->toArray() statt $this->toArray() da sonst sibling felder zuviel dabei sind
+            $data = $this->_row->toArray();
+
+            $returnedData = $this->getModel()->synchronizeAndUpdateRow($data);
+            foreach ($returnedData as $k=>$v) {
                 //parent aufrufen da die primaryKey exception ignoriert werden soll
                 //und doSynOnUpdate nicht benˆtigt wird
                 parent::__set($k, $v);
@@ -110,7 +85,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
 
     public function __set($name, $value)
     {
-        if ($name == $this->_primaryKey) {
+        if ($name == $this->_getPrimaryKey()) {
             // wenn das implementiert wird vorsicht wegen user-model. bei dem
             // darf der primary key zB wirklich (!) nicht ge√§ndert werden
             throw new Vps_Exception_NotYetImplemented("Primary key may not be changed when using a MirrorCache");

@@ -66,11 +66,11 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $this->synchronize();
     }
 
-    public function synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
+    private function _getSynchronizeSelect($overrideMaxSyncDelay)
     {
         if ($this->_synchronizeDone) {
             if ($overrideMaxSyncDelay !== self::SYNC_ALWAYS) {
-                return;
+                return false;
             }
         }
         if (!$this->_syncTimeField) {
@@ -82,7 +82,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             if ($overrideMaxSyncDelay === self::SYNC_AFTER_DELAY) {
                 $lastSync = $cache->load($this->_getSyncDelayCacheId());
                 if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
-                    return;
+                    return false;
                 }
             }
             $cache->save(time(), $this->_getSyncDelayCacheId());
@@ -104,12 +104,20 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $sourceModel = $this->getSourceModel();
         if (!$cacheTimestamp) {
             // kein cache vorhanden, alle kopieren
-            $this->getProxyModel()->copyDataFromModel($sourceModel, null, array('replace'=>true));
+            $select = null;
         } else {
             $select = $sourceModel->select()->where(
                 new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
             );
-            $this->getProxyModel()->copyDataFromModel($sourceModel, $select, array('replace'=>true));
+        }
+        return $select;
+    }
+
+    public function synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
+    {
+        $select = $this->_getSynchronizeSelect($overrideMaxSyncDelay);
+        if ($select !== false) {
+            $this->getProxyModel()->copyDataFromModel($this->getSourceModel(), $select, array('replace'=>true));
         }
     }
 
@@ -141,5 +149,33 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 'cache_dir' => 'application/cache/model'
             )
         );
+    }
+
+    public function synchronizeAndUpdateRow($data)
+    {
+        $select = $this->_getSynchronizeSelect(self::SYNC_ONCE);
+
+        $format = self::_optimalImportExportFormat($this->getSourceModel(), $this->getProxyModel());
+
+        $r = $this->getSourceModel()->callMultiple(array(
+            'export' => array($format, $select),
+            'updateRow' => array($data)
+        ));
+        $this->getProxyModel()->import($format, $r['export'], array('replace' => true));
+        return $r['updateRow'];
+    }
+
+    public function synchronizeAndInsertRow($data)
+    {
+        $select = $this->_getSynchronizeSelect(self::SYNC_ONCE);
+
+        $format = self::_optimalImportExportFormat($this->getSourceModel(), $this->getProxyModel());
+
+        $r = $this->getSourceModel()->callMultiple(array(
+            'export' => array($format, $select),
+            'insertRow' => array($data)
+        ));
+        $this->getProxyModel()->import($format, $r['export'], array('replace' => true));
+        return $r['insertRow'];
     }
 }
