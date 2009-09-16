@@ -118,4 +118,19 @@ class Vps_Srpc_Handler_Model
     {
         return $this->getModel()->import($format, $data);
     }
+
+    public function updateRow(array $data)
+    {
+        return $this->getModel()->updateRow($data);
+    }
+
+    public function insertRow(array $data)
+    {
+        return $this->getModel()->insertRow($data);
+    }
+
+    public function callMultiple(array $call)
+    {
+        return $this->getModel()->callMultiple($call);
+    }
 }
