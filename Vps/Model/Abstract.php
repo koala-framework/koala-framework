@@ -528,6 +528,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function insertRow(array $data)
     {
+        $row = $this->createRow();
         foreach ($data as $k => $v) {
             if ($this->getPrimaryKey() != $k) {
                 $row->$k = $v;
