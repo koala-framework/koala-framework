@@ -94,12 +94,8 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
                 $exception = unserialize(base64_decode($exception));
                 throw $exception;
             }
-            $this->assertTextNotPresent('Seite wurde nicht gefunden');
-            $this->assertTextNotPresent('was not found on this server');
+            $this->assertTextNotPresent('regexp:Seite wurde nicht gefunden|was not found on this server|Exception|Fatal error|Parse error');
             $this->assertTitleNotContains('Internal Server Error');
-            $this->assertTextNotPresent('Exception');
-            $this->assertTextNotPresent('Fatal error');
-            $this->assertTextNotPresent('Parse error');
         }
     }
 
