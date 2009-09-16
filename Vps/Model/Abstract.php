@@ -512,4 +512,37 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             throw new Vps_Exception_NotYetImplemented();
         }
     }
+
+    public function updateRow(array $data)
+    {
+        $row = $this->getRow($data[$this->getPrimaryKey()]);
+        if (!$row) {
+            throw new Vps_Exception("Can't update row, row not found");
+        }
+        foreach ($data as $k => $v) {
+            $row->$k = $v;
+        }
+        $row->save();
+        return $row->toArray();
+    }
+
+    public function insertRow(array $data)
+    {
+        foreach ($data as $k => $v) {
+            if ($this->getPrimaryKey() != $k) {
+                $row->$k = $v;
+            }
+        }
+        $row->save();
+        return $row->toArray();
+    }
+
+    public function callMultiple(array $call)
+    {
+        $ret = array();
+        foreach ($call as $method=>$arguments) {
+            $ret[$method] = call_user_func_array(array($this, $method), $arguments);
+        }
+        return $ret;
+    }
 }
