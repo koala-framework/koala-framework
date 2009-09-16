@@ -56,7 +56,7 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
 						if (result == 'yes') {
 				    		Ext.Ajax.request({
 				                url : this.controllerUrl + '/json-delete-all',
-				                params: this.initialConfig.baseParams,
+				                params: this.getBaseParams(),
 				                success: function(response, options, r) {
 				                    Ext.MessageBox.alert(trlVps('Status'), r.message);
 				                    this.reload();
@@ -131,7 +131,7 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
     	if (this.pressedButton == button.name) return;
     	Ext.Ajax.request({
             url: this.controllerUrl + '/json-change-status',
-            params : Ext.apply(this.initialConfig.baseParams, { 
+            params : Ext.apply(Vps.clone(this.getBaseParams()), {
             	status: button.name
     		}),
             success: function(response, options, r) {
