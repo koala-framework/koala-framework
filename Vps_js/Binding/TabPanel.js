@@ -21,18 +21,18 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
                     }
                 }
             }
-            var item = Ext.ComponentMgr.create(Ext.applyIf(this.tabs[i], {
+            // das tab muss gecloned werden, da sonst die baseParams nur vom
+            // ersten verwendet werden, weil sie wegen dem applyIf nicht
+            // nochmal kopiert werden, und dann bearbeitet man falsche
+            // datensätze...
+            var tab = Vps.clone(this.tabs[i]);
+            var item = Ext.ComponentMgr.create(Ext.applyIf(tab, {
                 autoScroll  : true,
                 closable    : false,
                 title       : i,
-                // das funktioniert nicht. wenn seitentyp eine composite mit TabsAdmin
-                // ist dann wird immer der parameter der ersten angeklickten seite
-                // dieses typs verwendet. wenn es direkt darunter mit setBaseParams
-                // gemacht wird ist alles ok
-//                 baseParams  : b,
+                baseParams  : b,
                 autoLoad    : this.autoLoad
             }));
-            item.setBaseParams(b);
 
             this.relayEvents(item, ['editcomponent', 'gotComponentConfigs']);
             this.tabPanel.add(item);
