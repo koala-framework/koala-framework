@@ -27,8 +27,12 @@ interface Vps_Model_Interface
     public function export($format, $select = array());
     public function import($format, $data, $options = array());
     public function writeBuffer();
+    public function updateRow(array $data);
+    public function insertRow(array $data);
 
     public function deleteRows($where);
+
+    public function callMultiple(array $call);
 
     //deprecated
     public function find($id);
