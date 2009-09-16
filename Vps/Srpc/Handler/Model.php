@@ -66,6 +66,7 @@ class Vps_Srpc_Handler_Model
         return $this->getModel()->getPrimaryKey();
     }
 
+    //TODO: stattdessen insertRow und updateRow verwenden
     public function rowSave($id, $data)
     {
         if (!$data || !is_array($data)) return false;
@@ -117,5 +118,20 @@ class Vps_Srpc_Handler_Model
     public function import($format, $data)
     {
         return $this->getModel()->import($format, $data);
+    }
+
+    public function updateRow(array $data)
+    {
+        return $this->getModel()->updateRow($data);
+    }
+
+    public function insertRow(array $data)
+    {
+        return $this->getModel()->insertRow($data);
+    }
+
+    public function callMultiple(array $call)
+    {
+        return $this->getModel()->callMultiple($call);
     }
 }

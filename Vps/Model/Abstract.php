@@ -367,23 +367,22 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $this->_supportedImportExportFormats;
     }
 
-    public function copyDataFromModel(Vps_Model_Interface $sourceModel, $select = null, $importOptions = array())
+    protected static final function _optimalImportExportFormat(Vps_Model_Interface $model1, Vps_Model_Interface $model2)
     {
-        if (is_null($select)) $select = $this->select();
-        if (!$select instanceof Vps_Model_Select) {
-            throw new Vps_Exception("Select must be an instance of Vps_Model_Select");
-        }
-
         $formats = array_values(array_intersect(
-            $this->getSupportedImportExportFormats(),
-            $sourceModel->getSupportedImportExportFormats()
+            $model1->getSupportedImportExportFormats(),
+            $model2->getSupportedImportExportFormats()
         ));
         if (!$formats || !$formats[0]) {
-            throw new Vps_Exception("Model '".get_class($this)."' cannot copy data "
-                ."from model '".get_class($sourceModel)."'. Import / Export Formats are not compatible.");
+            throw new Vps_Exception("Model '".get_class($model1)."' cannot copy data "
+                ."from model '".get_class($model2)."'. Import / Export Formats are not compatible.");
         }
-        $format = $formats[0];
+        return $formats[0];
+    }
 
+    public function copyDataFromModel(Vps_Model_Interface $sourceModel, Vps_Model_Select $select = null, array $importOptions = array())
+    {
+        $format = self::_optimalImportExportFormat($this, $sourceModel);
         $this->import($format, $sourceModel->export($format, $select), $importOptions);
     }
 
@@ -511,5 +510,39 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         } else {
             throw new Vps_Exception_NotYetImplemented();
         }
+    }
+
+    public function updateRow(array $data)
+    {
+        $row = $this->getRow($data[$this->getPrimaryKey()]);
+        if (!$row) {
+            throw new Vps_Exception("Can't update row, row not found");
+        }
+        foreach ($data as $k => $v) {
+            $row->$k = $v;
+        }
+        $row->save();
+        return $row->toArray();
+    }
+
+    public function insertRow(array $data)
+    {
+        $row = $this->createRow();
+        foreach ($data as $k => $v) {
+            if ($this->getPrimaryKey() != $k) {
+                $row->$k = $v;
+            }
+        }
+        $row->save();
+        return $row->toArray();
+    }
+
+    public function callMultiple(array $call)
+    {
+        $ret = array();
+        foreach ($call as $method=>$arguments) {
+            $ret[$method] = call_user_func_array(array($this, $method), $arguments);
+        }
+        return $ret;
     }
 }

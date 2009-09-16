@@ -220,4 +220,13 @@ class Vps_Model_Service extends Vps_Model_Abstract
         $this->_client->import($format, $data, $options);
     }
 
+    public function updateRow(array $data)
+    {
+        return $this->_client->updateRow($data);
+    }
+
+    public function callMultiple(array $call)
+    {
+        return $this->_client->callMultiple($call);
+    }
 }

@@ -58,7 +58,9 @@ class Vps_Srpc_Client
 
     public function __call($method, $args)
     {
+        $start = microtime(true);
         $b = Vps_Benchmark::start('srpc call', $this->_serverUrl.' '.$method);
+
         $params = array(
             'method' => $method,
             'arguments' => array(),
@@ -75,7 +77,11 @@ class Vps_Srpc_Client
         $params['extraParams'] = serialize($params['extraParams']);
 
         $response = $this->_performRequest($params);
+
+        $log = date('Y-m-d H:i:s').' '.round(microtime(true)-$start, 2)."s $this->_serverUrl $method ".(isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : '?')."\n";
+        file_put_contents('application/log/srpc-call', $log, FILE_APPEND);
         if ($b) $b->stop();
+
         if (@unserialize($response) === false) {
             throw new Vps_Exception('Srpc Server Response is not serialized: '.$response);
         } else {
