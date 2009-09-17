@@ -12,10 +12,10 @@
 
 
 <? if ($this->activationType == Vpc_Guestbook_Component::INACTIVE_ON_SAVE) {
-    echo trlVps('Click this link to activate this post on you website:');
+    echo trlVps('Click this link to activate the post on your website:');
     echo "\n*showcomponent*".$this->activateId."*&post_id=".$this->activatePostId;
 } else if ($this->activationType == Vpc_Guestbook_Component::ACTIVE_ON_SAVE) {
-    echo trlVps('If you wish to deactivate this post in your guestbook, click here:');
+    echo trlVps('If you wish to deactivate the post in your guestbook, click here:');
     echo "\n*showcomponent*".$this->activateId."*&post_id=".$this->activatePostId;
 } ?>
 
