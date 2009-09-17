@@ -92,7 +92,11 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             if ($this->isElementPresent('css=#exception')) {
                 $exception = $this->getText('css=#exception');
                 $exception = unserialize(base64_decode($exception));
-                throw $exception;
+                if ($exception instanceof Exception) {
+                    throw $exception;
+                } else {
+                    throw new Vps_Exception($exception);
+                }
             }
             $this->assertTextNotPresent('Seite wurde nicht gefunden');
             $this->assertTextNotPresent('was not found on this server');
