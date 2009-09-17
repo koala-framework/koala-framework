@@ -40,20 +40,12 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         $this->_unitTestCookie = md5(uniqid('testId', true));
     }
 
-    protected function assertPostConditions()
+    protected function runTest()
     {
+        parent::runTest();
         try {
             $this->stop();
-        } catch (RuntimeException $e) {}
-    }
-
-    protected function tearDown()
-    {
-        if (Zend_Registry::get('config')->server->autoStopTest) {
-            try {
-                $this->stop();
-            } catch (RuntimeException $e) {}
-        }
+        } catch (RuntimeException $e) { }
     }
 
     public function clickAndWait($link)
