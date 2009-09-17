@@ -132,11 +132,20 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         echo "\n\n*** [09/13] test: vps-version zurueck auf trunk anpassen\n";
         $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
 
+        $updateProd = false;
         $doneTodos = array();
         if ($this->_getParam('skip-prod')) {
             echo "\n\n*** [10/13] prod: (uebersprungen)\n";
         } else {
-
+            echo "\nUpdate Production?  [Y/n]";
+            $stdin = fopen('php://stdin', 'r');
+            $input = trim(strtolower(fgets($stdin, 2)));
+            fclose($stdin);
+            if ($input == '' || $input == 'j' || $input == 'y') {
+                $updateProd = true;
+            }
+        }
+        if ($updateProd) {
             echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
             $this->_systemSshVpsWithSubSections("import backup-db", 'production');
 
@@ -173,9 +182,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 }
                 echo "\n";
             }
-        }
 
-        if (!$this->_getParam('skip-prod')) {
             echo "\n";
             $cfg = Vps_Registry::get('config');
             if (isset($_SERVER['USER'])) {
