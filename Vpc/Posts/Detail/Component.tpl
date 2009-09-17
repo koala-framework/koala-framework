@@ -1,14 +1,15 @@
 <div class="<?=$this->cssClass?>">
     <div class="postData">
         <div class="postInfo">
-            <? if ($this->user) { ?>
+            <? if ($this->avatar) { ?>
                 <div class="avatar">
                     <?= $this->componentLink(
-                            $this->user, 
-                            $this->component($this->user->getChildComponent('-general')
-                                ->getChildComponent('-avatar')->getChildComponent('-small'))
+                            $this->user,
+                            $this->component($this->avatar)
                     ) ?>
                 </div>
+            <? } ?>
+            <? if ($this->user) { ?>
                 <div class="user">
                     <?=trlVps('By')?>: <?= $this->componentLink($this->user) ?>
                     <?=$this->component($this->user->getChildComponent('-general')->getChildComponent('-rating'))?>

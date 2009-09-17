@@ -1,7 +1,7 @@
 <?php
 class Vpc_Posts_Directory_Row extends Vps_Model_Db_Row
 {
-    protected function _insert()
+    protected function _beforeInsert()
     {
         $user = Vps_Registry::get('userModel')->getAuthedUser();
         if (!$this->user_id && $user) {

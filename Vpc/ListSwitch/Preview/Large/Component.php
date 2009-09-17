@@ -10,6 +10,7 @@ class Vpc_ListSwitch_Preview_Large_Component extends Vpc_Basic_Image_Component
             'height' => 360,
             'scale' => Vps_Media_Image::SCALE_CROP
         ));
+        $ret['plugins']['placeholders'] = 'Vpc_Abstract_Image_NoPreloadPlugin';
         $ret['useParentImage'] = true;
         return $ret;
     }
