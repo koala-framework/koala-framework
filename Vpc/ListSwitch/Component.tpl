@@ -1,15 +1,6 @@
 <div class="vpsListSwitch <?=$this->cssClass?>">
     <div class="listSwitchLargeWrapper">
-        <div class="listSwitchLargeContent">
-            <? foreach ($this->children as $child) {
-                // diese ausgabe ist nur um flackern zu unterbinden. könnte
-                // auch entfernt werden, da das bild sowieso vom javascript
-                // nochmal gesetzt wird.
-            ?>
-                <?= $this->component($child->getChildComponent('-large'));
-                break; ?>
-            <? } ?>
-        </div>
+        <div class="listSwitchLargeContent"></div>
         <a href="#" class="listSwitchPrevious"><?=$this->placeholder['prev'];?></a>
         <a href="#" class="listSwitchNext"><?=$this->placeholder['next'];?></a>
         <div class="clear"></div>

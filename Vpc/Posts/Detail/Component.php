@@ -16,6 +16,7 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
 
         $ret['content'] = self::replaceCodes($data->row->content);
         $ret['user'] = null;
+        $ret['avatar'] = null;
 
         $userDir = Vps_Component_Data_Root::getInstance()
             ->getComponentByClass(
@@ -26,6 +27,17 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
             $userComponent = $userDir->getChildComponent('_'.$data->row->user_id);
             if ($userComponent) {
                 $ret['user'] = $userComponent;
+
+                $avatarComponent = $userComponent->getChildComponent('-general');
+                if ($avatarComponent) {
+                    $avatarComponent = $avatarComponent->getChildComponent('-avatar');
+                    if ($avatarComponent) {
+                        $avatarComponent = $avatarComponent->getChildComponent('-small');
+                        if ($avatarComponent) {
+                            $ret['avatar'] = $avatarComponent;
+                        }
+                    }
+                }
             }
         }
 
