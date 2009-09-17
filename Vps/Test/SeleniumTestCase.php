@@ -162,7 +162,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
                 throw new InvalidArgumentException;
             }
         } else {
-            $browser['timeout'] = 30000;
+            $browser['timeout'] = 30;
         }
 
         $driver = new Vps_Test_SeleniumTestCase_Driver;
