@@ -38,22 +38,31 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         $this->setBrowserUrl('http://'.$domain.'/');
 
         $this->_unitTestCookie = md5(uniqid('testId', true));
+
+
+        $this->captureScreenshotOnFailure = true;
+        $this->screenshotPath = 's:';
+        $this->screenshotUrl = 'http://screenshots.vivid';
     }
 
-    protected function assertPostConditions()
+    protected function runTest()
     {
-        try {
-            $this->stop();
-        } catch (RuntimeException $e) {}
+        parent::runTest();
+        if (Zend_Registry::get('config')->server->autoStopTest) {
+            try {
+                $this->stop();
+            } catch (RuntimeException $e) { }
+        }
     }
 
-    protected function tearDown()
+    protected function onNotSuccessfulTest(Exception $e)
     {
         if (Zend_Registry::get('config')->server->autoStopTest) {
             try {
                 $this->stop();
-            } catch (RuntimeException $e) {}
+            }catch (RuntimeException $x) { }
         }
+        parent::onNotSuccessfulTest($e);
     }
 
     public function clickAndWait($link)
@@ -92,7 +101,11 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             if ($this->isElementPresent('css=#exception')) {
                 $exception = $this->getText('css=#exception');
                 $exception = unserialize(base64_decode($exception));
-                throw $exception;
+                if ($exception instanceof Exception) {
+                    throw $exception;
+                } else {
+                    throw new Vps_Exception($exception);
+                }
             }
             $this->assertTextNotPresent('regexp:Seite wurde nicht gefunden|was not found on this server|Exception|Fatal error|Parse error');
             $this->assertTitleNotContains('Internal Server Error');
