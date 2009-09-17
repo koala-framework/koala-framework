@@ -88,10 +88,12 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     public function __call($command, $arguments)
     {
         if ($command == 'open') {
-            $this->deleteCookie('unitTest', 'path=/');
             $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/');
         }
         $ret = parent::__call($command, $arguments);
+        if ($command == 'open') {
+            $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/');
+        }
         return $ret;
     }
 
