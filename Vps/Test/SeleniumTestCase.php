@@ -90,6 +90,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         if ($command == 'waitForPageToLoad' || $command == 'open' || $command == 'waitForConnections') {
             if ($this->isElementPresent('css=#exception')) {
+                $this->runScript('document.getElementById("exception").style.display="block";');
                 $exception = $this->getText('css=#exception');
                 $exception = unserialize(base64_decode($exception));
                 if ($exception instanceof Exception) {
