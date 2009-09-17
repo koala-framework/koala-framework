@@ -4565,6 +4565,195 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Anmerkung</de>
 <id>1252</id>
 </text>
+<text>
+<en>Subscribe date</en>
+<de>Abonniert am</de>
+<id>1253</id>
+</text>
+<text>
+<en>Active?</en>
+<de>Aktiv?</de>
+<id>1254</id>
+</text>
+<text>
+<en>Subscriber settings</en>
+<de>Empfänger Einstellungen</de>
+<id>1255</id>
+</text>
+<text>
+<en>unsubscribed</en>
+<de>abgemeldet</de>
+<id>1256</id>
+</text>
+<text>
+<en>not activated</en>
+<de>nicht aktiviert</de>
+<id>1257</id>
+</text>
+<text>
+<en>active</en>
+<de>aktiv</de>
+<id>1258</id>
+</text>
+<text>
+<en>Edit subscriber</en>
+<de>Empfänger bearbeiten</de>
+<id>1259</id>
+</text>
+<text>
+<en>Newsletter subscription</en>
+<de>Newsletter abonnement</de>
+<id>1260</id>
+</text>
+<text>
+<en>Hello {0}</en>
+<de>Hallo {0}</de>
+<id>1261</id>
+</text>
+<text>
+<en>You have just been subscribed to the newsletter at {0}.</en>
+<de>Sie wurden so eben als Empfänger des Newsletters bei {0} eingetragen.</de>
+<id>1262</id>
+</text>
+<text>
+<en>ACTIVATION LINK</en>
+<de>AKTIVIERUNGSLINK</de>
+<id>1263</id>
+</text>
+<text>
+<en>Please click here, to confirm your E-Mail address and to receive our newsletters in future.</en>
+<de>Bitte klicken Sie hier, um Ihre E-Mail Adresse zu verifizieren und die künftigen Newsletter zu erhalten.</de>
+<id>1264</id>
+</text>
+<text>
+<en>To unsubscribe anytime from our newsletter, click this link:</en>
+<de>Sie können sich jederzeit vom Newsletter abmelden, indem Sie folgenden Link klicken:</de>
+<id>1265</id>
+</text>
+<text>
+<en>To change you data or settings, click this link:</en>
+<de>Um Ihre Daten oder Einstellungen zu ändern, klicken Sie den folgenden Link:</de>
+<id>1266</id>
+</text>
+<text>
+<en>Thanks for your subscription!</en>
+<de>Vielen Dank für Ihre Anmeldung!</de>
+<id>1267</id>
+</text>
+<text>
+<en>Please click the following link to confirm your E-Mail address and to receive our newsletters in future.</en>
+<de>Bitte klicken Sie den folgenden link, um Ihre E-Mail Adresse zu verifizieren und die künftigen Newsletter zu erhalten.</de>
+<id>1268</id>
+</text>
+<text>
+<en>Subscribe the newsletter</en>
+<de>Für den Newsletter anmelden</de>
+<id>1269</id>
+</text>
+<text>
+<en>HTML-Format</en>
+<de>HTML-Format</de>
+<id>1270</id>
+</text>
+<text>
+<en>Text-Format</en>
+<de>Text-Format</de>
+<id>1271</id>
+</text>
+<text>
+<en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
+<de>Ihre E-Mail Adresse wurde verifiziert. Sie werden künftig unseren Newsletter erhalten</de>
+<id>1272</id>
+</text>
+<text>
+<en>Your data has been saved successfully.</en>
+<de>Ihre Daten wurden erfolgreich gespeichert.</de>
+<id>1273</id>
+</text>
+<text>
+<en>Create Date</en>
+<de>Erstellt am</de>
+<id>1274</id>
+</text>
+<text>
+<en>Created</en>
+<de>Erstellt</de>
+<id>1275</id>
+</text>
+<text>
+<en>The entry in your guestbook has been acitvated.</en>
+<de>Der Eintrag in Ihrem Gästebuch wurde aktiviert.</de>
+<id>1276</id>
+</text>
+<text>
+<en>Use this link to get to your guestbook:</en>
+<de>Benutzen Sie diesen Link um zu Ihrem Gästebuch zu gelangen:</de>
+<id>1277</id>
+</text>
+<text>
+<en>This post does not exist anymore.</en>
+<de>Dieser Eintrag existiert nicht mehr.</de>
+<id>1278</id>
+</text>
+<text>
+<en>A new post has been written in your Guestbook.</en>
+<de>Ein neue Eintrag wurde in Ihrem Gästebuch geschrieben.</de>
+<id>1279</id>
+</text>
+<text>
+<en>Written by</en>
+<de>Geschrieben von</de>
+<id>1280</id>
+</text>
+<text>
+<en>Content:</en>
+<de>Inhalt:</de>
+<id>1281</id>
+</text>
+<text>
+<en>Click this link to activate the post on your website:</en>
+<de>Klicken Sie diesen Link, um den Eintrag auf Ihrer Webseite zu aktivieren:</de>
+<id>1282</id>
+</text>
+<text>
+<en>If you wish to deactivate the post in your guestbook, click here:</en>
+<de>Wenn Sie diesen Eintrag in Ihrem Gästebuch deaktivieren möchten, klicken Sie bitte hier:</de>
+<id>1283</id>
+</text>
+<text>
+<en>Click this link to get to your guestbook:</en>
+<de>Klicken Sie hier, um zu Ihrem Gästebuch zu gelangen:</de>
+<id>1284</id>
+</text>
+<text>
+<en>The entry in your guestbook has been deacitvated.</en>
+<de>Der Eintrag in Ihrem Gästebuch wurde deaktiviert.</de>
+<id>1285</id>
+</text>
+<text>
+<en>Remind mail receiver</en>
+<de>Hinweismail empfänger</de>
+<id>1286</id>
+</text>
+<text>
+<en>Send no mail</en>
+<de>Keine Mail senden</de>
+<id>1287</id>
+</text>
+<text>
+<en>Post save type</en>
+<de>Eintragsspeicherung</de>
+<id>1288</id>
+</text>
+<text>
+<en>Active, may be deactivated</en>
+<de>Aktiv, kann deaktiviert werden</de>
+<id>1289</id>
+</text>
+<text>
+<en>Inactive, must be activated</en>
+<de>Inaktiv, muss aktiviert werden</de>
+<id>1290</id>
+</text>
 </trl>
-
 
