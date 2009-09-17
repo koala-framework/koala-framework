@@ -127,6 +127,7 @@ function _btArgString($arg)
 }
 function bt($file = false)
 {
+    require_once 'Vps/Debug.php';
     if (!Vps_Debug::isEnabled()) return;
     $bt = debug_backtrace();
     unset($bt[0]);
@@ -291,8 +292,13 @@ class Vps_Setup
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
 
         $ip = get_include_path();
-        foreach ($config->includepath as $p) {
-            $ip .= PATH_SEPARATOR . $p;
+        foreach ($config->includepath as $t=>$p) {
+            if ($t == 'phpunit') {
+                //vorne anhängen damit er vorrang vor /usr/share/php hat
+                $ip = $p . PATH_SEPARATOR . $ip;
+            } else {
+                $ip .= PATH_SEPARATOR . $p;
+            }
         }
         set_include_path($ip);
 
