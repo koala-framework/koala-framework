@@ -5,7 +5,7 @@ class Vps_Test_SeleniumTestCase_Driver extends PHPUnit_Extensions_SeleniumTestCa
     {
         if ($command == 'waitForElementPresent' || $command == 'waitForElementNotPresent') {
             if (count($arguments) == 1) {
-                $arguments[] = $this->timeout;
+                $arguments[] = $this->seleniumTimeout * 1000;
             }
             $this->doCommand($command, $arguments);
         } else {
