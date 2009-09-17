@@ -16,7 +16,7 @@
 *showcomponent*<?= $this->unsubscribeComponentId; ?>*
 
 <? } ?>
-<?= trlVps('To change you data and settings, click this link:'); ?>
+<?= trlVps('To change you data or settings, click this link:'); ?>
 
 *showcomponent*<?= $this->editComponentId; ?>*
 
