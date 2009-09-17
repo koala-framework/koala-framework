@@ -26,7 +26,7 @@ class Vps_Test_TestResult extends PHPUnit_Framework_TestResult
             FALSE
         );
 
-        echo "\nTest failed. Try again?";
+        echo "\nTest failed. Try again? [y/N]";
         $stdin = fopen('php://stdin', 'r');
         $input = fgets($stdin, 2);
         fclose($stdin);
