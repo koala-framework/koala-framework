@@ -20,7 +20,7 @@ class Vps_Test_TestResult extends PHPUnit_Framework_TestResult
             echo get_class($test);
         }
         echo "\n";
-        echo $error->toStringVerbose(true) .
+        echo $error->getExceptionAsString() .
         PHPUnit_Util_Filter::getFilteredStacktrace(
             $error->thrownException(),
             FALSE
