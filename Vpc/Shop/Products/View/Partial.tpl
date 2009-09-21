@@ -8,7 +8,7 @@
         <div class="detail"><?=$this->componentLink($this->item, trlVps('Detail info').' ...');?></div>
     </div>
     <div class="orderStuff">
-        <div class="productPrice"><?=$this->money($this->item->row->price)?></div>
+        <div class="productPrice"><?=$this->money($this->item->row->current_price)?></div>
         <?=$this->component($this->item->addToCart);?>
     </div>
 </div>

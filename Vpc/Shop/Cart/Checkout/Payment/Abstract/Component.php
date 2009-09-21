@@ -75,6 +75,8 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
     {
         $this->sendConfirmMail($order);
 
+        $order->payment_component_id = $this->getData()->componentId;
+        $order->checkout_component_id = $this->getData()->parent->componentId;
         $order->status = 'ordered';
         $order->date = date('Y-m-d H:i:s');
         $order->save();
