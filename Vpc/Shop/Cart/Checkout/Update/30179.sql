@@ -29,13 +29,11 @@ ALTER TABLE `vpc_shop_order_products` ADD INDEX ( `shop_product_price_id` ) ;
 UPDATE `vpc_shop_order_products` SET shop_product_price_id = (SELECT id FROM vpc_shop_product_prices WHERE vpc_shop_product_prices.shop_product_id=vpc_shop_order_products.shop_product_id LIMIT 1);
 
 
-#da gibts vielleicht ein problem:
-ALTER TABLE `vpc_shop_order_products` DROP FOREIGN KEY `vpc_shop_order_products_ibfk_5` ;
-ALTER TABLE `vpc_shop_order_products` DROP FOREIGN KEY `vpc_shop_order_products_ibfk_6` ;
-ALTER TABLE `vpc_shop_order_products` DROP FOREIGN KEY `vpc_shop_order_products_ibfk_7` ;
-
-ALTER TABLE `vpc_shop_order_products` ADD FOREIGN KEY ( `shop_order_id` ) REFERENCES `vpc_shop_orders` (`id`);
-ALTER TABLE `vpc_shop_order_products` ADD FOREIGN KEY ( `shop_product_price_id` ) REFERENCES `vpc_shop_product_prices` (`id`);
+-- #da gibts vielleicht ein problem:
+ALTER TABLE `vpc_shop_order_products` DROP FOREIGN KEY `vpc_shop_order_products_ibfk_1` ;
+ALTER TABLE `vpc_shop_order_products` DROP FOREIGN KEY `vpc_shop_order_products_ibfk_2` ;
 
 ALTER TABLE `vpc_shop_order_products` DROP `shop_product_id`;
 
+ALTER TABLE `vpc_shop_order_products` ADD FOREIGN KEY ( `shop_order_id` ) REFERENCES `vpc_shop_orders` (`id`);
+ALTER TABLE `vpc_shop_order_products` ADD FOREIGN KEY ( `shop_product_price_id` ) REFERENCES `vpc_shop_product_prices` (`id`);
