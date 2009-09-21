@@ -66,7 +66,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     public function clickAndWait($link)
     {
         $this->click($link);
-        $this->waitForPageToLoad("30000");
+        $this->waitForPageToLoad();
     }
     public function sessionRestart()
     {
