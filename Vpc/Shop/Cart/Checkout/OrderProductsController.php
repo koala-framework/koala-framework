@@ -9,7 +9,7 @@ class Vpc_Shop_Cart_Checkout_OrderProductsController extends Vps_Controller_Acti
     protected function _initColumns()
     {
         $this->_columns->add(new Vps_Grid_Column('product', trlVps('Product')))
-            ->setData(new Vps_Data_Table_Parent('Product'));
+            ->setData(new Vps_Data_Table_Parent(array('ProductPrice', 'Product')));
         $this->_columns->add(new Vps_Grid_Column('amount', trlVps('Amount'), 50));
         $this->_columns->add(new Vps_Grid_Column('size', trlVps('Size'), 100));
     }

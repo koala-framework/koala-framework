@@ -31,7 +31,7 @@ class Vps_Data_Table_Parent extends Vps_Data_Abstract
             ) {
                 $row = $row->findParentRow($t, $this->_ruleKey);
             } else {
-                $row = $row->getParentRow($this->_parentTable);
+                $row = $row->getParentRow($t);
             }
             if (!$row) return '';
         }
