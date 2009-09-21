@@ -29,6 +29,9 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
             $ret['vertical'] = false;
         }
         $store = $this->_getStoreData();
+        if (!isset($store['data'])) {
+            throw new Vps_Exception("No data set for radio field '{$this->getName()}'");
+        }
         foreach ($store['data'] as $d) {
             $id = $d[0];
             $value = $d[1];
