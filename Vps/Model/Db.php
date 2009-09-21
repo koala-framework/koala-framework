@@ -489,8 +489,22 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
             return $field;
+        } else if ($expr instanceof Vps_Model_Select_Expr_SumFields) {
+            $sqlExpressions = array();
+            foreach ($expr->getFields() as $expression) {
+                if (is_int($expression)) {
+                    $sqlExpressions[] = $expression;
+                } else if (is_string($expression)) {
+                    $sqlExpressions[] = $this->_formatField($expression, $dbSelect);
+                } else if ($expression instanceof Vps_Model_Select_Expr_Interface) {
+                    $sqlExpressions[] = $this->_createDbSelectExpression($expression, $dbSelect);
+                } else {
+                    throw new Vps_Exception_NotYetImplemented();
+                }
+            }
+            return '('.implode('+ ', $sqlExpressions).')';
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Vps_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
         }
     }
 
