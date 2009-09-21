@@ -10,7 +10,7 @@
             <? foreach($i->additionalOrderData as $d) { ?>
                 <td class="<?=$d['class']?>"><?=$d['name']?>: <?=$d['value']?></td>
             <? } ?>
-            <td class="price"><?=$this->money($i->product->row->price*$i->row->amount, '')?></td>
+            <td class="price"><?=$this->money($i->row->price*$i->row->amount, '')?></td>
         </tr>
         <? $c++;
     } ?>

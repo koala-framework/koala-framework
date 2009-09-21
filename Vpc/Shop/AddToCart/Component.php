@@ -23,7 +23,7 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
         parent::_beforeInsert($row);
         $orders = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders');
         $row->shop_order_id = $orders->getCartOrderAndSave()->id;
-        $row->shop_product_id = $this->_getProduct()->id;
+        $row->shop_product_price_id = $this->_getProduct()->current_price_id;
         $row->add_component_id = $this->getData()->dbId;
     }
 

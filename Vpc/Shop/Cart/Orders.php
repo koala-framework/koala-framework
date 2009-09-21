@@ -7,6 +7,12 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
     protected $_dependentModels = array('Products'=>'Vpc_Shop_Cart_OrderProducts');
     private static $_cartOrderId; //order-id falls sie schon ge-resetted wurde
 
+    protected function _init()
+    {
+        parent::_init();
+        $this->_exprs['sum_amount'] = new Vps_Model_Select_Expr_Child_Sum('Products', 'amount');
+    }
+
     public function getCartOrderAndSave()
     {
         $ret = $this->getCartOrder();

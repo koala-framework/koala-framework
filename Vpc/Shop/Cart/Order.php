@@ -38,7 +38,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     {
         $ret = 0;
         foreach ($this->getChildRows('Products') as $op) {
-            $p = $op->getParentRow('Product');
+            $p = $op->getParentRow('ProductPrice');
             $ret += $p->price * $op->amount;
         }
         return $ret;
