@@ -77,6 +77,18 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
         throw new Vps_Exception("Offset '$offset' not found");
     }
 
+    public function remove($item)
+    {
+        foreach ($this->_array as $k=>$v) {
+            if ($item === $v) {
+                unset($this->_array[$k]);
+                $this->_array = array_values($this->_array);
+                return;
+            }
+        }
+        throw new Vps_Exception("Item not found");
+    }
+
     //IteratorAggregate
     public function getIterator()
     {
