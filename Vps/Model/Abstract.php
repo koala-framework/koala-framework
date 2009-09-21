@@ -472,6 +472,9 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 $padType = STR_PAD_RIGHT;
             }
             return str_pad($v, $expr->getPadLength(), $expr->getPadStr(), $padType);
+        } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
+            $f = $expr->getField();
+            return $row->$f;
         } else {
             throw new Vps_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
@@ -508,8 +511,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 $ret += $r->$f;
             }
             return $ret;
+        } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
+            if (!count($rowset)) {
+                return null;
+            }
+            $f = $expr->getField();
+            return $rowset->current()->$f;
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            throw new Vps_Exception_NotYetImplemented("support for ".get_class($expr)." is not yet implemented");
         }
     }
 
