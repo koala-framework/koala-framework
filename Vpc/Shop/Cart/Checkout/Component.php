@@ -21,6 +21,9 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
 
         $ret['flags']['hasResources'] = true;
 
+        $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Shop/Cart/Checkout/OrdersPanel.js';
+
         return $ret;
     }
 

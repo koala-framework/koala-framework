@@ -4,5 +4,28 @@ class Vpc_Shop_Products extends Vps_Model_Db
     protected $_rowClass = 'Vpc_Shop_Product';
     protected $_table = 'vpc_shop_products';
     protected $_filters = array('pos');
-    protected $_dependentModels = array('OrderProducts'=>'Vpc_Shop_Cart_OrderProducts');
+    protected $_dependentModels = array(
+        'OrderProducts' => 'Vpc_Shop_Cart_OrderProducts',
+        'Prices' => 'Vpc_Shop_ProductPrices'
+    );
+
+    protected function _init()
+    {
+        parent::_init();
+        $s = $this->select();
+        $s->limit(1);
+        $s->order('valid_from', 'DESC');
+        $s->where(new Vps_Model_Select_Expr_SmallerDate('valid_from', date('Y-m-d H:i:s')));
+        $this->_exprs['current_price'] =
+            new Vps_Model_Select_Expr_Child(
+                'Prices',
+                new Vps_Model_Select_Expr_Field('price'),
+                $s);
+
+        $this->_exprs['current_price_id'] =
+            new Vps_Model_Select_Expr_Child(
+                'Prices',
+                new Vps_Model_Select_Expr_Field('id'),
+                $s);
+    }
 }

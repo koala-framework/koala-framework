@@ -25,7 +25,7 @@ class Vpc_Shop_Cart_Detail_Component extends Vpc_Abstract_Composite_Component
         $ret['product'] = Vps_Component_Data_Root::getInstance()
             ->getComponentByDbId($this->getData()->row->add_component_id)
             ->parent;
+        $ret['row'] = $this->getData()->row;
         return $ret;
     }
-
 }

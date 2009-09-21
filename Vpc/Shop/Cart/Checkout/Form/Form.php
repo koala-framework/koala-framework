@@ -6,8 +6,9 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vpc_Abstract_Form
     protected function _initFields()
     {
         parent::_initFields();
-        $this->add(new Vps_Form_Field_Panel())
-            ->setHtml('<h1>'.trlVps('Please enter your address').'</h1>');
+        $this->add(new Vps_Form_Field_Panel('intro_text'))
+            ->setHtml('<h1>'.trlVps('Please enter your address').'</h1>')
+            ->setHideFieldInBackend(true);
         $this->add(new Vps_Form_Field_Radio('sex', trlcVps('sex', 'Title')))
             ->setValues(array(
                 'male'   => trlVps('Mr.'),
@@ -33,9 +34,11 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vpc_Abstract_Form
             ->setAllowBlank(false);
         $this->add(new Vps_Form_Field_TextField('phone', trlVps('Phone')));
 
-        $this->add(new Vps_Form_Field_Panel())
-            ->setHtml('<p class="formText">'.trlVps('What type of payment do you wish?').'</p>');
-        $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')));
+        $this->add(new Vps_Form_Field_Panel('payment_text'))
+            ->setHtml('<p class="formText">'.trlVps('What type of payment do you wish?').'</p>')
+            ->setHideFieldInBackend(true);
+        $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')))
+            ->setHideFieldInBackend(true);
 
         $this->add(new Vps_Form_Field_TextArea('comment', trlVps('Other comments, questions or suggestions')))
             ->setHeight(80);
