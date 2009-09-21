@@ -475,6 +475,20 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
             $f = $expr->getField();
             return $row->$f;
+        } else if ($expr instanceof Vps_Model_Select_Expr_SumFields) {
+            $ret = 0;
+            foreach ($expr->getFields() as $f) {
+                if (is_int($f)) {
+                    $ret += $f;
+                } else if (is_string($f)) {
+                    $ret += $row->$f;
+                } else if ($f instanceof Vps_Model_Select_Expr_Interface) {
+                    $ret += $this->getExprValue($row, $f);
+                } else {
+                    throw new Vps_Exception_NotYetImplemented();
+                }
+            }
+            return $ret;
         } else {
             throw new Vps_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
