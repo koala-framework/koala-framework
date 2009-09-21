@@ -451,7 +451,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $col1 = $dbDepM->transformColumnName($ref['column']);
             $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
             $depSelect->where("$depTableName.$col1={$dbDepOf->getTableName()}.$col2");
-            $depDbSelect = $dbDepM->createDbSelect($depSelect);
+            $depDbSelect = $dbDepM->_getDbSelect($depSelect);
             $exprStr = $dbDepM->_createDbSelectExpression($expr->getExpr(), $depDbSelect);
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, $exprStr);
@@ -486,6 +486,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $refDbSelect->reset(Zend_Db_Select::COLUMNS);
             $refDbSelect->from(null, $exprStr);
             return "($refDbSelect)";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
+            $field = $this->_formatField($expr->getField(), $dbSelect);
+            return $field;
         } else {
             throw new Vps_Exception_NotYetImplemented();
         }
@@ -494,8 +497,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     //Nur zum Debuggen verwenden!
     public function getSqlForSelect($select)
     {
-        //TODO: limit und order fehlen :D
-        $dbSelect = $this->createDbSelect($select);
+        $dbSelect = $this->_getDbSelect($select);
         return $dbSelect->__toString();
     }
 
@@ -551,7 +553,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $this->_table->delete($where);
     }
 
-    private function _getDbSelect($where, $order, $limit, $start)
+    private function _getDbSelect($where, $order=null, $limit=null, $start=null)
     {
         if (!is_object($where)) {
             if (is_string($where)) $where = array($where);
