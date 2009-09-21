@@ -24,8 +24,8 @@ class Vpc_Shop_Products_Directory_Admin extends Vpc_Directories_Item_Directory_A
     {
         parent::addResources($acl);
         //TODO: ressource nur hinzufügen wenn es mindestens eine shop komponente im seitenbaum gibt
-        $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_shop',
-                    array('text'=>trlVps('Shop'), 'icon'=>'cart.png')), 'vps_component_root');
+//         $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_shop',
+//                     array('text'=>trlVps('Shop'), 'icon'=>'cart.png')), 'vps_component_root');
             $acl->add(new Vps_Acl_Resource_ComponentClass_MenuUrl($this->_class,
                     array('text'=>trlVps('Products'), 'icon'=>'application_view_list.png'),
                     $this->getControllerUrl()), 'vpc_shop');
