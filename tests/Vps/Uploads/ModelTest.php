@@ -6,7 +6,7 @@ class Vps_Uploads_ModelTest extends PHPUnit_Framework_TestCase
 {
     private $_model;
     private $_uploadsModel;
-
+    
     public function setUp()
     {
         $this->_uploadsModel = new Vps_Uploads_TestModel();
@@ -23,9 +23,11 @@ class Vps_Uploads_ModelTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $dir = $this->_uploadsModel->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
+        if ($this->_uplodasModel) {
+            $dir = $this->_uploadsModel->getUploadDir();
+            if (substr($dir, 0, 4)=='/tmp') {
+                system('rm -r '.$dir);
+            }
         }
     }
 
