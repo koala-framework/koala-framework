@@ -35,8 +35,6 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         $exception = $errors->exception;
         if ($exception instanceof Vps_Exception_Client) {
             $this->view->error = $exception->getMessage();
-        } else if ($exception instanceof Vps_Exception_NotFound) {
-            $this->view->error = trlVps('There is no editing for this component.');
         } else {
             if (!$exception instanceof Vps_ExceptionNoMail) {
                 $exception = new Vps_Exception_Other($exception);
