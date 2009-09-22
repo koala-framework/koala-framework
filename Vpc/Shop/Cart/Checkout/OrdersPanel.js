@@ -6,6 +6,7 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
         var order = new Vps.Auto.FormPanel({
             region: 'north',
             height: 400,
+            split: true,
             controllerUrl:  this.orderControllerUrl,
             baseParams: Vps.clone(this.baseParams)
         });
@@ -27,7 +28,7 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                         var row = grid.getStore().getAt(index);
                         window.open(this.ordersControllerUrl+'/pdf?'+Ext.urlEncode(this.baseParams)+'&id='+row.id);
                         (function() {
-                            order.reload(); //invoice_date wurde womöglich gesetzt
+                            order.reload(); //invoice_date wurde womï¿½glich gesetzt
                         }).defer(500);
                     },
                     scope: this
@@ -56,6 +57,7 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
             layout: 'border',
             region: 'east',
             width: 500,
+            split: true,
             items: [order, orderProducts]
         }];
 
