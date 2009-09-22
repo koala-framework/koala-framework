@@ -11,6 +11,7 @@ class Vpc_Shop_Products_Detail_Component extends Vpc_Directories_Item_Detail_Com
         $ret['modelname'] = 'Vpc_Shop_Products';
         $ret['cssClass'] = 'webStandard';
         $ret['placeholder']['backToShop'] = trlVps('Back to shop');
+        $ret['assetsAdmin']['dep'][] = 'VpsFormDateTimeField';
         return $ret;
     }
     public static function modifyItemData(Vps_Component_Data $item)
