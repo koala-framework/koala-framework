@@ -26,6 +26,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         }
         $this->fields = new Vps_Collection_FormFields();
         $this->setBorder(false);
+        $this->setBaseCls('x-plain');
         $this->setXtype('multifields');
     }
 
