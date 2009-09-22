@@ -23,7 +23,7 @@ class Vps_Uploads_ModelTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        if ($this->_uplodasModel) {
+        if ($this->_uploadsModel) {
             $dir = $this->_uploadsModel->getUploadDir();
             if (substr($dir, 0, 4)=='/tmp') {
                 system('rm -r '.$dir);
