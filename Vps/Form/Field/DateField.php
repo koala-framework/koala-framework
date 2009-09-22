@@ -7,6 +7,14 @@ class Vps_Form_Field_DateField extends Vps_Form_Field_SimpleAbstract
         $this->setXtype('datefield');
     }
 
+    protected function _processLoaded($v)
+    {
+        if (strlen($v) > 10) {
+            $v = substr($v, 0, 10);
+        }
+        return $v;
+    }
+
     protected function _addValidators()
     {
         parent::_addValidators();
