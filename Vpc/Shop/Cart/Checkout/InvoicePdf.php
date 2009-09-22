@@ -33,7 +33,7 @@ class Vpc_Shop_Cart_Checkout_InvoicePdf extends Vps_Pdf_TcPdf
         $checkout = Vps_Component_Data_Root::getInstance()->getComponentByDbId($order->checkout_component_id);
         foreach ($checkout->getComponent()->getSumRows($order) as $addSumRow) {
             if(isset($addSumRow['class']) && $addSumRow['class']=='totalAmount'){
-                $this->MultiCell(0, 0, "Total", 0, 'L');
+                $this->MultiCell(0, 0, $addSumRow['text']." ".$moneyHelper->money($addSumRow['amount']), 0, 'L');
             }
         }
     }
