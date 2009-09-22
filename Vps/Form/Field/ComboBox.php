@@ -38,7 +38,7 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     //setFilterValue
         //wird von ComboBoxFilter aufgerufen
 
-    //setDisplayField
+    //setDisplayField (name)
     //setListWidth
         
 
