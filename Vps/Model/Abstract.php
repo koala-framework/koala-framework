@@ -429,7 +429,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         throw new Vps_Exception_NotYetImplemented();
     }
 
-    public function getExprValue(Vps_Model_Row_Interface $row, $name)
+    public function getExprValue($row, $name)
     {
         if ($name instanceof Vps_Model_Select_Expr_Interface) {
             $expr = $name;
@@ -438,9 +438,15 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         }
 
         if ($expr instanceof Vps_Model_Select_Expr_Child) {
+            if (!$row instanceof Vps_Model_Row_Interface) {
+                throw new Vps_Exception("row must be a Row_Interface");
+            }
             $childs = $row->getChildRows($expr->getChild(), $expr->getSelect());
             return self::_evaluateExprForRowset($childs, $expr->getExpr());
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
+            if (!$row instanceof Vps_Model_Row_Interface) {
+                throw new Vps_Exception("row must be a Row_Interface");
+            }
             $parent = $row->getParentRow($expr->getParent());
             $field = $expr->getField();
             return $parent->$field;
@@ -450,7 +456,11 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 if ($e instanceof Vps_Model_Select_Expr_Interface) {
                     $ret .= $this->getExprValue($row, $e);
                 } else {
-                    $ret .= $row->$e;
+                    if (is_array($row)) {
+                        $ret .= $row[$e];
+                    } else {
+                        $ret .= $row->$e;
+                    }
                 }
             }
             return $ret;
@@ -458,7 +468,11 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             return $expr->getString();
         } else if ($expr instanceof Vps_Model_Select_Expr_StrPad) {
             $f = $expr->getField();
-            $v = $row->$f;
+            if (is_array($row)) {
+                $v = $row[$f];
+            } else {
+                $v = $row->$f;
+            }
             // faking mysql's implementation of LPAD / RPAD
             // mysql cuts always right when the string is too long, it does not
             // depend on the pad-type
@@ -474,14 +488,22 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             return str_pad($v, $expr->getPadLength(), $expr->getPadStr(), $padType);
         } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
             $f = $expr->getField();
-            return $row->$f;
+            if (is_array($row)) {
+                return $row[$f];
+            } else {
+                return $row->$f;
+            }
         } else if ($expr instanceof Vps_Model_Select_Expr_SumFields) {
             $ret = 0;
             foreach ($expr->getFields() as $f) {
                 if (is_int($f)) {
                     $ret += $f;
                 } else if (is_string($f)) {
-                    $ret += $row->$f;
+                    if (is_array($row)) {
+                        $ret += $row[$f];
+                    } else {
+                        $ret += $row->$f;
+                    }
                 } else if ($f instanceof Vps_Model_Select_Expr_Interface) {
                     $ret += $this->getExprValue($row, $f);
                 } else {

@@ -197,9 +197,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         if (!$expr) return false;
 
-        $col = $this->_createDbSelectExpression($expr, $dbSelect, $depOf);
-        $dbSelect->from(null, array($field=>$col));
-        return $field;
+        return $this->_createDbSelectExpression($expr, $dbSelect, $depOf);
     }
 
     /**
@@ -295,9 +293,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
         if ($exprs = $select->getPart(Vps_Model_Select::EXPR)) {
             foreach ($exprs as $field) {
-                if (!$this->_formatFieldExpr($field, $dbSelect)) {
+                if (!$col = $this->_formatFieldExpr($field, $dbSelect)) {
                     throw new Vps_Exception("Expression '$field' not found");
                 }
+                $dbSelect->from(null, array($field=>$col));
             }
         }
     }
