@@ -20,6 +20,10 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component',
         );
+        $ret['generators']['shippedMail'] = array(
+            'class' => 'Vps_Component_Generator_Static',
+            'component' => 'Vpc_Shop_Cart_Checkout_Payment_Abstract_ShippedMail_Component',
+        );
 
         return $ret;
     }

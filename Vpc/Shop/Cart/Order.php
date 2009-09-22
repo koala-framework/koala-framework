@@ -9,6 +9,21 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
             Vpc_Shop_Cart_Orders::resetCartOrderId();
         }
     }
+
+    protected function _beforeSave()
+    {
+        parent::_beforeSave();
+        if ($this->status != 'cart' && !$this->number) {
+            $s = $this->getModel()->select();
+            $s->limit(1);
+            $s->order('number', 'DESC');
+            $row = $this->getModel()->getRow($s);
+            $maxNumber = 0;
+            if ($row) $maxNumber = $row->number;
+            $this->number = $maxNumber + 1;
+        }
+    }
+
     public function getMailGender()
     {
         return $this->sex;
@@ -59,11 +74,6 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
             ->getComponentByClass('Vpc_Shop_Cart_Component')
             ->getChildComponent('_checkout')
             ->getComponent()->getTotal($this);
-    }
-
-    public function getOrderNumber()
-    {
-        return $this->id + 11000;
     }
 
     public function getSalutation()

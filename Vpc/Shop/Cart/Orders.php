@@ -5,12 +5,21 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
     protected $_rowClass = 'Vpc_Shop_Cart_Order';
     protected $_siblingModels = array('Vpc_Shop_Cart_Checkout_Model');
     protected $_dependentModels = array('Products'=>'Vpc_Shop_Cart_OrderProducts');
-    private static $_cartOrderId; //order-id falls sie schon ge-resetted wurde
+    private static $_cartOrderId; //order-id falls sie in der session schon ge-resetted wurde
 
     protected function _init()
     {
         parent::_init();
         $this->_exprs['sum_amount'] = new Vps_Model_Select_Expr_Child_Sum('Products', 'amount');
+        $this->_exprs['order_number'] = new Vps_Model_Select_Expr_SumFields(
+            array('number', 11000)
+        );
+        $this->_exprs['invoice_number'] = new Vps_Model_Select_Expr_SumFields(
+            array('number', 10500)
+        );
+        $this->_exprs['customer_number'] = new Vps_Model_Select_Expr_SumFields(
+            array('number', 1100)
+        );
     }
 
     public function getCartOrderAndSave()
