@@ -1,0 +1,73 @@
+#!/usr/bin/php
+<?php
+$mergeTo = '../vps-trunk-clean';
+
+if (!file_exists($mergeTo)) die("$mergeTo does not exist");
+$cmd = "svn st --xml -u $mergeTo";
+exec($cmd, $out, $ret);
+if ($ret) die("Failed checking for modified files");
+$xml = new SimpleXMLElement(implode('', $out));
+if (!$xml) die("Failed checking for modified files");
+$files = array();
+foreach ($xml->target->entry as $e) {
+    $files[(string)$e->{'wc-status'}['item']][] = (string)$e['path'];
+}
+if ($files) {
+    if (!isset($files['normal']) || count($files) > 1) {
+        echo "working copy contains ";
+        foreach ($files as $status=>$f) {
+            if ($status == 'normal') continue;
+            echo count($f)." $status ";
+        }
+        echo "files\n";
+    }
+    if (isset($files['normal'])) {
+        echo "working copy is not up to date\n";
+    }
+    die("You must not have modified files in '$mergeTo'");
+}
+
+$options = array();
+$files = array();
+$lastOptionName = false;
+foreach ($_SERVER['argv'] as $k=>$i) {
+    if ($k==0) continue;
+    if (substr($i, 0, 1) == '-') {
+        $lastOptionName = trim($i, '-');
+        if ($lastOptionName == 'm') $lastOptionName = 'message';
+        if ($pos = strpos($i, '=')) {
+            $options[substr($lastOptionName, 0, $pos-2)] = substr($lastOptionName, $pos-1);
+        } else {
+            $options[$lastOptionName] = true;
+        }
+    } else if ($lastOptionName) {
+        $options[$lastOptionName] = $i;
+        $lastOptionName = false;
+    } else {
+        $files[] = $i;
+    }
+}
+if (!isset($options['message'])) {
+    die('missing parameter message');
+}
+$cmd = "svn commit";
+foreach ($files as $i) {
+    $cmd .= ' '.escapeshellarg($i);
+}
+$cmd .= " --message=".escapeshellarg($options['message']);
+system($cmd, $ret);
+if ($ret) exit(1);
+
+$xml = new SimpleXMLElement(`svn info --xml`);
+$url = (string)$xml->entry->url;
+var_dump($url);
+
+chdir($mergeTo);
+$cmd = "svn merge $url";
+system($cmd, $ret);
+if ($ret) exit(1);
+
+$cmd = "svn commit";
+$cmd .= " --message=".escapeshellarg('merged '.$options['message']);
+system($cmd, $ret);
+if ($ret) exit(1);
