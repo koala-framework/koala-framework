@@ -16,7 +16,7 @@ class Vpc_Shop_Cart_Checkout_Admin extends Vpc_Admin
         $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
         foreach ($components as $c) {
             $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
-                    array('text'=>'Orders', 'icon'=>$icon),
+                    array('text'=>trlVps('Orders'), 'icon'=>$icon),
                     Vpc_Admin::getInstance($c->componentClass)->getControllerUrl('Orders').'?componentId='.$c->dbId), 'vpc_shop');
         }
     }
