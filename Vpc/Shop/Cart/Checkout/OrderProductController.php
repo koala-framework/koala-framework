@@ -16,13 +16,13 @@ class Vpc_Shop_Cart_Checkout_OrderProductController extends Vps_Controller_Actio
         foreach ($m->getRows($s) as $product) {
             $data[] = array(
                 $product->current_price_id,
-                $product->__toString().' ('.$product->current_price.' &euro;)'
+                $product->__toString().' ('.$product->current_price.' â‚¬)'
             );
         }
         $this->_form->add(new Vps_Form_Field_Select('shop_product_price_id', trlVps('Product')))
             ->setValues($data);
 
-        //keine optimale lösung, theoretisch können mehrere unterschiedliche
+        //keine optimale lï¿½sung, theoretisch kï¿½nnen mehrere unterschiedliche
         //addtocart komponenten verwendet werden
         foreach (Vpc_Abstract::getComponentClasses() as $c) {
             if (is_instance_of($c, 'Vpc_Shop_AddToCart_Component')) {

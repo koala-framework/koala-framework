@@ -4577,7 +4577,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Subscriber settings</en>
-<de>Empfänger Einstellungen</de>
+<de>Empf&#xE4;nger Einstellungen</de>
 <id>1255</id>
 </text>
 <text>
@@ -4597,7 +4597,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Edit subscriber</en>
-<de>Empfänger bearbeiten</de>
+<de>Empf&#xE4;nger bearbeiten</de>
 <id>1259</id>
 </text>
 <text>
@@ -4612,7 +4612,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>You have just been subscribed to the newsletter at {0}.</en>
-<de>Sie wurden so eben als Empfänger des Newsletters bei {0} eingetragen.</de>
+<de>Sie wurden so eben als Empf&#xE4;nger des Newsletters bei {0} eingetragen.</de>
 <id>1262</id>
 </text>
 <text>
@@ -4622,32 +4622,32 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please click here, to confirm your E-Mail address and to receive our newsletters in future.</en>
-<de>Bitte klicken Sie hier, um Ihre E-Mail Adresse zu verifizieren und die künftigen Newsletter zu erhalten.</de>
+<de>Bitte klicken Sie hier, um Ihre E-Mail Adresse zu verifizieren und die k&#xFC;nftigen Newsletter zu erhalten.</de>
 <id>1264</id>
 </text>
 <text>
 <en>To unsubscribe anytime from our newsletter, click this link:</en>
-<de>Sie können sich jederzeit vom Newsletter abmelden, indem Sie folgenden Link klicken:</de>
+<de>Sie k&#xF6;nnen sich jederzeit vom Newsletter abmelden, indem Sie folgenden Link klicken:</de>
 <id>1265</id>
 </text>
 <text>
 <en>To change you data or settings, click this link:</en>
-<de>Um Ihre Daten oder Einstellungen zu ändern, klicken Sie den folgenden Link:</de>
+<de>Um Ihre Daten oder Einstellungen zu &#xE4;ndern, klicken Sie den folgenden Link:</de>
 <id>1266</id>
 </text>
 <text>
 <en>Thanks for your subscription!</en>
-<de>Vielen Dank für Ihre Anmeldung!</de>
+<de>Vielen Dank f&#xFC;r Ihre Anmeldung!</de>
 <id>1267</id>
 </text>
 <text>
 <en>Please click the following link to confirm your E-Mail address and to receive our newsletters in future.</en>
-<de>Bitte klicken Sie den folgenden link, um Ihre E-Mail Adresse zu verifizieren und die künftigen Newsletter zu erhalten.</de>
+<de>Bitte klicken Sie den folgenden link, um Ihre E-Mail Adresse zu verifizieren und die k&#xFC;nftigen Newsletter zu erhalten.</de>
 <id>1268</id>
 </text>
 <text>
 <en>Subscribe the newsletter</en>
-<de>Für den Newsletter anmelden</de>
+<de>F&#xFC;r den Newsletter anmelden</de>
 <id>1269</id>
 </text>
 <text>
@@ -4662,7 +4662,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
-<de>Ihre E-Mail Adresse wurde verifiziert. Sie werden künftig unseren Newsletter erhalten</de>
+<de>Ihre E-Mail Adresse wurde verifiziert. Sie werden k&#xFC;nftig unseren Newsletter erhalten</de>
 <id>1272</id>
 </text>
 <text>
@@ -4682,12 +4682,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The entry in your guestbook has been acitvated.</en>
-<de>Der Eintrag in Ihrem Gästebuch wurde aktiviert.</de>
+<de>Der Eintrag in Ihrem G&#xE4;stebuch wurde aktiviert.</de>
 <id>1276</id>
 </text>
 <text>
 <en>Use this link to get to your guestbook:</en>
-<de>Benutzen Sie diesen Link um zu Ihrem Gästebuch zu gelangen:</de>
+<de>Benutzen Sie diesen Link um zu Ihrem G&#xE4;stebuch zu gelangen:</de>
 <id>1277</id>
 </text>
 <text>
@@ -4697,7 +4697,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>A new post has been written in your Guestbook.</en>
-<de>Ein neuer Eintrag wurde in Ihrem Gästebuch geschrieben.</de>
+<de>Ein neuer Eintrag wurde in Ihrem G&#xE4;stebuch geschrieben.</de>
 <id>1279</id>
 </text>
 <text>
@@ -4717,22 +4717,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>If you wish to deactivate the post in your guestbook, click here:</en>
-<de>Wenn Sie diesen Eintrag in Ihrem Gästebuch deaktivieren möchten, klicken Sie bitte hier:</de>
+<de>Wenn Sie diesen Eintrag in Ihrem G&#xE4;stebuch deaktivieren m&#xF6;chten, klicken Sie bitte hier:</de>
 <id>1283</id>
 </text>
 <text>
 <en>Click this link to get to your guestbook:</en>
-<de>Klicken Sie hier, um zu Ihrem Gästebuch zu gelangen:</de>
+<de>Klicken Sie hier, um zu Ihrem G&#xE4;stebuch zu gelangen:</de>
 <id>1284</id>
 </text>
 <text>
 <en>The entry in your guestbook has been deacitvated.</en>
-<de>Der Eintrag in Ihrem Gästebuch wurde deaktiviert.</de>
+<de>Der Eintrag in Ihrem G&#xE4;stebuch wurde deaktiviert.</de>
 <id>1285</id>
 </text>
 <text>
 <en>Remind mail receiver</en>
-<de>Hinweismail empfänger</de>
+<de>Hinweismail empf&#xE4;nger</de>
 <id>1286</id>
 </text>
 <text>
@@ -4754,6 +4754,101 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Inactive, must be activated</en>
 <de>Inaktiv, muss aktiviert werden</de>
 <id>1290</id>
+</text>
+<text>
+<en>Valid From</en>
+<de>Gültig von</de>
+<id>1291</id>
+</text>
+<text>
+<en>Current Price</en>
+<de>Aktueller Preis</de>
+<id>1292</id>
+</text>
+<text>
+<en>Shop Shipped Mail</en>
+<de>Shop Versendet Mail</de>
+<id>1293</id>
+</text>
+<text>
+<en>canceled</en>
+<de>storniert</de>
+<id>1294</id>
+</text>
+<text>
+<en>Show canceled orders</en>
+<de>Stornierte Bestellungen anzeigen</de>
+<id>1295</id>
+</text>
+<text>
+<en>shipped</en>
+<de>versandt</de>
+<id>1296</id>
+</text>
+<text>
+<en>Show shipped orders</en>
+<de>Versandte Bestellungen anzeigen</de>
+<id>1297</id>
+</text>
+<text>
+<en>Order Nr</en>
+<de>Bestellnr</de>
+<id>1298</id>
+</text>
+<text>
+<en>Payed</en>
+<de>Bezahlt</de>
+<id>1299</id>
+</text>
+<text>
+<en>Invoice</en>
+<de>Rechnung</de>
+<id>1300</id>
+</text>
+<text>
+<en>Shipped</en>
+<de>Verschickt</de>
+<id>1301</id>
+</text>
+<text>
+<en>Order</en>
+<de>Bestellung</de>
+<id>1302</id>
+</text>
+<text>
+<en>Origin</en>
+<de>Herkunft</de>
+<id>1303</id>
+</text>
+<text>
+<en>Internet</en>
+<de>Internet</de>
+<id>1304</id>
+</text>
+<text>
+<en>Invoice Nr</en>
+<de>Rechnungsnr</de>
+<id>1305</id>
+</text>
+<text>
+<en>Customer Nr</en>
+<de>Kundennr</de>
+<id>1306</id>
+</text>
+<text>
+<en>Invoice Date</en>
+<de>Rechnungsdatum</de>
+<id>1307</id>
+</text>
+<text>
+<en>Canceled</en>
+<de>Storniert</de>
+<id>1308</id>
+</text>
+<text>
+<en>Customer</en>
+<de>Kunde</de>
+<id>1309</id>
 </text>
 </trl>
 
