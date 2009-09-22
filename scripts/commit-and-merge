@@ -60,7 +60,6 @@ if ($ret) exit(1);
 
 $xml = new SimpleXMLElement(`svn info --xml`);
 $url = (string)$xml->entry->url;
-var_dump($url);
 
 chdir($mergeTo);
 $cmd = "svn merge $url";
