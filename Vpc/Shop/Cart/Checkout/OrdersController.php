@@ -1,4 +1,20 @@
 <?php
+class Vpc_Shop_Cart_Checkout_OrdersController_Payment extends Vps_Data_Abstract
+{
+    private $_payments;
+    public function __construct($componentClass)
+    {
+        $cc = Vpc_Abstract::getChildComponentClasses($componentClass, 'payment');
+        $this->_payments = array();
+        foreach ($cc as $k=>$c) {
+            $this->_payments[$k] = Vpc_Abstract::getSetting($c, 'componentName');
+        }
+    }
+    public function load($row)
+    {
+        return $this->_payments[$row->payment];
+    }
+}
 class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('add');
@@ -43,7 +59,8 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
         $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('Firstname'), 100));
         $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Lastname'), 100));
         $this->_columns->add(new Vps_Grid_Column('sum_amount', trlVps('Amount'), 30));
-        $this->_columns->add(new Vps_Grid_Column('payment', trlVps('Payment'), 100));
+        $this->_columns->add(new Vps_Grid_Column('payment', trlVps('Payment'), 100))
+            ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_Payment($this->_getParam('class')));
         $this->_columns->add(new Vps_Grid_Column_Date('payed', trlVps('Payed')));
         $this->_columns->add(new Vps_Grid_Column_Button('invoice', trlVps('Invoice')))
             ->setButtonIcon('/assets/silkicons/page_white_text.png');
