@@ -18,9 +18,8 @@ class Vpc_Mail_Component extends Vpc_Abstract
         );
 
         $ret['default'] = array(
-            'from_email' => 'el@vivid-planet.com',
+            'from_email' => 'el@vivid-planet.com', //TODO: dieser standardwert macht selten sinn
             'from_name' => 'Erich Lechenauer',
-            'reply_email' => 'el@vivid-planet.com'
         );
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/PreviewWindow.js';

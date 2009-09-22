@@ -18,7 +18,6 @@ class Vpc_Mail_Form extends Vpc_Abstract_Form
             ->setDefaultValue($default['from_name']);
         $this->add(new Vps_Form_Field_TextField('reply_email', trlVps('Reply Address')))
             ->setVtype('email')
-            ->setWidth(300)
-            ->setDefaultValue($default['reply_email']);
+            ->setWidth(300);
     }
 }
