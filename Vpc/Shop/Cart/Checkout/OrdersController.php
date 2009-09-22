@@ -91,7 +91,8 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
             $order->invoice_date = date('Y-m-d');
             $order->save();
         }
-        $pdf = new Vpc_Shop_Cart_Checkout_InvoicePdf($order);
+        $cls = Vpc_Admin::getComponentClass($this->_getParam('class'), 'InvoicePdf');
+        $pdf = new $cls($order);
         $pdf->output();
         exit;
     }
