@@ -9,6 +9,7 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
         $ret['generators']['confirm']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component';
         $ret['generators']['confirm']['name'] = trlVps('done');
         $ret['generators']['mail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_Mail_Component';
+        $ret['generators']['shippedMail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_ShippedMail_Component';
 
         $ret['business'] = '';
         $ret['itemName'] = trlVps('Order at {0}', Vps_Registry::get('config')->application->name);
@@ -33,6 +34,7 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
 
             $order->status = 'payed';
             $order->date = date('Y-m-d H:i:s');
+            $order->payed = date('Y-m-d H:i:s');
             $order->save();
 
             return true;
