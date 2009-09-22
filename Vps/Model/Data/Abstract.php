@@ -153,7 +153,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 } else if ($order['field'] == Vps_Model_Select::ORDER_RAND) {
                     $orderData[$inData[$key]['id']] = rand();
                 } else {
-                    $orderData[$inData[$key]['id']] = strtolower($inData[$key][$order['field']]);
+                   $orderData[$inData[$key]['id']] = strtolower($this->_rowValue($order['field'], $inData[$key]));
                 }
             }
             if ($order['direction'] == 'ASC') {
@@ -197,8 +197,9 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             foreach ($where as $f=>$v) {
                 if (!is_array($v)) $v = array($v);
                 foreach ($v as &$i) $i = (string)$i;
-                if (!isset($data[$f])) return false;
-                if (!in_array($data[$f], $v)) return false;
+                $rv = $this->_rowValue($f, $data);
+                if (is_null($rv)) return false;
+                if (!in_array($rv, $v)) return false;
             }
         }
         if ($where = $select->getPart(Vps_Model_Select::WHERE_EXPRESSION)) {
@@ -211,7 +212,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             foreach ($where as $f=>$v) {
                 if (!is_array($v)) $v = array($v);
                 foreach ($v as &$i) $i = (string)$i;
-                if (isset($data[$f]) && in_array($data[$f], $v)) {
+                $rv = $this->_rowValue($f, $data);
+                if ($rv && in_array($rv, $v)) {
                     $foundOneMatching = true;
                     break;
                 }
@@ -220,64 +222,82 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         }
         if ($where = $select->getPart(Vps_Model_Select::WHERE_NULL)) {
             foreach ($where as $f) {
-                if (isset($data[$f]) && !is_null($data[$f])) return false;
+                $rv = $this->_rowValue($f, $data);
+                if (!is_null($rv)) return false;
             }
         }
         return true;
     }
 
+    private function _rowValue($field, $rowData)
+    {
+        $ret = null;
+        if (isset($this->_exprs[$field])) {
+            $ret = $this->getExprValue($rowData, $field);
+        } else if (isset($rowData[$field])) {
+            $ret = $rowData[$field];
+        }
+        return $ret;
+    }
+
     private function _checkExpressions(Vps_Model_Select_Expr_Interface $expr, $data)
     {
         if ($expr instanceof Vps_Model_Select_Expr_Equals) {
+            $v = $this->_rowValue($expr->getField(), $data);
             $values = $expr->getValue();
             if (!is_array($values)) $values = array($values);
-            if (!in_array($data[$expr->getField()], $values)) {
+            if (!in_array($v, $values)) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
-            if (isset($data[$expr->getField()])) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if (!is_null($v)) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Higher) {
-            if (!($data[$expr->getField()] && $data[$expr->getField()] > $expr->getValue())) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if (!($v && $v > $expr->getValue())) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Smaller) {
-            if (!($data[$expr->getField()] && $data[$expr->getField()] < $expr->getValue())) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if (!($v && $v < $expr->getValue())) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_HigherDate) {
-            if ($data[$expr->getField()] && $data[$expr->getField()]) {
-               $fieldTime = strtotime($data[$expr->getField()]);
-               $exprTime = strtotime($expr->getValue());
-               if ($fieldTime > $exprTime) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if ($v) {
+                $fieldTime = strtotime($v);
+                $exprTime = strtotime($expr->getValue());
+                if ($fieldTime > $exprTime) {
                     return true;
-               } else {
-                   return false;
-               }
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_SmallerDate) {
-            if ($data[$expr->getField()] && $data[$expr->getField()]) {
-
-               $fieldTime = strtotime($data[$expr->getField()]);
-               $exprTime = strtotime($expr->getValue());
-               if ($fieldTime < $exprTime) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if ($v) {
+                $fieldTime = strtotime($v);
+                $exprTime = strtotime($expr->getValue());
+                if ($fieldTime < $exprTime) {
                     return true;
-               } else {
-                   return false;
-               }
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
-            if (!(isset($data[$expr->getField()]) && $data[$expr->getField()] && strpos(strtolower($data[$expr->getField()]), strtolower($expr->getValue())) !== false )) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if (!($v && strpos(strtolower($v), strtolower($expr->getValue())) !== false )) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Like) {
-            if (isset($data[$expr->getField()])) {
-                $value = $data[$expr->getField()];
+            $v = $this->_rowValue($expr->getField(), $data);
+            if ($v) {
                 $reg = $expr->getValue();
                 $partsToEscape = array('\\', '(', ')', '_', '*', '.', '^', '$');
                 foreach ($partsToEscape as $part) {
@@ -285,11 +305,12 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 }
                 $reg = str_replace('%', '(.*)', $reg);
                 $reg = "^$reg$";
-                return eregi($reg, $value);
+                return eregi($reg, $v);
             }
             return false;
         } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {
-            if (!(isset($data[$expr->getField()]) && $data[$expr->getField()] && substr($data[$expr->getField()], 0, strlen($expr->getValue()))==$expr->getValue())) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if (!($v && substr($v, 0, strlen($expr->getValue()))==$expr->getValue())) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Area) {
