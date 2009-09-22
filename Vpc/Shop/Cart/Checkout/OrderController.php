@@ -44,11 +44,13 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
                 $customerForm->fields->remove($f);
             }
         }
+        $customerForm->fields['email']->setAllowBlank(true);
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
         $row->status = 'ordered';
+        $row->checkout_component_id = $this->_getParam('componentId');
     }
 }

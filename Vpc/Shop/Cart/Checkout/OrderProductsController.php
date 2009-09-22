@@ -19,7 +19,7 @@ class Vpc_Shop_Cart_Checkout_OrderProductsController extends Vps_Controller_Acti
             ->setRenderer('money');
         $this->_columns->add(new Vps_Grid_Column('amount', trlVps('Amount'), 50));
 
-        //keine optimale lösung, size gibts nur beim babytuch und da auch nicht zwingend immer
+        //keine optimale lÃ¶sung, size gibts nur beim babytuch und da auch nicht zwingend immer
         $this->_columns->add(new Vps_Grid_Column('size', trlVps('Size'), 100))
             ->setType('int');
     }
