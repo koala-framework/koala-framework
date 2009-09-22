@@ -16,7 +16,7 @@ interface Vps_Model_Interface
      * @return string
      */
     public function getUniqueIdentifier();
-    public function getExprValue(Vps_Model_Row_Interface $row, $name);
+    public function getExprValue($row, $name);
 
     public function getRow($id);
     public function getRows($where=null, $order=null, $limit=null, $start=null);

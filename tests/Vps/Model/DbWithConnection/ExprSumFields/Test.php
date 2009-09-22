@@ -3,6 +3,7 @@
  * @group Model
  * @group Model_Db
  * @group Model_DbWithConnection
+ * @group Model_Expr_SumFields
  */
 class Vps_Model_DbWithConnection_ExprSumFields_Test extends Vps_Model_DbWithConnection_SelectExpr_AbstractTest
 {
@@ -49,6 +50,19 @@ class Vps_Model_DbWithConnection_ExprSumFields_Test extends Vps_Model_DbWithConn
         $this->assertEquals(410, $rows[2]['sum_field_int']);
         $this->assertEquals(100+10+99, $rows[2]['sum_int_int']);
         $this->assertEquals(403, $rows[2]['sum_field_field']);
+
+        $m->dropTable();
+    }
+
+    public function testExprSumFieldsWhereEquals()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_ExprSumFields_Model');
+        $m->setUp();
+
+        $s = $m->select();
+        $s->whereEquals('sum_field_int', 410);
+        $s->order('id');
+        $this->assertEquals(2, $m->getRow($s)->id);
 
         $m->dropTable();
     }
