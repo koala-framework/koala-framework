@@ -52,7 +52,10 @@ class Vpc_Shop_Cart_Checkout_Update_30277 extends Vps_Update
             'table' => 'vpc_shop_orders',
             'fields' => array('firstname', 'lastname', 'payment', 'zip', 'email', 'city'),
         ));
+    }
+    public function update()
+    {
+        parent::update();
         Vps_Registry::get('db')->query("UPDATE `vpc_shop_orders` SET payment='prePayment' WHERE payment='prepayment'");
-
     }
 }
