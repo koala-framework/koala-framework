@@ -17,11 +17,16 @@ class Vpc_Shop_Cart_Checkout_Form_Component extends Vpc_Form_Component
         }
         $this->_form->setId(Vpc_Shop_Cart_Orders::getCartOrderId());
 
+        $this->_form->setPayments($this->_getFrontendPayments());
+    }
+
+    protected function _getFrontendPayments()
+    {
         $cc = Vpc_Abstract::getChildComponentClasses($this->getData()->parent->componentClass, 'payment');
-        $payments = array();
+        $ret = array();
         foreach ($cc as $k=>$c) {
-            $payments[$k] = Vpc_Abstract::getSetting($c, 'componentName');
+            $ret[$k] = Vpc_Abstract::getSetting($c, 'componentName');
         }
-        $this->_form->setPayments($payments);
+        return $ret;
     }
 }
