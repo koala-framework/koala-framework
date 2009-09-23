@@ -71,6 +71,12 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         }
         return $this->_relations[$index];
     }
+    
+    public function setRelationToData($rel)
+    {
+        $this->_relations['relationToData'] = $rel;
+        return $this;
+    }
 
     public function setValuesModel($valModel)
     {
@@ -208,7 +214,11 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             $relModel = $this->getRelModel();
             $relToData = $relModel->getReference($this->_getRelationRule('relationToData'));
             $pk = $row->getModel()->getPrimaryKey();
-            return $relModel->getRows($relModel->select()->whereEquals($relToData['column'], $row->$pk));
+            if (!$row->$pk) {
+                return array();
+            } else {
+                return $relModel->getRows($relModel->select()->whereEquals($relToData['column'], $row->$pk));
+            }
         } else {
             return $row->getChildRows($dataToRel);
         }
