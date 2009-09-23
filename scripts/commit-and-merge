@@ -1,6 +1,10 @@
 #!/usr/bin/php
 <?php
-$mergeTo = '../vps-trunk-clean';
+if (file_exists('../vps-trunk-clean')) {
+    $mergeTo = '../vps-trunk-clean';
+} else {
+	$mergeTo = '../vps';
+}
 
 if (!file_exists($mergeTo)) die("$mergeTo does not exist");
 $cmd = "svn st --xml -u $mergeTo";
