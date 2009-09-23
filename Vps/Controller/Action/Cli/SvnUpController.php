@@ -23,12 +23,17 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
     public function indexAction()
     {
         echo "updating web\n";
-        passthru('svn up');
+        passthru('svn up', $ret);
+        if ($ret) throw new Vps_Exception("SVN Update failed");
+
         echo "\nupdating vps\n";
-        passthru('svn up '.VPS_PATH);
+        passthru('svn up '.VPS_PATH, $ret);
+        if ($ret) throw new Vps_Exception("SVN Update failed");
+
         if ($this->_getParam('with-library')) {
             echo "\nupdating library\n";
-            passthru('svn up '.Vps_Registry::get('config')->libraryPath);
+            passthru('svn up '.Vps_Registry::get('config')->libraryPath, $ret);
+            if ($ret) throw new Vps_Exception("SVN Update failed");
         } else {
             echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
         }
