@@ -204,7 +204,8 @@ Vps.handleError = function(error) {
             if (error.mail || (typeof error.mail == 'undefined')) {
             Ext.Ajax.request({
                 url: '/vps/error/error/json-mail',
-                params: {msg: error.message}
+                params: {msg: error.message},
+                ignoreErrors: true
             });
         }
         }
