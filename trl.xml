@@ -4757,7 +4757,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Valid From</en>
-<de>Gültig von</de>
+<de>G&#xFC;ltig von</de>
 <id>1291</id>
 </text>
 <text>
@@ -4849,6 +4849,21 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Customer</en>
 <de>Kunde</de>
 <id>1309</id>
+</text>
+<text>
+<en>Transfer Form</en>
+<de>Erlagschein</de>
+<id>1310</id>
+</text>
+<text>
+<en>Orders</en>
+<de>Bestellungen</de>
+<id>1311</id>
+</text>
+<text>
+<en>Folder</en>
+<de>Folder</de>
+<id>1312</id>
 </text>
 </trl>
 
