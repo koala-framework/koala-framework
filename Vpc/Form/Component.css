@@ -53,6 +53,7 @@
     text-align: right;
 }
 .$cssClass .vpsFieldRequired label { font-weight: bold; }
+.$cssClass .vpsFieldRequired span label { font-weight: normal; }
 .$cssClass .vpsFieldLabelAlignTop label {
     width: auto;
     margin: 0px;
