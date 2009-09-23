@@ -22,6 +22,16 @@ class Vpc_Newsletter_Subscribe_Component extends Vpc_Form_Component
 
         return $ret;
     }
+    
+    public function insertSubscription(Vpc_Newsletter_Subscribe_Row $row)
+    {
+        if ($row->id) {
+            throw new Vps_Exception("you can only insert unsaved rows");
+        }
+        $this->_beforeInsert($row);
+        $row->save();
+        $this->_afterInsert($row);
+    }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
