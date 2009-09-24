@@ -199,10 +199,10 @@ class Vps_Model_Service extends Vps_Model_Abstract
 
     public function getSupportedImportExportFormats()
     {
-        if (!$this->_supportedImportExportFormatsCache) {
+        if (!isset($this->_supportedImportExportFormatsCache)) {
             $cache = self::_getMetadataCache();
             $cacheId = md5($this->getUniqueIdentifier()).'_supportedImportExportFormats';
-            if (!$this->_supportedImportExportFormatsCache = $cache->load($cacheId)) {
+            if (($this->_supportedImportExportFormatsCache = $cache->load($cacheId))===false) {
                 $this->_supportedImportExportFormatsCache = $this->_client->getSupportedImportExportFormats();
                 $cache->save($this->_supportedImportExportFormatsCache, $cacheId);
             }
