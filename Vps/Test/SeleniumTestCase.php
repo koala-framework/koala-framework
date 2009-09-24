@@ -39,10 +39,11 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
         $this->_unitTestCookie = md5(uniqid('testId', true));
 
-
         $this->captureScreenshotOnFailure = true;
         $this->screenshotPath = 's:';
         $this->screenshotUrl = 'http://screenshots.vivid';
+        parent::setUp();
+
     }
 
     protected function runTest()
@@ -83,15 +84,16 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         }
     }
 
+    public function start()
+    {
+        parent::start();
+        $this->open('/vps/test/vps_start');
+        $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/, max_age=60*5');
+    }
+
     public function __call($command, $arguments)
     {
-        if ($command == 'open') {
-            $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/');
-        }
         $ret = parent::__call($command, $arguments);
-        if ($command == 'open') {
-            $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/');
-        }
         return $ret;
     }
 
