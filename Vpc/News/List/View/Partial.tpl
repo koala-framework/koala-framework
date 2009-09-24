@@ -1,1 +1,1 @@
-<div class="text">    <?=$this->componentLink($this->item);?>    <span class="publishDate"><?=$this->item->row->publish_date?></span>    <p><?=$this->mailEncodeText($this->item->row->teaser)?></p></div>
+<div class="text">    <h2><?=$this->componentLink($this->item);?></h2>    <div class="publishDate"><?=$this->item->row->publish_date?></div>    <p><?=$this->mailEncodeText($this->item->row->teaser)?></p></div>
