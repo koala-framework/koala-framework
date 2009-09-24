@@ -14,9 +14,6 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
         $this->_exprs['order_number'] = new Vps_Model_Select_Expr_SumFields(
             array('number', 11000)
         );
-        $this->_exprs['invoice_number'] = new Vps_Model_Select_Expr_SumFields(
-            array('number', 10500)
-        );
         $this->_exprs['customer_number'] = new Vps_Model_Select_Expr_SumFields(
             array('number', 1100)
         );

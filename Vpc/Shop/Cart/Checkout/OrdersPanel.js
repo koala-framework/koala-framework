@@ -34,8 +34,14 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                     scope: this
                 },
                 shipped: {
+                    renderer: function(value, p, record, rowIndex, colIndex, store, column) {
+                        if (!record.get('shipped')) {
+                            return Ext.util.Format.cellButton.apply(this, arguments);
+                        }
+                    },
                     clickHandler: function(grid, index, button, event) {
                         var row = grid.getStore().getAt(index);
+                        if (row.get('shipped')) return;
                         var p = Vps.clone(this.baseParams);
                         p.id = row.id;
                         Ext.Ajax.request({
@@ -60,6 +66,13 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
             split: true,
             items: [order, orderProducts]
         }];
+
+        Ext.TaskMgr.start({
+            run: function() {
+                orders.reload();
+            },
+            interval: 1000*60*5
+        });
 
         Vpc.Shop.Cart.Checkout.OrdersPanel.superclass.initComponent.call(this);
     }
