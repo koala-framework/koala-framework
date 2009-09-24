@@ -4782,12 +4782,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>shipped</en>
-<de>versandt</de>
+<de>versendet</de>
 <id>1296</id>
 </text>
 <text>
 <en>Show shipped orders</en>
-<de>Versandte Bestellungen anzeigen</de>
+<de>Versendete Bestellungen anzeigen</de>
 <id>1297</id>
 </text>
 <text>
@@ -4864,6 +4864,28 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Folder</en>
 <de>Folder</de>
 <id>1312</id>
+</text>
+<text>
+<en>Amt</en>
+<de>Stk</de>
+<id>1313</id>
+</text>
+<text>
+<en>IN</en>
+<de>RE</de>
+<context>Invoice</context>
+<id>1314</id>
+</text>
+<text>
+<en>SH</en>
+<de>VE</de>
+<context>Shipped</context>
+<id>1315</id>
+</text>
+<text>
+<en>Edit Column</en>
+<de>Spalte bearbeiten</de>
+<id>1316</id>
 </text>
 </trl>
 
