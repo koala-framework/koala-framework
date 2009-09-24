@@ -5,6 +5,8 @@ class Vps_Form_Field_TextArea extends Vps_Form_Field_TextField
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('textarea');
+        $this->setWidth(100);
+        $this->setHeight(60);
     }
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
