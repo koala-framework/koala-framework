@@ -19,6 +19,10 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         $ret['componentName'] = trlVps('Shop.Cart');
         $ret['placeholder']['backToShop'] = trlVps('Back to shop');
         $ret['placeholder']['checkout'] = trlVps('To checkout');
+
+        $ret['assets']['files'][] = 'vps/Vpc/Shop/Cart/Keepalive.js';
+        $ret['assets']['dep'][] = 'ExtCore';
+        $ret['assets']['dep'][] = 'ExtConnection';
         return $ret;
     }
 
