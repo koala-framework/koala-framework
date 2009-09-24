@@ -187,12 +187,9 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         ) {
             throw new Vps_ClientException("Invalid version number: '$version'");
         }
-        if (!in_array($project, self::_getSvnDirs("tags"))) {
-            passthru("svn mkdir $b/tags/$project -m \"created tags directory\"", $ret);
-            if ($ret) {
-                throw new Vps_ClientException("Failed creating Dir '$project'");
-            }
-        }
+
+        passthru("svn mkdir $b/tags/$project -m \"created tags directory\"  2>&1 > /dev/null");
+
         $versions = self::_getSvnDirs("tags/$project");
         if (in_array($version, $versions)) {
             throw new Vps_ClientException("Tag '$version' exists allready");
