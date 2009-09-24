@@ -2,13 +2,9 @@
 class Vpc_Shop_Cart_Checkout_OrdersController_Payment extends Vps_Data_Abstract
 {
     private $_payments;
-    public function __construct($componentClass)
+    public function __construct($payments)
     {
-        $cc = Vpc_Abstract::getChildComponentClasses($componentClass, 'payment');
-        $this->_payments = array();
-        foreach ($cc as $k=>$c) {
-            $this->_payments[$k] = Vpc_Abstract::getSetting($c, 'componentName');
-        }
+        $this->_payments = $payments;
     }
     public function load($row)
     {
@@ -34,8 +30,22 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
 
     protected function _initColumns()
     {
+        $cc = Vpc_Abstract::getChildComponentClasses($this->_getParam('class'), 'payment');
+        $paymentsFilterData = array();
+        $payments = array();
+        foreach ($cc as $k=>$c) {
+            $payments[$k] = Vpc_Abstract::getSetting($c, 'componentName');
+            $paymentsFilterData[] = array($k, $payments[$k]);
+        }
+
         $this->_filters = array(
             'text' => true,
+            'payment' => array(
+                'type'   => 'ComboBox',
+                'text'   => trlVps('Payment'),
+                'data'   => $paymentsFilterData,
+                'width'  => 100
+            ),
             'canceled' => array(
                 'type'      => 'Button',
                 'skipWhere' => true,
@@ -58,14 +68,16 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
         $this->_columns->add(new Vps_Grid_Column_Date('date', trlVps('Date')));
         $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('Firstname'), 100));
         $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Lastname'), 100));
-        $this->_columns->add(new Vps_Grid_Column('sum_amount', trlVps('Amount'), 30));
+        $this->_columns->add(new Vps_Grid_Column('sum_amount', trlVps('Amt'), 30));
         $this->_columns->add(new Vps_Grid_Column('payment', trlVps('Payment'), 100))
-            ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_Payment($this->_getParam('class')));
+            ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_Payment($payments));
         $this->_columns->add(new Vps_Grid_Column_Date('payed', trlVps('Payed')));
-        $this->_columns->add(new Vps_Grid_Column_Button('invoice', trlVps('Invoice')))
+        $this->_columns->add(new Vps_Grid_Column_Button('invoice', trlcVps('Invoice', 'IN')))
             ->setButtonIcon('/assets/silkicons/page_white_text.png');
-        $this->_columns->add(new Vps_Grid_Column_Button('shipped', trlVps('Shipped')))
+        $this->_columns->add(new Vps_Grid_Column_Button('shipped', trlcVps('Shipped', 'SH')))
             ->setButtonIcon('/assets/silkicons/package_go.png');
+
+        $this->_columns->add(new Vps_Grid_Column('shipped'));
     }
 
     protected function _getSelect()
@@ -106,12 +118,25 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
         $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->getRow($id);
         if (!$order->invoice_date) {
             $order->invoice_date = date('Y-m-d');
-            $order->save();
         }
+        if (!$order->invoice_number) {
+            $s = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->select();
+            $s->limit(1);
+            $s->order('invoice_number', 'DESC');
+            $row = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->getRow($s);
+            $maxNumber = 0;
+            if ($row) $maxNumber = $row->invoice_number;
+            $order->invoice_number = $maxNumber + 1;
+        }
+        $order->save();
+
         $cls = Vpc_Admin::getComponentClass($this->_getParam('class'), 'InvoicePdf');
         $pdf = new $cls($order);
-        $pdf->output();
-        exit;
+        Vps_Media_Output::output(array(
+            'contents' => $pdf->output('', 'S'),
+            'mimeType' => 'application/pdf',
+            'downloadFilename' => $order->order_number.'.pdf'
+        ));
     }
 
     public function jsonShippedAction()
