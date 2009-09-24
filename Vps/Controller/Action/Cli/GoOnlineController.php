@@ -89,8 +89,8 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             echo "(uebersprungen)\n";
         } else {
             Vps_Controller_Action_Cli_TestController::initForTests();
-            $suite = new Vps_Test_TestSuite();
             $runner = new PHPUnit_TextUI_TestRunner;
+            $suite = new Vps_Test_TestSuite();
 
             Vps_Registry::set('testDomain', $testConfig->server->domain);
             Vps_Registry::set('testServerConfig', $testConfig);
