@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
+class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
 {
     public function load($row, $postData = array())
     {
