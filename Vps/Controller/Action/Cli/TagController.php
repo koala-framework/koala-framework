@@ -180,17 +180,24 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
 
     private static function _createTag($branch, $version, $project)
     {
+        $b = self::$_svnBase;
+
         if (!preg_match('#^[0-9]+\.[0-9]+\.[0-9]+-?[0-9]*$#', $version) &&
             !preg_match('#^trunk\.[0-9]+$#', $version)
         ) {
             throw new Vps_ClientException("Invalid version number: '$version'");
+        }
+        if (!in_array($project, self::_getSvnDirs("tags"))) {
+            passthru("svn mkdir $b/tags/$project -m \"created tags directory\"", $ret);
+            if ($ret) {
+                throw new Vps_ClientException("Failed creating Dir '$project'");
+            }
         }
         $versions = self::_getSvnDirs("tags/$project");
         if (in_array($version, $versions)) {
             throw new Vps_ClientException("Tag '$version' exists allready");
         }
 
-        $b = self::$_svnBase;
         passthru("svn cp $b/$branch $b/tags/$project/$version -m \"created new version through vps-cli\"", $ret);
         if (!$ret) {
             echo "Tag tags/$project/$version from $branch successfully created.\n";
