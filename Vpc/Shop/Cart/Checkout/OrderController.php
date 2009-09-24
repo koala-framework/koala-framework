@@ -29,10 +29,10 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
         $fs->add(new Vps_Form_Field_ShowField('order_number', trlVps('Order Nr')));
         $fs->add(new Vps_Form_Field_ShowField('invoice_number', trlVps('Invoice Nr')));
         $fs->add(new Vps_Form_Field_ShowField('customer_number', trlVps('Customer Nr')));
-        $fs->add(new Vps_Form_Field_ShowField('shipped', trlVps('Shipped')))
-            ->setTpl('{value:localizedDate}');
         $fs->add(new Vps_Form_Field_DateField('invoice_date', trlVps('Invoice Date')));
         $fs->add(new Vps_Form_Field_DateField('payed', trlVps('Payed')));
+        $fs->add(new Vps_Form_Field_ShowField('shipped', trlVps('Shipped')))
+            ->setTpl('{value:localizedDate}');
         $fs->add(new Vps_Form_Field_Checkbox('canceled', trlVps('Canceled')));
 
         $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Customer')));

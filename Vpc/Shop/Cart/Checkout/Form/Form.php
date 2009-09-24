@@ -41,7 +41,8 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vpc_Abstract_Form
             ->setHideFieldInBackend(true);
 
         $this->add(new Vps_Form_Field_TextArea('comment', trlVps('Other comments, questions or suggestions')))
-            ->setHeight(80);
+            ->setHeight(80)
+            ->setWidth(200);
     }
 
     public function setPayments($payments)
