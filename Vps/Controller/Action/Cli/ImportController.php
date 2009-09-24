@@ -1,9 +1,12 @@
 <?php
 class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_Cli_Abstract
 {
+    private $_useSshVps;
+    private $_sshHost;
+    private $_sshDir;
     public function indexAction()
     {
-        $useSshVps = file_exists('/usr/local/bin/sshvps');
+        $this->_useSshVps = file_exists('/usr/local/bin/sshvps');
         $localHosts = array(
             'vivid',
             'vivid-test-server'
@@ -50,7 +53,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-update-revision";
-        } else if ($useSshVps) {
+        } else if ($this->_useSshVps) {
             $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-update-revision";
         } else {
             $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-update-revision");
@@ -88,7 +91,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 echo "OK\n";
             }
         }
-        if (Vps_Registry::get('config')->application->id != 'service') {
+        
+        if (!$this->_getParam('skip-users') && Vps_Registry::get('config')->application->id != 'service') {
             if (Vps_Setup::getConfigSection() == 'production') {
                 echo "\nAuf Production wird der user service NICHT importiert, das haette fatale Folgen.\n";
                 echo "Moeglicherweise muss 'vps create-users' ausgefuehrt werden\n\n";
@@ -115,7 +119,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
-            } else if ($useSshVps) {
+            } else if ($this->_useSshVps) {
                 $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
             } else if ($config->server->host == 'vivid' && !in_array($ownConfig->server->host, $localHosts)) {
                 $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
@@ -140,45 +144,24 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                     }
                 }
                 if (!$ignores) continue;
-
-                $includes = array();
-                foreach ($ignores as $i) {
-                    $p = '';
-                    foreach (explode('/', $i) as $j) {
-                        $p .= $j.'/';
-                        $e = trim($p, '/');
-                        //if (substr($e, -1) == '*') $e .= '*';
-                        if (!in_array($e, $includes)) {
-                            $includes[] = $e;
-                        }
-                    }
-                }
-                if ($ownConfig->server->host == $config->server->host) {
-                    $cmd  = "cd {$config->server->dir} && ";
-                    $cmd .= "rsync --omit-dir-times --progress --delete --times --recursive ";
-                    $cmd .= "--exclude='.svn' ";
-                    foreach ($includes as $i) {
-                        $cmd .= "--include='$i' ";
-                    }
-                    $cmd .= "--exclude='*' ";
-                    $cmd .= ". {$ownConfig->server->dir}";
-                } else if ($useSshVps) {
-                    $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir copy-files";
-                    $cmd .= " --includes=\"".implode(',', $includes)."\"";
-                    if ($this->_getParam('debug')) $cmd .= " --debug";
-                } else {
-                    $cmd = "rsync --omit-dir-times --progress --delete --times --recursive ";
-                    $cmd .= "--exclude='.svn' ";
-                    foreach ($includes as $i) {
-                        $cmd .= "--include='$i' ";
-                    }
-                    $cmd .= "--exclude='*' ";
-                    $cmd .= "{$this->_sshHost}:{$this->_sshDir} {$ownConfig->server->dir}";
-                }
-                if ($this->_getParam('debug')) echo $cmd."\n";
-                passthru($cmd);
+                $this->_importFiles($config, $ownConfig, $ignores);
             }
         }
+        if ($this->_getParam('include-cache')) {
+            echo "importing cache dirs...\n";
+            $includes = array();
+            foreach (Vps_Util_ClearCache::getInstance()->getCacheDirs() as $d) {
+                if (is_dir("application/cache/$d")) {
+                    $includes[] = "application/cache/$d/*";
+                } else if (is_dir($d)) {
+                    $includes[] = $d.'/*';
+                }
+            }
+            if ($includes) {
+                $this->_importFiles($config, $ownConfig, $includes);
+            }
+        }
+
         try {
             $db = Zend_Registry::get('db');
         } catch (Exception $e) {
@@ -258,7 +241,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
                 $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
-            } else if ($useSshVps) {
+            } else if ($this->_useSshVps) {
                 $ignoreTables = '';
                 if (!$this->_getParam('include-cache')) {
                     $ignoreTables = implode(',', array_merge($cacheTables, $keepTables));
@@ -315,6 +298,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
         echo "\n";
 
+
+        
+
         /*
         echo "importiere logs...\n";
         if ($ownConfig->server->host == $config->server->host) {
@@ -331,7 +317,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             echo "importiere rrds...\n";
             if ($ownConfig->server->host == $config->server->host) {
                 $cmd = "cd {$config->server->dir} && php bootstrap.php import get-rrd";
-            } else if ($useSshVps) {
+            } else if ($this->_useSshVps) {
                 $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-rrd";
             } else {
                 $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-rrd");
@@ -378,6 +364,51 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
+    private function _importFiles($config, $ownConfig, $dirs)
+    {
+
+        $includes = array();
+        foreach ($dirs as $i) {
+            $p = '';
+            foreach (explode('/', $i) as $j) {
+                $p .= $j.'/';
+                $e = trim($p, '/');
+                //if (substr($e, -1) == '*') $e .= '*';
+                if (!in_array($e, $includes)) {
+                    $includes[] = $e;
+                }
+            }
+        }
+
+        if ($ownConfig->server->host == $config->server->host) {
+            $cmd  = "cd {$config->server->dir} && ";
+            $cmd .= "rsync --omit-dir-times --progress --delete --times --recursive ";
+            $cmd .= "--exclude='.svn' ";
+            foreach ($includes as $i) {
+                $cmd .= "--include='$i' ";
+            }
+            $cmd .= "--exclude='*' ";
+            $cmd .= ". {$ownConfig->server->dir}";
+        } else if ($this->_useSshVps) {
+            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir copy-files";
+            $cmd .= " --includes=\"".implode(',', $includes)."\"";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+        } else {
+            $cmd = "rsync --omit-dir-times --progress --delete --times --recursive ";
+            $cmd .= "--exclude='.svn' ";
+            foreach ($includes as $i) {
+                $cmd .= "--include='$i' ";
+            }
+            $cmd .= "--exclude='*' ";
+            $cmd .= "{$this->_sshHost}:{$this->_sshDir} {$ownConfig->server->dir}";
+        }
+        if ($this->_getParam('debug')) echo $cmd."\n";
+        passthru($cmd, $ret);
+        if ($ret) {
+            throw new Vps_ClientException("");
+        }
+    }
+
     private function _copyServiceUsers($server)
     {
         try {
@@ -400,14 +431,14 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl, 'timeout' => 120));
         $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl, 'timeout' => 120));
 
-        echo "\n*** Service: source=$sourceUrl target=$targetUrl\n";
+        echo "importiere service...\nsource=$sourceUrl target=$targetUrl\n";
 
         if (strpos($targetUrl, 'http://service.vivid-planet.com') !== false) {
             echo "Service: !!! ACHTUNG !!! Service Import verhindert, nach online wird nicht importiert!!!\n";
             return;
         }
 
-        echo "Service: Kopiere 'users' tabelle (neu)...\n";
+        echo "importiere users tabelle...\n";
 
         $targetModel->copyDataFromModel($sourceModel);
 
@@ -420,7 +451,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl));
         $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl));
 
-        echo "Service: Fuege Produktiv-Benutzerzuweisungen hinzu (neu)...\n";
+        echo "importiere Produktiv-Benutzerzuweisungen...\n";
         $importSelect = $sourceModel->select();
         $importSelect->whereEquals('web_id', Vps_Registry::get('config')->application->id);
         $targetModel->deleteRows($importSelect);
@@ -449,6 +480,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             )
         );
         $ret[] = array('param' => 'include-cache');
+        $ret[] = array('param' => 'skip-users');
         return $ret;
     }
 
