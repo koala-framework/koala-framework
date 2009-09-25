@@ -40,4 +40,9 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Edit
         $ret['orderNumber'] = $o->order_number;
         return $ret;
     }
+
+    public final function getCurrentOrder()
+    {
+        return $this->_getOrder();
+    }
 }
