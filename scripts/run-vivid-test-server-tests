@@ -66,21 +66,6 @@ function execGetOutput($cmd, &$out)
 }
 
 
-
-echo "killing remaining firefox processes\n";
-$out = '';
-exec('winexe -U VPS/selenium%selenium //vivid-test "cmd /C tasklist /FO CSV"', $out);
-foreach ($out as $l) {
-    $l = explode(',', $l);
-    if ($l[0] == '"firefox.exe"') {
-        $pid = $l[1];
-        $cmd = 'winexe -U VPS/selenium%selenium //vivid-test "cmd /C taskkill /PID '.$pid.' /F"';
-        echo "$cmd\n";
-        system($cmd);
-    }
-}
-
-
 foreach (new DirectoryIterator($websDir) as $p) {
     if ($p->isDot()) continue;
     if (!$p->isDir()) continue;
@@ -91,6 +76,21 @@ foreach (new DirectoryIterator($websDir) as $p) {
     if ($p == 'rssinclude-updater') continue;
     if ($p == 'test.rssinclude-updater') continue;
     if (!file_exists($p->getPathname().'/.svn')) continue;
+
+
+    echo "killing remaining firefox processes\n";
+    $out = '';
+    exec('winexe -U VPS/selenium%selenium //vivid-test "cmd /C tasklist /FO CSV"', $out);
+    foreach ($out as $l) {
+        $l = explode(',', $l);
+        if ($l[0] == '"firefox.exe"') {
+            $pid = $l[1];
+            $cmd = 'winexe -U VPS/selenium%selenium //vivid-test "cmd /C taskkill /PID '.$pid.' /F"';
+            echo "$cmd\n";
+            system($cmd);
+        }
+    }
+
     echo $p."\n";
     chdir($p->getPathname());
     $out = '';
