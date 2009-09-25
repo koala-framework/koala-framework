@@ -150,9 +150,13 @@ class Vpc_Mail_Component extends Vpc_Abstract
     protected function _processPlaceholder($ret, Vpc_Mail_Recipient_Interface $recipient = null)
     {
         $plugins = $this->_getSetting('plugins');
-        $p = $plugins['placeholders'];
-        $p = new $p($this->getData()->componentId);
-        return $p->processMailOutput($ret, $recipient);
+        foreach ($plugins as $p) {
+            if (is_instance_of($p, 'Vps_Component_Plugin_View_Abstract')) {
+                $p = new $p($this->getData()->componentId);
+                $ret = $p->processMailOutput($ret, $recipient);
+            }
+        }
+        return $ret;
     }
 
     public function getPlaceholders(Vpc_Mail_Recipient_Interface $recipient = null)
