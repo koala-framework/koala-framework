@@ -135,7 +135,8 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
         Vps_Media_Output::output(array(
             'contents' => $pdf->output('', 'S'),
             'mimeType' => 'application/pdf',
-            'downloadFilename' => $order->order_number.'.pdf'
+            'downloadFilename' => $order->order_number.'.pdf',
+            'lifetime' => false
         ));
     }
 
