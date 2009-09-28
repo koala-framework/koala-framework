@@ -49,14 +49,17 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 subMenu.handler = function(o, e) {
                     e.stopEvent();
                     var cb = function() {
-                        location.href = o.href;
+                        top.location.href = o.href;
                     };
-                    if (!Vps.currentViewport.mabySubmit) cb();
-                    if (Vps.currentViewport.mabySubmit({
-                        callback: cb,
-                        scope: this
-                    })) {
+                    if (!Vps.currentViewport || !Vps.currentViewport.mabySubmit) {
                         cb();
+                    } else {
+                        if (Vps.currentViewport.mabySubmit({
+                            callback: cb,
+                            scope: this
+                        })) {
+                            cb();
+                        }
                     }
                 };
                 subMenu.scope = this;
