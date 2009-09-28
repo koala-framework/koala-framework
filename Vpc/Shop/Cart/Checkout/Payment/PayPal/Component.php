@@ -30,12 +30,15 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
                 throw new Vps_Exception("Order not found!");
             }
 
-            $this->sendConfirmMail($order);
+            $order->payment_component_id = $this->getData()->componentId;
+            $order->checkout_component_id = $this->getData()->parent->componentId;
 
             $order->status = 'payed';
             $order->date = date('Y-m-d H:i:s');
             $order->payed = date('Y-m-d H:i:s');
             $order->save();
+
+            $this->sendConfirmMail($order);
 
             return true;
         } else {
