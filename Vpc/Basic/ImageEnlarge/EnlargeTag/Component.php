@@ -7,6 +7,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['componentName'] = trlVps('Enlarge Image');
         $ret['alternativePreviewImage'] = true;
         $ret['fullSizeDownloadable'] = false;
+        $ret['imageTitle'] = true;
         $ret['dimensions'] = array(array('width'=>640, 'height'=>480, 'scale'=>Vps_Media_Image::SCALE_BESTFIT));
 
         $ret['assets']['files'][] = 'vps/Vpc/Basic/ImageEnlarge/EnlargeTag/Component.js';
@@ -35,7 +36,9 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
     protected function _getOptions()
     {
         $ret = array();
-        $ret['title'] = $this->getRow()->title;
+        if ($this->_getSetting('imageTitle')) {
+            $ret['title'] = $this->getRow()->title;
+        }
         if ($this->_getSetting('fullSizeDownloadable')) {
             $row = $this->getImageRow();
             $filename = $row->filename;
