@@ -94,6 +94,9 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
             }
 
             if ($this->_logger) {
+                if ($this->_lastQuery->getQueryParams()) {
+                    $this->_logger->debug(print_r($this->_lastQuery->getQueryParams(), true));
+                }
                 $this->_logger->debug($this->_lastQuery->getElapsedSecs());
             }
 
