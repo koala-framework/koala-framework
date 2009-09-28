@@ -14,14 +14,15 @@ set_include_path("$baseDir/library/zend/1.7.5");
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 
-exec('ps aux', $out);
+exec('ps ax', $out);
 foreach ($out as $o) {
-    //USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-    if (preg_match('#^\S+\s+([0-9]+)\s+#', $o, $m)) {
+    //  PID TTY      STAT   TIME COMMAND
+    if (preg_match('#^\s*([0-9]+)\s+\S+\s+\S+\s+([0-9]*):([0-9]*)\s+(.*)#', $o, $m)) {
         $pid = $m[1];
+        $cmd = $m[4];
         if (getmypid() == $pid) continue;
-        if (strpos($o,'run-vivid-test-server-tests')===false) continue;
-        if (substr($cmd, 0, 4) != 'php ' && substr($cmd, 0, 4) != '/usr/bin/php ') continue;
+        if (strpos($cmd,'run-vivid-test-server-tests')===false) continue;
+        if (substr($cmd, 0, 4) != 'php ' && substr($cmd, 0, 13) != '/usr/bin/php ') continue;
     /*    
         echo "There is already a run-vivid-test-server-tests process running:\n";
         echo $o."\n\n\n";
