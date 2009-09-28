@@ -705,7 +705,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
             //TODO: diesen sed aufruf beim import machen, abhängig von $options[replace]
             $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false --no-create-info=true ".$wherePart
-                ."$systemData[mysqlOptions] $systemData[tableName] | sed -e \"s|INSERT INTO|REPLACE INTO|\" | gzip -c > $filename";
+                ."$systemData[mysqlOptions] $systemData[tableName] | gzip -c > $filename";
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL export failed");
             $ret = file_get_contents($filename);
@@ -727,14 +727,15 @@ class Vps_Model_Db extends Vps_Model_Abstract
     public function import($format, $data, $options = array())
     {
         if ($format == self::FORMAT_SQL) {
-            if ($options) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
             $filename = tempnam('/tmp', 'modelimport');
             file_put_contents($filename, $data);
 
             $systemData = $this->_getSystemData();
-            $cmd = "gunzip -c $filename | {$systemData['mysqlDir']}mysql $systemData[mysqlOptions] 2>&1";
+            $cmd = "gunzip -c $filename ";
+            if (isset($options['replace']) && $options['replace']) {
+                $cmd .= "| sed -e \"s|INSERT INTO|REPLACE INTO|\"";
+            }
+            $cmd .= "| {$systemData['mysqlDir']}mysql $systemData[mysqlOptions] 2>&1";
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL import failed: ".implode("\n", $output));
             unlink($filename);
