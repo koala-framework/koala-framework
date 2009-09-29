@@ -9,7 +9,7 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
     {
         $ret = array_merge(parent::getSettings(), array(
             'dataClass' => 'Vpc_Basic_LinkTag_Intern_Data',
-            'modelname'     => 'Vpc_Basic_LinkTag_Intern_Model',
+            'ownModel'     => 'Vpc_Basic_LinkTag_Intern_Model',
             'componentName' => trlVps('Link.Intern'),
         ));
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/LinkTag/Intern/LinkField.js';

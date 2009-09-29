@@ -30,7 +30,7 @@ class Vpc_Directories_Top_Test extends Vpc_TestAbstract
     public function testCache()
     {
         $c = $this->_root->getChildComponent('_directory');
-        $model = $c->getComponent()->getModel();
+        $model = $c->getComponent()->getChildModel();
 
         $this->assertEquals(6, substr_count($c->render(), 'Foo'));
 

@@ -67,7 +67,7 @@ abstract class Vps_Component_Generator_Abstract
                     }
                     $this->_model = new Vps_Model_Db(array('table' => $table));
                 } else if ($this->_loadTableFromComponent) {
-                    $this->_model = Vpc_Abstract::createModel($this->_class);
+                    $this->_model = Vpc_Abstract::createChildModel($this->_class);
                 } else {
                     throw new Vps_Exception("Can't create model");
                 }
@@ -530,6 +530,7 @@ abstract class Vps_Component_Generator_Abstract
             if ($this->_inherits) {
                 $config['inherits'] = true;
             }
+            $config['generator'] = $this; //wird benötigt für duplizieren
             $pageDataClass = $this->_getDataClass($config, $row);
             $this->_dataCache[$parentData->componentId][$id] = new $pageDataClass($config);
         }
@@ -583,4 +584,8 @@ abstract class Vps_Component_Generator_Abstract
         return $this->_inherits;
     }
 
+    public function duplicateChild($source, $parentTarget)
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
 }

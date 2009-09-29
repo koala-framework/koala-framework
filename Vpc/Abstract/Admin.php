@@ -33,8 +33,16 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
         }
     }
 
-    public function duplicate($component)
+    public function duplicate($source, $target)
     {
+        if ($source->getRow()) {
+            $newRow = $source->getRow()->duplicate();
+            $newRow->component_id = $target->dbId;
+            $newRow->save();
+        }
+        foreach ($source->getChildComponents() as $c) {
+            $c->generator->duplicateChild($c, $target);
+        }
     }
 
     function createFormTable($tablename, $fields)

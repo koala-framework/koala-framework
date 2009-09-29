@@ -4,7 +4,6 @@ class Vpc_Advanced_GoogleMapView_TestComponent extends Vpc_Advanced_GoogleMapVie
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Basic_DownloadTag_TestModel';
         return $ret;
     }
     protected function _getOptions()

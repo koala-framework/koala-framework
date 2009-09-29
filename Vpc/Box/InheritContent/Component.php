@@ -4,7 +4,6 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vps_Model_FnF';
         $ret['generators']['child'] = array(
             'class' => 'Vps_Component_Generator_Static',
             'component' => false

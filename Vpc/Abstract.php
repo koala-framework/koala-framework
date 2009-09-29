@@ -196,12 +196,10 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             $model = $this->getModel();
             if (!$model) return null;
             if ($model instanceof Vps_Model_Interface) {
-                if ($model->getPrimaryKey() == 'component_id') {
-                    $this->_row = $model->getRow($this->getDbId());
-                    if (!$this->_row) {
-                        $this->_row = $model->createRow();
-                        $this->_row->component_id = $this->getDbId();
-                    }
+                $this->_row = $model->getRow($this->getDbId());
+                if (!$this->_row) {
+                    $this->_row = $model->createRow();
+                    $this->_row->component_id = $this->getDbId();
                 }
             } else {
                 $this->_row = $model->find($this->getDbId())->current();
@@ -316,9 +314,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $ret['placeholder'] = $this->_getSetting('placeholder');
         $ret['cssClass'] = self::getCssClass($this);
         $ret['data'] = $this->getData();
-        if ($this->_hasSetting('modelname') && is_instance_of($this->_getSetting('modelname'), 'Vps_Component_FieldModel')) {
-            $ret['row'] = $this->_getRow();
-        }
+        $ret['row'] = $this->_getRow();
         return $ret;
     }
 

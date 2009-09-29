@@ -24,7 +24,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/PreviewWindow.js';
         $ret['plugins']['placeholders'] = 'Vpc_Mail_PlaceholdersPlugin';
-        $ret['modelname'] = 'Vpc_Mail_Model';
+        $ret['ownModel'] = 'Vpc_Mail_Model';
         $ret['componentName'] = 'Mail';
 
         // set shorter source keys for recipient models

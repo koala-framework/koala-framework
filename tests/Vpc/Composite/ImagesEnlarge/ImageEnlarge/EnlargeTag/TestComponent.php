@@ -5,7 +5,7 @@ class Vpc_Composite_ImagesEnlarge_ImageEnlarge_EnlargeTag_TestComponent extends 
     {
         $ret = parent::getSettings();
         $ret['alternativePreviewImage'] = false;
-        $ret['modelname'] = 'Vpc_Composite_ImagesEnlarge_ImageEnlarge_TestModel';
+        $ret['ownModel'] = 'Vpc_Composite_ImagesEnlarge_ImageEnlarge_TestModel';
         return $ret;
     }
 }

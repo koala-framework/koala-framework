@@ -6,7 +6,7 @@ class Vpc_Basic_Flash_Component extends Vpc_Abstract implements Vps_Media_Output
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Flash');
         $ret['componentIcon'] = new Vps_Asset('film');
-        $ret['modelname'] = 'Vpc_Basic_Flash_Model';
+        $ret['ownModel'] = 'Vpc_Basic_Flash_Model';
         $ret['default'] = array();
         $ret['assets']['dep'][] = 'SwfObject';
         $ret['cssClass'] = 'webStandard';

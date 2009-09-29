@@ -4,7 +4,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'modelname'     => 'Vpc_Basic_DownloadTag_Model',
+            'ownModel'     => 'Vpc_Basic_DownloadTag_Model',
             'componentName' => trlVps('Download'),
             'componentIcon' => new Vps_Asset('folder_link'),
         ));

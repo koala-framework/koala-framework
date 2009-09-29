@@ -4,7 +4,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'modelname'         => 'Vpc_Basic_Text_Model',
+            'ownModel'          => 'Vpc_Basic_Text_Model',
             'componentName'     => trlVps('Text'),
             'componentIcon'     => new Vps_Asset('paragraph_page'),
             'width'             => 550,
@@ -58,6 +58,11 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public static function validateSettings($settings, $component)
+    {
+        //nicht parent aufrufen weil da würde das model erstellt werden ohne componentClass zu übergeben
+    }
+
     public function getModel()
     {
         return self::getTextModel(get_class($this));
@@ -67,7 +72,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
     {
         static $models = array();
         if (!isset($models[$componentClass])) {
-            $m = Vpc_Abstract::getSetting($componentClass, 'modelname');
+            $m = Vpc_Abstract::getSetting($componentClass, 'ownModel');
             $models[$componentClass] = new $m(array('componentClass' => $componentClass));
         }
         return $models[$componentClass];

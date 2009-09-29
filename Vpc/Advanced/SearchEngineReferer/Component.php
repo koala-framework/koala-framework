@@ -10,7 +10,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         $ret['generators']['child']['component']['view'] =
             'Vpc_Advanced_SearchEngineReferer_ViewMyLatest_Component';
         $ret['componentName'] = trlVps('Search engine referer');
-        $ret['modelname'] = 'Vpc_Advanced_SearchEngineReferer_Model';
+        $ret['childModel'] = 'Vpc_Advanced_SearchEngineReferer_Model';
         $ret['saveReferer'] = true;
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
@@ -26,7 +26,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         $host = parse_url($referer, PHP_URL_HOST);
         $allowedHosts = $this->_getSetting('allowedHosts');
         if (preg_match('/^(www\.)?(('.implode(')|(', $allowedHosts).'))\.[a-z]+$/i', $host)) {
-            $model = $this->getModel();
+            $model = $this->getChildModel();
 
             $rowCompare = $model->getRow($model->select()
                 ->whereEquals('component_id', $this->getData()->parent->componentId)

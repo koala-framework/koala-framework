@@ -4,7 +4,7 @@ class Vpc_Box_AssetsSelect_Component extends Vpc_Box_Assets_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Vps_Component_FieldModel';
         $ret['componentName'] = trlVps('Assets Select');
         return $ret;
     }

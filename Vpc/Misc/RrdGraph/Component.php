@@ -5,7 +5,7 @@ class Vpc_Misc_RrdGraph_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Vps_Component_FieldModel';
         $ret['componentName'] = trlVps('Rrd Graph');
         return $ret;
     }

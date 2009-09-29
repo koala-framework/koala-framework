@@ -4,7 +4,7 @@ class Vpc_Advanced_Amazon_Nodes_TestComponent extends Vpc_Advanced_Amazon_Nodes_
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Advanced_Amazon_Nodes_TestModel';
+        $ret['ownModel'] = 'Vpc_Advanced_Amazon_Nodes_TestModel';
         $ret['generators']['detail']['model'] = 'Vpc_Advanced_Amazon_Nodes_TestNodesModel';
         return $ret;
     }
