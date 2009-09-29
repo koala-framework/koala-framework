@@ -267,4 +267,19 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return (count($this->_settings['component']) > 1);
     }
 
+    public function duplicateChild($source, $parentTarget)
+    {
+        if ($source->generator != $this) {
+            throw new Vps_Exception("you must call this only with the correct source");
+        }
+        $newRow = $source->row->duplicate();
+        if ($this->_getModel()->hasColumn('component_id')) {
+            $newRow->component_id = $parentTarget->dbId;
+        }
+        $newRow->save();
+        $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
+        $target = $parentTarget->getChildComponent($id);
+        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
+        return $target;
+    }
 }

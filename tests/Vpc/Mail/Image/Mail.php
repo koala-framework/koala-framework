@@ -5,7 +5,7 @@ class Vpc_Mail_Image_Mail extends Vpc_Mail_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['content']['component'] = 'Vpc_Mail_Image_Content_Component';
-        $ret['modelname'] = 'Vpc_Mail_Image_MailModel';
+        $ret['ownModel'] = 'Vpc_Mail_Image_MailModel';
         return $ret;
     }
     

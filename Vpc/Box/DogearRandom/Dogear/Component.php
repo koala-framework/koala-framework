@@ -5,7 +5,7 @@ class Vpc_Box_DogearRandom_Dogear_Component extends Vpc_Abstract_Composite_Compo
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Dogear');
-        $ret['modelname'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Vps_Component_FieldModel';
 
         $ret['generators']['child']['component']['image'] = 'Vpc_Box_DogearRandom_Dogear_Image_Component';
         $ret['generators']['child']['component']['imageSmall'] = 'Vpc_Box_DogearRandom_Dogear_ImageSmall_Component';

@@ -8,7 +8,7 @@ class Vpc_Basic_ImageEnlarge_TestComponent extends Vpc_Basic_ImageEnlarge_Compon
         $ret['dimensions'] = array(
             array('width'=>10, 'height'=>10, 'scale'=>Vps_Media_Image::SCALE_DEFORM)
         );
-        $ret['modelname'] = 'Vpc_Basic_ImageEnlarge_TestModel';
+        $ret['ownModel'] = 'Vpc_Basic_ImageEnlarge_TestModel';
         return $ret;
     }
 }

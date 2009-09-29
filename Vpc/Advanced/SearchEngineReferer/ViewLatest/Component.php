@@ -24,7 +24,7 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
     protected function _getParentModel()
     {
         if (!isset($this->_parentModel)) {
-            $this->_parentModel = $this->getData()->parent->getComponent()->getModel();
+            $this->_parentModel = $this->getData()->parent->getComponent()->getChildModel();
         }
         return $this->_parentModel;
     }

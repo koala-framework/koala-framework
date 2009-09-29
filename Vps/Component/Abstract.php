@@ -207,6 +207,21 @@ class Vps_Component_Abstract
 
     public static function validateSettings($settings, $componentClass)
     {
+        if (isset($settings['ownModel']) && $settings['ownModel']) {
+            try {
+                $m = Vps_Model_Abstract::getInstance($settings['ownModel']);
+                $pk = $m->getPrimaryKey();
+            } catch (Exception $e) {}
+            if (isset($pk) && $pk != 'component_id') {
+                throw new Vps_Exception("ownModel for '$componentClass' must have 'component_id' as primary key");
+            }
+        }
+        if (isset($settings['modelname'])) {
+            throw new Vps_Exception("modelname for '$componentClass' is set - please rename into ownModel or childModel");
+        }
+        if (isset($settings['model'])) {
+            throw new Vps_Exception("model for '$componentClass' is set - please rename into ownModel or childModel");
+        }
     }
 
     public function getTable($tablename = null)
@@ -238,10 +253,8 @@ class Vps_Component_Abstract
     public static function createModel($class)
     {
         static $models = array();
-        if (!isset($models[$class])) {
-            if (Vpc_Abstract::hasSetting($class, 'model')) {
-                $models[$class] = Vpc_Abstract::getSetting($class, 'model');
-            } else if (Vpc_Abstract::hasSetting($class, 'tablename')) {
+        if (!array_key_exists($class, $models)) {
+            if (Vpc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
                 if (!$t instanceof Zend_Db_Table_Abstract) {
                     throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
@@ -249,11 +262,33 @@ class Vps_Component_Abstract
                 $models[$class] = new Vps_Model_Db(array(
                     'table' => $t
                 ));
-            } else if (Vpc_Abstract::hasSetting($class, 'modelname')) {
-                $modelName = Vpc_Abstract::getSetting($class, 'modelname');
+            } else if (Vpc_Abstract::hasSetting($class, 'ownModel')) {
+                $modelName = Vpc_Abstract::getSetting($class, 'ownModel');
                 $models[$class] = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                return null;
+                $models[$class] = null;
+            }
+        }
+        return $models[$class];
+    }
+
+    public static function createChildModel($class)
+    {
+        static $models = array();
+        if (!array_key_exists($class, $models)) {
+            if (Vpc_Abstract::hasSetting($class, 'tablename')) {
+                $t = self::createTable($class);
+                if (!$t instanceof Zend_Db_Table_Abstract) {
+                    throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
+                }
+                $models[$class] = new Vps_Model_Db(array(
+                    'table' => $t
+                ));
+            } else if (Vpc_Abstract::hasSetting($class, 'childModel')) {
+                $modelName = Vpc_Abstract::getSetting($class, 'childModel');
+                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+            } else {
+                $models[$class] = null;
             }
         }
         return $models[$class];
@@ -262,6 +297,11 @@ class Vps_Component_Abstract
     public function getModel()
     {
         return self::createModel(get_class($this));
+    }
+
+    public function getChildModel()
+    {
+        return self::createChildModel(get_class($this));
     }
 
     protected function _getSetting($setting)

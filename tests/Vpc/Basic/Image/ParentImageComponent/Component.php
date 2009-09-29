@@ -4,7 +4,7 @@ class Vpc_Basic_Image_ParentImageComponent_Component extends Vpc_Basic_Image_Com
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Basic_Image_TestModel';
+        $ret['ownModel'] = 'Vpc_Basic_Image_TestModel';
         $ret['generators']['child'] = array(
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vpc_Basic_Image_ParentImageComponent_Child_Component'

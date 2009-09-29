@@ -9,7 +9,7 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
     {
         $ret = array_merge(parent::getSettings(), array(
             'dataClass' => 'Vpc_Basic_LinkTag_Extern_Data',
-            'modelname'     => 'Vpc_Basic_LinkTag_Extern_Model',
+            'ownModel'     => 'Vpc_Basic_LinkTag_Extern_Model',
             'componentName' => trlVps('Link.Extern'),
             'hasPopup'      => true
         ));

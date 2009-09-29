@@ -1,7 +1,15 @@
 <?php
 class Vpc_Basic_LinkTag_Generator extends Vps_Component_Generator_Static
 {
-    protected $_loadTableFromComponent = true;
+    private $_model;
+
+    protected function _getModel()
+    {
+        if (!$this->_model) {
+            $this->_model = Vpc_Abstract::createModel($this->_class);
+        }
+        return $this->_model;
+    }
 
     protected function _formatSelect($parentData, $select = array())
     {

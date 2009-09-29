@@ -5,7 +5,7 @@ class Vpc_Advanced_Imprint_Disclaimer_Component extends Vpc_Abstract
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlVps('Imprint.Disclaimer'),
-            'modelname' => 'Vps_Component_FieldModel',
+            'ownModel' => 'Vps_Component_FieldModel',
             'cssClass' => 'webStandard'
         ));
         $ret['assets']['dep'][] = 'VpsSwitchDisplay';

@@ -5,7 +5,7 @@ class Vpc_Events_Directory_Component extends Vpc_News_Directory_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Events.Events');
-        $ret['modelname'] = 'Vpc_Events_Directory_Model';
+        $ret['childModel'] = 'Vpc_Events_Directory_Model';
 
         $ret['generators']['detail']['component'] = 'Vpc_Events_Detail_Component';
         $ret['generators']['detail']['dbIdShortcut'] = 'events_';

@@ -6,7 +6,7 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Mail_Redirect_Model';
+        $ret['childModel'] = 'Vpc_Mail_Redirect_Model';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
         return $ret;
@@ -18,7 +18,7 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
             throw new Vps_Exception("params in object must be set before _getRedirectRow is called");
         }
 
-        $r = $this->getModel()->getRow($this->_params['redirectId']);
+        $r = $this->getChildModel()->getRow($this->_params['redirectId']);
         if (!$r) {
             throw new Vps_Exception("The redirect row was not found");
         }
@@ -116,7 +116,7 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
                 $class
             );
 
-            $m = $this->getModel();
+            $m = $this->getChildModel();
         }
 
         while (preg_match('/\*(.+?)\*(.+?)\*/', $mailText, $matches)) {
