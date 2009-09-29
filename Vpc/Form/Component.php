@@ -31,6 +31,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     {
         if (!isset($this->_form)) {
             $this->_form = Vpc_Abstract_Form::createComponentForm(get_class($this), 'form');
+            $this->_form->setClass(get_class($this));
+            if ($this->getFormModel()) $this->_form->setModel($this->getFormModel());
         }
     }
 

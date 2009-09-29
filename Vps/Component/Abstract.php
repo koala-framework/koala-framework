@@ -294,6 +294,20 @@ class Vps_Component_Abstract
         return $models[$class];
     }
 
+    public static function createFormModel($class)
+    {
+        static $models = array();
+        if (!array_key_exists($class, $models)) {
+            if (Vpc_Abstract::hasSetting($class, 'formModel')) {
+                $modelName = Vpc_Abstract::getSetting($class, 'formModel');
+                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+            } else {
+                $models[$class] = null;
+            }
+        }
+        return $models[$class];
+    }
+
     public function getModel()
     {
         return self::createModel(get_class($this));
@@ -302,6 +316,11 @@ class Vps_Component_Abstract
     public function getChildModel()
     {
         return self::createChildModel(get_class($this));
+    }
+
+    public function getFormModel()
+    {
+        return self::createFormModel(get_class($this));
     }
 
     protected function _getSetting($setting)
