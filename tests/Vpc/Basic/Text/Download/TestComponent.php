@@ -4,7 +4,7 @@ class Vpc_Basic_Text_Download_TestComponent extends Vpc_Basic_DownloadTag_Compon
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Basic_Text_Download_TestModel';
+        $ret['ownModel'] = 'Vpc_Basic_Text_Download_TestModel';
         return $ret;
     }
 

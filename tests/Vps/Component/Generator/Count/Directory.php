@@ -4,7 +4,7 @@ class Vps_Component_Generator_Count_Directory extends Vpc_Directories_ItemPage_D
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['model'] = new Vps_Model_FnF(array(
+        $ret['childModel'] = new Vps_Model_FnF(array(
             'columns' => array('id', 'name'),
             'data' => array(
                 array('id'=>1, 'name'=>'Foo'),

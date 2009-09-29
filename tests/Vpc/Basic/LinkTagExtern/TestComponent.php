@@ -4,7 +4,7 @@ class Vpc_Basic_LinkTagExtern_TestComponent extends Vpc_Basic_LinkTag_Extern_Com
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Basic_LinkTagExtern_TestModel';
+        $ret['ownModel'] = 'Vpc_Basic_LinkTagExtern_TestModel';
         return $ret;
     }
 }

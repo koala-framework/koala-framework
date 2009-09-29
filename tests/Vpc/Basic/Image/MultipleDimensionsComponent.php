@@ -4,7 +4,7 @@ class Vpc_Basic_Image_MultipleDimensionsComponent extends Vpc_Basic_Image_Compon
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Basic_Image_TestModel';
+        $ret['ownModel'] = 'Vpc_Basic_Image_TestModel';
         $ret['dimensions'] = array(
             'original' => array(
                 'scale' => Vps_Media_Image::SCALE_ORIGINAL,

@@ -37,7 +37,7 @@ class Vpc_Advanced_SearchEngineReferer_Test extends PHPUnit_Framework_TestCase
     public function testComponentNewEntry()
     {
         $ref2 = $this->_root->getChildComponent('-referer2')->getComponent();
-        $model = $ref2->getModel();
+        $model = $ref2->getChildModel();
         $oldRow = $model->getRow($model->select()
             ->whereEquals('component_id', 'root')
             ->order('id', 'DESC')

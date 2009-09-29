@@ -5,7 +5,7 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Vpc_Posts_Write_Form_Success_Component';
-        $ret['modelname'] = 'Vpc_Posts_Directory_Model';
+        $ret['ownModel'] = 'Vpc_Posts_Directory_Model';
         return $ret;
     }
 

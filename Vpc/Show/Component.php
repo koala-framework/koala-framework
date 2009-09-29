@@ -5,7 +5,7 @@ class Vpc_Show_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Show Component');
-        $ret['modelname'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Vps_Component_FieldModel';
         return $ret;
     }
 

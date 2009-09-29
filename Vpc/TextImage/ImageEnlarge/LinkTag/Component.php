@@ -4,7 +4,7 @@ class Vpc_TextImage_ImageEnlarge_LinkTag_Component extends Vpc_Basic_LinkTag_Com
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_TextImage_ImageEnlarge_LinkTag_Model';
+        $ret['ownModel'] = 'Vpc_TextImage_ImageEnlarge_LinkTag_Model';
         $ret['generators']['link']['component']['download'] = 'Vpc_Basic_DownloadTag_Component';
         $ret['generators']['link']['component'] = array_merge(
             array(

@@ -20,7 +20,7 @@ class Vpc_Newsletter_Component extends Vpc_Directories_ItemPage_Directory_Compon
             'name' => trlVps('Edit subscriber')
         );
 
-        $ret['modelname'] = 'Vpc_Newsletter_Model';
+        $ret['childModel'] = 'Vpc_Newsletter_Model';
         $ret['flags']['hasResources'] = true;
         $ret['componentName'] = trlVps('Newsletter');
         return $ret;

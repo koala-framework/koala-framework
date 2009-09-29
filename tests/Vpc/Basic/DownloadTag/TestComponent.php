@@ -4,7 +4,7 @@ class Vpc_Basic_DownloadTag_TestComponent extends Vpc_Basic_DownloadTag_Componen
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Basic_DownloadTag_TestModel';
+        $ret['ownModel'] = 'Vpc_Basic_DownloadTag_TestModel';
         return $ret;
     }
 }

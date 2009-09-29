@@ -4,7 +4,7 @@ class Vpc_Advanced_SearchEngineReferer_Referer2_Component extends Vpc_Advanced_S
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Advanced_SearchEngineReferer_Referer2_Model';
+        $ret['childModel'] = 'Vpc_Advanced_SearchEngineReferer_Referer2_Model';
         return $ret;
     }
 }

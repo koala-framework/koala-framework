@@ -4,7 +4,7 @@ class Vpc_TextImage_ImageEnlarge_LinkTag_EnlargeTag_TestComponent extends Vpc_Te
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_TextImage_ImageEnlarge_TestModel';
+        $ret['ownModel'] = 'Vpc_TextImage_ImageEnlarge_TestModel';
         
         return $ret;
     }
