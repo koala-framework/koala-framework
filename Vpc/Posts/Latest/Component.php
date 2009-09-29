@@ -5,7 +5,7 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Posts.Last Posts');
-        $ret['modelname'] = 'Vpc_Posts_Directory_Model';
+        $ret['childModel'] = 'Vpc_Posts_Directory_Model';
         $ret['numberOfPosts'] = 9;
         return $ret;
     }
@@ -24,7 +24,7 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['posts'] = array();
-        $rows = $this->getModel()->fetchAll($this->_getSelect());
+        $rows = $this->getChildModel()->fetchAll($this->_getSelect());
         foreach ($rows as $row) {
             $id = $row->component_id . '-' . $row->id;
             $post = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id);

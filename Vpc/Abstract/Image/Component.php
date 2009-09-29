@@ -6,7 +6,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Abstract_Image_Model';
+        $ret['ownModel'] = 'Vpc_Abstract_Image_Model';
 
         $ret['dimensions'] = array(
             'default'=>array(

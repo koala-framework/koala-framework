@@ -15,7 +15,7 @@ class Vpc_Shop_Products_Directory_Component extends Vpc_Directories_ItemPage_Dir
             'component' => 'Vpc_Shop_Products_Directory_AddToCart_Component'
         );
 
-        $ret['modelname'] = 'Vpc_Shop_Products';
+        $ret['childModel'] = 'Vpc_Shop_Products';
 
         $ret['componentName'] = trlVps('Shop.Products');
         $ret['flags']['hasResources'] = true;

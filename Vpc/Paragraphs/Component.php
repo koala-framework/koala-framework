@@ -11,7 +11,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
             'componentName' => trlVps('Paragraphs'),
             'componentIcon' => new Vps_Asset('page')
         ));
-        $ret['modelname'] = 'Vpc_Paragraphs_Model';
+        $ret['childModel'] = 'Vpc_Paragraphs_Model';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/DataView.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/AddParagraphButton.js';
@@ -38,7 +38,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
     {
         $ret = parent::getCacheVars();
         $ret[] = array(
-            'model' => $this->getModel(),
+            'model' => $this->getChildModel(),
             'id' => $this->getData()->dbId,
             'field' => 'component_id'
         );

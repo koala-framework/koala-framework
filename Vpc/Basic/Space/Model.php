@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Space_Model extends Vpc_Table
+class Vpc_Basic_Space_Model extends Vps_Model_Db
 {
-    protected $_name = 'vpc_basic_space';
+    protected $_table = 'vpc_basic_space';
 }

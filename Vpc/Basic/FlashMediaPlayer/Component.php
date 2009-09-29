@@ -6,7 +6,7 @@ class Vpc_Basic_FlashMediaPlayer_Component extends Vpc_Abstract implements Vps_M
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Flash Media Player');
         $ret['componentIcon'] = new Vps_Asset('film');
-        $ret['modelname'] = 'Vpc_Basic_FlashMediaPlayer_Model';
+        $ret['ownModel'] = 'Vpc_Basic_FlashMediaPlayer_Model';
         $ret['default'] = array(
             'width' => 400,
             'height' => 300

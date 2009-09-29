@@ -52,7 +52,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         if (!$this->getForm()) return;
 
-        Vps_Registry::get('db')->beginTransaction();
+        if (Vps_Registry::get('db')) Vps_Registry::get('db')->beginTransaction();
 
         $this->getForm()->initFields();
 
@@ -81,7 +81,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             }
         }
 
-        Vps_Registry::get('db')->commit();
+        if (Vps_Registry::get('db')) Vps_Registry::get('db')->commit();
     }
 
     public function getErrors()

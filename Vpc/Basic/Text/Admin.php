@@ -18,4 +18,33 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
         $fields['content'] = 'text NOT NULL';
         $this->createFormTable('vpc_basic_text', $fields);
     }
+
+    public function duplicate($source, $target)
+    {
+        $newRow = $source->getRow()->duplicate();
+        $newRow->component_id = $target->dbId;
+        $idMap = array();
+        foreach ($source->getChildComponents() as $c) {
+            $newChild = $c->generator->duplicateChild($c, $target);
+            if ($c->generator instanceof Vpc_Basic_Text_Generator) {
+                $idMap[$c->dbId] = $newChild;
+            }
+        }
+        $content = '';
+        foreach ($source->getRow()->getContentParts() as $p) {
+            if (is_string($p)) {
+                $content .= $p;
+            } else if ($p['type'] == 'image' && isset($idMap[$p['componentId']])) {
+                $imageComponent = $idMap[$p['componentId']]->getComponent();
+                $dimension = $imageComponent->getImageDimensions();
+                $content .= "<img src=\"".$imageComponent->getImageUrl()."\" ".
+                            "width=\"$dimension[width]\" ".
+                            "height=\"$dimension[height]\" />";
+            } else if (($p['type'] == 'link' || $p['type'] == 'download') && isset($idMap[$p['componentId']])) {
+                $content .= "<a href=\"".$idMap[$p['componentId']]->dbId."\">";
+            }
+        }
+        $newRow->content = $content;
+        $newRow->save();
+    }
 }

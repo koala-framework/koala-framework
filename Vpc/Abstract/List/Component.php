@@ -5,7 +5,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'List',
-            'modelname'     => 'Vpc_Abstract_List_Model',
+            'childModel'     => 'Vpc_Abstract_List_Model',
             'showVisible' => true,
             'showPosition' => true
         ));
@@ -51,7 +51,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     protected function _getCacheVars()
     {
         return array(
-            'model' => $this->getModel(),
+            'model' => $this->getChildModel(),
             'id' => $this->getData()->dbId,
             'field' => 'component_id'
         );

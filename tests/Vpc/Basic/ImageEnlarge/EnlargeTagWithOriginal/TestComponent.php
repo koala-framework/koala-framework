@@ -4,7 +4,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTagWithOriginal_TestComponent extends Vpc_Ba
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['modelname'] = 'Vpc_Basic_ImageEnlarge_TestModel';
+        $ret['ownModel'] = 'Vpc_Basic_ImageEnlarge_TestModel';
         $ret['fullSizeDownloadable'] = true;
         return $ret;
     }

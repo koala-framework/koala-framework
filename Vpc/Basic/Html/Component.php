@@ -10,7 +10,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlVps('Html'),
             'componentIcon' => new Vps_Asset('tag'),
-            'modelname'     => 'Vpc_Basic_Html_Model'
+            'ownModel'     => 'Vpc_Basic_Html_Model'
         ));
         $ret['flags']['searchContent'] = true;
         return $ret;
