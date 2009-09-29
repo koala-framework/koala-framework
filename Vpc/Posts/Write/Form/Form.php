@@ -1,5 +1,5 @@
 <?php
-class Vpc_Posts_Write_Form_Form extends Vpc_Abstract_Form
+class Vpc_Posts_Write_Form_Form extends Vps_Form
 {
     protected function _init()
     {
