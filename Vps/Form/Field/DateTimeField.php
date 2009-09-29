@@ -7,6 +7,14 @@ class Vps_Form_Field_DateTimeField extends Vps_Form_Field_SimpleAbstract
         $this->setXtype('vps.datetime');
     }
 
+    protected function _getValueFromPostData($postData)
+    {
+        $ret = parent::_getValueFromPostData($postData);
+        preg_match('#^"([0-9]{4}-[0-9]{2}-[0-9]{2})T([0-9]{2}:[0-9]{2}:[0-9]{2})"$#', $ret, $m);
+        $ret = "$m[1] $m[2]";
+        return $ret;
+    }
+
     protected function _addValidators()
     {
         parent::_addValidators();

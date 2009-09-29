@@ -6,8 +6,8 @@ class Vpc_Events_Detail_Form extends Vpc_News_Detail_Abstract_Form
         parent::_initFields();
         unset($this->fields['publish_date']);
         if (isset($this->fields['expiry_date'])) unset($this->fields['expiry_date']);
-        $this->add(new Vps_Form_Field_DateField('start_date', trlVps('From')));
-        $this->add(new Vps_Form_Field_DateField('end_date', trlVps('To')));
+        $this->add(new Vps_Form_Field_DateTimeField('start_date', trlVps('From')));
+        $this->add(new Vps_Form_Field_DateTimeField('end_date', trlVps('To')));
         $this->add(new Vps_Form_Field_TextField('place', trlVps('Place (City)')));
     }
 }
