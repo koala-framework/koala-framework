@@ -58,7 +58,11 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         $ret = parent::getTemplateVars($values);
         $ret['preHtml'] = '<fieldset>';
         if ($this->getTitle()) {
-            $ret['preHtml'] .= "<legend>{$this->getTitle()}</legend>";
+            $ret['preHtml'] .= "<legend>";
+            if ($this->getCheckboxToggle()) {
+                $ret['preHtml'] .= "<input type=\"checkbox\" name=\"\" />";
+            }
+            $ret['preHtml'] .= "{$this->getTitle()}</legend>";
         }
         $ret['postHtml'] = '</fieldset>';
         return $ret;
