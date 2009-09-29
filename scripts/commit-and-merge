@@ -28,15 +28,16 @@ if ($files) {
     if (isset($files['normal'])) {
         echo "working copy is not up to date\n";
     }
-    die("You must not have modified files in '$mergeTo'");
+    die("You must not have modified files in '$mergeTo'\n");
 }
 
+$validOptions = array('m');
 $options = array();
 $files = array();
 $lastOptionName = false;
 foreach ($_SERVER['argv'] as $k=>$i) {
     if ($k==0) continue;
-    if (substr($i, 0, 1) == '-') {
+    if (substr($i, 0, 1) == '-' && in_array(trim($i, '-'), $validOptions)) {
         $lastOptionName = trim($i, '-');
         if ($lastOptionName == 'm') $lastOptionName = 'message';
         if ($pos = strpos($i, '=')) {
@@ -51,9 +52,10 @@ foreach ($_SERVER['argv'] as $k=>$i) {
         $files[] = $i;
     }
 }
-if (!isset($options['message'])) {
-    die('missing parameter message');
+if (!isset($options['message']) || !is_string($options['message'])) {
+    die("missing parameter message\n");
 }
+
 $cmd = "svn commit";
 foreach ($files as $i) {
     $cmd .= ' '.escapeshellarg($i);
