@@ -189,7 +189,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                     $key = $i->$pk;
                 }
                 if (!is_string($i)) $i = $i->__toString();
-                $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName().$key))
+                $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName().'_'.$key))
                     ->setKey($key)
                     ->setBoxLabel($i)
                     ->setHideLabel(true);
@@ -271,7 +271,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $new = array();
         foreach ($this->_getFields() as $f) {
             if (isset($postData[$f->getFieldName()]) && $postData[$f->getFieldName()]) {
-                $new[] = substr($f->getFieldName(), strlen($this->getFieldName()));
+                $new[] = substr($f->getFieldName(), strlen($this->getFieldName())+1);
             }
         }
 
