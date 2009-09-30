@@ -837,7 +837,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         var selectedRows = this.getGrid().getSelectionModel().getSelections();
 
         var ids = [];
-        var params = {};
+        var params = this.getBaseParams() || {};
         selectedRows.each(function(selectedRow) {
             if (selectedRow.data.id != 0) {
                 ids.push(selectedRow.id);

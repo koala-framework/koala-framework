@@ -35,12 +35,17 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
 
     public function duplicate($source, $target)
     {
-        if ($source->getRow()) {
-            $newRow = $source->getRow()->duplicate();
-            $newRow->component_id = $target->dbId;
-            $newRow->save();
+
+        if ($model = $source->getComponent()->getModel()) {
+            $row = $model->getRow($source->dbId);
+            if ($row) {
+                $newRow = $row->duplicate();
+                $newRow->component_id = $target->dbId;
+                $newRow->save();
+            }
         }
-        foreach ($source->getChildComponents() as $c) {
+
+        foreach ($source->getChildComponents(array('inherit' => false)) as $c) {
             $c->generator->duplicateChild($c, $target);
         }
     }
