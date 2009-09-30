@@ -703,8 +703,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $systemData = $this->_getSystemData();
             $filename = tempnam('/tmp', 'modelimport');
 
-            //TODO: diesen sed aufruf beim import machen, abhängig von $options[replace]
-            $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false --no-create-info=true ".$wherePart
+            $cmd = "{$systemData['mysqlDir']}mysqldump --add-drop-table=false ";
+            $cmd .= "--skip-add-locks --complete-insert ";
+            $cmd .= "--no-create-info=true ".$wherePart
                 ."$systemData[mysqlOptions] $systemData[tableName] | gzip -c > $filename";
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL export failed");
@@ -806,7 +807,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $sql .= ' IGNORE';
         $sql .= ' INTO '.$this->getTableName().' ('.implode(', ', $fields).') VALUES ';
         foreach ($data as $d) {
-            if (array_keys($d) != $fields) {
+            if (array_keys($d) != array_keys($data[0])) {
                 throw new Vps_Exception_NotYetImplemented("You must have always the same keys when importing");
             }
             $sql .= '(';
