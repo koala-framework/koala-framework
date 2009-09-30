@@ -60,4 +60,15 @@ class Vps_Model_FnF_SiblingModelTest extends PHPUnit_Framework_TestCase
         $data = Vps_Model_Abstract::getInstance('Vps_Model_FnF_SiblingModel')->getData();
         $this->assertEquals(4, $data[4]['master_id']);
     }
+
+    public function testDuplicateSiblingRow()
+    {
+        $newRow = $this->_model->getRow(1)->duplicate();
+        $newRow->save();
+
+        $this->assertEquals(4, $newRow->id);
+        $this->assertEquals(4, $newRow->master_id);
+        $this->assertEquals('bar1', $newRow->bar);
+        $this->assertEquals('foo1', $newRow->foo);
+    }
 }
