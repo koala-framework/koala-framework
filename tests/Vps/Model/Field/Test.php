@@ -147,4 +147,25 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
             array('id'=>1, 'foo1'=>'bar', 'data'=>serialize(array('blub'=>'bum')))
         ));
     }
+
+    public function testDuplicate()
+    {
+        $model = new Vps_Model_FnF(array(
+            'columns' => array('id', 'foo1', 'data'),
+            'siblingModels' => array(new Vps_Model_Field(array(
+                'fieldName'=>'data',
+            )))
+        ));
+        $row = $model->createRow();
+        $row->foo1 = 'foo1';
+        $row->blub = 'blub';
+        $row->blub2 = 'blub2';
+        $row->save();
+
+        $row = $row->duplicate();
+        $row->save();
+        $this->assertEquals($row->foo1, 'foo1');
+        $this->assertEquals($row->blub, 'blub');
+        $this->assertEquals($row->blub2, 'blub2');
+    }
 }

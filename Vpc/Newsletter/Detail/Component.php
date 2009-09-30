@@ -64,7 +64,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
     {
         $ret = array();
         $newsletter = $this->getData()->row;
-        $model = $this->getData()->parent->getComponent()->getModel()->getDependentModel('Queue');
+        $model = $this->getData()->parent->getComponent()->getChildModel()->getDependentModel('Queue');
         $select = $model->select()->whereEquals('newsletter_id', $newsletter->id);
         $ret['before'] = $model->countRows($select);
         $model->import(Vps_Model_Db::FORMAT_ARRAY, $this->_toImport, array('ignore' => true));

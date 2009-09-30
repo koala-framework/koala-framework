@@ -21,17 +21,23 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
 
     public function duplicate($source, $target)
     {
-        $newRow = $source->getRow()->duplicate();
+        if (!$source->getComponent()->getModel()->getRow($source->dbId)) {
+            //falls es nur eine nicht-vorhandene standard-row gibt müssen wir gar nichts tun
+            return;
+        }
+
+        $newRow = $source->getComponent()->getRow()->duplicate();
         $newRow->component_id = $target->dbId;
         $idMap = array();
-        foreach ($source->getChildComponents() as $c) {
+
+        foreach ($source->getChildComponents(array('inherit' => false)) as $c) {
             $newChild = $c->generator->duplicateChild($c, $target);
             if ($c->generator instanceof Vpc_Basic_Text_Generator) {
                 $idMap[$c->dbId] = $newChild;
             }
         }
         $content = '';
-        foreach ($source->getRow()->getContentParts() as $p) {
+        foreach ($source->getComponent()->getRow()->getContentParts() as $p) {
             if (is_string($p)) {
                 $content .= $p;
             } else if ($p['type'] == 'image' && isset($idMap[$p['componentId']])) {
