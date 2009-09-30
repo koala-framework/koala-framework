@@ -6,7 +6,7 @@ class Vpc_Advanced_CodeSyntaxHighlight_Component extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Code Syntax Highlighted');
         $ret['componentIcon'] = new Vps_Asset('page_code');
-        $ret['modelname'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Vps_Component_FieldModel';
         return $ret;
     }
 
