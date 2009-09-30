@@ -1,5 +1,5 @@
 <?php
-class Vps_Mail_Redirect_Admin extends Vpc_Admin
+class Vpc_Mail_Redirect_Admin extends Vpc_Admin
 {
     public function setup()
     {

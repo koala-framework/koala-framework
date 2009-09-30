@@ -76,4 +76,14 @@ class Vps_Model_DbWithConnection_DbSibling_Test extends PHPUnit_Framework_TestCa
         $m->deleteRows($select);
         $this->assertEquals(0, $m->countRows($select));
     }
+
+    public function testDuplicate()
+    {
+        $m = new Vps_Model_DbWithConnection_DbSibling_MasterModel();
+
+        $r = $m->getRow(1)->duplicate();
+        $this->assertEquals('aaabbbccc', $r->foo);
+        $this->assertEquals('abcd', $r->bar);
+        $this->assertEquals('aha', $r->baz);
+    }
 }
