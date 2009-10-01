@@ -7,8 +7,9 @@ class Vps_View_Helper_Image
     {
         $this->_view = $view;
     }
-
-    public function image($image, $type = 'default', $alt = '', $cssClass = null)
+    
+    // wird auch von ImageUrl helper verwendet
+    protected function _getImageParams($image, $type = 'default', $alt = '', $cssClass = null)
     {
         if (is_string($image)) {
             $cssClass = $alt;
@@ -77,9 +78,22 @@ class Vps_View_Helper_Image
                 $this->_view->addImage($img);
                 $url = "cid:".$img->id;
             }
-            return "<img src=\"$url\" width=\"$size[width]\" height=\"$size[height]\" alt=\"$alt\"$attr />";
+            return array(
+                'url' => $url,
+                'width' => $size['width'],
+                'height' => $size['height'],
+                'alt' => $alt,
+                'attr' => $attr
+            );
         } else {
-            return '';
+            return null;
         }
+    }
+
+    public function image($image, $type = 'default', $alt = '', $cssClass = null)
+    {
+        $data = $this->_getImageParams($image, $type, $alt, $cssClass);
+        if (!$data) return '';
+        return "<img src=\"$data[url]\" width=\"$data[width]\" height=\"$data[height]\" alt=\"$data[alt]\"$data[attr] />";
     }
 }
