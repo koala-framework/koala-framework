@@ -3,40 +3,25 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
 {
     private $_doSyncOnUpdate = false;
 
-    protected function _beforeSave()
+    public function save()
     {
-        parent::_beforeSave();
-        if ($this->getModel()->getLockTables()) {
-            $tableNames = array();
-            $models = array($this->getModel());
-            $models = array_merge($models, $this->getModel()->getSiblingModels());
-            foreach ($models as $m) {
-                while ($m instanceof Vps_Model_Proxy) {
-                    $m = $m->getProxyModel();
-                }
-                if ($m instanceof Vps_Model_Db) {
-                    $tableNames[] = $m->getTableName();
-                }
-            }
-            if ($tableNames) {
-                Vps_Benchmark::count('lock tables');
-                $m->executeSql("LOCK TABLES ".implode(" WRITE, ", $tableNames)." WRITE");
-            }
+        $this->_beforeSave();
+        $id = $this->{$this->_getPrimaryKey()};
+        if (!$id) {
+            $this->_beforeInsert();
+        } else {
+            $this->_beforeUpdate();
         }
-    }
-
-    protected function _afterSave()
-    {
-        parent::_afterSave();
-        if ($this->getModel()->getLockTables()) {
-            $m = $this->getModel();
-            while ($m instanceof Vps_Model_Proxy) {
-                $m = $m->getProxyModel();
-            }
-            if ($m instanceof Vps_Model_Db) {
-                $m->executeSql("UNLOCK TABLES");
-            }
+        $this->_beforeSaveSiblingMaster();
+        //DEAKTIVIERT: $ret = $this->_row->save();
+          //(neue row wird in Model::synchronizeAndInsertRow eingefÃ¼gt)
+        $this->_afterSave();
+        if (!$id) {
+            $this->_afterInsert();
+        } else {
+            $this->_afterUpdate();
         }
+        return Vps_Model_Row_Abstract::save(); //nicht parent, der wÃ¼rde wida _row->save machen
     }
 
     protected function _beforeInsert()
@@ -49,7 +34,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
         $returnedData = $this->getModel()->synchronizeAndInsertRow($data);
         foreach ($returnedData as $k=>$v) {
             //parent aufrufen da die primaryKey exception ignoriert werden soll
-            //und doSynOnUpdate nicht benötigt wird
+            //und doSynOnUpdate nicht benï¿½tigt wird
             parent::__set($k, $v);
         }
     }
@@ -66,7 +51,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
             $returnedData = $this->getModel()->synchronizeAndUpdateRow($data);
             foreach ($returnedData as $k=>$v) {
                 //parent aufrufen da die primaryKey exception ignoriert werden soll
-                //und doSynOnUpdate nicht benötigt wird
+                //und doSynOnUpdate nicht benï¿½tigt wird
                 parent::__set($k, $v);
             }
 

@@ -140,6 +140,7 @@ class Vps_User_Model extends Vps_Model_Proxy
                 ->whereEquals('deleted', 0);
             $row = $this->getRow($select);
         }
+
         return $row;
     }
 

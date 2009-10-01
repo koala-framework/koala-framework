@@ -8,6 +8,13 @@
  */
 class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Wenn ein User erstellt wird kann passieren dass ein anderer php prozess
+     * als der der ihn eigentlich erstellt hat diesen neuen user synct und so
+     * er bereits in der Datenbank steht.
+     * Workaround: LOCK (hatten wir mal)
+     *             statt INSERT ein REPLACE verwenden (also syncen)  <<---- AKTUELLE LÖSUNG
+     */
     public function testCreateManyAndSync()
     {
         $debugOutput = false;
