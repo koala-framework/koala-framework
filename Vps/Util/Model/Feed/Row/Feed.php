@@ -2,7 +2,6 @@
 class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
 {
     private $_xml;
-    private $_entries;
     const FORMAT_RSS = 'rss';
     const FORMAT_ATOM = 'atom';
     public function __construct($config)
@@ -105,27 +104,9 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         parent::__construct($config);
     }
 
-    public function getEntries()
+    public function getEntries($select = array())
     {
-        if (!isset($this->_entries)) {
-            $this->_entries = $this->_model->getDependentModel('Entries')
-                    ->_getFeedEntries($this, $this->_xml);
-        }
-        return $this->_entries;
-    }
-
-    public function serialize()
-    {
-        return serialize(array(
-            'parent' => parent::serialize(),
-            'entries' => $this->getEntries()
-        ));
-    }
-
-    public function unserialize($str)
-    {
-        $data = unserialize($str);
-        parent::unserialize($data['parent']);
-        $this->_entries = $data['entries'];
+        return $this->_model->getDependentModel('Entries')
+                ->_getFeedEntries($this, $this->_xml, $select);
     }
 }

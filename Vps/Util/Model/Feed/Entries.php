@@ -22,18 +22,17 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
     public function getRowsByParentRow(Vps_Model_Row_Interface $parentRow, $select = array())
     {
         $select = $this->select($select);
-        if ($select->getParts()) {
-            throw new Vps_Exception_NotYetImplemented('Custom select is not yet implemented');
-        }
         if (!($parentRow instanceof Vps_Util_Model_Feed_Row_Feed)) {
             throw new Vps_Exception('Only possible with feed row');
         }
-        return $parentRow->getEntries();
+        return $parentRow->getEntries($select);
     }
 
     //"darf" nur von Vps_Util_Model_Feed_Row_Feed aufgerufen werden!
-    public function _getFeedEntries($parentRow, $xml)
+    public function _getFeedEntries($parentRow, $xml, $select = array())
     {
+        $select = $this->select($select);
+
         $pId = $parentRow->getInternalId();
         $this->_data[$pId] = array();
 
@@ -42,15 +41,30 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
                 $xml->registerXPathNamespace('rss', 'http://purl.org/rss/1.0/');
                 foreach ($xml->xpath('//rss:item') as $item) {
                     $this->_data[$pId][] = $item;
+                    if (($l = $select->getPart(Vps_Model_Select::LIMIT_COUNT))
+                        && count($this->_data[$pId]) == $l)
+                    {
+                        break;
+                    }
                 }
             } else {
                 foreach ($xml->channel->item as $item) {
                     $this->_data[$pId][] = $item;
+                    if (($l = $select->getPart(Vps_Model_Select::LIMIT_COUNT))
+                        && count($this->_data[$pId]) == $l)
+                    {
+                        break;
+                    }
                 }
             }
         } else {
             foreach ($xml->entry as $item) {
                 $this->_data[$pId][] = $item;
+                if (($l = $select->getPart(Vps_Model_Select::LIMIT_COUNT))
+                    && count($this->_data[$pId]) == $l)
+                {
+                    break;
+                }
             }
         }
 
