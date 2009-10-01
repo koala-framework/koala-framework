@@ -82,13 +82,13 @@ foreach (new DirectoryIterator($websDir) as $p) {
 
     echo "killing remaining firefox processes\n";
     $out = '';
-    $cmd = '/usr/local/bin/winexe -U VPS/selenium%selenium //vivid-test "cmd /C tasklist /FO CSV" 2>&1';
+    $cmd = '/usr/local/bin/winexe -U VPS/selenium%selenium //vivid-test "cmd /C tasklist /V /FO CSV" 2>&1';
     exec($cmd, $out);
     echo "$cmd\n";
     var_dump($out);
     foreach ($out as $l) {
         $l = explode(',', $l);
-        if ($l[0] == '"firefox.exe"') {
+        if ($l[0] == '"firefox.exe"' && $l[6] == '"VIVID-TEST\selenium"') {
             $pid = $l[1];
             $cmd = '/usr/local/bin/winexe -U VPS/selenium%selenium //vivid-test "cmd /C taskkill /PID '.$pid.' /F"';
             echo "$cmd\n";
