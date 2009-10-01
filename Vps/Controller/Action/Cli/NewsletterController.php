@@ -20,7 +20,7 @@ class Vps_Controller_Action_Cli_NewsletterController extends Vps_Controller_Acti
                 'valueOptional' => true,
             ),
             array(
-                'param'=> 'debugOutput',
+                'param'=> 'debug',
                 'value'=> true,
                 'valueOptional' => true,
             )
@@ -30,7 +30,7 @@ class Vps_Controller_Action_Cli_NewsletterController extends Vps_Controller_Acti
     public function indexAction()
     {
         $model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_Model');
-        $model->send($this->_getParam('timeLimit'), $this->_getParam('mailsPerMinute'), $this->_getParam('debugOutput'));
+        $model->send($this->_getParam('timeLimit'), $this->_getParam('mailsPerMinute'), $this->_getParam('debug'));
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }
