@@ -151,7 +151,7 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
 
     /*
     TODO
-    public function duplicate($data = array())
+    public function duplicate(array $data = array())
     {
         $new = parent::duplicate($data);
         if (file_exists($this->getFileSource())) {
