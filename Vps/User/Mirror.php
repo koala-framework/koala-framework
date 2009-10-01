@@ -3,7 +3,6 @@ final class Vps_User_Mirror extends Vps_Model_MirrorCache
 {
     protected $_syncTimeField = 'last_modified';
     protected $_rowClass = 'Vps_User_MirrorRow';
-    protected $_lockTables = false;
 
     protected function _init()
     {

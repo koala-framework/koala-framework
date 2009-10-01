@@ -2,7 +2,6 @@
 class Vps_Model_MirrorCache extends Vps_Model_Proxy
 {
     protected $_rowClass = 'Vps_Model_MirrorCache_Row';
-    protected $_lockTables = true;
 
     protected $_sourceModel;
     protected $_syncTimeField;
@@ -34,27 +33,25 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         return $this->_sourceModel;
     }
 
-    public function getLockTables()
-    {
-        return $this->_lockTables;
-    }
-
     public function countRows($where = array())
     {
         $this->synchronize();
-        return parent::countRows($where);
+        $ret = parent::countRows($where);
+        return $ret;
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
         $this->synchronize();
-        return parent::getIds($where, $order, $limit, $start);
+        $ret = parent::getIds($where, $order, $limit, $start);
+        return $ret;
     }
 
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
         $this->synchronize();
-        return parent::getRows($where, $order, $limit, $start);
+        $ret = parent::getRows($where, $order, $limit, $start);
+        return $ret;
     }
 
     /**
@@ -165,6 +162,9 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         if ($select !== false) {
             $this->getProxyModel()->import($format, $r['export'], array('replace' => true));
         }
+        $this->getProxyModel()->import(self::FORMAT_ARRAY,
+            array($r['updateRow']),
+            array('replace' => true));
         return $r['updateRow'];
     }
 
@@ -182,6 +182,9 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         if ($select !== false) {
             $this->getProxyModel()->import($format, $r['export'], array('replace' => true));
         }
+        $this->getProxyModel()->import(self::FORMAT_ARRAY,
+            array($r['insertRow']),
+            array('replace' => true));
         return $r['insertRow'];
     }
 }
