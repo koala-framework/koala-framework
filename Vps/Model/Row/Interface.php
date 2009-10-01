@@ -7,8 +7,8 @@ interface Vps_Model_Row_Interface
     public function __set($name, $value);
     public function save();
     public function delete();
+    public function duplicate(array $data = array());
     public function toArray();
-    public function duplicate();
     public function setSiblingRows(array $rows);
     public function getChildRows($rule, $select = array());
     public function createChildRow($rule, array $data = array());

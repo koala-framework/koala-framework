@@ -372,17 +372,13 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $row->value);
 
         // duplicate a not yet saved, duplicated row
-        $rowFirst = $model->getRow(1)->duplicate();
+        $rowFirst = $model->getRow(1)->duplicate(array('value' => 'bla'));
         $rowSecond = $rowFirst->duplicate();
-        $rowSecond->save();
 
-        $rowFirst->value = 'bla';
-        $rowFirst->save();
-
-        $this->assertEquals(5, $rowSecond->id);
-        $this->assertEquals('foo', $rowSecond->value);
-
-        $this->assertEquals(6, $rowFirst->id);
+        $this->assertEquals(5, $rowFirst->id);
         $this->assertEquals('bla', $rowFirst->value);
+
+        $this->assertEquals(6, $rowSecond->id);
+        $this->assertEquals('bla', $rowSecond->value);
     }
 }
