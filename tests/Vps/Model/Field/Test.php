@@ -162,10 +162,9 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
         $row->blub2 = 'blub2';
         $row->save();
 
-        $row = $row->duplicate();
-        $row->save();
+        $row = $row->duplicate(array('blub2' => 'xxx'));
         $this->assertEquals($row->foo1, 'foo1');
         $this->assertEquals($row->blub, 'blub');
-        $this->assertEquals($row->blub2, 'blub2');
+        $this->assertEquals($row->blub2, 'xxx');
     }
 }

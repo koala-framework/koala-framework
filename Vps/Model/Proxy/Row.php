@@ -87,4 +87,13 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
         );
         return $ret;
     }
+
+    protected function _toArrayWithoutPrimaryKeys()
+    {
+        $ret = $this->_row->_toArrayWithoutPrimaryKeys();
+        foreach ($this->_getSiblingRows() as $r) {
+            $ret = array_merge($r->_toArrayWithoutPrimaryKeys(), $ret);
+        }
+        return $ret;
+    }
 }
