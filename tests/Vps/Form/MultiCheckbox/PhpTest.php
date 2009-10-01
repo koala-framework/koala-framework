@@ -14,9 +14,9 @@ class Vps_Form_MultiCheckbox_PhpTest extends PHPUnit_Framework_TestCase
         ));
 
         $post = array(
-            $mcb->getFieldName().'1' => 0,
-            $mcb->getFieldName().'2' => 1,
-            $mcb->getFieldName().'3' => 1
+            $mcb->getFieldName().'_1' => 0,
+            $mcb->getFieldName().'_2' => 1,
+            $mcb->getFieldName().'_3' => 1
         );
         $post = $form->processInput($form->getRow(), $post);
         $form->validate($form->getRow(), $post);
@@ -47,9 +47,9 @@ class Vps_Form_MultiCheckbox_PhpTest extends PHPUnit_Framework_TestCase
         ));
 
         $post = array(
-            $mcb->getFieldName().'1' => 1,
-            $mcb->getFieldName().'2' => 0,
-            $mcb->getFieldName().'3' => 0
+            $mcb->getFieldName().'_1' => 1,
+            $mcb->getFieldName().'_2' => 0,
+            $mcb->getFieldName().'_3' => 0
         );
         $post = $form->processInput($form->getRow(), $post);
         $form->validate($form->getRow(), $post);
