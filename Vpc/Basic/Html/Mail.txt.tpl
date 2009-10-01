@@ -1,1 +1,1 @@
-<?= strip_tags($this->content); ?>
+<?=strip_tags($this->content);?>
