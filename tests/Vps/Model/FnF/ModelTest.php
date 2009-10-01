@@ -366,7 +366,6 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
 
         // duplicate a duplicated row
         $row = $row->duplicate();
-        $row->save();
 
         $this->assertEquals(4, $row->id);
         $this->assertEquals('bar', $row->value);
