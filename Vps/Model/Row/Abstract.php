@@ -190,7 +190,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         }
     }
 
-    public function duplicate($data = array())
+    public function duplicate(array $data = array())
     {
         $data = array_merge($this->toArray(), $data);
         unset($data[$this->getModel()->getPrimaryKey()]);
