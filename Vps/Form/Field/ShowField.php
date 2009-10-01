@@ -21,7 +21,7 @@ class Vps_Form_Field_ShowField extends Vps_Form_Field_SimpleAbstract
 
         $ret['html'] = '&nbsp;';
         if (isset($values[$name]) && $values[$name] != '') {
-            $ret['html'] = $values[$name];
+            $ret['html'] = '<span class="fieldContent">'.$values[$name].'</span>';
         }
         return $ret;
     }
