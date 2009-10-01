@@ -30,9 +30,9 @@ class Vpc_Basic_Text_Generator extends Vps_Component_Generator_Table
         if ($source->generator != $this) {
             throw new Vps_Exception("you must call this only with the correct source");
         }
-        $newRow = $source->row->duplicate();
-        $newRow->component_id = $parentTarget->dbId;
-        $newRow->save();
+        $newRow = $source->row->duplicate(array(
+            'component_id' => $parentTarget->dbId
+        ));
         $id = '-' . substr($newRow->component, 0, 1) . $newRow->nr;
         $target = $parentTarget->getChildComponent($id);
         Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);

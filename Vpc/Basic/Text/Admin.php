@@ -26,8 +26,6 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
             return;
         }
 
-        $newRow = $source->getComponent()->getRow()->duplicate();
-        $newRow->component_id = $target->dbId;
         $idMap = array();
 
         foreach ($source->getChildComponents(array('inherit' => false)) as $c) {
@@ -50,7 +48,10 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
                 $content .= "<a href=\"".$idMap[$p['componentId']]->dbId."\">";
             }
         }
-        $newRow->content = $content;
-        $newRow->save();
+
+        $source->getComponent()->getRow()->duplicate(array(
+            'component_id' => $target->dbId,
+            'content'      => $content
+        ));
     }
 }
