@@ -2,7 +2,8 @@
 .$cssClass .form_city {
     clear: none;
 }
-.$cssClass form .vpsField label {
+.$cssClass form .vpsField label,
+.$cssClass form .vpsField span.fieldContent {
     line-height: 20px;
     clear: both;
 }
