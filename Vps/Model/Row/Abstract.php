@@ -414,17 +414,4 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         }
         return false;
     }
-
-    public function duplicate()
-    {
-        $primaryKey = $this->getModel()->getPrimaryKey();
-        $newRow = $this->getModel()->createRow();
-
-        foreach ($this->toArray() as $k => $v) {
-            if ($k == $primaryKey) continue;
-            $newRow->$k = $v;
-        }
-
-        return $newRow;
-    }
 }
