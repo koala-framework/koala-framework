@@ -1,1 +1,1 @@
-<div class="<?=$this->cssClass?>"><?=$this->image($this->data, 'default', '', array('border' => 0))?></div>
+<?=$this->image($this->data, 'default', '', array('border' => 0))?>
