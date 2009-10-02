@@ -45,6 +45,7 @@ class Vpc_Newsletter_Controller extends Vpc_Directories_Item_Directory_Controlle
 
             $newDetailRow = $newDetail->row;
             $newDetailRow->create_date = date('Y-m-d H:i:s');
+            $newDetailRow->status = null;
             $newDetailRow->save();
 
             $mailRow = $newDetail->getChildComponent('-mail')->getComponent()->getRow();
