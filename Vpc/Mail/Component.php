@@ -217,6 +217,12 @@ class Vpc_Mail_Component extends Vpc_Abstract
 
     public function addImage(Zend_Mime_Part $image)
     {
-        $this->_images[] = $image;
+        // Bild nur hinzufügen wenn dasselbe nicht bereits hinzugefügt wurde.
+        // wenns das bild schon gibt, hat es eh die gleiche cid
+        $found = false;
+        foreach ($this->_images as $addedImg) {
+            if ($image == $addedImg) $found = true;
+        }
+        if ($found === false) $this->_images[] = $image;
     }
 }
