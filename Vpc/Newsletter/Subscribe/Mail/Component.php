@@ -26,4 +26,9 @@ class Vpc_Newsletter_Subscribe_Mail_Component extends Vpc_Mail_Component
         $ret = array_merge($ret, $this->getMailData());
         return $ret;
     }
+
+    public function getSubject(Vpc_Mail_Recipient_Interface $recipient = null)
+    {
+        return trlVps('Newsletter subscription');
+    }
 }
