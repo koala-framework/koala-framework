@@ -269,7 +269,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     public function duplicateChild($source, $parentTarget)
     {
-        if ($source->generator != $this) {
+        if ($source->generator !== $this) {
             throw new Vps_Exception("you must call this only with the correct source");
         }
 

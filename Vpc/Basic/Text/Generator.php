@@ -27,7 +27,7 @@ class Vpc_Basic_Text_Generator extends Vps_Component_Generator_Table
 
     public function duplicateChild($source, $parentTarget)
     {
-        if ($source->generator != $this) {
+        if ($source->generator !== $this) {
             throw new Vps_Exception("you must call this only with the correct source");
         }
         $newRow = $source->row->duplicate(array(
