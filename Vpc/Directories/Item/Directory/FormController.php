@@ -10,7 +10,7 @@ class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Actio
                 $this->_getParam('class'), '-detail', $this->_getParam('class'));
         $this->_form->setIdTemplate(null);
 
-        $this->_form->setModel(Vpc_Abstract::createModel($this->_getParam('class')));
+        $this->_form->setModel(Vpc_Abstract::createChildModel($this->_getParam('class')));
 
         $classes = Vpc_Abstract::getChildComponentClasses($this->_getParam('class'));
         foreach ($classes as $class) {
