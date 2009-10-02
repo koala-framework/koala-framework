@@ -126,7 +126,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
 
     public function duplicateChild($source, $parentTarget)
     {
-        if ($source->generator != $this) {
+        if ($source->generator !== $this) {
             throw new Vps_Exception("you must call this only with the correct source");
         }
         $id = $this->_idSeparator . array_pop(explode($this->_idSeparator, $source->componentId));
