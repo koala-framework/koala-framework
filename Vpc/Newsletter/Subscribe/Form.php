@@ -26,7 +26,7 @@ class Vpc_Newsletter_Subscribe_Form extends Vps_Form
             ->setWidth(255)
             ->setVtype('email')
             ->setAllowBlank(false)
-            ->addValidator(new Vps_Validate_Row_Unique());
+            ->addValidator(new Vpc_Newsletter_Subscribe_ValidateUnique());
         $this->add(new Vps_Form_Field_Radio('format', trlVps('Format')))
             ->setAllowBlank(false)
             ->setValues(array(

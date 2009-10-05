@@ -36,6 +36,15 @@ class Vpc_Newsletter_Subscribe_Component extends Vpc_Form_Component
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
+
+        // if there is already an unsubscribed row, delete the old one
+        $m = $row->getModel();
+        $oldRow = $m->getRow($m->select()
+            ->whereEquals('email', $row->email)
+            ->whereEquals('unsubscribed', 1)
+        );
+        if ($oldRow) $oldRow->delete();
+
         $row->subscribe_date = date('Y-m-d H:i:s');
         if ($this->_getSetting('subscribeType') == self::CONFIRM_MAIL_ONLY) {
             $row->unsubscribed = 0;

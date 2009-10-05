@@ -38,14 +38,14 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
         foreach ($source->getComponent()->getRow()->getContentParts() as $p) {
             if (is_string($p)) {
                 $content .= $p;
-            } else if ($p['type'] == 'image' && isset($idMap[$p['componentId']])) {
-                $imageComponent = $idMap[$p['componentId']]->getComponent();
+            } else if ($p['type'] == 'image') {
+                $imageComponent = $idMap[$source->dbId.'-'.substr($p['type'], 0, 1).$p['nr']]->getComponent();
                 $dimension = $imageComponent->getImageDimensions();
                 $content .= "<img src=\"".$imageComponent->getImageUrl()."\" ".
                             "width=\"$dimension[width]\" ".
                             "height=\"$dimension[height]\" />";
-            } else if (($p['type'] == 'link' || $p['type'] == 'download') && isset($idMap[$p['componentId']])) {
-                $content .= "<a href=\"".$idMap[$p['componentId']]->dbId."\">";
+            } else if (($p['type'] == 'link' || $p['type'] == 'download')) {
+                $content .= "<a href=\"".$idMap[$source->dbId.'-'.substr($p['type'], 0, 1).$p['nr']]->dbId."\">";
             }
         }
 
