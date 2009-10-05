@@ -226,4 +226,12 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $entries = $feed->getChildRows('Entries', $s);
         $this->assertEquals(50, count($entries));
     }
+
+    public function testHub()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://aseigo.blogspot.com/feeds/posts/default');
+        $this->assertNotEquals('', $feed->hub);
+        file_get_contents($feed->hub); //check if valid url
+    }
 }
