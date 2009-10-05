@@ -378,6 +378,7 @@ class Vps_Setup
             && isset($_SERVER['REDIRECT_URL'])
             && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
+            && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
         ) {
             $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
