@@ -9,7 +9,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         $data['url'] = $config['url'];
         $encoding = false;
 
-        if (substr($data['url'], 0, 7)=='file://') {
+        if (substr($data['url'], 0, 7)=='file://' || substr($data['url'], 0, 6)=='php://') {
             $str = file_get_contents($data['url']);
         } else {
             $response = $config['model']->getHttpRequestor()->request($data['url']);
@@ -18,9 +18,9 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             }
             $str = $response->getBody();
         }
-	if (!$str) {
-	    throw new Vps_Exception("Can't load feed '$data[url]', response is empty");
-	}
+        if (!$str) {
+            throw new Vps_Exception("Can't load feed '$data[url]', response is empty");
+        }
         $originalContent = $str;
         $str = trim($str);
         if (preg_match('#<?xml[^>]* encoding=["\']([^"\']*)["\']#', $str, $m)) {
@@ -84,6 +84,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             throw new Vps_Exception("Can't load feed '$data[url]', unknown format: ".$originalContent);
         }
         $data['encoding'] = $encoding;
+        $data['hub'] = null;
         if ($data['format'] == self::FORMAT_RSS) {
             $data['title'] = (string)$this->_xml->channel->title;
             $data['link'] = (string)$this->_xml->channel->link;
@@ -92,8 +93,16 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             $data['title'] = (string)$this->_xml->title;
             $data['link'] = null;
             foreach ($this->_xml->link as $link) {
-                if ($link['href'] && $link['rel'] != 'self') {
+                if (!$link['href']) continue;
+                if ($link['rel'] != 'self') {
                     $data['link'] = (string)$link['href'];
+                    break;
+                }
+            }
+            foreach ($this->_xml->link as $link) {
+                if (!$link['href']) continue;
+                if ($link['rel'] == 'hub') {
+                    $data['hub'] = (string)$link['href'];
                     break;
                 }
             }
