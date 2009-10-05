@@ -294,7 +294,7 @@ class Vps_Setup
         $ip = get_include_path();
         foreach ($config->includepath as $t=>$p) {
             if ($t == 'phpunit') {
-                //vorne anhängen damit er vorrang vor /usr/share/php hat
+                //vorne anhï¿½ngen damit er vorrang vor /usr/share/php hat
                 $ip = $p . PATH_SEPARATOR . $ip;
             } else {
                 $ip .= PATH_SEPARATOR . $p;
@@ -374,13 +374,11 @@ class Vps_Setup
             exit;
         }
 
-        if (php_sapi_name() != 'cli' && $config->preLogin && !isset($_COOKIE['unitTest'])
+        if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
-             && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/vps/test/'
-             && substr($_SERVER['REDIRECT_URL'], 0, 13) != '/vps/webtest/'
-             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' /*hack fÃ¼r rssinclude-test*/
-             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
-             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
+            && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
+            && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
+            && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
         ) {
             $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
             if (empty($sessionPhpAuthed->success)) {
