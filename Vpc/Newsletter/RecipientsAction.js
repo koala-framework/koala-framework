@@ -1,6 +1,6 @@
-Ext.ns('Vpc.Newsletter.Detail');
+Ext.ns('Vpc.Newsletter');
 
-Vpc.Newsletter.Detail.RecipientsAction = Ext.extend(Ext.Action, {
+Vpc.Newsletter.RecipientsAction = Ext.extend(Ext.Action, {
 	constructor: function(config){
 		config = Ext.apply({
             icon    : '/assets/silkicons/database_save.png',
@@ -28,6 +28,6 @@ Vpc.Newsletter.Detail.RecipientsAction = Ext.extend(Ext.Action, {
                 });
             }
         }, config);
-		Vpc.Newsletter.Detail.RecipientsAction.superclass.constructor.call(this, config);
+		Vpc.Newsletter.RecipientsAction.superclass.constructor.call(this, config);
 	}
 });
