@@ -58,6 +58,15 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
             }
         }
         $data['date'] = $date;
+
+        if ($xml->id) {
+            $data['id'] = (string)$xml->id;
+        } else if ($xml->guid) {
+            $data['id'] = (string)$xml->guid;
+        } else {
+            $data['id'] = $data['link'];
+        }
+
         $config['data'] = $data;
 
         parent::__construct($config);
