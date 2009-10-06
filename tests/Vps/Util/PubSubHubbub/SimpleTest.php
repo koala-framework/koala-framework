@@ -16,15 +16,17 @@ class Vps_Util_PubSubHubbub_SimpleTest extends Vps_Util_PubSubHubbub_AbstractTes
 
         $this->_runHubTasks('subscriptions');
         $this->_runHubTasks('mappings');
+        $this->assertFeedRequested(1);
 
         $this->_writeTestFeedContent(2);
         $this->_publishTestFeedUpdate();
 
         $this->_runHubTasks('feed-pulls');
         $this->_runHubTasks('event-delivery');
+        $this->assertFeedRequested(2);
 
         $newC = file_get_contents('/tmp/lastCallback'.$this->_testId);
-        $this->assertTrue(strpos($newC, '<title>blub1</title>') !== false);
-        $this->assertEquals(1, substr_count($newC, '<entry>'));
+        $this->assertTrue(strpos($newC, '<title>blub2</title>') !== false);
+        //$this->assertEquals(1, substr_count($newC, '<entry>'));
     }
 }
