@@ -1,34 +1,52 @@
 #!/usr/bin/php
 <?php
-if (file_exists('../vps-trunk-clean')) {
-    $mergeTo = '../vps-trunk-clean';
-} else {
-	$mergeTo = '../vps';
+$mergeToArray = array();
+
+$xml = new SimpleXMLElement(`svn info --xml`);
+$ownUrl = (string)$xml->entry->url;
+var_dump($ownUrl);
+if (preg_match('#branches/vps/1\\.6#', $ownUrl)) {
+	if (file_exists('../vps-1.7')) {
+		$mergeToArray[] = '../vps-1.7';
+	} else {
+		$mergeToArray[] = '../vps1.7';
+	}
 }
 
-if (!file_exists($mergeTo)) die("$mergeTo does not exist");
-$cmd = "svn st --xml -u $mergeTo";
-exec($cmd, $out, $ret);
-if ($ret) die("Failed checking for modified files");
-$xml = new SimpleXMLElement(implode('', $out));
-if (!$xml) die("Failed checking for modified files");
-$files = array();
-foreach ($xml->target->entry as $e) {
-    $files[(string)$e->{'wc-status'}['item']][] = (string)$e['path'];
+if (file_exists('../vps-trunk-clean')) {
+    $mergeToArray[] = '../vps-trunk-clean';
+} else {
+	$mergeToArray[] = '../vps';
 }
-if ($files) {
-    if (!isset($files['normal']) || count($files) > 1) {
-        echo "working copy contains ";
-        foreach ($files as $status=>$f) {
-            if ($status == 'normal') continue;
-            echo count($f)." $status ";
-        }
-        echo "files\n";
-    }
-    if (isset($files['normal'])) {
-        echo "working copy is not up to date\n";
-    }
-    die("You must not have modified files in '$mergeTo'\n");
+
+echo "Merge nach: ".implode(', ', $mergeToArray)."\n";
+
+foreach ($mergeToArray as $mergeTo) {
+	if (!file_exists($mergeTo)) die("$mergeTo does not exist");
+	$cmd = "svn st --xml -u $mergeTo";
+	$out = array();
+	exec($cmd, $out, $ret);
+	if ($ret) die("Failed checking for modified files");
+	$xml = new SimpleXMLElement(implode('', $out));
+	if (!$xml) die("Failed checking for modified files");
+	$files = array();
+	foreach ($xml->target->entry as $e) {
+	    $files[(string)$e->{'wc-status'}['item']][] = (string)$e['path'];
+	}
+	if ($files) {
+	    if (!isset($files['normal']) || count($files) > 1) {
+	        echo "working copy contains ";
+	        foreach ($files as $status=>$f) {
+	            if ($status == 'normal') continue;
+	            echo count($f)." $status ";
+	        }
+	        echo "files\n";
+	    }
+	    if (isset($files['normal'])) {
+	        echo "working copy is not up to date\n";
+	    }
+	    die("You must not have modified files in '$mergeTo'\n");
+	}
 }
 
 $validOptions = array('m');
@@ -61,18 +79,25 @@ foreach ($files as $i) {
     $cmd .= ' '.escapeshellarg($i);
 }
 $cmd .= " --message=".escapeshellarg($options['message']);
+echo "$cmd\n";
 system($cmd, $ret);
 if ($ret) exit(1);
 
-$xml = new SimpleXMLElement(`svn info --xml`);
-$url = (string)$xml->entry->url;
-
-chdir($mergeTo);
-$cmd = "svn merge $url";
-system($cmd, $ret);
-if ($ret) exit(1);
-
-$cmd = "svn commit";
-$cmd .= " --message=".escapeshellarg('merged '.$options['message']);
-system($cmd, $ret);
-if ($ret) exit(1);
+$ownDir = getcwd();
+foreach ($mergeToArray as $mergeTo) {
+	$xml = new SimpleXMLElement(`svn info --xml`);
+	$url = (string)$xml->entry->url;
+	chdir($ownDir);
+	chdir($mergeTo);
+	echo "chdir $mergeTo\n";
+	$cmd = "svn merge $url";
+	echo "$cmd\n";
+	system($cmd, $ret);
+	if ($ret) exit(1);
+	
+	$cmd = "svn commit";
+	$cmd .= " --message=".escapeshellarg('merged '.$options['message']);
+	echo "$cmd\n";
+	system($cmd, $ret);
+	if ($ret) exit(1);
+}
