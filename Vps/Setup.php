@@ -130,12 +130,12 @@ function bt($file = false)
     require_once 'Vps/Debug.php';
     if (!Vps_Debug::isEnabled()) return;
     $bt = debug_backtrace();
-    unset($bt[0]);
     if (php_sapi_name() == 'cli' || $file) {
         $ret = '';
         foreach ($bt as $i) {
-            if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') continue;
-            if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') continue;
+            if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') break;
+            if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') break;
+            if (isset($i['file']) && substr($i['file'], 0, 16) == '/www/public/niko/phpunit') break;
             $ret .=
                 (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
                 (isset($i['line']) ? $i['line'] : '?') . ' - ' .
@@ -151,6 +151,7 @@ function bt($file = false)
             echo $ret;
         }
     } else {
+        unset($bt[0]);
         $out = array(array('File', 'Line', 'Function', 'Args'));
         foreach ($bt as $i) {
             $out[] = array(
