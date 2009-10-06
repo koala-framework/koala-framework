@@ -39,11 +39,13 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
 
         $this->_testId = rand(0, 1000000);
         touch('/tmp/lastCallback'.$this->_testId);
-        $this->_writeTestFeedContent(1);
+        file_put_contents('/tmp/feedRequested'.$this->_testId, 0);
 
         $domain = Vps_Registry::get('config')->server->domain;
         $urlPrefix = 'http://'.$domain.'/vps/test';
         $this->_testFeedUrl = $urlPrefix.'/vps_util_pub-sub-hubbub_test-feed?id='.$this->_testId;
+
+        $this->_writeTestFeedContent(1);
 
         sleep(1);
         $status = proc_get_status($this->_hubApp);
@@ -52,14 +54,20 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
 
     public function tearDown()
     {
-//         unlink('/tmp/feed'.$this->_testId);
+        unlink('/tmp/feed'.$this->_testId);
         unlink('/tmp/lastCallback'.$this->_testId);
+        unlink('/tmp/feedRequested'.$this->_testId);
 
         proc_terminate($this->_hubApp, SIGTERM);
         do {
             $status = proc_get_status($this->_hubApp);
             sleep(1);
         } while ($status['running']);
+    }
+
+    protected function assertFeedRequested($num)
+    {
+        $this->assertEquals($num, file_get_contents('/tmp/feedRequested'.$this->_testId));
     }
 
     protected function _writeTestFeedContent($entries, $advertiseHub = true)
@@ -83,16 +91,16 @@ if ($advertiseHub) {
     $ret .= '    <link rel="hub" href="'.$this->_hubUrl.'/" />
 ';
 }
-$ret .= '    <id>http://niko.vps:8081/atom/stream/niko</id>
+$ret .= '    <id>'.$this->_testFeedUrl.'</id>
     <author><name>niko</name></author>
 ';
 for ($i=$entries;$i>0;$i--) {
 $ret .= '    <entry>
         <title>blub'.$i.'</title>
-        <id>http://niko.vps:8081/notice/79b8ea34-f52d-4b3b-8391-41152da11749</id>
-        <link href="http://niko.vps:8081/notice/79b8ea34-f52d-4b3b-8391-41152da11749" />
+        <id>'.$this->_testFeedUrl.'/'.$i.'</id>
+        <link href="'.$this->_testFeedUrl.'/'.$i.'" />
         <summary>bleb'.$i.'</summary>
-        <updated>2009-10-'.($i).'T10:23:24+01:00</updated>
+        <updated>2009-10-0'.($i).'T10:23:24+01:00</updated>
     </entry>';
 }
 $ret .= '
