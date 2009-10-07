@@ -110,7 +110,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
                     throw new Vps_Exception($exception);
                 }
             }
-            $this->assertTextNotPresent('regexp:Seite wurde nicht gefunden|was not found on this server|Exception|Fatal error|Parse error');
+            $this->assertTextNotPresent('regexp:File not found|Seite wurde nicht gefunden|was not found on this server|Exception|Fatal error|Parse error');
             $this->assertTitleNotContains('Internal Server Error');
         }
     }
