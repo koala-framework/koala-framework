@@ -1,6 +1,7 @@
 <?php
 /**
  * @group PubSubHubbub
+ * @group slow
  */
 class Vps_Util_PubSubHubbub_SimpleTest extends Vps_Util_PubSubHubbub_AbstractTest
 {

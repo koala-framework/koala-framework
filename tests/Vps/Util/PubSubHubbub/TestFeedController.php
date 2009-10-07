@@ -8,6 +8,8 @@ class Vps_Util_PubSubHubbub_TestFeedController extends Vps_Controller_Action
 
         $c = file_get_contents('/tmp/feed'.(int)$this->_getParam('id'));
 
+        //file_put_contents('application/log/feedFetch'.date('H:i:s').uniqid(), print_r($_SERVER, true));
+
         if ($this->_getParam('etlm')) {
             Vps_Media_Output::output(array(
                 'contents' => $c,
