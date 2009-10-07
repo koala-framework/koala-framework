@@ -8,6 +8,8 @@ var_dump($ownUrl);
 if (preg_match('#branches/vps/1\\.6#', $ownUrl)) {
 	if (file_exists('../vps-1.7')) {
 		$mergeToArray[] = '../vps-1.7';
+    } else if (file_exists('../1.7')) {
+        $mergeToArray[] = '../1.7';
 	} else {
 		$mergeToArray[] = '../vps1.7';
 	}
@@ -15,6 +17,8 @@ if (preg_match('#branches/vps/1\\.6#', $ownUrl)) {
 
 if (file_exists('../vps-trunk-clean')) {
     $mergeToArray[] = '../vps-trunk-clean';
+} else if (file_exists('../trunk')) {
+    $mergeToArray[] = '../trunk';
 } else {
 	$mergeToArray[] = '../vps';
 }
