@@ -1,6 +1,6 @@
 <?php
 /**
- * @group 
+ * @group slow
  */
 class Vps_Test_SeleniumTestCase_CookieTest extends Vps_Test_SeleniumTestCase
 {
