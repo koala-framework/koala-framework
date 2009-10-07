@@ -88,17 +88,17 @@ $ret = '<feed xmlns="http://www.w3.org/2005/Atom">
     <title>niko\'s stream</title>
 ';
 if ($advertiseHub) {
-    $ret .= '    <link rel="hub" href="'.$this->_hubUrl.'/" />
+    $ret .= '    <link rel="hub" href="'.htmlspecialchars($this->_hubUrl).'/" />
 ';
 }
-$ret .= '    <id>'.$this->_testFeedUrl.'</id>
+$ret .= '    <id>'.htmlspecialchars($this->_testFeedUrl).'</id>
     <author><name>niko</name></author>
 ';
 for ($i=$entries;$i>0;$i--) {
 $ret .= '    <entry>
         <title>blub'.$i.'</title>
-        <id>'.$this->_testFeedUrl.'/'.$i.'</id>
-        <link href="'.$this->_testFeedUrl.'/'.$i.'" />
+        <id>'.htmlspecialchars($this->_testFeedUrl).'/'.$i.'</id>
+        <link href="'.htmlspecialchars($this->_testFeedUrl).'/'.$i.'" />
         <summary>bleb'.$i.'</summary>
         <updated>2009-10-0'.($i).'T10:23:24+01:00</updated>
     </entry>';
