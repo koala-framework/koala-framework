@@ -3,6 +3,7 @@
         <tr>
             <? if ($this->image) { ?>
                 <td><?=$this->component($this->image)?></td>
+                <td width="5">&nbsp;</td>
             <? } ?>
             <td><?=$this->component($this->text)?></td>
         </tr>
@@ -10,7 +11,8 @@
         <tr>
             <td><?=$this->component($this->text)?></td>
             <? if ($this->image) { ?>
-                <td align="right"><?=$this->component($this->image)?></td>
+                <td width="5">&nbsp;</td>
+                <td><?=$this->component($this->image)?></td>
             <? } ?>
         </tr>
     <? } ?>
