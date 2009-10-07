@@ -74,7 +74,11 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
                 $versions[] = "$m[1].".($m[2]+1).".0";
                 $versions[] = ($m[1]+1).".0.0";
             } else {
-                $versions = $maxVersion;
+                if ($maxVersion) {
+                    $versions[] = $maxVersion;
+                } else {
+                    $versions[] = '1.0.0';
+                }
             }
             $ret['webVersion'] = array(
                 'param'=> 'web-version',
