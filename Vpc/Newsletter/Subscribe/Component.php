@@ -14,6 +14,7 @@ class Vpc_Newsletter_Subscribe_Component extends Vpc_Form_Component
         $ret['componentName'] = trl('Newsletter subscribing');
         $ret['placeholder']['submitButton'] = trlVps('Subscribe the newsletter');
         $ret['subscribeType'] = self::CONFIRM_MAIL_ONLY;
+        $ret['flags']['hasResources'] = true;
 
         $ret['generators']['child']['component']['mail'] = 'Vpc_Newsletter_Subscribe_Mail_Component';
         $ret['generators']['child']['component']['doubleOptIn'] = 'Vpc_Newsletter_Subscribe_DoubleOptIn_Component';

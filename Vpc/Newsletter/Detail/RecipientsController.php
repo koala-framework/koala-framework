@@ -1,47 +1,7 @@
 <?php
-class Vpc_Newsletter_Detail_RecipientsController extends Vps_Controller_Action_Auto_Grid
+class Vpc_Newsletter_Detail_RecipientsController extends Vpc_Newsletter_Subscribe_RecipientsController
 {
     protected $_buttons = array('add', 'delete', 'saveRecipients');
-    protected $_sortable = true;
-    protected $_defaultOrder = 'id';
-    protected $_paging = 20;
-    protected $_queryFields = array('id', 'email', 'firstname', 'lastname');
-
-    public function preDispatch()
-    {
-        $this->_model = Vps_Model_Abstract::getInstance('Vpc_Newsletter_Subscribe_Model');
-        parent::preDispatch();
-    }
-
-    protected function _initColumns()
-    {
-        parent::_initColumns();
-        $this->_filters['text'] = array(
-            'type'=>'TextField',
-            'width' => 85
-        );
-
-        $this->_columns->add(new Vps_Grid_Column_Button('edit', trlVps('Edit')));
-        $this->_columns->add(new Vps_Grid_Column('email', trlVps('Email'), 200));
-        $this->_columns->add(new Vps_Grid_Column('gender', trlVps('Gender'), 70))
-            ->setRenderer('genderIcon');
-
-        $this->_columns->add(new Vps_Grid_Column('title', trlVps('Title'), 80));
-        $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('First name'), 110));
-        $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Last name'), 110));
-
-        $this->_columns->add(new Vps_Grid_Column('subscribe_date', trlVps('Subscribe date'), 110));
-
-        $this->_columns->add(new Vps_Grid_Column('is_active', trlVps('Active?'), 80))
-            ->setData(new Vpc_Newsletter_Detail_IsActiveData());
-    }
-
-    public function indexAction()
-    {
-        parent::indexAction();
-        $this->view->xtype = 'vpc.newsletter.recipientsPanel';
-        $this->view->model = get_class($this->_model);
-    }
 
     public function jsonSaveRecipientsAction()
     {
