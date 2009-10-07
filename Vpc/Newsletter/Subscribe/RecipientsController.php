@@ -1,5 +1,5 @@
 <?php
-class Vpc_Newsletter_RecipientsController extends Vps_Controller_Action_Auto_Grid
+class Vpc_Newsletter_Subscribe_RecipientsController extends Vps_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('add', 'delete');
     protected $_sortable = true;
@@ -39,9 +39,7 @@ class Vpc_Newsletter_RecipientsController extends Vps_Controller_Action_Auto_Gri
     public function indexAction()
     {
         parent::indexAction();
-        $c = Vps_Component_Data_Root::getInstance()
-            ->getComponentById($this->_getParam('componentId'));
-        $formControllerUrl = Vpc_Admin::getInstance($c->componentClass)
+        $formControllerUrl = Vpc_Admin::getInstance($this->_getParam('class'))
             ->getControllerUrl('Recipient');
 
         $this->view->formControllerUrl = $formControllerUrl;

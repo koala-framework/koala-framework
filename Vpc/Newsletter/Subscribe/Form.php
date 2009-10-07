@@ -22,11 +22,14 @@ class Vpc_Newsletter_Subscribe_Form extends Vps_Form
         $this->add(new Vps_Form_Field_TextField('lastname', trlVps('Lastname')))
             ->setWidth(255)
             ->setAllowBlank(false);
+
+        $validator = new Vps_Validate_Row_Unique();
+        $validator->addSelectExpr(new Vps_Model_Select_Expr_Equals('unsubscribed', 0));
         $this->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
             ->setWidth(255)
             ->setVtype('email')
             ->setAllowBlank(false)
-            ->addValidator(new Vpc_Newsletter_Subscribe_ValidateUnique());
+            ->addValidator($validator);
         $this->add(new Vps_Form_Field_Radio('format', trlVps('Format')))
             ->setAllowBlank(false)
             ->setValues(array(
