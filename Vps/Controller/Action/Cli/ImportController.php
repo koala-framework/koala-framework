@@ -132,7 +132,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
         }
 
-        if ($config->server->import->dirs) {
+        if ($config->server->import && $config->server->import->dirs) {
             foreach ($config->server->import->dirs as $dir) {
                 echo "importing $dir...\n";
                 $ig = simplexml_load_string(`svn propget --recursive --xml svn:ignore $dir`);
@@ -183,7 +183,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
             $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
 
-            if ($config->server->import->ignoreTables) {
+            if ($config->server->import && $config->server->import->ignoreTables) {
                 foreach ($config->server->import->ignoreTables as $t) {
                     if (substr($t, -1) == '*') {
                         foreach ($tables as $table) {
@@ -198,7 +198,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
 
             $keepTables = array();
-            if ($config->server->import->keepTables) {
+            if ($config->server->import && $config->server->import->keepTables) {
                 foreach ($config->server->import->keepTables as $t) {
                     if (substr($t, -1) == '*') {
                         foreach ($tables as $table) {
@@ -313,7 +313,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         echo "\n";
         */
 
-        if (!$ownConfig->server->import->ignoreRrd) {
+        if ($ownConfig->server->import && !$ownConfig->server->import->ignoreRrd) {
             echo "importiere rrds...\n";
             if ($ownConfig->server->host == $config->server->host) {
                 $cmd = "cd {$config->server->dir} && php bootstrap.php import get-rrd";
