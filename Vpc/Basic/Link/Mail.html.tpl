@@ -1,1 +1,3 @@
-<?=$this->component($this->linkTag)?><?=$this->text?><?=$this->ifHasContent($this->linkTag)?></a><?=$this->ifHasContent()?>
+<?=$this->component($this->linkTag)?>
+    <?=$this->text?>
+<?=$this->ifHasContent($this->linkTag)?></a><?=$this->ifHasContent()?>

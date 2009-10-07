@@ -1,7 +1,5 @@
-<div>
-    <ul>
-        <? foreach ($this->children as $child) { ?>
-            <li><?= $this->component($child); ?></li>
-        <? } ?>
-    </ul>
-</div>
+<ul>
+    <? foreach ($this->children as $child) { ?>
+        <li><?= $this->component($child); ?></li>
+    <? } ?>
+</ul>
