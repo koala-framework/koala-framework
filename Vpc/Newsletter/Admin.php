@@ -5,6 +5,11 @@ class Vpc_Newsletter_Admin extends Vpc_Directories_Item_Directory_Admin
     {
         parent::addResources($acl);
 
+        if (!$acl->has('vpc_newsletter')) {
+            $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_newsletter',
+                array('text'=>trlVps('Newsletter'), 'icon'=>'email_open_image.png')), 'vps_component_root');
+        }
+
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
@@ -12,16 +17,10 @@ class Vpc_Newsletter_Admin extends Vpc_Directories_Item_Directory_Admin
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
         $c = $components[0];
 
-        $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_newsletter',
-                    array('text'=>$name, 'icon'=>$icon)), 'vps_component_root');
-            $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
-                array('text'=>trlVps('Edit {0}', $name), 'icon'=>$icon),
-                Vpc_Admin::getInstance($c->componentClass)->getControllerUrl().'?componentId='.$c->dbId),
-            'vpc_newsletter');
-            $acl->add(new Vps_Acl_Resource_MenuUrl('vpc_'.$c->dbId.'_recipients',
-                array('text'=>trlVps('Recipients'), 'icon'=>new Vps_Asset('group.png')),
-                Vpc_Admin::getInstance($c->componentClass)->getControllerUrl('Recipients').'?componentId='.$c->dbId),
-            'vpc_newsletter');
+        $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
+            array('text'=>trlVps('Edit {0}', $name), 'icon'=>$icon),
+            Vpc_Admin::getInstance($c->componentClass)->getControllerUrl().'?componentId='.$c->dbId),
+        'vpc_newsletter');
     }
 
     protected function _getContentClass()
