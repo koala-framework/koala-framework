@@ -1,6 +1,5 @@
 <?php
 abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
-    implements Vps_Model_Interface_Id
 {
     protected $_rowClass = 'Vps_Model_Row_Data_Abstract';
 
