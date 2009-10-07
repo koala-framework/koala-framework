@@ -1,6 +1,5 @@
 <?php
 class Vps_Model_Db extends Vps_Model_Abstract
-    implements Vps_Model_Interface_Id
 {
     protected $_rowClass = 'Vps_Model_Db_Row';
     protected $_rowsetClass = 'Vps_Model_Db_Rowset';

@@ -145,6 +145,15 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $this->getRows($select)->current();
     }
 
+    public function getIds($where=null, $order=null, $limit=null, $start=null)
+    {
+        $ret = array();
+        foreach ($this->getRows($where, $order, $limit, $start) as $row) {
+            $ret[] = $row->{$this->getPrimaryKey()};
+        }
+        return $ret;
+    }
+
     public function countRows($select = array())
     {
         return count($this->getRows($select));

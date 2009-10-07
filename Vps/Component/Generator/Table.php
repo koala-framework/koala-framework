@@ -62,9 +62,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     public function getChildIds($parentData, $select = array())
     {
-        if (!$this->_getModel() instanceof Vps_Model_Interface_Id) {
-            throw new Vps_Exception('Model for getChildIds must implement Vps_Model_Interface_Id');
-        }
         $select = $this->_formatSelect($parentData, $select);
         return $this->_getModel()->getIds($select);
     }

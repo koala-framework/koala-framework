@@ -20,6 +20,7 @@ interface Vps_Model_Interface
 
     public function getRow($id);
     public function getRows($where=null, $order=null, $limit=null, $start=null);
+    public function getIds($where=null, $order=null, $limit=null, $start=null);
     public function countRows($where = array());
 
     public function getSupportedImportExportFormats();

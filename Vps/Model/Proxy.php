@@ -1,6 +1,5 @@
 <?php
 class Vps_Model_Proxy extends Vps_Model_Abstract
-    implements Vps_Model_Interface_Id
 {
     protected $_proxyModel;
     protected $_rowClass = 'Vps_Model_Proxy_Row';
