@@ -36,6 +36,19 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
                "--port=$port --address=$address --clear_datastore";
         $this->_hubApp = proc_open($cmd, $descriptorspec, $pipes);
         $this->_hubUrl = "http://$address:$port";
+        sleep(1);
+        $status = proc_get_status($this->_hubApp);
+        if (!$status['running']) {
+            //try again with differnet port
+            $port = rand(8000, 10000);
+            $cmd = "python2.5 {$d}google_appengine/dev_appserver.py {$d}pubsubhubbub/hub/ ".
+                "--port=$port --address=$address --clear_datastore";
+            $this->_hubApp = proc_open($cmd, $descriptorspec, $pipes);
+            $this->_hubUrl = "http://$address:$port";
+            sleep(1);
+            $status = proc_get_status($this->_hubApp);
+        }
+        $this->assertTrue($status['running']);
 
         $this->_testId = rand(0, 1000000);
         touch('/tmp/lastCallback'.$this->_testId);
@@ -47,9 +60,6 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
 
         $this->_writeTestFeedContent(1);
 
-        sleep(1);
-        $status = proc_get_status($this->_hubApp);
-        $this->assertTrue($status['running']);
     }
 
     public function tearDown()
