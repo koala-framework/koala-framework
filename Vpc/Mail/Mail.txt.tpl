@@ -1,1 +1,1 @@
-<?php echo $this->component($this->content) ?>
+<?=$this->component($this->content);?>
