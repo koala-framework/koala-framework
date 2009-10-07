@@ -1,5 +1,11 @@
-<p><?=trlpVps('You ordered following product', 'You ordered following products', count($this->items));?>:</p>
-<table width="600" class="tblBoxCart" cellspacing="0" cellpadding="0">
+<table width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <?=trlpVps('You ordered following product', 'You ordered following products', count($this->items));?>:
+        </td>
+    </tr>
+</table>
+<table width="100%" class="tblBoxCart" cellspacing="0" cellpadding="0">
     <?
     $c=0;
     foreach ($this->items as $i) { ?>
@@ -16,8 +22,8 @@
         <? $c++;
     } ?>
 </table>
-<hr width="600" align="left"/>
-<table width="600" class="moneyInfo" cellspacing="0" cellpadding="0">
+<hr width="100%" align="left"/>
+<table width="100%" class="moneyInfo" cellspacing="0" cellpadding="0">
     <? foreach ($this->sumRows as $row) { ?>
         <tr>
             <td align="right"><?=$row['text']?></td>
