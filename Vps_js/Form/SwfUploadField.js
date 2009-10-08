@@ -101,7 +101,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         }
         if (Ext.isLinux) return; //für markus deaktivert
 
-        this.checkSwf = false;
+        this.useSwf = false;
         this.swfu = new SWFUpload({
             custom_settings: {field: this},
             upload_url: location.protocol+'/'+'/'+location.host+'/vps/media/upload/json-upload',
@@ -121,7 +121,6 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             button_window_mode: SWFUpload.WINDOW_MODE.OPAQUE,
 
             file_queued_handler: function(file) {
-                this.checkSwf = true;
                 this.progress = Ext.MessageBox.show({
                     title : trlVps('Upload'),
                     msg : trlVps('Uploading file'),
@@ -224,16 +223,19 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
                 Ext.Msg.alert(trlVps("Upload Error"), message);
             },
             swfupload_loaded_handler: function(file, errorCode, errorMessage) {
-                this.customSettings.field.checkSwf = true;
+                this.customSettings.field.useSwf = true;
             }
         });
+        /*
+        //das wurde ursprünglich vom lenz so gemacht
+        //ist aber scheinbar ned nötig da der uploader eh in allen browsern geht
         var checkButton = function() {
-            if (!this.checkSwf) {
+            if (!this.useSwf) {
                 this.createUploadButton(true);
             }
         };
         checkButton.defer(5000, this);
-
+        */
     },
 
     createInfoContainer: function() {
