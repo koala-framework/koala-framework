@@ -2,7 +2,7 @@
 <?php
 $validOptions = array('m', 'dry-run', 'debug');
 $options = array();
-$files = array();
+$commitFiles = array();
 $lastOptionName = false;
 foreach ($_SERVER['argv'] as $k=>$i) {
     if ($k==0) continue;
@@ -18,7 +18,7 @@ foreach ($_SERVER['argv'] as $k=>$i) {
         $options[$lastOptionName] = $i;
         $lastOptionName = false;
     } else {
-        $files[] = $i;
+        $commitFiles[] = $i;
     }
 }
 if (!isset($options['message']) || !is_string($options['message'])) {
@@ -114,7 +114,7 @@ foreach ($mergeToArray as $mergeTo) {
 chdir($ownDir);
 
 $cmd = "svn commit";
-foreach ($files as $i) {
+foreach ($commitFiles as $i) {
     $cmd .= ' '.escapeshellarg($i);
 }
 $cmd .= " --message=".escapeshellarg($options['message']);
