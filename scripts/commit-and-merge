@@ -6,7 +6,9 @@ $xml = new SimpleXMLElement(`svn info --xml`);
 $ownUrl = (string)$xml->entry->url;
 var_dump($ownUrl);
 if (preg_match('#branches/vps/1\\.6#', $ownUrl)) {
-	if (file_exists('../vps-1.7')) {
+	if (file_exists('../vps-1.7-clean')) {
+		$mergeToArray[] = '../vps-1.7-clean';
+	} else if (file_exists('../vps-1.7')) {
 		$mergeToArray[] = '../vps-1.7';
     } else if (file_exists('../1.7')) {
         $mergeToArray[] = '../1.7';
