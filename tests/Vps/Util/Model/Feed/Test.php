@@ -234,4 +234,11 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $this->assertNotEquals('', $feed->hub);
         file_get_contents($feed->hub); //check if valid url
     }
+
+    public function testRss20Hub()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('file://'.dirname(__FILE__).'/rss2.0-with-hub.xml');
+        $this->assertEquals('http://pubsubhubbub.appspot.com', $feed->hub);
+    }
 }

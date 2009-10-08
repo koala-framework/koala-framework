@@ -89,6 +89,16 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
             $data['title'] = (string)$this->_xml->channel->title;
             $data['link'] = (string)$this->_xml->channel->link;
             $data['description'] = (string)$this->_xml->channel->description;
+
+            //der hub ist im atom namespace in einem rss20 feed
+            //also in diesen namespace wechseln
+            foreach ($this->_xml->channel->children('http://www.w3.org/2005/Atom')->link as $link) {
+                $link = $link->attributes(''); //die attribute sind aber wida im default namespace, also wida rauswechseln
+                if ($link['rel'] == 'hub') {
+                    $data['hub'] = (string)$link['href'];
+                    break;
+                }
+            }
         } else {
             $data['title'] = (string)$this->_xml->title;
             $data['link'] = null;
