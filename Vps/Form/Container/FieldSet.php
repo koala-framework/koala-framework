@@ -49,20 +49,34 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
 
     public function getTemplateVars($values)
     {
-        $name = $this->getFieldName();
-        if (isset($values[$name])) {
-            $value = $values[$name];
-        } else {
-            $value = $this->getDefaultValue();
+        if ($this->getCheckboxToggle() && $this->_checkboxHiddenField) {
+            $name = $this->_checkboxHiddenField->getFieldName();
+            if (isset($values[$name])) {
+                $value = $values[$name];
+            } else {
+                $value = $this->getDefaultValue();
+            }
         }
         $ret = parent::getTemplateVars($values);
-        $ret['preHtml'] = '<fieldset>';
+        foreach ($ret['items'] as $k=>$i) {
+            if ($i['item'] === $this->_checkboxHiddenField) {
+                unset($ret['items'][$k]);
+            }
+        }
+        $ret['preHtml'] = '<fieldset';
+        if ($this->getCheckboxToggle() && $this->_checkboxHiddenField && !$value) {
+            $ret['preHtml'] .= ' class="vpsFormContainerFieldSetCollapsed"';
+        }
+        $ret['preHtml'] .= '>';
         if ($this->getTitle()) {
             $ret['preHtml'] .= "<legend>";
-            if ($this->getCheckboxToggle()) {
-                $ret['preHtml'] .= "<input type=\"checkbox\" name=\"\" />";
+            if ($this->getCheckboxToggle() && $this->_checkboxHiddenField) {
+                $n = $this->_checkboxHiddenField->getFieldName();
+                $ret['preHtml'] .= "<input type=\"checkbox\" name=\"$n\" ";
+                if ($value) $ret['preHtml'] .= 'checked="checked" ';
+                $ret['preHtml'] .= "/>";
             }
-            $ret['preHtml'] .= "{$this->getTitle()}</legend>";
+            $ret['preHtml'] .= " {$this->getTitle()}</legend>";
         }
         $ret['postHtml'] = '</fieldset>';
         return $ret;
