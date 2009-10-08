@@ -13,9 +13,9 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
             $size = $this->getSize();
 
             $imageSize = array(
-                'scale' => Vps_Media_Image::SCALE_DEFORM,
-                'width' => $this->_calculateDpi($size['width']),
-                'height' => $this->_calculateDpi($size['height'])
+                'scale' => Vps_Media_Image::SCALE_BESTFIT,
+                'width' => $this->_calculateMm($size['width']),
+                'height' => $this->_calculateMm($size['height'])
             );
             $content = Vps_Media_Image::scale($source, $imageSize);
             $filter = new Vps_Filter_Ascii();
@@ -32,7 +32,7 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
                 }
                 $this->_pdf->Image(
                     $tempFilename, $this->getX(), $this->getY(),
-                    $size['width'], $size['height'], $file->extension
+                    $this->_calculatePx($data[0]), $this->_calculatePx($data[1]), $file->extension
                 );
                 if ($setCoordinates) {
                     $this->SetY($this->getY() + $size['height'] + 2);
@@ -83,17 +83,20 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
                 $height = $dimension["height"] / $dimension["width"] * $maxWidth;
                 $width = $maxWidth;
             }
-
             $this->_size = array('width' => $width, 'height' => $height);
         }
         return $this->_size;
     }
 
-    private function _calculateDpi ($mm)
+    private function _calculateMm($px)
     {
         $dpi = Vpc_Abstract::getSetting(get_class($this->_component), 'pdfMaxDpi');
-        return ($mm / 2.54) * ($dpi / 10);
+        return $px * $dpi / 25.4;
     }
 
-
+    private function _calculatePx($mm)
+    {
+        $dpi = Vpc_Abstract::getSetting(get_class($this->_component), 'pdfMaxDpi');
+        return 25.4 * $mm / $dpi;
+    }
 }
