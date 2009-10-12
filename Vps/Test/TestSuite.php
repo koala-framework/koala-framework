@@ -5,8 +5,8 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
     {
         parent::__construct($name);
         $this->setBackupGlobals(false);
-        $this->_addDirectory(VPS_PATH.'/tests', true);
         $this->_addDirectory('./tests', false);
+        $this->_addDirectory(VPS_PATH.'/tests', true);
     }
 
     private function _addDirectory($basePath, $onlyTestPrefix)
