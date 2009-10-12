@@ -140,6 +140,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             echo "\n\n*** [10/13] prod: (uebersprungen)\n";
         } else {
             echo "\nUpdate Production?  [Y/n]";
+            $this->_notifyUser("Test Finished. Update Production?");
             $stdin = fopen('php://stdin', 'r');
             $input = trim(strtolower(fgets($stdin, 2)));
             fclose($stdin);
@@ -225,5 +226,14 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $log = `svn log --xml --revision $revision http://svn/tags/$project/$version`;
         $log = new SimpleXMLElement($log);
         if (count($log->logentry)) return true;
+    }
+
+    private function _notifyUser($msg)
+    {
+        if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
+            $msg = Vps_Registry::get('config')->application->name.' Go Online: '.$msg;
+            $msg = str_replace(" ", "\ ", utf8_decode($msg));
+            system("ssh niko \"export DISPLAY=:0 && /usr/kde/3.5/bin/kdialog --passivepopup $msg 2\"");
+        }
     }
 }
