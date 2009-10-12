@@ -63,7 +63,7 @@ foreach ($mergeToArray as $mergeTo) {
     $out = array();
     $ret = null;
     if ($debug) echo "$cmd\n";
-    system($cmd, $ret);
+    passthru($cmd, $ret);
     if ($ret) die("Update failed");
 
     echo "check for modified files $mergeTo...\n";
@@ -120,7 +120,7 @@ foreach ($commitFiles as $i) {
 $cmd .= " --message=".escapeshellarg($options['message']);
 if ($dryRun || $debug) echo "$cmd\n";
 if (!$dryRun) {
-    system($cmd, $ret);
+    passthru($cmd, $ret);
     if ($ret) exit(1);
 }
 
@@ -134,7 +134,7 @@ foreach ($mergeToArray as $mergeTo) {
     $cmd = "svn merge $url";
     if ($dryRun || $debug) echo "$cmd\n";
     if (!$dryRun) {
-        system($cmd, $ret);
+        passthru($cmd, $ret);
         if ($ret) exit(1);
     }
 
@@ -142,7 +142,7 @@ foreach ($mergeToArray as $mergeTo) {
     $cmd .= " --message=".escapeshellarg('merged '.$options['message']);
     if ($dryRun || $debug) echo "$cmd\n";
     if (!$dryRun) {
-        system($cmd, $ret);
+        passthru($cmd, $ret);
         if ($ret) exit(1);
     }
 }
