@@ -31,4 +31,42 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
         $row->height = isset($value['height']) ? $value['height'] : null;
         $row->scale = isset($value['scale']) ? $value['scale'] : null;
     }
+
+    protected function _getValueFromPostData($postData)
+    {
+        $fieldName = $this->getFieldName();
+        if (!isset($postData[$fieldName])) $postData[$fieldName] = null;
+        return $postData[$fieldName];
+    }
+
+    public function validate($row, $postData)
+    {
+        $ret = parent::validate($row, $postData);
+
+        if ($this->getInternalSave() !== false) {
+
+            $data = $this->_getValueFromPostData($postData);
+            if (!is_string($data)) {
+                return $ret;
+            }
+            $data = Zend_Json::decode($data);
+            $dimensions = $this->getDimensions();
+            reset($dimensions);
+
+            if ($data['dimension']) {
+                $dimension = $dimensions[$data['dimension']];
+            } else {
+                $dimension = current($dimensions);
+            }
+            if ($dimension) {
+                if (($dimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
+                    Vps_Media_Image::SCALE_CROP) &&
+                    empty($data['width']) && empty($data['height'])
+                ) {
+                    $ret[] = trlVps('Dimension: At least width or height must be set higher than 0 when using crop or bestfit.');
+                }
+            }
+        }
+        return $ret;
+    }
 }
