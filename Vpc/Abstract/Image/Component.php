@@ -22,13 +22,13 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
                 'scale' => Vps_Media_Image::SCALE_ORIGINAL
             ),
             'custombestfit'=>array(
-                'text' => trlVps('user-defined bestfit'),
+                'text' => trlVps('user-defined'),
                 'width' => self::USER_SELECT,
                 'height' => self::USER_SELECT,
                 'scale' => Vps_Media_Image::SCALE_BESTFIT
             ),
             'customcrop'=>array(
-                'text' => trlVps('user-defined crop'),
+                'text' => trlVps('user-defined'),
                 'width' => self::USER_SELECT,
                 'height' => self::USER_SELECT,
                 'scale' => Vps_Media_Image::SCALE_CROP

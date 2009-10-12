@@ -27,6 +27,27 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
         }
     },
 
+    _validateSizes: function()
+    {
+        var dim = this.dimensionField.getValue();
+        if (this.dimensions[dim].scale == 'crop' || this.dimensions[dim].scale == 'bestfit') {
+            if (this.widthField.getValue() < 1 && this.heightField.getValue() < 1) {
+                if (this.widthField.getValue() < 1) {
+                    this.widthField.markInvalid(trlVps('Width or height must be higher than 0 when using crop or bestfit.'));
+                }
+                if (this.heightField.getValue() < 1) {
+                    this.heightField.markInvalid(trlVps('Width or height must be higher than 0 when using crop or bestfit.'));
+                }
+                return false;
+            }
+        }
+
+        this.widthField.clearInvalid();
+        this.heightField.clearInvalid();
+
+        return true;
+    },
+
     onTriggerClick: function() {
         if (!this.sizeWindow) {
             var radios = [];
@@ -49,12 +70,27 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
             });
             this.widthField = new Ext.form.NumberField({
                 fieldLabel: trlVps('Width'),
-                width: 50
+                width: 50,
+                enableKeyEvents: true,
+                validateOnBlur: false,
+                validationEvent: false,
+                allowNegative: false
             });
             this.heightField = new Ext.form.NumberField({
                 fieldLabel: trlVps('Height'),
-                width: 50
+                width: 50,
+                enableKeyEvents: true,
+                validateOnBlur: false,
+                validationEvent: false,
+                allowNegative: false
             });
+
+            this.widthField.on('blur', this._validateSizes, this);
+            this.widthField.on('keyup', this._validateSizes, this);
+            this.heightField.on('blur', this._validateSizes, this);
+            this.heightField.on('keyup', this._validateSizes, this);
+            this.dimensionField.on('change', this._validateSizes, this);
+
             this.sizeWindow = new Ext.Window({
                 title: trlVps('Image Size'),
                 closeAction: 'hide',
@@ -80,12 +116,16 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                 buttons: [{
                     text: trlVps('OK'),
                     handler: function() {
-                        this.sizeWindow.hide();
-                        this.setValue({
-                            dimension: this.dimensionField.getValue(),
-                            width: this.widthField.getValue(),
-                            height: this.heightField.getValue()
-                        });
+                        if (this._validateSizes()) {
+                            this.sizeWindow.hide();
+                            this.setValue({
+                                dimension: this.dimensionField.getValue(),
+                                width: this.widthField.getValue(),
+                                height: this.heightField.getValue()
+                            });
+                        } else {
+                            Ext.Msg.alert(trlVps('Error'), trlVps('Please fill the marked fields correctly.'));
+                        }
                     },
                     scope: this
                 },{
@@ -104,11 +144,15 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
             this.widthField.setValue(v.width);
             this.heightField.setValue(v.height);
         } else {
-            this.dimensionField.setValue(null);
+            for (var i in this.dimensions) {
+                break;
+            }
+            this.dimensionField.setValue(i);
         }
         this._enableDisableFields();
-
         this.sizeWindow.show();
+
+        this._validateSizes();
     },
 
     _enableDisableFields: function()
