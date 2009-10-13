@@ -217,7 +217,6 @@ class Vps_Component_Cache
             );
 
             if ($this->getMetaModel()->getProxyModel() instanceof Vps_Model_Db) {
-                $adapter = $this->getMetaModel()->getProxyModel()->getTable()->getAdapter();
                 $sql = "
                     DELETE cache_component
                     FROM cache_component, cache_component_meta m
