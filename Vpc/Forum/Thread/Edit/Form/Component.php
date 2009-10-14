@@ -8,7 +8,7 @@ class Vpc_Forum_Thread_Edit_Form_Component extends Vpc_Form_Component
         $ret['tablename'] = 'Vpc_Forum_Group_Model';
         return $ret;
     }
-    
+
     protected function _initForm()
     {
         parent::_initForm();

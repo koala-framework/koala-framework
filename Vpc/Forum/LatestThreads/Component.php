@@ -5,7 +5,7 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Forum.Latest Threads');
-        $ret['tablename'] = 'Vpc_Forum_Group_Model';
+        $ret['childModel'] = 'Vpc_Forum_Group_Model';
         $ret['numberOfThreads'] = 5;
         $ret['forumClass'] = 'Vpc_Forum_Directory_Component';
         return $ret;

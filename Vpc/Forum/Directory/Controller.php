@@ -12,8 +12,8 @@ class Vpc_Forum_Directory_Controller extends Vps_Controller_Action_Auto_Vpc_Tree
     {
         $this->_editDialog = array(
             'controllerUrl'=> Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form'),
-            'width'=>450,
-            'height'=>200
+            'width'=>600,
+            'height'=>300
         );
         parent::init();
     }

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Forum_Thread_Observe_Model extends Vps_Db_Table_Abstract
+class Vpc_Forum_Thread_Observe_Model extends Vps_Model_Db
 {
-    protected $_name = 'vpc_forum_threads_observe';
+    protected $_table = 'vpc_forum_threads_observe';
 }

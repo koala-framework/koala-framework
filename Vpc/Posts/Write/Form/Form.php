@@ -1,6 +1,8 @@
 <?php
 class Vpc_Posts_Write_Form_Form extends Vps_Form
 {
+    protected $_modelName = 'Vpc_Posts_Directory_Model';
+
     protected function _init()
     {
         parent::_init();
