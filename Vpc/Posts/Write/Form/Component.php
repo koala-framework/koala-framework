@@ -5,7 +5,6 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Vpc_Posts_Write_Form_Success_Component';
-        $ret['formModel'] = 'Vpc_Posts_Directory_Model';
         return $ret;
     }
 
@@ -35,8 +34,10 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
                 $thread = $this->getData()->getParentPage();
                 $observe = $thread->getChildComponent('-observe');
                 $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
-                $table = Vpc_Abstract::createTable($observe->componentClass);
-                $observers = $table->fetchAll(array('thread_id = ?' => $thread->row->id));
+                $observeModel = Vpc_Abstract::createChildModel($observe->componentClass);
+                $observers = $observeModel->getRows($observeModel->select()
+                    ->whereEquals('thread_id', $thread->row->id)
+                );
                 $userModel = Zend_Registry::get('userModel');
                 foreach ($observers as $observer) {
                     if ($authedUser && $authedUser->id == $observer->user_id) {

@@ -3,7 +3,7 @@ class Vpc_Forum_Directory_FormController extends Vps_Controller_Action_Auto_Form
 {
     protected $_buttons = array();
     protected $_permissions = array('save', 'add');
-    protected $_tableName = 'Vpc_Forum_Directory_Model';
+    protected $_modelName = 'Vpc_Forum_Directory_Model';
 
     public function _initFields()
     {

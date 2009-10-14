@@ -250,7 +250,15 @@ class Vps_Component_Abstract
         return $tables[$class.'-'.$tablename];
     }
 
+    /**
+     * @deprecated
+     */
     public static function createModel($class)
+    {
+        return self::createOwnModel($class);
+    }
+
+    public static function createOwnModel($class)
     {
         static $models = array();
         if (!array_key_exists($class, $models)) {
@@ -308,9 +316,17 @@ class Vps_Component_Abstract
         return $models[$class];
     }
 
+    /**
+     * @deprecated
+     */
     public function getModel()
     {
-        return self::createModel(get_class($this));
+        return $this->getOwnModel();
+    }
+
+    public function getOwnModel()
+    {
+        return self::createOwnModel(get_class($this));
     }
 
     public function getChildModel()

@@ -10,6 +10,5 @@ class Vpc_Forum_Thread_Edit_Form_Form extends Vpc_Abstract_Form
             ->setLabelAlign('top');
         $form = new Vpc_Forum_Thread_Edit_Form_EditForm('form', 'Vpc_Posts_Detail_Edit_Form_Component');
         $this->add($form);
-            
     }
 }

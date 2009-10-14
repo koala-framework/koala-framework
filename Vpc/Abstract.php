@@ -230,6 +230,25 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $this->_pdfWriter;
     }
 
+    private function _getRequestWithFiles()
+    {
+        $ret = $_REQUEST;
+        //in _REQUEST sind _FILES nicht mit drinnen
+        foreach ($_FILES as $k=>$file) {
+            if (is_array($file['tmp_name'])) {
+                //wenn name[0] dann kommts in komischer form daher -> umwandeln
+                foreach (array_keys($file['tmp_name']) as $i) {
+                    foreach (array_keys($file) as $prop) {
+                        $ret[$k][$i][$prop] = $file[$prop][$i];
+                    }
+                }
+            } else {
+                $ret[$k] = $file;
+            }
+        }
+        return $ret;
+    }
+
     protected function _callProcessInput()
     {
         $process = $this->getData()
@@ -252,20 +271,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             }
         }
 
-        $postData = $_REQUEST;
-        //in _REQUEST sind _FILES nicht mit drinnen
-        foreach ($_FILES as $k=>$file) {
-            if (is_array($file['tmp_name'])) {
-                //wenn name[0] dann kommts in komischer form daher -> umwandeln
-                foreach (array_keys($file['tmp_name']) as $i) {
-                    foreach (array_keys($file) as $prop) {
-                        $postData[$k][$i][$prop] = $file[$prop][$i];
-                    }
-                }
-            } else {
-                $postData[$k] = $file;
-            }
-        }
+        $postData = $this->_getRequestWithFiles();
         foreach ($process as $i) {
             Vps_Benchmark::count('processInput', $i->componentId);
             if (method_exists($i->getComponent(), 'preProcessInput')) {
@@ -285,6 +291,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     protected function _callPostProcessInput($process)
     {
+        $postData = $this->_getRequestWithFiles();
         foreach ($process as $i) {
             if (method_exists($i->getComponent(), 'postProcessInput')) {
                 $i->getComponent()->postProcessInput($postData);
