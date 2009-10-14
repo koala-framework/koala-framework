@@ -27,6 +27,31 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         foreach ($this->_getFieldNames() as $field) {
             $this->addField($field);
         }
+        $this->addField(array(
+            'name'=>'mysql-processes',
+            'type'=>'GAUGE',
+            'max'=>1000,
+        ));
+        $this->addField(array(
+            'name'=>'mysql-processes-select',
+            'type'=>'GAUGE',
+            'max'=>1000,
+        ));
+        $this->addField(array(
+            'name'=>'mysql-processes-modify',
+            'type'=>'GAUGE',
+            'max'=>1000,
+        ));
+        $this->addField(array(
+            'name'=>'mysql-processes-others',
+            'type'=>'GAUGE',
+            'max'=>1000,
+        ));
+        $this->addField(array(
+            'name'=>'mysql-processes-locked',
+            'type'=>'GAUGE',
+            'max'=>1000,
+        ));
     }
 
     private function _getFieldNames()
@@ -69,6 +94,38 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         foreach ($this->_getFieldNames() as $field) {
             $values[] = $this->_getMemcacheValue($field);
         }
+
+        $dbConfig = Vps_Registry::get('dao')->getDbConfig();
+        $dbName = $dbConfig['dbname'];
+        $cnt = array(
+            'processes' => 0,
+            'select' => 0,
+            'modify' => 0,
+            'others' => 0,
+            'locked' => 0
+        );
+        foreach (Vps_Registry::get('db')->query('SHOW PROCESSLIST')->fetchAll() as $row) {
+            if ($row['db'] != $dbName) continue;
+            if ($row['Command'] == 'Sleep') continue;
+            $sql = strtolower(trim($row['Info']));
+            if ($sql == 'show processlist') continue;
+            $cnt['processes']++;
+            if ($row['Command'] == 'Locked') {
+                $cnt['locked']++;
+            }
+            if (substr($sql, 0, 6) == 'select') {
+                $cnt['select']++;
+            } else if (substr($sql, 0, 6) == 'update'
+                || substr($sql, 0, 6) == 'insert'
+                || substr($sql, 0, 7) == 'replace'
+                || substr($sql, 0, 6) == 'delete'
+            ) {
+                $cnt['modify']++;
+            } else {
+                $cnt['others']++;
+            }
+        }
+        $values = array_merge($values, array_values($cnt));
         return $values;
     }
 
