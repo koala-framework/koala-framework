@@ -8,7 +8,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
 
     public function setUp()
     {
-        $debugOutput = false;
+        $debugOutput = true;
 
         $descriptorspec = array();
         if ($debugOutput) {
