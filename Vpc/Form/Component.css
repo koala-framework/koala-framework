@@ -20,8 +20,10 @@
 .$cssClass .submitWrapper {
     text-align: center;
 }
-.$cssClass .submitWrapper span {
-    display: block;
+.$cssClass .submitWrapper .beforeButton,
+.$cssClass .submitWrapper .button,
+.$cssClass .submitWrapper .afterButton {
+    float: left;
 }
 .$cssClass input,
 .$cssClass textarea,
