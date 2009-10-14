@@ -2,8 +2,7 @@
 .$cssClass .form_city {
     clear: none;
 }
-.$cssClass form .vpsField label,
-.$cssClass form .vpsField span.fieldContent {
+.$cssClass form .vpsField label {
     line-height: 20px;
     clear: both;
 }
@@ -20,8 +19,10 @@
 .$cssClass .submitWrapper {
     text-align: center;
 }
-.$cssClass .submitWrapper span {
-    display: block;
+.$cssClass .submitWrapper .beforeButton,
+.$cssClass .submitWrapper .button,
+.$cssClass .submitWrapper .afterButton {
+    float: left;
 }
 .$cssClass input,
 .$cssClass textarea,
