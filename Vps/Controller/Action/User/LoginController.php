@@ -190,6 +190,9 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
     public function jsonLostPasswordAction()
     {
         $email = $this->getRequest()->getParam('email');
+        if (!$email) {
+            throw new Vps_Exception_Client(trlVps("Please enter your E-Mail-Address"));
+        }
 
         $users = Zend_Registry::get('userModel');
         $result = $users->lostPassword($email);
