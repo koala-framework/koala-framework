@@ -19,6 +19,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             }
         }
 
+        $allowed = false;
         $acl = $this->_getAcl();
         $resource = $this->getRequest()->getResourceName();
         if ($resource == 'vps_user_changeuser') {
@@ -30,7 +31,11 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
         } else if ($resource == 'vps_component') {
             $allowed = $this->_isAllowedComponent();
         } else {
-            $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
+            if (!$acl->has($resource)) {
+                throw new Vps_Exception_NotFound();
+            } else {
+                $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
+            }
         }
         if ($allowed) {
             if ($this->_getUserRole() == 'cli') {
