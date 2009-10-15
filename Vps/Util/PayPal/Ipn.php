@@ -61,7 +61,7 @@ class Vps_Util_PayPal_Ipn
         } else if (strcmp ($res, "INVALID") == 0) {
             throw new Vps_Exception("Ipn validation received INVALID $domain");
         } else {
-            throw new Vps_Exception("Ipn validation received something strange");
+            throw new Vps_Exception("Ipn validation received something strange: $res");
         }
 
         echo 'OK';
