@@ -1,5 +1,5 @@
 <?php
-class Vpc_Posts_Detail_Edit_Form_Form extends Vpc_Posts_Write_Form_Form
+class Vpc_Posts_Detail_Edit_Form_FrontendForm extends Vpc_Posts_Write_Form_FrontendForm
 {
     protected function _init()
     {

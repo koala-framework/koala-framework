@@ -1,6 +1,8 @@
 <?php
-class Vpc_Forum_Group_NewThread_Form_Form extends Vps_Form
+class Vpc_Forum_Group_NewThread_Form_FrontendForm extends Vps_Form
 {
+    protected $_modelName = 'Vpc_Forum_Group_Model';
+
     protected function _init()
     {
         parent::_init();
@@ -8,7 +10,8 @@ class Vpc_Forum_Group_NewThread_Form_Form extends Vps_Form
             ->setAllowBlank(false)
             ->setLabelWidth(80)
             ->setWidth(200);
-        $this->add(Vpc_Abstract_Form::createComponentForm('Vpc_Posts_Write_Form_Component', 'post'))
+        $subForm = new Vpc_Posts_Write_Form_FrontendForm('post');
+        $this->add($subForm)
             ->setIdTemplate('{component_id}_{id}-posts')
             ->setIdTemplateField('component_id');
     }

@@ -29,12 +29,30 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         return $ret;
     }
 
+    public static function validateSettings($settings, $componentClass)
+    {
+        parent::validateSettings($settings, $componentClass);
+
+        // wenn es eine Form.php gibt aber keine FrontendForm.php
+        // sollte man aus irgendeinem grund doch eine Form benutzen ohne FrontendForm
+        // dann einfach validateSettings überschreiben und parent nicht aufrufen
+        $frontendFormClass = Vpc_Admin::getComponentClass($componentClass, 'FrontendForm');
+        $formClass = Vpc_Admin::getComponentClass($componentClass, 'Form');
+        if ($formClass != 'Vpc_Abstract_Composite_Form' && !$frontendFormClass) {
+            throw new Vps_Exception("Form.php files for frontend have been renamed to FrontendForm.php");
+        }
+
+        if ($frontendFormClass && is_instance_of($frontendFormClass, 'Vpc_Abstract_Form')) {
+            throw new Vps_Exception("A frontend form may never be an instance of Vpc_Abstract_Form");
+        }
+    }
+
     protected function _initForm()
     {
         if (!isset($this->_form)) {
-            $this->_form = Vpc_Abstract_Form::createComponentForm(get_class($this), 'form');
+            $formClass = Vpc_Admin::getComponentClass($this, 'FrontendForm');
+            $this->_form = new $formClass('form');
             $this->_form->setClass(get_class($this));
-            if ($this->getFormModel()) $this->_form->setModel($this->getFormModel());
         }
     }
 

@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_LostPassword_Form_Form extends Vps_Form
+class Vpc_User_LostPassword_Form_FrontendForm extends Vps_Form
 {
     protected function _init()
     {
