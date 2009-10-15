@@ -1,5 +1,5 @@
 <?php
-class Vpc_Forum_Thread_Edit_Form_Form extends Vpc_Abstract_Form
+class Vpc_Forum_Thread_Edit_Form_FrontendForm extends Vps_Form
 {
     protected function _init()
     {

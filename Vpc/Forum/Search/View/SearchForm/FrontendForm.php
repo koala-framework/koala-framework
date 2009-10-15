@@ -1,5 +1,5 @@
 <?php
-class Vpc_Forum_Search_View_SearchForm_Form extends Vps_Form
+class Vpc_Forum_Search_View_SearchForm_FrontendForm extends Vps_Form
 {
     protected function _init()
     {

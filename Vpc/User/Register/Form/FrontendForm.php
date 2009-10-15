@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Register_Form_Form extends Vpc_User_Edit_Form_Form
+class Vpc_User_Register_Form_FrontendForm extends Vpc_User_Edit_Form_FrontendForm
 {
     public function initFields()
     {

@@ -1,5 +1,5 @@
 <?php
-class Vpc_NewsletterCategory_Subscribe_Form extends Vpc_Newsletter_Subscribe_Form
+class Vpc_NewsletterCategory_Subscribe_FrontendForm extends Vpc_Newsletter_Subscribe_FrontendForm
 {
     protected $_modelName = 'Vpc_NewsletterCategory_Subscribe_Model';
 

@@ -2,7 +2,7 @@
 class Vps_User_Form extends Vps_Form
 {
     protected $_permissions = array('save', 'add');
-    protected $_userDataFormName = 'Vpc_User_Edit_Form_Form';
+    protected $_userDataFormName = 'Vpc_User_Edit_Form_FrontendForm';
 
     protected $_newUserRow = null;
 

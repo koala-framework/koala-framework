@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Checkout_Form_Form extends Vpc_Abstract_Form
+class Vpc_Shop_Cart_Checkout_Form_FrontendForm extends Vps_Form
 {
     protected $_modelName = 'Vpc_Shop_Cart_Orders';
 

@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Directory_CommunityView_SearchForm_Form extends Vps_Form
+class Vpc_User_Directory_CommunityView_SearchForm_FrontendForm extends Vps_Form
 {
     protected function _init()
     {

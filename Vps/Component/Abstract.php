@@ -222,6 +222,9 @@ class Vps_Component_Abstract
         if (isset($settings['model'])) {
             throw new Vps_Exception("model for '$componentClass' is set - please rename into ownModel or childModel");
         }
+        if (isset($settings['formModel'])) {
+            throw new Vps_Exception("formModel is no longer supported. Set the model in the FrontendForm.php. Component: '$componentClass'");
+        }
     }
 
     public function getTable($tablename = null)

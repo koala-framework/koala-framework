@@ -5,50 +5,20 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
     protected $_hubUrl;
     protected $_testId;
     protected $_testFeedUrl;
+    private $_storePath;
 
     public function setUp()
     {
         $debugOutput = true;
 
-        $descriptorspec = array();
-        if ($debugOutput) {
-            $descriptorspec = array(
-                1 => STDOUT,
-                2 => STDOUT
-            );
-        } else {
-            $descriptorspec = array(
-                1 => array('file', '/dev/null', 'w'),
-                2 => array('file', '/dev/null', 'w')
-            );
-        }
-
-        $port = rand(8000, 10000);
-        $address = trim(`hostname`);
-        if ($address == 'vivid-test-server') {
-            $d = "/var/www/library/pshb/";
-        } else {
-            $d = "/www/public/library/pshb/";
-        }
-
+        $this->_storePath = tempnam('/tmp', 'pshb');
+        unlink($this->_storePath);
+        mkdir($this->_storePath);
         //installation see here: http://code.google.com/p/pubsubhubbub/wiki/DeveloperGettingStartedGuide
-        $cmd = "python2.5 {$d}google_appengine/dev_appserver.py {$d}pubsubhubbub/hub/ ".
-               "--port=$port --address=$address --clear_datastore";
-        $this->_hubApp = proc_open($cmd, $descriptorspec, $pipes);
-        $this->_hubUrl = "http://$address:$port";
-        sleep(1);
-        $status = proc_get_status($this->_hubApp);
-        if (!$status['running']) {
+        if (!$this->_startHub($debugOutput)) {
             //try again with differnet port
-            $port = rand(8000, 10000);
-            $cmd = "python2.5 {$d}google_appengine/dev_appserver.py {$d}pubsubhubbub/hub/ ".
-                "--port=$port --address=$address --clear_datastore";
-            $this->_hubApp = proc_open($cmd, $descriptorspec, $pipes);
-            $this->_hubUrl = "http://$address:$port";
-            sleep(1);
-            $status = proc_get_status($this->_hubApp);
+            $this->assertTrue($this->_startHub($debugOutput));
         }
-        $this->assertTrue($status['running']);
 
         $this->_testId = rand(0, 1000000);
         touch('/tmp/lastCallback'.$this->_testId);
@@ -62,11 +32,46 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
 
     }
 
+    private function _startHub($debugOutput)
+    {
+        $descriptorspec = array();
+        if ($debugOutput) {
+            $descriptorspec = array(
+                1 => STDOUT,
+                2 => STDOUT
+            );
+        } else {
+            $descriptorspec = array(
+                1 => array('file', '/dev/null', 'w'),
+                2 => array('file', '/dev/null', 'w')
+            );
+        }
+
+        $address = trim(`hostname`);
+        if ($address == 'vivid-test-server') {
+            $d = "/var/www/library/pshb/";
+        } else {
+            $d = "/www/public/library/pshb/";
+        }
+        $port = rand(8000, 10000);
+        $cmd = "python2.5 {$d}google_appengine/dev_appserver.py {$d}pubsubhubbub/hub/ ".
+               "--port=$port --address=$address --clear_datastore ".
+               "--datastore_path=$this->_storePath/dev_appserver.datastore ".
+               "--history_path=$this->_storePath/dev_appserver.datastore.history";
+        if ($debugOutput) echo "$cmd\n";
+        $this->_hubApp = proc_open($cmd, $descriptorspec, $pipes);
+        $this->_hubUrl = "http://$address:$port";
+        sleep(1);
+        $status = proc_get_status($this->_hubApp);
+        return $status['running'];
+    }
+
     public function tearDown()
     {
         unlink('/tmp/feed'.$this->_testId);
         unlink('/tmp/lastCallback'.$this->_testId);
         unlink('/tmp/feedRequested'.$this->_testId);
+        system("rm -r $this->_storePath");
 
         proc_terminate($this->_hubApp, SIGTERM);
         do {

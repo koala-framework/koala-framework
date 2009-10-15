@@ -1,5 +1,5 @@
 <?php
-class Vpc_Newsletter_Subscribe_Form extends Vps_Form
+class Vpc_Newsletter_Subscribe_FrontendForm extends Vps_Form
 {
     protected $_modelName = 'Vpc_Newsletter_Subscribe_Model';
 
