@@ -60,7 +60,7 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
             }
             if ($dimension) {
                 if (($dimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
-                    Vps_Media_Image::SCALE_CROP) &&
+                    $dimension['scale'] == Vps_Media_Image::SCALE_CROP) &&
                     empty($data['width']) && empty($data['height'])
                 ) {
                     $ret[] = trlVps('Dimension: At least width or height must be set higher than 0 when using crop or bestfit.');
