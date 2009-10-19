@@ -9,9 +9,12 @@ class Vpc_Events_Directory_Component extends Vpc_News_Directory_Component
 
         $ret['generators']['detail']['component'] = 'Vpc_Events_Detail_Component';
         $ret['generators']['detail']['dbIdShortcut'] = 'events_';
-
+        
+        $ret['generators']['child']['component']['view'] = 'Vpc_Events_List_View_Component';
+        
         return $ret;
     }
+    
     public function getSelect($overrideValues = array())
     {
         $select = Vpc_Directories_ItemPage_Directory_Component::getSelect();
