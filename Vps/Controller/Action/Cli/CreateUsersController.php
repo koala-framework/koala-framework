@@ -36,6 +36,8 @@ class Vps_Controller_Action_Cli_CreateUsersController extends Vps_Controller_Act
             }
         }
         echo "\nfertig, service up to date.\n\n";
+        
+        Vps_Util_ClearCache::getInstance()->clearCache('cache_users', true);
         exit;
     }
 }

@@ -83,9 +83,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $dbConfig = Vps_Registry::get('dao')->getDbConfig();
             if (!in_array($dbConfig['dbname'], $databases)) {
                 echo "Datenbank {$dbConfig['dbname']} nicht vorhanden, versuche sie zu erstellen...\n";
-                try {
-                    $db->query("CREATE DATABASE {$dbConfig['dbname']}");
-                } catch (Exception $e) {
+                system("echo \"CREATE DATABASE \`{$dbConfig['dbname']}\`;\" | mysql", $ret);
+                if ($ret != 0) {
                     throw new Vps_ClientException("Kann Datenbank '{$dbConfig['dbname']}' nicht erstellen, bitte manuell anlegen od. config anpassen.");
                 }
                 echo "OK\n";
