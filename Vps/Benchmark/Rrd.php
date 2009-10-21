@@ -202,6 +202,15 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $g->addField('load', '#000000');
         $ret['load'] = $g;
 
+        $g = new Vps_Util_Rrd_Graph($this);
+        $g->setVerticalLabel('[processes]');
+        $g->addField('mysql-processes');
+        $g->addField('mysql-processes-select');
+        $g->addField('mysql-processes-modify');
+        $g->addField('mysql-processes-others');
+        $g->addField('mysql-processes-locked');
+        $ret['mysql'] = $g;
+
         return $ret;
     }
 }
