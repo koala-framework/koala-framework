@@ -19,7 +19,7 @@ class Vpc_TextImage_SeleniumTest extends Vps_Test_SeleniumTestCase
         $this->assertElementPresent('css=.vpcTextImageTestComponent a img');
         $this->click('css=.vpcTextImageTestComponent a img');
         $this->assertVisible('css=.lightbox');
-        $this->assertElementPresent('css=.lightbox .lightboxBody img');
+        $this->assertElementPresent('css=.lightbox img.centerImage');
         $this->click('css=.lightbox a.closeButton');
         $this->assertNotVisible('css=.lightbox');
     }

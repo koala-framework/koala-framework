@@ -17,7 +17,7 @@ class Vpc_Composite_ImagesEnlarge_SeleniumTest extends Vps_Test_SeleniumTestCase
         $this->assertElementPresent('css=.vpcCompositeImagesEnlarge a img');
         $this->click('css=a');
         $this->assertVisible('css=.lightbox');
-        $this->assertElementPresent('css=.lightbox .lightboxBody img');
+        $this->assertElementPresent('css=.lightbox img.centerImage');
         $this->assertElementPresent('css=.lightbox a.nextSwitchButton');
         $this->assertElementNotPresent('css=.lightbox a.previousSwitchButton');
         $this->click('css=.lightbox a.nextSwitchButton');
