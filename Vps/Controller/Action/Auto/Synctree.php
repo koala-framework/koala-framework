@@ -324,9 +324,20 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $this->_beforeSaveMove($row);
 
         if ($point == 'append') {
-            $row->$parentField = (int)$target == 0 ? null : $target;
-            if ($this->_hasPosition) {
-                $row->pos = '1';
+            $targetRow = $this->_model->getRow($target);
+            if ((int)$target == 0) $target = null;
+
+            if (!is_null($target)) {
+                $targetRow = $this->_model->getRow($target);
+            }
+
+            if (is_null($target) || ($targetRow && $targetRow->$parentField != $source)) {
+                $row->$parentField = $target;
+                if ($this->_hasPosition) {
+                    $row->pos = '1';
+                }
+            } else {
+                $this->view->error = trlVps('Cannot move here. View has been reloaded, please try again.');
             }
         } else {
             $targetRow = $this->_model->getRow($target);
@@ -345,7 +356,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 }
                 $row->$parentField = $targetRow->$parentField;
             } else {
-                $this->view->error = 'Cannot move here.';
+                $this->view->error = trlVps('Cannot move here.');
             }
         }
         $row->save();
