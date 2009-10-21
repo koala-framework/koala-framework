@@ -5,13 +5,37 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
     {
         parent::__construct($name);
         $this->setBackupGlobals(false);
-        $this->_addDirectory('./tests', false);
-        $this->_addDirectory(VPS_PATH.'/tests', true);
+        $classes = $this->_addDirectory('./tests', false);
+        $classes = array_merge($classes, $this->_addDirectory(VPS_PATH.'/tests', true));
+
+        if (file_exists("/www/testtimes")) {
+            $app = Vps_Registry::get('config')->application->id;
+            if (!file_exists("/www/testtimes/failure_$app")) mkdir("/www/testtimes/failure_$app");
+
+            $times = array();
+            foreach ($classes as $k=>$c) {
+                $times[$k] = 0;
+                $p = "/www/testtimes/failure_$app/".$c;
+                if (file_exists($p)) {
+                    $times[$k] = file_get_contents($p);
+                }
+            }
+            arsort($times);
+            $sortedClasses = array();
+            foreach (array_keys($times) as $k) {
+                $sortedClasses[] = $classes[$k];
+            }
+            $classes = $sortedClasses;
+        }
+        foreach ($classes as $c) {
+            $this->addTestSuite($c);
+        }
+
     }
 
     private function _addDirectory($basePath, $onlyTestPrefix)
     {
-        if (!file_exists($basePath)) return;
+        if (!file_exists($basePath)) return array();
 
         set_include_path(
             get_include_path().PATH_SEPARATOR.$basePath
@@ -20,6 +44,7 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
             new RecursiveIteratorIterator(new RecursiveDirectoryIterator($basePath), true)
         );
 
+        $ret = array();
         foreach ($dir as $file) {
             $file = substr($file, strlen($basePath)+1);
             if (substr($file, -8) != 'Test.php' && $onlyTestPrefix) {
@@ -27,10 +52,10 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
             }
             $className = str_replace(array('./', '.php', '/'), array('', '', '_'), $file);
             if (class_exists($className) && is_instance_of($className, 'PHPUnit_Framework_TestCase')) {
-                require_once($file);
-                $this->addTestSuite($className);
+                $ret[] = $className;
             }
         }
+        return $ret;
     }
 
     public function getFilteredTests($filter = FALSE, array $groups = array(), array $excludeGroups = array())

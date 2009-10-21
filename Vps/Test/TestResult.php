@@ -8,9 +8,15 @@ class Vps_Test_TestResult extends PHPUnit_Framework_TestResult
     }
     private function _askForRetry(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-        if (!$this->_retryOnError) return false;
         if ($e instanceof PHPUnit_Framework_IncompleteTest) return false;
         if ($e instanceof PHPUnit_Framework_SkippedTest) return false;
+
+        if (file_exists("/www/testtimes")) {
+            $app = Vps_Registry::get('config')->application->id;
+            file_put_contents("/www/testtimes/failure_$app/".get_class($test), time());
+        }
+
+        if (!$this->_retryOnError) return false;
         
         $error = new PHPUnit_Framework_TestFailure($test, $e);
 
