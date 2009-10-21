@@ -48,7 +48,7 @@ class Vpc_Directories_Category_View_Component
 
     public static function getItemCountCache()
     {
-        $frontendOptions = array('lifetime' => 3600);
+        $frontendOptions = array('lifetime' => 3600, 'automatic_serialization' => true);
         $backendOptions = array('cache_dir' => 'application/cache/component/');
         return Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
     }
