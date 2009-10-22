@@ -174,7 +174,23 @@ class Vps_Mail_Template
         return $this;
     }
 
-    public function send()
+    // constants for type defined in Vps_Model_Mail_Row
+    public function getMailContent($type = Vps_Model_Mail_Row::GET_MAIL_CONTENT_AUTO)
+    {
+        if ($type == Vps_Model_Mail_Row::GET_MAIL_CONTENT_AUTO) {
+            $ret = $this->_getHtmlMailContent();
+            if (is_null($ret)) $ret = $this->_getTextMailContent();
+            return $ret;
+        } else if ($type == Vps_Model_Mail_Row::GET_MAIL_CONTENT_HTML) {
+            return $this->_getHtmlMailContent();
+        } else if ($type == Vps_Model_Mail_Row::GET_MAIL_CONTENT_TEXT) {
+            return $this->_getTextMailContent();
+        }
+
+        return null;
+    }
+
+    private function _getVars()
     {
         $vars = array();
         if ($this->_mailVarsClassName) {
@@ -191,20 +207,26 @@ class Vps_Mail_Template
             }
         }
         if (!$vars) $vars = array();
+        return $vars;
+    }
 
-        // txt mail
-        $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.txt.tpl");
+    private function _getTextMailContent()
+    {
+        $vars = $this->_getVars();
+
         foreach ($vars as $row) {
             $var = $row->variable;
             $this->_view->$var = trim($row->text);
         }
-        $bodyText = $this->_view->render($this->_txtTemplate);
-        $this->_mail->setBodyText($bodyText);
+        return $this->_view->render($this->_txtTemplate);
+    }
 
-        // html mail
+    private function _getHtmlMailContent()
+    {
         $bodyHtml = null;
         if ($this->_htmlTemplate) {
-            $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.html.tpl");
+            $vars = $this->_getVars();
+
             foreach ($vars as $row) {
                 $var = $row->variable;
                 $html = $row->html;
@@ -212,6 +234,20 @@ class Vps_Mail_Template
                 $this->_view->$var = $html;
             }
             $bodyHtml = $this->_view->render($this->_htmlTemplate);
+        }
+        return $bodyHtml;
+    }
+
+    public function send()
+    {
+        // txt mail
+        $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.txt.tpl");
+        $this->_mail->setBodyText($this->_getTextMailContent());
+
+        // html mail
+        $bodyHtml = $this->_getHtmlMailContent();
+        if (!is_null($bodyHtml)) {
+            $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.html.tpl");
             $this->_mail->setBodyHtml($bodyHtml);
         }
 

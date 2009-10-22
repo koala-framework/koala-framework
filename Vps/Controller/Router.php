@@ -50,6 +50,10 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/vps/spam/:controller/:action',
                     array('module'     => 'vps_controller_action_spam',
                           'action'     =>'index')));
+        $this->AddRoute('vps_enquiries', new Zend_Controller_Router_Route(
+                    '/vps/enquiries/:controller/:action',
+                    array('module'     => 'vps_controller_action_enquiries',
+                          'action'     =>'index')));
 
         //für selenium-tests von sachen die im vps liegen
         $this->AddRoute('vps_test', new Zend_Controller_Router_Route(
