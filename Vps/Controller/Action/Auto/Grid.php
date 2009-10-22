@@ -14,9 +14,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     protected $_primaryKey;
     protected $_model;
-    protected $_table;
-    protected $_tableName;
-    protected $_modelName;
+    protected $_table;     // deprecated: use models!
+    protected $_tableName; // deprecated: use models!
+    protected $_modelName; // deprecated: use model with a string
     protected $_grouping = null;
 
     protected $_pdf = array();
@@ -76,6 +76,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
         if (!isset($this->_model) && isset($this->_modelName)) {
             $this->_model = Vps_Model_Abstract::getInstance($this->_modelName);
+        } else if (isset($this->_model) && is_string($this->_model)) {
+            $this->_model = Vps_Model_Abstract::getInstance($this->_model);
         }
 
         $this->_initColumns();

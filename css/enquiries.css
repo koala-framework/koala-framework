@@ -1,0 +1,13 @@
+
+div.enquiryReview { padding: 12px; font-size: 13px; font-family: arial,tahoma,helvetica,sans-serif; }
+div.enquiryReview .headers { border: 1px solid #99bbe8; }
+div.enquiryReview .headers .subject {
+    padding: 5px; font-weight: bold; color: #15428B; font-size: 15px;
+    border-bottom: 1px solid #99bbe8; background-color: #d2e0f1;
+}
+div.enquiryReview .headers .detail {
+    padding: 5px; line-height: 19px;
+    background-color: #f3f8ff;
+}
+div.enquiryReview .headers .detail label { float: left; width: 100px; font-weight: bold; }
+div.enquiryReview .message { padding-top: 10px; }

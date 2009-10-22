@@ -5,12 +5,26 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
     private $_mailData = array();
     protected $_additionalMailVarsRow = null;
 
+    const GET_MAIL_CONTENT_AUTO = 'auto'; // html if possible, otherwise text
+    const GET_MAIL_CONTENT_HTML = 'html';
+    const GET_MAIL_CONTENT_TEXT = 'text';
+
+    public function getMailContent($type = self::GET_MAIL_CONTENT_AUTO)
+    {
+        $mail = $this->_prepareMail();
+        if ($mail instanceof Vps_Mail_Template) {
+            return $mail->getMailContent($type);
+        } else {
+            throw new Vps_Exception_NotYetImplemented();
+        }
+    }
+
     public function getAdditionalMailVarsRow()
     {
         return $this->_additionalMailVarsRow;
     }
 
-    public function sendMail()
+    private function _prepareMail()
     {
         $siblingRows = $this->_getSiblingRows();
         $essentialsRow = $siblingRows['essentials'];
@@ -26,38 +40,45 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             $mail->$k = $v;
         }
 
-        if ($essentialsRow->cc) {
-            $arr = unserialize($essentialsRow->cc);
-            foreach ($arr as $v) {
+        $cc = $this->getCc();
+        if ($cc) {
+            foreach ($cc as $v) {
                 $mail->addCc($v['email'], $v['name']);
             }
         }
-        if ($essentialsRow->header) {
-            $arr = unserialize($essentialsRow->header);
-            foreach ($arr as $v) {
+        $header = $this->getHeader();
+        if ($header) {
+            foreach ($header as $v) {
                 $mail->addHeader($v['name'], $v['value'], $v['append']);
             }
         }
-        if ($essentialsRow->bcc) {
-            $arr = unserialize($essentialsRow->bcc);
-            foreach ($arr as $v) {
+        $bcc = $this->getBcc();
+        if ($bcc) {
+            foreach ($bcc as $v) {
                 $mail->addBcc($v);
             }
         }
-        if ($essentialsRow->to) {
-            $arr = unserialize($essentialsRow->to);
-            foreach ($arr as $v) {
+        $to = $this->getTo();
+        if ($to) {
+            foreach ($to as $v) {
                 $mail->addTo($v['email'], $v['name']);
             }
         }
-        if ($essentialsRow->returnPath) {
-            $mail->setReturnPath($essentialsRow->returnPath);
+        $returnPath = $this->getReturnPath();
+        if ($returnPath) {
+            $mail->setReturnPath($returnPath);
         }
-        if ($essentialsRow->from) {
-            $from = unserialize($essentialsRow->from);
+        $from = $this->getFrom();
+        if ($from) {
             $mail->setFrom($from['email'], $from['name']);
         }
 
+        return $mail;
+    }
+
+    public function sendMail()
+    {
+        $mail = $this->_prepareMail();
         $mail->send();
     }
 
@@ -197,5 +218,46 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
     {
         $row = $this->_getEssentialsRow();
         $row->from = serialize(array('email' => $email, 'name' => $name));
+    }
+
+    public function getCc()
+    {
+        $row = $this->_getEssentialsRow();
+        if (!$row->cc) return array();
+        return unserialize($row->cc);
+    }
+
+    public function getHeader()
+    {
+        $row = $this->_getEssentialsRow();
+        if (!$row->header) return array();
+        return unserialize($row->header);
+    }
+
+    public function getBcc()
+    {
+        $row = $this->_getEssentialsRow();
+        if (!$row->bcc) return array();
+        return unserialize($row->bcc);
+    }
+
+    public function getTo()
+    {
+        $row = $this->_getEssentialsRow();
+        if (!$row->to) return array();
+        return unserialize($row->to);
+    }
+
+    public function getReturnPath()
+    {
+        $row = $this->_getEssentialsRow();
+        return $row->returnPath;
+    }
+
+    public function getFrom()
+    {
+        $row = $this->_getEssentialsRow();
+        if (!$row->from) return array();
+        return unserialize($row->from);
     }
 }
