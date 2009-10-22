@@ -1,0 +1,221 @@
+#ifndef GENERATOR_H
+#define GENERATOR_H
+
+#include "ComponentClass.h"
+
+class Select;
+class ComponentData;
+
+struct BuildStrategy
+{
+    virtual bool skip(ComponentData *parent) const = 0;
+    virtual bool recurse() const { return true; }
+};
+
+struct BuildAllStrategy : public BuildStrategy
+{
+    virtual bool skip(ComponentData *parent) const {
+        Q_UNUSED(parent);
+        return false;
+    }
+};
+
+struct BuildNoChildrenStrategy : public BuildAllStrategy
+{
+    virtual bool recurse() const { return false; }
+};
+/*
+struct BuildOnlyComponentClassStrategy : public BuildStrategy
+{
+    BuildOnlyComponentClassStrategy(ComponentClass c) : cc(c) {}
+    virtual bool skip(ComponentData *parent) const;
+
+private:
+    ComponentClass cc;
+};
+*/
+struct BuildOnlyRootStrategy : public BuildStrategy
+{
+    virtual bool skip(ComponentData *parent) const;
+};
+
+struct BuildWithDbIdShortcutStrategy : public BuildStrategy
+{
+    virtual bool skip(ComponentData *parent) const;
+};
+
+struct Generator
+{
+    Generator()
+        : componentTypes(TypeComponent)
+    {
+        generators << this;
+    }
+
+    enum IdSeparator {
+        Dash,
+        Underscore,
+        NoSeparator //für root + seiten aus seitenbaum
+    };
+
+    enum Type {
+        Unknown,
+        Static,
+        Table,
+        TableSql,
+        Load,
+        Pages,
+        TableSqlWithComponent,
+        LoadSql,
+        LoadSqlWithComponent,
+        LinkTag
+    };
+
+    enum ComponentType {
+        TypeComponent  = 0x0000,
+        TypePage       = 0x0001,
+        TypePseudoPage = 0x0002,
+        TypeBox        = 0x0004,
+        TypeMultiBox   = 0x0008,
+        TypeInherit    = 0x0010, //ob die komponente vererbt werden soll
+        TypeUnique     = 0x0020,
+        TypeInherits   = 0x0040, //ob die komponente andere erben soll
+        TypeShowInMenu = 0x0080,
+        TypePagesGenerator = 0x0100, //obs der pages-generator ist der die pages-tabelle ausliest
+    };
+    Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
+
+    ComponentClass componentClass;
+    IndexedString key;
+    IndexedString generatorClass;
+    QList<IndexedString> parentClasses;
+    IdSeparator idSeparator;
+    IndexedString dbIdPrefix;
+    ComponentTypes componentTypes; //TODO umbenennen, da inherit und unique auch dabei ist
+    IndexedString model;
+    IndexedString box; //TODO macht nicht in jedem generator sinn
+
+    virtual bool showInMenu(ComponentData *d); //TODO should be const
+
+    virtual void build(ComponentData *parent, bool inherited) = 0;
+    virtual void preload() {}
+
+    virtual QList<ComponentClass> childComponentClasses() = 0;
+
+    static QHash<Type, int> buildCallCount;
+    static QList<Generator*> generators;
+    static QList<Generator*> inheritGenerators();
+
+    static void buildWithGenerators(ComponentData* parent, const BuildStrategy *buildStrategy);
+};
+Q_DECLARE_OPERATORS_FOR_FLAGS(Generator::ComponentTypes)
+
+struct GeneratorWithModel : public Generator
+{
+    void fetchRowData(ComponentData *parent, IndexedString field);
+    QList<int> fetchIds(ComponentData *parent, const Select &select) const;
+private:
+    QSet<IndexedString> m_fetchedRowData;
+};
+
+struct GeneratorStatic : public Generator
+{
+    QHash<IndexedString, ComponentClass> component;
+    QString filename;
+    QString name;
+
+    GeneratorStatic() : Generator()
+    {
+        Q_ASSERT(dbIdPrefix.isEmpty());
+    }
+
+    virtual void build(ComponentData *parent, bool inherited);
+    virtual QList<ComponentClass> childComponentClasses();
+};
+
+struct GeneratorTable : public GeneratorWithModel
+{
+    struct Row {
+        Row(IndexedString id_, QString name_) : id(id_), name(name_) {}
+        IndexedString id;
+        QString name;
+    };
+    QList<Row> rows;
+    ComponentClass component;
+    virtual void build(ComponentData *parent, bool inherited);
+    virtual QList<ComponentClass> childComponentClasses();
+};
+struct GeneratorTableSql : public GeneratorWithModel
+{
+    QString tableName;
+    bool whereComponentId;
+    ComponentClass component;
+    virtual void build(ComponentData *parent, bool inherited);
+    virtual QList<ComponentClass> childComponentClasses();
+};
+struct GeneratorTableSqlWithComponent : public GeneratorWithModel
+{
+    QString tableName;
+    bool whereComponentId;
+    QHash<IndexedString, ComponentClass> component;
+
+    QHash<QString, QList<QPair<int, ComponentClass> > > data;
+
+    virtual void preload();
+
+    virtual void build(ComponentData *parent, bool inherited);
+    virtual QList<ComponentClass> childComponentClasses();
+
+    //verwendet von ComponentData::getComponentsByClass
+    //um einen einsprungspunkt für paragraphs zu haben
+    QList<QString> fetchParentDbIds(ComponentClass cc);
+};
+struct GeneratorLoadSql : public GeneratorWithModel
+{
+    ComponentClass component;
+    virtual void build(ComponentData *parent, bool inherited);
+    virtual QList<ComponentClass> childComponentClasses();
+};
+struct GeneratorLoadSqlWithComponent : public GeneratorWithModel
+{
+    QHash<IndexedString, ComponentClass> component;
+    virtual void build(ComponentData *parent, bool inherited);
+    virtual QList<ComponentClass> childComponentClasses();
+};
+struct GeneratorLoad : public GeneratorWithModel
+{
+    QHash<IndexedString, ComponentClass> component; //wird nur für childComponentClasses benötigt
+    GeneratorLoad() : GeneratorWithModel()
+    {
+        Q_ASSERT(dbIdPrefix.isEmpty());
+    }
+
+    virtual void build(ComponentData* parent, bool inherited);
+    virtual QList<ComponentClass> childComponentClasses();
+
+protected:
+    void _build(ComponentData* parent, QList<QByteArray> args);
+};
+
+struct GeneratorPages : public GeneratorLoad
+{
+    virtual void build(ComponentData* parent, bool inherited);
+    virtual bool showInMenu(ComponentData* d);
+};
+struct GeneratorLinkTag : public Generator
+{
+    QHash<IndexedString, ComponentClass> component;
+    QHash<QString, IndexedString> componentIdToComponent;
+
+    GeneratorLinkTag() : Generator()
+    {
+        Q_ASSERT(dbIdPrefix.isEmpty());
+    }
+
+    virtual void preload();
+
+    virtual void build(ComponentData* parent, bool inherited);
+    virtual QList<ComponentClass> childComponentClasses();
+};
+
+#endif // GENERATOR_H

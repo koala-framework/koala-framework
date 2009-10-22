@@ -1,0 +1,117 @@
+#include "Select.h"
+
+#include "Unserializer.h"
+#include "ComponentData.h"
+
+
+Select::Select()
+    : limitCount(0), limitOffset(0)
+{
+}
+
+
+Select::Select(Unserializer* unserializer)
+    : limitCount(0), limitOffset(0)
+{
+    int numProperties = unserializer->readNumber();
+    QByteArray in = unserializer->device()->read(2);
+    Q_ASSERT(in == ":{");
+    for (int i=0; i < numProperties; ++i) {
+        QByteArray varName = unserializer->readString();
+        varName = varName.replace('\0', "");
+        if (varName == "Vps_Model_Select_OnlyExpr_where") {
+            int entries = unserializer->readArrayStart();
+            for (int i=0; i < entries; ++i) {
+                unserializer->readInt(); //array key
+                where << SelectExpr::create(unserializer);
+            }
+            unserializer->readArrayEnd();
+        } else if (varName == "Vps_Model_Select_OnlyExpr_limitCount") {
+            limitCount = unserializer->readInt();
+        } else if (varName == "Vps_Model_Select_OnlyExpr_limitOffset") {
+            limitOffset = unserializer->readInt();
+        } else if (varName == "Vps_Model_Select_OnlyExpr_other") {
+            int entries = unserializer->readArrayStart();
+            for (int i=0; i < entries; ++i) {
+                unserializer->readInt(); //array key
+                other << unserializer->readRawData();
+            }
+            unserializer->readArrayEnd();
+        }
+    }
+    in = unserializer->device()->read(1);
+    Q_ASSERT(in == "}");
+}
+
+
+
+Select::~Select()
+{
+    qDeleteAll(where);
+}
+
+bool Select::match(ComponentData* data) const
+{
+    foreach (SelectExpr *e, where) {
+        if (!e->match(data)) return false;
+    }
+
+    if (!other.isEmpty()) {
+        if (!m_IdsCache.contains(data->parent)) {
+            IndexedString gen;
+            foreach (SelectExpr *e, where) {
+                if (dynamic_cast<SelectExprWhereGenerator*>(e)) {
+                    gen = static_cast<SelectExprWhereGenerator*>(e)->generator();
+                    break;
+                }
+            }
+            Q_ASSERT(!gen.isEmpty());
+            Generator *generator = 0;
+            foreach (Generator *g, Generator::generators) {
+                if (g->componentClass == data->parent->componentClass() && g->key == gen) {
+                    generator = g;
+                    break;
+                }
+            }
+            Q_ASSERT(generator);
+            Q_ASSERT(dynamic_cast<GeneratorWithModel*>(generator));
+            const_cast<Select*>(this)->m_IdsCache[data->parent] = static_cast<GeneratorWithModel*>(generator)
+                                                ->fetchIds(data->parent, *this);
+        }
+        bool ok;
+        int childId = data->childId().toInt(&ok);
+        if (!ok) return false;
+        if (!(m_IdsCache[data->parent].contains(childId))) return false;
+    }
+    return true;
+}
+
+QDebug operator<<(QDebug dbg, const Select& s)
+{
+    foreach (SelectExpr *e, s.where) {
+        dbg.nospace() << *e;
+    }
+    if (!s.other.isEmpty()) dbg.space() << "other";
+    foreach (const QByteArray &a, s.other) {
+        dbg.space() << a;
+    }
+    if (s.limitCount) dbg.space() << "limitCount" << s.limitCount;
+    if (s.limitOffset) dbg.space() << "limitOffset" << s.limitOffset;
+    return dbg.space();
+}
+
+QByteArray serialize(const Select &s)
+{
+    QByteArray ret;
+    QByteArray cls("Vps_Component_Select");
+    ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":1:{";
+    QHash<IndexedString, RawData> parts;
+    parts[IndexedString("where")] = RawData(serialize(s.where));
+    parts[IndexedString("limitCount")] = RawData(serialize(s.limitCount));
+    parts[IndexedString("limitOffset")] = RawData(serialize(s.limitOffset));
+    parts[IndexedString("other")] = RawData(serialize(s.other));
+    ret += serializePrivateObjectProperty("_parts", "*", parts);
+    ret += "}";
+    return ret;
+}
+
