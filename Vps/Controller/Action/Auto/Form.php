@@ -51,7 +51,11 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             } else if (isset($this->_modelName)) {
                 $this->_form->setModel(new $this->_modelName);
             } else if (isset($this->_model)) {
-                $this->_form->setModel($this->_model);
+                if (is_string($this->_model)) {
+                    $this->_form->setModel(new $this->_model);
+                } else {
+                    $this->_form->setModel($this->_model);
+                }
             }
         }
 
