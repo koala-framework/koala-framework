@@ -64,5 +64,6 @@ QVariant Unserializer::readVariant()
         qDebug() << type;
         Q_ASSERT(0);
     }
+    return QVariant();
 }
 

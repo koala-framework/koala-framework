@@ -24,7 +24,10 @@ SOURCES += main.cpp \
     SelectExpr.cpp \
     Select.cpp \
     Unserializer.cpp \
-    Generator.cpp
+    Generator.cpp \
+    ConnectionThread.cpp \
+    ConnectionServer.cpp \
+    CommandDispatcher.cpp
 
 HEADERS += ComponentData.h \
     ComponentDataRoot.h \
@@ -35,4 +38,7 @@ HEADERS += ComponentData.h \
     SelectExpr.h \
     Select.h \
     Unserializer.h \
-    Generator.h
+    Generator.h \
+    ConnectionThread.h \
+    ConnectionServer.h \
+    CommandDispatcher.h

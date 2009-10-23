@@ -2,30 +2,27 @@
 #define PHPPROCESS_H
 
 #include <QtCore/QStringList>
-#include <QtCore/QProcess>
 
-#define ifDebugProcess(x)
 
+class ProcessThread;
 
 class PhpProcess
 {
 private:
     PhpProcess(QString webDir);
 public:
-    static void setup(QString webDir)
-    {
-        i = new PhpProcess(webDir);
-    }
+    static void setup(QString webDir);
+
     static PhpProcess *getInstance()
     {
-        return i;
+        return m_instance;
     }
 
-    QByteArray call(QByteArray method, const QList<QByteArray> &arguments = QList<QByteArray>());
+    QByteArray call(const QByteArray& method, const QList< QByteArray >& arguments = QList<QByteArray>());
 
 private:
-    static PhpProcess *i;
-    QProcess p;
+    static PhpProcess *m_instance;
+    ProcessThread *m_processThread;
 };
 
 #endif

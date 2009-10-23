@@ -1,41 +1,126 @@
 #include "PhpProcess.h"
 
 #include <QtCore/QDebug>
+#include <qcoreapplication.h>
+#include <qmutex.h>
+#include <QThread>
+#include <QProcess>
 
-PhpProcess *PhpProcess::i = 0;
-QByteArray PhpProcess::call(QByteArray method, const QList< QByteArray >& arguments)
+#define ifDebugProcess(x)
+
+
+PhpProcess *PhpProcess::m_instance = 0;
+
+class Process : public QObject
 {
-    QByteArray ret;
-    foreach (const QByteArray& a, arguments) {
-        method += "$$$$" + a;
+    Q_OBJECT
+public:
+    Process(const QString &webDir, QObject *parent = 0) : QObject(parent)
+    {
+        p = new QProcess;
+        p->setProcessChannelMode(QProcess::MergedChannels);
+        p->setWorkingDirectory(webDir);
+        QStringList arg;
+        arg << "bootstrap.php" << "get-generators";
+        ifDebugProcess( qDebug() << "starting php process"; )
+        p->start("php", arg);
+        p->waitForStarted();
+        ifDebugProcess( qDebug() << "started php process"; )
     }
-    ifDebugProcess( qDebug() << "calling php" << method; )
-    p.write(method + "\n");
-    while (true) {
-        if (p.state() != QProcess::Running) {
-            qDebug() << ret << p.readAll();
-            qDebug() << p.readAllStandardError();
-            qFatal("php process exited!");
+
+public slots:
+    void call(const QByteArray &method)
+    {
+        ret.clear();
+        ifDebugProcess( qDebug() << "calling php" << method; )
+        p->write(method + "\n");
+        while (true) {
+            if (p->state() != QProcess::Running) {
+                qDebug() << ret << p->readAll();
+                qDebug() << p->readAllStandardError();
+                qFatal("php process exited!");
+            }
+            p->waitForReadyRead();
+            QByteArray r = p->readAll();
+            if (r.isEmpty()) continue;
+            //ifDebugProcess( qDebug() << "php returned" << r; )
+            ret.append(r);
+            //ifDebugProcess( qDebug() << "last byte" << (int)ret.at(ret.length()-1); )
+            if (ret.at(ret.length()-1) == 0) break;
         }
-        p.waitForReadyRead();
-        QByteArray r = p.readAll();
-        ifDebugProcess( qDebug() << "php returned" << r; )
-        ret.append(r);
-        ifDebugProcess( qDebug() << "last byte" << (int)ret.at(ret.length()-1); )
-        if (ret.at(ret.length()-1) == 0) break;
+        ret = ret.left(ret.length()-1);
+        ifDebugProcess( qDebug() << "returning"; )
+        retReady.unlock();
     }
-    ret = ret.left(ret.length()-1);
-    ifDebugProcess( qDebug() << "returning"; )
-    return ret;
+
+public:
+    QByteArray ret;
+    QMutex retReady;
+
+private:
+    QProcess *p;
+};
+
+class ProcessThread : public QThread
+{
+    Q_OBJECT
+public:
+    
+    ProcessThread(const QString &_webDir, QObject* parent = 0)
+        : QThread(parent), webDir(_webDir)
+    {
+        startupMutex.lock();
+    }
+
+    virtual void run() {
+        process = new Process(webDir);
+        startupMutex.unlock();
+        exec();
+    }
+
+    QByteArray call(QByteArray method, const QList< QByteArray >& arguments)
+    {
+        startupMutex.lock();
+        ifDebugProcess( qDebug() << "calling" << method; )
+        foreach (const QByteArray& a, arguments) {
+            method += "$$$$" + a;
+        }
+        retMutex.lock();
+        process->retReady.lock();
+        QMetaObject::invokeMethod(process, "call", Qt::QueuedConnection, Q_ARG(QByteArray, method));
+        process->retReady.lock(); //wait for ret
+        QByteArray ret = process->ret;
+        process->retReady.unlock();
+        retMutex.unlock();
+        startupMutex.unlock();
+        return ret;
+    }
+private:
+    QString webDir;
+    Process *process;
+    QMutex retMutex;
+    QMutex startupMutex;
+};
+
+
+
+void PhpProcess::setup(QString webDir)
+{
+    m_instance = new PhpProcess(webDir);
 }
 
 PhpProcess::PhpProcess(QString webDir)
 {
-    p.setProcessChannelMode(QProcess::MergedChannels);
-    p.setWorkingDirectory(webDir);
-    QStringList arg;
-    arg << "bootstrap.php" << "get-generators";
-    ifDebugProcess( qDebug() << "starting php process"; )
-    p.start("php", arg);
-    p.waitForStarted();
+    m_processThread = new ProcessThread(webDir);
+    m_processThread->start();
 }
+
+
+QByteArray PhpProcess::call(const QByteArray &method, const QList< QByteArray >& arguments)
+{
+    Q_ASSERT(m_processThread->isRunning());
+    return m_processThread->call(method, arguments);
+}
+
+#include "PhpProcess.moc"
+
