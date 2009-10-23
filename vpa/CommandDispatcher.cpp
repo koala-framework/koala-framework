@@ -5,12 +5,14 @@
 #include "ComponentData.h"
 #include "Unserializer.h"
 
+#define debug(x)
+
 
 void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, QIODevice* socket)
 {
     QByteArray prettyArgs = args;
     prettyArgs.replace('\0', "\\0");
-    qDebug() << cmd << prettyArgs;
+    debug(qDebug() << cmd << prettyArgs; )
 
     QBuffer buffer(&args);
     buffer.open(QIODevice::ReadOnly);
@@ -27,7 +29,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
 
         ComponentData *d = ComponentData::getComponentById(QString::fromUtf8(u.readString()));
         if (!d) {
-            qDebug() << "invalid";
+            debug( qDebug() << "invalid"; )
             socket->write(serialize(NullValue()));
             return;
         }
@@ -121,7 +123,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         ComponentData *d = ComponentData::getComponentById(componentId);
         Q_ASSERT(d);
 
-        qDebug() << s;
+        debug( qDebug() << s; )
 
         socket->write(serialize(d->childComponents(s)));
     } else if (cmd == "countChildComponents") {
@@ -148,13 +150,13 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         u.readInt(); //array key
         u.readObjectClassName();
         Select s(&u);
-        qDebug() << "select" << s;
+        debug( qDebug() << "select" << s; )
 
 
         u.readInt(); //array key
         u.readObjectClassName();
         Select childSelect(&u);
-        qDebug() << "childSelect" << childSelect;
+        debug( qDebug() << "childSelect" << childSelect; )
 
 
 

@@ -280,13 +280,13 @@ ComponentData* ComponentData::childPageByPath(const QString& path)
 
     ComponentData *page = this;
     foreach (const QString &pathPart, path.split('/')) {
-        qDebug() << pathPart;
+        //qDebug() << pathPart;
                                                                  //TODO: schönere, bessere lösung nötig
         if (page==this || page->componentClass().parentClasses().contains(IndexedString("Vpc_Root_DomainRoot_Domain_Component"))) {
-            qDebug() << "checking for shortcutUrl" << pathPart;
+            //qDebug() << "checking for shortcutUrl" << pathPart;
             ComponentClass cc = ComponentClass::componentForShortcutUrl(pathPart);
             if (!cc.isEmpty()) {
-                qDebug() << "it is a shortcutUrl" << pathPart;
+                //qDebug() << "it is a shortcutUrl" << pathPart;
                 bool found = false;
                 QList<ComponentData*> components = ComponentData::getComponentsByClass(cc);
                 foreach (ComponentData *c, components) {
@@ -309,7 +309,7 @@ ComponentData* ComponentData::childPageByPath(const QString& path)
         s.limitCount = 1;
         QList<ComponentData*> pages = page->recursiveChildComponents(s, childSelect);
         if (pages.isEmpty()) {
-            qDebug() << "found nothing for " << pathPart;
+            //qDebug() << "found nothing for " << pathPart;
             return 0;
         }
         page = pages.first();
@@ -317,8 +317,8 @@ ComponentData* ComponentData::childPageByPath(const QString& path)
 
                                                                       //TODO: schönere, bessere lösung nötig
     if (page && (page==this || page->componentClass().parentClasses().contains(IndexedString("Vpc_Root_DomainRoot_Domain_Component")))) {
-        qDebug() << "looking for home" << page;
-        if (page) qDebug() << "startAt" << page->componentId();
+        //qDebug() << "looking for home" << page;
+        //if (page) qDebug() << "startAt" << page->componentId();
         page = ComponentData::getHome(page);
     }
 

@@ -6,6 +6,7 @@
 
 
 QHash<IndexedString, ComponentClassData> ComponentClass::m_data;
+QMutex ComponentClass::m_dataMutex;
 QHash<QString, ComponentClass> ComponentClass::m_shortcutUrlToComponent;
 QHash<ComponentClass, IndexedString> ComponentClass::m_componentToShortcutUrl;
 

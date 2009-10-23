@@ -5,20 +5,27 @@
 #include <QtCore/QString>
 #include <QtCore/QHash>
 #include <QtCore/QDebug>
+#include <QtCore/QReadWriteLock>
 
 #include "Serialize.h"
 
 class IndexedString
 {
+private:
+    static QReadWriteLock lock;
 public:
     IndexedString(const QString &string)
     {
+        lock.lockForRead();
         m_index = m_strings.key(string);
         if (!m_index) {
+            lock.unlock();
+            lock.lockForWrite();
             m_nextId++;
             m_index = m_nextId;
             m_strings[m_index] = string;
         }
+        lock.unlock();
     }
 
     IndexedString()
@@ -39,6 +46,7 @@ public:
     }
 
     inline QString toString() const {
+        QReadLocker locker(&lock);
         return m_strings[m_index];
     }
 

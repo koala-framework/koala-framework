@@ -3,6 +3,7 @@
 
 #include <QtCore/QHash>
 #include <QtCore/QVariant>
+#include <QtCore/QMutex>
 
 #include "IndexedString.h"
 
@@ -32,12 +33,14 @@ public:
 
     ComponentClass(QString cls) : m_componentClass(cls)
     {
+        QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!cls.isEmpty());
         Q_ASSERT(m_data.contains(m_componentClass));
     }
 
     ComponentClass(IndexedString cls) : m_componentClass(cls)
     {
+        QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!cls.isEmpty());
         Q_ASSERT(m_data.contains(m_componentClass));
     }
@@ -50,19 +53,23 @@ public:
 
     inline QHash<IndexedString, QVariant> flags() const
     {
+        QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!m_componentClass.isEmpty());
         return m_data[m_componentClass].flags;
     }
 
     inline QList<IndexedString> parentClasses() const
     {
+        QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!m_componentClass.isEmpty());
         return m_data[m_componentClass].m_parentClasses;
     }
 
     inline bool hasFlag(IndexedString flag) const
     {
-        return flags().contains(flag);
+        QMutexLocker locker(&m_dataMutex);
+        Q_ASSERT(!m_componentClass.isEmpty());
+        return m_data[m_componentClass].flags.contains(flag);
     }
 
     inline bool operator == ( const ComponentClass& rhs ) const {
@@ -89,6 +96,7 @@ public:
 
     QByteArray getSetting(IndexedString name)
     {
+        QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!m_componentClass.isEmpty());
         if (!m_data[m_componentClass].settings.contains(name)) return QByteArray();
         return m_data[m_componentClass].settings[name];
@@ -96,6 +104,7 @@ public:
 
     bool hasSetting(IndexedString name)
     {
+        QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!m_componentClass.isEmpty());
         return m_data[m_componentClass].settings.contains(name);
     }
@@ -111,6 +120,8 @@ private:
 
     static QHash<QString, ComponentClass> m_shortcutUrlToComponent;
     static QHash<ComponentClass, IndexedString> m_componentToShortcutUrl;
+
+    static QMutex m_dataMutex;
 };
 
 QDebug operator<<(QDebug dbg, const ComponentClass &s);

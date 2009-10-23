@@ -19,7 +19,11 @@ void ConnectionThread::run()
         Q_ASSERT(0);
         return;
     }
-    qDebug() << "new connection";
+    //qDebug() << "new connection";
+
+    int commands = 0;
+    int sumProcessingTime = 0;
+    int maxProcessingTime = 0;
 
     socket.waitForConnected();
     forever {
@@ -47,9 +51,15 @@ void ConnectionThread::run()
         socket.write("\0\n", 2);
         socket.flush();
         socket.waitForBytesWritten();
-        qDebug() << stopWatch.elapsed() << "ms" << ComponentData::count << "datas";
+        int t = stopWatch.elapsed();
+        commands++;
+        sumProcessingTime += t;
+        if (t > maxProcessingTime) maxProcessingTime = t;
+
+        //qDebug() << stopWatch.elapsed() << "ms" << ComponentData::count << "datas";
 //        qDebug() << "php memory usage" << PhpProcess::getInstance()->call("memory-usage");
-        qDebug() << "";
+        //qDebug() << "";
     }
+    qDebug() << "commands" << commands << "sumProcessingTime" << sumProcessingTime << "ms" << "maxProcessingTime" << maxProcessingTime << "ms";
 }
 
