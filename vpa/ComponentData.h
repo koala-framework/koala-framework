@@ -20,6 +20,8 @@ public:
     ComponentData(Generator *generator, ComponentData *parent_, Generator::IdSeparator separator_, IndexedString childId_, ComponentClass componentClass_);
     void init();
 
+    ~ComponentData();
+
     void setDbIdPrefix(IndexedString id)
     {
         if (id.isEmpty()) {
@@ -29,8 +31,8 @@ public:
         Q_ASSERT(!id.toString().contains('-') && !id.toString().contains('_'));
         Q_ASSERT(m_idSeparator != Generator::NoSeparator);
         m_dbIdPrefix = id;
-        if (!m_dbIdHash.contains(m_dbIdPrefix, parent)) {
-            m_dbIdHash.insertMulti(m_dbIdPrefix, parent);
+        if (!m_dbIdHash.contains(m_dbIdPrefix, parent())) {
+            m_dbIdHash.insertMulti(m_dbIdPrefix, parent());
             //qDebug() << m_dbIdPrefix << parent->componentId();
         }
     }
@@ -38,12 +40,13 @@ public:
     inline QString componentId() const
     {
         if (m_idSeparator == Generator::Dash) {
-            return parent->componentId()+'-'+m_childId;
+            return parent()->componentId()+'-'+m_childId;
         } else if (m_idSeparator == Generator::Underscore) {
-            return parent->componentId()+'_'+m_childId;
+            return parent()->componentId()+'_'+m_childId;
         } else if (m_idSeparator == Generator::NoSeparator) {
             return m_childId;
         } else {
+            qWarning() << "unknown idSeparator" << m_idSeparator;
             Q_ASSERT(0);
             return QString();
         }
@@ -66,8 +69,8 @@ public:
     QString dbId() const
     {
         QString parentId;
-        if (m_dbIdPrefix.isEmpty() && parent) {
-            parentId = parent->dbId();
+        if (m_dbIdPrefix.isEmpty() && parent()) {
+            parentId = parent()->dbId();
         } else {
             parentId = m_dbIdPrefix.toString();
         }
@@ -131,6 +134,11 @@ public:
         return m_idSeparator;
     }
 
+    inline bool isVisible() const {
+        if (!m_generator) return true; //root
+        return m_generator->isVisible(this);
+    }
+
     inline IndexedString box() const
     {
         if (componentTypes() & Generator::TypeBox) {
@@ -141,11 +149,19 @@ public:
         return IndexedString();
     }
 
+    inline int priority() const
+    {
+        if (componentTypes() & Generator::TypeBox) {
+            return m_generator->priority;
+        }
+        return -1;
+    }
+
     inline const ComponentData *page() const
     {
         const ComponentData *page = this;
         while (page && !(page->componentTypes() & Generator::TypePage)) {
-            page = page->parent;
+            page = page->parent();
         }
         return page;
     }
@@ -154,7 +170,7 @@ public:
     {
         const ComponentData *page = this;
         while (page && !(page->componentTypes() & Generator::TypePseudoPage)) {
-            page = page->parent;
+            page = page->parent();
         }
         return page;
     }
@@ -164,8 +180,8 @@ public:
     inline const ComponentData *parentPseudoPageOrRoot() const
     {
         const ComponentData *page = pseudoPage();
-        if (page && page->parent) {
-            return page->parent->pseudoPageOrRoot();
+        if (page && page->parent()) {
+            return page->parent()->pseudoPageOrRoot();
         }
         return 0;
     }
@@ -176,10 +192,36 @@ public:
     QList<ComponentData*> recursiveChildComponents(const Select &s, const Select &childSelect);
     ComponentData *childPageByPath(const QString &path);
 
-    ComponentData *parent;
-    QList<ComponentData*> children;
-    bool childrenBuilt;
-    void buildChildren();
+    inline const QList<ComponentData*> &children() const
+    {
+        {
+            QReadLocker locker(&m_childrenLock);
+            if (!m_childrenBuilt) {
+                //qDebug() << componentId() << "buildChildren";
+                static BuildNoChildrenStrategy s;
+                locker.unlock();
+                Generator::buildWithGenerators(const_cast<ComponentData*>(this), &s);
+            }
+        }
+        return m_children;
+    }
+    void addChildren(ComponentData* c);
+
+    inline ComponentData* parent() const
+    {
+        return m_parent;
+    }
+
+    inline int treeLevel() const
+    {
+        int ret = 0;
+        const ComponentData *d = this;
+        while ((d = d->parent())) {
+            ++ret;
+        }
+        return ret;
+    }
+
     QHash<int, ComponentData*> childIdsHash();
 
     QHash<QByteArray, QVariant> dataForWeb();
@@ -195,6 +237,15 @@ public:
     static ComponentData* getHome(ComponentData* subRoot);
 
 private:
+    friend class Generator;
+    friend class GeneratorWithModel;
+
+    //tree data
+    bool m_childrenBuilt;
+    ComponentData *m_parent;
+    QList<ComponentData*> m_children;
+    mutable QReadWriteLock m_childrenLock;
+
     //data
     Generator::IdSeparator m_idSeparator;
     IndexedString m_dbIdPrefix;
@@ -203,6 +254,7 @@ private:
     Generator *m_generator;
     QString m_filename;
     QString m_name;
+    QSet<IndexedString> m_fetchedRowData;
     //TODO QString m_rel;
     //TODO bool m_visible;
     //TODO bool m_inherits;

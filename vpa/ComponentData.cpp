@@ -18,10 +18,10 @@ QSet<ComponentClass> ComponentData::m_componentsByClassRequested;
 QList<ComponentData*> ComponentData::m_homes;
 
 ComponentData::ComponentData(Generator* generator, ComponentData* parent_, QString componentId_, QString dbId_, ComponentClass componentClass_)
-    : parent(parent_), m_componentClass(componentClass_), m_generator(generator)
+    : m_parent(parent_), m_componentClass(componentClass_), m_generator(generator)
 {
-    if (parent && componentId_.startsWith(parent->componentId())) {
-        componentId_ = componentId_.mid(parent->componentId().length());
+    if (m_parent && componentId_.startsWith(m_parent->componentId())) {
+        componentId_ = componentId_.mid(m_parent->componentId().length());
         if (componentId_.startsWith('-')) {
             m_idSeparator = Generator::Dash;
         } else if (componentId_.startsWith('_')) {
@@ -35,8 +35,8 @@ ComponentData::ComponentData(Generator* generator, ComponentData* parent_, QStri
         m_idSeparator = Generator::NoSeparator;
     }
 
-    if (parent && dbId_.startsWith(parent->dbId())) {
-        dbId_ = dbId_.mid(parent->dbId().length());
+    if (m_parent && dbId_.startsWith(m_parent->dbId())) {
+        dbId_ = dbId_.mid(m_parent->dbId().length());
         if (dbId_.startsWith('-')) {
             Q_ASSERT(m_idSeparator == Generator::Dash);
         } else if (dbId_.startsWith('_')) {
@@ -53,7 +53,7 @@ ComponentData::ComponentData(Generator* generator, ComponentData* parent_, QStri
 }
 
 ComponentData::ComponentData(Generator* generator, ComponentData* parent_, Generator::IdSeparator separator_, int childId_, ComponentClass componentClass_)
-    : parent(parent_), m_idSeparator(separator_),
+    : m_parent(parent_), m_idSeparator(separator_),
       m_childId(QString::number(childId_)), m_componentClass(componentClass_),
       m_generator(generator)
 {
@@ -61,7 +61,7 @@ ComponentData::ComponentData(Generator* generator, ComponentData* parent_, Gener
 }
 
 ComponentData::ComponentData(Generator* generator, ComponentData* parent_, Generator::IdSeparator separator_, IndexedString childId_, ComponentClass componentClass_)
-    : parent(parent_), m_idSeparator(separator_),
+    : m_parent(parent_), m_idSeparator(separator_),
       m_childId(childId_.toString()), m_componentClass(componentClass_),
       m_generator(generator)
 {
@@ -70,7 +70,7 @@ ComponentData::ComponentData(Generator* generator, ComponentData* parent_, Gener
 
 void ComponentData::init()
 {
-    childrenBuilt = false;
+    m_childrenBuilt = false;
 
     Q_ASSERT(!m_componentClass.isEmpty());
 
@@ -87,15 +87,27 @@ void ComponentData::init()
     }
 }
 
-
-void ComponentData::buildChildren()
+ComponentData::~ComponentData()
 {
-    if (childrenBuilt) return;
-    qDebug() << componentId() << "buildChildren";
-    static BuildNoChildrenStrategy s;
-    Generator::buildWithGenerators(this, &s);
+    m_componentClassHash[m_componentClass.toIndexedString()].removeAll(this);
+    if (m_idSeparator == Generator::NoSeparator) {
+        m_idHash.remove(componentId());
+    }
+    foreach (const IndexedString &key, m_dbIdHash.keys(this)) {
+        m_dbIdHash.remove(key, this);
+    }
+    m_homes.removeAll(this);
+    foreach (int key, m_parent->m_childIdsHash.keys(this)) {
+        m_parent->m_childIdsHash.remove(key);
+    }
 }
 
+void ComponentData::addChildren(ComponentData *c)
+{
+    Q_ASSERT(!m_childrenLock.tryLockForRead());
+    m_children << c;
+    m_childIdsHash.clear();
+}
 
 QList<ComponentData*> ComponentData::getComponentsByClass(ComponentClass cls)
 {
@@ -121,7 +133,7 @@ QList<ComponentData*> ComponentData::getComponentsByClass(ComponentClass cls)
                         continue;
                     }
                 }
-                qWarning() << "too bad" << g->generatorClass << "is only fallback spported";
+                //qWarning() << "too bad" << g->generatorClass << "is only fallback spported";
                 allSupported = false;
             }
         }
@@ -157,13 +169,13 @@ ComponentData* ComponentData::getHome(ComponentData* subRoot)
 {
     foreach (ComponentData *c, m_homes) {
         while (!subRoot->hasFlag(IndexedString("subroot"))) {
-            subRoot = subRoot->parent;
+            subRoot = subRoot->parent();
             if (!subRoot) return false;
         }
         ComponentData* i = c;
         do {
             if (i == subRoot) return c;
-        } while ((i = i->parent));
+        } while ((i = i->parent()));
     }
     return 0;
 }
@@ -176,8 +188,8 @@ QHash< QByteArray, QVariant > ComponentData::dataForWeb()
     ret["url"] = url();
     ret["componentId"] = componentId();
     ret["dbId"] = dbId();
-    if (parent) {
-        ret["parentId"] = parent->componentId();
+    if (parent()) {
+        ret["parentId"] = parent()->componentId();
     } else {
         ret["parentId"] = false;
     }
@@ -211,8 +223,8 @@ QByteArray serialize(ComponentData* d)
     ret += serializePrivateObjectProperty("_filename", "*", d->filename());
     ret += serializeObjectProperty("componentId", d->componentId());
     ret += serializeObjectProperty("dbId", d->dbId());
-    if (d->parent) {
-        ret += serializeObjectProperty("parentId", d->parent->componentId());
+    if (d->parent()) {
+        ret += serializeObjectProperty("parentId", d->parent()->componentId());
     } else {
         ret += serializeObjectProperty("parentId", NullValue());
     }
@@ -234,10 +246,14 @@ QByteArray serialize(ComponentData* d)
 
 QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s, const Select& childSelect)
 {
-    buildChildren();
-
     QList<ComponentData*> ret;
-    foreach (ComponentData *d, children) {
+    foreach (ComponentData *d, children()) {
+        Q_ASSERT(d);
+        if (d->componentClass().isEmpty()) {
+            qWarning() << "empty componentClass" << this;
+            qWarning() << "parent" << componentId();
+        }
+        Q_ASSERT(!d->componentClass().isEmpty());
         if (s.match(d)) {
             ret << d;
         }
@@ -256,10 +272,8 @@ QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s,
 
 QList< ComponentData* > ComponentData::childComponents(const Select& s)
 {
-    buildChildren();
-
     QList<ComponentData*> ret;
-    foreach (ComponentData *d, children) {
+    foreach (ComponentData *d, children()) {
         if (s.match(d)) {
             ret << d;
         }
@@ -297,7 +311,7 @@ ComponentData* ComponentData::childPageByPath(const QString& path)
                             found = true;
                             break;
                         }
-                    } while ((p = p->parent));
+                    } while ((p = p->parent()));
                 }
                 if (!found) return 0;
                 continue;
@@ -362,8 +376,7 @@ QHash<int, ComponentData*> ComponentData::childIdsHash()
 {
     bool ok;
     if (m_childIdsHash.isEmpty()) {
-        buildChildren();
-        foreach (ComponentData *c, children) {
+        foreach (ComponentData *c, children()) {
             int childIdInt = c->m_childId.toInt(&ok);
             if (ok) {
                 m_childIdsHash[childIdInt * (c->m_idSeparator == Generator::Underscore ? -1 : 1)] = c;
@@ -451,8 +464,7 @@ ComponentData* ComponentData::_getChildComponent(ComponentData* data, QString id
                 found = true;
             }
         } else {
-            data->buildChildren();
-            foreach (ComponentData *c, data->children) {
+            foreach (ComponentData *c, data->children()) {
                 if (c->m_idSeparator == sep && idPart == c->m_childId) {
                     data = c;
                     found = true;
@@ -526,7 +538,7 @@ const ComponentData* ComponentData::pseudoPageOrRoot() const
     const ComponentData *page = this;
     while (page && !(page->componentTypes() & Generator::TypePseudoPage)) {
         if (page == ComponentDataRoot::getInstance()) return page;
-        page = page->parent;
+        page = page->parent();
     }
     return page;
 }

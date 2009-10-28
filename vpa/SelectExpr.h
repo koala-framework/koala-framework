@@ -221,12 +221,21 @@ private:
 };
 QDebug operator<<(QDebug dbg, const SelectExprWhereSubRoot &s);
 
+
+class SelectExprWhereVisible : public SelectExpr {
+public:
+    SelectExprWhereVisible(Unserializer *unserializer);
+    virtual bool match(ComponentData *d) const;
+    virtual QByteArray serialize() const;
+    friend QDebug operator<<(QDebug, const SelectExprWhereVisible &);
+};
+QDebug operator<<(QDebug dbg, const SelectExprWhereVisible &s);
+
 /*
 WhereHasEditComponents,
 WhereComponentKey,
 WhereComponentClasses,
 WhereOnSamePage,
-IgnoreVisible
 */
 
 

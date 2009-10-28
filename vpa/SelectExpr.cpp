@@ -43,6 +43,8 @@ SelectExpr* SelectExpr::create(Unserializer* unserializer)
         return new SelectExprWhereEquals(unserializer);
     } else if (className == "Vps_Model_Select_Expr_Component_SubRoot") {
         return new SelectExprWhereSubRoot(unserializer);
+    } else if (className == "Vps_Model_Select_Expr_Component_Visible") {
+        return new SelectExprWhereVisible(unserializer);
     }
     qWarning() << className;
     Q_ASSERT(0);
@@ -88,6 +90,8 @@ QDebug operator<<(QDebug dbg, const SelectExpr& se)
         dbg.space() << *static_cast<const SelectExprWhereEquals*>(e);
     } else if (dynamic_cast<const SelectExprWhereSubRoot*>(e)) {
         dbg.space() << *static_cast<const SelectExprWhereSubRoot*>(e);
+    } else if (dynamic_cast<const SelectExprWhereVisible*>(e)) {
+        dbg.space() << *static_cast<const SelectExprWhereVisible*>(e);
     } else {
         dbg.space() << "unknown expression";
     }
@@ -559,7 +563,7 @@ SelectExprWhereEquals::SelectExprWhereEquals(Unserializer* unserializer)
 bool SelectExprWhereEquals::match(ComponentData* d) const
 {
     if (!dynamic_cast<GeneratorWithModel*>(d->generator())) return false;
-    static_cast<GeneratorWithModel*>(d->generator())->fetchRowData(d->parent, m_field);
+    static_cast<GeneratorWithModel*>(d->generator())->fetchRowData(d->parent(), m_field);
     if (!d->rowData.contains(m_field)) return false;
     if (d->rowData[m_field] != m_value) {
 //         qDebug() << d->rowData[m_field] << "!=" << m_value;
@@ -615,12 +619,12 @@ bool SelectExprWhereSubRoot::match(ComponentData* d) const
 {
     ComponentData *sr = ComponentData::getComponentById(m_componentId);
     while (!sr->hasFlag(IndexedString("subroot"))) {
-        sr = sr->parent;
+        sr = sr->parent();
         if (!sr) return false;
     }
     do {
         if (d == sr) return true;
-    } while ((d = d->parent));
+    } while ((d = d->parent()));
     return false;
 }
 
@@ -628,6 +632,41 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereSubRoot& s)
 {
     dbg.nospace() << "SelectExprWhereSubRoot(" << s.m_componentId << ")";
     return dbg.nospace();
+}
+
+SelectExprWhereVisible::SelectExprWhereVisible(Unserializer* unserializer)
+{
+    int numProperties = unserializer->readNumber();
+    QByteArray in = unserializer->device()->read(2);
+    Q_ASSERT(in == ":{");
+    for (int i=0; i < numProperties; ++i) {
+        QByteArray varName = unserializer->readString();
+        varName = varName.replace('\0', "");
+    }
+    in = unserializer->device()->read(1);
+    Q_ASSERT(in == "}");
+}
+
+QByteArray SelectExprWhereVisible::serialize() const
+{
+    QByteArray ret;
+    QByteArray cls("Vps_Model_Select_Expr_Component_Visible");
+    ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":0:{";
+    ret += "}";
+    return ret;
+}
+
+bool SelectExprWhereVisible::match(ComponentData* d) const
+{
+    if (!d->isVisible()) return false;
+    if (!d->parent()) return true;
+    return d->parent()->isVisible();
+}
+
+QDebug operator<<(QDebug dbg, const SelectExprWhereVisible& s)
+{
+    dbg.nospace() << "SelectExprWhereVisible";
+    return dbg.space();
 }
 
 

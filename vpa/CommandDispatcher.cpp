@@ -99,6 +99,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         u.readInt(); //array key
         u.readObjectClassName();
         Select s(&u);
+        qDebug() << s;
 
         QList<ComponentData*> ret;
         foreach (const ComponentClass &c, classes) {
@@ -161,6 +162,9 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
 
 
         ComponentData *d = ComponentData::getComponentById(componentId);
+        if (!d) {
+            qWarning() << "invalid componentId" << componentId;
+        }
         Q_ASSERT(d);
         socket->write(serialize(d->recursiveChildComponents(s, childSelect)));
 

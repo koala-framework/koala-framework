@@ -52,6 +52,8 @@ struct Generator
         generators << this;
     }
 
+    virtual ~Generator() {}
+
     enum IdSeparator {
         Dash,
         Underscore,
@@ -94,8 +96,10 @@ struct Generator
     ComponentTypes componentTypes; //TODO umbenennen, da inherit und unique auch dabei ist
     IndexedString model;
     IndexedString box; //TODO macht nicht in jedem generator sinn
+    int priority; //TODO macht nicht in jedem generator sinn
 
     virtual bool showInMenu(ComponentData *d); //TODO should be const
+    virtual bool isVisible(const ComponentData *d) const;
 
     virtual void build(ComponentData *parent, bool inherited) = 0;
     virtual void preload() {}
@@ -114,8 +118,8 @@ struct GeneratorWithModel : public Generator
 {
     void fetchRowData(ComponentData *parent, IndexedString field);
     QList<int> fetchIds(ComponentData *parent, const Select &select) const;
-private:
-    QSet<IndexedString> m_fetchedRowData;
+
+    virtual bool isVisible(const ComponentData* d) const;
 };
 
 struct GeneratorStatic : public Generator

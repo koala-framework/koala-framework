@@ -57,7 +57,7 @@ bool Select::match(ComponentData* data) const
     }
 
     if (!other.isEmpty()) {
-        if (!m_IdsCache.contains(data->parent)) {
+        if (!m_IdsCache.contains(data->parent())) {
             IndexedString gen;
             foreach (SelectExpr *e, where) {
                 if (dynamic_cast<SelectExprWhereGenerator*>(e)) {
@@ -68,20 +68,20 @@ bool Select::match(ComponentData* data) const
             Q_ASSERT(!gen.isEmpty());
             Generator *generator = 0;
             foreach (Generator *g, Generator::generators) {
-                if (g->componentClass == data->parent->componentClass() && g->key == gen) {
+                if (g->componentClass == data->parent()->componentClass() && g->key == gen) {
                     generator = g;
                     break;
                 }
             }
             Q_ASSERT(generator);
             Q_ASSERT(dynamic_cast<GeneratorWithModel*>(generator));
-            const_cast<Select*>(this)->m_IdsCache[data->parent] = static_cast<GeneratorWithModel*>(generator)
-                                                ->fetchIds(data->parent, *this);
+            const_cast<Select*>(this)->m_IdsCache[data->parent()] = static_cast<GeneratorWithModel*>(generator)
+                                                ->fetchIds(data->parent(), *this);
         }
         bool ok;
         int childId = data->childId().toInt(&ok);
         if (!ok) return false;
-        if (!(m_IdsCache[data->parent].contains(childId))) return false;
+        if (!(m_IdsCache[data->parent()].contains(childId))) return false;
     }
     return true;
 }

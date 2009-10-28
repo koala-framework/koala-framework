@@ -74,6 +74,9 @@ void createGenerators()
                 if (xml.isStartElement() && xml.name() == "box") {
                     g->box = IndexedString(xml.readElementText());
                 }
+                if (xml.isStartElement() && xml.name() == "priority") {
+                    g->priority = xml.readElementText().toInt();
+                }
                 if (xml.isStartElement() && xml.name() == "model") {
                     g->model = IndexedString(xml.readElementText());
                 }
@@ -345,12 +348,7 @@ int main(int argc, char** argv)
     if (!server.listen(QHostAddress::Any, 1234)) {
         qFatal(server.errorString().toAscii().constData());
     }
-    /*
-    forever {
-        if (server.waitForNewConnection(30000)) {
-        }
-    }
-    */
+
     return app.exec();
 }
 
