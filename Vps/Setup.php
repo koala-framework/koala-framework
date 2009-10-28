@@ -228,7 +228,7 @@ class Vps_Setup
 {
     public static $configClass;
 
-    public static function setUp($configClass = 'Vps_Config_Web')
+    public static function setUpZend()
     {
         if (file_exists(VPS_PATH.'/include_path')) {
             $zendPath = trim(file_get_contents(VPS_PATH.'/include_path'));
@@ -245,6 +245,12 @@ class Vps_Setup
 
         require_once 'Vps/Loader.php';
         require_once 'Zend/Loader/Autoloader.php';
+    }
+
+    public static function setUp($configClass = 'Vps_Config_Web')
+    {
+        self::setUpZend();
+
         if (isset($_SERVER['REQUEST_URI']) &&
             substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/json-progress-status' &&
             !empty($_REQUEST['progressNum'])
