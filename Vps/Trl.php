@@ -1,4 +1,45 @@
 <?php
+function hlp($string){
+    return Zend_Registry::get('hlp')->hlp($string);
+}
+
+function hlpVps($string){
+    return Zend_Registry::get('hlp')->hlpVps($string);
+}
+
+function trl($string, $text = array())
+{
+    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB);
+}
+
+function trlc($context, $string, $text = array()) {
+    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB);
+}
+
+function trlp($single, $plural, $text =  array()) {
+    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB);
+}
+
+function trlcp($context, $single, $plural = null, $text = array()){
+    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB);
+}
+
+function trlVps($string, $text = array()){
+    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_VPS);
+}
+
+function trlcVps($context, $string, $text = array()){
+    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS);
+}
+
+function trlpVps($single, $plural, $text =  array()){
+    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS);
+}
+
+function trlcpVps($context, $single, $plural, $text = array()){
+    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
+}
+
 class Vps_Trl
 {
     private $_modelWeb;
