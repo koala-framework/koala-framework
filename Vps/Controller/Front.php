@@ -68,13 +68,18 @@ class Vps_Controller_Front extends Zend_Controller_Front
     {
         if (null == $this->_router) {
             if (php_sapi_name() == 'cli') {
-                $this->setRouter(new Vps_Controller_Router_Cli());
+                $this->setRouter($this->_getDefaultCliRouter());
             } else {
                 $this->setRouter($this->getWebRouter());
             }
         }
 
         return $this->_router;
+    }
+
+    protected function _getDefaultCliRouter()
+    {
+        return new Vps_Controller_Router_Cli();
     }
 
     public function getWebRouter()
