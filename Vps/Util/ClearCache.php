@@ -22,6 +22,7 @@ class Vps_Util_ClearCache
         $ret = array();
         foreach (new DirectoryIterator('application/cache') as $d) {
             if ($d->isDir() && substr($d->getFilename(), 0, 1) != '.') {
+                if ($d->getFilename() == 'searchindex') continue;
                 $ret[] = $d->getFilename();
             }
         }
