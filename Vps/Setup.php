@@ -95,6 +95,7 @@ class Vps_Setup
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
+        setlocale(LC_ALL, array('de_AT.UTF-8', 'de.UTF-8', 'de_DE.UTF-8'));
 
         $ip = get_include_path();
         foreach ($config->includepath as $t=>$p) {
