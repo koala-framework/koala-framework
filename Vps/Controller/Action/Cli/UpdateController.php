@@ -121,7 +121,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                         $updateRevision['done'][] = $u->getRevision();
                     }
                 }
-                //file_put_contents('application/update', serialize($updateRevision));
+                file_put_contents('application/update', serialize($updateRevision));
                 echo "\n\033[32mupdate finished\033[0m\n";
 
                 if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
