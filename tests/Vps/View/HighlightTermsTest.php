@@ -47,4 +47,14 @@ class Vps_View_HighlightTermsTest extends PHPUnit_Framework_TestCase
 
         $this->assertLessThanOrEqual(200, mb_strlen(strip_tags($res)));
     }
+
+    public function testNoMatch()
+    {
+        $searchWord = 'blubbel';
+        $h = new Vps_View_Helper_HighlightTerms();
+        $res = $h->highlightTerms($searchWord, $this->_text, array('maxReturnLength' => 50, 'maxReturnBlocks' => 4));
+
+        $this->assertEquals(50, mb_strlen($res));
+        $this->assertEquals('Für. Dies ist ein Text für das Highlighten des Tex', $res);
+    }
 }

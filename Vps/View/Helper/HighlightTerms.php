@@ -32,49 +32,57 @@ class Vps_View_Helper_HighlightTerms
                 preg_match_all("/(^|\W)($term)(\W|$)/i", $text, $matches, PREG_OFFSET_CAPTURE);
                 $m = $matches[2];
                 $blocks = count($m) > $options['maxReturnBlocks'] ? $options['maxReturnBlocks'] : count($m);
-                $blockLength = $options['maxReturnLength'];
-                $blockLength -= $blocks * mb_strlen($options['blockSeparator']);
-                $blockLength /= $blocks;
-                $blockLength = floor($blockLength);
-                for ($i=0; $i<$blocks; $i++) {
-                    $blockPos = floor($m[$i][1] - (($blockLength - mb_strlen($term)) / 2));
-                    if ($blockPos < 0) $blockPos = 0;
-                    $blocksPositions[] = array(
-                        'pos' => $blockPos,
-                        'length' => $blockLength
-                    );
+                if ($blocks >= 1) {
+                    $blockLength = $options['maxReturnLength'];
+                    $blockLength -= $blocks * mb_strlen($options['blockSeparator']);
+                    $blockLength /= $blocks;
+                    $blockLength = floor($blockLength);
+                    for ($i=0; $i<$blocks; $i++) {
+                        $blockPos = floor($m[$i][1] - (($blockLength - mb_strlen($term)) / 2));
+                        if ($blockPos < 0) $blockPos = 0;
+                        $blocksPositions[] = array(
+                            'pos' => $blockPos,
+                            'length' => $blockLength
+                        );
+                    }
                 }
             }
 
             // merge overlapping blocks
-            do {
-                $merged = false;
-                for ($i=0; $i<count($blocksPositions); $i++) {
-                    $curPos = $blocksPositions[$i];
-                    $nextPos = isset($blocksPositions[$i+1]) ? $blocksPositions[$i+1] : null;
-                    if (!$nextPos) break;
+            if ($blocksPositions) {
+                do {
+                    $merged = false;
+                    for ($i=0; $i<count($blocksPositions); $i++) {
+                        $curPos = $blocksPositions[$i];
+                        $nextPos = isset($blocksPositions[$i+1]) ? $blocksPositions[$i+1] : null;
+                        if (!$nextPos) break;
 
-                    if ($curPos['pos'] + $curPos['length'] >= $nextPos['pos']) {
-                        $blocksPositions[$i]['length'] = ($nextPos['pos'] + $nextPos['length']) - $curPos['pos'];
-                        unset($blocksPositions[$i+1]);
-                        // assigning new keys
-                        $blocksPositions = array_values($blocksPositions);
-                        $merged = true;
-                        break;
+                        if ($curPos['pos'] + $curPos['length'] >= $nextPos['pos']) {
+                            $blocksPositions[$i]['length'] = ($nextPos['pos'] + $nextPos['length']) - $curPos['pos'];
+                            unset($blocksPositions[$i+1]);
+                            // assigning new keys
+                            $blocksPositions = array_values($blocksPositions);
+                            $merged = true;
+                            break;
+                        }
                     }
-                }
-            } while ($merged);
+                } while ($merged);
+            }
 
             // building the new string
-            $ret = '';
-            foreach ($blocksPositions as $blockPos) {
-                if ($blockPos['pos'] != 0) $ret .= $options['blockSeparator'];
-                $ret .= mb_substr($text, $blockPos['pos'], $blockPos['length']);
-                $lastBlockPos = $blockPos;
-            }
-            if ($lastBlockPos) {
-                if ($lastBlockPos['pos'] + $lastBlockPos['length'] < mb_strlen($text)) {
-                    $ret .= $options['blockSeparator'];
+            if (!$blocksPositions) {
+                $ret = mb_substr($text, 0, $options['maxReturnLength']);
+            } else {
+                $ret = '';
+                foreach ($blocksPositions as $blockPos) {
+                    if ($blockPos['pos'] != 0) $ret .= $options['blockSeparator'];
+                    $ret .= mb_substr($text, $blockPos['pos'], $blockPos['length']);
+                    $lastBlockPos = $blockPos;
+                }
+                if ($lastBlockPos) {
+                    if ($lastBlockPos['pos'] + $lastBlockPos['length'] < mb_strlen($text)) {
+                        $ret .= $options['blockSeparator'];
+                    }
                 }
             }
         }
