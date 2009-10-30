@@ -1,6 +1,8 @@
 <?php
 abstract class Vps_Update
 {
+    protected $_tags = array();
+
     protected $_actions = array();
     protected $_revision;
 
@@ -8,6 +10,11 @@ abstract class Vps_Update
     {
         $this->_revision = (int)$revision;
         $this->_init();
+    }
+
+    public function getTags()
+    {
+        return $this->_tags;
     }
 
     public function getRevision()
@@ -89,6 +96,7 @@ abstract class Vps_Update
                     && is_dir('./Vps/'.$d->__toString().'/Update')
                 ) {
                     $u = self::getUpdatesForDir('Vps/'.$d->__toString(), $from, $to);
+                    foreach ($u as $i) $i->_tags[] = 'web';
                     $ret = array_merge($ret, $u);
                 }
             }
@@ -97,6 +105,7 @@ abstract class Vps_Update
         $u = self::getUpdatesForDir(VPS_PATH.'/Vps', $from, $to);
         $ret = array_merge($ret, $u);
         $u = self::getUpdatesForDir('./update', $from, $to);
+        foreach ($u as $i) $i->_tags[] = 'web';
         $ret = array_merge($ret, $u);
         $ret = self::_sortByRevision($ret);
         return $ret;
@@ -147,6 +156,10 @@ abstract class Vps_Update
                             if ($fileType == '.sql') {
                                 $u = new Vps_Update_Sql($nr);
                                 $u->sql = file_get_contents($i->getPathname());
+                                if (preg_match("#\\#\\s*tags:(.*)#", $u->sql, $m)) {
+                                    $u->_tags = explode(' ', trim($m[1]));
+                                }
+                                $u->_tags[] = 'db';
                                 $ret[] = $u;
                             } else {
                                 $n = '';
