@@ -166,8 +166,25 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 echo "... ";
             }
             $e = false;
+            if (in_array('db', $update->getTags())) {
+                $databases = array();
+                foreach (Vps_Registry::get('config')->server->databases as $db) {
+                    try {
+                        Vps_Registry::get('dao')->getDbConfig($db);
+                    } catch (Exception $e) {
+                        continue;
+                    }
+                    $database[] = $db;
+                }
+            } else {
+                $databases = array('db');
+            }
             try {
-                $res = $update->$method();
+                foreach ($databases as $db) {
+                    Vps_Registry::set('db', Vps_Registry::get('dao')->getDb($db));
+                    $res = $update->$method();
+                }
+                Vps_Registry::set('db', Vps_Registry::get('dao')->getDb());
             } catch (Exception $e) {
                 if ($debug) throw $e;
                 if ($method == 'checkSettings') {
