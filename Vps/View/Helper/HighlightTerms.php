@@ -19,7 +19,7 @@ class Vps_View_Helper_HighlightTerms
     {
         if (!is_array($terms)) $terms = array($terms);
 
-        if (!isset($options['maxReturnLength'])) $options['maxReturnLength'] = 200;
+        if (!isset($options['maxReturnLength'])) $options['maxReturnLength'] = 350;
         if (!isset($options['maxReturnBlocks'])) $options['maxReturnBlocks'] = 3;
         if (!isset($options['blockSeparator'])) $options['blockSeparator'] = ' ... ';
 
