@@ -121,7 +121,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                         $updateRevision['done'][] = $u->getRevision();
                     }
                 }
-                file_put_contents('application/update', serialize($updateRevision));
+                //file_put_contents('application/update', serialize($updateRevision));
                 echo "\n\033[32mupdate finished\033[0m\n";
 
                 if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
@@ -141,6 +141,19 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
     {
         $ret = true;
         foreach ($updates as $update) {
+            if ($update->getTags()) {
+                if (!array_intersect(
+                    $update->getTags(),
+                    Vps_Registry::get('config')->server->updateTags->toArray()
+                )) {
+                    if ($method != 'checkSettings') {
+                        echo "$method: skipping ".get_class($update);
+                        if ($update->getRevision()) echo " (".$update->getRevision().")";
+                        echo ", tags '".implode(', ', $update->getTags())."' don't match\n";
+                    }
+                    continue; //skip
+                }
+            }
             if ($method != 'checkSettings') {
                 if ($method != 'postClearCache' && !$skipClearCache) {
                     Vps_Util_ClearCache::getInstance()->clearCache('all', false, false);
