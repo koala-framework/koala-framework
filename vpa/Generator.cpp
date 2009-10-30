@@ -434,6 +434,11 @@ QList<ComponentClass> GeneratorStatic::childComponentClasses()
     return component.values();
 }
 
+QList<IndexedString> GeneratorStatic::childComponentKeys()
+{
+    return component.keys();
+}
+
 void GeneratorTable::build(ComponentData* parent, bool inherited)
 {
     Q_UNUSED(inherited);
@@ -452,6 +457,13 @@ QList<ComponentClass> GeneratorTable::childComponentClasses()
 {
     QList<ComponentClass> ret;
     ret << component;
+    return ret;
+}
+
+QList<IndexedString> GeneratorTable::childComponentKeys()
+{
+    QList<IndexedString> ret;
+    ret << key;
     return ret;
 }
 
@@ -484,6 +496,13 @@ QList<ComponentClass> GeneratorTableSql::childComponentClasses()
     ret << component;
     return ret;
 
+}
+
+QList<IndexedString> GeneratorTableSql::childComponentKeys()
+{
+    QList<IndexedString> ret;
+    ret << key;
+    return ret;
 }
 
 void GeneratorTableSqlWithComponent::preload()
@@ -559,6 +578,11 @@ QList<ComponentClass> GeneratorTableSqlWithComponent::childComponentClasses()
     return component.values();
 }
 
+QList<IndexedString> GeneratorTableSqlWithComponent::childComponentKeys()
+{
+    return component.keys();
+}
+
 void GeneratorLoadSql::build(ComponentData* parent, bool inherited)
 {
     Q_UNUSED(inherited);
@@ -596,6 +620,13 @@ QList<ComponentClass> GeneratorLoadSql::childComponentClasses()
     return ret;
 }
 
+QList<IndexedString> GeneratorLoadSql::childComponentKeys()
+{
+    QList<IndexedString> ret;
+    ret << key;
+    return ret;
+}
+
 void GeneratorLoadSqlWithComponent::build(ComponentData* parent, bool inherited)
 {
     Q_UNUSED(inherited);
@@ -625,6 +656,11 @@ void GeneratorLoadSqlWithComponent::build(ComponentData* parent, bool inherited)
 QList<ComponentClass> GeneratorLoadSqlWithComponent::childComponentClasses()
 {
     return component.values();
+}
+
+QList<IndexedString> GeneratorLoadSqlWithComponent::childComponentKeys()
+{
+    return component.keys();
 }
 
 void GeneratorLoad::build(ComponentData* parent, bool inherited)
@@ -701,6 +737,10 @@ QList<ComponentClass> GeneratorLoad::childComponentClasses()
     return component.values();
 }
 
+QList<IndexedString> GeneratorLoad::childComponentKeys()
+{
+    return component.keys();
+}
 
 void GeneratorPages::build(ComponentData* parent, bool inherited)
 {
@@ -756,4 +796,11 @@ QList< ComponentClass > GeneratorLinkTag::childComponentClasses()
 {
     return component.values();
 }
+
+
+QList<IndexedString> GeneratorLinkTag::childComponentKeys()
+{
+    return component.keys();
+}
+
 

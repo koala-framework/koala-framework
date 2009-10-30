@@ -86,6 +86,22 @@ bool Select::match(ComponentData* data) const
     return true;
 }
 
+
+QList<ComponentData*> Select::filter(const QList<ComponentData*>& data) const
+{
+    QList<ComponentData*> ret;
+    int i=0;
+    foreach (ComponentData *d, data) {
+        if (match(d)) {
+            i++;
+            if (i > limitOffset) ret << d;
+        }
+        if (ret.count() == limitCount) break;
+    }
+    return ret;
+}
+
+
 QDebug operator<<(QDebug dbg, const Select& s)
 {
     foreach (SelectExpr *e, s.where) {

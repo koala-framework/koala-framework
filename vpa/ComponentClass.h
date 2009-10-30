@@ -15,6 +15,7 @@ private:
     QHash<IndexedString, QVariant> flags;
     QList<IndexedString> m_parentClasses;
     QHash<IndexedString, QByteArray> settings;
+    QList<IndexedString> m_editComponents;
 };
 
 class ComponentClass
@@ -63,6 +64,13 @@ public:
         QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!m_componentClass.isEmpty());
         return m_data[m_componentClass].m_parentClasses;
+    }
+
+    inline QList<IndexedString> editComponents() const
+    {
+        QMutexLocker locker(&m_dataMutex);
+        Q_ASSERT(!m_componentClass.isEmpty());
+        return m_data[m_componentClass].m_editComponents;
     }
 
     inline bool hasFlag(IndexedString flag) const

@@ -105,6 +105,7 @@ struct Generator
     virtual void preload() {}
 
     virtual QList<ComponentClass> childComponentClasses() = 0;
+    virtual QList<IndexedString> childComponentKeys() = 0;
 
     static QHash<Type, int> buildCallCount;
     static QList<Generator*> generators;
@@ -135,6 +136,7 @@ struct GeneratorStatic : public Generator
 
     virtual void build(ComponentData *parent, bool inherited);
     virtual QList<ComponentClass> childComponentClasses();
+    virtual QList<IndexedString> childComponentKeys();
 };
 
 struct GeneratorTable : public GeneratorWithModel
@@ -148,6 +150,7 @@ struct GeneratorTable : public GeneratorWithModel
     ComponentClass component;
     virtual void build(ComponentData *parent, bool inherited);
     virtual QList<ComponentClass> childComponentClasses();
+    virtual QList<IndexedString> childComponentKeys();
 };
 struct GeneratorTableSql : public GeneratorWithModel
 {
@@ -156,6 +159,7 @@ struct GeneratorTableSql : public GeneratorWithModel
     ComponentClass component;
     virtual void build(ComponentData *parent, bool inherited);
     virtual QList<ComponentClass> childComponentClasses();
+    virtual QList<IndexedString> childComponentKeys();
 };
 struct GeneratorTableSqlWithComponent : public GeneratorWithModel
 {
@@ -169,6 +173,7 @@ struct GeneratorTableSqlWithComponent : public GeneratorWithModel
 
     virtual void build(ComponentData *parent, bool inherited);
     virtual QList<ComponentClass> childComponentClasses();
+    virtual QList<IndexedString> childComponentKeys();
 
     //verwendet von ComponentData::getComponentsByClass
     //um einen einsprungspunkt für paragraphs zu haben
@@ -179,12 +184,14 @@ struct GeneratorLoadSql : public GeneratorWithModel
     ComponentClass component;
     virtual void build(ComponentData *parent, bool inherited);
     virtual QList<ComponentClass> childComponentClasses();
+    virtual QList<IndexedString> childComponentKeys();
 };
 struct GeneratorLoadSqlWithComponent : public GeneratorWithModel
 {
     QHash<IndexedString, ComponentClass> component;
     virtual void build(ComponentData *parent, bool inherited);
     virtual QList<ComponentClass> childComponentClasses();
+    virtual QList<IndexedString> childComponentKeys();
 };
 struct GeneratorLoad : public GeneratorWithModel
 {
@@ -196,6 +203,7 @@ struct GeneratorLoad : public GeneratorWithModel
 
     virtual void build(ComponentData* parent, bool inherited);
     virtual QList<ComponentClass> childComponentClasses();
+    virtual QList<IndexedString> childComponentKeys();
 
 protected:
     void _build(ComponentData* parent, QList<QByteArray> args);
@@ -220,6 +228,7 @@ struct GeneratorLinkTag : public Generator
 
     virtual void build(ComponentData* parent, bool inherited);
     virtual QList<ComponentClass> childComponentClasses();
+    virtual QList<IndexedString> childComponentKeys();
 };
 
 #endif // GENERATOR_H

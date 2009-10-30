@@ -67,11 +67,18 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         ComponentData *d = ComponentData::getComponentById(QString::fromUtf8(u.readString()));
         socket->write(serialize(d));
     } else if (cmd == "getComponentsByDbId") {
-        Q_ASSERT(paramCount == 1);
+        Q_ASSERT(paramCount == 2);
         u.readInt(); //array key
 
-        QList< ComponentData* > d = ComponentData::getComponentsByDbId(QString::fromUtf8(u.readString()));
-        socket->write(serialize(d));
+
+        QString id = QString::fromUtf8(u.readString());
+
+        u.readInt(); //array key
+        u.readObjectClassName();
+        Select s(&u);
+        qDebug() << s;
+
+        socket->write(serialize(s.filter(ComponentData::getComponentsByDbId(id))));
     } else if (cmd == "getComponentsBySameClasses") {
         Q_ASSERT(paramCount == 2);
         u.readInt(); //array key

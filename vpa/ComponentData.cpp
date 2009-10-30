@@ -5,7 +5,7 @@
 #include "ComponentDataRoot.h"
 #include "Generator.h"
 
-#define ifDebugCreateComponentData(x)
+#define ifDebugCreateComponentData(x) x
 #define ifDebugGetComponentById(x)
 #include <QStringList>
 

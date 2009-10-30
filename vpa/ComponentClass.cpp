@@ -49,7 +49,18 @@ void ComponentClass::init()
                             buffer.open(QIODevice::ReadOnly);
                             Unserializer u(&buffer);
                             shortcutUrl = IndexedString(u.readString());
+                        } else if (key == IndexedString("editComponents")) {
+                            QBuffer buffer(&value);
+                            buffer.open(QIODevice::ReadOnly);
+                            Unserializer u(&buffer);
+                            int cnt = u.readArrayStart();
+                            for (int j=0; j<cnt; ++j) {
+                                u.readInt(); //index
+                                data.m_editComponents << IndexedString(u.readString());
+                            }
+                            u.readArrayEnd();
                         }
+                        
                     }
                     s.readArrayEnd();
                 }

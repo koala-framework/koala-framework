@@ -231,6 +231,16 @@ public:
 };
 QDebug operator<<(QDebug dbg, const SelectExprWhereVisible &s);
 
+
+class SelectExprWhereHasEditComponents : public SelectExpr {
+public:
+    SelectExprWhereHasEditComponents(Unserializer *unserializer);
+    virtual bool match(ComponentData *d) const;
+    virtual QByteArray serialize() const;
+    friend QDebug operator<<(QDebug, const SelectExprWhereHasEditComponents &);
+};
+QDebug operator<<(QDebug dbg, const SelectExprWhereHasEditComponents &s);
+
 /*
 WhereHasEditComponents,
 WhereComponentKey,

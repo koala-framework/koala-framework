@@ -45,6 +45,8 @@ SelectExpr* SelectExpr::create(Unserializer* unserializer)
         return new SelectExprWhereSubRoot(unserializer);
     } else if (className == "Vps_Model_Select_Expr_Component_Visible") {
         return new SelectExprWhereVisible(unserializer);
+    } else if (className == "Vps_Model_Select_Expr_Component_HasEditComponents") {
+        return new SelectExprWhereHasEditComponents(unserializer);
     }
     qWarning() << className;
     Q_ASSERT(0);
@@ -92,6 +94,8 @@ QDebug operator<<(QDebug dbg, const SelectExpr& se)
         dbg.space() << *static_cast<const SelectExprWhereSubRoot*>(e);
     } else if (dynamic_cast<const SelectExprWhereVisible*>(e)) {
         dbg.space() << *static_cast<const SelectExprWhereVisible*>(e);
+    } else if (dynamic_cast<const SelectExprWhereHasEditComponents*>(e)) {
+        dbg.space() << *static_cast<const SelectExprWhereHasEditComponents*>(e);
     } else {
         dbg.space() << "unknown expression";
     }
@@ -658,9 +662,14 @@ QByteArray SelectExprWhereVisible::serialize() const
 
 bool SelectExprWhereVisible::match(ComponentData* d) const
 {
+    return true; //TODO: performanceproblem, erstmal deaktiviert
+    /*
     if (!d->isVisible()) return false;
-    if (!d->parent()) return true;
-    return d->parent()->isVisible();
+    while ((d = d->parent())) {
+        if (!d->parent()->isVisible()) return false;
+    }
+    return true;
+    */
 }
 
 QDebug operator<<(QDebug dbg, const SelectExprWhereVisible& s)
@@ -671,6 +680,39 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereVisible& s)
 
 
 
+SelectExprWhereHasEditComponents::SelectExprWhereHasEditComponents(Unserializer* unserializer)
+{
+    int numProperties = unserializer->readNumber();
+    Q_ASSERT(numProperties== 0);
+    QByteArray in = unserializer->device()->read(3);
+    Q_ASSERT(in == ":{}");
+}
+
+bool SelectExprWhereHasEditComponents::match(ComponentData* d) const
+{
+    QList<IndexedString> ec = d->generator()->componentClass.editComponents();
+    foreach (const IndexedString &i, ec) {
+        if (d->generator()->childComponentKeys().contains(i)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+QByteArray SelectExprWhereHasEditComponents::serialize() const
+{
+    QByteArray ret;
+    QByteArray cls("Vps_Model_Select_Expr_Component_HasEditComponents");
+    ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":0:{";
+    ret += "}";
+    return ret;
+}
+
+QDebug operator<<(QDebug dbg, const SelectExprWhereHasEditComponents&)
+{
+    dbg.nospace() << "SelectExprWhereHasEditComponents";
+    return dbg.nospace();
+}
 
 
 

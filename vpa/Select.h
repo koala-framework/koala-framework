@@ -12,6 +12,7 @@ public:
     ~Select();
 
     bool match(ComponentData *data) const;
+    QList<ComponentData*> filter(const QList<ComponentData*>& data) const;
 
 public:
     QList<SelectExpr*> where;
