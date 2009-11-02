@@ -141,15 +141,17 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
     {
         $ret = true;
         foreach ($updates as $update) {
-            if ($update->getTags()) {
+            if ($update->getTags() && !in_array('web', $update->getTags())) {
                 if (!array_intersect(
                     $update->getTags(),
                     Vps_Registry::get('config')->server->updateTags->toArray()
-                )) {
+                ) && !($update->getTags()==array('db') && get_class($update)=='Vps_Update_Sql')) {
                     if ($method != 'checkSettings') {
                         echo "$method: skipping ".get_class($update);
                         if ($update->getRevision()) echo " (".$update->getRevision().")";
-                        echo ", tags '".implode(', ', $update->getTags())."' don't match\n";
+                        echo ", tags '".implode(', ', $update->getTags())."' don't match ";
+                        echo "(".implode(', ', Vps_Registry::get('config')->server->updateTags->toArray()).")";
+                        echo "\n";
                     }
                     continue; //skip
                 }
@@ -167,38 +169,43 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             }
             $e = false;
             if (in_array('db', $update->getTags())) {
-                $databases = array();
-                foreach (Vps_Registry::get('config')->server->databases as $db) {
-                    try {
-                        Vps_Registry::get('dao')->getDbConfig($db);
-                    } catch (Exception $e) {
-                        continue;
-                    }
-                    $database[] = $db;
-                }
+                $databases = Vps_Registry::get('config')->server->databases->toArray();
             } else {
-                $databases = array('db');
+                $databases = array('web');
             }
-            try {
-                foreach ($databases as $db) {
-                    Vps_Registry::set('db', Vps_Registry::get('dao')->getDb($db));
+            foreach ($databases as $db) {
+                if ($method != 'checkSettings') {
+                    echo $db.' ';
+                }
+                try {
+                    $db = Vps_Registry::get('dao')->getDb($db);
+                } catch (Exception $e) {
+                    echo "skipping, invalid db\n";
+                    continue;
+                }
+                Vps_Registry::set('db', $db);
+                try {
                     $res = $update->$method();
+                } catch (Exception $e) {
+                    if ($debug) throw $e;
+                    if ($method == 'checkSettings') {
+                        echo get_class($update);
+                    }
+                    echo "\n\033[31mError:\033[0m\n";
+                    echo $e->getMessage()."\n\n";
+                    $ret = false;
                 }
+                if (!$e) {
+                    if ($res) {
+                        print_r($res);
+                    }
+                }
+
+                //reset to default database
                 Vps_Registry::set('db', Vps_Registry::get('dao')->getDb());
-            } catch (Exception $e) {
-                if ($debug) throw $e;
-                if ($method == 'checkSettings') {
-                    echo get_class($update);
-                }
-                echo "\n\033[31mError:\033[0m\n";
-                echo $e->getMessage()."\n\n";
-                $ret = false;
             }
-            if (!$e) {
-                if ($method != 'checkSettings') echo "\033[32 OK \033[0m\n";
-                if ($res) {
-                    print_r($res);
-                }
+            if ($method != 'checkSettings' && $ret) {
+                echo "\033[32 OK \033[0m\n";
             }
         }
         return $ret;
