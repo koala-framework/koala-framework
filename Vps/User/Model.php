@@ -270,6 +270,12 @@ class Vps_User_Model extends Vps_Model_Proxy
     public function getAuthedUserRole()
     {
         if (php_sapi_name() == 'cli') return 'cli';
+
+        $loginData = Vps_Auth::getInstance()->getStorage()->read();
+        if (isset($loginData['userRole'])) {
+            return $loginData['userRole'];
+        }
+
         $u = $this->getAuthedUser();
         return $u ? $u->role : 'guest';
     }
