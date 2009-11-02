@@ -180,7 +180,7 @@ abstract class Vps_Update
                         if (!$i->isFile()) continue;
                         $f = $i->__toString();
                         $fileType = substr($f, -4);
-                        if ($fileType != '.php' && $fileType != '.sql') continue;
+                        if ($fileType != '.php') continue;
                         $f = substr($f, 0, -4);
                         $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_Update_Always_'.$f;
                         if (is_instance_of($n, 'Vps_Update')) {
