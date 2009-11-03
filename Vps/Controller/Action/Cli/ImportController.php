@@ -552,7 +552,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     public function getDbConfigAction()
     {
-        echo serialize(Zend_Registry::get('db')->getConfig($this->_getParam('key')));
+        echo serialize(Zend_Registry::get('dao')->getDbConfig($this->_getParam('key')));
         exit;
     }
 
