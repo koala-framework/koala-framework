@@ -67,30 +67,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             throw new Vps_ClientException("Can't get onlineRevision");
         }
 
-        try {
-            Vps_Registry::get('db');
-        } catch (Vps_Dao_Exception $e) {
-            //ignore
-        } catch (Zend_Db_Adapter_Exception $e) {
-            $dbConfig = Vps_Registry::get('dao')->getDbConfig();
-            $dbConfig['dbname'] = 'test';
-            $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
-            $databases = array();
-            foreach ($db->query("SHOW DATABASES")->fetchAll() as $r) {
-                $databases[] = $r['Database'];
-            }
-
-            $dbConfig = Vps_Registry::get('dao')->getDbConfig();
-            if (!in_array($dbConfig['dbname'], $databases)) {
-                echo "Datenbank {$dbConfig['dbname']} nicht vorhanden, versuche sie zu erstellen...\n";
-                system("echo \"CREATE DATABASE \`{$dbConfig['dbname']}\`;\" | mysql", $ret);
-                if ($ret != 0) {
-                    throw new Vps_ClientException("Kann Datenbank '{$dbConfig['dbname']}' nicht erstellen, bitte manuell anlegen od. config anpassen.");
-                }
-                echo "OK\n";
-            }
-        }
-        
         if (!$this->_getParam('skip-users') && Vps_Registry::get('config')->application->id != 'service') {
             if (Vps_Setup::getConfigSection() == 'production') {
                 echo "\nAuf Production wird der user service NICHT importiert, das haette fatale Folgen.\n";
@@ -161,13 +137,26 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
         }
 
-        try {
-            $db = Zend_Registry::get('db');
-        } catch (Exception $e) {
-            $db = false;
-        }
-        if ($db) {
-            $dbConfig = $db->getConfig();
+        exec("echo \"SHOW DATABASES\" | mysql", $existingDatabases);
+
+        $databases = $config->server->databases->toArray();
+        if (!$databases) $databases = array('web');
+        foreach ($databases as $dbKey) {
+            try {
+                $dbConfig = Vps_Registry::get('dao')->getDbConfig($dbKey);
+            } catch (Vps_Dao_Exception $e) {
+                echo "ignoriere $dbKey, nicht in lokaler db config vorhanden...\n";
+                continue;
+            }
+            if (!in_array($dbConfig['dbname'], $existingDatabases)) {
+                echo "Datenbank {$dbConfig['dbname']} nicht vorhanden, versuche sie zu erstellen...\n";
+                system("echo \"CREATE DATABASE \`{$dbConfig['dbname']}\`;\" | mysql", $ret);
+                if ($ret != 0) {
+                    throw new Vps_ClientException("Kann Datenbank '{$dbConfig['dbname']}' nicht erstellen, bitte manuell anlegen od. config anpassen.");
+                }
+                echo "OK\n";
+            }
+            $db = Zend_Registry::get('dao')->getDb($dbKey);
 
             $mysqlLocalOptions = "--host=$dbConfig[host] ";
             //auskommentiert weil: es muss in ~/.my.cnf ein benutzer der das machen darf eingestellt sein!
@@ -176,7 +165,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
 
 
-            echo "erstelle datenbank-backup...\n";
+            echo "erstelle datenbank-backup '$dbKey'...\n";
 
             $tables = $db->fetchCol('SHOW TABLES');
 
@@ -205,7 +194,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                                 $keepTables[] = $table;
                             }
                         }
-                    } else {
+                    } else if (in_array($t, $tables)) {
                         $keepTables[] = $t;
                     }
                 }
@@ -220,23 +209,23 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
 
             if ($keepTables) {
-                echo "erstelle dump fuer KeepTables...\n";
+                echo "erstelle dump fuer KeepTables '$dbKey'...\n";
                 $keepTablesDump = tempnam('/tmp', 'importkeep');
                 $cmd = "mysqldump --add-drop-table=false --no-create-info=true $mysqlLocalOptions $dbConfig[dbname] ".implode(' ', $keepTables).">> $keepTablesDump";
                 if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
                 $this->_systemCheckRet($cmd);
             }
 
-            echo "loesche lokale datenbank...\n";
+            echo "loesche lokale datenbank '$dbKey'...\n";
             $this->_systemCheckRet("echo \"DROP DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
 
-            echo "erstelle neue datenbank...\n";
+            echo "erstelle neue datenbank '$dbKey'...\n";
             $this->_systemCheckRet("echo \"CREATE DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
 
 
-            echo "importiere datenbank...\n";
+            echo "importiere datenbank '$dbKey'...\n";
             if ($ownConfig->server->host == $config->server->host) {
-                $cmd = "cd {$config->server->dir} && php bootstrap.php import get-db-config";
+                $cmd = "cd {$config->server->dir} && php bootstrap.php import get-db-config --key=$dbKey";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
                 $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
@@ -246,12 +235,12 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                     $ignoreTables = implode(',', array_merge($cacheTables, $keepTables));
                     if ($ignoreTables) $ignoreTables = " --ignore-tables=$ignoreTables";
                 }
-                $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir db-dump";
+                $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir db-dump --key=$dbKey";
                 $cmd .= "$ignoreTables";
                 if ($this->_getParam('debug')) $cmd .= " --debug";
                 $cmd .= " | gunzip";
             } else {
-                $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-db-config");
+                $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-db-config --key=$dbKey");
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
                 $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
@@ -288,7 +277,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $procDump->close();
 
             if ($keepTables) {
-                echo "spiele KeepTables ein...\n";
+                echo "spiele KeepTables ein '$dbKey'...\n";
                 $cmd = "mysql $mysqlLocalOptions $dbConfig[dbname] < $keepTablesDump";
                 if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
                 $this->_systemCheckRet($cmd);
@@ -563,7 +552,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     public function getDbConfigAction()
     {
-        echo serialize(Zend_Registry::get('db')->getConfig());
+        echo serialize(Zend_Registry::get('db')->getConfig($this->_getParam('key')));
         exit;
     }
 
