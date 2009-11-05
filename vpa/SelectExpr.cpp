@@ -149,8 +149,9 @@ SelectExprWhereComponentType::SelectExprWhereComponentType(Unserializer* unseria
 }
 
 
-bool SelectExprWhereComponentType::match(ComponentData* d) const
+bool SelectExprWhereComponentType::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     return d->componentTypes() & m_type;
 }
 
@@ -223,8 +224,9 @@ QByteArray SelectExprWhereShowInMenu::serialize() const
     return ret;
 }
 
-bool SelectExprWhereShowInMenu::match(ComponentData* d) const
+bool SelectExprWhereShowInMenu::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     return d->generator()->showInMenu(d);
 }
 
@@ -254,10 +256,16 @@ SelectExprWhereHasFlag::SelectExprWhereHasFlag(Unserializer* unserializer)
     Q_ASSERT(in == "}");
 }
 
-bool SelectExprWhereHasFlag::match(ComponentData* d) const
+bool SelectExprWhereHasFlag::match(ComponentData* d, ComponentData *parentData) const
 {
-    if (!d->hasFlag(m_flag)) return false;
-    return true;
+    Q_UNUSED(parentData);
+    return d->hasFlag(m_flag);
+}
+
+bool SelectExprWhereHasFlag::mightMatch(const ComponentClass& cls)
+{
+    //qDebug() << "WhereHasFlag::mightMatch" << m_flag << cls << cls.hasFlag(m_flag);
+    return cls.hasFlag(m_flag);
 }
 
 QByteArray SelectExprWhereHasFlag::serialize() const
@@ -292,8 +300,9 @@ SelectExprWhereFilename::SelectExprWhereFilename(Unserializer* unserializer)
     Q_ASSERT(in == "}");
 }
 
-bool SelectExprWhereFilename::match(ComponentData* d) const
+bool SelectExprWhereFilename::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     return d->filename() == m_filename;
 }
 
@@ -325,8 +334,9 @@ SelectExprWhereIsHome::SelectExprWhereIsHome(Unserializer* unserializer)
     Q_ASSERT(in == ":{}");
 }
 
-bool SelectExprWhereIsHome::match(ComponentData* d) const
+bool SelectExprWhereIsHome::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     return d->isHome();
 }
 
@@ -361,8 +371,9 @@ SelectExprWhereGenerator::SelectExprWhereGenerator(Unserializer* unserializer)
     Q_ASSERT(in == "}");
 }
 
-bool SelectExprWhereGenerator::match(ComponentData* d) const
+bool SelectExprWhereGenerator::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     return d->generator()->key == m_generator;
 }
 
@@ -399,8 +410,9 @@ SelectExprWhereGeneratorClass::SelectExprWhereGeneratorClass(Unserializer* unser
     Q_ASSERT(in == "}");
 }
 
-bool SelectExprWhereGeneratorClass::match(ComponentData* d) const
+bool SelectExprWhereGeneratorClass::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     if (d->generator()->generatorClass == m_generatorClass) {
         return true;
     }
@@ -444,8 +456,9 @@ SelectExprWhereIdEquals::SelectExprWhereIdEquals(Unserializer* unserializer)
     Q_ASSERT(in == "}");
 }
 
-bool SelectExprWhereIdEquals::match(ComponentData* d) const
+bool SelectExprWhereIdEquals::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     return d->childIdWithSeparator() == m_id;
 }
 
@@ -474,8 +487,9 @@ SelectExprWherePageGenerator::SelectExprWherePageGenerator(Unserializer* unseria
     Q_ASSERT(in == ":{}");
 }
 
-bool SelectExprWherePageGenerator::match(ComponentData* d) const
+bool SelectExprWherePageGenerator::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     //TODO: kann diese klasse im web abgeleitet werden?
     static IndexedString c("Vps_Component_Generator_Page");
     static IndexedString c2("Vpc_Root_DomainRoot_Category_PageGenerator");
@@ -517,10 +531,11 @@ SelectExprWhereSql::SelectExprWhereSql(Unserializer* unserializer)
     Q_ASSERT(in == "}");
 }
 
-bool SelectExprWhereSql::match(ComponentData* d) const
+bool SelectExprWhereSql::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     Q_UNUSED(d);
-    //not implemented, da müsste direkt die datenbank gefragt werden oder so
+    //not implemented, da muesste direkt die datenbank gefragt werden oder so
     return true;
 }
 
@@ -564,8 +579,9 @@ SelectExprWhereEquals::SelectExprWhereEquals(Unserializer* unserializer)
     Q_ASSERT(in == "}");
 }
 
-bool SelectExprWhereEquals::match(ComponentData* d) const
+bool SelectExprWhereEquals::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     if (!dynamic_cast<GeneratorWithModel*>(d->generator())) return false;
     static_cast<GeneratorWithModel*>(d->generator())->fetchRowData(d->parent(), m_field);
     if (!d->rowData.contains(m_field)) return false;
@@ -619,8 +635,9 @@ QByteArray SelectExprWhereSubRoot::serialize() const
     return ret;
 }
 
-bool SelectExprWhereSubRoot::match(ComponentData* d) const
+bool SelectExprWhereSubRoot::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     ComponentData *sr = ComponentData::getComponentById(m_componentId);
     while (!sr->hasFlag(IndexedString("subroot"))) {
         sr = sr->parent();
@@ -660,8 +677,9 @@ QByteArray SelectExprWhereVisible::serialize() const
     return ret;
 }
 
-bool SelectExprWhereVisible::match(ComponentData* d) const
+bool SelectExprWhereVisible::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(parentData);
     return true; //TODO: performanceproblem, erstmal deaktiviert
     /*
     if (!d->isVisible()) return false;
@@ -688,9 +706,9 @@ SelectExprWhereHasEditComponents::SelectExprWhereHasEditComponents(Unserializer*
     Q_ASSERT(in == ":{}");
 }
 
-bool SelectExprWhereHasEditComponents::match(ComponentData* d) const
+bool SelectExprWhereHasEditComponents::match(ComponentData* d, ComponentData *parentData) const
 {
-    QList<IndexedString> ec = d->generator()->componentClass.editComponents();
+    QList<IndexedString> ec = parentData->componentClass().editComponents();
     foreach (const IndexedString &i, ec) {
         if (d->generator()->childComponentKeys().contains(i)) {
             return true;
@@ -698,6 +716,15 @@ bool SelectExprWhereHasEditComponents::match(ComponentData* d) const
     }
     return false;
 }
+
+
+bool SelectExprWhereHasEditComponents::mightMatch(const ComponentClass& cls)
+{
+    //qDebug() << "SelectExprWhereHasEditComponents::mightMatch" << cls << (!cls.editComponents().isEmpty());
+    //TODO very simple implementation
+    return !cls.editComponents().isEmpty();
+}
+
 
 QByteArray SelectExprWhereHasEditComponents::serialize() const
 {

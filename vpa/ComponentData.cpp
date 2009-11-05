@@ -1,13 +1,15 @@
 #include "ComponentData.h"
 
 #include <QRegExp>
+#include <QStringList>
+#include <QThread>
 
 #include "ComponentDataRoot.h"
 #include "Generator.h"
 
 #define ifDebugCreateComponentData(x) x
 #define ifDebugGetComponentById(x)
-#include <QStringList>
+#include "ConnectionThread.h"
 
 
 int ComponentData::count = 0;
@@ -77,6 +79,10 @@ void ComponentData::init()
     m_componentClassHash[m_componentClass.toIndexedString()] << this;
 
     ++count;
+    if (qobject_cast<ConnectionThread*>(QThread::currentThread())) {
+        static_cast<ConnectionThread*>(QThread::currentThread())->componentCreated();
+    }
+
     ifDebugCreateComponentData( qDebug() << count << componentId() << componentClass().toString(); )
     if (m_idSeparator == Generator::NoSeparator) {
         if (m_idHash.contains(componentId())) {
@@ -84,6 +90,10 @@ void ComponentData::init()
         }
         Q_ASSERT(!m_idHash.contains(componentId()));
         m_idHash[componentId()] = this;
+    }
+
+    if (generator()) {
+        generator()->builtComponents << this;
     }
 }
 
@@ -99,6 +109,13 @@ ComponentData::~ComponentData()
     m_homes.removeAll(this);
     foreach (int key, m_parent->m_childIdsHash.keys(this)) {
         m_parent->m_childIdsHash.remove(key);
+    }
+    m_parent->m_children.removeAll(this);
+    generator()->builtComponents.removeAll(this);
+    foreach (ComponentData *c, m_children) {
+        if (!(c->generator()->componentTypes & Generator::TypeInherit)) { //TODO: das leakt womöglich
+            delete c;
+        }
     }
 }
 
@@ -246,6 +263,8 @@ QByteArray serialize(ComponentData* d)
 
 QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s, const Select& childSelect)
 {
+// static int depth=0;
+// depth++;
     QList<ComponentData*> ret;
     foreach (ComponentData *d, children()) {
         Q_ASSERT(d);
@@ -254,19 +273,28 @@ QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s,
             qWarning() << "parent" << componentId();
         }
         Q_ASSERT(!d->componentClass().isEmpty());
-        if (s.match(d)) {
+        if (s.match(d, this)) {
             ret << d;
         }
         if (s.limitCount && ret.count() >= (s.limitCount+s.limitOffset)) {
             break;
         }
-        if (childSelect.match(d)) {
-            ret << d->recursiveChildComponents(s, childSelect);
+        if (childSelect.match(d, this)) {
+//             QString prefix;
+//             for(int i=1; i<depth; ++i) {
+//                 prefix += "  ";
+//             }
+            //qDebug() << /*prefix <<*/ "recursiveChildComponents: childSelect matched for" << d->componentId();
+            if (s.couldCreateIndirectly(d->componentClass())) {
+                //qDebug() << /*prefix <<*/ "recursiveChildComponents: couldCreateIndirectly also matched" << d->componentClass();
+                ret << d->recursiveChildComponents(s, childSelect);
+            }
         }
     }
     if (s.limitOffset) {
         ret = ret.mid(s.limitOffset);
     }
+// depth--;
     return ret;
 }
 
@@ -274,7 +302,7 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
 {
     QList<ComponentData*> ret;
     foreach (ComponentData *d, children()) {
-        if (s.match(d)) {
+        if (s.match(d, this)) {
             ret << d;
         }
         if (s.limitCount && ret.count() >= (s.limitCount+s.limitOffset)) {

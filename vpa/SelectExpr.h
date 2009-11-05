@@ -9,7 +9,12 @@ class ComponentData;
 
 class SelectExpr {
 public:
-    virtual bool match(ComponentData*) const = 0;
+    virtual bool match(ComponentData*, ComponentData *parentData) const = 0;
+    virtual bool mightMatch(const ComponentClass& cls) {
+        Q_UNUSED(cls);
+        return true; //kann wenn n?¢ùtig false zur??ckgeben f??r performance
+                     //true ist aber _immer_ eine g??ltige antwort
+    }
     virtual QByteArray serialize() const = 0;
 
     static SelectExpr *create(Unserializer *unserializer);
@@ -23,8 +28,15 @@ public:
     SelectExprNot(Unserializer *unserializer);
     SelectExprNot(SelectExpr *e) : m_expr(e) {}
     ~SelectExprNot() { delete m_expr; }
-    virtual bool match(ComponentData *d) const {
-        return !m_expr->match(d);
+    virtual bool match(ComponentData *d, ComponentData *parentData) const {
+        return !m_expr->match(d, parentData);
+    }
+    virtual bool mightMatch(const ComponentClass& cls) {
+        Q_UNUSED(cls);
+        return true;
+
+        //das stimmt so nicht, da es ja _might_Match heisst und so ned umgedreht werden kann
+        //return !m_expr->mightMatch(cls);
     }
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprNot &);
@@ -38,7 +50,7 @@ class SelectExprWhereComponentType : public SelectExpr {
 public:
     SelectExprWhereComponentType(Unserializer *unserializer, Generator::ComponentTypes type);
     SelectExprWhereComponentType(Generator::ComponentTypes type) : m_type(type) {}
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     friend QDebug operator<<(QDebug, const SelectExprWhereComponentType &);
 
 private:
@@ -82,7 +94,7 @@ public:
     SelectExprWhereShowInMenu(Unserializer *unserializer)
       : SelectExprWhereComponentType(unserializer, Generator::TypeShowInMenu) {}
     virtual QByteArray serialize() const;
-    virtual bool match(ComponentData* d) const;
+    virtual bool match(ComponentData* d, ComponentData *parentData) const;
 };
 
 class SelectExprWhereInherit : public SelectExprWhereComponentType {
@@ -103,7 +115,8 @@ class SelectExprWhereHasFlag : public SelectExpr {
 public:
     SelectExprWhereHasFlag(Unserializer *unserializer);
     SelectExprWhereHasFlag(IndexedString flag) : m_flag(flag) {}
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
+    virtual bool mightMatch(const ComponentClass& cls);
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereHasFlag &);
 
@@ -117,7 +130,7 @@ class SelectExprWhereFilename : public SelectExpr {
 public:
     SelectExprWhereFilename(Unserializer *unserializer);
     SelectExprWhereFilename(const QString fn) : SelectExpr(), m_filename(fn) {}
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereFilename &);
 
@@ -130,7 +143,7 @@ class SelectExprWhereIsHome : public SelectExpr {
 public:
     SelectExprWhereIsHome();
     SelectExprWhereIsHome(Unserializer *unserializer);
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
 };
 QDebug operator<<(QDebug dbg, const SelectExprWhereIsHome &s);
@@ -138,7 +151,7 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereIsHome &s);
 class SelectExprWhereGenerator : public SelectExpr {
 public:
     SelectExprWhereGenerator(Unserializer *unserializer);
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereGenerator &);
 
@@ -154,7 +167,7 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereGenerator &s);
 class SelectExprWhereGeneratorClass : public SelectExpr {
 public:
     SelectExprWhereGeneratorClass(Unserializer *unserializer);
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereGeneratorClass &);
 
@@ -166,7 +179,7 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereGeneratorClass &s);
 class SelectExprWhereIdEquals : public SelectExpr {
 public:
     SelectExprWhereIdEquals(Unserializer *unserializer);
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereIdEquals &);
 
@@ -179,7 +192,7 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereIdEquals &s);
 class SelectExprWherePageGenerator : public SelectExpr {
 public:
     SelectExprWherePageGenerator(Unserializer *unserializer);
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWherePageGenerator &);
 };
@@ -188,7 +201,7 @@ QDebug operator<<(QDebug dbg, const SelectExprWherePageGenerator &s);
 class SelectExprWhereSql : public SelectExpr {
 public:
     SelectExprWhereSql(Unserializer *unserializer);
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereSql &);
 private:
@@ -201,7 +214,7 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereSql &s);
 class SelectExprWhereEquals : public SelectExpr {
 public:
     SelectExprWhereEquals(Unserializer *unserializer);
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereEquals &);
 private:
@@ -213,7 +226,7 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereEquals &s);
 class SelectExprWhereSubRoot : public SelectExpr {
 public:
     SelectExprWhereSubRoot(Unserializer *unserializer);
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereSubRoot &);
 private:
@@ -225,7 +238,7 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereSubRoot &s);
 class SelectExprWhereVisible : public SelectExpr {
 public:
     SelectExprWhereVisible(Unserializer *unserializer);
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereVisible &);
 };
@@ -235,7 +248,8 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereVisible &s);
 class SelectExprWhereHasEditComponents : public SelectExpr {
 public:
     SelectExprWhereHasEditComponents(Unserializer *unserializer);
-    virtual bool match(ComponentData *d) const;
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
+    virtual bool mightMatch(const ComponentClass& cls);
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereHasEditComponents &);
 };

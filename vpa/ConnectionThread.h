@@ -12,8 +12,11 @@ public:
 
     virtual void run();
 
+    void componentCreated();
+
 private:
      int m_socketDescriptor;
+     int m_countComponentsCreated;
 };
 
 #endif

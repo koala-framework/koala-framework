@@ -7,8 +7,15 @@
 #include "CommandDispatcher.h"
 
 ConnectionThread::ConnectionThread(int socketDescriptor, QObject* parent)
-: QThread(parent), m_socketDescriptor(socketDescriptor)
+: QThread(parent), m_socketDescriptor(socketDescriptor), m_countComponentsCreated(0)
 {
+}
+
+
+void ConnectionThread::componentCreated()
+{
+    m_countComponentsCreated++;
+//     Q_ASSERT(m_countComponentsCreated < 5000);
 }
 
 void ConnectionThread::run()

@@ -5,14 +5,16 @@
 #include "ComponentData.h"
 #include "Unserializer.h"
 
-#define debug(x)
+#define debug(x) x
+#define debugVerbose(x)
 
 
 void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, QIODevice* socket)
 {
     QByteArray prettyArgs = args;
     prettyArgs.replace('\0', "\\0");
-    debug(qDebug() << cmd << prettyArgs; )
+    debug(qDebug() << cmd ; )
+    debugVerbose(qDebug() << prettyArgs; )
 
     QBuffer buffer(&args);
     buffer.open(QIODevice::ReadOnly);
@@ -29,7 +31,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
 
         ComponentData *d = ComponentData::getComponentById(QString::fromUtf8(u.readString()));
         if (!d) {
-            debug( qDebug() << "invalid"; )
+            debugVerbose( qDebug() << "invalid"; )
             socket->write(serialize(NullValue()));
             return;
         }
@@ -78,7 +80,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         Select s(&u);
         qDebug() << s;
 
-        socket->write(serialize(s.filter(ComponentData::getComponentsByDbId(id))));
+        socket->write(serialize(s.filter(ComponentData::getComponentsByDbId(id), 0)));
     } else if (cmd == "getComponentsBySameClasses") {
         Q_ASSERT(paramCount == 2);
         u.readInt(); //array key
@@ -91,7 +93,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         QList< ComponentData* > ret;
         foreach (const QByteArray &c, classes) {
             foreach (ComponentData *d, ComponentData::getComponentsByClass(ComponentClass(QString::fromUtf8(c)))) {
-                if (s.match(d)) {
+                if (s.match(d, 0)) {
                     ret << d;
                 }
             }
@@ -111,7 +113,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         QList<ComponentData*> ret;
         foreach (const ComponentClass &c, classes) {
             foreach (ComponentData *d, ComponentData::getComponentsByClass(c)) {
-                if (s.match(d)) {
+                if (s.match(d, 0)) {
                     ret << d;
                 }
             }
@@ -131,7 +133,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         ComponentData *d = ComponentData::getComponentById(componentId);
         Q_ASSERT(d);
 
-        debug( qDebug() << s; )
+        debugVerbose( qDebug() << s; )
 
         socket->write(serialize(d->childComponents(s)));
     } else if (cmd == "countChildComponents") {
@@ -158,13 +160,13 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         u.readInt(); //array key
         u.readObjectClassName();
         Select s(&u);
-        debug( qDebug() << "select" << s; )
+        debugVerbose( qDebug() << "select" << s; )
 
 
         u.readInt(); //array key
         u.readObjectClassName();
         Select childSelect(&u);
-        debug( qDebug() << "childSelect" << childSelect; )
+        debugVerbose( qDebug() << "childSelect" << childSelect; )
 
 
 
@@ -217,6 +219,49 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         Q_ASSERT(d);
         socket->write(serialize(d->childPageByPath(path)));
 
+    } else if (cmd == "handleChangedRows") {
+        Q_ASSERT(paramCount == 1);
+
+        u.readInt(); //array key
+
+        int cnt = u.readArrayStart();
+        for (int i=0; i<cnt; ++i) {
+            Generator::ChangedRowMethod method;
+            {
+                QString m = u.readString();
+                if (m == "update") {
+                    method = Generator::RowUpdated;
+                } else if (m == "insert") {
+                    method = Generator::RowInserted;
+                } else if (m == "delete") {
+                    method = Generator::RowDeleted;
+                } else {
+                    Q_ASSERT(0);
+                }
+            }
+            int cntRows = u.readArrayStart();
+            for (int j=0; j<cntRows; ++i) {
+                u.readInt(); //array key
+                int cntFields = u.readArrayStart();
+                IndexedString model;
+                QString id;
+                for (int k=0; k<cntFields; ++k) {
+                    if (u.readString() == "model") {
+                        model = IndexedString(u.readString());
+                    } else if (u.readString() == "id") {
+                        id = u.readString();
+                    } else {
+                        Q_ASSERT(0);
+                        u.readVariant();
+                    }
+                }
+                u.readArrayEnd();
+                Generator::handleChangedRow(method, model, id);
+            }
+            u.readArrayEnd();
+        }
+        u.readArrayEnd();
+        socket->write(serialize(true));
     } else {
         socket->write("ERROR: unknown command");
     }

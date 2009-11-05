@@ -76,7 +76,7 @@ bool BuildOnlyComponentClassStrategy::skip(ComponentData *parent) const
     return skip;
 }
 */
-bool canHaveComponentIdWithoutSeparatorAsChild(Generator *generator)
+bool canHavePagesGeneratorAsChild(Generator *generator)
 {
     static QHash<Generator *, bool> cache;
     if (cache.contains(generator)) return cache[generator];
@@ -91,7 +91,7 @@ bool canHaveComponentIdWithoutSeparatorAsChild(Generator *generator)
     foreach (ComponentClass c, generator->childComponentClasses()) {
         foreach (Generator *g, Generator::generators) {
             if (g->componentClass == c) {
-                if (canHaveComponentIdWithoutSeparatorAsChild(g)) {
+                if (canHavePagesGeneratorAsChild(g)) {
                     cache[generator] = true;
                     return true;
                 }
@@ -101,18 +101,11 @@ bool canHaveComponentIdWithoutSeparatorAsChild(Generator *generator)
     return false;
 }
 
-bool BuildOnlyRootStrategy::skip(ComponentData *parent) const
+bool BuildOnlyPagesGeneratorStrategy::skip(ComponentData *parent) const
 {
     foreach (Generator *g, Generator::generators) {
         if (parent->componentClass() == g->componentClass) {
-            if (canHaveComponentIdWithoutSeparatorAsChild(g)) {
-                return false;
-            }
-        }
-    }
-    if (parent->idSeparator() == Generator::NoSeparator) { //dieses if wegen dem page generator; ist vielleicht nicht korrekt
-        foreach (Generator *g, Generator::inheritGenerators()) {
-            if (canHaveComponentIdWithoutSeparatorAsChild(g)) {
+            if (canHavePagesGeneratorAsChild(g)) {
                 return false;
             }
         }
@@ -167,19 +160,19 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
 {
     if (buildStrategy && buildStrategy->skip(parent)) return;
 
-    parent->m_childrenLock.lockForRead();
+    parent->childrenLock()->lockForRead();
 
     bool childrenBuilt = parent->m_childrenBuilt;
 
     if (!childrenBuilt) {
-        parent->m_childrenLock.unlock();
-        parent->m_childrenLock.lockForWrite();
+        parent->childrenLock()->unlock();
+        parent->childrenLock()->lockForWrite();
 
         parent->m_childrenBuilt = true;
 
         foreach (Generator *g, generators) {
             if (g->componentClass == parent->componentClass()) {
-                g->build(parent, false);
+                g->build(parent);
             }
         }
 
@@ -189,7 +182,7 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
             while ((p = p->parent())) {
                 foreach (Generator *g, inheritGenerators()) {
                     if (!(g->componentTypes & Generator::TypeUnique) && g->componentClass == p->componentClass()) {
-                        g->build(parent, true);
+                        g->build(parent);
                     }
                 }
             }
@@ -269,11 +262,72 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
         }
     }
 
-    parent->m_childrenLock.unlock();
+    parent->childrenLock()->unlock();
 }
 
+void Generator::handleChangedRow(Generator::ChangedRowMethod method, IndexedString model, const QString& id)
+{
+    switch (method) {
+        case RowUpdated:
+            foreach (Generator *g, generators) {
+                if (g->model == model) {
+                    g->preload(); //tut im moment noch _alles_ preloaden, möglicherweise nur eine id preloaden wenn zu langsam
+                    foreach (ComponentData *d, g->builtComponents) { //das benötigt womöglich einen index wenns zu langsam ist
+                        if (d->childId() == id) {
+                            foreach (const IndexedString &field, d->rowData.keys()) {
+                                Q_ASSERT(dynamic_cast<GeneratorWithModel*>(g));
+                                static_cast<GeneratorWithModel*>(g)->fetchRowData(d->parent(), field, id);
+                            }
+                            g->refresh(d);
+                            break;
+                        }
+                    }
+                }
+            }
+            break;
+        case RowInserted:
+            foreach (Generator *g, generators) {
+                if (g->model == model) {
+                    g->preload(); //tut im moment noch _alles_ preloaden, möglicherweise nur eine id preloaden wenn zu langsam
+                    foreach (ComponentData *d, ComponentData::getComponentsByClass(g->componentClass)) {
+                        QWriteLocker locker(&d->m_childrenLock);
+                        if (d->m_childrenBuilt) {
+                            g->buildSingle(d, id);
+                            locker.unlock();
+                            foreach (ComponentData *sibling, d->children()) {
+                                if (sibling->generator() == g && sibling->childId() != id) {
+                                    foreach (const IndexedString &field, sibling->rowData.keys()) {
+                                        Q_ASSERT(dynamic_cast<GeneratorWithModel*>(g));
+                                        static_cast<GeneratorWithModel*>(g)->fetchRowData(d, field, id);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+        case RowDeleted:
+            foreach (Generator *g, generators) {
+                if (g->model == model) {
+                    foreach (ComponentData *d, g->builtComponents) { //das benötigt womöglich einen index wenns zu langsam ist
+                        if (d->childId() == id) {
+                            Q_ASSERT(!(d->generator()->componentTypes & Generator::TypeInherit));
+                            if (!(d->generator()->componentTypes & Generator::TypeInherit)) {
+                                d->parent()->m_childrenLock.lockForWrite();
+                                delete d;
+                                d->parent()->m_childrenLock.unlock();
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+    }
+}
 
-void GeneratorWithModel::fetchRowData(ComponentData *parent, IndexedString field)
+void GeneratorWithModel::fetchRowData(ComponentData* parent, IndexedString field, const QString& onlyId)
 {
     static QMutex lock;
     QMutexLocker locker(&lock);
@@ -282,6 +336,9 @@ void GeneratorWithModel::fetchRowData(ComponentData *parent, IndexedString field
     QList<QByteArray> args;
     args << QByteArray("--field=") + field.toString().toUtf8();
     args << QByteArray("--model=") + model.toString().toUtf8();
+    if (!onlyId.isEmpty()) {
+        args << QByteArray("--id=") + onlyId.toUtf8();
+    }
 
     QTime stopWatch;
     stopWatch.start();
@@ -305,7 +362,8 @@ void GeneratorWithModel::fetchRowData(ComponentData *parent, IndexedString field
         QSqlQuery query;
         if (!query.exec(sql)) {
             qCritical() << "can't execute query GeneratorWithModel::fetchRowData" << query.lastError() << sql;
-            qFatal("aborted");
+            Q_ASSERT(0);
+            return;
         }
         while (query.next()) {
             int id = query.value(0).toInt();
@@ -362,7 +420,8 @@ QList<int> GeneratorWithModel::fetchIds(ComponentData* parent, const Select& sel
     QSqlQuery query;
     if (!query.exec(sql)) {
         qCritical() << "can't execute query GeneratorWithModel::fetchRowData" << query.lastError() << sql;
-        qFatal("aborted");
+        Q_ASSERT(0);
+        return QList<int>();
     }
     QList<int> ret;
     while (query.next()) {
@@ -394,13 +453,12 @@ bool Generator::showInMenu(ComponentData* d)
 
 bool Generator::isVisible(const ComponentData* d) const
 {
+    Q_UNUSED(d);
     return true;
 }
 
-void GeneratorStatic::build(ComponentData* parent, bool inherited)
+void GeneratorStatic::build(ComponentData* parent)
 {
-    Q_UNUSED(inherited);
-
     buildCallCount[Static]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorStatic::build" << componentClass << key << parent->componentId();)
     QHashIterator<IndexedString, ComponentClass> i(component);
@@ -428,6 +486,18 @@ void GeneratorStatic::build(ComponentData* parent, bool inherited)
     }
 }
 
+void GeneratorStatic::buildSingle(ComponentData* parent, const QString& id)
+{
+    Q_UNUSED(parent);
+    Q_UNUSED(id);
+    Q_ASSERT(0); //doesn't make any sense
+}
+
+void GeneratorStatic::refresh(ComponentData* d)
+{
+    Q_UNUSED(d);
+    Q_ASSERT(0); //doesn't make any sense
+}
 
 QList<ComponentClass> GeneratorStatic::childComponentClasses()
 {
@@ -439,10 +509,8 @@ QList<IndexedString> GeneratorStatic::childComponentKeys()
     return component.keys();
 }
 
-void GeneratorTable::build(ComponentData* parent, bool inherited)
+void GeneratorTable::build(ComponentData* parent)
 {
-    Q_UNUSED(inherited);
-
     buildCallCount[Table]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorTable::build" << parent->componentId(); )
     foreach (Row row, rows) {
@@ -451,6 +519,19 @@ void GeneratorTable::build(ComponentData* parent, bool inherited)
         //d->name = row.name;
         parent->addChildren(d);
     }
+}
+
+void GeneratorTable::buildSingle(ComponentData* parent, const QString& id)
+{
+    Q_UNUSED(parent);
+    Q_UNUSED(id);
+    Q_ASSERT(0); //not yet implemented
+}
+
+void GeneratorTable::refresh(ComponentData* d)
+{
+    Q_UNUSED(d);
+    //nothing to do as long as no name is set in build()
 }
 
 QList<ComponentClass> GeneratorTable::childComponentClasses()
@@ -467,20 +548,13 @@ QList<IndexedString> GeneratorTable::childComponentKeys()
     return ret;
 }
 
-void GeneratorTableSql::build(ComponentData* parent, bool inherited)
-{
-    Q_UNUSED(inherited);
 
-    buildCallCount[TableSql]++;
-    ifDebugGeneratorBuild( qDebug() << "GeneratorTableSql::build" << parent->dbId(); )
-    QString sql = "SELECT id FROM "+tableName;
-    if (whereComponentId) {
-        sql += " WHERE component_id='"+parent->dbId()+"'";
-    }
-    QSqlQuery query;
-    if (!query.exec(sql)) {
+void GeneratorTableSql::_build(ComponentData* parent, QSqlQuery &query)
+{
+    if (!query.exec()) {
         qCritical() << "can't execute query GeneratorTableSql::build";
-        qFatal("aborted");
+        Q_ASSERT(0);
+        return;
     }
     while (query.next()) {
         int id = query.value(0).toInt();
@@ -488,6 +562,42 @@ void GeneratorTableSql::build(ComponentData* parent, bool inherited)
         d->setDbIdPrefix(dbIdPrefix);
         parent->addChildren(d);
     }
+}
+
+
+void GeneratorTableSql::build(ComponentData* parent)
+{
+    buildCallCount[TableSql]++;
+    ifDebugGeneratorBuild( qDebug() << "GeneratorTableSql::build" << parent->dbId(); )
+    QString sql = "SELECT id FROM "+tableName;
+    if (whereComponentId) {
+        sql += " WHERE component_id='"+parent->dbId()+"'";
+    }
+    QSqlQuery query;
+    query.prepare(sql);
+    _build(parent, query);
+}
+
+void GeneratorTableSql::buildSingle(ComponentData* parent, const QString& id)
+{
+    buildCallCount[TableSql]++;
+    QString sql = "SELECT id FROM "+tableName;
+    if (whereComponentId) {
+        sql += " WHERE component_id='"+parent->dbId()+"' AND ";
+    } else {
+        sql += " WHERE ";
+    }
+    sql += "id=:id";
+    QSqlQuery query;
+    query.bindValue(":id", id);
+    query.prepare(sql);
+    _build(parent, query);
+}
+
+void GeneratorTableSql::refresh(ComponentData* d)
+{
+    Q_UNUSED(d);
+    //nothing to do as long as no name/filename is set in _build()
 }
 
 QList<ComponentClass> GeneratorTableSql::childComponentClasses()
@@ -515,8 +625,10 @@ void GeneratorTableSqlWithComponent::preload()
     sql += "FROM "+tableName;
     if (!query.exec(sql)) {
         qCritical() << "can't execute query GeneratorTableSqlWithComponent::preload" << query.lastError() << sql;
-        qFatal("aborted");
+        Q_ASSERT(0);
+        return;
     }
+    data.clear();
     while (query.next()) {
         QList<QPair<int, IndexedString> > l;
         QString componentId;
@@ -527,18 +639,19 @@ void GeneratorTableSqlWithComponent::preload()
     }
 }
 
-void GeneratorTableSqlWithComponent::build(ComponentData* parent, bool inherited)
+QList< QPair< int, ComponentClass > > GeneratorTableSqlWithComponent::_items(ComponentData* parent)
 {
-    Q_UNUSED(inherited);
-
-    buildCallCount[TableSqlWithComponent]++;
-
     QList<QPair<int, ComponentClass> > items;
     if (whereComponentId) {
-        items = data[parent->dbId()];
-    } else {
-        items = data[QString()];
+        return data[parent->dbId()];
     }
+    return data[QString()];
+}
+
+void GeneratorTableSqlWithComponent::build(ComponentData* parent)
+{
+    buildCallCount[TableSqlWithComponent]++;
+    QList< QPair< int, ComponentClass > > items = _items(parent);
     QPair<int, ComponentClass> i;
     foreach (i, items) {
         ComponentData *d = new ComponentData(this, parent, idSeparator, i.first, i.second);
@@ -547,6 +660,38 @@ void GeneratorTableSqlWithComponent::build(ComponentData* parent, bool inherited
     }
 }
 
+void GeneratorTableSqlWithComponent::buildSingle(ComponentData* parent, const QString& id)
+{
+    buildCallCount[TableSqlWithComponent]++;
+
+    QList< QPair< int, ComponentClass > > items = _items(parent);
+    QPair<int, ComponentClass> i;
+    foreach (i, items) {
+        if (i.first == id.toInt()) {
+            ComponentData *d = new ComponentData(this, parent, idSeparator, i.first, i.second);
+            d->setDbIdPrefix(dbIdPrefix);
+            parent->addChildren(d);
+        }
+    }
+}
+
+void GeneratorTableSqlWithComponent::refresh(ComponentData* d)
+{
+    ComponentData* parent = d->parent();
+    QList< QPair< int, ComponentClass > > items = _items(parent);
+    QPair<int, ComponentClass> i;
+    foreach (i, items) {
+        if (i.first == d->childId().toInt()) {
+            if (d->componentClass() != i.second) {
+                parent->childrenLock()->lockForWrite();
+                delete d;
+                buildSingle(parent, QString::number(i.first));
+                parent->childrenLock()->unlock();
+            }
+            break;
+        }
+    }
+}
 
 QList<QString> GeneratorTableSqlWithComponent::fetchParentDbIds(ComponentClass cc)
 {
@@ -563,7 +708,8 @@ QList<QString> GeneratorTableSqlWithComponent::fetchParentDbIds(ComponentClass c
     sql += ")";
     if (!query.exec(sql)) {
         qCritical() << "can't execute query GeneratorTableSqlWithComponent::fetchParentDbIds" << query.lastError() << sql;
-        qFatal("aborted");
+        Q_ASSERT(0);
+        return QList<QString>();
     }
     QList<QString> ret;
     while (query.next()) {
@@ -583,21 +729,20 @@ QList<IndexedString> GeneratorTableSqlWithComponent::childComponentKeys()
     return component.keys();
 }
 
-void GeneratorLoadSql::build(ComponentData* parent, bool inherited)
+QByteArray GeneratorLoadSql::_sql(ComponentData* parent)
 {
-    Q_UNUSED(inherited);
-
-    buildCallCount[LoadSql]++;
     QList<QByteArray> arg;
     arg << QByteArray("--componentId=") + parent->componentId().toUtf8();
     arg << QByteArray("--generator=") + key.toString().toUtf8();
-    QByteArray sql = PhpProcess::getInstance()->call("generator-sql", arg);
-    ifDebugGeneratorBuild( qDebug() << "GeneratorLoadSql::build" << parent->componentId() << sql; )
-    if (sql.isEmpty()) return;
-    QSqlQuery query;
-    if (!query.exec(sql)) {
-        qCritical() << "can't execute query GeneratorLoadSql::build" << query.lastError() << sql;
-        qFatal("aborted");
+    return PhpProcess::getInstance()->call("generator-sql", arg);
+}
+
+void GeneratorLoadSql::_build(ComponentData* parent, QSqlQuery query)
+{
+    if (!query.exec()) {
+        qCritical() << "can't execute query GeneratorLoadSql::build" << query.lastError() << query.executedQuery();
+        Q_ASSERT(0);
+        return;
     }
     while (query.next()) {
         int id = query.value(0).toInt();
@@ -610,6 +755,48 @@ void GeneratorLoadSql::build(ComponentData* parent, bool inherited)
             d->setFilename(d->name());
         }
         parent->addChildren(d);
+    }
+}
+
+void GeneratorLoadSql::build(ComponentData* parent)
+{
+    buildCallCount[LoadSql]++;
+    ifDebugGeneratorBuild( qDebug() << "GeneratorLoadSql::build" << parent->componentId() << sql; )
+    QByteArray sql = _sql(parent);
+    if (sql.isEmpty()) return;
+    QSqlQuery query;
+    query.prepare(sql);
+    _build(parent, query);
+}
+
+void GeneratorLoadSql::buildSingle(ComponentData* parent, const QString& id)
+{
+    buildCallCount[LoadSql]++;
+
+    QByteArray sql = _sql(parent);
+    QSqlQuery query;
+    sql += " AND id=:id"; //TODO: des passt sicha ned imma
+    query.prepare(sql);
+    query.bindValue(":id", id);
+    _build(parent, query);
+}
+
+void GeneratorLoadSql::refresh(ComponentData* d)
+{
+    ComponentData* parent = d->parent();
+
+    QByteArray sql = _sql(parent);
+    QSqlQuery query;
+    sql += " AND id=:id"; //TODO: des passt sicha ned imma
+    query.prepare(sql);
+    query.bindValue(":id", d->childId());
+    if (query.next()) {
+        d->setName(query.value(1).toString());
+        //TODO: maxNameLength, uniqueFilename, maxFilenameLength
+        //d->setFilename(query.value(2).toString());
+        if (d->filename().isEmpty()) {
+            d->setFilename(d->name());
+        }
     }
 }
 
@@ -627,21 +814,21 @@ QList<IndexedString> GeneratorLoadSql::childComponentKeys()
     return ret;
 }
 
-void GeneratorLoadSqlWithComponent::build(ComponentData* parent, bool inherited)
-{
-    Q_UNUSED(inherited);
 
-    buildCallCount[LoadSqlWithComponent]++;
+QByteArray GeneratorLoadSqlWithComponent::_sql(ComponentData* parent)
+{
     QList<QByteArray> arg;
     arg << QByteArray("--componentId=") + parent->componentId().toUtf8();
     arg << QByteArray("--generator=") + key.toString().toUtf8();
-    QByteArray sql = PhpProcess::getInstance()->call("generator-sql", arg);
-    ifDebugGeneratorBuild( qDebug() << "GeneratorLoadSqlWithComponent::build" << parent->componentId() << sql; )
-    if (sql.isEmpty()) return;
-    QSqlQuery query;
-    if (!query.exec(sql)) {
-        qCritical() << "can't execute query GeneratorLoadSqlWithComponent::build" << query.lastError() << sql;
-        qFatal("aborted");
+    return PhpProcess::getInstance()->call("generator-sql", arg);
+}
+
+void GeneratorLoadSqlWithComponent::_build(ComponentData* parent, QSqlQuery query)
+{
+    if (!query.exec()) {
+        qCritical() << "can't execute query GeneratorLoadSqlWithComponent::build" << query.lastError() << query.executedQuery();
+        Q_ASSERT(0);
+        return;
     }
     while (query.next()) {
         int id = query.value(0).toInt();
@@ -650,6 +837,54 @@ void GeneratorLoadSqlWithComponent::build(ComponentData* parent, bool inherited)
         d->setFilename("todo");
         d->setName("todo");
         parent->addChildren(d);
+    }
+
+}
+
+
+void GeneratorLoadSqlWithComponent::build(ComponentData* parent)
+{
+    buildCallCount[LoadSqlWithComponent]++;
+    ifDebugGeneratorBuild( qDebug() << "GeneratorLoadSqlWithComponent::build" << parent->componentId() << sql; )
+
+    QByteArray sql = _sql(parent);
+    if (sql.isEmpty()) return;
+    QSqlQuery query;
+    query.prepare(sql);
+    _build(parent, query);
+}
+
+void GeneratorLoadSqlWithComponent::buildSingle(ComponentData* parent, const QString& id)
+{
+    buildCallCount[LoadSqlWithComponent]++;
+
+    QByteArray sql = _sql(parent);
+    QSqlQuery query;
+    query.prepare(sql);
+    sql += " AND id=:id"; //TODO: des passt sicha ned imma
+    query.bindValue(":id", id);
+    _build(parent, query);
+}
+
+void GeneratorLoadSqlWithComponent::refresh(ComponentData* d)
+{
+    ComponentData* parent = d->parent();
+
+    QByteArray sql = _sql(parent);
+    QSqlQuery query;
+    sql += " AND id=:id"; //TODO: des passt sicha ned imma
+    query.prepare(sql);
+    query.bindValue(":id", d->childId());
+    if (query.next()) {
+        int id = query.value(0).toInt();
+        if (d->componentClass() != component[query.value(1).toString()]) {
+            parent->childrenLock()->lockForWrite();
+            delete d;
+            buildSingle(parent, QString::number(id));
+            parent->childrenLock()->unlock();
+        } else {
+            //TODO update name & filename (sind oben auch noch todo)
+        }
     }
 }
 
@@ -663,9 +898,8 @@ QList<IndexedString> GeneratorLoadSqlWithComponent::childComponentKeys()
     return component.keys();
 }
 
-void GeneratorLoad::build(ComponentData* parent, bool inherited)
+void GeneratorLoad::build(ComponentData* parent)
 {
-    Q_UNUSED(inherited);
     buildCallCount[Load]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorLoad::build" << parent->componentId(); )
     QList<QByteArray> arg;
@@ -674,8 +908,52 @@ void GeneratorLoad::build(ComponentData* parent, bool inherited)
     _build(parent, arg);
 }
 
-void GeneratorLoad::_build(ComponentData* parent, QList<QByteArray> args)
+void GeneratorLoad::buildSingle(ComponentData* parent, const QString& id)
 {
+    buildCallCount[Load]++;
+    ifDebugGeneratorBuild( qDebug() << "GeneratorLoad::build" << parent->componentId(); )
+    QList<QByteArray> arg;
+    arg << QByteArray("--componentId=") + parent->componentId().toUtf8();
+    arg << QByteArray("--generator=") + key.toString().toUtf8();
+    arg << QByteArray("--id=") + id.toUtf8();
+    _build(parent, arg);
+}
+
+void GeneratorLoad::refresh(ComponentData* d)
+{
+    ComponentData* parent = d->parent();
+    QString id = d->childId();
+
+    QList<QByteArray> arg;
+    arg << QByteArray("--componentId=") + parent->componentId().toUtf8();
+    arg << QByteArray("--generator=") + key.toString().toUtf8();
+    arg << QByteArray("--id=") + id.toUtf8();
+
+    QXmlStreamReader xml(PhpProcess::getInstance()->call("get-child-components", arg));
+    while (!xml.atEnd()) {
+        xml.readNext();
+        if (xml.isStartElement() && xml.name() == "component") {
+            while (!xml.atEnd()) {
+                xml.readNext();
+                if (xml.isStartElement() && xml.name() == "componentClass") {
+                    ComponentClass cc = ComponentClass(IndexedString(xml.readElementText()));
+                    if (cc != d->componentClass()) {
+                        parent->childrenLock()->lockForWrite();
+                        delete d;
+                        buildSingle(parent, id);
+                        parent->childrenLock()->unlock();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+QList<ComponentData*> GeneratorLoad::_build(ComponentData* parent, QList<QByteArray> args)
+{
+    QList<ComponentData*> ret;
+
     PhpProcess *p = PhpProcess::getInstance();
     ifDebugGeneratorBuild( qDebug() << "get-child-components" << args; )
     QXmlStreamReader xml(p->call("get-child-components", args));
@@ -724,12 +1002,15 @@ void GeneratorLoad::_build(ComponentData* parent, QList<QByteArray> args)
                 }
             }
 
+            ret << d;
             parent->addChildren(d);
         }
     }
     if (xml.hasError()) {
         qFatal(xml.errorString().toAscii().data());
     }
+
+    return ret;
 }
 
 QList<ComponentClass> GeneratorLoad::childComponentClasses()
@@ -742,20 +1023,21 @@ QList<IndexedString> GeneratorLoad::childComponentKeys()
     return component.keys();
 }
 
-void GeneratorPages::build(ComponentData* parent, bool inherited)
+void GeneratorPages::build(ComponentData* parent)
 {
-    if (inherited) {
-        if (parent->idSeparator() != Generator::NoSeparator) {
-            ifDebugGeneratorBuild( qDebug() << "GeneratorPages::build SKIPPED" << parent->componentId(); )
-            return;
-        }
-    }
     buildCallCount[Pages]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorPages::build" << parent->componentId(); )
     QList<QByteArray> arg;
     arg << QByteArray("--componentId=") + parent->componentId().toUtf8();
     arg << QByteArray("--pageGenerator=1");
-    _build(parent, arg);
+    QList<ComponentData*> pages = _build(parent, arg);
+
+    //pages-generator ist eigentlich rekursiv
+    foreach (ComponentData *d, pages) {
+        d->m_childrenLock.lockForWrite();
+        build(d);
+        d->m_childrenLock.unlock();
+    }
 }
 
 bool GeneratorPages::showInMenu(ComponentData* d)
@@ -771,17 +1053,17 @@ void GeneratorLinkTag::preload()
     QString sql = "SELECT component_id, component FROM vpc_basic_linktag";
     if (!query.exec(sql)) {
         qCritical() << "can't execute query GeneratorLinkTag::preload" << query.lastError();
-        qFatal("aborted");
+        Q_ASSERT(0);
+        return;
     }
+    componentIdToComponent.clear();
     while (query.next()) {
         componentIdToComponent[query.value(0).toString()] = query.value(1).toString();
     }
 }
 
-void GeneratorLinkTag::build(ComponentData* parent, bool inherited)
+void GeneratorLinkTag::build(ComponentData* parent)
 {
-    Q_UNUSED(inherited);
-
     buildCallCount[LinkTag]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorLinkTag::build" << parent->componentId(); )
     ComponentClass c = component[componentIdToComponent[parent->dbId()]];
@@ -791,6 +1073,18 @@ void GeneratorLinkTag::build(ComponentData* parent, bool inherited)
     }
 }
 
+void GeneratorLinkTag::buildSingle(ComponentData* parent, const QString& id)
+{
+    Q_UNUSED(parent);
+    Q_UNUSED(id);
+    Q_ASSERT(0);
+}
+
+void GeneratorLinkTag::refresh(ComponentData* d)
+{
+    Q_UNUSED(d);
+    Q_ASSERT(0); //TODO: not yet implemented, component can be changed
+}
 
 QList< ComponentClass > GeneratorLinkTag::childComponentClasses()
 {

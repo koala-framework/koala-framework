@@ -1,6 +1,8 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
+#include <QSqlQuery>
+
 #include "ComponentClass.h"
 
 class Select;
@@ -34,7 +36,7 @@ private:
     ComponentClass cc;
 };
 */
-struct BuildOnlyRootStrategy : public BuildStrategy
+struct BuildOnlyPagesGeneratorStrategy : public BuildStrategy
 {
     virtual bool skip(ComponentData *parent) const;
 };
@@ -97,11 +99,14 @@ struct Generator
     IndexedString model;
     IndexedString box; //TODO macht nicht in jedem generator sinn
     int priority; //TODO macht nicht in jedem generator sinn
+    QList<ComponentData*> builtComponents;
 
     virtual bool showInMenu(ComponentData *d); //TODO should be const
     virtual bool isVisible(const ComponentData *d) const;
 
-    virtual void build(ComponentData *parent, bool inherited) = 0;
+    virtual void build(ComponentData *parent) = 0;
+    virtual void buildSingle(ComponentData *parent, const QString &id) = 0;
+    virtual void refresh(ComponentData *d) = 0;
     virtual void preload() {}
 
     virtual QList<ComponentClass> childComponentClasses() = 0;
@@ -112,12 +117,19 @@ struct Generator
     static QList<Generator*> inheritGenerators();
 
     static void buildWithGenerators(ComponentData* parent, const BuildStrategy *buildStrategy);
+
+    enum ChangedRowMethod {
+        RowUpdated,
+        RowInserted,
+        RowDeleted
+    };
+    static void handleChangedRow(ChangedRowMethod method, IndexedString model, const QString &id);
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Generator::ComponentTypes)
 
 struct GeneratorWithModel : public Generator
 {
-    void fetchRowData(ComponentData *parent, IndexedString field);
+    void fetchRowData(ComponentData *parent, IndexedString field, const QString &onlyId = QString());
     QList<int> fetchIds(ComponentData *parent, const Select &select) const;
 
     virtual bool isVisible(const ComponentData* d) const;
@@ -134,7 +146,10 @@ struct GeneratorStatic : public Generator
         Q_ASSERT(dbIdPrefix.isEmpty());
     }
 
-    virtual void build(ComponentData *parent, bool inherited);
+    virtual void build(ComponentData *parent);
+    virtual void buildSingle(ComponentData* parent, const QString& id);
+    virtual void refresh(ComponentData* d);
+
     virtual QList<ComponentClass> childComponentClasses();
     virtual QList<IndexedString> childComponentKeys();
 };
@@ -148,7 +163,10 @@ struct GeneratorTable : public GeneratorWithModel
     };
     QList<Row> rows;
     ComponentClass component;
-    virtual void build(ComponentData *parent, bool inherited);
+    virtual void build(ComponentData *parent);
+    virtual void buildSingle(ComponentData* parent, const QString& id);
+    virtual void refresh(ComponentData* d);
+
     virtual QList<ComponentClass> childComponentClasses();
     virtual QList<IndexedString> childComponentKeys();
 };
@@ -157,9 +175,15 @@ struct GeneratorTableSql : public GeneratorWithModel
     QString tableName;
     bool whereComponentId;
     ComponentClass component;
-    virtual void build(ComponentData *parent, bool inherited);
+    virtual void build(ComponentData *parent);
+    virtual void buildSingle(ComponentData* parent, const QString& id);
+    virtual void refresh(ComponentData* d);
+
     virtual QList<ComponentClass> childComponentClasses();
     virtual QList<IndexedString> childComponentKeys();
+
+private:
+    void _build(ComponentData* parent, QSqlQuery& query);
 };
 struct GeneratorTableSqlWithComponent : public GeneratorWithModel
 {
@@ -171,27 +195,47 @@ struct GeneratorTableSqlWithComponent : public GeneratorWithModel
 
     virtual void preload();
 
-    virtual void build(ComponentData *parent, bool inherited);
+    virtual void build(ComponentData *parent);
+    virtual void buildSingle(ComponentData* parent, const QString& id);
+    virtual void refresh(ComponentData* d);
+
     virtual QList<ComponentClass> childComponentClasses();
     virtual QList<IndexedString> childComponentKeys();
 
     //verwendet von ComponentData::getComponentsByClass
     //um einen einsprungspunkt für paragraphs zu haben
     QList<QString> fetchParentDbIds(ComponentClass cc);
+
+private:
+    QList< QPair< int, ComponentClass > > _items(ComponentData* parent);
 };
 struct GeneratorLoadSql : public GeneratorWithModel
 {
     ComponentClass component;
-    virtual void build(ComponentData *parent, bool inherited);
+    virtual void build(ComponentData *parent);
+    virtual void buildSingle(ComponentData* parent, const QString& id);
+    virtual void refresh(ComponentData* d);
+
     virtual QList<ComponentClass> childComponentClasses();
     virtual QList<IndexedString> childComponentKeys();
+
+private:
+    void _build(ComponentData* parent, QSqlQuery query);
+    QByteArray _sql(ComponentData* parent);
 };
 struct GeneratorLoadSqlWithComponent : public GeneratorWithModel
 {
     QHash<IndexedString, ComponentClass> component;
-    virtual void build(ComponentData *parent, bool inherited);
+    virtual void build(ComponentData *parent);
+    virtual void buildSingle(ComponentData* parent, const QString& id);
+    virtual void refresh(ComponentData* d);
+
     virtual QList<ComponentClass> childComponentClasses();
     virtual QList<IndexedString> childComponentKeys();
+
+private:
+    void _build(ComponentData* parent, QSqlQuery query);
+    QByteArray _sql(ComponentData* parent);
 };
 struct GeneratorLoad : public GeneratorWithModel
 {
@@ -201,17 +245,20 @@ struct GeneratorLoad : public GeneratorWithModel
         Q_ASSERT(dbIdPrefix.isEmpty());
     }
 
-    virtual void build(ComponentData* parent, bool inherited);
+    virtual void build(ComponentData* parent);
+    virtual void buildSingle(ComponentData* parent, const QString& id);
+    virtual void refresh(ComponentData* d);
+
     virtual QList<ComponentClass> childComponentClasses();
     virtual QList<IndexedString> childComponentKeys();
 
 protected:
-    void _build(ComponentData* parent, QList<QByteArray> args);
+    QList<ComponentData*> _build(ComponentData* parent, QList<QByteArray> args);
 };
 
 struct GeneratorPages : public GeneratorLoad
 {
-    virtual void build(ComponentData* parent, bool inherited);
+    virtual void build(ComponentData* parent);
     virtual bool showInMenu(ComponentData* d);
 };
 struct GeneratorLinkTag : public Generator
@@ -226,7 +273,10 @@ struct GeneratorLinkTag : public Generator
 
     virtual void preload();
 
-    virtual void build(ComponentData* parent, bool inherited);
+    virtual void build(ComponentData* parent);
+    virtual void buildSingle(ComponentData* parent, const QString& id);
+    virtual void refresh(ComponentData* d);
+
     virtual QList<ComponentClass> childComponentClasses();
     virtual QList<IndexedString> childComponentKeys();
 };

@@ -300,7 +300,7 @@ int main(int argc, char** argv)
         QTime stopWatch;
         int startDatas = ComponentData::count;
         stopWatch.start();
-        BuildOnlyRootStrategy s;
+        BuildOnlyPagesGeneratorStrategy s;
         Generator::buildWithGenerators(root, &s);
         qDebug() << stopWatch.elapsed() << "ms" << (ComponentData::count-startDatas) << "datas";
     }

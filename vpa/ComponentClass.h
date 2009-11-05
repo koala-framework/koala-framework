@@ -77,7 +77,11 @@ public:
     {
         QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!m_componentClass.isEmpty());
-        return m_data[m_componentClass].flags.contains(flag);
+        if (!m_data[m_componentClass].flags.contains(flag)) return false;
+        if (m_data[m_componentClass].flags[flag].type() == QVariant::Bool) {
+            if (!m_data[m_componentClass].flags[flag].toBool()) return false;
+        }
+        return true;
     }
 
     inline bool operator == ( const ComponentClass& rhs ) const {

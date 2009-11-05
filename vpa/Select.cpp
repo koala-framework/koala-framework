@@ -50,10 +50,13 @@ Select::~Select()
     qDeleteAll(where);
 }
 
-bool Select::match(ComponentData* data) const
+bool Select::match(ComponentData* data, ComponentData *parentData) const
 {
+    //das ist nicht immer korrekt, bei vererben unique nicht
+    if (!parentData) parentData = data->parent();
+
     foreach (SelectExpr *e, where) {
-        if (!e->match(data)) return false;
+        if (!e->match(data, parentData)) return false;
     }
 
     if (!other.isEmpty()) {
@@ -87,12 +90,51 @@ bool Select::match(ComponentData* data) const
 }
 
 
-QList<ComponentData*> Select::filter(const QList<ComponentData*>& data) const
+bool Select::couldCreateIndirectly(const ComponentClass& cls) const
+{
+    Q_ASSERT(!cls.isEmpty());
+
+    //qDebug() << cls << *this;
+
+    bool ret = false;
+    if (const_cast<Select*>(this)->m_couldCreateIndirectlyCache.contains(cls)) {
+        ret = const_cast<Select*>(this)->m_couldCreateIndirectlyCache[cls];
+//         qDebug() << "Select::couldCreateIndirectly (cached)" << cls << ret << *this;
+        return ret;
+    }
+    const_cast<Select*>(this)->m_couldCreateIndirectlyCache.insert(cls, false);
+
+    ret = true;
+    foreach (SelectExpr *e, where) {
+        if (!e->mightMatch(cls)) {
+            ret = false;
+        }
+    }
+    if (ret) goto cacheAndReturn;
+
+    foreach (Generator *g, Generator::generators) {
+        if (g->componentClass == cls) {
+            foreach (const ComponentClass &cc, g->childComponentClasses()) {
+                if (!cc.isEmpty() && couldCreateIndirectly(cc)) {
+                    ret = true;
+                    goto cacheAndReturn;
+                }
+            }
+        }
+    }
+cacheAndReturn:
+    const_cast<Select*>(this)->m_couldCreateIndirectlyCache.insert(cls, ret);
+//     qDebug() << "Select::couldCreateIndirectly" << cls << ret << *this;
+    return ret;
+}
+
+
+QList<ComponentData*> Select::filter(const QList<ComponentData*>& data, ComponentData *parentData) const
 {
     QList<ComponentData*> ret;
     int i=0;
     foreach (ComponentData *d, data) {
-        if (match(d)) {
+        if (match(d, parentData)) {
             i++;
             if (i > limitOffset) ret << d;
         }

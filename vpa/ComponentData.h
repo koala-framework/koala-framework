@@ -207,6 +207,11 @@ public:
     }
     void addChildren(ComponentData* c);
 
+    inline QReadWriteLock *childrenLock()
+    {
+        return &m_childrenLock;
+    }
+
     inline ComponentData* parent() const
     {
         return m_parent;
@@ -239,6 +244,7 @@ public:
 private:
     friend class Generator;
     friend class GeneratorWithModel;
+    friend class GeneratorPages;
 
     //tree data
     bool m_childrenBuilt;
