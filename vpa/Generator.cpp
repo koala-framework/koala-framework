@@ -551,11 +551,6 @@ QList<IndexedString> GeneratorTable::childComponentKeys()
 
 void GeneratorTableSql::_build(ComponentData* parent, QSqlQuery &query)
 {
-    if (!query.exec()) {
-        qCritical() << "can't execute query GeneratorTableSql::build";
-        Q_ASSERT(0);
-        return;
-    }
     while (query.next()) {
         int id = query.value(0).toInt();
         ComponentData *d = new ComponentData(this, parent, idSeparator, id, component);
@@ -574,7 +569,11 @@ void GeneratorTableSql::build(ComponentData* parent)
         sql += " WHERE component_id='"+parent->dbId()+"'";
     }
     QSqlQuery query;
-    query.prepare(sql);
+    if (!query.exec(sql)) {
+        qCritical() << "can't execute query GeneratorTableSql::build";
+        Q_ASSERT(0);
+        return;
+    }
     _build(parent, query);
 }
 
@@ -590,7 +589,11 @@ void GeneratorTableSql::buildSingle(ComponentData* parent, const QString& id)
     sql += "id=:id";
     QSqlQuery query;
     query.bindValue(":id", id);
-    query.prepare(sql);
+    if (!query.exec(sql)) {
+        qCritical() << "can't execute query GeneratorTableSql::build";
+        Q_ASSERT(0);
+        return;
+    }
     _build(parent, query);
 }
 
@@ -739,11 +742,6 @@ QByteArray GeneratorLoadSql::_sql(ComponentData* parent)
 
 void GeneratorLoadSql::_build(ComponentData* parent, QSqlQuery query)
 {
-    if (!query.exec()) {
-        qCritical() << "can't execute query GeneratorLoadSql::build" << query.lastError() << query.executedQuery();
-        Q_ASSERT(0);
-        return;
-    }
     while (query.next()) {
         int id = query.value(0).toInt();
         ComponentData *d = new ComponentData(this, parent, idSeparator, id, component);
@@ -765,7 +763,11 @@ void GeneratorLoadSql::build(ComponentData* parent)
     QByteArray sql = _sql(parent);
     if (sql.isEmpty()) return;
     QSqlQuery query;
-    query.prepare(sql);
+    if (!query.exec(sql)) {
+        qCritical() << "can't execute query GeneratorLoadSql::build" << query.lastError() << query.executedQuery();
+        Q_ASSERT(0);
+        return;
+    }
     _build(parent, query);
 }
 
@@ -776,8 +778,12 @@ void GeneratorLoadSql::buildSingle(ComponentData* parent, const QString& id)
     QByteArray sql = _sql(parent);
     QSqlQuery query;
     sql += " AND id=:id"; //TODO: des passt sicha ned imma
-    query.prepare(sql);
     query.bindValue(":id", id);
+    if (!query.exec(sql)) {
+        qCritical() << "can't execute query GeneratorLoadSql::build" << query.lastError() << query.executedQuery();
+        Q_ASSERT(0);
+        return;
+    }
     _build(parent, query);
 }
 
@@ -788,8 +794,8 @@ void GeneratorLoadSql::refresh(ComponentData* d)
     QByteArray sql = _sql(parent);
     QSqlQuery query;
     sql += " AND id=:id"; //TODO: des passt sicha ned imma
-    query.prepare(sql);
     query.bindValue(":id", d->childId());
+    query.exec(sql);
     if (query.next()) {
         d->setName(query.value(1).toString());
         //TODO: maxNameLength, uniqueFilename, maxFilenameLength
@@ -825,11 +831,6 @@ QByteArray GeneratorLoadSqlWithComponent::_sql(ComponentData* parent)
 
 void GeneratorLoadSqlWithComponent::_build(ComponentData* parent, QSqlQuery query)
 {
-    if (!query.exec()) {
-        qCritical() << "can't execute query GeneratorLoadSqlWithComponent::build" << query.lastError() << query.executedQuery();
-        Q_ASSERT(0);
-        return;
-    }
     while (query.next()) {
         int id = query.value(0).toInt();
         ComponentData *d = new ComponentData(this, parent, idSeparator, id, component[query.value(1).toString()]);
@@ -850,7 +851,11 @@ void GeneratorLoadSqlWithComponent::build(ComponentData* parent)
     QByteArray sql = _sql(parent);
     if (sql.isEmpty()) return;
     QSqlQuery query;
-    query.prepare(sql);
+    if (!query.exec(sql)) {
+        qCritical() << "can't execute query GeneratorLoadSqlWithComponent::build" << query.lastError() << query.executedQuery();
+        Q_ASSERT(0);
+        return;
+    }
     _build(parent, query);
 }
 
@@ -860,9 +865,13 @@ void GeneratorLoadSqlWithComponent::buildSingle(ComponentData* parent, const QSt
 
     QByteArray sql = _sql(parent);
     QSqlQuery query;
-    query.prepare(sql);
     sql += " AND id=:id"; //TODO: des passt sicha ned imma
     query.bindValue(":id", id);
+    if (!query.exec(sql)) {
+        qCritical() << "can't execute query GeneratorLoadSqlWithComponent::build" << query.lastError() << query.executedQuery();
+        Q_ASSERT(0);
+        return;
+    }
     _build(parent, query);
 }
 
@@ -873,8 +882,8 @@ void GeneratorLoadSqlWithComponent::refresh(ComponentData* d)
     QByteArray sql = _sql(parent);
     QSqlQuery query;
     sql += " AND id=:id"; //TODO: des passt sicha ned imma
-    query.prepare(sql);
     query.bindValue(":id", d->childId());
+    query.exec(sql);
     if (query.next()) {
         int id = query.value(0).toInt();
         if (d->componentClass() != component[query.value(1).toString()]) {
