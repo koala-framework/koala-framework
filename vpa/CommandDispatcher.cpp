@@ -6,7 +6,7 @@
 #include "Unserializer.h"
 
 #define debug(x) x
-#define debugVerbose(x)
+#define debugVerbose(x) x
 
 
 void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, QIODevice* socket)
@@ -240,15 +240,16 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
                 }
             }
             int cntRows = u.readArrayStart();
-            for (int j=0; j<cntRows; ++i) {
+            for (int j=0; j<cntRows; ++j) {
                 u.readInt(); //array key
                 int cntFields = u.readArrayStart();
                 IndexedString model;
                 QString id;
                 for (int k=0; k<cntFields; ++k) {
-                    if (u.readString() == "model") {
+                    QString key = u.readString();
+                    if (key == "model") {
                         model = IndexedString(u.readString());
-                    } else if (u.readString() == "id") {
+                    } else if (key == "id") {
                         id = u.readString();
                     } else {
                         Q_ASSERT(0);

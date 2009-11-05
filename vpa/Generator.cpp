@@ -264,9 +264,10 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
 
     parent->childrenLock()->unlock();
 }
-
+#define debugHandleChangedRow(x) x
 void Generator::handleChangedRow(Generator::ChangedRowMethod method, IndexedString model, const QString& id)
 {
+    debugHandleChangedRow( qDebug() << "Generator::handleChangedRow" << method << model << id; )
     switch (method) {
         case RowUpdated:
             foreach (Generator *g, generators) {
@@ -274,6 +275,7 @@ void Generator::handleChangedRow(Generator::ChangedRowMethod method, IndexedStri
                     g->preload(); //tut im moment noch _alles_ preloaden, möglicherweise nur eine id preloaden wenn zu langsam
                     foreach (ComponentData *d, g->builtComponents) { //das benötigt womöglich einen index wenns zu langsam ist
                         if (d->childId() == id) {
+                            debugHandleChangedRow( qDebug() << "refresh" << d->componentId(); )
                             foreach (const IndexedString &field, d->rowData.keys()) {
                                 Q_ASSERT(dynamic_cast<GeneratorWithModel*>(g));
                                 static_cast<GeneratorWithModel*>(g)->fetchRowData(d->parent(), field, id);
@@ -680,6 +682,8 @@ void GeneratorTableSqlWithComponent::buildSingle(ComponentData* parent, const QS
 
 void GeneratorTableSqlWithComponent::refresh(ComponentData* d)
 {
+    qDebug() << "GeneratorTableSqlWithComponent::refresh" << d->componentId();
+
     ComponentData* parent = d->parent();
     QList< QPair< int, ComponentClass > > items = _items(parent);
     QPair<int, ComponentClass> i;
@@ -732,11 +736,14 @@ QList<IndexedString> GeneratorTableSqlWithComponent::childComponentKeys()
     return component.keys();
 }
 
-QByteArray GeneratorLoadSql::_sql(ComponentData* parent)
+QByteArray GeneratorLoadSql::_sql(ComponentData* parent, int id)
 {
     QList<QByteArray> arg;
     arg << QByteArray("--componentId=") + parent->componentId().toUtf8();
     arg << QByteArray("--generator=") + key.toString().toUtf8();
+    if (id) {
+        arg << QByteArray("--id=") + QByteArray::number(id);
+    }
     return PhpProcess::getInstance()->call("generator-sql", arg);
 }
 
@@ -775,10 +782,8 @@ void GeneratorLoadSql::buildSingle(ComponentData* parent, const QString& id)
 {
     buildCallCount[LoadSql]++;
 
-    QByteArray sql = _sql(parent);
+    QByteArray sql = _sql(parent, id.toInt());
     QSqlQuery query;
-    sql += " AND id=:id"; //TODO: des passt sicha ned imma
-    query.bindValue(":id", id);
     if (!query.exec(sql)) {
         qCritical() << "can't execute query GeneratorLoadSql::build" << query.lastError() << query.executedQuery();
         Q_ASSERT(0);
@@ -789,20 +794,26 @@ void GeneratorLoadSql::buildSingle(ComponentData* parent, const QString& id)
 
 void GeneratorLoadSql::refresh(ComponentData* d)
 {
+    qDebug() << "GeneratorLoadSql::refresh" << d->componentId();
+
     ComponentData* parent = d->parent();
 
-    QByteArray sql = _sql(parent);
+    QByteArray sql = _sql(parent, d->childId().toInt());
+    qDebug() << sql;
     QSqlQuery query;
-    sql += " AND id=:id"; //TODO: des passt sicha ned imma
-    query.bindValue(":id", d->childId());
-    query.exec(sql);
+    if (!query.exec(sql)) {
+        qCritical() << "can't execute query GeneratorLoadSql::refresh" << query.lastError() << query.executedQuery();
+        Q_ASSERT(0);
+        return;
+    }
     if (query.next()) {
+        qDebug() << "new name" << query.value(1).toString();
         d->setName(query.value(1).toString());
         //TODO: maxNameLength, uniqueFilename, maxFilenameLength
         //d->setFilename(query.value(2).toString());
-        if (d->filename().isEmpty()) {
+        //if (d->filename().isEmpty()) {
             d->setFilename(d->name());
-        }
+        //}
     }
 }
 
@@ -877,6 +888,8 @@ void GeneratorLoadSqlWithComponent::buildSingle(ComponentData* parent, const QSt
 
 void GeneratorLoadSqlWithComponent::refresh(ComponentData* d)
 {
+    qDebug() << "GeneratorLoadSqlWithComponent::refresh" << d->componentId();
+
     ComponentData* parent = d->parent();
 
     QByteArray sql = _sql(parent);
@@ -930,6 +943,8 @@ void GeneratorLoad::buildSingle(ComponentData* parent, const QString& id)
 
 void GeneratorLoad::refresh(ComponentData* d)
 {
+    qDebug() << "GeneratorLoad::refresh" << d->componentId();
+
     ComponentData* parent = d->parent();
     QString id = d->childId();
 

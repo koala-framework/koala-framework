@@ -221,7 +221,7 @@ struct GeneratorLoadSql : public GeneratorWithModel
 
 private:
     void _build(ComponentData* parent, QSqlQuery query);
-    QByteArray _sql(ComponentData* parent);
+    QByteArray _sql(ComponentData* parent, int id = 0);
 };
 struct GeneratorLoadSqlWithComponent : public GeneratorWithModel
 {
