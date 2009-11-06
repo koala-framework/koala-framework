@@ -32,4 +32,8 @@ class Vps_Model_Select_Expr_Child implements Vps_Model_Select_Expr_Interface
         $this->_expr->validate();
     }
 
+    public function getResultType()
+    {
+        return $this->_expr->getResultType();
+    }
 }

@@ -18,4 +18,9 @@ class Vps_Model_Select_Expr_SumFields implements Vps_Model_Select_Expr_Interface
             throw new Vps_Exception("'".get_class($this)."' has to contain at least one field");
         }
     }
+
+    public function getResultType()
+    {
+        return Vps_Model_Interface::TYPE_INTEGER;
+    }
 }

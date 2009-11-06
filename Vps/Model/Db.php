@@ -59,6 +59,31 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
     }
 
+    public function getColumnType($col)
+    {
+        $info = $this->getTable()->info();
+        if (isset($info['metadata'][$col])) {
+            return $this->_getTypeFromDbType($info['metadata'][$col]['DATA_TYPE']);
+        }
+        return parent::getColumnType($col);
+    }
+
+    private function _getTypeFromDbType($type)
+    {
+        if ($type == 'varchar') $type = self::TYPE_STRING;
+        else if (substr($type, 0, 7) == 'tinyint') $type = self::TYPE_BOOLEAN;
+        else if ($type == 'text') $type = self::TYPE_STRING;
+        else if ($type == 'tinytext') $type = self::TYPE_STRING;
+        else if (substr($type, -3) == 'int') $type = self::TYPE_INTEGER;
+        else if ($type == 'datetime') $type = self::TYPE_DATE;
+        else if ($type == 'date') $type = self::TYPE_DATE;
+        else if ($type == 'decimal') $type = self::TYPE_FLOAT;
+        else if (substr($type, 0, 6) == 'double') $type = self::TYPE_FLOAT;
+        else if ($type == 'time') $type = null;
+        else $type = null;
+        return $type;
+    }
+
     protected function _getOwnColumns()
     {
         if (!$this->_columns)

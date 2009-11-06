@@ -178,6 +178,17 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $ret;
     }
 
+    public function getColumnType($col)
+    {
+        if (in_array($col, $this->getExprColumns())) {
+            return $this->_exprs[$col]->getResultType();
+        }
+        foreach ($this->getSiblingModels() as $m) {
+            return $m->getColumnType($col);
+        }
+        return null;
+    }
+
     private function _hasColumn($col)
     {
         if (!$this->getOwnColumns()) return true;
