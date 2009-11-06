@@ -98,6 +98,14 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         return false;
     }
 
+    public function getColumnType($col)
+    {
+        if ($this->_proxyModel->hasColumn($col)) {
+            return $this->_proxyModel->getColumnType($col);
+        }
+        return parent::getColumnType($col);
+    }
+
     protected function _getOwnColumns()
     {
         return $this->_proxyModel->getColumns();
