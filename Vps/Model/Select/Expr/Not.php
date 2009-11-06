@@ -17,4 +17,9 @@ class Vps_Model_Select_Expr_Not implements Vps_Model_Select_Expr_Interface
 			throw new Vps_Exception("No Expression set for '"+get_class($this)+"'");
 		}
 	}
+
+    public function getResultType()
+    {
+        return Vps_Model_Interface::TYPE_BOOLEAN;
+    }
 }

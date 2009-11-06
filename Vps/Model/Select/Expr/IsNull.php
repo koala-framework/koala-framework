@@ -18,4 +18,9 @@ class Vps_Model_Select_Expr_IsNull implements Vps_Model_Select_Expr_Interface
             throw new Vps_Exception("No Field-Value set for '"+get_class($this)+"'");
         }
     }
+
+    public function getResultType()
+    {
+        return Vps_Model_Interface::TYPE_BOOLEAN;
+    }
 }

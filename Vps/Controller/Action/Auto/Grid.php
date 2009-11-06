@@ -100,8 +100,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
         if (isset($this->_model) && ($info = $this->_getTableInfo())) {
             foreach ($this->_columns as $column) {
-                if (!$column->getType() && isset($info['metadata'][$column->getDataIndex()])) {
-                    $column->setType($this->_getTypeFromDbType($info['metadata'][$column->getDataIndex()]['DATA_TYPE']));
+                if (!$column->getType()) {
+                    $column->setType($this->_model->getColumnType($column->getDataIndex()));
                 }
             }
         }
@@ -116,8 +116,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             if (!$primaryFound) {
                 //primary key hinzufügen falls er noch nicht in gridColumns existiert
                 $columnObject = new Vps_Grid_Column($this->_primaryKey);
-                $info = $this->_getTableInfo();
-                $columnObject->setType($this->_getTypeFromDbType($info['metadata'][$this->_primaryKey]['DATA_TYPE']));
+                $columnObject->setType($this->_model->getColumnType($this->_primaryKey));
                 $this->_columns[] = $columnObject;
             }
         }
@@ -412,22 +411,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if ($this->getRequest()->getParam('meta')) {
             $this->_appendMetaData();
         }
-    }
-
-    protected function _getTypeFromDbType($type)
-    {
-        if ($type == 'varchar') $type = 'string';
-        else if (substr($type, 0, 7) == 'tinyint') $type = 'boolean';
-        else if ($type == 'text') $type = 'string';
-        else if ($type == 'tinytext') $type = 'string';
-        else if (substr($type, -3) == 'int') $type = 'int';
-        else if ($type == 'datetime') $type = 'date';
-        else if ($type == 'date') $type = 'date';
-        else if ($type == 'decimal') $type = 'float';
-        else if (substr($type, 0, 6) == 'double') $type = 'float';
-        else if ($type == 'time') $type = ''; //auto
-        else $type = ''; //auto
-        return $type;
     }
 
     protected function _appendMetaData()
