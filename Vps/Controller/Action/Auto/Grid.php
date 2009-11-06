@@ -101,7 +101,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (isset($this->_model) && ($info = $this->_getTableInfo())) {
             foreach ($this->_columns as $column) {
                 if (!$column->getType()) {
-                    $column->setType($this->_model->getColumnType($column->getDataIndex()));
+                    $column->setType((string)$this->_model->getColumnType($column->getDataIndex()));
                 }
             }
         }
@@ -116,7 +116,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             if (!$primaryFound) {
                 //primary key hinzufügen falls er noch nicht in gridColumns existiert
                 $columnObject = new Vps_Grid_Column($this->_primaryKey);
-                $columnObject->setType($this->_model->getColumnType($this->_primaryKey));
+                $columnObject->setType((string)$this->_model->getColumnType($this->_primaryKey));
                 $this->_columns[] = $columnObject;
             }
         }
