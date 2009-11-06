@@ -4,10 +4,17 @@ interface Vps_Model_Interface
     const FORMAT_SQL = 'sql';
     const FORMAT_ARRAY = 'array';
 
+    const TYPE_BOOLEAN = 'boolean';
+    const TYPE_INTEGER = 'int';
+    const TYPE_STRING = 'string';
+    const TYPE_FLOAT = 'float';
+    const TYPE_DATE = 'date';
+
     public function createRow(array $data=array());
     public function getPrimaryKey();
     public function isEqual(Vps_Model_Interface $other);
     public function select($where = array());
+    public function getColumnType($col);
     public function getColumns();
     public function hasColumn($col);
     public function getSiblingModels();

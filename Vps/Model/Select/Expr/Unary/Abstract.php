@@ -47,4 +47,9 @@ abstract class Vps_Model_Select_Expr_Unary_Abstract
             $expression->validate();
         }
     }
+
+    public function getResultType()
+    {
+        return Vps_Model_Interface::TYPE_BOOLEAN;
+    }
 }

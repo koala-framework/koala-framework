@@ -15,4 +15,9 @@ class Vps_Model_Select_Expr_Sum implements Vps_Model_Select_Expr_Interface
     {
         $this->_field->validate();
     }
+
+    public function getResultType()
+    {
+        return Vps_Model_Interface::TYPE_INTEGER;
+    }
 }

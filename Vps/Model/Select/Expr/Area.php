@@ -34,4 +34,8 @@ class Vps_Model_Select_Expr_Area implements Vps_Model_Select_Expr_Interface
         }
     }
 
+    public function getResultType()
+    {
+        return Vps_Model_Interface::TYPE_BOOLEAN;
+    }
 }

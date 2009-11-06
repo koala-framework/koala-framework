@@ -24,4 +24,9 @@ abstract class Vps_Model_Select_Expr_CompareField_Abstract implements Vps_Model_
 			throw new Vps_Exception("No Field-Value set for '"+get_class($this)+"'");
 		}
 	}
+
+    public function getResultType()
+    {
+        return Vps_Model_Interface::TYPE_BOOLEAN;
+    }
 }
