@@ -767,7 +767,15 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                              || $column->getType() == 'float') $setTypeTo = 'float';
                             if ($column->getType() == 'null') $setTypeTo = 'null';
                         }
-                        settype($colVal, $setTypeTo);
+                        if ($setTypeTo == 'bool') {
+                            if ($colVal) {
+                                $colVal = trlVps('Yes');
+                            } else {
+                                $colVal = trlVps('No');
+                            }
+                        } else {
+                            settype($colVal, $setTypeTo);
+                        }
                         $columns[] = $colVal;
                     }
                 }
