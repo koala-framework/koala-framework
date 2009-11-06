@@ -1,4 +1,20 @@
-Vps.Viewport = Ext.extend(Ext.Viewport, {
+
+Vps.ViewportWithoutMenu = Ext.extend(Ext.Viewport, {
+    layout: 'fit',
+    mabySubmit: function(cb, options) {
+        var ret = true;
+        this.items.each(function(i) {
+            if (i.mabySubmit && !i.mabySubmit(cb, options)) {
+                ret = false;
+                return false; //break each
+            }
+        }, this);
+        return ret;
+    }
+
+});
+
+Vps.Viewport = Ext.extend(Vps.ViewportWithoutMenu, {
     initComponent: function()
     {
         Vps.menu = Ext.ComponentMgr.create({
@@ -13,15 +29,5 @@ Vps.Viewport = Ext.extend(Ext.Viewport, {
         });
         this.layout = 'border';
         Vps.Viewport.superclass.initComponent.call(this);
-    },
-    mabySubmit: function(cb, options) {
-        var ret = true;
-        this.items.each(function(i) {
-            if (i.mabySubmit && !i.mabySubmit(cb, options)) {
-                ret = false;
-                return false; //break each
-            }
-        }, this);
-        return ret;
     }
 });
