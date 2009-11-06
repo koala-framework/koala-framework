@@ -72,7 +72,11 @@ class Vps_Auth_Adapter_PartnerNet implements Zend_Auth_Adapter_Interface
         $code = Zend_Auth_Result::FAILURE;
 
         $identity = $r->getParam('type');
-        $time = $r->getParam('SYS1');
+        if ($r->getParam('PG_OS')) {
+            $time = $r->getParam('PG_OS');
+        } else if ($r->getParam('SYS1')) {
+            $time = $r->getParam('SYS1');
+        }
         $hash = $r->getParam('SYS3');
 
         $diff = abs((time()) - $time);
