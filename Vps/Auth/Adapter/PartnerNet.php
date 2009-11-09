@@ -76,6 +76,8 @@ class Vps_Auth_Adapter_PartnerNet implements Zend_Auth_Adapter_Interface
             $time = $r->getParam('PG_OS');
         } else if ($r->getParam('SYS1')) {
             $time = $r->getParam('SYS1');
+        } else {
+            $time = 0;
         }
         $hash = $r->getParam('SYS3');
 
