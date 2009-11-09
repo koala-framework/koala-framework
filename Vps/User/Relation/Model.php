@@ -6,13 +6,28 @@ class Vps_User_Relation_Model extends Vps_Model_Proxy
     public function __construct(array $config = array())
     {
         if (!isset($config['proxyModel'])) {
-            $client = new Vps_Srpc_Client(array(
+            $clientConfig = array(
                 'serverUrl' => Vps_Registry::get('config')->service->usersRelation->url,
                 'extraParams' => array(
                     'applicationId' => $this->getApplicationId(),
                     'version'       => Vps_User_Model::version()
                 )
-            ));
+            );
+            $cfg = Vps_Registry::get('config');
+            if (!empty($cfg->service->usersRelation->proxy->host)) {
+                $clientConfig['proxy_host'] = $cfg->service->usersRelation->proxy->host;
+            }
+            if (!empty($cfg->service->usersRelation->proxy->port)) {
+                $clientConfig['proxy_port'] = $cfg->service->usersRelation->proxy->port;
+            }
+            if (!empty($cfg->service->usersRelation->proxy->user)) {
+                $clientConfig['proxy_user'] = $cfg->service->usersRelation->proxy->user;
+            }
+            if (!empty($cfg->service->usersRelation->proxy->pass)) {
+                $clientConfig['proxy_pass'] = $cfg->service->usersRelation->proxy->pass;
+            }
+
+            $client = new Vps_Srpc_Client($clientConfig);
             $config['proxyModel'] = new Vps_User_Relation_ServiceModel(array('client' => $client));
         }
         parent::__construct($config);
