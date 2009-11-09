@@ -15,16 +15,16 @@ class Vps_User_Relation_Model extends Vps_Model_Proxy
             );
             $cfg = Vps_Registry::get('config');
             if (!empty($cfg->service->usersRelation->proxy->host)) {
-                $clientConfig['proxy_host'] = $cfg->service->usersRelation->proxy->host;
+                $clientConfig['proxyHost'] = $cfg->service->usersRelation->proxy->host;
             }
             if (!empty($cfg->service->usersRelation->proxy->port)) {
-                $clientConfig['proxy_port'] = $cfg->service->usersRelation->proxy->port;
+                $clientConfig['proxyPort'] = $cfg->service->usersRelation->proxy->port;
             }
             if (!empty($cfg->service->usersRelation->proxy->user)) {
-                $clientConfig['proxy_user'] = $cfg->service->usersRelation->proxy->user;
+                $clientConfig['proxyUser'] = $cfg->service->usersRelation->proxy->user;
             }
-            if (!empty($cfg->service->usersRelation->proxy->pass)) {
-                $clientConfig['proxy_pass'] = $cfg->service->usersRelation->proxy->pass;
+            if (!empty($cfg->service->usersRelation->proxy->password)) {
+                $clientConfig['proxyPassword'] = $cfg->service->usersRelation->proxy->password;
             }
 
             $client = new Vps_Srpc_Client($clientConfig);
