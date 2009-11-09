@@ -58,7 +58,7 @@ abstract class Vps_Db_Table_Rowset_Abstract extends Zend_Db_Table_Rowset_Abstrac
         }
         $args[] =& $rows; //ohne & hört sich der spaß auf
 
-        if (!call_user_func_array('array_multisort', &$args)) {
+        if (!call_user_func_array('array_multisort', $args)) {
             throw new Vps_Exception("Can't sort by '$order', array_multisort returned an error");
         }
         $this->_rows = array();
