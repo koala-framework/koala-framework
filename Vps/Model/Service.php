@@ -27,25 +27,25 @@ class Vps_Model_Service extends Vps_Model_Abstract
             $this->_serverUrl = $cfg->service->{$this->_serverConfig}->url;
             if ($cfg->service->{$this->_serverConfig}->proxy) {
                 if (!empty($cfg->service->{$this->_serverConfig}->proxy->host)) {
-                    $config['proxy_host'] = $cfg->service->{$this->_serverConfig}->proxy->host;
+                    $config['proxyHost'] = $cfg->service->{$this->_serverConfig}->proxy->host;
                 }
                 if (!empty($cfg->service->{$this->_serverConfig}->proxy->port)) {
-                    $config['proxy_port'] = $cfg->service->{$this->_serverConfig}->proxy->port;
+                    $config['proxyPort'] = $cfg->service->{$this->_serverConfig}->proxy->port;
                 }
                 if (!empty($cfg->service->{$this->_serverConfig}->proxy->user)) {
-                    $config['proxy_user'] = $cfg->service->{$this->_serverConfig}->proxy->user;
+                    $config['proxyUser'] = $cfg->service->{$this->_serverConfig}->proxy->user;
                 }
-                if (!empty($cfg->service->{$this->_serverConfig}->proxy->pass)) {
-                    $config['proxy_pass'] = $cfg->service->{$this->_serverConfig}->proxy->pass;
+                if (!empty($cfg->service->{$this->_serverConfig}->proxy->password)) {
+                    $config['proxyPassword'] = $cfg->service->{$this->_serverConfig}->proxy->password;
                 }
             }
         }
         if ($this->_serverUrl) {
             $srpcClientConfig = array('serverUrl' => $this->_serverUrl);
-            if (!empty($config['proxy_host'])) $srpcClientConfig['proxy_host'] = $config['proxy_host'];
-            if (!empty($config['proxy_port'])) $srpcClientConfig['proxy_port'] = $config['proxy_port'];
-            if (!empty($config['proxy_user'])) $srpcClientConfig['proxy_user'] = $config['proxy_user'];
-            if (!empty($config['proxy_pass'])) $srpcClientConfig['proxy_pass'] = $config['proxy_pass'];
+            if (!empty($config['proxyHost'])) $srpcClientConfig['proxyHost'] = $config['proxyHost'];
+            if (!empty($config['proxyPort'])) $srpcClientConfig['proxyPort'] = $config['proxyPort'];
+            if (!empty($config['proxyUser'])) $srpcClientConfig['proxyUser'] = $config['proxyUser'];
+            if (!empty($config['proxyPassword'])) $srpcClientConfig['proxyPassword'] = $config['proxyPassword'];
             $this->_client = new Vps_Srpc_Client($srpcClientConfig);
         }
 
