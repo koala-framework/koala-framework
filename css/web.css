@@ -1,4 +1,4 @@
-.clear { clear: both; }
+.clear { height: 0px; clear: both; }
 .left { float: left; }
 .right { float: right; }
 
