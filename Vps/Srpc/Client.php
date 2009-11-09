@@ -14,17 +14,17 @@ class Vps_Srpc_Client
         if (!empty($config['serverUrl'])) {
             $this->setServerUrl($config['serverUrl']);
         }
-        if (!empty($config['proxy_host'])) {
-            $this->_proxy['proxy_host'] = $config['proxy_host'];
+        if (!empty($config['proxyHost'])) {
+            $this->_proxy['proxy_host'] = $config['proxyHost'];
         }
-        if (!empty($config['proxy_port'])) {
-            $this->_proxy['proxy_port'] = $config['proxy_port'];
+        if (!empty($config['proxyPort'])) {
+            $this->_proxy['proxy_port'] = $config['proxyPort'];
         }
-        if (!empty($config['proxy_user'])) {
-            $this->_proxy['proxy_user'] = $config['proxy_user'];
+        if (!empty($config['proxyUser'])) {
+            $this->_proxy['proxy_user'] = $config['proxyUser'];
         }
-        if (!empty($config['proxy_pass'])) {
-            $this->_proxy['proxy_pass'] = $config['proxy_pass'];
+        if (!empty($config['proxyPassword'])) {
+            $this->_proxy['proxy_pass'] = $config['proxyPassword'];
         }
         if (!empty($config['extraParams']) && is_array($config['extraParams'])) {
             if (array_key_exists('method', $config['extraParams'])
