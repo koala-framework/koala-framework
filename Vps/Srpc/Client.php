@@ -7,11 +7,24 @@ class Vps_Srpc_Client
     protected $_serverUrl;
     protected $_extraParams = array();
     protected $_timeout = 20; // standard von Zend ist 10
+    protected $_proxy = array();
 
     public function __construct(array $config = array())
     {
         if (!empty($config['serverUrl'])) {
             $this->setServerUrl($config['serverUrl']);
+        }
+        if (!empty($config['proxy_host'])) {
+            $this->_proxy['proxy_host'] = $config['proxy_host'];
+        }
+        if (!empty($config['proxy_port'])) {
+            $this->_proxy['proxy_port'] = $config['proxy_port'];
+        }
+        if (!empty($config['proxy_user'])) {
+            $this->_proxy['proxy_user'] = $config['proxy_user'];
+        }
+        if (!empty($config['proxy_pass'])) {
+            $this->_proxy['proxy_pass'] = $config['proxy_pass'];
         }
         if (!empty($config['extraParams']) && is_array($config['extraParams'])) {
             if (array_key_exists('method', $config['extraParams'])
@@ -47,10 +60,15 @@ class Vps_Srpc_Client
 
     protected function _performRequest(array $params)
     {
-        $httpClient = new Zend_Http_Client($this->getServerUrl(), array(
+        $httpClientConfig = array(
             'timeout' => $this->_timeout,
             'persistent' => true
-        ));
+        );
+        if ($this->_proxy) {
+            $httpClientConfig = array_merge($httpClientConfig, $this->_proxy);
+            $httpClientConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
+        }
+        $httpClient = new Zend_Http_Client($this->getServerUrl(), $httpClientConfig);
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost($params);
         return $httpClient->request()->getBody();
