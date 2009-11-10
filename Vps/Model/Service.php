@@ -74,7 +74,17 @@ class Vps_Model_Service extends Vps_Model_Abstract
                 'automatic_serialization' => true,
                 'write_control' => false,
             );
-            $ret = Vps_Cache::factory('Core', 'Memcached', $frontendOptions);
+            if (class_exists('Memcache')) {
+                $backendOptions = array();
+                $backend = 'Memcached';
+            } else {
+                $backendOptions = array(
+                    'cache_dir' => 'application/cache/model',
+                    'file_name_prefix' => 'servicemeta'
+                );
+                $backend = 'File';
+            }
+            $ret = Vps_Cache::factory('Core', $backend, $frontendOptions, $backendOptions);
         }
         return $ret;
     }
