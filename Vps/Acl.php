@@ -86,6 +86,17 @@ class Vps_Acl extends Zend_Acl
             }
         }
 
+        if (!$ret) {
+            $additionalRoles = $this->_getAdditionalRolesByRole($user->role);
+            if ($additionalRoles) {
+                foreach ($user->getAdditionalRoles() as $r) {
+                    if (in_array($r, $additionalRoles) && $this->isAllowed($r, $resource, $privilege)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
         return $ret;
     }
 
@@ -99,21 +110,7 @@ class Vps_Acl extends Zend_Acl
         if (!$user) {
             return $this->isAllowed('guest', $resource, $privilege);
         }
-
-        if ($this->isAllowed($user->role, $resource, $privilege)) {
-            return true;
-        }
-
-        $additionalRoles = $this->_getAdditionalRolesByRole($user->role);
-        if ($additionalRoles) {
-            foreach ($user->getAdditionalRoles() as $r) {
-                if (in_array($r, $additionalRoles) && $this->isAllowed($r, $resource, $privilege)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->isAllowed($user->role, $resource, $privilege);
     }
 
     private function _getAdditionalRolesByRole($role)
