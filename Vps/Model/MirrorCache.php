@@ -143,7 +143,8 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 'automatic_serialization' => true
             ),
             array(
-                'cache_dir' => 'application/cache/model'
+                'cache_dir' => 'application/cache/model',
+                'file_name_prefix' => 'mirrorcache'
             )
         );
     }
