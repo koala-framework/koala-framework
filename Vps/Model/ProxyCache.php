@@ -117,8 +117,14 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
     private function _getCache()
     {
         if (!$this->_cache) {
-            $frontendOptions = array('lifetime' => 3600, 'automatic_serialization' => true);
-            $backendOptions = array('cache_dir' => 'application/cache/model');
+            $frontendOptions = array(
+                'lifetime' => 3600, //TODO: warum lifetime??
+                'automatic_serialization' => true
+            );
+            $backendOptions = array(
+                'cache_dir' => 'application/cache/model',
+                'file_name_prefix' => 'proxycache'
+            );
             $this->_cache = Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
         }
 
