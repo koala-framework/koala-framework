@@ -37,7 +37,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
                 if ($this->_getAuthData()) {
                     $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
                 } else {
-                    $allowed = $acl->isAllowedUser($this->_getUserRole(), $resource, 'view');
+                    $allowed = $acl->isAllowed($this->_getUserRole(), $resource, 'view');
                 }
             }
         }
