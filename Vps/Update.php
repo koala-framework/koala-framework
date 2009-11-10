@@ -107,6 +107,10 @@ abstract class Vps_Update
         $u = self::getUpdatesForDir('./update', $from, $to);
         foreach ($u as $i) $i->_tags[] = 'web';
         $ret = array_merge($ret, $u);
+        if (defined('DOC_CMS')) { //HACK
+            $u = self::getUpdatesForDir(DOC_CMS.'/Vps', $from, $to);
+            $ret = array_merge($ret, $u);
+        }
         $ret = self::_sortByRevision($ret);
         return $ret;
     }
