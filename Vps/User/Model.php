@@ -286,9 +286,10 @@ class Vps_User_Model extends Vps_Model_Proxy
     {
         $storage = Vps_Auth::getInstance()->getStorage();
         $loginData = $storage->read();
+        $userId = false;
         if (isset($loginData['changeUserId'])) {
             $userId = $loginData['changeUserId'];
-        } else {
+        } else if (isset($loginData['userId'])) {
             $userId = $loginData['userId'];
         }
         if ($userId && ($user = $this->getRow($userId))) {
