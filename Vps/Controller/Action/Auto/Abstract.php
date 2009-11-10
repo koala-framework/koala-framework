@@ -39,12 +39,12 @@ abstract class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
         $resource = $this->getRequest()->getResourceName();
 
         foreach ($this->_buttons as $k=>$i) {
-            if (!$acl->isAllowedUser($authData, $resource, $k)) {
+            if (!$acl->isAllowedUser($authData, $resource, $k) && !$acl->isAllowed($this->_getUserRole(), $resource, $k)) {
                 unset($this->_buttons[$k]);
             }
         }
         foreach ($this->_permissions as $k=>$i) {
-            if (!$acl->isAllowedUser($authData, $resource, $k)) {
+            if (!$acl->isAllowedUser($authData, $resource, $k) && !$acl->isAllowed($this->_getUserRole(), $resource, $k)) {
                 unset($this->_permissions[$k]);
             }
         }
