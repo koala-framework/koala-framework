@@ -30,6 +30,7 @@ class Vps_Auth_Adapter_PartnerNet implements Zend_Auth_Adapter_Interface
 {
     protected $_request;
     protected $_secret;
+    protected $_maxLinkAge = 600; //10 min
 
     public function getSecret()
     {
@@ -39,6 +40,11 @@ class Vps_Auth_Adapter_PartnerNet implements Zend_Auth_Adapter_Interface
     public function setSecret($secret)
     {
         $this->_secret = $secret;
+    }
+
+    public function setMaxLinkAge($age)
+    {
+        $this->_maxLinkAge = $age;
     }
 
     /**
@@ -73,7 +79,7 @@ class Vps_Auth_Adapter_PartnerNet implements Zend_Auth_Adapter_Interface
 
         $identity = $r->getParam('type');
         if ($r->getParam('PG_OS')) {
-            $time = $r->getParam('PG_OS');
+            $time = (int)($r->getParam('PG_OS') / 1000);
         } else if ($r->getParam('SYS1')) {
             $time = $r->getParam('SYS1');
         } else {
@@ -83,7 +89,7 @@ class Vps_Auth_Adapter_PartnerNet implements Zend_Auth_Adapter_Interface
 
         $diff = abs((time()) - $time);
 
-        if ($diff < (60*10)) {
+        if ($diff < $this->_maxLinkAge) {
 
             $url = $r->getRequestUri();
             $url = preg_replace('#&SYS3=[a-f0-9]+#', '', $url);
