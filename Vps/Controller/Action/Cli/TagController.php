@@ -168,6 +168,8 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
             return $m[1];
         } else if (preg_match("#branches/(.*)\n#", `svn info`, $m)) {
             return $m[1];
+        } else if (preg_match("#trunk/vw-projekte/(.*)\n#", `svn info`, $m)) {
+            return $m[1];
         }
         return false;
     }
