@@ -34,7 +34,11 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             if (!$acl->has($resource)) {
                 throw new Vps_Exception_NotFound();
             } else {
-                $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
+                if ($this->_getAuthData()) {
+                    $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
+                } else {
+                    $allowed = $acl->isAllowedUser($this->_getUserRole(), $resource, 'view');
+                }
             }
         }
         if ($allowed) {
@@ -46,11 +50,9 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
         }
 
         if (!$allowed) {
-            $role = null;
-            if ($this->_getAuthData()) $role = $this->_getAuthData()->role;
             $params = array(
                 'resource' => $resource,
-                'role' => $role
+                'role' => $this->_getUserRole()
             );
             if ($this->getHelper('ViewRenderer')->isJson()) {
                 $this->_forward('json-login', 'login',
