@@ -35,8 +35,21 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
     {
         //hier drinnen damits nur gemacht wird sobald di erste Table erstellt wird
         if (!self::getDefaultMetadataCache()) {
-            $frontendOptions = array('automatic_serialization' => true, 'write_control' => false);
-            $cache = Vps_Cache::factory('Core', 'Memcached', $frontendOptions);
+            $frontendOptions = array(
+                'automatic_serialization' => true,
+                'write_control' => false
+            );
+            if (class_exists('Memcache')) {
+                $backendOptions = array();
+                $backend = 'Memcached';
+            } else {
+                $backendOptions = array(
+                    'cache_dir' => 'application/cache/model',
+                    'file_name_prefix' => 'dbtable'
+                );
+                $backend = 'File';
+            }
+            $cache = Vps_Cache::factory('Core', $backend, $frontendOptions, $backendOptions);
             self::setDefaultMetadataCache($cache);
         }
 
