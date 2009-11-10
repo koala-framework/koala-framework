@@ -1,6 +1,9 @@
 <?php
 abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Auto_Abstract
 {
+    /**
+     * @var Vps_Form
+     */
     protected $_form;
     protected $_fields = array(); //deprecated
     protected $_buttons = array();
