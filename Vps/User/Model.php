@@ -256,7 +256,9 @@ class Vps_User_Model extends Vps_Model_Proxy
 
         if (!$this->_authedUser) {
             $loginData = Vps_Auth::getInstance()->getStorage()->read();
-            if (!$loginData || !$loginData['userId']) return null;
+            if (!$loginData || !isset($loginData['userId']) || !$loginData['userId']) {
+                return null;
+            }
             $this->_authedUser = $this->getRow($this->select($loginData['userId']));
         }
         return $this->_authedUser;
