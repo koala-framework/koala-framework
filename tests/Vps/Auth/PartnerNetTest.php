@@ -3,13 +3,14 @@ class Vps_Auth_PartnerNetTestRequest extends Zend_Controller_Request_Http
 {
     public $params = array();
     public $requestUri = array();
+    public $host = 'www.example.com';
     public function getParam($param)
     {
         parse_str(parse_url('http://www.example.com'.$this->requestUri, PHP_URL_QUERY), $params);
         if (isset($params[$param])) return $params[$param];
         return null;
     }
-    public function getHttpHost() { return 'www.example.com'; }
+    public function getHttpHost() { return $this->host; }
     public function getScheme() { return 'http'; }
     public function getRequestUri() { return $this->requestUri; }
 }
@@ -62,5 +63,21 @@ class Vps_Auth_PartnerNetTest extends PHPUnit_Framework_TestCase
         $adapter->setRequest($request);
         $r = $adapter->authenticate();
         $this->assertFalse($r->isValid());
+    }
+
+    public function testRealUrl()
+    {
+    
+        $request = new Vps_Auth_PartnerNetTestRequest();
+        $request->host = 'specials.audi.at';
+        $url = "/partner-net-login?type=a8preview&HDLNR=undefined&PG_OS=1257837956517&SYS3=ab6671c5ddb4a46412ce3d68e7a9b955";
+        $request->requestUri = $url;
+
+        $adapter = new Vps_Auth_Adapter_PartnerNet();
+        $adapter->setSecret('a8preview');
+        $adapter->setMaxLinkAge(100000000000);
+        $adapter->setRequest($request);
+        $r = $adapter->authenticate();
+        $this->assertTrue($r->isValid());
     }
 }
