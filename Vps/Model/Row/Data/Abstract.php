@@ -11,6 +11,13 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         parent::__construct($config);
     }
 
+    //internal
+    public function setData($data)
+    {
+        $this->_data = $data;
+        $this->_cleanData = $data;
+    }
+
     public function serialize()
     {
         return serialize(array(
