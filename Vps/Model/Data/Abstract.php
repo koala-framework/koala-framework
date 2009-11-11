@@ -70,6 +70,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             if ($row === $i) {
                 $this->_data[$k] = $rowData;
                 $this->_afterDataUpdate();
+                $this->_dataModified();
                 return $rowData[$this->getPrimaryKey()];
             }
         }
@@ -101,6 +102,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         $this->_afterDataUpdate();
         $key = end(array_keys($this->_data));
         $this->_rows[$key] = $row;
+        $this->_dataModified();
         return $rowData[$this->getPrimaryKey()];
     }
 
@@ -112,6 +114,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 unset($this->_data[$k]);
                 $this->_afterDataUpdate();
                 unset($this->_rows[$k]);
+                $this->_dataModified();
                 return;
             }
         }
@@ -398,4 +401,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         }
     }
 
+    protected function _dataModified()
+    {
+    }
 }
