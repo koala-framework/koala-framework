@@ -65,6 +65,8 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
         );
 
         $this->_columns->add(new Vps_Grid_Column('order_number', trlVps('Order Nr'), 50));
+        $this->_columns->add(new Vps_Grid_Column('invoice_number', trlVps('Invoice Nr'), 50))
+            ->setHidden(true);
         $this->_columns->add(new Vps_Grid_Column_Date('date', trlVps('Date')));
         $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('Firstname'), 100));
         $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Lastname'), 100));
@@ -72,8 +74,7 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
         $this->_columns->add(new Vps_Grid_Column('payment', trlVps('Payment'), 100))
             ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_Payment($payments));
         $this->_columns->add(new Vps_Grid_Column_Date('payed', trlVps('Payed')));
-        $this->_columns->add(new Vps_Grid_Column_Button('invoice', trlcVps('Invoice', 'IN')))
-            ->setButtonIcon('/assets/silkicons/page_white_text.png');
+        $this->_columns->add(new Vps_Grid_Column_Button('invoice', trlcVps('Invoice', 'IN')));
         $this->_columns->add(new Vps_Grid_Column_Button('shipped', trlcVps('Shipped', 'SH')))
             ->setButtonIcon('/assets/silkicons/package_go.png');
 
@@ -135,8 +136,7 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
         Vps_Media_Output::output(array(
             'contents' => $pdf->output('', 'S'),
             'mimeType' => 'application/pdf',
-            'downloadFilename' => $order->order_number.'.pdf',
-            'lifetime' => false
+            'downloadFilename' => $order->order_number.'.pdf'
         ));
     }
 
