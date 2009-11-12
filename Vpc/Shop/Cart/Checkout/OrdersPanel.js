@@ -31,6 +31,14 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                             order.reload(); //invoice_date wurde wom�glich gesetzt
                         }).defer(500);
                     },
+                    renderer: function(value, p, record, rowIndex, colIndex, store, column) {
+                        p.css += 'vps-cell-button';
+                        var icon = '/assets/silkicons/page_white.png';
+                        if (record.get('invoice_number')) {
+                            icon = '/assets/silkicons/page_white_star.png';
+                        }
+                        p.attr += 'style="background-image:url('+icon+');" ';
+                    },
                     scope: this
                 },
                 shipped: {
