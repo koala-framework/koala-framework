@@ -7,6 +7,7 @@
 
 #include "IndexedString.h"
 
+class ComponentDataRoot;
 class ComponentClass;
 class ComponentClassData
 {
@@ -16,17 +17,13 @@ private:
     QList<IndexedString> m_parentClasses;
     QHash<IndexedString, QByteArray> settings;
     QList<IndexedString> m_editComponents;
+    QList<IndexedString> m_plugins;
 };
 
 class ComponentClass
 {
 public:
-    static void init();
-
-    static QList<IndexedString> componentClasses()
-    {
-        return m_data.keys();
-    }
+    static void init(const IndexedString &rootComponentClass);
 
     ComponentClass()
     {
@@ -43,6 +40,9 @@ public:
     {
         QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!cls.isEmpty());
+        if (!m_data.contains(m_componentClass)) {
+            qWarning() << "not loaded ComponentClass" << m_componentClass;
+        }
         Q_ASSERT(m_data.contains(m_componentClass));
     }
 
@@ -71,6 +71,13 @@ public:
         QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!m_componentClass.isEmpty());
         return m_data[m_componentClass].m_editComponents;
+    }
+
+    inline QList<IndexedString> plugins() const
+    {
+        QMutexLocker locker(&m_dataMutex);
+        Q_ASSERT(!m_componentClass.isEmpty());
+        return m_data[m_componentClass].m_plugins;
     }
 
     inline bool hasFlag(IndexedString flag) const

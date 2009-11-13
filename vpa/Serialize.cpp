@@ -1,7 +1,6 @@
 #include "Serialize.h"
 
-#include <QtCore/QList>
-#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 QByteArray serialize(NullValue) {
     return QByteArray("N;");
@@ -56,6 +55,8 @@ QByteArray serialize(QVariant v)
         return serialize(NullValue());
     } else if (v.type() == QVariant::ByteArray) {
         return serialize(v.toByteArray());
+    } else if (v.type() == QVariant::StringList) {
+        return serialize(v.toStringList());
     } else {
         qDebug() << "unknown QVariant type" << v.typeName();
         Q_ASSERT(0);

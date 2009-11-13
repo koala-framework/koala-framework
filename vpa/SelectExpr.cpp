@@ -1,8 +1,11 @@
 #include "SelectExpr.h"
 
+#include <QStringList>
+
 #include "Unserializer.h"
 #include "ComponentData.h"
 
+#define debug(x)
 
 SelectExpr* SelectExpr::create(Unserializer* unserializer)
 {
@@ -47,6 +50,8 @@ SelectExpr* SelectExpr::create(Unserializer* unserializer)
         return new SelectExprWhereVisible(unserializer);
     } else if (className == "Vps_Model_Select_Expr_Component_HasEditComponents") {
         return new SelectExprWhereHasEditComponents(unserializer);
+    } else if (className == "Vps_Model_Select_Expr_Component_ComponentClasses") {
+        return new SelectExprWhereComponentClasses(unserializer);
     }
     qWarning() << className;
     Q_ASSERT(0);
@@ -96,6 +101,8 @@ QDebug operator<<(QDebug dbg, const SelectExpr& se)
         dbg.space() << *static_cast<const SelectExprWhereVisible*>(e);
     } else if (dynamic_cast<const SelectExprWhereHasEditComponents*>(e)) {
         dbg.space() << *static_cast<const SelectExprWhereHasEditComponents*>(e);
+    } else if (dynamic_cast<const SelectExprWhereComponentClasses*>(e)) {
+        dbg.space() << *static_cast<const SelectExprWhereComponentClasses*>(e);
     } else {
         dbg.space() << "unknown expression";
     }
@@ -117,9 +124,15 @@ SelectExprNot::SelectExprNot(Unserializer* unserializer)
         varName = varName.replace('\0', "");
         if (varName == "Vps_Model_Select_Expr_Not_expression") {
             m_expr = SelectExpr::create(unserializer);
+        } else {
+            qWarning() << "unknown varName" << varName;
+            Q_ASSERT(0);
         }
     }
     in = unserializer->device()->read(1);
+    if (in != "}") {
+        qWarning() << in + unserializer->device()->readAll();
+    }
     Q_ASSERT(in == "}");
 }
 
@@ -152,7 +165,9 @@ SelectExprWhereComponentType::SelectExprWhereComponentType(Unserializer* unseria
 bool SelectExprWhereComponentType::match(ComponentData* d, ComponentData *parentData) const
 {
     Q_UNUSED(parentData);
-    return d->componentTypes() & m_type;
+    bool ret = d->componentTypes() & m_type;
+    debug( qDebug() << "SelectExprWhereComponentType::match" << ret <<d->componentId(); )
+    return ret;
 }
 
 QDebug operator<<(QDebug dbg, const SelectExprWhereComponentType& s)
@@ -638,11 +653,13 @@ QByteArray SelectExprWhereSubRoot::serialize() const
 bool SelectExprWhereSubRoot::match(ComponentData* d, ComponentData *parentData) const
 {
     Q_UNUSED(parentData);
-    ComponentData *sr = ComponentData::getComponentById(m_componentId);
+    ComponentData *sr = ComponentData::getComponentById(d->root(), m_componentId);
+    qDebug() << "subroot set" << sr->componentId();
     while (!sr->hasFlag(IndexedString("subroot"))) {
+        if (!sr->parent()) break;
         sr = sr->parent();
-        if (!sr) return false;
     }
+    qDebug() << "subroot using" << sr->componentId();
     do {
         if (d == sr) return true;
     } while ((d = d->parent()));
@@ -679,6 +696,7 @@ QByteArray SelectExprWhereVisible::serialize() const
 
 bool SelectExprWhereVisible::match(ComponentData* d, ComponentData *parentData) const
 {
+    Q_UNUSED(d);
     Q_UNUSED(parentData);
     return true; //TODO: performanceproblem, erstmal deaktiviert
     /*
@@ -692,6 +710,7 @@ bool SelectExprWhereVisible::match(ComponentData* d, ComponentData *parentData) 
 
 QDebug operator<<(QDebug dbg, const SelectExprWhereVisible& s)
 {
+    Q_UNUSED(s);
     dbg.nospace() << "SelectExprWhereVisible";
     return dbg.space();
 }
@@ -711,9 +730,11 @@ bool SelectExprWhereHasEditComponents::match(ComponentData* d, ComponentData *pa
     QList<IndexedString> ec = parentData->componentClass().editComponents();
     foreach (const IndexedString &i, ec) {
         if (d->generator()->childComponentKeys().contains(i)) {
+            debug( qDebug() << "SelectExprWhereHasEditComponents::match TRUE" << d->componentId(); )
             return true;
         }
     }
+    debug( qDebug() << "SelectExprWhereHasEditComponents::match FALSE" << d->componentId(); )
     return false;
 }
 
@@ -740,6 +761,67 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereHasEditComponents&)
     dbg.nospace() << "SelectExprWhereHasEditComponents";
     return dbg.nospace();
 }
+
+SelectExprWhereComponentClasses::SelectExprWhereComponentClasses(Unserializer* unserializer)
+    : SelectExpr()
+{
+    int numProperties = unserializer->readNumber();
+    QByteArray in = unserializer->device()->read(2);
+    Q_ASSERT(in == ":{");
+    for (int i=0; i < numProperties; ++i) {
+        QByteArray varName = unserializer->readString();
+        varName = varName.replace('\0', "");
+        if (varName == "Vps_Model_Select_Expr_Component_ComponentClasses_componentClasses") {
+            int l = unserializer->readArrayStart();
+            for (int j=0; j < l; ++j) {
+                unserializer->readInt(); //key
+                m_componentClasses << ComponentClass(IndexedString(unserializer->readString()));
+            }
+            unserializer->readArrayEnd();
+        }
+    }
+    in = unserializer->device()->read(1);
+    Q_ASSERT(in == "}");
+}
+
+bool SelectExprWhereComponentClasses::match(ComponentData* d, ComponentData* parentData) const
+{
+    Q_UNUSED(parentData);
+    return m_componentClasses.contains(d->componentClass());
+}
+
+QByteArray SelectExprWhereComponentClasses::serialize() const
+{
+    QByteArray ret;
+    QByteArray cls("Vps_Model_Select_Expr_Component_ComponentClasses");
+    ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":1:{";
+    QStringList o;
+    foreach (const ComponentClass &c, m_componentClasses) {
+        o << c.toString();
+    }
+    ret += serializePrivateObjectProperty("_componentClasses", "Vps_Model_Select_Expr_Component_ComponentClasses", o);
+    ret += "}";
+    return ret;
+}
+
+QDebug operator<<(QDebug dbg, const SelectExprWhereComponentClasses& s)
+{
+    dbg.nospace() << "SelectExprWhereComponentClasses(" << s.m_componentClasses << ")";
+    return dbg.nospace();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -10,9 +10,9 @@ QMutex ComponentClass::m_dataMutex;
 QHash<QString, ComponentClass> ComponentClass::m_shortcutUrlToComponent;
 QHash<ComponentClass, IndexedString> ComponentClass::m_componentToShortcutUrl;
 
-void ComponentClass::init()
+void ComponentClass::init(const IndexedString &rootComponentClass)
 {
-    QXmlStreamReader xml(PhpProcess::getInstance()->call("get-component-classes"));
+    QXmlStreamReader xml(PhpProcess::getInstance()->call(rootComponentClass, "get-component-classes"));
     while (!xml.atEnd()) {
         xml.readNext();
         if (xml.isStartElement() && xml.name() == "componentClass") {
@@ -57,6 +57,16 @@ void ComponentClass::init()
                             for (int j=0; j<cnt; ++j) {
                                 u.readInt(); //index
                                 data.m_editComponents << IndexedString(u.readString());
+                            }
+                            u.readArrayEnd();
+                        } else if (key == IndexedString("plugins")) {
+                            QBuffer buffer(&value);
+                            buffer.open(QIODevice::ReadOnly);
+                            Unserializer u(&buffer);
+                            int cnt = u.readArrayStart();
+                            for (int j=0; j<cnt; ++j) {
+                                u.readVariant(); //index
+                                data.m_plugins << IndexedString(u.readString());
                             }
                             u.readArrayEnd();
                         }

@@ -156,6 +156,16 @@ public:
         }
         return -1;
     }
+    
+    QList<QString> tags() const
+    {
+        if (m_generator) {
+            return m_generator->tags(this);
+        }
+        return QList<QString>();
+    }
+
+    const ComponentDataRoot *root() const;
 
     inline const ComponentData *page() const
     {
@@ -190,7 +200,7 @@ public:
 
     QList<ComponentData*> childComponents(const Select &s);
     QList<ComponentData*> recursiveChildComponents(const Select &s, const Select &childSelect);
-    ComponentData *childPageByPath(const QString &path);
+    ComponentData *childPageByPath(const ComponentDataRoot *root, const QString &path);
 
     inline const QList<ComponentData*> &children() const
     {
@@ -234,11 +244,11 @@ public:
     QHash<IndexedString, QVariant> rowData;
 
     static int _getNextSeperatorPos(const QString &id);
-    static ComponentData *getComponentById(QString id);
-    static QList<ComponentData*> getComponentsByDbId(QString id);
+    static ComponentData *getComponentById(const ComponentDataRoot* root, QString id);
+    static QList<ComponentData*> getComponentsByDbId(const ComponentDataRoot* root, QString id);
     static ComponentData *_getChildComponent(ComponentData *data, QString id);
 
-    static QList<ComponentData*> getComponentsByClass(ComponentClass cls);
+    static QList<ComponentData*> getComponentsByClass(const ComponentDataRoot *root, ComponentClass cls);
     static ComponentData* getHome(ComponentData* subRoot);
 
 private:
@@ -273,10 +283,11 @@ private:
     QHash<int, ComponentData*> m_childIdsHash;
 
     //static performance hashes
-    static QHash<QString, ComponentData*> m_idHash;
     static QMultiHash<IndexedString, ComponentData*> m_dbIdHash;
     static QHash<ComponentClass, QList<ComponentData*> > m_componentClassHash;
     static QSet<ComponentClass> m_componentsByClassRequested;
+protected:
+    static QHash<const ComponentDataRoot*, QHash<QString, ComponentData*> > m_idHash;
 };
 
 QByteArray serialize(ComponentData *d);

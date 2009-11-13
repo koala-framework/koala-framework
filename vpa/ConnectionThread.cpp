@@ -5,6 +5,7 @@
 
 #include "ComponentData.h"
 #include "CommandDispatcher.h"
+#include "ComponentDataRoot.h"
 
 ConnectionThread::ConnectionThread(int socketDescriptor, QObject* parent)
 : QThread(parent), m_socketDescriptor(socketDescriptor), m_countComponentsCreated(0)
@@ -15,8 +16,15 @@ ConnectionThread::ConnectionThread(int socketDescriptor, QObject* parent)
 void ConnectionThread::componentCreated()
 {
     m_countComponentsCreated++;
-//     Q_ASSERT(m_countComponentsCreated < 5000);
+    Q_ASSERT(m_countComponentsCreated < 5000);
 }
+
+
+IndexedString ConnectionThread::rootComponentClass()
+{
+    return m_rootComponentClass;
+}
+
 
 void ConnectionThread::run()
 {
@@ -33,6 +41,22 @@ void ConnectionThread::run()
     int maxProcessingTime = 0;
 
     socket.waitForConnected();
+
+    QByteArray rc;
+    do {
+        if (socket.state() == QAbstractSocket::UnconnectedState) break;
+        if (socket.waitForReadyRead()) {
+            rc.append(socket.readAll());
+        }
+    } while(!rc.endsWith('\0'));
+    socket.write("\0\n", 2);
+    socket.flush();
+    rc.chop(1);
+    QByteArray prettyRc = rc;
+    prettyRc.replace('\0', "\\0");
+    m_rootComponentClass = IndexedString(QString(rc));
+    qDebug() << "new connection thread with root" << m_rootComponentClass;
+
     forever {
         QByteArray cmd;
         do {
@@ -54,7 +78,11 @@ void ConnectionThread::run()
             args = cmd.mid(cmd.indexOf(' ')+1);
             cmd = cmd.left(cmd.indexOf(' '));
         }
-        CommandDispatcher::dispatchCommand(cmd, args, &socket);
+        const ComponentDataRoot* root = 0;
+//         if (cmd != "reset" || ComponentDataRoot::hasInstance(m_rootComponentClass)) {
+            root = ComponentDataRoot::getInstance(m_rootComponentClass);
+//         }
+        CommandDispatcher::dispatchCommand(root, cmd, args, &socket);
         socket.write("\0\n", 2);
         socket.flush();
         socket.waitForBytesWritten();
@@ -64,7 +92,7 @@ void ConnectionThread::run()
         if (t > maxProcessingTime) maxProcessingTime = t;
 
         //qDebug() << stopWatch.elapsed() << "ms" << ComponentData::count << "datas";
-//        qDebug() << "php memory usage" << PhpProcess::getInstance()->call("memory-usage");
+//        qDebug() << "php memory usage" << PhpProcess::getInstance()->call(0, "memory-usage");
         //qDebug() << "";
     }
     qDebug() << "commands" << commands << "sumProcessingTime" << sumProcessingTime << "ms" << "maxProcessingTime" << maxProcessingTime << "ms";

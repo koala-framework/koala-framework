@@ -7,6 +7,7 @@
 #include <QProcess>
 
 #define ifDebugProcess(x)
+#include "ComponentDataRoot.h"
 
 
 PhpProcess *PhpProcess::m_instance = 0;
@@ -38,6 +39,7 @@ public slots:
             if (p->state() != QProcess::Running) {
                 qDebug() << ret << p->readAll();
                 qDebug() << p->readAllStandardError();
+                qDebug() << "called" << method;
                 qFatal("php process exited!");
             }
             p->waitForReadyRead();
@@ -78,10 +80,11 @@ public:
         exec();
     }
 
-    QByteArray call(QByteArray method, const QList< QByteArray >& arguments)
+    QByteArray call(const IndexedString& rootComponentClass, QByteArray method, const QList< QByteArray >& arguments)
     {
         startupMutex.lock();
         ifDebugProcess( qDebug() << "calling" << method; )
+        method = rootComponentClass.toString().toUtf8() + "$$$$" + method;
         foreach (const QByteArray& a, arguments) {
             method += "$$$$" + a;
         }
@@ -116,11 +119,22 @@ PhpProcess::PhpProcess(QString webDir)
 }
 
 
-QByteArray PhpProcess::call(const QByteArray &method, const QList< QByteArray >& arguments)
+QByteArray PhpProcess::call(const ComponentDataRoot *root, const QByteArray &method, const QList< QByteArray >& arguments)
+{
+    if (root) {
+        return call(root->componentClass().toIndexedString(), method, arguments);
+    } else {
+        return call(IndexedString(""), method, arguments);
+    }
+}
+
+
+QByteArray PhpProcess::call(const IndexedString& rootComponentClass, const QByteArray& method, const QList< QByteArray >& arguments)
 {
     Q_ASSERT(m_processThread->isRunning());
-    return m_processThread->call(method, arguments);
+    return m_processThread->call(rootComponentClass, method, arguments);
 }
+
 
 #include "PhpProcess.moc"
 

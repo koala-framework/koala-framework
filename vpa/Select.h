@@ -12,7 +12,7 @@ public:
     ~Select();
 
     bool match(ComponentData *data, ComponentData *parentData) const;
-    bool couldCreateIndirectly(const ComponentClass &cls) const;
+    bool couldCreateIndirectly(const ComponentDataRoot *root, const ComponentClass &cls) const;
 
     QList<ComponentData*> filter(const QList<ComponentData*>& data, ComponentData *parentData) const;
 
@@ -24,7 +24,7 @@ public:
 
 private:
     QHash<ComponentData *, QList<int> > m_IdsCache;
-    QHash<ComponentClass, bool> m_couldCreateIndirectlyCache;
+    QHash<QPair<const ComponentDataRoot *, ComponentClass>, bool> m_couldCreateIndirectlyCache;
 };
 QDebug operator<<(QDebug dbg, const Select &s);
 QByteArray serialize(const Select &s);

@@ -70,7 +70,7 @@ bool Select::match(ComponentData* data, ComponentData *parentData) const
             }
             Q_ASSERT(!gen.isEmpty());
             Generator *generator = 0;
-            foreach (Generator *g, Generator::generators) {
+            foreach (Generator *g, Generator::generators(data->root())) {
                 if (g->componentClass == data->parent()->componentClass() && g->key == gen) {
                     generator = g;
                     break;
@@ -90,19 +90,20 @@ bool Select::match(ComponentData* data, ComponentData *parentData) const
 }
 
 
-bool Select::couldCreateIndirectly(const ComponentClass& cls) const
+bool Select::couldCreateIndirectly(const ComponentDataRoot *root, const ComponentClass& cls) const
 {
     Q_ASSERT(!cls.isEmpty());
 
     //qDebug() << cls << *this;
+    QPair<const ComponentDataRoot*, ComponentClass> cacheKey = qMakePair<const ComponentDataRoot*, ComponentClass>(root, cls);
 
     bool ret = false;
-    if (const_cast<Select*>(this)->m_couldCreateIndirectlyCache.contains(cls)) {
-        ret = const_cast<Select*>(this)->m_couldCreateIndirectlyCache[cls];
+    if (const_cast<Select*>(this)->m_couldCreateIndirectlyCache.contains(cacheKey)) {
+        ret = const_cast<Select*>(this)->m_couldCreateIndirectlyCache[cacheKey];
 //         qDebug() << "Select::couldCreateIndirectly (cached)" << cls << ret << *this;
         return ret;
     }
-    const_cast<Select*>(this)->m_couldCreateIndirectlyCache.insert(cls, false);
+    const_cast<Select*>(this)->m_couldCreateIndirectlyCache.insert(cacheKey, false);
 
     ret = true;
     foreach (SelectExpr *e, where) {
@@ -112,10 +113,10 @@ bool Select::couldCreateIndirectly(const ComponentClass& cls) const
     }
     if (ret) goto cacheAndReturn;
 
-    foreach (Generator *g, Generator::generators) {
+    foreach (Generator *g, Generator::generators(root)) {
         if (g->componentClass == cls) {
             foreach (const ComponentClass &cc, g->childComponentClasses()) {
-                if (!cc.isEmpty() && couldCreateIndirectly(cc)) {
+                if (!cc.isEmpty() && couldCreateIndirectly(root, cc)) {
                     ret = true;
                     goto cacheAndReturn;
                 }
@@ -123,7 +124,7 @@ bool Select::couldCreateIndirectly(const ComponentClass& cls) const
         }
     }
 cacheAndReturn:
-    const_cast<Select*>(this)->m_couldCreateIndirectlyCache.insert(cls, ret);
+    const_cast<Select*>(this)->m_couldCreateIndirectlyCache.insert(cacheKey, ret);
 //     qDebug() << "Select::couldCreateIndirectly" << cls << ret << *this;
     return ret;
 }

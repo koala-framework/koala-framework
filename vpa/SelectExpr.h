@@ -255,8 +255,18 @@ public:
 };
 QDebug operator<<(QDebug dbg, const SelectExprWhereHasEditComponents &s);
 
+class SelectExprWhereComponentClasses : public SelectExpr {
+public:
+    SelectExprWhereComponentClasses(Unserializer *unserializer);
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
+    virtual QByteArray serialize() const;
+    friend QDebug operator<<(QDebug, const SelectExprWhereComponentClasses &);
+private:
+    QList<ComponentClass> m_componentClasses;
+};
+QDebug operator<<(QDebug dbg, const SelectExprWhereComponentClasses &s);
+
 /*
-WhereHasEditComponents,
 WhereComponentKey,
 WhereComponentClasses,
 WhereOnSamePage,

@@ -3,6 +3,8 @@
 
 #include <QByteArray>
 #include <QVariant>
+#include <QStringList>
+
 #include "IndexedString.h"
 
 class NullValue {};
@@ -60,6 +62,22 @@ QByteArray serialize(QList< T > v) {
     for(int i=0; i<v.count(); ++i) {
         ret += "i:" + QByteArray::number(i) + ";";
         ret += serialize(v.at(i));
+    }
+    ret += "}";
+    return ret;
+}
+
+template <typename T>
+QByteArray serialize(QHash<QString, T > v) {
+    QByteArray ret;
+    ret += "a:";
+    ret += QByteArray::number(v.count());
+    ret += ":{";
+    QHashIterator<QString, T> i(v);
+    while (i.hasNext()) {
+        i.next();
+        ret += serialize(i.key());
+        ret += serialize(i.value());
     }
     ret += "}";
     return ret;

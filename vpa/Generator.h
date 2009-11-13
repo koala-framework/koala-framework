@@ -5,8 +5,10 @@
 
 #include "ComponentClass.h"
 
+struct ComponentDataRoot;
 class Select;
 class ComponentData;
+class Generator;
 
 struct BuildStrategy
 {
@@ -39,22 +41,38 @@ private:
 struct BuildOnlyPagesGeneratorStrategy : public BuildStrategy
 {
     virtual bool skip(ComponentData *parent) const;
+private:
+    friend class Generator;
+    bool canHavePagesGeneratorAsChild(Generator *generator) const;
+    static QHash<Generator *, bool> m_cache;
 };
 
 struct BuildWithDbIdShortcutStrategy : public BuildStrategy
 {
     virtual bool skip(ComponentData *parent) const;
+private:
+    friend class Generator;
+    enum DbIdShortcutType {
+        NoDbIdShortcut,
+        DirectDbIdShortcut,
+        IndirectDbIdShortcut
+    };
+    DbIdShortcutType canHaveDbIdShortcutAsChild(Generator *generator) const;
+    static QHash<Generator *, DbIdShortcutType> m_cache;
 };
 
 struct Generator
 {
-    Generator()
+    Generator(const ComponentDataRoot *root)
         : componentTypes(TypeComponent)
     {
-        generators << this;
+        m_root = root;
+        m_generators[root] << this;
     }
 
-    virtual ~Generator() {}
+    virtual ~Generator();
+    
+    static void deleteGenerators(const ComponentDataRoot *root);
 
     enum IdSeparator {
         Dash,
@@ -101,8 +119,13 @@ struct Generator
     int priority; //TODO macht nicht in jedem generator sinn
     QList<ComponentData*> builtComponents;
 
+    const ComponentDataRoot *root() const {
+        return m_root;
+    }
+
     virtual bool showInMenu(ComponentData *d); //TODO should be const
     virtual bool isVisible(const ComponentData *d) const;
+    virtual QList<QString> tags(const ComponentData *d) const;
 
     virtual void build(ComponentData *parent) = 0;
     virtual void buildSingle(ComponentData *parent, const QString &id) = 0;
@@ -113,8 +136,19 @@ struct Generator
     virtual QList<IndexedString> childComponentKeys() = 0;
 
     static QHash<Type, int> buildCallCount;
-    static QList<Generator*> generators;
-    static QList<Generator*> inheritGenerators();
+    static QList<Generator*> generators(const ComponentDataRoot* root) {
+        return m_generators[root];
+    }
+
+    //generators von allen roots!
+    static QList<Generator*> generators() {
+        QList<Generator*> ret;
+        foreach (QList<Generator*> l, m_generators.values()) {
+            ret << l;
+        }
+        return ret;
+    }
+    static QList<Generator*> inheritGenerators(const ComponentDataRoot* root);
 
     static void buildWithGenerators(ComponentData* parent, const BuildStrategy *buildStrategy);
 
@@ -124,11 +158,21 @@ struct Generator
         RowDeleted
     };
     static void handleChangedRow(ChangedRowMethod method, IndexedString model, const QString &id);
+
+    static void createGenerators(const ComponentDataRoot* root);
+private:
+    static QHash<const ComponentDataRoot *, QList<Generator*> > m_generators;
+    static QHash<const ComponentDataRoot*, QList<Generator*> > m_inheritGeneratorsCache;
+
+    const ComponentDataRoot *m_root;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Generator::ComponentTypes)
 
 struct GeneratorWithModel : public Generator
 {
+    GeneratorWithModel(const ComponentDataRoot* root) : Generator(root) {}
+
+    QHash<int, QVariant> rowData(IndexedString field, const QString& onlyId = QString()) const;
     void fetchRowData(ComponentData *parent, IndexedString field, const QString &onlyId = QString());
     QList<int> fetchIds(ComponentData *parent, const Select &select) const;
 
@@ -141,7 +185,7 @@ struct GeneratorStatic : public Generator
     QString filename;
     QString name;
 
-    GeneratorStatic() : Generator()
+    GeneratorStatic(const ComponentDataRoot *root) : Generator(root)
     {
         Q_ASSERT(dbIdPrefix.isEmpty());
     }
@@ -156,22 +200,30 @@ struct GeneratorStatic : public Generator
 
 struct GeneratorTable : public GeneratorWithModel
 {
-    struct Row {
-        Row(IndexedString id_, QString name_) : id(id_), name(name_) {}
-        IndexedString id;
-        QString name;
-    };
-    QList<Row> rows;
+    GeneratorTable(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
+
     ComponentClass component;
+    
+    virtual void preload();
     virtual void build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
     virtual QList<ComponentClass> childComponentClasses();
     virtual QList<IndexedString> childComponentKeys();
+
+private:
+    struct Row {
+        Row(IndexedString id_, QString name_) : id(id_), name(name_) {}
+        IndexedString id;
+        QString name;
+    };
+    QList<Row> m_rows;
 };
 struct GeneratorTableSql : public GeneratorWithModel
 {
+    GeneratorTableSql(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
+
     QString tableName;
     bool whereComponentId;
     ComponentClass component;
@@ -187,6 +239,8 @@ private:
 };
 struct GeneratorTableSqlWithComponent : public GeneratorWithModel
 {
+    GeneratorTableSqlWithComponent(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
+
     QString tableName;
     bool whereComponentId;
     QHash<IndexedString, ComponentClass> component;
@@ -211,6 +265,8 @@ private:
 };
 struct GeneratorLoadSql : public GeneratorWithModel
 {
+    GeneratorLoadSql(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
+
     ComponentClass component;
     virtual void build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
@@ -225,6 +281,8 @@ private:
 };
 struct GeneratorLoadSqlWithComponent : public GeneratorWithModel
 {
+    GeneratorLoadSqlWithComponent(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
+
     QHash<IndexedString, ComponentClass> component;
     virtual void build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
@@ -240,7 +298,7 @@ private:
 struct GeneratorLoad : public GeneratorWithModel
 {
     QHash<IndexedString, ComponentClass> component; //wird nur für childComponentClasses benötigt
-    GeneratorLoad() : GeneratorWithModel()
+    GeneratorLoad(const ComponentDataRoot* root) : GeneratorWithModel(root)
     {
         Q_ASSERT(dbIdPrefix.isEmpty());
     }
@@ -258,15 +316,18 @@ protected:
 
 struct GeneratorPages : public GeneratorLoad
 {
+    GeneratorPages(const ComponentDataRoot *root) : GeneratorLoad(root) {}
+
     virtual void build(ComponentData* parent);
     virtual bool showInMenu(ComponentData* d);
+    virtual QList<QString> tags(const ComponentData* d) const;
 };
 struct GeneratorLinkTag : public Generator
 {
     QHash<IndexedString, ComponentClass> component;
     QHash<QString, IndexedString> componentIdToComponent;
 
-    GeneratorLinkTag() : Generator()
+    GeneratorLinkTag(const ComponentDataRoot *root) : Generator(root)
     {
         Q_ASSERT(dbIdPrefix.isEmpty());
     }

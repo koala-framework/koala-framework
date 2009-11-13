@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     Generator.cpp \
     ConnectionThread.cpp \
     ConnectionServer.cpp \
-    CommandDispatcher.cpp
+    CommandDispatcher.cpp \
+    Model.cpp
 
 HEADERS += ComponentData.h \
     ComponentDataRoot.h \
@@ -41,4 +42,5 @@ HEADERS += ComponentData.h \
     Generator.h \
     ConnectionThread.h \
     ConnectionServer.h \
-    CommandDispatcher.h
+    CommandDispatcher.h \
+    Model.h

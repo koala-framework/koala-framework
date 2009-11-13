@@ -13,7 +13,7 @@
 
 
 int ComponentData::count = 0;
-QHash<QString, ComponentData*> ComponentData::m_idHash;
+QHash<const ComponentDataRoot*, QHash<QString, ComponentData*> > ComponentData::m_idHash;
 QMultiHash<IndexedString, ComponentData*> ComponentData::m_dbIdHash;
 QHash<ComponentClass, QList<ComponentData*> > ComponentData::m_componentClassHash;
 QSet<ComponentClass> ComponentData::m_componentsByClassRequested;
@@ -85,11 +85,11 @@ void ComponentData::init()
 
     ifDebugCreateComponentData( qDebug() << count << componentId() << componentClass().toString(); )
     if (m_idSeparator == Generator::NoSeparator) {
-        if (m_idHash.contains(componentId())) {
+        if (m_idHash[root()].contains(componentId())) {
             qWarning() << "componentId exists already" << componentId();
         }
-        Q_ASSERT(!m_idHash.contains(componentId()));
-        m_idHash[componentId()] = this;
+        Q_ASSERT(!m_idHash[root()].contains(componentId()));
+        m_idHash[root()][componentId()] = this;
     }
 
     if (generator()) {
@@ -99,22 +99,29 @@ void ComponentData::init()
 
 ComponentData::~ComponentData()
 {
+    count--;
     m_componentClassHash[m_componentClass.toIndexedString()].removeAll(this);
     if (m_idSeparator == Generator::NoSeparator) {
-        m_idHash.remove(componentId());
+        m_idHash[root()].remove(componentId());
     }
     foreach (const IndexedString &key, m_dbIdHash.keys(this)) {
         m_dbIdHash.remove(key, this);
     }
     m_homes.removeAll(this);
-    foreach (int key, m_parent->m_childIdsHash.keys(this)) {
-        m_parent->m_childIdsHash.remove(key);
+    if (m_parent) {
+        foreach (int key, m_parent->m_childIdsHash.keys(this)) {
+            m_parent->m_childIdsHash.remove(key);
+        }
+        m_parent->m_children.removeAll(this);
     }
-    m_parent->m_children.removeAll(this);
-    generator()->builtComponents.removeAll(this);
+    if (generator()) {
+        generator()->builtComponents.removeAll(this);
+    }
     foreach (ComponentData *c, m_children) {
-        if (!(c->generator()->componentTypes & Generator::TypeInherit)) { //TODO: das leakt womöglich
+        if (c->m_parent == this) {
             delete c;
+        } else {
+            Q_ASSERT(c->generator()->componentTypes & Generator::TypeInherit);
         }
     }
 }
@@ -126,21 +133,21 @@ void ComponentData::addChildren(ComponentData *c)
     m_childIdsHash.clear();
 }
 
-QList<ComponentData*> ComponentData::getComponentsByClass(ComponentClass cls)
+QList<ComponentData*> ComponentData::getComponentsByClass(const ComponentDataRoot *root, ComponentClass cls)
 {
     //m_componentClassHash wird in ComponentData::init geschrieben
     if (!m_componentsByClassRequested.contains(cls)) {
 
         m_componentsByClassRequested.insert(cls);
 
-        if (ComponentDataRoot::getInstance()->componentClass() == cls) {
+        if (root->componentClass() == cls) {
             //es darf nur eine root geben
             return m_componentClassHash[cls];
         }
 
         bool allSupported = true;
         QList<GeneratorTableSqlWithComponent*> generators;
-        foreach (Generator *g, Generator::generators) {
+        foreach (Generator *g, Generator::generators(root)) {
             if (g->childComponentClasses().contains(cls)) {
                 generators << static_cast<GeneratorTableSqlWithComponent*>(g);
                 if (dynamic_cast<GeneratorTableSqlWithComponent*>(g)) {
@@ -159,7 +166,7 @@ QList<ComponentData*> ComponentData::getComponentsByClass(ComponentClass cls)
             foreach (Generator *g, generators) {
                 GeneratorTableSqlWithComponent *gt = static_cast<GeneratorTableSqlWithComponent*>(g);
                 foreach (const QString &id, gt->fetchParentDbIds(cls)) {
-                    foreach (ComponentData *d, ComponentDataRoot::getComponentsByDbId(id)) {
+                    foreach (ComponentData *d, ComponentDataRoot::getComponentsByDbId(root, id)) {
                         Generator::buildWithGenerators(d, &s);
                     }
                 }
@@ -167,7 +174,7 @@ QList<ComponentData*> ComponentData::getComponentsByClass(ComponentClass cls)
         } else {
             BuildNoChildrenStrategy s;
             foreach (Generator *g, generators) {
-                foreach (ComponentData *d, getComponentsByClass(g->componentClass)) {
+                foreach (ComponentData *d, getComponentsByClass(root, g->componentClass)) {
                     Generator::buildWithGenerators(d, &s);
                 }
             }
@@ -219,9 +226,11 @@ QHash< QByteArray, QVariant > ComponentData::dataForWeb()
     if (generator() && !generator()->model.isEmpty()) {
         ret["model"] = generator()->model.toString();
     } else {
-        ret["model"] = false;;
+        ret["model"] = false;
     }
     ret["name"] = name();
+    ret["tags"] = QVariant(tags());
+    ret["inherits"] = QVariant(componentTypes() & Generator::TypeInherits);
     ret["_filename"] = filename();
     ret["_rel"] = false;
     return ret;
@@ -234,7 +243,7 @@ QByteArray serialize(ComponentData* d)
     if (!d) return serialize(NullValue());
     QByteArray ret;
     QByteArray cls("Vps_Component_Data");
-    ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":14:{";
+    ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":16:{";
     ret += serializePrivateObjectProperty("_url", "Vps_Component_Data", d->url());
     ret += serializePrivateObjectProperty("_rel", "Vps_Component_Data", NullValue());
     ret += serializePrivateObjectProperty("_filename", "*", d->filename());
@@ -257,6 +266,8 @@ QByteArray serialize(ComponentData* d)
         ret += serializeObjectProperty("model", false);
     }
     ret += serializeObjectProperty("name", d->name());
+    ret += serializeObjectProperty("tags", d->tags());
+    ret += serializeObjectProperty("inherits", d->componentTypes() & Generator::TypeInherits);
     ret += "}";
     return ret;
 }
@@ -285,7 +296,7 @@ QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s,
 //                 prefix += "  ";
 //             }
             //qDebug() << /*prefix <<*/ "recursiveChildComponents: childSelect matched for" << d->componentId();
-            if (s.couldCreateIndirectly(d->componentClass())) {
+            if (s.couldCreateIndirectly(d->root(), d->componentClass())) {
                 //qDebug() << /*prefix <<*/ "recursiveChildComponents: couldCreateIndirectly also matched" << d->componentClass();
                 ret << d->recursiveChildComponents(s, childSelect);
             }
@@ -315,7 +326,7 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
     return ret;
 }
 
-ComponentData* ComponentData::childPageByPath(const QString& path)
+ComponentData* ComponentData::childPageByPath(const ComponentDataRoot* root, const QString& path)
 {
     Select childSelect;
     childSelect.where << new SelectExprNot(new SelectExprWhereIsPseudoPage());
@@ -330,7 +341,7 @@ ComponentData* ComponentData::childPageByPath(const QString& path)
             if (!cc.isEmpty()) {
                 //qDebug() << "it is a shortcutUrl" << pathPart;
                 bool found = false;
-                QList<ComponentData*> components = ComponentData::getComponentsByClass(cc);
+                QList<ComponentData*> components = ComponentData::getComponentsByClass(root, cc);
                 foreach (ComponentData *c, components) {
                     ComponentData *p = c;
                     do {
@@ -377,7 +388,7 @@ int ComponentData::_getNextSeperatorPos(const QString& id) {
     }
     return pos;
 }
-ComponentData* ComponentData::getComponentById(QString id)
+ComponentData* ComponentData::getComponentById(const ComponentDataRoot *root, QString id)
 {
     int pos = _getNextSeperatorPos(id);
     QString mainId;
@@ -385,18 +396,18 @@ ComponentData* ComponentData::getComponentById(QString id)
         mainId = id.left(pos);
         id = id.mid(pos);
     } else {
-        if (!m_idHash.contains(id)) {
+        if (!m_idHash[root].contains(id)) {
             ifDebugGetComponentById( qDebug() << "not in m_idHash"; )
             return 0;
         }
-        return m_idHash[id];
+        return m_idHash[root][id];
     }
     ifDebugGetComponentById( qDebug() << "mainId" << mainId << "restId" << id; )
-    if (!m_idHash.contains(mainId)) {
+    if (!m_idHash[root].contains(mainId)) {
         ifDebugGetComponentById( qDebug() << "not in m_idHash"; )
         return 0;
     }
-    ComponentData *data = m_idHash[mainId];
+    ComponentData *data = m_idHash[root][mainId];
     return _getChildComponent(data, id);
 }
 
@@ -414,7 +425,7 @@ QHash<int, ComponentData*> ComponentData::childIdsHash()
     return m_childIdsHash;
 }
 
-QList< ComponentData* > ComponentData::getComponentsByDbId(QString id)
+QList< ComponentData* > ComponentData::getComponentsByDbId(const ComponentDataRoot* root, QString id)
 {
     QString mainId;
 
@@ -430,12 +441,12 @@ QList< ComponentData* > ComponentData::getComponentsByDbId(QString id)
     QList<ComponentData*> ret;
 
     //zuerst über normale id suchen
-    if (m_idHash.contains(mainId)) {
+    if (m_idHash[root].contains(mainId)) {
         if (!id.isEmpty()) {
-            ComponentData *d = _getChildComponent(m_idHash[mainId], id);
+            ComponentData *d = _getChildComponent(m_idHash[root][mainId], id);
             if (d) ret << d;
         } else {
-            ret << m_idHash[mainId];
+            ret << m_idHash[root][mainId];
         }
     }
     ifDebugGetComponentById( qDebug() << "count found using m_idHash" << ret.count(); )
@@ -565,9 +576,20 @@ const ComponentData* ComponentData::pseudoPageOrRoot() const
 {
     const ComponentData *page = this;
     while (page && !(page->componentTypes() & Generator::TypePseudoPage)) {
-        if (page == ComponentDataRoot::getInstance()) return page;
+        if (!page->parent()) return page;
         page = page->parent();
     }
     return page;
+}
+
+const ComponentDataRoot* ComponentData::root() const
+{
+    const ComponentData *page = this;
+    forever {
+        if (!page->parent()) {
+            return static_cast<const ComponentDataRoot*>(page);
+        }
+        page = page->parent();
+    }
 }
 

@@ -4,12 +4,13 @@
 
 #include "ComponentData.h"
 #include "Unserializer.h"
+#include "ComponentDataRoot.h"
 
-#define debug(x) x
-#define debugVerbose(x) x
+#define debug(x)
+#define debugVerbose(x)
 
 
-void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, QIODevice* socket)
+void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QByteArray& cmd, QByteArray args, QIODevice* socket)
 {
     QByteArray prettyArgs = args;
     prettyArgs.replace('\0', "\\0");
@@ -29,7 +30,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         Q_ASSERT(paramCount == 1);
         u.readInt(); //array key
 
-        ComponentData *d = ComponentData::getComponentById(QString::fromUtf8(u.readString()));
+        ComponentData *d = ComponentData::getComponentById(root, QString::fromUtf8(u.readString()));
         if (!d) {
             debugVerbose( qDebug() << "invalid"; )
             socket->write(serialize(NullValue()));
@@ -56,7 +57,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         int cnt = u.readArrayStart();
         for (int i=0; i<cnt; ++i) {
             u.readInt(); //array key;
-            ComponentData *d = ComponentData::getComponentById(QString::fromUtf8(u.readString()));
+            ComponentData *d = ComponentData::getComponentById(root, QString::fromUtf8(u.readString()));
             if (d) ret << d;
         }
         u.readArrayEnd();
@@ -66,7 +67,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         Q_ASSERT(paramCount == 1);
         u.readInt(); //array key
 
-        ComponentData *d = ComponentData::getComponentById(QString::fromUtf8(u.readString()));
+        ComponentData *d = ComponentData::getComponentById(root, QString::fromUtf8(u.readString()));
         socket->write(serialize(d));
     } else if (cmd == "getComponentsByDbId") {
         Q_ASSERT(paramCount == 2);
@@ -79,8 +80,12 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         u.readObjectClassName();
         Select s(&u);
         qDebug() << s;
-
-        socket->write(serialize(s.filter(ComponentData::getComponentsByDbId(id), 0)));
+        
+        QHash<QString, QByteArray> ret;
+        foreach (ComponentData *d, s.filter(ComponentData::getComponentsByDbId(root, id), 0)) {
+            ret[d->componentId()] = serialize(d);
+        }
+        socket->write(serialize(ret));
     } else if (cmd == "getComponentsBySameClasses") {
         Q_ASSERT(paramCount == 2);
         u.readInt(); //array key
@@ -92,7 +97,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
 
         QList< ComponentData* > ret;
         foreach (const QByteArray &c, classes) {
-            foreach (ComponentData *d, ComponentData::getComponentsByClass(ComponentClass(QString::fromUtf8(c)))) {
+            foreach (ComponentData *d, ComponentData::getComponentsByClass(root, ComponentClass(QString::fromUtf8(c)))) {
                 if (s.match(d, 0)) {
                     ret << d;
                 }
@@ -112,7 +117,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
 
         QList<ComponentData*> ret;
         foreach (const ComponentClass &c, classes) {
-            foreach (ComponentData *d, ComponentData::getComponentsByClass(c)) {
+            foreach (ComponentData *d, ComponentData::getComponentsByClass(root, c)) {
                 if (s.match(d, 0)) {
                     ret << d;
                 }
@@ -130,12 +135,16 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         Select s(&u);
 
 
-        ComponentData *d = ComponentData::getComponentById(componentId);
+        ComponentData *d = ComponentData::getComponentById(root, componentId);
         Q_ASSERT(d);
 
         debugVerbose( qDebug() << s; )
-
-        socket->write(serialize(d->childComponents(s)));
+        
+        QHash<QString, ComponentData*> ret;
+        foreach (ComponentData *i, d->childComponents(s)) {
+            ret[i->componentId()] = i;
+        }
+        socket->write(serialize(ret));
     } else if (cmd == "countChildComponents") {
         Q_ASSERT(paramCount == 2);
 
@@ -147,7 +156,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         Select s(&u);
 
 
-        ComponentData *d = ComponentData::getComponentById(componentId);
+        ComponentData *d = ComponentData::getComponentById(root, componentId);
         Q_ASSERT(d);
 
         socket->write(serialize(d->childComponents(s).count()));
@@ -170,7 +179,7 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
 
 
 
-        ComponentData *d = ComponentData::getComponentById(componentId);
+        ComponentData *d = ComponentData::getComponentById(root, componentId);
         if (!d) {
             qWarning() << "invalid componentId" << componentId;
         }
@@ -204,7 +213,22 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
     } else if (cmd == "getComponentClasses") {
         Q_ASSERT(paramCount == 0);
 
-        socket->write(serialize(ComponentClass::componentClasses()));
+        QList<IndexedString> ret;
+        ret << root->componentClass().toIndexedString();
+        foreach (Generator *g, Generator::generators(root)) {
+            foreach (const ComponentClass &c, g->childComponentClasses()) {
+                if (c.isEmpty()) continue;
+                if (!ret.contains(c.toIndexedString())) {
+                    ret << c.toIndexedString();
+                }
+                foreach (const IndexedString &p, c.plugins()) {
+                    if (!ret.contains(p)) {
+                        ret << p;
+                    }
+                }
+            }
+        }
+        socket->write(serialize(ret));
 
     } else if (cmd == "getChildPageByPath") {
         Q_ASSERT(paramCount == 2);
@@ -215,9 +239,9 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         u.readInt(); //array key
         QString path = QString::fromUtf8(u.readString());
 
-        ComponentData *d = ComponentData::getComponentById(componentId);
+        ComponentData *d = ComponentData::getComponentById(root, componentId);
         Q_ASSERT(d);
-        socket->write(serialize(d->childPageByPath(path)));
+        socket->write(serialize(d->childPageByPath(root, path)));
 
     } else if (cmd == "handleChangedRows") {
         Q_ASSERT(paramCount == 1);
@@ -263,6 +287,18 @@ void CommandDispatcher::dispatchCommand(const QByteArray& cmd, QByteArray args, 
         }
         u.readArrayEnd();
         socket->write(serialize(true));
+    } else if (cmd == "reset") {
+        qDebug() << "RESET ======================================================================";
+        Q_ASSERT(paramCount == 0);
+        if (root) {
+            qDebug() << root->componentId();
+        } else {
+            qDebug() << "no root yet; nothing to do";
+        }
+        if (root) {
+            delete root;
+            Generator::deleteGenerators(root);
+        }
     } else {
         socket->write("ERROR: unknown command");
     }
