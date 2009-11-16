@@ -432,6 +432,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else if ($expr instanceof Vps_Model_Select_Expr_Sum) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
             return "SUM($field)";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Max) {
+            $field = $this->_formatField($expr->getField(), $dbSelect);
+            return "MAX($field)";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Min) {
+            $field = $this->_formatField($expr->getField(), $dbSelect);
+            return "MIN($field)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Area) {
             $lat1 = $this->_formatField('latitude', $dbSelect);
             $lat2 = $expr->getLatitude();
