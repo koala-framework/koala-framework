@@ -566,6 +566,20 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 $ret += $r->$f;
             }
             return $ret;
+        } else if ($expr instanceof Vps_Model_Select_Expr_Max) {
+            $f = $expr->getField();
+            $ret = $rowset->current()->$f;
+            foreach ($rowset as $r) {
+                $ret = max($ret, $r->$f);
+            }
+            return $ret;
+        } else if ($expr instanceof Vps_Model_Select_Expr_Min) {
+            $f = $expr->getField();
+            $ret = $rowset->current()->$f;
+            foreach ($rowset as $r) {
+                $ret = min($ret, $r->$f);
+            }
+            return $ret;
         } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
             if (!count($rowset)) {
                 return null;
