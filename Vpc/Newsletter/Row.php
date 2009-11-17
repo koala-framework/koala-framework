@@ -60,6 +60,9 @@ class Vpc_Newsletter_Row extends Vps_Model_Proxy_Row
                 if (!$recipient) {
                     $row->status = 'userNotFound';
                     $countNoUser++;
+                } else if (!$recipient->getMailEmail()) {
+                    $row->status = 'noAddress';
+                    $countNoUser++;
                 } else {
                     $result = $this->_sendMail($recipient);
                     if ($result) {
