@@ -66,9 +66,9 @@ class Vps_Setup
 
         self::$configClass = $configClass;
         require_once 'Vps/Config/Web.php';
-        Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(self::getConfigSection()));
         $config = Vps_Config_Web::getInstance(self::getConfigSection());
         Vps_Registry::set('config', $config);
+        Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(self::getConfigSection()));
 
 
         if ($config->debug->benchmark) {
