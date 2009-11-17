@@ -14,6 +14,9 @@ class Vps_Test
         if (Zend_Registry::get('config')->debug->querylog) {
             $profiler = new Vps_Db_Profiler(true);
             $db->setProfiler($profiler);
+        } else if (Zend_Registry::get('config')->debug->benchmark || Zend_Registry::get('config')->debug->benchmarkLog) {
+            $profiler = new Vps_Db_Profiler_Count(true);
+            $db->setProfiler($profiler);
         }
 
         return $db;

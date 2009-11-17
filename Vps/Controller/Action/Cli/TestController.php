@@ -67,7 +67,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         Zend_Session::start();
         ini_set('memory_limit', '256M');
         Zend_Registry::get('config')->debug->benchmark = false;
-        Zend_Registry::get('config')->debug->querylog = false;
+        //Zend_Registry::get('config')->debug->querylog = false;
         Zend_Registry::get('config')->hasIndex = false; //zwischenlösung bis index auf models umgestellt wurde und auch getestet werden muss
         Zend_Registry::get('config')->debug->error->log = false;
 
