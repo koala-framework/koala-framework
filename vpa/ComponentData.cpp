@@ -1,4 +1,3 @@
-#include "ComponentData.h"
 
 #include <QRegExp>
 #include <QStringList>
@@ -6,17 +5,20 @@
 
 #include "ComponentDataRoot.h"
 #include "Generator.h"
+#include "ComponentData.h"
 
 #define ifDebugCreateComponentData(x) x
 #define ifDebugGetComponentById(x)
+#define ifDebugGetChildPageByPath(x) x
+#define ifDebugGetHome(x) x
 #include "ConnectionThread.h"
 
 
 int ComponentData::count = 0;
 QHash<const ComponentDataRoot*, QHash<QString, ComponentData*> > ComponentData::m_idHash;
 QMultiHash<IndexedString, ComponentData*> ComponentData::m_dbIdHash;
-QHash<ComponentClass, QList<ComponentData*> > ComponentData::m_componentClassHash;
-QSet<ComponentClass> ComponentData::m_componentsByClassRequested;
+QHash< QPair<const ComponentDataRoot*, ComponentClass>, QList<ComponentData*> > ComponentData::m_componentClassHash;
+QSet< QPair<const ComponentDataRoot*, ComponentClass> > ComponentData::m_componentsByClassRequested;
 QList<ComponentData*> ComponentData::m_homes;
 
 ComponentData::ComponentData(Generator* generator, ComponentData* parent_, QString componentId_, QString dbId_, ComponentClass componentClass_)
@@ -76,7 +78,7 @@ void ComponentData::init()
 
     Q_ASSERT(!m_componentClass.isEmpty());
 
-    m_componentClassHash[m_componentClass.toIndexedString()] << this;
+    m_componentClassHash[qMakePair(root(), m_componentClass)] << this;
 
     ++count;
     if (qobject_cast<ConnectionThread*>(QThread::currentThread())) {
@@ -100,7 +102,7 @@ void ComponentData::init()
 ComponentData::~ComponentData()
 {
     count--;
-    m_componentClassHash[m_componentClass.toIndexedString()].removeAll(this);
+    m_componentClassHash[qMakePair(root(), m_componentClass)].removeAll(this);
     if (m_idSeparator == Generator::NoSeparator) {
         m_idHash[root()].remove(componentId());
     }
@@ -135,14 +137,16 @@ void ComponentData::addChildren(ComponentData *c)
 
 QList<ComponentData*> ComponentData::getComponentsByClass(const ComponentDataRoot *root, ComponentClass cls)
 {
-    //m_componentClassHash wird in ComponentData::init geschrieben
-    if (!m_componentsByClassRequested.contains(cls)) {
+    qDebug() << "getComponentsByClass" << cls << "root:" << root->componentClass();
 
-        m_componentsByClassRequested.insert(cls);
+    //m_componentClassHash wird in ComponentData::init geschrieben
+    if (!m_componentsByClassRequested.contains(qMakePair(root, cls))) {
+
+        m_componentsByClassRequested.insert(qMakePair(root, cls));
 
         if (root->componentClass() == cls) {
             //es darf nur eine root geben
-            return m_componentClassHash[cls];
+            return m_componentClassHash[qMakePair(root, cls)];
         }
 
         bool allSupported = true;
@@ -185,22 +189,29 @@ QList<ComponentData*> ComponentData::getComponentsByClass(const ComponentDataRoo
             */
         }
     }
-    return m_componentClassHash[cls];
+    return m_componentClassHash[qMakePair(root, cls)];
 }
 
 
 ComponentData* ComponentData::getHome(ComponentData* subRoot)
 {
     foreach (ComponentData *c, m_homes) {
+        ifDebugGetHome( qDebug() << "checking" << c->componentId(); )
         while (!subRoot->hasFlag(IndexedString("subroot"))) {
+            if (!subRoot->parent()) break; //use root
             subRoot = subRoot->parent();
-            if (!subRoot) return false;
         }
+        ifDebugGetHome( qDebug() << "subroot" << subRoot->componentId(); )
         ComponentData* i = c;
         do {
-            if (i == subRoot) return c;
+            if (i == subRoot) {
+                ifDebugGetHome( qDebug() << "MATCH! return" << c->componentId(); )
+                return c;
+            }
         } while ((i = i->parent()));
+        ifDebugGetHome( qDebug() << "doesn't match"; )
     }
+    ifDebugGetHome( qDebug() << "no home matched, return 0"; )
     return 0;
 }
 
@@ -328,50 +339,54 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
 
 ComponentData* ComponentData::childPageByPath(const ComponentDataRoot* root, const QString& path)
 {
+    ifDebugGetChildPageByPath( qDebug() << "childPageByPath" << path; )
     Select childSelect;
     childSelect.where << new SelectExprNot(new SelectExprWhereIsPseudoPage());
 
     ComponentData *page = this;
-    foreach (const QString &pathPart, path.split('/')) {
-        //qDebug() << pathPart;
-                                                                 //TODO: schönere, bessere lösung nötig
-        if (page==this || page->componentClass().parentClasses().contains(IndexedString("Vpc_Root_DomainRoot_Domain_Component"))) {
-            //qDebug() << "checking for shortcutUrl" << pathPart;
-            ComponentClass cc = ComponentClass::componentForShortcutUrl(pathPart);
-            if (!cc.isEmpty()) {
-                //qDebug() << "it is a shortcutUrl" << pathPart;
-                bool found = false;
-                QList<ComponentData*> components = ComponentData::getComponentsByClass(root, cc);
-                foreach (ComponentData *c, components) {
-                    ComponentData *p = c;
-                    do {
-                        if (p == page) {
-                            page = c;
-                            found = true;
-                            break;
-                        }
-                    } while ((p = p->parent()));
+    if (!path.isEmpty()) {
+        foreach (const QString &pathPart, path.split('/')) {
+            ifDebugGetChildPageByPath( qDebug() << "pathPart" << pathPart; )
+                                                                    //TODO: schönere, bessere lösung nötig
+            if (page==this || page->componentClass().parentClasses().contains(IndexedString("Vpc_Root_DomainRoot_Domain_Component"))) {
+                ifDebugGetChildPageByPath( qDebug() << "checking for shortcutUrl" << pathPart; )
+                ComponentClass cc = ComponentClass::componentForShortcutUrl(pathPart);
+                if (!cc.isEmpty()) {
+                    ifDebugGetChildPageByPath( qDebug() << "it is a shortcutUrl" << pathPart; )
+                    bool found = false;
+                    QList<ComponentData*> components = ComponentData::getComponentsByClass(root, cc);
+                    foreach (ComponentData *c, components) {
+                        ComponentData *p = c;
+                        do {
+                            if (p == page) {
+                                page = c;
+                                found = true;
+                                break;
+                            }
+                        } while ((p = p->parent()));
+                    }
+                    if (!found) return 0;
+                    continue;
                 }
-                if (!found) return 0;
-                continue;
             }
+            Select s;
+            s.where << new SelectExprWhereFilename(pathPart);
+            s.where << new SelectExprWhereIsPseudoPage();
+            s.limitCount = 1;
+            QList<ComponentData*> pages = page->recursiveChildComponents(s, childSelect);
+            if (pages.isEmpty()) {
+                ifDebugGetChildPageByPath( qDebug() << "found nothing for " << pathPart; )
+                return 0;
+            }
+            page = pages.first();
         }
-        Select s;
-        s.where << new SelectExprWhereFilename(pathPart);
-        s.where << new SelectExprWhereIsPseudoPage();
-        s.limitCount = 1;
-        QList<ComponentData*> pages = page->recursiveChildComponents(s, childSelect);
-        if (pages.isEmpty()) {
-            //qDebug() << "found nothing for " << pathPart;
-            return 0;
-        }
-        page = pages.first();
     }
 
+    ifDebugGetChildPageByPath( qDebug() << "page" << page << "this" << this; )
                                                                       //TODO: schönere, bessere lösung nötig
     if (page && (page==this || page->componentClass().parentClasses().contains(IndexedString("Vpc_Root_DomainRoot_Domain_Component")))) {
-        //qDebug() << "looking for home" << page;
-        //if (page) qDebug() << "startAt" << page->componentId();
+        ifDebugGetChildPageByPath( qDebug() << "looking for home" << page; )
+        ifDebugGetChildPageByPath( if (page) qDebug() << "startAt" << page->componentId(); )
         page = ComponentData::getHome(page);
     }
 

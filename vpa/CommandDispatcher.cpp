@@ -6,8 +6,8 @@
 #include "Unserializer.h"
 #include "ComponentDataRoot.h"
 
-#define debug(x)
-#define debugVerbose(x)
+#define debug(x) x
+#define debugVerbose(x) x
 
 
 void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QByteArray& cmd, QByteArray args, QIODevice* socket)

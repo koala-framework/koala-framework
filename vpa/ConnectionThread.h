@@ -15,10 +15,12 @@ public:
 
     void componentCreated();
     IndexedString rootComponentClass();
+    void setCheckCountComponentsCreated(bool v);
 
 private:
     int m_socketDescriptor;
     int m_countComponentsCreated;
+    bool m_checkCountComponentsCreated;
 
     IndexedString m_rootComponentClass;
 };

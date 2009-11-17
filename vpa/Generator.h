@@ -84,6 +84,7 @@ struct Generator
         Unknown,
         Static,
         Table,
+        TableWithComponent,
         TableSql,
         Load,
         Pages,
@@ -203,6 +204,7 @@ struct GeneratorTable : public GeneratorWithModel
     GeneratorTable(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
 
     ComponentClass component;
+    bool whereComponentId;
     
     virtual void preload();
     virtual void build(ComponentData *parent);
@@ -217,9 +219,38 @@ private:
         Row(IndexedString id_, QString name_) : id(id_), name(name_) {}
         IndexedString id;
         QString name;
+        QString componentId;
     };
     QList<Row> m_rows;
 };
+
+struct GeneratorTableWithComponent : public GeneratorWithModel
+{
+    GeneratorTableWithComponent(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
+
+    QHash<IndexedString, ComponentClass> component;
+    bool whereComponentId;
+    
+    virtual void preload();
+    virtual void build(ComponentData *parent);
+    virtual void buildSingle(ComponentData* parent, const QString& id);
+    virtual void refresh(ComponentData* d);
+
+    virtual QList<ComponentClass> childComponentClasses();
+    virtual QList<IndexedString> childComponentKeys();
+
+private:
+    struct Row {
+        Row(IndexedString id_, QString name_, IndexedString component_)
+            : id(id_), name(name_), component(component_) {}
+        IndexedString id;
+        QString name;
+        IndexedString component;
+        QString componentId;
+    };
+    QList<Row> m_rows;
+};
+
 struct GeneratorTableSql : public GeneratorWithModel
 {
     GeneratorTableSql(const ComponentDataRoot *root) : GeneratorWithModel(root) {}

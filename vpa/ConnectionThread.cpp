@@ -8,7 +8,8 @@
 #include "ComponentDataRoot.h"
 
 ConnectionThread::ConnectionThread(int socketDescriptor, QObject* parent)
-: QThread(parent), m_socketDescriptor(socketDescriptor), m_countComponentsCreated(0)
+: QThread(parent), m_socketDescriptor(socketDescriptor),
+    m_countComponentsCreated(0), m_checkCountComponentsCreated(false)
 {
 }
 
@@ -16,7 +17,9 @@ ConnectionThread::ConnectionThread(int socketDescriptor, QObject* parent)
 void ConnectionThread::componentCreated()
 {
     m_countComponentsCreated++;
-    Q_ASSERT(m_countComponentsCreated < 5000);
+    if (m_checkCountComponentsCreated) {
+//         Q_ASSERT(m_countComponentsCreated < 10000);
+    }
 }
 
 
@@ -96,5 +99,11 @@ void ConnectionThread::run()
         //qDebug() << "";
     }
     qDebug() << "commands" << commands << "sumProcessingTime" << sumProcessingTime << "ms" << "maxProcessingTime" << maxProcessingTime << "ms";
+}
+
+void ConnectionThread::setCheckCountComponentsCreated(bool v)
+{
+    if (!v) m_countComponentsCreated = 0;
+    m_checkCountComponentsCreated = v;
 }
 

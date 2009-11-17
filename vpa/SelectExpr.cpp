@@ -505,10 +505,7 @@ SelectExprWherePageGenerator::SelectExprWherePageGenerator(Unserializer* unseria
 bool SelectExprWherePageGenerator::match(ComponentData* d, ComponentData *parentData) const
 {
     Q_UNUSED(parentData);
-    //TODO: kann diese klasse im web abgeleitet werden?
-    static IndexedString c("Vps_Component_Generator_Page");
-    static IndexedString c2("Vpc_Root_DomainRoot_Category_PageGenerator");
-    return d->generator()->generatorClass == c || d->generator()->generatorClass == c2;
+    return dynamic_cast<GeneratorPages*>(d->generator());
 }
 
 QByteArray SelectExprWherePageGenerator::serialize() const

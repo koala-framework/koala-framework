@@ -284,8 +284,8 @@ private:
 
     //static performance hashes
     static QMultiHash<IndexedString, ComponentData*> m_dbIdHash;
-    static QHash<ComponentClass, QList<ComponentData*> > m_componentClassHash;
-    static QSet<ComponentClass> m_componentsByClassRequested;
+    static QHash< QPair<const ComponentDataRoot*, ComponentClass>, QList<ComponentData*> > m_componentClassHash;
+    static QSet< QPair<const ComponentDataRoot*, ComponentClass> > m_componentsByClassRequested;
 protected:
     static QHash<const ComponentDataRoot*, QHash<QString, ComponentData*> > m_idHash;
 };

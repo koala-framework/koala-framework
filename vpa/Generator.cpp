@@ -10,8 +10,9 @@
 #include "Unserializer.h"
 #include "Model.h"
 
-#define ifDebugGeneratorBuild(x)
+#define ifDebugGeneratorBuild(x) x
 #define ifDebugGeneratorBuildInherit(x)
+#define ifDebugBuildWithGenerators(x) x
 #define debugHandleChangedRow(x)
 
 #include "ComponentDataRoot.h"
@@ -174,16 +175,16 @@ bool BuildWithDbIdShortcutStrategy::skip(ComponentData* parent) const
 
 void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *buildStrategy)
 {
-    qDebug() << "buildWithGenerators parent:" << parent->componentId();
+    ifDebugBuildWithGenerators( qDebug() << "buildWithGenerators parent:" << parent->componentId(); )
     if (buildStrategy && buildStrategy->skip(parent)) {
-        qDebug() << "SKIP";
+        ifDebugBuildWithGenerators( qDebug() << "SKIP"; )
         return;
     }
 
     parent->childrenLock()->lockForRead();
 
     bool childrenBuilt = parent->m_childrenBuilt;
-    qDebug() << "childrenBuilt" << childrenBuilt;
+    ifDebugBuildWithGenerators( qDebug() << "childrenBuilt" << childrenBuilt; )
 
     if (!childrenBuilt) {
         parent->childrenLock()->unlock();
@@ -501,12 +502,23 @@ QList<IndexedString> GeneratorStatic::childComponentKeys()
 
 void GeneratorTable::preload()
 {
-    QHash<QString, QVariant> rows = Model::rowData(this);
-    QHashIterator<QString, QVariant> i(rows);
+    QHash<IndexedString, IndexedString> fields;
+    fields[IndexedString("name")] = IndexedString("--generator-name");
+    if (whereComponentId) {
+        fields[IndexedString("component_id")] = IndexedString("component_id");
+    }
+    QHash<QString, QHash<IndexedString, QVariant> > rows = Model::rowData(this, fields);
+    qDebug() << rows;
+    QHashIterator<QString, QHash<IndexedString, QVariant> > i(rows);
     m_rows.clear();
     while (i.hasNext()) {
         i.next();
-        m_rows << Row(IndexedString(i.key()), i.value().toString());
+        Row r(IndexedString(i.key()),
+                    i.value()[IndexedString("name")].toString());
+        if (whereComponentId) {
+            r.componentId = i.value()[IndexedString("component_id")].toString();
+        }
+        m_rows << r;
     }
 }
 
@@ -515,6 +527,10 @@ void GeneratorTable::build(ComponentData* parent)
     buildCallCount[Table]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorTable::build" << parent->componentId(); )
     foreach (Row row, m_rows) {
+        qDebug() << "build" << row.componentId << parent->componentId() << parent->dbId();
+        if (whereComponentId) {
+            if (parent->dbId() != row.componentId) continue;
+        }
         ComponentData *d = new ComponentData(this, parent, idSeparator, row.id, component);
         d->setDbIdPrefix(dbIdPrefix);
         d->setName(row.name);
@@ -529,6 +545,9 @@ void GeneratorTable::buildSingle(ComponentData* parent, const QString& id)
     ifDebugGeneratorBuild( qDebug() << "GeneratorTable::buildSingle" << parent->componentId(); )
     foreach (Row row, m_rows) {
         if (id == row.id.toString()) {
+            if (whereComponentId) {
+                Q_ASSERT(parent->dbId() == row.componentId);
+            }
             ComponentData *d = new ComponentData(this, parent, idSeparator, row.id, component);
             d->setDbIdPrefix(dbIdPrefix);
             d->setName(row.name);
@@ -557,6 +576,77 @@ QList<IndexedString> GeneratorTable::childComponentKeys()
     return ret;
 }
 
+void GeneratorTableWithComponent::preload()
+{
+    QHash<IndexedString, IndexedString> fields;
+    fields[IndexedString("name")] = IndexedString("--generator-name");
+    fields[IndexedString("component")] = IndexedString("--generator-component");
+    if (whereComponentId) {
+        fields[IndexedString("component_id")] = IndexedString("component_id");
+    }
+    QHash<QString, QHash<IndexedString, QVariant> > rows = Model::rowData(this, fields);
+    QHashIterator<QString, QHash<IndexedString, QVariant> > i(rows);
+    m_rows.clear();
+    while (i.hasNext()) {
+        i.next();
+        Row r(IndexedString(i.key()),
+                    i.value()[IndexedString("name")].toString(),
+                    i.value()[IndexedString("component")].toString());
+        if (whereComponentId) {
+            r.componentId = i.value()[IndexedString("component_id")].toString();
+        }
+        m_rows << r;
+    }
+}
+
+void GeneratorTableWithComponent::build(ComponentData* parent)
+{
+    buildCallCount[Table]++;
+    ifDebugGeneratorBuild( qDebug() << "GeneratorTableWithComponent::build" << parent->componentId(); )
+    foreach (Row row, m_rows) {
+        if (whereComponentId) {
+            if (parent->dbId() != row.componentId) continue;
+        }
+        ComponentData *d = new ComponentData(this, parent, idSeparator, row.id, component[row.component]);
+        d->setDbIdPrefix(dbIdPrefix);
+        d->setName(row.name);
+        d->setFilename(row.name);
+        parent->addChildren(d);
+    }
+}
+
+void GeneratorTableWithComponent::buildSingle(ComponentData* parent, const QString& id)
+{
+    buildCallCount[Table]++;
+    ifDebugGeneratorBuild( qDebug() << "GeneratorTableWithComponent::buildSingle" << parent->componentId(); )
+    foreach (Row row, m_rows) {
+        if (id == row.id.toString()) {
+            if (whereComponentId) {
+                Q_ASSERT(parent->dbId() == row.componentId);
+            }
+            ComponentData *d = new ComponentData(this, parent, idSeparator, row.id, component[row.component]);
+            d->setDbIdPrefix(dbIdPrefix);
+            d->setName(row.name);
+            parent->addChildren(d);
+        }
+    }
+}
+
+void GeneratorTableWithComponent::refresh(ComponentData* d)
+{
+    Q_UNUSED(d);
+    //nothing to do as long as no name is set in build()
+}
+
+QList<ComponentClass> GeneratorTableWithComponent::childComponentClasses()
+{
+    return component.values();
+}
+
+QList<IndexedString> GeneratorTableWithComponent::childComponentKeys()
+{
+    return component.keys();
+}
 
 void GeneratorTableSql::_build(ComponentData* parent, QSqlQuery &query)
 {
@@ -751,6 +841,7 @@ QByteArray GeneratorLoadSql::_sql(ComponentData* parent, int id)
     if (id) {
         arg << QByteArray("--id=") + QByteArray::number(id);
     }
+    qDebug() << "generator-sql" << arg;
     return PhpProcess::getInstance()->call(parent->root(), "generator-sql", arg);
 }
 
@@ -1105,10 +1196,10 @@ void GeneratorLinkTag::build(ComponentData* parent)
     buildCallCount[LinkTag]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorLinkTag::build" << parent->componentId(); )
     if (!componentIdToComponent.contains(parent->dbId())) {
-        qWarning() << "can't figure out correct component for " << parent->dbId() << "root:" << root()->componentClass();
-        qWarning() << "existing" << componentIdToComponent.keys();
+        //TODO: das dürfte eigentlich nicht passieren, kann es jedoch wenn eine row
+        //noch nie gespeichert wurde; korrekt wäre da die defaultValues zu verwenen
+        return;
     }
-    Q_ASSERT(componentIdToComponent.contains(parent->dbId()));
     ComponentClass c = component[componentIdToComponent[parent->dbId()]];
     qDebug() << "GeneratorLinkTag::build" << parent->componentId() << c;
     ComponentData *d = new ComponentData(this, parent, idSeparator, IndexedString("link"), c);
@@ -1155,6 +1246,9 @@ void Generator::createGenerators(const ComponentDataRoot *root)
             } else if (t == "table") {
                 type = Generator::Table;
                 g = new GeneratorTable(root);
+            } else if (t == "tableWithComponent") {
+                type = Generator::TableWithComponent;
+                g = new GeneratorTableWithComponent(root);
             } else if (t == "tableSql") {
                 type = Generator::TableSql;
                 g = new GeneratorTableSql(root);
@@ -1307,6 +1401,11 @@ void Generator::createGenerators(const ComponentDataRoot *root)
                 }
                 Q_ASSERT(!component.isEmpty());
                 static_cast<GeneratorTable*>(g)->component = component;
+                static_cast<GeneratorTable*>(g)->whereComponentId = whereComponentId;
+            } else if (type == Generator::TableWithComponent) {
+                Q_ASSERT(component.isEmpty());
+                static_cast<GeneratorTableWithComponent*>(g)->component = components;
+                static_cast<GeneratorTableWithComponent*>(g)->whereComponentId = whereComponentId;
             } else if (type == Generator::TableSql) {
                 static_cast<GeneratorTableSql*>(g)->tableName = tableName;
                 static_cast<GeneratorTableSql*>(g)->whereComponentId = whereComponentId;

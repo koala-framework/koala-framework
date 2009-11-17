@@ -16,6 +16,10 @@ ComponentDataRoot::~ComponentDataRoot()
 
 void ComponentDataRoot::initInstance(IndexedString componentClass)
 {
+    if (qobject_cast<ConnectionThread*>(QThread::currentThread())) {
+        static_cast<ConnectionThread*>(QThread::currentThread())->setCheckCountComponentsCreated(false);
+    }
+
     qDebug() << "****** initializing RootComponent" << componentClass;
     {
         qDebug() << "loading componentClasses";
@@ -84,4 +88,7 @@ void ComponentDataRoot::initInstance(IndexedString componentClass)
     qDebug() << "php memory usage" << PhpProcess::getInstance()->call(0, "memory-usage");
     qDebug() << "";
     */
+    if (qobject_cast<ConnectionThread*>(QThread::currentThread())) {
+        static_cast<ConnectionThread*>(QThread::currentThread())->setCheckCountComponentsCreated(true);
+    }
 }
