@@ -152,6 +152,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                         echo ", tags '".implode(', ', $update->getTags())."' don't match ";
                         echo "(".implode(', ', Vps_Registry::get('config')->server->updateTags->toArray()).")";
                         echo "\n";
+                        flush();
                     }
                     continue; //skip
                 }
@@ -163,9 +164,10 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 Vps_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
                 Vps_Component_Generator_Abstract::clearInstances();
                 Vps_Component_Data_Root::reset();
-                echo "executing $method ".get_class($update);
+                echo "\nexecuting $method ".get_class($update);
                 if ($update->getRevision()) echo " (".$update->getRevision().")";
                 echo "... ";
+                flush();
             }
             $e = false;
             if (in_array('db', $update->getTags())) {
@@ -176,11 +178,13 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             foreach ($databases as $db) {
                 if ($method != 'checkSettings') {
                     echo $db.' ';
+                    flush();
                 }
                 try {
                     $db = Vps_Registry::get('dao')->getDb($db);
                 } catch (Exception $e) {
                     echo "skipping, invalid db\n";
+                    flush();
                     continue;
                 }
                 Vps_Registry::set('db', $db);
@@ -193,6 +197,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                     }
                     echo "\n\033[31mError:\033[0m\n";
                     echo $e->getMessage()."\n\n";
+                    flush();
                     $ret = false;
                 }
                 if (!$e) {
@@ -207,6 +212,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             if ($method != 'checkSettings' && $ret) {
                 echo "\033[32 OK \033[0m\n";
             }
+            flush();
         }
         return $ret;
     }
