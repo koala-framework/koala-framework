@@ -52,6 +52,21 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
             'type'=>'GAUGE',
             'max'=>1000,
         ));
+        $this->addField(array(
+            'name'=>'memcache-bytes',
+            'type'=>'GAUGE',
+            'max'=>pow(2, 64),
+        ));
+        $this->addField(array(
+            'name'=>'memcache-curr-items',
+            'type'=>'GAUGE',
+            'max'=>pow(2, 64),
+        ));
+        $this->addField(array(
+            'name'=>'memcache-curr-connections',
+            'type'=>'GAUGE',
+            'max'=>pow(2, 64),
+        ));
     }
 
     private function _getFieldNames()
@@ -86,11 +101,11 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $load = explode(' ', $load);
         $values[] = $load[0];
 
-        $stats = $this->_getMemcache()->getStats();
-        $values[] = $stats['bytes_read'];
-        $values[] = $stats['bytes_written'];
-        $values[] = $stats['get_hits'];
-        $values[] = $stats['get_misses'];
+        $memcacheStats = $this->_getMemcache()->getStats();
+        $values[] = $memcacheStats['bytes_read'];
+        $values[] = $memcacheStats['bytes_written'];
+        $values[] = $memcacheStats['get_hits'];
+        $values[] = $memcacheStats['get_misses'];
         foreach ($this->_getFieldNames() as $field) {
             $values[] = $this->_getMemcacheValue($field);
         }
@@ -126,6 +141,10 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
             }
         }
         $values = array_merge($values, array_values($cnt));
+
+        $values[] = $memcacheStats['bytes'];
+        $values[] = $memcacheStats['curr_items'];
+        $values[] = $memcacheStats['curr_connections'];
         return $values;
     }
 
@@ -192,10 +211,37 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $ret['generators'] = $g;
 
         $g = new Vps_Util_Rrd_Graph($this);
+        $g->setTitle('Memcache');
         $g->setVerticalLabel('accesses');
         $g->addField('getHits', '#00FF00');
         $g->addField('getMisses', '#FF0000');
         $ret['memcacheHits'] = $g;
+
+        $g = new Vps_Util_Rrd_Graph($this);
+        $g->setTitle('Memcache');
+        $g->setVerticalLabel('bytes');
+        $g->addField('bytesRead');
+        $g->addField('bytesWritten');
+        $ret['memcacheBytes'] = $g;
+
+        $g = new Vps_Util_Rrd_Graph($this);
+        $g->setTitle('Memcache');
+        $g->setVerticalLabel('bytes');
+        $g->addField('memcache-bytes');
+        $ret['memcacheBytesAbs'] = $g;
+
+        $g = new Vps_Util_Rrd_Graph($this);
+        $g->setTitle('Memcache');
+        $g->setVerticalLabel('items');
+        $g->addField('memcache-curr-items');
+        $ret['memcacheItems'] = $g;
+
+
+        $g = new Vps_Util_Rrd_Graph($this);
+        $g->setTitle('Memcache');
+        $g->setVerticalLabel('connections');
+        $g->addField('memcache-curr-connections');
+        $ret['memcacheConnections'] = $g;
 
         $g = new Vps_Util_Rrd_Graph($this);
         $g->setVerticalLabel('[load]');
