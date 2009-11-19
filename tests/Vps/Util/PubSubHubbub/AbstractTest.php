@@ -9,7 +9,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
 
     public function setUp()
     {
-        $debugOutput = true;
+        $debugOutput = false;
 
         $this->_storePath = tempnam('/tmp', 'pshb');
         unlink($this->_storePath);
