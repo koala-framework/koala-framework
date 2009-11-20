@@ -38,6 +38,9 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
 
         if (isset($this->_settings['model'])) {
             $select = $this->_getModel()->select()->order('pos');
+            if ($domainsToLoad[0] != '') {
+                $select->whereEquals('domain', $domainsToLoad);
+            }
             $rows = $this->_getModel()->fetchAll($select)->toArray();
         } else {
             $select = new Zend_Db_Select(Vps_Registry::get('db'));
@@ -120,7 +123,6 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             } else if (!$showInvisible) {
                 if (!$this->_pageData[$pageId]['visible']) continue;
             }
-
             $d = $this->_createData($parentData, $pageId, $select);
             if ($d) $ret[] = $d;
 
