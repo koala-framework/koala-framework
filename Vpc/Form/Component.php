@@ -51,8 +51,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     {
         if (!isset($this->_form)) {
             $formClass = Vpc_Admin::getComponentClass($this, 'FrontendForm');
-            $this->_form = new $formClass('form');
-            $this->_form->setClass(get_class($this));
+            $this->_form = new $formClass('form', get_class($this));
         }
     }
 
