@@ -59,6 +59,7 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $page->componentId);
         $this->assertEquals('root-at-main', $page->parent->componentId);
         $this->assertNotNull($this->_root->getComponentById('2'));
+        $this->assertEquals('Vpc_Basic_Link_Component', $this->_root->getComponentById('2')->componentClass);
         $this->assertEquals('1', $this->_root->getComponentById('2')->parent->componentId);
         $this->assertEquals('root-at-main', $this->_root->getComponentById('2')->parent->parent->componentId);
 
@@ -68,7 +69,7 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, $page->componentId);
         $this->assertEquals('root-ch-main', $page->parent->componentId);
         $this->assertNotNull($this->_root->getComponentById('6'));
-        $this->assertEquals('Vpc_Basic_Link_Component', $this->_root->getComponentById('6')->componentClass);
+        $this->assertEquals('Vpc_Basic_Empty_Component', $this->_root->getComponentById('6')->componentClass);
         $this->assertEquals('5', $this->_root->getComponentById('6')->parent->componentId);
         $this->assertEquals('root-ch-main', $this->_root->getComponentById('6')->parent->parent->componentId);
     }
