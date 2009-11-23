@@ -1,6 +1,18 @@
 <?php
 class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
 {
+    public function __construct(array $options = array())
+    {
+        if (!isset($options['servers'])) {
+            $options['servers'] = array(array(
+                'host' => Vps_Registry::get('config')->server->memcache->host,
+                'port' => Vps_Registry::get('config')->server->memcache->port
+            ));
+        }
+        $options['compatibility'] = true;
+        parent::__construct($options);
+    }
+
     public function load($id, $doNotTestCacheValidity = false)
     {
         $id = $this->_processId($id);
