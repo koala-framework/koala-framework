@@ -594,8 +594,6 @@ QString ComponentData::url() const
             if (!page->filename().isEmpty()) filenames.prepend(page->filename());
         }
     } while ((page = page->parentPseudoPageOrRoot()));
-    //TODO: $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
-    //return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse(filenames));
     return "/" + filenames.join("/");
 }
 

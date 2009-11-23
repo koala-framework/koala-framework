@@ -36,6 +36,7 @@ Model::RowSet Model::fetchRows(const QHash<IndexedString, IndexedString>& fields
     qDebug() << "model-get-rows" << args;
     QByteArray data = PhpProcess::getInstance()->call(0, "model-get-rows", args);
     qDebug() << stopWatch.elapsed() << "ms";
+    qDebug() << data;
 
     QBuffer buffer(&data);
     buffer.open(QIODevice::ReadOnly);
@@ -69,13 +70,16 @@ Model::RowSet Model::fetchRows(const QHash<IndexedString, IndexedString>& fields
         int rowCount = u.readArrayStart();
         for (int i=0; i < rowCount; ++i) {
             QString id = u.readVariant().toString();
+            qDebug() << "************* fetched; id:" << id;
             Q_ASSERT(!id.isEmpty());
             int colCount = u.readArrayStart();
             Q_ASSERT(colCount == fieldNames.count());
             QHash<IndexedString, QVariant> values;
             for (int j=0; j < colCount; ++j) {
                 u.readInt(); //key
-                values[fieldNames[j]] = u.readVariant();
+                QVariant v = u.readVariant();
+                qDebug() << fieldNames[j] << v;
+                values[fieldNames[j]] = v;
             }
             ret << createRow(id, values);
             u.readArrayEnd();

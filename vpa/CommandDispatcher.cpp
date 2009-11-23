@@ -103,10 +103,15 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
         Select s(&u);
 
         QList< ComponentData* > ret;
+        int i=0;
         foreach (const QByteArray &c, classes) {
             foreach (ComponentData *d, ComponentData::getComponentsByClass(root, ComponentClass(QString::fromUtf8(c)))) {
                 if (s.match(d, 0)) {
-                    ret << d;
+                    i++;
+                    if (i > s.limitOffset) ret << d;
+                    if (s.limitCount && ret.count() == s.limitCount) {
+                        break;
+                    }
                 }
             }
         }
@@ -123,10 +128,15 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
         qDebug() << s;
 
         QList<ComponentData*> ret;
+        int i=0;
         foreach (const ComponentClass &c, classes) {
             foreach (ComponentData *d, ComponentData::getComponentsByClass(root, c)) {
                 if (s.match(d, 0)) {
-                    ret << d;
+                    i++;
+                    if (i > s.limitOffset) ret << d;
+                    if (s.limitCount && ret.count() == s.limitCount) {
+                        break;
+                    }
                 }
             }
         }
