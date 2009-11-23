@@ -13,7 +13,8 @@
 #define ifDebugGeneratorBuild(x) x
 #define ifDebugGeneratorBuildInherit(x)
 #define ifDebugBuildWithGenerators(x) x
-#define debugHandleChangedRow(x)
+#define ifDebugPriority(x)
+#define ifDebugHandleChangedRow(x) x
 
 #include "ComponentDataRoot.h"
 
@@ -26,6 +27,7 @@ Generator::~Generator()
     Q_ASSERT(builtComponents.isEmpty());
     BuildOnlyPagesGeneratorStrategy::m_cache.remove(this);
     BuildWithDbIdShortcutStrategy::m_cache.remove(this);
+    Model::m_instancesGenerator.remove(this);
 }
 
 void Generator::deleteGenerators(const ComponentDataRoot* root)
@@ -164,7 +166,7 @@ bool BuildWithDbIdShortcutStrategy::skip(ComponentData* parent) const
 {
     foreach (Generator *g, Generator::generators(parent->root())) {
         if (parent->componentClass() == g->componentClass) {
-            if (canHaveDbIdShortcutAsChild(g) == IndirectDbIdShortcut) {
+            if (canHaveDbIdShortcutAsChild(g) != NoDbIdShortcut) {
                 return false;
             }
         }
@@ -255,28 +257,39 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
                 for (int i2=0; i2 < parent->m_children.count(); ++i2) {
                     ComponentData *c2 = parent->m_children.at(i2);
                     if (boxHash.contains(c2) && c!=c2 && boxHash[c2] == boxHash[c]) {
-                        //if (c->priority() == c2->priority()) {
-                            //qDebug() << "same priority" << c->componentId() << c->treeLevel() << c2->componentId() << c2->treeLevel();
-                        //}
+                        ifDebugPriority(
+                            if (c->priority() == c2->priority()) {
+                                //qDebug() << "same priority" << c->componentId() << c2->componentId() << c2->treeLevel();
+                            }
+                        )
                         if (c->priority() > c2->priority()
                             || (c->priority() == c2->priority() && c->treeLevel() <= c2->treeLevel())) {
                             parent->m_children.removeAt(i2);
+                            Q_ASSERT(i2 != i);
+                            if (i2 < i) {
+                                i--;
+                            }
                             i2--;
-                            if (i2 > i) i--;
-                            //qDebug() << "delte" << c2->componentId() << "not" << c->componentId();
+                            ifDebugPriority( qDebug() << "DELETE c2>>>" << c2 << c2->componentId() << "not" << c->componentId(); )
                             if (!(c2->generator()->componentTypes & Generator::TypeInherit)) {
                                 //TODO: leaked, manchmal muss auch in inherit gelöscht werden (kann vielleicht woanders gelöst werden)
+                                //wurde aber eigentlich schon gelöst indem es mit dem generator mitgelöscht wird falls der gelöscht wird
+                                //(bei einem reset aufruf)
                                 delete c2;
                             }
                         } else {
+                            qDebug() << parent->m_children;
                             parent->m_children.removeAt(i);
                             i--;
-                            if (i2 > i) i2--;
-                            //qDebug() << "delte" << c->componentId() << "not" << c2->componentId();
+                            ifDebugPriority( qDebug() << "DELETE c>>>" << c << c->componentId() << "not" << c2->componentId(); )
+                            qDebug() << parent->m_children;
                             if (!(c->generator()->componentTypes & Generator::TypeInherit)) {
                                 //TODO: leaked, manchmal muss auch in inherit gelöscht werden (kann vielleicht woanders gelöst werden)
+                                //wurde aber eigentlich schon gelöst indem es mit dem generator mitgelöscht wird falls der gelöscht wird
+                                //(bei einem reset aufruf)
                                 delete c;
                             }
+                            break;
                         }
                     }
                 }
@@ -289,15 +302,17 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
 
 void Generator::handleChangedRow(Generator::ChangedRowMethod method, IndexedString model, const QString& id)
 {
-    debugHandleChangedRow( qDebug() << "Generator::handleChangedRow" << method << model << id; )
+    ifDebugHandleChangedRow( qDebug() << "Generator::handleChangedRow" << method << model << id; )
     switch (method) {
         case RowUpdated:
             foreach (Generator *g, generators()) {
                 if (g->model == model) {
+                    ifDebugHandleChangedRow( qDebug() << "refresh" << g->model << g->componentClass << g->key; )
                     g->preload(); //tut im moment noch _alles_ preloaden, möglicherweise nur eine id preloaden wenn zu langsam
                     foreach (ComponentData *d, g->builtComponents) { //das benötigt womöglich einen index wenns zu langsam ist
+                        ifDebugHandleChangedRow( qDebug() << d->componentId() << d->childId() << id; )
                         if (d->childId() == id) {
-                            debugHandleChangedRow( qDebug() << "refresh" << d->componentId(); )
+                            ifDebugHandleChangedRow( qDebug() << "refresh" << d->componentId() << d->rowData.keys(); )
                             foreach (const IndexedString &field, d->rowData.keys()) {
                                 Q_ASSERT(dynamic_cast<GeneratorWithModel*>(g));
                                 static_cast<GeneratorWithModel*>(g)->fetchRowData(d->parent(), field, id);
@@ -312,12 +327,12 @@ void Generator::handleChangedRow(Generator::ChangedRowMethod method, IndexedStri
         case RowInserted:
             foreach (Generator *g, generators()) {
                 if (g->model == model) {
-                    debugHandleChangedRow( qDebug() << "found generator" << g->componentClass << g->key; )
+                    ifDebugHandleChangedRow( qDebug() << "found generator" << g->componentClass << g->key; )
                     g->preload(); //tut im moment noch _alles_ preloaden, möglicherweise nur eine id preloaden wenn zu langsam
                     foreach (ComponentData *d, ComponentData::getComponentsByClass(g->root(), g->componentClass)) {
                         QWriteLocker locker(&d->m_childrenLock);
                         if (d->m_childrenBuilt) {
-                            debugHandleChangedRow( qDebug() << "buildSingle" << d->componentId() << id; )
+                            ifDebugHandleChangedRow( qDebug() << "buildSingle" << d->componentId() << id; )
                             g->buildSingle(d, id);
                             locker.unlock();
                             foreach (ComponentData *sibling, d->children()) {
@@ -357,21 +372,29 @@ void GeneratorWithModel::fetchRowData(ComponentData* parent, IndexedString field
 {
     static QMutex lock;
     QMutexLocker locker(&lock);
-    if (parent->m_fetchedRowData.contains(field)) return;
-    parent->m_fetchedRowData.insert(field);
+    if (!onlyId.isEmpty()) {
+        Q_ASSERT(parent->m_fetchedRowData.contains(field));
+    } else {
+        if (parent->m_fetchedRowData.contains(field)) return;
+        parent->m_fetchedRowData.insert(field);
+    }
 
     QHash<int, ComponentData*> childIds = parent->childIdsHash();
     int fetchedButNotUsed = 0;
     
-    QHash<QString, QVariant> rows = Model::rowData(model, field, onlyId);
-    QHashIterator<QString, QVariant> i(rows);
-    while (i.hasNext()) {
-        i.next();
-        int id = i.key().toInt();
+    QHash<IndexedString, IndexedString> fields;
+    fields[IndexedString("field")] = field;
+    Model::RowSet rows = Model::instance(model)->fetchRows(fields, onlyId);
+    if (!onlyId.isEmpty()) {
+        Q_ASSERT(rows.count() <= 1);
+    }
+    foreach (const Model::Row &row, rows) {
+        int id = row.id().toInt();
+        qDebug() << "fetchRowData" << id << row.value(IndexedString("field"));
         if (childIds.contains(-id)) {
-            childIds[-id]->rowData[field] = i.value();
+            childIds[-id]->rowData[field] = row.value(IndexedString("field"));
         } else if (childIds.contains(id)) {
-            childIds[id]->rowData[field] = i.value();
+            childIds[id]->rowData[field] = row.value(IndexedString("field"));
         }
         if (!childIds.contains(-id) && !childIds.contains(id)) {
             fetchedButNotUsed++;
@@ -389,7 +412,7 @@ QList<int> GeneratorWithModel::fetchIds(ComponentData* parent, const Select& sel
 
     QList<QByteArray> args;
     args << QByteArray("--model=") + model.toString().toUtf8();
-    args << QByteArray("--select=") + serialize(select).replace('\0', "\\0");;
+    args << QByteArray("--select=") + serialize(select).replace('\0', "\\0");
 
     QTime stopWatch;
     stopWatch.start();
@@ -500,25 +523,27 @@ QList<IndexedString> GeneratorStatic::childComponentKeys()
     return component.keys();
 }
 
-void GeneratorTable::preload()
+void GeneratorTable::_build(ComponentData* parent, QString onlyId)
 {
     QHash<IndexedString, IndexedString> fields;
     fields[IndexedString("name")] = IndexedString("--generator-name");
+    fields[IndexedString("filename")] = IndexedString("--generator-filename");
     if (whereComponentId) {
         fields[IndexedString("component_id")] = IndexedString("component_id");
     }
-    QHash<QString, QHash<IndexedString, QVariant> > rows = Model::rowData(this, fields);
-    qDebug() << rows;
-    QHashIterator<QString, QHash<IndexedString, QVariant> > i(rows);
-    m_rows.clear();
-    while (i.hasNext()) {
-        i.next();
-        Row r(IndexedString(i.key()),
-                    i.value()[IndexedString("name")].toString());
+    Model::RowSet rows = Model::instance(this)->fetchRows(fields, parent, onlyId);
+    if (!onlyId.isEmpty()) {
+        Q_ASSERT(rows.count() <= 1);
+    }
+    foreach (const Model::Row &row, rows) {
         if (whereComponentId) {
-            r.componentId = i.value()[IndexedString("component_id")].toString();
+            if (parent->dbId() != row.value(IndexedString("component_id")).toString()) continue;
         }
-        m_rows << r;
+        ComponentData *d = new ComponentData(this, parent, idSeparator, row.id(), component);
+        d->setDbIdPrefix(dbIdPrefix);
+        d->setName(row.value(IndexedString("name")).toString());
+        d->setFilename(row.value(IndexedString("filename")).toString());
+        parent->addChildren(d);
     }
 }
 
@@ -526,34 +551,14 @@ void GeneratorTable::build(ComponentData* parent)
 {
     buildCallCount[Table]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorTable::build" << parent->componentId(); )
-    foreach (Row row, m_rows) {
-        qDebug() << "build" << row.componentId << parent->componentId() << parent->dbId();
-        if (whereComponentId) {
-            if (parent->dbId() != row.componentId) continue;
-        }
-        ComponentData *d = new ComponentData(this, parent, idSeparator, row.id, component);
-        d->setDbIdPrefix(dbIdPrefix);
-        d->setName(row.name);
-        d->setFilename(row.name);
-        parent->addChildren(d);
-    }
+    _build(parent);
 }
 
 void GeneratorTable::buildSingle(ComponentData* parent, const QString& id)
 {
     buildCallCount[Table]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorTable::buildSingle" << parent->componentId(); )
-    foreach (Row row, m_rows) {
-        if (id == row.id.toString()) {
-            if (whereComponentId) {
-                Q_ASSERT(parent->dbId() == row.componentId);
-            }
-            ComponentData *d = new ComponentData(this, parent, idSeparator, row.id, component);
-            d->setDbIdPrefix(dbIdPrefix);
-            d->setName(row.name);
-            parent->addChildren(d);
-        }
-    }
+    _build(parent, id);
 }
 
 void GeneratorTable::refresh(ComponentData* d)
@@ -576,7 +581,7 @@ QList<IndexedString> GeneratorTable::childComponentKeys()
     return ret;
 }
 
-void GeneratorTableWithComponent::preload()
+void GeneratorTableWithComponent::_build(ComponentData* parent, QString onlyId)
 {
     QHash<IndexedString, IndexedString> fields;
     fields[IndexedString("name")] = IndexedString("--generator-name");
@@ -584,18 +589,21 @@ void GeneratorTableWithComponent::preload()
     if (whereComponentId) {
         fields[IndexedString("component_id")] = IndexedString("component_id");
     }
-    QHash<QString, QHash<IndexedString, QVariant> > rows = Model::rowData(this, fields);
-    QHashIterator<QString, QHash<IndexedString, QVariant> > i(rows);
-    m_rows.clear();
-    while (i.hasNext()) {
-        i.next();
-        Row r(IndexedString(i.key()),
-                    i.value()[IndexedString("name")].toString(),
-                    i.value()[IndexedString("component")].toString());
+    Model::RowSet rows = Model::instance(this)->fetchRows(fields, parent, onlyId);
+    if (!onlyId.isEmpty()) {
+        Q_ASSERT(rows.count() <= 1);
+    }
+    foreach (const Model::Row &row, rows) {
         if (whereComponentId) {
-            r.componentId = i.value()[IndexedString("component_id")].toString();
+            if (parent->dbId() != row.value(IndexedString("component_id")).toString()) continue;
         }
-        m_rows << r;
+        ComponentData *d = new ComponentData(this, parent, idSeparator,
+                    IndexedString(row.id()),
+                    component[row.value(IndexedString("component")).toString()]);
+        d->setDbIdPrefix(dbIdPrefix);
+        d->setName(row.value(IndexedString("name")).toString());
+        d->setFilename(row.value(IndexedString("name")).toString());
+        parent->addChildren(d);
     }
 }
 
@@ -603,39 +611,20 @@ void GeneratorTableWithComponent::build(ComponentData* parent)
 {
     buildCallCount[Table]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorTableWithComponent::build" << parent->componentId(); )
-    foreach (Row row, m_rows) {
-        if (whereComponentId) {
-            if (parent->dbId() != row.componentId) continue;
-        }
-        ComponentData *d = new ComponentData(this, parent, idSeparator, row.id, component[row.component]);
-        d->setDbIdPrefix(dbIdPrefix);
-        d->setName(row.name);
-        d->setFilename(row.name);
-        parent->addChildren(d);
-    }
+    _build(parent);
 }
 
 void GeneratorTableWithComponent::buildSingle(ComponentData* parent, const QString& id)
 {
     buildCallCount[Table]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorTableWithComponent::buildSingle" << parent->componentId(); )
-    foreach (Row row, m_rows) {
-        if (id == row.id.toString()) {
-            if (whereComponentId) {
-                Q_ASSERT(parent->dbId() == row.componentId);
-            }
-            ComponentData *d = new ComponentData(this, parent, idSeparator, row.id, component[row.component]);
-            d->setDbIdPrefix(dbIdPrefix);
-            d->setName(row.name);
-            parent->addChildren(d);
-        }
-    }
+    _build(parent, id);
 }
 
 void GeneratorTableWithComponent::refresh(ComponentData* d)
 {
     Q_UNUSED(d);
-    //nothing to do as long as no name is set in build()
+    //TODO!!!
 }
 
 QList<ComponentClass> GeneratorTableWithComponent::childComponentClasses()
@@ -1182,12 +1171,12 @@ QList<QString> GeneratorPages::tags(const ComponentData* d) const
 
 void GeneratorLinkTag::preload()
 {
-    QHash<QString, QVariant> rows = Model::rowData(model, IndexedString("component"));
-    QHashIterator<QString, QVariant> i(rows);
+    QHash<IndexedString, IndexedString> fields;
+    fields[IndexedString("component")] = IndexedString("component");
+    Model::RowSet rows = Model::instance(model)->fetchRows(fields, Select());
     componentIdToComponent.clear();
-    while (i.hasNext()) {
-        i.next();
-        componentIdToComponent[i.key()] = i.value().toString();
+    foreach (const Model::Row &row, rows) {
+        componentIdToComponent[row.id()] = row.value(IndexedString("component")).toString();
     }
 }
 
@@ -1298,6 +1287,9 @@ void Generator::createGenerators(const ComponentDataRoot *root)
                 }
                 if (xml.isStartElement() && xml.name() == "model") {
                     g->model = IndexedString(xml.readElementText());
+                }
+                if (xml.isStartElement() && xml.name() == "uniqueFilename") {
+                    g->uniqueFilename = xml.readElementText().toInt();
                 }
                 if (xml.isStartElement() && xml.name() == "component") {
                     if (!xml.attributes().value("key").isEmpty()) {

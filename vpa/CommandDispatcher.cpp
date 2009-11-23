@@ -27,10 +27,18 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
 
         socket->write(serialize("pong"));
     } else if (cmd == "getComponentDataById") {
-        Q_ASSERT(paramCount == 1);
+        Q_ASSERT(paramCount == 1 || paramCount == 2);
         u.readInt(); //array key
 
         ComponentData *d = ComponentData::getComponentById(root, QString::fromUtf8(u.readString()));
+        if (paramCount == 2) {
+            u.readInt(); //array key
+            u.readObjectClassName();
+            Select s(&u);
+            if (!s.match(d, d->parent())) {
+                d = 0;
+            }
+        }
         if (!d) {
             debugVerbose( qDebug() << "invalid"; )
             socket->write(serialize(NullValue()));
@@ -72,7 +80,6 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
     } else if (cmd == "getComponentsByDbId") {
         Q_ASSERT(paramCount == 2);
         u.readInt(); //array key
-
 
         QString id = QString::fromUtf8(u.readString());
 
@@ -158,6 +165,10 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
 
         ComponentData *d = ComponentData::getComponentById(root, componentId);
         Q_ASSERT(d);
+        
+        foreach (ComponentData *c, d->childComponents(s)) {
+            qDebug() << c->componentId();
+        }
 
         socket->write(serialize(d->childComponents(s).count()));
     } else if (cmd == "getRecursiveChildComponents") {
@@ -241,7 +252,7 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
 
         ComponentData *d = ComponentData::getComponentById(root, componentId);
         Q_ASSERT(d);
-        socket->write(serialize(d->childPageByPath(root, path)));
+        socket->write(serialize(d->childPageByPath(path)));
 
     } else if (cmd == "handleChangedRows") {
         Q_ASSERT(paramCount == 1);

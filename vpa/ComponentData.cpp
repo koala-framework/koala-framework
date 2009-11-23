@@ -16,7 +16,7 @@
 
 int ComponentData::count = 0;
 QHash<const ComponentDataRoot*, QHash<QString, ComponentData*> > ComponentData::m_idHash;
-QMultiHash<IndexedString, ComponentData*> ComponentData::m_dbIdHash;
+QHash<const ComponentDataRoot*, QMultiHash<IndexedString, ComponentData*> > ComponentData::m_dbIdHash;
 QHash< QPair<const ComponentDataRoot*, ComponentClass>, QList<ComponentData*> > ComponentData::m_componentClassHash;
 QSet< QPair<const ComponentDataRoot*, ComponentClass> > ComponentData::m_componentsByClassRequested;
 QList<ComponentData*> ComponentData::m_homes;
@@ -106,8 +106,8 @@ ComponentData::~ComponentData()
     if (m_idSeparator == Generator::NoSeparator) {
         m_idHash[root()].remove(componentId());
     }
-    foreach (const IndexedString &key, m_dbIdHash.keys(this)) {
-        m_dbIdHash.remove(key, this);
+    foreach (const IndexedString &key, m_dbIdHash[root()].keys(this)) {
+        m_dbIdHash[root()].remove(key, this);
     }
     m_homes.removeAll(this);
     if (m_parent) {
@@ -217,7 +217,7 @@ ComponentData* ComponentData::getHome(ComponentData* subRoot)
 
 
 //TODO: kopie von serialize
-QHash< QByteArray, QVariant > ComponentData::dataForWeb()
+QHash< QByteArray, QVariant > ComponentData::dataForWeb() const
 {
     QHash<QByteArray, QVariant> ret;
     ret["url"] = url();
@@ -231,8 +231,9 @@ QHash< QByteArray, QVariant > ComponentData::dataForWeb()
     ret["isPage"] = QVariant(componentTypes() & Generator::TypePage);
     ret["componentClass"] = componentClass().toString();
     ret["isPseudoPage"] = QVariant(componentTypes() & Generator::TypePseudoPage);
-    ret["priority"] = 0; //TODO
+    ret["priority"] = priority(); 
     ret["box"] = box().toString();
+    ret["multiBox"] = multiBox().toString();
     ret["id"] = childId();
     if (generator() && !generator()->model.isEmpty()) {
         ret["model"] = generator()->model.toString();
@@ -249,12 +250,12 @@ QHash< QByteArray, QVariant > ComponentData::dataForWeb()
 }
 
 //TODO: kopie von dataForWeb
-QByteArray serialize(ComponentData* d)
+QByteArray serialize(const ComponentData* d)
 {
     if (!d) return serialize(NullValue());
     QByteArray ret;
     QByteArray cls("Vps_Component_Data");
-    ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":16:{";
+    ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":17:{";
     ret += serializePrivateObjectProperty("_url", "Vps_Component_Data", d->url());
     ret += serializePrivateObjectProperty("_rel", "Vps_Component_Data", NullValue());
     ret += serializePrivateObjectProperty("_filename", "*", d->filename());
@@ -268,8 +269,9 @@ QByteArray serialize(ComponentData* d)
     ret += serializeObjectProperty("isPage", d->componentTypes() & Generator::TypePage);
     ret += serializeObjectProperty("componentClass", d->componentClass().toString());
     ret += serializeObjectProperty("isPseudoPage", d->componentTypes() & Generator::TypePseudoPage);
-    ret += serializeObjectProperty("priority", 0); //TODO
+    ret += serializeObjectProperty("priority", d->priority());
     ret += serializeObjectProperty("box", d->box());
+    ret += serializeObjectProperty("multiBox", d->multiBox());
     ret += serializeObjectProperty("id", d->childId());
     if (d->generator() && !d->generator()->model.isEmpty()) {
         ret += serializeObjectProperty("model", d->generator()->model);
@@ -337,9 +339,9 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
     return ret;
 }
 
-ComponentData* ComponentData::childPageByPath(const ComponentDataRoot* root, const QString& path)
+ComponentData* ComponentData::childPageByPath(const QString& path)
 {
-    ifDebugGetChildPageByPath( qDebug() << "childPageByPath" << path; )
+    ifDebugGetChildPageByPath( qDebug() << "childPageByPath" << path << componentId(); )
     Select childSelect;
     childSelect.where << new SelectExprNot(new SelectExprWhereIsPseudoPage());
 
@@ -354,7 +356,7 @@ ComponentData* ComponentData::childPageByPath(const ComponentDataRoot* root, con
                 if (!cc.isEmpty()) {
                     ifDebugGetChildPageByPath( qDebug() << "it is a shortcutUrl" << pathPart; )
                     bool found = false;
-                    QList<ComponentData*> components = ComponentData::getComponentsByClass(root, cc);
+                    QList<ComponentData*> components = ComponentData::getComponentsByClass(root(), cc);
                     foreach (ComponentData *c, components) {
                         ComponentData *p = c;
                         do {
@@ -376,6 +378,9 @@ ComponentData* ComponentData::childPageByPath(const ComponentDataRoot* root, con
             QList<ComponentData*> pages = page->recursiveChildComponents(s, childSelect);
             if (pages.isEmpty()) {
                 ifDebugGetChildPageByPath( qDebug() << "found nothing for " << pathPart; )
+                foreach (const ComponentData *c, page->childComponents(Select())) {
+                    qDebug() << c->componentId() << c->filename();
+                }
                 return 0;
             }
             page = pages.first();
@@ -466,9 +471,9 @@ QList< ComponentData* > ComponentData::getComponentsByDbId(const ComponentDataRo
     }
     ifDebugGetComponentById( qDebug() << "count found using m_idHash" << ret.count(); )
 
-    ifDebugGetComponentById( qDebug() << m_dbIdHash; )
+    ifDebugGetComponentById( qDebug() << m_dbIdHash[root]; )
     //dann über dbId
-    foreach (ComponentData *data, m_dbIdHash.values(IndexedString(mainId))) {
+    foreach (ComponentData *data, m_dbIdHash[root].values(IndexedString(mainId))) {
         ifDebugGetComponentById( qDebug() << "m_dbIdHash entry" << data->componentId(); )
         if (!id.isEmpty()) {
             ComponentData *d = _getChildComponent(data, id);
@@ -535,6 +540,13 @@ ComponentData* ComponentData::_getChildComponent(ComponentData* data, QString id
     return data;
 }
 
+QString ComponentData::filename() const
+{
+    if (!generator() || generator()->uniqueFilename) {
+        return m_filename;
+    }
+    return childId()+"_"+m_filename;
+}
 
 void ComponentData::setFilename(const QString& filename)
 {

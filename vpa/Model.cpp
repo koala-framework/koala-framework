@@ -8,86 +8,31 @@
 #include "PhpProcess.h"
 #include "Unserializer.h"
 #include "Generator.h"
+#include "ComponentData.h"
 
-QHash<QString, QHash<IndexedString, QVariant> > Model::rowData(Generator *g, QHash<IndexedString, IndexedString> fields)
+QHash<IndexedString, StandardModel*> Model::m_instances;
+QHash<Generator *, GeneratorModel*> Model::m_instancesGenerator;
+
+Model::RowSet Model::fetchRows(const QHash<IndexedString, IndexedString>& fields, const Select& select, QList<QByteArray> args)  const
 {
-    QList<QByteArray> args;
-    args << QByteArray("--generator-class=") + g->componentClass.toString().toUtf8();
-    args << QByteArray("--generator-key=") + g->key.toString().toUtf8();
-    QByteArray arg;
-    QList<IndexedString> fieldNames;
-    QHashIterator<IndexedString, IndexedString> i(fields);
-    while (i.hasNext()) {
-        i.next();
-        if (!arg.isEmpty()) arg += ",";
-        arg += i.value().toString().toUtf8();
-        fieldNames << i.key();
-    }
-    args << QByteArray("--fields=") + arg;
-    return _rowData(args, fieldNames);
-}
-
-QHash<QString, QHash<IndexedString, QVariant> > Model::rowData(IndexedString model, QHash<IndexedString, IndexedString> fields, const QString& onlyId)
-{
-    Q_ASSERT(model != IndexedString("Vps_Model_FnF"));
-    Q_ASSERT(model != IndexedString("Vps_Model_FnFFile"));
-    QList<QByteArray> args;
-    QByteArray arg;
-    QList<IndexedString> fieldNames;
-    QHashIterator<IndexedString, IndexedString> i(fields);
-    while (i.hasNext()) {
-        i.next();
-        if (!arg.isEmpty()) arg += ",";
-        arg += i.value().toString().toUtf8();
-        fieldNames << i.key();
-    }
-    args << QByteArray("--fields=") + arg;
-    args << QByteArray("--model=") + model.toString().toUtf8();
-    if (!onlyId.isEmpty()) {
-        args << QByteArray("--id=") + onlyId.toUtf8();
-    }
-    return _rowData(args, fieldNames);
-}
-
-
-QHash<QString, QVariant> Model::rowData(IndexedString model, IndexedString field, const QString& onlyId)
-{
-    QHash<IndexedString, IndexedString> fields;
-    fields[IndexedString("field")] = field;
-    QHash<QString, QHash<IndexedString, QVariant> > rows = rowData(model, fields, onlyId);
-    QHashIterator<QString, QHash<IndexedString, QVariant> > i(rows);
-    QHash<QString, QVariant> ret;
-    while (i.hasNext()) {
-        i.next();
-        ret[i.key()] = i.value()[IndexedString("field")];
-    }
-    return ret;
-}
-
-
-QHash<QString, QVariant> Model::rowData(Generator* g, IndexedString field)
-{
-    QHash<QString, QVariant> ret;
-
-    QHash<IndexedString, IndexedString> fields;
-    fields[IndexedString("field")] = field;
-    QHash<QString, QHash<IndexedString, QVariant> > rows = rowData(g, fields);
-    QHashIterator<QString, QHash<IndexedString, QVariant> > i(rows);
-    while (i.hasNext()) {
-        i.next();
-        ret[i.key()] = i.value()[IndexedString("field")];
-    }
-    return ret;
-}
-
-
-
-QHash<QString, QHash<IndexedString, QVariant> > Model::_rowData(QList<QByteArray> args, QList<IndexedString> fields)
-{
-    QHash<QString, QHash<IndexedString, QVariant> > ret;
+    Model::RowSet ret;
 
     QTime stopWatch;
     stopWatch.start();
+
+    QByteArray arg;
+    QList<IndexedString> fieldNames;
+    QHashIterator<IndexedString, IndexedString> i(fields);
+    while (i.hasNext()) {
+        i.next();
+        if (!arg.isEmpty()) arg += ",";
+        arg += i.value().toString().toUtf8();
+        fieldNames << i.key();
+    }
+    args << QByteArray("--fields=") + arg;
+    args << QByteArray("--select=") + serialize(select).replace('\0', "\\0");
+
+    args = _args(select, args);
     qDebug() << "model-get-rows" << args;
     QByteArray data = PhpProcess::getInstance()->call(0, "model-get-rows", args);
     qDebug() << stopWatch.elapsed() << "ms";
@@ -112,9 +57,11 @@ QHash<QString, QHash<IndexedString, QVariant> > Model::_rowData(QList<QByteArray
         while (query.next()) {
             QString id = query.value(0).toString();
             Q_ASSERT(!id.isEmpty());
-            for (int j=0; j < fields.count(); ++j) {
-                ret[id][fields[j]] = query.value(j+1);
+            QHash<IndexedString, QVariant> values;
+            for (int j=0; j < fieldNames.count(); ++j) {
+                values[fieldNames[j]] = query.value(j+1);
             }
+            ret << createRow(id, values);
         }
     } else {
         qDebug() << "rows (bad)";
@@ -124,15 +71,66 @@ QHash<QString, QHash<IndexedString, QVariant> > Model::_rowData(QList<QByteArray
             QString id = u.readVariant().toString();
             Q_ASSERT(!id.isEmpty());
             int colCount = u.readArrayStart();
-            Q_ASSERT(colCount == fields.count());
+            Q_ASSERT(colCount == fieldNames.count());
+            QHash<IndexedString, QVariant> values;
             for (int j=0; j < colCount; ++j) {
                 u.readInt(); //key
-                ret[id][fields[j]] = u.readVariant();
+                values[fieldNames[j]] = u.readVariant();
             }
+            ret << createRow(id, values);
             u.readArrayEnd();
         }
         u.readArrayEnd();
     }
     qDebug() << ret.count() << "rows fetched";
     return ret;
+}
+
+
+
+QList<QByteArray> GeneratorModel::_args(const Select& select, QList<QByteArray> args) const
+{
+    Q_UNUSED(select);
+    args << QByteArray("--generator-class=") + m_generator->componentClass.toString().toUtf8();
+    args << QByteArray("--generator-key=") + m_generator->key.toString().toUtf8();
+//     if (!onlyId.isEmpty()) {
+//         args << QByteArray("--id=") + onlyId.toUtf8();
+//     }
+    return args;
+}
+
+QList<QByteArray> StandardModel::_args(const Select &select, QList<QByteArray> args) const
+{
+    Q_UNUSED(select);
+    args << QByteArray("--model=") + m_modelClass.toString().toUtf8();
+//     if (!onlyId.isEmpty()) {
+//         args << QByteArray("--id=") + onlyId.toUtf8();
+//     }
+    return args;
+}
+
+Model::RowSet GeneratorModel::fetchRows(QHash<IndexedString, IndexedString> fields, const ComponentData* parentData, const Select &select) const
+{
+    QList<QByteArray> args;
+    //args << QByteArray("--parent-component-id=") + parentData->componentId().toUtf8();
+    args << QByteArray("--parent-data=") + serialize(parentData).replace('\0', "\\0");
+    return Model::fetchRows(fields, select, args);
+}
+
+GeneratorModel* Model::instance(Generator* generator)
+{
+    if (!m_instancesGenerator.contains(generator)) {
+        m_instancesGenerator[generator] = new GeneratorModel(generator);
+    }
+    return m_instancesGenerator[generator];
+}
+
+StandardModel* Model::instance(IndexedString phpModelClass)
+{
+    Q_ASSERT(phpModelClass != IndexedString("Vps_Model_FnF"));
+    Q_ASSERT(phpModelClass != IndexedString("Vps_Model_FnFFile"));
+    if (!m_instances.contains(phpModelClass)) {
+        m_instances[phpModelClass] = new StandardModel(phpModelClass);
+    }
+    return m_instances[phpModelClass];
 }

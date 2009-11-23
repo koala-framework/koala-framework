@@ -37,9 +37,16 @@ Select::Select(Unserializer* unserializer)
                 other << unserializer->readRawData();
             }
             unserializer->readArrayEnd();
+        } else {
+            qWarning() << "unknown var" << varName;
+            Q_ASSERT(0);
+            unserializer->readVariant();
         }
     }
     in = unserializer->device()->read(1);
+    if (in != "}") {
+        qWarning() << unserializer->device()->readAll();
+    }
     Q_ASSERT(in == "}");
 }
 
@@ -135,11 +142,15 @@ QList<ComponentData*> Select::filter(const QList<ComponentData*>& data, Componen
     QList<ComponentData*> ret;
     int i=0;
     foreach (ComponentData *d, data) {
+        //qDebug() << "Select::filter match?" << d->componentId();
         if (match(d, parentData)) {
             i++;
             if (i > limitOffset) ret << d;
         }
-        if (ret.count() == limitCount) break;
+        if (limitCount && ret.count() == limitCount) {
+            //qDebug() << "Select::filter break - I have enough" << ret.count() << limitCount;
+            break;
+        }
     }
     return ret;
 }
@@ -165,10 +176,10 @@ QByteArray serialize(const Select &s)
     QByteArray cls("Vps_Component_Select");
     ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":1:{";
     QHash<IndexedString, RawData> parts;
-    parts[IndexedString("where")] = RawData(serialize(s.where));
-    parts[IndexedString("limitCount")] = RawData(serialize(s.limitCount));
-    parts[IndexedString("limitOffset")] = RawData(serialize(s.limitOffset));
-    parts[IndexedString("other")] = RawData(serialize(s.other));
+    if (!s.where.isEmpty()) parts[IndexedString("whereExpression")] = RawData(serialize(s.where));
+    if (s.limitCount) parts[IndexedString("limitCount")] = RawData(serialize(s.limitCount));
+    if (s.limitOffset) parts[IndexedString("limitOffset")] = RawData(serialize(s.limitOffset));
+    if (!s.other.isEmpty()) parts[IndexedString("other")] = RawData(serialize(s.other));
     ret += serializePrivateObjectProperty("_parts", "*", parts);
     ret += "}";
     return ret;

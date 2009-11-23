@@ -8,6 +8,12 @@ class Select {
 public:
     Select(Unserializer *unserializer);
     Select();
+    Select(const Select &s) {
+        where = s.where;
+        limitCount = s.limitCount;
+        limitOffset = s.limitOffset;
+        other = s.other;
+    }
 
     ~Select();
 

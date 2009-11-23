@@ -41,23 +41,23 @@ void ComponentDataRoot::initInstance(IndexedString componentClass)
     }
 
     {
-        qDebug() << "build root components";
+        qDebug() << "build root components ****************************";
         QTime stopWatch;
         int startDatas = ComponentData::count;
         stopWatch.start();
         BuildOnlyPagesGeneratorStrategy s;
         Generator::buildWithGenerators(root, &s);
-        qDebug() << "root components" << stopWatch.elapsed() << "ms" << (ComponentData::count-startDatas) << "datas";
+        qDebug() << "********root components" << stopWatch.elapsed() << "ms" << (ComponentData::count-startDatas) << "datas";
     }
 
     {
-        qDebug() << "build dbIdShortcut components";
+        qDebug() << "build dbIdShortcut components ****************************";
         QTime stopWatch;
         int startDatas = ComponentData::count;
         stopWatch.start();
         BuildWithDbIdShortcutStrategy s;
         Generator::buildWithGenerators(root, &s);
-        qDebug() << "dbIdShortcut components" << stopWatch.elapsed() << "ms" << (ComponentData::count-startDatas) << "datas";
+        qDebug() << "***************** dbIdShortcut components" << stopWatch.elapsed() << "ms" << (ComponentData::count-startDatas) << "datas";
     }
     /*
     {

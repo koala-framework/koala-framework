@@ -64,7 +64,7 @@ private:
 struct Generator
 {
     Generator(const ComponentDataRoot *root)
-        : componentTypes(TypeComponent)
+        : componentTypes(TypeComponent), uniqueFilename(false)
     {
         m_root = root;
         m_generators[root] << this;
@@ -118,6 +118,7 @@ struct Generator
     IndexedString model;
     IndexedString box; //TODO macht nicht in jedem generator sinn
     int priority; //TODO macht nicht in jedem generator sinn
+    bool uniqueFilename; //TODO macht nicht in jedem generator sinn
     QList<ComponentData*> builtComponents;
 
     const ComponentDataRoot *root() const {
@@ -206,7 +207,6 @@ struct GeneratorTable : public GeneratorWithModel
     ComponentClass component;
     bool whereComponentId;
     
-    virtual void preload();
     virtual void build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
@@ -215,13 +215,7 @@ struct GeneratorTable : public GeneratorWithModel
     virtual QList<IndexedString> childComponentKeys();
 
 private:
-    struct Row {
-        Row(IndexedString id_, QString name_) : id(id_), name(name_) {}
-        IndexedString id;
-        QString name;
-        QString componentId;
-    };
-    QList<Row> m_rows;
+    void _build(ComponentData* parent, QString onlyId = QString());
 };
 
 struct GeneratorTableWithComponent : public GeneratorWithModel
@@ -231,7 +225,6 @@ struct GeneratorTableWithComponent : public GeneratorWithModel
     QHash<IndexedString, ComponentClass> component;
     bool whereComponentId;
     
-    virtual void preload();
     virtual void build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
@@ -240,15 +233,7 @@ struct GeneratorTableWithComponent : public GeneratorWithModel
     virtual QList<IndexedString> childComponentKeys();
 
 private:
-    struct Row {
-        Row(IndexedString id_, QString name_, IndexedString component_)
-            : id(id_), name(name_), component(component_) {}
-        IndexedString id;
-        QString name;
-        IndexedString component;
-        QString componentId;
-    };
-    QList<Row> m_rows;
+    void _build(ComponentData* parent, QString onlyId = QString());
 };
 
 struct GeneratorTableSql : public GeneratorWithModel

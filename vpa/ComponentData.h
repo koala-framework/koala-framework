@@ -31,9 +31,9 @@ public:
         Q_ASSERT(!id.toString().contains('-') && !id.toString().contains('_'));
         Q_ASSERT(m_idSeparator != Generator::NoSeparator);
         m_dbIdPrefix = id;
-        if (!m_dbIdHash.contains(m_dbIdPrefix, parent())) {
-            m_dbIdHash.insertMulti(m_dbIdPrefix, parent());
-            //qDebug() << m_dbIdPrefix << parent->componentId();
+        if (!m_dbIdHash[root()].contains(m_dbIdPrefix, parent())) {
+            m_dbIdHash[root()].insertMulti(m_dbIdPrefix, parent());
+            qDebug() << "insert into m_dbIdHash" << m_dbIdPrefix << parent()->componentId();
         }
     }
 
@@ -108,9 +108,7 @@ public:
         return m_generator->componentTypes;
     }
 
-    inline QString filename() const {
-        return m_filename;
-    }
+    QString filename() const;
     void setFilename(const QString &filename);
 
     inline QString name() const {
@@ -156,7 +154,17 @@ public:
         }
         return -1;
     }
-    
+
+    inline IndexedString multiBox() const
+    {
+        if (componentTypes() & Generator::TypeMultiBox) {
+            //TODO: das funktioniert nur für static, es gibt aber boxen eh nur von static
+            if (!m_generator->box.isEmpty()) return m_generator->box;
+            return IndexedString(m_childId);
+        }
+        return IndexedString();
+    }
+
     QList<QString> tags() const
     {
         if (m_generator) {
@@ -200,7 +208,7 @@ public:
 
     QList<ComponentData*> childComponents(const Select &s);
     QList<ComponentData*> recursiveChildComponents(const Select &s, const Select &childSelect);
-    ComponentData *childPageByPath(const ComponentDataRoot *root, const QString &path);
+    ComponentData *childPageByPath(const QString &path);
 
     inline const QList<ComponentData*> &children() const
     {
@@ -239,7 +247,7 @@ public:
 
     QHash<int, ComponentData*> childIdsHash();
 
-    QHash<QByteArray, QVariant> dataForWeb();
+    QHash<QByteArray, QVariant> dataForWeb() const;
 
     QHash<IndexedString, QVariant> rowData;
 
@@ -272,9 +280,6 @@ private:
     QString m_name;
     QSet<IndexedString> m_fetchedRowData;
     //TODO QString m_rel;
-    //TODO bool m_visible;
-    //TODO bool m_inherits;
-    //TODO QHash<IndexedString> m_tags;
 
     //static data
     static QList<ComponentData*> m_homes;
@@ -283,13 +288,13 @@ private:
     QHash<int, ComponentData*> m_childIdsHash;
 
     //static performance hashes
-    static QMultiHash<IndexedString, ComponentData*> m_dbIdHash;
+    static QHash<const ComponentDataRoot*, QMultiHash<IndexedString, ComponentData*> > m_dbIdHash;
     static QHash< QPair<const ComponentDataRoot*, ComponentClass>, QList<ComponentData*> > m_componentClassHash;
     static QSet< QPair<const ComponentDataRoot*, ComponentClass> > m_componentsByClassRequested;
 protected:
     static QHash<const ComponentDataRoot*, QHash<QString, ComponentData*> > m_idHash;
 };
 
-QByteArray serialize(ComponentData *d);
+QByteArray serialize(const ComponentData *d);
 
 #endif

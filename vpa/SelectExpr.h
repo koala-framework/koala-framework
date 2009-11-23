@@ -179,6 +179,7 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereGeneratorClass &s);
 class SelectExprWhereIdEquals : public SelectExpr {
 public:
     SelectExprWhereIdEquals(Unserializer *unserializer);
+    SelectExprWhereIdEquals(const QString &id);
     virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereIdEquals &);
@@ -214,6 +215,7 @@ QDebug operator<<(QDebug dbg, const SelectExprWhereSql &s);
 class SelectExprWhereEquals : public SelectExpr {
 public:
     SelectExprWhereEquals(Unserializer *unserializer);
+    SelectExprWhereEquals(IndexedString field, QVariant value);
     virtual bool match(ComponentData *d, ComponentData *parentData) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereEquals &);

@@ -12,7 +12,9 @@ public:
     int readArrayStart()
     {
         QByteArray in = device()->read(2);
-        if (in != "a:") qDebug() << in;
+        if (in != "a:") {
+            qWarning() << in << device()->peek(1024);
+        }
         Q_ASSERT(in == "a:");
         int ret = readNumber();
         in = device()->read(2);

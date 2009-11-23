@@ -6,6 +6,7 @@
 #include "ComponentData.h"
 
 #define debug(x)
+#define ifDebugSubRootMatch(x)
 
 SelectExpr* SelectExpr::create(Unserializer* unserializer)
 {
@@ -317,6 +318,9 @@ SelectExprWhereFilename::SelectExprWhereFilename(Unserializer* unserializer)
 
 bool SelectExprWhereFilename::match(ComponentData* d, ComponentData *parentData) const
 {
+    if (!(d->componentTypes() & Generator::TypePseudoPage)) {
+        return false;
+    }
     Q_UNUSED(parentData);
     return d->filename() == m_filename;
 }
@@ -471,6 +475,13 @@ SelectExprWhereIdEquals::SelectExprWhereIdEquals(Unserializer* unserializer)
     Q_ASSERT(in == "}");
 }
 
+
+SelectExprWhereIdEquals::SelectExprWhereIdEquals(const QString& id)
+    : m_id(id)
+{
+}
+
+
 bool SelectExprWhereIdEquals::match(ComponentData* d, ComponentData *parentData) const
 {
     Q_UNUSED(parentData);
@@ -591,6 +602,13 @@ SelectExprWhereEquals::SelectExprWhereEquals(Unserializer* unserializer)
     Q_ASSERT(in == "}");
 }
 
+
+SelectExprWhereEquals::SelectExprWhereEquals(IndexedString field, QVariant value)
+    : m_field(field), m_value(value)
+{
+}
+
+
 bool SelectExprWhereEquals::match(ComponentData* d, ComponentData *parentData) const
 {
     Q_UNUSED(parentData);
@@ -609,8 +627,8 @@ QByteArray SelectExprWhereEquals::serialize() const
     QByteArray ret;
     QByteArray cls("Vps_Model_Select_Expr_Equals");
     ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":2:{";
-    ret += serializePrivateObjectProperty("_field", "Vps_Model_Select_Expr_Equals", m_field);
-    ret += serializePrivateObjectProperty("_value", "Vps_Model_Select_Expr_Equals", m_value);
+    ret += serializePrivateObjectProperty("_field", "*", m_field);
+    ret += serializePrivateObjectProperty("_value", "*", m_value);
     ret += "}";
     return ret;
 }
@@ -651,14 +669,18 @@ bool SelectExprWhereSubRoot::match(ComponentData* d, ComponentData *parentData) 
 {
     Q_UNUSED(parentData);
     ComponentData *sr = ComponentData::getComponentById(d->root(), m_componentId);
-    qDebug() << "subroot set" << sr->componentId();
+    ifDebugSubRootMatch( qDebug() << "subroot set" << sr->componentId(); )
     while (!sr->hasFlag(IndexedString("subroot"))) {
         if (!sr->parent()) break;
         sr = sr->parent();
     }
-    qDebug() << "subroot using" << sr->componentId();
+    ifDebugSubRootMatch( qDebug() << "subroot using" << sr->componentId(); )
     do {
-        if (d == sr) return true;
+        ifDebugSubRootMatch( qDebug() << "subroot" << d->componentId(); )
+        if (d == sr) {
+            ifDebugSubRootMatch( qDebug() << "subroot MATCH"; )
+            return true;
+        }
     } while ((d = d->parent()));
     return false;
 }
@@ -693,16 +715,14 @@ QByteArray SelectExprWhereVisible::serialize() const
 
 bool SelectExprWhereVisible::match(ComponentData* d, ComponentData *parentData) const
 {
-    Q_UNUSED(d);
     Q_UNUSED(parentData);
-    return true; //TODO: performanceproblem, erstmal deaktiviert
-    /*
+//     Q_UNUSED(d);
+//     return true; //TODO: performanceproblem, erstmal deaktiviert
     if (!d->isVisible()) return false;
     while ((d = d->parent())) {
-        if (!d->parent()->isVisible()) return false;
+        if (!d->isVisible()) return false;
     }
     return true;
-    */
 }
 
 QDebug operator<<(QDebug dbg, const SelectExprWhereVisible& s)
@@ -724,8 +744,11 @@ SelectExprWhereHasEditComponents::SelectExprWhereHasEditComponents(Unserializer*
 
 bool SelectExprWhereHasEditComponents::match(ComponentData* d, ComponentData *parentData) const
 {
-    QList<IndexedString> ec = parentData->componentClass().editComponents();
+    Q_UNUSED(parentData);
+
+    QList<IndexedString> ec = d->generator()->componentClass.editComponents();
     foreach (const IndexedString &i, ec) {
+        debug( qDebug() << "SelectExprWhereHasEditComponents::match editComponent" << i; )
         if (d->generator()->childComponentKeys().contains(i)) {
             debug( qDebug() << "SelectExprWhereHasEditComponents::match TRUE" << d->componentId(); )
             return true;
