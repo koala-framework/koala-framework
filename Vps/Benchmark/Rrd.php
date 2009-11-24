@@ -67,6 +67,11 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
             'type'=>'GAUGE',
             'max'=>pow(2, 64),
         ));
+        $this->addField(array(
+            'name'=>'memcache-limit-maxbytes',
+            'type'=>'GAUGE',
+            'max'=>pow(2, 64),
+        ));
     }
 
     private function _getFieldNames()
@@ -145,6 +150,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $values[] = $memcacheStats['bytes'];
         $values[] = $memcacheStats['curr_items'];
         $values[] = $memcacheStats['curr_connections'];
+        $values[] = $memcacheStats['limit_maxbytes'];
         return $values;
     }
 
@@ -228,6 +234,7 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $g->setTitle('Memcache');
         $g->setVerticalLabel('bytes');
         $g->addField('memcache-bytes');
+        $g->addField('memcache-limit-maxbytes');
         $ret['memcacheBytesAbs'] = $g;
 
         $g = new Vps_Util_Rrd_Graph($this);
