@@ -6,6 +6,10 @@ Ext.util.Format.booleanTickCross = function(v, p, record) {
     p.css += ' x-grid3-check-col-td';
     return '<div class="x-grid3-check-col vps-check-tick-cross-col'+(v?'-on':'')+'">&#160;</div>';
 };
+Ext.util.Format.booleanRtr = function(v, p, record) {
+    p.css += ' x-grid3-check-col-td';
+    return '<div class="x-grid3-check-col vps-check-rtr-col'+(v?'-on':'')+'">&#160;</div>';
+};
 
 Ext.util.Format.password = function(value)
 {
