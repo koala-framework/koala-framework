@@ -103,9 +103,9 @@ public:
         return m_componentClass.flags();
     }
 
-    inline Generator::ComponentTypes componentTypes() const {
-        if (!m_generator) return Generator::ComponentTypes(Generator::TypeComponent); //wg. root
-        return m_generator->componentTypes;
+    inline Generator::GeneratorFlags generatorFlags() const {
+        if (!m_generator) return Generator::GeneratorFlags(Generator::TypeComponent); //wg. root
+        return m_generator->generatorFlags;
     }
 
     QString filename() const;
@@ -139,7 +139,7 @@ public:
 
     inline IndexedString box() const
     {
-        if (componentTypes() & Generator::TypeBox) {
+        if (generatorFlags() & Generator::TypeBox) {
             //TODO: das funktioniert nur für static, es gibt aber boxen eh nur von static
             if (!m_generator->box.isEmpty()) return m_generator->box;
             return IndexedString(m_childId);
@@ -149,7 +149,7 @@ public:
 
     inline int priority() const
     {
-        if (componentTypes() & Generator::TypeBox) {
+        if (generatorFlags() & Generator::TypeBox) {
             return m_generator->priority;
         }
         return -1;
@@ -157,7 +157,7 @@ public:
 
     inline IndexedString multiBox() const
     {
-        if (componentTypes() & Generator::TypeMultiBox) {
+        if (generatorFlags() & Generator::TypeMultiBox) {
             //TODO: das funktioniert nur für static, es gibt aber boxen eh nur von static
             if (!m_generator->box.isEmpty()) return m_generator->box;
             return IndexedString(m_childId);
@@ -178,7 +178,7 @@ public:
     inline const ComponentData *page() const
     {
         const ComponentData *page = this;
-        while (page && !(page->componentTypes() & Generator::TypePage)) {
+        while (page && !(page->generatorFlags() & Generator::TypePage)) {
             page = page->parent();
         }
         return page;
@@ -187,7 +187,7 @@ public:
     inline const ComponentData *pseudoPage() const
     {
         const ComponentData *page = this;
-        while (page && !(page->componentTypes() & Generator::TypePseudoPage)) {
+        while (page && !(page->generatorFlags() & Generator::TypePseudoPage)) {
             page = page->parent();
         }
         return page;

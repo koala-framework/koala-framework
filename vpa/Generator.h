@@ -64,7 +64,7 @@ private:
 struct Generator
 {
     Generator(const ComponentDataRoot *root)
-        : componentTypes(TypeComponent), uniqueFilename(false)
+        : generatorFlags(TypeComponent), uniqueFilename(false)
     {
         m_root = root;
         m_generators[root] << this;
@@ -93,19 +93,24 @@ struct Generator
         LinkTag
     };
 
-    enum ComponentType {
-        TypeComponent  = 0x0000,
-        TypePage       = 0x0001,
-        TypePseudoPage = 0x0002,
-        TypeBox        = 0x0004,
-        TypeMultiBox   = 0x0008,
-        TypeInherit    = 0x0010, //ob die komponente vererbt werden soll
-        TypeUnique     = 0x0020,
-        TypeInherits   = 0x0040, //ob die komponente andere erben soll
-        TypeShowInMenu = 0x0080,
-        TypePagesGenerator = 0x0100, //obs der pages-generator ist der die pages-tabelle ausliest
+    enum GeneratorFlag {
+        TypeComponent      = 0x0000,
+        TypePage           = 0x0001,
+        TypePseudoPage     = 0x0002,
+        TypeBox            = 0x0004,
+        TypeMultiBox       = 0x0008,
+        TypePagesGenerator = 0x0010, //obs der pages-generator ist der die pages-tabelle ausliest
+
+        TypeInherit        = 0x0100, //ob die komponente vererbt werden soll
+        TypeUnique         = 0x0200,
+        TypeInherits       = 0x0400, //ob die komponente andere erben soll
+        TypeShowInMenu     = 0x0800,
+        
+        ColumnComponentId  = 0x1000,
+        ColumnComponent    = 0x2000,
+        ColumnVisible      = 0x4000
     };
-    Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
+    Q_DECLARE_FLAGS(GeneratorFlags, GeneratorFlag)
 
     ComponentClass componentClass;
     IndexedString key;
@@ -113,7 +118,7 @@ struct Generator
     QList<IndexedString> parentClasses;
     IdSeparator idSeparator;
     IndexedString dbIdPrefix;
-    ComponentTypes componentTypes; //TODO umbenennen, da inherit und unique auch dabei ist
+    GeneratorFlags generatorFlags;
     IndexedString model;
     IndexedString box; //TODO macht nicht in jedem generator sinn
     int priority; //TODO macht nicht in jedem generator sinn
@@ -169,7 +174,7 @@ private:
 
     const ComponentDataRoot *m_root;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS(Generator::ComponentTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Generator::GeneratorFlags)
 
 struct GeneratorWithModel : public Generator
 {
@@ -206,8 +211,6 @@ struct GeneratorTable : public GeneratorWithModel
     GeneratorTable(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
 
     QHash<IndexedString, ComponentClass> component;
-    bool hasMultipleComponents;
-    bool whereComponentId;
     
     virtual void build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
@@ -225,7 +228,6 @@ struct GeneratorTableSql : public GeneratorWithModel
     GeneratorTableSql(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
 
     QString tableName;
-    bool whereComponentId;
     ComponentClass component;
     virtual void build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
@@ -242,7 +244,6 @@ struct GeneratorTableSqlWithComponent : public GeneratorWithModel
     GeneratorTableSqlWithComponent(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
 
     QString tableName;
-    bool whereComponentId;
     QHash<IndexedString, ComponentClass> component;
 
     QHash<QString, QList<QPair<int, ComponentClass> > > data;

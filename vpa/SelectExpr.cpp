@@ -153,7 +153,7 @@ QByteArray SelectExprNot::serialize() const
     return ret;
 }
 
-SelectExprWhereComponentType::SelectExprWhereComponentType(Unserializer* unserializer, Generator::ComponentTypes type)
+SelectExprWhereComponentType::SelectExprWhereComponentType(Unserializer* unserializer, Generator::GeneratorFlags type)
     : m_type(type)
 {
     int numProperties = unserializer->readNumber();
@@ -166,7 +166,7 @@ SelectExprWhereComponentType::SelectExprWhereComponentType(Unserializer* unseria
 bool SelectExprWhereComponentType::match(ComponentData* d, ComponentData *parentData) const
 {
     Q_UNUSED(parentData);
-    bool ret = d->componentTypes() & m_type;
+    bool ret = d->generatorFlags() & m_type;
     debug( qDebug() << "SelectExprWhereComponentType::match" << ret <<d->componentId(); )
     return ret;
 }
@@ -318,7 +318,7 @@ SelectExprWhereFilename::SelectExprWhereFilename(Unserializer* unserializer)
 
 bool SelectExprWhereFilename::match(ComponentData* d, ComponentData *parentData) const
 {
-    if (!(d->componentTypes() & Generator::TypePseudoPage)) {
+    if (!(d->generatorFlags() & Generator::TypePseudoPage)) {
         return false;
     }
     Q_UNUSED(parentData);

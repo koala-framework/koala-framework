@@ -123,7 +123,7 @@ ComponentData::~ComponentData()
         if (c->m_parent == this) {
             delete c;
         } else {
-            Q_ASSERT(c->generator()->componentTypes & Generator::TypeInherit);
+            Q_ASSERT(c->generator()->generatorFlags & Generator::TypeInherit);
         }
     }
 }
@@ -157,7 +157,7 @@ QList<ComponentData*> ComponentData::getComponentsByClass(const ComponentDataRoo
                 if (dynamic_cast<GeneratorTableSqlWithComponent*>(g)) {
                     //TODO: support more, by adding an interface or something
                     //(for now we are happy to get paragraphs fast
-                    if (static_cast<GeneratorTableSqlWithComponent*>(g)->whereComponentId) {
+                    if (g->generatorFlags & Generator::ColumnComponentId) {
                         continue;
                     }
                 }
@@ -228,9 +228,9 @@ QHash< QByteArray, QVariant > ComponentData::dataForWeb() const
     } else {
         ret["parentId"] = false;
     }
-    ret["isPage"] = QVariant(componentTypes() & Generator::TypePage);
+    ret["isPage"] = QVariant(generatorFlags() & Generator::TypePage);
     ret["componentClass"] = componentClass().toString();
-    ret["isPseudoPage"] = QVariant(componentTypes() & Generator::TypePseudoPage);
+    ret["isPseudoPage"] = QVariant(generatorFlags() & Generator::TypePseudoPage);
     ret["priority"] = priority(); 
     ret["box"] = box().toString();
     ret["multiBox"] = multiBox().toString();
@@ -242,7 +242,7 @@ QHash< QByteArray, QVariant > ComponentData::dataForWeb() const
     }
     ret["name"] = name();
     ret["tags"] = QVariant(tags());
-    ret["inherits"] = QVariant(componentTypes() & Generator::TypeInherits);
+    ret["inherits"] = QVariant(generatorFlags() & Generator::TypeInherits);
     ret["_filename"] = filename();
     ret["_rel"] = false;
     return ret;
@@ -266,9 +266,9 @@ QByteArray serialize(const ComponentData* d)
     } else {
         ret += serializeObjectProperty("parentId", NullValue());
     }
-    ret += serializeObjectProperty("isPage", d->componentTypes() & Generator::TypePage);
+    ret += serializeObjectProperty("isPage", d->generatorFlags() & Generator::TypePage);
     ret += serializeObjectProperty("componentClass", d->componentClass().toString());
-    ret += serializeObjectProperty("isPseudoPage", d->componentTypes() & Generator::TypePseudoPage);
+    ret += serializeObjectProperty("isPseudoPage", d->generatorFlags() & Generator::TypePseudoPage);
     ret += serializeObjectProperty("priority", d->priority());
     ret += serializeObjectProperty("box", d->box());
     ret += serializeObjectProperty("multiBox", d->multiBox());
@@ -280,7 +280,7 @@ QByteArray serialize(const ComponentData* d)
     }
     ret += serializeObjectProperty("name", d->name());
     ret += serializeObjectProperty("tags", d->tags());
-    ret += serializeObjectProperty("inherits", d->componentTypes() & Generator::TypeInherits);
+    ret += serializeObjectProperty("inherits", d->generatorFlags() & Generator::TypeInherits);
     ret += "}";
     return ret;
 }
@@ -571,7 +571,7 @@ void ComponentData::setIsHome(bool isHome)
 
 QString ComponentData::url() const
 {
-    if (!(componentTypes() & Generator::TypePage)) {
+    if (!(generatorFlags() & Generator::TypePage)) {
         const ComponentData *p = page();
         if (p) return p->url();
         return QString();
@@ -600,7 +600,7 @@ QString ComponentData::url() const
 const ComponentData* ComponentData::pseudoPageOrRoot() const
 {
     const ComponentData *page = this;
-    while (page && !(page->componentTypes() & Generator::TypePseudoPage)) {
+    while (page && !(page->generatorFlags() & Generator::TypePseudoPage)) {
         if (!page->parent()) return page;
         page = page->parent();
     }

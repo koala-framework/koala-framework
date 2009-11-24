@@ -48,13 +48,13 @@ QDebug operator<<(QDebug dbg, const SelectExprNot &s);
 
 class SelectExprWhereComponentType : public SelectExpr {
 public:
-    SelectExprWhereComponentType(Unserializer *unserializer, Generator::ComponentTypes type);
-    SelectExprWhereComponentType(Generator::ComponentTypes type) : m_type(type) {}
+    SelectExprWhereComponentType(Unserializer *unserializer, Generator::GeneratorFlags type);
+    SelectExprWhereComponentType(Generator::GeneratorFlags type) : m_type(type) {}
     virtual bool match(ComponentData *d, ComponentData *parentData) const;
     friend QDebug operator<<(QDebug, const SelectExprWhereComponentType &);
 
 private:
-    Generator::ComponentTypes m_type;
+    Generator::GeneratorFlags m_type;
 };
 QDebug operator<<(QDebug dbg, const SelectExprWhereComponentType &s);
 

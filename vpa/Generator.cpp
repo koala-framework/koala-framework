@@ -44,7 +44,7 @@ QList<Generator*> Generator::inheritGenerators(const ComponentDataRoot* root)
         Q_ASSERT(m_generators.contains(root));
         m_inheritGeneratorsCache[root] = QList<Generator*>();
         foreach (Generator *g, m_generators[root]) {
-            if (g->componentTypes & Generator::TypeInherit) {
+            if (g->generatorFlags & Generator::TypeInherit) {
                 m_inheritGeneratorsCache[root] << g;
             }
         }
@@ -107,7 +107,7 @@ bool BuildOnlyPagesGeneratorStrategy::canHavePagesGeneratorAsChild(Generator *ge
 
     m_cache[generator] = false;
 
-    if (generator->componentTypes & Generator::TypePagesGenerator) {
+    if (generator->generatorFlags & Generator::TypePagesGenerator) {
         m_cache[generator] = true;
         return true;
     }
@@ -201,11 +201,11 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
         }
 
         //build inherited children
-        if (parent->generator() && parent->generator()->componentTypes & Generator::TypeInherits) {
+        if (parent->generator() && parent->generator()->generatorFlags & Generator::TypeInherits) {
             ComponentData *p = parent;
             while ((p = p->parent())) {
                 foreach (Generator *g, inheritGenerators(parent->root())) {
-                    if (!(g->componentTypes & Generator::TypeUnique) && g->componentClass == p->componentClass()) {
+                    if (!(g->generatorFlags & Generator::TypeUnique) && g->componentClass == p->componentClass()) {
                         g->build(parent);
                     }
                 }
@@ -220,13 +220,13 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
         }
     }
 
-    if (!childrenBuilt && parent->generator() && parent->generator()->componentTypes & Generator::TypeInherits) {
+    if (!childrenBuilt && parent->generator() && parent->generator()->generatorFlags & Generator::TypeInherits) {
         ifDebugGeneratorBuildInherit( qDebug() << "----->inherits" << parent->generator()->componentClass << parent->generator()->key << parent->componentId(); )
         ComponentData *p = parent;
         while ((p = p->parent())) {
             ifDebugGeneratorBuildInherit( qDebug() << "check if inherits us something" << p->componentId(); )
             foreach (Generator *g, inheritGenerators(parent->root())) {
-                if (g->componentTypes & Generator::TypeUnique && g->componentClass == p->componentClass()) {
+                if (g->generatorFlags & Generator::TypeUnique && g->componentClass == p->componentClass()) {
                     ifDebugGeneratorBuildInherit( qDebug() << "it's unique"; )
                     //TODO das sollte glaub ich besser in inheritedUniqueChildren oder so
                     //damit keine endlosschleifen bei rekursiven aktionen rauskommen
@@ -271,7 +271,7 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
                             }
                             i2--;
                             ifDebugPriority( qDebug() << "DELETE c2>>>" << c2 << c2->componentId() << "not" << c->componentId(); )
-                            if (!(c2->generator()->componentTypes & Generator::TypeInherit)) {
+                            if (!(c2->generator()->generatorFlags & Generator::TypeInherit)) {
                                 //TODO: leaked, manchmal muss auch in inherit gelöscht werden (kann vielleicht woanders gelöst werden)
                                 //wurde aber eigentlich schon gelöst indem es mit dem generator mitgelöscht wird falls der gelöscht wird
                                 //(bei einem reset aufruf)
@@ -283,7 +283,7 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
                             i--;
                             ifDebugPriority( qDebug() << "DELETE c>>>" << c << c->componentId() << "not" << c2->componentId(); )
                             qDebug() << parent->m_children;
-                            if (!(c->generator()->componentTypes & Generator::TypeInherit)) {
+                            if (!(c->generator()->generatorFlags & Generator::TypeInherit)) {
                                 //TODO: leaked, manchmal muss auch in inherit gelöscht werden (kann vielleicht woanders gelöst werden)
                                 //wurde aber eigentlich schon gelöst indem es mit dem generator mitgelöscht wird falls der gelöscht wird
                                 //(bei einem reset aufruf)
@@ -354,8 +354,8 @@ void Generator::handleChangedRow(Generator::ChangedRowMethod method, IndexedStri
                 if (g->model == model) {
                     foreach (ComponentData *d, g->builtComponents) { //das benötigt womöglich einen index wenns zu langsam ist
                         if (d->childId() == id) {
-                            Q_ASSERT(!(d->generator()->componentTypes & Generator::TypeInherit));
-                            if (!(d->generator()->componentTypes & Generator::TypeInherit)) {
+                            Q_ASSERT(!(d->generator()->generatorFlags & Generator::TypeInherit));
+                            if (!(d->generator()->generatorFlags & Generator::TypeInherit)) {
                                 d->parent()->m_childrenLock.lockForWrite();
                                 delete d;
                                 d->parent()->m_childrenLock.unlock();
@@ -456,7 +456,7 @@ bool GeneratorWithModel::isVisible(const ComponentData* d) const
 bool Generator::showInMenu(ComponentData* d)
 {
     Q_ASSERT(d->generator() == this);
-    return (d->componentTypes() & Generator::TypeShowInMenu);
+    return (d->generatorFlags() & Generator::TypeShowInMenu);
 }
 
 bool Generator::isVisible(const ComponentData* d) const
@@ -479,7 +479,7 @@ void GeneratorStatic::build(ComponentData* parent)
     while (i.hasNext()) {
         i.next();
         ComponentData *d = new ComponentData(this, parent, idSeparator, i.key(), i.value());
-        if (componentTypes & TypePseudoPage) {
+        if (generatorFlags & TypePseudoPage) {
             QString fn = filename;
             if (fn.isEmpty()) {
                 fn = name;
@@ -489,7 +489,7 @@ void GeneratorStatic::build(ComponentData* parent)
             }
             d->setFilename(fn);
         }
-        if (componentTypes & TypePage) {
+        if (generatorFlags & TypePage) {
             QString n = name;
             if (n.isEmpty()) {
                 n = i.key().toString();
@@ -528,7 +528,7 @@ void GeneratorTable::_build(ComponentData* parent, QString onlyId)
     QHash<IndexedString, IndexedString> fields;
     fields[IndexedString("name")] = IndexedString("--generator-name");
     fields[IndexedString("filename")] = IndexedString("--generator-filename");
-    if (whereComponentId) {
+    if (generatorFlags & ColumnComponentId) {
         fields[IndexedString("component_id")] = IndexedString("component_id");
     }
     Model::RowSet rows = Model::instance(this)->fetchRows(fields, parent, onlyId);
@@ -536,7 +536,7 @@ void GeneratorTable::_build(ComponentData* parent, QString onlyId)
         Q_ASSERT(rows.count() <= 1);
     }
     foreach (const Model::Row &row, rows) {
-        if (whereComponentId) {
+        if (generatorFlags & ColumnComponentId) {
             if (parent->dbId() != row.value(IndexedString("component_id")).toString()) continue;
         }
         ComponentData *d = new ComponentData(this, parent, idSeparator, row.id(), component);
@@ -552,10 +552,10 @@ void GeneratorTable::_build(ComponentData* parent, QString onlyId)
     QHash<IndexedString, IndexedString> fields;
     fields[IndexedString("name")] = IndexedString("--generator-name");
     fields[IndexedString("filename")] = IndexedString("--generator-filename");
-    if (hasMultipleComponents) {
+    if (generatorFlags & ColumnComponent) {
         fields[IndexedString("component")] = IndexedString("--generator-component");
     }
-    if (whereComponentId) {
+    if (generatorFlags & ColumnComponentId) {
         fields[IndexedString("component_id")] = IndexedString("component_id");
     }
     Model::RowSet rows = Model::instance(this)->fetchRows(fields, parent, onlyId);
@@ -563,11 +563,11 @@ void GeneratorTable::_build(ComponentData* parent, QString onlyId)
         Q_ASSERT(rows.count() <= 1);
     }
     foreach (const Model::Row &row, rows) {
-        if (whereComponentId) {
+        if (generatorFlags & ColumnComponentId) {
             if (parent->dbId() != row.value(IndexedString("component_id")).toString()) continue;
         }
         ComponentClass c;
-        if (hasMultipleComponents) {
+        if (generatorFlags & ColumnComponent) {
             c = component[row.value(IndexedString("component")).toString()];
         } else {
             c = component[key];
@@ -628,7 +628,7 @@ void GeneratorTableSql::build(ComponentData* parent)
     buildCallCount[TableSql]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorTableSql::build" << parent->dbId(); )
     QString sql = "SELECT id FROM "+tableName;
-    if (whereComponentId) {
+    if (generatorFlags & ColumnComponentId) {
         sql += " WHERE component_id='"+parent->dbId()+"'";
     }
     QSqlQuery query;
@@ -644,7 +644,7 @@ void GeneratorTableSql::buildSingle(ComponentData* parent, const QString& id)
 {
     buildCallCount[TableSql]++;
     QString sql = "SELECT id FROM "+tableName;
-    if (whereComponentId) {
+    if (generatorFlags & ColumnComponentId) {
         sql += " WHERE component_id='"+parent->dbId()+"' AND ";
     } else {
         sql += " WHERE ";
@@ -685,7 +685,7 @@ void GeneratorTableSqlWithComponent::preload()
 {
     QSqlQuery query;
     QString sql = "SELECT id, component ";
-    if (whereComponentId) {
+    if (generatorFlags & ColumnComponentId) {
         sql += ", component_id ";
     }
     sql += "FROM "+tableName;
@@ -698,7 +698,7 @@ void GeneratorTableSqlWithComponent::preload()
     while (query.next()) {
         QList<QPair<int, IndexedString> > l;
         QString componentId;
-        if (whereComponentId) {
+        if (generatorFlags & ColumnComponentId) {
             componentId = query.value(2).toString();
         }
         data[componentId] << qMakePair(query.value(0).toInt(), component[IndexedString(query.value(1).toString())]);
@@ -708,7 +708,7 @@ void GeneratorTableSqlWithComponent::preload()
 QList< QPair< int, ComponentClass > > GeneratorTableSqlWithComponent::_items(ComponentData* parent)
 {
     QList<QPair<int, ComponentClass> > items;
-    if (whereComponentId) {
+    if (generatorFlags & ColumnComponentId) {
         return data[parent->dbId()];
     }
     return data[QString()];
@@ -763,7 +763,7 @@ void GeneratorTableSqlWithComponent::refresh(ComponentData* d)
 
 QList<QString> GeneratorTableSqlWithComponent::fetchParentDbIds(ComponentClass cc)
 {
-    Q_ASSERT(whereComponentId);
+    Q_ASSERT(generatorFlags & ColumnComponentId);
     QSqlQuery query;
     QString sql = "SELECT component_id";
     sql += " FROM "+tableName;
@@ -1076,13 +1076,13 @@ QList<ComponentData*> GeneratorLoad::_build(ComponentData* parent, QList<QByteAr
             }
             ComponentData *d = new ComponentData(this, parent, componentId, dbId, componentClass);
 
-            if (componentTypes & TypePseudoPage) {
+            if (generatorFlags & TypePseudoPage) {
                 if (!fn.isEmpty()) {
                     d->setFilename(fn);
                 }
                 d->setIsHome(isHome);
             }
-            if (componentTypes & TypePage) {
+            if (generatorFlags & TypePage) {
                 if (!name.isEmpty()) {
                     d->setName(name);
                 }
@@ -1240,8 +1240,6 @@ void Generator::createGenerators(const ComponentDataRoot *root)
             QHash<IndexedString, ComponentClass> components;
             QString sql;
             QString tableName;
-            bool whereComponentId = false;
-            bool hasMultipleComponents = false;
             while (!xml.atEnd()) {
                 if (xml.isStartElement() && xml.name() == "key") {
                     g->key = IndexedString(xml.readElementText());
@@ -1292,58 +1290,66 @@ void Generator::createGenerators(const ComponentDataRoot *root)
                 if (xml.isStartElement() && xml.name() == "tableName") {
                     tableName = xml.readElementText();
                 }
-                if (xml.isStartElement() && xml.name() == "whereComponentId") {
-                    whereComponentId = (bool)xml.readElementText().toInt();
-                }
-                if (xml.isStartElement() && xml.name() == "hasMultipleComponents") {
-                    hasMultipleComponents = (bool)xml.readElementText().toInt();
-                }
                 if (xml.isStartElement() && xml.name() == "pageGenerator") {
                     if ((bool)xml.readElementText().toInt()) {
-                        g->componentTypes |= Generator::TypePage;
+                        g->generatorFlags |= Generator::TypePage;
                     }
                 }
                 if (xml.isStartElement() && xml.name() == "boxGenerator") {
                     if ((bool)xml.readElementText().toInt()) {
-                        g->componentTypes |= Generator::TypeBox;
+                        g->generatorFlags |= Generator::TypeBox;
                     }
                 }
                 if (xml.isStartElement() && xml.name() == "multiBoxGenerator") {
                     if ((bool)xml.readElementText().toInt()) {
-                        g->componentTypes |= Generator::TypeMultiBox;
+                        g->generatorFlags |= Generator::TypeMultiBox;
                     }
                 }
                 if (xml.isStartElement() && xml.name() == "pseudoPageGenerator") {
                     if ((bool)xml.readElementText().toInt()) {
-                        g->componentTypes |= Generator::TypePseudoPage;
+                        g->generatorFlags |= Generator::TypePseudoPage;
                     }
                 }
                 if (xml.isStartElement() && xml.name() == "pagesGenerator") {
                     if ((bool)xml.readElementText().toInt()) {
-                        g->componentTypes |= Generator::TypePagesGenerator;
+                        g->generatorFlags |= Generator::TypePagesGenerator;
                     }
                 }
                 if (xml.isStartElement() && xml.name() == "inherit") {
                     if ((bool)xml.readElementText().toInt()) {
-                        g->componentTypes |= Generator::TypeInherit;
+                        g->generatorFlags |= Generator::TypeInherit;
                     }
                 }
                 if (xml.isStartElement() && xml.name() == "unique") {
                     if ((bool)xml.readElementText().toInt()) {
-                        g->componentTypes |= Generator::TypeUnique;
+                        g->generatorFlags |= Generator::TypeUnique;
                     }
                 }
                 if (xml.isStartElement() && xml.name() == "inherits") {
                     if ((bool)xml.readElementText().toInt()) {
-                        g->componentTypes |= Generator::TypeInherits;
+                        g->generatorFlags |= Generator::TypeInherits;
                     }
                 }
                 if (xml.isStartElement() && xml.name() == "showInMenu") {
                     if ((bool)xml.readElementText().toInt()) {
-                        g->componentTypes |= Generator::TypeShowInMenu;
+                        g->generatorFlags |= Generator::TypeShowInMenu;
                     }
                 }
-
+                if (xml.isStartElement() && xml.name() == "hasComponentId") {
+                    if ((bool)xml.readElementText().toInt()) {
+                        g->generatorFlags |= Generator::ColumnComponentId;
+                    }
+                }
+                if (xml.isStartElement() && xml.name() == "hasMultipleComponents") {
+                    if ((bool)xml.readElementText().toInt()) {
+                        g->generatorFlags |= Generator::ColumnComponent;
+                    }
+                }
+                if (xml.isStartElement() && xml.name() == "hasVisible") {
+                    if ((bool)xml.readElementText().toInt()) {
+                        g->generatorFlags |= Generator::ColumnVisible;
+                    }
+                }
                 if (xml.isStartElement() && xml.name() == "dbIdShortcut") {
                     g->dbIdPrefix = IndexedString(xml.readElementText());
                 }
@@ -1366,15 +1372,11 @@ void Generator::createGenerators(const ComponentDataRoot *root)
             } else if (type == Generator::Table) {
                 if (!component.isEmpty()) components[g->key] = component;
                 static_cast<GeneratorTable*>(g)->component = components;
-                static_cast<GeneratorTable*>(g)->whereComponentId = whereComponentId;
-                static_cast<GeneratorTable*>(g)->hasMultipleComponents = hasMultipleComponents;
             } else if (type == Generator::TableSql) {
                 static_cast<GeneratorTableSql*>(g)->tableName = tableName;
-                static_cast<GeneratorTableSql*>(g)->whereComponentId = whereComponentId;
                 static_cast<GeneratorTableSql*>(g)->component = component;
             } else if (type == Generator::TableSqlWithComponent) {
                 static_cast<GeneratorTableSqlWithComponent*>(g)->tableName = tableName;
-                static_cast<GeneratorTableSqlWithComponent*>(g)->whereComponentId = whereComponentId;
                 Q_ASSERT(!components.isEmpty());
                 static_cast<GeneratorTableSqlWithComponent*>(g)->component = components;
             } else if (type == Generator::Load) {
