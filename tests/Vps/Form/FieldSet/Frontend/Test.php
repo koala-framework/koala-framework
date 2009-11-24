@@ -1,6 +1,7 @@
 <?php
 /**
  * @group selenium
+ * @group slow
  * @group Vps_Form_FieldSet
  */
 class Vps_Form_FieldSet_Frontend_Test extends Vps_Test_SeleniumTestCase
