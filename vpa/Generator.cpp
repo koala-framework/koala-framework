@@ -441,6 +441,9 @@ QList<int> GeneratorWithModel::fetchIds(ComponentData* parent, const Select& sel
 
 bool GeneratorWithModel::isVisible(const ComponentData* d) const
 {
+    if (!(generatorFlags & ColumnVisible)) {
+        return true;
+    }
     const_cast<GeneratorWithModel*>(this)
         ->fetchRowData(const_cast<ComponentData*>(d->parent()), IndexedString("visible"));
     if (!d->rowData.contains(IndexedString("visible"))) {
