@@ -27,7 +27,7 @@ class Vpc_Newsletter_Detail_RecipientsController extends Vpc_Newsletter_Subscrib
         $progressBar = new Zend_ProgressBar(
             new Vps_Util_ProgressBar_Adapter_Cache(
                 $this->_getParam('progressNum')
-            ), 0, $count
+            ), 0, $count * 1.1
         );
         $x = 0;
         foreach ($rowset as $row) {
@@ -35,6 +35,9 @@ class Vpc_Newsletter_Detail_RecipientsController extends Vpc_Newsletter_Subscrib
             $component->getComponent()->addToQueue($row);
             $progressBar->next(1, "$x / $count");
         }
+
+        $progressBar->next(1, trlVps('RTR-ECG-Check and saving data: please wait...'));
         $this->view->assign($component->getComponent()->saveQueue());
+        $progressBar->finish();
     }
 }

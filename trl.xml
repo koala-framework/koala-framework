@@ -4157,7 +4157,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Error while sending E-Mail.</en>
-<de>Fehler während E-Mail Versand.</de>
+<de>Fehler w&#xE4;hrend E-Mail Versand.</de>
 <id>1149</id>
 </text>
 <text>
@@ -4167,12 +4167,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Save Recipients</en>
-<de>Empfänger speichern</de>
+<de>Empf&#xE4;nger speichern</de>
 <id>1151</id>
 </text>
 <text>
 <en>{0} recipients added, total {1} recipients.</en>
-<de>{0} Empfänger hinzugefügt, Insgesamt {1} Empfänger.</de>
+<de>{0} Empf&#xE4;nger hinzugef&#xFC;gt, Insgesamt {1} Empf&#xE4;nger.</de>
 <id>1152</id>
 </text>
 <text>
@@ -4186,12 +4186,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Can only delete queued recipients</en>
-<de>Es können nur Empfänger entfernt werden, die sich in der Warteschlange befinden</de>
+<de>Es k&#xF6;nnen nur Empf&#xE4;nger entfernt werden, die sich in der Warteschlange befinden</de>
 <id>1155</id>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
-<de>Newsletter wurde gestoppt. Status kann nicht geändert werden.</de>
+<de>Newsletter wurde gestoppt. Status kann nicht ge&#xE4;ndert werden.</de>
 <id>1156</id>
 </text>
 <text>
@@ -4213,7 +4213,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Delete All</en>
-<de>Alle löschen</de>
+<de>Alle l&#xF6;schen</de>
 <id>1161</id>
 </text>
 <text>
@@ -4223,12 +4223,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Do you really want to delete all receivers with status "queued"?.</en>
-<de>Möchten Sie wirklich alle Empfänger aus der Warteschlange entfernen?.</de>
+<de>M&#xF6;chten Sie wirklich alle Empf&#xE4;nger aus der Warteschlange entfernen?.</de>
 <id>1163</id>
 </text>
 <text>
 <en>If you press yes, the mailing will be stopped an can\'t be restarted again.</en>
-<de>Wenn Sie "Ja" wählen, wird das Versenden gestoppt und kann nicht mehr gestartet werden.</de>
+<de>Wenn Sie "Ja" w&#xE4;hlen, wird das Versenden gestoppt und kann nicht mehr gestartet werden.</de>
 <id>1164</id>
 </text>
 <text>
@@ -4237,7 +4237,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Recipients</en>
-<de>Empfänger</de>
+<de>Empf&#xE4;nger</de>
 <id>1166</id>
 </text>
 <text>
@@ -4282,13 +4282,13 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>{0} receiver not found.</en>
 <en_plural>{0} receivers not found.</en_plural>
-<de>{0} Empfänger nicht gefunden.</de>
-<de_plural>{0} Empfänger nicht gefunden.</de_plural>
+<de>{0} Empf&#xE4;nger nicht gefunden.</de>
+<de_plural>{0} Empf&#xE4;nger nicht gefunden.</de_plural>
 <id>1175</id>
 </text>
 <text>
 <en>{0} errors while sending mail.</en>
-<de>{0} Fehler während des Sendens.</de>
+<de>{0} Fehler w&#xE4;hrend des Sendens.</de>
 <id>1176</id>
 </text>
 <text>
@@ -4318,7 +4318,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>back to ...</en>
-<de>zurück zu ...</de>
+<de>zur&#xFC;ck zu ...</de>
 <id>1182</id>
 </text>
 <text>
@@ -4336,7 +4336,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>This export is limited to {0} rows.</en>
-<de>Dieser Export ist auf {0} Einträge limitiert.</de>
+<de>Dieser Export ist auf {0} Eintr&#xE4;ge limitiert.</de>
 <id>1186</id>
 </text>
 <text>
@@ -4351,12 +4351,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>You cannot delete your own account.</en>
-<de>Sie können Ihr eigenes Konto nicht löschen.</de>
+<de>Sie k&#xF6;nnen Ihr eigenes Konto nicht l&#xF6;schen.</de>
 <id>1189</id>
 </text>
 <text>
 <en>You cannot lock your own account.</en>
-<de>Sie können Ihr eigenes Konto nicht sperren.</de>
+<de>Sie k&#xF6;nnen Ihr eigenes Konto nicht sperren.</de>
 <id>1190</id>
 </text>
 <text>
@@ -4366,12 +4366,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>You may now log in to your account.</en>
-<de>Sie können sich nun in Ihr Konto einloggen.</de>
+<de>Sie k&#xF6;nnen sich nun in Ihr Konto einloggen.</de>
 <id>1192</id>
 </text>
 <text>
 <en>If you lost your password, you may use the Lost Password? service.</en>
-<de>Wenn Sie Ihr Passwort vergessen haben, können Sie den "Passwort vergessen?"-Service nutzen.</de>
+<de>Wenn Sie Ihr Passwort vergessen haben, k&#xF6;nnen Sie den "Passwort vergessen?"-Service nutzen.</de>
 <id>1193</id>
 </text>
 <text>
@@ -4533,7 +4533,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Can only add users to a paused newsletter</en>
-<de>Empfänger können nur in einen pausierten Newsletter hinzugefügt werden</de>
+<de>Empf&#xE4;nger k&#xF6;nnen nur in einen pausierten Newsletter hinzugef&#xFC;gt werden</de>
 <id>1234</id>
 </text>
 <text>
@@ -4948,4 +4948,81 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Spalte bearbeiten</de>
 <id>1316</id>
 </text>
+<text>
+<en>Ein Fehler ist aufgetreten</en>
+<id>1317</id>
+</text>
+<text>
+<en>Dimension: At least width or height must be set higher than 0 when using crop or bestfit.</en>
+<id>1318</id>
+</text>
+<text>
+<en>Width or height must be higher than 0 when using crop or bestfit.</en>
+<id>1319</id>
+</text>
+<text>
+<en>Please fill the marked fields correctly.</en>
+<de>Bitte f&#xFC;llen Sie die markierten Felder korrekt aus.</de>
+<id>1320</id>
+</text>
+<text>
+<en>user-defined</en>
+<id>1321</id>
+</text>
+<text>
+<en>Code Syntax Highlighted</en>
+<id>1322</id>
+</text>
+<text>
+<en>Code</en>
+<id>1323</id>
+</text>
+<text>
+<en>Line Numbers</en>
+<id>1324</id>
+</text>
+<text>
+<en>Copy</en>
+<de>Kopieren</de>
+<id>1325</id>
+</text>
+<text>
+<en>The following E-Mail addresses were excluded due to the RTR-ECG-Check (see {0})</en>
+<de>Die folgenden E-Mail Adressen wurden aufgrund der RTR-ECG-&#xDC;berpr&#xFC;fung ausgeschlossen (siehe {0})</de>
+<id>1326</id>
+</text>
+<text>
+<en>Column {0}</en>
+<de>Spalte {0}</de>
+<id>1327</id>
+</text>
+<text>
+<en>Cannot move here. View has been reloaded, please try again.</en>
+<id>1328</id>
+</text>
+<text>
+<en>Cannot move here.</en>
+<id>1329</id>
+</text>
+<text>
+<en>Please enter your E-Mail-Address</en>
+<de>Bitte geben Sie Ihre E-Mail-Adresse ein</de>
+<id>1330</id>
+</text>
+<text>
+<en>Betreff</en>
+<id>1331</id>
+</text>
+<text>
+<en>To</en>
+<de>An</de>
+<context>email</context>
+<id>1332</id>
+</text>
+<text>
+<en>RTR-ECG-Check and saving data: please wait...</en>
+<de>RTR-ECG-Check und Daten speichern: bitte warten...</de>
+<id>1333</id>
+</text>
 </trl>
+

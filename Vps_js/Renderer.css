@@ -11,3 +11,9 @@
     color: #777777;
     font-style:italic;
 }
+.vps-check-rtr-col {
+    background-image:none;
+}
+.vps-check-rtr-col-on {
+    background-image:url(/assets/vps/images/rtr.png);
+}
