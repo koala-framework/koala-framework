@@ -3,6 +3,13 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
 {
     private $_toImport = array();
 
+    /**
+     * Cache for email addresses that should be checked against the rtr-ecg list
+     * Key   = the same key as in $this->_toImport
+     * Value = the email address that should be checked
+     */
+    private $_rtrCheck = array();
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -44,6 +51,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
             if ($recipient->getMailUnsubscribe()) return false;
         }
 
+        // add to senders list import
         $this->_toImport[] = array(
             'newsletter_id' => $newsletter->id,
             'recipient_model' => $class,
@@ -54,12 +62,36 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
                 $recipient->getMailLastname() . ' ' .
                 $recipient->getMailEmail()
         );
+
+        // if this receiver should be checked against the rtr-ecg
+        if (true && count($this->_toImport)) {
+            $this->_rtrCheck[count($this->_toImport) - 1] = $recipient->getMailEmail();
+        }
+
         return true;
     }
 
     public function saveQueue()
     {
         $ret = array();
+        $ret['rtrExcluded'] = array();
+
+        // check against rtr-ecg list
+        if (count($this->_rtrCheck)) {
+            $badKeys = Vps_Util_RtrList::getBadKeys($this->_rtrCheck);
+
+            // remove the bad rtr entries from the list
+            if ($badKeys) {
+                foreach ($badKeys as $badKey) {
+                    $ret['rtrExcluded'][] = $this->_rtrCheck[$badKey];
+                    unset($this->_toImport[$badKey]);
+                }
+                // assign new keys
+                $this->_toImport = array_values($this->_toImport);
+            }
+        }
+
+        // add to model
         $newsletter = $this->getData()->row;
         $model = $this->getData()->parent->getComponent()->getChildModel()->getDependentModel('Queue');
         $select = $model->select()->whereEquals('newsletter_id', $newsletter->id);

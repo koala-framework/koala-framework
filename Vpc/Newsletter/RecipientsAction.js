@@ -17,10 +17,13 @@ Vpc.Newsletter.RecipientsAction = Ext.extend(Ext.Action, {
                     url : this.controllerUrl + '/json-save-recipients',
                     params: params,
                     success: function(response, options, r) {
-                        Ext.MessageBox.alert(
-                            trlVps('Status'),
-                            trlVps('{0} recipients added, total {1} recipients.', [r.added, r.after])
-                        );
+                        var msgText = trlVps('{0} recipients added, total {1} recipients.', [r.added, r.after]);
+                        if (r.rtrExcluded.length) {
+                            msgText += '<br /><br />';
+                            msgText += trlVps('The following E-Mail addresses were excluded due to the RTR-ECG-Check (see {0})', ['<a href="http://www.rtr.at/ecg" target="_blank">www.rtr.at/ecg</a>']);
+                            msgText += ':<div class="recipientsStatusRtr">'+r.rtrExcluded.join('<br />')+'</div>';
+                        }
+                        Ext.MessageBox.alert(trlVps('Status'), msgText);
                     },
                     progress: true,
                     timeout: 600000,
