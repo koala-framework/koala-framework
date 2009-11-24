@@ -84,7 +84,6 @@ struct Generator
         Unknown,
         Static,
         Table,
-        TableWithComponent,
         TableSql,
         Load,
         Pages,
@@ -143,13 +142,15 @@ struct Generator
     }
 
     //generators von allen roots!
-    static QList<Generator*> generators() {
+    static QList<Generator*> generators()
+    {
         QList<Generator*> ret;
         foreach (QList<Generator*> l, m_generators.values()) {
             ret << l;
         }
         return ret;
     }
+
     static QList<Generator*> inheritGenerators(const ComponentDataRoot* root);
 
     static void buildWithGenerators(ComponentData* parent, const BuildStrategy *buildStrategy);
@@ -204,25 +205,8 @@ struct GeneratorTable : public GeneratorWithModel
 {
     GeneratorTable(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
 
-    ComponentClass component;
-    bool whereComponentId;
-    
-    virtual void build(ComponentData *parent);
-    virtual void buildSingle(ComponentData* parent, const QString& id);
-    virtual void refresh(ComponentData* d);
-
-    virtual QList<ComponentClass> childComponentClasses();
-    virtual QList<IndexedString> childComponentKeys();
-
-private:
-    void _build(ComponentData* parent, QString onlyId = QString());
-};
-
-struct GeneratorTableWithComponent : public GeneratorWithModel
-{
-    GeneratorTableWithComponent(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
-
     QHash<IndexedString, ComponentClass> component;
+    bool hasMultipleComponents;
     bool whereComponentId;
     
     virtual void build(ComponentData *parent);
