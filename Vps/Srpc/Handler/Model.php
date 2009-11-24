@@ -1,32 +1,14 @@
 <?php
-class Vps_Srpc_Handler_Model
+class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
 {
     protected $_model;
-    protected $_extraParams;
 
     public function __construct(array $config = array())
     {
         if (isset($config['model']) && is_object($config['model']) && $config['model'] instanceof Vps_Model_Interface) {
             $this->_model = $config['model'];
         }
-        $this->_init();
-    }
-
-    protected function _init()
-    {
-    }
-
-    /**
-     * Speichert extra-parameter, die individuell abgerufen werden müssen
-     */
-    public function setExtraParams($params)
-    {
-        $this->_extraParams = $params;
-    }
-
-    public function getExtraParams()
-    {
-        return $this->_extraParams;
+        parent::__construct();
     }
 
     public function getModel()
