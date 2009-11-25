@@ -21,10 +21,9 @@ class Vpc_User_Detail_General_Validate_UniqueEmail extends Vps_Validate_Row_Abst
             $select->whereNotEquals($primaryKey, $row->$primaryKey);
         }
 
-        $lock = fopen("application/temp/create-user.lock", "w");
-        if (!flock($lock, LOCK_SH)) throw new Vps_Exception("Lock Failed");
+        $row->getModel()->lockCreateUser();
         $cnt = $row->getModel()->countRows($select);
-        fclose($lock);
+        $row->getModel()->unlockCreateUser();
 
         if ($cnt) {
             $this->_error(self::NOT_UNIQUE_USER);

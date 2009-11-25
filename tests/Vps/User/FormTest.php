@@ -9,7 +9,7 @@ class Vps_User_FormTest extends Vps_Test_SeleniumTestCase
 {
     public function testForm()
     {
-        $email = 'seltest@vivid-planet.com';
+        $email = 'seltest123@vivid-planet.com';
 
         $this->open('/vps/test/vps_user_form');
         $this->waitForConnections();
