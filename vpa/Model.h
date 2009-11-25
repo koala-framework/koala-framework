@@ -17,6 +17,8 @@ public:
     static GeneratorModel *instance(Generator *generator);
     static StandardModel *instance(IndexedString phpModelClass);
 
+    virtual ~Model() {}
+
     class Row
     {
     public:
@@ -26,7 +28,7 @@ public:
         QString id() const {
             return m_id;
         }
-        
+
     private:
         friend class Model;
         Row(const QString id, const QHash<IndexedString, QVariant> &values) 

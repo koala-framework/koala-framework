@@ -12,6 +12,7 @@ class Generator;
 
 struct BuildStrategy
 {
+    virtual ~BuildStrategy() {}
     virtual bool skip(ComponentData *parent) const = 0;
     virtual bool recurse() const { return true; }
 };

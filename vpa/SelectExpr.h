@@ -9,6 +9,7 @@ class ComponentData;
 
 class SelectExpr {
 public:
+    virtual ~SelectExpr() {}
     virtual bool match(ComponentData*, ComponentData *parentData) const = 0;
     virtual bool mightMatch(const ComponentClass& cls) {
         Q_UNUSED(cls);

@@ -4,6 +4,7 @@
 #include <QList>
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
+#include <QXmlStreamReader>
 
 #include "ComponentDataRoot.h"
 #include "PhpProcess.h"

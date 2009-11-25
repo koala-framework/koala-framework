@@ -6,7 +6,7 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += /home/niko/www/vps/qttest/. .
-QT += sql network
+QT += sql network xml
 QT -= gui
 
 QMAKE_CXXFLAGS += -O0
