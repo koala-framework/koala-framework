@@ -8,6 +8,8 @@ class Vps_User_Model extends Vps_Model_Proxy
 
     protected $_mailClass = 'Vps_Mail_Template';
 
+    private $_lock = null;
+
     public function __construct(array $config = array())
     {
         if (!isset($config['proxyModel'])) {
@@ -37,6 +39,20 @@ class Vps_User_Model extends Vps_Model_Proxy
         throw new Vps_Exception("createRow is not allowed in Vps_User_Model. Use createUserRow() instead.");
     }
 
+    public function unlockCreateUser()
+    {
+        fclose($this->_lock);
+        $this->_lock = null;
+    }
+    public function lockCreateUser()
+    {
+        if ($this->_lock) {
+            throw new Vps_Exception('Already locked');
+        }
+        $this->_lock = fopen("application/temp/create-user.lock", "w");
+        if (!flock($this->_lock, LOCK_EX)) throw new Vps_Exception("Lock Failed");
+    }
+
     public function createUserRow($email, $webcode = null)
     {
         if (is_null($webcode)) {
@@ -44,15 +60,22 @@ class Vps_User_Model extends Vps_Model_Proxy
         }
 
         if (empty($webcode) && !is_null($webcode) && $email) {
+            $this->lockCreateUser();
             $row = $this->getRow($this->select()
                 ->whereEquals('email', $email)
                 ->whereEquals('webcode', '')
             );
             if ($row) {
+                if (!$row->deleted) {
+                    throw new Vps_ClientException(
+                        trlVps('An account with this email address already exists')
+                    );
+                }
                 // global user wurde gelöscht und wird wieder angelegt
                 $row->locked = 0;
                 $row->deleted = 0;
                 $this->_resetPermissions($row);
+                $this->unlockCreateUser();
                 return $row;
             } else {
                 // globaler benutzer existiert im web noch nicht. schauen, ob
@@ -74,6 +97,8 @@ class Vps_User_Model extends Vps_Model_Proxy
 
                     $this->getProxyModel()->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
 
+                    $this->unlockCreateUser();
+
                     $row = $this->getRow($this->select()
                         ->whereEquals('email', $email)
                         ->whereEquals('webcode', '')
@@ -83,6 +108,7 @@ class Vps_User_Model extends Vps_Model_Proxy
                     return $row;
                 }
             }
+            $this->unlockCreateUser();
         }
 
         $row = parent::createRow(array('email' => $email, 'webcode' => $webcode));

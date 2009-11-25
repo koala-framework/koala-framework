@@ -6,6 +6,8 @@
  */
 class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 {
+    private static $_lastMailNumber = 0;
+
     public function setUp()
     {
         Vps_Registry::set('db', Vps_Registry::get('dao')->getDb());
@@ -14,6 +16,12 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         Vps_Registry::set('db', Vps_Test::getTestDb());
+    }
+
+    private function _getNewMailAddress()
+    {
+        self::$_lastMailNumber += 1;
+        return 'vpstest'.time().'_'.(self::$_lastMailNumber).'@vivid.vps';
     }
 
     /**
@@ -33,7 +41,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
         $webcode = Vps_Registry::get('config')->service->users->webcode;
         if (!$webcode) return; // Dieser Test ist nur für webcode
 
-        $email = 'vpstest'.time().mt_rand(0,99).'@vivid.vps';
+        $email = $this->_getNewMailAddress();
 
         // CREATE USER \\
         $m = new Vps_User_Model();
@@ -167,7 +175,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
         $webId = Vps_Registry::get('config')->application->id;
         $webcode = '';
 
-        $email = 'vpstest'.time().mt_rand(0,99).'@vivid.vps';
+        $email = $this->_getNewMailAddress();
 
         // CREATE USER \\
         $m = new Vps_User_Model();
@@ -300,5 +308,144 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
         $webr = $web->getRow($web->select()->order('id', 'DESC'));
         $this->assertEquals($r2->id, $webr->id);
         $this->assertEquals('guest', $webr->role);
+    }
+
+    public function testCreateUserRowGlobalOnly()
+    {
+        // Annahme: user gibt es nur global, im web noch nicht.
+        // nach createUserRow müsste es ihn dann im web auch sofort geben
+        // und man muss die row erhalten
+
+        $webId = Vps_Registry::get('config')->application->id;
+        $webcode = '';
+
+        $email = $this->_getNewMailAddress();
+
+        $m = new Vps_User_Model();
+        $all = new Vps_User_All_Model();
+
+        $newestAllRow = $all->getRow($all->select()->order('id', 'DESC'));
+        $newestId = $newestAllRow->id;
+
+        // globalen user erstellen, nicht in web
+        $allr = $all->createRow(array(
+            'email' => $email,
+            'password' => '',
+            'password_salt' => 'abcdefg',
+            'gender' => 'male',
+            'title' => '',
+            'firstname' => 'm',
+            'lastname' => 'h',
+            'webcode' => '',
+            'created' => date('Y-m-d H:i:s', time() - 10),
+            'last_modified' => date('Y-m-d H:i:s', time() - 10)
+        ));
+        $allr->save();
+        $this->assertGreaterThan($newestAllRow->id, $allr->id);
+
+        // user im web suchen, sollte nicht vorhanden sein
+        $r = $m->getRow($m->select()->whereEquals('email', $email));
+        $this->assertNull($r);
+
+        // createUserRow in usermodel aufrufen, sollte den user im web anlegen, auch ohne speichern
+        $r = $m->createUserRow($email, $webcode);
+
+        $r = $m->getRow($m->select()->whereEquals('email', $email));
+        $this->assertNotNull($r);
+        $this->assertEquals($allr->id, $r->id);
+        $this->assertEquals('m', $r->firstname);
+
+        $r->gender = 'male';
+        $r->title = 'Dr.';
+        $r->firstname = 'Test Global';
+        $r->lastname = 'Testermann Global';
+        $r->save();
+
+        $r = $m->getRow($m->select()->whereEquals('email', $email));
+        $this->assertEquals($allr->id, $r->id);
+        $this->assertEquals('Dr.', $r->title);
+        $this->assertEquals('Test Global', $r->firstname);
+        $this->assertEquals('Testermann Global', $r->lastname);
+    }
+
+    public function testCreateUserRowDeleted()
+    {
+        // Annahme: globalen user gibt es im web, aber er hat das deleted flag gesetzt
+        // nach createUserRow müsste das deleted flag auf 0 sein
+        // und man muss die row erhalten
+
+        $webId = Vps_Registry::get('config')->application->id;
+        $webcode = '';
+
+        $email = $this->_getNewMailAddress();
+
+        $m = new Vps_User_Model();
+
+        $r = $m->createUserRow($email, $webcode);
+        $r->gender = 'male';
+        $r->title = 'Dr.';
+        $r->firstname = 'mia';
+        $r->lastname = 'Testermann Global';
+        $r->save();
+
+        $r->deleted = 1;
+        $r->save();
+
+        $this->assertNotNull($r);
+        $this->assertEquals(1, $r->deleted);
+
+        // createUserRow in usermodel aufrufen
+        // sollte den gelöschten user zurückgeben, ohne deleted flag
+        $createRow = $m->createUserRow($email, $webcode);
+
+        $this->assertNotNull($createRow);
+        // die createRow soll die gleiche id haben wie die zuvor angelegte row
+        $this->assertEquals($r->id, $createRow->id);
+        $this->assertEquals('mia', $createRow->firstname);
+        $this->assertEquals(0, $createRow->deleted);
+        $this->assertEquals(0, $createRow->locked);
+
+        $createRow->firstname = 'mia Global';
+        $createRow->save();
+
+        $this->assertEquals('mia Global', $createRow->firstname);
+
+        $newRow = $m->getRow($m->select()->whereEquals('email', $email));
+
+        $this->assertNotNull($newRow);
+        $this->assertEquals('mia Global', $newRow->firstname);
+        $this->assertEquals(0, $newRow->deleted);
+        $this->assertEquals(0, $newRow->locked);
+    }
+
+    /**
+     * @expectedException Vps_ClientException
+     */
+    public function testCreateUserRowExisting()
+    {
+        // Annahme: globalen user gibt es im web und ist aktiv
+        // createUserRow müsste eine ClientException werfen, dass User schon existent ist
+
+        $webId = Vps_Registry::get('config')->application->id;
+        $webcode = '';
+
+        $email = $this->_getNewMailAddress();
+
+        $m = new Vps_User_Model();
+
+        $r = $m->createUserRow($email, $webcode);
+        $r->gender = 'male';
+        $r->title = 'Dr.';
+        $r->firstname = 'moep';
+        $r->lastname = 'blubb';
+        $r->save();
+
+        $this->assertNotNull($r);
+        $this->assertEquals(0, $r->deleted);
+        $this->assertEquals(0, $r->locked);
+
+        // createUserRow in usermodel aufrufen
+        // sollte eine exception werfen, dass user schon existent ist
+        $createRow = $m->createUserRow($email, $webcode);
     }
 }
