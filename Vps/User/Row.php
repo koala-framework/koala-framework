@@ -7,7 +7,6 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
     protected $_sendDeletedMail = null;
     protected $_additionalRolesCache = null;
     protected $_notifyGlobalUserAdded = false;
-    private $_lock;
 
     public static function getWebcode()
     {
@@ -69,21 +68,11 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         }
     }
 
-    private function _unlock()
-    {
-        fclose($this->_lock);
-    }
-    private function _lock()
-    {
-        $this->_lock = fopen("application/temp/create-user.lock", "w");
-        if (!flock($this->_lock, LOCK_EX)) throw new Vps_Exception("Lock Failed");
-    }
-
     protected function _beforeInsert()
     {
         parent::_beforeInsert();
 
-        $this->_lock();
+        $this->getModel()->lockCreateUser();
 
         if ($this->getModel()->mailExists($this->email)) {
             throw new Vps_ClientException(
@@ -123,7 +112,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
     protected function _afterInsert()
     {
         parent::_afterInsert();
-        $this->_unlock();
+        $this->getModel()->unlockCreateUser();
 
         if (!$this->password) {
             $this->sendActivationMail();
