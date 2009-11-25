@@ -125,7 +125,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($this->_getParam('include-cache')) {
             echo "importing cache dirs...\n";
             $includes = array();
-            foreach (Vps_Util_ClearCache::getInstance()->getCacheDirs() as $d) {
+            $dirs = Vps_Util_ClearCache::getInstance()
+                        ->getCacheDirs(Vps_Util_ClearCache::MODE_IMPORT);
+            foreach ($dirs as $d) {
                 if (is_dir("application/cache/$d")) {
                     $includes[] = "application/cache/$d/*";
                 } else if (is_dir($d)) {

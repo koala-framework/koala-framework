@@ -1,6 +1,9 @@
 <?php
 class Vps_Util_ClearCache
 {
+    const MODE_CLEAR = 'clear';
+    const MODE_IMPORT = 'import';
+
     public function getInstance()
     {
         static $i;
@@ -12,12 +15,12 @@ class Vps_Util_ClearCache
         return $i;
     }
 
-    public final function getCacheDirs()
+    public final function getCacheDirs($mode = self::MODE_CLEAR)
     {
-        return $this->_getCacheDirs();
+        return $this->_getCacheDirs($mode);
     }
 
-    protected function _getCacheDirs()
+    protected function _getCacheDirs($mode = self::MODE_CLEAR)
     {
         $ret = array();
         foreach (new DirectoryIterator('application/cache') as $d) {
@@ -64,7 +67,7 @@ class Vps_Util_ClearCache
 
         $types = array('all');
         if (class_exists('Memcache')) $types[] = 'memcache';
-        $types = array_merge($types, $this->_getCacheDirs());
+        $types = array_merge($types, $this->getCacheDirs());
         $types = array_merge($types, $this->getDbCacheTables());
         return $types;
     }
@@ -139,7 +142,7 @@ class Vps_Util_ClearCache
                 }
             }
         }
-        foreach ($this->_getCacheDirs() as $d) {
+        foreach ($this->getCacheDirs() as $d) {
             if (in_array($d, $types)) {
                 if (is_dir("application/cache/$d")) {
                     $this->_removeDirContents("application/cache/$d", $server);
