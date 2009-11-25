@@ -9,6 +9,7 @@
 #include "Generator.h"
 
 class Generator;
+class CommandDispatcher;
 
 class ComponentData
 {
@@ -225,6 +226,13 @@ public:
     }
     void addChildren(ComponentData* c);
 
+    void addChildren(const QList<ComponentData*> l)
+    {
+        foreach (ComponentData *c, l) {
+            addChildren(c);
+        }
+    }
+
     inline QReadWriteLock *childrenLock()
     {
         return &m_childrenLock;
@@ -263,6 +271,7 @@ private:
     friend class Generator;
     friend class GeneratorWithModel;
     friend class GeneratorPages;
+    friend class CommandDispatcher;
 
     //tree data
     bool m_childrenBuilt;
@@ -283,6 +292,7 @@ private:
 
     //static data
     static QList<ComponentData*> m_homes;
+    static QMultiHash<QThread*, ComponentData*> m_uncachedDatas; //um es löschen zu können
 
     //performance hashes
     QHash<int, ComponentData*> m_childIdsHash;

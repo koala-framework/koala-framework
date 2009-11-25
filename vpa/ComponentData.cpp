@@ -20,6 +20,7 @@ QHash<const ComponentDataRoot*, QMultiHash<IndexedString, ComponentData*> > Comp
 QHash< QPair<const ComponentDataRoot*, ComponentClass>, QList<ComponentData*> > ComponentData::m_componentClassHash;
 QSet< QPair<const ComponentDataRoot*, ComponentClass> > ComponentData::m_componentsByClassRequested;
 QList<ComponentData*> ComponentData::m_homes;
+QMultiHash<QThread*, ComponentData*> ComponentData::m_uncachedDatas;
 
 ComponentData::ComponentData(Generator* generator, ComponentData* parent_, QString componentId_, QString dbId_, ComponentClass componentClass_)
     : m_parent(parent_), m_componentClass(componentClass_), m_generator(generator)
@@ -97,6 +98,9 @@ void ComponentData::init()
     if (generator()) {
         generator()->builtComponents << this;
     }
+    if (generatorFlags() & Generator::DisableCache) {
+        m_uncachedDatas.insert(QThread::currentThread(), this);
+    }
 }
 
 ComponentData::~ComponentData()
@@ -130,6 +134,7 @@ ComponentData::~ComponentData()
 
 void ComponentData::addChildren(ComponentData *c)
 {
+    Q_ASSERT(!(c->generatorFlags() & Generator::DisableCache));
     Q_ASSERT(!m_childrenLock.tryLockForRead());
     m_children << c;
     m_childIdsHash.clear();
@@ -330,11 +335,36 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
             ret << d;
         }
         if (s.limitCount && ret.count() >= (s.limitCount+s.limitOffset)) {
+            qDebug() << "break; limit reached";
             break;
         }
     }
+    foreach (Generator *g, Generator::generators(root())) {
+        if (g->componentClass == componentClass() && g->generatorFlags & Generator::DisableCache) {
+            Select s2(s);
+            s2.limitOffset = 0;
+            s2.limitCount = 0;
+            foreach (ComponentData *d, g->buildDynamic(this, s2)) {
+                if (s.match(d, this)) {
+                    ret << d;
+                }
+                if (s.limitCount && ret.count() >= (s.limitCount+s.limitOffset)) {
+                    qDebug() << "break; limit reached (2)";
+                    break;
+                }
+            }
+            s2.where.clear(); //TODO MEEEEEGA HACK ohne dem würden die where objeckte doppelt gelöscht werden
+                              //Select kopiert die noch nicht korrektr
+        }
+    }
     if (s.limitOffset) {
+        foreach (ComponentData *d, ret) {
+            qDebug() << "---> beforeOffset" << d->componentId();
+        }
         ret = ret.mid(s.limitOffset);
+        foreach (ComponentData *d, ret) {
+            qDebug() << "afterOffset" << d->componentId();
+        }
     }
     return ret;
 }

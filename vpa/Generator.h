@@ -102,6 +102,8 @@ struct Generator
         TypeMultiBox       = 0x0008,
         TypePagesGenerator = 0x0010, //obs der pages-generator ist der die pages-tabelle ausliest
 
+        DisableCache       = 0x0020, //ob der komponenten baum cache deaktivert ist
+
         TypeInherit        = 0x0100, //ob die komponente vererbt werden soll
         TypeUnique         = 0x0200,
         TypeInherits       = 0x0400, //ob die komponente andere erben soll
@@ -134,7 +136,13 @@ struct Generator
     virtual bool isVisible(const ComponentData *d) const;
     virtual QList<QString> tags(const ComponentData *d) const;
 
-    virtual void build(ComponentData *parent) = 0;
+    virtual QList<ComponentData*> build(ComponentData *parent) = 0;
+    virtual QList<ComponentData*> buildDynamic(ComponentData *parent, const Select &select) { 
+        Q_UNUSED(parent);
+        Q_UNUSED(select);
+        Q_ASSERT(0); 
+        return QList<ComponentData*>();
+    }
     virtual void buildSingle(ComponentData *parent, const QString &id) = 0;
     virtual void refresh(ComponentData *d) = 0;
     virtual void preload() {}
@@ -199,7 +207,7 @@ struct GeneratorStatic : public Generator
         Q_ASSERT(dbIdPrefix.isEmpty());
     }
 
-    virtual void build(ComponentData *parent);
+    virtual QList<ComponentData*> build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
@@ -213,7 +221,8 @@ struct GeneratorTable : public GeneratorWithModel
 
     QHash<IndexedString, ComponentClass> component;
     
-    virtual void build(ComponentData *parent);
+    virtual QList<ComponentData*> build(ComponentData *parent);
+    virtual QList<ComponentData*> buildDynamic(ComponentData *parent, const Select &select);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
@@ -221,7 +230,7 @@ struct GeneratorTable : public GeneratorWithModel
     virtual QList<IndexedString> childComponentKeys();
 
 private:
-    void _build(ComponentData* parent, QString onlyId = QString());
+    QList<ComponentData*> _build(ComponentData* parent, const Select& select);
 };
 
 struct GeneratorTableSql : public GeneratorWithModel
@@ -230,7 +239,7 @@ struct GeneratorTableSql : public GeneratorWithModel
 
     QString tableName;
     ComponentClass component;
-    virtual void build(ComponentData *parent);
+    virtual QList<ComponentData*> build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
@@ -238,7 +247,7 @@ struct GeneratorTableSql : public GeneratorWithModel
     virtual QList<IndexedString> childComponentKeys();
 
 private:
-    void _build(ComponentData* parent, QSqlQuery& query);
+    QList<ComponentData*> _build(ComponentData* parent, QSqlQuery& query);
 };
 struct GeneratorTableSqlWithComponent : public GeneratorWithModel
 {
@@ -251,7 +260,7 @@ struct GeneratorTableSqlWithComponent : public GeneratorWithModel
 
     virtual void preload();
 
-    virtual void build(ComponentData *parent);
+    virtual QList<ComponentData*> build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
@@ -270,7 +279,7 @@ struct GeneratorLoadSql : public GeneratorWithModel
     GeneratorLoadSql(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
 
     ComponentClass component;
-    virtual void build(ComponentData *parent);
+    virtual QList<ComponentData*> build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
@@ -278,7 +287,7 @@ struct GeneratorLoadSql : public GeneratorWithModel
     virtual QList<IndexedString> childComponentKeys();
 
 private:
-    void _build(ComponentData* parent, QSqlQuery query);
+    QList<ComponentData*> _build(ComponentData* parent, QSqlQuery query);
     QByteArray _sql(ComponentData* parent, int id = 0);
 };
 struct GeneratorLoadSqlWithComponent : public GeneratorWithModel
@@ -286,7 +295,7 @@ struct GeneratorLoadSqlWithComponent : public GeneratorWithModel
     GeneratorLoadSqlWithComponent(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
 
     QHash<IndexedString, ComponentClass> component;
-    virtual void build(ComponentData *parent);
+    virtual QList<ComponentData*> build(ComponentData *parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
@@ -294,7 +303,7 @@ struct GeneratorLoadSqlWithComponent : public GeneratorWithModel
     virtual QList<IndexedString> childComponentKeys();
 
 private:
-    void _build(ComponentData* parent, QSqlQuery query);
+    QList<ComponentData*> _build(ComponentData* parent, QSqlQuery query);
     QByteArray _sql(ComponentData* parent);
 };
 struct GeneratorLoad : public GeneratorWithModel
@@ -305,7 +314,8 @@ struct GeneratorLoad : public GeneratorWithModel
         Q_ASSERT(dbIdPrefix.isEmpty());
     }
 
-    virtual void build(ComponentData* parent);
+    virtual QList<ComponentData*> build(ComponentData* parent);
+    virtual QList<ComponentData*> buildDynamic(ComponentData *parent, const Select &select);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
@@ -320,7 +330,7 @@ struct GeneratorPages : public GeneratorLoad
 {
     GeneratorPages(const ComponentDataRoot *root) : GeneratorLoad(root) {}
 
-    virtual void build(ComponentData* parent);
+    virtual QList<ComponentData*> build(ComponentData* parent);
     virtual bool showInMenu(ComponentData* d);
     virtual QList<QString> tags(const ComponentData* d) const;
 };
@@ -336,7 +346,7 @@ struct GeneratorLinkTag : public Generator
 
     virtual void preload();
 
-    virtual void build(ComponentData* parent);
+    virtual QList<ComponentData*> build(ComponentData* parent);
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 

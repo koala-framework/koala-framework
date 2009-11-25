@@ -3,6 +3,7 @@
 #include "Unserializer.h"
 #include "ComponentData.h"
 
+#define debug(x) x
 
 Select::Select()
     : limitCount(0), limitOffset(0)
@@ -63,7 +64,10 @@ bool Select::match(ComponentData* data, ComponentData *parentData) const
     if (!parentData) parentData = data->parent();
 
     foreach (SelectExpr *e, where) {
-        if (!e->match(data, parentData)) return false;
+        if (!e->match(data, parentData)) {
+            debug( qDebug() << "Select::match: no match" << data->componentId() << *e; )
+            return false;
+        }
     }
 
     if (!other.isEmpty()) {
@@ -90,9 +94,16 @@ bool Select::match(ComponentData* data, ComponentData *parentData) const
         }
         bool ok;
         int childId = data->childId().toInt(&ok);
-        if (!ok) return false;
-        if (!(m_IdsCache[data->parent()].contains(childId))) return false;
+        if (!ok) {
+            debug( qDebug() << "Select::match: no match" << data->componentId() << "!ok"; )
+            return false;
+        }
+        if (!(m_IdsCache[data->parent()].contains(childId))) {
+            debug( qDebug() << "Select::match: no match" << data->componentId() << "!in IdsCache"; )
+            return false;
+        }
     }
+    debug( qDebug() << "Select::match: match!" << data->componentId(); )
     return true;
 }
 

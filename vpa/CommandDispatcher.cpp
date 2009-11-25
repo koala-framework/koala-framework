@@ -14,6 +14,7 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
 {
     QByteArray prettyArgs = args;
     prettyArgs.replace('\0', "\\0");
+    debugVerbose(qDebug() << "********************************************************"; )
     debug(qDebug() << cmd ; )
     debugVerbose(qDebug() << prettyArgs; )
 
@@ -159,6 +160,7 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
         
         QHash<QString, ComponentData*> ret;
         foreach (ComponentData *i, d->childComponents(s)) {
+            qDebug() << "returning" << i->componentId();
             ret[i->componentId()] = i;
         }
         socket->write(serialize(ret));
@@ -324,4 +326,9 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
         socket->write("ERROR: unknown command");
     }
     u.readArrayEnd();
+
+    //cleanup
+    qDebug() << "delete" << ComponentData::m_uncachedDatas.values(QThread::currentThread()).count() << "uncached datas";
+    qDeleteAll(ComponentData::m_uncachedDatas.values(QThread::currentThread()));
+    ComponentData::m_uncachedDatas.remove(QThread::currentThread());
 }

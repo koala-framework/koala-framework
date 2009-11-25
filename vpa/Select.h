@@ -9,7 +9,7 @@ public:
     Select(Unserializer *unserializer);
     Select();
     Select(const Select &s) {
-        where = s.where;
+        where = s.where; //TODO das ist nicht korrekt
         limitCount = s.limitCount;
         limitOffset = s.limitOffset;
         other = s.other;

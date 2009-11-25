@@ -5,8 +5,8 @@
 #include "Unserializer.h"
 #include "ComponentData.h"
 
-#define debug(x)
-#define ifDebugSubRootMatch(x)
+#define debug(x) x
+#define ifDebugSubRootMatch(x) x
 
 SelectExpr* SelectExpr::create(Unserializer* unserializer)
 {
@@ -612,6 +612,7 @@ SelectExprWhereEquals::SelectExprWhereEquals(IndexedString field, QVariant value
 bool SelectExprWhereEquals::match(ComponentData* d, ComponentData *parentData) const
 {
     Q_UNUSED(parentData);
+    if (d->generatorFlags() & Generator::DisableCache) return true; //php berücksichtigt es bereits
     if (!dynamic_cast<GeneratorWithModel*>(d->generator())) return false;
     static_cast<GeneratorWithModel*>(d->generator())->fetchRowData(d->parent(), m_field);
     if (!d->rowData.contains(m_field)) return false;
