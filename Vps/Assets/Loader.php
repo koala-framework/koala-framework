@@ -34,13 +34,8 @@ class Vps_Assets_Loader
         if ($file == 'AllRteStyles.css') {
             $ret = Vpc_Basic_Text_StylesModel::getStylesContents();
         } else if (substr($file, 0, 4) == 'all/') {
-            if (isset($_SERVER['HTTP_HOST'])) {
-                $host = $_SERVER['HTTP_HOST'];
-            } else {
-                $host = $this->_getConfig()->server->domain;
-            }
             $encoding = Vps_Media_Output::getEncoding();
-            $cacheId = md5($file.str_replace(array('.', '-'), array('', ''), $host).$encoding);
+            $cacheId = md5($file.$encoding);
             $cache = Vps_Assets_Cache::getInstance();
             if (!$cacheData = $cache->load($cacheId)) {
                 Vps_Benchmark::count('load asset all');
@@ -124,13 +119,7 @@ class Vps_Assets_Loader
                 $cache = Vps_Assets_Cache::getInstance();
                 $section = substr($file, 0, strpos($file, '-'));
                 if (!$section) $section = 'web';
-                if (isset($_SERVER['HTTP_HOST'])) {
-                    $host = $_SERVER['HTTP_HOST'];
-                } else {
-                    $host = $this->_getConfig()->server->domain;
-                }
-                $host = str_replace(array('.', '-'), array('', ''), $host);
-                $cacheId = 'fileContents'.$language.$section.$host.
+                $cacheId = 'fileContents'.$language.$section.
                     str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $file).
                     Vps_Component_Data_Root::getComponentClass();
                 if (!$cacheData = $cache->load($cacheId)) {
