@@ -1,10 +1,11 @@
 <?php
+//group skipGoOnline
+//group reallySlow
+
 /**
- * @group skipGoOnline
  * @group slow
- * @group reallySlow
  * @group User
- * @group UserBruteForce 
+ * @group UserBruteForce
  */
 class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
 {
@@ -18,7 +19,7 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
     public function testCreateManyAndSync()
     {
         $debugOutput = false;
-        $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 l�uft der server hei�
+        $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 läuft der server heiß
 
         $cmd = "php bootstrap.php test forward --controller=vps_user_brute-force-insert";
         $descriptorspec = array(
@@ -66,7 +67,7 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
     public function testCreateOneMultipleTimes()
     {
         $debugOutput = false;
-        $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 l�uft der server hei�
+        $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 läuft der server heiß
 
         $prefix = uniqid('usr');
         $cmd = "php bootstrap.php test forward --controller=vps_user_brute-force-insert --action=create-one-user  --prefix=$prefix";
