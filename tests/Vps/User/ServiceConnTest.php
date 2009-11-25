@@ -11,7 +11,7 @@ class Vps_User_ServiceConnTest extends PHPUnit_Framework_TestCase
     public function testBruteServiceConnection()
     {
         $debugOutput = false;
-        $numProcesses = 30; //mind. 10 damit der test sinn macht, bei >50 l�uft der server hei�
+        $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 l�uft der server hei�
 
         $cmd = "php bootstrap.php test forward --controller=vps_user_service-conn";
         $descriptorspec = array(
@@ -52,7 +52,7 @@ class Vps_User_ServiceConnTest extends PHPUnit_Framework_TestCase
             if ($debugOutput) echo $out."\n\n";
         }
         if ($failed) {
-            $this->fail("alt least one process failed");
+            $this->fail("alt least one process failed:".print_r($allOut, true));
         }
     }
 }
