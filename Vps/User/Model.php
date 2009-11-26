@@ -39,6 +39,14 @@ class Vps_User_Model extends Vps_Model_Proxy
         throw new Vps_Exception("createRow is not allowed in Vps_User_Model. Use createUserRow() instead.");
     }
 
+    public static function isLockedCreateUser()
+    {
+        $lock = fopen("application/temp/create-user.lock", "w");
+        $ret = !flock($lock, LOCK_EX | LOCK_NB);
+        fclose($lock);
+        return $ret;
+    }
+
     public function unlockCreateUser()
     {
         fclose($this->_lock);
@@ -50,7 +58,18 @@ class Vps_User_Model extends Vps_Model_Proxy
             throw new Vps_Exception('Already locked');
         }
         $this->_lock = fopen("application/temp/create-user.lock", "w");
-        if (!flock($this->_lock, LOCK_EX)) throw new Vps_Exception("Lock Failed");
+
+        $startTime = microtime(true); 
+        while(true) {
+            if (flock($this->_lock, LOCK_EX | LOCK_NB)) {
+                break;
+            }
+            if (microtime(true)-$startTime > 5) {
+                throw new Vps_Exception("Lock Failed, locked by");
+            }
+            usleep(rand(0, 100)*100);
+        }
+        fwrite($this->_lock, getmypid());
     }
 
     public function createUserRow($email, $webcode = null)
@@ -67,6 +86,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             );
             if ($row) {
                 if (!$row->deleted) {
+                    $this->unlockCreateUser();
                     throw new Vps_ClientException(
                         trlVps('An account with this email address already exists')
                     );

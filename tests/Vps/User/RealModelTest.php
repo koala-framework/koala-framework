@@ -15,6 +15,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
+        $this->assertFalse(Vps_User_Model::isLockedCreateUser());
         Vps_Registry::set('db', Vps_Test::getTestDb());
     }
 
