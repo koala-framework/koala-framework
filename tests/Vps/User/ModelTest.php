@@ -56,6 +56,11 @@ class Vps_User_ModelTest extends PHPUnit_Framework_TestCase
         ));
     }
 
+    public function tearDown()
+    {
+        $this->assertFalse(Vps_User_Model::isLockedCreateUser());
+    }
+
     public function testCreateAndUpdate()
     {
         // $this->_userModel erben und im init() gemockte row geben
