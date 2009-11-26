@@ -5,6 +5,7 @@ class Vps_User_Model extends Vps_Model_Proxy
     protected $_rowClass = 'Vps_User_Row';
     protected $_authedUser;
     protected $_passwordColumn = 'password';
+    protected $_maxLockTime = 10; // in seconds
 
     protected $_mailClass = 'Vps_Mail_Template';
 
@@ -64,7 +65,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             if (flock($this->_lock, LOCK_EX | LOCK_NB)) {
                 break;
             }
-            if (microtime(true)-$startTime > 5) {
+            if (microtime(true)-$startTime > $this->_maxLockTime) {
                 throw new Vps_Exception("Lock Failed, locked by");
             }
             usleep(rand(0, 100)*100);
