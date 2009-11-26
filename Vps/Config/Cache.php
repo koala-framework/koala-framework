@@ -1,4 +1,5 @@
 <?php
+require_once 'Zend/Cache.php';
 require_once 'Zend/Cache/Frontend/File.php';
 class Vps_Config_Cache extends Zend_Cache_Frontend_File
 {
