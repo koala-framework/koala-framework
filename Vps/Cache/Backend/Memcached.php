@@ -1,6 +1,8 @@
 <?php
 class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
 {
+    private $_fillingPercentageFactor = 1;
+
     public function __construct(array $options = array())
     {
         if (!isset($options['servers'])) {
@@ -10,6 +12,13 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
             ));
         }
         $options['compatibility'] = true;
+        if (isset($options['filling_percentage_factor'])) {
+            $this->_fillingPercentageFactor = $options['filling_percentage_factor'];
+            if ($this->_fillingPercentageFactor > 1 || $this->_fillingPercentageFactor <= 0) {
+                throw new Vps_Exception("Invalid filling_percentage_factor");
+            }
+            unset($options['filling_percentage_factor']);
+        }
         parent::__construct($options);
     }
 
@@ -49,6 +58,13 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         }
         $id = md5($cacheIdPrefix.$id);
         return $id;
+    }
+
+    public function getFillingPercentage()
+    {
+        $ret = parent::getFillingPercentage();
+        $ret *= $this->_fillingPercentageFactor;
+        return $ret;
     }
 
 }
