@@ -75,6 +75,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         $this->getModel()->lockCreateUser();
 
         if ($this->getModel()->mailExists($this->email)) {
+            $this->getModel()->unlockCreateUser();
             throw new Vps_ClientException(
                 trlVps('An account with this email address already exists')
             );
