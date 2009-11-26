@@ -3,7 +3,7 @@ class Vps_User_BruteForceInsertController extends Vps_Controller_Action
 {
     public function indexAction()
     {
-        $model = Vps_Registry::get('userModel');
+        $model = Vps_Model_Abstract::getInstance('Vps_User_BruteForceModel');
 
         $prefix = uniqid('usr');
         for($i=0;$i<10;$i++) {
@@ -22,7 +22,7 @@ class Vps_User_BruteForceInsertController extends Vps_Controller_Action
     public function createOneUserAction()
     {
         try {
-            $model = Vps_Registry::get('userModel');
+            $model = Vps_Model_Abstract::getInstance('Vps_User_BruteForceModel');
             $prefix = $this->_getParam('prefix');
             $row = $model->createUserRow($prefix.'@vivid-planet.com');
             $row->title = '';
