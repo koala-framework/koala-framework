@@ -12,7 +12,9 @@ class Vps_Config_Cache extends Zend_Cache_Frontend_File
             'automatic_serialization' => true
         ));
         require_once 'Vps/Cache/Backend/File.php';
-        $this->setBackend(new Vps_Cache_Backend_File());
+        $this->setBackend(new Vps_Cache_Backend_File(array(
+            'cache_dir' => 'application/cache/config'
+        )));
     }
 
 
