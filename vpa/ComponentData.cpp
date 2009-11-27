@@ -8,7 +8,7 @@
 #include "ComponentData.h"
 
 #define ifDebugCreateComponentData(x) x
-#define ifDebugGetComponentById(x)
+#define ifDebugGetComponentById(x) x
 #define ifDebugGetChildPageByPath(x) x
 #define ifDebugGetHome(x) x
 #include "ConnectionThread.h"
@@ -292,38 +292,34 @@ QByteArray serialize(const ComponentData* d)
 
 QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s, const Select& childSelect)
 {
-// static int depth=0;
-// depth++;
+    qDebug() << "====> recursiveChildComponents" << componentId() << s << childSelect;
     QList<ComponentData*> ret;
-    foreach (ComponentData *d, children()) {
+    Select s2(s);
+    s2.limitCount = 0; //TODO recht ineffizient, aber dafür simpel
+    s2.limitOffset = 0;
+    foreach (ComponentData *d, childComponents(s2)) {
         Q_ASSERT(d);
-        if (d->componentClass().isEmpty()) {
-            qWarning() << "empty componentClass" << this;
-            qWarning() << "parent" << componentId();
-        }
         Q_ASSERT(!d->componentClass().isEmpty());
-        if (s.match(d, this)) {
-            ret << d;
-        }
+        ret << d;
+        qDebug() << "recursiveChildComponents found" << d->componentId();
         if (s.limitCount && ret.count() >= (s.limitCount+s.limitOffset)) {
             break;
         }
-        if (childSelect.match(d, this)) {
-//             QString prefix;
-//             for(int i=1; i<depth; ++i) {
-//                 prefix += "  ";
-//             }
-            //qDebug() << /*prefix <<*/ "recursiveChildComponents: childSelect matched for" << d->componentId();
-            if (s.couldCreateIndirectly(d->root(), d->componentClass())) {
-                //qDebug() << /*prefix <<*/ "recursiveChildComponents: couldCreateIndirectly also matched" << d->componentClass();
-                ret << d->recursiveChildComponents(s, childSelect);
+    }
+    
+    qDebug() << "getting childComponents to check recursively" << componentId();
+    foreach (ComponentData *d, childComponents(childSelect)) {
+        foreach (ComponentData *c, d->recursiveChildComponents(s2, childSelect)) {
+            ret << c;
+            if (s.limitCount && ret.count() >= (s.limitCount+s.limitOffset)) {
+                break;
             }
         }
     }
     if (s.limitOffset) {
         ret = ret.mid(s.limitOffset);
     }
-// depth--;
+    s2.where.clear(); //TODO MEGA HACK ist nötig damit ned where doppelt gelöscht wird
     return ret;
 }
 
@@ -341,6 +337,9 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
     }
     foreach (Generator *g, Generator::generators(root())) {
         if (g->componentClass == componentClass() && g->generatorFlags & Generator::DisableCache) {
+            qDebug() << "add for DisabledCache generator" << g->componentClass;
+            if (!s.mightMatch(g)) continue;
+            qDebug() << "We can't skip it :(" << g->componentClass;
             Select s2(s);
             s2.limitOffset = 0;
             s2.limitCount = 0;
@@ -353,7 +352,7 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
                     break;
                 }
             }
-            s2.where.clear(); //TODO MEEEEEGA HACK ohne dem würden die where objeckte doppelt gelöscht werden
+            s2.where.clear(); //TODO MEEEEEGA HACK ohne dem würden die where objekte doppelt gelöscht werden
                               //Select kopiert die noch nicht korrektr
         }
     }
@@ -408,9 +407,6 @@ ComponentData* ComponentData::childPageByPath(const QString& path)
             QList<ComponentData*> pages = page->recursiveChildComponents(s, childSelect);
             if (pages.isEmpty()) {
                 ifDebugGetChildPageByPath( qDebug() << "found nothing for " << pathPart; )
-                foreach (const ComponentData *c, page->childComponents(Select())) {
-                    qDebug() << c->componentId() << c->filename();
-                }
                 return 0;
             }
             page = pages.first();
@@ -562,6 +558,19 @@ ComponentData* ComponentData::_getChildComponent(ComponentData* data, QString id
             }
         }
         if (!found) {
+            foreach (Generator *g, Generator::generators(data->root())) {
+                if (g->componentClass == data->componentClass() && g->generatorFlags & Generator::DisableCache) {
+                    Select s;
+                    s.where << new SelectExprWhereIdEquals((sep == Generator::Underscore ? '_' : '-')+idPart);
+                    s.limitCount = 1;
+                    foreach (ComponentData *d, g->buildDynamic(data, s)) {
+                        data = d;
+                        found = true;
+                    }
+                }
+            }
+        }
+        if (!found) {
             ifDebugGetComponentById( qDebug() << "nothing found in children"; )
             ifDebugGetComponentById( qDebug() << "looking for" << sep << idPart << "in" << data->componentId(); )
             return 0;
@@ -572,7 +581,9 @@ ComponentData* ComponentData::_getChildComponent(ComponentData* data, QString id
 
 QString ComponentData::filename() const
 {
-    if (!generator() || generator()->uniqueFilename) {
+    if (!generator()) return QString(); //root
+
+    if (generatorFlags() & Generator::UniqueFilename) {
         return m_filename;
     }
     return childId()+"_"+m_filename;

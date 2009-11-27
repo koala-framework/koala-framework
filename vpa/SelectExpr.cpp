@@ -115,6 +115,28 @@ QByteArray serialize(const SelectExpr* e)
     return e->serialize();
 }
 
+
+SelectExpr::MatchType SelectExpr::mightMatch (const Generator* generator) const
+{
+    bool allYes = true;
+    bool allNo = true;
+    foreach (const ComponentClass &cls, generator->childComponentClasses()) {
+        MatchType m = mightMatch(cls);
+        if (m == MatchUnsure) {
+            return MatchUnsure;
+        }
+        if (m == MatchNo) allYes = false;
+        if (m == MatchYes) allNo = false;
+    }
+    if (allYes && allNo) {
+        return MatchUnsure;
+    }
+    if (allYes) return MatchYes;
+    Q_ASSERT(allNo);
+    return MatchNo;
+}
+
+
 SelectExprNot::SelectExprNot(Unserializer* unserializer)
 {
     int numProperties = unserializer->readNumber();
@@ -143,6 +165,40 @@ QDebug operator<<(QDebug dbg, const SelectExprNot& s)
     return dbg.space();
 }
 
+bool SelectExprNot::match(ComponentData *d, ComponentData *parentData) const
+{
+    return !m_expr->match(d, parentData);
+}
+    
+SelectExprNot::MatchType SelectExprNot::mightMatch(const ComponentClass& cls) const
+{
+    MatchType match = m_expr->mightMatch(cls);
+    if (match == MatchNo) {
+        qDebug() << "SelectExprNot::imghtMatch YES";
+        return MatchYes;
+    } else if (match == MatchYes) {
+        qDebug() << "SelectExprNot::imghtMatch NO";
+        return MatchNo;
+    }
+    qDebug() << "SelectExprNot::imghtMatch MAYBY";
+    return match;
+}
+
+
+SelectExpr::MatchType SelectExprNot::mightMatch (const Generator* generator) const
+{
+    MatchType match = m_expr->mightMatch(generator);
+    if (match == MatchNo) {
+        qDebug() << "SelectExprNot::imghtMatch YES";
+        return MatchYes;
+    } else if (match == MatchYes) {
+        qDebug() << "SelectExprNot::imghtMatch NO";
+        return MatchNo;
+    }
+    qDebug() << "SelectExprNot::imghtMatch MAYBY";
+    return match;
+}
+
 QByteArray SelectExprNot::serialize() const
 {
     QByteArray ret;
@@ -162,6 +218,15 @@ SelectExprWhereComponentType::SelectExprWhereComponentType(Unserializer* unseria
     Q_ASSERT(in == ":{}");
 }
 
+SelectExpr::MatchType SelectExprWhereComponentType::mightMatch (const Generator *g) const
+{
+    if (g->generatorFlags & m_type) {
+        qDebug() << "SelectExprWhereComponentType::mightMatch YES";
+        return MatchYes;
+    }
+    qDebug() << "SelectExprWhereComponentType::mightMatch NO";
+    return MatchNo;
+}
 
 bool SelectExprWhereComponentType::match(ComponentData* d, ComponentData *parentData) const
 {
@@ -278,10 +343,14 @@ bool SelectExprWhereHasFlag::match(ComponentData* d, ComponentData *parentData) 
     return d->hasFlag(m_flag);
 }
 
-bool SelectExprWhereHasFlag::mightMatch(const ComponentClass& cls)
+SelectExpr::MatchType SelectExprWhereHasFlag::mightMatch(const ComponentClass& cls) const
 {
-    //qDebug() << "WhereHasFlag::mightMatch" << m_flag << cls << cls.hasFlag(m_flag);
-    return cls.hasFlag(m_flag);
+    if (cls.hasFlag(m_flag)) {
+        qDebug() << "WhereHasFlag::mightMatch YES" << m_flag << cls << cls.hasFlag(m_flag);
+        return MatchYes;
+    }
+    qDebug() << "WhereHasFlag::mightMatch NO" << m_flag << cls << cls.hasFlag(m_flag);
+    return MatchNo;
 }
 
 QByteArray SelectExprWhereHasFlag::serialize() const
@@ -322,7 +391,14 @@ bool SelectExprWhereFilename::match(ComponentData* d, ComponentData *parentData)
         return false;
     }
     Q_UNUSED(parentData);
-    return d->filename() == m_filename;
+    if (d->generatorFlags() & Generator::UniqueFilename) {
+        return d->filename() == m_filename;
+    } else {
+        if (int i = m_filename.indexOf('_')) {
+            return m_filename.left(i) == d->childId();
+        }
+    }
+    return false;
 }
 
 QByteArray SelectExprWhereFilename::serialize() const
@@ -760,11 +836,14 @@ bool SelectExprWhereHasEditComponents::match(ComponentData* d, ComponentData *pa
 }
 
 
-bool SelectExprWhereHasEditComponents::mightMatch(const ComponentClass& cls)
+SelectExpr::MatchType SelectExprWhereHasEditComponents::mightMatch(const ComponentClass& cls) const
 {
     //qDebug() << "SelectExprWhereHasEditComponents::mightMatch" << cls << (!cls.editComponents().isEmpty());
     //TODO very simple implementation
-    return !cls.editComponents().isEmpty();
+    if (!cls.editComponents().isEmpty()) {
+        return MatchUnsure;
+    }
+    return MatchNo;
 }
 
 

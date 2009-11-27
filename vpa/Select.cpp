@@ -107,6 +107,28 @@ bool Select::match(ComponentData* data, ComponentData *parentData) const
     return true;
 }
 
+bool Select::mightMatch (const ComponentClass& cls) const
+{
+    foreach (SelectExpr *e, where) {
+        if (e->mightMatch(cls) == SelectExpr::MatchNo) {
+            debug( qDebug() << "Select::mightMatch: no match" << cls << *e; )
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Select::mightMatch (Generator* g) const
+{
+    foreach (SelectExpr *e, where) {
+        if (e->mightMatch(g) == SelectExpr::MatchNo) {
+            debug( qDebug() << "Select::mightMatch: no match" << g->componentClass << g->key << *e; )
+            return false;
+        }
+    }
+    return true;
+}
+
 
 bool Select::couldCreateIndirectly(const ComponentDataRoot *root, const ComponentClass& cls) const
 {
@@ -125,7 +147,7 @@ bool Select::couldCreateIndirectly(const ComponentDataRoot *root, const Componen
 
     ret = true;
     foreach (SelectExpr *e, where) {
-        if (!e->mightMatch(cls)) {
+        if (e->mightMatch(cls) == SelectExpr::MatchNo) {
             ret = false;
         }
     }

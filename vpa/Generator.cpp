@@ -521,12 +521,12 @@ void GeneratorStatic::refresh(ComponentData* d)
     Q_ASSERT(0); //doesn't make any sense
 }
 
-QList<ComponentClass> GeneratorStatic::childComponentClasses()
+QList<ComponentClass> GeneratorStatic::childComponentClasses() const
 {
     return component.values();
 }
 
-QList<IndexedString> GeneratorStatic::childComponentKeys()
+QList<IndexedString> GeneratorStatic::childComponentKeys() const
 {
     return component.keys();
 }
@@ -632,12 +632,12 @@ void GeneratorTable::refresh(ComponentData* d)
     //TODO!!!
 }
 
-QList<ComponentClass> GeneratorTable::childComponentClasses()
+QList<ComponentClass> GeneratorTable::childComponentClasses() const
 {
     return component.values();
 }
 
-QList<IndexedString> GeneratorTable::childComponentKeys()
+QList<IndexedString> GeneratorTable::childComponentKeys() const
 {
     return component.keys();
 }
@@ -701,7 +701,7 @@ void GeneratorTableSql::refresh(ComponentData* d)
     //nothing to do as long as no name/filename is set in _build()
 }
 
-QList<ComponentClass> GeneratorTableSql::childComponentClasses()
+QList<ComponentClass> GeneratorTableSql::childComponentClasses() const
 {
     QList<ComponentClass> ret;
     ret << component;
@@ -709,7 +709,7 @@ QList<ComponentClass> GeneratorTableSql::childComponentClasses()
 
 }
 
-QList<IndexedString> GeneratorTableSql::childComponentKeys()
+QList<IndexedString> GeneratorTableSql::childComponentKeys() const
 {
     QList<IndexedString> ret;
     ret << key;
@@ -829,12 +829,12 @@ QList<QString> GeneratorTableSqlWithComponent::fetchParentDbIds(ComponentClass c
 }
 
 
-QList<ComponentClass> GeneratorTableSqlWithComponent::childComponentClasses()
+QList<ComponentClass> GeneratorTableSqlWithComponent::childComponentClasses() const
 {
     return component.values();
 }
 
-QList<IndexedString> GeneratorTableSqlWithComponent::childComponentKeys()
+QList<IndexedString> GeneratorTableSqlWithComponent::childComponentKeys() const
 {
     return component.keys();
 }
@@ -926,14 +926,14 @@ void GeneratorLoadSql::refresh(ComponentData* d)
     }
 }
 
-QList<ComponentClass> GeneratorLoadSql::childComponentClasses()
+QList<ComponentClass> GeneratorLoadSql::childComponentClasses() const
 {
     QList<ComponentClass> ret;
     ret << component;
     return ret;
 }
 
-QList<IndexedString> GeneratorLoadSql::childComponentKeys()
+QList<IndexedString> GeneratorLoadSql::childComponentKeys() const
 {
     QList<IndexedString> ret;
     ret << key;
@@ -1023,12 +1023,12 @@ void GeneratorLoadSqlWithComponent::refresh(ComponentData* d)
     }
 }
 
-QList<ComponentClass> GeneratorLoadSqlWithComponent::childComponentClasses()
+QList<ComponentClass> GeneratorLoadSqlWithComponent::childComponentClasses() const
 {
     return component.values();
 }
 
-QList<IndexedString> GeneratorLoadSqlWithComponent::childComponentKeys()
+QList<IndexedString> GeneratorLoadSqlWithComponent::childComponentKeys() const
 {
     return component.keys();
 }
@@ -1144,7 +1144,7 @@ QList<ComponentData*> GeneratorLoad::_build(ComponentData* parent, QList<QByteAr
             ComponentData *d = new ComponentData(this, parent, componentId, dbId, componentClass);
 
             if (generatorFlags & TypePseudoPage) {
-                if (!fn.isEmpty()) {
+                if (generatorFlags & UniqueFilename && !fn.isEmpty()) {
                     d->setFilename(fn);
                 }
                 d->setIsHome(isHome);
@@ -1172,12 +1172,12 @@ QList<ComponentData*> GeneratorLoad::_build(ComponentData* parent, QList<QByteAr
     return ret;
 }
 
-QList<ComponentClass> GeneratorLoad::childComponentClasses()
+QList<ComponentClass> GeneratorLoad::childComponentClasses() const
 {
     return component.values();
 }
 
-QList<IndexedString> GeneratorLoad::childComponentKeys()
+QList<IndexedString> GeneratorLoad::childComponentKeys() const
 {
     return component.keys();
 }
@@ -1260,13 +1260,13 @@ void GeneratorLinkTag::refresh(ComponentData* d)
     Q_ASSERT(0); //TODO: not yet implemented, component can be changed
 }
 
-QList< ComponentClass > GeneratorLinkTag::childComponentClasses()
+QList< ComponentClass > GeneratorLinkTag::childComponentClasses() const
 {
     return component.values();
 }
 
 
-QList<IndexedString> GeneratorLinkTag::childComponentKeys()
+QList<IndexedString> GeneratorLinkTag::childComponentKeys() const
 {
     return component.keys();
 }
@@ -1337,7 +1337,9 @@ void Generator::createGenerators(const ComponentDataRoot *root)
                     g->model = IndexedString(xml.readElementText());
                 }
                 if (xml.isStartElement() && xml.name() == "uniqueFilename") {
-                    g->uniqueFilename = xml.readElementText().toInt();
+                    if ((bool)xml.readElementText().toInt()) {
+                        g->generatorFlags |= Generator::UniqueFilename;
+                    }
                 }
                 if (xml.isStartElement() && xml.name() == "component") {
                     if (!xml.attributes().value("key").isEmpty()) {

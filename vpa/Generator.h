@@ -65,7 +65,7 @@ private:
 struct Generator
 {
     Generator(const ComponentDataRoot *root)
-        : generatorFlags(TypeComponent), uniqueFilename(false)
+        : generatorFlags(TypeComponent)
     {
         m_root = root;
         m_generators[root] << this;
@@ -103,6 +103,7 @@ struct Generator
         TypePagesGenerator = 0x0010, //obs der pages-generator ist der die pages-tabelle ausliest
 
         DisableCache       = 0x0020, //ob der komponenten baum cache deaktivert ist
+        UniqueFilename     = 0x0040,
 
         TypeInherit        = 0x0100, //ob die komponente vererbt werden soll
         TypeUnique         = 0x0200,
@@ -125,7 +126,6 @@ struct Generator
     IndexedString model;
     IndexedString box; //TODO macht nicht in jedem generator sinn
     int priority; //TODO macht nicht in jedem generator sinn
-    bool uniqueFilename; //TODO macht nicht in jedem generator sinn
     QList<ComponentData*> builtComponents;
 
     const ComponentDataRoot *root() const {
@@ -147,8 +147,8 @@ struct Generator
     virtual void refresh(ComponentData *d) = 0;
     virtual void preload() {}
 
-    virtual QList<ComponentClass> childComponentClasses() = 0;
-    virtual QList<IndexedString> childComponentKeys() = 0;
+    virtual QList<ComponentClass> childComponentClasses() const = 0;
+    virtual QList<IndexedString> childComponentKeys() const = 0;
 
     static QHash<Type, int> buildCallCount;
     static QList<Generator*> generators(const ComponentDataRoot* root) {
@@ -211,8 +211,8 @@ struct GeneratorStatic : public Generator
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
-    virtual QList<ComponentClass> childComponentClasses();
-    virtual QList<IndexedString> childComponentKeys();
+    virtual QList<ComponentClass> childComponentClasses() const;
+    virtual QList<IndexedString> childComponentKeys() const;
 };
 
 struct GeneratorTable : public GeneratorWithModel
@@ -226,8 +226,8 @@ struct GeneratorTable : public GeneratorWithModel
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
-    virtual QList<ComponentClass> childComponentClasses();
-    virtual QList<IndexedString> childComponentKeys();
+    virtual QList<ComponentClass> childComponentClasses() const;
+    virtual QList<IndexedString> childComponentKeys() const;
 
 private:
     QList<ComponentData*> _build(ComponentData* parent, const Select& select);
@@ -243,8 +243,8 @@ struct GeneratorTableSql : public GeneratorWithModel
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
-    virtual QList<ComponentClass> childComponentClasses();
-    virtual QList<IndexedString> childComponentKeys();
+    virtual QList<ComponentClass> childComponentClasses() const;
+    virtual QList<IndexedString> childComponentKeys() const;
 
 private:
     QList<ComponentData*> _build(ComponentData* parent, QSqlQuery& query);
@@ -264,8 +264,8 @@ struct GeneratorTableSqlWithComponent : public GeneratorWithModel
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
-    virtual QList<ComponentClass> childComponentClasses();
-    virtual QList<IndexedString> childComponentKeys();
+    virtual QList<ComponentClass> childComponentClasses() const;
+    virtual QList<IndexedString> childComponentKeys() const;
 
     //verwendet von ComponentData::getComponentsByClass
     //um einen einsprungspunkt für paragraphs zu haben
@@ -283,8 +283,8 @@ struct GeneratorLoadSql : public GeneratorWithModel
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
-    virtual QList<ComponentClass> childComponentClasses();
-    virtual QList<IndexedString> childComponentKeys();
+    virtual QList<ComponentClass> childComponentClasses() const;
+    virtual QList<IndexedString> childComponentKeys() const;
 
 private:
     QList<ComponentData*> _build(ComponentData* parent, QSqlQuery query);
@@ -299,8 +299,8 @@ struct GeneratorLoadSqlWithComponent : public GeneratorWithModel
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
-    virtual QList<ComponentClass> childComponentClasses();
-    virtual QList<IndexedString> childComponentKeys();
+    virtual QList<ComponentClass> childComponentClasses() const;
+    virtual QList<IndexedString> childComponentKeys() const;
 
 private:
     QList<ComponentData*> _build(ComponentData* parent, QSqlQuery query);
@@ -319,8 +319,8 @@ struct GeneratorLoad : public GeneratorWithModel
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
-    virtual QList<ComponentClass> childComponentClasses();
-    virtual QList<IndexedString> childComponentKeys();
+    virtual QList<ComponentClass> childComponentClasses() const;
+    virtual QList<IndexedString> childComponentKeys() const;
 
 protected:
     QList<ComponentData*> _build(ComponentData* parent, QList<QByteArray> args);
@@ -350,8 +350,8 @@ struct GeneratorLinkTag : public Generator
     virtual void buildSingle(ComponentData* parent, const QString& id);
     virtual void refresh(ComponentData* d);
 
-    virtual QList<ComponentClass> childComponentClasses();
-    virtual QList<IndexedString> childComponentKeys();
+    virtual QList<ComponentClass> childComponentClasses() const;
+    virtual QList<IndexedString> childComponentKeys() const;
 };
 
 #endif // GENERATOR_H

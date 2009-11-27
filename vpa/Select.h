@@ -18,6 +18,8 @@ public:
     ~Select();
 
     bool match(ComponentData *data, ComponentData *parentData) const;
+    bool mightMatch(const ComponentClass &cls) const;
+    bool mightMatch(Generator *generator) const;
     bool couldCreateIndirectly(const ComponentDataRoot *root, const ComponentClass &cls) const;
 
     QList<ComponentData*> filter(const QList<ComponentData*>& data, ComponentData *parentData) const;

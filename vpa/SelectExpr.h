@@ -11,11 +11,16 @@ class SelectExpr {
 public:
     virtual ~SelectExpr() {}
     virtual bool match(ComponentData*, ComponentData *parentData) const = 0;
-    virtual bool mightMatch(const ComponentClass& cls) {
+    enum MatchType {
+        MatchNo,
+        MatchUnsure,
+        MatchYes
+    };
+    virtual MatchType mightMatch(const ComponentClass& cls) const {
         Q_UNUSED(cls);
-        return true; //kann wenn n?¢ùtig false zur??ckgeben f??r performance
-                     //true ist aber _immer_ eine g??ltige antwort
+        return MatchUnsure; //kann wenn n?¢ùtig false zur??ckgeben f??r performance
     }
+    virtual MatchType mightMatch(const Generator *generator) const;
     virtual QByteArray serialize() const = 0;
 
     static SelectExpr *create(Unserializer *unserializer);
@@ -29,16 +34,9 @@ public:
     SelectExprNot(Unserializer *unserializer);
     SelectExprNot(SelectExpr *e) : m_expr(e) {}
     ~SelectExprNot() { delete m_expr; }
-    virtual bool match(ComponentData *d, ComponentData *parentData) const {
-        return !m_expr->match(d, parentData);
-    }
-    virtual bool mightMatch(const ComponentClass& cls) {
-        Q_UNUSED(cls);
-        return true;
-
-        //das stimmt so nicht, da es ja _might_Match heisst und so ned umgedreht werden kann
-        //return !m_expr->mightMatch(cls);
-    }
+    virtual bool match(ComponentData *d, ComponentData *parentData) const;
+    virtual MatchType mightMatch(const ComponentClass& cls) const;
+    virtual MatchType mightMatch(const Generator *generator) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprNot &);
 private:
@@ -51,6 +49,7 @@ class SelectExprWhereComponentType : public SelectExpr {
 public:
     SelectExprWhereComponentType(Unserializer *unserializer, Generator::GeneratorFlags type);
     SelectExprWhereComponentType(Generator::GeneratorFlags type) : m_type(type) {}
+    virtual MatchType mightMatch(const Generator *generator) const;
     virtual bool match(ComponentData *d, ComponentData *parentData) const;
     friend QDebug operator<<(QDebug, const SelectExprWhereComponentType &);
 
@@ -117,7 +116,7 @@ public:
     SelectExprWhereHasFlag(Unserializer *unserializer);
     SelectExprWhereHasFlag(IndexedString flag) : m_flag(flag) {}
     virtual bool match(ComponentData *d, ComponentData *parentData) const;
-    virtual bool mightMatch(const ComponentClass& cls);
+    virtual MatchType mightMatch(const ComponentClass& cls) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereHasFlag &);
 
@@ -252,7 +251,7 @@ class SelectExprWhereHasEditComponents : public SelectExpr {
 public:
     SelectExprWhereHasEditComponents(Unserializer *unserializer);
     virtual bool match(ComponentData *d, ComponentData *parentData) const;
-    virtual bool mightMatch(const ComponentClass& cls);
+    virtual MatchType mightMatch(const ComponentClass& cls) const;
     virtual QByteArray serialize() const;
     friend QDebug operator<<(QDebug, const SelectExprWhereHasEditComponents &);
 };
