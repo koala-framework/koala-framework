@@ -97,9 +97,9 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
         return $this->getModel()->export($format, $select);
     }
 
-    public function import($format, $data)
+    public function import($format, $data, $options = array())
     {
-        return $this->getModel()->import($format, $data);
+        return $this->getModel()->import($format, $data, $options);
     }
 
     public function updateRow(array $data)
