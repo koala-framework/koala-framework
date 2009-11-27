@@ -381,7 +381,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         echo "Service: Kopiere 'users' tabelle (neu)...\n";
 
-        $targetModel->copyDataFromModel($sourceModel);
+        $targetModel->copyDataFromModel($sourceModel, null, array('replace' => true));
 
         // copy users_to_web
         $targetUrl = $this->_getConfig('web')->service->usersRelation->url;
