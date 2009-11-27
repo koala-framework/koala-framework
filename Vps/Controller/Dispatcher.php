@@ -24,6 +24,9 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 $class = substr($class, 0, $pos);
             }
             $className = Vpc_Admin::getComponentClass($class, $controller);
+            if (!$className) {
+                throw new Vps_Exception("Controller '$controller' for component '$class' not found");
+            }
             Zend_Loader::loadClass($className);
 
         } else {
