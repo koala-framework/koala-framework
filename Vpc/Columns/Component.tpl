@@ -4,4 +4,5 @@
             <?=$this->component($c)?>
         </div>
     <? } ?>
+    <div class="clear"></div>
 </div>
