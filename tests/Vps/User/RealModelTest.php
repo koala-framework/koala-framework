@@ -58,13 +58,13 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing service users table
         $all = new Vps_User_All_Model();
-        $allr = $all->getRow($all->select()->order('id', 'DESC'));
+        $allr = $all->getRow($all->select()->whereEquals('id', $r->id)->order('id', 'DESC'));
         $this->assertEquals($allr->id, $r->id);
         $this->assertEquals($email, $allr->email);
 
         // testing service relation table
         $rel = new Vps_User_Relation_Model();
-        $relr = $rel->getRow($rel->select()->order('id', 'DESC'));
+        $relr = $rel->getRow($rel->select()->whereEquals('user_id', $r->id)->order('id', 'DESC'));
         $this->assertEquals($r->id, $relr->user_id);
         $this->assertEquals($webId, $relr->web_id);
         $this->assertEquals(0, $relr->locked);
@@ -72,7 +72,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing the mirror in web
         $mir = new Vps_User_Mirror();
-        $mirr = $mir->getRow($mir->select()->order('id', 'DESC'));
+        $mirr = $mir->getRow($mir->select()->whereEquals('id', $r->id)->order('id', 'DESC'));
         $this->assertEquals($r->id, $mirr->id);
         $this->assertEquals($email, $mirr->email);
         $this->assertEquals($webcode, $mirr->webcode);
@@ -82,7 +82,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing web model
         $web = new Vps_User_Web_Model();
-        $webr = $web->getRow($web->select()->order('id', 'DESC'));
+        $webr = $web->getRow($web->select()->whereEquals('id', $r->id)->order('id', 'DESC'));
         $this->assertEquals($r->id, $webr->id);
         $this->assertEquals('guest', $webr->role);
 
@@ -139,7 +139,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing service users table
         $all = new Vps_User_All_Model();
-        $allr = $all->getRow($all->select()->order('id', 'DESC'));
+        $allr = $all->getRow($all->select()->whereEquals('id', $r2->id)->order('id', 'DESC'));
         $this->assertEquals($allr->id, $r2->id);
         $this->assertNotEquals($allr->id, $r->id); // muss eine andere row wie die ganz oben sein
         $this->assertEquals($email, $allr->email);
@@ -147,7 +147,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing service relation table
         $rel = new Vps_User_Relation_Model();
-        $relr = $rel->getRow($rel->select()->order('id', 'DESC'));
+        $relr = $rel->getRow($rel->select()->whereEquals('user_id', $r2->id)->order('id', 'DESC'));
         $this->assertEquals($r2->id, $relr->user_id);
         $this->assertEquals($webId, $relr->web_id);
         $this->assertEquals(0, $relr->locked);
@@ -155,7 +155,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing the mirror in web
         $mir = new Vps_User_Mirror();
-        $mirr = $mir->getRow($mir->select()->order('id', 'DESC'));
+        $mirr = $mir->getRow($mir->select()->whereEquals('id', $r2->id)->order('id', 'DESC'));
         $this->assertEquals($r2->id, $mirr->id);
         $this->assertNotEquals($r->id, $mirr->id);
         $this->assertEquals($email, $mirr->email);
@@ -166,7 +166,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing web model
         $web = new Vps_User_Web_Model();
-        $webr = $web->getRow($web->select()->order('id', 'DESC'));
+        $webr = $web->getRow($web->select()->whereEquals('id', $r2->id)->order('id', 'DESC'));
         $this->assertEquals($r2->id, $webr->id);
         $this->assertNotEquals($r->id, $webr->id);
         $this->assertEquals('guest', $webr->role);
@@ -192,13 +192,13 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing service users table
         $all = new Vps_User_All_Model();
-        $allr = $all->getRow($all->select()->order('id', 'DESC'));
+        $allr = $all->getRow($all->select()->whereEquals('id', $r->id)->order('id', 'DESC'));
         $this->assertEquals($allr->id, $r->id);
         $this->assertEquals($email, $allr->email);
 
         // testing service relation table
         $rel = new Vps_User_Relation_Model();
-        $relr = $rel->getRow($rel->select()->order('id', 'DESC'));
+        $relr = $rel->getRow($rel->select()->whereEquals('user_id', $r->id)->order('id', 'DESC'));
         $this->assertEquals($r->id, $relr->user_id);
         $this->assertEquals($webId, $relr->web_id);
         $this->assertEquals(0, $relr->locked);
@@ -206,7 +206,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing the mirror in web
         $mir = new Vps_User_Mirror();
-        $mirr = $mir->getRow($mir->select()->order('id', 'DESC'));
+        $mirr = $mir->getRow($mir->select()->whereEquals('id', $r->id)->order('id', 'DESC'));
         $this->assertEquals($r->id, $mirr->id);
         $this->assertEquals($email, $mirr->email);
         $this->assertEquals($webcode, $mirr->webcode);
@@ -216,7 +216,10 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing web model
         $web = new Vps_User_Web_Model();
-        $webr = $web->getRow($web->select()->order('id', 'DESC'));
+        $webr = $web->getRow($web->select()
+            ->whereEquals('id', $r->id)
+            ->order('id', 'DESC')
+        );
         $this->assertEquals($r->id, $webr->id);
         $this->assertEquals('guest', $webr->role);
 
@@ -225,7 +228,10 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
         $r->save();
 
         $web = new Vps_User_Web_Model();
-        $webr = $web->getRow($web->select()->order('id', 'DESC'));
+        $webr = $web->getRow($web->select()
+            ->whereEquals('id', $r->id)
+            ->order('id', 'DESC')
+        );
         $this->assertEquals($r->id, $webr->id);
         $this->assertEquals('user', $webr->role);
 
@@ -284,14 +290,19 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing service users table
         $all = new Vps_User_All_Model();
-        $allr = $all->getRow($all->select()->order('id', 'DESC'));
+        $allr = $all->getRow($all->select()
+            ->whereEquals('email', $r2->email)
+            ->order('id', 'DESC')
+        );
         $this->assertEquals($allr->id, $r2->id);
-        $this->assertEquals($email, $allr->email);
         $this->assertEquals('Test Global 2', $allr->firstname);
 
         // testing service relation table
         $rel = new Vps_User_Relation_Model();
-        $relr = $rel->getRow($rel->select()->order('id', 'DESC'));
+        $relr = $rel->getRow($rel->select()
+            ->whereEquals('user_id', $r2->id)
+            ->order('id', 'DESC')
+        );
         $this->assertEquals($r2->id, $relr->user_id);
         $this->assertEquals($webId, $relr->web_id);
         $this->assertEquals(0, $relr->locked);
@@ -299,7 +310,10 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing the mirror in web
         $mir = new Vps_User_Mirror();
-        $mirr = $mir->getRow($mir->select()->order('id', 'DESC'));
+        $mirr = $mir->getRow($mir->select()
+            ->whereEquals('email', $r2->email)
+            ->order('id', 'DESC')
+        );
         $this->assertEquals($r2->id, $mirr->id);
         $this->assertEquals($email, $mirr->email);
         $this->assertEquals($webcode, $mirr->webcode);
@@ -309,7 +323,10 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 
         // testing web model
         $web = new Vps_User_Web_Model();
-        $webr = $web->getRow($web->select()->order('id', 'DESC'));
+        $webr = $web->getRow($web->select()
+            ->whereEquals('id', $r2->id)
+            ->order('id', 'DESC')
+        );
         $this->assertEquals($r2->id, $webr->id);
         $this->assertEquals('guest', $webr->role);
     }
