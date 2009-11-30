@@ -171,4 +171,19 @@ class Vps_Component_Abstract_Admin
     {
         return Vpc_Abstract::getSetting($this->_class, $name);
     }
+    
+    
+    public function componentToString(Vps_Component_Data $data)
+    {
+        return $data->getComponent()->getRow()->__toString();
+    }
+    
+    public function gridColumns()
+    {
+        $ret = array();
+        $c = new Vps_Grid_Column('string', trlVps('Name'));
+        $c->setData(new Vps_Component_Abstract_ToStringData($this->_class));
+        $ret[] = $c;
+        return $ret;
+    }
 }
