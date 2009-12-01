@@ -25,25 +25,85 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
     public function load($id, $doNotTestCacheValidity = false)
     {
         $id = $this->_processId($id);
-        return parent::load($id, $doNotTestCacheValidity);
+        try {
+            return parent::load($id, $doNotTestCacheValidity);
+        } catch (ErrorException $e) {
+            if ($e->getException()->getSeverity() == E_NOTICE) {
+                $e->logOrThrow();
+                return false;
+            }
+            throw $e;
+        }
     }
 
     public function test($id)
     {
         $id = $this->_processId($id);
-        return parent::test($id);
+        try {
+            return parent::test($id);
+        } catch (ErrorException $e) {
+            if ($e->getException()->getSeverity() == E_NOTICE) {
+                $e->logOrThrow();
+                return false;
+            }
+            throw $e;
+        }
     }
 
     public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
         $id = $this->_processId($id);
-        return parent::save($data, $id, $tags, $specificLifetime);
+        try {
+            return parent::save($data, $id, $tags, $specificLifetime);
+        } catch (ErrorException $e) {
+            if ($e->getException()->getSeverity() == E_NOTICE) {
+                $e->logOrThrow();
+                return false;
+            }
+            throw $e;
+        }
     }
 
     public function remove($id)
     {
         $id = $this->_processId($id);
-        return parent::remove($id);
+        try {
+            return parent::remove($id);
+        } catch (ErrorException $e) {
+            if ($e->getException()->getSeverity() == E_NOTICE) {
+                $e->logOrThrow();
+                return false;
+            }
+            throw $e;
+        }
+    }
+
+    public function getMetadatas($id)
+    {
+        $id = $this->_processId($id);
+        try {
+            return parent::getMetadatas($id);
+        } catch (ErrorException $e) {
+            if ($e->getException()->getSeverity() == E_NOTICE) {
+                $e->logOrThrow();
+                return false;
+            }
+            throw $e;
+        }
+    }
+
+    public function touch($id, $extraLifetime)
+    {
+        $id = $this->_processId($id);
+        try {
+            return parent::touch($id, $extraLifetime);
+        } catch (ErrorException $e) {
+            if ($e->getException()->getSeverity() == E_NOTICE) {
+                $e->logOrThrow();
+                return false;
+            }
+            throw $e;
+        }
     }
 
     private function _processId($id)
