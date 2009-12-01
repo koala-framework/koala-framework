@@ -5,12 +5,12 @@ class Vps_View_Helper_HighlightTerms
      * Highlights a term in a text and shorts it. The output then may look like
      * the description of a web-search-engine result.
      *
-     * @param string|array $terms The term(s) to highlight.
+     * @param string|array $terms The term(s) to highlight. Each must contain at least a char of: a-z A-Z 0-9
      * @param string $text The text to highlight the terms in.
      * @param array $options Options for the highlighting.
      *     Possible keys an their default values are:
      *
-     *     maxReturnLength => 200 // the maximum text-length to be returned. Set to '0' to return full string.
+     *     maxReturnLength => 350 // the maximum text-length to be returned. Set to '0' to return full string.
      *     maxReturnBlocks => 3 // maximum blocks to be returned
      *     blockSeparator => ' ... ' // string with which blocks are separated
      * @return string $highlightenedText The highlightened and shortened text.
@@ -22,6 +22,13 @@ class Vps_View_Helper_HighlightTerms
         if (!isset($options['maxReturnLength'])) $options['maxReturnLength'] = 350;
         if (!isset($options['maxReturnBlocks'])) $options['maxReturnBlocks'] = 3;
         if (!isset($options['blockSeparator'])) $options['blockSeparator'] = ' ... ';
+
+        foreach ($terms as $k => $term) {
+            if (!preg_match('/[a-zA-Z0-9]/', $term)) {
+                unset($terms[$k]);
+            }
+        }
+        $terms = array_values($terms);
 
         if ($options['maxReturnLength'] == 0) {
             $ret = $text;
