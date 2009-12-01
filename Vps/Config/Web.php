@@ -43,7 +43,7 @@ class Vps_Config_Web extends Zend_Config_Ini
         }
 
         $vpsSection = false;
-        $webConfig = new Zend_Config_Ini($webPath.'/config.ini', $section);
+        $webConfig = new Zend_Config_Ini($webPath.'/application/config.ini', $section);
         if (!empty($webConfig->vpsConfigSection)) {
             $vpsSection = $webConfig->vpsConfigSection;
         } else {
