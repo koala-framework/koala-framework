@@ -56,12 +56,12 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function onNotSuccessfulTest(Exception $e)
     {
+        parent::onNotSuccessfulTest($e);
         if (Zend_Registry::get('config')->server->autoStopTest) {
             try {
                 $this->stop();
             }catch (RuntimeException $x) { }
         }
-        parent::onNotSuccessfulTest($e);
     }
 
     public function clickAndWait($link)
