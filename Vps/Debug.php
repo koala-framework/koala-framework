@@ -177,13 +177,13 @@ class Vps_Debug
 
     public static function handleException($exception, $ignoreCli = false)
     {
-        if (!$ignoreCli && php_sapi_name() == 'cli') {
-            file_put_contents('php://stderr', $exception->__toString()."\n");
-            exit(1);
-        }
-
         if (!$exception instanceof Vps_Exception_Abstract) {
             $exception = new Vps_Exception_Other($exception);
+        }
+
+        if (!$ignoreCli && php_sapi_name() == 'cli') {
+            file_put_contents('php://stderr', $exception->getException()->__toString()."\n");
+            exit(1);
         }
 
         $view = self::getView();
