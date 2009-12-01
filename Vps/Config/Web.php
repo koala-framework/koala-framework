@@ -41,11 +41,19 @@ class Vps_Config_Web extends Zend_Config_Ini
         } else {
             $webPath = '.';
         }
-        $vpsSection = 'vivid';
 
-        $vpsConfigFull = new Zend_Config_Ini($vpsPath.'/config.ini', null);
-        if (isset($vpsConfigFull->$section)) {
-            $vpsSection = $section;
+        $vpsSection = false;
+        $webConfig = new Zend_Config_Ini($webPath.'/config.ini', $section);
+        if (!empty($webConfig->vpsConfigSection)) {
+            $vpsSection = $webConfig->vpsConfigSection;
+        } else {
+            $vpsConfigFull = new Zend_Config_Ini($vpsPath.'/config.ini', null);
+            if (isset($vpsConfigFull->$section)) {
+                $vpsSection = $section;
+            }
+        }
+        if (!$vpsSection) {
+            throw new Vps_Exception("Add either '$section' to vps/config.ini or set vpsConfigSection in web config.ini");
         }
 
         parent::__construct($vpsPath.'/config.ini', $vpsSection,
