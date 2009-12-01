@@ -31,7 +31,8 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         try {
             return parent::load($id, $doNotTestCacheValidity);
         } catch (ErrorException $e) {
-            if ($e->getException()->getSeverity() == E_NOTICE) {
+            if ($e->getSeverity() == E_NOTICE) {
+                $e = new Vps_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -45,7 +46,8 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         try {
             return parent::test($id);
         } catch (ErrorException $e) {
-            if ($e->getException()->getSeverity() == E_NOTICE) {
+            if ($e->getSeverity() == E_NOTICE) {
+                $e = new Vps_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -59,7 +61,8 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         try {
             return parent::save($data, $id, $tags, $specificLifetime);
         } catch (ErrorException $e) {
-            if ($e->getException()->getSeverity() == E_NOTICE) {
+            if ($e->getSeverity() == E_NOTICE) {
+                $e = new Vps_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -73,7 +76,8 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         try {
             return parent::remove($id);
         } catch (ErrorException $e) {
-            if ($e->getException()->getSeverity() == E_NOTICE) {
+            if ($e->getSeverity() == E_NOTICE) {
+                $e = new Vps_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -87,7 +91,8 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         try {
             return parent::getMetadatas($id);
         } catch (ErrorException $e) {
-            if ($e->getException()->getSeverity() == E_NOTICE) {
+            if ($e->getSeverity() == E_NOTICE) {
+                $e = new Vps_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
@@ -101,7 +106,8 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         try {
             return parent::touch($id, $extraLifetime);
         } catch (ErrorException $e) {
-            if ($e->getException()->getSeverity() == E_NOTICE) {
+            if ($e->getSeverity() == E_NOTICE) {
+                $e = new Vps_Exception_Other($e);
                 $e->logOrThrow();
                 return false;
             }
