@@ -104,21 +104,9 @@ abstract class Vps_Util_Rrd_File
         if ($ret != 0) throw new Vps_Exception("Command failed");
     }
 
-    protected function _getMemcache()
-    {
-        if (!isset($this->_memcache)) {
-            $this->_memcache = new Memcache;
-            $memcacheSettings = Vps_Registry::get('config')->server->memcache;
-            $this->_memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
-        }
-        return $this->_memcache;
-    }
-
     protected function _getMemcacheValue($field)
     {
-        $prefix = Zend_Registry::get('config')->application->id.'-'.
-                            Vps_Setup::getConfigSection().'-bench-';
-        $value = $this->_getMemcache()->get($prefix.$field);
+        $value = Vps_Benchmark_Counter::getInstance()->getValue($field);
         if ($value===false) $value = 'U';
         return $value;
     }
