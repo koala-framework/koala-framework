@@ -11,6 +11,9 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
                 'port' => Vps_Registry::get('config')->server->memcache->port
             ));
         }
+        foreach ($options['servers'] as &$s) {
+            $s['retry_interval'] = 1;
+        }
         $options['compatibility'] = true;
         if (isset($options['filling_percentage_factor'])) {
             $this->_fillingPercentageFactor = $options['filling_percentage_factor'];
