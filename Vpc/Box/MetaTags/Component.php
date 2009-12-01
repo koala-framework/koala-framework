@@ -56,6 +56,11 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
         if ($configVerify && $configVerify->$configDomain) {
             $ret['metaTags']['verify-v1'] = $configVerify->$configDomain;
         }
+
+        $configVerify = Vps_Registry::get('config')->googleSiteVerification;
+        if ($configVerify && $configVerify->$configDomain) {
+            $ret['metaTags']['google-site-verification'] = $configVerify->$configDomain;
+        }
         return $ret;
     }
 
