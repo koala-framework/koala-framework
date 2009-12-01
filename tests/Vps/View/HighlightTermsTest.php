@@ -31,6 +31,10 @@ class Vps_View_HighlightTermsTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp('/<span class="highlightTerms highlightTerm1">Für<\/span>/', $res);
         $this->assertNotRegExp('/hier<span class="highlightTerms highlightTerm1">für<\/span>/', $res);
         $this->assertNotRegExp('/<span class="highlightTerms highlightTerm1">Für<\/span>wahr/', $res);
+
+        $res = $h->highlightTerms(array('Highlighten', ' '), $this->_text, array('maxReturnLength' => 0));
+        $highlights = mb_substr_count($res, '<span ');
+        $this->assertEquals(1, $highlights);
     }
 
     public function testShorting()
