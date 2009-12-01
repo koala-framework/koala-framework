@@ -106,7 +106,9 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $load = explode(' ', $load);
         $values[] = $load[0];
 
-        $memcacheStats = $this->_getMemcache()->getStats();
+        $counter = new Vps_Benchmark_Counter_Memcache();
+        $memcache = $counter->getMemcache();
+        $memcacheStats = $memcache->getStats();
         $values[] = $memcacheStats['bytes_read'];
         $values[] = $memcacheStats['bytes_written'];
         $values[] = $memcacheStats['get_hits'];
