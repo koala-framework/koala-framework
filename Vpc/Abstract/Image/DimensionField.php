@@ -65,8 +65,6 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
                     (empty($data['height']) && empty($dimension['height']))
                 ) {
                     $ret[] = trlVps('Dimension: At least width or height must be set higher than 0 when using crop or bestfit.');
-                    $ret[] = print_r($data, true);
-                    $ret[] = print_r($dimension, true);
                 }
             }
         }
