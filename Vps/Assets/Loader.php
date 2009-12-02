@@ -28,6 +28,24 @@ class Vps_Assets_Loader
         $this->_config = $config;
     }
 
+    /**
+     * der host muss ich der CacheId vorkommen wegen Google Maps API keys
+     * die pro domain unterschiedlich sein müssen
+     */
+    private function _getHostForCacheId()
+    {
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = $this->_getConfig()->server->domain;
+        }
+        if (preg_match('#[^\.]+\.[^\.]+$#', $host, $m)) {
+            $host = $m[0];
+        }
+        $host = str_replace(array('.', '-'), array('', ''), $host);
+        return $host;
+    }
+
     public function getFileContents($file, $language = null)
     {
         $ret = array();
@@ -35,7 +53,7 @@ class Vps_Assets_Loader
             $ret = Vpc_Basic_Text_StylesModel::getStylesContents();
         } else if (substr($file, 0, 4) == 'all/') {
             $encoding = Vps_Media_Output::getEncoding();
-            $cacheId = md5($file.$encoding);
+            $cacheId = md5($file.$encoding.$this->_getHostForCacheId());
             $cache = Vps_Assets_Cache::getInstance();
             if (!$cacheData = $cache->load($cacheId)) {
                 Vps_Benchmark::count('load asset all');
@@ -119,7 +137,7 @@ class Vps_Assets_Loader
                 $cache = Vps_Assets_Cache::getInstance();
                 $section = substr($file, 0, strpos($file, '-'));
                 if (!$section) $section = 'web';
-                $cacheId = 'fileContents'.$language.$section.
+                $cacheId = 'fileContents'.$language.$section.$this->_getHostForCacheId().
                     str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $file).
                     Vps_Component_Data_Root::getComponentClass();
                 if (!$cacheData = $cache->load($cacheId)) {
