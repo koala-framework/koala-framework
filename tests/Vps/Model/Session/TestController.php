@@ -1,6 +1,14 @@
 <?php
 class Vps_Model_Session_TestController extends Vps_Controller_Action
 {
+    public function preDispatch()
+    {
+        //RowObserver brauchen wir hier nicht
+        Vps_Component_Data_Root::setComponentClass(false);
+
+        parent::preDispatch();
+    }
+
     public function testExceptionAction()
     {
         throw new Vps_Model_Session_TestException('Test');
