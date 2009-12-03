@@ -110,12 +110,13 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($config->server->import && $config->server->import->dirs) {
             foreach ($config->server->import->dirs as $dir) {
                 echo "importing $dir...\n";
-                $ig = simplexml_load_string(`svn propget --recursive --xml svn:ignore $dir`);
-                $ignores = array();
-                foreach ($ig->target as $t) {
-                    $p = explode("\n", trim((string)$t->property));
-                    foreach ($p as $i) {
-                        $ignores[] = (string)$t['path'] . '/' . trim($i);
+                $ig = trim(`svn propget --recursive svn:ignore $dir`);
+                if (substr($ig, 0, strlen($dir))==$dir) $ig = substr($ig, strlen($dir));
+                foreach (preg_split("#\n".preg_quote($dir)."#", $ig) as $p) {
+                    if (preg_match("#^([^ ]*) - (.*?)$#s", $p, $m)) {
+                        foreach (explode("\n", trim($m[2])) as $i) {
+                            $ignores[] = $dir.$m[1].'/'.trim($i);
+                        }
                     }
                 }
                 if (!$ignores) continue;
