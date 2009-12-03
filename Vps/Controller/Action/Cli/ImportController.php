@@ -454,7 +454,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $importSelect = $sourceModel->select();
         $importSelect->whereEquals('web_id', Vps_Registry::get('config')->application->id);
         $targetModel->deleteRows($importSelect);
-        $targetModel->copyDataFromModel($sourceModel, $importSelect);
+        $targetModel->copyDataFromModel($sourceModel, $importSelect, array('ignorePrimaryKey' => true));
     }
 
     private function _systemSshVps($cmd, $dir = null)
