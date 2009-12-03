@@ -31,18 +31,12 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateRow()
     {
-        p('== testCreateRow VORHER ==');
-        p(Vps_Registry::get('db')->getConfig());
         $m = new Vps_User_Model();
         $r = $m->createRow();
-        p('== testCreateRow NACHHER ==');
-        p(Vps_Registry::get('db')->getConfig());
     }
 
     public function testWithWebcode()
     {
-        p('== testWithWebcode VORHER ==');
-        p(Vps_Registry::get('db')->getConfig());
         // create -> lock -> unlock -> delete -> create
 
         $webId = Vps_Registry::get('config')->application->id;
@@ -176,14 +170,10 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($r2->id, $webr->id);
         $this->assertNotEquals($r->id, $webr->id);
         $this->assertEquals('guest', $webr->role);
-        p('== testWithWebcode NACHHER ==');
-        p(Vps_Registry::get('db')->getConfig());
     }
 
     public function testWithoutWebcode()
     {
-        p('== testWithoutWebcode VORHER ==');
-        p(Vps_Registry::get('db')->getConfig());
         // create -> lock -> unlock -> delete -> create
 
         $webId = Vps_Registry::get('config')->application->id;
@@ -339,14 +329,10 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals($r2->id, $webr->id);
         $this->assertEquals('guest', $webr->role);
-        p('== testWithoutWebcode NACHHER ==');
-        p(Vps_Registry::get('db')->getConfig());
     }
 
     public function testCreateUserRowGlobalOnly()
     {
-        p('== testCreateUserRowGlobalOnly VORHER ==');
-        p(Vps_Registry::get('db')->getConfig());
         // Annahme: user gibt es nur global, im web noch nicht.
         // nach createUserRow müsste es ihn dann im web auch sofort geben
         // und man muss die row erhalten
@@ -401,14 +387,10 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Dr.', $r->title);
         $this->assertEquals('Test Global', $r->firstname);
         $this->assertEquals('Testermann Global', $r->lastname);
-        p('== testCreateUserRowGlobalOnly NACHHER ==');
-        p(Vps_Registry::get('db')->getConfig());
     }
 
     public function testCreateUserRowDeleted()
     {
-        p('== testCreateUserRowDeleted VORHER ==');
-        p(Vps_Registry::get('db')->getConfig());
         // Annahme: globalen user gibt es im web, aber er hat das deleted flag gesetzt
         // nach createUserRow müsste das deleted flag auf 0 sein
         // und man muss die row erhalten
@@ -455,8 +437,6 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('mia Global', $newRow->firstname);
         $this->assertEquals(0, $newRow->deleted);
         $this->assertEquals(0, $newRow->locked);
-        p('== testCreateUserRowDeleted NACHHER ==');
-        p(Vps_Registry::get('db')->getConfig());
     }
 
     /**
@@ -464,8 +444,6 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateUserRowExisting()
     {
-        p('== testCreateUserRowExisting VORHER ==');
-        p(Vps_Registry::get('db')->getConfig());
         // Annahme: globalen user gibt es im web und ist aktiv
         // createUserRow müsste eine ClientException werfen, dass User schon existent ist
 
@@ -490,7 +468,5 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
         // createUserRow in usermodel aufrufen
         // sollte eine exception werfen, dass user schon existent ist
         $createRow = $m->createUserRow($email, $webcode);
-        p('== testCreateUserRowExisting NACHHER ==');
-        p(Vps_Registry::get('db')->getConfig());
     }
 }

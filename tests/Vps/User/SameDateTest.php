@@ -28,8 +28,6 @@ class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
 
     public function testCreateUserSameDateGlobal()
     {
-        p('== testCreateUserSameDateGlobal VORHER ==');
-        p(Vps_Registry::get('db')->getConfig());
         // es wäre möglich, dass zwei user in der selben sekunde angelegt werden
         // aber dann nur der erste gesynct wird, weil das web glaubt am aktuellen
         // stand zu sein, da der neueste user im web das gleiche datum wie der
@@ -72,14 +70,10 @@ class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
             }
             $lastModifiedDates[] = $r->last_modified;
         }
-        p('== testCreateUserSameDateGlobal NACHHER ==');
-        p(Vps_Registry::get('db')->getConfig());
     }
 
     public function testCreateUserSameDateWeb()
     {
-        p('== testCreateUserSameDateWeb VORHER ==');
-        p(Vps_Registry::get('db')->getConfig());
         $webId = Vps_Registry::get('config')->application->id;
         $webcode = Vps_Registry::get('config')->service->users->webcode;
         if (!$webcode) {
@@ -109,7 +103,5 @@ class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
             }
             $lastModifiedDates[] = $r->last_modified;
         }
-        p('== testCreateUserSameDateWeb NACHHER ==');
-        p(Vps_Registry::get('db')->getConfig());
     }
 }
