@@ -33,6 +33,16 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
             ->getChildComponents(array('generator'=>'paragraphs'));
         return $ret;
     }
+    
+    public function hasContent()
+    {
+        $childComponents = $this->getData()->getChildComponents(array('generator' => 'paragraphs'));
+        foreach ($childComponents as $c) {
+            if ($c->hasContent()) return true;
+        }
+        return false;
+    }
+
 
     public function getCacheVars()
     {
