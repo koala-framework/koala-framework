@@ -6,13 +6,14 @@ class Vpc_Root_DomainRoot_Domain_Component extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['generators']['category'] = array(
             'class' => 'Vpc_Root_DomainRoot_Domain_CategoryGenerator',
-            'component' => 'Vpc_Root_DomainRoot_Category_Component',
+            'component' => 'Vpc_Root_Category_Component',
             'model' => 'Vpc_Root_CategoryModel'
         );
         $ret['dataClass'] = 'Vpc_Root_DomainRoot_Domain_Data';
         $ret['componentName'] = trlVps('Domain');
         $ret['flags']['subroot'] = 'domain';
         $ret['flags']['showInPageTreeAdmin'] = true;
+        $ret['flags']['hasHome'] = true;
         return $ret;
     }
 

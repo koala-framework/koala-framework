@@ -325,12 +325,11 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
         if ($point == 'append') {
             $targetRow = $this->_model->getRow($target);
-            if ((int)$target == 0) $target = null;
+            if (is_numeric($target) && (int)$target == 0) $target = null;
 
             if (!is_null($target)) {
                 $targetRow = $this->_model->getRow($target);
             }
-
             if (is_null($target) || ($targetRow && $targetRow->$parentField != $source)) {
                 $row->$parentField = $target;
                 if ($this->_hasPosition) {

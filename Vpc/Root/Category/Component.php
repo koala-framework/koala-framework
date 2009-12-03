@@ -5,7 +5,7 @@ class Vpc_Root_Category_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['generators']['page'] = array(
-            'class' => 'Vpc_Root_Category_PageGenerator',
+            'class' => 'Vps_Component_Generator_Page',
             'showInMenu' => true,
             'inherit' => true,
             'component' => array(

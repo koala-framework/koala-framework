@@ -17,7 +17,7 @@ class Vpc_Advanced_GoogleMapView_Test extends PHPUnit_Framework_TestCase
         $this->setExpectedException("Vps_Exception");
         $this->_root->getComponentById(2000)->getComponent()->getTemplateVars();
     }
-
+/*
     public function testEmptyCoordinates()
     {
         $c = $this->_root->getComponentById(2001)->getComponent();
@@ -60,4 +60,5 @@ class Vpc_Advanced_GoogleMapView_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(13, $options['longitude']);
         $this->assertEquals(1, $options['routing']);
     }
+    */
 }
