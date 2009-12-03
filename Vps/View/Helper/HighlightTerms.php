@@ -41,19 +41,23 @@ class Vps_View_Helper_HighlightTerms
                 $blocks = count($m) > $options['maxReturnBlocks'] ? $options['maxReturnBlocks'] : count($m);
                 if ($blocks >= 1) {
                     $blockLength = $options['maxReturnLength'];
-                    $blockLength -= $blocks * mb_strlen($options['blockSeparator']);
                     $blockLength /= $blocks;
+                    $blockLength -= $blocks * mb_strlen($options['blockSeparator']);
                     $blockLength = floor($blockLength);
                     for ($i=0; $i<$blocks; $i++) {
                         $blockPos = floor($m[$i][1] - (($blockLength - mb_strlen($term)) / 2));
                         if ($blockPos < 0) $blockPos = 0;
-                        $blocksPositions[] = array(
+                        $blocksPositions[$blockPos] = array(
                             'pos' => $blockPos,
                             'length' => $blockLength
                         );
                     }
                 }
             }
+
+            // sorting the blocks if there was more than one search word
+            ksort($blocksPositions);
+            $blocksPositions = array_values($blocksPositions);
 
             // merge overlapping blocks
             if ($blocksPositions) {
@@ -81,10 +85,29 @@ class Vps_View_Helper_HighlightTerms
                 $ret = mb_substr($text, 0, $options['maxReturnLength']);
             } else {
                 $ret = '';
+                $i = 1;
                 foreach ($blocksPositions as $blockPos) {
+                    $retBlock = mb_substr($text, $blockPos['pos'], $blockPos['length']);
+                    if ($i > $options['maxReturnBlocks']
+                        || mb_strlen($ret) + mb_strlen($retBlock) > $options['maxReturnLength']
+                    ) {
+                        // wenn die zeichen die zuviel sind, weniger als 30%
+                        // des blocks ausmachen, vorn und hinten wegschneiden
+                        $signsTooMuch = (mb_strlen($ret) + mb_strlen($retBlock)) - $options['maxReturnLength'];
+                        if ($signsTooMuch <= mb_strlen($retBlock) * 0.3) {
+                            $retBlock = mb_substr($retBlock, ceil($signsTooMuch/2), (-1)*ceil($signsTooMuch/2));
+                            if ($blockPos['pos'] != 0) $ret .= $options['blockSeparator'];
+                            $ret .= $retBlock;
+                            $lastBlockPos = $blockPos;
+                        }
+
+                        // breaken, ab hier wirds wirklich zu lang
+                        break;
+                    }
                     if ($blockPos['pos'] != 0) $ret .= $options['blockSeparator'];
-                    $ret .= mb_substr($text, $blockPos['pos'], $blockPos['length']);
+                    $ret .= $retBlock;
                     $lastBlockPos = $blockPos;
+                    $i++;
                 }
                 if ($lastBlockPos) {
                     if ($lastBlockPos['pos'] + $lastBlockPos['length'] < mb_strlen($text)) {
