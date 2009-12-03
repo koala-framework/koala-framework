@@ -25,7 +25,7 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
 
     protected function _setupDatabaseAdapter()
     {
-        //instead of setDefaultAdapter - this one layz loads
+        //instead of setDefaultAdapter - this one lazy loads
         if (! $this->_db) {
             $this->_db = Vps_Registry::get('db');
         }
