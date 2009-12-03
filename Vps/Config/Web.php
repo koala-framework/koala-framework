@@ -43,7 +43,8 @@ class Vps_Config_Web extends Zend_Config_Ini
         }
 
         $vpsSection = false;
-        $webConfig = new Zend_Config_Ini($webPath.'/application/config.ini', $section);
+        $webConfig = new Zend_Config_Ini($webPath.'/application/config.ini', 
+                                                $this->_getWebSection($section));
         if (!empty($webConfig->vpsConfigSection)) {
             $vpsSection = $webConfig->vpsConfigSection;
         } else {
@@ -86,13 +87,8 @@ class Vps_Config_Web extends Zend_Config_Ini
                                             $i);
         }
     }
-
-    protected function _mergeWebConfig($path, $section)
-    {
-        $this->_mergeFile($path, $section);
-    }
-
-    protected final function _mergeFile($file, $section)
+    
+    private function _getWebSection($section)
     {
         $webConfigFull = new Zend_Config_Ini($file, null);
         if (isset($webConfigFull->$section)) {
@@ -102,6 +98,16 @@ class Vps_Config_Web extends Zend_Config_Ini
         } else {
             $webSection = 'production';
         }
-        return $this->merge(new Zend_Config_Ini($file, $webSection));
+        return $webSection;
+    }
+
+    protected function _mergeWebConfig($path, $section)
+    {
+        $this->_mergeFile($path, $section);
+    }
+
+    protected final function _mergeFile($file, $section)
+    {
+        return $this->merge(new Zend_Config_Ini($file, $this->_getWebSection($section)));
     }
 }
