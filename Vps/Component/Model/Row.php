@@ -36,10 +36,13 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
             }
             $this->_tableLoaded = true;
         }
+        if ($name == 'id') $name = 'componentId';
         if (isset($this->_data->$name)) {
             $ret = $this->_data->$name;
             if ($name == 'tags') $ret = implode(',', $ret);
             return $ret;
+        } else if ($name == 'parent_id') {
+            return $this->_data->parent->componentId;
         } else {
             return null;
         }

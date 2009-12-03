@@ -2,14 +2,11 @@
 /**
  * @group Composite_Images
  */
-class Vpc_Composite_Images_Test extends PHPUnit_Framework_TestCase
+class Vpc_Composite_Images_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Composite_Images_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Composite_Images_Root');
     }
 
     public function testHtml()

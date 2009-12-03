@@ -63,26 +63,26 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('1', $this->_root->getComponentById('2')->parent->componentId);
         $this->assertEquals('root-at-main', $this->_root->getComponentById('2')->parent->parent->componentId);
 
+
         // ch
         $page = $this->_root->getComponentById('5');
         $this->assertNotNull($page);
         $this->assertEquals(5, $page->componentId);
         $this->assertEquals('root-ch-main', $page->parent->componentId);
         $this->assertNotNull($this->_root->getComponentById('6'));
-        $this->assertEquals('Vpc_Basic_Empty_Component', $this->_root->getComponentById('6')->componentClass);
+        $this->assertEquals('Vpc_Basic_Link_Component', $this->_root->getComponentById('6')->componentClass);
         $this->assertEquals('5', $this->_root->getComponentById('6')->parent->componentId);
         $this->assertEquals('root-ch-main', $this->_root->getComponentById('6')->parent->parent->componentId);
     }
 
     public function testByPath()
     {
-
         $at = $this->_root->getComponentById('root-ch');
         $this->assertNotNull($at);
-        $home = $at->getChildPseudoPage(array('filename' => 'home'));
+        $home = $at->getChildPseudoPage(array('filename' => 'home', 'recursive' => true));
         $this->assertNotNull($home);
         $this->assertNotNull($home->getChildPseudoPage(array('filename' => 'foo')));
-        $this->assertEquals('2', count($at->getChildPseudoPages()));
+        $this->assertEquals(2, count($at->getChildPseudoPages()));
 
         $this->assertEquals('root-ch', $this->_root->getChildPageByPath('ch')->componentId);
         $this->assertEquals('6', $this->_root->getPageByUrl('http://rotary.ch/home/foo?x=1')->componentId);
@@ -92,7 +92,6 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('4', $this->_root->getPageByUrl('http://rotary.at/foo3')->componentId);
         $this->assertEquals('7', $this->_root->getPageByUrl('http://rotary.ch/foo3')->componentId);
     }
-
 
     public function testTitle()
     {
@@ -133,8 +132,10 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $components = $this->_root->getComponentsByClass('Vpc_Basic_Image_Component');
         $this->assertEquals(2, count($components));
 
-        $c = $this->_root->getComponentById('6');
+        $components = $this->_root->getComponentsByClass('Vpc_Basic_Image_Component');
+        $this->assertEquals(2, count($components));
 
+        $c = $this->_root->getComponentById('6');
         $components = $this->_root->getComponentsByClass('Vpc_Basic_Image_Component', array('subroot' => $c));
         $this->assertEquals(1, count($components));
 

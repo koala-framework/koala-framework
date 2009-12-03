@@ -31,16 +31,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         parent::init();
     }
 
-    // Bei Domains Root ausblenden
-    protected function _formatNodes($parentRow = null)
-    {
-        $root = Vps_Component_Data_Root::getInstance();
-        if (is_instance_of($root->componentClass, 'Vpc_Root_DomainRoot_Component') && is_null($parentRow)) {
-            //$parentRow = $this->_model->getRow($this->_model->select()->whereNull('parent_id'));
-        }
-        return parent::_formatNodes($parentRow);
-    }
-
     protected function _formatNode($row)
     {
         $data = parent::_formatNode($row);
@@ -58,27 +48,16 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['bIcon'] = $this->_icons['root']->__toString();
             $data['expanded'] = true;
             $data['type'] = 'root';
-            $data['domain'] = null;
             $data['allowDrop'] = false;
         } else if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_Category_Component')) {
             $data['bIcon'] = $this->_icons['folder']->__toString();
             $data['expanded'] = $data['allowed'];
             $data['type'] = 'category';
-            $domain = null;
-            $domainComponent = $row->getData()->parent;
-            if (is_instance_of($domainComponent->componentClass, 'Vpc_Root_DomainRoot_Domain_Component'))
-                $domain = $row->getData()->parent->row->id;
-            $data['domain'] = $domain;
-            $data['category'] = $row->getData()->row->id;
         } else if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_DomainRoot_Domain_Component')) {
             $data['bIcon'] = $this->_icons['domain']->__toString();
             $data['type'] = 'root';
             $data['expanded'] = $data['allowed'];
-            $data['domain'] = $row->getData()->row->id;
             $data['allowDrop'] = false;
-        } else {
-            $data['domain'] = $row->getData()->row->domain;
-            $data['category'] = $row->getData()->row->category;
         }
         $data['uiProvider'] = 'Vps.Component.PagesNode';
         if (!$data['allowed']) {
@@ -132,17 +111,36 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $id = $this->_getParam('id');
         $table = $this->_model->getTable();
         $row = $table->find($id)->current();
+        $root = Vps_Component_Data_Root::getInstance();
+        $component = $root->getComponentById($id, array('ignoreVisible' => true));
+        while ($component) {
+            if (Vpc_Abstract::getFlag($component->componentClass, 'hasHome')) {
+                $homeComponent = $component;
+                $component = null;
+            } else {
+                $component = $component->parent;
+            }
+        }
+
         if ($row) {
-            $domain = $row->domain;
-            $domainWhere = $domain ? "domain='$domain'" : "ISNULL(domain)";
-            $oldRows = $table->fetchAll("is_home=1 AND id!='$id' AND $domainWhere");
+            $oldRows = $table->fetchAll("is_home=1 AND id!='$id'");
             $oldId = $id;
             $oldVisible = false;
             foreach ($oldRows as $oldRow) {
-                $oldId = $oldRow->id;
-                $oldVisible = $oldRow->visible;
-                $oldRow->is_home = 0;
-                $oldRow->save();
+                $component = $root->getComponentById($oldRow->id, array('ignoreVisible' => true));
+                while ($component) {
+                    if (Vpc_Abstract::getFlag($component->componentClass, 'hasHome')) {
+                        if ($component == $homeComponent) {
+                            $oldId = $oldRow->id;
+                            $oldVisible = $oldRow->visible;
+                            $oldRow->is_home = 0;
+                            $oldRow->save();
+                        }
+                        $component = null;
+                    } else {
+                        $component = $component->parent;
+                    }
+                }
             }
 
             $row->is_home = 1;
@@ -174,8 +172,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $sourceRow = $this->_model->getTable()->find($this->getRequest()->getParam('source'))->current();
         $targetRow = $this->_model->getTable()->find($this->getRequest()->getParam('target'))->current();
         if ($sourceRow && $targetRow) {
-            $sourceRow->category = $targetRow->category;
-            $sourceRow->domain = $targetRow->domain;
             $sourceRow->save();
         }
     }

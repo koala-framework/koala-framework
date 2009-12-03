@@ -9,6 +9,7 @@ class Vpc_Root_Component extends Vpc_Root_Abstract
             'component' => 'Vpc_Root_Category_Component',
             'model' => 'Vpc_Root_CategoryModel'
         );
+        $ret['flags']['hasHome'] = true;
         return $ret;
     }
 }

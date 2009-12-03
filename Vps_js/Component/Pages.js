@@ -57,7 +57,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     },
     setupEditform : function ()
     {
-       this.editDialog = new Vps.Component.PageEdit({
+       this.editDialog = new Vps.Auto.Form.Window({
             width: 400,
             height: 400,
             controllerUrl: '/admin/component/pageEdit'
@@ -218,7 +218,11 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Properties of selected Page'),
                 handler : function () {
-                    this.editDialog.getAutoForm().setBaseParams({});
+                    var form = this.editDialog.getAutoForm();
+                    if (form.formPanel) {
+                        form.remove(form.formPanel, true);
+                        this.editDialog.getAutoForm().formPanel = null;
+                    }
                     this.editDialog.showEdit(this.treePanel.tree.selModel.selNode.id);
                 },
                 icon    : '/assets/silkicons/page_gear.png',
@@ -229,10 +233,13 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Add new Subpage'),
                 handler : function () {
+            		var form = this.editDialog.getAutoForm();
+	                if (form.formPanel) {
+	                    form.remove(form.formPanel, true);
+	                    this.editDialog.getAutoForm().formPanel = null;
+	                }
                     this.editDialog.getAutoForm().setBaseParams({
-                        parent_id: this.treePanel.tree.selModel.selNode.id,
-                        domain: this.treePanel.tree.selModel.selNode.attributes.domain,
-                        category: this.treePanel.tree.selModel.selNode.attributes.category
+                        parent_id: this.treePanel.tree.selModel.selNode.id
                     });
                     this.editDialog.showAdd();
                 },

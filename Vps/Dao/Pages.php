@@ -13,6 +13,6 @@ class Vps_Dao_Pages extends Vps_Db_Table_Abstract
         parent::_setupFilters();
         $this->_filters['filename'] = new Vps_Dao_Pages_FilenameFilter();
         $this->_filters['pos'] = new Vps_Filter_Row_Numberize();
-        $this->_filters['pos']->setGroupBy(array('parent_id', 'category', 'domain'));
+        $this->_filters['pos']->setGroupBy('parent_id');
     }
 }
