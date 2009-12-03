@@ -766,6 +766,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
             if (isset($options['replace']) && $options['replace']) {
                 $cmd .= "| sed -e \"s|INSERT INTO|REPLACE INTO|\"";
             }
+            if (isset($options['ignorePrimaryKey']) && $options['ignorePrimaryKey']) {
+                $primaryKey = $this->getPrimaryKey();
+                $cmd .= " | sed -e \"s|(\`".$primaryKey."\`,|(|\" -e \"s|([0-9]*,|(|g\"";
+            }
+
             $cmd .= "| {$systemData['mysqlDir']}mysql $systemData[mysqlOptions] 2>&1";
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL import failed: ".implode("\n", $output));
