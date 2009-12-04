@@ -6,8 +6,8 @@
 #include "Unserializer.h"
 #include "ComponentDataRoot.h"
 
-#define debug(x) x
-#define debugVerbose(x) x
+#define debug(x)
+#define debugVerbose(x)
 
 
 void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QByteArray& cmd, QByteArray args, QIODevice* socket)
@@ -178,9 +178,11 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
         ComponentData *d = ComponentData::getComponentById(root, componentId);
         Q_ASSERT(d);
         
+        debug(
         foreach (ComponentData *c, d->childComponents(s)) {
             qDebug() << c->componentId();
         }
+        )
 
         socket->write(serialize(d->childComponents(s).count()));
     } else if (cmd == "getRecursiveChildComponents") {
@@ -328,7 +330,9 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
     u.readArrayEnd();
 
     //cleanup
-    qDebug() << "delete" << ComponentData::m_uncachedDatas.values(QThread::currentThread()).count() << "uncached datas";
-    qDeleteAll(ComponentData::m_uncachedDatas.values(QThread::currentThread()));
+    if (ComponentData::m_uncachedDatas.values(QThread::currentThread()).count()) {
+        qDebug() << "delete" << ComponentData::m_uncachedDatas.values(QThread::currentThread()).count() << "uncached datas";
+        qDeleteAll(ComponentData::m_uncachedDatas.values(QThread::currentThread()));
+    }
     ComponentData::m_uncachedDatas.remove(QThread::currentThread());
 }

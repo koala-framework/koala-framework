@@ -1,9 +1,11 @@
 #include "Select.h"
 
+#include <QTime>
+
 #include "Unserializer.h"
 #include "ComponentData.h"
 
-#define debug(x) x
+#define debug(x)
 
 Select::Select()
     : limitCount(0), limitOffset(0)
@@ -64,7 +66,11 @@ bool Select::match(ComponentData* data, ComponentData *parentData) const
     if (!parentData) parentData = data->parent();
 
     foreach (SelectExpr *e, where) {
-        if (!e->match(data, parentData)) {
+        //debug( QTime stopWatch; )
+        //debug( stopWatch.start(); )
+        bool m = e->match(data, parentData);
+        //debug( qDebug() << "matched in" << stopWatch.elapsed() << "ms"; )
+        if (!m) {
             debug( qDebug() << "Select::match: no match" << data->componentId() << *e; )
             return false;
         }
@@ -90,7 +96,7 @@ bool Select::match(ComponentData* data, ComponentData *parentData) const
             Q_ASSERT(generator);
             Q_ASSERT(dynamic_cast<GeneratorWithModel*>(generator));
             const_cast<Select*>(this)->m_IdsCache[data->parent()] = static_cast<GeneratorWithModel*>(generator)
-                                                ->fetchIds(data->parent(), *this);
+                                                ->fetchIds(data->parent(), *this).toSet();
         }
         bool ok;
         int childId = data->childId().toInt(&ok);

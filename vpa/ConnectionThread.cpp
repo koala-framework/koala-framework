@@ -7,6 +7,17 @@
 #include "CommandDispatcher.h"
 #include "ComponentDataRoot.h"
 
+
+#define debugCommandProfiler
+
+#ifdef debugCommandProfiler
+struct ProfilerData {
+    QByteArray cmd;
+    QByteArray args;
+    int time;
+};
+#endif
+
 ConnectionThread::ConnectionThread(int socketDescriptor, QObject* parent)
 : QThread(parent), m_socketDescriptor(socketDescriptor),
     m_countComponentsCreated(0), m_checkCountComponentsCreated(false)
@@ -39,9 +50,9 @@ void ConnectionThread::run()
     }
     //qDebug() << "new connection";
 
-    int commands = 0;
-    int sumProcessingTime = 0;
-    int maxProcessingTime = 0;
+    #ifdef debugCommandProfiler
+    QList<ProfilerData> profiler;
+    #endif
 
     socket.waitForConnected();
 
@@ -89,16 +100,30 @@ void ConnectionThread::run()
         socket.write("\0\n", 2);
         socket.flush();
         socket.waitForBytesWritten();
-        int t = stopWatch.elapsed();
-        commands++;
-        sumProcessingTime += t;
-        if (t > maxProcessingTime) maxProcessingTime = t;
-
+        #ifdef debugCommandProfiler
+        ProfilerData pd;
+        pd.time = stopWatch.elapsed();
+        pd.cmd = cmd;
+        pd.args = args;
+        profiler << pd;
+        #endif
         //qDebug() << stopWatch.elapsed() << "ms" << ComponentData::count << "datas";
 //        qDebug() << "php memory usage" << PhpProcess::getInstance()->call(0, "memory-usage");
         //qDebug() << "";
     }
-    qDebug() << "commands" << commands << "sumProcessingTime" << sumProcessingTime << "ms" << "maxProcessingTime" << maxProcessingTime << "ms";
+    #ifdef debugCommandProfiler
+    ProfilerData pd;
+    int sum = 0;
+    int max = 0;
+    qDebug() << "Executed commands:";
+    foreach (const ProfilerData &pd, profiler) {
+        sum += pd.time;
+        max = qMax(max, pd.time);
+        QByteArray args = pd.args;
+        qDebug() << "\n" << pd.cmd << pd.time << "ms" << args.replace('\0', "\\0");
+    }
+    qDebug() << "commands" << profiler.count() << "sumProcessingTime" << sum << "ms" << "maxProcessingTime" << max << "ms";
+    #endif
 }
 
 void ConnectionThread::setCheckCountComponentsCreated(bool v)

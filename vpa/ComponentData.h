@@ -34,7 +34,7 @@ public:
         m_dbIdPrefix = id;
         if (!m_dbIdHash[root()].contains(m_dbIdPrefix, parent())) {
             m_dbIdHash[root()].insertMulti(m_dbIdPrefix, parent());
-            qDebug() << "insert into m_dbIdHash" << m_dbIdPrefix << parent()->componentId();
+            //qDebug() << "insert into m_dbIdHash" << m_dbIdPrefix << parent()->componentId();
         }
     }
 

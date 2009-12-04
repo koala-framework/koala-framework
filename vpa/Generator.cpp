@@ -9,14 +9,14 @@
 #include "ComponentData.h"
 #include "Unserializer.h"
 #include "Model.h"
-
-#define ifDebugGeneratorBuild(x) x
-#define ifDebugGeneratorBuildInherit(x)
-#define ifDebugBuildWithGenerators(x) x
-#define ifDebugPriority(x)
-#define ifDebugHandleChangedRow(x) x
-
 #include "ComponentDataRoot.h"
+
+#define ifDebugGeneratorBuild(x)
+#define ifDebugGeneratorBuildInherit(x)
+#define ifDebugBuildWithGenerators(x)
+#define ifDebugPriority(x)
+#define ifDebugHandleChangedRow(x)
+
 
 QHash<const ComponentDataRoot *, QList<Generator*> > Generator::m_generators;
 QHash<Generator::Type, int> Generator::buildCallCount;
@@ -390,7 +390,7 @@ void GeneratorWithModel::fetchRowData(ComponentData* parent, IndexedString field
     }
     foreach (const Model::Row &row, rows) {
         int id = row.id().toInt();
-        qDebug() << "fetchRowData" << id << row.value(IndexedString("field"));
+        //qDebug() << "fetchRowData" << id << row.value(IndexedString("field"));
         if (childIds.contains(-id)) {
             childIds[-id]->rowData[field] = row.value(IndexedString("field"));
         } else if (childIds.contains(id)) {
@@ -424,17 +424,22 @@ QList<int> GeneratorWithModel::fetchIds(ComponentData* parent, const Select& sel
     Unserializer u(&buffer);
 
     QString sql = QString::fromUtf8(u.readString());
-    qDebug() << sql;
+    qDebug() << "GeneratorWithModel::fetchIds" << sql;
     QSqlQuery query;
+    stopWatch.start();
     if (!query.exec(sql)) {
         qCritical() << "can't execute query GeneratorWithModel::fetchRowData" << query.lastError() << sql;
         Q_ASSERT(0);
         return QList<int>();
     }
+    qDebug() << "GeneratorWithModel::fetchIds" << "executed sql in" << stopWatch.elapsed() << "ms";
+
+    stopWatch.start();
     QList<int> ret;
     while (query.next()) {
         ret << query.value(0).toInt();
     }
+    qDebug() << "GeneratorWithModel::fetchIds" << "feched data in" << stopWatch.elapsed() << "ms";
     return ret;
 }
 
@@ -444,12 +449,13 @@ bool GeneratorWithModel::isVisible(const ComponentData* d) const
     if (!(generatorFlags & ColumnVisible)) {
         return true;
     }
+    static const IndexedString visible("visible");
     const_cast<GeneratorWithModel*>(this)
-        ->fetchRowData(const_cast<ComponentData*>(d->parent()), IndexedString("visible"));
-    if (!d->rowData.contains(IndexedString("visible"))) {
+        ->fetchRowData(const_cast<ComponentData*>(d->parent()), visible);
+    if (!d->rowData.contains(visible)) {
         return true;
     }
-    if (d->rowData[IndexedString("visible")].toInt()) {
+    if (d->rowData[visible].toInt()) {
         return true;
     }
     return false;

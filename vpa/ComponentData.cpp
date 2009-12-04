@@ -2,17 +2,18 @@
 #include <QRegExp>
 #include <QStringList>
 #include <QThread>
+#include <QTime>
 
 #include "ComponentDataRoot.h"
 #include "Generator.h"
 #include "ComponentData.h"
-
-#define ifDebugCreateComponentData(x) x
-#define ifDebugGetComponentById(x) x
-#define ifDebugGetChildPageByPath(x) x
-#define ifDebugGetHome(x) x
 #include "ConnectionThread.h"
 
+#define ifDebugCreateComponentData(x)
+#define ifDebugGetComponentById(x)
+#define ifDebugGetChildPageByPath(x)
+#define ifDebugGetRecursiveChildComponents(x)
+#define ifDebugGetHome(x)
 
 int ComponentData::count = 0;
 QHash<const ComponentDataRoot*, QHash<QString, ComponentData*> > ComponentData::m_idHash;
@@ -292,7 +293,7 @@ QByteArray serialize(const ComponentData* d)
 
 QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s, const Select& childSelect)
 {
-    qDebug() << "====> recursiveChildComponents" << componentId() << s << childSelect;
+    ifDebugGetRecursiveChildComponents( qDebug() << "====> recursiveChildComponents" << componentId() << s << childSelect; )
     QList<ComponentData*> ret;
     Select s2(s);
     s2.limitCount = 0; //TODO recht ineffizient, aber dafür simpel
@@ -301,18 +302,20 @@ QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s,
         Q_ASSERT(d);
         Q_ASSERT(!d->componentClass().isEmpty());
         ret << d;
-        qDebug() << "recursiveChildComponents found" << d->componentId();
+        ifDebugGetRecursiveChildComponents( qDebug() << "recursiveChildComponents found" << d->componentId(); )
         if (s.limitCount && ret.count() >= (s.limitCount+s.limitOffset)) {
             break;
         }
     }
     
-    qDebug() << "getting childComponents to check recursively" << componentId();
+    ifDebugGetRecursiveChildComponents( qDebug() << "getting childComponents to check recursively" << componentId(); )
     foreach (ComponentData *d, childComponents(childSelect)) {
-        foreach (ComponentData *c, d->recursiveChildComponents(s2, childSelect)) {
-            ret << c;
-            if (s.limitCount && ret.count() >= (s.limitCount+s.limitOffset)) {
-                break;
+        if (s2.couldCreateIndirectly(d->root(), d->componentClass())) {
+            foreach (ComponentData *c, d->recursiveChildComponents(s2, childSelect)) {
+                ret << c;
+                if (s.limitCount && ret.count() >= (s.limitCount+s.limitOffset)) {
+                    break;
+                }
             }
         }
     }
@@ -326,7 +329,10 @@ QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s,
 QList< ComponentData* > ComponentData::childComponents(const Select& s)
 {
     QList<ComponentData*> ret;
-    foreach (ComponentData *d, children()) {
+    QList<ComponentData*> chld = children();
+    //QTime stopWatch;
+    //stopWatch.start();
+    foreach (ComponentData *d, chld) {
         if (s.match(d, this)) {
             ret << d;
         }
@@ -335,6 +341,8 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
             break;
         }
     }
+    //qDebug() << "matched children in" << stopWatch.elapsed() << "ms";
+
     foreach (Generator *g, Generator::generators(root())) {
         if (g->componentClass == componentClass() && g->generatorFlags & Generator::DisableCache) {
             qDebug() << "add for DisabledCache generator" << g->componentClass;
@@ -357,13 +365,7 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
         }
     }
     if (s.limitOffset) {
-        foreach (ComponentData *d, ret) {
-            qDebug() << "---> beforeOffset" << d->componentId();
-        }
         ret = ret.mid(s.limitOffset);
-        foreach (ComponentData *d, ret) {
-            qDebug() << "afterOffset" << d->componentId();
-        }
     }
     return ret;
 }

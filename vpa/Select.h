@@ -31,7 +31,7 @@ public:
     QList<RawData> other;
 
 private:
-    QHash<ComponentData *, QList<int> > m_IdsCache;
+    QHash<ComponentData *, QSet<int> > m_IdsCache;
     QHash<QPair<const ComponentDataRoot *, ComponentClass>, bool> m_couldCreateIndirectlyCache;
 };
 QDebug operator<<(QDebug dbg, const Select &s);

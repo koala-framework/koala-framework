@@ -5,8 +5,9 @@
 #include "Unserializer.h"
 #include "ComponentData.h"
 
-#define debug(x) x
-#define ifDebugSubRootMatch(x) x
+#define debug(x)
+#define debugMightMatch(x)
+#define ifDebugSubRootMatch(x)
 
 SelectExpr* SelectExpr::create(Unserializer* unserializer)
 {
@@ -174,13 +175,13 @@ SelectExprNot::MatchType SelectExprNot::mightMatch(const ComponentClass& cls) co
 {
     MatchType match = m_expr->mightMatch(cls);
     if (match == MatchNo) {
-        qDebug() << "SelectExprNot::imghtMatch YES";
+        debugMightMatch( qDebug() << "SelectExprNot::imghtMatch YES"; )
         return MatchYes;
     } else if (match == MatchYes) {
-        qDebug() << "SelectExprNot::imghtMatch NO";
+        debugMightMatch( qDebug() << "SelectExprNot::imghtMatch NO"; )
         return MatchNo;
     }
-    qDebug() << "SelectExprNot::imghtMatch MAYBY";
+    debugMightMatch( qDebug() << "SelectExprNot::imghtMatch MAYBY"; )
     return match;
 }
 
@@ -189,13 +190,13 @@ SelectExpr::MatchType SelectExprNot::mightMatch (const Generator* generator) con
 {
     MatchType match = m_expr->mightMatch(generator);
     if (match == MatchNo) {
-        qDebug() << "SelectExprNot::imghtMatch YES";
+        debugMightMatch( qDebug() << "SelectExprNot::imghtMatch YES"; )
         return MatchYes;
     } else if (match == MatchYes) {
-        qDebug() << "SelectExprNot::imghtMatch NO";
+        debugMightMatch( qDebug() << "SelectExprNot::imghtMatch NO"; )
         return MatchNo;
     }
-    qDebug() << "SelectExprNot::imghtMatch MAYBY";
+    debugMightMatch( qDebug() << "SelectExprNot::imghtMatch MAYBY"; )
     return match;
 }
 
@@ -221,10 +222,10 @@ SelectExprWhereComponentType::SelectExprWhereComponentType(Unserializer* unseria
 SelectExpr::MatchType SelectExprWhereComponentType::mightMatch (const Generator *g) const
 {
     if (g->generatorFlags & m_type) {
-        qDebug() << "SelectExprWhereComponentType::mightMatch YES";
+        debugMightMatch( qDebug() << "SelectExprWhereComponentType::mightMatch YES"; )
         return MatchYes;
     }
-    qDebug() << "SelectExprWhereComponentType::mightMatch NO";
+    debugMightMatch( qDebug() << "SelectExprWhereComponentType::mightMatch NO"; )
     return MatchNo;
 }
 
@@ -346,10 +347,10 @@ bool SelectExprWhereHasFlag::match(ComponentData* d, ComponentData *parentData) 
 SelectExpr::MatchType SelectExprWhereHasFlag::mightMatch(const ComponentClass& cls) const
 {
     if (cls.hasFlag(m_flag)) {
-        qDebug() << "WhereHasFlag::mightMatch YES" << m_flag << cls << cls.hasFlag(m_flag);
+        debugMightMatch( qDebug() << "WhereHasFlag::mightMatch YES" << m_flag << cls << cls.hasFlag(m_flag); )
         return MatchYes;
     }
-    qDebug() << "WhereHasFlag::mightMatch NO" << m_flag << cls << cls.hasFlag(m_flag);
+    debugMightMatch( qDebug() << "WhereHasFlag::mightMatch NO" << m_flag << cls << cls.hasFlag(m_flag); )
     return MatchNo;
 }
 
