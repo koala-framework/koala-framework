@@ -72,12 +72,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         } catch (Vps_Dao_Exception $e) {
             //ignore
         } catch (Zend_Db_Adapter_Exception $e) {
-            $dbConfig = Vps_Registry::get('dao')->getDbConfig();
-            $dbConfig['dbname'] = 'test';
-            $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
             $databases = array();
-            foreach ($db->query("SHOW DATABASES")->fetchAll() as $r) {
-                $databases[] = $r['Database'];
+            exec("echo \"SHOW DATABASES\" | mysql", $databases, $ret);
+            if ($ret != 0) {
+                throw new Vps_ClientException("Kann vorhandene Datenbanken nicht ermitteln.");
             }
 
             $dbConfig = Vps_Registry::get('dao')->getDbConfig();
