@@ -113,6 +113,8 @@ class Vps_Util_ClearCache
                     if (Vps_Registry::get('config')->cleanupVpsUsersOnClearCache) {
                         if ($output) echo "vps_users cleanup......";
 
+                        $dbRes = $db->query('SELECT COUNT(*) `cache_users_count` FROM `cache_users`')->fetchAll();
+                        if ($dbRes[0]['cache_users_count'] >= 1) {
                             $dbRes = $db->query('SELECT COUNT(*) `sort_out_count` FROM `vps_users`
                                     WHERE NOT (SELECT cache_users.id
                                                 FROM cache_users
