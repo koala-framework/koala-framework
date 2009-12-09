@@ -11,6 +11,12 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
 
         if ($feed->format == Vps_Util_Model_Feed_Row_Feed::FORMAT_RSS) {
             $data['link'] = (string)$xml->link;
+            if (!$data['link']) {
+                $isPermaLink = (string)$xml->guid['isPermaLink'];
+                if ($isPermaLink == 'true' || $isPermaLink == '1') {
+                    $data['link'] = (string)$xml->guid;
+                }
+            }
             $data['description'] = (string)$xml->description;
             if ($xml->pubDate) {
                 $date = (string)$xml->pubDate;
