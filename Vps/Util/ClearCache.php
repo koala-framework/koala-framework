@@ -113,18 +113,18 @@ class Vps_Util_ClearCache
                     if (Vps_Registry::get('config')->cleanupVpsUsersOnClearCache) {
                         if ($output) echo "vps_users cleanup......";
 
-                        $dbRes = $db->query('SELECT COUNT(*) `cache_users_count` FROM `cache_users`')->fetchAll();
-                        if ($dbRes[0]['cache_users_count'] >= 1) {
-                            $db->query('DELETE FROM `vps_users` '
-                                .'WHERE `id` NOT IN (('
-                                    .'SELECT cache_users.id FROM cache_users'
-                                .'))'
-                            );
-                            $dbRes = $db->query('SELECT COUNT(*) `sort_out_count` FROM `vps_users` '
-                                .'WHERE `id` NOT IN (('
-                                    .'SELECT cache_users.id FROM cache_users'
-                                .'))'
+                            $dbRes = $db->query('SELECT COUNT(*) `sort_out_count` FROM `vps_users`
+                                    WHERE NOT (SELECT cache_users.id
+                                                FROM cache_users
+                                                WHERE cache_users.id = vps_users.id
+                                               )'
                             )->fetchAll();
+                            $db->query('DELETEFROM `vps_users`
+                                    WHERE NOT (SELECT cache_users.id
+                                                FROM cache_users
+                                                WHERE cache_users.id = vps_users.id
+                                               )'
+                            );
                             if ($output) echo " [\033[00;32mOK: ".$dbRes[0]['sort_out_count']." rows cleared\033[00m]\n";
                         } else {
                             if ($output) echo " [\033[01;33mskipping: cache_users is empty\033[00m]\n";
