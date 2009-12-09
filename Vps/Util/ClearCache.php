@@ -125,7 +125,7 @@ class Vps_Util_ClearCache
                                                 WHERE cache_users.id = vps_users.id
                                                )'
                             )->fetchAll();
-                            $db->query('DELETEFROM `vps_users`
+                            $db->query('DELETE FROM `vps_users`
                                     WHERE NOT (SELECT cache_users.id
                                                 FROM cache_users
                                                 WHERE cache_users.id = vps_users.id
