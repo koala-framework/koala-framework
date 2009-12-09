@@ -241,4 +241,15 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
             ->getRow('file://'.dirname(__FILE__).'/rss2.0-with-hub.xml');
         $this->assertEquals('http://pubsubhubbub.appspot.com', $feed->hub);
     }
+
+    public function testRss20WithoutLinkButGuid()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('file://'.dirname(__FILE__).'/rss20-without-link-but-guid.xml');
+        $this->assertEquals('http://click.linksynergy.com/fs-bin/click?id=u3By/Cu91nQ$offerid=57302.10000557$type=3&subid=0', $feed->link);
+
+        $entries = $feed->getChildRows('Entries');
+        $this->assertEquals(3, count($entries));
+        $this->assertEquals('http://click.linksynergy.com/fs-bin/click?id=u3By/Cu91nQ&offerid=57302.10000220&type=3&subid=0', $entries->current()->link);
+    }
 }
