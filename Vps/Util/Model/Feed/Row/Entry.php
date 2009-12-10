@@ -73,6 +73,13 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
             $data['id'] = $data['link'];
         }
 
+        $data['author_name'] = null;
+        if (isset($xml->author->name)) {
+            $data['author_name'] = (string)$xml->author->name;
+        } else if (isset($xml->author)) {
+            $data['author_name'] = (string)$xml->author;
+        }
+
         $config['data'] = $data;
 
         parent::__construct($config);
