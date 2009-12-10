@@ -8,6 +8,7 @@ class Vpc_Shop_Cart_Checkout_OrdersController_Payment extends Vps_Data_Abstract
     }
     public function load($row)
     {
+        if (!isset($this->_payments[$row->payment])) return $row->payment;
         return $this->_payments[$row->payment];
     }
 }
