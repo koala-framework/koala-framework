@@ -252,4 +252,26 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($entries));
         $this->assertEquals('http://click.linksynergy.com/fs-bin/click?id=u3By/Cu91nQ&offerid=57302.10000220&type=3&subid=0', $entries->current()->link);
     }
+
+    public function testAuthorBloggerRss()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://nikosams.blogspot.com/feeds/posts/default?alt=rss');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->author_name);
+    }
+    public function testAuthorBloggerAtom()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://nikosams.blogspot.com/feeds/posts/default');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertEquals('Niko Sams', $entries->current()->author_name);
+    }
+    public function testAuthorTwitterSearch()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://search.twitter.com/search.atom?q=vivid');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->author_name);
+    }
 }
