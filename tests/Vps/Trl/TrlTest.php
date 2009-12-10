@@ -172,9 +172,6 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
 
     public function testTrlParseJsLargeString()
     {
-        //$this->markTestIncomplete();
-        //wenn behoben in JsLoader Zeile 77 Hack entfernen
-
         $input = str_repeat(' ', 10015)." trlVps('Info')";
         $result = $this->_trlObject->parse($input, 'js');
         $this->assertEquals(1, count($result));
