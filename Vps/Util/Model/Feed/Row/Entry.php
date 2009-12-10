@@ -18,6 +18,7 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
                 }
             }
             $data['description'] = (string)$xml->description;
+
             if ($xml->pubDate) {
                 $date = (string)$xml->pubDate;
             } else {
@@ -78,6 +79,40 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
             $data['author_name'] = (string)$xml->author->name;
         } else if (isset($xml->author)) {
             $data['author_name'] = (string)$xml->author;
+        }
+
+        if ($xml->children('http://purl.org/rss/1.0/modules/content/')->encoded) {
+            $data['content_encoded'] = (string)$xml->children('http://purl.org/rss/1.0/modules/content/')->encoded;
+        }
+
+        $data['media_image'] = null;
+        if ($xml->children('http://search.yahoo.com/mrss/')->content) {
+            $attributes = $xml->children('http://search.yahoo.com/mrss/')->content->attributes();
+            if (substr((string)$attributes['type'], 0, 6) == 'image/') {
+                $data['media_image'] = (string)$attributes['url'];
+                $data['media_image_width'] = (string)$attributes['width'];
+                $data['media_image_height'] = (string)$attributes['height'];
+            }
+        }
+        if ($xml->children('http://search.yahoo.com/mrss/')->thumbnail) {
+            $attributes = $xml->children('http://search.yahoo.com/mrss/')->thumbnail->attributes();
+            $data['media_thumbnail'] = (string)$attributes['url'];
+            $data['media_thumbnail_width'] = (string)$attributes['width'];
+            $data['media_thumbnail_height'] = (string)$attributes['height'];
+        }
+        if (!$data['media_image']) {
+            foreach ($xml->link as $link) {
+                if ((string)$link['rel'] == 'enclosure' && substr((string)$link['type'], 0, 6)=='image/') {
+                    $data['media_image'] = (string)$link['href'];
+                }
+            }
+        }
+        if (!$data['media_image']) {
+            foreach ($xml->enclosure as $enclosure) {
+                if (substr((string)$enclosure['type'], 0, 6)=='image/') {
+                    $data['media_image'] = (string)$link['url'];
+                }
+            }
         }
 
         $config['data'] = $data;
