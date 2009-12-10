@@ -274,4 +274,43 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->author_name);
     }
+
+    public function testContentEncoded()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://www.swgemu.com/forums/external.php?type=RSS2&forumids=107');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->description);
+        $this->assertTrue(!!$entries->current()->content_encoded);
+    }
+
+    public function testContentEncoded2()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://www.jmg-galleries.com/blog/feed/');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->description);
+        $this->assertTrue(!!$entries->current()->content_encoded);
+    }
+
+    public function testFlickrImageRss20()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://api.flickr.com/services/feeds/photos_public.gne?id=72526577@N00&tags=ghana&lang=de-de&format=rss_200');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->media_image);
+        $this->assertTrue(!!$entries->current()->media_image_width);
+        $this->assertTrue(!!$entries->current()->media_image_height);
+        $this->assertTrue(!!$entries->current()->media_thumbnail);
+        $this->assertTrue(!!$entries->current()->media_thumbnail_width);
+        $this->assertTrue(!!$entries->current()->media_thumbnail_height);
+    }
+
+    public function testFlickrImageAtom()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://api.flickr.com/services/feeds/photos_public.gne?id=72526577@N00&tags=ghana&lang=de-de&format=atom');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->media_image);
+    }
 }
