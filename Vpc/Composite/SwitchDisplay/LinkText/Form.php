@@ -1,9 +1,9 @@
 <?php
 class Vpc_Composite_SwitchDisplay_LinkText_Form extends Vpc_Basic_Textfield_Form
 {
-    public function __construct($name, $class, $id = null)
+    protected function _initFields()
     {
-        parent::__construct($name, $class, $id);
+        parent::_initFields();
         $this->getByName('content')->setFieldLabel(trlVps('Link text'));
     }
 }
