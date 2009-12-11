@@ -95,6 +95,9 @@ class Vpc_Mail_HtmlParser
 
     public function parse($html)
     {
+        // replace entities
+        $html = preg_replace('/&([a-z0-9#]{2,5});/i', '+$1;', $html);
+
         $this->_stack = array();
         $this->_ret = '';
         $this->_parser = xml_parser_create();
@@ -117,9 +120,20 @@ class Vpc_Mail_HtmlParser
           'characterData'
         );
 
-        xml_parse($this->_parser,
+        $result = xml_parse($this->_parser,
           '<body>'.$html.'</body>',
           true);
+        if (!$result) {
+            // wenn man ein nicht geschlossenes <br> rein gibt, schreit er hier,
+            // macht aber normal weiter. wenns zu oft vorkommt, evtl. exception
+            // entfernen und ignorieren, oder was andres überlegen :-)
+            $errorCode = xml_get_error_code($this->_parser);
+            $ex = new Vps_Exception("Mail HtmlParser XML Error $errorCode: ".xml_error_string($errorCode));
+            $ex->logOrThrow();
+        }
+
+        // re-replace entities
+        $this->_ret = preg_replace('/\+([a-z0-9#]{2,5});/i', '&$1;', $this->_ret);
 
         return $this->_ret;
     }
