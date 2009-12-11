@@ -11,6 +11,8 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     protected $_exprValues = array();
     static private $_internalIdCounter = 0;
 
+    private $_referencedParentRowToSetReferenceOnSave = null; //deprected
+
     public function __construct(array $config)
     {
         if (isset($config['siblingRows'])) {
@@ -219,6 +221,11 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         }
     }
 
+    private function _setReferencedParentRowToSetReferenceOnSave($row) //deprected
+    {
+        $this->_referencedParentRowToSetReferenceOnSave = $row;
+    }
+
     public function createChildRow($rule, array $data = array())
     {
         $m = $this->_model->getDependentModel($rule);
@@ -228,8 +235,13 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             return $m->createRowByParentRow($this, $data);
         } else {
             $ret = $m->createRow();
-            $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
-            $ret->{$ref['column']} = $this->{$this->_getPrimaryKey()};
+            if ($this->{$this->_getPrimaryKey()}) {
+                $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
+                $ret->{$ref['column']} = $this->{$this->_getPrimaryKey()};
+            } else {
+                //neue row, es gibt noch keine id, muss später gesetzt werden
+                $ret->_setReferencedParentRowToSetReferenceOnSave($this);//deprected
+            }
             return $ret;
         }
     }
@@ -287,6 +299,11 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     protected function _beforeSave()
     {
+        if ($row = $this->_referencedParentRowToSetReferenceOnSave) {
+            $ref = $this->getModel()->getReferenceByModelClass(get_class($row->getModel()), null);
+            $this->{$ref['column']} = $row->{$row->_getPrimaryKey()};
+        }
+
         $this->_updateFilters(false);
     }
 
