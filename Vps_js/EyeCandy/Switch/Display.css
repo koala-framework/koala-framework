@@ -6,7 +6,9 @@ div.vpsSwitchDisplay a.switchLink.switchLinkOpened {
     background: url(/assets/silkicons/bullet_arrow_up.png) 0px -2px no-repeat;
 
 }
-div.vpsSwitchDisplay div.switchContent { overflow: hidden; z-index: 1000; position: relative; }
+/* z-index unter 50 lassen. bildgalerie hat 50 auf die mask und 100 auf die box
+   und da sollten wir drunter bleiben. */
+div.vpsSwitchDisplay div.switchContent { overflow: hidden; z-index: 45; position: relative; }
 
 /*
 Bei einer Bildergalerie in einem switch display gab es einen Fehler,
