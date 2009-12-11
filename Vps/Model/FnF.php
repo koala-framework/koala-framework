@@ -18,6 +18,7 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
         $this->_data = $data;
         $this->_rows = array();
         $this->_dataModified();
+        $this->_autoId = null;
     }
 
     public function isEqual(Vps_Model_Interface $other)
