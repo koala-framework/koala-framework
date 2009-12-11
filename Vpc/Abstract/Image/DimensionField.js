@@ -30,7 +30,6 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
     _validateSizes: function()
     {
         var dim = this.dimensionField.getValue();
-        console.log(this.dimensions[dim]);
         if (this.dimensions[dim].scale == 'crop' || this.dimensions[dim].scale == 'bestfit') {
             if (this.widthField.getValue() < 1 && this.dimensions[dim].width == 'user'
                 && this.heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
