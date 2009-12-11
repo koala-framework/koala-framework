@@ -30,8 +30,11 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
     _validateSizes: function()
     {
         var dim = this.dimensionField.getValue();
+        console.log(this.dimensions[dim]);
         if (this.dimensions[dim].scale == 'crop' || this.dimensions[dim].scale == 'bestfit') {
-            if (this.widthField.getValue() < 1 && this.heightField.getValue() < 1) {
+            if (this.widthField.getValue() < 1 && this.dimensions[dim].width == 'user'
+                && this.heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
+            ) {
                 if (this.widthField.getValue() < 1) {
                     this.widthField.markInvalid(trlVps('Width or height must be higher than 0 when using crop or bestfit.'));
                 }
@@ -96,7 +99,7 @@ Vpc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                 closeAction: 'hide',
                 modal: true,
                 width: 350,
-                height: 300,
+                height: 350,
                 layout: 'fit',
                 items: new Ext.FormPanel({
                     bodyStyle: 'padding: 10px',
