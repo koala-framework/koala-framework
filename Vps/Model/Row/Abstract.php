@@ -11,6 +11,9 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     protected $_exprValues = array();
     static private $_internalIdCounter = 0;
 
+    //damit im save() die childRows autom. mitgespeichert werden können
+    private $_childRows = array();
+
     public function __construct(array $config)
     {
         if (isset($config['siblingRows'])) {
@@ -215,7 +218,12 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                 //throw new Vps_Exception("row does not yet have a primary id");
             }
             $select->whereEquals($ref['column'], $this->{$this->_getPrimaryKey()});
-            return $m->getRows($select);
+            $ret = $m->getRows($select);
+            foreach ($ret as $r) {
+                $this->_childRows[] = $r;
+            }
+            $ret->rewind();
+            return $ret;
         }
     }
 
@@ -230,6 +238,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             $ret = $m->createRow();
             $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
             $ret->{$ref['column']} = $this->{$this->_getPrimaryKey()};
+            $this->_childRows[] = $ret;
             return $ret;
         }
     }
@@ -299,6 +308,13 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     protected function _afterSave()
     {
+        foreach ($this->_childRows as $row) {
+            if (!$row->{$row->_getPrimaryKey()}) {
+                $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
+                $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
+            }
+            $row->save();
+        }
         $this->_updateFilters(true);
         $this->_callObserver('save');
     }
