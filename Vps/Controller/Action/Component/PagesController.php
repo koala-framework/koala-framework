@@ -113,7 +113,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $ec[] = array(
                     'componentClass' => $cc->componentClass,
                     'type' => $type,
-                    'dbId' => $cc->dbId
+                    'componentId' => $cc->dbId
                 );
             }
         }
