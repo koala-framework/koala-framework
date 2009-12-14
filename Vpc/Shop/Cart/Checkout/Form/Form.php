@@ -38,7 +38,8 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vpc_Abstract_Form
             ->setHtml('<p class="formText">'.trlVps('What type of payment do you wish?').'</p>')
             ->setHideFieldInBackend(true);
         $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')))
-            ->setHideFieldInBackend(true);
+            ->setHideFieldInBackend(true)
+            ->setAllowBlank(false);
 
         $this->add(new Vps_Form_Field_TextArea('comment', trlVps('Other comments, questions or suggestions')))
             ->setHeight(80)
