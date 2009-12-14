@@ -12,7 +12,7 @@
             <td><?=$this->component($this->text)?></td>
             <? if ($this->image) { ?>
                 <td width="5">&nbsp;</td>
-                <td><?=$this->component($this->image)?></td>
+                <td align="right"><?=$this->component($this->image)?></td>
             <? } ?>
         </tr>
     <? } ?>
