@@ -106,7 +106,6 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     updateToolbar: function() {
         this.clearToolbar();
         var toolbar = this.getTopToolbar();
-
         for (var i=0; i < this.componentsStack.length; i++) {
             var data = this.componentsStack[i];
             var b = {};
@@ -142,8 +141,12 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     stackIndex: i,
                     componentClass: ec.componentClass,
                     type: ec.type,
+                    componentId: ec.componentId, //gesetzt wenn aus Pages - weil da gibts unterschiedliche
                     handler: function(o) {
                         var data = Vps.clone(this.componentsStack[o.stackIndex]);
+                        if (o.componentId) {
+                            data.componentId = o.componentId;
+                        }
                         data.componentClass = o.componentClass;
                         data.type = o.type;
                         this.componentsStack = this.componentsStack.slice(0, o.stackIndex);

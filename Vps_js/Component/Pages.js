@@ -152,12 +152,13 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                             node.attributes.data.editComponents.each(function(editComponent) {
                                 if (editComponent.componentClass+'-'+editComponent.type == o.actionKey) {
                                     this.loadComponent({
-                                        id: editComponent.dbId,
+                                        id: editComponent.componentId,
                                         componentClass: editComponent.componentClass,
                                         type: editComponent.type,
                                         text: node.text,
                                         icon: node.attributes.bIcon,
-                                        editComponents: node.attributes.data.editComponents
+                                        editComponents: node.attributes.data.editComponents,
+                                        pageId: node.attributes.id
                                     });
                                     return false;
                                 }
@@ -179,7 +180,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     loadComponent: function(data)
     {
-        var panel = this.contentTabPanel.getItem('page'+data.id);
+        var panel = this.contentTabPanel.getItem('page'+data.pageId);
         if (!panel) {
             panel = this.createComponentPanel(data);
             this.contentTabPanel.add(panel);
@@ -201,7 +202,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     createComponentPanel: function(data)
     {
         var panel = new Vps.Component.ComponentPanel({
-            id          : 'page'+data.id,
+            id          : 'page'+data.pageId,
             title       : data.text,
             closable    : true,
             autoLoad    : false,
