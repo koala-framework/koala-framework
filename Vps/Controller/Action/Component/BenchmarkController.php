@@ -74,7 +74,7 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         );
         $start = $this->_getParam('start');
         if (!$start && isset($_COOKIE['start'])) $start = $_COOKIE['start'];
-        if (!$start) $start = '-1 week';
+        if (!$start || !strtotime($start)) $start = '-1 week';
         setcookie('benchmark-start', $start, time()+60*60*24*14);
 
         foreach ($startDates as $k=>$i) {
@@ -138,7 +138,11 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
             $graphs = $rrd->getGraphs();
             $g = $graphs[$this->_getParam('name')];
             $output = array();
-            $output['contents'] = $g->getContents(strtotime($this->_getParam('start')));
+            $start = strtotime($this->_getParam('start'));
+            if (!$start) {
+                throw new Vps_ClientException("invalid start");
+            }
+            $output['contents'] = $g->getContents($start);
             $output['mimeType'] = 'image/png';
             $cache->save($output, $cacheId);
         }
