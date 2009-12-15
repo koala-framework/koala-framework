@@ -254,11 +254,13 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
 
         $g = new Vps_Util_Rrd_Graph($this);
         $g->setVerticalLabel('[load]');
+        $g->setLowerLimit(0);
         $g->addField('load', '#000000');
         $ret['load'] = $g;
 
         $g = new Vps_Util_Rrd_Graph($this);
         $g->setVerticalLabel('[processes]');
+        $g->setLowerLimit(0);
         $g->addField('mysql-processes');
         $g->addField('mysql-processes-select');
         $g->addField('mysql-processes-modify');
