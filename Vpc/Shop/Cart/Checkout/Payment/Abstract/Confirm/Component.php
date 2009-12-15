@@ -10,6 +10,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Edit
         $ret['cssClass'] = 'webStandard';
         $ret['componentName'] = trlVps('Shop Conformation Text');
         $ret['plugins']['placeholders'] = 'Vps_Component_Plugin_Placeholders';
+        $ret['viewCache'] = false;
         return $ret;
     }
 
