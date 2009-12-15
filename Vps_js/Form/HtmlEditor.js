@@ -194,11 +194,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
 
         if (this.controllerUrl && this.enableTidy) {
-            Ext.EventManager.on(this.doc, 'keypress', function(e) {
+            Ext.EventManager.on(this.doc, 'keydown', function(e) {
                 if(e.ctrlKey){
-                    var c = e.getCharCode(), cmd;
+                    var c = e.getCharCode();
                     if(c > 0){
-                        c = String.fromCharCode(c);
+                        c = String.fromCharCode(c).toLowerCase();
                         if (c == 'v') {
                             //tidy on paste
                             Ext.getBody().mask('Cleaning...');
