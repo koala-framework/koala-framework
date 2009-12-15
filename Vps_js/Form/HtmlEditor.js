@@ -274,7 +274,12 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tb.insert(1, '-');
         }
         if (this.enableStyles) {
-            tb.stylesTr = tb.el.insertHtml('beforeEnd', tb.autoCreate.html);
+            var table = document.createElement('table');
+            table.cellspacing = '0';
+            tb.stylesTr = table.appendChild(document.createElement('tbody'))
+                        .appendChild(document.createElement('tr'));
+            tb.stylesTr.appendChild(document.createElement('td'));
+            tb.el.appendChild(table);
             tb.tr = tb.stylesTr;
             tb.originalTr = tb.tr;
             if (this.stylesEditorDialog) {
