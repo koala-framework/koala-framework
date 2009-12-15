@@ -22,7 +22,7 @@ class Vps_View_Helper_DebugData
                     $autoClearCache = $session->autoClearAssetsCache;
                 }
                 $ret .= "<script type=\"text/javascript\">\n";
-                $ret .=$indent.'Vps.Debug.displayErrors = '.(!$config->errormail ? 'true' : 'false').";\n";
+                $ret .=$indent.'Vps.Debug.displayErrors = '.(!$config->error->log ? 'true' : 'false').";\n";
                 $ret .=$indent.'Vps.Debug.showMenu = '.($config->menu ? 'true' : 'false').";\n";
                 $ret .=$indent.'Vps.Debug.js = '.($js ? 'true' : 'false').";\n";
                 $ret .=$indent.'Vps.Debug.css = '.($css ? 'true' : 'false').";\n";
