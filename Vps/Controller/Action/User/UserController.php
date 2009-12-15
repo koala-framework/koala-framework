@@ -28,6 +28,9 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
                      .trlVps('Create, Delete and E-Mail change'));
         $fs->add(new Vps_Form_Field_ShowField('password', trlVps('Activation link')))
             ->setData(new Vps_Controller_Action_User_Users_ActivationlinkData());
+        $fs->add(new Vps_Form_Field_Checkbox('avoid_mailsend', trlVps('E-Mails')))
+            ->setSave(false)
+            ->setBoxLabel(trlVps("Don't send any E-Mail when saving."));
 
         if ($roleField = $this->_getRoleField()) {
             $this->_getPermissionFieldset()->add($roleField);
@@ -45,6 +48,14 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         $fs->add(new Vps_Form_Field_ShowField('logins', trlVps('Logins')));
         $fs->add(new Vps_Form_Field_ShowField('last_login', trlVps('Last login')))
             ->setTpl('{value:localizedDatetime}');
+    }
+
+    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    {
+        parent::_beforeSave($row);
+        if ($this->_getParam('avoid_mailsend')) {
+            $row->setSendMails(false);
+        }
     }
 
     private function _getPermissionFieldset()

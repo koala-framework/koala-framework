@@ -76,6 +76,9 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
             $this->_columns->add(new Vps_Grid_Column_Checkbox('webcode', trlVps('Only for this web'), 110))
                  ->setData(new Vps_Controller_Action_User_Users_WebcodeData());
         }
+        $this->_columns->add(new Vps_Grid_Column_Button('resend_mails', trlVps('E-Mails')))
+            ->setTooltip(trl('Eine E-Mail erneut senden'))
+            ->setButtonIcon(new Vps_Asset('email_go.png'));
     }
 
     public function jsonUserDeleteAction()
@@ -127,6 +130,27 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
             }
             $row->locked = $row->locked ? 0 : 1;
             $row->save();
+        }
+    }
+
+    public function jsonResendMailAction()
+    {
+        $userId = $this->getRequest()->getParam('user_id');
+        $type = $this->getRequest()->getParam('mailtype');
+
+        if (!$userId || !$type) {
+            throw new Vps_Exception("Wrong parameters submitted");
+        }
+
+        $userModel = Vps_Registry::get('userModel');
+        $row = $userModel->getRow($userId);
+        if (!$row) {
+            throw new Vps_Exception("User row not found");
+        }
+        if ($type == 'activation') {
+            $row->sendActivationMail();
+        } else if ($type == 'lost_password') {
+            $row->sendLostPasswordMail();
         }
     }
 
