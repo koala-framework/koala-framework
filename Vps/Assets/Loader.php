@@ -42,7 +42,7 @@ class Vps_Assets_Loader
         if (preg_match('#[^\.]+\.[^\.]+$#', $host, $m)) {
             $host = $m[0];
         }
-        $host = str_replace(array('.', '-'), array('', ''), $host);
+        $host = str_replace(array('.', '-', ':'), array('', '', ''), $host);
         return $host;
     }
 
