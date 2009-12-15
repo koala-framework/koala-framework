@@ -7,6 +7,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
     protected $_sendDeletedMail = null;
     protected $_additionalRolesCache = null;
     protected $_notifyGlobalUserAdded = false;
+    private $_sendMails = true; // whether to send mails on saving or not. used for resending emails
 
     public static function getWebcode()
     {
@@ -148,7 +149,11 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
             $this->_afterUpdate();
         }
         $this->_afterSave();
+    }
 
+    public function setSendMails($value)
+    {
+        $this->_sendMails = $value;
     }
 
     // a global user that exists already in service, but not in web
@@ -193,7 +198,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
 
     private function _sendMail($tpl, $subject, $tplParams = null)
     {
-        if (!$this->email) {
+        if (!$this->email || !$this->_sendMails) {
             return false;
         }
         $mailClass = $this->getModel()->getMailClass();
