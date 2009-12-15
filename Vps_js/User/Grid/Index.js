@@ -5,6 +5,19 @@ Vps.User.Grid.Index = Ext.extend(Vps.Auto.GridPanel,
 {
     initComponent: function() {
         Vps.User.Grid.Index.superclass.initComponent.call(this);
+        if (!this.columnsConfig) this.columnsConfig = { };
+        this.columnsConfig['resend_mails'] = {
+            clickHandler: function(grid, rowIndex, col, e) {
+                var r = grid.getStore().getAt(rowIndex);
+                var win = new Vps.User.Grid.SendMailWindow({
+                    controllerUrl: this.controllerUrl,
+                    baseParams: { user_id: r.data.id }
+                });
+                win.show();
+            },
+            scope: this
+        };
+
         this.actions.userdelete = new Ext.Action({
             text    : trlVps('Delete user'),
             icon    : '/assets/silkicons/delete.png',
