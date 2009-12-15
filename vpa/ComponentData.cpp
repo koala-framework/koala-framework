@@ -9,11 +9,11 @@
 #include "ComponentData.h"
 #include "ConnectionThread.h"
 
-#define ifDebugCreateComponentData(x)
+#define ifDebugCreateComponentData(x) x
 #define ifDebugGetComponentById(x)
-#define ifDebugGetChildPageByPath(x)
+#define ifDebugGetChildPageByPath(x) x
 #define ifDebugGetRecursiveChildComponents(x)
-#define ifDebugGetHome(x)
+#define ifDebugGetHome(x) x
 
 int ComponentData::count = 0;
 QHash<const ComponentDataRoot*, QHash<QString, ComponentData*> > ComponentData::m_idHash;
@@ -201,6 +201,7 @@ QList<ComponentData*> ComponentData::getComponentsByClass(const ComponentDataRoo
 
 ComponentData* ComponentData::getHome(ComponentData* subRoot)
 {
+    ifDebugGetHome( qDebug() << "homes" << m_homes; )
     foreach (ComponentData *c, m_homes) {
         ifDebugGetHome( qDebug() << "checking" << c->componentId(); )
         while (!subRoot->hasFlag(IndexedString("subroot"))) {

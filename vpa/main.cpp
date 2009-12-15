@@ -60,7 +60,7 @@ int main(int argc, char** argv)
         }
         qDebug() << stopWatch.elapsed() << "ms";
     }
-
+    
     //ComponentDataRoot::getInstance(IndexedString(PhpProcess::getInstance()->call(0, "root-component")));
 
     qDebug() << "startup time" << startupStopWatch.elapsed() << "ms";

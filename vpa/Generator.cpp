@@ -11,7 +11,7 @@
 #include "Model.h"
 #include "ComponentDataRoot.h"
 
-#define ifDebugGeneratorBuild(x)
+#define ifDebugGeneratorBuild(x) x
 #define ifDebugGeneratorBuildInherit(x)
 #define ifDebugBuildWithGenerators(x)
 #define ifDebugPriority(x)
@@ -862,6 +862,7 @@ QList<ComponentData*> GeneratorLoadSql::_build(ComponentData* parent, QSqlQuery 
     QList<ComponentData*> ret;
     while (query.next()) {
         int id = query.value(0).toInt();
+        qDebug() << query.value(0).toInt() << query.value(1);
         ComponentData *d = new ComponentData(this, parent, idSeparator, id, component);
         d->setDbIdPrefix(dbIdPrefix);
         d->setName(query.value(1).toString());
@@ -870,6 +871,7 @@ QList<ComponentData*> GeneratorLoadSql::_build(ComponentData* parent, QSqlQuery 
         if (d->filename().isEmpty()) {
             d->setFilename(d->name());
         }
+        //Q_ASSERT(!(generatorFlags & Generator::TypePage) || !d->name().isEmpty());
         if (!(generatorFlags & Generator::DisableCache)) {
             parent->addChildren(d);
         }
