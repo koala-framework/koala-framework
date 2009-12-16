@@ -54,11 +54,8 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     {
         if ($this->_settings['nameColumn']) {
             return $row->{$this->_settings['nameColumn']};
-        } else if ((get_class($row) == 'Vps_Model_Db_Row' && method_exists($row->getRow(), '__toString'))
-                    || (get_class($row) != 'Vps_Model_Db_Row')) {
-            return $row->__toString();
         } else {
-            return null;
+            return $row->__toString();
         }
     }
 
