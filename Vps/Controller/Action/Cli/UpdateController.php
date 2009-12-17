@@ -39,21 +39,34 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         }
 
         if (!file_exists('application/update')) {
-            file_put_contents('application/update', serialize(array('start' => $currentRevision)));
-            echo "No application/update revision found, wrote current revision ($currentRevision)\n";
+            $doneRevisions = array();
+            foreach (Vps_Update::getUpdates(0, $currentRevision) as $u) {
+                $doneRevisions[] = $u->getRevision();
+            }
+            file_put_contents('application/update', serialize($doneRevisions));
+            echo "No application/update revision found, wrote all to current revision ($currentRevision)\n";
             exit;
         }
-        $updateRevision = file_get_contents('application/update');
-        if (is_numeric(trim($updateRevision))) {
-            $updateRevision = array('start' => trim($updateRevision));
+        $doneRevisions = file_get_contents('application/update');
+        if (is_numeric(trim($doneRevisions))) {
+            $doneRevisions = array();
+            foreach (Vps_Update::getUpdates(0, trim($doneRevisions)) as $u) {
+                $doneRevisions[] = $u->getRevision();
+            }
         } else {
-            $updateRevision = unserialize($updateRevision);
+            $doneRevisions = unserialize($doneRevisions);
+            if (isset($doneRevisions['start'])) {
+                if (!isset($doneRevisions['done'])) $doneRevisions['done'] = array();
+                foreach (Vps_Update::getUpdates(0, $doneRevisions['start']) as $u) {
+                    $doneRevisions['done'][] = $u->getRevision();
+                }
+                $doneRevisions = $doneRevisions['done'];
+            }
         }
-        if (!$updateRevision) {
+        if (!$doneRevisions) {
             throw new Vps_ClientException("Invalid application/update revision");
         }
-        if (!isset($updateRevision['done'])) $updateRevision['done'] = array();
-        $from = $updateRevision['start'];
+        $from = 1;
         $to = $currentRevision;
         if ($current) {
             $to++;
@@ -80,7 +93,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             echo "Looking for update-scripts from revision $from to {$to}...";
             $updates = Vps_Update::getUpdates($from, $to);
             foreach ($updates as $k=>$u) {
-                if ($u->getRevision() && in_array($u->getRevision(), $updateRevision['done']) && !$rev) {
+                if ($u->getRevision() && in_array($u->getRevision(), $doneRevisions) && !$rev) {
                     if ($current && $u->getRevision() == $to-1) continue;
                     unset($updates[$k]);
                 }
@@ -110,11 +123,11 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 echo "\n";
                 self::_executeUpdate($updates, 'postClearCache', $debug);
                 foreach ($updates as $k=>$u) {
-                    if (!in_array($u->getRevision(), $updateRevision['done'])) {
-                        $updateRevision['done'][] = $u->getRevision();
+                    if (!in_array($u->getRevision(), $doneRevisions)) {
+                        $doneRevisions[] = $u->getRevision();
                     }
                 }
-                file_put_contents('application/update', serialize($updateRevision));
+                file_put_contents('application/update', serialize($doneRevisions));
                 echo "\n\033[32mupdate finished\033[0m\n";
 
                 if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
