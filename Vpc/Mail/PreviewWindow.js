@@ -63,7 +63,8 @@ Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
         this.subject = new Ext.StatusBar({});
         this.mailPanel = new Ext.Panel({
             autoScroll: true,
-            tbar	: this.subject
+            tbar	: this.subject,
+            bodyCssClass: 'mailPreviewPanel'
         });
 
         this.items = [this.mailPanel];
