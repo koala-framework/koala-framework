@@ -16,5 +16,6 @@
             <? } ?>
         </li>
     <? } ?>
+    <div class="clear"></div>
 </ul>
 <? } ?>
