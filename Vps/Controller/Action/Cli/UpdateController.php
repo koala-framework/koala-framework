@@ -54,8 +54,9 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         }
         $doneRevisions = file_get_contents('application/update');
         if (is_numeric(trim($doneRevisions))) {
+            $r = trim($doneRevisions);
             $doneRevisions = array();
-            foreach (Vps_Update::getUpdates(0, trim($doneRevisions)) as $u) {
+            foreach (Vps_Update::getUpdates(0, $r) as $u) {
                 $doneRevisions[] = $u->getRevision();
             }
         } else {
