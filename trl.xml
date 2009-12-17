@@ -5024,5 +5024,80 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>RTR-ECG-Check und Daten speichern: bitte warten...</de>
 <id>1333</id>
 </text>
+<text>
+<en>E-Mail type</en>
+<de>E-Mail Typ</de>
+<id>1334</id>
+</text>
+<text>
+<en>Activation</en>
+<de>Aktivierung</de>
+<id>1335</id>
+</text>
+<text>
+<en>Please select the E-Mail type you wish to send to the user.</en>
+<de>Bitte w&#xE4;hlen Sie den E-Mail Typ aus, den Sie senden m&#xF6;chten.</de>
+<id>1336</id>
+</text>
+<text>
+<en>Send a mail to a user</en>
+<de>Eine Mail an einen Benutzer senden</de>
+<id>1337</id>
+</text>
+<text>
+<en>Table</en>
+<de>Tabelle</de>
+<id>1338</id>
+</text>
+<text>
+<en>Green</en>
+<de>Gr&#xFC;n</de>
+<id>1339</id>
+</text>
+<text>
+<en>How many columns</en>
+<de>Wie viele Spalten</de>
+<id>1340</id>
+</text>
+<text>
+<en>Table style</en>
+<de>Tabellenstil</de>
+<id>1341</id>
+</text>
+<text>
+<en>Style</en>
+<de>Stil</de>
+<id>1342</id>
+</text>
+<text>
+<en>Switch display</en>
+<de>Klappbox</de>
+<id>1343</id>
+</text>
+<text>
+<en>Link text</en>
+<de>Link Text</de>
+<id>1344</id>
+</text>
+<text>
+<en>E-Mails</en>
+<de>E-Mails</de>
+<id>1345</id>
+</text>
+<text>
+<en>Don't send any E-Mail when saving.</en>
+<de>Beim speichern keine E-Mails senden.</de>
+<id>1346</id>
+</text>
+<text>
+<en>Log</en>
+<de>Log</de>
+<id>1347</id>
+</text>
+<text>
+<en>Comments</en>
+<de>Kommentare</de>
+<id>1348</id>
+</text>
 </trl>
 
