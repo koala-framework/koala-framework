@@ -104,12 +104,6 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         return null;
     }
 
-    public function getImageDimensions()
-    {
-        $ret = self::_getDimensions($this->getImageRow(), get_class($this));
-        return $ret;
-    }
-
     public function getImageRow()
     {
         return $this->_getRow();
@@ -125,9 +119,10 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         return false;
     }
 
-    private static function _getDimensions($row, $className)
+    public function getImageDimensions()
     {
-        $dimension = Vpc_Abstract::getSetting($className, 'dimensions');
+        $row = $this->getImageRow();
+        $dimension = $this->_getSetting('dimensions');
 
         $s = array();
         if (sizeof($dimension) > 1 && isset($dimension[$row->dimension])) {
@@ -194,7 +189,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             return null;
         }
 
-        $dim = self::_getDimensions($row, $className);
+        $dim = $component->getComponent()->getImageDimensions();
         if ($dim) {
             $output = Vps_Media_Image::scale($file, $dim);
         } else {
