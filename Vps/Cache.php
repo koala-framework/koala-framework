@@ -1,6 +1,9 @@
 <?php
 class Vps_Cache extends Zend_Cache
 {
+    /**
+     * @return Zend_Cache_Core
+     */
     public static function factory($frontend, $backend, $frontendOptions = array(), $backendOptions = array())
     {
         $frontendClass = 'Zend_Cache_' . ($frontend != 'Core' ? 'Frontend_' : '') . $frontend;
