@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Basic_ImagePosition
+ * @group Image
  *
  * Testet vorallem das Vps_Component_FieldModel Model
  */

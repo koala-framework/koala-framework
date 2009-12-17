@@ -78,8 +78,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
     public function hasContent()
     {
-        $imageRow = $this->getImageRow();
-        if ($imageRow && $imageRow->imageExists()) {
+        $data = $this->_getImageDataOrEmptyImageData();
+        if ($data && file_exists($data['file'])) {
             return true;
         }
         return false;
@@ -87,44 +87,74 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
     public function getImageUrl()
     {
-        $row = $this->getImageRow();
-        $fRow = false;
-        if ($row) $fRow = $row->getParentRow('Image');
-        if ($fRow) {
-            $filename = $row->filename;
-            if (!$filename) {
-                $filename = $fRow->filename;
-            }
-            $filename .= '.'.$fRow->extension;
+        $data = $this->_getImageDataOrEmptyImageData();
+        if ($data) {
             $id = $this->getData()->componentId;
-            return Vps_Media::getUrl(get_class($this), $id, 'default', $filename);
+            return Vps_Media::getUrl(get_class($this), $id, 'default', $data['filename']);
         }
         return null;
     }
 
-    public function getImageRow()
+    public function getImageData()
     {
-        return $this->_getRow();
+        $row = $this->_getRow();
+        $fRow = false;
+        if ($row) $fileRow = $row->getParentRow('Image');
+        if ($fileRow) {
+            $filename = $row->filename;
+            if (!$filename) {
+                $filename = $fileRow->filename;
+            }
+            $filename .= '.'.$fileRow->extension;
+            $id = $this->getData()->componentId;
+            return array(
+                'filename' => $filename,
+                'file' => $fileRow->getFileSource(),
+                'mimeType' => $fileRow->mime_type,
+                'row' => $row
+            );
+        }
+        return false;
+    }
+
+    private function _getImageDataOrEmptyImageData()
+    {
+        $file = $this->getImageData();
+        if (!$file) {
+            $file = $this->_getEmptyImageData();
+        }
+        return $file;
     }
 
     public function _getCacheRow()
     {
-        return $this->getImageRow();
+        $data = $this->getImageData();
+        if (isset($data['row'])) return $data['row'];
+        return null;
     }
 
-    protected static function _getEmptyImage($className)
+    protected function _getEmptyImageData()
     {
         return false;
     }
 
     public function getImageDimensions()
     {
-        $row = $this->getImageRow();
+        $data = $this->_getImageDataOrEmptyImageData();
+        $row = false;
+        if (isset($data['row'])) {
+            $row = $data['row'];
+        }
         $dimension = $this->_getSetting('dimensions');
 
         $s = array();
-        if (sizeof($dimension) > 1 && isset($dimension[$row->dimension])) {
-            $d = $dimension[$row->dimension];
+        if (sizeof($dimension) > 1) {
+            if ($row && isset($dimension[$row->dimension])) {
+                $d = $dimension[$row->dimension];
+            } else {
+                reset($dimension);
+                $d = current($dimension);
+            }
         } else {
             reset($dimension);
             $d = current($dimension);
@@ -151,13 +181,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $s['scale'] = $d['scale'];
         }
 
-        if (!$row || !$fileRow = $row->getParentRow('Image')) {
-            $file = call_user_func(array($className, '_getEmptyImage'), $className);
-        } else {
-            $file = $fileRow->getFileSource();
-        }
-        if ($file && file_exists($file)) {
-            $sourceSize = @getimagesize($file);
+        if ($data && file_exists($data['file'])) {
+            $sourceSize = @getimagesize($data['file']);
             if (!$sourceSize) return null;
             return Vps_Media_Image::calculateScaleDimensions($sourceSize, $s);
         }
@@ -169,37 +194,24 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $component = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
         if (!$component) return null;
 
-        $row = $component->getComponent()->getImageRow();
-        if ($row) {
-            $fileRow = $row->getParentRow('Image');
-        } else {
-            $fileRow = false;
-        }
-        if (!$fileRow) {
-            $file = call_user_func(array($className, '_getEmptyImage'), $className);
-            $s = getimagesize($file);
-            $mimeType = $s['mime'];
-        } else {
-            $file = $fileRow->getFileSource();
-            $mimeType = $fileRow->mime_type;
-        }
-        if (!$file || !file_exists($file)) {
+        $data = $component->getComponent()->_getImageDataOrEmptyImageData();
+        if (!$data || !file_exists($data['file'])) {
             return null;
         }
 
         $dim = $component->getComponent()->getImageDimensions();
         if ($dim) {
-            $output = Vps_Media_Image::scale($file, $dim);
+            $output = Vps_Media_Image::scale($data['file'], $dim);
         } else {
-            $output = file_get_contents($file);
+            $output = file_get_contents($data['file']);
         }
         $ret = array(
             'contents' => $output,
-            'mimeType' => $mimeType,
+            'mimeType' => $data['mimeType'],
         );
         if (Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
             $mtimeFiles = array();
-            $mtimeFiles[] = $file;
+            $mtimeFiles[] = $data['file'];
             $classes = Vpc_Abstract::getParentClasses($className);
             $classes[] = $className;
             $incPaths = explode(PATH_SEPARATOR, get_include_path());
@@ -220,9 +232,9 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         } else {
             $ret['mtime'] = filemtime($file);
         }
-        if ($row) {
+        if (isset($data['row'])) {
             Vps_Component_Cache::getInstance()->saveMeta(
-                get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+                get_class($data['row']->getModel()), $data['row']->component_id, $id, Vps_Component_Cache::META_CALLBACK
             );
         }
         return $ret;
