@@ -163,20 +163,30 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         if (!isset($d['width'])) {
             $s['width'] = 0;
         } else if ($d['width'] == self::USER_SELECT) {
-            $s['width'] = $row->width;
+            if (!is_object($row)) {
+                $s['width'] = 0;
+            } else {
+                $s['width'] = $row->width;
+            }
         } else {
             $s['width'] = $d['width'];
         }
         if (!isset($d['height'])) {
             $s['height'] = 0;
         } else if ($d['height'] == self::USER_SELECT) {
-            $s['height'] = $row->height;
+            if (!is_object($row)) {
+                $s['height'] = 0;
+            } else {
+                $s['height'] = $row->height;
+            }
         } else {
             $s['height'] = $d['height'];
         }
         if (!isset($d['scale'])) {
         } else if ($d['scale'] == self::USER_SELECT) {
-            $s['scale'] = $row->scale;
+            if (!is_object($row)) {
+                $s['scale'] = $row->scale;
+            }
         } else {
             $s['scale'] = $d['scale'];
         }
