@@ -69,6 +69,11 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $this->_getModel()->getIds($select);
     }
 
+    protected function _fetchRows($parentData, $select)
+    {
+        return $this->_getModel()->getRows($select);
+    }
+
     public function getChildData($parentData, $select = array())
     {
         Vps_Benchmark::count('GenTable::getChildData');
@@ -87,7 +92,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $select = $this->_formatSelect($parentData, $select);
             $rows = array();
             if ($select) {
-                $rows = $this->_getModel()->fetchAll($select);
+                $rows = $this->_fetchRows($parentData, $select);
             }
             foreach ($rows as $row) {
                 $currentPd = $parentData;
