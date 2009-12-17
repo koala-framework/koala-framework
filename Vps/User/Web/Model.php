@@ -9,5 +9,4 @@ final class Vps_User_Web_Model extends Vps_Model_Db
             'refModelClass' => 'Vps_User_Model' // muss hier hardcodet sein, sonst endlos
         )
     );
-    protected $_default = array('role' => 'guest');
 }
