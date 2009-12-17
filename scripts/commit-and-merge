@@ -44,7 +44,9 @@ if (preg_match('#branches/vps/1\\.6#', $ownUrl)) {
     }
 }
 
-if (file_exists('../vps-trunk-clean')) {
+if (file_exists('../vps-trunk-mergehere')) {
+    $mergeToArray[] = '../vps-trunk-mergehere';
+} else if (file_exists('../vps-trunk-clean')) {
     $mergeToArray[] = '../vps-trunk-clean';
 } else if (file_exists('../trunk')) {
     $mergeToArray[] = '../trunk';
