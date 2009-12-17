@@ -40,47 +40,41 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
             $ret['title'] = $this->getRow()->title;
         }
         if ($this->_getSetting('fullSizeDownloadable')) {
-            $row = $this->getImageRow();
-            $filename = $row->filename;
-            $fRow = $row->getParentRow('Image');
-            if (!$fRow) return $ret;
-            if (!$filename && $fRow) {
-                $filename = $fRow->filename;
+            $data = $this->getImageData();
+            if ($data) {
+                $ret['fullSizeUrl'] = Vps_Media::getUrl($this->getData()->componentClass,
+                    $this->getData()->componentId, 'original', $data['filename']);
             }
-            $filename .= '.'.$fRow->extension;
-            $ret['fullSizeUrl'] = Vps_Media::getUrl($this->getData()->componentClass,
-                $this->getData()->componentId, 'original', $filename);
         }
         return $ret;
     }
 
-    public function getImageRow()
+    public function getImageData()
     {
         $d = $this->getData();
         while (!is_instance_of($d->componentClass, 'Vpc_Basic_ImageEnlarge_Component')) {
             $d = $d->parent;
         }
-        return $d->getComponent()->getOwnImageRow();
+        return $d->getComponent()->getOwnImageData();
     }
 
-    public function getAlternativePreviewImageRow()
+    public function getAlternativePreviewImageData()
     {
-        return parent::getImageRow();
+        return parent::getImageData();
     }
 
     public static function getMediaOutput($id, $type, $className)
     {
         if ($type == 'original') {
-            $row = Vps_Component_Data_Root::getInstance()
+            $data = Vps_Component_Data_Root::getInstance()
                 ->getComponentByDbId($id, array('limit'=>1))
-                ->getComponent()->getImageRow();
-            if (!$row->imageExists()) {
+                ->getComponent()->getImageData();
+            if (!$data) {
                 return null;
             }
-            $fileRow = $row->getParentRow('Image');
             return array(
-                'file' => $fileRow->getFileSource(),
-                'mimeType' => $fileRow->mime_type
+                'file' => $data['file'],
+                'mimeType' => $data['mimeType']
             );
         } else {
             return parent::getMediaOutput($id, $type, $className);
