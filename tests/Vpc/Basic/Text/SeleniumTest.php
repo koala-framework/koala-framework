@@ -1,8 +1,10 @@
 <?php
 /**
+das funktioniert alles nicht; sowas zu testen ist mit selenium _etwas_ schwierig
+
+
  * @group slow
  * @group Vpc_Basic_Text
- */
 class Vpc_Basic_Text_SeleniumTest extends Vps_Test_SeleniumTestCase
 {
     public function setUp()
@@ -15,8 +17,7 @@ class Vpc_Basic_Text_SeleniumTest extends Vps_Test_SeleniumTestCase
     {
         $this->openVpcEdit('Vpc_Basic_Text_TestComponent', 1000);
         $this->waitForConnections();
-	/*
-	das funktioniert alles nicht; sowas zu testen ist mit selenium _etwas_ schwierig
+	
 
         $this->focus('dom=window.frames[0].document.body');
         $this->keyPress('dom=window.frames[0].document.body', 'a');
@@ -44,5 +45,6 @@ class Vpc_Basic_Text_SeleniumTest extends Vps_Test_SeleniumTestCase
 //         $this->click("//button[text()='".trlVps('Save')."']");
         sleep(500);
         //$this->assertEquals('foo', $this->getText('dom=window.frames[0].document.body'));
-	*/
+
     }}
+*/
