@@ -22,7 +22,7 @@ Vpc.ListSwitch.View.prototype = {
         );
         Ext.each(switchItems, function(si) {
             var previewLink = Ext.get(si).down('a.previewLink');
-            previewLink.largeContent = Ext.get(si).down('.largeContent').dom.innerHTML;
+            previewLink.largeContent = Ext.get(si).down('.largeContent').dom;
             previewLink.switchIndex = this.previewElements.length;
             previewLink.on('click', function(ev, el, cfg) {
                 this.setLarge(cfg.linkEl);
@@ -35,8 +35,9 @@ Vpc.ListSwitch.View.prototype = {
     },
 
     setLarge: function(previewEl) {
-        this.componentWrapper.down('.listSwitchLargeWrapper .listSwitchLargeContent').dom.innerHTML =
-            previewEl.largeContent;
+        previewEl.largeContent.style.display = 'block';
+        this.componentWrapper.down('.listSwitchLargeWrapper .listSwitchLargeContent').dom.innerHTML = '';
+        this.componentWrapper.down('.listSwitchLargeWrapper .listSwitchLargeContent').dom.appendChild(previewEl.largeContent);
         if (this.activePreviewLink) {
             this.activePreviewLink.removeClass('active');
         }
