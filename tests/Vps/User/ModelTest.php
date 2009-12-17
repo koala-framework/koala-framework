@@ -9,6 +9,7 @@ class Vps_User_ModelTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        Vps_Model_Abstract::clearInstances();
         $this->_serviceFnf = new Vps_Model_FnF(array(
             'data' => array(
                 array(

@@ -12,6 +12,7 @@ class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         Vps_Registry::set('db', Vps_Registry::get('dao')->getDb());
+        Vps_Model_Abstract::clearInstances();
     }
 
     public function tearDown()
