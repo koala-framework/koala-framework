@@ -53,7 +53,8 @@ class Vps_User_ModelTest extends PHPUnit_Framework_TestCase
         $this->_userModel = new Vps_User_UserModel(array(
             'proxyModel' => $this->_serviceFnf,
             'siblingModels' => array('webuser' => 'Vps_User_SiblingModel'),
-            'mailClass' => 'Vps_User_MailClass'
+            'mailClass' => 'Vps_User_MailClass',
+            'log' => false
         ));
     }
 

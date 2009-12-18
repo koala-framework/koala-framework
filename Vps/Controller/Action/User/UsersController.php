@@ -131,10 +131,10 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
             $row->locked = $row->locked ? 0 : 1;
             $row->save();
 
-            $this->_model->getDependentModel('Messages')->createRow(array(
+            $this->_model->writeLog(array(
                 'user_id' => $row->id,
                 'message_type' => ($row->locked ? 'user_locked' : 'user_unlocked')
-            ))->save();
+            ));
         }
     }
 
