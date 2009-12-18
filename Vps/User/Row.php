@@ -5,8 +5,11 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
     protected $_changedPasswordData = array();
     protected $_changedOldMail = null;
     protected $_sendDeletedMail = null;
+    protected $_saveDeletedLog = false;
     protected $_additionalRolesCache = null;
     protected $_notifyGlobalUserAdded = false;
+    protected $_logChangedUser = false;
+    protected $_passwordSet = false;
     private $_sendMails = true; // whether to send mails on saving or not. used for resending emails
 
     public static function getWebcode()
@@ -53,6 +56,12 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
 
     public function setPassword($password)
     {
+        if (!$this->password) {
+            $this->_passwordSet = 'activate';
+        } else {
+            $this->_passwordSet = 'password_set';
+        }
+
         $this->generatePasswordSalt();
         $this->password = $this->encodePassword($password);
     }
@@ -109,6 +118,28 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         if ($this->_sendDeletedMail) {
             $this->sendDeletedMail();
         }
+        if ($this->_saveDeletedLog) {
+            $this->getModel()->getDependentModel('Messages')->createRow(array(
+                'user_id' => $this->id,
+                'message_type' => 'user_deleted'
+            ))->save();
+
+            $this->_saveDeletedLog = false;
+        }
+    }
+
+
+    protected function _afterUpdate()
+    {
+        parent::_afterUpdate();
+        if ($this->_logChangedUser) {
+            $this->getModel()->getDependentModel('Messages')->createRow(array(
+                'user_id' => $this->id,
+                'message_type' => 'user_edited'
+            ))->save();
+
+            $this->_logChangedUser = false;
+        }
     }
 
     protected function _afterInsert()
@@ -119,6 +150,11 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         if (!$this->password) {
             $this->sendActivationMail();
         }
+
+        $this->getModel()->getDependentModel('Messages')->createRow(array(
+            'user_id' => $this->id,
+            'message_type' => 'user_created'
+        ))->save();
     }
 
     protected function _afterSave()
@@ -128,6 +164,15 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         if ($this->_notifyGlobalUserAdded) {
             $this->sendGlobalUserActivated();
             $this->_notifyGlobalUserAdded = false;
+        }
+
+        if ($this->_passwordSet) {
+            $this->getModel()->getDependentModel('Messages')->createRow(array(
+                'user_id' => $this->id,
+                'message_type' => 'user_'.$this->_passwordSet
+            ))->save();
+
+            $this->_passwordSet = false;
         }
     }
 
@@ -223,16 +268,27 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         $mail->activationUrl = $mail->webUrl.$url.'?code='.$this->id.'-'.
                         $this->getActivationCode();
 
-        return $mail->send();
+        $ret = $mail->send();
+
+        $this->getModel()->getDependentModel('Messages')->createRow(array(
+            'user_id' => $this->id,
+            'message_type' => 'user_mail_'.$tpl
+        ))->save();
+
+        return $ret;
     }
 
     public function __set($columnName, $value)
     {
+        if (!in_array($columnName, array('webcode', 'created', 'logins', 'last_login', 'last_modified', 'locked'))) {
+            $this->_logChangedUser = true;
+        }
         if ($columnName == 'email' && $value != $this->email) {
             $this->_changedOldMail = $this->email;
         }
         if ($columnName == 'deleted' && $value != $this->deleted && $value) {
             $this->_sendDeletedMail = true;
+            $this->_saveDeletedLog = true;
         }
 
         if ($columnName == 'password1' || $columnName == 'password2') {

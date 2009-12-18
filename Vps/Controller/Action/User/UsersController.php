@@ -130,6 +130,11 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
             }
             $row->locked = $row->locked ? 0 : 1;
             $row->save();
+
+            $this->_model->getDependentModel('Messages')->createRow(array(
+                'user_id' => $row->id,
+                'message_type' => ($row->locked ? 'user_locked' : 'user_unlocked')
+            ))->save();
         }
     }
 
@@ -194,6 +199,12 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         $config = array(
             'controllerUrl' => $this->getRequest()->getPathInfo()
         );
+        if (Vps_Registry::get('acl')->has('vps_user_log')) {
+            $config['logControllerUrl'] = '/vps/user/log';
+        }
+        if (Vps_Registry::get('acl')->has('vps_user_comments')) {
+            $config['commentsControllerUrl'] = '/vps/user/comments';
+        }
         $this->view->ext('Vps.User.Grid.Index', $config);
     }
 }
