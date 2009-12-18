@@ -119,10 +119,10 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
             $this->sendDeletedMail();
         }
         if ($this->_saveDeletedLog) {
-            $this->getModel()->getDependentModel('Messages')->createRow(array(
+            $this->getModel()->writeLog(array(
                 'user_id' => $this->id,
                 'message_type' => 'user_deleted'
-            ))->save();
+            ));
 
             $this->_saveDeletedLog = false;
         }
@@ -133,10 +133,10 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
     {
         parent::_afterUpdate();
         if ($this->_logChangedUser) {
-            $this->getModel()->getDependentModel('Messages')->createRow(array(
+            $this->getModel()->writeLog(array(
                 'user_id' => $this->id,
                 'message_type' => 'user_edited'
-            ))->save();
+            ));
 
             $this->_logChangedUser = false;
         }
@@ -151,10 +151,10 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
             $this->sendActivationMail();
         }
 
-        $this->getModel()->getDependentModel('Messages')->createRow(array(
+        $this->getModel()->writeLog(array(
             'user_id' => $this->id,
             'message_type' => 'user_created'
-        ))->save();
+        ));
     }
 
     protected function _afterSave()
@@ -167,10 +167,10 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         }
 
         if ($this->_passwordSet) {
-            $this->getModel()->getDependentModel('Messages')->createRow(array(
+            $this->getModel()->writeLog(array(
                 'user_id' => $this->id,
                 'message_type' => 'user_'.$this->_passwordSet
-            ))->save();
+            ));
 
             $this->_passwordSet = false;
         }
@@ -270,10 +270,10 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
 
         $ret = $mail->send();
 
-        $this->getModel()->getDependentModel('Messages')->createRow(array(
+        $this->getModel()->writeLog(array(
             'user_id' => $this->id,
             'message_type' => 'user_mail_'.$tpl
-        ))->save();
+        ));
 
         return $ret;
     }

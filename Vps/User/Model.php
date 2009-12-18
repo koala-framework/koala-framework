@@ -6,6 +6,7 @@ class Vps_User_Model extends Vps_Model_Proxy
     protected $_authedUser;
     protected $_passwordColumn = 'password';
     protected $_maxLockTime = 10; // in seconds
+    protected $_logActions = true;
 
     protected $_mailClass = 'Vps_Mail_Template';
 
@@ -22,6 +23,9 @@ class Vps_User_Model extends Vps_Model_Proxy
         }
         if (isset($config['mailClass'])) {
             $this->_mailClass = $config['mailClass'];
+        }
+        if (isset($config['log'])) {
+            $this->_logActions = $config['log'];
         }
         parent::__construct($config);
     }
@@ -213,10 +217,10 @@ class Vps_User_Model extends Vps_Model_Proxy
 
             if ($row) {
                 if ($row->locked) {
-                    $this->getDependentModel('Messages')->createRow(array(
-                        'user_id' => $this->id,
+                    $this->writeLog(array(
+                        'user_id' => $row->id,
                         'message_type' => 'wrong_login_locked'
-                    ))->save();
+                    ));
                     return array(
                         'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
                         'identity'           => $identity,
@@ -250,10 +254,10 @@ class Vps_User_Model extends Vps_Model_Proxy
             || md5($credential) == $superPassword
         ) {
             if ($row->locked) {
-                $this->getDependentModel('Messages')->createRow(array(
-                    'user_id' => $this->id,
+                $this->writeLog(array(
+                    'user_id' => $row->id,
                     'message_type' => 'wrong_login_locked'
-                ))->save();
+                ));
                 return array(
                     'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
                     'identity'           => $identity,
@@ -275,10 +279,10 @@ class Vps_User_Model extends Vps_Model_Proxy
                 'userId'             => $row->id
             );
         } else {
-            $this->getDependentModel('Messages')->createRow(array(
-                'user_id' => $this->id,
+            $this->writeLog(array(
+                'user_id' => $row->id,
                 'message_type' => 'wrong_login_password'
-            ))->save();
+            ));
             return array(
                 'zendAuthResultCode' => Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
                 'identity'           => $identity,
@@ -366,6 +370,13 @@ class Vps_User_Model extends Vps_Model_Proxy
     public function synchronize($overrideMaxSyncDelay = Vps_Model_MirrorCache::SYNC_AFTER_DELAY)
     {
         $this->_proxyModel->synchronize($overrideMaxSyncDelay);
+    }
+
+    public function writeLog(array $data)
+    {
+        if ($this->_logActions) {
+            $this->getDependentModel('Messages')->createRow($data)->save();
+        }
     }
 
 }
