@@ -5099,5 +5099,145 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Kommentare</de>
 <id>1348</id>
 </text>
+<text>
+<en>Account created.</en>
+<de>Account erstellt.</de>
+<id>1349</id>
+</text>
+<text>
+<en>Account created by {0}.</en>
+<de>Account erstellt von {0}.</de>
+<id>1350</id>
+</text>
+<text>
+<en>Account edited.</en>
+<de>Account bearbeitet.</de>
+<id>1351</id>
+</text>
+<text>
+<en>Account edited by {0}.</en>
+<de>Account bearbeitet von {0}.</de>
+<id>1352</id>
+</text>
+<text>
+<en>Account activated.</en>
+<de>Account aktiviert.</de>
+<id>1353</id>
+</text>
+<text>
+<en>Account activated by {0}.</en>
+<de>Account aktiviert von {0}.</de>
+<id>1354</id>
+</text>
+<text>
+<en>Password set.</en>
+<de>Passwort gesetzt.</de>
+<id>1355</id>
+</text>
+<text>
+<en>Password set by {0}.</en>
+<de>Passwort gesetzt von {0}.</de>
+<id>1356</id>
+</text>
+<text>
+<en>Account deleted e-mail sent.</en>
+<de>Account gelöscht E-Mail gesendet.</de>
+<id>1357</id>
+</text>
+<text>
+<en>Account deleted e-mail sent by {0}.</en>
+<de>Account gelöscht E-Mail gesendet von {0}.</de>
+<id>1358</id>
+</text>
+<text>
+<en>Changed mail address e-mail sent.</en>
+<de>Geänderte E-Mail-Adresse E-Mail gesendet.</de>
+<id>1359</id>
+</text>
+<text>
+<en>Changed mail address e-mail sent by {0}.</en>
+<de>Geänderte E-Mail-Adresse E-Mail gesendet von {0}.</de>
+<id>1360</id>
+</text>
+<text>
+<en>Lost password e-mail sent.</en>
+<de>Passwort vergessen E-Mail gesendet.</de>
+<id>1361</id>
+</text>
+<text>
+<en>Lost password e-mail sent by {0}.</en>
+<de>Passwort vergessen E-Mail gesendet von {0}.</de>
+<id>1362</id>
+</text>
+<text>
+<en>Activation e-mail sent.</en>
+<de>Aktivierungs E-Mail gesendet.</de>
+<id>1363</id>
+</text>
+<text>
+<en>Activation e-mail sent by {0}.</en>
+<de>Aktivierungs E-Mail gesendet von {0}.</de>
+<id>1364</id>
+</text>
+<text>
+<en>Global user activation e-mail sent.</en>
+<de>Globaler Benutzer Aktivierungs E-Mail gesendet.</de>
+<id>1365</id>
+</text>
+<text>
+<en>Global user activation e-mail sent by {0}.</en>
+<de>Globaler Benutzer Aktivierungs E-Mail gesendet {0}.</de>
+<id>1366</id>
+</text>
+<text>
+<en>User locked.</en>
+<de>Benutzer gesperrt.</de>
+<id>1367</id>
+</text>
+<text>
+<en>User locked by {0}.</en>
+<de>Benutzer gesperrt von {0}.</de>
+<id>1368</id>
+</text>
+<text>
+<en>User unlocked.</en>
+<de>Benutzer entsperrt.</de>
+<id>1369</id>
+</text>
+<text>
+<en>User unlocked by {0}.</en>
+<de>Benutzer entsperrt von {0}.</de>
+<id>1370</id>
+</text>
+<text>
+<en>User deleted.</en>
+<de>Benutzer gelöscht.</de>
+<id>1371</id>
+</text>
+<text>
+<en>User deleted by {0}.</en>
+<de>Benutzer gelöscht von {0}.</de>
+<id>1372</id>
+</text>
+<text>
+<en>Wrong login password used.</en>
+<de>Falsches Passwort beim Login verwendet.</de>
+<id>1373</id>
+</text>
+<text>
+<en>Wrong login password used by {0}.</en>
+<de>Falsches Passwort beim Login verwendet von {0}.</de>
+<id>1374</id>
+</text>
+<text>
+<en>Tried login into locked account.</en>
+<de>Versuch in gesperrten Account einzuloggen.</de>
+<id>1375</id>
+</text>
+<text>
+<en>{0} tried to login into locked account.</en>
+<de>Versuch in gesperrten Account einzuloggen von {0}.</de>
+<id>1376</id>
+</text>
 </trl>
 
