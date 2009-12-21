@@ -247,6 +247,18 @@ Vps.GoogleMap.Map.prototype = {
             showNextWindow.defer(1, this);
         }
         Vps.GoogleMap.maps.push(this);
+
+        var mapTypes = this.gmap.getMapTypes();
+        var minRes = this.config.minimumResolution;
+        var maxRes = this.config.maximumResolution;
+        for (var i=0; i<mapTypes.length; i++) {
+            if (minRes) {
+                mapTypes[i].getMinimumResolution = function() {return minRes;}
+            }
+            if (maxRes) {
+                mapTypes[i].getMaximumResolution = function() {return maxRes;}
+            }
+        }
     },
 
     _reloadMarkers: function() {

@@ -20,6 +20,8 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
             'scale' => 1,
             'satelite' => 1,
             'overview' => 1,
+//             'minimumResolution' => 7, // min zoomstufe wenn nötig
+//             'maximumResolution' => 12, // max zoomstufe wenn nötig
         );
         $ret['viewCache'] = false;
         return $ret;
@@ -31,7 +33,10 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
         $markers = array();
         foreach ($this->_getItems() as $item) {
             $row = $item->getRow();
-            $marker = array('infoHtml' => self::getInfoWindowHtml($item));
+            $infoHtml = call_user_func_array(
+                array($this->getData()->componentClass, 'getInfoWindowHtml'), array($item)
+            );
+            $marker = array('infoHtml' => $infoHtml);
             if (empty($row->coordinates) && (
                 !(isset($row->longitude) && isset($row->latitude))
                 || (is_null($row->longitude) && is_null($row->latitude))
@@ -106,6 +111,9 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
         );
     }
 
+    /**
+     * Static for performance reasons. Is also called in sub-component "Coordinates"
+     */
     static public function getInfoWindowHtml($data)
     {
         $row = $data->getRow();
