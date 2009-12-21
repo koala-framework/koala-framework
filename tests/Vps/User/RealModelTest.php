@@ -8,6 +8,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        Vps_Model_Abstract::clearInstances();
         Vps_Registry::set('db', Vps_Registry::get('dao')->getDb());
     }
 
