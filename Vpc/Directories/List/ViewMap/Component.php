@@ -76,7 +76,9 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
         }
 
         $lightMarkers = $markers;
-        $markers = $this->getData()->getChildComponent('_coordinates')->getUrl();
+        if ($this->getData()->getChildComponent('_coordinates')) {
+            $markers = $this->getData()->getChildComponent('_coordinates')->getUrl();
+        }
 
         $ret['options'] = $this->_getSetting('mapOptions');
         if (is_null($lowestLng) || is_null($highestLng) || is_null($lowestLat) || is_null($highestLat)) {
