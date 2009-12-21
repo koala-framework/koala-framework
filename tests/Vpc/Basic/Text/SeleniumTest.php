@@ -1,4 +1,7 @@
 <?php
+class Vpc_Basic_Text_SeleniumTest extends PHPUnit_Framework_TestCase
+{
+}
 /**
 das funktioniert alles nicht; sowas zu testen ist mit selenium _etwas_ schwierig
 
