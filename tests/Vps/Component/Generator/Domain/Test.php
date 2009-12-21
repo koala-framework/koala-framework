@@ -77,13 +77,13 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
 
     public function testByFilename()
     {
-        $at = $this->_root->getComponentById('root-ch');
-        $this->assertNotNull($at);
-        $home = $at->getChildPseudoPage(array('filename' => 'home', 'recursive' => true));
+        $ch = $this->_root->getComponentById('root-ch');
+        $this->assertNotNull($ch);
+        $home = $ch->getChildPseudoPage(array('filename' => 'home', 'recursive' => true));
         $this->assertNotNull($home);
         $this->assertNotNull($home->getChildPseudoPage(array('filename' => 'foo')));
-        $this->assertEquals(0, count($at->getChildPseudoPages()));
-        $this->assertEquals(1, count($at->getChildComponent('-main')->getChildPseudoPages()));
+        $this->assertEquals(0, count($ch->getChildPseudoPages()));
+        $this->assertEquals(1, count($ch->getChildComponent('-main')->getChildPseudoPages()));
     }
 
     public function testChildPageByPath()
