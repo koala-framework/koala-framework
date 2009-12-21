@@ -65,9 +65,13 @@ class Vps_View_Helper_Image
                     $mimeType = $fileContents['mimeType'];
                     $content = $fileContents['contents'];
                 } else {
-                    $row = $c->getImageRow()->getParentRow('Image');
-                    $content = file_get_contents($row->getFileSource());
-                    $mimeType = $row->mime_type;
+                    $className = get_class($c);
+                    $output = call_user_func_array(
+                        array($className, 'getMediaOutput'),
+                        array($c->getData()->componentId, null, $className)
+                    );
+                    $content = $output['contents'];
+                    $mimeType = $output['mimeType'];
                 }
                 $img = new Zend_Mime_Part($content);
                 $img->type = $mimeType;
