@@ -15,10 +15,6 @@ Vpc.Directories.List.ViewMap.renderMap = function(map) {
 
     Vps.GoogleMap.load(function() {
         this.show();
-        var mapTypes = this.gmap.getMapTypes();
-        for (var i=0; i<mapTypes.length; i++) {
-            mapTypes[i].getMinimumResolution = function() {return 12;}
-        }
     }, myMap);
 };
 
