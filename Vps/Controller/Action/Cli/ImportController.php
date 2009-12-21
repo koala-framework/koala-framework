@@ -358,6 +358,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     private function _copyServiceUsers()
     {
+        if ($this->_getParam('skip-users')) return;
         if (!Vps_Registry::get('db')) return;
         $tables = Vps_Registry::get('db')->fetchCol('SHOW TABLES');
         if (!in_array('vps_users', $tables)) return;
