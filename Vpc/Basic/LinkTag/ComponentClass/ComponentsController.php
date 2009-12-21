@@ -25,10 +25,4 @@ class Vpc_Basic_LinkTag_ComponentClass_ComponentsController extends Vps_Controll
         }
         return $ret;
     }
-
-    //TODO fixme, das gehört hier entfernt
-    protected function _isAllowedComponent()
-    {
-        return true;
-    }
 }

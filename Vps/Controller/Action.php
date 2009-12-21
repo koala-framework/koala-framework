@@ -132,6 +132,13 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
                 $c = $c->parent;
             }
 
+            if (!$allowCheck) {
+                //nötig für news-link in link-komponente die einen eigenen controller hat
+                //wo dann die componentId für die link-komponente aber die componentClass der News-Link Komponente daher kommt
+                //das ganze muss statisch gemacht werden, da die link-komponente möglicherweise noch nicht gespeichert wurde
+                $allowCheck = $this->_canHaveChildComponentOnSamePage($component->componentClass, $class);
+            }
+
             if ($allowCheck &&
                 Vps_Registry::get('acl')->getComponentAcl()
                     ->isAllowed($this->_getAuthData(), $component)
@@ -142,6 +149,26 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             if ($allowed) return $allowed;
         }
         return $allowed;
+    }
+
+    private function _canHaveChildComponentOnSamePage($componentClass, $lookForClass)
+    {
+        static $cache = array();
+        if (isset($cache[$componentClass.'-'.$lookForClass])) {
+            return $cache[$componentClass.'-'.$lookForClass];
+        }
+        $cache[$componentClass.'-'.$lookForClass] = false;
+        $childComponentClasses = Vpc_Abstract::getChildComponentClasses(
+            $componentClass, array('page' => false)
+        );
+        if (in_array($lookForClass, $childComponentClasses)) {
+            $cache[$componentClass.'-'.$lookForClass] = true;
+            return true;
+        }
+        foreach ($childComponentClasses as $c) {
+            if ($this->_canHaveChildComponentOnSamePage($c, $lookForClass)) return true;
+        }
+        return false;
     }
 
     public function postDispatch()
