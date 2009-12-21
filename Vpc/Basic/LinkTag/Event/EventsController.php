@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_LinkTag_Event_EventsController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_tableName = 'Vpc_Events_Directory_Model';
+    protected $_modelName = 'Vpc_Events_Directory_Model';
     protected $_defaultOrder = array('field'=>'start_date', 'direction'=>'DESC');
     protected $_paging = 20;
 
