@@ -1,4 +1,5 @@
 <div class="<?=$this->cssClass?>">
+    <? if (isset($this->searchForm)) echo $this->component($this->searchForm); ?>
 
     <input type="hidden" class="options" value="<?= str_replace("\"", "'", Zend_Json::encode($this->options)) ?>" />
 
