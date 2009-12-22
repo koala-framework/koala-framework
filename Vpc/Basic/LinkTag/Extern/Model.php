@@ -15,4 +15,6 @@ class Vpc_Basic_LinkTag_Extern_Model extends Vpc_Basic_LinkTag_Abstract_Model
         'scrollbars'    => '1',
         'resizable'     => '1'
     );
+
+    protected $_toStringField = 'target';
 }
