@@ -88,7 +88,7 @@
     <? if($this->row->link_company_az) {?>
         <span class="imprintHeadline"><?=trlVps('Entry at WK Austria');?></span>
         <p>
-            <a href="<?=$this->row->linkCompanyAZ;?>" rel="popup_blank"><?=$this->row->linkCompanyAZ;?></a>
+            <a href="<?=$this->row->link_company_az;?>" rel="popup_blank"><?=$this->row->link_company_az;?></a>
         </p>
     <? } ?>
 </div>
