@@ -52,12 +52,11 @@ class Vps_Component_Abstract
                 throw new Vps_Exception("Invalid component '$class'");
             }
             if ($setting == 'parentClasses') {
-                $ret = array();
                 $p = $class;
-                while ($p) {
-                    $p = get_parent_class($p);
-                    if ($p) $ret[] = $p;
-                }
+                $ret = array();
+                do {
+                    $ret[] = $p;
+                } while ($p = get_parent_class($p));
                 return $ret;
             } else {
                 $settings = call_user_func(array($class, 'getSettings'));
@@ -65,8 +64,7 @@ class Vps_Component_Abstract
                     throw new Vps_Exception("Couldn't find required setting '$setting' for $class.");
                 }
                 if ($setting == 'generators') {
-                    $classes = array($class);
-                    $classes = array_merge($classes, self::getSetting($class, 'parentClasses', $useSettingsCache));
+                    $classes = self::getSetting($class, 'parentClasses', $useSettingsCache);
                     $cc = array();
                     if (isset(Vps_Registry::get('config')->vpc->childComponents)) {
                         $cc = Vps_Registry::get('config')->vpc->childComponents->toArray();
