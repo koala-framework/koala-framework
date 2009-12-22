@@ -64,6 +64,31 @@ class Vps_Component_Abstract
                 if (!array_key_exists($setting, $settings)) {
                     throw new Vps_Exception("Couldn't find required setting '$setting' for $class.");
                 }
+                if ($setting == 'generators') {
+                    $classes = array($class);
+                    $classes = array_merge($classes, self::getSetting($class, 'parentClasses', $useSettingsCache));
+                    $cc = array();
+                    if (isset(Vps_Registry::get('config')->vpc->childComponents)) {
+                        $cc = Vps_Registry::get('config')->vpc->childComponents->toArray();
+                    }
+                    foreach ($classes as $c) {
+                        if (isset($cc[$c])) {
+                            if (!isset($settings['configChildComponentsGenerator'])) {
+                                throw new Vps_Exception("configChildComponentsGenerator setting not set for '$class'");
+                            }
+                            $gen = $settings['configChildComponentsGenerator'];
+                            if (!isset($settings['generators'][$gen])) {
+                                throw new Vps_Exception("invalid configChildComponentsGenerator for '$class'");
+                            }
+                            if (!is_array($settings['generators'][$gen]['component'])) {
+                                throw new Vps_Exception("component must be an array for generator '$gen' for '$class'");
+                            }
+                            foreach ($cc[$c] as $componentKey=>$componentClass) {
+                                $settings['generators'][$gen]['component'][$componentKey] = $componentClass;
+                            }
+                        }
+                    }
+                }
                 return $settings[$setting];
             }
 
@@ -109,6 +134,10 @@ class Vps_Component_Abstract
                 $incPaths = explode(PATH_SEPARATOR, get_include_path());
                 foreach (self::getComponentClasses(false/*don't use settings cache*/) as $c) {
                     self::$_settings[$c] = call_user_func(array($c, 'getSettings'));
+
+                    //generators über getSetting holen, da dort noch die aus der config dazugemixt werden
+                    self::$_settings[$c]['generators'] = self::getSetting($c, 'generators', false/*don't use settings cache*/);
+
                     try {
                         call_user_func(array($c, 'validateSettings'), self::$_settings[$c], $c);
                     } catch (Vps_Exception $e) {
@@ -123,11 +152,7 @@ class Vps_Component_Abstract
                     );
 
                     //*** parentClasses
-                    $p = $c;
-                    self::$_settings[$c]['parentClasses'] = array();
-                    do {
-                        self::$_settings[$c]['parentClasses'][] = $p;
-                    } while ($p = get_parent_class($p));
+                    self::$_settings[$c]['parentClasses'] = self::getSetting($c, 'parentClasses', false/*don't use settings cache*/);
 
                     //*** processedCssClass
                     self::$_settings[$c]['processedCssClass'] = '';
