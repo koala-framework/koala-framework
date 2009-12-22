@@ -175,7 +175,11 @@ class Vps_Component_Abstract_Admin
     
     public function componentToString(Vps_Component_Data $data)
     {
-        return $data->getComponent()->getRow()->__toString();
+        try {
+            return $data->getComponent()->getRow()->__toString();
+        } catch (Zend_Db_Table_Row_Exception $e) {
+            throw new Vps_Exception("__toString failed for component ".$data->componentClass.' you might want to set _toStringField or override componentToString');
+        }
     }
     
     public function gridColumns()
