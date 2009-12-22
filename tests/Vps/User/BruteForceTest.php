@@ -1,11 +1,11 @@
 <?php
-//group skipGoOnline
 //group reallySlow
 
 /**
  * @group slow
  * @group User
  * @group UserBruteForce
+ * @group skipGoOnline
  */
 class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
 {
