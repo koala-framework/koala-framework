@@ -5143,22 +5143,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Account deleted e-mail sent.</en>
-<de>Account gelöscht E-Mail gesendet.</de>
+<de>Account gel&#xF6;scht E-Mail gesendet.</de>
 <id>1357</id>
 </text>
 <text>
 <en>Account deleted e-mail sent by {0}.</en>
-<de>Account gelöscht E-Mail gesendet von {0}.</de>
+<de>Account gel&#xF6;scht E-Mail gesendet von {0}.</de>
 <id>1358</id>
 </text>
 <text>
 <en>Changed mail address e-mail sent.</en>
-<de>Geänderte E-Mail-Adresse E-Mail gesendet.</de>
+<de>Ge&#xE4;nderte E-Mail-Adresse E-Mail gesendet.</de>
 <id>1359</id>
 </text>
 <text>
 <en>Changed mail address e-mail sent by {0}.</en>
-<de>Geänderte E-Mail-Adresse E-Mail gesendet von {0}.</de>
+<de>Ge&#xE4;nderte E-Mail-Adresse E-Mail gesendet von {0}.</de>
 <id>1360</id>
 </text>
 <text>
@@ -5213,12 +5213,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>User deleted.</en>
-<de>Benutzer gelöscht.</de>
+<de>Benutzer gel&#xF6;scht.</de>
 <id>1371</id>
 </text>
 <text>
 <en>User deleted by {0}.</en>
-<de>Benutzer gelöscht von {0}.</de>
+<de>Benutzer gel&#xF6;scht von {0}.</de>
 <id>1372</id>
 </text>
 <text>
@@ -5240,6 +5240,23 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>{0} tried to login into locked account.</en>
 <de>Versuch in gesperrten Account einzuloggen von {0}.</de>
 <id>1376</id>
+</text>
+<text>
+<en>Link.to Component</en>
+<id>1377</id>
+</text>
+<text>
+<en>Moderators</en>
+<id>1378</id>
+</text>
+<text>
+<en>Company A-Z</en>
+<de>Firmen A-Z</de>
+<id>1379</id>
+</text>
+<text>
+<en>Newsletter subscribing</en>
+<id>1380</id>
 </text>
 </trl>
 
