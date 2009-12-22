@@ -9,6 +9,14 @@ class Vpc_ListSwitch_Component extends Vpc_Abstract_List_Component
         $ret['generators']['child']['component'] = 'Vpc_ListSwitch_Preview_Component';
         $ret['placeholder']['prev'] = trlVps('previous');
         $ret['placeholder']['next'] = trlVps('next');
+        $ret['previewCssClass'] = '';
+        return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['previewCssClass'] = $this->_getSetting('previewCssClass');
         return $ret;
     }
 }
