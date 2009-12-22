@@ -78,9 +78,17 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
             if (!isset($dbPassword)) {
                 $filter = new Vps_Filter_Random(16);
                 $dbPassword = $filter->filter('');
-                $createSql = "CREATE USER '$projectName'@'localhost' IDENTIFIED BY '$dbPassword'";
+                $dbUser = $projectName;
+                while (strlen($dbUser) > 16) {
+                    echo "Kann MySQL Benutzername $dbUser ist laenger als 16 Zeichen (".strlen($dbUser)."),\n";
+                    echo "darf jedoch max. 16 Zeichen haben, neuer Name: ";
+                    $stdin = fopen('php://stdin', 'r');
+                    $dbUser = trim(strtolower(fgets($stdin, 128)));
+                    fclose($stdin);
+                }
+                $createSql = "CREATE USER '$dbUser'@'localhost' IDENTIFIED BY '$dbPassword'";
                 if (!$this->_execSql($config, $createSql)) {
-                    echo "Kann Benutzer $projectName nicht anlegen, er existiert\n";
+                    echo "Kann Benutzer $dbUser nicht anlegen, er existiert\n";
                     echo "moeglicherweise bereits.\n";
                     echo "* (l)oeschen und neu anlegen\n";
                     echo "* bestehenden verwenden und (p)asswort eingeben\n";
@@ -88,8 +96,8 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                     $input = trim(strtolower(fgets($stdin, 2)));
                     fclose($stdin);
                     if ($input == 'l') {
-                        $this->_execSql($config, "DROP USER '$projectName'@'localhost'");
-                        $createSql = "CREATE USER '$projectName'@'localhost' IDENTIFIED BY '$dbPassword'";
+                        $this->_execSql($config, "DROP USER '$dbUser'@'localhost'");
+                        $createSql = "CREATE USER '$dbUser'@'localhost' IDENTIFIED BY '$dbPassword'";
                         if (!$this->_execSql($config, $createSql)) {
                             throw new Vps_ClientException("Kann Benutzer nicht anlegen");
                         }
@@ -103,7 +111,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                     }
                 }
 
-                $sql = "GRANT ALL PRIVILEGES ON `$projectName%` . * TO '$projectName'@'localhost'";
+                $sql = "GRANT ALL PRIVILEGES ON `$projectName%` . * TO '$dbUser'@'localhost'";
                 $cmd = "echo ".escapeshellarg($sql)." | mysql";
                 $cmd = "ssh $sshHost ".escapeshellarg("$cmd");
                 system($cmd, $ret);
@@ -139,7 +147,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
 
             $dbConfig = array();
             $dbConfig[] = "web.host = localhost";
-            $dbConfig[] = "web.username = $projectName";
+            $dbConfig[] = "web.username = $dbUser";
             $dbConfig[] = "web.password = $dbPassword";
             $dbName = $projectName;
             if ($server != 'production') $dbName .= "_$server";
