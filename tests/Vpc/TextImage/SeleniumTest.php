@@ -14,7 +14,9 @@ class Vpc_TextImage_SeleniumTest extends Vps_Test_SeleniumTestCase
     public function testLightbox()
     {
         $this->openVpc('/textimage1');
+        sleep(5);
         $this->assertContainsText('css=.vpcTextImageTestComponent .vpcText', 'foo');
+        sleep(5);
         $this->assertNotVisible('css=.lightbox');
         $this->assertElementPresent('css=.vpcTextImageTestComponent a img');
         $this->click('css=.vpcTextImageTestComponent a img');
