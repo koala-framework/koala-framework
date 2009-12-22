@@ -15,7 +15,7 @@
         <div class="clear"></div>
     </div>
 
-    <div class="listSwitchPreviewWrapper">
+    <div class="listSwitchPreviewWrapper <?=$this->previewCssClass?>">
         <? $i = 0; ?>
         <? foreach ($this->children as $child) { ?>
             <?
