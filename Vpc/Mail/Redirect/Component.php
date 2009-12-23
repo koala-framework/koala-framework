@@ -27,6 +27,10 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
 
     public function processInput($inputData)
     {
+        if (empty($inputData['d'])) {
+            throw new Vps_Exception_NotFound();
+        }
+
         $params = explode('_', $inputData['d']);
         if (count($params) < 4) {
             throw new Vps_Exception("Too less parameters submitted");
