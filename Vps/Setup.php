@@ -288,6 +288,9 @@ class Vps_Setup
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))
             && (!$urlPrefix || substr($_SERVER['REDIRECT_URL'], 0, strlen($urlPrefix)) == $urlPrefix)
         ) {
+            if (!isset($_SERVER['HTTP_HOST'])) {
+                throw new Vps_Exception_NotFound();
+            }
 
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
