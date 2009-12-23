@@ -7,10 +7,18 @@
  */
 class Vps_Model_DbWithConnection_DbSibling_Test extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        $this->_model = new Vps_Model_DbWithConnection_DbSibling_MasterModel();
+    }
+    public function tearDown()
+    {
+        $this->_model->dropTable();
+    }
 
     public function testJoinWithWhereAndOrder()
     {
-        $m = new Vps_Model_DbWithConnection_DbSibling_MasterModel();
+        $m = $this->_model;
         $m->createRow(array('foo' => 'a1', 'bar' => '0', 'baz' => 'admin'))->save();
         $m->createRow(array('foo' => 'b1', 'bar' => '0', 'baz' => 'admin'))->save();
         $m->createRow(array('foo' => 'c1', 'bar' => '0', 'baz' => 'admin'))->save();
@@ -35,7 +43,7 @@ class Vps_Model_DbWithConnection_DbSibling_Test extends PHPUnit_Framework_TestCa
 
     public function testIt()
     {
-        $m = new Vps_Model_DbWithConnection_DbSibling_MasterModel();
+        $m = $this->_model;
 
         $r = $m->getRow(1);
         $this->assertEquals('aaabbbccc', $r->foo);
@@ -79,7 +87,7 @@ class Vps_Model_DbWithConnection_DbSibling_Test extends PHPUnit_Framework_TestCa
 
     public function testDuplicate()
     {
-        $m = new Vps_Model_DbWithConnection_DbSibling_MasterModel();
+        $m = $this->_model;
 
         $r = $m->getRow(1)->duplicate();
         $this->assertEquals('aaabbbccc', $r->foo);
