@@ -32,28 +32,46 @@ $mergeToArray = array();
 
 $xml = new SimpleXMLElement(`svn info --xml`);
 $ownUrl = (string)$xml->entry->url;
+if (preg_match('#trunk/vps#', $ownUrl)) {
+    die("this script doesn't work in trunk\n");
+}
+if (preg_match('#tags/vps/([0-9]+\\.[0-9]+)\\.[^/]+#', $ownUrl, $m)) {
+    $ownUrl = 'branches/vps/'.$m[1]; //wenn wir in tag sind ownUrl faken
+    $mergeToBranches[] = $m[1];
+}
+
 if (preg_match('#branches/vps/1\\.6#', $ownUrl)) {
-    if (file_exists('../vps-1.7-clean')) {
-        $mergeToArray[] = '../vps-1.7-clean';
-    } else if (file_exists('../vps-1.7')) {
-        $mergeToArray[] = '../vps-1.7';
-    } else if (file_exists('../1.7')) {
-        $mergeToArray[] = '../1.7';
+    $mergeToBranches[] = '1.7';
+}
+$mergeToBranches[] = 'trunk';
+
+foreach ($mergeToBranches as $branch) {
+    if (file_exists("../vps-$branch-mergehere")) {
+        $mergeTo = "../vps-$branch-mergehere";
+    } else if (file_exists("../vps-$branch-clean")) {
+        $mergeTo = "../vps-$branch-clean";
+    } else if (file_exists("../vps-$branch")) {
+        $mergeTo = "../vps-$branch";
+    } else if (file_exists("../vps$branch")) {
+        $mergeTo = "../vps$branch";
+    } else if (file_exists("../$branch")) {
+        $mergeTo = "../$branch";
     } else {
-        $mergeToArray[] = '../vps1.7';
+        die("Can't find workingcopy for branch '$branch'");
     }
+    $xml = new SimpleXMLElement(`svn info --xml $mergeTo`);
+    $url = (string)$xml->entry->url;
+    if ($branch == 'trunk') {
+        if (!preg_match('#trunk/vps#', $url)) {
+            die("Unknown workingcopy in $mergeTo, expected vps $branch");
+        }
+    } else {
+        if (!preg_match('#branches/vps/([^/]+)#', $url, $m) || $m[1] != $branch) {
+            die("Unknown workingcopy in $mergeTo, expected vps $branch");
+        }
+    }
+    $mergeToArray[] = $mergeTo;
 }
-
-if (file_exists('../vps-trunk-mergehere')) {
-    $mergeToArray[] = '../vps-trunk-mergehere';
-} else if (file_exists('../vps-trunk-clean')) {
-    $mergeToArray[] = '../vps-trunk-clean';
-} else if (file_exists('../trunk')) {
-    $mergeToArray[] = '../trunk';
-} else {
-    $mergeToArray[] = '../vps';
-}
-
 echo "Merge to: ".implode(', ', $mergeToArray)."\n\n";
 
 $ownDir = getcwd();
