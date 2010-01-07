@@ -18,7 +18,7 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         } else if ($dir == 'trunk/vps') {
             $branchVersion = false;
         } else {
-            throw new Vps_Exception("unknown branch!");
+            $branchVersion = false;
         }
         $versions = array();
         if ($branchVersion) {
