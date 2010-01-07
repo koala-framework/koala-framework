@@ -24,6 +24,8 @@ class Vps_Controller_Action_Cli_SwitchController extends Vps_Controller_Action_C
             return substr($path, 0, -12);
         } else if (substr($path, -18) == '%vps_branch%-clean') {
             return substr($path, 0, -18);
+        } else if (substr($path, -3) == 'tag') {
+            return substr($path, 0, -3);
         } else {
             if (preg_match('#^(.*)[0-9]+\\.[0-9]+(\\.[0-9]+(-[0-9]+)?)?$#', $path, $m)) {
                 return $m[1];
