@@ -18,13 +18,6 @@ class Vps_Controller_Action_Cli_CommitAndMergeController extends Vps_Controller_
         );
     }
 
-    private function _svnStat($dir)
-    {
-        exec("svn info $dir", $out, $ret);
-        if ($ret) return false;
-        return true;
-    }
-
     public function indexAction()
     {
         $message = $this->_getParam('message');
@@ -39,13 +32,7 @@ class Vps_Controller_Action_Cli_CommitAndMergeController extends Vps_Controller_
             throw new Vps_ClientException("Can't use this script while on trunk");
         }
 
-        if ($this->_svnStat('http://svn/trunk/vps-projekte/'.$m[3])) {
-            $trunkUrl = $m[1].'trunk/vps-projekte/'.$m[3];
-        } else if ($this->_svnStat('http://svn/trunk/vw-projekte/'.$m[3])) {
-            $trunkUrl = $m[1].'trunk/vw-projekte/'.$m[3];
-        } else {
-            throw new Vps_Exception("Can't figure out trunk url");
-        }
+        $trunkUrl = Vps_Controller_Action_Cli_TagCheckoutController::getWebSvnPathForVersion('trunk');
 
         $cmd = "svn ci -m ".escapeshellarg($message);
         if ($this->_getParam('debug')) echo $cmd."\n";
