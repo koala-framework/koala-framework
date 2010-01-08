@@ -13,7 +13,7 @@ class Vps_Controller_Action_Cli_SwitchController extends Vps_Controller_Action_C
             array(
                 'param'=> 'version',
                 'value'=> $value,
-                'valueOptional' => false,
+                'valueOptional' => true
             )
         );
     }
