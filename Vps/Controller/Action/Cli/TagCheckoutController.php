@@ -42,14 +42,14 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
                 $url = (string)$info->entry->url;
             } catch (Exception $e) {}
             if (!$url) {
-                throw new Vps_ClientException("Can't detect svn url");
+                throw new Vps_Exception("Can't detect svn url");
             }
             if (substr($url, -10) == '/trunk/vps') {
                 $url = substr($url, 0, -10);
             } else if (preg_match('#^(.+)/(tags|branches)/vps/[^/]+$#', $url, $m)) {
                 $url = $m[1];
             } else {
-                throw new Vps_ClientException("Can't detect vps base url");
+                throw new Vps_Exception("Can't detect vps base url from '$url'");
             }
             if ($this->_getParam('version') == 'trunk') {
                 $url .= "/trunk/vps";
@@ -87,33 +87,49 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    public function webSwitchAction()
+    private static function _svnStat($dir)
     {
-        try {
-            $info = new SimpleXMLElement(`svn info --xml`);
-            $url = (string)$info->entry->url;
-        } catch (Exception $e) {}
-        if (!$url) {
-            throw new Vps_ClientException("Can't detect svn url");
+        exec("svn ls $dir", $out, $ret);
+        if ($ret) return false;
+        return true;
+    }
+
+    public static function getWebSvnPathForVersion($version)
+    {
+        $xml = new SimpleXMLElement(`svn info --xml`);
+        $currentUrl = (string)$xml->entry->url;
+        if (!preg_match('#^(.*)(trunk|branches|tags)/([^/]+)#', $currentUrl, $m)) {
+            throw new Vps_Exception("invalid url");
+        }
+        if (preg_match('#^(.+)/trunk/(vps|vw)-projekte/([^/]+)$#', $currentUrl, $m)) {
+            $project = $m[3];
+            $baseUrl = $m[1];
+        } else if (preg_match('#^(.+)/tags/([^/]+)/[^/]+$#', $currentUrl, $m)) {
+            $project = $m[2];
+            $baseUrl = $m[1];
+        } else {
+            throw new Vps_Exception("Can't detect web base url from $url");
         }
 
-        if (preg_match('#^(.+)/trunk/vps-projekte/([^/]+)$#', $url, $m)) {
-            $project = $m[2];
-            $url = $m[1];
-        } else if (preg_match('#^(.+)/tags/([^/]+)/[^/]+$#', $url, $m)) {
-            $project = $m[2];
-            $url = $m[1];
+        if ($version == 'trunk') {
+            if ($this->_svnStat($baseUrl.'/trunk/vps-projekte/'.$project)) {
+                return $baseUrl.'/trunk/vps-projekte/'.$project;
+            } else if ($this->_svnStat($baseUrl.'/trunk/vw-projekte/'.$project)) {
+                return $baseUrl.'/trunk/vw-projekte/'.$project;
+            } else {
+                throw new Vps_Exception("Can't figure out trunk url");
+            }
         } else {
-            throw new Vps_ClientException("Can't detect vps base url");
+            return $baseUrl. "/tags/$project/".$version;
         }
-        if ($this->_getParam('version') == 'trunk') {
-            $url .= "/trunk/vps-projekte/$project";
-        } else {
-            $url .= "/tags/$project/".$this->_getParam('version');
-        }
+    }
+
+    public function webSwitchAction()
+    {
+        $url = self::getWebSvnPathForVersion($this->_getParam('version'));
+
         echo "updating web to ".$this->_getParam('version')."\n";
         $this->_systemCheckRet("svn sw $url");
-        
 
         $this->_helper->viewRenderer->setNoRender(true);
     }
