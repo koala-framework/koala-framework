@@ -59,7 +59,10 @@ foreach ($mergeToBranches as $branch) {
     } else {
         die("Can't find workingcopy for branch '$branch'");
     }
-    $xml = new SimpleXMLElement(`svn info --xml $mergeTo`);
+    $mergeTo = realpath($mergeTo);
+    $cmd = "svn info --xml $mergeTo";
+    if ($debug) echo $cmd."\n";
+    $xml = new SimpleXMLElement(`$cmd`);
     $url = (string)$xml->entry->url;
     if ($branch == 'trunk') {
         if (!preg_match('#trunk/vps#', $url)) {
