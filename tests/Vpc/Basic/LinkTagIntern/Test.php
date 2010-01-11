@@ -17,6 +17,7 @@ class Vpc_Basic_LinkTagIntern_Test extends PHPUnit_Framework_TestCase
         $c = $this->_root->getComponentById(1300);
         $this->assertEquals('/bar', $c->url);
         $this->assertEquals('', $c->rel);
+        $this->assertTrue($c->getComponent()->hasContent());
     }
     public function testHtml()
     {
@@ -31,5 +32,24 @@ class Vpc_Basic_LinkTagIntern_Test extends PHPUnit_Framework_TestCase
         $c = $this->_root->getComponentById(1301);
         $this->assertEquals('', $c->url);
         $this->assertEquals('', $c->rel);
+        $this->assertFalse($c->getComponent()->hasContent());
+    }
+
+    public function testLinkToNotExistingSite()
+    {
+        //ist das das gewünscht verhalten?
+        $c = $this->_root->getComponentById(1302);
+        $this->assertEquals('', $c->url);
+        $this->assertEquals('', $c->rel);
+        $this->assertFalse($c->getComponent()->hasContent());
+    }
+
+    public function testLinkToInvisibleSite()
+    {
+        //ist das das gewünscht verhalten?
+        $c = $this->_root->getComponentById(1303);
+        $this->assertEquals('', $c->url);
+        $this->assertEquals('', $c->rel);
+        $this->assertFalse($c->getComponent()->hasContent());
     }
 }
