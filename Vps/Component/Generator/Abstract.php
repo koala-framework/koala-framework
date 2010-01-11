@@ -439,7 +439,7 @@ abstract class Vps_Component_Generator_Abstract
     {
         $c = $this->_settings['component'];
         if (!isset($c[$key])) {
-            throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found.");
+            throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found; set are ".implode(', ', array_keys($c)));
         }
         return $c[$key];
     }
