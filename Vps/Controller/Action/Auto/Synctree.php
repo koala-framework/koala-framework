@@ -281,9 +281,14 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $visible = $this->getRequest()->getParam('visible') == 'true';
         $id = $this->getRequest()->getParam('id');
         $row = $this->_model->find($id)->current();
-        $row->visible = $row->visible == '0' ? '1' : '0';
+        $this->_changeVisibility($row);
         $this->view->id = $row->save();
         $this->view->visible = $row->visible == '1';
+    }
+
+    protected function _changeVisibility(Vps_Model_Row_Interface $row)
+    {
+        $row->visible = $row->visible == '0' ? '1' : '0';
     }
 
     public function jsonAddAction()
@@ -309,6 +314,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $row = $this->_model->find($id)->current();
         if (!$row) throw new Vps_Exception("No entry with id '$id' found");
+        $this->_beforeDelete($row);
         $row->delete();
         $this->view->id = $id;
     }
@@ -389,6 +395,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     }
 
     protected function _beforeSaveMove($row) {}
+    protected function _beforeDelete(Vps_Model_Row_Interface $row) {}
 
     public function jsonCollapseAction()
     {
