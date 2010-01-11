@@ -31,4 +31,33 @@ class Vps_Component_Pages_Row extends Vps_Model_Tree_Row
             Vpc_Admin::getInstance($class)->delete($this->id);
         }
     }
+
+    public function getComponentsDependingOnRow()
+    {
+        $ret = array();
+
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            $a = Vpc_Admin::getInstance($c);
+            if ($a instanceof Vps_Component_Abstract_Admin_Interface_DependsOnRow) {
+                $ret = array_merge($ret, $a->getComponentsDependingOnRow($this));
+            }
+        }
+
+        //unterseiten
+        foreach ($this->getChildNodes() as $c) {
+            $ret = array_merge($ret, $c->getComponentsDependingOnRow());
+        }
+
+        //rekursive links ignorieren
+        foreach ($ret as $k=>$r) {
+            while ($r) {
+                if ($r->componentId == $this->id) {
+                    unset($ret[$k]);
+                    break;
+                }
+                $r = $r->parent;
+            }
+        }
+        return $ret;
+    }
 }

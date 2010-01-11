@@ -189,4 +189,41 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         header('Location: '.$href);
         exit;
     }
+
+    protected function _changeVisibility(Vps_Model_Row_Interface $row)
+    {
+        parent::_changeVisibility($row);
+        if (!$row->visible) {
+            $this->_checkRowIndependence($row, trlVps('hide'));
+        }
+    }
+
+    protected function _beforeDelete(Vps_Model_Row_Interface $row)
+    {
+        parent::_beforeDelete($row);
+        $this->_checkRowIndependence($row, trlVps('delete'));
+    }
+
+    private function _checkRowIndependence(Vps_Model_Row_Interface $row, $msgMethod)
+    {
+        $r = $row;
+        while ($r) {
+            if (!$r->visible) {
+                //wenn seite offline ist ignorieren
+                //  ist nicht natürlich nicht korrekt, wir *müssten* die überprüfung
+                //  nachholen, sobald die seite online gestellt wird
+                return;
+            }
+            $r = $row->getParentNode();
+        }
+        $components = $row->getComponentsDependingOnRow();
+        if ($components) {
+            $msg = trlVps("You can not {0} this entry as it is used on the following pages:", $msgMethod);
+            foreach ($components as $c) {
+                $msg .= "<br /><a href=\"$c->url\" target=\"_blank\">".$c->getTitle()."</a>";
+            }
+            throw new Vps_ClientException($msg);
+        }
+    }
+
 }
