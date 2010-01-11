@@ -112,9 +112,9 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
         }
 
         if ($version == 'trunk') {
-            if ($this->_svnStat($baseUrl.'/trunk/vps-projekte/'.$project)) {
+            if (self::_svnStat($baseUrl.'/trunk/vps-projekte/'.$project)) {
                 return $baseUrl.'/trunk/vps-projekte/'.$project;
-            } else if ($this->_svnStat($baseUrl.'/trunk/vw-projekte/'.$project)) {
+            } else if (self::_svnStat($baseUrl.'/trunk/vw-projekte/'.$project)) {
                 return $baseUrl.'/trunk/vw-projekte/'.$project;
             } else {
                 throw new Vps_Exception("Can't figure out trunk url");
