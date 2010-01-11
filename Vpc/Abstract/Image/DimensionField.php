@@ -53,7 +53,7 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
             $dimensions = $this->getDimensions();
             reset($dimensions);
 
-            if ($data['dimension']) {
+            if (!empty($data['dimension'])) {
                 $dimension = $dimensions[$data['dimension']];
             } else {
                 $dimension = current($dimensions);
