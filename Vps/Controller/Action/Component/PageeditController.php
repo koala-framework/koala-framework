@@ -3,7 +3,7 @@
 class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save' => true, 'add' => true);
-    protected $_tableName = 'Vps_Dao_Pages';
+    protected $_modelName = 'Vps_Component_PagesModel';
 
     public function _isAllowed($user)
     {

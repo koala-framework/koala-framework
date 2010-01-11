@@ -24,7 +24,7 @@ class Vps_Component_CacheVars_Menu_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('Vps_Component_CacheVars_Menu_PageModel', get_class($cacheVars[0]['model']));
         $this->assertEquals('Vps_Component_CacheVars_Menu_Model', get_class($cacheVars[1]['model']));
         $this->assertEquals('Vps_Component_Model', $cacheVars[2]['model']);
-        $this->assertEquals('Vps_Dao_Pages', $cacheVars[3]['model']);
+        $this->assertEquals('Vps_Component_PagesModel', $cacheVars[3]['model']);
         $this->assertEquals(Vps_Registry::get('config')->user->model, $cacheVars[4]['model']);
     }
 }

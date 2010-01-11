@@ -25,7 +25,7 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
                 'id' => $linkedData->row->id
             );
             $ret[] = array(
-                'model' => 'Vps_Dao_Pages',
+                'model' => 'Vps_Component_PagesModel',
                 'id' => $linkedData->row->id
             );
             if ($linkedData instanceof Vpc_Basic_LinkTag_FirstChildPage_Data) {

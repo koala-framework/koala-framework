@@ -19,4 +19,59 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
         $url = Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form');
         $this->_editDialog['controllerUrl'] = $url;
     }
+
+    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    {
+        parent::_beforeSave($row);
+        if ($row->getModel()->hasColumn('visible') && !$row->visible) {
+            $this->_checkRowIndependence($row, trlVps('hide'));
+        }
+    }
+
+    protected function _beforeDelete(Vps_Model_Row_Interface $row)
+    {
+        parent::_beforeDelete();
+        $this->_checkRowIndependence($row, trlVps('delete'));
+    }
+
+    private function _checkRowIndependence(Vps_Model_Row_Interface $row, $msgMethod)
+    {
+        $c = Vps_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'));
+        if (!$c->getPage()->visible) {
+            //wenn seite offline ist ignorieren
+            //  ist nicht natürlich nicht korrekt, wir *müssten* die überprüfung
+            //  nachholen, sobald die seite online gestellt wird
+            return;
+        }
+        $components = array();
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            $a = Vpc_Admin::getInstance($c);
+            if ($a instanceof Vps_Component_Abstract_Admin_Interface_DependsOnRow) {
+                $components = array_merge($components, $a->getComponentsDependingOnRow($row));
+            }
+        }
+
+        $g = Vpc_Abstract::getSetting($this->_getParam('class'), 'generators');
+        if (isset($g['detail']['dbIdShortcut'])) {
+            //wenn auf sich selbst verlinkt ignorieren
+            foreach ($components as $k=>&$c) {
+                $c = $c->getPage();
+                $news = Vps_Component_Data_Root::getInstance()
+                    ->getComponentsByDbId($g['detail']['dbIdShortcut'].$row->id);
+                foreach ($news as $n) {
+                    if ($c->componentId == $n->getPage()->componentId) {
+                        unset($components[$k]);
+                    }
+                }
+            }
+        }
+        if ($components) {
+            $msg = trlVps("You can not {0} this entry as it is used on the following pages:", $msgMethod);
+            foreach ($components as $c) {
+                $msg .= "<br /><a href=\"$c->url\" target=\"_blank\">".$c->getTitle()."</a>";
+            }
+            throw new Vps_ClientException($msg);
+        }
+    }
 }

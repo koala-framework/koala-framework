@@ -13,7 +13,7 @@ class Vpc_Root_Category_Component extends Vpc_Abstract
                 'link' => 'Vpc_Basic_LinkTag_Component',
                 'firstChildPage' => 'Vpc_Basic_LinkTag_FirstChildPage_Component'
             ),
-            'table' => 'Vps_Dao_Pages'
+            'model' => 'Vps_Component_PagesModel'
         );
         $ret['componentName'] = trlVps('Category');
         $ret['flags']['showInPageTreeAdmin'] = true;
