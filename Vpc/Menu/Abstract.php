@@ -114,7 +114,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             'model' => 'Vps_Component_Model'
         );
         $ret[] = array(
-            'model' => 'Vps_Dao_Pages'
+            'model' => 'Vps_Component_PagesModel'
         );
         // Falls Nickname geändert wird, ändert sich Url zum User
         $ret[] = array(

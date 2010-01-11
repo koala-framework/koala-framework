@@ -102,7 +102,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
 
     public function getTable()
     {
-        return new Vps_Dao_Pages();
+        return Vps_Model_Abstract::getInstance('Vps_Component_PagesModel')->getTable();
     }
 
     protected function _getOwnColumns()

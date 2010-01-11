@@ -1,31 +1,26 @@
 <?php
-class Vps_Dao_Row_Page extends Vps_Db_Table_Row_Abstract
+class Vps_Component_Pages_Row extends Vps_Model_Tree_Row
 {
-    public function __toString()
+    protected function _beforeInsert()
     {
-        return $this->name;
-    }
-
-    protected function _insert()
-    {
-        parent::_insert();
+        parent::_beforeInsert();
         if (!$this->is_home) $this->is_home = 0;
         if (!$this->visible) $this->visible = 0;
         if (!$this->pos) $this->pos = 1;
     }
 
-    protected function _update()
+    protected function _beforeUpdate()
     {
-        parent::_update();
+        parent::_beforeUpdate();
         if ($this->is_home && !$this->visible) {
             throw new Vps_ClientException(trlVps('Cannot set Home Page invisible'));
         }
     }
 
-    protected function _delete()
+    protected function _beforeDelete()
     {
-        parent::_delete();
-        if (count($this->findDependentRowset('Vps_Dao_Pages'))) {
+        parent::_beforeDelete();
+        if (count($this->getChildNodes())) {
             throw new Vps_ClientException(trlVps("Can't delete page as there are child pages."));
         }
 

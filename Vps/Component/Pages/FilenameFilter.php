@@ -1,5 +1,5 @@
 <?php
-class Vps_Dao_Pages_FilenameFilter extends Vps_Filter_Row_UniqueAscii
+class Vps_Component_Pages_FilenameFilter extends Vps_Filter_Row_UniqueAscii
 {
     public function __construct($sourceField = null)
     {
