@@ -108,6 +108,59 @@ class Vps_Config_Web extends Zend_Config_Ini
 
     protected final function _mergeFile($file, $section)
     {
-        return $this->merge(new Zend_Config_Ini($file, $this->_getWebSection($file, $section)));
+        return self::mergeConfigs($this, new Zend_Config_Ini($file, $this->_getWebSection($file, $section)));
+    }
+
+    /**
+     * Diesen Merge sollte eigentlich das Zend machen, aber das merged nicht so
+     * wie wir das erwarten. Beispiel:
+     *
+     * Main Config:
+     * bla.blubb[] = x
+     * bla.blubb[] = y
+     * bla.blubb[] = z
+     *
+     * Merge Config:
+     * bla.blubb[] = a
+     * bla.blubb[] = b
+     *
+     * Nach den Config-Section regeln würde man erwarten, dass nach dem mergen nur mehr
+     * a und b drin steht. Tatsächlich merget Zend aber so, dass a, b, z überbleibt.
+     * Zend überschreibt die Werte, was wir nicht wollen, deshalb dieses
+     * händische mergen hier.
+     */
+    public static function mergeConfigs(Zend_Config $main, Zend_Config $merge)
+    {
+        // check if all keys are of type 'integer' and if so, only use merge config
+        $everyKeyIsInteger = true;
+        foreach($merge as $key => $item) {
+            if (!is_int($key)) {
+                $everyKeyIsInteger = false;
+                break;
+            }
+        }
+        if ($everyKeyIsInteger) {
+            return $merge;
+        }
+
+        foreach($merge as $key => $item) {
+            if(isset($main->$key)) {
+                if($item instanceof Zend_Config && $main->$key instanceof Zend_Config) {
+                    $main->$key = Vps_Config_Web::mergeConfigs(
+                        $main->$key,
+                        new Zend_Config($item->toArray(), !$main->readOnly())
+                    );
+                } else {
+                    $main->$key = $item;
+                }
+            } else {
+                if($item instanceof Zend_Config) {
+                    $main->$key = new Zend_Config($item->toArray(), !$main->readOnly());
+                } else {
+                    $main->$key = $item;
+                }
+            }
+        }
+        return $main;
     }
 }
