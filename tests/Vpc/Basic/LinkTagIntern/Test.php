@@ -12,6 +12,19 @@ class Vpc_Basic_LinkTagIntern_Test extends PHPUnit_Framework_TestCase
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
+    public function testDependsOnRow()
+    {
+        $delRow = $this->_root->getGenerator('page')->getModel()->getRow(1310);
+
+        $a = Vpc_Admin::getInstance('Vpc_Basic_LinkTagIntern_TestComponent');
+        $depends = $a->getComponentsDependingOnRow($delRow);
+
+        $this->assertEquals(1, count($depends));
+
+        $depend = current($depends);
+        $this->assertEquals($this->_root->getComponentById(1300)->componentId, $depend->componentId);
+    }
+
     public function testUrlAndRel()
     {
         $c = $this->_root->getComponentById(1300);

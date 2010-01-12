@@ -190,4 +190,25 @@ class Vps_Component_Abstract_Admin
         $ret[] = $c;
         return $ret;
     }
+
+    public final static function getDependsOnRowInstances()
+    {
+        $ret = array();
+
+        $cache = Vps_Cache::factory('Core', 'Memcached', array('automatic_serialization'=>true, 'lifetime'=>null));
+        if (!$componentsWithDependsOnRow = $cache->load('componentsWithDependsOnRow')) {
+            foreach (Vpc_Abstract::getComponentClasses() as $c) {
+                $a = Vpc_Admin::getInstance($c);
+                if ($a instanceof Vps_Component_Abstract_Admin_Interface_DependsOnRow) {
+                    $componentsWithDependsOnRow[] = $c;
+                }
+            }
+            $cache->save($componentsWithDependsOnRow, 'componentsWithDependsOnRow');
+        }
+        foreach ($componentsWithDependsOnRow as $c) {
+            $ret[] = Vpc_Admin::getInstance($c);
+        }
+
+        return $ret;
+    }
 }

@@ -36,10 +36,11 @@ class Vps_Component_Pages_Row extends Vps_Model_Tree_Row
     {
         $ret = array();
 
-        foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            $a = Vpc_Admin::getInstance($c);
-            if ($a instanceof Vps_Component_Abstract_Admin_Interface_DependsOnRow) {
-                $ret = array_merge($ret, $a->getComponentsDependingOnRow($this));
+        foreach (Vpc_Admin::getDependsOnRowInstances() as $a) {
+            foreach ($a->getComponentsDependingOnRow($this) as $i) {
+                if ($i) {
+                    $ret[] = $i;
+                }
             }
         }
 
@@ -58,6 +59,6 @@ class Vps_Component_Pages_Row extends Vps_Model_Tree_Row
                 $r = $r->parent;
             }
         }
-        return $ret;
+        return array_values($ret);
     }
 }

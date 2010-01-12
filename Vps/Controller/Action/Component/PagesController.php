@@ -206,7 +206,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     private function _checkRowIndependence(Vps_Model_Row_Interface $row, $msgMethod)
     {
-        $r = $row;
+        $m = Vps_Model_Abstract::getInstance('Vps_Component_PagesModel');
+        $pageRow = $m->getRow($row->getData()->row->id);
+        $r = $pageRow;
         while ($r) {
             if (!$r->visible) {
                 //wenn seite offline ist ignorieren
@@ -214,14 +216,12 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 //  nachholen, sobald die seite online gestellt wird
                 return;
             }
-            $r = $row->getParentNode();
+            $r = $r->getParentNode();
         }
-        $components = $row->getComponentsDependingOnRow();
+        $components = $pageRow->getComponentsDependingOnRow();
         if ($components) {
             $msg = trlVps("You can not {0} this entry as it is used on the following pages:", $msgMethod);
-            foreach ($components as $c) {
-                $msg .= "<br /><a href=\"$c->url\" target=\"_blank\">".$c->getTitle()."</a>";
-            }
+            $msg .= Vps_Util_Component::getHtmlLocations($components);
             throw new Vps_ClientException($msg);
         }
     }
