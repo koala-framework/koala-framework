@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->cssClass?><?if($this->isPosted){?> vpsImportant<?}?>">
 <?php
 if ($this->showSuccess) {
     echo $this->component($this->success);
