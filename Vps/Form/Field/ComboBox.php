@@ -35,6 +35,9 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     //setShowNoSelection
         //keine auswahl anbieten
 
+    //setEmptyText
+        //text fuer keine auswahl
+    
     //setFilterValue
         //wird von ComboBoxFilter aufgerufen
 
