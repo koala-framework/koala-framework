@@ -5,6 +5,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     private $_processed = false;
     private $_isSaved = false;
     private $_initialized = false;
+    private $_posted;
     private $_postData;
     protected $_errors = array();
 
@@ -79,6 +80,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         if (!isset($postData[$this->getData()->componentId.'-post']) && !isset($postData[$this->getData()->componentId])) {
             $postData = array();
+            $this->_posted = false;
+        } else {
+            $this->_posted = true;
         }
         $postData = $this->_form->processInput(null, $postData);
         $this->_postData = $postData;
@@ -142,6 +146,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         if (self::hasChildComponentClass(get_class($this), 'child', 'success')) {
             $class = self::getChildComponentClass(get_class($this), 'child', 'success');
         }
+
+        $ret['isPosted'] = $this->_posted;
         $ret['showSuccess'] = false;
         $ret['errors'] = $this->getErrors();
         if ($this->isSaved()) {
