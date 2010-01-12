@@ -247,7 +247,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             );
         }
 
-        if (!$row->validatePassword($credential)) {
+        if ($row->validatePassword($credential)) {
             if ($row->locked) {
                 $this->writeLog(array(
                     'user_id' => $row->id,
@@ -261,6 +261,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             }
 
             // Login nur zählen wenn richtig normal eingeloggt
+            $passCol = $this->getPasswordColumn();
             if ($credential == md5($row->$passCol)
                 || $row->encodePassword($credential) == $row->$passCol
             ) {
