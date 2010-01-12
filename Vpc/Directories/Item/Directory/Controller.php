@@ -30,7 +30,7 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
 
     protected function _beforeDelete(Vps_Model_Row_Interface $row)
     {
-        parent::_beforeDelete();
+        parent::_beforeDelete($row);
         $this->_checkRowIndependence($row, trlVps('delete'));
     }
 
@@ -45,8 +45,7 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
             return;
         }
         $components = array();
-        foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            $a = Vpc_Admin::getInstance($c);
+        foreach (Vpc_Admin::getDependsOnRowInstances() as $a) {
             if ($a instanceof Vps_Component_Abstract_Admin_Interface_DependsOnRow) {
                 $components = array_merge($components, $a->getComponentsDependingOnRow($row));
             }
@@ -68,9 +67,7 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
         }
         if ($components) {
             $msg = trlVps("You can not {0} this entry as it is used on the following pages:", $msgMethod);
-            foreach ($components as $c) {
-                $msg .= "<br /><a href=\"$c->url\" target=\"_blank\">".$c->getTitle()."</a>";
-            }
+            $msg .= Vps_Util_Component::getHtmlLocations($components);
             throw new Vps_ClientException($msg);
         }
     }
