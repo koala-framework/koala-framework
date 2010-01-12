@@ -25,7 +25,11 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
             
         //todo: escapen
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
-        $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\"$onchange>";
+        $style = '';
+        if ($this->getWidth()) {
+            $style = " style=\"width: ".$this->getWidth()."px\"";
+        }
+        $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\"$onchange$style>";
         //todo: andere values varianten ermöglichen
         //todo: html wählt ersten wert vor-aus - ext galub ich nicht
         //      => sollte sich gleich verhalten.
