@@ -42,7 +42,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         }
 
         if (!$encoding) {
-            $encoding = 'iso-8859-1';
+            $encoding = $this->getModel()->getDefaultEncoding();
             $str = iconv($encoding, 'utf-8', $str);
         }
 
