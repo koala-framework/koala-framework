@@ -240,7 +240,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $ret['mtime'] = $mtime;
             $ret['mtimeFiles'] = $mtimeFiles;
         } else {
-            $ret['mtime'] = filemtime($file);
+            $ret['mtime'] = filemtime($data['file']);
         }
         if (isset($data['row'])) {
             Vps_Component_Cache::getInstance()->saveMeta(
