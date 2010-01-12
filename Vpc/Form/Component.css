@@ -15,7 +15,6 @@
     height: 25px;
     overflow: visible;
 }
-/*styling für buttons, die eine variable länge haben, aber zb. abgerundet sind*/
 .$cssClass .submitWrapper {
     text-align: center;
 }
