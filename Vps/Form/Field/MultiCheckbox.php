@@ -319,6 +319,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             $ret['html'] .= '<div class="checkboxItem'.($i==0?' first':'').'">'.$helper->returnFormField($field).'</div>';
             $i++;
         }
+        $ret['html'] .= '<div class="checkboxItemEnd"></div>';
         return $ret;
     }
 }
