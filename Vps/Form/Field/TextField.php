@@ -50,9 +50,13 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
             $cls = trim($cls.' vpsClearOnFocus');
         }
+        $style = '';
+        if ($this->getWidth()) {
+            $style = "style=\"width: ".$this->getWidth()."px\" ";
+        }
         $ret['html'] = "<input type=\"".$this->getInputType()."\" id=\"$ret[id]\" ".
                         "name=\"$name$fieldNamePostfix\" value=\"$value\" ".
-                        "style=\"width: {$this->getWidth()}px\" ".
+                        $style.
                         ($cls ? "class=\"$cls\"" : '').
                         "maxlength=\"{$this->getMaxLength()}\" />";
         return $ret;
