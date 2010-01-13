@@ -5,6 +5,7 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
     protected $_dependentModels = array(
         'Entries' => 'Vps_Util_Model_Feed_Entries'
     );
+    protected $_defaultEncoding = 'utf-8';
 
     /**
      * @return Vps_Http_Requestor
@@ -141,5 +142,15 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
 
         // Return the fetched feeds
         return $feeds;
+    }
+
+    public function getDefaultEncoding()
+    {
+        return $this->_defaultEncoding;
+    }
+
+    public function setDefaultEncoding($enc)
+    {
+        $this->_defaultEncoding = $enc;
     }
 }
