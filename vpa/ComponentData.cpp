@@ -9,11 +9,11 @@
 #include "ComponentData.h"
 #include "ConnectionThread.h"
 
-#define ifDebugCreateComponentData(x) x
+#define ifDebugCreateComponentData(x)
 #define ifDebugGetComponentById(x)
-#define ifDebugGetChildPageByPath(x) x
+#define ifDebugGetChildPageByPath(x)
 #define ifDebugGetRecursiveChildComponents(x)
-#define ifDebugGetHome(x) x
+#define ifDebugGetHome(x)
 
 int ComponentData::count = 0;
 QHash<const ComponentDataRoot*, QHash<QString, ComponentData*> > ComponentData::m_idHash;
@@ -297,7 +297,7 @@ QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s,
     ifDebugGetRecursiveChildComponents( qDebug() << "====> recursiveChildComponents" << componentId() << s << childSelect; )
     QList<ComponentData*> ret;
     Select s2(s);
-    s2.limitCount = 0; //TODO recht ineffizient, aber dafür simpel
+    s2.limitCount = 0; //TODO recht ineffizient, aber dafï¿½r simpel
     s2.limitOffset = 0;
     foreach (ComponentData *d, childComponents(s2)) {
         Q_ASSERT(d);
@@ -323,7 +323,7 @@ QList< ComponentData* > ComponentData::recursiveChildComponents(const Select& s,
     if (s.limitOffset) {
         ret = ret.mid(s.limitOffset);
     }
-    s2.where.clear(); //TODO MEGA HACK ist nötig damit ned where doppelt gelöscht wird
+    s2.where.clear(); //TODO MEGA HACK ist nï¿½tig damit ned where doppelt gelï¿½scht wird
     return ret;
 }
 
@@ -361,7 +361,7 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
                     break;
                 }
             }
-            s2.where.clear(); //TODO MEEEEEGA HACK ohne dem würden die where objekte doppelt gelöscht werden
+            s2.where.clear(); //TODO MEEEEEGA HACK ohne dem wï¿½rden die where objekte doppelt gelï¿½scht werden
                               //Select kopiert die noch nicht korrektr
         }
     }
@@ -381,7 +381,7 @@ ComponentData* ComponentData::childPageByPath(const QString& path)
     if (!path.isEmpty()) {
         foreach (const QString &pathPart, path.split('/')) {
             ifDebugGetChildPageByPath( qDebug() << "pathPart" << pathPart; )
-                                                                    //TODO: schönere, bessere lösung nötig
+                                                                    //TODO: schï¿½nere, bessere lï¿½sung nï¿½tig
             if (page==this || page->componentClass().parentClasses().contains(IndexedString("Vpc_Root_DomainRoot_Domain_Component"))) {
                 ifDebugGetChildPageByPath( qDebug() << "checking for shortcutUrl" << pathPart; )
                 ComponentClass cc = ComponentClass::componentForShortcutUrl(pathPart);
@@ -417,7 +417,7 @@ ComponentData* ComponentData::childPageByPath(const QString& path)
     }
 
     ifDebugGetChildPageByPath( qDebug() << "page" << page << "this" << this; )
-                                                                      //TODO: schönere, bessere lösung nötig
+                                                                      //TODO: schï¿½nere, bessere lï¿½sung nï¿½tig
     if (page && (page==this || page->componentClass().parentClasses().contains(IndexedString("Vpc_Root_DomainRoot_Domain_Component")))) {
         ifDebugGetChildPageByPath( qDebug() << "looking for home" << page; )
         ifDebugGetChildPageByPath( if (page) qDebug() << "startAt" << page->componentId(); )
@@ -489,7 +489,7 @@ QList< ComponentData* > ComponentData::getComponentsByDbId(const ComponentDataRo
     ifDebugGetComponentById( qDebug() << "mainId" << mainId << "restId" << id; )
     QList<ComponentData*> ret;
 
-    //zuerst über normale id suchen
+    //zuerst ï¿½ber normale id suchen
     if (m_idHash[root].contains(mainId)) {
         if (!id.isEmpty()) {
             ComponentData *d = _getChildComponent(m_idHash[root][mainId], id);
@@ -501,7 +501,7 @@ QList< ComponentData* > ComponentData::getComponentsByDbId(const ComponentDataRo
     ifDebugGetComponentById( qDebug() << "count found using m_idHash" << ret.count(); )
 
     ifDebugGetComponentById( qDebug() << m_dbIdHash[root]; )
-    //dann über dbId
+    //dann ï¿½ber dbId
     foreach (ComponentData *data, m_dbIdHash[root].values(IndexedString(mainId))) {
         ifDebugGetComponentById( qDebug() << "m_dbIdHash entry" << data->componentId(); )
         if (!id.isEmpty()) {
@@ -632,7 +632,7 @@ QString ComponentData::url() const
             break;
         } else {
 
-            //TODO: das ist ein schircher hack; das war früher im Data von dieser komponente
+            //TODO: das ist ein schircher hack; das war frï¿½her im Data von dieser komponente
             if (page->componentClass().parentClasses().contains(IndexedString("Vpc_Root_DomainRoot_Domain_Component"))) continue;
 
             if (!page->filename().isEmpty()) filenames.prepend(page->filename());

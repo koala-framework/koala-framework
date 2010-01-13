@@ -11,7 +11,7 @@
 #include "Model.h"
 #include "ComponentDataRoot.h"
 
-#define ifDebugGeneratorBuild(x) x
+#define ifDebugGeneratorBuild(x)
 #define ifDebugGeneratorBuildInherit(x)
 #define ifDebugBuildWithGenerators(x)
 #define ifDebugPriority(x)
@@ -272,8 +272,8 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
                             i2--;
                             ifDebugPriority( qDebug() << "DELETE c2>>>" << c2 << c2->componentId() << "not" << c->componentId(); )
                             if (!(c2->generator()->generatorFlags & Generator::TypeInherit)) {
-                                //TODO: leaked, manchmal muss auch in inherit gelöscht werden (kann vielleicht woanders gelöst werden)
-                                //wurde aber eigentlich schon gelöst indem es mit dem generator mitgelöscht wird falls der gelöscht wird
+                                //TODO: leaked, manchmal muss auch in inherit gelï¿½scht werden (kann vielleicht woanders gelï¿½st werden)
+                                //wurde aber eigentlich schon gelï¿½st indem es mit dem generator mitgelï¿½scht wird falls der gelï¿½scht wird
                                 //(bei einem reset aufruf)
                                 delete c2;
                             }
@@ -284,8 +284,8 @@ void Generator::buildWithGenerators(ComponentData* parent, const BuildStrategy *
                             ifDebugPriority( qDebug() << "DELETE c>>>" << c << c->componentId() << "not" << c2->componentId(); )
                             qDebug() << parent->m_children;
                             if (!(c->generator()->generatorFlags & Generator::TypeInherit)) {
-                                //TODO: leaked, manchmal muss auch in inherit gelöscht werden (kann vielleicht woanders gelöst werden)
-                                //wurde aber eigentlich schon gelöst indem es mit dem generator mitgelöscht wird falls der gelöscht wird
+                                //TODO: leaked, manchmal muss auch in inherit gelï¿½scht werden (kann vielleicht woanders gelï¿½st werden)
+                                //wurde aber eigentlich schon gelï¿½st indem es mit dem generator mitgelï¿½scht wird falls der gelï¿½scht wird
                                 //(bei einem reset aufruf)
                                 delete c;
                             }
@@ -308,8 +308,8 @@ void Generator::handleChangedRow(Generator::ChangedRowMethod method, IndexedStri
             foreach (Generator *g, generators()) {
                 if (g->model == model) {
                     ifDebugHandleChangedRow( qDebug() << "refresh" << g->model << g->componentClass << g->key; )
-                    g->preload(); //tut im moment noch _alles_ preloaden, möglicherweise nur eine id preloaden wenn zu langsam
-                    foreach (ComponentData *d, g->builtComponents) { //das benötigt womöglich einen index wenns zu langsam ist
+                    g->preload(); //tut im moment noch _alles_ preloaden, mï¿½glicherweise nur eine id preloaden wenn zu langsam
+                    foreach (ComponentData *d, g->builtComponents) { //das benï¿½tigt womï¿½glich einen index wenns zu langsam ist
                         ifDebugHandleChangedRow( qDebug() << d->componentId() << d->childId() << id; )
                         if (d->childId() == id) {
                             ifDebugHandleChangedRow( qDebug() << "refresh" << d->componentId() << d->rowData.keys(); )
@@ -328,7 +328,7 @@ void Generator::handleChangedRow(Generator::ChangedRowMethod method, IndexedStri
             foreach (Generator *g, generators()) {
                 if (g->model == model) {
                     ifDebugHandleChangedRow( qDebug() << "found generator" << g->componentClass << g->key; )
-                    g->preload(); //tut im moment noch _alles_ preloaden, möglicherweise nur eine id preloaden wenn zu langsam
+                    g->preload(); //tut im moment noch _alles_ preloaden, mï¿½glicherweise nur eine id preloaden wenn zu langsam
                     foreach (ComponentData *d, ComponentData::getComponentsByClass(g->root(), g->componentClass)) {
                         QWriteLocker locker(&d->m_childrenLock);
                         if (d->m_childrenBuilt) {
@@ -352,7 +352,7 @@ void Generator::handleChangedRow(Generator::ChangedRowMethod method, IndexedStri
         case RowDeleted:
             foreach (Generator *g, generators()) {
                 if (g->model == model) {
-                    foreach (ComponentData *d, g->builtComponents) { //das benötigt womöglich einen index wenns zu langsam ist
+                    foreach (ComponentData *d, g->builtComponents) { //das benï¿½tigt womï¿½glich einen index wenns zu langsam ist
                         if (d->childId() == id) {
                             Q_ASSERT(!(d->generator()->generatorFlags & Generator::TypeInherit));
                             if (!(d->generator()->generatorFlags & Generator::TypeInherit)) {
@@ -537,7 +537,7 @@ QList<IndexedString> GeneratorStatic::childComponentKeys() const
     return component.keys();
 }
 /*
-NICHT MEHR VERWENDET KANN GELÖSCH WERDEN *************************************************
+NICHT MEHR VERWENDET KANN GELï¿½SCH WERDEN *************************************************
 QList<ComponentData*> GeneratorTable::_build(ComponentData* parent, QString onlyId)
 {
     QHash<IndexedString, IndexedString> fields;
@@ -563,7 +563,7 @@ QList<ComponentData*> GeneratorTable::_build(ComponentData* parent, QString only
         }
     }
 }
-NICHT MEHR VERWENDET KANN GELÖSCH WERDEN *************************************************
+NICHT MEHR VERWENDET KANN GELï¿½SCH WERDEN *************************************************
 */
 QList<ComponentData*> GeneratorTable::_build(ComponentData* parent, const Select &select)
 {
@@ -1240,8 +1240,8 @@ QList<ComponentData*> GeneratorLinkTag::build(ComponentData* parent)
     buildCallCount[LinkTag]++;
     ifDebugGeneratorBuild( qDebug() << "GeneratorLinkTag::build" << parent->componentId(); )
     if (!componentIdToComponent.contains(parent->dbId())) {
-        //TODO: das dürfte eigentlich nicht passieren, kann es jedoch wenn eine row
-        //noch nie gespeichert wurde; korrekt wäre da die defaultValues zu verwenen
+        //TODO: das dï¿½rfte eigentlich nicht passieren, kann es jedoch wenn eine row
+        //noch nie gespeichert wurde; korrekt wï¿½re da die defaultValues zu verwenen
         return QList<ComponentData*>();
     }
     ComponentClass c = component[componentIdToComponent[parent->dbId()]];
