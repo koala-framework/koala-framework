@@ -4,7 +4,6 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
 {
     protected $_rowsetClass = 'Vps_Model_Rowset_ParentRow';
     protected $_rowClass = 'Vps_Util_Model_Feed_Row_Entry';
-    protected $_defaultEncoding = 'iso-8859-1';
 
     protected function _getOwnColumns()
     {
@@ -91,15 +90,5 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
             ));
         }
         return $this->_rows[$pId][$key];
-    }
-
-    public function getDefaultEncoding()
-    {
-        return $this->_defaultEncoding;
-    }
-
-    public function setDefaultEncoding($enc)
-    {
-        $this->_defaultEncoding = $enc;
     }
 }
