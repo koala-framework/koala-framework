@@ -331,8 +331,8 @@ QList< ComponentData* > ComponentData::childComponents(const Select& s)
 {
     QList<ComponentData*> ret;
     QList<ComponentData*> chld = children();
-    //QTime stopWatch;
-    //stopWatch.start();
+    QTime stopWatch;
+    stopWatch.start();
     foreach (ComponentData *d, chld) {
         if (s.match(d, this)) {
             ret << d;

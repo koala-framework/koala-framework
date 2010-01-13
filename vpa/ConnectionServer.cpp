@@ -3,12 +3,13 @@
 #include "ConnectionThread.h"
 
 ConnectionServer::ConnectionServer(QObject* parent)
-    : QTcpServer(parent)
+    : QLocalServer(parent)
 {
 }
 
-void ConnectionServer::incomingConnection(int socketDescriptor)
+void ConnectionServer::incomingConnection(quintptr socketDescriptor)
 {
+    qDebug() << "ConnectionServer::incomingConnection" << socketDescriptor;
     ConnectionThread *thread = new ConnectionThread(socketDescriptor, this);
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     thread->start();

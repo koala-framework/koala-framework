@@ -2,8 +2,8 @@
 #include <QtSql>
 #include <QProcess>
 #include <QList>
-#include <QtNetwork/QTcpServer>
-#include <QtNetwork/QTcpSocket>
+#include <QtNetwork/QLocalServer>
+#include <QtNetwork/QLocalSocket>
 #include <QXmlStreamReader>
 
 #include "ComponentDataRoot.h"
@@ -66,7 +66,11 @@ int main(int argc, char** argv)
     qDebug() << "startup time" << startupStopWatch.elapsed() << "ms";
 
     ConnectionServer server;
-    if (!server.listen(QHostAddress::Any, 1234)) {
+
+    QDir path(argv[1]);
+    QString socketPath = path.absolutePath()+"/application/temp/vpa.sock";
+    qDebug() << "opening socket" << socketPath;
+    if (!server.listen(socketPath)) {
         qFatal(server.errorString().toAscii().constData());
     }
 

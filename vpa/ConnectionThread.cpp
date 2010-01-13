@@ -1,6 +1,6 @@
 #include "ConnectionThread.h"
 
-#include <QTcpSocket>
+#include <QLocalSocket>
 #include <QTime>
 
 #include "ComponentData.h"
@@ -18,7 +18,7 @@ struct ProfilerData {
 };
 #endif
 
-ConnectionThread::ConnectionThread(int socketDescriptor, QObject* parent)
+ConnectionThread::ConnectionThread(quintptr socketDescriptor, QObject* parent)
 : QThread(parent), m_socketDescriptor(socketDescriptor),
     m_countComponentsCreated(0), m_checkCountComponentsCreated(false)
 {
@@ -42,7 +42,7 @@ IndexedString ConnectionThread::rootComponentClass()
 
 void ConnectionThread::run()
 {
-    QTcpSocket socket;
+    QLocalSocket socket;
     if (!socket.setSocketDescriptor(m_socketDescriptor)) {
         qWarning() << socket.errorString();
         Q_ASSERT(0);
@@ -58,7 +58,7 @@ void ConnectionThread::run()
 
     QByteArray rc;
     do {
-        if (socket.state() == QAbstractSocket::UnconnectedState) break;
+        if (socket.state() == QLocalSocket::UnconnectedState) break;
         if (socket.waitForReadyRead()) {
             rc.append(socket.readAll());
         }
@@ -74,14 +74,14 @@ void ConnectionThread::run()
     forever {
         QByteArray cmd;
         do {
-            if (socket.state() == QAbstractSocket::UnconnectedState) {
+            if (socket.state() == QLocalSocket::UnconnectedState) {
                 break;
             }
             if (socket.waitForReadyRead()) {
                 cmd.append(socket.readAll());
             }
         } while(!cmd.endsWith('\0'));
-        if (socket.state() == QAbstractSocket::UnconnectedState) {
+        if (socket.state() == QLocalSocket::UnconnectedState) {
             break;
         }
         QTime stopWatch;

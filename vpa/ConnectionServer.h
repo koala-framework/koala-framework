@@ -1,10 +1,10 @@
 #ifndef CONNECTIONSERVER_H
 #define CONNECTIONSERVER_H
 
-#include <QTcpServer>
+#include <QLocalServer>
 
 
-class ConnectionServer : public QTcpServer
+class ConnectionServer : public QLocalServer
 {
     Q_OBJECT
 
@@ -12,7 +12,7 @@ public:
     ConnectionServer(QObject *parent = 0);
 
 protected:
-    virtual void incomingConnection(int socketDescriptor);
+    virtual void incomingConnection(quintptr socketDescriptor);
 };
 
 #endif

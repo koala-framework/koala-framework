@@ -9,7 +9,7 @@ class ConnectionThread : public QThread
 {
     Q_OBJECT
 public:
-    ConnectionThread(int socketDescriptor, QObject *parent);
+    ConnectionThread(quintptr socketDescriptor, QObject *parent);
 
     virtual void run();
 
@@ -18,7 +18,7 @@ public:
     void setCheckCountComponentsCreated(bool v);
 
 private:
-    int m_socketDescriptor;
+    quintptr m_socketDescriptor;
     int m_countComponentsCreated;
     bool m_checkCountComponentsCreated;
 

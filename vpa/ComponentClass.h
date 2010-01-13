@@ -33,6 +33,9 @@ public:
     {
         QMutexLocker locker(&m_dataMutex);
         Q_ASSERT(!cls.isEmpty());
+        if (!m_data.contains(m_componentClass)) {
+            qWarning() << m_componentClass;
+        }
         Q_ASSERT(m_data.contains(m_componentClass));
     }
 
