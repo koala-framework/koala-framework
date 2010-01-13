@@ -5,7 +5,7 @@
     </div>
 
     <script type="text/javascript">
-        var s1 = new SWFObject("<?=str_replace('/watch?v=','/v/',$this->row->url);?>&hl=de_DE&fs=1&","ply<?=$this->row->component_id;?>","<?=$this->row->width;?>","<?=$this->row->height;?>","9","#FFFFFF");
+        var s1 = new SWFObject("<?=str_replace('/watch?v=','/v/',$this->row->url);?>","ply<?=$this->row->component_id;?>","<?=$this->row->width;?>","<?=$this->row->height;?>","9","#FFFFFF");
         s1.addParam("allowfullscreen","true");
         s1.addParam("allowscriptaccess","always");
         s1.write("flashMediaPlayer<?=$this->row->component_id;?>");
