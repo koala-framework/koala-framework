@@ -60,7 +60,7 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
             if ($debugOutput) echo $out."\n\n";
         }
         if ($failed) {
-            $this->fail("alt least one process failed");
+            $this->fail("alt least one process failed; output was: ".implode("\n", $allOut));
         }
     }
 
@@ -109,7 +109,7 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
             if ($debugOutput) echo $out."\n\n";
         }
         if ($failed) {
-            $this->fail("alt least one process failed");
+            $this->fail("alt least one process failed; output was: ".implode("\n", $allOut));
         }
 
         $createdId = false;
