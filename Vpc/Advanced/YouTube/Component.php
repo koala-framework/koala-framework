@@ -6,7 +6,7 @@ class Vpc_Advanced_YouTube_Component extends Vpc_Abstract_Composite_Component
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlVps('YouTube'),
             'componentIcon' => new Vps_Asset('film'),
-            'ownModel'     => 'Vps_Component_FieldModel'
+            'ownModel'     => 'Vpc_Advanced_YouTube_Model'
         ));
         return $ret;
     }
