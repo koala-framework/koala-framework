@@ -648,80 +648,6 @@ QList<IndexedString> GeneratorTable::childComponentKeys() const
     return component.keys();
 }
 
-QList<ComponentData*> GeneratorTableSql::_build(ComponentData* parent, QSqlQuery &query)
-{
-    QList<ComponentData*> ret;
-    while (query.next()) {
-        int id = query.value(0).toInt();
-        ComponentData *d = new ComponentData(this, parent, idSeparator, id, component);
-        d->setDbIdPrefix(dbIdPrefix);
-        if (!(generatorFlags & Generator::DisableCache)) {
-            parent->addChildren(d);
-        }
-        ret << d;
-    }
-    return ret;
-}
-
-
-QList<ComponentData*> GeneratorTableSql::build(ComponentData* parent)
-{
-    buildCallCount[TableSql]++;
-    ifDebugGeneratorBuild( qDebug() << "GeneratorTableSql::build" << parent->dbId(); )
-    QString sql = "SELECT id FROM "+tableName;
-    if (generatorFlags & ColumnComponentId) {
-        sql += " WHERE component_id='"+parent->dbId()+"'";
-    }
-    QSqlQuery query;
-    if (!query.exec(sql)) {
-        qCritical() << "can't execute query GeneratorTableSql::build";
-        Q_ASSERT(0);
-        return QList<ComponentData*>();
-    }
-    return _build(parent, query);
-}
-
-void GeneratorTableSql::buildSingle(ComponentData* parent, const QString& id)
-{
-    buildCallCount[TableSql]++;
-    QString sql = "SELECT id FROM "+tableName;
-    if (generatorFlags & ColumnComponentId) {
-        sql += " WHERE component_id='"+parent->dbId()+"' AND ";
-    } else {
-        sql += " WHERE ";
-    }
-    sql += "id=:id";
-    QSqlQuery query;
-    query.bindValue(":id", id);
-    if (!query.exec(sql)) {
-        qCritical() << "can't execute query GeneratorTableSql::build";
-        Q_ASSERT(0);
-        return;
-    }
-    _build(parent, query);
-}
-
-void GeneratorTableSql::refresh(ComponentData* d)
-{
-    Q_UNUSED(d);
-    //nothing to do as long as no name/filename is set in _build()
-}
-
-QList<ComponentClass> GeneratorTableSql::childComponentClasses() const
-{
-    QList<ComponentClass> ret;
-    ret << component;
-    return ret;
-
-}
-
-QList<IndexedString> GeneratorTableSql::childComponentKeys() const
-{
-    QList<IndexedString> ret;
-    ret << key;
-    return ret;
-}
-
 void GeneratorTableSqlWithComponent::preload()
 {
     QSqlQuery query;
@@ -862,7 +788,7 @@ QList<ComponentData*> GeneratorLoadSql::_build(ComponentData* parent, QSqlQuery 
     QList<ComponentData*> ret;
     while (query.next()) {
         int id = query.value(0).toInt();
-        qDebug() << query.value(0).toInt() << query.value(1);
+        //qDebug() << query.value(0).toInt() << query.value(1);
         ComponentData *d = new ComponentData(this, parent, idSeparator, id, component);
         d->setDbIdPrefix(dbIdPrefix);
         d->setName(query.value(1).toString());
@@ -1245,13 +1171,17 @@ QList<ComponentData*> GeneratorLinkTag::build(ComponentData* parent)
         return QList<ComponentData*>();
     }
     ComponentClass c = component[componentIdToComponent[parent->dbId()]];
-    qDebug() << "GeneratorLinkTag::build" << parent->componentId() << c;
-    ComponentData *d = new ComponentData(this, parent, idSeparator, IndexedString("link"), c);
-    if (!(generatorFlags & Generator::DisableCache)) {
-        parent->addChildren(d);
-    }
+    qDebug() << component << componentIdToComponent;
+    qDebug() << "GeneratorLinkTag::build" << parent->componentId() << parent->dbId() << c;
+    Q_ASSERT(!c.isEmpty());
     QList<ComponentData*> ret;
-    ret << d;
+    if (!c.isEmpty()) {
+        ComponentData *d = new ComponentData(this, parent, idSeparator, IndexedString("link"), c);
+        if (!(generatorFlags & Generator::DisableCache)) {
+            parent->addChildren(d);
+        }
+        ret << d;
+    }
     return ret;
 }
 
@@ -1295,9 +1225,6 @@ void Generator::createGenerators(const ComponentDataRoot *root)
             } else if (t == "table") {
                 type = Generator::Table;
                 g = new GeneratorTable(root);
-            } else if (t == "tableSql") {
-                type = Generator::TableSql;
-                g = new GeneratorTableSql(root);
             } else if (t == "load") {
                 type = Generator::Load;
                 g = new GeneratorLoad(root);
@@ -1464,9 +1391,6 @@ void Generator::createGenerators(const ComponentDataRoot *root)
             } else if (type == Generator::Table) {
                 if (!component.isEmpty()) components[g->key] = component;
                 static_cast<GeneratorTable*>(g)->component = components;
-            } else if (type == Generator::TableSql) {
-                static_cast<GeneratorTableSql*>(g)->tableName = tableName;
-                static_cast<GeneratorTableSql*>(g)->component = component;
             } else if (type == Generator::TableSqlWithComponent) {
                 static_cast<GeneratorTableSqlWithComponent*>(g)->tableName = tableName;
                 Q_ASSERT(!components.isEmpty());
@@ -1478,13 +1402,16 @@ void Generator::createGenerators(const ComponentDataRoot *root)
                 if (!component.isEmpty()) components[g->key] = component;
                 static_cast<GeneratorLoad*>(g)->component = components;
             } else if (type == Generator::LoadSql) {
+                if (component.isEmpty()) {
+                    qWarning() << g->componentClass << g->key;
+                }
                 Q_ASSERT(!component.isEmpty());
                 static_cast<GeneratorLoadSql*>(g)->component = component;
             } else if (type == Generator::LoadSqlWithComponent) {
                 Q_ASSERT(!components.isEmpty());
                 static_cast<GeneratorLoadSqlWithComponent*>(g)->component = components;
             } else if (type == Generator::LinkTag) {
-                Q_ASSERT(!components.isEmpty());
+                if (!component.isEmpty()) components[g->key] = component;
                 static_cast<GeneratorLinkTag*>(g)->component = components;
             } else {
                 continue;

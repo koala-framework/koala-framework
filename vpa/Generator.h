@@ -233,22 +233,6 @@ private:
     QList<ComponentData*> _build(ComponentData* parent, const Select& select);
 };
 
-struct GeneratorTableSql : public GeneratorWithModel
-{
-    GeneratorTableSql(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
-
-    QString tableName;
-    ComponentClass component;
-    virtual QList<ComponentData*> build(ComponentData *parent);
-    virtual void buildSingle(ComponentData* parent, const QString& id);
-    virtual void refresh(ComponentData* d);
-
-    virtual QList<ComponentClass> childComponentClasses() const;
-    virtual QList<IndexedString> childComponentKeys() const;
-
-private:
-    QList<ComponentData*> _build(ComponentData* parent, QSqlQuery& query);
-};
 struct GeneratorTableSqlWithComponent : public GeneratorWithModel
 {
     GeneratorTableSqlWithComponent(const ComponentDataRoot *root) : GeneratorWithModel(root) {}
