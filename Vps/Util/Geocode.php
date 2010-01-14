@@ -22,7 +22,18 @@ class Vps_Util_Geocode
         $client->setMethod(Zend_Http_Client::GET);
         $client->setParameterGet($getParams);
         $body = utf8_encode($client->request()->getBody());
-        $result = Zend_Json::decode($body);
+
+        // da gibts einen php bug in älteren versionen, der verursacht,
+        // dass json_decode() bei gesetztem "setlocale(LC_NUMERIC, 'de_DE');"
+        // float zahlen mit punkt als integer interpretiert.
+        // php bugtracker: http://bugs.php.net/bug.php?id=41403
+        if (version_compare(PHP_VERSION, '5.2.3') == -1) {
+            setlocale(LC_NUMERIC, 'C');
+            $result = Zend_Json::decode($body);
+            setlocale(LC_NUMERIC, explode(', ', trlcVps('locale', 'C')));
+        } else {
+            $result = Zend_Json::decode($body);
+        }
 
         if (isset($result) && isset($result['Placemark']) && isset($result['Placemark'][0])
             && isset($result['Placemark'][0]['Point']) && isset($result['Placemark'][0]['Point']['coordinates'])

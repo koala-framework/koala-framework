@@ -95,7 +95,6 @@ class Vps_Setup
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
-        setlocale(LC_ALL, array('de_AT.UTF-8', 'de.UTF-8', 'de_DE.UTF-8'));
 
         $ip = get_include_path();
         foreach ($config->includepath as $t=>$p) {
@@ -211,6 +210,8 @@ class Vps_Setup
         if ($tl = $config->debug->timeLimit) {
             set_time_limit($tl);
         }
+
+        setlocale(LC_ALL, explode(', ', trlcVps('locale', 'C')));
     }
 
     public static function shutDown()
@@ -295,6 +296,7 @@ class Vps_Setup
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
             Vps_Registry::get('trl')->setUseUserLanguage(false);
+            setlocale(LC_ALL, explode(', ', trlcVps('locale', 'C')));
 
             $root = Vps_Component_Data_Root::getInstance();
             $data = $root->getPageByUrl($requestUrl);
