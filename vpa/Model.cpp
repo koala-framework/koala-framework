@@ -65,12 +65,12 @@ Model::RowSet Model::fetchRows(const QHash<IndexedString, IndexedString>& fields
             ret << createRow(id, values);
         }
     } else {
-        qDebug() << "rows (bad)";
+        //qDebug() << "rows (bad)";
         //wir haben gleich die daten bekommen
         int rowCount = u.readArrayStart();
         for (int i=0; i < rowCount; ++i) {
             QString id = u.readVariant().toString();
-            qDebug() << "************* fetched; id:" << id;
+            //qDebug() << "************* fetched; id:" << id;
             Q_ASSERT(!id.isEmpty());
             int colCount = u.readArrayStart();
             Q_ASSERT(colCount == fieldNames.count());
