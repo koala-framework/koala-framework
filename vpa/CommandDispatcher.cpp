@@ -7,7 +7,7 @@
 #include "Unserializer.h"
 #include "ComponentDataRoot.h"
 
-#define debug(x)
+#define debug(x) x
 #define debugVerbose(x)
 
 
@@ -133,7 +133,7 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
         u.readInt(); //array key
         u.readObjectClassName();
         Select s(&u);
-        qDebug() << s;
+        qDebug() << classes << s;
 
         QList<ComponentData*> ret;
         int i=0;
