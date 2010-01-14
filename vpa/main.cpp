@@ -21,6 +21,13 @@ int main(int argc, char** argv)
     if (argc < 2) {
         qFatal("First parameter needs to be path to the web");
     }
+    QDir webPath(argv[1]);
+
+    QFile pidFile(webPath.absolutePath()+"/application/temp/vpa.pid");
+    pidFile.open(QIODevice::WriteOnly);
+    qDebug() << QCoreApplication::applicationPid();
+    pidFile.write(QByteArray::number(QCoreApplication::applicationPid()));
+    pidFile.close();
 
     QTime startupStopWatch;
     startupStopWatch.start();
@@ -28,7 +35,7 @@ int main(int argc, char** argv)
         qDebug() << "start php process";
         QTime stopWatch;
         stopWatch.start();
-        PhpProcess::setup(argv[1]);
+        PhpProcess::setup(webPath.absolutePath());
         qDebug() << stopWatch.elapsed() << "ms";
     }
 
@@ -67,8 +74,7 @@ int main(int argc, char** argv)
 
     ConnectionServer server;
 
-    QDir path(argv[1]);
-    QString socketPath = path.absolutePath()+"/application/temp/vpa.sock";
+    QString socketPath = webPath.absolutePath()+"/application/temp/vpa.sock";
     qDebug() << "opening socket" << socketPath;
     if (!server.listen(socketPath)) {
         qFatal(server.errorString().toAscii().constData());
