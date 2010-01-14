@@ -1,6 +1,7 @@
 #include "CommandDispatcher.h"
 
 #include <QBuffer>
+#include <QCoreApplication>
 
 #include "ComponentData.h"
 #include "Unserializer.h"
@@ -27,6 +28,12 @@ void CommandDispatcher::dispatchCommand(const ComponentDataRoot* root, const QBy
         Q_ASSERT(paramCount == 0);
 
         socket->write(serialize("pong"));
+
+    } else if (cmd == "quit") {
+        Q_ASSERT(paramCount == 0);
+        socket->write(serialize(true));
+        QCoreApplication::instance()->quit();
+
     } else if (cmd == "getComponentDataById") {
         Q_ASSERT(paramCount == 1 || paramCount == 2);
         u.readInt(); //array key
