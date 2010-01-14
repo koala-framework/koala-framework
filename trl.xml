@@ -5263,5 +5263,11 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>none</en>
 <id>1381</id>
 </text>
+<text>
+<context>locale</context>
+<en>C</en>
+<de>de_AT.UTF-8, de.UTF-8, de_DE.UTF-8</de>
+<id>1382</id>
+</text>
 </trl>
 

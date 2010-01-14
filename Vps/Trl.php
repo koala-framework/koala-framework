@@ -46,6 +46,7 @@ class Vps_Trl
     private $_modelVps;
     private $_languages; //cache
     private $_useUserLanguage = true;
+    private $_webCodeLanguage;
 
     const SOURCE_VPS = 'vps';
     const SOURCE_WEB = 'web';
@@ -88,11 +89,8 @@ class Vps_Trl
             $config = Zend_Registry::get('config');
             if ($config->languages) {
                 $this->_languages = array_values($config->languages->toArray());
-            } else if ($config->webCodeLanguage) {
-                $this->_languages = array($config->webCodeLanguage);
-            }
-            if (empty($this->_languages)) {
-                throw new Vps_Exception('Neither config languages nor config webCodeLanguage set.');
+            } else {
+                $this->_languages = array($config->getWebCodeLanguage());
             }
         }
         return $this->_languages;
@@ -109,6 +107,12 @@ class Vps_Trl
             return $this->getWebCodeLanguage();
         }
 
+        //abkürzung
+        if (count($this->getLanguages()) == 1) {
+            return $this->getWebCodeLanguage();
+        }
+
+        //TODO: das benötigt IMMER eine datenbankverbindung, sollte in session gespeichert werden
         $userModel = Vps_Registry::get('userModel');
         if (!$userModel || !$userModel->getAuthedUser() ||
             !isset($userModel->getAuthedUser()->language) ||
@@ -123,13 +127,11 @@ class Vps_Trl
 
     public function getWebCodeLanguage()
     {
-        $config = Zend_Registry::get('config');
-        if (isset($this->_webCodeLanguage) && $this->_webCodeLanguage) {
-            return $this->_webCodeLanguage;
+        if (!isset($this->_webCodeLanguage)) {
+            $config = Zend_Registry::get('config');
+            $this->_webCodeLanguage = $config->webCodeLanguage;
         }
-        if ($config->webCodeLanguage) {
-            return $config->webCodeLanguage;
-        }
+        return $this->_webCodeLanguage;
     }
 
     private function _getModel($type)
