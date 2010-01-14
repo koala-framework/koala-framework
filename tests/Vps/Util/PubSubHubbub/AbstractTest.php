@@ -6,6 +6,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
     protected $_testId;
     protected $_testFeedUrl;
     private $_storePath;
+    private $_pipes;
 
     public function setUp()
     {
@@ -18,6 +19,12 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         if (!$this->_startHub($debugOutput)) {
             //try again with differnet port
             $this->assertTrue($this->_startHub($debugOutput));
+        }
+        try {
+            $c = file_get_contents($this->_hubUrl);
+            $this->assertContains('Welcome to the demo PubSubHubbub reference Hub server', $c);
+        } catch (Exception $e) {
+            $this->fail("Failed starting hub, output: ".stream_get_contents($this->_pipes[1]));
         }
 
         $this->_testId = rand(0, 1000000);
@@ -42,8 +49,8 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
             );
         } else {
             $descriptorspec = array(
-                1 => array('file', '/dev/null', 'w'),
-                2 => array('file', '/dev/null', 'w')
+                1 => array('pipe', 'w'),
+                2 => STDOUT //should be empty
             );
         }
 
@@ -57,9 +64,11 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         $cmd = "python2.5 {$d}google_appengine/dev_appserver.py {$d}pubsubhubbub/hub/ ".
                "--port=$port --address=$address --clear_datastore ".
                "--datastore_path=$this->_storePath/dev_appserver.datastore ".
-               "--history_path=$this->_storePath/dev_appserver.datastore.history";
+               "--history_path=$this->_storePath/dev_appserver.datastore.history".
+               " 2>&1";
         if ($debugOutput) echo "$cmd\n";
-        $this->_hubApp = proc_open($cmd, $descriptorspec, $pipes);
+        $this->_hubApp = proc_open($cmd, $descriptorspec, $this->_pipes);
+        $this->assertTrue(is_resource($this->_hubApp));
         $this->_hubUrl = "http://$address:$port";
         sleep(1);
         $status = proc_get_status($this->_hubApp);
@@ -71,13 +80,14 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         unlink('/tmp/feed'.$this->_testId);
         unlink('/tmp/lastCallback'.$this->_testId);
         unlink('/tmp/feedRequested'.$this->_testId);
-        system("rm -r $this->_storePath");
 
         proc_terminate($this->_hubApp, SIGTERM);
         do {
             $status = proc_get_status($this->_hubApp);
-            sleep(1);
+            if ($status['running']) sleep(1);
         } while ($status['running']);
+
+        system("rm -r $this->_storePath");
     }
 
     protected function assertFeedRequested($num)
