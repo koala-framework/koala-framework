@@ -9,7 +9,7 @@
 #include "ComponentData.h"
 #include "ConnectionThread.h"
 
-#define ifDebugCreateComponentData(x)
+#define ifDebugCreateComponentData(x) x
 #define ifDebugGetComponentById(x)
 #define ifDebugGetChildPageByPath(x)
 #define ifDebugGetRecursiveChildComponents(x)
@@ -252,6 +252,7 @@ QHash< QByteArray, QVariant > ComponentData::dataForWeb() const
     ret["inherits"] = QVariant(generatorFlags() & Generator::TypeInherits);
     ret["_filename"] = filename();
     ret["_rel"] = false;
+    ret["visible"] = isVisible();
     return ret;
 
 }
@@ -262,7 +263,7 @@ QByteArray serialize(const ComponentData* d)
     if (!d) return serialize(NullValue());
     QByteArray ret;
     QByteArray cls("Vps_Component_Data");
-    ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":17:{";
+    ret += "O:"+QByteArray::number(cls.length())+":\""+cls+"\":18:{";
     ret += serializePrivateObjectProperty("_url", "Vps_Component_Data", d->url());
     ret += serializePrivateObjectProperty("_rel", "Vps_Component_Data", NullValue());
     ret += serializePrivateObjectProperty("_filename", "*", d->filename());
@@ -288,6 +289,7 @@ QByteArray serialize(const ComponentData* d)
     ret += serializeObjectProperty("name", d->name());
     ret += serializeObjectProperty("tags", d->tags());
     ret += serializeObjectProperty("inherits", d->generatorFlags() & Generator::TypeInherits);
+    ret += serializeObjectProperty("visible", d->isVisible());
     ret += "}";
     return ret;
 }
