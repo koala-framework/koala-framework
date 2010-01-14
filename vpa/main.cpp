@@ -80,6 +80,8 @@ int main(int argc, char** argv)
         qFatal(server.errorString().toAscii().constData());
     }
 
-    return app.exec();
-}
+    int ret = app.exec();
+    qDebug() << "application quit";
+    pidFile.remove();
+    return ret;}
 
