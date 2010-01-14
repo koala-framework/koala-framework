@@ -137,7 +137,7 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $feeds = $m->findFeeds('http://www.vivid-planet.com');
         $this->assertEquals(1, count($feeds));
         $feeds = array_keys($feeds);
-        $this->assertEquals('http://www.vivid-planet.com/news/aktuelle_news/rss/', $feeds[0]);
+        $this->assertContains('vivid-planet.com/news/aktuelle_news/rss/', $feeds[0]);
 
         $feeds = $m->findFeeds('http://www.prosalzburg.at');
         $this->assertEquals(2, count($feeds));
