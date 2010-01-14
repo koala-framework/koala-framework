@@ -22,7 +22,7 @@ public:
         p->setProcessChannelMode(QProcess::MergedChannels);
         p->setWorkingDirectory(webDir);
         QStringList arg;
-        arg << "bootstrap.php" << "get-generators";
+        arg << "bootstrap.php" << "vpa-callback";
         ifDebugProcess( qDebug() << "starting php process"; )
         p->start("php", arg);
         p->waitForStarted();
