@@ -9,7 +9,7 @@
 #include "ComponentData.h"
 #include "ConnectionThread.h"
 
-#define ifDebugCreateComponentData(x) x
+#define ifDebugCreateComponentData(x)
 #define ifDebugGetComponentById(x)
 #define ifDebugGetChildPageByPath(x)
 #define ifDebugGetRecursiveChildComponents(x)
@@ -88,6 +88,7 @@ void ComponentData::init()
     }
 
     ifDebugCreateComponentData( qDebug() << count << componentId() << componentClass().toString(); )
+
     if (m_idSeparator == Generator::NoSeparator) {
         if (m_idHash[root()].contains(componentId())) {
             qWarning() << "componentId exists already" << componentId();
@@ -143,7 +144,7 @@ void ComponentData::addChildren(ComponentData *c)
 
 QList<ComponentData*> ComponentData::getComponentsByClass(const ComponentDataRoot *root, ComponentClass cls)
 {
-    qDebug() << "getComponentsByClass" << cls << "root:" << root->componentClass();
+    //qDebug() << "ComponentData::getComponentsByClass" << cls << "root:" << root->componentClass();
 
     //m_componentClassHash wird in ComponentData::init geschrieben
     if (!m_componentsByClassRequested.contains(qMakePair(root, cls))) {
@@ -156,10 +157,10 @@ QList<ComponentData*> ComponentData::getComponentsByClass(const ComponentDataRoo
         }
 
         bool allSupported = true;
-        QList<GeneratorTableSqlWithComponent*> generators;
+        QList<Generator*> generators;
         foreach (Generator *g, Generator::generators(root)) {
             if (g->childComponentClasses().contains(cls)) {
-                generators << static_cast<GeneratorTableSqlWithComponent*>(g);
+                generators << g;
                 if (dynamic_cast<GeneratorTableSqlWithComponent*>(g)) {
                     //TODO: support more, by adding an interface or something
                     //(for now we are happy to get paragraphs fast
