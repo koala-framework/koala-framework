@@ -172,4 +172,22 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         );
         $this->view->ext('Vps.User.Grid.Index', $config);
     }
+
+    protected function _hasPermissions($row, $action)
+    {
+        $acl = Vps_Registry::get('acl');
+        $userRole = Vps_Registry::get('userModel')->getAuthedUserRole();
+
+        $roles = array();
+        foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
+            $roles[$role->getRoleId()] = $role->getRoleName();
+        }
+        if (!$roles) return false;
+
+        if (!$row || !array_key_exists($row->role, $roles)) {
+            return false;
+        }
+
+        return true;
+    }
 }
