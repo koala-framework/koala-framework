@@ -90,7 +90,7 @@ class Vps_Trl
             if ($config->languages) {
                 $this->_languages = array_values($config->languages->toArray());
             } else {
-                $this->_languages = array($config->getWebCodeLanguage());
+                $this->_languages = array($this->getWebCodeLanguage());
             }
         }
         return $this->_languages;
