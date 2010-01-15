@@ -42,6 +42,10 @@ if (preg_match('#tags/vps/([0-9]+\\.[0-9]+)\\.[^/]+#', $ownUrl, $m)) {
 
 if (preg_match('#branches/vps/1\\.6#', $ownUrl)) {
     $mergeToBranches[] = '1.7';
+    $mergeToBranches[] = '1.8';
+}
+if (preg_match('#branches/vps/1\\.7#', $ownUrl)) {
+    $mergeToBranches[] = '1.8';
 }
 $mergeToBranches[] = 'trunk';
 
