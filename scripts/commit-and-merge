@@ -44,6 +44,18 @@ if (preg_match('#branches/vps/1\\.6#', $ownUrl)) {
     }
 }
 
+if (preg_match('#branches/vps/1\\.(6|7)#', $ownUrl)) {
+    if (file_exists('../vps-1.8-clean')) {
+        $mergeToArray[] = '../vps-1.8-clean';
+    } else if (file_exists('../vps-1.8')) {
+        $mergeToArray[] = '../vps-1.8';
+    } else if (file_exists('../1.8')) {
+        $mergeToArray[] = '../1.8';
+    } else {
+        $mergeToArray[] = '../vps1.8';
+    }
+}
+
 if (file_exists('../vps-trunk-mergehere')) {
     $mergeToArray[] = '../vps-trunk-mergehere';
 } else if (file_exists('../vps-trunk-clean')) {
