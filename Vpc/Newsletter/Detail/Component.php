@@ -50,6 +50,10 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         if ($recipient instanceof Vpc_Mail_Recipient_UnsubscribableInterface) {
             if ($recipient->getMailUnsubscribe()) return false;
         }
+        // break if the account has not been activated
+        if ($row->getModel()->hasColumn('activated') && !$row->activated) {
+            return false;
+        }
 
         // add to senders list import
         $this->_toImport[] = array(
@@ -64,7 +68,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         );
 
         // if this receiver should be checked against the rtr-ecg
-        if (true && count($this->_toImport)) {
+        if (count($this->_toImport)) {
             $this->_rtrCheck[count($this->_toImport) - 1] = $recipient->getMailEmail();
         }
 
