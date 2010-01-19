@@ -114,7 +114,21 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     {
         $select = $this->_getSynchronizeSelect($overrideMaxSyncDelay);
         if ($select !== false) {
-            $this->getProxyModel()->copyDataFromModel($this->getSourceModel(), $select, array('replace'=>true));
+            // it's possible to use $this->getProxyModel()->copyDataFromModel()
+            // but if < 20 rows are copied, array is faster than sql or csv
+            $format = null;
+            if (!is_null($select)) {
+                if (in_array(self::FORMAT_ARRAY, $this->getProxyModel()->getSupportedImportExportFormats())
+                    && in_array(self::FORMAT_ARRAY, $this->getSourceModel()->getSupportedImportExportFormats())
+                ) {
+                    $format = self::FORMAT_ARRAY;
+                }
+            }
+            if (!$format) {
+                $format = self::_optimalImportExportFormat($this->getProxyModel(), $this->getSourceModel());
+            }
+
+            $this->getProxyModel()->import($format, $this->getSourceModel()->export($format, $select), array('replace'=>true));
         }
     }
 
