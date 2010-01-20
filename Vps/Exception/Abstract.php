@@ -22,10 +22,9 @@ abstract class Vps_Exception_Abstract extends Exception
         return $this;
     }
 
-    protected function _writeLog($path, $filename, $content)
+    protected function _writeLog($path, $filename, $content, $force = false)
     {
-        $requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-        if (self::isDebug()) {
+        if (self::isDebug() && !$force) {
             return false;
         }
         $this->_logFilename = $filename;

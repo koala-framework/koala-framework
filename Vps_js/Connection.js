@@ -259,6 +259,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                     errorText = null;
                 }
                 Vps.handleError({
+                    url: options.url,
                     message: errorMsg,
                     title: errorMsgTitle,
                     mail: sendMail,
@@ -308,24 +309,18 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 return;
             }
             options.vpsIsSuccess = true;
-            Vps.callWithErrorHandler(function() {
-                Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options, r]);
-            });
+            options.vpsCallback.success.call(options.vpsCallback.scope, response, options, r);
         };
     },
     vpsNoJsonSuccess: function(response, options)
     {
         options.vpsIsSuccess = true;
-        Vps.callWithErrorHandler(function() {
-            Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options]);
-        });
+        options.vpsCallback.success.call(options.vpsCallback.scope, response, options);
     },
     vpsNoJsonFailure: function(response, options)
     {
         options.vpsIsSuccess = false;
-        Vps.callWithErrorHandler(function() {
-            Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
-        });
+        options.vpsCallback.failure.call(options.vpsCallback.scope, response, options);
     },
     vpsJsonFailure: function(response, options)
     {
@@ -342,6 +337,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             }
             if (!options.ignoreErrors) {
                 Vps.handleError({
+                    url: options.url,
                     message: errorMsg,
                     title: errorMsgTitle,
                     errorText: errorText,
