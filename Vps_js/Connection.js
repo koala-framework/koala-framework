@@ -309,18 +309,24 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 return;
             }
             options.vpsIsSuccess = true;
-            options.vpsCallback.success.call(options.vpsCallback.scope, response, options, r);
+            if (options.vpsCallback.success) {
+                options.vpsCallback.success.call(options.vpsCallback.scope, response, options, r);
+            }
         };
     },
     vpsNoJsonSuccess: function(response, options)
     {
         options.vpsIsSuccess = true;
-        options.vpsCallback.success.call(options.vpsCallback.scope, response, options);
+        if (options.vpsCallback.success) {
+            options.vpsCallback.success.call(options.vpsCallback.scope, response, options);
+        }
     },
     vpsNoJsonFailure: function(response, options)
     {
         options.vpsIsSuccess = false;
-        options.vpsCallback.failure.call(options.vpsCallback.scope, response, options);
+        if (options.vpsCallback.failure) {
+            options.vpsCallback.failure.call(options.vpsCallback.scope, response, options);
+        }
     },
     vpsJsonFailure: function(response, options)
     {
