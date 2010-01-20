@@ -141,6 +141,7 @@ Ext.ux.ErrorHandler.on('error', function(ex) {
         }
     });
 });
+
 if (!Vps.Debug.displayErrors) {
     Ext.ux.ErrorHandler.init();
 }

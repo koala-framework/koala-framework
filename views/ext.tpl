@@ -35,8 +35,8 @@
         var Vps = {isApp: true};
     </script>
 
-    <?= $this->assets($this->ext['assetsType']) ?>
     <?= $this->debugData() ?>
+    <?= $this->assets($this->ext['assetsType']) ?>
 
     <script type="text/javascript">
         Vps.userRole = '<?= $this->ext['userRole'] ?>';
