@@ -121,28 +121,29 @@ Vps.log = function(msg) {
     Vps.debugDiv.innerHTML += msg+'<br />';
 };
 
-Vps.callWithErrorHandler = function(fn, scope) {
-    if (Vps.Debug.displayErrors) {
-        //call without error handler
-        return fn.call(scope || window);
+Ext.ux.ErrorHandler.on('error', function(ex) {
+    if(Ext.get('loading')) {
+        Ext.get('loading').fadeOut({remove: true});
     }
-    try {
-        return fn.call(scope || window);
-    } catch(e) {
-        if (e.toString) e = e.toString();
-        if (e.message) e = e.message;
-        if(Ext.get('loading')) {
-            Ext.get('loading').fadeOut({remove: true});
-        }
-        if (Ext.Msg) {
-            Ext.Msg.alert(trlVps('Error'), trlVps("An error has occured"));
-        }
-        Ext.Ajax.request({
-            url: '/vps/error/error/json-mail',
-            params: {msg: e}
-        });
+    if (Ext.Msg) {
+        Ext.Msg.alert(trlVps('Error'), trlVps("An error has occured"));
     }
-};
+    Ext.Ajax.request({
+        url: '/vps/error/error/json-mail',
+        ignoreErrors: true,
+        params: {
+            url: ex.url,
+            lineNumber: ex.lineNumber,
+            stack: Ext.encode(ex.stack),
+            message: ex.message,
+            location: location.href,
+            referrer: document.referrer
+        }
+    });
+});
+if (!Vps.Debug.displayErrors) {
+    Ext.ux.ErrorHandler.init();
+}
 
 //wird gesetzt in Vps.Connection
 Vps.requestSentSinceLastKeepAlive = false;
@@ -189,6 +190,7 @@ Vps.handleError = function(error) {
     if (error instanceof String) error = { message: error };
     if (arguments[1]) error.title = arguments[1];
     if (arguments[2]) error.mail = arguments[2];
+    if (!error.url) error.url = '';
 
 
     if ((error.checkRetry || Vps.Debug.displayErrors) && error.retry) {
@@ -202,12 +204,17 @@ Vps.handleError = function(error) {
             title = (trlVps('Error'));
             msg = trlVps("A Server failure occured.");
             if (error.mail || (typeof error.mail == 'undefined')) {
-            Ext.Ajax.request({
-                url: '/vps/error/error/json-mail',
-                params: {msg: error.message},
-                ignoreErrors: true
-            });
-        }
+                Ext.Ajax.request({
+                    url: '/vps/error/error/json-mail',
+                    params: {
+                        url: error.url,
+                        message: error.message,
+                        location: location.href,
+                        referrer: document.referrer
+                    },
+                    ignoreErrors: true
+                });
+            }
         }
 
             var win = new Ext.Window({
@@ -257,7 +264,12 @@ Vps.handleError = function(error) {
         if (error.mail || (typeof error.mail == 'undefined')) {
             Ext.Ajax.request({
                 url: '/vps/error/error/json-mail',
-                params: {msg: error.message}
+                params: {
+                    url: error.url,
+                    message: error.message,
+                    location: location.href,
+                    referrer: document.referrer
+                }
             });
         }
     }

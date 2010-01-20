@@ -54,6 +54,6 @@
             }
         };
         Ext.onReady(function() {
-            Vps.callWithErrorHandler(Vps.main);
+            Vps.main();
         });
     </script>
