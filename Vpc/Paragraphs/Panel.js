@@ -1,4 +1,18 @@
 Ext.namespace('Vpc.Paragraphs');
+
+
+Vpc.Paragraphs.PanelJsonReader = Ext.extend(Ext.data.JsonReader,
+{
+    readRecords: function(o) {
+        var ret = Vpc.Paragraphs.PanelJsonReader.superclass.readRecords.apply(this, arguments);
+        if (o.componentConfigs) {
+            this.paragraphsPanel.fireEvent('gotComponentConfigs', o.componentConfigs);
+            Ext.applyIf(this.paragraphsPanel.dataView.componentConfigs, o.componentConfigs);
+        }
+        return ret;
+    }
+});
+
 Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     layout:'fit',
@@ -109,21 +123,23 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 
     onMetaLoad : function(result)
     {
-        this.fireEvent('gotComponentConfigs', result.componentConfigs);
-        Ext.applyIf(this.dataView.componentConfigs, result.componentConfigs);
+        //this.fireEvent('gotComponentConfigs', result.componentConfigs);
+        //Ext.applyIf(this.dataView.componentConfigs, result.componentConfigs);
 
         var meta = result.metaData;
         this.metaData = meta;
 
+        var reader = new Vpc.Paragraphs.PanelJsonReader({
+            totalProperty: meta.totalProperty,
+            root: meta.root,
+            id: meta.id,
+            sucessProperty: meta.successProperty,
+            fields: meta.fields
+        });
+        reader.paragraphsPanel = this;
         var storeConfig = {
             proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
-            reader: new Ext.data.JsonReader({
-                totalProperty: meta.totalProperty,
-                root: meta.root,
-                id: meta.id,
-                sucessProperty: meta.successProperty,
-                fields: meta.fields
-            }),
+            reader: reader,
             sortInfo: meta.sortInfo,
             remoteSort: true
         };
