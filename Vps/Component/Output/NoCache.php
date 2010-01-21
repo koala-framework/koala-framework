@@ -85,7 +85,7 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
             foreach ($ids as $id) {
                 $info = array(
                     'total' => $count,
-                    'number' => ++$number
+                    'number' => $number++
                 );
                 $content .= $this->_renderPartial($componentId, $componentClass, $partial, $id, $info);
             }
