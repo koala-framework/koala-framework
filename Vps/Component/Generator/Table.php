@@ -123,7 +123,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     {
         $select = $this->_formatSelect($parentData, $select);
         if ($select) {
-            return $this->_getModel()->fetchCount($select);
+            return $this->_getModel()->countRows($select);
         } else {
             return 0;
         }
