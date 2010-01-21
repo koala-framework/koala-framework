@@ -313,4 +313,12 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->media_image);
     }
+
+    public function testImageAtomEnclosure()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://www.lsusports.net/rss.dbml?db_oem_id=5200&RSS_SPORT_ID=2164&media=news');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->media_image);
+    }
 }

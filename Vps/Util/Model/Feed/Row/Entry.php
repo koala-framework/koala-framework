@@ -104,13 +104,15 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
             foreach ($xml->link as $link) {
                 if ((string)$link['rel'] == 'enclosure' && substr((string)$link['type'], 0, 6)=='image/') {
                     $data['media_image'] = (string)$link['href'];
+                    break;
                 }
             }
         }
         if (!$data['media_image']) {
             foreach ($xml->enclosure as $enclosure) {
                 if (substr((string)$enclosure['type'], 0, 6)=='image/') {
-                    $data['media_image'] = (string)$link['url'];
+                    $data['media_image'] = (string)$enclosure['url'];
+                    break;
                 }
             }
         }
