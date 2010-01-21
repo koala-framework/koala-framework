@@ -91,6 +91,17 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 }
             }
             if (is_string($f)) {
+                if (!class_exists($f)) {
+                    if (class_exists('Vps_Filter_Row_'.$f)) {
+                        $f = 'Vps_Filter_Row_'.$f;
+                        $f = new $f();
+                    } else if (class_exists('Vps_Filter_'.$f)) {
+                        $f = 'Vps_Filter_'.$f;
+                        $f = new $f();
+                    } else {
+                        throw new Vps_Exception("Invalid filter class");
+                    }
+                }
                 $f = new $f();
             }
             if ($f instanceof Vps_Filter_Row_Abstract) {
