@@ -87,8 +87,8 @@ Vps.clone = function(o) {
 //workaround für Permission denied to access property 'dom' from non-chrome context
 //siehe http://www.extjs.com/forum/showthread.php?t=74765
 //fixed in Ext 3
-Ext.Element.prototpye.origContains = Ext.Element.prototpye.contains;
-Ext.Element.prototpye.contains = function(el) {
+Ext.Element.prototype.origContains = Ext.Element.prototype.contains;
+Ext.Element.prototype.contains = function(el) {
     try {
         return Ext.Element.prototpye.origContains.apply(this, arguments);
     } catch(e) {
