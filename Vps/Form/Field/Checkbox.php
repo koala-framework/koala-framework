@@ -20,7 +20,6 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
     {
         $name = $this->getFieldName();
         $value = $values[$name];
-        if (is_null($value) && $this->getChecked()) $value = true;
 
         $ret = parent::getTemplateVars($values);
         //todo: escapen
