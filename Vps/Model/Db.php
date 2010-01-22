@@ -901,6 +901,15 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private function _importArray($data, $options)
     {
         if (empty($data)) return;
+        if ($this->getSiblingModels()) {
+            if ($options) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
+            foreach ($data as $r) {
+                $this->createRow($r)->save();
+            }
+            return;
+        }
         $fields = array_keys($data[0]);
         if (isset($options['replace']) && $options['replace']) {
             $sql = 'REPLACE';
@@ -940,6 +949,15 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $this->_table->getAdapter()->getConnection()->exec($sql);
         } else {
             $this->_table->getAdapter()->query($sql);
+        }
+    }
+
+    public function getSupportedImportExportFormats()
+    {
+        if ($this->getSiblingModels()) {
+            return array(self::FORMAT_ARRAY);
+        } else {
+            return $this->_supportedImportExportFormats;
         }
     }
 }
