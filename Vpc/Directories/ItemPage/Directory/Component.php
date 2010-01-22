@@ -4,7 +4,7 @@ abstract class Vpc_Directories_ItemPage_Directory_Component extends Vpc_Director
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['detail']['class'] = 'Vpc_CnImmobilien_Immovables_Detail_ChildImmovables_Directory_Generator';
+        $ret['generators']['detail']['class'] = 'Vps_Component_Generator_Page_Table';
         $ret['generators']['child']['component']['view'] = 'Vpc_Directories_List_ViewPage_Component';
         return $ret;
     }
