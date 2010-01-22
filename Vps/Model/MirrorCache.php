@@ -4,7 +4,8 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     protected $_rowClass = 'Vps_Model_MirrorCache_Row';
 
     protected $_sourceModel;
-    protected $_syncTimeField;
+    protected $_syncTimeField = null;
+    protected $_truncateBeforeFullImport = false;
 
     const SYNC_AFTER_DELAY = false;
     const SYNC_ONCE = true;
@@ -22,6 +23,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         if (isset($config['sourceModel'])) $this->_sourceModel = $config['sourceModel'];
         if (isset($config['syncTimeField'])) $this->_syncTimeField = $config['syncTimeField'];
         if (isset($config['maxSyncDelay'])) $this->_maxSyncDelay = $config['maxSyncDelay'];
+        if (isset($config['truncateBeforeFullImport'])) $this->_truncateBeforeFullImport = $config['truncateBeforeFullImport'];
         parent::__construct($config);
     }
 
@@ -70,9 +72,6 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 return false;
             }
         }
-        if (!$this->_syncTimeField) {
-            throw new Vps_Exception("syncTimeField must be set when using MirrorCache");
-        }
 
         if ($this->_getMaxSyncDelay()) {
             $cache = $this->_getSyncDelayCache();
@@ -88,6 +87,11 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $this->_synchronizeDone = true; //wegen endlosschleife ganz oben
 
         Vps_Benchmark::count('mirror sync');
+
+        if (!$this->_syncTimeField) {
+            // kein modified feld vorhanden, alle kopieren
+            return null;
+        }
 
         $syncField = $this->_syncTimeField;
         $proxyModel = $this->getProxyModel();
@@ -128,7 +132,14 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 $format = self::_optimalImportExportFormat($this->getProxyModel(), $this->getSourceModel());
             }
 
-            $this->getProxyModel()->import($format, $this->getSourceModel()->export($format, $select), array('replace'=>true));
+            $options = array();
+            $data = $this->getSourceModel()->export($format, $select);
+            if (!$select && $this->_truncateBeforeFullImport) {
+                $this->getProxyModel()->deleteRows($this->getProxyModel()->select());
+            } else {
+                $options['replace'] = true;
+            }
+            $this->getProxyModel()->import($format, $data, $options);
         }
     }
 
