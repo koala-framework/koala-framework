@@ -60,9 +60,14 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $select;
     }
 
-    public function getChildIds($parentData, $select = array())
+    public final function getChildIds($parentData, $select = array())
     {
         $select = $this->_formatSelect($parentData, $select);
+        return $this->_fetchIds($parentData, $select);
+    }
+
+    protected function _fetchIds($parentData, $select)
+    {
         return $this->_getModel()->getIds($select);
     }
 
@@ -71,7 +76,16 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $this->_getModel()->getRows($select);
     }
 
-    public function getChildData($parentData, $select = array())
+    protected function _fetchCountChildData($parentData, $select)
+    {
+        if ($select) {
+            return $this->_getModel()->countRows($select);
+        } else {
+            return 0;
+        }
+    }
+
+    public final function getChildData($parentData, $select = array())
     {
         Vps_Benchmark::count('GenTable::getChildData');
         if (is_array($select)) $select = new Vps_Component_Select($select);
@@ -119,14 +133,10 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    public function countChildData($parentData, $select = array())
+    public final function countChildData($parentData, $select = array())
     {
         $select = $this->_formatSelect($parentData, $select);
-        if ($select) {
-            return $this->_getModel()->countRows($select);
-        } else {
-            return 0;
-        }
+        return $this->_fetchCountChildData($parentData, $select);
     }
 
     protected function _getParentDataByRow($row, $select)
