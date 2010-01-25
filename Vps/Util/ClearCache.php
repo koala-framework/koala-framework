@@ -93,7 +93,7 @@ class Vps_Util_ClearCache
                     Vps_Component_Cache::refreshStaticCache();
                     if ($output) echo " [\033[00;32mOK\033[00m]\n";
                 } catch (Exception $e) {
-                    if ($output) echo " [\033[01;31mERROR\033[00m]\n";
+                    if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
                 }
             }
             try {
@@ -109,7 +109,7 @@ class Vps_Util_ClearCache
                         Vps_Registry::get('userModel')->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
                         if ($output) echo " [\033[00;32mOK\033[00m]\n";
                     } catch (Exception $e) {
-                        if ($output) echo " [\033[01;31mERROR\033[00m]\n";
+                        if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
                     }
 
                     // alle zeilen löschen die zuviel sind in vps_users
