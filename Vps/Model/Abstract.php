@@ -48,11 +48,18 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     }
 
     /**
+     * @param Vps_Model_Abstract|string wenn string: entweder aus config (models.modelName)
+     *                                               oder Klassenname von Model
      * @return Vps_Model_Abstract
      **/
     public static function getInstance($modelName)
     {
         if (is_object($modelName)) return $modelName;
+        static $config;
+        if (!isset($config)) $config = Vps_Registry::get('config')->models->toArray();
+        if (isset($config[$modelName]) && $config[$modelName]) {
+            $modelName = $config[$modelName];
+        }
         if (!isset(self::$_instances[$modelName])) {
             self::$_instances[$modelName] = new $modelName();
         }
