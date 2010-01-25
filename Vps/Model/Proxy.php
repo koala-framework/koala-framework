@@ -89,10 +89,9 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function isEqual(Vps_Model_Interface $other)
     {
-        if (get_class($other) == get_class($this)
-            && $this->_proxyModel->isEqual($other->_proxyModel)
-        ) {
-            return true;
+        if ($this->_proxyModel->isEqual($other)) return true;
+        if ($other instanceof Vps_Model_Proxy) {
+            return $this->_proxyModel->isEqual($other->_proxyModel);
         }
         return false;
     }
