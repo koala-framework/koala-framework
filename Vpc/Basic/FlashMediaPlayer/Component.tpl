@@ -9,6 +9,7 @@
             var s1 = new SWFObject("<?= $this->playerPath; ?>","ply<?= $this->row->component_id; ?>","<?= $this->width; ?>","<?= $this->height; ?>","9","#FFFFFF");
             s1.addParam("allowfullscreen","true");
             s1.addParam("allowscriptaccess","always");
+            s1.addParam("wmode","opaque");
             s1.addParam("flashvars","file=<?= $this->url; ?>"
                 <? if ($this->row->autostart) { ?>
                     +"&autostart=true"
