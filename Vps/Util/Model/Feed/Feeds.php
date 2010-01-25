@@ -12,7 +12,7 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
      */
     public function getHttpRequestor()
     {
-        return new Vps_Http_Requestor;
+        return Vps_Http_Requestor::getInstance();
     }
 
     protected function _getOwnColumns()
