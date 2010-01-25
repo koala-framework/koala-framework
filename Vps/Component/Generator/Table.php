@@ -85,7 +85,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
     }
 
-    public final function getChildData($parentData, $select = array())
+    public function getChildData($parentData, $select = array())
     {
         Vps_Benchmark::count('GenTable::getChildData');
         if (is_array($select)) $select = new Vps_Component_Select($select);
