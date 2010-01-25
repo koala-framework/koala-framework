@@ -64,7 +64,7 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
     }
     public function startTest(PHPUnit_Framework_Test $test)
     {
-        if ($this->_verbose) echo $test->toString()."\n\n";
+        if ($this->_verbose) echo date('Y-m-d H:i:s').': '.$test->toString()."\n\n";
         if ($this->_getProgressBar()) {
             //erstellt sie beim ersten aufruf, nicht im kostruktor machen da sonst zu früh was rausgeschrieben wird
             $this->writeProgress('.');
