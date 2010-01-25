@@ -82,13 +82,15 @@ class Vps_Controller_Action_Cli_SwitchController extends Vps_Controller_Action_C
             if (!file_exists($vpsTagPath)) {
                 echo "$vpsTagPath doesn't exist, initial checkout... (will take some time)\n";
                 $cmd = "svn co $svnPath $vpsTagPath";
+                if ($this->_getParam('debug')) echo "$cmd\n";
+                $this->_systemCheckRet("$cmd >/dev/null");
                 copy(VPS_PATH.'/include_path', $vpsTagPath.'/include_path');
             } else {
                 echo "switch $vpsTagPath to $vpsVersion...\n";
                 $cmd = "svn sw $svnPath $vpsTagPath";
+                if ($this->_getParam('debug')) echo "$cmd\n";
+                $this->_systemCheckRet("$cmd >/dev/null");
             }
-            if ($this->_getParam('debug')) echo "$cmd\n";
-            $this->_systemCheckRet("$cmd >/dev/null");
             file_put_contents('application/include_path', $vpsTagPath);
         }
         echo "Checked Out Web $webVersion with Vps $vpsVersion\n";
