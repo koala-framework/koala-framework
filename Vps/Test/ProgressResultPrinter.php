@@ -6,6 +6,7 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
     private $_expectedTimes;
     private $_currentProgress;
     private $_currentTest;
+    private $_verbose;
 
 
     private function _getProgressBar()
@@ -30,7 +31,8 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
     }
     public function __construct(array $expectedTimes, $out = NULL, $verbose = FALSE, $colors = FALSE)
     {
-        parent::__construct($out, $verbose, $colors);
+        $this->_verbose = $verbose;
+        parent::__construct($out, false, $colors);
         $this->_expectedTimes = $expectedTimes;
     }
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
@@ -62,6 +64,7 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
     }
     public function startTest(PHPUnit_Framework_Test $test)
     {
+        if ($this->_verbose) echo date('Y-m-d H:i:s').': '.$test->toString()."\n\n";
         if ($this->_getProgressBar()) {
             //erstellt sie beim ersten aufruf, nicht im kostruktor machen da sonst zu früh was rausgeschrieben wird
             $this->writeProgress('.');
