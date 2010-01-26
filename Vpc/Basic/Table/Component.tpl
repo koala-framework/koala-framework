@@ -11,7 +11,7 @@
                         }
                     }
                 ?>
-                    <<?=$tag;?> class="col<?= $i; ?>"><?= $dr->{'column'.$i}; ?></<?=$tag;?>>
+                    <<?=$tag;?> class="col<?= $i; ?><? if($i==1) echo' first';?><? if($i==$this->settingsRow->columns) echo' last';?>"><?= $dr->{'column'.$i}; ?></<?=$tag;?>>
                 <? } ?>
             </tr>
         <? } ?>
