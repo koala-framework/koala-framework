@@ -220,7 +220,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
 
             echo "loesche lokale datenbank '$dbKey'...\n";
-            $this->_systemCheckRet("echo \"DROP DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
+            $this->_systemCheckRet("echo \"SET foreign_key_checks = 0; DROP DATABASE \`$dbConfig[dbname]\`; SET foreign_key_checks = 1;\" | mysql $mysqlLocalOptions");
 
             echo "erstelle neue datenbank '$dbKey'...\n";
             $this->_systemCheckRet("echo \"CREATE DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
