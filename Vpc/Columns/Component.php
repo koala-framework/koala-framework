@@ -35,8 +35,8 @@ class Vpc_Columns_Component extends Vpc_Abstract
 
     public function hasContent()
     {
-        if ($this->getData()->countChildComponents(array('generator' => 'columns'))) {
-            return true;
+        foreach ($this->getData()->getChildComponents(array('generator' => 'columns')) as $c) {
+            if ($c->getComponent()->hasContent()) return true;
         }
         return false;
     }
