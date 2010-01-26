@@ -13,7 +13,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
         $ret = array();
         $ret[] = array(
             'param' => 'server',
-            'value' => 'test,production',
+            'value' => 'vivid-test-server,test,production',
             'valueOptional' => true
         );
         $ret[] = array('param' => 'debug');
@@ -60,14 +60,42 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
         $projectName = Vps_Controller_Action_Cli_TagController::getProjectName();
         $projectPath = self::_getProjectPath();
         $servers = explode(',', $this->_getParam('server'));
+        $setupVividTestServer = false;
         foreach ($servers as $server) {
             $config = Vps_Config_Web::getInstance($server);
             $sshHost = $config->server->user.'@'.$config->server->host;
             $sshDir = $config->server->dir;
+            $cmd = "if [ -d $sshDir ]; then echo \"yes\"; else echo \"no\"; fi";
+            $cmd = "ssh $sshHost ".escapeshellarg($cmd);
+            if (trim(exec($cmd)) != "yes") {
+                if ($server != 'vivid-test-server') {
+                    throw new Vps_Exception_Client("$sshDir ist nicht vorhanden.");
+                } else {
+                    $setupVividTestServer = true;
+                    continue;
+                }
+            }
             $cmd = "ssh $sshHost ".escapeshellarg("cd $sshDir && ls -l");
-            if (trim(exec($cmd)) != "total 0") {
+            $l = trim(exec($cmd));
+            if ($l != "total 0" && $l != "insgesamt 0") {
                 throw new Vps_Exception_Client("$server ist nicht leer, bitte alle Dateien löschen.");
             }
+        }
+
+        if ($setupVividTestServer) {
+            $config = Vps_Config_Web::getInstance('vivid-test-server');
+            $sshHost = $config->server->user.'@'.$config->server->host;
+            $args = array(
+                $config->application->id,
+                $config->server->dir,
+                $config->server->domain
+            );
+            $cmd  = "sudo/ usr/local/bin/setup-web";
+            foreach ($args as $a) {
+                $cmd .= " ".escapeshellarg($a);
+            }
+            $cmd = "ssh $sshHost ".escapeshellarg($cmd);
+            $this->_systemCheckRet($cmd);
         }
 
 
@@ -75,52 +103,56 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
         foreach ($servers as $server) {
             $config = Vps_Config_Web::getInstance($server);
 
-            if (!isset($dbPassword)) {
-                $filter = new Vps_Filter_Random(16);
-                $dbPassword = $filter->filter('');
-                $dbUser = $projectName;
-                while (strlen($dbUser) > 16) {
-                    echo "Kann MySQL Benutzername $dbUser ist laenger als 16 Zeichen (".strlen($dbUser)."),\n";
-                    echo "darf jedoch max. 16 Zeichen haben, neuer Name: ";
-                    $stdin = fopen('php://stdin', 'r');
-                    $dbUser = trim(strtolower(fgets($stdin, 128)));
-                    fclose($stdin);
-                }
-                $createSql = "CREATE USER '$dbUser'@'localhost' IDENTIFIED BY '$dbPassword'";
-                if (!$this->_execSql($config, $createSql)) {
-                    echo "Kann Benutzer $dbUser nicht anlegen, er existiert\n";
-                    echo "moeglicherweise bereits.\n";
-                    echo "* (l)oeschen und neu anlegen\n";
-                    echo "* bestehenden verwenden und (p)asswort eingeben\n";
-                    $stdin = fopen('php://stdin', 'r');
-                    $input = trim(strtolower(fgets($stdin, 2)));
-                    fclose($stdin);
-                    if ($input == 'l') {
-                        $this->_execSql($config, "DROP USER '$dbUser'@'localhost'");
-                        $createSql = "CREATE USER '$dbUser'@'localhost' IDENTIFIED BY '$dbPassword'";
-                        if (!$this->_execSql($config, $createSql)) {
-                            throw new Vps_ClientException("Kann Benutzer nicht anlegen");
-                        }
-                    } else if ($input == 'p') {
+            if ($server == 'vivid-test-server') {
+                $svnBase = 'http://svn/';
+            } else {
+                if (!isset($dbPassword)) {
+                    $filter = new Vps_Filter_Random(16);
+                    $dbPassword = $filter->filter('');
+                    $dbUser = $projectName;
+                    while (strlen($dbUser) > 16) {
+                        echo "Kann MySQL Benutzername $dbUser ist laenger als 16 Zeichen (".strlen($dbUser)."),\n";
+                        echo "darf jedoch max. 16 Zeichen haben, neuer Name: ";
                         $stdin = fopen('php://stdin', 'r');
-                        echo "enter password: ";
-                        $dbPassword = trim(strtolower(fgets($stdin, 128)));
+                        $dbUser = trim(strtolower(fgets($stdin, 128)));
                         fclose($stdin);
-                    } else {
-                        throw new Vps_ClientException("unbekannte option");
+                    }
+                    $createSql = "CREATE USER '$dbUser'@'localhost' IDENTIFIED BY '$dbPassword'";
+                    if (!$this->_execSql($config, $createSql)) {
+                        echo "Kann Benutzer $dbUser nicht anlegen, er existiert\n";
+                        echo "moeglicherweise bereits.\n";
+                        echo "* (l)oeschen und neu anlegen\n";
+                        echo "* bestehenden verwenden und (p)asswort eingeben\n";
+                        $stdin = fopen('php://stdin', 'r');
+                        $input = trim(strtolower(fgets($stdin, 2)));
+                        fclose($stdin);
+                        if ($input == 'l') {
+                            $this->_execSql($config, "DROP USER '$dbUser'@'localhost'");
+                            $createSql = "CREATE USER '$dbUser'@'localhost' IDENTIFIED BY '$dbPassword'";
+                            if (!$this->_execSql($config, $createSql)) {
+                                throw new Vps_ClientException("Kann Benutzer nicht anlegen");
+                            }
+                        } else if ($input == 'p') {
+                            $stdin = fopen('php://stdin', 'r');
+                            echo "enter password: ";
+                            $dbPassword = trim(strtolower(fgets($stdin, 128)));
+                            fclose($stdin);
+                        } else {
+                            throw new Vps_ClientException("unbekannte option");
+                        }
+                    }
+
+                    $sql = "GRANT ALL PRIVILEGES ON `$projectName%` . * TO '$dbUser'@'localhost'";
+                    $cmd = "echo ".escapeshellarg($sql)." | mysql";
+                    $cmd = "ssh $sshHost ".escapeshellarg("$cmd");
+                    system($cmd, $ret);
+                    if ($ret) {
+                        throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
                     }
                 }
 
-                $sql = "GRANT ALL PRIVILEGES ON `$projectName%` . * TO '$dbUser'@'localhost'";
-                $cmd = "echo ".escapeshellarg($sql)." | mysql";
-                $cmd = "ssh $sshHost ".escapeshellarg("$cmd");
-                system($cmd, $ret);
-                if ($ret) {
-                    throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
-                }
+                $svnBase = 'svn://intern.vivid-planet.com/'; //TODO: ist bei POI anders, in config einstellbar machen
             }
-
-            $svnBase = 'svn://intern.vivid-planet.com/'; //TODO: ist bei POI anders, in config einstellbar machen
 
             echo "\n$server: [1/8] svn checkout\n";
             $cmd = "svn co $svnBase/$projectPath .";
@@ -147,10 +179,17 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
 
             $dbConfig = array();
             $dbConfig[] = "web.host = localhost";
-            $dbConfig[] = "web.username = $dbUser";
-            $dbConfig[] = "web.password = $dbPassword";
+            if ($server == 'vivid-test-server') {
+                $dbConfig[] = "web.username = root";
+                $dbConfig[] = "web.password = ";
+            } else {
+                $dbConfig[] = "web.username = $dbUser";
+                $dbConfig[] = "web.password = $dbPassword";
+            }
             $dbName = $projectName;
-            if ($server != 'production') $dbName .= "_$server";
+            if ($server != 'production' && $server != 'vivid-test-server') {
+                $dbName .= "_$server";
+            }
             $dbConfig[] = "web.dbname = $dbName";
             $cmd = "echo \"[database]\" > application/config.db.ini";
             foreach ($dbConfig as $line) {
