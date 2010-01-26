@@ -51,6 +51,9 @@ class Vps_Test_TestRunner extends PHPUnit_TextUI_TestRunner
             if ($unknownTimes/count($expectedTimes) > 0.2) $expectedTimes = array();
             $printer = new Vps_Test_ProgressResultPrinter($expectedTimes, null, $handlesArguments['verbose'], true);
             $this->setPrinter($printer);
+        } else if ($handlesArguments['verbose']) {
+            $printer = new Vps_Test_ProgressResultPrinter(null, true);
+            $this->setPrinter($printer);
         }
 
         return parent::doRun($suite, $arguments);
