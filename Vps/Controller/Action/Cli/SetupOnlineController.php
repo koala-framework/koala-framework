@@ -149,6 +149,8 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                     if ($ret) {
                         throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
                     }
+                    // globale file rechte für csv import setzen
+                    Vps_Util_Mysql::grantFileRight($dbUser);
                 }
 
                 $svnBase = 'svn://intern.vivid-planet.com/'; //TODO: ist bei POI anders, in config einstellbar machen
