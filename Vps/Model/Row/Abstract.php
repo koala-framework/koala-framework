@@ -13,6 +13,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     //damit im save() die childRows autom. mitgespeichert werden können
     private $_childRows = array();
+    private $_isDeleted = false;
 
     public function __construct(array $config)
     {
@@ -309,6 +310,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     protected function _afterSave()
     {
         foreach ($this->_childRows as $row) {
+            if ($row->_isDeleted) continue;
             if (!$row->{$row->_getPrimaryKey()}) {
                 $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
                 $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
@@ -351,6 +353,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     protected function _afterDelete()
     {
+        $this->_isDeleted = true;
     }
 
     protected function _updateFilters($filterAfterSave = false)
