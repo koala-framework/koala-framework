@@ -8,6 +8,7 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Static',
             'component' => false
         );
+        $ret['editComponents'] = array('child');
 
         //TODO: viewcache nicht deaktiveren
         //cache löschen muss dazu korrekt eingebaut werden
