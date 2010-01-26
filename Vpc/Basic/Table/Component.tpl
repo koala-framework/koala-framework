@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?>">
-    <table class="<? if (!empty($this->settingsRow->table_style)) echo $this->settingsRow->table_style; ?>">
+    <table class="<? if (!empty($this->settingsRow->table_style)) echo $this->settingsRow->table_style; ?>" cellspacing="0" cellpadding="0">
         <? foreach ($this->dataRows as $k => $dr) { ?>
             <tr class="<?= $k%2 == 0 ? 'odd' : 'even'; ?> <? if (!empty($dr->css_style)) echo $dr->css_style; ?>">
                 <? for ($i = 1; $i <= $this->settingsRow->columns; $i++) {
