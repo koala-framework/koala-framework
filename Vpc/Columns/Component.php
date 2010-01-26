@@ -32,4 +32,12 @@ class Vpc_Columns_Component extends Vpc_Abstract
         $ret['columns'] = $this->getData()->getChildComponents($s);
         return $ret;
     }
+
+    public function hasContent()
+    {
+        if ($this->getData()->countChildComponents(array('generator' => 'columns'))) {
+            return true;
+        }
+        return false;
+    }
 }
