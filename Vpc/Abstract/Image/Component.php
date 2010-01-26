@@ -141,10 +141,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     public function getImageDimensions()
     {
         $data = $this->_getImageDataOrEmptyImageData();
-        $row = false;
-        if (isset($data['row'])) {
-            $row = $data['row'];
-        }
+        $row = $this->getRow();
         $dimension = $this->_getSetting('dimensions');
 
         $s = array();
