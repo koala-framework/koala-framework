@@ -1,6 +1,8 @@
 <?php
 class Vps_Update_33018 extends Vps_Update
 {
+    protected $_tags = array('vps');
+
     public function update()
     {
         $dbConfig = Vps_Registry::get('db')->getConfig();
