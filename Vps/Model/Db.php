@@ -259,12 +259,16 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
             foreach ($whereEquals as $field=>$value) {
                 if (is_array($value)) {
-                    foreach ($value as &$v) {
-                        $v = $this->_fixStupidQuoteBug($v);
-                        $v = $this->getAdapter()->quote($v);
+                    if ($value) {
+                        foreach ($value as &$v) {
+                            $v = $this->_fixStupidQuoteBug($v);
+                            $v = $this->getAdapter()->quote($v);
+                        }
+                        $value = implode(', ', $value);
+                        $dbSelect->where($this->_formatField($field, $dbSelect)." IN ($value)");
+                    } else {
+                        $dbSelect->where('0');
                     }
-                    $value = implode(', ', $value);
-                    $dbSelect->where($this->_formatField($field, $dbSelect)." IN ($value)");
                 } else {
                     $value = $this->_fixStupidQuoteBug($value);
                     $dbSelect->where($this->_formatField($field, $dbSelect)." = ?", $value);
