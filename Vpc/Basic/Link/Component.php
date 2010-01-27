@@ -27,4 +27,10 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
     {
         return $this->_getRow()->text;
     }
+    
+    public function hasContent()
+    {
+        if (!$this->_getRow()->text) return false;
+        return parent::hasContent();
+    }
 }
