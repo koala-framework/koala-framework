@@ -175,6 +175,9 @@ class Vps_Component_Abstract_Admin
     
     public function componentToString(Vps_Component_Data $data)
     {
+        if (!$data->getComponent()->getRow()) {
+            throw new Vps_Exception('Please implement Admin::componentToString for '.$data->componentClass);
+        }
         try {
             return $data->getComponent()->getRow()->__toString();
         } catch (Zend_Db_Table_Row_Exception $e) {
