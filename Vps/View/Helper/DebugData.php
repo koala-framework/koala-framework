@@ -8,6 +8,7 @@ class Vps_View_Helper_DebugData
         if ($config->menu || !$config->error->log) {
             $indent = str_repeat(' ', 8);
             $ret .= "<script type=\"text/javascript\">\n";
+            $ret .=$indent."if (typeof Vps == 'undefined') Vps = {};\n";
             $ret .=$indent."Vps.Debug = {};\n";
             $ret .=$indent.'Vps.Debug.displayErrors = '.(!$config->error->log ? 'true' : 'false').";\n";
             $session = new Zend_Session_Namespace('debug');
