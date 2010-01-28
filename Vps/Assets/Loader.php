@@ -25,7 +25,13 @@ class Vps_Assets_Loader
 
     public function __construct($config = null)
     {
+        if (!$config) $config = Vps_Registry::get('config');
         $this->_config = $config;
+    }
+
+    public function getConfig()
+    {
+        return $this->_config;
     }
 
     /**
@@ -49,8 +55,28 @@ class Vps_Assets_Loader
     public function getFileContents($file, $language = null)
     {
         $ret = array();
-        if ($file == 'AllRteStyles.css') {
-            $ret = Vpc_Basic_Text_StylesModel::getStylesContents();
+        if (substr($file, 0, 8) == 'dynamic/') {
+            if (!preg_match('#^dynamic/([a-z0-9_:]+)/(([a-z0-9_]+)/)?([a-z0-9_:]+)$#i', $file, $m)) {
+                throw new Vps_Exception_NotFound();
+            }
+            $assetsType = $m[1];
+            $rootComponent = $m[3];
+            $assetClass = $m[4];
+            if (!is_instance_of($assetClass, 'Vps_Assets_Dynamic_Interface')) {
+                throw new Vps_Exception_NotFound();
+            }
+            $file = new $assetClass($this, $assetsType, $rootComponent);
+            $ret = array();
+            $ret['contents'] = $file->getContents();
+            $ret['mtime'] = $file->getMTime();
+            $ret['mtimeFiles'] = $file->getMTimeFiles();
+            if ($file->getType() == 'js') {
+                $ret['mimeType'] = 'text/javascript; charset=utf8';
+            } else if ($file->getType() == 'css' || $file->getType() == 'printcss') {
+                $ret['mimeType'] = 'text/css; charset=utf8';
+            } else {
+                throw new Vps_Exception("Unknown type");
+            }
         } else if (substr($file, 0, 4) == 'all/') {
             $encoding = Vps_Media_Output::getEncoding();
             $cacheId = md5($file.$encoding.$this->_getHostForCacheId());
@@ -79,14 +105,22 @@ class Vps_Assets_Loader
                 $cacheData['contents'] = '';
                 $cacheData['mtimeFiles'] = array();
                 foreach ($this->_getDep()->getAssetFiles($assetsType, $fileType, $section, $rootComponent) as $file) {
-                    if ($file instanceof Vps_Assets_Dynamic) {
-                        $file = $file->getFile();
-                    }
                     if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
-                        try {
-                            $c = $this->getFileContents($file, $language);
-                        } catch (Vps_Assets_NotFoundException $e) {
-                            throw new Vps_Exception($file.': '.$e->getMessage());
+                        if (substr($file, 0, 8) == 'dynamic/') {
+                            $file = substr($file, 8);
+                            if (!is_instance_of($file, 'Vps_Assets_Dynamic_Interface')) {
+                                throw new Vps_Exception_NotFound();
+                            }
+                            $file = new $file($this, $assetsType, $rootComponent);
+                            $c = array();
+                            $c['contents'] = $file->getContents();
+                            $c['mtimeFiles'] = $file->getMTimeFiles();
+                        } else {
+                            try {
+                                $c = $this->getFileContents($file, $language);
+                            } catch (Vps_Assets_NotFoundException $e) {
+                                throw new Vps_Exception($file.': '.$e->getMessage());
+                            }
                         }
                         $cacheData['contents'] .=  $c['contents']."\n";
                         $cacheData['mtimeFiles'] = array_merge($cacheData['mtimeFiles'], $c['mtimeFiles']);
@@ -184,9 +218,10 @@ class Vps_Assets_Loader
                     }
 
                     if (substr($ret['mimeType'], 0, 15) == 'text/javascript') {
+                        //Deprecated: sollte durch dynamische assets ersetzt werden
                         preg_match_all('#{([A-Za-z0-9_]+)::([A-Za-z0-9_]+)\\(\\)}#', $cacheData['contents'], $m);
                         foreach (array_keys($m[0]) as $i) {
-                            $c = call_user_func(array($m[1][$i], $m[2][$i]), $this->_getDep());
+                            $c = call_user_func(array($m[1][$i], $m[2][$i]), $this->_getDep(), $this);
                             $cacheData['contents'] = str_replace($m[0][$i], $c, $cacheData['contents']);
                             if (method_exists($m[1][$i], 'getMTimeFiles')) {
                                $cacheData['mtimeFiles'] = array_merge($cacheData['mtimeFiles'],
@@ -228,9 +263,14 @@ class Vps_Assets_Loader
     private function _getDep()
     {
         if (!isset($this->_dep)) {
-            $this->_dep = new Vps_Assets_Dependencies($this->_getConfig());
+            $this->_dep = new Vps_Assets_Dependencies($this);
         }
         return $this->_dep;
+    }
+
+    public function getDependencies()
+    {
+        return $this->_getDep();
     }
 
     private function _hlp($contents, $language)

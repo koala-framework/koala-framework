@@ -326,7 +326,7 @@ class Vps_Setup
         if (is_array($urlParts) && count($urlParts) == 2 && $urlParts[0] == 'media'
             && $urlParts[1] == 'headline'
         ) {
-            Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text']);
+            Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text'], $_GET['assetsType']);
         } else if (is_array($urlParts) && $urlParts[0] == 'media') {
             if (sizeof($urlParts) != 6) {
                 throw new Vps_Exception_NotFound();

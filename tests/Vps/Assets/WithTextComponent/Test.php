@@ -15,7 +15,8 @@
         $config->debug->assets->js = true;
         $config->debug->assets->css = true;
         $config->debug->assets->printcss = true;
-        $dep = new Vps_Assets_Dependencies($config);
+        $loader = new Vps_Assets_Loader($config);
+        $dep = $loader->getDependencies();
 
         $type = 'Vps_Assets_WithTextComponent:Test';
         $files = $dep->getAssetUrls($type, 'js', 'web', $rootComponent);
