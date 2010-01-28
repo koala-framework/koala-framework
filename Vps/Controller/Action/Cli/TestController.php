@@ -45,6 +45,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             array('param'=> 'coverage-html'),
             array('param'=> 'report'),
             array('param'=> 'no-progress'),
+            array('param'=> 'disable-debug'),
         );
         $value = self::_getConfigSectionsWithTestDomain();
         if (in_array('production', $value)) {
@@ -140,6 +141,9 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         }
         if ($this->_getParam('no-progress')) {
             $arguments['noProgress'] = true;
+        }
+        if ($this->_getParam('disable-debug')) {
+            Vps_Debug::disable();
         }
 
         $runner = new Vps_Test_TestRunner();
