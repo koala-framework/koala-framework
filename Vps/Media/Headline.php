@@ -111,8 +111,8 @@ class Vps_Media_Headline
         $lineHeight = isset($styles['line-height']) ? $styles['line-height'] : $fontSize;
         
 
-        $backgroundColor = isset($styles['background-color']) ? $styles['background-color'] : '#FFFFFF';
-        if (!preg_match('/^#[0-9a-fA-F]{6}$/', $backgroundColor)) throw new Vps_Exception("Invalid background-color: '$backgroundColor'");
+        $backgroundColor = isset($styles['background-color']) ? $styles['background-color'] : false;
+        if ($backgroundColor && !preg_match('/^#[0-9a-fA-F]{6}$/', $backgroundColor)) throw new Vps_Exception("Invalid background-color: '$backgroundColor'");
 
         $color = isset($styles['color']) ? $styles['color'] : '#000000';
         if (!preg_match('/^#[0-9a-fA-F]{6}$/', $color)) throw new Vps_Exception("Invalid color: '$color'");
@@ -132,10 +132,12 @@ class Vps_Media_Headline
         
         $bbox = imagettfbbox($fontSize*$factor, 0, $fontFile, $text[0]);
         if (!$width) {
+            $width = 0;
             foreach ($text as $t) {
                 $bbox = imagettfbbox($fontSize*$factor, 0, $fontFile, $t);
-                $width += abs($bbox[4] - $bbox[0])/$factor + 2; //+2 damit platz für antializing-pixel sind
+                $width = max($width, abs($bbox[4] - $bbox[0])/$factor);
             }
+            $width += 2; //+2 damit platz für antializing-pixel sind
         }
         $width += $paddingRight;
         $width += $paddingLeft;
@@ -153,16 +155,17 @@ class Vps_Media_Headline
         if (!$height) throw new Vps_Exception("Height can't be 0");
         $fontY = $paddingTop*$factor - $bbox[5] /*- $bbox[1]*/;
 
-        if($antializing) {
-            $im1 = imagecreatetruecolor ($width*$factor, $height*$factor) or die ("Error");
+        $im1 = imagecreatetruecolor ($width*$factor, $height*$factor) or die ("Error");
+        imagealphablending($im1, true);
+        imageSaveAlpha($im1, true);
+
+        if ($backgroundColor) {
+            $bgColor = ImageColorAllocate ($im1, hexdec(substr($backgroundColor,1,2)), hexdec(substr($backgroundColor,3,2)), hexdec(substr($backgroundColor,5,2)));
         } else {
-            //weil sonst funktioniert transparenz im ie ned
-            $im1 = imagecreate ($width*$factor, $height*$factor) or die ("Error");
+            $bgColor = imagecolorallocatealpha($im1, 255, 255, 255, 127);
         }
-
-        $bgColor = ImageColorAllocate ($im1, hexdec(substr($backgroundColor,1,2)), hexdec(substr($backgroundColor,3,2)), hexdec(substr($backgroundColor,5,2)));
-
         imageFill($im1, 0, 0, $bgColor);
+
         $textColorAllocated = ImageColorAllocate ($im1, hexdec(substr($color,1,2)), hexdec(substr($color,3,2)), hexdec(substr($color,5,2)));
 
         $textY = $fontY;

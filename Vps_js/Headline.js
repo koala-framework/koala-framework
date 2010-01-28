@@ -1,4 +1,5 @@
 Vps.onContentReady(function() {
+    if (Ext.isIE6) return;
 
     var getElementText = function(element) {
         if(typeof element == "string")
