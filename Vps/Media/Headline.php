@@ -4,6 +4,7 @@ class Vps_Media_Headline
     public static function getHeadlineStyles($contents)
     {
         $ret = array();
+        $contents = preg_replace('#/\\*.*\\*/#', '', $contents);
         preg_match_all('#\s*([^{}]*)\s*{([^}]*)\s*-vps-headline\s*:\s*graphic\s*;([^}]*)}#', $contents, $m);
         foreach (array_keys($m[0]) as $i) {
             $selector = trim($m[1][$i]);
