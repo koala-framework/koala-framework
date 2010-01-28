@@ -1,21 +1,6 @@
 <?php
 class Vpc_ListChildPages_Teaser_Admin extends Vpc_Admin
-{/*
-    public function getExtConfig()
-    {
-        $ret = array();
-
-        $url = Vpc_Admin::getInstance($this->_class)->getControllerUrl();
-        $icon = new Vps_Asset('wrench');
-        $ret['table'] = array(
-            'xtype' => 'vps.autogrid',
-            'controllerUrl' => $url,
-            'title' => trlVps('Teaser'),
-            'icon' => $icon->__toString()
-        );
-
-        return $ret;
-    }*/
+{
     public function getExtConfig()
     {
         $class = Vpc_Abstract::getChildComponentClass($this->_class, 'child');
