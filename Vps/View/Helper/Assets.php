@@ -4,7 +4,10 @@ class Vps_View_Helper_Assets
     private $_dep;
     public function __construct($dep = null)
     {
-        if (!$dep) $dep = new Vps_Assets_Dependencies();
+        if (!$dep) {
+            $l = new Vps_Assets_Loader();
+            $dep = $l->getDependencies();
+        }
         $this->_dep = $dep;
     }
     public function assets($type, $section = 'web')

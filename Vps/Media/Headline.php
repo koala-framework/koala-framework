@@ -1,42 +1,6 @@
 <?php
 class Vps_Media_Headline
 {
-    public static function getSelectors(Vps_Assets_Dependencies $dep)
-    {
-        $ret = array();
-        $language = Zend_Registry::get('trl')->getTargetLanguage();
-
-        $files = $dep->getAssetFiles('Frontend', 'css', 'web', Vps_Component_Data_Root::getComponentClass());
-        foreach ($files as $file) {
-            if ($file instanceof Vps_Assets_Dynamic) {
-                $file = $file->getFile();
-            }
-            if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
-                $c = $dep->getFileContents($file, $language);
-                foreach (self::getHeadlineStyles($c['contents']) as $selector => $styles) {
-                    if (!in_array($selector, $ret)) {
-                        $ret[] = $selector;
-                    }
-                }
-            }
-        }
-        return Zend_Json::encode($ret);
-    }
-
-    public static function getMTimeFiles(Vps_Assets_Dependencies $dep)
-    {
-        $ret = array();
-        foreach ($dep->getAssetFiles('Frontend', 'css') as $file) {
-            if ($file instanceof Vps_Assets_Dynamic) {
-                $file = $file->getFile();
-            }
-            if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
-                $ret[] = $dep->getAssetPath($file);
-            }
-        }
-        return $ret;
-    }
-
     public static function getHeadlineStyles($contents)
     {
         $ret = array();
@@ -50,17 +14,22 @@ class Vps_Media_Headline
                 if (substr($s, 0, 5) == '-vps-') {
                     $s = substr($s, 5);
                 }
-                $ret[$selector][$s] = trim($ms[2][$j]);
+                $value = trim($ms[2][$j]);
+                if (substr($value, 0, 1) == "'" && substr($value, -1) == "'") {
+                    $value = substr($value, 1, -1);
+                }
+                $ret[$selector][$s] = $value;
             }
         }
         return $ret;
     }
 
-    public static function outputHeadline($selector, $text)
+    public static function outputHeadline($selector, $text, $assetsType)
     {
         if(strlen($text)>200) $text = substr($text, 0, 200)."...";
 
-        $dep = new Vps_Assets_Dependencies();
+        $loader = new Vps_Assets_Loader();
+        $dep = $loader->getDependencies();
         $language = Zend_Registry::get('trl')->getTargetLanguage();
         $cacheId = 'headline'.md5($selector.$text);
         $cache = new Vps_Assets_Cache();
@@ -72,12 +41,9 @@ class Vps_Media_Headline
         if (!$cacheData) {
             $s = false;
             $styles = false;
-            foreach ($dep->getAssetFiles('Frontend', 'css') as $file) {
-                if ($file instanceof Vps_Assets_Dynamic) {
-                    $file = $file->getFile();
-                }
-                if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
-                    $c = $dep->getFileContents($file, $language);
+            foreach ($dep->getAssetFiles($assetsType, 'css', 'web', Vps_Component_Data_Root::getComponentClass()) as $file) {
+                if (!(substr($file, 0, 8) == 'dynamic/' || substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
+                    $c = $loader->getFileContents($file, $language);
                     foreach (self::getHeadlineStyles($c['contents']) as $s => $styles) {
                         if ($s == $selector) {
                             break;
@@ -115,12 +81,17 @@ class Vps_Media_Headline
         $text = str_replace(array("\r", "\n", "<br>", "<br/>"), array("", "", "<br />", "<br />"), $text);
         $text = explode("<br />", $text);
 
+        if (!isset($styles['font-file'])) {
+            throw new Vps_Exception("missing style font-file");
+        }
         $fontFile = $styles['font-file'];
         if (file_exists($fontFile)) {
         } else if (file_exists('fonts/'.$fontFile)) {
             $fontFile = 'fonts/'.$fontFile;
-        } else if (file_exists(VPS_PATH.'/fonts/'.$fontFile)) {
-            $fontFile = VPS_PATH.'/fonts/'.$fontFile;
+        } else if (file_exists(VPS_PATH.'/'.$fontFile)) {
+            $fontFile = VPS_PATH.'/'.$fontFile;
+        } else {
+            throw new Vps_Exception("invalid font: '$fontFile'");
         }
 
         $width = isset($styles['width']) ? $styles['width'] : false;

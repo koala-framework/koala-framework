@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Headline
+ */
 class Vps_Media_HeadlineTest extends PHPUnit_Framework_TestCase
 {
     public function testGetHeadlineStyles()

@@ -11,7 +11,8 @@ class Vps_Assets_OwnConfig_Test extends PHPUnit_Framework_TestCase
         $config->debug->assets->js = true;
         $config->debug->assets->css = true;
         $config->debug->assets->printcss = true;
-        $dep = new Vps_Assets_Dependencies($config);
+        $loader = new Vps_Assets_Loader($config);
+        $dep = $loader->getDependencies();
 
         $type = 'Vps_Assets_OwnConfig:Test';
         $files = $dep->getAssetUrls($type, 'js', 'web', false);
@@ -22,7 +23,6 @@ class Vps_Assets_OwnConfig_Test extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expected, $files);
 
-        $loader = new Vps_Assets_Loader($config);
         $c = $loader->getFileContents('web-vps/tests/Vps/Assets/OwnConfig/file2.js');
         $this->assertEquals('file2', $c['contents']);
     }
@@ -51,7 +51,8 @@ class Vps_Assets_OwnConfig_Test extends PHPUnit_Framework_TestCase
         $config->debug->assets->js = false;
         $config->debug->assets->css = false;
         $config->debug->assets->printcss = false;
-        $dep = new Vps_Assets_Dependencies($config);
+        $loader = new Vps_Assets_Loader($config);
+        $dep = $loader->getDependencies();
 
         $type = 'Vps_Assets_OwnConfig:Test';
         $files = $dep->getAssetUrls($type, 'js', 'web', false);
@@ -59,8 +60,6 @@ class Vps_Assets_OwnConfig_Test extends PHPUnit_Framework_TestCase
             '/assets/all/web/'.Zend_Registry::get('trl')->getTargetLanguage().'/Vps_Assets_OwnConfig:Test.js?v=1.0',
         );
         $this->assertEquals($expected, $files);
-
-        $loader = new Vps_Assets_Loader($config);
 
         $c = $loader->getFileContents('all/web/'.Zend_Registry::get('trl')->getTargetLanguage().'/Vps_Assets_OwnConfig:Test.js?v=1.0');
         $this->assertContains("file2\nfile1\n", $c['contents']);

@@ -21,7 +21,7 @@ Vps.onContentReady(function() {
         }
         return text;
     };
-    var selectors = {Vps_Media_Headline::getSelectors()};
+    var selectors = Vps.Headline.selectors;
     selectors.each(function(selector) {
         var elements = Ext.DomQuery.select(selector);
         elements.each(function(element) {
@@ -29,7 +29,9 @@ Vps.onContentReady(function() {
             var text = getElementText(element.dom);
             element.dom.innerHTML = '<img src="/media/headline?selector='
                                         +encodeURIComponent(selector)+
-                                    '&text='+encodeURIComponent(text)+'" />';
+                                    '&text='+encodeURIComponent(text)+
+                                    '&assetsType='+encodeURIComponent(Vps.Headline.assetsType)+
+                                    '" />';
         });
     });
 });
