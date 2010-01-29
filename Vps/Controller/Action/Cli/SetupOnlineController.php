@@ -51,6 +51,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
         $cmd = "echo ".escapeshellarg($sql)." | mysql";
         $cmd = "ssh $sshHost ".escapeshellarg("$cmd");
         $ret = null;
+        if ($this->_getParam('debug')) echo "$cmd\n";
         system($cmd, $ret);
         return !$ret;
     }
@@ -67,6 +68,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
             $sshDir = $config->server->dir;
             $cmd = "if [ -d $sshDir ]; then echo \"yes\"; else echo \"no\"; fi";
             $cmd = "ssh $sshHost ".escapeshellarg($cmd);
+            if ($this->_getParam('debug')) echo "$cmd\n";
             if (trim(exec($cmd)) != "yes") {
                 if ($server != 'vivid-test-server') {
                     throw new Vps_Exception_Client("$sshDir ist nicht vorhanden.");
@@ -76,6 +78,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                 }
             }
             $cmd = "ssh $sshHost ".escapeshellarg("cd $sshDir && ls -l");
+            if ($this->_getParam('debug')) echo "$cmd\n";
             $l = trim(exec($cmd));
             if ($l != "total 0" && $l != "insgesamt 0") {
                 throw new Vps_Exception_Client("$server ist nicht leer, bitte alle Dateien löschen.");
@@ -90,11 +93,12 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                 $config->server->dir,
                 $config->server->domain
             );
-            $cmd  = "sudo/ usr/local/bin/setup-web";
+            $cmd  = "sudo /usr/local/bin/setup-web";
             foreach ($args as $a) {
                 $cmd .= " ".escapeshellarg($a);
             }
             $cmd = "ssh $sshHost ".escapeshellarg($cmd);
+            if ($this->_getParam('debug')) echo "$cmd\n";
             $this->_systemCheckRet($cmd);
         }
 
@@ -145,6 +149,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                     $sql = "GRANT ALL PRIVILEGES ON `$projectName%` . * TO '$dbUser'@'localhost'";
                     $cmd = "echo ".escapeshellarg($sql)." | mysql";
                     $cmd = "ssh $sshHost ".escapeshellarg("$cmd");
+                    if ($this->_getParam('debug')) echo "$cmd\n";
                     system($cmd, $ret);
                     if ($ret) {
                         throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
