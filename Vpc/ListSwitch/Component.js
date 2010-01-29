@@ -35,8 +35,12 @@ Vpc.ListSwitch.View.prototype = {
     },
 
     setLarge: function(previewEl) {
+        if (this.activePreviewLink)  {
+            this.activePreviewLink.largeContent.style.display = 'none';
+        } else {
+            this.componentWrapper.down('.listSwitchLargeWrapper .listSwitchLargeContent').dom.innerHTML = '';
+        }
         previewEl.largeContent.style.display = 'block';
-        this.componentWrapper.down('.listSwitchLargeWrapper .listSwitchLargeContent').dom.innerHTML = '';
         this.componentWrapper.down('.listSwitchLargeWrapper .listSwitchLargeContent').dom.appendChild(previewEl.largeContent);
         if (this.activePreviewLink) {
             this.activePreviewLink.removeClass('active');
