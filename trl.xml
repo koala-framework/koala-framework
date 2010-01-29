@@ -3933,10 +3933,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1085</id>
 </text>
 <text>
-<en>Link-Action</en>
-<id>1097</id>
-</text>
-<text>
 <en>Event</en>
 <id>1098</id>
 </text>
@@ -5268,6 +5264,84 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>C</en>
 <de>de_AT.UTF-8, de.UTF-8, de_DE.UTF-8</de>
 <id>1382</id>
+</text>
+<text>
+<en>YouTube</en>
+<id>1383</id>
+</text>
+<text>
+<en>YouTube URL</en>
+<id>1384</id>
+</text>
+<text>
+<en>hide</en>
+<id>1385</id>
+</text>
+<text>
+<en>You can not {0} this entry as it is used on the following pages:</en>
+<id>1386</id>
+</text>
+<text>
+<en>Delete Account</en>
+<id>1387</id>
+</text>
+<text>
+<en>Your Password</en>
+<id>1388</id>
+</text>
+<text>
+<en>The password was changed successfully</en>
+<id>1389</id>
+</text>
+<text>
+<en>Change Password</en>
+<id>1390</id>
+</text>
+<text>
+<en>Current Password</en>
+<id>1391</id>
+</text>
+<text>
+<en>New Password</en>
+<id>1392</id>
+</text>
+<text>
+<en>Account - Change Password</en>
+<id>1393</id>
+</text>
+<text>
+<en>Link target</en>
+<en>Linkziel</en>
+<id>1394</id>
+</text>
+<text>
+<en>Link type</en>
+<en>Linktyp</en>
+<id>1395</id>
+</text>
+<text>
+<en>List child pages</en>
+<id>1396</id>
+</text>
+<text>
+<en>Page name</en>
+<id>1397</id>
+</text>
+<text>
+<en>Teaser image</en>
+<id>1398</id>
+</text>
+<text>
+<en>on multiple pages, eg. in a footer</en>
+<id>1399</id>
+</text>
+<text>
+<en>You are not logged in</en>
+<id>1400</id>
+</text>
+<text>
+<en>You entered a wrong password</en>
+<id>1401</id>
 </text>
 </trl>
 

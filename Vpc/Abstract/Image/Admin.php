@@ -7,10 +7,10 @@ class Vpc_Abstract_Image_Admin extends Vpc_Abstract_Composite_Admin
         $c = new Vps_Grid_Column('pic', trlVps('Image'), 100);
             $c->setData(new Vps_Data_Vpc_Image($this->_class, 'gridRow'))
             ->setRenderer('mouseoverPic');
-        $ret[] = $c;
+        $ret['pic'] = $c;
         $c = new Vps_Grid_Column('pic_large');
             $c->setData(new Vps_Data_Vpc_Image($this->_class, 'gridRowLarge'));        
-        $ret[] = $c;
+        $ret['pic_large'] = $c;
         return $ret;
     }
 }

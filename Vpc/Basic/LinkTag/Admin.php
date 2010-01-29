@@ -18,4 +18,11 @@ class Vpc_Basic_LinkTag_Admin extends Vpc_Admin
         if (!$data) return '';
         return Vpc_Admin::getInstance($data->componentClass)->componentToString($data);
     }
+
+    public function gridColumns()
+    {
+        $ret = parent::gridColumns();
+        $ret['string']->setHeader(trlVps('Link target'));
+        return $ret;
+    }
 }

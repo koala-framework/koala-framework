@@ -190,7 +190,7 @@ class Vps_Component_Abstract_Admin
         $ret = array();
         $c = new Vps_Grid_Column('string', trlVps('Name'));
         $c->setData(new Vps_Component_Abstract_ToStringData($this->_class));
-        $ret[] = $c;
+        $ret['string'] = $c;
         return $ret;
     }
 
