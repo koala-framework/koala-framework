@@ -236,6 +236,10 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     {
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
         var tb = this.getToolbar();
+        
+        if (this.tb.items.map.underline) {
+            this.tb.items.map.underline.hide();
+        }
 
         if (this.downloadDialog) {
             tb.insert(6,  this.getAction('insertDownload'));

@@ -124,8 +124,9 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
                 }
                 $css .= "} /* $row->name */\n";
             }
+            $css = array('contents' => $css);
             $cache->save($css, 'RteStyles');
         }
-        return $css;
+        return $css['contents'];
     }
 }
