@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Image_Admin extends Vpc_Admin
+class Vpc_Basic_Image_Admin extends Vpc_Abstract_Image_Admin
 {
     protected function _onRowAction($row)
     {

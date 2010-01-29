@@ -24,4 +24,23 @@ class Vpc_Abstract_Composite_Admin extends Vpc_Admin
         }
         $where = array();
     }
+
+    public function gridColumns()
+    {
+        $ret = array();
+        $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'child');
+        foreach ($classes as $key => $class) {
+            $columns = Vpc_Admin::getInstance($class)->gridColumns();
+            foreach ($columns as $k => $column) {
+                $childData = $column->getData();
+                if ($childData instanceof Vps_Data_Vpc_ListInterface) {
+                    $childData->setSubComponent('-'.$key);
+                    $ret[$key.$k] = $column->setData(
+                        new Vpc_Abstract_Composite_ChildData($childData)
+                    );
+                }
+            }
+        }
+        return $ret;
+    }
 }
