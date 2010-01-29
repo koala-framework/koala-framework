@@ -32,10 +32,11 @@ class Vpc_Abstract_Composite_Admin extends Vpc_Admin
         foreach ($classes as $key => $class) {
             $columns = Vpc_Admin::getInstance($class)->gridColumns();
             foreach ($columns as $k => $column) {
+                $column->setDataIndex($key.'_'.$column->getDataIndex());
                 $childData = $column->getData();
                 if ($childData instanceof Vps_Data_Vpc_ListInterface) {
                     $childData->setSubComponent('-'.$key);
-                    $ret[$key.$k] = $column->setData(
+                    $ret[$key.'_'.$k] = $column->setData(
                         new Vpc_Abstract_Composite_ChildData($childData)
                     );
                 }
