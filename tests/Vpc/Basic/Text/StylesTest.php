@@ -27,9 +27,11 @@ class Vpc_Basic_Text_StylesTest extends PHPUnit_Framework_TestCase
     public function testStylesContent()
     {
         $model = new Vpc_Basic_Text_TestStylesModel();
+        Vpc_Basic_Text_TestStylesModel::removeCache();
         $content = $model->getStylesContents2();
         $this->assertEquals(".vpcText h1.style1 { font-weight: bold; font-size: 10px; text-align: center; } /* Test1 */
 .vpcText p.style2 { font-size: 10px; } /* Test2 */
-.vpcText span.style3 { font-size: 8px; } /* Test3 */\n", $content['contents']);
+.vpcText span.style3 { font-size: 8px; } /* Test3 */\n", $content);
+        Vpc_Basic_Text_TestStylesModel::removeCache();
     }
 }
