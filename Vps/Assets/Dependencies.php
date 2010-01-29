@@ -42,7 +42,7 @@ class Vps_Assets_Dependencies
             } else if (!$allUsed) {
                 if (substr($file, 0, 8) == 'dynamic/') {
                     $file = substr($file, 8);
-                    $a = new $file($this->_loader, $assetsType);
+                    $a = new $file($this->_loader, $assetsType, $rootComponent);
                     $v = $this->_config->application->version;
                     $f = "/assets/dynamic/$assetsType/"
                         .($rootComponent?$rootComponent.'/':'')
