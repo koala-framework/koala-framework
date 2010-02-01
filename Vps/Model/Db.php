@@ -832,7 +832,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (isset($options['replace']) && $options['replace']) {
                     $sqlString .= " REPLACE";
                 }
-                $sqlString .= " INTO TABLE `".($this->getTableName())."` ";
+                $sqlString .= " INTO TABLE `".($this->getTableName())."`";
+                $sqlString .= " CHARACTER SET UTF8";
                 $sqlString .= " FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\\\\' LINES TERMINATED BY '\\n'";
                 $sqlString .= " IGNORE 1 LINES";
                 $sqlString .= " ($fieldNames)";
