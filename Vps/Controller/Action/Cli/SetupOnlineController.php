@@ -150,7 +150,8 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                         throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
                     }
                     // globale file rechte für csv import setzen
-                    Vps_Util_Mysql::grantFileRight($dbUser);
+                    $cmd = "php bootstrap.php setup-online set-mysql-file-right --user=$dbUser";
+                    $this->_systemSshVps($config, $cmd);
                 }
 
                 $svnBase = 'svn://intern.vivid-planet.com/'; //TODO: ist bei POI anders, in config einstellbar machen
@@ -218,5 +219,15 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
         }
 
         exit(0);
+    }
+
+    public function setMysqlFileRightAction()
+    {
+        $dbUser = $this->_getParam('user');
+        if (!$dbUser) {
+            throw new Vps_Exception("--user=foo must be set!");
+        }
+        Vps_Util_Mysql::grantFileRight($dbUser);
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 }
