@@ -162,7 +162,7 @@ class Vps_Media_Headline
         if ($backgroundColor) {
             $bgColor = ImageColorAllocate ($im1, hexdec(substr($backgroundColor,1,2)), hexdec(substr($backgroundColor,3,2)), hexdec(substr($backgroundColor,5,2)));
         } else {
-            $bgColor = imagecolorallocatealpha($im1, 255, 255, 255, 127);
+            $bgColor = imagecolorallocatealpha($im1, 255, 255, 255, 0);
         }
         imageFill($im1, 0, 0, $bgColor);
 
