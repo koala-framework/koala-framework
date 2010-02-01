@@ -277,6 +277,7 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
         if (!value instanceof Array) throw new 'ohje, value ist kein array - wos mochma do?';
         this._initFields(value.length);
         for (var i = 0; i < gp.groups.length; i++) {
+            gp.groups[i].id = value[i].id;
             this._findFormFields(gp.groups[i].item, function(item) {
                 if (value[i]) {
                     for (var j in value[i]) {
@@ -299,6 +300,7 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
         for (var i = 0; i < gp.groups.length; i++) {
             var g = gp.groups[i];
             var row = {};
+            row.id = g.id;
             this._findFormFields(g.item, function(item) {
                 row[item.name] = item.getValue();
             });
