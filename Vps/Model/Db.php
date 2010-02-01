@@ -7,7 +7,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private $_tableName;
     private $_columns;
 
-    protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
+    // CSV deaktiviert, weil character set bei LOAD DATA INFILE an der online
+    // mysql version nicht möglich ist
+//     protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
+    protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_ARRAY);
 
     private $_proxyContainerModels = array();
 
