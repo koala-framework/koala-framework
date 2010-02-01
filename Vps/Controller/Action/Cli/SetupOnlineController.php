@@ -149,36 +149,33 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                     if ($ret) {
                         throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
                     }
-                    // globale file rechte für csv import setzen
-                    $cmd = "php bootstrap.php setup-online set-mysql-file-right --user=$dbUser";
-                    $this->_systemSshVps($config, $cmd);
                 }
 
                 $svnBase = 'svn://intern.vivid-planet.com/'; //TODO: ist bei POI anders, in config einstellbar machen
             }
 
-            echo "\n$server: [1/8] svn checkout\n";
+            echo "\n$server: [1/9] svn checkout\n";
             $cmd = "svn co $svnBase/$projectPath .";
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [2/8] set include_path\n";
+            echo "\n$server: [2/9] set include_path\n";
             $cmd = "echo \"{$config->libraryPath}/vps/%vps_branch%\" > application/include_path";
             $this->_systemSshVps($config, $cmd);
 
             if ($config->uploads) {
-                echo "\n$server: [3/8] create uploads\n";
+                echo "\n$server: [3/9] create uploads\n";
                 $cmd = "mkdir {$config->uploads}";
                 try {
                     $this->_systemSshVps($config, $cmd);
                 } catch (Exception $e) {}
             }
 
-            echo "\n$server: [4/8] create include_path\n";
+            echo "\n$server: [4/9] create include_path\n";
             $cmd = "echo \"{$config->libraryPath}/vps/%vps_branch%\" > application/include_path";
             $this->_systemSshVps($config, $cmd);
 
 
-            echo "\n$server: [5/8] create config.db.ini\n";
+            echo "\n$server: [5/9] create config.db.ini\n";
 
             $dbConfig = array();
             $dbConfig[] = "web.host = localhost";
@@ -200,19 +197,24 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
             }
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [6/8] set permissions\n";
+            echo "\n$server: [6/9] set permissions\n";
             $this->_systemSshVps($config, "chmod a+w application/cache/*");
             $this->_systemSshVps($config, "chmod a+w application/temp");
             $this->_systemSshVps($config, "chmod a+w application/log");
             $this->_systemSshVps($config, "chmod a+w application/log/*");
             $this->_systemSshVps($config, "chmod a+w $config->uploads");
 
-            echo "\n$server: [7/8] import\n";
+            echo "\n$server: [7/9] set mysql file rights\n";
+            // globale file rechte für csv import setzen
+            $cmd = "php bootstrap.php setup-online set-mysql-file-right --user=$dbUser";
+            $this->_systemSshVps($config, $cmd);
+
+            echo "\n$server: [8/9] import\n";
             $cmd = "php bootstrap.php import --server=".Vps_Setup::getConfigSection();
             if (!$this->_getParam('debug')) $cmd .= " --debug";
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [8/8] create-users\n";
+            echo "\n$server: [9/9] create-users\n";
             $cmd = "php bootstrap.php create-users";
             if (!$this->_getParam('debug')) $cmd .= " --debug";
             $this->_systemSshVps($config, $cmd);
