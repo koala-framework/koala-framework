@@ -11,7 +11,9 @@ class Vpc_Columns_Form extends Vpc_Abstract_Form
     {
         parent::_initFields();
         $mf = $this->add(new Vps_Form_Field_MultiFields('Columns'));
+        $mf->setWidth(400);
         $mf->setPosition(true);
+        $mf->setMinEntries(0);
         $fs = $mf->fields->add(new Vps_Form_Container_FieldSet(trlVps('Column {0}')));
             $fs->add(new Vps_Form_Field_TextField('width', trlVps('Width')))
                 ->setAllowBlank(false);
