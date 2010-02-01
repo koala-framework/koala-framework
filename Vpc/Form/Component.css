@@ -101,9 +101,8 @@
     margin-bottom: 20px;
     padding: 10px 10px 0px 10px !important;
 }
-.$cssClass .vpcFormError h1 {
+.$cssClass .vpcFormError p.error {
     font-weight: bold;
-    font-size: 12px;
-    margin-bottom: 10px;
+    color: $mainColor;
 }
 .$cssClass span.comment { margin-left: 10px; color: #999; }
