@@ -28,6 +28,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         $this->setBorder(false);
         $this->setBaseCls('x-plain');
         $this->setXtype('multifields');
+        $this->setMinEntries(1);
     }
 
     protected function _addValidators()
@@ -127,6 +128,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                         $r = $this->_model->createRow();
                     }
                 }
+                $retRow['id'] = $r->id;
                 $rPostData = $postData[$i];
                 foreach ($this->fields as $field) {
                     $retRow = array_merge($retRow, $field->load($r, $rPostData));
@@ -141,6 +143,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             $pos = array();
             foreach ($rows as $i=>$r) {
                 $retRow = array();
+                $retRow['id'] = $r->id;
                 foreach ($this->fields as $field) {
                     $retRow = array_merge($retRow, $field->load($r));
                 }
@@ -195,13 +198,17 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         );
 
         $rows = $this->_getRowsByRow($row);
-
         foreach ($rows as $k=>$r) {
-            if (isset($fieldPostData[$k])) {
-                $rowPostData = $fieldPostData[$k];
-                $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>false);
-                unset($fieldPostData[$k]);
-            } else {
+            $found = false;
+            foreach ($fieldPostData as $postDataKey=>$rowPostData) {
+                if ($rowPostData['id'] == $r->id) {
+                    $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>false);
+                    unset($fieldPostData[$postDataKey]);
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
                 $postData[$this->getFieldName()]['delete'][] = $r;
             }
         }
