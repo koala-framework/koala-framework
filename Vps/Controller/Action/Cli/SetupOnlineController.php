@@ -4,7 +4,6 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
     public static function getHelp()
     {
         if (!Vps_Controller_Action_Cli_TagController::getProjectName()) return null;
-        if (Vps_Registry::get('config')->server->host != 'vivid') return null;
         return "setup online";
     }
 
@@ -58,6 +57,10 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
 
     public function indexAction()
     {
+        if (Vps_Registry::get('config')->server->host != 'vivid') {
+            throw new Vps_Exception("setup-online may only be called on local vivid server");
+        }
+
         $projectName = Vps_Controller_Action_Cli_TagController::getProjectName();
         $projectPath = self::_getProjectPath();
         $servers = explode(',', $this->_getParam('server'));
