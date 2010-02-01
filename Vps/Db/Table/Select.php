@@ -109,7 +109,6 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
         foreach (array_keys(self::$_partsInit) as $part) {
             if ($part == self::FROM) {
                 $sql .= " INTO OUTFILE '$outFile'";
-                $sql .= " CHARACTER SET UTF8";
                 $sql .= " FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\\\\' LINES TERMINATED BY '\\n'";
             }
             $method = '_render' . ucfirst($part);
