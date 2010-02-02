@@ -31,7 +31,10 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $ret['settingsRow'] = $this->_getRow();
-        $ret['dataRows'] = $this->_getRow()->getChildRows('tableData');
+
+        $dataSelect = new Vps_Model_Select();
+        $dataSelect->order('pos', 'ASC');
+        $ret['dataRows'] = $this->_getRow()->getChildRows('tableData', $dataSelect);
         return $ret;
     }
 
