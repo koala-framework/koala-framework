@@ -82,10 +82,13 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         unlink('/tmp/feedRequested'.$this->_testId);
 
         $start = time();
+        echo "\nsending SIGTERM to hub\n";
         proc_terminate($this->_hubApp, SIGTERM);
         do {
             if (time() - $start > 15) {
+                echo "\nsending SIGKILL to hub\n";
                 proc_terminate($this->_hubApp, SIGKILL);
+                break;
             }
             $status = proc_get_status($this->_hubApp);
             if ($status['running']) sleep(1);
