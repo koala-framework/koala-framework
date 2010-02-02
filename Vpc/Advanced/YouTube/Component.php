@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_YouTube_Component extends Vpc_Abstract_Composite_Component
+class Vpc_Advanced_YouTube_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
@@ -8,6 +8,13 @@ class Vpc_Advanced_YouTube_Component extends Vpc_Abstract_Composite_Component
             'componentIcon' => new Vps_Asset('film'),
             'ownModel'     => 'Vpc_Advanced_YouTube_Model'
         ));
+        $ret['assets']['dep'][] = 'SwfObject';
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        if ($this->getRow()->url) return true;
+        return false;
     }
 }
