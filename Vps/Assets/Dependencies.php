@@ -98,6 +98,13 @@ class Vps_Assets_Dependencies
                         $this->_processDependency($assetsType, $d, $rootComponent);
                     }
                 }
+
+                //zur sicherheit überprüfen ob eh keine dynamischen assets cached werden
+                foreach ($this->_files[$assetsType] as $f) {
+                    if (!is_string($f)) {
+                        throw new Vps_Exception("Invalid asset file");
+                    }
+                }
                 $cache->save($this->_files[$assetsType], $cacheId);
             }
         }
