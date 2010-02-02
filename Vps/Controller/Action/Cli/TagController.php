@@ -160,6 +160,7 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         passthru("svn ci $dir/config.ini -m \"version++\" >/dev/null");
         passthru("rm -rf $dir >/dev/null");
         self::_createTag($branch, $version, $project);
+        system("svn up application/config.ini > /dev/null");
     }
 
     public static function getProjectName()
