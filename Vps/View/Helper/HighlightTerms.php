@@ -13,6 +13,7 @@ class Vps_View_Helper_HighlightTerms
      *     maxReturnLength => 350 // the maximum text-length to be returned. Set to '0' to return full string.
      *     maxReturnBlocks => 3 // maximum blocks to be returned
      *     blockSeparator => ' ... ' // string with which blocks are separated
+     *     cutWithinWords => false // if the blocks are cut within words or only on a space
      * @return string $highlightenedText The highlightened and shortened text.
      */
     public function highlightTerms($terms, $text, array $options = array())
@@ -22,6 +23,7 @@ class Vps_View_Helper_HighlightTerms
         if (!isset($options['maxReturnLength'])) $options['maxReturnLength'] = 350;
         if (!isset($options['maxReturnBlocks'])) $options['maxReturnBlocks'] = 3;
         if (!isset($options['blockSeparator'])) $options['blockSeparator'] = ' ... ';
+        if (!isset($options['cutWithinWords'])) $options['cutWithinWords'] = false;
 
         foreach ($terms as $k => $term) {
             if (!preg_match('/[a-zA-Z0-9]/', $term)) {
@@ -58,6 +60,31 @@ class Vps_View_Helper_HighlightTerms
             // sorting the blocks if there was more than one search word
             ksort($blocksPositions);
             $blocksPositions = array_values($blocksPositions);
+
+            // block begin / end only on space character
+            if (!$options['cutWithinWords'] && $blocksPositions) {
+                foreach ($blocksPositions as $k => $blockPos) {
+                    // check start
+                    if ($blockPos['pos'] != 0 ) {
+                        while (preg_match('/\S/', mb_substr($text, $blockPos['pos']-1, 1)) // davor kein whitespace
+                            || preg_match('/\s/', mb_substr($text, $blockPos['pos'], 1)) // beginn ein whitespace
+                        ) {
+                            $blockPos['pos'] += 1;
+                        }
+                        $blocksPositions[$k] = $blockPos;
+                    }
+
+                    // check end
+                    if ($blockPos['pos'] + $blockPos['length'] < mb_strlen($text)) {
+                        while (preg_match('/\S/', mb_substr($text, $blockPos['pos']+$blockPos['length'], 1)) // danach kein whitespace
+                            || preg_match('/\s/', mb_substr($text, $blockPos['pos']+$blockPos['length']-1, 1)) // ende ein whitespace
+                        ) {
+                            $blockPos['length'] -= 1;
+                        }
+                        $blocksPositions[$k] = $blockPos;
+                    }
+                }
+            }
 
             // merge overlapping blocks
             if ($blocksPositions) {
