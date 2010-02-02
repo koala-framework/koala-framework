@@ -222,7 +222,13 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
                 }
                 Ext.Msg.alert(trlVps("Upload Error"), message);
             },
-            swfupload_loaded_handler: function(file, errorCode, errorMessage) {
+            swfupload_loaded_handler: function() {
+                //wenn CallFunction nicht vorhanden funktioniert der uploader nicht.
+                //dann einfach durch die html version ersetzen
+                if (!this.getMovieElement().CallFunction) {
+                    this.customSettings.field.createUploadButton(true);
+                    return;
+                }
                 this.customSettings.field.useSwf = true;
             }
         });
