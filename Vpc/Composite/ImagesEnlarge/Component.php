@@ -26,4 +26,21 @@ class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Compone
 
         return $ret;
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $ret[] = $this->_getCacheVars();
+        $images = $this->getData()->getChildComponents(array(
+            'generator' => 'child'
+        ));
+        foreach ($images as $image) {
+            $ret[] = array(
+                'model' => $this->getComponent()->getOwnModel(),
+                'id' => $image->dbId,
+                'field' => 'component_id'
+            );
+        }
+        return $ret;
+    }
 }
