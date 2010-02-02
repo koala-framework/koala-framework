@@ -78,8 +78,16 @@ Im neuen Golf GTI können Sie sich die Freiheit nehmen, die Sie brauchen - egal,
         $searchWords = array('golf', 'gti');
         $h = new Vps_View_Helper_HighlightTerms();
         $res = $h->highlightTerms($searchWords, $text);
+        $resStripped = strip_tags($res);
 
-        $this->assertLessThanOrEqual(350, mb_strlen(strip_tags($res)));
+        $this->assertLessThanOrEqual(350, mb_strlen($resStripped));
+
+        $expectedString = ' ... Wettrennen mit Ihrem Puls? Ihr Gegner: der neue Golf GTI. '
+            .'Ihre Aufgabe: einsteigen, anlassen, Gas geben. ... Rasant und offensiv. Das '
+            .'ist der neue Golf GTI mit tiefergelegtem Sportfahrwerk und ... "Denver". '
+            .'Typisches Markenzeichen des GTI ist sein spezielles Kühlerschutzgitter mit '
+            .'schwarz ... ';
+        $this->assertEquals($expectedString, $resStripped);
     }
 
     public function testNoMatch()
