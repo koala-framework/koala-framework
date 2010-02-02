@@ -200,11 +200,6 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(50, $s['width']);
         $this->assertEquals(50, $s['height']);
 
-        $c = $this->_root->getComponentById('1613');
-        $s = $c->getComponent()->getImageDimensions();
-        $this->assertEquals(10, $s['width']);
-        $this->assertEquals(10, $s['height']);
-
         $c = $this->_root->getComponentById('1614');
         $s = $c->getComponent()->getImageDimensions();
         $this->assertEquals(300, $s['width']); //correct?

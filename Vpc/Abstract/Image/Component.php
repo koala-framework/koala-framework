@@ -67,7 +67,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             if (!array_key_exists('scale', $d)) {
                 throw new Vps_Exception('Dimension setting must contain scale');
             }
-            $validScales = array(Vps_Media_Image::SCALE_BESTFIT, Vps_Media_Image::SCALE_CROP, Vps_Media_Image::SCALE_ORIGINAL);
+            $validScales = array(Vps_Media_Image::SCALE_BESTFIT, Vps_Media_Image::SCALE_CROP, Vps_Media_Image::SCALE_ORIGINAL, Vps_Media_Image::SCALE_DEFORM);
             if (!in_array($d['scale'], $validScales)) {
                 throw new Vps_Exception("Invalid Scale '$d[scale]'");
             }
