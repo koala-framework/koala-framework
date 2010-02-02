@@ -10,12 +10,13 @@ class Vpc_Abstract_Composite_ChildData extends Vps_Data_Abstract implements Vps_
 
     public function load($row)
     {
-        return $this->_parentData->load($row);
+        $ret = $this->_parentData->load($row);
+        return $ret;
     }
 
     public function setSubComponent($key)
     {
-        $key = $this->_parentData->getSubComponent().$key;
+        $key = $key.$this->_parentData->getSubComponent();
         $this->_parentData->setSubComponent($key);
     }
 
