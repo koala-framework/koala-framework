@@ -67,6 +67,20 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             if (!array_key_exists('scale', $d)) {
                 throw new Vps_Exception('Dimension setting must contain scale');
             }
+            $validScales = array(Vps_Media_Image::SCALE_BESTFIT, Vps_Media_Image::SCALE_CROP, Vps_Media_Image::SCALE_ORIGINAL);
+            if (!in_array($d['scale'], $validScales)) {
+                throw new Vps_Exception("Invalid Scale '$d[scale]'");
+            }
+        }
+
+        reset($settings['dimensions']);
+        $firstDimension = current($settings['dimensions']);
+        if (($firstDimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
+            $firstDimension['scale'] == Vps_Media_Image::SCALE_CROP) &&
+            empty($firstDimension['width']) &&
+            empty($firstDimension['height'])
+        ) {
+            throw new Vps_Exception('The first dimension must contain width or height if bestfit or crop is used');
         }
     }
 
@@ -179,14 +193,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         } else {
             $s['height'] = $d['height'];
         }
-        if (!isset($d['scale'])) {
-        } else if ($d['scale'] == self::USER_SELECT) {
-            if (is_object($row)) {
-                $s['scale'] = $row->scale;
-            }
-        } else {
-            $s['scale'] = $d['scale'];
-        }
+        $s['scale'] = $d['scale'];
 
         if ($data && file_exists($data['file'])) {
             $sourceSize = @getimagesize($data['file']);

@@ -24,6 +24,7 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
         $dimensions = Vpc_Abstract::getSetting($this->getClass(), 'dimensions');
         if (count($dimensions) > 1) {
             $this->add(new Vpc_Abstract_Image_DimensionField('dimension', trlVps('Dimension')))
+                ->setAllowBlank(false)
                 ->setDimensions($dimensions);
         }
 
