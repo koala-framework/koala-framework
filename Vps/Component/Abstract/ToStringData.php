@@ -21,4 +21,8 @@ class Vps_Component_Abstract_ToStringData extends Vps_Data_Abstract implements V
     {
         $this->_subComponent = $key;
     }
+    public function getSubComponent()
+    {
+        return $this->_subComponent;
+    }
 }

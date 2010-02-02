@@ -32,4 +32,8 @@ class Vps_Data_Vpc_Image extends Vps_Data_Abstract implements Vps_Data_Vpc_ListI
     {
         $this->_subComponent = $key;
     }
+    public function getSubComponent()
+    {
+        return $this->_subComponent;
+    }
 }

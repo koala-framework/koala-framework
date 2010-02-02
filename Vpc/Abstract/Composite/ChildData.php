@@ -15,8 +15,12 @@ class Vpc_Abstract_Composite_ChildData extends Vps_Data_Abstract implements Vps_
 
     public function setSubComponent($key)
     {
-        throw new Vps_Exception_NotYetImplemented();
-        // possible has to look like the following
-        // $this->_parentData->setSubComponent($key);
+        $key = $this->_parentData->getSubComponent().$key;
+        $this->_parentData->setSubComponent($key);
+    }
+
+    public function getSubComponent()
+    {
+        return $this->_parentData->getSubComponent();
     }
 }
