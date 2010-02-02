@@ -7,7 +7,7 @@ class Vpc_Basic_Table_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     protected function _initColumns()
     {
-        $row = Vpc_Abstract::createModel($this->_getParam('class'))
+        $row = Vpc_Abstract::createOwnModel($this->_getParam('class'))
             ->getRow($this->_getParam('componentId'));
         if (!$row || !$row->columns) {
             throw new Vps_ClientException("Please set first the amount of columns in the settings section.");
