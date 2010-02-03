@@ -9,7 +9,7 @@ Vpc.ListChildPages.Teaser.Panel = Ext.extend(Vps.Binding.ProxyPanel,
 
         this.grid = new Vps.Auto.GridPanel({
             controllerUrl: this.controllerUrl,
-            width: 230,
+            width: 300,
             split: true,
             region: 'west',
             baseParams: this.baseParams, //Kompatibilität zu ComponentPanel
