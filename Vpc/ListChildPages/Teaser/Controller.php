@@ -7,7 +7,17 @@ class Vpc_ListChildPages_Teaser_Controller extends Vps_Controller_Action_Auto_Vp
 
     protected function _initColumns()
     {
+        $c = Vpc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
+        $childOwnModel = Vpc_Abstract::getSetting($c, 'ownModel');
+
         $this->_columns->add(new Vps_Grid_Column('pos'));
+        if ($childOwnModel) {
+            $this->_columns->add(new Vps_Grid_Column_Checkbox('visible', ''))
+                ->setData(new Vpc_ListChildPages_Teaser_ChildVisibilityData($childOwnModel, $this->_getParam('componentId')))
+                ->setRenderer('booleanTickCross')
+                ->setHeaderIcon(new Vps_Asset('visible'))
+                ->setTooltip('Visibility');
+        }
         $this->_columns->add(new Vps_Grid_Column('name', trlVps('Page name'), 200));
     }
 
