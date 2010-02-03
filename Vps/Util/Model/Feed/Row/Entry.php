@@ -42,7 +42,7 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
             }
             $data['description'] = '';
             foreach ($xml->content as $i) {
-                if (!$data['description'] || $i['type'] == 'html') {
+                if (!$data['description'] || $i['type'] == 'html' || $i['type'] == 'xhtml') {
                     $data['description'] = (string)$i;
                 }
             }
