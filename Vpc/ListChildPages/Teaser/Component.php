@@ -14,7 +14,7 @@ class Vpc_ListChildPages_Teaser_Component extends Vpc_Abstract
         $ret['componentName'] = trlVps('List child pages');
         $ret['cssClass'] = 'webStandard';
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/ListChildPages/Teaser/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/Panel.js';
         return $ret;
     }
 
