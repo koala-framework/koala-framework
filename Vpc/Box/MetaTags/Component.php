@@ -15,19 +15,18 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
         return $components;
     }
 
-    public function getTemplateVars()
+    protected function _getMetaTags()
     {
-        $ret = parent::getTemplateVars();
         $components = $this->_getMetaTagComponents();
-        $ret['metaTags'] = array();
+        $ret = array();
         foreach ($components as $component) {
             foreach ($component->getComponent()->getMetaTags() as $name=>$content) {
-                if (!isset($ret['metaTags'][$name])) $ret['metaTags'][$name] = '';
+                if (!isset($ret[$name])) $ret[$name] = '';
                 //TODO: bei zB noindex,nofollow anderes trennzeichen
-                $ret['metaTags'][$name] .= ' '.$content;
+                $ret[$name] .= ' '.$content;
             }
         }
-        foreach ($ret['metaTags'] as &$i) $i = trim($i);
+        foreach ($ret as &$i) $i = trim($i);
         /*
         $components = $this->getData()->getPage()->getRecursiveChildComponents(array(
             'page' => false,
@@ -35,12 +34,12 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
             'flags' => array('noIndex' => true)
         ));*/
         if (/*$components || */Vpc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'noIndex')) {
-            if (isset($ret['metaTags']['robots'])) {
-                $ret['metaTags']['robots'] .= ',';
+            if (isset($ret['robots'])) {
+                $ret['robots'] .= ',';
             } else {
-                $ret['metaTags']['robots'] = '';
+                $ret['robots'] = '';
             }
-            $ret['metaTags']['robots'] .= 'noindex';
+            $ret['robots'] .= 'noindex';
         }
 
         // verify-v1
@@ -54,13 +53,20 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
                         .$hostParts[count($hostParts)-1]; // zB 'com'
         $configVerify = Vps_Registry::get('config')->verifyV1;
         if ($configVerify && $configVerify->$configDomain) {
-            $ret['metaTags']['verify-v1'] = $configVerify->$configDomain;
+            $ret['verify-v1'] = $configVerify->$configDomain;
         }
 
         $configVerify = Vps_Registry::get('config')->googleSiteVerification;
         if ($configVerify && $configVerify->$configDomain) {
-            $ret['metaTags']['google-site-verification'] = $configVerify->$configDomain;
+            $ret['google-site-verification'] = $configVerify->$configDomain;
         }
+        return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['metaTags'] = $this->_getMetaTags();
         return $ret;
     }
 
