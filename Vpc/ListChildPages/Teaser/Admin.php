@@ -8,7 +8,7 @@ class Vpc_ListChildPages_Teaser_Admin extends Vpc_Admin
 
         return array(
             'list' => array(
-                'xtype' => 'vpc.listchildpages',
+                'xtype' => 'vpc.list',
                 'controllerUrl' => $this->getControllerUrl(),
                 'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
                 'icon' => $this->_getSetting('componentIcon')->__toString(),
