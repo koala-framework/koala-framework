@@ -8,7 +8,7 @@ class Vpc_Abstract_Composite_TabsAdmin extends Vpc_Abstract_Composite_Admin
         $config = array(
             'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
             'icon' => $this->_getSetting('componentIcon')->__toString(),
-            'activeTab' => '0',
+            'activeTab' => 0,
             'xtype' => 'vps.tabpanel'
         );
 
