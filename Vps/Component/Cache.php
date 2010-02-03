@@ -145,15 +145,15 @@ class Vps_Component_Cache
         $this->_fieldCache[$model][] = $field;
     }
 
-    private function _getFields($model)
+    private function _getFields($modelname)
     {
         if (!$this->_fieldCache) {
             foreach ($this->getFieldsModel()->export(Vps_Model_Abstract::FORMAT_ARRAY) as $row) {
                 $this->_fieldCache[$row['model']][] = $row['field'];
             }
         }
-        if (!isset($this->_fieldCache[$model])) return null;
-        return $this->_fieldCache[$model];
+        if (!isset($this->_fieldCache[$modelname])) return null;
+        return $this->_fieldCache[$modelname];
     }
 
     public function writeBuffer()
@@ -184,45 +184,59 @@ class Vps_Component_Cache
     public function clean($mode = self::CLEANING_MODE_META, $value = null)
     {
         if ($mode == Vps_Component_Cache::CLEANING_MODE_META) {
-            $row = $value;
-            if (!$row instanceof Vps_Model_Row_Abstract && !$row instanceof Zend_Db_Table_Row_Abstract) {
-                throw new Vps_Exception('$value must be instance of Vps_Model_Row_Abstract or Zend_Db_Table_Row_Abstract');
-            }
-            if ($row instanceof Zend_Db_Table_Row_Abstract) {
-                $model = $row->getTable();
-                $primaryKey = current($model->info('primary'));
+            $id = 'null';
+            if ($value instanceof Vps_Model_Interface) {
+                $model = $value;
+                if ($model instanceof Zend_Db_Table_Abstract || get_class($model) == 'Vps_Model_Db') {
+                    $model = $model->getTable();
+                }
+                $modelname = get_class($model);
+                $select = $this->getMetaModel()->select()->where(
+                    new Vps_Model_Select_Expr_Equals('model', $modelname)
+                );
+                $sqlInsert = '';
             } else {
-                $model = $row->getModel();
-                $primaryKey = $model->getPrimaryKey();
-                if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
+                $row = $value;
+                if (!$row instanceof Vps_Model_Row_Abstract && !$row instanceof Zend_Db_Table_Row_Abstract) {
+                    throw new Vps_Exception('$value must be instance of Vps_Model_Row_Abstract or Zend_Db_Table_Row_Abstract');
+                }
+                if ($row instanceof Zend_Db_Table_Row_Abstract) {
+                    $model = $row->getTable();
+                    $primaryKey = current($model->info('primary'));
+                } else {
+                    $model = $row->getModel();
+                    $primaryKey = $model->getPrimaryKey();
+                    if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
+                }
+                $modelname = get_class($model);
+                $fields = $this->_getFields($modelname);
+                if (!$fields) $fields = array('');
+                $or = array(new Vps_Model_Select_Expr_Equals('id', ''));
+                $sqlOr = '';
+                foreach ($fields as $field) {
+                    $id = $field != '' ? $row->$field : $row->$primaryKey;
+                    $sqlOr .= "OR (m.id='$id' AND m.field='$field')";
+                    $or[] = new Vps_Model_Select_Expr_And(array(
+                        new Vps_Model_Select_Expr_Equals('id', $id),
+                        new Vps_Model_Select_Expr_Equals('field', $field)
+                    ));
+                }
+                $sqlInsert = "AND (m.id = '' $sqlOr)";
+                $select = $this->getMetaModel()->select()->where(
+                    new Vps_Model_Select_Expr_And(array(
+                        new Vps_Model_Select_Expr_Equals('model', $modelname),
+                        new Vps_Model_Select_Expr_Or($or)
+                    ))
+                );
             }
-            $model = get_class($model);
-            $fields = $this->_getFields($model);
-            if (!$fields) $fields = array('');
-            $or = array(new Vps_Model_Select_Expr_Equals('id', ''));
-            $sqlOr = '';
-            foreach ($fields as $field) {
-                $id = $field != '' ? $row->$field : $row->$primaryKey;
-                $sqlOr .= "OR (m.id='$id' AND m.field='$field')";
-                $or[] = new Vps_Model_Select_Expr_And(array(
-                    new Vps_Model_Select_Expr_Equals('id', $id),
-                    new Vps_Model_Select_Expr_Equals('field', $field)
-                ));
-            }
-            $select = $this->getMetaModel()->select()->where(
-                new Vps_Model_Select_Expr_And(array(
-                    new Vps_Model_Select_Expr_Equals('model', $model),
-                    new Vps_Model_Select_Expr_Or($or)
-                ))
-            );
 
             if ($this->getMetaModel()->getProxyModel() instanceof Vps_Model_Db) {
                 $sql = "
                     DELETE cache_component
                     FROM cache_component, cache_component_meta m
                     WHERE cache_component.id = m.value
-                        AND m.model = '$model'
-                        AND (m.id = '' $sqlOr)
+                        AND m.model = '$modelname'
+                        $sqlInsert
                         AND m.type='cacheId'
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
@@ -230,12 +244,12 @@ class Vps_Component_Cache
                     DELETE cache_component
                     FROM cache_component, cache_component_meta m
                     WHERE cache_component.component_class = m.value
-                        AND m.model = '$model'
-                        AND (m.id = '' $sqlOr)
+                        AND m.model = '$modelname'
+                        $sqlInsert
                         AND m.type='componentClass'
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
-                Vps_Benchmark::cacheInfo("Cache: cleared $model with $id");
+                Vps_Benchmark::cacheInfo("Cache: cleared $modelname with $id");
                 $select->whereEquals('type', 'callback');
             }
 

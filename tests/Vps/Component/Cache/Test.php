@@ -11,13 +11,13 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
         Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
         Vps_Component_Cache::getInstance()->emptyPreload();
-        Vps_Component_RowObserver::getInstance()->setSkipFnF(false);
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
     }
 
     public function tearDown()
     {
-        Vps_Component_RowObserver::getInstance()->clear();
-        Vps_Component_RowObserver::getInstance()->setSkipFnF(true);
+        Vps_Component_ModelObserver::getInstance()->clear();
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
     }
 
     public function testCacheId()
@@ -114,6 +114,20 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $cache->getModel()->countRows());
     }
 
+    public function testDeleteByMetaModel()
+    {
+        $cache = Vps_Component_Cache::getInstance();
+        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_TestModel');
+        $cache->saveMeta($model, null, 'a');
+        $cache->saveMeta($model, 1, 'b');
+        $cache->save('', 'a', 'Vpc_Bar');
+        $cache->save('', 'b', 'Vpc_Bar');
+
+        $this->assertEquals(2, $cache->getModel()->countRows());
+        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model);
+        $this->assertEquals(0, $cache->getModel()->countRows());
+    }
+
     public function testDeleteByMetaField()
     {
         $cache = Vps_Component_Cache::getInstance();
@@ -144,11 +158,11 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $cache->getModel()->countRows());
 
         $model->getRow(2)->save();
-        Vps_Component_RowObserver::getInstance()->process();
+        Vps_Component_ModelObserver::getInstance()->process();
         $this->assertEquals(1, $cache->getModel()->countRows());
 
         $model->getRow(1)->save();
-        Vps_Component_RowObserver::getInstance()->process();
+        Vps_Component_ModelObserver::getInstance()->process();
         $this->assertEquals(0, $cache->getModel()->countRows());
     }
 
@@ -164,7 +178,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         $cache->saveMeta('Vps_Component_Cache_TestModel', null, 'root', Vps_Component_Cache::META_CALLBACK);
 
         $row->save();
-        Vps_Component_RowObserver::getInstance()->process();
+        Vps_Component_ModelObserver::getInstance()->process();
 
         $callbacks = $root->getComponent()->getCallbacks();
         $this->assertEquals(1, count($callbacks));

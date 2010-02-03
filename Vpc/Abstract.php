@@ -283,8 +283,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 $i->getComponent()->processInput($postData);
             }
         }
-        if (class_exists('Vps_Component_RowObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Vps_Component_RowObserver::getInstance()->process(false);
+        if (class_exists('Vps_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Vps_Component_ModelObserver::getInstance()->process(false);
         }
         return $process;
     }
@@ -297,8 +297,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 $i->getComponent()->postProcessInput($postData);
             }
         }
-        if (class_exists('Vps_Component_RowObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Vps_Component_RowObserver::getInstance()->process();
+        if (class_exists('Vps_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Vps_Component_ModelObserver::getInstance()->process();
         }
     }
 
