@@ -10,7 +10,7 @@ class Vpc_ListChildPages_Teaser_TeaserImage_Component extends Vpc_Abstract_Compo
             'Vpc_ListChildPages_Teaser_TeaserImage_Image_Component';
         $ret['componentName'] = trlVps('Teaser image');
         $ret['cssClass'] = 'webStandard';
-        $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['ownModel'] = 'Vpc_ListChildPages_Teaser_TeaserImage_Model';
         return $ret;
     }
 

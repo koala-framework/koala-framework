@@ -14,6 +14,7 @@ class Vpc_ListChildPages_Teaser_ChildVisibilityData extends Vps_Data_Abstract
     {
         $m = Vps_Model_Abstract::getInstance($this->_childOwnModel);
         $childRow = $m->getRow($this->_componentId.'-'.$row->id);
+        if (!$childRow) return 0;
         return $childRow->visible;
     }
 }

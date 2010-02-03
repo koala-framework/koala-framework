@@ -5338,11 +5338,31 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>You are not logged in</en>
+<de>Sie sind nicht eingeloggt</de>
 <id>1400</id>
 </text>
 <text>
 <en>You entered a wrong password</en>
+<de>Sie haben ein falsches Passwort eingegeben</de>
 <id>1401</id>
+</text>
+<text>
+<en>Meta Tags</en>
+<id>1402</id>
+</text>
+<text>
+<en>Keywords</en>
+<id>1403</id>
+</text>
+<text>
+<en>Dimension: At width and height must be set higher than 0 when using deform.</en>
+<de>Dimension: Breite und Höhe muss gesetzt werden, wenn Verzerrung verwendet wird.</de>
+<id>1404</id>
+</text>
+<text>
+<en>Read more &#xBB;</en>
+<de>Weiterlesen &#xBB;</de>
+<id>1405</id>
 </text>
 </trl>
 
