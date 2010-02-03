@@ -133,9 +133,9 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             }
 
             if (!$allowCheck) {
-                //nötig für news-link in link-komponente die einen eigenen controller hat
-                //wo dann die componentId für die link-komponente aber die componentClass der News-Link Komponente daher kommt
-                //das ganze muss statisch gemacht werden, da die link-komponente möglicherweise noch nicht gespeichert wurde
+                //nï¿½tig fï¿½r news-link in link-komponente die einen eigenen controller hat
+                //wo dann die componentId fï¿½r die link-komponente aber die componentClass der News-Link Komponente daher kommt
+                //das ganze muss statisch gemacht werden, da die link-komponente mï¿½glicherweise noch nicht gespeichert wurde
                 $allowCheck = $this->_canHaveChildComponentOnSamePage($component->componentClass, $class);
             }
 
@@ -173,7 +173,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     public function postDispatch()
     {
-        Vps_Component_RowObserver::getInstance()->process();
+        Vps_Component_ModelObserver::getInstance()->process();
     }
 
     protected function _getUserRole()

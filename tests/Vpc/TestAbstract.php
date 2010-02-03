@@ -10,19 +10,19 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
         Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
         Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
-        Vps_Component_RowObserver::getInstance()->clear();
-        Vps_Component_RowObserver::getInstance()->setSkipFnF(false);
+        Vps_Component_ModelObserver::getInstance()->clear();
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
     }
 
     public function tearDown()
     {
-        Vps_Component_RowObserver::getInstance()->clear();
-        Vps_Component_RowObserver::getInstance()->setSkipFnF(true);
+        Vps_Component_ModelObserver::getInstance()->clear();
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
     }
 
     protected final function _process()
     {
-        Vps_Component_RowObserver::getInstance()->process();
+        Vps_Component_ModelObserver::getInstance()->process();
         Vps_Component_Data_Root::reset();
         $this->_root = Vps_Component_Data_Root::getInstance();
     }

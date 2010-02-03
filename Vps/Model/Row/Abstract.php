@@ -303,7 +303,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     protected function _callObserver($fn)
     {
         if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_RowObserver::getInstance()->$fn($this);
+            Vps_Component_ModelObserver::getInstance()->$fn($this);
         }
     }
 

@@ -803,6 +803,19 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
     }
 
+    private function _updateModelObserver()
+    {
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            if ($this->_proxyContainerModels) {
+                foreach ($this->_proxyContainerModels as $m) {
+                    Vps_Component_ModelObserver::getInstance()->update($m);
+                }
+            } else {
+                Vps_Component_ModelObserver::getInstance()->update($this);
+            }
+        }
+    }
+
     public function import($format, $data, $options = array())
     {
         if ($format == self::FORMAT_SQL) {
@@ -824,8 +837,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
             $cmd .= "| {$systemData['mysqlDir']}mysql $systemData[mysqlOptions] 2>&1";
             exec($cmd, $output, $ret);
-            if ($ret != 0) throw new Vps_Exception("SQL import failed: ".implode("\n", $output));
             unlink($filename);
+            $this->_updateModelObserver();
+            if ($ret != 0) throw new Vps_Exception("SQL import failed: ".implode("\n", $output));
         } else if ($format == self::FORMAT_CSV) {
             // if no data is recieved, quit
             if (!$data) return;
@@ -855,6 +869,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
             unlink($filename.'.gz');
             unlink($filename);
+            $this->_updateModelObserver();
         } else if ($format == self::FORMAT_ARRAY) {
             if (isset($options['buffer']) && $options['buffer']) {
                 if (isset($this->_importBuffer)) {
@@ -874,6 +889,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             } else {
                 $this->_importArray($data, $options);
             }
+            $this->_updateModelObserver();
         } else {
             parent::import($format, $data);
         }

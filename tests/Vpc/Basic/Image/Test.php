@@ -15,13 +15,13 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
         Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
         Vps_Component_Cache::getInstance()->emptyPreload();
-        Vps_Component_RowObserver::getInstance()->setSkipFnF(false);
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
     }
 
     public function tearDown()
     {
-        Vps_Component_RowObserver::getInstance()->clear();
-        Vps_Component_RowObserver::getInstance()->setSkipFnF(true);
+        Vps_Component_ModelObserver::getInstance()->clear();
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
     }
 
     public function testUrl()
@@ -155,7 +155,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $c = $this->_root->getComponentById('1600');
         $row = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_TestModel')->getRow('1600');
         $row->save();
-        Vps_Component_RowObserver::getInstance()->process();
+        Vps_Component_ModelObserver::getInstance()->process();
         Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
         $this->assertEquals(3, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
     }
