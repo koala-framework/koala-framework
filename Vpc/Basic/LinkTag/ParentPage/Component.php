@@ -1,22 +1,15 @@
 <?php
-class Vpc_Basic_LinkTag_ParentPage_Component extends Vpc_Abstract
+/**
+ * @package Vpc
+ * @subpackage Basic
+ */
+class Vpc_Basic_LinkTag_ParentPage_Component extends Vpc_Basic_LinkTag_Abstract_Component
 {
-    public function getTemplateVars()
+    public static function getSettings()
     {
-        $ret = parent::getTemplateVars();
-        $parentUrl = $this->_getParentPageUrl();
-        $ret['parentPageUrl'] = $parentUrl ? $parentUrl : '';
+        $ret = parent::getSettings();
+        $ret['dataClass'] = 'Vpc_Basic_LinkTag_ParentPage_Data';
+        $ret['componentName'] = trlVps('Link.to parent page');
         return $ret;
-    }
-
-    protected function _getParentPageUrl()
-    {
-        return $this->getData()->getPage()->parent->url;
-    }
-
-    public function hasContent()
-    {
-        if ($this->_getParentPageUrl()) return true;
-        return false;
     }
 }
