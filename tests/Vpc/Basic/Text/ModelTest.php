@@ -209,7 +209,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/a1b024ef219bcfe6b3f5ac9916d8f722/foo.png\">foo</a>\n</p>".
+                    "<p>\n  <a href=\"/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/a1b024ef219bcfe6b3f5ac9916d8f722/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
                     "</div>", $html);
     }
 
