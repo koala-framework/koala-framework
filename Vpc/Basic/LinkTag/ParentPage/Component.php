@@ -1,10 +1,11 @@
 <?php
-class Vpc_Basic_LinkParent_ParentTag_Component extends Vpc_Abstract
+class Vpc_Basic_LinkTag_ParentPage_Component extends Vpc_Abstract
 {
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['parentPageUrl'] = $this->_getParentPageUrl();
+        $parentUrl = $this->_getParentPageUrl();
+        $ret['parentPageUrl'] = $parentUrl ? $parentUrl : '';
         return $ret;
     }
 

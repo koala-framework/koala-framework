@@ -40,6 +40,7 @@ class Vps_Component_Data
             $filenames = array();
             if (!$this->isPage) {
                 $page = $this->getPage();
+                if (!$page) return null;
                 return $page->url;
             }
             $page = $this;
