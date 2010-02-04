@@ -7,6 +7,7 @@
         z-index:20001;
         height:auto;
         border:1px solid #ccc;
+        min-width: 100px;
     }
     #loading .loading-indicator{
         background:#f6f6f6;
