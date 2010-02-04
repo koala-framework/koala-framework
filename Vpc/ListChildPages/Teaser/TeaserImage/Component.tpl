@@ -3,7 +3,7 @@
         $targetComponent = Vps_Component_Data_Root::getInstance()
             ->getComponentById($this->data->row->target_page_id);
     ?>
-    <h1><?= $this->componentLink($targetComponent); ?></h1>
+    <h2><?= $this->componentLink($targetComponent); ?></h2>
     <?= $this->ifHasContent($this->image); ?>
         <div class="left prevImg">
             <?= $this->component($this->image); ?>
