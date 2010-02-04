@@ -40,7 +40,7 @@ class Vps_Component_Data
             $filenames = array();
             if (!$this->isPage) {
                 $page = $this->getPage();
-                if (!$page) return null;
+                if (!$page) return '';
                 return $page->url;
             }
             $page = $this;
@@ -60,7 +60,9 @@ class Vps_Component_Data
                 'flags' => array('noIndex' => true),
                 'page' => false
             ));*/
-            $rel = $this->getPage()->_rel;
+            $page = $this->getPage();
+            if (!$page) return '';
+            $rel = $page->_rel;
             if (/*$childs || */Vps_Component_Abstract::getFlag($this->getPage()->componentClass, 'noIndex')) {
                 $rel .= ' nofollow';
             }
