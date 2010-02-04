@@ -21,7 +21,7 @@ class Vps_View_Helper_FileSize
             $ret = number_format($filesize, 0, ",", ".");
         }
     
-        $ret .= $shortcuts[$i];
+        $ret .= ' '.$shortcuts[$i];
         return $ret;
     }
 }
