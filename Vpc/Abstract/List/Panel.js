@@ -31,9 +31,12 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
     {
         this.grid.load();
         this.grid.selectId(false);
+
+        this.childPanel.setBaseParams({});
         var f = this.childPanel.getForm();
         if (f) {
             f.clearValues();
+            f.clearInvalid();
         }
         this.childPanel.disable();
     },
