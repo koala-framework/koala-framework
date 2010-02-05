@@ -1,9 +1,11 @@
 <div class="<?=$this->cssClass?>">
-    <?=$this->component($this->linkTag)?>
+    <p>
+        <?=$this->component($this->linkTag)?>
 
-        <?=$this->mailEncodeText($this->text)?>
+            <?=$this->mailEncodeText($this->text)?>
 
-    <?=$this->ifHasContent($this->linkTag)?>
-    </a>
-    <?=$this->ifHasContent()?>
+        <?=$this->ifHasContent($this->linkTag)?>
+        </a>
+        <?=$this->ifHasContent()?>
+    </p>
 </div>
