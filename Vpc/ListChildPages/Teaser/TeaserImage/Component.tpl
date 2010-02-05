@@ -6,7 +6,7 @@
     <h2><?= $this->componentLink($targetComponent); ?></h2>
     <?= $this->ifHasContent($this->image); ?>
         <div class="left prevImg">
-            <?= $this->component($this->image); ?>
+            <?= $this->componentLink($targetComponent, $this->component($this->image)); ?>
         </div>
     <?= $this->ifHasContent(); ?>
     <?= $this->ifHasContent($this->text); ?>
