@@ -120,6 +120,7 @@ class Vps_Component_ModelObserver
                 }
             }
         }
+        $this->clear();
 
         // Suchindex
         if (class_exists('Vps_Dao_Index', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
@@ -127,10 +128,5 @@ class Vps_Component_ModelObserver
         }
 
         return $ret;
-    }
-
-    public function getProcessedRows()
-    {
-        return $this->_processed;
     }
 }
