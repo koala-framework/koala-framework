@@ -7,7 +7,7 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
     {
         $data = $this->_component->getImageData();
 
-        if ($data && is_file($data['file'])) {
+        if ($data && $data['file'] && is_file($data['file'])) {
             $source = $data['file'];
             $size = $this->getSize();
 
