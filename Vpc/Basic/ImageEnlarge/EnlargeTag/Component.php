@@ -41,7 +41,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         }
         if ($this->_getSetting('fullSizeDownloadable')) {
             $data = $this->getImageData();
-            if ($data) {
+            if ($data && $data['filename']) {
                 $ret['fullSizeUrl'] = Vps_Media::getUrl($this->getData()->componentClass,
                     $this->getData()->componentId, 'original', $data['filename']);
             }
@@ -69,7 +69,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
             $data = Vps_Component_Data_Root::getInstance()
                 ->getComponentByDbId($id, array('limit'=>1))
                 ->getComponent()->getImageData();
-            if (!$data) {
+            if (!$data || !$data['file']) {
                 return null;
             }
             return array(

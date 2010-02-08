@@ -23,6 +23,8 @@ class Vpc_Advanced_SearchEngineReferer_Test extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         if (isset($_SERVER['HTTP_REFERER'])) unset($_SERVER['HTTP_REFERER']);
+        Vps_Component_ModelObserver::getInstance()->clear();
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
     }
 
     public function testCache()
