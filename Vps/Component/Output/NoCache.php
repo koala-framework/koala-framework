@@ -59,18 +59,6 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
 
     protected function _parseTemplate($ret)
     {
-        // hasContent-Tags ersetzen
-        preg_match_all("/{content(No)?: ([^ }]+) ([^ }]+) ([^ }]+)}(.*){content(No)?}/imsU", $ret, $matches);
-        foreach ($matches[0] as $key => $search) {
-            $inverse = $matches[1][$key] == 'No';
-            $componentId = $matches[3][$key];
-            $componentClass = $matches[2][$key];
-            $counter = $matches[4][$key];
-            $content = $matches[5][$key];
-            $replace = $this->_renderHasContent($componentId, $componentClass, $content, $counter, $inverse);
-            $ret = str_replace($search, $replace, $ret);
-        }
-
         // partials-Tags ersetzen
         preg_match_all('/{partials: ([^ }]+) ([^ }]+) ([^ }]+) ([^ ]+) }/', $ret, $matches);
         foreach ($matches[0] as $key => $search) {
@@ -90,6 +78,18 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
                 $content .= $this->_renderPartial($componentId, $componentClass, $partial, $id, $info);
             }
             $ret = str_replace($search, $content, $ret);
+        }
+
+        // hasContent-Tags ersetzen
+        preg_match_all("/{content(No)?: ([^ }]+) ([^ }]+) ([^ }]+)}(.*){content(No)?}/imsU", $ret, $matches);
+        foreach ($matches[0] as $key => $search) {
+            $inverse = $matches[1][$key] == 'No';
+            $componentId = $matches[3][$key];
+            $componentClass = $matches[2][$key];
+            $counter = $matches[4][$key];
+            $content = $matches[5][$key];
+            $replace = $this->_renderHasContent($componentId, $componentClass, $content, $counter, $inverse);
+            $ret = str_replace($search, $replace, $ret);
         }
 
         // nocache-Tags ersetzen
