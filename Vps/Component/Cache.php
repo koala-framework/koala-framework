@@ -338,7 +338,7 @@ class Vps_Component_Cache
     public function preload($ids)
     {
         $this->_countPreloadCalls++;
-        $this->_preloadedValues += $this->_preload($ids);
+        $this->_preloadedValues = array_merge($this->_preloadedValues, $this->_preload($ids));
     }
 
     protected function _preload($ids)
