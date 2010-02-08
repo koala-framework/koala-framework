@@ -9,11 +9,9 @@
             <?= $this->componentLink($targetComponent, $this->component($this->image)); ?>
         </div>
     <?= $this->ifHasContent(); ?>
-    <?= $this->ifHasContent($this->text); ?>
-        <div class="text">
-            <?= $this->component($this->text); ?>
-        </div>
-    <?= $this->ifHasContent(); ?>
+    <div class="text<?= $this->ifHasContent($this->image); ?> withImage<?= $this->ifHasContent(); ?>">
+        <?= $this->component($this->text); ?>
+    </div>
     <div class="clear"></div>
     <p class="goTo"><?= $this->componentLink($targetComponent, $this->row->link_text); ?></p>
 </div>
