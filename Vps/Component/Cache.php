@@ -338,7 +338,16 @@ class Vps_Component_Cache
     public function preload($ids)
     {
         $this->_countPreloadCalls++;
-        $this->_preloadedValues = array_merge($this->_preloadedValues, $this->_preload($ids));
+
+        // frueher blieb da in den preloadedValues teilweise null drinstehen
+        // obwohl ueber das _preload() was daherkam, wurde dann aber nicht verwendet.
+        // array_merge nicht nehmen, das setzt werte die dann zu rekursiven
+        // endlos-aufrufen führen
+        foreach ($this->_preload($ids) as $k => $v) {
+            if ($v || !array_key_exists($k, $this->_preloadedValues)) {
+                $this->_preloadedValues[$k] = $v;
+            }
+        }
     }
 
     protected function _preload($ids)
