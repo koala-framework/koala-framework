@@ -10,7 +10,7 @@
         </div>
     <?= $this->ifHasContent(); ?>
     <?= $this->ifHasContent($this->text); ?>
-        <div class="left text">
+        <div class="text">
             <?= $this->component($this->text); ?>
         </div>
     <?= $this->ifHasContent(); ?>
