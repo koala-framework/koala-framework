@@ -5326,10 +5326,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Page name</en>
+<de>Seitenname</de>
 <id>1397</id>
 </text>
 <text>
 <en>Teaser image</en>
+<de>Teaser Bild</de>
 <id>1398</id>
 </text>
 <text>
@@ -5356,13 +5358,41 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Dimension: At width and height must be set higher than 0 when using deform.</en>
-<de>Dimension: Breite und Höhe muss gesetzt werden, wenn Verzerrung verwendet wird.</de>
+<de>Dimension: Breite und H&#xF6;he muss gesetzt werden, wenn Verzerrung verwendet wird.</de>
 <id>1404</id>
 </text>
 <text>
 <en>Read more &#xBB;</en>
 <de>Weiterlesen &#xBB;</de>
 <id>1405</id>
+</text>
+<text>
+<en>Community Video</en>
+<id>1406</id>
+</text>
+<text>
+<en>Please insert the web address to your YouTube or Vimeo video.</en>
+<de>Bitte f&#xFC;gen Sie die Adresse von YouTube oder Vimeo ein.</de>
+<id>1407</id>
+</text>
+<text>
+<en>URL</en>
+<id>1408</id>
+</text>
+<text>
+<en>Link.to parent page</en>
+<de>Link.zur &#xFC;bergeordneten Seite</de>
+<id>1409</id>
+</text>
+<text>
+<en>&#xAB; back</en>
+<de>&#xAB; zur&#xFC;ck</de>
+<id>1410</id>
+</text>
+<text>
+<en>Link to parent page</en>
+<de>Link zur übergeordneten Seite</de>
+<id>1411</id>
 </text>
 </trl>
 
