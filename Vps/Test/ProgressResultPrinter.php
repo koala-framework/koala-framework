@@ -37,10 +37,12 @@ class Vps_Test_ProgressResultPrinter extends PHPUnit_TextUI_ResultPrinter
     }
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
+        if ($this->_verbose) echo $e;
         return parent::addError($test, $e, $time);
     }
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
+        if ($this->_verbose) echo $e;
         return parent::addFailure($test, $e, $time);
     }
     public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
