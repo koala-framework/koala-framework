@@ -26,7 +26,27 @@ class Vps_Form_Field_TimeField extends Vps_Form_Field_SimpleAbstract
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
+        if ($ret == trlVps('hh:mm')) $ret = null;
         if ($ret == '') $ret = null;
+        if ($ret) {
+            $ret = str_replace('"', '', $ret);
+            $date = new Vps_Date($ret, Zend_Date::TIME_SHORT);
+            $ret = $date->get(Zend_Date::TIME_SHORT);
+        }
+        return $ret;
+    }
+
+    public function getTemplateVars($values, $fieldNamePostfix = '')
+    {
+        $name = $this->getFieldName();
+        $value = $values[$name];
+        if (!$value) $value = trlVps('hh:mm');
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
+
+        $value = htmlspecialchars($value);
+        $name = htmlspecialchars($name);
+        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
+        $ret['html'] = "<input type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
     }
 }
