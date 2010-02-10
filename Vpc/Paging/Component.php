@@ -10,7 +10,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['maxPagingLinks'] = 13;
         $ret['bigPagingSteps'] = array(10, 50);
         $ret['nextPrevOnly'] = false;
-        $ret['buttonTexts'] = array(
+        $ret['placeholder'] = array(
             'first'    => '&lt;&lt;',
             'previous' => '&lt;',
             'next'     => '&gt;',
@@ -201,7 +201,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
 
     protected function _getPageLinks($pages, $currentPage)
     {
-        $buttonTexts = $this->_getSetting('buttonTexts');
+        $buttonTexts = $this->_getSetting('placeholder');
 
         $pageLinks = array();
         if ($currentPage >= 3 && !$this->_getSetting('nextPrevOnly')) {
