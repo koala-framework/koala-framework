@@ -28,8 +28,10 @@ class Vps_Form_Field_DateField extends Vps_Form_Field_SimpleAbstract
         if ($ret == '') $ret = null;
         if ($ret) {
             $ret = str_replace('"', '', $ret);
-            $datetime = new DateTime($ret);
-            $ret = $datetime->format('Y-m-d');
+            $date = new Vps_Date($ret);
+            $ret = $date->get(Zend_Date::YEAR)
+                .'-'.$date->get(Zend_Date::MONTH)
+                .'-'.$date->get(Zend_Date::DAY);
         }
         return $ret;
     }
