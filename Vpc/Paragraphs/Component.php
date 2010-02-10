@@ -43,7 +43,6 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         return false;
     }
 
-
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();

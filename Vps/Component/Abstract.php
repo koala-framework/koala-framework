@@ -133,7 +133,7 @@ class Vps_Component_Abstract
                 foreach (self::getComponentClasses(false/*don't use settings cache*/) as $c) {
                     self::$_settings[$c] = call_user_func(array($c, 'getSettings'));
 
-                    //generators über getSetting holen, da dort noch die aus der config dazugemixt werden
+                    //generators ï¿½ber getSetting holen, da dort noch die aus der config dazugemixt werden
                     self::$_settings[$c]['generators'] = self::getSetting($c, 'generators', false/*don't use settings cache*/);
 
                     try {
@@ -421,6 +421,12 @@ class Vps_Component_Abstract
                 self::_getChildComponentClasses($componentClasses, $c);
             }
         }
+        /*
+        $c = Vpc_Admin::getComponentClass($class, 'Trl_Component');
+        if ($c&& !in_array($c, $componentClasses)) {
+            $componentClasses[] = $c;
+        }
+        */
     }
 
     protected function _getPlaceholder($name)
