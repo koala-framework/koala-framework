@@ -17,6 +17,8 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     layout:'fit',
     cls: 'vpc-paragraphs',
+    showDelete: true,
+    showPosition: true,
     initComponent : function()
     {
         this.addEvents('editcomponent', 'gotComponentConfigs');
@@ -31,6 +33,8 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             components: this.components,
             componentIcons: this.componentIcons,
             width: this.previewWidth,
+            showDelete: this.showDelete,
+            showPosition: this.showPosition,
             listeners: {
                 scope: this,
                 'delete': this.onDelete,
@@ -65,26 +69,31 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             scope: this
         });
 
-        this.actions.addparagraph = new Vpc.Paragraphs.AddParagraphButton({
-            components: this.components,
-            componentIcons: this.componentIcons,
-            listeners: {
-                scope: this,
-                menushow: function() {
-                    if (this.store.getCount() == 0) {
-                        this.addParagraphPos = 1;
-                    } else {
-                        this.addParagraphPos = this.store.getAt(this.store.getCount()-1).get('pos')+1;
+        if (this.components) {
+            this.actions.addparagraph = new Vpc.Paragraphs.AddParagraphButton({
+                components: this.components,
+                componentIcons: this.componentIcons,
+                listeners: {
+                    scope: this,
+                    menushow: function() {
+                        if (this.store.getCount() == 0) {
+                            this.addParagraphPos = 1;
+                        } else {
+                            this.addParagraphPos = this.store.getAt(this.store.getCount()-1).get('pos')+1;
+                        }
+                    },
+                    addParagraph: function(component) {
+                        this.onParagraphAdd(component);
                     }
-                },
-                addParagraph: function(component) {
-                    this.onParagraphAdd(component);
                 }
-            }
-        });
+            });
+        }
 
-        this.tbar = [ this.actions.showPreview, '-', this.actions.addparagraph ];
-
+        this.tbar = [ this.actions.showPreview ];
+        if (this.actions.addparagraph) {
+            this.tbar.push('-');
+            this.tbar.push(this.actions.addparagraph);
+        }
 
         Vpc.Paragraphs.Panel.superclass.initComponent.call(this);
     },

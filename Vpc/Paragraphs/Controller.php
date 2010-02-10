@@ -36,13 +36,10 @@ class Vpc_Paragraphs_Controller_EditComponentsData extends Vps_Data_Abstract
 
 class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
-    protected $_buttons = array(
+    protected $_permissions = array(
         'save',
         'delete',
-        'reload',
-        'addparagraph'
-        );
-    protected $_paging = 0;
+    );
     protected $_position = 'pos';
 
     protected function _initColumns()
