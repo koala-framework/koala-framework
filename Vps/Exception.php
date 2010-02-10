@@ -1,4 +1,5 @@
 <?php
+require_once 'Vps/Exception/NoLog.php';
 class Vps_Exception extends Vps_Exception_NoLog
 {
     /**

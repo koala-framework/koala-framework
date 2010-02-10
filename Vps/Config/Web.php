@@ -54,6 +54,7 @@ class Vps_Config_Web extends Zend_Config_Ini
             }
         }
         if (!$vpsSection) {
+            require_once 'Vps/Exception.php';
             throw new Vps_Exception("Add either '$section' to vps/config.ini or set vpsConfigSection in web config.ini");
         }
 
