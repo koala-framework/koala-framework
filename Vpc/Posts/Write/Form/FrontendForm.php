@@ -12,6 +12,6 @@ class Vpc_Posts_Write_Form_FrontendForm extends Vps_Form
             ->setAllowBlank(false)
             ->setLabelAlign('top');
         $this->add(new Vps_Form_Field_Panel('infotext'))
-            ->setHtml(trlVps('Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.'));
+            ->setHtml('<p>'.trlVps('Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.').'</p>');
     }
 }
