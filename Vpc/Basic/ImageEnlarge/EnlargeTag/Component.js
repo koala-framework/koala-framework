@@ -162,14 +162,14 @@ Vpc.Basic.ImageEnlarge.prototype =
             data.nextImageButton = tpls.tplSwitchButton.apply(data.nextImage);
             data.nextImageBig = tpls.tplSwitchBig.apply(data.nextImage);
         } else {
-            data.nextImageButton = '&nbsp;';
+            data.nextImageButton = data.showInactiveSwitchLinks ? trlVps('next') + ' &raquo;' : '&nbsp;';
             data.nextImageBig = '&nbsp;';
         }
         if (data.previousImage) {
             data.previousImageButton = tpls.tplSwitchButton.apply(data.previousImage);
             data.previousImageBig = tpls.tplSwitchBig.apply(data.previousImage);
         } else {
-            data.previousImageButton = '&nbsp;';
+            data.previousImageButton = data.showInactiveSwitchLinks ? '&laquo; ' + trlVps('previous') : '&nbsp;';
             data.previousImageBig = '&nbsp;';
         }
         data.header = tpls.tplHeader.apply(data);

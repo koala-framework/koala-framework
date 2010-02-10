@@ -7,6 +7,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['componentName'] = trlVps('Enlarge Image');
         $ret['alternativePreviewImage'] = true;
         $ret['fullSizeDownloadable'] = false;
+        $ret['showInactiveSwitchLinks'] = false;
         $ret['imageTitle'] = true;
         $ret['dimensions'] = array(array('width'=>640, 'height'=>480, 'scale'=>Vps_Media_Image::SCALE_BESTFIT));
 
@@ -36,6 +37,8 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
     protected function _getOptions()
     {
         $ret = array();
+        $ret['showInactiveSwitchLinks'] = $this->_getSetting('showInactiveSwitchLinks');
+
         if ($this->_getSetting('imageTitle')) {
             $ret['title'] = $this->getRow()->title;
         }
