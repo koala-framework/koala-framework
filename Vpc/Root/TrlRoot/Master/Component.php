@@ -10,6 +10,7 @@ class Vpc_Root_TrlRoot_Master_Component extends Vpc_Abstract
             'model' => 'Vpc_Root_CategoryModel'
         );
         $ret['flags']['showInPageTreeAdmin'] = true;
+        $ret['flags']['hasHome'] = true;
         return $ret;
     }
 }

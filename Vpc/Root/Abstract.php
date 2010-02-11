@@ -43,7 +43,7 @@ class Vpc_Root_Abstract extends Vpc_Abstract
             $ret = $this->getData()->getChildPageByPath($path);
         }
 
-        if (!$ret->isPage && Vps_Component_Abstract::getFlag($ret->componentClass, 'hasHome')) {
+        if ($ret && !$ret->isPage && Vps_Component_Abstract::getFlag($ret->componentClass, 'hasHome')) {
             $ret = $ret->getChildPage(array('home' => true));
         }
         return $ret;
