@@ -293,8 +293,9 @@ class Vps_Setup
             Vps_Registry::get('trl')->setUseUserLanguage(false);
             setlocale(LC_ALL, explode(', ', trlcVps('locale', 'C')));
 
+            $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Vps_Component_Data_Root::getInstance();
-            $data = $root->getPageByUrl($requestUrl);
+            $data = $root->getPageByUrl($requestUrl, $acceptLanguage);
             if (!$data) {
                throw new Vps_Exception_NotFound();
             }
