@@ -170,7 +170,7 @@ class Vps_Component_Cache
     public static function refreshStaticCache()
     {
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
-            $methods = get_class_methods($componentClass);
+            $methods = get_class_methods(strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass);
             if (in_array('getStaticCacheVars', $methods)) {
                 $vars = call_user_func(array($componentClass, 'getStaticCacheVars'), $componentClass);
                 foreach ($vars as $id => $model) {
