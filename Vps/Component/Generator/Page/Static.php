@@ -9,10 +9,6 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Pseudo
     {
         $data = parent::_formatConfig($parentData, $componentKey);
         $data['isPage'] = true;
-
-        $c = $this->_settings;
-        $data['name'] = isset($c['name']) ? $c['name'] : $componentKey;
-
         return $data;
     }
 }

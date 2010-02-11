@@ -82,7 +82,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
             $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
         }
-
+        $data['name'] = $this->_getNameFromRow($row);
         $data['rel'] = '';
         $data['isPseudoPage'] = true;
         return $data;

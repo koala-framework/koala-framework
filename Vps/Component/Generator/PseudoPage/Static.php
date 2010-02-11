@@ -39,6 +39,7 @@ class Vps_Component_Generator_PseudoPage_Static extends Vps_Component_Generator_
         $c = $this->_settings;
 
         $data = parent::_formatConfig($parentData, $componentKey);
+        $data['name'] = isset($c['name']) ? $c['name'] : $componentKey;
         $data['filename'] = $this->_getFilenameFromRow($componentKey, $parentData);
         $data['rel'] = isset($c['rel']) ? $c['rel'] : '';
         $data['isPseudoPage'] = true;

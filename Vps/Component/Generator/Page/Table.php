@@ -19,13 +19,9 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoP
     {
         $data = parent::_formatConfig($parentData, $row);
         $data['isPage'] = true;
-
-        $data['name'] = $this->_getNameFromRow($row);
-
         if (isset($data['name']) && mb_strlen($data['name']) > $this->_settings['maxNameLength']) {
             $data['name'] = mb_substr($data['name'], 0, $this->_settings['maxNameLength']-3).'...';
         }
-
         return $data;
     }
 }
