@@ -208,10 +208,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     {
         return $id;
     }
-    public function createsPages()
-    {
-        return true;
-    }
 
     protected function _getDataClass($config, $id)
     {
@@ -220,5 +216,12 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         } else {
             return parent::_getDataClass($config, $id);
         }
+    }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['showInPageTreeAdmin'] = true;
+        return $ret;
     }
 }

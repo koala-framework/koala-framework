@@ -30,7 +30,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
     {
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root');
         $this->assertEquals(count($generators), 3);
-        $this->assertTrue($generators[1] instanceof Vps_Component_Generator_Page);
+        $this->assertTrue($generators[1] instanceof Vpc_Root_Category_Generator);
         $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Box_Static);
     }
 
@@ -44,7 +44,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
         $constraints = array('page' => true);
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
         $this->assertEquals(count($generators), 1);
-        $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Page);
+        $this->assertTrue($generators[0] instanceof Vpc_Root_Category_Generator);
 
         $constraints = array('page' => false);
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);

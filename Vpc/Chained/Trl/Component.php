@@ -21,8 +21,16 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
             $g['chainedGenerator'] = $g['class'];
             $g['class'] = 'Vpc_Chained_Trl_Generator';
         }
-        $ret['componentName'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentName', false);
-        $ret['componentIcon'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentIcon', false);
+        try {
+            $ret['componentName'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentName', false);
+        } catch (Exception $e) {}
+        try {
+            $ret['componentIcon'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentIcon', false);
+        } catch (Exception $e) {}
+        $flags = Vpc_Abstract::getSetting($masterComponentClass, 'flags', false);
+        if (isset($flags['showInPageTreeAdmin'])) {
+            $ret['flags']['showInPageTreeAdmin'] = $flags['showInPageTreeAdmin'];
+        }
         return $ret;
     }
 

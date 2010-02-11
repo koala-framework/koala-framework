@@ -7,7 +7,7 @@ class Vpc_Paragraphs_Trl_Generator extends Vpc_Chained_Trl_Generator
         $ret = parent::_getChainedChildComponents($parentData, $select);
         if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
             foreach ($ret as $k=>$c) {
-                $r = $m->getRow($parentData->dbId.$this->_getIdWithSeparatorFromRow($c));
+                $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($c));
                 if (!$r || !$r->visible) {
                     unset($ret[$k]);
                 }
@@ -19,7 +19,7 @@ class Vpc_Paragraphs_Trl_Generator extends Vpc_Chained_Trl_Generator
     {
         $ret = parent::_formatConfig($parentData, $row);
         $m = Vpc_Abstract::createChildModel($this->_class);
-        $id = $parentData->dbId.$this->_getIdWithSeparatorFromRow($row);
+        $id = $parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row);
         $ret['row'] = $m->getRow($id);
         if (!$ret['row']) {
             $ret['row'] = $m->createRow();
