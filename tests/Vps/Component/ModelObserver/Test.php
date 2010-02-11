@@ -28,6 +28,7 @@ class Vps_Component_ModelObserver_Test extends PHPUnit_Framework_TestCase
     {
         Vps_Component_ModelObserver::getInstance()->clear();
         Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
+        $this->_observer->setDisableCache(false);
     }
 
     public function testAddRow()
