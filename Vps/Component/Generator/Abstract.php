@@ -246,13 +246,16 @@ abstract class Vps_Component_Generator_Abstract
         $ret = array();
         foreach ($generators as $g) {
             if ($component && $g instanceof Vpc_Root_Category_Generator &&
-                !(
-                    is_numeric($component->componentId) ||
-                    $component instanceof Vps_Component_Data_Root ||
-                    is_instance_of($component->componentClass, 'Vpc_Root_Category_Component')
-                )
+                !is_numeric($component->componentId)
             ) {
-                continue;
+                $hasPageGenerator = false;
+                foreach (Vpc_Abstract::getSetting($component->componentClass, 'generators') as $i) {
+                    if (is_instance_of($i['class'], 'Vpc_Root_Category_Generator')) {
+                        $hasPageGenerator = true;
+                        break;
+                    }
+                }
+                if (!$hasPageGenerator) continue;
             }
             if (isset($selectParts[Vps_Component_Select::WHERE_GENERATOR_CLASS])) {
                 $value = $selectParts[Vps_Component_Select::WHERE_GENERATOR_CLASS];
