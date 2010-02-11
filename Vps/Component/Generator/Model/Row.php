@@ -45,7 +45,7 @@ class Vps_Component_Generator_Model_Row extends Vps_Model_Row_Abstract
 
     public function delete()
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Component_PagesModel');
+        $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
         $row = $m->getRow($this->componentId)->current();
         $row->delete();
     }

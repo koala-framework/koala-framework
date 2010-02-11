@@ -5,7 +5,7 @@ class Vpc_Basic_LinkTag_Intern_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
     public function getComponentsDependingOnRow(Vps_Model_Row_Interface $row)
     {
         // nur bei pageModel
-        if ($row->getModel() instanceof Vps_Component_PagesModel) {
+        if ($row->getModel() instanceof Vpc_Root_Category_GeneratorModel) {
             $linkModel = Vps_Model_Abstract::getInstance(
                 Vpc_Abstract::getSetting($this->_class, 'ownModel')
             );

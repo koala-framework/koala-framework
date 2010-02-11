@@ -5,7 +5,7 @@ class Vpc_Root_Category_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['generators']['page'] = array(
-            'class' => 'Vps_Component_Generator_Page',
+            'class' => 'Vpc_Root_Category_Generator',
             'showInMenu' => true,
             'inherit' => true,
             'component' => array(
@@ -13,7 +13,7 @@ class Vpc_Root_Category_Component extends Vpc_Abstract
                 'link' => 'Vpc_Basic_LinkTag_Component',
                 'firstChildPage' => 'Vpc_Basic_LinkTag_FirstChildPage_Component'
             ),
-            'model' => 'Vps_Component_PagesModel'
+            'model' => 'Vpc_Root_Category_GeneratorModel'
         );
         $ret['componentName'] = trlVps('Category');
         $ret['flags']['showInPageTreeAdmin'] = true;

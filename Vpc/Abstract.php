@@ -345,7 +345,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         // Seite im Seitanbaum wird gelöscht, wenn Eigenschaften im Admin geändert werden
         if ($this->getData()->isPage && is_numeric($this->getData()->componentId)) {
             $ret[] = array(
-                'model' => 'Vps_Component_PagesModel',
+                'model' => 'Vpc_Root_Category_GeneratorModel',
                 'id' => $this->getData()->componentId
             );
         }

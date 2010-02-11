@@ -92,7 +92,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
 
     public function fetchCount($where = array())
     {
-        throw new Vps_Exception('Not implemented yet.');
+        return count($this->getRows($where));
     }
 
     public function getPrimaryKey()
@@ -102,7 +102,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
 
     public function getTable()
     {
-        return Vps_Model_Abstract::getInstance('Vps_Component_PagesModel')->getTable();
+        return Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel')->getTable();
     }
 
     protected function _getOwnColumns()

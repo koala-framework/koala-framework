@@ -100,7 +100,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
                 if (!isset($generator['showInMenu']) || !$generator['showInMenu']) continue;
                 if (!is_instance_of($generator['class'], 'Vps_Component_Generator_PseudoPage_Table') &&
-                    !is_instance_of($generator['class'], 'Vps_Component_Generator_Page')
+                    !is_instance_of($generator['class'], 'Vpc_Root_Category_Generator')
                 ) continue;
                 $generator = current(Vps_Component_Generator_Abstract::getInstances(
                     $componentClass, array('generator' => $key))
@@ -114,7 +114,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             'model' => 'Vps_Component_Model'
         );
         $ret[] = array(
-            'model' => 'Vps_Component_PagesModel'
+            'model' => 'Vpc_Root_Category_GeneratorModel'
         );
         // Falls Nickname geändert wird, ändert sich Url zum User
         $ret[] = array(

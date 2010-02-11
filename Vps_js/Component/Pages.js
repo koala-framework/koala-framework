@@ -60,7 +60,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
        this.editDialog = new Vps.Auto.Form.Window({
             width: 400,
             height: 400,
-            controllerUrl: '/admin/component/pageEdit'
+            controllerUrl: ' '
         });
         this.editDialog.on('datachange', function(test) {
             this.treePanel.tree.root.reload();
@@ -97,85 +97,75 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }, this);
 
         tree.on('dblclick', function (o, e) {
-            if (o.attributes.allowed) {
-                var action;
-                for (var i in this.editActions) {
-                    if (!this.editActions[i].isHidden()) {
-                        action = this.editActions[i];
-                    }
+            var action;
+            for (var i in this.editActions) {
+                if (!this.editActions[i].isHidden()) {
+                    action = this.editActions[i];
                 }
-                if (action) {
-                    action.execute(action.initialConfig);
-                }
+            }
+            if (action) {
+                action.execute(action.initialConfig);
             }
         }, this);
 
     },
 
     treeSelectionchange : function (node) {
-        if (node) {
+        if (!node) return;
+        var data = node.attributes;
+        
+        this.editDialog.getAutoForm().controllerUrl = data.editControllerUrl;
+        
+        if (data.disabled) {
+            this.pageButton.disable();
+        } else {
             this.pageButton.enable();
-            for (var i in this.editActions) {
-                this.editActions[i].hide();
-            }
-            if (!node.attributes.allowed) {
-                this.pageButton.disable();
-            } else {
-                this.pageButton.enable();
-            }
-
-            if (node.attributes.type != 'default' || !node.attributes.allowed) {
-                this.getAction('properties').disable();
-                this.getAction('delete').disable();
-                this.getAction('visible').disable();
-                this.getAction('makeHome').disable();
-                this.getAction('add').disable();
-                this.getAction('preview').disable();
-            } else {
-                this.getAction('properties').enable();
-                this.getAction('delete').enable();
-                this.getAction('visible').enable();
-                this.getAction('makeHome').enable();
-                this.getAction('add').enable();
-                this.getAction('preview').enable();
-            }
-            if (node.attributes.type == 'category' && node.attributes.allowed) {
-                this.getAction('add').enable();
-            }
-            node.attributes.data.editComponents.each(function(editComponent) {
-                var actionKey = editComponent.componentClass+'-'+editComponent.type;
-                if (!this.editActions[actionKey]) {
-                    this.editActions[actionKey] = new Ext.Action({
-                        text    : this.componentConfigs[actionKey].title,
-                        handler : function (o, e) {
-                            var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
-                            node.attributes.data.editComponents.each(function(editComponent) {
-                                if (editComponent.componentClass+'-'+editComponent.type == o.actionKey) {
-                                    this.loadComponent({
-                                        id: editComponent.componentId,
-                                        componentClass: editComponent.componentClass,
-                                        type: editComponent.type,
-                                        text: node.text,
-                                        icon: node.attributes.bIcon,
-                                        editComponents: node.attributes.data.editComponents,
-                                        pageId: node.attributes.id
-                                    });
-                                    return false;
-                                }
-                            }, this);
-                        },
-                        icon    : this.componentConfigs[actionKey].icon,
-                        cls     : 'x-btn-text-icon',
-                        scope   : this,
-                        disabled : !node.attributes.allowed,
-                        actionKey: actionKey
-                    });
-                    this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
-                    this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
-                }
-                this.editActions[actionKey].show();
-            }, this);
         }
+        
+        for (var action in data.actions) {
+        	if (data.actions[action]) {
+                this.getAction(action).enable();
+        	} else {
+                this.getAction(action).disable();
+        	}
+        }
+
+        for (var i in this.editActions) {
+            this.editActions[i].hide();
+        }
+        data.editComponents.each(function(editComponent) {
+            var actionKey = editComponent.componentClass+'-'+editComponent.type;
+            if (!this.editActions[actionKey]) {
+                this.editActions[actionKey] = new Ext.Action({
+                    text    : this.componentConfigs[actionKey].title,
+                    handler : function (o, e) {
+                        var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
+                        node.attributes.editComponents.each(function(editComponent) {
+                            if (editComponent.componentClass+'-'+editComponent.type == o.actionKey) {
+                                this.loadComponent({
+                                    id: editComponent.componentId,
+                                    componentClass: editComponent.componentClass,
+                                    type: editComponent.type,
+                                    text: node.text,
+                                    icon: node.attributes.bIcon,
+                                    editComponents: node.attributes.editComponents,
+                                    pageId: node.attributes.id
+                                });
+                                return false;
+                            }
+                        }, this);
+                    },
+                    icon    : this.componentConfigs[actionKey].icon,
+                    cls     : 'x-btn-text-icon',
+                    scope   : this,
+                    disabled : data.disabled,
+                    actionKey: actionKey
+                });
+                this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
+                this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
+            }
+            this.editActions[actionKey].show();
+        }, this);
     },
 
     loadComponent: function(data)
@@ -224,7 +214,10 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                         form.remove(form.formPanel, true);
                         this.editDialog.getAutoForm().formPanel = null;
                     }
-                    this.editDialog.showEdit(this.treePanel.tree.selModel.selNode.id);
+                    var node = this.treePanel.tree.selModel.selNode;
+                    this.editDialog.getAutoForm().baseParams.componentId = 
+                        node.attributes.editControllerComponentId;
+                    this.editDialog.showEdit(node.id);
                 },
                 icon    : '/assets/silkicons/page_gear.png',
                 cls     : 'x-btn-text-icon',

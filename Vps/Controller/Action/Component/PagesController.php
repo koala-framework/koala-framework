@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Action_Auto_Synctree
+class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Action_Auto_Tree
 {
     protected $_textField = 'name';
     protected $_rootVisible = false;
@@ -9,14 +9,13 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         'reload' => 'arrow_rotate_clockwise',
         'add' => 'page_add',
         'delete' => 'page_delete',
-        'folder' => 'folder',
         'home' => 'application_home',
-        'domain' => 'world',
-        'allowed' => 'page_white',
+        'disabled' => 'page_white',
         'root' => 'world'
-        );
+    );
     protected $_buttons = array();
     protected $_hasPosition = true;
+    protected $_modelName = 'Vps_Component_Model';
 
     private $_componentConfigs = array();
 
@@ -25,47 +24,64 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $this->view->xtype = 'vps.component.pages';
     }
 
-    public function init()
-    {
-        $this->_model = Vps_Model_Abstract::getInstance('Vps_Component_Model');
-        parent::init();
-    }
-
     protected function _formatNode($row)
     {
-        $data = parent::_formatNode($row);
-        if (!$row->visible) {
-            $data['bIcon'] = $this->_icons['invisible']->__toString();
-        }
-        if ($row->isHome) {
-            $data['bIcon'] = $this->_icons['home']->__toString();
-        }
-        $data['type'] = 'default';
-        $data['allowed'] = Vps_Registry::get('acl')->getComponentAcl()
-            ->isAllowed(Zend_Registry::get('userModel')->getAuthedUser(), $row->getData());
+        $component = $row->getData();
 
-        if ($row->componentId == 'root') {
+        $data = parent::_formatNode($row);
+        $data['uiProvider'] = 'Vps.Component.PagesNode';
+        $disabled = !Vps_Registry::get('acl')->getComponentAcl()
+            ->isAllowed(Zend_Registry::get('userModel')->getAuthedUser(), $component);
+
+        $data['actions'] = array(
+            'properties' => false,
+            'delete' => false,
+            'visible' => false,
+            'makeHome' => false,
+            'add' => false,
+            'preview' => false
+        );
+        $data['allowDrop'] = false;
+        $data['disabled'] = $disabled;
+        $data['editControllerUrl'] = '';
+        if ($component->componentId == 'root') { // Root hat keinen Generator
             $data['bIcon'] = $this->_icons['root']->__toString();
             $data['expanded'] = true;
-            $data['type'] = 'root';
-            $data['allowDrop'] = false;
-        } else if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_Category_Component')) {
-            $data['bIcon'] = $this->_icons['folder']->__toString();
-            $data['expanded'] = $data['allowed'];
-            $data['type'] = 'category';
-        } else if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_DomainRoot_Domain_Component')) {
-            $data['bIcon'] = $this->_icons['domain']->__toString();
-            $data['type'] = 'root';
-            $data['expanded'] = $data['allowed'];
-            $data['allowDrop'] = false;
+        } else {
+            $data = array_merge($data, $component->generator->getPagesControllerConfig());
+            $generatorClass = $component->generator->getClass();
+            $c = $component;
+            while ($c && $c->componentClass != $generatorClass) $c = $c->parent;
+            $data['editControllerComponentId'] = $c->componentId;
+            $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
+                ->getControllerUrl('Generator');
+            if ($component->generator instanceof Vpc_Root_Category_Generator) {
+                if (!$disabled) { foreach ($data['actions'] as &$v) $v = true; }
+                if ($disabled) {
+                    $data['bIcon'] = $this->_icons['disabled']->__toString();
+                } else if ($row->isHome) {
+                    $data['bIcon'] = $this->_icons['home']->__toString();
+                } else if (!$row->visible) {
+                    $data['bIcon'] = $this->_icons['invisible']->__toString();
+                } else {
+                    $data['bIcon'] = $this->_icons['default']->__toString();
+                }
+                $data['allowDrop'] = true;
+            } else {
+                $icon = $disabled ? $data['disabledIcon'] : $data['icon'];
+                $asset = new Vps_Asset($icon);
+                $data['bIcon'] = $asset->__toString();
+                foreach (Vpc_Abstract::getSetting($component->componentClass, 'generators') as $generator) {
+                    if (!$disabled && is_instance_of($generator['class'], 'Vpc_Root_Category_Generator')) {
+                        $data['actions']['add'] = true;
+                        $data['allowDrop'] = true;
+                    }
+                }
+            }
+            unset($data['icon']);
         }
-        $data['uiProvider'] = 'Vps.Component.PagesNode';
-        if (!$data['allowed']) {
-            $data['bIcon'] = $this->_icons['allowed']->__toString();
-        }
-        $data['data']['editComponents'] = array();
 
-        $component = $row->getData();
+        $data['editComponents'] = array();
         $editComponents = $component->getRecursiveChildComponents(
             array(
                 'hasEditComponents' => true,
@@ -96,7 +112,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 );
             }
         }
-        $data['data']['editComponents'] = $ec;
+        $data['editComponents'] = $ec;
         return $data;
     }
 
@@ -206,7 +222,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     private function _checkRowIndependence(Vps_Model_Row_Interface $row, $msgMethod)
     {
-        $m = Vps_Model_Abstract::getInstance('Vps_Component_PagesModel');
+        $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
         $pageRow = $m->getRow($row->getData()->row->id);
         $r = $pageRow;
         while ($r) {

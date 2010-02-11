@@ -1,9 +1,9 @@
 <?php
 
-class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_Action_Auto_Form
+class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save' => true, 'add' => true);
-    protected $_modelName = 'Vps_Component_PagesModel';
+    protected $_modelName = 'Vpc_Root_Category_GeneratorModel';
 
     public function _isAllowed($user)
     {
@@ -36,7 +36,7 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
             ->getComponentById($this->_getComponentId(), array('ignoreVisible' => true));
         while (empty($componentClasses) && $component) {
             foreach (Vpc_Abstract::getSetting($component->componentClass, 'generators') as $key => $generator) {
-                if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) {
+                if (is_instance_of($generator['class'], 'Vpc_Root_Category_Generator')) {
                     foreach ($generator['component'] as $k => $class) {
                         $name = Vpc_Abstract::getSetting($class, 'componentName');
                         if ($name) {
