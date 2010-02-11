@@ -127,7 +127,6 @@ function _btArgString($arg)
 }
 function bt($file = false)
 {
-    require_once 'Vps/Debug.php';
     if (!Vps_Debug::isEnabled()) return;
     $bt = debug_backtrace();
     if (php_sapi_name() == 'cli' || $file) {
