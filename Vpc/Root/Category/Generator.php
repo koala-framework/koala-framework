@@ -13,7 +13,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     protected $_pageFilename = array();
     protected $_pageComponentParent = array();
     protected $_pageComponent = array();
-    protected $_pageHome = null;
+    private $_pageHome = null;
 
     protected function _loadPageData($parentData, $select)
     {
@@ -37,7 +37,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             $this->_pageFilename[$row['filename']][$parentId] = $id;
             $this->_pageComponentParent[$row['component']][$parentId][] = $id;
             $this->_pageComponent[$row['component']][] = $id;
-            if ($row['is_home']) $this->_pageHome[$parentId] = $id;
+            if ($row['is_home']) $this->_pageHome[] = $id;
         }
     }
 
@@ -114,9 +114,20 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             // diese Abfragen sind implizit recursive=true
             $parentId = $parentData->dbId;
             if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
-                foreach ($this->_pageHome as $pId => $pageId) {
-                    if (substr($pId, 0, strlen($parentId)) == $parentId)
+                foreach ($this->_pageHome as $pageId) {
+                    if (substr($this->_pageData[$pageId]['parent_id'], 0, strlen($parentId)) == $parentId) {
                         $pageIds[] = $pageId;
+                    } else {
+                        $id = $pageId;
+                        while (true) {
+                            if ($this->_pageData[$id]['parent_id'] == $parentId) {
+                                $pageIds[] = $pageId;
+                                break;
+                            }
+                            $id = $this->_pageData[$id]['parent_id'];
+                            if (!isset($this->_pageData[$id])) break;
+                        }
+                    }
                 }
             } else if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
                 $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
