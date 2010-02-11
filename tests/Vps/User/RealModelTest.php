@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group slow
  * @group Model
  * @group User
  * @group Model_User

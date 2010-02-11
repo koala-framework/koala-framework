@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group slow
  * @group Vpc_Newsletter
  */
 class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase

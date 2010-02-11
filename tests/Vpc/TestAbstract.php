@@ -12,6 +12,7 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
         Vps_Component_ModelObserver::getInstance()->clear();
         Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
+        Vps_Component_ModelObserver::getInstance()->setDisableCache(false);
     }
 
     public function tearDown()

@@ -272,6 +272,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         } catch (Vps_Exception $e) {}
         $ret = print_r($this->toArray(), true);
         $ret = preg_replace('#^Array#', $i, $ret);
+        $ret .= "Model: ".get_class($this->getModel());
         $ret = "<pre>$ret</pre>";
         return $ret;
     }
