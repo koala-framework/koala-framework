@@ -17,6 +17,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/AddParagraphButton.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.css';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
+        $ret['configChildComponentsGenerator'] = 'paragraphs';
         $ret['generators']['paragraphs'] = array(
             'class' => 'Vps_Component_Generator_Table',
             'component' => array(
