@@ -1,3 +1,5 @@
+<?
+/*
 urls:
 
 ansicht frontend:
@@ -8,4 +10,5 @@ DE bearbeiten:
 http://xlink.vps.niko.vivid/vps/componentedittest/Vpc_Trl_Paragraphs_Root/Vpc_Trl_Paragraphs_Paragraphs_Component?componentId=root-de_test
 EN bearbeiten
 http://xlink.vps.niko.vivid/vps/componentedittest/Vpc_Trl_Paragraphs_Root/Vpc_Trl_Paragraphs_Paragraphs_Trl_Component.Vpc_Trl_Paragraphs_Paragraphs_Component/?componentId=root-en_test
-
+*/
+?>
