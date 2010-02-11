@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Generator_Categories
+ * @group Vpc_UrlResolve
  */
 class Vps_Component_Generator_Categories_Test extends PHPUnit_Framework_TestCase
 {
@@ -47,12 +48,17 @@ class Vps_Component_Generator_Categories_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('1', $this->_root->getComponentById('2')->parent->componentId);
     }
 
+    public function testHome()
+    {
+        $this->assertEquals('1', $this->_root->getChildPage(array('home' => true))->componentId);
+    }
+
     public function testByPath()
     {
         $domain = 'http://'.Zend_Registry::get('config')->server->domain;
-        $this->assertEquals('1', $this->_root->getPageByUrl($domain.'/')->componentId);
-        $this->assertEquals('2', $this->_root->getPageByUrl($domain.'/home/foo')->componentId);
-        $this->assertEquals('4', $this->_root->getPageByUrl($domain.'/foo3')->componentId);
+        $this->assertEquals('1', $this->_root->getPageByUrl($domain.'/', null)->componentId);
+        $this->assertEquals('2', $this->_root->getPageByUrl($domain.'/home/foo', null)->componentId);
+        $this->assertEquals('4', $this->_root->getPageByUrl($domain.'/foo3', null)->componentId);
     }
 
     public function testTitle()

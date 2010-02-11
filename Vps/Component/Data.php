@@ -34,6 +34,28 @@ class Vps_Component_Data
         }
     }
 
+    /**
+     * So wie ->url aber funktioniert auch fuer pseudoPages
+     */
+    protected function _getPseudoPageUrl()
+    {
+        $page = $this;
+        if (!$page->isPseudoPage) {
+            $page = $page->getParentPseudoPageOrRoot();
+        }
+        if (!$page) return '';
+        do {
+            if (!empty($filenames) && Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
+                $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
+                break;
+            } else {
+                if ($page->filename) $filenames[] = $page->filename;
+            }
+        } while ($page = $page->getParentPseudoPageOrRoot());
+        $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+        return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse($filenames));
+    }
+
     public function __get($var)
     {
         if ($var == 'url') {
@@ -43,17 +65,7 @@ class Vps_Component_Data
                 if (!$page) return '';
                 return $page->url;
             }
-            $page = $this;
-            do {
-                if (!empty($filenames) && Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
-                    $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
-                    break;
-                } else {
-                    if ($page->filename) $filenames[] = $page->filename;
-                }
-            } while ($page = $page->getParentPseudoPageOrRoot());
-            $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
-            return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse($filenames));
+            return $this->_getPseudoPageUrl();
         } else if ($var == 'rel') {
             /*
             $childs = $this->getPage()->getRecursiveChildComponents(array(

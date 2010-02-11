@@ -15,5 +15,4 @@ class Vpc_Root_LanguageRoot_Language_Component extends Vpc_Abstract
         $ret['flags']['hasHome'] = true;
         return $ret;
     }
-
 }

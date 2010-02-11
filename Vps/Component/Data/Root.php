@@ -67,7 +67,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         Vps_Component_Abstract::resetSettingsCache();
     }
 
-    public function getPageByUrl($url)
+    public function getPageByUrl($url, $acceptLangauge)
     {
         $parsedUrl = parse_url($url);
         if (!isset($parsedUrl['path'])) return null;
@@ -90,21 +90,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             }
         }
         $path = trim($path, '/');
-        if ($path == '') {
-            $ret = $this->getChildPage(array('home' => true));
-        } else {
-            foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                if (Vpc_Abstract::getFlag($c, 'shortcutUrl')) {
-                    $ret = call_user_func(array($c, 'getDataByShortcutUrl'), $c, $path);
-                    if ($ret) return $ret;
-                }
-            }
-            $ret = $this->getChildPageByPath($path);
-            if ($parsedUrl['path'] == '' || $parsedUrl['path'] == '/') {
-                $ret = $ret->getChildPage(array('home' => true));
-            }
-        }
-        return $ret;
+        return $this->getComponent()->getPageByUrl($path, $acceptLangauge);
     }
 
     public function getComponentById($componentId, $select = array())

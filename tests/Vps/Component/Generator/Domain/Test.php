@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Generator_Domain
+ * @group Vpc_UrlResolve
  */
 class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
 {
@@ -84,7 +85,7 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $this->assertNotNull($home->getChildPseudoPage(array('filename' => 'foo')));
         $this->assertEquals(1, count($ch->getChildComponent('-main')->getChildPseudoPages()));
 
-        $this->markTestIncomplete('getChildPseudoPage ist rekursiv, es müssen daher zwei sein');
+        $this->markTestIncomplete('getChildPseudoPage ist rekursiv, es mï¿½ssen daher zwei sein');
         $this->assertEquals(2, count($ch->getChildPseudoPages()));
     }
 
@@ -95,12 +96,12 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
 
     public function testByPath()
     {
-        $this->assertEquals('6', $this->_root->getPageByUrl('http://rotary.ch/home/foo?x=1')->componentId);
-        $this->assertEquals('5', $this->_root->getPageByUrl('http://rotary.ch/')->componentId);
-        $this->assertEquals('1', $this->_root->getPageByUrl('http://rotary.at/')->componentId);
-        $this->assertEquals('2', $this->_root->getPageByUrl('http://rotary.at/home/foo?x=1')->componentId);
-        $this->assertEquals('4', $this->_root->getPageByUrl('http://rotary.at/foo3')->componentId);
-        $this->assertEquals('7', $this->_root->getPageByUrl('http://rotary.ch/foo3')->componentId);
+        $this->assertEquals('6', $this->_root->getPageByUrl('http://rotary.ch/home/foo?x=1', null)->componentId);
+        $this->assertEquals('5', $this->_root->getPageByUrl('http://rotary.ch/', null)->componentId);
+        $this->assertEquals('1', $this->_root->getPageByUrl('http://rotary.at/', null)->componentId);
+        $this->assertEquals('2', $this->_root->getPageByUrl('http://rotary.at/home/foo?x=1', null)->componentId);
+        $this->assertEquals('4', $this->_root->getPageByUrl('http://rotary.at/foo3', null)->componentId);
+        $this->assertEquals('7', $this->_root->getPageByUrl('http://rotary.ch/foo3', null)->componentId);
     }
 
     public function testTitle()
