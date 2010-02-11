@@ -7,8 +7,8 @@ class Vpc_Advanced_DownloadsTree_ProjectController extends Vps_Controller_Action
     {
         $this->_form->setModel(Vps_Model_Abstract::getInstance('Vpc_Advanced_DownloadsTree_Projects'));
 
-        $this->_form->add(new Vps_Form_Field_TextField('text', trl('Text')));
-        $this->_form->add(new Vps_Form_Field_Checkbox('visible', trl('Sichtbar')));
+        $this->_form->add(new Vps_Form_Field_TextField('text', trlVps('Text')));
+        $this->_form->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)

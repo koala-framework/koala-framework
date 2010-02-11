@@ -4,7 +4,7 @@ class Vpc_Advanced_DownloadsTree_Component extends Vpc_Abstract_Composite_Compon
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trl('Downloads');
+        $ret['componentName'] = trlVps('Downloads');
         $ret['componentIcon'] = new Vps_Asset('application_side_tree');
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Advanced/DownloadsTree/AdminPanel.js';

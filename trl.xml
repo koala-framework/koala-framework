@@ -5391,8 +5391,93 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Link to parent page</en>
-<de>Link zur übergeordneten Seite</de>
+<de>Link zur &#xFC;bergeordneten Seite</de>
 <id>1411</id>
+</text>
+<text>
+<en>Vivid Planet Software GmbH</en>
+<id>1412</id>
+</text>
+<text>
+<en>Internet-Agentur Salzburg</en>
+<id>1413</id>
+</text>
+<text>
+<en>Pfongauerstra&#xDF;e 67</en>
+<id>1414</id>
+</text>
+<text>
+<en>A-5202 Neumarkt a. Wallersee</en>
+<id>1415</id>
+</text>
+<text>
+<en>http://www.vivid-planet.at</en>
+<id>1416</id>
+</text>
+<text>
+<en>This {0} is an {1}</en>
+<de>Diese {0} ist ein {1}</de>
+<id>1417</id>
+</text>
+<text>
+<en>isiWEB</en>
+<id>1418</id>
+</text>
+<text>
+<en>hh:mm</en>
+<id>1419</id>
+</text>
+<text>
+<en>Google Analytics</en>
+<id>1420</id>
+</text>
+<text>
+<en>www.isiweb.at</en>
+<id>1422</id>
+</text>
+<text>
+<en>A product of Vivid Planet Software GmbH</en>
+<de>Ein Produkt der Vivid Planet Software GmbH</de>
+<id>1424</id>
+</text>
+<text>
+<en>Typ</en>
+<id>1425</id>
+</text>
+<text>
+<en>Document</en>
+<de>Dokument</de>
+<id>1426</id>
+</text>
+<text>
+<en>Enquiries</en>
+<de>Anfragen</de>
+<id>1427</id>
+</text>
+<text>
+<en>- All -</en>
+<de>- Alle -</de>
+<id>1428</id>
+</text>
+<text>
+<en>Categorie</en>
+<de>Kategorie</de>
+<id>1429</id>
+</text>
+<text>
+<en>Remember password on this computer</en>
+<de>Passwort auf diesem Computer speichern</de>
+<id>1430</id>
+</text>
+<text>
+<en>Sent E-Mail again</en>
+<de>Eine E-Mail erneut senden</de>
+<id>1431</id>
+</text>
+<text>
+<en>Useradministration</en>
+<de>Benutzerverwaltung</de>
+<id>1432</id>
 </text>
 </trl>
 

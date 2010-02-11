@@ -13,13 +13,13 @@ class Vpc_NewsletterCategory_Detail_RecipientsController extends Vpc_Newsletter_
         );
 
         // filter by category
-        $categorySelects = array(array('all', trl('- Alle -')));
+        $categorySelects = array(array('all', trlVps('- All -')));
         foreach ($categories as $row) {
             $categorySelects[] = array($row->id, $row->value);
         }
         $this->_filters['pool_id'] = array(
             'type'=>'ComboBox',
-            'label' => trl('Kategorie:'),
+            'label' => trlVps('Categorie').':',
             'width'=>110,
             'skipWhere' => true,
             'data' => $categorySelects,
