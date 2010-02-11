@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_DependingOnRows_PagesModel extends Vps_Component_PagesModel
+class Vps_Component_DependingOnRows_PagesModel extends Vpc_Root_Category_GeneratorModel
 {
     public function __construct()
     {

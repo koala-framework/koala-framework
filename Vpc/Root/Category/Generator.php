@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
+class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     implements Vps_Component_Generator_Page_Interface, Vps_Component_Generator_PseudoPage_Interface
 {
     protected $_componentClass = 'row';

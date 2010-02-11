@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Pages_Row extends Vps_Model_Tree_Row
+class Vpc_Root_Category_GeneratorRow extends Vps_Model_Tree_Row
 {
     protected function _beforeInsert()
     {

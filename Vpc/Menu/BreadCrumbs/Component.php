@@ -27,7 +27,7 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
             foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
                 if (!is_instance_of($generator['class'], 'Vps_Component_Generator_PseudoPage_Table') &&
-                    !is_instance_of($generator['class'], 'Vps_Component_Generator_Page')
+                    !is_instance_of($generator['class'], 'Vpc_Root_Category_Generator')
                 ) continue;
                 $generator = current(Vps_Component_Generator_Abstract::getInstances(
                     $componentClass, array('generator' => $key))
@@ -43,7 +43,7 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
             'model' => 'Vps_Component_Model'
         );
         $ret[] = array(
-            'model' => 'Vps_Component_PagesModel'
+            'model' => 'Vpc_Root_Category_GeneratorModel'
         );
         return $ret;
     }

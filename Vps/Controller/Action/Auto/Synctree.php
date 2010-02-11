@@ -244,7 +244,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         if (sizeof($data['children']) == 0) {
             $data['expanded'] = true;
         }
-        $nodes[] = $data;
         return $data;
     }
 

@@ -274,7 +274,7 @@ abstract class Vps_Component_Generator_Abstract
 
 
             $interfaces = array(
-                Vps_Component_Select::WHERE_PAGE_GENERATOR => 'Vps_Component_Generator_Page',
+                Vps_Component_Select::WHERE_PAGE_GENERATOR => 'Vpc_Root_Category_Generator',
                 Vps_Component_Select::WHERE_PAGE => 'Vps_Component_Generator_Page_Interface',
                 Vps_Component_Select::WHERE_PSEUDO_PAGE => 'Vps_Component_Generator_PseudoPage_Interface',
                 Vps_Component_Select::WHERE_BOX => 'Vps_Component_Generator_Box_Interface',
@@ -588,5 +588,13 @@ abstract class Vps_Component_Generator_Abstract
     public function duplicateChild($source, $parentTarget)
     {
         throw new Vps_Exception_NotYetImplemented();
+    }
+
+    public function getPagesControllerConfig()
+    {
+        return array(
+            'icon' => 'bullet_yellow',
+            'disabledIcon' => 'bullet_white'
+        );
     }
 }

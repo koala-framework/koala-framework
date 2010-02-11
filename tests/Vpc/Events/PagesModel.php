@@ -1,5 +1,5 @@
 <?php
-class Vpc_Events_PagesModel extends Vps_Component_PagesModel
+class Vpc_Events_PagesModel extends Vpc_Root_Category_GeneratorModel
 {
     public function __construct()
     {

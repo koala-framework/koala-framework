@@ -175,7 +175,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     if (!isset($generator['class'])) {
                         throw new Vps_Exception("no generator class set for generator '$key' in component '$class'");
                     }
-                    if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) {
+                    if (is_instance_of($generator['class'], 'Vpc_Root_Category_Generator')) {
                         $generators[] = array('class' => $class, 'key' => $key, 'generator' => $generator);
                     }
                 }
