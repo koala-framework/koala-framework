@@ -2,12 +2,11 @@
 class Vpc_Paragraphs_Trl_Component extends Vpc_Chained_Trl_Component
 {
 
-    public static function getSettings()
+    public static function getSettings($masterComponentClass)
     {
-        $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Paragraphs');
+        $ret = parent::getSettings($masterComponentClass);
         $ret['componentIcon'] = new Vps_Asset('page');
-        $ret['generators']['chained']['class'] = 'Vpc_Paragraphs_Trl_Generator';
+        $ret['generators']['paragraphs']['class'] = 'Vpc_Paragraphs_Trl_Generator';
         $ret['previewWidth'] = 600;
         return $ret;
     }

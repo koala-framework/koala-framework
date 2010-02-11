@@ -21,6 +21,7 @@ class Vpc_TestController extends Vps_Controller_Action
         $root->setFilename('vps/vpctest/'.$this->_getParam('root'));
 
         $url = $this->_getParam('url');
+
         $urlParts = explode('/', $url);
         if (is_array($urlParts) && $urlParts[0] == 'media') {
             if (sizeof($urlParts) != 6) {

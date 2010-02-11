@@ -13,7 +13,7 @@ class Vpc_Trl_Simple_Root extends Vpc_Root_Abstract
         );
         $ret['generators']['en'] = array(
             'class' => 'Vps_Component_Generator_PseudoPage_Static',
-            'component' => 'Vpc_Trl_Simple_English',
+            'component' => 'Vpc_Trl_Simple_English.Vpc_Trl_Simple_German',
             'name' => 'en'
         );
         return $ret;

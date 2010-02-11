@@ -144,6 +144,7 @@ abstract class Vps_Component_Generator_Abstract
                 $cacheId .= '__' . $inheritComponent;
             }
         }
+        $cacheId = str_replace('.', '_', $cacheId);
         static $cache = null;
         if (!$cache) {
             $cache = Vps_Cache::factory('Core', 'Memcached', array(

@@ -4,6 +4,7 @@
 function is_instance_of($sub, $super)
 {
     $sub = is_object($sub) ? get_class($sub) : (string)$sub;
+    $sub = strpos($sub, '.') ? substr($sub, 0, strpos($sub, '.')) : $sub;
     $super = is_object($super) ? get_class($super) : (string)$super;
     Zend_Loader::loadClass($sub);
     Zend_Loader::loadClass($super);
