@@ -17,15 +17,15 @@ class Vpc_Advanced_DownloadsTree_ViewDownloadsController extends Vps_Controller_
     {
         parent::_initColumns();
 
-        $this->_columns->add(new Vps_Grid_Column('type', trl('Typ'), 30))
+        $this->_columns->add(new Vps_Grid_Column('type', trlVps('Typ'), 30))
             ->setData(new Vpc_Advanced_DownloadsTree_Data_Fileicon())
             ->setRenderer('image');
-        $this->_columns->add(new Vps_Grid_Column('text', trl('Dokument'), 320))
+        $this->_columns->add(new Vps_Grid_Column('text', trlVps('Document'), 320))
             ->setData(new Vpc_Advanced_DownloadsTree_ViewDownloadsControllerDownloadData());
-        $this->_columns->add(new Vps_Grid_Column('filesize', trl('Größe'), 60))
+        $this->_columns->add(new Vps_Grid_Column('filesize', trlVps('Size'), 60))
             ->setData(new Vpc_Advanced_DownloadsTree_Data_Filesize())
             ->setRenderer('fileSize');
-        $this->_columns->add(new Vps_Grid_Column_Date('date', trl('Datum')));
+        $this->_columns->add(new Vps_Grid_Column_Date('date', trlVps('Date')));
     }
 
     protected function _getSelect()

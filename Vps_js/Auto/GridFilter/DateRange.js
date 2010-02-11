@@ -17,7 +17,7 @@ Vps.Auto.GridFilter.DateRange = function(config)
 
     if (config.button) {
 	    this.toolbarItems.add(new Ext.Button({
-	        text: trl('Suchen'),
+	        text: trlVps('Search'),
 	        handler: function() {
 	            this.fireEvent('filter', this, this.getParams());
 	        },

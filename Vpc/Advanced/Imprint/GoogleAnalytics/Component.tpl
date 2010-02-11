@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?>">
-    <span class="imprintHeadline">Google Analytics</span>
+    <span class="imprintHeadline"><?=trlVps('Google Analytics');?></span>
     <p>
         Diese Website verwendet Google Analytics, einen Webanalysedienst von Google Inc.
         Google Analytics verwendet "Cookies", Textdateien, die auf Ihrem Computer

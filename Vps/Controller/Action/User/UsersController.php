@@ -77,7 +77,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
                  ->setData(new Vps_Controller_Action_User_Users_WebcodeData());
         }
         $this->_columns->add(new Vps_Grid_Column_Button('resend_mails', trlVps('E-Mails')))
-            ->setTooltip(trl('Eine E-Mail erneut senden'))
+            ->setTooltip(trlVps('Sent E-Mail again'))
             ->setButtonIcon(new Vps_Asset('email_go.png'));
     }
 
