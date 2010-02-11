@@ -6,6 +6,7 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_BOX = 'whereBox';
     const WHERE_MULTI_BOX = 'whereMultiBox';
     const WHERE_FLAGS = 'whereFlags';
+    const WHERE_GENERATOR_FLAGS = 'whereGeneratorFlags';
     const WHERE_INHERIT = 'whereInherit';
     const WHERE_UNIQUE = 'whereUnique';
     const WHERE_HAS_EDIT_COMPONENTS = 'whereHasEditComponents';
@@ -88,6 +89,18 @@ class Vps_Component_Select extends Vps_Model_Select
     public function whereFlag($flag, $value = true)
     {
         $this->_parts[self::WHERE_FLAGS][$flag] = $value;
+        return $this;
+    }
+
+    public function whereGeneratorFlags(array $value)
+    {
+        $this->_parts[self::WHERE_GENERATOR_FLAGS] = $value;
+        return $this;
+    }
+
+    public function whereGeneratorFlag($flag, $value = true)
+    {
+        $this->_parts[self::WHERE_GENERATOR_FLAGS][$flag] = $value;
         return $this;
     }
 

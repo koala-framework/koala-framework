@@ -245,7 +245,7 @@ abstract class Vps_Component_Generator_Abstract
 
         $ret = array();
         foreach ($generators as $g) {
-            if ($component && $g instanceof Vps_Component_Generator_Page &&
+            if ($component && $g instanceof Vpc_Root_Category_Generator &&
                 !(
                     is_numeric($component->componentId) ||
                     $component instanceof Vps_Component_Data_Root ||
@@ -272,7 +272,6 @@ abstract class Vps_Component_Generator_Abstract
                 }
             }
 
-
             $interfaces = array(
                 Vps_Component_Select::WHERE_PAGE_GENERATOR => 'Vpc_Root_Category_Generator',
                 Vps_Component_Select::WHERE_PAGE => 'Vps_Component_Generator_Page_Interface',
@@ -289,6 +288,13 @@ abstract class Vps_Component_Generator_Abstract
                     } else {
                         if ($value) continue 2;
                     }
+                }
+            }
+
+            if (isset($selectParts[Vps_Component_Select::WHERE_GENERATOR_FLAGS])) {
+                $flags = $g->getGeneratorFlags();
+                foreach ($selectParts[Vps_Component_Select::WHERE_GENERATOR_FLAGS] as $flag=>$value) {
+                    if (!isset($flags[$flag]) || $flags[$flag] != $value) continue 2;
                 }
             }
 
@@ -355,7 +361,7 @@ abstract class Vps_Component_Generator_Abstract
                 if ($continue) { continue; }
             }
             if (isset($selectParts[Vps_Component_Select::WHERE_HOME]) && $selectParts[Vps_Component_Select::WHERE_HOME]) {
-                if (!$g instanceof Vps_Component_Generator_Page) continue;
+                if (!$g instanceof Vpc_Root_Category_Generator) continue;
             }
             if (!$g->getChildComponentClasses($select)) continue;
 
@@ -596,5 +602,10 @@ abstract class Vps_Component_Generator_Abstract
             'icon' => 'bullet_yellow',
             'disabledIcon' => 'bullet_white'
         );
+    }
+
+    public function getGeneratorFlags()
+    {
+        return array();
     }
 }
