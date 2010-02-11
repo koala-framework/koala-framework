@@ -22,7 +22,7 @@ class Vps_Component_Abstract
         return isset($s[$class]);
     }
 
-    public static function hasSetting($class, $setting)
+    public static function hasSetting($class, $setting, $useSettingsCache = true)
     {
         static $settingsCache;
         if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
@@ -74,7 +74,7 @@ class Vps_Component_Abstract
                     foreach ($classes as $c) {
                         if (isset($cc[$c])) {
                             if (!isset($settings['configChildComponentsGenerator'])) {
-                                throw new Vps_Exception("configChildComponentsGenerator setting not set for '$class'");
+                                throw new Vps_Exception("configChildComponentsGenerator setting not set for '$class', but vpc.childComponents in config is used");
                             }
                             $gen = $settings['configChildComponentsGenerator'];
                             if (!isset($settings['generators'][$gen])) {
