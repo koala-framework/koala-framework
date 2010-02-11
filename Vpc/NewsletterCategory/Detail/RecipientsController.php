@@ -13,7 +13,7 @@ class Vpc_NewsletterCategory_Detail_RecipientsController extends Vpc_Newsletter_
         );
 
         // filter by category
-        $categorySelects = array(array('all', trlVps('- All -')));
+        $categorySelects = array(array('all', '- '.trlVps('All').' -'));
         foreach ($categories as $row) {
             $categorySelects[] = array($row->id, $row->value);
         }
