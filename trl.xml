@@ -5459,11 +5459,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1427</id>
 </text>
 <text>
-<en>- All -</en>
-<de>- Alle -</de>
-<id>1428</id>
-</text>
-<text>
 <en>Categorie</en>
 <de>Kategorie</de>
 <id>1429</id>
@@ -5482,6 +5477,20 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Useradministration</en>
 <de>Benutzerverwaltung</de>
 <id>1432</id>
+</text>
+<text>
+<en>Time</en>
+<de>Zeit</de>
+<id>1433</id>
+</text>
+<text>
+<en>Home</en>
+<id>1434</id>
+</text>
+<text>
+<en>All</en>
+<de>Alle</de>
+<id>1435</id>
 </text>
 </trl>
 
