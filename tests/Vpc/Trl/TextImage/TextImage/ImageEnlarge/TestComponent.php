@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_TextImage_TextImage_ImageEnlarge_Component extends Vpc_TextImage_ImageEnlarge_Component
+class Vpc_Trl_TextImage_TextImage_ImageEnlarge_TestComponent extends Vpc_TextImage_ImageEnlarge_Component
 {
     public static function getSettings()
     {

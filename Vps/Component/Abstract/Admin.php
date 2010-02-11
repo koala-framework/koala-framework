@@ -103,6 +103,7 @@ class Vps_Component_Abstract_Admin
     public static function getComponentFile($class, $filename = '', $ext = 'php', $returnClass = false)
     {
         if (is_object($class)) $class = get_class($class);
+        $class = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
         $ret = null;
         while (!$ret && $class != '') {
             $curClass = $class;

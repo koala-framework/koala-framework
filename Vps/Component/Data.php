@@ -193,6 +193,7 @@ class Vps_Component_Data
 
         $selectHash = md5($genSelect->getHash().$childSelect->getHash());
         $cacheId = 'recCCGen'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
+        $cacheId = str_replace('.', '_', $cacheId);
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
             Vps_Benchmark::count('getRecCC Gen hit', $this->componentClass.' '.$genSelect->toDebug());
             $generators = $this->_recursiveGeneratorsCache[$cacheId];
@@ -530,7 +531,9 @@ class Vps_Component_Data
     public function getComponent()
     {
         if (!isset($this->_component)) {
-            $component = new $this->componentClass($this);
+            $class = $this->componentClass;
+            $class = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            $component = new $class($this);
             $this->_component = $component;
         }
         return $this->_component;

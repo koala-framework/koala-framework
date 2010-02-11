@@ -10,6 +10,8 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
     public function getChildData($parentData, $select = array())
     {
         $ret = array();
+        if (is_array($select)) $select = new Vps_Component_Select($select);
+        $select->whereGenerator($this->_settings['generator']);
         foreach ($this->_getChainedChildComponents($parentData, $select) as $c) {
             $data = $this->_createData($parentData, $c, $select);
             if ($data) {
@@ -31,10 +33,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
     protected function _formatConfig($parentData, $row)
     {
-        $componentClass = Vpc_Admin::getComponentClass($row->componentClass, 'Trl_Component');
-        if (!$componentClass) {
-            $componentClass = 'Vpc_Chained_Trl_Component';
-        }
+        $componentClass = $this->_settings['masterComponentsMap'][$row->componentClass];
         $id = $this->_getIdWithSeparatorFromRow($row);
         $data = array(
             'componentId' => $parentData->componentId.$id,
@@ -61,5 +60,12 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
             $ret[] = $this->_getIdFromRow($c);
         }
         return $ret;
+    }
+
+    public function getIdSeparator()
+    {
+        return Vps_Component_Generator_Abstract
+            ::getInstance(Vpc_Abstract::getSetting($this->_class, 'masterComponentClass'), $this->_settings['generator'])
+            ->getIdSeparator();
     }
 }

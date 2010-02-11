@@ -1,13 +1,13 @@
 <?php
 class Vpc_Basic_Text_Trl_Component extends Vpc_Chained_Trl_Component
 {
-    public static function getSettings()
+    public static function getSettings($masterComponentClass)
     {
-        $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Text');
+        $ret = parent::getSettings($masterComponentClass);
+        $ret['generators'] = array();
         $ret['generators']['text'] = array(
             'class' => 'Vps_Component_Generator_Static',
-            'component' => 'Vpc_Basic_Text_Component',
+            'component' => $masterComponentClass,
         );
         return $ret;
     }

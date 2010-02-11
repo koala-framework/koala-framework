@@ -48,20 +48,22 @@ class Vps_Component_Abstract
         if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
         if (!$useSettingsCache || !$settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
-            if (!class_exists($class)) {
+            if (!class_exists(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class)) {
                 throw new Vps_Exception("Invalid component '$class'");
             }
             if ($setting == 'parentClasses') {
-                $p = $class;
+                $p = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
                 $ret = array();
                 do {
                     $ret[] = $p;
                 } while ($p = get_parent_class($p));
                 return $ret;
             } else {
-                $settings = call_user_func(array($class, 'getSettings'));
+                $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+                $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
+                $settings = call_user_func(array($c, 'getSettings'), $param);
                 if (!array_key_exists($setting, $settings)) {
-                    throw new Vps_Exception("Couldn't find required setting '$setting' for $class.");
+                    throw new Vps_Exception("Couldn't find required setting '$setting' for $c.");
                 }
                 if ($setting == 'generators') {
                     $classes = self::getSetting($class, 'parentClasses', $useSettingsCache);
@@ -131,13 +133,15 @@ class Vps_Component_Abstract
                 self::$_settings['mtimeFiles'] = array();
                 $incPaths = explode(PATH_SEPARATOR, get_include_path());
                 foreach (self::getComponentClasses(false/*don't use settings cache*/) as $c) {
-                    self::$_settings[$c] = call_user_func(array($c, 'getSettings'));
+                    $realCls = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
+                    $param = strpos($c, '.') ? substr($c, strpos($c, '.')+1) : null;
+                    self::$_settings[$c] = call_user_func(array($realCls, 'getSettings'), $param);
 
                     //generators �ber getSetting holen, da dort noch die aus der config dazugemixt werden
                     self::$_settings[$c]['generators'] = self::getSetting($c, 'generators', false/*don't use settings cache*/);
 
                     try {
-                        call_user_func(array($c, 'validateSettings'), self::$_settings[$c], $c);
+                        call_user_func(array($realCls, 'validateSettings'), self::$_settings[$c], $c);
                     } catch (Vps_Exception $e) {
                         throw new Vps_Exception("$c: ".$e->getMessage());
                     }
@@ -175,7 +179,7 @@ class Vps_Component_Abstract
                     self::$_settings[$c]['processedCssClass'] = trim(self::$_settings[$c]['processedCssClass']);
 
                     //*** mtimeFiles
-                    $p = $c;
+                    $p = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
                     do {
                         $file = str_replace('_', DIRECTORY_SEPARATOR, $p);
                         $f = false;
@@ -197,13 +201,14 @@ class Vps_Component_Abstract
         return self::$_settings;
     }
 
-    static private function _formatCssClass($cls)
+    static private function _formatCssClass($c)
     {
-        if (substr($cls, -10) == '_Component') {
-            $cls = substr($cls, 0, -10);
+        $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
+        if (substr($c, -10) == '_Component') {
+            $c = substr($c, 0, -10);
         }
-        $cls = str_replace('_', '', $cls);
-        return strtolower(substr($cls, 0, 1)) . substr($cls, 1);
+        $c = str_replace('_', '', $c);
+        return strtolower(substr($c, 0, 1)) . substr($c, 1);
     }
 
     public static function getParentClasses($c)
@@ -252,7 +257,7 @@ class Vps_Component_Abstract
 
     public function getTable($tablename = null)
     {
-        return self::createTable(get_class($this));
+        return self::createTable($this->getData()->componentClass);
     }
 
     public static function createTable($class, $tablename = null)
@@ -352,27 +357,27 @@ class Vps_Component_Abstract
 
     public function getOwnModel()
     {
-        return self::createOwnModel(get_class($this));
+        return self::createOwnModel($this->getData()->componentClass);
     }
 
     public function getChildModel()
     {
-        return self::createChildModel(get_class($this));
+        return self::createChildModel($this->getData()->componentClass);
     }
 
     public function getFormModel()
     {
-        return self::createFormModel(get_class($this));
+        return self::createFormModel($this->getData()->componentClass);
     }
 
     protected function _getSetting($setting)
     {
-        return self::getSetting(get_class($this), $setting);
+        return self::getSetting($this->getData()->componentClass, $setting);
     }
 
     protected function _hasSetting($setting)
     {
-        return self::hasSetting(get_class($this), $setting);
+        return self::hasSetting($this->getData()->componentClass, $setting);
     }
 
     static public function getFlag($class, $flag)
@@ -402,6 +407,10 @@ class Vps_Component_Abstract
     {
         $classes = array();
         foreach (Vpc_Abstract::getSetting($class, 'generators', false) as $generator) {
+            if (!isset($generator['component'])) {
+                var_dump($class);
+                d($generator);
+            }
             if (is_array($generator['component'])) {
                 $classes = array_merge($classes, $generator['component']);
             } else {
@@ -414,19 +423,13 @@ class Vps_Component_Abstract
         }
         foreach ($classes as $c) {
             if ($c&& !in_array($c, $componentClasses)) {
-                if (!class_exists($c)) {
+                if (!class_exists(strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c)) {
                     throw new Vps_Exception("Component Class '$c' does not exist, used in '$class'");
                 }
                 $componentClasses[] = $c;
                 self::_getChildComponentClasses($componentClasses, $c);
             }
         }
-        /*
-        $c = Vpc_Admin::getComponentClass($class, 'Trl_Component');
-        if ($c&& !in_array($c, $componentClasses)) {
-            $componentClasses[] = $c;
-        }
-        */
     }
 
     protected function _getPlaceholder($name)

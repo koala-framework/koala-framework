@@ -256,7 +256,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                     'page' => false,
                     'flags' => array('processInput' => true)
                 ));
-        if (Vps_Component_Abstract::getFlag(get_class($this), 'processInput')) {
+        if (Vps_Component_Abstract::getFlag($this->getData()->componentClass, 'processInput')) {
             $process[] = $this->getData();
         }
         // TODO: Äußerst suboptimal
