@@ -29,6 +29,11 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             }
             if (is_string($level)) {
                 $component = $this->getData()->parent;
+
+                //***HACK***
+                if (isset($component->chained)) $component = $component->chained; //TODO UMBEDINGT: das funktioniert so nat?rlich nicht, es muss eine eigene Trl version vom men? gemacht werden das vom englischen zweig die seiten sucht
+                //***/HACK***
+
                 while ($component &&
                     !is_instance_of($component->componentClass, 'Vpc_Root_Category_Component')
                 ) {

@@ -100,6 +100,8 @@ function _btArgString($arg)
             $r[] = "$key => $val";
         }
         $ret[] = 'select(' . implode(', ', $r) . ')';
+    } else if ($arg instanceof Vps_Component_Data) {
+        $ret[] = get_class($arg).'('.$arg->componentId.')';
     } else if (is_object($arg)) {
         $ret[] = get_class($arg);
     } else if (is_array($arg)) {

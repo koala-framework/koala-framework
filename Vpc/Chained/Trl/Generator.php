@@ -1,9 +1,32 @@
 <?php
 class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 {
+    protected function _init()
+    {
+        parent::_init();
+        $this->_inherits = $this->_getChainedGenerator()->getInherits();
+    }
+
+    protected function _getChainedData($data)
+    {
+        if ($data) {
+            if (isset($data->chained)) {
+                $data = $data->chained;
+            } else {
+                $gen = Vps_Component_Generator_Abstract::getInstances($data, array('generatorFlag'=>'trlBase'));
+                return $gen[0]->_getChainedData($data);
+            }
+        }
+        return $data;
+    }
+
     protected function _getChainedChildComponents($parentData, $select)
     {
-        return $parentData->chained->getChildComponents($select);
+        if ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE)) {
+            $select->whereOnSamePage($this->_getChainedData($p));
+        }
+        return $this->_getChainedGenerator()
+            ->getChildData($this->_getChainedData($parentData), $select);
     }
 
     public function getChildData($parentData, $select = array())
@@ -15,8 +38,16 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
                 $select->whereId(substr($id, 1));
             }
         }
-        $select->whereGenerator($this->_settings['generator']);
         foreach ($this->_getChainedChildComponents($parentData, $select) as $c) {
+            if (!$parentData) {
+                $id = $c->parent->componentId;
+
+                //***HACK***
+                $id = str_replace('root-master', 'root-slave', $id); //TODO WICHTIG das muss besser gemacht werden (englische version von deutscher holen)
+                //***/HACK***
+
+                $parentData = Vps_Component_Data_Root::getInstance()->getComponentById($id);
+            }
             $data = $this->_createData($parentData, $c, $select);
             if ($data) {
                 $ret[] = $data;
@@ -55,11 +86,8 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
     public function getChildIds($parentData, $select = array())
     {
-        $ret = array();
-        foreach ($parentData->getChildComponents($select) as $c) {
-            $ret[] = $this->_getIdFromRow($c);
-        }
-        return $ret;
+        return $this->_getChainedGenerator()
+            ->getChildIds($this->_getChainedData($parentData), $select);
     }
 
     private function _getChainedGenerator()
