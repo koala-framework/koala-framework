@@ -214,8 +214,12 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
 
             echo "\n$server: [7/9] set mysql file rights\n";
             // globale file rechte für csv import setzen
-            $cmd = "php bootstrap.php setup-online set-mysql-file-right --user=$dbUser";
-            $this->_systemSshVps($config, $cmd);
+            if ($server == 'vivid-test-server') {
+                echo "skipped for vivid-test-server - root user has all rights\n";
+            } else {
+                $cmd = "php bootstrap.php setup-online set-mysql-file-right --user=$dbUser";
+                $this->_systemSshVps($config, $cmd);
+            }
 
             echo "\n$server: [8/9] import\n";
             $cmd = "php bootstrap.php import --server=".Vps_Setup::getConfigSection();
