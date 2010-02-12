@@ -114,7 +114,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         if (!node) return;
         var data = node.attributes;
         
-        this.editDialog.getAutoForm().controllerUrl = data.editControllerUrl;
+        this.editDialog.getAutoForm().editControllerUrl = data.editControllerUrl;
+        this.editDialog.getAutoForm().addControllerUrl = data.addControllerUrl;
         
         if (data.disabled) {
             this.pageButton.disable();
@@ -210,6 +211,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 text    : trlVps('Properties of selected Page'),
                 handler : function () {
                     var form = this.editDialog.getAutoForm();
+                    form.controllerUrl = form.editControllerUrl;
                     if (form.formPanel) {
                         form.remove(form.formPanel, true);
                         this.editDialog.getAutoForm().formPanel = null;
@@ -228,6 +230,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 text    : trlVps('Add new Subpage'),
                 handler : function () {
             		var form = this.editDialog.getAutoForm();
+                    form.controllerUrl = form.addControllerUrl;
 	                if (form.formPanel) {
 	                    form.remove(form.formPanel, true);
 	                    this.editDialog.getAutoForm().formPanel = null;

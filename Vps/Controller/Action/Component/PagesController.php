@@ -3,16 +3,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 {
     protected $_textField = 'name';
     protected $_rootVisible = false;
-    protected $_icons = array (
-        'default' => 'page',
-        'invisible' => 'page_red',
-        'reload' => 'arrow_rotate_clockwise',
-        'add' => 'page_add',
-        'delete' => 'page_delete',
-        'home' => 'application_home',
-        'disabled' => 'page_white',
-        'root' => 'world'
-    );
     protected $_buttons = array();
     protected $_hasPosition = true;
     protected $_modelName = 'Vps_Component_Model';
@@ -33,53 +23,33 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $disabled = !Vps_Registry::get('acl')->getComponentAcl()
             ->isAllowed(Zend_Registry::get('userModel')->getAuthedUser(), $component);
 
-        $data['actions'] = array(
+        $data['actions'] = array();
+        $data['allowDrop'] = false;
+        $data['disabled'] = $disabled;
+        $data['editControllerUrl'] = '';
+        if ($component->componentId == 'root') { // Root hat keinen Generator
+            $data['bIcon'] = new Vps_Asset('world');
+            $data['bIcon'] = $data['bIcon']->__toString();
+            $data['expanded'] = true;
+        } else {
+            $data = array_merge($data, $component->generator->getPagesControllerConfig($component));
+
+            $icon = $disabled ? $data['disabledIcon'] : $data['icon'];
+            if (is_string($icon)) {
+                $icon = new Vps_Asset($icon);
+            }
+            $data['bIcon'] = $icon->__toString();
+            if (isset($data['icon'])) unset($data['icon']);
+        }
+
+        $data['actions'] = array_merge(array(
             'properties' => false,
             'delete' => false,
             'visible' => false,
             'makeHome' => false,
             'add' => false,
             'preview' => false
-        );
-        $data['allowDrop'] = false;
-        $data['disabled'] = $disabled;
-        $data['editControllerUrl'] = '';
-        if ($component->componentId == 'root') { // Root hat keinen Generator
-            $data['bIcon'] = $this->_icons['root']->__toString();
-            $data['expanded'] = true;
-        } else {
-            $data = array_merge($data, $component->generator->getPagesControllerConfig());
-            $generatorClass = $component->generator->getClass();
-            $c = $component;
-            while ($c && $c->componentClass != $generatorClass) $c = $c->parent;
-            $data['editControllerComponentId'] = $c->componentId;
-            $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
-                ->getControllerUrl('Generator');
-            if ($component->generator instanceof Vpc_Root_Category_Generator) {
-                if (!$disabled) { foreach ($data['actions'] as &$v) $v = true; }
-                if ($disabled) {
-                    $data['bIcon'] = $this->_icons['disabled']->__toString();
-                } else if ($row->isHome) {
-                    $data['bIcon'] = $this->_icons['home']->__toString();
-                } else if (!$row->visible) {
-                    $data['bIcon'] = $this->_icons['invisible']->__toString();
-                } else {
-                    $data['bIcon'] = $this->_icons['default']->__toString();
-                }
-                $data['allowDrop'] = true;
-            } else {
-                $icon = $disabled ? $data['disabledIcon'] : $data['icon'];
-                $asset = new Vps_Asset($icon);
-                $data['bIcon'] = $asset->__toString();
-                foreach (Vpc_Abstract::getSetting($component->componentClass, 'generators') as $generator) {
-                    if (!$disabled && is_instance_of($generator['class'], 'Vpc_Root_Category_Generator')) {
-                        $data['actions']['add'] = true;
-                        $data['allowDrop'] = true;
-                    }
-                }
-            }
-            unset($data['icon']);
-        }
+        ), $data['actions']);
 
         $data['editComponents'] = array();
         $editComponents = $component->getRecursiveChildComponents(
