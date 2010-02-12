@@ -39,6 +39,8 @@ class Vpc_Paragraphs_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         'save',
         );
     protected $_model = 'Vpc_Paragraphs_Trl_AdminModel';
+    protected $_sortable = false;
+    protected $_defaultOrder = 'pos';
 
     protected function _initColumns()
     {

@@ -4,7 +4,7 @@ class Vpc_Abstract_Image_Trl_Form_ImageData extends Vps_Data_Abstract
     public function load($row)
     {
         $ret = '';
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($row->id);
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($row->id, array('ignoreVisible'=>true));
         $row = $c->chained->getComponent()->getRow()->getParentRow('Image');
         if ($row) {
             $info = $row->getFileInfo();

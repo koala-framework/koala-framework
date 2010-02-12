@@ -63,4 +63,9 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
         $ret['componentClass'] = get_class($this);
         return $ret;
     }
+
+    public function getCacheVars()
+    {
+        return $this->getData()->chained->getComponent()->getCacheVars();
+    }
 }

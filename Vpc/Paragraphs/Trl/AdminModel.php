@@ -4,7 +4,10 @@ class Vpc_Paragraphs_Trl_AdminModel extends Vps_Model_Data_Abstract
     public function setComponentId($componentId)
     {
         $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($componentId, array('ignoreVisible'=>true));
-        foreach ($c->getChildComponents(array('ignoreVisible'=>true)/*array('generator'=>'paragraphs')*/) as $c) {
+        $s = new Vps_Component_Select();
+        $s->ignoreVisible();
+        $s->whereGenerator('paragraphs');
+        foreach ($c->getChildComponents($s) as $c) {
             $this->_data[$c->componentId] = array(
                 'id' => $c->chained->row->id,
                 'component_id' => $componentId,
@@ -13,6 +16,7 @@ class Vpc_Paragraphs_Trl_AdminModel extends Vps_Model_Data_Abstract
                 'component_icon' => (string)Vpc_Abstract::getSetting($c->componentClass, 'componentIcon'),
                 'row' => $c->row,
                 'visible' => $c->row->visible,
+                'pos' => $c->chained->row->pos
             );
         }
     }
