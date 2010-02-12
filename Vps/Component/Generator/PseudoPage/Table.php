@@ -1,6 +1,5 @@
 <?php
 class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_Table
-    implements Vps_Component_Generator_PseudoPage_Interface
 {
     protected $_filenameColumn;
     protected $_uniqueFilename;
@@ -86,5 +85,12 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         $data['rel'] = '';
         $data['isPseudoPage'] = true;
         return $data;
+    }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['pseudoPage'] = true;
+        return $ret;
     }
 }

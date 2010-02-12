@@ -1,6 +1,5 @@
 <?php
 class Vps_Component_Generator_Box_Static extends Vps_Component_Generator_Static
-    implements Vps_Component_Generator_Box_Interface
 {
     protected function _init()
     {
@@ -45,5 +44,12 @@ class Vps_Component_Generator_Box_Static extends Vps_Component_Generator_Static
         } else {
             unset($this->_settings['component'][$box]);
         }
+    }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['box'] = true;
+        return $ret;
     }
 }
