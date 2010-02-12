@@ -381,7 +381,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                             }
                         }
                         $internLinkPage = Vps_Component_Data_Root::getInstance()
-                            ->getPageByUrl($url);
+                            ->getPageByUrl($url, null);
                         if ($internLinkPage) {
                             $destRow->component = 'intern';
                         }
