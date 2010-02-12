@@ -1,6 +1,5 @@
 <?php
 class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
-    implements Vps_Component_Generator_PseudoPage_Interface, Vps_Component_Generator_Page_Interface
 {
     protected function _getChainedChildComponents($parentData, $select)
     {
@@ -80,8 +79,12 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
     {
         $ret = parent::getGeneratorFlags();
         $flags = $this->_getChainedGenerator()->getGeneratorFlags();
-        if (isset($flags['showInPageTreeAdmin'])) {
-            $ret['showInPageTreeAdmin'] = $flags['showInPageTreeAdmin'];
+
+        $copyFlags = array('showInPageTreeAdmin', 'page', 'pseudoPage', 'box', 'multiBox');
+        foreach ($copyFlags as $f) {
+            if (isset($flags[$f])) {
+                $ret[$f] = $flags[$f];
+            }
         }
         return $ret;
     }

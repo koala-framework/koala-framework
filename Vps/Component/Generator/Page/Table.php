@@ -1,6 +1,5 @@
 <?php
 class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoPage_Table
-    implements Vps_Component_Generator_Page_Interface, Vps_Component_Generator_PseudoPage_Interface
 {
     protected $_idSeparator = '_';
     protected $_inherits = true;
@@ -24,4 +23,12 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoP
         }
         return $data;
     }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['page'] = true;
+        return $ret;
+    }
+
 }

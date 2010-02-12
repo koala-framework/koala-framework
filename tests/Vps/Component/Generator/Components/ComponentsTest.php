@@ -11,24 +11,6 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
-    public function testIsInstanceOf()
-    {
-        $this->assertTrue(is_instance_of('Vps_Component_Generator_PseudoPage_Table',
-                                    'Vps_Component_Generator_PseudoPage_Interface'));
-        $this->assertFalse(is_instance_of('Vps_Component_Generator_PseudoPage_Table',
-                                    'Vps_Component_Generator_Page_Interface'));
-        $this->assertTrue(is_instance_of('Vps_Component_Generator_Page_Table',
-                                    'Vps_Component_Generator_Page_Interface'));
-        $this->assertTrue(is_instance_of('Vps_Component_Generator_Page_Table',
-                                    'Vps_Component_Generator_PseudoPage_Interface'));
-        $this->assertFalse(is_instance_of('Vps_Component_Generator_Table',
-                                    'Vps_Component_Generator_PseudoPage_Interface'));
-        $this->assertFalse(is_instance_of('Vps_Component_Generator_Table',
-                                    'Vps_Component_Generator_Page_Interface'));
-        $this->assertFalse(is_instance_of('Vps_Component_Generator_Table',
-                                    'Vps_Component_Generator_Box_Interface'));
-    }
-
     public function testRoot()
     {
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root');

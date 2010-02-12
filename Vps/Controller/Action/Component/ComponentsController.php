@@ -22,10 +22,12 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
         $data = parent::_formatNode($row);
         if ($row->class == 'root') {
             $icon = 'root';
+        /*NOT PORTED to flags
         } else if (is_instance_of($row->class, 'Vps_Component_Generator_Box_Interface')) {
             $icon = 'box';
         } else if (is_instance_of($row->class, 'Vps_Component_Generator_Page_Interface')) {
             $icon = 'page';
+        */
         } else {
             $icon = 'component';            
         }

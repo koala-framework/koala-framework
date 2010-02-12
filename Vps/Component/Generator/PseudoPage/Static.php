@@ -1,6 +1,5 @@
 <?php
 class Vps_Component_Generator_PseudoPage_Static extends Vps_Component_Generator_Static
-    implements Vps_Component_Generator_PseudoPage_Interface
 {
     protected function _formatSelectFilename(Vps_Component_Select $select)
     {
@@ -44,5 +43,12 @@ class Vps_Component_Generator_PseudoPage_Static extends Vps_Component_Generator_
         $data['rel'] = isset($c['rel']) ? $c['rel'] : '';
         $data['isPseudoPage'] = true;
         return $data;
+    }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['pseudoPage'] = true;
+        return $ret;
     }
 }

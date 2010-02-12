@@ -196,7 +196,7 @@ abstract class Vps_Component_Generator_Abstract
                     foreach ($gs as $key => $inheritedGenerator) {
                         if (!isset($inheritedGenerator['inherit']) || !$inheritedGenerator['inherit']) continue;
                         $inheritedGenerator = self::getInstance($inheritClass, $key, $inheritedGenerator);
-                        if (!$inheritedGenerator instanceof Vps_Component_Generator_Box_Interface) {
+                        if (!$inheritedGenerator->getGeneratorFlag('box')) {
                             $generators[] = $inheritedGenerator;
                             continue;
                         }
@@ -206,7 +206,7 @@ abstract class Vps_Component_Generator_Abstract
 //                             }
                         $inheritedBox = $inheritedBoxes[0];
                         foreach ($generators as $k=>$g) {
-                            if (!$g instanceof Vps_Component_Generator_Box_Interface) continue;
+                            if (!$g->getGeneratorFlag('box')) continue;
                             foreach ($inheritedBoxes as $inheritedBox) {
                                 if (!in_array($inheritedBox, $g->getBoxes())) continue;
                                 if ($g->getPriority() >= $inheritedGenerator->getPriority()) {
@@ -225,7 +225,7 @@ abstract class Vps_Component_Generator_Abstract
                 }
 /*
                     foreach ($generators as $k=>$g) {
-                        if ($g instanceof Vps_Component_Generator_Box_Interface && !$g->getBoxes()) {
+                        if ($g->getGeneratorFlag('box') && !$g->getBoxes()) {
                             unset($generators[$k]);
                         }
                     }
@@ -275,18 +275,19 @@ abstract class Vps_Component_Generator_Abstract
                 }
             }
 
-            $interfaces = array(
-                Vps_Component_Select::WHERE_PAGE_GENERATOR => 'Vpc_Root_Category_Generator',
-                Vps_Component_Select::WHERE_PAGE => 'Vps_Component_Generator_Page_Interface',
-                Vps_Component_Select::WHERE_PSEUDO_PAGE => 'Vps_Component_Generator_PseudoPage_Interface',
-                Vps_Component_Select::WHERE_BOX => 'Vps_Component_Generator_Box_Interface',
-                Vps_Component_Select::WHERE_MULTI_BOX => 'Vps_Component_Generator_MultiBox_Interface'
+            $flags = array(
+                Vps_Component_Select::WHERE_PAGE_GENERATOR => 'pageGenerator',
+                Vps_Component_Select::WHERE_PAGE => 'page',
+                Vps_Component_Select::WHERE_PSEUDO_PAGE => 'pseudoPage',
+                Vps_Component_Select::WHERE_BOX => 'box',
+                Vps_Component_Select::WHERE_MULTI_BOX => 'multiBox'
             );
 
-            foreach ($interfaces as $part=>$interface) {
+            foreach ($flags as $part=>$flag) {
                 if (isset($selectParts[$part])) {
                     $value = $selectParts[$part];
-                    if ($g instanceof $interface) {
+                    $flags = $g->getGeneratorFlags();
+                    if (isset($flags[$flag]) && $flags[$flag]) {
                         if (!$value) continue 2;
                     } else {
                         if ($value) continue 2;
@@ -610,5 +611,12 @@ abstract class Vps_Component_Generator_Abstract
     public function getGeneratorFlags()
     {
         return array();
+    }
+
+    public final function getGeneratorFlag($flag)
+    {
+        $flags = $this->getGeneratorFlags();
+        if (!isset($flags[$flag])) return null;
+        return $flags[$flag];
     }
 }
