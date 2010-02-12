@@ -3,8 +3,11 @@ class Vpc_Basic_Text_Trl_Form_OriginalText extends Vps_Data_Abstract
 {
     public function load($row)
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($row->id);
-        return $c->chained->getComponent()->getRow()->content;
+        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($row->id, array('ignoreVisible'=>true));
+        return $c->chained
+            ->getComponent()
+            ->getRow()
+            ->content;
     }
 }
 
