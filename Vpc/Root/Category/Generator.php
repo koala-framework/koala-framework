@@ -237,4 +237,27 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $ret['pageGenerator'] = true;
         return $ret;
     }
+
+
+    public function getPagesControllerConfig($component)
+    {
+        $data = parent::getPagesControllerConfig($component);
+
+        $data['actions']['properties'] = true;
+        $data['actions']['delete'] = true;
+        $data['actions']['visible'] = true;
+        $data['actions']['makeHome'] = true;
+
+        $data['disabledIcon'] = 'page_white';
+        if ($component->isHome) {
+            $data['icon'] = 'application_home';
+        } else if (!$component->visible) {
+            $data['icon'] = 'page_red';
+        } else {
+            $data['icon'] = 'page';
+        }
+        $data['allowDrop'] = true;
+
+        return $data;
+    }
 }

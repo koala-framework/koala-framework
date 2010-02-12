@@ -600,12 +600,41 @@ abstract class Vps_Component_Generator_Abstract
         throw new Vps_Exception_NotYetImplemented();
     }
 
-    public function getPagesControllerConfig()
+    public function getPagesControllerConfig($component)
     {
-        return array(
-            'icon' => 'bullet_yellow',
-            'disabledIcon' => 'bullet_white'
-        );
+        $data = array();
+
+        $disabled = !Vps_Registry::get('acl')->getComponentAcl()
+            ->isAllowed(Zend_Registry::get('userModel')->getAuthedUser(), $component);
+        $generatorClass = $this->getClass();
+
+        $data['icon'] = 'bullet_yellow';
+        $data['disabledIcon'] = 'bullet_white';
+
+        $c = $component;
+        while ($c && $c->componentClass != $generatorClass) {
+            $c = $c->parent;
+        }
+
+        $data['editControllerComponentId'] = $c->componentId;
+        $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
+            ->getControllerUrl('Generator');
+
+        $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
+            'pageGenerator' => true
+        ));
+        if ($pageGenerator) {
+            $data['addControllerUrl'] = Vpc_Admin::getInstance($pageGenerator[0]->_class)
+                ->getControllerUrl('Generator');
+            $data['actions']['add'] = true;
+            $data['allowDrop'] = true;
+        }
+
+        if ($component->isPage) {
+            $data['actions']['preview'] = true;
+        }
+
+        return $data;
     }
 
     public function getGeneratorFlags()

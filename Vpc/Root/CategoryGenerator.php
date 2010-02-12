@@ -4,9 +4,9 @@ class Vpc_Root_CategoryGenerator extends Vps_Component_Generator_Table
     protected $_hasNumericIds = false;
     protected $_inherits = true;
 
-    public function getPagesControllerConfig()
+    public function getPagesControllerConfig($component)
     {
-        $ret = parent::getPagesControllerConfig();
+        $ret = parent::getPagesControllerConfig($component);
         $ret['icon'] = 'folder';
         $ret['disabledIcon'] = 'folder';
         $ret['expanded'] = true;

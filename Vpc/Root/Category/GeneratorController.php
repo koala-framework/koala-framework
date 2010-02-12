@@ -5,7 +5,7 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
     protected $_permissions = array('save' => true, 'add' => true);
     protected $_modelName = 'Vpc_Root_Category_GeneratorModel';
 
-    public function _isAllowed($user)
+    protected function _isAllowedComponent()
     {
         $c = Vps_Component_Data_Root::getInstance()
             ->getComponentByDbId($this->_getComponentId(), array('ignoreVisible'=>true));
@@ -15,12 +15,10 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
         }
         return Vps_Registry::get('acl')->getComponentAcl()
             ->isAllowed($this->_getAuthData(), $c);
-        return true;
     }
 
     private function _getComponentId()
     {
-        $id = null;
         if ($this->_getParam('id')) {
             $id = $this->_getParam('id');
         } else {
