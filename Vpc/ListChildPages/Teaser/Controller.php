@@ -25,6 +25,7 @@ class Vpc_ListChildPages_Teaser_Controller extends Vps_Controller_Action_Auto_Vp
     {
         $ret = parent::_getSelect();
         $ret->whereEquals('parent_component_id', $this->_getParam('componentId'));
+        $ret->whereEquals('ignore_visible', true);
         return $ret;
     }
 }
