@@ -3,6 +3,7 @@ class Vpc_Posts_Directory_Model extends Vps_Model_Db
 {
     protected $_table = 'vpc_posts';
     protected $_rowClass = 'Vpc_Posts_Directory_Row';
+    protected $_toStringField = 'id';
 
     protected $_referenceMap = array(
         'User' => array(
