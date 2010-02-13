@@ -4,7 +4,7 @@ class Vpc_ListChildPages_PageNameOnly_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('List child pages');
+        $ret['componentName'] = trlVps('List child page names');
         $ret['cssClass'] = 'webStandard';
         return $ret;
     }
@@ -14,6 +14,18 @@ class Vpc_ListChildPages_PageNameOnly_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $page = $this->getData()->getPage();
         $ret['childPages'] = $page->getChildPages();
+        return $ret;
+    }
+
+    public static function getStaticCacheVars()
+    {
+        $ret = array();
+        $ret[] = array(
+            'model' => 'Vps_Component_Model'
+        );
+        $ret[] = array(
+            'model' => 'Vpc_Root_Category_GeneratorModel'
+        );
         return $ret;
     }
 }

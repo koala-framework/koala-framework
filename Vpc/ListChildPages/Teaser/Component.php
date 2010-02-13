@@ -24,4 +24,16 @@ class Vpc_ListChildPages_Teaser_Component extends Vpc_Abstract
         $ret['children'] = $this->getData()->getChildComponents(array('generator' => 'child'));
         return $ret;
     }
+
+    public static function getStaticCacheVars()
+    {
+        $ret = array();
+        $ret[] = array(
+            'model' => 'Vps_Component_Model'
+        );
+        $ret[] = array(
+            'model' => 'Vpc_Root_Category_GeneratorModel'
+        );
+        return $ret;
+    }
 }
