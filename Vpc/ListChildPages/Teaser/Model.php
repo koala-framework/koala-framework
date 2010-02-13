@@ -25,10 +25,14 @@ class Vpc_ListChildPages_Teaser_Model extends Vps_Model_Abstract
         $whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
         if (isset($whereEquals['parent_component_id'])) {
             $whereId = $select->getPart(Vps_Model_Select::WHERE_ID);
+
+            $componentSelectArray = array(
+                Vps_Component_Select::IGNORE_VISIBLE => true
+            );
             $childPages = Vps_Component_Data_Root::getInstance()
-                ->getComponentById($whereEquals['parent_component_id'], array(
-                    Vps_Component_Select::IGNORE_VISIBLE => true
-                ))->getPage()->getChildPages();
+                ->getComponentById($whereEquals['parent_component_id'], $componentSelectArray)
+                ->getPage()
+                ->getChildPages($componentSelectArray);
             foreach ($childPages as $childPage) {
                 if (is_numeric($childPage->dbId)) {
                     $id = $childPage->dbId;
