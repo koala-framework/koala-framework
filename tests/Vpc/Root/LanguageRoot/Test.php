@@ -12,32 +12,34 @@ class Vpc_Root_LanguageRoot_Test extends Vpc_TestAbstract
 
     public function testIt()
     {
-        $data = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/', 'de');
+        $domain = Zend_Registry::get('config')->server->domain;
+
+        $data = $this->_root->getPageByUrl('http://'.$domain.'/', 'de');
         $this->assertEquals('1', $data->componentId);
         $this->assertEquals('/de', $data->url);
 
-        $data = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/de', 'en');
+        $data = $this->_root->getPageByUrl('http://'.$domain.'/de', 'en');
         $this->assertEquals($data->componentId, '1');
 
-        $data = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/de', ''); //erste
+        $data = $this->_root->getPageByUrl('http://'.$domain.'/de', ''); //erste
         $this->assertEquals($data->componentId, '1');
 
-        $data = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/', 'en');
+        $data = $this->_root->getPageByUrl('http://'.$domain.'/', 'en');
         $this->assertEquals($data->componentId, '3');
         $this->assertEquals($data->url, '/en');
 
-        $data = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/en', 'de');
+        $data = $this->_root->getPageByUrl('http://'.$domain.'/en', 'de');
         $this->assertEquals($data->componentId, '3');
 
-        $data = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/en', 'en');
+        $data = $this->_root->getPageByUrl('http://'.$domain.'/en', 'en');
         $this->assertEquals($data->componentId, '3');
 
 
-        $data = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/', 'fr');
+        $data = $this->_root->getPageByUrl('http://'.$domain.'/', 'fr');
         $this->assertEquals($data->componentId, '5');
         $this->assertEquals($data->url, '/fr');
 
-        $data = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/fr', 'en');
+        $data = $this->_root->getPageByUrl('http://'.$domain.'/fr', 'en');
         $this->assertEquals($data->componentId, '5');
     }
 }
