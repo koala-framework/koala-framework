@@ -51,7 +51,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
             if ($recipient->getMailUnsubscribe()) return false;
         }
         // break if the account has not been activated
-        if ($row->getModel()->hasColumn('activated') && !$row->activated) {
+        if ($recipient->getModel()->hasColumn('activated') && !$recipient->activated) {
             return false;
         }
 
