@@ -38,7 +38,8 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
     {
         $c = Vps_Component_Data_Root::getInstance()
             ->getComponentByDbId($this->_getParam('componentId'));
-        if (!$c->getPage()->visible) {
+        // wenn zB Newsletter statisch in root erstellt wurde, gibts kein visible
+        if (isset($c->getPage()->visible) && !$c->getPage()->visible) {
             //wenn seite offline ist ignorieren
             //  ist nicht natürlich nicht korrekt, wir *müssten* die überprüfung
             //  nachholen, sobald die seite online gestellt wird
