@@ -871,6 +871,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
             unlink($filename);
             $this->_updateModelObserver();
         } else if ($format == self::FORMAT_ARRAY) {
+            // TODO: Buffer entfernen? Noch diskutieren
+            // problem ist wenn man viel importiert ohne buffer, dann kommt ein
+            // "mysql server has gone away" weil das query zu lang ist. ich glaub
+            // standardmäßig darf eine query max 1M haben, weshalb man den
+            // buffer automatisch machen könnte und ihn schreiben, wenn
+            // string > 800.000 Zeichen ist oder ähnlich
+            // ist ja auch nicht nötig, den buffer immer von außen anzugeben,
+            // von außen ists mir eigentlich egal wie genau der das importiert
             if (isset($options['buffer']) && $options['buffer']) {
                 if (isset($this->_importBuffer)) {
                     if ($options != $this->_importBufferOptions) {
