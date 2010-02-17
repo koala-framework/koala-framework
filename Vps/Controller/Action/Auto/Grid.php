@@ -215,7 +215,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
             foreach ($query as $q) {
                 if (strpos($q, ':') !== false) { // falls nach einem bestimmten feld gesucht wird zB id:15
-                    $ret->where($this->_getQueryContainsColon($q));
+                    $whereContainsColon = $this->_getQueryContainsColon($q);
+                    if (!is_null($whereContainsColon)) {
+                        $ret->where($whereContainsColon);
+                    } else {
+                        $ret->where($this->_getQueryExpression($q));
+                    }
                 } else {
                     $ret->where($this->_getQueryExpression($q));
                 }
@@ -263,7 +268,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         return $ret;
     }
 
-    private function _getQueryContainsColon ($query)
+    private function _getQueryContainsColon($query)
     {
         $availableColumns = $this->_model->getColumns();
 
