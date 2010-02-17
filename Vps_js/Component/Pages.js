@@ -24,7 +24,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             disabled: true
         });
 
-        this.treePanel = new Vps.Auto.SyncTreePanel({
+        this.treePanel = new Vps.Auto.TreePanel({
             controllerUrl: '/admin/component/pages',
             title       : trlVps('Seitenbaum'),
             region      : 'west',
@@ -37,6 +37,9 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             tbar: [this.pageButton, '->']
         });
         this.treePanel.getTopToolbar().add(this.treePanel.getAction('reload'));
+        this.treePanel.onMoved = function (response) {
+            this.tree.getRootNode().reload();
+        };
 
         this.contentTabPanel = new Ext.TabPanel({
             region      : 'center'
@@ -217,8 +220,9 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                         this.editDialog.getAutoForm().formPanel = null;
                     }
                     var node = this.treePanel.tree.selModel.selNode;
-                    this.editDialog.getAutoForm().baseParams.componentId = 
-                        node.attributes.editControllerComponentId;
+                    this.editDialog.getAutoForm().setBaseParams({
+                        componentId: node.attributes.editControllerComponentId
+                    });
                     this.editDialog.showEdit(node.id);
                 },
                 icon    : '/assets/silkicons/page_gear.png',
@@ -235,8 +239,10 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 	                    form.remove(form.formPanel, true);
 	                    this.editDialog.getAutoForm().formPanel = null;
 	                }
+                    var node = this.treePanel.tree.selModel.selNode;
                     this.editDialog.getAutoForm().setBaseParams({
-                        parent_id: this.treePanel.tree.selModel.selNode.id
+                        componentId: node.attributes.editControllerComponentId,
+                        parent_id: node.id
                     });
                     this.editDialog.showAdd();
                 },

@@ -5,12 +5,12 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
     {
         $ret = parent::getSettings();
         $ret['generators']['master'] = array(
-            'class' => 'Vps_Component_Generator_PseudoPage_Static',
+            'class' => 'Vpc_Root_TrlRoot_Generator',
             'component' => 'Vpc_Root_TrlRoot_Master_Component',
             'name' => 'de',
         );
         $ret['generators']['slave'] = array(
-            'class' => 'Vps_Component_Generator_PseudoPage_Static',
+            'class' => 'Vpc_Root_TrlRoot_Generator',
             'component' => 'Vpc_Chained_Trl_Base_Component.Vpc_Root_TrlRoot_Master_Component',
             'name' => 'en',
         );

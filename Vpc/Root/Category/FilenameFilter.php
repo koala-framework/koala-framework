@@ -1,15 +1,42 @@
 <?php
-class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_UniqueAscii
+class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
 {
-    public function __construct($sourceField = null)
-    {
-        parent::__construct($sourceField);
-        $this->setGroupBy(array('parent_id'));
-    }
-
     public function skipFilter($row)
     {
         if ($row->custom_filename) return true;
         return parent::skipFilter($row);
+    }
+
+    public function filter($row)
+    {
+        $value = Vps_Filter::filterStatic($row->name, 'Ascii');
+
+        $componentId = $this->_getComponentId($row);
+        if (!$componentId && isset($row->parent_id)) {
+            $parent = Vps_Component_Data_Root::getInstance()
+                ->getComponentById($row->parent_id, array('ignoreVisible' => true));
+        } else {
+            $parent = Vps_Component_Data_Root::getInstance()
+                ->getComponentById($componentId, array('ignoreVisible' => true))
+                ->parent;
+        }
+        $values = array();
+        foreach ($parent->getChildPages(array('ignoreVisible' => true)) as $c) {
+            if ($c->componentId == $componentId) continue;
+            $values[] = $c->filename;
+        }
+
+        $x = 0;
+        $unique = $value;
+        while (in_array($unique, $values)) {
+            $unique = $value . '_' . ++$x;
+        }
+
+        return $unique;
+    }
+
+    protected function _getComponentId($row)
+    {
+        return $row->id;
     }
 }

@@ -7,11 +7,10 @@ class Vpc_Root_DomainRoot_Generator extends Vps_Component_Generator_PseudoPage_T
     protected $_uniqueFilename = true;
     protected $_inherits = true;
 
-    public function getPagesControllerConfig($component)
+    public function getPagesControllerConfig($component, $generatorClass = null)
     {
-        $ret = parent::getPagesControllerConfig($component);
+        $ret = parent::getPagesControllerConfig($component, $generatorClass);
         $ret['icon'] = 'world';
-        $ret['disabledIcon'] = 'world';
         $ret['expanded'] = true;
         return $ret;
     }

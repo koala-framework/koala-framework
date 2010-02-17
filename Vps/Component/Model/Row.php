@@ -58,12 +58,10 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function save()
     {
         $this->_beforeSave();
-        $id = $this->_data->row->id;
-        $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+        $m = $this->_data->row->getModel();
+        $primaryKey = $m->getPrimaryKey();
+        $id = $this->_data->row->$primaryKey;
         if ($id) {
-            if (!is_numeric($id)) {
-                throw new Vps_Exception("Can only save pages");
-            }
             $this->_beforeUpdate();
             $row = $m->getRow($id);
         } else {
