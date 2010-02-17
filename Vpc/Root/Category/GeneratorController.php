@@ -5,18 +5,6 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
     protected $_permissions = array('save' => true, 'add' => true);
     protected $_modelName = 'Vpc_Root_Category_GeneratorModel';
 
-    protected function _isAllowedComponent()
-    {
-        $c = Vps_Component_Data_Root::getInstance()
-            ->getComponentByDbId($this->_getComponentId(), array('ignoreVisible'=>true));
-
-        if (!$c) {
-            throw new Vps_Exception("Can't find component to check permissions");
-        }
-        return Vps_Registry::get('acl')->getComponentAcl()
-            ->isAllowed($this->_getAuthData(), $c);
-    }
-
     private function _getComponentId()
     {
         if ($this->_getParam('id')) {

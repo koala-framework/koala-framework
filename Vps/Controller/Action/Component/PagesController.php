@@ -34,6 +34,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         } else {
             $data = array_merge($data, $component->generator->getPagesControllerConfig($component));
 
+            if (!isset($data['disabledIcon'])) $data['disabledIcon'] = $data['icon'];
             $icon = $disabled ? $data['disabledIcon'] : $data['icon'];
             if (is_string($icon)) {
                 $icon = new Vps_Asset($icon);
@@ -149,7 +150,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $component = $component->parent;
             }
         }
-        parent::jsonMoveAction();
+        parent::jsonMoveAction(); // TODO: chained Rows mitmoven
 
         $this->_rootParentValue = null;
     }
@@ -179,6 +180,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     protected function _changeVisibility(Vps_Model_Row_Interface $row)
     {
         parent::_changeVisibility($row);
+        $config = $row->getData()->generator->getPagesControllerConfig($row->getData());
+        $icon = is_string($config['icon']) ? new Vps_Asset($config['icon']) : $config['icon'];
+        $this->view->icon = $icon->__toString();
         if (!$row->visible) {
             $this->_checkRowIndependence($row, trlVps('hide'));
         }
@@ -192,6 +196,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     private function _checkRowIndependence(Vps_Model_Row_Interface $row, $msgMethod)
     {
+        if (!$row instanceof Vpc_Root_Category_GeneratorRow) return;
         $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
         $pageRow = $m->getRow($row->getData()->row->id);
         $r = $pageRow;

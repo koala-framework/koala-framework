@@ -203,7 +203,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $data['isPseudoPage'] = true;
         $data['componentId'] = $page['id'];
         $data['componentClass'] = $this->_getChildComponentClass($page['component']);
-        $data['row'] = (object)$page;
+        $data['row'] = $this->_getModel()->getRow($id);
         $data['parent'] = $parentData;
         $data['isHome'] = $page['is_home'];
         $data['visible'] = $page['visible'];
@@ -239,25 +239,25 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     }
 
 
-    public function getPagesControllerConfig($component)
+    public function getPagesControllerConfig($component, $generatorClass = null)
     {
-        $data = parent::getPagesControllerConfig($component);
+        $ret = parent::getPagesControllerConfig($component, $generatorClass);
 
-        $data['actions']['properties'] = true;
-        $data['actions']['delete'] = true;
-        $data['actions']['visible'] = true;
-        $data['actions']['makeHome'] = true;
+        $ret['actions']['properties'] = true;
+        $ret['actions']['delete'] = true;
+        $ret['actions']['visible'] = true;
+        $ret['actions']['makeHome'] = true;
 
-        $data['disabledIcon'] = 'page_white';
+        $ret['disabledIcon'] = 'page_white';
         if ($component->isHome) {
-            $data['icon'] = 'application_home';
+            $ret['icon'] = 'application_home';
         } else if (!$component->visible) {
-            $data['icon'] = 'page_red';
+            $ret['icon'] = 'page_red';
         } else {
-            $data['icon'] = 'page';
+            $ret['icon'] = 'page';
         }
-        $data['allowDrop'] = true;
+        $ret['allowDrop'] = true;
 
-        return $data;
+        return $ret;
     }
 }
