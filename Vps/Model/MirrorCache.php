@@ -132,7 +132,13 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 $format = self::_optimalImportExportFormat($this->getProxyModel(), $this->getSourceModel());
             }
 
-            $options = array();
+            // TODO: wär vielleicht ganz gut den buffer zu entfernen, das soll
+            // die import funktion eigentlich automatisch machen. von außen
+            // will ich ja nur sagen "importieren", wie ist mir egal...
+            // Problem war ein "mysql server has gone away" wenn zuviel auf
+            // einmal mit typ array importiert wurde (zeiterfassung, wegen
+            // column transforming). DB und CSV import ignorieren buffer eh
+            $options = array('buffer' => true, 'bufferSize' => 1000);
             $data = $this->getSourceModel()->export($format, $select);
             if (!$select && $this->_truncateBeforeFullImport) {
                 $this->getProxyModel()->deleteRows($this->getProxyModel()->select());
