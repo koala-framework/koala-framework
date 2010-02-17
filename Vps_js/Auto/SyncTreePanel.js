@@ -239,15 +239,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             url: this.controllerUrl + '/json-move',
             params: params,
             success: function(response, options, result) {
-                if (result.parent) {
-                    var parent = this.tree.getNodeById(result.parent);
-                } else {
-                    var parent = this.tree.getRootNode();
-                }
-                var node = this.tree.getNodeById(result.node);
-                var before = this.tree.getNodeById(result.before);
-                parent.insertBefore(node, before);
-                parent.expand();
+            	this.onMoved(result);
             },
             failure: function(r) {
                 this.tree.getRootNode().reload();
@@ -282,18 +274,10 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             success: function(response, options, result) {
                 node = this.tree.getNodeById(result.id);
                 node.attributes.visible = result.visible;
-                this.setVisible(node);
+                node.ui.iconNode.style.backgroundImage = 'url(' + result.icon + ')';
             },
             scope: this
         })
-    },
-
-    setVisible : function (node) {
-        if (node.attributes.visible) {
-            node.ui.iconNode.style.backgroundImage = 'url(' + this.icons['default'] + ')';
-        } else {
-            node.ui.iconNode.style.backgroundImage = 'url(' + this.icons['invisible'] + ')';
-        }
     },
 
     getTree : function() {
@@ -330,6 +314,15 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             var m = this.getSelectionModel();
             if (m) m.clearSelections();
         }
+    },
+
+    onMoved : function (response)
+    {
+        var parent = this.tree.getNodeById(response.parent);
+        var node = this.tree.getNodeById(response.node);
+        var before = this.tree.getNodeById(response.before);
+        parent.insertBefore(node, before);
+        parent.expand();
     },
 
     onSaved : function (response)

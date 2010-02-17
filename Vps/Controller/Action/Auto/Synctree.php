@@ -283,6 +283,11 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $this->_changeVisibility($row);
         $this->view->id = $row->save();
         $this->view->visible = $row->visible == '1';
+        if (!isset($this->view->icon)) {
+            $this->view->icon = $this->view->visible ?
+                $this->_icons['invisible']->__toString() :
+                $this->_icons['default']->__toString();
+        }
     }
 
     protected function _changeVisibility(Vps_Model_Row_Interface $row)
