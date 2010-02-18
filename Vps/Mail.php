@@ -58,8 +58,7 @@ class Vps_Mail extends Zend_Mail
 
     public function setFrom($email, $name='')
     {
-        $validator = new Vps_Validate_EmailAddress();
-        if (empty($email) || !$validator->isValid($email)) {
+        if (empty($email)) {
             throw new Vps_Exception("Email address '$email' cannot be set as from part in a mail. Empty or invalid address.");
         }
         $this->_ownFrom = trim("$name <$email>");
