@@ -146,6 +146,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 $options['replace'] = true;
             }
             $this->getProxyModel()->import($format, $data, $options);
+            $this->getProxyModel()->writeBuffer();
         }
     }
 
