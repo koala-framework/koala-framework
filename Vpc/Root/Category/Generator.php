@@ -153,8 +153,9 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                     }
                 }
             } else {
-                if (isset($this->_pageChilds[$parentData->componentId])) {
-                    $pageIds = $this->_pageChilds[$parentData->componentId];
+                foreach ($this->_pageChilds as $pId => $ids) {
+                    if (substr($pId, 0, strlen($parentId)) == $parentId)
+                        $pageIds = array_merge($pageIds, $ids);
                 }
             }
         } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
