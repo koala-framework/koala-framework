@@ -46,22 +46,36 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
                 $select->whereId(substr($id, 1));
             }
         }
-        foreach ($this->_getChainedChildComponents($parentData, $select) as $c) {
-            if (!$parentData) {
-                $id = $c->parent->componentId;
-
-                //***HACK***
-                $id = str_replace('root-master', 'root-slave', $id); //TODO WICHTIG das muss besser gemacht werden (englische version von deutscher holen)
-                //***/HACK***
-
-                $parentData = Vps_Component_Data_Root::getInstance()->getComponentById($id);
-            }
-            $data = $this->_createData($parentData, $c, $select);
+        foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
+            if (!$parentData) $parentData = $this->_getParentData($component);
+            $data = $this->_createData($parentData, $component, $select);
             if ($data) {
                 $ret[] = $data;
             }
         }
         return $ret;
+    }
+
+    protected function _getParentData($chainedData)
+    {
+        $c = $chainedData->parent;
+        $ids = array();
+        while ($c) {
+            $pos = max(
+                strrpos($c->componentId, '-'),
+                strrpos($c->componentId, '_')
+            );
+            $id = substr($c->componentId, $pos);
+            if ($id == '-master') $id = '-slave';
+            if ((int)$id > 0) $id = '_' . $id;
+            $c = $c->parent;
+            if ($c) $ids[] = $id;
+        }
+        $parentData = Vps_Component_Data_Root::getInstance();
+        foreach (array_reverse($ids) as $id) {
+            $parentData = $parentData->getChildComponent($id);
+        }
+        return $parentData;
     }
 
     protected function _getIdFromRow($row)
@@ -98,7 +112,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
             ->getChildIds($this->_getChainedData($parentData), $select);
     }
 
-    private function _getChainedGenerator()
+    protected function _getChainedGenerator()
     {
         return Vps_Component_Generator_Abstract
             ::getInstance(Vpc_Abstract::getSetting($this->_class, 'masterComponentClass'), $this->_settings['generator']);
