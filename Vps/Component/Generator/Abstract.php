@@ -245,7 +245,7 @@ abstract class Vps_Component_Generator_Abstract
 
         $ret = array();
         foreach ($generators as $g) {
-            if ($component && $g instanceof Vpc_Root_Category_Generator &&
+            if ($component && is_instance_of($g, 'Vpc_Root_Category_Generator') &&
                 !is_numeric($component->componentId)
             ) {
                 $hasPageGenerator = false;
@@ -365,7 +365,7 @@ abstract class Vps_Component_Generator_Abstract
                 if ($continue) { continue; }
             }
             if (isset($selectParts[Vps_Component_Select::WHERE_HOME]) && $selectParts[Vps_Component_Select::WHERE_HOME]) {
-                if (!$g instanceof Vpc_Root_Category_Generator) continue;
+                if (!is_instance_of($g, 'Vpc_Root_Category_Generator')) continue;
             }
             if (!$g->getChildComponentClasses($select)) continue;
 
