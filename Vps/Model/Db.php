@@ -871,23 +871,15 @@ class Vps_Model_Db extends Vps_Model_Abstract
             unlink($filename);
             $this->_updateModelObserver();
         } else if ($format == self::FORMAT_ARRAY) {
-            // TODO: Buffer entfernen? Noch diskutieren
-            // problem ist wenn man viel importiert ohne buffer, dann kommt ein
-            // "mysql server has gone away" weil das query zu lang ist. ich glaub
-            // standardmäßig darf eine query max 1M haben, weshalb man den
-            // buffer automatisch machen könnte und ihn schreiben, wenn
-            // string > 800.000 Zeichen ist oder ähnlich
-            // ist ja auch nicht nötig, den buffer immer von außen anzugeben,
-            // von außen ists mir eigentlich egal wie genau der das importiert
             if (isset($options['buffer']) && $options['buffer']) {
                 if (isset($this->_importBuffer)) {
                     if ($options != $this->_importBufferOptions) {
                         throw new Vps_Exception_NotYetImplemented("You can't buffer imports with different options (not yet implemented)");
                     }
                     $this->_importBuffer = array_merge($this->_importBuffer, $data);
-                    if (isset($options['bufferSize']) &&
-                        count($this->_importBuffer) > $options['bufferSize'])
-                    {
+                    // write buffer when mysql string will get over 700K
+                    // normally mysql supports string up to 1M, but the function
+                    if (self::_recursiveGetSizeForMysql($this->_importBuffer) > 700000) {
                         $this->writeBuffer();
                     }
                 } else {
@@ -901,6 +893,25 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else {
             parent::import($format, $data);
         }
+    }
+
+    // this function just makes a guess at the length
+    final private static function _recursiveGetSizeForMysql($var)
+    {
+        if (!is_array($var) && !is_scalar($var) && !is_null($var)
+        ) {
+            throw new Vps_Exception("only types array, scalar an null allowed. Given is '".gettype($var)."'");
+        }
+
+        $len = 3; // fixed value for mysql quotes and commas.
+        if (is_array($var)) {
+            foreach ($var as $v) {
+                $len += self::_recursiveGetSizeForMysql($v);
+            }
+        } else {
+            $len += strlen($var);
+        }
+        return $len;
     }
 
     private function _getSystemData()
