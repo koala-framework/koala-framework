@@ -47,8 +47,12 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
             }
         }
         foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
-            if (!$parentData) $parentData = $this->_getParentData($component);
-            $data = $this->_createData($parentData, $component, $select);
+            if (!$parentData) {
+                $pData = $this->_getParentData($component, $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE));
+            } else {
+                $pData = $parentData;
+            }
+            $data = $this->_createData($pData, $component, $select);
             if ($data) {
                 $ret[] = $data;
             }
@@ -56,7 +60,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    protected function _getParentData($chainedData)
+    private function _getParentData($chainedData, $slaveData)
     {
         $c = $chainedData->parent;
         $ids = array();
