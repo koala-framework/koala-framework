@@ -57,7 +57,7 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
                 'component_id' => $ret['componentId'],
                 'name' => $row->getRow()->name,
                 'filename' => $row->getRow()->filename,
-                'visible' => false,
+                'visible' => $row->isHome,
                 'custom_filename' => $row->getRow()->custom_filename
             ));
         }
@@ -69,7 +69,7 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         $ret['isHome'] = $row->getRow()->is_home;
         return $ret;
     }
-
+/*
     protected function _getDataClass($config, $id)
     {
         if (isset($config['isHome']) && $config['isHome']) {
@@ -78,5 +78,5 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
             return parent::_getDataClass($config, $id);
         }
     }
-
+*/
 }
