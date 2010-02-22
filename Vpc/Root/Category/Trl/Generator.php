@@ -49,31 +49,34 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
 
     protected function _formatConfig($parentData, $row)
     {
-        $parentData = $this->_getParentData($row); // Muss hier jedes Mal gemacht werden, weil es auf unterschiedliche Weise im PageGenerator erstellt wird
-
         $ret = parent::_formatConfig($parentData, $row);
         $model = Vps_Model_Abstract::getInstance('Vpc_Root_Category_Trl_GeneratorModel');
         $dbRow = $model->getRow($ret['componentId']);
         if (!$dbRow) {
-            // Row anlegen, sobald angezeigt wird, damit visibility immer bei
-            // alles rows unabhängig von Chained Row ist
-            // TODO: nicht mehr verwendete Rows löschen
-            $data = array(
+            $dbRow = $model->createRow(array(
                 'component_id' => $ret['componentId'],
                 'name' => $row->getRow()->name,
                 'filename' => $row->getRow()->filename,
-                'visible' => $row->getRow()->visible,
-                'tags' => '',
+                'visible' => false,
                 'custom_filename' => $row->getRow()->custom_filename
-            );
-            $model->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data)); // import, weil sonst FilenameFilter rekursiv reinläuft TODO: geht wahrscheinlich besser
-            $dbRow = $model->getRow($ret['componentId']);
+            ));
         }
         $ret['row'] = $dbRow;
         $ret['name'] = $dbRow->name;
         $ret['filename'] = $dbRow->filename;
         $ret['visible'] = $dbRow->visible;
+        $ret['tags'] = $row->getRow()->tags;
         $ret['isHome'] = $row->getRow()->is_home;
         return $ret;
     }
+
+    protected function _getDataClass($config, $id)
+    {
+        if (isset($config['isHome']) && $config['isHome']) {
+            return 'Vps_Component_Data_Home';
+        } else {
+            return parent::_getDataClass($config, $id);
+        }
+    }
+
 }
