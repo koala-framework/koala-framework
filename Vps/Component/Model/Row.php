@@ -63,7 +63,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
         $id = $this->_data->row->$primaryKey;
         if ($id) {
             $this->_beforeUpdate();
-            $row = $m->getRow($id);
+            $row = $this->_data->row;
         } else {
             $this->_beforeInsert();
             $row = $m->createRow();
