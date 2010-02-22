@@ -877,11 +877,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
                         throw new Vps_Exception_NotYetImplemented("You can't buffer imports with different options (not yet implemented)");
                     }
                     $this->_importBuffer = array_merge($this->_importBuffer, $data);
-                    // write buffer when mysql string will get over 700K
-                    // normally mysql supports string up to 1M, but the function
-                    if (self::_recursiveGetSizeForMysql($this->_importBuffer) > 700000) {
-                        $this->writeBuffer();
-                    }
+                    // handling for not sending too much data to mysql in one query
+                    // is in _importArray() function
                 } else {
                     $this->_importBufferOptions = $options;
                     $this->_importBuffer = $data;
@@ -893,25 +890,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else {
             parent::import($format, $data);
         }
-    }
-
-    // this function just makes a guess at the length
-    final private static function _recursiveGetSizeForMysql($var)
-    {
-        if (!is_array($var) && !is_scalar($var) && !is_null($var)
-        ) {
-            throw new Vps_Exception("only types array, scalar an null allowed. Given is '".gettype($var)."'");
-        }
-
-        $len = 3; // fixed value for mysql quotes and commas.
-        if (is_array($var)) {
-            foreach ($var as $v) {
-                $len += self::_recursiveGetSizeForMysql($v);
-            }
-        } else {
-            $len += strlen($var);
-        }
-        return $len;
     }
 
     private function _getSystemData()
@@ -955,34 +933,43 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         $fields = array_keys($data[0]);
         if (isset($options['replace']) && $options['replace']) {
-            $sql = 'REPLACE';
+            $sqlTableAndColumns = 'REPLACE';
         } else {
-            $sql = 'INSERT';
+            $sqlTableAndColumns = 'INSERT';
         }
         foreach ($fields as &$f) {
             $f = $this->transformColumnName($f);
         }
         if (isset($options['ignore']) && $options['ignore'])
-            $sql .= ' IGNORE';
-        $sql .= ' INTO '.$this->getTableName().' ('.implode(', ', $fields).') VALUES ';
+            $sqlTableAndColumns .= ' IGNORE';
+        $sqlTableAndColumns .= ' INTO '.$this->getTableName().' ('.implode(', ', $fields).') VALUES ';
+        $sqlValues = '';
         foreach ($data as $d) {
             if (array_keys($d) != array_keys($data[0])) {
                 throw new Vps_Exception_NotYetImplemented("You must have always the same keys when importing");
             }
-            $sql .= '(';
+            $sqlValues .= '(';
             foreach ($d as $i) {
                 if (is_null($i)) {
-                    $sql .= 'NULL';
+                    $sqlValues .= 'NULL';
                 } else {
-                    $sql .= $this->_table->getAdapter()->quote($i);
+                    $sqlValues .= $this->_table->getAdapter()->quote($i);
                 }
-                $sql .= ',';
+                $sqlValues .= ',';
             }
-            $sql = substr($sql, 0, -1);
-            $sql .= '),';
+            $sqlValues = substr($sqlValues, 0, -1);
+            $sqlValues .= '),';
+
+            // write buffer when mysql string will get over 700K
+            // normally mysql supports string up to 1M
+            if (strlen($sqlValues) > 700000) {
+                $this->executeSql($sqlTableAndColumns.substr($sqlValues, 0, -1));
+                $sqlValues = '';
+            }
         }
-        $sql = substr($sql, 0, -1);
-        $this->executeSql($sql);
+        if ($sqlValues) {
+            $this->executeSql($sqlTableAndColumns.substr($sqlValues, 0, -1));
+        }
     }
 
     public function executeSql($sql)

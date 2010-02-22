@@ -132,7 +132,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 $format = self::_optimalImportExportFormat($this->getProxyModel(), $this->getSourceModel());
             }
 
-            $options = array('buffer' => true);
+            $options = array();
             $data = $this->getSourceModel()->export($format, $select);
             if (!$select && $this->_truncateBeforeFullImport) {
                 $this->getProxyModel()->deleteRows($this->getProxyModel()->select());
@@ -140,7 +140,6 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 $options['replace'] = true;
             }
             $this->getProxyModel()->import($format, $data, $options);
-            $this->getProxyModel()->writeBuffer();
         }
     }
 
