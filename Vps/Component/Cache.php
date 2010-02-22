@@ -83,7 +83,6 @@ class Vps_Component_Cache
         );
         $options = array(
             'buffer' => true,
-            'bufferSize' => 50,
             'replace' => true
         );
         $this->getModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
@@ -124,7 +123,6 @@ class Vps_Component_Cache
         );
         $options = array(
             'buffer' => true,
-            'bufferSize' => 50,
             'replace' => true
         );
         $this->getMetaModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
