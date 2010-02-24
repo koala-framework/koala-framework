@@ -30,8 +30,8 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getChainedChildComponents($parentData, $select)
     {
-        if ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE)) {
-            $select->whereOnSamePage($this->_getChainedData($p));
+        if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+            $select->whereChildOfSamePage($this->_getChainedData($p));
         }
         return $this->_getChainedGenerator()
             ->getChildData($this->_getChainedData($parentData), $select);
@@ -48,7 +48,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         }
         foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
             if (!$parentData) {
-                $pData = $this->_getParentData($component, $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE));
+                $pData = $this->_getParentData($component, $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE));
             } else {
                 $pData = $parentData;
             }

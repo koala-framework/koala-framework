@@ -93,7 +93,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getPageIds($parentData, $select)
     {
-        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE))) {
+        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE))) {
             if ($p->getPage()) $p = $p->getPage();
             $parentData = $p;
         }
