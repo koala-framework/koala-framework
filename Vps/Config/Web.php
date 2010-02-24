@@ -1,7 +1,7 @@
 <?php
-require_once 'Zend/Config/Ini.php';
+require_once 'Vps/Config/Ini.php';
 
-class Vps_Config_Web extends Zend_Config_Ini
+class Vps_Config_Web extends Vps_Config_Ini
 {
     public static function getInstance($section)
     {
@@ -43,12 +43,12 @@ class Vps_Config_Web extends Zend_Config_Ini
         }
 
         $vpsSection = false;
-        $webConfig = new Zend_Config_Ini($webPath.'/application/config.ini', 
+        $webConfig = new Vps_Config_Ini($webPath.'/application/config.ini',
                         $this->_getWebSection($webPath.'/application/config.ini', $section));
         if (!empty($webConfig->vpsConfigSection)) {
             $vpsSection = $webConfig->vpsConfigSection;
         } else {
-            $vpsConfigFull = new Zend_Config_Ini($vpsPath.'/config.ini', null);
+            $vpsConfigFull = new Vps_Config_Ini($vpsPath.'/config.ini', null);
             if (isset($vpsConfigFull->$section)) {
                 $vpsSection = $section;
             }
@@ -91,7 +91,7 @@ class Vps_Config_Web extends Zend_Config_Ini
     
     private function _getWebSection($file, $section)
     {
-        $webConfigFull = new Zend_Config_Ini($file, null);
+        $webConfigFull = new Vps_Config_Ini($file, null);
         if (isset($webConfigFull->$section)) {
             $webSection = $section;
         } else if (isset($webConfigFull->vivid)) {
@@ -109,7 +109,7 @@ class Vps_Config_Web extends Zend_Config_Ini
 
     protected final function _mergeFile($file, $section)
     {
-        return self::mergeConfigs($this, new Zend_Config_Ini($file, $this->_getWebSection($file, $section)));
+        return self::mergeConfigs($this, new Vps_Config_Ini($file, $this->_getWebSection($file, $section)));
     }
 
     /**
