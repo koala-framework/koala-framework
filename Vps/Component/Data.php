@@ -220,7 +220,7 @@ class Vps_Component_Data
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
             $cache->save($generators, $cacheId);
         }
-        $select->whereOnSamePage($this);
+        $select->whereChildOfSamePage($this);
         foreach ($generators as $g) {
             if (!$g['static']) {
                 $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);

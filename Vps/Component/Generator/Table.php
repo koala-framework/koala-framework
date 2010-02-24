@@ -90,7 +90,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         Vps_Benchmark::count('GenTable::getChildData');
         if (is_array($select)) $select = new Vps_Component_Select($select);
         $ret = array();
-        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE))
+        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE))
                 && !$this->_getModel()->hasColumn('component_id')) {
             $parentDatas = $p->getRecursiveChildComponents(array(
                 'componentClass' => $this->_class
@@ -151,6 +151,24 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             }
             $ret = Vps_Component_Data_Root::getInstance()
                 ->getComponentsByDbId($row->component_id, $constraints);
+
+            //streng genommen nicht on same page sondern children of und auf same page
+            //siehe Vps_Component_Generator_RecursiveTable2_RecursiveTest
+            if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+                foreach ($ret as $k=>$i) {
+                    $found = false;
+                    while ($i) {
+                        if ($p->componentId == $i->componentId) {
+                            $found = true;
+                        }
+                        if ($i->isPage) break; //bei page aufhoeren
+                        $i = $i->parent;
+                    }
+                    if (!$found) {
+                        unset($ret[$k]); //kein gemeinsamer parent vorhanden
+                    }
+                }
+            }
         } else {
             throw new Vps_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
         }
@@ -181,7 +199,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if ($this->_getModel()->hasColumn('component_id')) {
             if ($parentData) {
                 $select->whereEquals('component_id', $parentData->dbId);
-            } else if ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE)) {
+            } else if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
                 $p = $p->getPageOrRoot();
                 $select->where(new Vps_Model_Select_Expr_Or(array(
                     new Vps_Model_Select_Expr_StartsWith('component_id', $p->dbId.'-'),
