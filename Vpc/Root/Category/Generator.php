@@ -13,6 +13,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     protected $_pageComponentParent = array();
     protected $_pageComponent = array();
     private $_pageHome = null;
+    private $_pageChilds = array();
 
     protected function _loadPageData($parentData, $select)
     {
