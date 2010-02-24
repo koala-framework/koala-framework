@@ -7,7 +7,11 @@ class Vps_Config_Ini extends Zend_Config_Ini
     //im neuen zend gibts _parseIniFile - nur das sollte ?berschrieben werden
     protected function _loadIniFile($filename)
     {
-        $loaded = parse_ini_file($filename, true, INI_SCANNER_RAW); // Warnings and errors are suppressed
+        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+            $loaded = parse_ini_file($filename, true, INI_SCANNER_RAW); // Warnings and errors are suppressed
+        } else {
+            $loaded = parse_ini_file($filename, true); // Warnings and errors are suppressed
+        }
 
         $iniArray = array();
         foreach ($loaded as $key => $data)
