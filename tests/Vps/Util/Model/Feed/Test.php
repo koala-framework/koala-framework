@@ -316,7 +316,8 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->media_image);
     }
-
+    /*
+    test deaktiviert weil der feed kaputt ist
     public function testImageAtomEnclosure()
     {
         $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
@@ -324,6 +325,7 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->media_image);
     }
+    */
 
     public function testAtomXhmlContent()
     {
