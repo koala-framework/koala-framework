@@ -924,7 +924,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if (empty($data)) return;
         if ($this->getSiblingModels()) {
             if ($options) {
-                throw new Vps_Exception_NotYetImplemented();
+                throw new Vps_Exception_NotYetImplemented("import options together with siblingModels are not yet implemented");
             }
             foreach ($data as $r) {
                 $this->createRow($r)->save();
