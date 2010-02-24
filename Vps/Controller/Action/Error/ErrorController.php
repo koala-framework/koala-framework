@@ -44,18 +44,20 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
 
     public function jsonMailAction()
     {
-        $e = new Vps_Exception_JavaScript($this->_getParam('message'));
-        $e->setUrl($this->_getParam('url'));
-        $e->setLineNumber($this->_getParam('lineNumber'));
-        $e->setLocation($this->_getParam('location'));
-        $e->setReferrer($this->_getParam('referrer'));
+        if ($this->_getParam('message')) {
+            $e = new Vps_Exception_JavaScript($this->_getParam('message'));
+            $e->setUrl($this->_getParam('url'));
+            $e->setLineNumber($this->_getParam('lineNumber'));
+            $e->setLocation($this->_getParam('location'));
+            $e->setReferrer($this->_getParam('referrer'));
 
-        try {
-            $stack = Zend_Json::decode($this->_getParam('stack'));
-            $e->setStack($stack);
-        } catch (Exception $e) {
+            try {
+                $stack = Zend_Json::decode($this->_getParam('stack'));
+                $e->setStack($stack);
+            } catch (Exception $e) {
+            }
+            $e->log();
         }
-        $e->log();
     }
 
     public function jsonTimeoutAction()
