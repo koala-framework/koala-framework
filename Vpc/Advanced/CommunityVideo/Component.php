@@ -20,13 +20,17 @@ class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
 
         $url = $this->getRow()->url;
-        $urlParts = parse_url($url);
+        if (!empty($url)) {
+            $urlParts = parse_url($url);
 
-        if (preg_match('/youtube\.com$/i', $urlParts['host'])) {
-            $url = str_replace('/watch?v=', '/v/', $url);
-        } else if (preg_match('/vimeo\.com$/i', $urlParts['host'])) {
-            $clipId = substr($urlParts['path'], 1);
-            $url = 'http://vimeo.com/moogaloop.swf?clip_id='.$clipId.'&server=vimeo.com&show_title=1&show_byline=1&show_portrait=0&color=&fullscreen=1';
+            if ($urlParts && !empty($urlParts['host'])) {
+                if (preg_match('/youtube\.com$/i', $urlParts['host'])) {
+                    $url = str_replace('/watch?v=', '/v/', $url);
+                } else if (preg_match('/vimeo\.com$/i', $urlParts['host'])) {
+                    $clipId = substr($urlParts['path'], 1);
+                    $url = 'http://vimeo.com/moogaloop.swf?clip_id='.$clipId.'&server=vimeo.com&show_title=1&show_byline=1&show_portrait=0&color=&fullscreen=1';
+                }
+            }
         }
 
         $ret['flashUrl'] = $url;
