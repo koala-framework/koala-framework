@@ -154,7 +154,8 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                 }
             } else {
                 foreach ($this->_pageChilds as $pId => $ids) {
-                    if (substr($pId, 0, strlen($parentId)) == $parentId)
+                    //if (substr($pId, 0, strlen($parentId)) == $parentId) //TODO für chained wird irgendwo das benötigt (ist aber kaputt)
+                    if ($pId == $parentId)
                         $pageIds = array_merge($pageIds, $ids);
                 }
             }
