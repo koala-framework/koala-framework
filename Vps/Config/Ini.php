@@ -74,4 +74,47 @@ class Vps_Config_Ini extends Zend_Config_Ini
             return true;
         }
     }
+
+    //kopie von zend um INI_SCANNER_RAW einzuf?gen; f?r Php 5.3
+    //im neuen zend gibts _parseIniFile - nur das sollte ?berschrieben werden
+    protected function _loadIniFile($filename)
+    {
+        set_error_handler(array($this, '_loadFileErrorHandler'));
+        $loaded = parse_ini_file($filename, true, INI_SCANNER_RAW); // Warnings and errors are suppressed
+        restore_error_handler();
+        // Check if there was a error while loading file
+        if ($this->_loadFileErrorStr !== null) {
+            /**
+             * @see Zend_Config_Exception
+             */
+            require_once 'Zend/Config/Exception.php';
+            throw new Zend_Config_Exception($this->_loadFileErrorStr);
+        }
+
+        $iniArray = array();
+        foreach ($loaded as $key => $data)
+        {
+            $pieces = explode($this->_sectionSeparator, $key);
+            $thisSection = trim($pieces[0]);
+            switch (count($pieces)) {
+                case 1:
+                    $iniArray[$thisSection] = $data;
+                    break;
+
+                case 2:
+                    $extendedSection = trim($pieces[1]);
+                    $iniArray[$thisSection] = array_merge(array(';extends'=>$extendedSection), $data);
+                    break;
+
+                default:
+                    /**
+                     * @see Zend_Config_Exception
+                     */
+                    require_once 'Zend/Config/Exception.php';
+                    throw new Zend_Config_Exception("Section '$thisSection' may not extend multiple sections in $filename");
+            }
+        }
+
+        return $iniArray;
+    }
 }
