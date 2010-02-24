@@ -4,7 +4,7 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
     public function jsonUploadAction()
     {
         if (!isset($_FILES['Filedata'])) {
-            throw new Vps_Exception("No Filedata received");
+            throw new Vps_ClientException(trlVps("No Filedata received."));
         }
         $file = $_FILES['Filedata'];
         if ($file['error']) {
