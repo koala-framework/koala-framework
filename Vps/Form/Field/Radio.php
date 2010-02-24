@@ -44,6 +44,16 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
         return $ret;
     }
 
+    protected function _validateNotAllowBlank($data, $name)
+    {
+        $ret = array();
+        $v = new Vps_Validate_NotEmpty();
+        if (!$v->isValid($data)) {
+            $ret[] = $name.": ".trlVps("Please choose an option");
+        }
+        return $ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);

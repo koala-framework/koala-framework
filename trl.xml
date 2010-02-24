@@ -5492,5 +5492,24 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Alle</de>
 <id>1435</id>
 </text>
+<text>
+<en>Can't delete translated pages.</en>
+<de>Kann übersetzte Seite nicht löschen.</de>
+<id>1436</id>
+</text>
+<text>
+<en>List child page names</en>
+<de>Liste der Unterseitennamen</de>
+<id>1437</id>
+</text>
+<text>
+<en>Please choose an option</en>
+<de>Bitte wählen Sie eine Option aus</de>
+<id>1438</id>
+</text>
+<text>
+<en>No Filedata received.</en>
+<id>1439</id>
+</text>
 </trl>
 
