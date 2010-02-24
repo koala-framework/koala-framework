@@ -209,7 +209,7 @@ class Vps_Setup
         }
 
         if ($tl = $config->debug->timeLimit) {
-            set_time_limit($tl);
+            set_time_limit((int)$tl);
         }
 
         self::_setLocale();
