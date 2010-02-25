@@ -95,7 +95,6 @@ class Vps_Trl_Parser
                           }
                           $ret = Zend_Registry::get('trl')->parse(file_get_contents($file), $extension);
                           if ($ret){
-                              set_time_limit(60);
                               $errors = array_merge($errors, $this->insertToXml($ret, $file->getPathname(), $dirKey));
                           }
                       }
@@ -158,7 +157,6 @@ class Vps_Trl_Parser
                             if (isset($entry['context'])) {
                               $content['context'] = $entry['context'];
                             }
-                            set_time_limit(20);
                             $row = $xmlModel->createRow($content);
 
 
@@ -213,7 +211,6 @@ class Vps_Trl_Parser
 
     private function _cleanUp ($quiet)
     {
-        set_time_limit(200);
         $toDeleteRows = array();
         if ($this->_cleanUp == "all" || $this->_cleanUp == "vps") {
             $rows = $this->_modelVps->getRows();
