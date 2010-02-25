@@ -20,12 +20,6 @@ class Vps_Model_Session_Test extends Vps_Test_SeleniumTestCase
         Vps_Component_Data_Root::setComponentClass(null);
     }
 
-    public function testException()
-    {
-        $this->setExpectedException('Vps_Model_Session_TestException');
-        $this->open('/vps/test/vps_model_session_test/test-exception');
-    }
-
     public function testModel()
     {
         $this->open('/vps/test/vps_model_session_test/model-get');
