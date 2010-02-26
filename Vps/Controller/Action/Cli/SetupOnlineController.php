@@ -24,7 +24,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
         $sshHost = $config->server->user.'@'.$config->server->host;
         $sshDir = $config->server->dir;
 
-        $cmd = "ssh $sshHost ".escapeshellarg("cd $sshDir && $cmd");
+        $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("cd $sshDir && $cmd");
         if ($this->_getParam('debug')) {
             echo $cmd."\n";
         }
@@ -48,7 +48,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
         $sshHost = $config->server->user.'@'.$config->server->host;
         $sshDir = $config->server->dir;
         $cmd = "echo ".escapeshellarg($sql)." | mysql";
-        $cmd = "ssh $sshHost ".escapeshellarg("$cmd");
+        $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("$cmd");
         $ret = null;
         if ($this->_getParam('debug')) echo "$cmd\n";
         system($cmd, $ret);
@@ -70,7 +70,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
             $sshHost = $config->server->user.'@'.$config->server->host;
             $sshDir = $config->server->dir;
             $cmd = "if [ -d $sshDir ]; then echo \"yes\"; else echo \"no\"; fi";
-            $cmd = "ssh $sshHost ".escapeshellarg($cmd);
+            $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg($cmd);
             if ($this->_getParam('debug')) echo "$cmd\n";
             if (trim(exec($cmd)) != "yes") {
                 if ($server != 'vivid-test-server') {
@@ -80,7 +80,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                     continue;
                 }
             }
-            $cmd = "ssh $sshHost ".escapeshellarg("cd $sshDir && ls -l");
+            $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("cd $sshDir && ls -l");
             if ($this->_getParam('debug')) echo "$cmd\n";
             $l = trim(exec($cmd));
             if ($l != "total 0" && $l != "insgesamt 0") {
@@ -100,7 +100,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
             foreach ($args as $a) {
                 $cmd .= " ".escapeshellarg($a);
             }
-            $cmd = "ssh $sshHost ".escapeshellarg($cmd);
+            $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg($cmd);
             if ($this->_getParam('debug')) echo "$cmd\n";
             $this->_systemCheckRet($cmd);
         }
@@ -151,7 +151,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
 
                     $sql = "GRANT ALL PRIVILEGES ON `$projectName%` . * TO '$dbUser'@'localhost'";
                     $cmd = "echo ".escapeshellarg($sql)." | mysql";
-                    $cmd = "ssh $sshHost ".escapeshellarg("$cmd");
+                    $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("$cmd");
                     if ($this->_getParam('debug')) echo "$cmd\n";
                     system($cmd, $ret);
                     if ($ret) {
