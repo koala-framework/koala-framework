@@ -31,7 +31,7 @@ Vps.Switch.Display = function(el) {
     this.switchContent.setStyle('display', 'none');
 
     // if it is important, show on startup
-    if (this.switchContent.down('.vpsImportant')) {
+    if (this.switchContent.child('.vpsImportant')) {
         this.switchContent.setStyle('display', 'block');
         this.switchContent.setStyle('height', 'auto');
         this.switchLink.addClass('switchLinkOpened');
