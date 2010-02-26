@@ -24,7 +24,8 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
             $process = $data
                 ->getRecursiveChildComponents(array(
                         'page' => false,
-                        'flags' => array('processInput' => true)
+                        'flags' => array('processInput' => true),
+                        'ignoreVisible' => true
                     ));
             if (Vps_Component_Abstract::getFlag($data->componentClass, 'processInput')) {
                 $process[] = $data;
