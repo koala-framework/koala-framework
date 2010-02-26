@@ -20,7 +20,7 @@ class Vpc_Chained_Trl_Base_Component extends Vpc_Abstract
                 $g['masterComponentsMap'][$masterC] = $c;
             }
             $g['chainedGenerator'] = $g['class'];
-            $g['class'] = 'Vpc_Chained_Trl_Base_Generator';
+            $g['class'] = 'Vpc_Chained_Trl_Generator';
         }
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;

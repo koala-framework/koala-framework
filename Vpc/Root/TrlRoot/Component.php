@@ -9,10 +9,11 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
             'component' => 'Vpc_Root_TrlRoot_Master_Component',
             'name' => 'de',
         );
-        $ret['generators']['slave'] = array(
+        $ret['generators']['chained'] = array(
             'class' => 'Vpc_Root_TrlRoot_Generator',
-            'component' => 'Vpc_Chained_Trl_Base_Component.Vpc_Root_TrlRoot_Master_Component',
-            'name' => 'en',
+            'component' => array(
+                'en' => 'Vpc_Chained_Trl_Base_Component.Vpc_Root_TrlRoot_Master_Component',
+            )
         );
         return $ret;
     }
@@ -22,7 +23,7 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
         if ($path == '') {
             $ret = null;
             $lngs = array();
-            foreach ($this->getData()->getChildComponents() as $c) {
+            foreach ($this->getData()->getChildComponents(array('pseudoPage'=>true)) as $c) {
                 $lngs[$c->filename] = $c;
             }
             if(preg_match('#^([a-z]{2,3})#', $acceptLangauge, $m)) {
@@ -30,7 +31,9 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
                     $ret = $lngs[$m[1]];
                 }
             }
-            if (!$ret) $ret = current($lngs);
+            if (!$ret) {
+                $ret = current($lngs);
+            }
             return $ret->getChildPage(array('home' => true));
         }
         return parent::getPageByUrl($path, $acceptLangauge);

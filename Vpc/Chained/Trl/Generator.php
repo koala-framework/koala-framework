@@ -17,15 +17,23 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getChainedData($data)
     {
-        if ($data) {
-            if (isset($data->chained)) {
-                $data = $data->chained;
-            } else {
-                $gen = Vps_Component_Generator_Abstract::getInstances($data, array('generatorFlag'=>'trlBase'));
-                return $gen[0]->_getChainedData($data);
+        if (is_instance_of($this->_class, 'Vpc_Chained_Trl_Base_Component')) {
+            if ($data->componentClass == $this->_class) {
+            return Vps_Component_Data_Root::getInstance()
+                ->getComponentByClass(Vpc_Abstract::getSetting($this->_class, 'masterComponentClass'));
             }
+            throw new Vps_Exception_NotYetImplemented();
+        } else {
+            if ($data) {
+                if (isset($data->chained)) {
+                    $data = $data->chained;
+                } else {
+                    $gen = Vps_Component_Generator_Abstract::getInstances($data, array('generatorFlag'=>'trlBase'));
+                    return $gen[0]->_getChainedData($data);
+                }
+            }
+            return $data;
         }
-        return $data;
     }
 
     protected function _getChainedChildComponents($parentData, $select)
@@ -134,11 +142,15 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         $ret = parent::getGeneratorFlags();
         $flags = $this->_getChainedGenerator()->getGeneratorFlags();
 
-        $copyFlags = array('showInPageTreeAdmin', 'page', 'pseudoPage', 'box', 'multiBox');
+        $copyFlags = array('showInPageTreeAdmin', 'page', 'pseudoPage', 'box', 'multiBox', 'table', 'static', 'hasHome');
         foreach ($copyFlags as $f) {
             if (isset($flags[$f])) {
                 $ret[$f] = $flags[$f];
             }
+        }
+
+        if (is_instance_of($this->_class, 'Vpc_Chained_Trl_Base_Component')) {
+            $ret['trlBase'] = true;
         }
         return $ret;
     }

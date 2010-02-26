@@ -314,4 +314,10 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
         return $target;
     }
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['table'] = true;
+        return $ret;
+    }
 }

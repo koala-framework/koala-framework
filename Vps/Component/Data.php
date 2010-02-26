@@ -285,7 +285,7 @@ class Vps_Component_Data
             foreach (Vps_Component_Generator_Abstract::getInstances($componentClass, $select) as $generator) {
                 if ($generator->getChildComponentClasses($select)) {
                     $ret[] = array(
-                        'static' => $generator instanceof Vps_Component_Generator_Static,
+                        'static' => !!$generator->getGeneratorFlag('static'),
                         'class' => $generator->getClass(),
                         'pluginBaseComponentClass' => $generator->getPluginBaseComponentClass(),
                         'key' => $generator->getGeneratorKey()

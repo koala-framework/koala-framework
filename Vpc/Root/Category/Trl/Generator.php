@@ -50,14 +50,13 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
     protected function _formatConfig($parentData, $row)
     {
         $ret = parent::_formatConfig($parentData, $row);
-        $model = Vps_Model_Abstract::getInstance('Vpc_Root_Category_Trl_GeneratorModel');
-        $dbRow = $model->getRow($ret['componentId']);
+        $dbRow = $this->_getModel()->getRow($ret['componentId']);
         if (!$dbRow) {
-            $dbRow = $model->createRow(array(
+            $dbRow = $this->_getModel()->createRow(array(
                 'component_id' => $ret['componentId'],
                 'name' => $row->getRow()->name,
                 'filename' => $row->getRow()->filename,
-                'visible' => $row->isHome,
+                'visible' => $row->isHome, //home ist standardmäßig immer sichtbar, andere seiten nicht
                 'custom_filename' => $row->getRow()->custom_filename
             ));
         }
@@ -66,10 +65,10 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         $ret['filename'] = $dbRow->filename;
         $ret['visible'] = $dbRow->visible;
         $ret['tags'] = $row->getRow()->tags;
-        $ret['isHome'] = $row->getRow()->is_home;
+        $ret['isHome'] = $row->isHome;
         return $ret;
     }
-/*
+
     protected function _getDataClass($config, $id)
     {
         if (isset($config['isHome']) && $config['isHome']) {
@@ -78,5 +77,4 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
             return parent::_getDataClass($config, $id);
         }
     }
-*/
 }
