@@ -28,7 +28,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
             $ret['componentIcon'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentIcon', false);
         } catch (Exception $e) {}
 
-        foreach (array('showInPageTreeAdmin', 'processInput') as $f) {
+        foreach (array('showInPageTreeAdmin', 'processInput', 'menuCategory') as $f) {
             $flags = Vpc_Abstract::getSetting($masterComponentClass, 'flags', false);
             if (isset($flags[$f])) {
                 $ret['flags'][$f] = $flags[$f];

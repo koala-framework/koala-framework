@@ -19,6 +19,7 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
     {
         Vps_Component_ModelObserver::getInstance()->clear();
         Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
+        Vps_Component_Data_Root::reset();
     }
 
     protected final function _process()

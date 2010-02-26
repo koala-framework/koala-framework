@@ -29,11 +29,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             }
             if (is_string($level)) {
                 $component = $this->getData()->parent;
-
-                while ($component &&
-                    !is_instance_of($component->componentClass, 'Vpc_Root_Category_Component') &&
-                    !is_instance_of($component->componentClass, 'Vpc_Root_Category_Trl_Component') // HACK, sollte irgendwie von selbst gehen
-                ) {
+                while ($component && !Vpc_Abstract::getFlag($component->componentClass, 'menuCategory')) {
                     $component = $component->parent;
                 }
                 $category = null;
@@ -43,7 +39,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                     while ($component && !$category) {
                         $component = $component->parent;
                         $category = $component->getChildComponent('-' . $level);
-                        if ($category && !is_instance_of($category->componentClass, 'Vpc_Root_Category_Component')) {
+                        if ($category && !Vpc_Abstract::getFlag($component->componentClass, 'menuCategory')) {
                             $category = false;
                         }
                     }

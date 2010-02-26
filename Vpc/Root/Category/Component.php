@@ -17,6 +17,7 @@ class Vpc_Root_Category_Component extends Vpc_Abstract
         );
         $ret['componentName'] = trlVps('Category');
         $ret['flags']['showInPageTreeAdmin'] = true;
+        $ret['flags']['menuCategory'] = true;
         return $ret;
     }
 }

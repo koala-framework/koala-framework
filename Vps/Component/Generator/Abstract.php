@@ -365,7 +365,7 @@ abstract class Vps_Component_Generator_Abstract
                 if ($continue) { continue; }
             }
             if (isset($selectParts[Vps_Component_Select::WHERE_HOME]) && $selectParts[Vps_Component_Select::WHERE_HOME]) {
-                if (!is_instance_of($g, 'Vpc_Root_Category_Generator')) continue;
+                if (!$g->getGeneratorFlag('hasHome')) continue;
             }
             if (!$g->getChildComponentClasses($select)) continue;
 
