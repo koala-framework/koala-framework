@@ -49,14 +49,15 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $config->server->host = 'intern.vivid-planet.com';
         }
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
+        $this->_sshPort = $config->server->port;
         $this->_sshDir = $config->server->dir;
 
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-update-revision";
         } else if ($this->_useSshVps) {
-            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-update-revision";
+            $cmd = "sudo -u vps sshvps $this->_sshHost:$this->_sshPort $this->_sshDir import get-update-revision";
         } else {
-            $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-update-revision");
+            $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-update-revision");
         }
         if ($this->_getParam('debug')) echo $cmd."\n";
         exec($cmd, $onlineRevision, $ret);
@@ -101,7 +102,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             } else {
-                $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
+                $cmd = "rsync --port=$this->_sshPort --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             }
@@ -238,16 +239,16 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                     $ignoreTables = implode(',', array_merge($cacheTables, $keepTables));
                     if ($ignoreTables) $ignoreTables = " --ignore-tables=$ignoreTables";
                 }
-                $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir db-dump --key=$dbKey";
+                $cmd = "sudo -u vps sshvps $this->_sshHost:$this->_sshPort $this->_sshDir db-dump --key=$dbKey";
                 $cmd .= "$ignoreTables";
                 if ($this->_getParam('debug')) $cmd .= " --debug";
                 $cmd .= " | gunzip";
             } else {
-                $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-db-config --key=$dbKey");
+                $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-db-config --key=$dbKey");
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
                 $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
-                $cmd = "ssh $this->_sshHost ".escapeshellarg($cmd);
+                $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg($cmd);
             }
             $descriptorspec = array(
                 1 => array("pipe", "w")
@@ -297,7 +298,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($ownConfig->server->host == $config->server->host) {
             $cmd = "cd {$config->server->dir} && php bootstrap.php import get-logs | tar xzm";
         } else {
-            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-logs | tar xzm";
+            $cmd = "sudo -u vps sshvps $this->_sshHost:$this->_sshPort $this->_sshDir import get-logs | tar xzm";
         }
         if ($this->_getParam('debug')) echo $cmd."\n";
         $this->_systemCheckRet($cmd);
@@ -309,9 +310,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             if ($ownConfig->server->host == $config->server->host) {
                 $cmd = "cd {$config->server->dir} && php bootstrap.php import get-rrd";
             } else if ($this->_useSshVps) {
-                $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir import get-rrd";
+                $cmd = "sudo -u vps sshvps $this->_sshHost:$this->_sshPort $this->_sshDir import get-rrd";
             } else {
-                $cmd = "ssh $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-rrd");
+                $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-rrd");
             }
             if ($this->_getParam('debug')) echo $cmd."\n";
             $data = unserialize(`$cmd`);
@@ -381,11 +382,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $cmd .= "--exclude='*' ";
             $cmd .= ". {$ownConfig->server->dir}";
         } else if ($this->_useSshVps) {
-            $cmd = "sudo -u vps sshvps $this->_sshHost $this->_sshDir copy-files";
+            $cmd = "sudo -u vps sshvps $this->_sshHost:$this->_sshPort $this->_sshDir copy-files";
             $cmd .= " --includes=\"".implode(',', $includes)."\"";
             if ($this->_getParam('debug')) $cmd .= " --debug";
         } else {
-            $cmd = "rsync --omit-dir-times --progress --delete --times --recursive ";
+            $cmd = "rsync --port=$this->_sshPort --omit-dir-times --progress --delete --times --recursive ";
             $cmd .= "--exclude='.svn' ";
             foreach ($includes as $i) {
                 $cmd .= "--include='$i' ";
@@ -452,7 +453,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     private function _systemSshVps($cmd, $dir = null)
     {
         if (!$dir) $dir = $this->_sshDir;
-        $cmd = "sshvps $this->_sshHost $dir $cmd";
+        $cmd = "sshvps $this->_sshHost:$this->_sshPort $dir $cmd";
         $cmd = "sudo -u vps $cmd";
         return $this->_systemCheckRet($cmd);
     }

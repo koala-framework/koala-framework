@@ -43,7 +43,7 @@ class Vps_Controller_Action_Cli_SwitchController extends Vps_Controller_Action_C
         $vpsVersion = null;
         if (in_array($webVersion, $configSections)) {
             $config = Vps_Config_Web::getInstance($webVersion);
-            $sshHost = $config->server->user.'@'.$config->server->host;
+            $sshHost = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
             $sshDir = $config->server->dir;
             $cmd = "switch get-version";
             $cmd = "sshvps $sshHost $sshDir $cmd";

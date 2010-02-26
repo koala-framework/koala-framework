@@ -57,7 +57,7 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
 
     private function _update($config)
     {
-        $sshHost = $config->server->user.'@'.$config->server->host;
+        $sshHost = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
         $sshDir = $config->server->dir;
 
         $params = '';
