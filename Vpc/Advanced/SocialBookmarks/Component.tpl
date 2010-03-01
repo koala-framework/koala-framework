@@ -1,5 +1,7 @@
 <div class="<?=$this->cssClass?>">
-    <?php foreach ($this->services as $service) { ?>
-    <a href="<?= htmlspecialchars($service['url']) ?>" target="_blank"><img alt="<?= $service['name'] ?>" src="<?= $service['icon'] ?>" title="<? trlVps('Bookmark at') ?> <?= $service['name'] ?>" /></a>
+    <?php foreach ($this->networks as $network) { ?>
+    <a href="<?= htmlspecialchars($network['url']) ?>" target="_blank">
+        <img alt="<?= $network['name'] ?>" src="<?= $network['icon'] ?>" title="<?= trlVps('Bookmark at') ?> <?= $network['name'] ?>" />
+    </a>
     <?php } ?>
 </div>

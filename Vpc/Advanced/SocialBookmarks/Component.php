@@ -6,23 +6,48 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Socal Bookmarks');
         $ret['ownModel'] = 'Vpc_Advanced_SocialBookmarks_Model';
+        $ret['inheritComponentClass'] = 'Vpc_Advanced_SocialBookmarks_Inherit_Component';
         return $ret;
     }
+
+    public function getNetworks($currentPage)
+    {
+        //TODO: funktioniert mit mehreren domains nicht korrekt
+        $pageUrl = 'http://'.Vps_Registry::get('config')->server->domain.$currentPage->url;
+
+        $networks = array();
+        foreach (Vps_Model_Abstract::getInstance('Vpc_Advanced_SocialBookmarks_AvaliableModel')->getRows() as $n) {
+            $networks[$n->id] = $n->toArray();
+        }
+        $s = new Vps_Model_Select();
+        $s->order('pos');
+        $ret = array();
+        foreach ($this->getRow()->getChildRows('Networks', $s) as $net) {
+            if (isset($networks[$net->network_id])) {
+                $icon = '/Vpc/Advanced/SocialBookmarks/Icons/';
+                if (file_exists(VPS_PATH.$icon.$net->network_id.'.png')) {
+                    $icon .= $net->network_id.'.png';
+                } else if (file_exists(VPS_PATH.$icon.$net->network_id.'.gif')) {
+                    $icon .= $net->network_id.'.gif';
+                } else {
+                    $icon = false;
+                }
+                if ($icon) $icon = '/assets/vps'.$icon;
+                $url = str_replace('{0}', $pageUrl, $networks[$net->network_id]['url']);
+                $ret[] = array(
+                    'name' => $networks[$net->network_id]['name'],
+                    'url' => $url,
+                    'icon' => $icon
+                );
+            }
+        }
+        return $ret;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $services = $this->_getServices();
-/*        foreach ($ret as $key => &$r) {
-            $ext = $key=='wong' ? 'png' : 'gif';
-            $r['icon'] = "/assets/vps/images/socialbookmarks/$key.$ext";
-        }*/
-        foreach ($this->_getSetting('services') as $service) {
-            if (!isset($services[$service])) {
-                throw new Vps_Exception('Service not found: ' . $service);
-            }
-            $services[$service]['url'] = str_replace('{0}', $_SERVER['SCRIPT_URI'], $services[$service]['url']);
-            $ret['services'][] = $services[$service];
-        }
+        $ret['networks'] = $this->getNetworks($this->getData()->parent);
         return $ret;
     }
 }
