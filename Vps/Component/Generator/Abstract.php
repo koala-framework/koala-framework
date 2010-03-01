@@ -4,6 +4,7 @@ abstract class Vps_Component_Generator_Abstract
     protected $_class;
     protected $_settings;
     protected $_pluginBaseComponentClass = false;
+    protected $_inherited = false;
 
     protected $_loadTableFromComponent = false;
 
@@ -87,9 +88,9 @@ abstract class Vps_Component_Generator_Abstract
         self::$instances = array();
     }
 
-    public static function getInstance($componentClass, $key, $settings = array(), $pluginBaseComponentClass = false)
+    public static function getInstance($componentClass, $key, $settings = array(), $pluginBaseComponentClass = false, $inherited = false)
     {
-        $instanceKey = $componentClass . '_' . $key . '_' . $pluginBaseComponentClass;
+        $instanceKey = $componentClass . '_' . $key . '_' . $pluginBaseComponentClass . '_' . $inherited;
         if (!isset(self::$instances[$instanceKey])) {
             if (empty($settings)) {
                 $settings = Vpc_Abstract::getSetting($componentClass, 'generators');
@@ -108,10 +109,25 @@ abstract class Vps_Component_Generator_Abstract
                 throw new Vps_Exception("Generator-Class '{$settings['class']}' is not an Vps_Component_Generator_Abstract");
             }
             $settings['generator'] = $key;
+            if ($inherited) {
+                if (is_array($settings['component'])) {
+                    foreach ($settings['component'] as $k=>$c) {
+                        if (!$c) continue;
+                        if (Vpc_Abstract::hasSetting($c, 'inheritComponentClass')) {
+                            $settings['component'][$k] = Vpc_Abstract::getSetting($c, 'inheritComponentClass');
+                        }
+                    }
+                } else {
+                    if (Vpc_Abstract::hasSetting($settings['component'], 'inheritComponentClass')) {
+                        $settings['component'] = Vpc_Abstract::getSetting($settings['component'], 'inheritComponentClass');
+                    }
+                }
+            }
             self::$instances[$instanceKey] = new $settings['class']($componentClass, $settings);
             if ($pluginBaseComponentClass) {
                 self::$instances[$instanceKey]->_pluginBaseComponentClass = $pluginBaseComponentClass;
             }
+            self::$instances[$instanceKey]->_inherited = $inherited;
         }
         return self::$instances[$instanceKey];
     }
@@ -160,7 +176,7 @@ abstract class Vps_Component_Generator_Abstract
             Vps_Benchmark::count('Generator::getInst semi-hit');
             $generators = array();
             foreach ($cachedGeneratorData as $g) {
-                $generators[] = self::getInstance($g['componentClass'], $g['key'], array(), $g['pluginBaseComponentClass']);
+                $generators[] = self::getInstance($g['componentClass'], $g['key'], array(), $g['pluginBaseComponentClass'], $g['inherited']);
             }
         } else {
             Vps_Benchmark::count('Generator::getInst miss', $cacheId);
@@ -195,7 +211,7 @@ abstract class Vps_Component_Generator_Abstract
                     }
                     foreach ($gs as $key => $inheritedGenerator) {
                         if (!isset($inheritedGenerator['inherit']) || !$inheritedGenerator['inherit']) continue;
-                        $inheritedGenerator = self::getInstance($inheritClass, $key, $inheritedGenerator);
+                        $inheritedGenerator = self::getInstance($inheritClass, $key, $inheritedGenerator, false, true);
                         if (!$inheritedGenerator->getGeneratorFlag('box')) {
                             $generators[] = $inheritedGenerator;
                             continue;
@@ -235,7 +251,8 @@ abstract class Vps_Component_Generator_Abstract
             foreach ($generators as $g) {
                 $cachedGeneratorData[] = array('componentClass' => $g->_class,
                                                'key' => $g->_settings['generator'],
-                                               'pluginBaseComponentClass' => $g->_pluginBaseComponentClass);
+                                               'pluginBaseComponentClass' => $g->_pluginBaseComponentClass,
+                                               'inherited' => $g->_inherited);
             }
             $cache->save($cachedGeneratorData, $cacheId);
         }
@@ -531,7 +548,7 @@ abstract class Vps_Component_Generator_Abstract
 
         if (!isset($this->_dataCache[$parentData->componentId][$id])) {
             $config = $this->_formatConfig($parentData, $row);
-            if (!$config['componentClass']) {
+            if (!$config['componentClass'] || !is_string($config['componentClass'])) {
                 throw new Vps_Exception("no componentClass set (id $parentData->componentId $id)");
             }
             $config['id'] = $id;
@@ -590,6 +607,17 @@ abstract class Vps_Component_Generator_Abstract
         return $this->_pluginBaseComponentClass;
     }
 
+    /**
+     * Ob dieser Generator geerbt wurde
+     */
+    public function getInherited()
+    {
+        return $this->_inherited;
+    }
+
+    /**
+     * OB dieser Generator erbt (normalerweise nur Pages)
+     */
     public function getInherits()
     {
         return $this->_inherits;

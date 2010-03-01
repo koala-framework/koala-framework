@@ -26,7 +26,7 @@ class Vps_Component_Abstract
     {
         static $settingsCache;
         if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
-        if (!$settingsCache) {
+        if (!$useSettingsCache || !$settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
             if (!class_exists($class)) {
                 throw new Vps_Exception("Invalid component '$class'");
@@ -407,10 +407,6 @@ class Vps_Component_Abstract
     {
         $classes = array();
         foreach (Vpc_Abstract::getSetting($class, 'generators', false) as $generator) {
-            if (!isset($generator['component'])) {
-                var_dump($class);
-                d($generator);
-            }
             if (is_array($generator['component'])) {
                 $classes = array_merge($classes, $generator['component']);
             } else {
@@ -420,6 +416,9 @@ class Vps_Component_Abstract
         $plugins = Vpc_Abstract::getSetting($class, 'plugins', false);
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
+        }
+        if (Vpc_Abstract::hasSetting($class, 'inheritComponentClass', false)) {
+            $classes[] = Vpc_Abstract::getSetting($class, 'inheritComponentClass', false);
         }
         foreach ($classes as $c) {
             if ($c&& !in_array($c, $componentClasses)) {
