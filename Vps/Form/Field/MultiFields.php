@@ -211,7 +211,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             $found = false;
             foreach ($fieldPostData as $postDataKey=>$rowPostData) {
                 if ($rowPostData['id'] == $r->id) {
-                    $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>false, 'pos'=>$postDataKey);
+                    $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>false, 'pos'=>$postDataKey+1);
                     unset($fieldPostData[$postDataKey]);
                     $found = true;
                     break;
@@ -228,7 +228,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             } else {
                 $r = $this->_model->createRow();
             }
-            $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>true, 'pos'=>$postDataKey);
+            $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>true, 'pos'=>$postDataKey+1);
         }
 
         foreach ($postData[$this->getFieldName()]['save'] as &$d) {
