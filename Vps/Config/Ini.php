@@ -3,12 +3,25 @@ require_once 'Zend/Config/Ini.php';
 
 class Vps_Config_Ini extends Zend_Config_Ini
 {
+    private function _fixValues(&$data)
+    {
+        foreach ($data as &$i) {
+            if (is_array($i)) {
+                $this->_fixValues($i);
+            } else {
+                if ($i === 'false') $i = false;
+                if ($i === 'true') $i = false;
+            }
+        }
+    }
+
     //kopie von zend um INI_SCANNER_RAW einzuf?gen; f?r Php 5.3
     //im neuen zend gibts _parseIniFile - nur das sollte ?berschrieben werden
     protected function _loadIniFile($filename)
     {
         if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
             $loaded = parse_ini_file($filename, true, INI_SCANNER_RAW); // Warnings and errors are suppressed
+            $this->_fixValues($loaded);
         } else {
             $loaded = parse_ini_file($filename, true); // Warnings and errors are suppressed
         }
