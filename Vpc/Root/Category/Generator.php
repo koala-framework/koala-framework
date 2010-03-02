@@ -155,9 +155,9 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                 }
             } else {
                 foreach ($this->_pageChilds as $pId => $ids) {
-                    //if (substr($pId, 0, strlen($parentId)) == $parentId) //TODO für chained wird irgendwo das benötigt (ist aber kaputt)
-                    if ($pId == $parentId)
+                    if ($parentId == $pId || substr($pId, 0, strlen($parentId)+1) == $parentId.'-') {
                         $pageIds = array_merge($pageIds, $ids);
+                    }
                 }
             }
         } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {

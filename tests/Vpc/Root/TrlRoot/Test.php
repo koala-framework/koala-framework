@@ -46,25 +46,29 @@ class Vpc_Root_TrlRoot_Test extends Vpc_TestAbstract
 
 
         $data = $this->_root->getPageByUrl('http://'.$domain.'/', 'en');
-        $this->assertEquals('root-chained_1', $data->componentId);
+        $this->assertEquals('root-en_1', $data->componentId);
         $this->assertEquals('/en', $data->url);
 
         $data = $this->_root->getPageByUrl('http://'.$domain.'/en', 'en');
-        $this->assertEquals('root-chained_1', $data->componentId);
+        $this->assertEquals('root-en_1', $data->componentId);
 
         $data = $this->_root->getPageByUrl('http://'.$domain.'/en', 'de');
-        $this->assertEquals('root-chained_1', $data->componentId);
+        $this->assertEquals('root-en_1', $data->componentId);
 
         $data = $this->_root->getPageByUrl('http://'.$domain.'/', 'en');
-        $this->assertEquals('root-chained_1', $data->componentId);
+        $this->assertEquals('root-en_1', $data->componentId);
         $this->assertEquals('/en', $data->url);
 
         $data = $this->_root->getPageByUrl('http://'.$domain.'/', 'en');
-        $this->assertEquals('root-chained_1', $data->componentId);
+        $this->assertEquals('root-en_1', $data->componentId);
         $this->assertEquals('/en', $data->url);
+
+        $data = $this->_root->getPageByUrl('http://'.$domain.'/en/test', 'en');
+        $this->assertEquals('root-en_2', $data->componentId);
+        $this->assertEquals('/en/test', $data->url);
 
         $data = $this->_root->getPageByUrl('http://'.$domain.'/en/test2_en', 'en');
-        $this->assertEquals('root-chained_3', $data->componentId);
+        $this->assertEquals('root-en_3', $data->componentId);
         $this->assertEquals('/en/test2_en', $data->url);
     }
 }

@@ -16,7 +16,5 @@ class Vpc_Root_Category_Trl_GeneratorForm extends Vpc_Abstract_Form
         $fs->add(new Vps_Form_Field_TextField('filename', trlVps('Filename')))
             ->setAllowBlank(false)
             ->setVtype('alphanum');
-
-        $fields->add(new Vps_Form_Field_TextField('tags', trlVps('Tags')));
     }
 }

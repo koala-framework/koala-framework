@@ -28,10 +28,12 @@ class Vps_Component_Abstract
         if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
         if (!$useSettingsCache || !$settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
-            if (!class_exists($class)) {
+            $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            if (!class_exists($c)) {
                 throw new Vps_Exception("Invalid component '$class'");
             }
-            $settings = call_user_func(array($class, 'getSettings'));
+            $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
+            $settings = call_user_func(array($c, 'getSettings'), $param);
             return isset($settings[$setting]);
         }
         //& für performance
