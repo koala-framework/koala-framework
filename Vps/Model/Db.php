@@ -9,8 +9,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     // CSV deaktiviert, weil character set bei LOAD DATA INFILE an der online
     // mysql version nicht möglich ist
-//     protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
-    protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_ARRAY);
+    protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
 
     private $_proxyContainerModels = array();
 
@@ -854,12 +853,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
             $fieldNames = trim($output[0]);
             if ($fieldNames) {
+                // set the character_set_database MySQL system variable to utf8
+                $this->executeSql("SET character_set_database = 'utf8'");
+
                 $sqlString = "LOAD DATA INFILE '$filename'";
                 if (isset($options['replace']) && $options['replace']) {
                     $sqlString .= " REPLACE";
                 }
                 $sqlString .= " INTO TABLE `".($this->getTableName())."`";
-                $sqlString .= " CHARACTER SET UTF8";
                 $sqlString .= " FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\\\\' LINES TERMINATED BY '\\n'";
                 $sqlString .= " IGNORE 1 LINES";
                 $sqlString .= " ($fieldNames)";
