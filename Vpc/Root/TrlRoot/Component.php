@@ -4,16 +4,19 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        unset($ret['generators']['box']);
         $ret['generators']['master'] = array(
-            'class' => 'Vpc_Root_TrlRoot_Generator',
+            'class' => 'Vpc_Root_TrlRoot_MasterGenerator',
             'component' => 'Vpc_Root_TrlRoot_Master_Component',
             'name' => 'de',
         );
         $ret['generators']['chained'] = array(
-            'class' => 'Vpc_Root_TrlRoot_Generator',
-            'component' => array(
-                'en' => 'Vpc_Chained_Trl_Base_Component.Vpc_Root_TrlRoot_Master_Component',
-            )
+            'class' => 'Vpc_Root_TrlRoot_ChainedGenerator',
+            'component' => 'Vpc_Chained_Trl_Base_Component.Vpc_Root_TrlRoot_Master_Component',
+            'filenameColumn' => 'filename',
+            'nameColumn' => 'name',
+            'uniqueFilename' => true,
+            'model' => null //TODO standard model in vps
         );
         return $ret;
     }

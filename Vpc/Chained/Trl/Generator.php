@@ -17,20 +17,19 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getChainedData($data)
     {
+        if (isset($data->chained)) return $data->chained;
+
         if (is_instance_of($this->_class, 'Vpc_Chained_Trl_Base_Component')) {
             if ($data->componentClass == $this->_class) {
-            return Vps_Component_Data_Root::getInstance()
-                ->getComponentByClass(Vpc_Abstract::getSetting($this->_class, 'masterComponentClass'));
+                //vielleicht flexibler machen?
+                return Vps_Component_Data_Root::getInstance()
+                    ->getComponentByClass(Vpc_Abstract::getSetting($this->_class, 'masterComponentClass'));
             }
             throw new Vps_Exception_NotYetImplemented();
         } else {
             if ($data) {
-                if (isset($data->chained)) {
-                    $data = $data->chained;
-                } else {
-                    $gen = Vps_Component_Generator_Abstract::getInstances($data, array('generatorFlag'=>'trlBase'));
-                    return $gen[0]->_getChainedData($data);
-                }
+                $gen = Vps_Component_Generator_Abstract::getInstances($data, array('generatorFlag'=>'trlBase'));
+                return $gen[0]->_getChainedData($data);
             }
             return $data;
         }
@@ -54,9 +53,11 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
                 $select->whereId(substr($id, 1));
             }
         }
+        $slaveData = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
+
         foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
             if (!$parentData) {
-                $pData = $this->_getParentData($component, $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE));
+                $pData = $this->_getParentData($component, $slaveData);
             } else {
                 $pData = $parentData;
             }
@@ -70,6 +71,13 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
     private function _getParentData($chainedData, $slaveData)
     {
+        while ($slaveData) {
+            if (is_instance_of($slaveData->componentClass, 'Vpc_Chained_Trl_Base_Component')) { //wen nötig stattdessen ein neues flag erstellen
+                break;
+            }
+            $slaveData = $slaveData->parent;
+        }
+
         $c = $chainedData->parent;
         $ids = array();
         while ($c) {
@@ -78,16 +86,18 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
                 strrpos($c->componentId, '_')
             );
             $id = substr($c->componentId, $pos);
-            if ($id == '-master') $id = '-slave';
+            if (is_instance_of($c->componentClass, 'Vpc_Root_TrlRoot_Master_Component')) { //wen nötig stattdessen ein neues erstellen
+                break;
+            }
             if ((int)$id > 0) $id = '_' . $id;
             $c = $c->parent;
             if ($c) $ids[] = $id;
         }
-        $parentData = Vps_Component_Data_Root::getInstance();
+        $ret = $slaveData;
         foreach (array_reverse($ids) as $id) {
-            $parentData = $parentData->getChildComponent($id);
+            $ret = $ret->getChildComponent($id);
         }
-        return $parentData;
+        return $ret;
     }
 
     protected function _getIdFromRow($row)
@@ -115,6 +125,9 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         if (isset($row->name)) {
             $data['name'] = $row->name;
         }
+        if (isset($row->box)) {
+            $data['box'] = $row->box;
+        }
         return $data;
     }
 
@@ -135,6 +148,16 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         $ret = $this->_getChainedGenerator()->getIdSeparator();
         if (!$ret) $ret = '_'; //pages generator
         return $ret;
+    }
+
+    public function getPriority()
+    {
+        return $this->_getChainedGenerator()->getPriority();
+    }
+
+    public function getBoxes()
+    {
+        return $this->_getChainedGenerator()->getBoxes();
     }
 
     public function getGeneratorFlags()

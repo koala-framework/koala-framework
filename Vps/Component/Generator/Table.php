@@ -185,7 +185,8 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                 if ($separator != $this->_idSeparator || ($this->_hasNumericIds && !is_numeric($id))) {
                     return null;
                 }
-                $select->whereId($id);
+                $select->whereEquals($this->_idColumn, $id);
+                $select->unsetPart(Vps_Model_Select::WHERE_ID);
             }
         }
         return $select;
