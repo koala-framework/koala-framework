@@ -10,7 +10,6 @@ class Vps_Test
             'dbname'=>'test'
         ));
         $db->query('SET names UTF8');
-        $db->query("SET lc_time_names = '".trlVps('en_US')."'");
         if (Zend_Registry::get('config')->debug->querylog) {
             $profiler = new Vps_Db_Profiler(true);
             $db->setProfiler($profiler);
