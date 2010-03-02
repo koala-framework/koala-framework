@@ -29,8 +29,13 @@ class Vps_Controller_Request_Cli extends Zend_Controller_Request_Abstract
             if (substr($arg, 0, 2) == '--') {
                 $arg = substr($arg, 2);
                 $arg = explode('=', $arg);
-                if (!isset($arg[1])) $arg[1] = true;
-                $params[$arg[0]] = $arg[1];
+                $p = $arg[0];
+                if (!isset($arg[1])) {
+                    $params[$p] = true;
+                } else {
+                    unset($arg[0]);
+                    $params[$p] = implode('=', $arg);
+                }
             }
         }
         $this->setParams($params);
