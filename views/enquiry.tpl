@@ -2,10 +2,15 @@
     <div class="headers">
         <div class="subject"><?= $this->subject; ?></div>
         <div class="detail">
-            <div>
-                <label><?= trlVps('From'); ?>:</label>
-                <div><?= $this->from['name']; ?> &lt;<?= $this->from['email']; ?>&gt;</div>
-            </div>
+            <? if (!empty($this->from['name']) || !empty($this->from['email'])) { ?>
+                <div>
+                    <label><?= trlVps('From'); ?>:</label>
+                    <div>
+                        <? if (!empty($this->from['name'])) echo $this->from['name']; ?>
+                        <? if (!empty($this->from['email'])) echo '&lt;'.$this->from['email'].'&gt;'; ?>
+                    </div>
+                </div>
+            <? } ?>
             <div>
                 <label><?= trlcVps('email', 'To'); ?>:</label>
                 <div>
