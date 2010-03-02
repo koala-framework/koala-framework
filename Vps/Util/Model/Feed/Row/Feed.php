@@ -23,11 +23,14 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         }
         $originalContent = $str;
         $str = trim($str);
+
         if (preg_match('#<?xml[^>]* encoding=["\']([^"\']*)["\']#', $str, $m)) {
             $encoding = trim(strtolower($m[1]));
             if ($encoding != 'utf8' && $encoding != 'utf-8') {
-                $str = iconv($encoding, 'utf-8', $str);
-                $str = preg_replace('#(<?xml[^>]* encoding=["\'])([^"\']*)(["\'])#', '\1utf-8\3', $str);
+                try {
+                    $str = iconv($encoding, 'utf-8', $str);
+                    $str = preg_replace('#(<?xml[^>]* encoding=["\'])([^"\']*)(["\'])#', '\1utf-8\3', $str);
+                } catch (Exception $e) {}
             }
         } else if (isset($response)) {
             $ct = $response->getContentType();
@@ -42,8 +45,10 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
         }
 
         if (!$encoding) {
-            $encoding = $config['model']->getDefaultEncoding();
-            $str = iconv($encoding, 'utf-8', $str);
+            try {
+                $encoding = $config['model']->getDefaultEncoding();
+                $str = iconv($encoding, 'utf-8', $str);
+            } catch (Exception $e) {}
         }
 
         $this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
@@ -69,6 +74,8 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
                 $tidy->parseString($str, $c, 'utf8');
                 $tidy->cleanRepair();
                 $str = $tidy->value;
+                $str = preg_replace('#(<?xml[^>]* encoding=["\'])([^"\']*)(["\'])#', '\1utf-8\3', $str);
+                $str = str_replace("\0", '', $str);
                 $this->_xml = simplexml_load_string($str, 'SimpleXMLElement');
             }
         }
