@@ -39,7 +39,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                     while ($component && !$category) {
                         $component = $component->parent;
                         $category = $component->getChildComponent('-' . $level);
-                        if ($category && !Vpc_Abstract::getFlag($component->componentClass, 'menuCategory')) {
+                        if ($category && !Vpc_Abstract::getFlag($category->componentClass, 'menuCategory')) {
                             $category = false;
                         }
                     }
