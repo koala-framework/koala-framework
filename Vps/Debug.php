@@ -50,17 +50,24 @@ function d($src)
 function pHex($s)
 {
     $terminalSize = explode(' ', `stty size`);
-    $breakAt = 1000;
+    $breakAt = 500;
     if (isset($terminalSize[1])) {
         $breakAt = (int)($terminalSize[1]/3);
     }
     while (strlen($s) > $breakAt) {
-        dmp(substr($s, 0, $breakAt));
+        pHex(substr($s, 0, $breakAt));
         $s = substr($s, $breakAt);
     }
     for($i=0;$i<strlen($s);$i++) {
-        echo $s[$i].'  ';
-        if ($s[$i] == "\0") echo " ";
+        if ($s[$i] == "\0") {
+            echo '\0 ';
+        } else if ($s[$i] == "\n") {
+            echo '\n ';
+        } else if ($s[$i] == "\r") {
+            echo '\r ';
+        } else {
+            echo $s[$i].'  ';
+        }
     }
     echo "\n";
     for($i=0;$i<strlen($s);$i++) {
