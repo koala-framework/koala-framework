@@ -335,4 +335,12 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $entries = $feed->getChildRows('Entries');
         $this->assertTrue(!!$entries->current()->description);
     }
-}
+
+    public function testBug4()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('file://'.dirname(__FILE__).'/bug4.xml');
+
+        $entries = $feed->getChildRows('Entries');
+        $this->assertEquals(25, count($entries));
+    }}
