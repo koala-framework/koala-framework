@@ -321,6 +321,7 @@ class Vps_Setup
             }
             $root->setCurrentPage($data);
             if ($data->url != $_SERVER['REDIRECT_URL']) {
+                d($data);
                 header('Location: '.$data->url);
                 exit;
             }
