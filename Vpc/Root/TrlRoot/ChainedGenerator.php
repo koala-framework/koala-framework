@@ -10,4 +10,17 @@ class Vpc_Root_TrlRoot_ChainedGenerator extends Vps_Component_Generator_PseudoPa
         $ret['icon'] = 'font';
         return $ret;
     }
+
+    protected function _getParentDataByRow($row, $select)
+    {
+        return Vps_Component_Data_Root::getInstance()->getComponentsByClass($this->_class);
+    }
+
+    protected function _formatSelect($parentData, $select)
+    {
+        $ret = parent::_formatSelect($parentData, $select);
+        if (!$ret) return $ret;
+        $ret->whereEquals('master', false);
+        return $ret;
+    }
 }

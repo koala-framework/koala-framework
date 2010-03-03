@@ -8,7 +8,6 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
         $ret['generators']['master'] = array(
             'class' => 'Vpc_Root_TrlRoot_MasterGenerator',
             'component' => 'Vpc_Root_TrlRoot_Master_Component',
-            'name' => 'de',
         );
         $ret['generators']['chained'] = array(
             'class' => 'Vpc_Root_TrlRoot_ChainedGenerator',
@@ -16,8 +15,8 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
             'filenameColumn' => 'filename',
             'nameColumn' => 'name',
             'uniqueFilename' => true,
-            'model' => null //TODO standard model in vps
         );
+        $ret['childModel'] = null; //TODO standard model in vps
         return $ret;
     }
 

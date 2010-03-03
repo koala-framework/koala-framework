@@ -280,7 +280,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
             $lookingForChildClasses = Vpc_Abstract::getComponentClassesByParentClass($class);
             foreach ($lookingForChildClasses as $c) {
-                if (is_instance_of($c, 'Vpc_Root_Component')) {
+                if (is_instance_of($c, 'Vpc_Root_Abstract')) {
                     return array($this);
                 }
             }
@@ -336,7 +336,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 'automatic_serialization'=>true));
         }
 
-        $cacheId = 'genForCls'.$this->getComponentClass().implode('', $lookingForClasses);
+        $cacheId = 'genForCls'.$this->getComponentClass().str_replace('.', '_', implode('', $lookingForClasses));
         if (isset($this->_generatorsForClassesCache[$cacheId])) {
             Vps_Benchmark::count('_getGeneratorsForClasses hit', implode(', ', $lookingForClasses));
         } else if (($generators = $cache->load($cacheId)) !== false) {
