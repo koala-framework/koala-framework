@@ -24,6 +24,7 @@ class Vpc_Chained_Trl_Base_Component extends Vpc_Abstract
         }
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
+        $ret['editComponents'] = array('flag');
         return $ret;
     }
 }

@@ -4,9 +4,15 @@ class Vpc_Root_TrlRoot_Master_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['generators']['flag'] = array(
+            'class' => 'Vps_Component_Generator_Static',
+            'component' => 'Vpc_Root_TrlRoot_Master_FlagImage_Component',
+        );
         $ret['generators']['box'] = array(
             'class' => 'Vps_Component_Generator_Box_Static',
-            'component' => array(),
+            'component' => array(
+                'switchLanguage' => 'Vpc_Box_SwitchLanguage_Component'
+            ),
             'inherit' => true,
             'priority' => 0
         );
@@ -17,6 +23,7 @@ class Vpc_Root_TrlRoot_Master_Component extends Vpc_Abstract
         );
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
+        $ret['editComponents'] = array('flag');
         return $ret;
     }
 }

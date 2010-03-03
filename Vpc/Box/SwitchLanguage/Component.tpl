@@ -1,5 +1,12 @@
 <div class="<?=$this->cssClass?>">
     <? foreach ($this->languages as $l) { ?>
-        <?=$this->componentLink($l['home'], $l['language'])?>
+        <?
+        if ($l['flag']) {
+            $text = $this->component($l['flag']);
+        } else {
+            $text = $l['language'];
+        }
+        echo $this->componentLink($l['home'], $text)
+        ?>
     <? } ?>
 </div>
