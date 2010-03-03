@@ -242,10 +242,34 @@ class Vps_Assets_Loader
                 $ret['mtimeFiles'] = $cacheData['mtimeFiles'];
 
             } else {
-                $cacheData = false;
-                $ret['contents'] = file_get_contents($this->_getDep()->getAssetPath($file));
-                $ret['mtime'] = filemtime($this->_getDep()->getAssetPath($file));
-                $ret['mtimeFiles'] = array($this->_getDep()->getAssetPath($file));
+                $fx = substr($file, 0, strpos($file, '/'));
+                if (substr($fx, 0, 3) == 'fx_') {
+                    $cache = Vps_Assets_Cache::getInstance();
+                    $cacheId = 'fileContents'.str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $file);
+                    if (!$cacheData = $cache->load($cacheId)) {
+                        if (substr($ret['mimeType'], 0, 6) != 'image/') {
+                            throw new Vps_Exception("Fx is only possible for images");
+                        }
+                        $im = new Imagick();
+                        $im->readImage($this->_getDep()->getAssetPath($file));
+                        $fx = explode('_', substr($fx, 3));
+                        foreach ($fx as $i) {
+                            call_user_func(array('Vps_Assets_Effects', $i), $im);
+                        }
+                        $cacheData['mtime'] = filemtime($this->_getDep()->getAssetPath($file));
+                        $cacheData['mtimeFiles'] = array($this->_getDep()->getAssetPath($file));
+                        $cacheData['contents'] = $im->getImageBlob();;
+                        $im->destroy();
+                        $cache->save($cacheData, $cacheId);
+                    }
+                    $ret['contents'] = $cacheData['contents'];
+                    $ret['mtime'] = $cacheData['mtime'];
+                    $ret['mtimeFiles'] = $cacheData['mtimeFiles'];
+                } else {
+                    $ret['mtime'] = filemtime($this->_getDep()->getAssetPath($file));
+                    $ret['mtimeFiles'] = array($this->_getDep()->getAssetPath($file));
+                    $ret['contents'] = file_get_contents($this->_getDep()->getAssetPath($file));
+                }
             }
         }
 

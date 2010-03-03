@@ -310,10 +310,14 @@ class Vps_Assets_Dependencies
         $paths = $this->_config->path;
 
         $type = substr($url, 0, strpos($url, '/'));
+        $url = substr($url, strpos($url, '/')+1);
+        if (substr($type, 0, 3) == 'fx_') {
+            $type = substr($url, 0, strpos($url, '/'));
+            $url = substr($url, strpos($url, '/')+1);
+        }
         if (strpos($type, '-')!==false) {
             $type = substr($type, strpos($type, '-')+1); //section abschneiden
         }
-        $url = substr($url, strpos($url, '/')+1);
         if (!isset($paths->$type)) {
             throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' for url '$url' not found in config.");
         }
