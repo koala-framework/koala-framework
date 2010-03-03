@@ -11,12 +11,16 @@ class Vpc_Posts_Detail_Signature_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['user'] = Vps_Component_Data_Root::getInstance()
+        $userDir = Vps_Component_Data_Root::getInstance()
             ->getComponentByClass(
                 'Vpc_User_Directory_Component',
                 array('subroot' => $this->getData())
-            )
-            ->getChildComponent('_'.$this->getData()->parent->row->user_id);
+            );
+        if ($userDir) {
+            $ret['user'] = $userDir->getChildComponent('_'.$this->getData()->parent->row->user_id);
+        } else {
+            $ret['user'] = false;
+        }
         return $ret;
     }
 }
