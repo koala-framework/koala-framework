@@ -105,6 +105,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             if ($select) {
                 $rows = $this->_fetchRows($parentData, $select);
             }
+
             foreach ($rows as $row) {
                 $currentPd = $parentData;
                 if (!$currentPd) {

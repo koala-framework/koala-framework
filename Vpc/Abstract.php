@@ -352,6 +352,11 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $ret;
     }
 
+    public static function getStaticCacheVars($componentClass)
+    {
+        return array();
+    }
+
     protected function _getCacheRow()
     {
         return $this->_getRow();

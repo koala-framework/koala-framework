@@ -168,13 +168,11 @@ class Vps_Component_Cache
     public static function refreshStaticCache()
     {
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
-            $methods = get_class_methods(strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass);
-            if (in_array('getStaticCacheVars', $methods)) {
-                $vars = call_user_func(array($componentClass, 'getStaticCacheVars'), $componentClass);
-                foreach ($vars as $id => $model) {
-                    if (is_array($model)) $model = $model['model'];
-                    Vps_Component_Cache::getInstance()->saveMeta($model, null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
-                }
+            $cls = strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass;
+            $vars = call_user_func(array($cls, 'getStaticCacheVars'), $componentClass);
+            foreach ($vars as $id => $model) {
+                if (is_array($model)) $model = $model['model'];
+                Vps_Component_Cache::getInstance()->saveMeta($model, null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
             }
         }
     }

@@ -237,6 +237,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $ret['showInPageTreeAdmin'] = true;
         $ret['pseudoPage'] = true;
         $ret['page'] = true;
+        $ret['table'] = true;
         $ret['pageGenerator'] = true;
         $ret['hasHome'] = true;
         return $ret;
