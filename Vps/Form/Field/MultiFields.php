@@ -222,7 +222,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             }
         }
 
-        foreach ($fieldPostData as $rowPostData) {
+        foreach ($fieldPostData as $postDataKey=>$rowPostData) {
             if (isset($this->_referenceName)) {
                 $r = $row->createChildRow($this->_referenceName);
             } else {
