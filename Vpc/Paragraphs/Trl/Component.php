@@ -19,4 +19,17 @@ class Vpc_Paragraphs_Trl_Component extends Vpc_Chained_Trl_Component
             ->getChildComponents(array('generator'=>'paragraphs'));
         return $ret;
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        foreach ($this->getData()->getChildComponents(array('generator'=>'paragraphs')) as $p) {
+            $ret[] = array(
+                'model' => $this->getChildModel(),
+                'id' => $p->dbId,
+                'field' => 'component_id'
+            );
+        }
+        return $ret;
+    }
 }

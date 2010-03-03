@@ -43,7 +43,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
                     $pattern = '#^([^_]+)_#';
                 }
                 if (!preg_match($pattern, $filename, $m)) return null;
-                $select->whereId($this->_idSeparator . $m[1]);
+                $select->whereEquals($this->_idColumn, $m[1]);
             }
         }
         return $select;
