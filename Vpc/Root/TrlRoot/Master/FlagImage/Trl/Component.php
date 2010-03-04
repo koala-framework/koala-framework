@@ -8,7 +8,6 @@ class Vpc_Root_TrlRoot_Master_FlagImage_Trl_Component extends Vpc_Abstract_Compo
             'class' => 'Vps_Component_Generator_Static',
             'component' => $masterComponentClass,
         );
-        $ret['editComponents'] = array('image');
         return $ret;
     }
 
