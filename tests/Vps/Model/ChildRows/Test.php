@@ -24,13 +24,20 @@ class Vps_Model_ChildRows_Test extends PHPUnit_Framework_TestCase
         $rows = $row->getChildRows('Child');
         $this->assertEquals(count($rows), 2);
 
+        $rows = $row->getChildRows($cModel); // nicht per Rule, sonder direkt Model
+        $this->assertEquals(count($rows), 2);
+
         $cRow = $row->createChildRow('Child');
         $cRow->bar = 'bar3';
         $cRow->save();
 
+        $cRow = $row->createChildRow($cModel); // nicht per Rule, sonder direkt Model
+        $cRow->bar = 'bar4';
+        $cRow->save();
+
         $row = $model->getRow(1);
         $rows = $row->getChildRows('Child');
-        $this->assertEquals(count($rows), 3);
+        $this->assertEquals(count($rows), 4);
 
         $row = $cModel->getRow(3);
         $this->assertEquals($row->bar, 'bar3');

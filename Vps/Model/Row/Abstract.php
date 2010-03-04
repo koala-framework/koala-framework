@@ -204,7 +204,11 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         // die referenz vom Relationsmodel steht (ist nötig wenn zwei relationen
         // zur selben Tabelle gehen (getDependetModel ist dann vllt. die falsche
         // bezeichnung)
-        $m = $this->_model->getDependentModel($rule);
+        if ($rule instanceof Vps_Model_Abstract) {
+            $m = $rule;
+        } else {
+            $m = $this->_model->getDependentModel($rule);
+        }
 
 //         if ($m instanceof Vps_Model_RowsSubModel_Interface) { geht aus irgendeinen komischen grund ned
         if (method_exists($m, 'getRowsByParentRow')) {
@@ -230,7 +234,11 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     public function createChildRow($rule, array $data = array())
     {
-        $m = $this->_model->getDependentModel($rule);
+        if ($rule instanceof Vps_Model_Abstract) {
+            $m = $rule;
+        } else {
+            $m = $this->_model->getDependentModel($rule);
+        }
 
         //if ($m instanceof Vps_Model_RowsSubModel_Interface) { geht aus irgendeinen komischen grund ned
         if (method_exists($m, 'createRowByParentRow')) {
