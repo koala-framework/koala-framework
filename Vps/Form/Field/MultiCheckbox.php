@@ -71,7 +71,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         }
         return $this->_relations[$index];
     }
-    
+
     public function setRelationToData($rel)
     {
         $this->_relations['relationToData'] = $rel;
@@ -282,8 +282,6 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
 
         $ref = $this->getRelModel()->getReference($this->_getRelationRule('relationToValue'));
         $valueKey = $ref['column'];
-        $ref = $this->getRelModel()->getReference($this->_getRelationRule('relationToData'));
-        $dataKey = $ref['column'];
 
         foreach ($this->_getRowsByRow($row) as $savedRow) {
             $id = $savedRow->$valueKey;
@@ -300,12 +298,12 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $dataPrimaryKey = $this->getDataModel()->getPrimaryKey();
         foreach ($new as $id) {
             if (in_array($id, $avaliableKeys)) {
-                $i = $this->getRelModel()->createRow();
-                $i->$dataKey = $row->$dataPrimaryKey;
+                $i = $row->createChildRow($this->getRelModel());
                 $i->$valueKey = $id;
                 $i->save();
             }
         }
+        $row->save();
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '')
