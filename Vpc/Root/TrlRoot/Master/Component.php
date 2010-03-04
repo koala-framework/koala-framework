@@ -30,6 +30,6 @@ class Vpc_Root_TrlRoot_Master_Component extends Vpc_Abstract
 
     public function getLanguage()
     {
-        return $this->getData()->langauge;
+        return $this->getData()->language;
     }
 }

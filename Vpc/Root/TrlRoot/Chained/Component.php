@@ -25,12 +25,14 @@ class Vpc_Root_TrlRoot_Chained_Component extends Vpc_Abstract
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;
-        $ret['editComponents'] = Vpc_Abstract::getSetting($masterComponentClass, 'editComponents', false);
+        if (Vpc_Abstract::hasSetting($masterComponentClass, 'editComponents', false)) {
+            $ret['editComponents'] = Vpc_Abstract::getSetting($masterComponentClass, 'editComponents', false);
+        }
         return $ret;
     }
 
     public function getLanguage()
     {
-        return $this->getData()->langauge;
+        return $this->getData()->language;
     }
 }

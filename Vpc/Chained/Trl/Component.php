@@ -57,6 +57,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
     {
         $data = $this->getData();
         $ret = $data->chained->getComponent()->getTemplateVars();
+        $ret['data'] = $data;
         $ret['chained'] = $data->chained;
         $ret['linkTemplate'] = self::getTemplateFile($data->chained->componentClass);
 
