@@ -17,7 +17,8 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
                 $ret['languages'][] = array(
                     'language' => $l->id,
                     'home' => $home,
-                    'flag' => $l->getChildComponent('-flag')
+                    'flag' => $l->getChildComponent('-flag'),
+                    'name' => $l->name
                 );
             }
         }
