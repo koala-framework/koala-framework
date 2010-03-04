@@ -11,6 +11,9 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     protected $_exprValues = array();
     static private $_internalIdCounter = 0;
 
+    //damit im save() die childRows autom. mitgespeichert werden können
+    private $_childRows = array();
+
     public function __construct(array $config)
     {
         if (isset($config['siblingRows'])) {
@@ -215,7 +218,12 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                 //throw new Vps_Exception("row does not yet have a primary id");
             }
             $select->whereEquals($ref['column'], $this->{$this->_getPrimaryKey()});
-            return $m->getRows($select);
+            $ret = $m->getRows($select);
+            foreach ($ret as $r) {
+                $this->_childRows[] = $r;
+            }
+            $ret->rewind();
+            return $ret;
         }
     }
 
@@ -230,6 +238,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             $ret = $m->createRow();
             $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
             $ret->{$ref['column']} = $this->{$this->_getPrimaryKey()};
+            $this->_childRows[] = $ret;
             return $ret;
         }
     }
@@ -299,6 +308,13 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     protected function _afterSave()
     {
+        foreach ($this->_childRows as $row) {
+            if (!$row->{$row->_getPrimaryKey()}) {
+                $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
+                $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
+            }
+            $row->save();
+        }
         $this->_updateFilters(true);
         $this->_callObserver('save');
     }
@@ -380,20 +396,6 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         return $ret;
     }
 
-    // ist momentan nur fürs duplicate.
-    protected function _toArrayWithoutPrimaryKeys()
-    {
-        $ret = $this->toArray();
-        unset($ret[$this->getModel()->getPrimaryKey()]);
-        foreach ($this->_getSiblingRows() as $r) {
-            $primaryKey = $r->getModel()->getPrimaryKey();
-            if ($primaryKey) {
-                unset($ret[$primaryKey]);
-            }
-        }
-        return $ret;
-    }
-
     //kopiert von model, da in row _getSiblingRows überschrieben sein kann
     public function hasColumn($col)
     {
@@ -404,27 +406,5 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             if ($r->hasColumn($col)) return true;
         }
         return false;
-    }
-
-    /**
-     * Hilfsfunktion die von duplicate aufgerufen werden kann
-     */
-    protected final function _duplicateDependentModel($newRow, $rule)
-    {
-        $rowset = $this->getChildRows($rule);
-        foreach ($rowset as $row) {
-            $ref = $row->getModel()->getReferenceByModelClass(get_class($this->getModel()), null);
-            $data = array();
-            $data[$ref['column']] = $newRow->{$this->_getPrimaryKey()};
-            $row->duplicate($data);
-        }
-    }
-
-    public function duplicate(array $data = array())
-    {
-        $data = array_merge($this->_toArrayWithoutPrimaryKeys(), $data);
-        $new = $this->getModel()->createRow($data);
-        $new->save();
-        return $new;
     }
 }

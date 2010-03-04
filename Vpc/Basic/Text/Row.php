@@ -177,7 +177,6 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                 $row->component = $part['type'];
                 $row->nr = $part['nr'];
                 $row->saved = 1;
-                $row->save();
             }
         }
     }
