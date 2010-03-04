@@ -35,4 +35,12 @@ class Vpc_Trl_Simple_Test extends Vpc_TestAbstract
         $this->assertContains('test2 root-de_test_test2', $c->render());
         $this->assertContains('Vpc_Chained_Trl_Component', $c->render());
     }
+
+    public function testComponentClassContraint()
+    {
+        $c = $this->_root->getChildComponent('-en');
+        $this->assertEquals($c->getChildComponent(
+                array('componentClass' => 'Vpc_Trl_Simple_Test_Trl_Component.Vpc_Trl_Simple_Test_Component')
+            )->componentId, 'root-en_test');
+    }
 }

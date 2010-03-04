@@ -37,8 +37,15 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getChainedChildComponents($parentData, $select)
     {
+        $select = clone $select;
         if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
             $select->whereChildOfSamePage($this->_getChainedData($p));
+        }
+        if ($cls = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            foreach ($cls as &$c) {
+                $c = substr($c, strpos($c, '.')+1);
+            }
+            $select->whereComponentClasses($cls);
         }
         return $this->_getChainedGenerator()
             ->getChildData($this->_getChainedData($parentData), $select);
