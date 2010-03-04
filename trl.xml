@@ -5494,7 +5494,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Can't delete translated pages.</en>
-<de>Kann übersetzte Seite nicht löschen.</de>
+<de>Kann &#xFC;bersetzte Seite nicht l&#xF6;schen.</de>
 <id>1436</id>
 </text>
 <text>
@@ -5504,7 +5504,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please choose an option</en>
-<de>Bitte wählen Sie eine Option aus</de>
+<de>Bitte w&#xE4;hlen Sie eine Option aus</de>
 <id>1438</id>
 </text>
 <text>
@@ -5515,6 +5515,26 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Family</en>
 <de>Familie</de>
 <id>1440</id>
+</text>
+<text>
+<en>Flag</en>
+<id>1441</id>
+</text>
+<text>
+<en>Social Bookmarks</en>
+<id>1442</id>
+</text>
+<text>
+<en>Network</en>
+<id>1443</id>
+</text>
+<text>
+<en>reply</en>
+<en_plural>replies</en_plural>
+<de>Antwort</de>
+<de_plural>Antworten</de_plural>
+<context>test</context>
+<id>1444</id>
 </text>
 </trl>
 
