@@ -193,6 +193,7 @@ class Vps_Assets_Loader
                         }
                         foreach ($assetVariables[$section] as $k=>$i) {
                             $cacheData['contents'] = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $cacheData['contents']);
+                            $cacheData['contents'] = str_replace('var('.$k.')', $i, $cacheData['contents']);
                         }
                     }
                     if (substr($ret['mimeType'], 0, 8) == 'text/css') {
@@ -215,6 +216,7 @@ class Vps_Assets_Loader
                         $cssClass = str_replace('/', '', $cssClass);
                         $cssClass = strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
                         $cacheData['contents'] = str_replace('$cssClass', $cssClass, $cacheData['contents']);
+                        $cacheData['contents'] = str_replace('.cssClass', '.'.$cssClass, $cacheData['contents']);
                     }
 
                     if (substr($ret['mimeType'], 0, 15) == 'text/javascript') {
