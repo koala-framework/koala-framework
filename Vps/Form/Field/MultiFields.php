@@ -305,7 +305,10 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                     }
                 }
             }
-            $r->save();
+            if (!isset($this->_referenceName)) {
+                //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
+                $r->save();
+            }
             foreach ($this->fields as $field) {
                 $field->save($r, $rowPostData);
             }
