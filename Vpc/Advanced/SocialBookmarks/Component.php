@@ -29,6 +29,8 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
                     $icon .= $net->network_id.'.png';
                 } else if (file_exists(VPS_PATH.$icon.$net->network_id.'.gif')) {
                     $icon .= $net->network_id.'.gif';
+                } else if (file_exists(VPS_PATH.$icon.$net->network_id.'.jpg')) {
+                    $icon .= $net->network_id.'.jpg';
                 } else {
                     $icon = false;
                 }
