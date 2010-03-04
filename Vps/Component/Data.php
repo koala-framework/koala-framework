@@ -11,6 +11,8 @@ class Vps_Component_Data
 
     private $_constraintsCache = array();
     private $_recursiveGeneratorsCache = array();
+    private $_languageKey = null;
+    private $_languageData = null;
 
     public function __construct($config)
     {
@@ -677,18 +679,32 @@ class Vps_Component_Data
         return $page;
     }
 
+    public function getLanguageData()
+    {
+        if (!$this->_languageData) {
+            // search parents for flag hasLanguage
+            $c = $this;
+            do {
+                if (Vpc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
+                    break;
+                }
+            } while (($c = $c->parent));
+
+            if (!$c) {
+                throw new Vps_Exception("Language data not found.");
+            }
+            $this->_languageData = $c;
+        }
+        return $this->_languageData;
+    }
+
     public function getLanguage()
     {
-        // search parents for flag hasLanguage
-        $c = $this;
-        do {
-            if (Vpc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
-                break;
-            }
-        } while (($c = $c->parent));
-
-        if (!$c) return null;
-        return $c->getComponent()->getLanguage();
+        if (!$this->_languageKey) {
+            $ret = $this->getLanguageData();
+            $this->_languageKey = $ret->getComponent()->getLanguage();
+        }
+        return $this->_languageKey;
     }
 
     public function trl($string, $text = array())
