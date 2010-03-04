@@ -19,7 +19,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
     {
         if (isset($data->chained)) return $data->chained;
 
-        if (is_instance_of($this->_class, 'Vpc_Chained_Trl_Base_Component')) {
+        if (is_instance_of($this->_class, 'Vpc_Root_TrlRoot_Chained_Component')) {
             if ($data->componentClass == $this->_class) {
                 //vielleicht flexibler machen?
                 return Vps_Component_Data_Root::getInstance()
@@ -72,7 +72,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
     private function _getParentData($chainedData, $slaveData)
     {
         while ($slaveData) {
-            if (is_instance_of($slaveData->componentClass, 'Vpc_Chained_Trl_Base_Component')) { //wen nötig stattdessen ein neues flag erstellen
+            if (is_instance_of($slaveData->componentClass, 'Vpc_Root_TrlRoot_Chained_Component')) { //wen nötig stattdessen ein neues flag erstellen
                 break;
             }
             $slaveData = $slaveData->parent;
@@ -172,7 +172,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
             }
         }
 
-        if (is_instance_of($this->_class, 'Vpc_Chained_Trl_Base_Component')) {
+        if (is_instance_of($this->_class, 'Vpc_Root_TrlRoot_Chained_Component')) {
             $ret['trlBase'] = true;
         }
         return $ret;

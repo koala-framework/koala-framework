@@ -23,4 +23,11 @@ class Vpc_Root_TrlRoot_ChainedGenerator extends Vps_Component_Generator_PseudoPa
         $ret->whereEquals('master', false);
         return $ret;
     }
+
+    protected function _formatConfig($parentData, $row)
+    {
+        $data = parent::_formatConfig($parentData, $row);
+        $data['language'] = $row->filename;
+        return $data;
+    }
 }

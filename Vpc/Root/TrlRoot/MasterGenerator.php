@@ -26,6 +26,7 @@ class Vpc_Root_TrlRoot_MasterGenerator extends Vps_Component_Generator_PseudoPag
     {
         $data = parent::_formatConfig($parentData, $componentKey);
         $data['name'] = $this->_getLanguageRow()->name;
+        $data['language'] = $this->_getLanguageRow()->filename;
         return $data;
     }
     
