@@ -127,20 +127,25 @@ class Vps_Trl
 
     public function getWebCodeLanguage()
     {
-        if (!isset($this->_webCodeLanguage)) {
+        if (!$this->_webCodeLanguage) {
             $config = Zend_Registry::get('config');
             $this->_webCodeLanguage = $config->webCodeLanguage;
         }
         return $this->_webCodeLanguage;
     }
 
+    public function setWebCodeLanguage($code)
+    {
+        $this->_webCodeLanguage = $code;
+    }
+
     private function _getModel($type)
     {
         if ($type == self::SOURCE_WEB) {
-            if (!isset($this->_modelWeb)) $this->_modelWeb = new Vps_Trl_Model_Web();
+            if (!$this->_modelWeb) $this->_modelWeb = new Vps_Trl_Model_Web();
             return $this->_modelWeb;
         } else {
-            if (!isset($this->_modelVps)) $this->_modelVps = new Vps_Trl_Model_Vps();
+            if (!$this->_modelVps) $this->_modelVps = new Vps_Trl_Model_Vps();
             return $this->_modelVps;
         }
     }
