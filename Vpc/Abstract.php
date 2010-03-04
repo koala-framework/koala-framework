@@ -374,7 +374,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     static public function getCssClass($component)
     {
-        if (!is_string($component)) $component = get_class($component);
+        if (!is_string($component)) $component = $component->getData()->componentClass;
         return self::getSetting($component, 'processedCssClass');
     }
 
