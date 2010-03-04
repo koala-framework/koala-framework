@@ -23,7 +23,13 @@ class Vpc_Root_TrlRoot_Master_Component extends Vpc_Abstract
         );
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
+        $ret['flags']['hasLanguage'] = true;
         $ret['editComponents'] = array('flag');
         return $ret;
+    }
+
+    public function getLanguage()
+    {
+        return $this->getData()->langauge;
     }
 }

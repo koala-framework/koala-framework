@@ -677,6 +677,11 @@ class Vps_Component_Data
         return $page;
     }
 
+    public function getLanguage()
+    {
+        return;
+    }
+
     public function toDebug()
     {
         return $this->componentId . ' (' . $this->componentClass . ')';

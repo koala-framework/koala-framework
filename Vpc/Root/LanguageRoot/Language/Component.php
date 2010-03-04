@@ -13,6 +13,12 @@ class Vpc_Root_LanguageRoot_Language_Component extends Vpc_Abstract
         $ret['flags']['subroot'] = 'language';
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
+        $ret['flags']['hasLanguage'] = true;
         return $ret;
+    }
+
+    public function getLanguage()
+    {
+        return $this->getData()->id;
     }
 }

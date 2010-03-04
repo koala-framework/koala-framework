@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_TrlRoot_Slave_Component extends Vpc_Chained_Trl_Base_Component
+class Vpc_Root_TrlRoot_Slave_Component extends Vpc_Root_TrlRoot_Chained_Component
 {
     public static function getSettings($masterComponentClass)
     {

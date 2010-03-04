@@ -1,5 +1,5 @@
 <?php
-class Vpc_Chained_Trl_Base_Component extends Vpc_Abstract
+class Vpc_Root_TrlRoot_Chained_Component extends Vpc_Abstract
 {
     public static function getSettings($masterComponentClass)
     {
@@ -24,7 +24,13 @@ class Vpc_Chained_Trl_Base_Component extends Vpc_Abstract
         }
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
+        $ret['flags']['hasLanguage'] = true;
         $ret['editComponents'] = array('flag');
         return $ret;
+    }
+
+    public function getLanguage()
+    {
+        return $this->getData()->langauge;
     }
 }
