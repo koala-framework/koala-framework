@@ -7,7 +7,7 @@
             <? foreach ($this->menu as $m) { ?>
                 <li class="<?=$m->class;?>">
                     <? if (is_instance_of($m->componentClass, 'Vpc_Basic_LinkTag_FirstChildPage_Component')) { ?>
-                        <?=$m->name;?>
+                        <p><?=$m->name;?></p>
                     <? } else { ?>
                         <?=$this->componentLink($m);?>
                     <? } ?>
