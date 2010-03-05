@@ -20,11 +20,10 @@ class Vps_Component_CacheVars_Menu_Test extends PHPUnit_Framework_TestCase
 
         $menu = $this->_root->getChildComponent('-menu');
         $cacheVars = $menu->getComponent()->getStaticCacheVars();
-        $this->assertEquals(5, count($cacheVars));
+        $this->assertEquals(4, count($cacheVars));
         $this->assertEquals('Vps_Component_CacheVars_Menu_PageModel', get_class($cacheVars[0]['model']));
         $this->assertEquals('Vps_Component_CacheVars_Menu_Model', get_class($cacheVars[1]['model']));
         $this->assertEquals('Vps_Component_Model', $cacheVars[2]['model']);
-        $this->assertEquals('Vpc_Root_Category_GeneratorModel', $cacheVars[3]['model']);
-        $this->assertEquals(Vps_Registry::get('config')->user->model, $cacheVars[4]['model']);
+        $this->assertEquals(Vps_Registry::get('config')->user->model, $cacheVars[3]['model']);
     }
 }
