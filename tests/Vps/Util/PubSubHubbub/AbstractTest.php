@@ -10,23 +10,29 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
 
     public function setUp()
     {
-        $debugOutput = false;
+        $debugOutput = true;
+        echo "setUp\n";
 
         $this->_storePath = tempnam('/tmp', 'pshb');
         unlink($this->_storePath);
         mkdir($this->_storePath);
         //installation see here: http://code.google.com/p/pubsubhubbub/wiki/DeveloperGettingStartedGuide
+        echo "startHub\n";
         if (!$this->_startHub($debugOutput)) {
+            echo "startHub again\n";
             //try again with differnet port
             $this->assertTrue($this->_startHub($debugOutput));
         }
+        echo "test hub\n";
         try {
             $c = file_get_contents($this->_hubUrl);
             $this->assertContains('Welcome to the demo PubSubHubbub reference Hub server', $c);
+            echo "OK\n";
         } catch (Exception $e) {
             $this->fail("Failed starting hub, output: ".stream_get_contents($this->_pipes[1]));
         }
 
+        echo "write test feed\n";
         $this->_testId = rand(0, 1000000);
         touch('/tmp/lastCallback'.$this->_testId);
         file_put_contents('/tmp/feedRequested'.$this->_testId, 0);
@@ -70,21 +76,20 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         $this->_hubApp = proc_open($cmd, $descriptorspec, $this->_pipes);
         $this->assertTrue(is_resource($this->_hubApp));
         $this->_hubUrl = "http://$address:$port";
-        sleep(1);
+        sleep(10);
         $status = proc_get_status($this->_hubApp);
         return $status['running'];
     }
 
     public function tearDown()
     {
-        unlink('/tmp/feed'.$this->_testId);
-        unlink('/tmp/lastCallback'.$this->_testId);
-        unlink('/tmp/feedRequested'.$this->_testId);
+        echo "\n".date('H:i:s')."tearDown\n";
 
         $start = time();
         echo "\nsending SIGTERM to hub\n";
         proc_terminate($this->_hubApp, SIGTERM);
         do {
+            echo "waiting while running\n";
             if (time() - $start > 15) {
                 echo "\nsending SIGKILL to hub\n";
                 proc_terminate($this->_hubApp, SIGKILL);
@@ -94,7 +99,13 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
             if ($status['running']) sleep(1);
         } while ($status['running']);
 
+        echo "removing datastore\n";
         system("rm -r $this->_storePath");
+
+        echo "removing feeds\n";
+        unlink('/tmp/feed'.$this->_testId);
+        unlink('/tmp/lastCallback'.$this->_testId);
+        unlink('/tmp/feedRequested'.$this->_testId);
     }
 
     protected function assertFeedRequested($num)
