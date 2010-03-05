@@ -17,10 +17,11 @@ class Vpc_Trl_Text_Test extends Vpc_TestAbstract
 
     public function testIt()
     {
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/de/text', 'en');
+        $domain = Vps_Registry::get('config')->server->domain;
+        $c = $this->_root->getPageByUrl('http://'.$domain.'/de/text', 'en');
         $this->assertEquals($c->componentId, 'root-de_text');
         $this->assertContains('<p>foo</p>', $c->render());
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/en/text', 'en');
+        $c = $this->_root->getPageByUrl('http://'.$domain.'/en/text', 'en');
         $this->assertEquals($c->componentId, 'root-en_text');
         $this->assertContains('<p>fooen</p>', $c->render());
     }
