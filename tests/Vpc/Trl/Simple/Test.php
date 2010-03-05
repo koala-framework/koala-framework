@@ -23,7 +23,7 @@ class Vpc_Trl_Simple_Test extends Vpc_TestAbstract
 
         $c = $this->_root->getPageByUrl('http://'.$domain.'/en/test', 'en');
         $this->assertEquals($c->componentId, 'root-en_test');
-        $this->assertContains('test root-de_test', $c->render());
+        $this->assertContains('test root-en_test', $c->render());
         $this->assertContains('/en/test/test2', $c->render());
         $this->assertContains('Vpc_Trl_Simple_Test_Trl_Component', $c->render());
 
@@ -34,7 +34,7 @@ class Vpc_Trl_Simple_Test extends Vpc_TestAbstract
 
         $c = $this->_root->getPageByUrl('http://'.$domain.'/en/test/test2', 'en');
         $this->assertEquals($c->componentId, 'root-en_test_test2');
-        $this->assertContains('test2 root-de_test_test2', $c->render());
+        $this->assertContains('test2 root-en_test_test2', $c->render());
         $this->assertContains('Vpc_Chained_Trl_Component', $c->render());
     }
 
