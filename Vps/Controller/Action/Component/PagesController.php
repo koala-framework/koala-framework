@@ -52,7 +52,44 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             'preview' => false
         ), $data['actions']);
 
-        $data['editComponents'] = array();
+
+        // EditComponents
+        $ec = array();
+        foreach ($this->getEditComponents($component) as $c) {
+            $ec = array_merge($ec, $this->_formatEditComponents($c, Vpc_Admin::EXT_CONFIG_DEFAULT));
+        }
+        foreach ($this->getSharedComponents($component) as $c) {
+            $ec = array_merge($ec, $this->_formatEditComponents($c, Vpc_Admin::EXT_CONFIG_SHARED));
+        }
+
+        $data['editComponents'] = $ec;
+        return $data;
+    }
+
+    private function _formatEditComponents($component, $configType)
+    {
+        $ret = array();
+        $cfg = Vpc_Admin::getInstance($component->componentClass)->getExtConfig($configType);
+        if (isset($cfg['xtype'])) { //test for legacy
+            throw new Vps_Exception("getExtConfig for $component->componentClass doesn't return an array of configs");
+        }
+        foreach ($cfg as $type=>$c) {
+            $k = $component->componentClass.'-'.$type;
+            if (!isset($this->_componentConfigs[$k])) {
+                $this->_componentConfigs[$k] = $c;
+            }
+            $ret[] = array(
+                'componentClass' => $component->componentClass,
+                'type' => $type,
+                'componentId' => $component->dbId
+            );
+        }
+        return $ret;
+    }
+
+    // static zum Testen
+    public static function getEditComponents($component)
+    {
         $editComponents = $component->getRecursiveChildComponents(
             array(
                 'hasEditComponents' => true,
@@ -65,26 +102,32 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         if ($component->isPage) {
             $editComponents[] = $component;
         }
-        $ec = array();
-        foreach ($editComponents as $cc) {
-            $cfg = Vpc_Admin::getInstance($cc->componentClass)->getExtConfig();
-            if (isset($cfg['xtype'])) { //test for legacy
-                throw new Vps_Exception("getExtConfig for $cc->componentClass doesn't return an array of configs");
-            }
-            foreach ($cfg as $type=>$c) {
-                $k = $cc->componentClass.'-'.$type;
-                if (!isset($this->_componentConfigs[$k])) {
-                    $this->_componentConfigs[$k] = $c;
-                }
-                $ec[] = array(
-                    'componentClass' => $cc->componentClass,
-                    'type' => $type,
-                    'componentId' => $cc->dbId
-                );
+        return $editComponents;
+    }
+
+    // static zum Testen
+    public static function getSharedComponents($component)
+    {
+        static $sharedClasses = null;
+        if (!is_array($sharedClasses)) {
+            $componentClasses = Vpc_Abstract::getComponentClasses();
+            $sharedClasses = array();
+            foreach ($componentClasses as $componentClass) {
+                $class = Vpc_Abstract::getFlag($componentClass, 'sharedDataClass');
+                if ($class) $sharedClasses[$componentClass] = $class;
             }
         }
-        $data['editComponents'] = $ec;
-        return $data;
+        $ret = array();
+        foreach ($sharedClasses as $componentClass => $sharedClass) {
+            if (is_instance_of($component->componentClass, $class) ||
+                (count($component->getRecursiveChildComponents(
+                    array('componentClass' => $class)
+                )) > 0)
+            ) {
+                $ret[$componentClass] = $class;
+            }
+        }
+        return $ret;
     }
 
     public function jsonDataAction()
