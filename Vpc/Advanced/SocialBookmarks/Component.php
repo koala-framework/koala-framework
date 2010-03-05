@@ -7,6 +7,7 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         $ret['componentName'] = trlVps('Social Bookmarks');
         $ret['ownModel'] = 'Vpc_Advanced_SocialBookmarks_Model';
         $ret['inheritComponentClass'] = 'Vpc_Advanced_SocialBookmarks_Inherit_Component';
+        $ret['cssClass'] = 'webStandard';
         return $ret;
     }
 
