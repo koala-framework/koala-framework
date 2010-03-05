@@ -189,7 +189,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
                 $msg .= 'NICHT erfolgreich ausgeführt';
             }
             $msg = str_replace(" ", "\ ", utf8_decode($msg));
-            system("ssh niko \"export DISPLAY=:0 && /usr/kde/3.5/bin/kdialog --passivepopup $msg 2\"");
+            system("ssh niko \"export DISPLAY=:0 && /usr/bin/kdialog --passivepopup $msg 2\"");
         }
 
         Vps_Benchmark::shutDown();
