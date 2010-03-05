@@ -2,6 +2,8 @@
 class Vps_Component_Abstract_Admin
 {
     protected $_class;
+    const EXT_CONFIG_DEFAULT = 'default';
+    const EXT_CONFIG_SHARED = 'shared';
 
     protected function __construct($class)
     {
@@ -56,8 +58,11 @@ class Vps_Component_Abstract_Admin
         return $return;
     }
 
-    public function getExtConfig()
+    public function getExtConfig($type = self::EXT_CONFIG_DEFAULT)
     {
+        if ($type == self::EXT_CONFIG_DEFAULT && Vpc_Abstract::getFlag($this->_class, 'sharedDataClass')) return array();
+        if ($type == self::EXT_CONFIG_SHARED && !Vpc_Abstract::getFlag($this->_class, 'sharedDataClass')) return array();
+
         if (!self::getComponentFile($this->_class, 'Controller')) {
             return array();
         }
@@ -172,8 +177,8 @@ class Vps_Component_Abstract_Admin
     {
         return Vpc_Abstract::getSetting($this->_class, $name);
     }
-    
-    
+
+
     public function componentToString(Vps_Component_Data $data)
     {
         if (!$data->getComponent()->getRow()) {
@@ -185,7 +190,7 @@ class Vps_Component_Abstract_Admin
             throw new Vps_Exception("__toString failed for component ".$data->componentClass.' you might want to set _toStringField or override componentToString');
         }
     }
-    
+
     public function gridColumns()
     {
         $ret = array();
