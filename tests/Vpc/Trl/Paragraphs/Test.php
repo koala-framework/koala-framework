@@ -19,11 +19,13 @@ class Vpc_Trl_Paragraphs_Test extends Vpc_TestAbstract
     }
     public function testIt()
     {
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/de/test', 'en');
+        $domain = Zend_Registry::get('config')->server->domain;
+
+        $c = $this->_root->getPageByUrl('http://'.$domain.'/de/test', 'en');
         $this->assertEquals($c->componentId, 'root-de_test');
         $this->assertTrue(substr_count($c->render(), 'child')==3);
 
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/en/test', 'en');
+        $c = $this->_root->getPageByUrl('http://'.$domain.'/en/test', 'en');
         $this->assertEquals($c->componentId, 'root-en_test');
         $this->assertTrue(substr_count($c->render(), 'child (en)')==1);
     }

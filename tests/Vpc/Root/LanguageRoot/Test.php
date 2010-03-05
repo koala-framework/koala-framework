@@ -12,7 +12,7 @@ class Vpc_Root_LanguageRoot_Test extends Vpc_TestAbstract
 
     public function testIt()
     {
-        $domain = Zend_Registry::get('testDomain');
+        $domain = Zend_Registry::get('config')->server->domain;
 
         $data = $this->_root->getPageByUrl('http://'.$domain.'/', 'de');
         $this->assertEquals('1', $data->componentId);

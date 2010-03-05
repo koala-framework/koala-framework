@@ -13,24 +13,26 @@ class Vpc_Trl_Simple_Test extends Vpc_TestAbstract
     }
     public function testIt()
     {
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/de/test', 'en');
+        $domain = Vps_Registry::get('config')->server->domain;
+
+        $c = $this->_root->getPageByUrl('http://'.$domain.'/de/test', 'en');
         $this->assertEquals($c->componentId, 'root-de_test');
         $this->assertContains('test root-de_test', $c->render());
         $this->assertContains('/de/test/test2', $c->render());
         $this->assertContains('Vpc_Trl_Simple_Test_Component', $c->render());
 
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/en/test', 'en');
+        $c = $this->_root->getPageByUrl('http://'.$domain.'/en/test', 'en');
         $this->assertEquals($c->componentId, 'root-en_test');
         $this->assertContains('test root-de_test', $c->render());
         $this->assertContains('/en/test/test2', $c->render());
         $this->assertContains('Vpc_Trl_Simple_Test_Trl_Component', $c->render());
 
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/de/test/test2', 'en');
+        $c = $this->_root->getPageByUrl('http://'.$domain.'/de/test/test2', 'en');
         $this->assertEquals($c->componentId, 'root-de_test_test2');
         $this->assertContains('test2 root-de_test_test2', $c->render());
         $this->assertContains('Vpc_Trl_Simple_Test_Test2_Component', $c->render());
 
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/en/test/test2', 'en');
+        $c = $this->_root->getPageByUrl('http://'.$domain.'/en/test/test2', 'en');
         $this->assertEquals($c->componentId, 'root-en_test_test2');
         $this->assertContains('test2 root-de_test_test2', $c->render());
         $this->assertContains('Vpc_Chained_Trl_Component', $c->render());
