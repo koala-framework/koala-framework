@@ -4,6 +4,11 @@
  */
 class Vps_Update_Action_Db_RenameFieldTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        Vps_Component_Data_Root::setComponentClass(false);
+    }
+
     public function testRenameField()
     {
         $model = new Vps_Update_Action_Db_TestModel();
