@@ -15,6 +15,7 @@ class Vpc_Root_Category_Component extends Vpc_Abstract
             ),
             'model' => 'Vpc_Root_Category_GeneratorModel'
         );
+        $ret['configChildComponentsGenerator'] = 'page';
         $ret['componentName'] = trlVps('Category');
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['menuCategory'] = true;
