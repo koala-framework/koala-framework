@@ -6,7 +6,7 @@ class Vpc_Trl_Text_Text_TestModel extends Vpc_Basic_Text_Model
         $this->_dependentModels['ChildComponents'] = 'Vpc_Trl_Text_Text_TestChildComponentsModel';
 
         $config['proxyModel'] = new Vps_Model_FnF(array(
-                'columns' => array('component_id', 'content'),
+                'columns' => array('component_id', 'content', 'data'),
                 'primaryKey' => 'component_id',
                 'data'=> array(
                     array('component_id'=>'root-de_text', 'content'=>'<p>foo</p>'),
