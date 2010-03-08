@@ -28,6 +28,7 @@ class Vpc_Abstract_Composite_Admin extends Vpc_Admin
     public function gridColumns()
     {
         $ret = parent::gridColumns();
+        unset($ret['string']);
         $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'child');
         foreach ($classes as $key => $class) {
             $columns = Vpc_Admin::getInstance($class)->gridColumns();
