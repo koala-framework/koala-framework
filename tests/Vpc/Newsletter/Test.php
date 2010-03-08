@@ -12,7 +12,7 @@ class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase
         $queueModel = $model->getDependentModel('Queue');
 
         // Vom Newsletter mit der ID 2 sollten zwei Einträge gesendet werden
-        $model->send(6);
+        $model->send(0);
         $this->assertEquals(1, $logModel->countRows());
         $this->assertEquals(2, $logModel->getRow(1)->count);
         $this->assertEquals(0, $logModel->getRow(1)->countErrors);
