@@ -24,9 +24,6 @@ class Vpc_Trl_StaticTexts_Test extends Vpc_TestAbstract
         $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/de/test', 'de');
         $this->assertEquals('de', $c->getLanguage());
         $render = $c->render();
-        echo "\n**************\n";
-        echo $render;
-        echo "\n**************\n";
         $this->assertContains('trlTest: Sichtbar', $render);
         $this->assertContains('trlcTest: Am', $render);
         $this->assertContains('trlpTest1: Antwort', $render);
@@ -61,9 +58,6 @@ class Vpc_Trl_StaticTexts_Test extends Vpc_TestAbstract
         $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/en/test', 'en');
         $this->assertEquals('en', $c->getLanguage());
         $render = $c->render();
-        echo "\n**************\n";
-        echo $render;
-        echo "\n**************\n";
         $this->assertContains('trlTest: Visible', $render);
         $this->assertContains('trlcTest: On', $render);
         $this->assertContains('trlpTest1: reply', $render);
