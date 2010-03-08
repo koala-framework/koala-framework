@@ -31,6 +31,11 @@ class Vps_Component_Cache
         return self::$_instance;
     }
 
+    public static function clearInstance()
+    {
+        self::$_instance = null;
+    }
+
     public function getMetaModel()
     {
         if (!$this->_metaModel) {
