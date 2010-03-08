@@ -28,6 +28,9 @@ class Vps_Util_Check_Config
         $checks['pdo_mysql'] = array(
             'name' => 'pdo_mysql Php extension'
         );
+        $checks['log_write'] = array(
+            'name' => 'log_write permissions'
+        );
 
         //ab hier wird die config geladen
         $checks['setup_vps'] = array(
@@ -152,5 +155,19 @@ class Vps_Util_Check_Config
         if ($ret) {
             throw new Vps_Exception("Svn command failed");
         }
+    }
+
+    private static function _log_write()
+    {
+        if (file_exists('application/log/error/test-config-check')) {
+            rmdir('application/log/error/test-config-check');
+        }
+        mkdir('application/log/error/test-config-check');
+        file_put_contents('application/log/error/test-config-check/test.log', 'blah');
+        if (file_get_contents('application/log/error/test-config-check/test.log') != 'blah') {
+            throw new Vps_Exception("reading test log failed");
+        }
+        unlink('application/log/error/test-config-check/test.log');
+        rmdir('application/log/error/test-config-check');
     }
 }
