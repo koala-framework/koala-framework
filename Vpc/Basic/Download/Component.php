@@ -5,13 +5,13 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
 
     public static function getSettings()
     {
-        $ret = array_merge(parent::getSettings(), array(
-            'ownModel' => 'Vpc_Basic_Download_Model',
-            'componentName' => trlVps('Download'),
-            'componentIcon' => new Vps_Asset('folder_link'),
-            'showFilesize' => true,
-            'cssClass' => 'webStandard',
-        ));
+        $ret = parent::getSettings();
+        $ret['ownModel'] = 'Vpc_Basic_Download_Model';
+        $ret['componentName'] = trlVps('Download');
+        $ret['componentIcon'] = new Vps_Asset('folder_link');
+        $ret['showFilesize'] = true;
+        $ret['showIcon'] = true;
+        $ret['cssClass'] = 'webStandard';
         $ret['flags']['searchContent'] = true;
         $ret['generators']['child']['component']['downloadTag'] = 'Vpc_Basic_DownloadTag_Component';
         return $ret;
@@ -32,7 +32,11 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
         if ($return['infotext'] == '' && $parentRow)
             $return['infotext'] = $parentRow->filename;
 
-        $return['icon'] = $this->getIcon();
+        if ($this->_getSetting('showIcon')) {
+            $return['icon'] = $this->getIcon();
+        } else {
+            $return['icon'] = null;
+        }
         return $return;
     }
 
