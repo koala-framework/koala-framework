@@ -163,9 +163,10 @@ class Vps_Component_Abstract
                     if (isset(self::$_settings[$c]['cssClass'])) {
                         self::$_settings[$c]['processedCssClass'] .= self::$_settings[$c]['cssClass'].' ';
                     }
-                    $cssClass = array();
+                    $cssClass = array(self::_formatCssClass($c));
                     $dirs = explode(PATH_SEPARATOR, get_include_path());
                     foreach (self::$_settings[$c]['parentClasses'] as $i) {
+                        if ($i == $c) continue;
                         $file = str_replace('_', '/', $i);
                         if (substr($file, -10) != '/Component') {
                             $file .= '/Component';
