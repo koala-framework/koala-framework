@@ -7,7 +7,7 @@ class Vpc_Basic_Text_TestModel extends Vpc_Basic_Text_Model
 
         $config['proxyModel'] = new Vps_Model_FnF(array(
                 'default' => array('content'=>'ShouldGetOverwritten'),
-                'columns' => array('component_id', 'content'),
+                'columns' => array('component_id', 'content', 'data'),
                 'primaryKey' => 'component_id',
                 'data'=> array(
                     array('component_id'=>'1000', 'content'=>'<p>foo</p>'),

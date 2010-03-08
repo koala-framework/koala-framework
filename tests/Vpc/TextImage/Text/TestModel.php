@@ -8,7 +8,7 @@ class Vpc_TextImage_Text_TestModel extends Vpc_Basic_Text_Model
         $config['proxyModel'] = new Vps_Model_FnF(array(
                 'primaryKey' => 'component_id',
                 'data'=> array(
-                    array('component_id'=>'root_textImage1-text', 'content'=>'<p>foo</p>')
+                    array('component_id'=>'root_textImage1-text', 'content'=>'<p>foo</p>', 'data'=>'')
                 )
             ));
         parent::__construct($config);
