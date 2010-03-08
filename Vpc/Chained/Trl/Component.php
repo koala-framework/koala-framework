@@ -20,6 +20,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
             }
             $g['chainedGenerator'] = $g['class'];
             $g['class'] = 'Vpc_Chained_Trl_Generator';
+            if (isset($g['dbIdShortcut'])) unset($g['dbIdShortcut']);
         }
         try {
             $ret['componentName'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentName', false);
@@ -68,6 +69,16 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
     public function getCacheVars()
     {
         return $this->getData()->chained->getComponent()->getCacheVars();
+    }
+
+    public function getPartialClass()
+    {
+        return $this->getData()->chained->getComponent()->getPartialClass();
+    }
+
+    public function getPartialParams()
+    {
+        return $this->getData()->chained->getComponent()->getPartialParams();
     }
 
     public static function getStaticCacheVars($componentClass)
