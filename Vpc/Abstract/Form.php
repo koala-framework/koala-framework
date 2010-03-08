@@ -38,6 +38,13 @@ class Vpc_Abstract_Form extends Vps_Form
         if (!$componentClass) {
             throw new Vpc_Exception("No component for dbIdShortcut '$dbIdShortcut' found.");
         }
+        if (is_array($componentClass)) {
+            if (sizeof($componentClass) > 1) {
+                throw new Vpc_Exception("Can't have multiple component classes");
+            }
+            reset($componentClass);
+            $componentClass = current($componentClass);
+        }
 
         if ($id) { // id hatte form 'dbId_{0}-key', also für Key Unterkomponente suchen
             $form = self::createChildComponentForm($componentClass, $id, $name);
