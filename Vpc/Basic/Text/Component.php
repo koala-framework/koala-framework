@@ -32,7 +32,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'class' => 'Vpc_Basic_Text_Generator',
             'component' => array(
                 //auf false setzen um buttons zu deaktivieren
-                'image'         => 'Vpc_Basic_Text_Image_Component',
+                'image'         => false,
                 'link'          => 'Vpc_Basic_LinkTag_Component',
                 'download'      => 'Vpc_Basic_DownloadTag_Component'
             ),
