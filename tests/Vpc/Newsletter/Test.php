@@ -28,7 +28,7 @@ class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase
         ));
 
         // Vom Newsletter mit der ID 1 sollte ein Eintrag gesendet werden
-        $model->send(6);
+        $model->send(0);
         $this->assertEquals(2, $logModel->countRows());
         $this->assertEquals(1, $logModel->getRow(2)->count);
         $this->assertEquals(1, $logModel->getRow(2)->newsletter_id);
@@ -41,7 +41,7 @@ class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase
         ));
 
         // Nichts mehr zu senden
-        $model->send(6);
+        $model->send(0);
         $this->assertEquals(2, $logModel->countRows());
     }
 }
