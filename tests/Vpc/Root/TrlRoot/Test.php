@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Vpc_Trl
  * @group Vpc_TrlRoot
  * @group Vpc_UrlResolve
 

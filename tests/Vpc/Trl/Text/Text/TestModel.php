@@ -9,7 +9,7 @@ class Vpc_Trl_Text_Text_TestModel extends Vpc_Basic_Text_Model
                 'columns' => array('component_id', 'content', 'data'),
                 'primaryKey' => 'component_id',
                 'data'=> array(
-                    array('component_id'=>'root-de_text', 'content'=>'<p>foo</p>'),
+                    array('component_id'=>'root-master_text', 'content'=>'<p>foo</p>'),
                     array('component_id'=>'root-en_text-text', 'content'=>'<p>fooen</p>')
                 )
             ));
