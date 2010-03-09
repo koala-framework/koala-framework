@@ -335,6 +335,14 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $ret;
     }
 
+    /**
+     * Data i.e. for json or xml output
+     */
+    public function getExportData()
+    {
+        throw new Vps_Exception_NotYetImplemented("getExportData is not yet implemented for component '".get_class($this)."'");
+    }
+
     public function getMailVars($user = null)
     {
         return $this->getTemplateVars();

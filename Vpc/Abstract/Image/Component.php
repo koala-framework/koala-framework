@@ -84,6 +84,13 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         }
     }
 
+    public function getExportData()
+    {
+        $ret = parent::getExportData();
+        $ret['imageUrl'] = $this->getImageUrl();
+        return $ret;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

@@ -19,6 +19,17 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $ret['child'] = $this->_getContentChild();
+        return $ret;
+    }
+
+    public function getExportData()
+    {
+        return $this->_getContentChild()->getComponent()->getExportData();
+    }
+
+    private function _getContentChild()
+    {
         $page = $this->getData();
         do {
             while ($page && !$page->inherits) {
@@ -30,9 +41,9 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
             if ($page instanceof Vps_Component_Data_Root) break;
             $page = $page->parent;
         } while(!$c->hasContent());
-        $ret['child'] = $c;
-        return $ret;
+        return $c;
     }
+
     public function hasContent()
     {
         return true;
