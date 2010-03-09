@@ -102,7 +102,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             } else {
-                $cmd = "rsync --port=$this->_sshPort --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
+                $cmd = "rsync -e 'ssh -p $this->_sshPort' --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             }
@@ -386,7 +386,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $cmd .= " --includes=\"".implode(',', $includes)."\"";
             if ($this->_getParam('debug')) $cmd .= " --debug";
         } else {
-            $cmd = "rsync --port=$this->_sshPort --omit-dir-times --progress --delete --times --recursive ";
+            $cmd = "rsync 'ssh -p $this->_sshPort' --omit-dir-times --progress --delete --times --recursive ";
             $cmd .= "--exclude='.svn' ";
             foreach ($includes as $i) {
                 $cmd .= "--include='$i' ";
@@ -455,6 +455,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if (!$dir) $dir = $this->_sshDir;
         $cmd = "sshvps $this->_sshHost:$this->_sshPort $dir $cmd";
         $cmd = "sudo -u vps $cmd";
+        if ($this->_getParam('debug')) {
+            $cmd .= " --debug";
+            echo $cmd."\n";
+        }
         return $this->_systemCheckRet($cmd);
     }
     public static function getHelp()
