@@ -67,7 +67,7 @@ class Vps_Component_Abstract
                 if (!array_key_exists($setting, $settings)) {
                     throw new Vps_Exception("Couldn't find required setting '$setting' for $c.");
                 }
-                if ($setting == 'generators') {
+                if ($setting == 'generators' && Vps_Registry::get('config')->vpc->rootComponent == Vps_Component_Data_Root::getComponentClass()) {
                     $classes = self::getSetting($class, 'parentClasses', $useSettingsCache);
                     $cc = array();
                     if (isset(Vps_Registry::get('config')->vpc->childComponents)) {
