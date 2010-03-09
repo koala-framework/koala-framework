@@ -5,12 +5,12 @@ class Vps_Config_Ini extends Zend_Config_Ini
 {
     private function _fixValues(&$data)
     {
-        foreach ($data as &$i) {
+        foreach ($data as $k=>$i) {
             if (is_array($i)) {
-                $this->_fixValues($i);
+                $this->_fixValues($data[$k]);
             } else {
-                if ($i === 'false') $i = false;
-                if ($i === 'true') $i = false;
+                if ($i === 'false') $data[$k] = false;
+                if ($i === 'true') $data[$k] = true;
             }
         }
     }
