@@ -21,7 +21,8 @@ class Vpc_Trl_StaticTexts_Test extends Vpc_TestAbstract
 
     public function testDe()
     {
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/de/test', 'de');
+        
+        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('config')->server->domain.'/de/test', 'de');
         $this->assertEquals('de', $c->getLanguage());
         $render = $c->render();
         $this->assertContains('trlTest: Sichtbar', $render);
@@ -55,7 +56,7 @@ class Vpc_Trl_StaticTexts_Test extends Vpc_TestAbstract
 
     public function testEn()
     {
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('testDomain').'/en/test', 'en');
+        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('config')->server->domain.'/en/test', 'en');
         $this->assertEquals('en', $c->getLanguage());
         $render = $c->render();
         $this->assertContains('trlTest: Visible', $render);
