@@ -28,6 +28,10 @@ class Vpc_Root_TrlRoot_ChainedGenerator extends Vps_Component_Generator_PseudoPa
     {
         $data = parent::_formatConfig($parentData, $row);
         $data['language'] = $row->filename;
+
+        //vielleicht flexibler machen?
+        $data['chained'] = Vps_Component_Data_Root::getInstance()
+                    ->getComponentByClass(Vpc_Abstract::getSetting($data['componentClass'], 'masterComponentClass'));
         return $data;
     }
 }

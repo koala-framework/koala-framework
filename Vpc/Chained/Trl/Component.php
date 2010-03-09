@@ -86,4 +86,35 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
         $cls = substr($componentClass, strpos($componentClass, '.')+1);
         return call_user_func(array($cls, 'getStaticCacheVars'), $cls);
     }
+
+    public static function getChainedByMaster($masterData, $chainedData)
+    {
+        while ($chainedData) {
+            if (is_instance_of($chainedData->componentClass, 'Vpc_Root_TrlRoot_Chained_Component')) { //wen nötig stattdessen ein neues flag erstellen
+                break;
+            }
+            $chainedData = $chainedData->parent;
+        }
+
+        $c = $masterData;
+        $ids = array();
+        while ($c) {
+            $pos = max(
+                strrpos($c->componentId, '-'),
+                strrpos($c->componentId, '_')
+            );
+            $id = substr($c->componentId, $pos);
+            if (is_instance_of($c->componentClass, 'Vpc_Root_TrlRoot_Master_Component')) { //wen nötig stattdessen ein neues erstellen
+                break;
+            }
+            if ((int)$id > 0) $id = '_' . $id;
+            $c = $c->parent;
+            if ($c) $ids[] = $id;
+        }
+        $ret = $chainedData;
+        foreach (array_reverse($ids) as $id) {
+            $ret = $ret->getChildComponent($id);
+        }
+        return $ret;
+    }
 }

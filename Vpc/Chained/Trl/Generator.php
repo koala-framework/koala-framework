@@ -20,11 +20,13 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         if (isset($data->chained)) return $data->chained;
 
         if (is_instance_of($this->_class, 'Vpc_Root_TrlRoot_Chained_Component')) {
+            /* auskommentiert, weil Vpc_Root_TrlRoot_ChainedGenerator setzt chained bereits
             if ($data->componentClass == $this->_class) {
                 //vielleicht flexibler machen?
                 return Vps_Component_Data_Root::getInstance()
                     ->getComponentByClass(Vpc_Abstract::getSetting($this->_class, 'masterComponentClass'));
             }
+            */
             throw new Vps_Exception_NotYetImplemented();
         } else {
             if ($data) {
@@ -64,7 +66,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
         foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
             if (!$parentData) {
-                $pData = $this->_getParentData($component, $slaveData);
+                $pData = Vpc_Chained_Trl_Component::getChainedByMaster($component->parent, $slaveData);
             } else {
                 $pData = $parentData;
             }
@@ -72,37 +74,6 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
             if ($data) {
                 $ret[] = $data;
             }
-        }
-        return $ret;
-    }
-
-    private function _getParentData($chainedData, $slaveData)
-    {
-        while ($slaveData) {
-            if (is_instance_of($slaveData->componentClass, 'Vpc_Root_TrlRoot_Chained_Component')) { //wen nötig stattdessen ein neues flag erstellen
-                break;
-            }
-            $slaveData = $slaveData->parent;
-        }
-
-        $c = $chainedData->parent;
-        $ids = array();
-        while ($c) {
-            $pos = max(
-                strrpos($c->componentId, '-'),
-                strrpos($c->componentId, '_')
-            );
-            $id = substr($c->componentId, $pos);
-            if (is_instance_of($c->componentClass, 'Vpc_Root_TrlRoot_Master_Component')) { //wen nötig stattdessen ein neues erstellen
-                break;
-            }
-            if ((int)$id > 0) $id = '_' . $id;
-            $c = $c->parent;
-            if ($c) $ids[] = $id;
-        }
-        $ret = $slaveData;
-        foreach (array_reverse($ids) as $id) {
-            $ret = $ret->getChildComponent($id);
         }
         return $ret;
     }
