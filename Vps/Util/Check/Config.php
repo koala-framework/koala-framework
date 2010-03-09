@@ -48,6 +48,10 @@ class Vps_Util_Check_Config
         $checks['svn'] = array(
             'name' => 'svn'
         );
+        $checks['uploads'] = array(
+            'name' => 'uploads'
+        );
+
 
         $res = '<h3>';
         if (php_sapi_name()!= 'cli') {
@@ -95,7 +99,8 @@ class Vps_Util_Check_Config
 
     private static function _imagick()
     {
-        if (!extension_loaded('imagick')) {
+        //if (!extension_loaded('imagick')) {
+        if (!class_exists('Imagick')) {
             throw new Vps_Exception("Extension 'imagick' is not loaded");
         }
     }
@@ -109,7 +114,7 @@ class Vps_Util_Check_Config
 
     private static function _fileinfo()
     {
-        if (!extension_loaded('fileinfo')) {
+        if (!function_exists('finfo_file')) {
             throw new Vps_Exception("Extension 'fileinfo' is not loaded");
         }
     }
@@ -180,11 +185,25 @@ class Vps_Util_Check_Config
             throw new Vps_Exception("Imagick class doesn't exist");
         }
         $im = new Imagick();
-        $im->readImage(dirname(__FILE__).'/../../../images/vividplanet.gif');
+        $im->readImage(dirname(__FILE__).'/Config/testImage.jpg');
+//        $im->readImage('/srv/www/web6/uploads/90');
         $im->scaleImage(10, 10);
         $im->setImagePage(0, 0, 0, 0);
         $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         $im->getImageBlob();
         $im->destroy();
+
+    }
+    private static function _uploads()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Uploads_Model');
+        $dir = $m->getUploadDir();
+        if (!file_exists($dir)) {
+             throw new Vps_Exception("Path for uploads does not eixst");
+        }
+        if (!is_writable($dir)) {
+            throw new Vps_Exception("Path for uploads is not writeable");
+        }
     }
 }
+
