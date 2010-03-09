@@ -31,6 +31,9 @@ class Vps_Util_Check_Config
         $checks['log_write'] = array(
             'name' => 'log_write permissions'
         );
+        $checks['imagick_functionality'] = array(
+            'name' => 'imagick functionality'
+        );
 
         //ab hier wird die config geladen
         $checks['setup_vps'] = array(
@@ -169,5 +172,19 @@ class Vps_Util_Check_Config
         }
         unlink('application/log/error/test-config-check/test.log');
         rmdir('application/log/error/test-config-check');
+    }
+
+    private static function _imagick_functionality()
+    {
+        if (!class_exists('Imagick')) {
+            throw new Vps_Exception("Imagick class doesn't exist");
+        }
+        $im = new Imagick();
+        $im->readImage(dirname(__FILE__).'/../../../images/vividplanet.gif');
+        $im->scaleImage(10, 10);
+        $im->setImagePage(0, 0, 0, 0);
+        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        $im->getImageBlob();
+        $im->destroy();
     }
 }
