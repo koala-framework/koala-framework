@@ -19,16 +19,16 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['child'] = $this->_getContentChild();
+        $ret['child'] = $this->getContentChild();
         return $ret;
     }
 
     public function getExportData()
     {
-        return $this->_getContentChild()->getComponent()->getExportData();
+        return $this->getContentChild()->getComponent()->getExportData();
     }
 
-    private function _getContentChild()
+    public function getContentChild()
     {
         $page = $this->getData();
         do {
@@ -36,8 +36,11 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
                 $page = $page->parent;
                 if ($page instanceof Vps_Component_Data_Root) break;
             }
-            $c = $page->getChildComponent('-'.$this->getData()->id)
-                    ->getChildComponent(array('generator' => 'child'));
+            $ic = $page->getChildComponent('-'.$this->getData()->id);
+            if (!$ic) {
+                return null;
+            }
+            $c = $ic->getChildComponent(array('generator' => 'child'));
             if ($page instanceof Vps_Component_Data_Root) break;
             $page = $page->parent;
         } while(!$c->hasContent());
