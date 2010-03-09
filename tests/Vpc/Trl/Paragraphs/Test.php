@@ -22,7 +22,7 @@ class Vpc_Trl_Paragraphs_Test extends Vpc_TestAbstract
         $domain = Zend_Registry::get('config')->server->domain;
 
         $c = $this->_root->getPageByUrl('http://'.$domain.'/de/test', 'en');
-        $this->assertEquals($c->componentId, 'root-de_test');
+        $this->assertEquals($c->componentId, 'root-master_test');
         $this->assertTrue(substr_count($c->render(), 'child')==3);
 
         $c = $this->_root->getPageByUrl('http://'.$domain.'/en/test', 'en');

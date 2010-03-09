@@ -12,8 +12,8 @@ class Vpc_Trl_TextImage_TextImage_ImageEnlarge_TestModel extends Vpc_Abstract_Im
                 'columns' => array(),
                 'primaryKey' => 'component_id',
                 'data'=> array(
-                    array('component_id'=>'root-de_test-image', 'vps_upload_id'=>1, 'dimension' => 'large'),
-                    array('component_id'=>'root-de_test-image-linkTag-link', 'vps_upload_id'=>1),
+                    array('component_id'=>'root-master_test-image', 'vps_upload_id'=>1, 'dimension' => 'large'),
+                    array('component_id'=>'root-master_test-image-linkTag-link', 'vps_upload_id'=>1),
                 )
             ));
         parent::__construct($config);
