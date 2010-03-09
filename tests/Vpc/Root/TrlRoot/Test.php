@@ -21,7 +21,7 @@ class Vpc_Root_TrlRoot_Test extends Vpc_TestAbstract
 
     public function testIt()
     {
-        $domain = Zend_Registry::get('testDomain');
+        $domain = Vps_Registry::get('config')->server->domain;
 
         $data = $this->_root->getPageByUrl('http://'.$domain.'/', 'de');
         $this->assertEquals('1', $data->componentId);
