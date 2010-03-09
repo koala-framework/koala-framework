@@ -53,7 +53,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
             ->getChildData($this->_getChainedData($parentData), $select);
     }
 
-    public function getChildData($parentData, $select = array())
+    public function getChildData($parentDatas, $select = array())
     {
         $ret = array();
         if (is_array($select)) $select = new Vps_Component_Select($select);
@@ -64,15 +64,18 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         }
         $slaveData = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
 
-        foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
-            if (!$parentData) {
-                $pData = Vpc_Chained_Trl_Component::getChainedByMaster($component->parent, $slaveData);
-            } else {
-                $pData = $parentData;
-            }
-            $data = $this->_createData($pData, $component, $select);
-            if ($data) {
-                $ret[] = $data;
+        $parentDatas = is_array($parentDatas) ? $parentDatas : array($parentDatas);
+        foreach ($parentDatas as $parentData) {
+            foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
+                if (!$parentData) {
+                    $pData = Vpc_Chained_Trl_Component::getChainedByMaster($component->parent, $slaveData);
+                } else {
+                    $pData = $parentData;
+                }
+                $data = $this->_createData($pData, $component, $select);
+                if ($data) {
+                    $ret[] = $data;
+                }
             }
         }
         return $ret;
