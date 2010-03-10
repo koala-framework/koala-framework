@@ -68,7 +68,9 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
 
     public function getCacheVars()
     {
-        return $this->getData()->chained->getComponent()->getCacheVars();
+        $ret = parent::getCacheVars();
+        $ret = array_merge($ret, $this->getData()->chained->getComponent()->getCacheVars());
+        return $ret;
     }
 
     public function getPartialClass()

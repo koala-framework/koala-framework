@@ -4,7 +4,7 @@ class Vpc_Abstract_Image_Trl_Form_ImageData extends Vps_Data_Abstract
     public function load($row)
     {
         $ret = '';
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($row->id, array('ignoreVisible'=>true));
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($row->component_id, array('ignoreVisible'=>true));
         $row = $c->chained->getComponent()->getRow()->getParentRow('Image');
         if ($row) {
             $info = $row->getFileInfo();
@@ -22,5 +22,9 @@ class Vpc_Abstract_Image_Trl_Form extends Vpc_Abstract_Composite_Trl_Form
         parent::_initFields();
         $this->add(new Vps_Form_Field_ShowField('image', trlVps('Image')))
             ->setData(new Vpc_Abstract_Image_Trl_Form_ImageData());
+        $fs = $this->add(new Vps_Form_Container_FieldSet(trlVps('Own Image')));
+        $fs->setCheckboxToggle(true);
+        $fs->setCheckboxName('own_image');
+        $fs->add(Vpc_Abstract_Form::createChildComponentForm($this->getClass(), '-image', 'image'));
     }
 }
