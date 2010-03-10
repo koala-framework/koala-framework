@@ -18,7 +18,7 @@ class Vps_Update_Test extends PHPUnit_Framework_TestCase
                     ->method('postUpdate')
                     ->with();
 
-        $update = new Vps_Update_TestUpdate(123);
+        $update = new Vps_Update_TestUpdate(123, 'abcd');
         $update->setActions($actions);
         $update->preUpdate();
         $update->update();
