@@ -71,6 +71,7 @@ class Vps_Trl_Parser
             {
                 if(!$file->isDir()) {
                     if (stripos($file->getPathname(), ".svn")) continue;
+                    if (stripos($file->getPathname(), ".git")) continue;
                     if ((
                             stripos($file->getPathname(), VPS_PATH . "/tests/Vps/Trl/") === false &&
                             stripos($file->getPathname(), VPS_PATH . "/Vps/Trl.php") === false
