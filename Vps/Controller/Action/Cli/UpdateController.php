@@ -44,32 +44,53 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         }
 
         if (!file_exists('application/update')) {
-            $doneRevisions = array();
+            $doneNames = array();
             foreach (Vps_Update::getUpdates(0, $currentRevision) as $u) {
-                $doneRevisions[] = $u->getRevision();
+                $doneNames[] = $u->uniqueName();
             }
-            file_put_contents('application/update', serialize($doneRevisions));
+            file_put_contents('application/update', serialize($doneNames));
             echo "No application/update revision found, wrote all to current revision ($currentRevision)\n";
             exit;
         }
-        $doneRevisions = file_get_contents('application/update');
-        if (is_numeric(trim($doneRevisions))) {
-            $r = trim($doneRevisions);
-            $doneRevisions = array();
+        $doneNames = file_get_contents('application/update');
+        if (is_numeric(trim($doneNames))) {
+            //UPDATE applicaton/update format
+            $r = trim($doneNames);
+            $doneNames = array();
             foreach (Vps_Update::getUpdates(0, $r) as $u) {
-                $doneRevisions[] = $u->getRevision();
+                $doneNames[] = $u->uniqueName();
             }
         } else {
-            $doneRevisions = unserialize($doneRevisions);
-            if (isset($doneRevisions['start'])) {
-                if (!isset($doneRevisions['done'])) $doneRevisions['done'] = array();
-                foreach (Vps_Update::getUpdates(0, $doneRevisions['start']) as $u) {
-                    $doneRevisions['done'][] = $u->getRevision();
+            $doneNames = unserialize($doneNames);
+            if (isset($doneNames['start'])) {
+                //UPDATE applicaton/update format
+                if (!isset($doneNames['done'])) $doneNames['done'] = array();
+                foreach (Vps_Update::getUpdates(0, $doneNames['start']) as $u) {
+                    $doneNames['done'][] = $u->getRevision();
                 }
-                $doneRevisions = $doneRevisions['done'];
+                $doneNames = $doneNames['done'];
+            }
+            $doneNamesCpy = $doneNames;
+            $doneNames = array();
+            foreach ($doneNamesCpy as $i) {
+                if (is_numeric($i)) {
+                    //UPDATE applicaton/update format
+                    static $allUpdates;
+                    if (!isset($allUpdates)) {
+                        $allUpdates = array();
+                        foreach (Vps_Update::getUpdates(0, 9999999) as $u) {
+                            $allUpdates[$u->getRevision()] = $u;
+                        }
+                    }
+                    if (isset($allUpdates[$i])) {
+                        $doneNames[] = $allUpdates[$i]->getUniqueName();
+                    }
+                } else {
+                    $doneNames[] = $i;
+                }
             }
         }
-        if (!$doneRevisions) {
+        if (!$doneNames) {
             throw new Vps_ClientException("Invalid application/update revision");
         }
         $from = 1;
@@ -99,7 +120,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             echo "Looking for update-scripts from revision $from to {$to}...";
             $updates = Vps_Update::getUpdates($from, $to);
             foreach ($updates as $k=>$u) {
-                if ($u->getRevision() && in_array($u->getRevision(), $doneRevisions) && !$rev) {
+                if ($u->getRevision() && in_array($u->getUniqueName(), $doneNames) && !$rev) {
                     if ($current && $u->getRevision() == $to-1) continue;
                     unset($updates[$k]);
                 }
@@ -131,11 +152,11 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 }
                 self::_executeUpdate($updates, 'postClearCache', $debug, $skipClearCache);
                 foreach ($updates as $k=>$u) {
-                    if (!in_array($u->getRevision(), $doneRevisions)) {
-                        $doneRevisions[] = $u->getRevision();
+                    if (!in_array($u->getRevision(), $doneNames)) {
+                        $doneNames[] = $u->getUniqueName();
                     }
                 }
-                file_put_contents('application/update', serialize($doneRevisions));
+                file_put_contents('application/update', serialize($doneNames));
                 echo "\n\033[32mupdate finished\033[0m\n";
 
                 if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
