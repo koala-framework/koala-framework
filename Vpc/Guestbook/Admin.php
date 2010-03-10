@@ -16,7 +16,7 @@ class Vpc_Guestbook_Admin extends Vpc_Directories_Item_Directory_Admin
         $arr = array('settings' => array(
             'xtype' => 'vps.autoform',
             'controllerUrl' => $url,
-            'title' => trlVps('Settings'),
+            'title' => trlVps('Guestbook Settings'),
             'icon' => $icon->__toString()
         ));
         return array_merge($arr, $ret);

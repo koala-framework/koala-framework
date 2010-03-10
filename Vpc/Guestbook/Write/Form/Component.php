@@ -6,9 +6,7 @@ class Vpc_Guestbook_Write_Form_Component extends Vpc_Posts_Write_Form_Component
     protected function _getSettingsRow()
     {
         if (!$this->_settingsRow) {
-            $guestbookComponent = $this->getData()->parent->parent;
-            $this->_settingsRow = Vps_Model_Abstract::getInstance('Vps_Component_FieldModel')
-                ->getRow($guestbookComponent->componentId);
+            $this->_settingsRow = $this->getData()->parent->parent->getComponent()->getRow();
         }
         return $this->_settingsRow;
     }
