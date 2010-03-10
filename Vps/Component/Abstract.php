@@ -2,6 +2,7 @@
 class Vps_Component_Abstract
 {
     private static $_settings = null;
+    private static $_rebuildingSettings = false;
 
     public function __construct()
     {
@@ -22,11 +23,11 @@ class Vps_Component_Abstract
         return isset($s[$class]);
     }
 
-    public static function hasSetting($class, $setting, $useSettingsCache = true)
+    public static function hasSetting($class, $setting)
     {
         static $settingsCache;
         if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
-        if (!$useSettingsCache || !$settingsCache) {
+        if (self::$_rebuildingSettings || !$settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
             $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             if (!class_exists($c)) {
@@ -44,11 +45,11 @@ class Vps_Component_Abstract
         return array_key_exists($setting, $s[$class]);
     }
 
-    public static function getSetting($class, $setting, $useSettingsCache = true)
+    public static function getSetting($class, $setting)
     {
         static $settingsCache;
         if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
-        if (!$useSettingsCache || !$settingsCache) {
+        if (self::$_rebuildingSettings || !$settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
             if (!class_exists(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class)) {
                 throw new Vps_Exception("Invalid component '$class'");
@@ -68,7 +69,7 @@ class Vps_Component_Abstract
                     throw new Vps_Exception("Couldn't find required setting '$setting' for $c.");
                 }
                 if ($setting == 'generators' && Vps_Registry::get('config')->vpc->rootComponent == Vps_Component_Data_Root::getComponentClass()) {
-                    $classes = self::getSetting($class, 'parentClasses', $useSettingsCache);
+                    $classes = self::getSetting($class, 'parentClasses');
                     $cc = array();
                     if (isset(Vps_Registry::get('config')->vpc->childComponents)) {
                         $cc = Vps_Registry::get('config')->vpc->childComponents->toArray();
@@ -131,6 +132,7 @@ class Vps_Component_Abstract
                                 .'_'.Vps_Component_Data_Root::getComponentClass();
             self::$_settings = $cache->load($cacheId);
             if (!self::$_settings) {
+                self::$_rebuildingSettings = true;
                 self::$_settings = array();
                 self::$_settings['mtimeFiles'] = array();
                 $incPaths = explode(PATH_SEPARATOR, get_include_path());
@@ -197,6 +199,7 @@ class Vps_Component_Abstract
                         self::$_settings['mtimeFiles'][] = $incPath.DIRECTORY_SEPARATOR.$file.'.css';
                     } while ($p = get_parent_class($p));
                 }
+                self::$_rebuildingSettings = false;
 
                 $cache->save(self::$_settings, $cacheId);
             }
@@ -390,9 +393,9 @@ class Vps_Component_Abstract
         return $flags[$flag];
     }
 
-    public static function getComponentClasses($useSettingsCache = true)
+    public static function getComponentClasses()
     {
-        if ($useSettingsCache) {
+        if (!self::$_rebuildingSettings) {
             $s =& self::_getSettingsCached();
             $ret = array_keys($s);
             unset($ret[array_search('mtime', $ret)]);
