@@ -5,23 +5,36 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['viewCache'] = false;
-        $ret['editComponents'] = array('child');
+        $ret['ownModel'] = 'Vps_Component_FieldModel';
+
+        $childConfig = Vpc_Admin::getInstance($ret['generators']['child']['component']['child'])->getExtConfig();
+        if (array_keys($childConfig) == array('form')) {
+            $ret['hasVisible'] = true;
+        } else {
+            $ret['hasVisible'] = false;
+            $ret['editComponents'] = array('child');
+        }
+
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $model = $this->getOwnModel();
         $masterChild = $this->getData()->chained->getComponent()->getContentChild();
         $c = Vpc_Chained_Trl_Component::getChainedByMaster($masterChild, $this->getData());
 
         $page = $this->getData();
-        while(!$c->hasContent()) {
+        while(!$c->hasContent() || ($this->_getSetting('hasVisible') && !$c->parent->getComponent()->getRow()->visible)) {
             while ($page && !$page->inherits) {
                 $page = $page->parent;
                 if ($page instanceof Vps_Component_Data_Root) break;
             }
-            if (!isset($page->chained)) break;
+            if (!isset($page->chained)) {
+                $c = null;
+                break;
+            }
             $masterChild = $page->chained->getChildComponent('-'.$this->getData()->id)
                     ->getChildComponent(array('generator' => 'child'));
             $c = Vpc_Chained_Trl_Component::getChainedByMaster($masterChild, $this->getData());
