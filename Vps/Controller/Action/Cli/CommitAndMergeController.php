@@ -20,6 +20,9 @@ class Vps_Controller_Action_Cli_CommitAndMergeController extends Vps_Controller_
 
     public function indexAction()
     {
+        if (!file_exists('.svn')) {
+            throw new Vps_ClientException("This script is not yet ported to git");
+        }
         $message = $this->_getParam('message');
         if (!$message) throw new Vps_ClientException("--message is required");
 
