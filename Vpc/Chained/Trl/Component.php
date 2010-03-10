@@ -89,6 +89,8 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
 
     public static function getChainedByMaster($masterData, $chainedData)
     {
+        if (!$masterData) return null;
+
         while ($chainedData) {
             if (is_instance_of($chainedData->componentClass, 'Vpc_Root_TrlRoot_Chained_Component')) { //wen nötig stattdessen ein neues flag erstellen
                 break;
