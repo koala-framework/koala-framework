@@ -24,7 +24,10 @@ class Vpc_ListChildPages_Teaser_Model extends Vps_Model_Abstract
         $dataKeys = array();
         $whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
         if (isset($whereEquals['parent_component_id'])) {
-            $whereId = $select->getPart(Vps_Model_Select::WHERE_ID);
+            $whereId = null;
+            if (isset($whereEquals['id'])) {
+                $whereId = $whereEquals['id'];
+            }
 
             $childPagesComponentSelect = array();
 
