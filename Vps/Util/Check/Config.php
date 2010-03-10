@@ -48,6 +48,9 @@ class Vps_Util_Check_Config
         $checks['svn'] = array(
             'name' => 'svn'
         );
+        $checks['git'] = array(
+            'name' => 'git'
+        );
         $checks['uploads'] = array(
             'name' => 'uploads'
         );
@@ -159,7 +162,14 @@ class Vps_Util_Check_Config
     }
     private static function _svn()
     {
-        exec("svn info", $out, $ret);
+        exec("svn --version", $out, $ret);
+        if ($ret) {
+            throw new Vps_Exception("Svn command failed");
+        }
+    }
+    private static function _git()
+    {
+        exec("git --version", $out, $ret);
         if ($ret) {
             throw new Vps_Exception("Svn command failed");
         }
