@@ -18,6 +18,7 @@ class Vpc_Guestbook_Component extends Vpc_Posts_Directory_Component
         $ret['generators']['child']['component']['mail'] = 'Vpc_Guestbook_Mail_Component';
         $ret['generators']['child']['component']['activate'] = 'Vpc_Guestbook_ActivatePost_Component';
         $ret['generators']['child']['component']['deactivate'] = 'Vpc_Guestbook_DeactivatePost_Component';
+        $ret['ownModel'] = 'Vps_Component_FieldModel';
 
         return $ret;
     }
