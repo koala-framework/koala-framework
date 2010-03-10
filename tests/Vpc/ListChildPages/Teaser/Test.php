@@ -29,7 +29,7 @@ class Vpc_ListChildPages_Teaser_Test extends Vpc_TestAbstract
 
         $s = new Vps_Model_Select();
         $s->whereEquals('parent_component_id', 400);
-        $s->whereId(501);
+        $s->whereEquals('id', 501);
         $this->assertEquals(1, count($model->getRows($s)));
     }
 }
