@@ -46,6 +46,7 @@ class Vps_Component_Data
             $page = $page->getParentPseudoPageOrRoot();
         }
         if (!$page) return '';
+        $filenames = array();
         do {
             if (!empty($filenames) && Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
                 $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
