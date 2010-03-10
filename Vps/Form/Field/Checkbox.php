@@ -11,7 +11,12 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
     {
         $ret = array();
         if (!$data) {
-            $ret[] = $name.": ".trlVps("Value is empty, but a non-empty value is required");
+            $msg = '';
+            if (trim($name)) {
+                $msg .= $name.': ';
+            }
+            $msg .= trlVps("Please mark the checkbox");
+            $ret[] = $msg;
         }
         return $ret;
     }
