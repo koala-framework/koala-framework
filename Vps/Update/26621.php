@@ -14,10 +14,13 @@ class Vps_Update_26621 extends Vps_Update
     {
         if (!is_dir($dir)) {
             mkdir($dir, 0777);
-            exec("svn add $dir");
-            exec("svn propset svn:ignore \"*\" $dir");
-            return true;
+            if (file_exists('.svn')) {
+                exec("svn add $dir");
+                exec("svn propset svn:ignore \"*\" $dir");
+            } else {
+                file_put_contents($dir.'.gitignore', '*');
+                exec("git add $dir");
+            }
         }
-        return false;
     }
 }
