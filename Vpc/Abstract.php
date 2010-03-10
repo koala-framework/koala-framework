@@ -25,7 +25,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     public function getDbId()
     {
-        $sharedDataClass = self::getFlag(get_class($this), 'sharedDataClass');
+        $sharedDataClass = self::getFlag($this->getData()->componentClass, 'sharedDataClass');
         if ($sharedDataClass) {
             $component = $this->getData();
             while ($component) {
