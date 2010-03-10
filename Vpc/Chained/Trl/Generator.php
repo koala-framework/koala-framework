@@ -109,6 +109,9 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         if (isset($row->box)) {
             $data['box'] = $row->box;
         }
+        if (isset($row->row)) {
+            $data['row'] = $row->row;
+        }
         return $data;
     }
 

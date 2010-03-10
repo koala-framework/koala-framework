@@ -17,7 +17,5 @@ class Vpc_Columns_Admin extends Vpc_Admin
             );
         }
         return $ret;
-
     }
-
 }
