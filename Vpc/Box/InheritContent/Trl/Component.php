@@ -5,6 +5,7 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['viewCache'] = false;
+        $ret['editComponents'] = array('child');
         return $ret;
     }
 
