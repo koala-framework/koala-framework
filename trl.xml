@@ -5536,5 +5536,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <context>test</context>
 <id>1444</id>
 </text>
+<text>
+<en>Please mark the checkbox</en>
+<de>Bitte setzen Sie das Häkchen</de>
+<id>1445</id>
+</text>
 </trl>
 
