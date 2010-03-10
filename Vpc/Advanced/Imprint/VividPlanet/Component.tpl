@@ -8,7 +8,7 @@
         <?=trlVps('A-5202 Neumarkt a. Wallersee');?><br/>
         <p><a href="http://www.vivid-planet.at/" title="Internet-Agentur Salzburg" rel="popup_blank"><?=trlVps('http://www.vivid-planet.at');?></a><br/>
         <? if ($this->row->is_isiweb) { ?>
-            <?=trlVps('This {0} is an {1}','<a href="http://www.vivid-planet.at/produkte/isiweb_homepage.html" rel="popup_blank">'.trlVps('Homepage').'</a>','<a href="http://www.vivid-planet.at/produkte/isiweb_homepage.html" rel="popup_blank">'.trlVps('isiWEB').'</a>')?>
+            <?=trlVps('This {0} is an {1}',array('<a href="http://www.vivid-planet.at/produkte/isiweb_homepage.html" rel="popup_blank">'.trlVps("Homepage").'</a>','<a href="http://www.vivid-planet.at/produkte/isiweb_homepage.html" rel="popup_blank">'.trlVps("isiWEB").'</a>'))?>
             (<a href="http://www.isiweb.at" rel="popup_blank"><?=trlVps('www.isiweb.at');?></a>).<br/>
             <?=trlVps('A product of Vivid Planet Software GmbH');?>.
         <? } ?>
