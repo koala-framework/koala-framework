@@ -8,7 +8,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
             throw new Vps_Exception("This component requires a parameter");
         }
         $ret['masterComponentClass'] = $masterComponentClass;
-        $ret['generators'] = Vpc_Abstract::getSetting($masterComponentClass, 'generators', false);
+        $ret['generators'] = Vpc_Abstract::getSetting($masterComponentClass, 'generators');
         foreach ($ret['generators'] as $k=>&$g) {
             if (!is_array($g['component'])) $g['component'] = array($k=>$g['component']);
             foreach ($g['component'] as &$c) {
@@ -23,10 +23,10 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
             if (isset($g['dbIdShortcut'])) unset($g['dbIdShortcut']);
         }
         try {
-            $ret['componentName'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentName', false);
+            $ret['componentName'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentName');
         } catch (Exception $e) {}
         try {
-            $ret['componentIcon'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentIcon', false);
+            $ret['componentIcon'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentIcon');
         } catch (Exception $e) {}
 
         foreach (array('showInPageTreeAdmin', 'processInput', 'menuCategory') as $f) {

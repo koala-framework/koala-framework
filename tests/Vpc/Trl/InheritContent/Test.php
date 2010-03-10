@@ -35,20 +35,26 @@ class Vpc_Trl_InheritContent_Test extends Vpc_TestAbstract
             $this->_root->getComponentById('root-de_test_test2_test3-box')->render());
     }
 
-    public function testContentEn()
+    public function testContentEn1()
     {
         $this->assertEquals('root-en-box-child',
             $this->_root->getComponentById('root-en-box-child')->render());
         $this->assertEquals('root-en_test_test2_test3-box-child',
             $this->_root->getComponentById('root-en_test_test2_test3-box-child')->render());
+    }
 
+    public function testContentEn2()
+    {
         $this->assertEquals('root-en-box-child',
             $this->_root->getComponentById('root-en-box')->render());
         $this->assertEquals('root-en-box-child',
             $this->_root->getComponentById('root-en_test-box')->render());
         $this->assertEquals('root-en-box-child',
             $this->_root->getComponentById('root-en_test_test2-box')->render());
+    }
 
+    public function testContentEn3()
+    {
         //test3-box has no content in en
         $this->assertEquals('root-en-box-child',
             $this->_root->getComponentById('root-en_test_test2_test3-box')->render());
