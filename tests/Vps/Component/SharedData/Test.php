@@ -11,7 +11,7 @@ class Vps_Component_SharedData_Test extends PHPUnit_Framework_TestCase
         $component = $root->getComponentById('root_2-shared');
 
         $sharedComponents = Vps_Controller_Action_Component_PagesController::getSharedComponents($root);
-        $expected = array($component->componentClass => $root->componentClass);
+        $expected = array($component->componentClass => $root);
         $this->assertEquals($expected, $sharedComponents);
 
         $row = $component->getComponent()->getRow();
