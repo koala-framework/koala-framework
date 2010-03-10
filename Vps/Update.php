@@ -5,10 +5,12 @@ abstract class Vps_Update
 
     protected $_actions = array();
     protected $_revision;
+    protected $_uniqueName;
 
-    public function __construct($revision)
+    public function __construct($revision, $uniqueName)
     {
         $this->_revision = (int)$revision;
+        $this->_uniqueName = $uniqueName;
         $this->_init();
     }
 
@@ -20,6 +22,11 @@ abstract class Vps_Update
     public function getRevision()
     {
         return $this->_revision;
+    }
+
+    public function getUniqueName()
+    {
+        return $this->_uniqueName;
     }
 
     protected function _init()
@@ -157,8 +164,13 @@ abstract class Vps_Update
                         if (!is_numeric($f)) continue;
                         $nr = (int)$f;
                         if ($nr >= $from && $nr < $to) {
+                            $n = '';
+                            if ($file != './update') {
+                                $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_';
+                            }
+                            $n .= 'Update_'.$nr;
                             if ($fileType == '.sql') {
-                                $u = new Vps_Update_Sql($nr);
+                                $u = new Vps_Update_Sql($nr, $n);
                                 $u->sql = file_get_contents($i->getPathname());
                                 if (preg_match("#\\#\\s*tags:(.*)#", $u->sql, $m)) {
                                     $u->_tags = explode(' ', trim($m[1]));
@@ -166,13 +178,8 @@ abstract class Vps_Update
                                 $u->_tags[] = 'db';
                                 $ret[] = $u;
                             } else {
-                                $n = '';
-                                if ($file != './update') {
-                                    $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_';
-                                }
-                                $n .= 'Update_'.$nr;
                                 if (is_instance_of($n, 'Vps_Update')) {
-                                    $ret[] = new $n($nr);
+                                    $ret[] = new $n($nr, $n);
                                 }
                             }
                         }
