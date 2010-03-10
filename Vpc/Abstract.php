@@ -25,17 +25,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     public function getDbId()
     {
-        $sharedDataClass = self::getFlag($this->getData()->componentClass, 'sharedDataClass');
-        if ($sharedDataClass) {
-            $component = $this->getData();
-            while ($component) {
-                if (is_instance_of($component->componentClass, $sharedDataClass))
-                    return $component->dbId;
-                $component = $component->parent;
-            }
-        } else {
-            return $this->getData()->dbId;
-        }
+        return $this->getData()->dbId;
     }
 
     public function getComponentId()
@@ -206,10 +196,22 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             $model = $this->getModel();
             if (!$model) return null;
             if ($model instanceof Vps_Model_Interface) {
-                $this->_row = $model->getRow($this->getDbId());
+
+                $dbId = $this->getDbId();
+                $sharedDataClass = self::getFlag($this->getData()->componentClass, 'sharedDataClass');
+                if ($sharedDataClass) {
+                    $component = $this->getData();
+                    while ($component) {
+                        if (is_instance_of($component->componentClass, $sharedDataClass))
+                            $dbId = $component->dbId;
+                        $component = $component->parent;
+                    }
+                }
+
+                $this->_row = $model->getRow($dbId);
                 if (!$this->_row) {
                     $this->_row = $model->createRow();
-                    $this->_row->component_id = $this->getDbId();
+                    $this->_row->component_id = $dbId;
                 }
             } else {
                 $this->_row = $model->find($this->getDbId())->current();

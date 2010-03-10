@@ -56,32 +56,32 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         // EditComponents
         $ec = array();
         foreach ($this->getEditComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c, Vpc_Admin::EXT_CONFIG_DEFAULT));
+            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c->dbId, Vpc_Admin::EXT_CONFIG_DEFAULT));
         }
-        foreach ($this->getSharedComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c, Vpc_Admin::EXT_CONFIG_SHARED));
+        foreach ($this->getSharedComponents($component) as $componentClass => $c) {
+            $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c->dbId, Vpc_Admin::EXT_CONFIG_SHARED));
         }
 
         $data['editComponents'] = $ec;
         return $data;
     }
 
-    private function _formatEditComponents($component, $configType)
+    private function _formatEditComponents($componentClass, $dbId, $configType)
     {
         $ret = array();
-        $cfg = Vpc_Admin::getInstance($component->componentClass)->getExtConfig($configType);
+        $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig($configType);
         if (isset($cfg['xtype'])) { //test for legacy
-            throw new Vps_Exception("getExtConfig for $component->componentClass doesn't return an array of configs");
+            throw new Vps_Exception("getExtConfig for $componentClass doesn't return an array of configs");
         }
         foreach ($cfg as $type=>$c) {
-            $k = $component->componentClass.'-'.$type;
+            $k = $componentClass.'-'.$type;
             if (!isset($this->_componentConfigs[$k])) {
                 $this->_componentConfigs[$k] = $c;
             }
             $ret[] = array(
-                'componentClass' => $component->componentClass,
+                'componentClass' => $componentClass,
                 'type' => $type,
-                'componentId' => $component->dbId
+                'componentId' => $dbId
             );
         }
         return $ret;
@@ -119,13 +119,17 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         }
         $ret = array();
         foreach ($sharedClasses as $componentClass => $sharedClass) {
-            if (is_instance_of($component->componentClass, $class) ||
-                (count($component->getRecursiveChildComponents(
-                    array('componentClass' => $class)
-                )) > 0)
-            ) {
-                $ret[$componentClass] = $class;
+            $targetComponent = null;
+            if (is_instance_of($component->componentClass, $sharedClass)) {
+                $targetComponent = $component;
             }
+            if (!$targetComponent) {
+                $components = $component->getRecursiveChildComponents(
+                    array('componentClass' => $sharedClass, 'pseudoPage' => false)
+                );
+                if (count($components) > 0) $targetComponent = array_shift($components);
+            }
+            if ($targetComponent) $ret[$componentClass] = $targetComponent;
         }
         return $ret;
     }
