@@ -33,7 +33,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         if (!file_exists('application/update')) {
             $doneNames = array();
             foreach (Vps_Update::getUpdates(0, 9999999) as $u) {
-                $doneNames[] = $u->uniqueName();
+                $doneNames[] = $u->getUniqueName();
             }
             file_put_contents('application/update', serialize($doneNames));
             echo "No application/update revision found, assuming up-to-date\n";
@@ -45,7 +45,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             $r = trim($doneNames);
             $doneNames = array();
             foreach (Vps_Update::getUpdates(0, $r) as $u) {
-                $doneNames[] = $u->uniqueName();
+                $doneNames[] = $u->getUniqueName();
             }
         } else {
             $doneNames = unserialize($doneNames);
