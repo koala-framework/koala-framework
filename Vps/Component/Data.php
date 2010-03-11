@@ -692,7 +692,7 @@ class Vps_Component_Data
             } while (($c = $c->parent));
 
             if (!$c) {
-                throw new Vps_Exception("Language data not found.");
+                return null;
             }
             $this->_languageData = $c;
         }
@@ -702,8 +702,12 @@ class Vps_Component_Data
     public function getLanguage()
     {
         if (!$this->_languageKey) {
-            $ret = $this->getLanguageData();
-            $this->_languageKey = $ret->getComponent()->getLanguage();
+            $langData = $this->getLanguageData();
+            if (!$langData) {
+                $this->_languageKey = Vps_Registry::get('config')->webCodeLanguage;
+            } else {
+                $this->_languageKey = $langData->getComponent()->getLanguage();
+            }
         }
         return $this->_languageKey;
     }
