@@ -19,6 +19,7 @@ class Vps_Component_Output_ComponentMaster extends Vps_Component_Output_NoCache
         if ($template && Vps_Component_Data_Root::getInstance()->componentId != $component->componentId) {
             $templateVars = array();
             $templateVars['component'] = $component;
+            $templateVars['data'] = $component;
             $templateVars['boxes'] = array();
             foreach ($component->getChildBoxes() as $box) {
                 $templateVars['boxes'][$box->box] = $box;

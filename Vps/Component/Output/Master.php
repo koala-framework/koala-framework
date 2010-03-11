@@ -49,6 +49,7 @@ class Vps_Component_Output_Master extends Vps_Component_Output_NoCache
             $template = $masterTemplate['template'];
             $templateVars = array();
             $templateVars['component'] = $component;
+            $templateVars['data'] = $component;
             $templateVars['boxes'] = array();
             $templateVars['cssClass'] = Vpc_Abstract::getCssClass($masterTemplate['masterComponent']->componentClass);
             foreach ($component->getChildBoxes() as $box) {
