@@ -702,6 +702,11 @@ class Vps_Component_Data
         }
     }
 
+    public function trlStaticExecute(array $trlStaticData)
+    {
+        return Zend_Registry::get('trl')->trlStaticExecute($trlStaticData, $this->getLanguage());
+    }
+
     public function trl($string, $text = array())
     {
         return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
@@ -717,7 +722,7 @@ class Vps_Component_Data
         return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
     }
 
-    public function trlcp($context, $single, $plural = null, $text = array())
+    public function trlcp($context, $single, $plural, $text = array())
     {
         return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
     }

@@ -63,6 +63,11 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
         $ret['linkTemplate'] = self::getTemplateFile($data->chained->componentClass);
 
         $ret['componentClass'] = get_class($this);
+
+        $ret['placeholder'] = Vpc_Abstract::getSetting($data->chained->componentClass, 'placeholder');
+        foreach ($ret['placeholder'] as $k => $v) {
+            $ret['placeholder'][$k] = $this->getData()->trlStaticExecute($v);
+        }
         return $ret;
     }
 

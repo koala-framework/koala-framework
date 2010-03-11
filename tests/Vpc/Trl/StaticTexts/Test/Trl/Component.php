@@ -5,6 +5,13 @@ class Vpc_Trl_StaticTexts_Test_Trl_Component extends Vpc_Chained_Trl_Component
     {
         $ret = parent::getTemplateVars();
 
+        /* Wird im normalfall nicht in Trl Component überschrieben,
+           weil man das sowieso nicht benötigt in den templateVars.
+           Üblicherweise wird man da immer placeholder verwenden
+           oder das trl direkt im template aufrufen (dort funktioniert
+           es dann korrekt)
+        */
+
         $ret['trlTest'] = $this->getData()->trl('Sichtbar');
         $ret['trlcTest'] = $this->getData()->trlc('time', 'Am');
         $ret['trlpTest1'] = $this->getData()->trlp('Antwort', 'Antworten', 1);
