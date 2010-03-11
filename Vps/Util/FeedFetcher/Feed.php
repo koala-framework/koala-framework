@@ -102,7 +102,7 @@ class Vps_Util_FeedFetcher_Feed
         $feed = array();
         $feed['url'] = $url;
         $feed['update'] = time();
-        $entriesSelect = $m->select()->limit(50);
+        $entriesSelect = $m->select()->limit(100);
         try {
             if ($feedId > 40000) {
                 $m->setDefaultEncoding('utf-8');
