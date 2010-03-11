@@ -386,7 +386,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $cmd .= " --includes=\"".implode(',', $includes)."\"";
             if ($this->_getParam('debug')) $cmd .= " --debug";
         } else {
-            $cmd = "rsync 'ssh -p $this->_sshPort' --omit-dir-times --progress --delete --times --recursive ";
+            $cmd = "rsync -e 'ssh -p $this->_sshPort' --omit-dir-times --progress --delete --times --recursive ";
             $cmd .= "--exclude='.svn' ";
             foreach ($includes as $i) {
                 $cmd .= "--include='$i' ";
