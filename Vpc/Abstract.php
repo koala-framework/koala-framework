@@ -331,6 +331,9 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         $ret = array();
         $ret['placeholder'] = $this->_getSetting('placeholder');
+        foreach ($ret['placeholder'] as $k => $v) {
+            $ret['placeholder'][$k] = $this->getData()->trlStaticExecute($v);
+        }
         $ret['cssClass'] = self::getCssClass($this);
         $ret['data'] = $this->getData();
         $ret['row'] = $this->_getRow();

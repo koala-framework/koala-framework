@@ -1,14 +1,13 @@
 <?php
-function hlp($string){
+function hlp($string) {
     return Zend_Registry::get('hlp')->hlp($string);
 }
 
-function hlpVps($string){
+function hlpVps($string) {
     return Zend_Registry::get('hlp')->hlpVps($string);
 }
 
-function trl($string, $text = array())
-{
+function trl($string, $text = array()) {
     return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB);
 }
 
@@ -20,25 +19,59 @@ function trlp($single, $plural, $text =  array()) {
     return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB);
 }
 
-function trlcp($context, $single, $plural = null, $text = array()){
+function trlcp($context, $single, $plural, $text = array()) {
     return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB);
 }
 
-function trlVps($string, $text = array()){
+function trlVps($string, $text = array()) {
     return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_VPS);
 }
 
-function trlcVps($context, $string, $text = array()){
+function trlcVps($context, $string, $text = array()) {
     return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS);
 }
 
-function trlpVps($single, $plural, $text =  array()){
+function trlpVps($single, $plural, $text =  array()) {
     return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS);
 }
 
-function trlcpVps($context, $single, $plural, $text = array()){
+function trlcpVps($context, $single, $plural, $text = array()) {
     return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
 }
+
+// trl functions for e.g. placeholders
+function trlStatic($string, $text = array()) {
+    return array('type' => 'trl', 'args' => array($string, $text));
+}
+
+function trlcStatic($context, $string, $text = array()) {
+    return array('type' => 'trlc', 'args' => array($context, $string, $text));
+}
+
+function trlpStatic($single, $plural, $text =  array()) {
+    return array('type' => 'trlp', 'args' => array($single, $plural, $text));
+}
+
+function trlcpStatic($context, $single, $plural, $text = array()) {
+    return array('type' => 'trlcp', 'args' => array($context, $single, $plural, $text));
+}
+
+function trlVpsStatic($string, $text = array()) {
+    return array('type' => 'trlVps', 'args' => array($string, $text));
+}
+
+function trlcVpsStatic($context, $string, $text = array()) {
+    return array('type' => 'trlcVps', 'args' => array($context, $string, $text));
+}
+
+function trlpVpsStatic($single, $plural, $text =  array()) {
+    return array('type' => 'trlpVps', 'args' => array($single, $plural, $text));
+}
+
+function trlcpVpsStatic($context, $single, $plural, $text = array()) {
+    return array('type' => 'trlcpVps', 'args' => array($context, $single, $plural, $text));
+}
+
 
 class Vps_Trl
 {
@@ -148,6 +181,24 @@ class Vps_Trl
             if (!$this->_modelVps) $this->_modelVps = new Vps_Trl_Model_Vps();
             return $this->_modelVps;
         }
+    }
+
+    public function trlStaticExecute(array $trlStaticData, $language = null)
+    {
+        if (strtolower(substr($trlStaticData['type'], -3)) == 'vps') {
+            $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
+            $source = Vps_Trl::SOURCE_VPS;
+        } else {
+            $source = Vps_Trl::SOURCE_WEB;
+        }
+
+        $args = $trlStaticData['args'];
+        $args[] = $source;
+        $args[] = $language;
+
+        return call_user_func_array(
+            array($this, $trlStaticData['type']), $args
+        );
     }
 
     public function trl($string, $params, $source, $language = null)
