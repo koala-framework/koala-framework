@@ -81,7 +81,6 @@ class Vps_Media_Headline
         $text = str_replace(chr(0xE2).chr(0x80).chr(0x93), '-', $text); //langen bindestrich durch normalen ersetzen
         $text = str_replace(array("\r", "\n", "<br>", "<br/>"), array("", "", "<br />", "<br />"), $text);
         $text = explode("<br />", $text);
-
         if (!isset($styles['font-file'])) {
             throw new Vps_Exception("missing style font-file");
         }
@@ -129,7 +128,6 @@ class Vps_Media_Headline
         //5  upper right corner, Y position = 3
         //6  upper left corner, X position
         //7  upper left corner, Y position
-        
         $bbox = imagettfbbox($fontSize*$factor, 0, $fontFile, $text[0]);
         if (!$width) {
             $width = 0;
@@ -143,7 +141,6 @@ class Vps_Media_Headline
         $width += $paddingLeft;
         if (!$width) throw new Vps_Exception("Width can't be 0");
         $fontX = $paddingLeft*$factor - $bbox[0];
-
         //für die berechnung der höhe immer 'gÜ' verwenden - das gibt und die maximale höhe die zu erwarten ist
         //TODO: funktioniert nicht für mehrzeilige texte!
         $bbox = imagettfbbox($fontSize*$factor, 0, $fontFile, 'gÜ');
@@ -158,18 +155,19 @@ class Vps_Media_Headline
         $im1 = imagecreatetruecolor ($width*$factor, $height*$factor) or die ("Error");
         imagealphablending($im1, true);
         imageSaveAlpha($im1, true);
-
         if ($backgroundColor) {
             $bgColor = ImageColorAllocate ($im1, hexdec(substr($backgroundColor,1,2)), hexdec(substr($backgroundColor,3,2)), hexdec(substr($backgroundColor,5,2)));
         } else {
-            $bgColor = imagecolorallocatealpha($im1, 255, 255, 255, 127);
+	    if (PHP_VERSION == '5.2.0-8+etch16') {
+                $bgColor = imagecolorallocatealpha($im1, 255, 255, 255, 0);
+	    } else {
+	        $bgColor = imagecolorallocatealpha($im1, 255, 255, 255, 127);
+	    }
         }
         imageFill($im1, 0, 0, $bgColor);
-
         $textColorAllocated = ImageColorAllocate ($im1, hexdec(substr($color,1,2)), hexdec(substr($color,3,2)), hexdec(substr($color,5,2)));
 
         $textY = $fontY;
-
         //zeile für zeile schreiben
         foreach($text as $t) {
             $t = trim($t);
