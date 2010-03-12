@@ -25,9 +25,8 @@ class Vpc_Trl_StaticTextsForm_Test extends Vpc_TestAbstract
         // web code language is 'de', tested language is 'en'
 
         $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('config')->server->domain.'/en/testtrl', 'en');
-
         $this->assertEquals('en', $c->getLanguage());
-        $c->getChildComponent('-form')->getComponent()->processInput(array());
+        $c->getChildComponent('-child')->getComponent()->processInput(array());
 
         $render = $c->render();
 
