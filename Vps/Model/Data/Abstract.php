@@ -238,6 +238,13 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             $ret = $this->getExprValue($rowData, $field);
         } else if (isset($rowData[$field])) {
             $ret = $rowData[$field];
+        } else {
+            foreach ($this->_siblingModels as $m) {
+                if ($m->hasColumn($field)) {
+                    $row = $m->getRow($rowData[$this->getPrimaryKey()]);
+                    if ($row) $ret = $row->$field;
+                }
+            }
         }
         return $ret;
     }
