@@ -12,11 +12,9 @@ class Vpc_Trl_StaticTextsPlaceholder_Root extends Vpc_Root_TrlRoot_Component
         $ret['generators']['chained']['component'] =
             'Vpc_Root_TrlRoot_Chained_Component.Vpc_Trl_StaticTextsPlaceholder_GermanMaster';
 
-        $ret['childModel'] = new Vps_Model_FnF(array(
-            'data' => array(
-                array('id'=>'1', 'filename'=>'de', 'name'=>'Deutsch', 'master'=>true),
-                array('id'=>'2', 'filename'=>'en', 'name'=>'English', 'master'=>false),
-            )
+        $ret['childModel'] = new Vpc_Trl_RootModel(array(
+            'de' => 'Deutsch',
+            'en' => 'English'
         ));
 
         return $ret;
