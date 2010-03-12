@@ -637,7 +637,7 @@ abstract class Vps_Component_Generator_Abstract
         if (!$generatorClass) $generatorClass = $this->getClass();
 
         $data['icon'] = 'bullet_yellow';
-        $data['disabledIcon'] = 'bullet_white';
+        $data['iconEffects'] = array();
         $data['allowDrag'] = false;
         $data['allowDrop'] = false;
 

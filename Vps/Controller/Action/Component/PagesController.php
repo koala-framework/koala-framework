@@ -34,12 +34,12 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         } else {
             $data = array_merge($data, $component->generator->getPagesControllerConfig($component));
 
-            if (!isset($data['disabledIcon'])) $data['disabledIcon'] = $data['icon'];
-            $icon = $disabled ? $data['disabledIcon'] : $data['icon'];
+            if ($disabled) $data['iconEffects'][] = 'forbidden';
+            $icon = $data['icon'];
             if (is_string($icon)) {
                 $icon = new Vps_Asset($icon);
             }
-            $data['bIcon'] = $icon->__toString();
+            $data['bIcon'] = $icon->__toString($data['iconEffects']);
             if (isset($data['icon'])) unset($data['icon']);
         }
 
@@ -228,8 +228,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     {
         parent::_changeVisibility($row);
         $config = $row->getData()->generator->getPagesControllerConfig($row->getData());
-        $icon = is_string($config['icon']) ? new Vps_Asset($config['icon']) : $config['icon'];
-        $this->view->icon = $icon->__toString();
+        $icon = new Vps_Asset($config['icon']);
+        $this->view->icon = $icon->__toString($config['iconEffects']);
         if (!$row->visible) {
             $this->_checkRowIndependence($row, trlVps('hide'));
         }

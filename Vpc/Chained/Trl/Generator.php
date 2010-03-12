@@ -12,6 +12,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         $ret = $this->_getChainedGenerator()->getPagesControllerConfig($component, $this->getClass());
         $ret['allowDrag'] = false;
         $ret['allowDrop'] = false;
+        $ret['iconEffects'][] = 'chained';
         return $ret;
     }
 
