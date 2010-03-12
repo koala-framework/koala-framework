@@ -17,6 +17,13 @@ class Vps_Assets_Effects
 
     public static function invisible(Imagick $image)
     {
-        $image->setImageOpacity(0.5);
+        $image->setImageOpacity(0.2);
+    }
+
+    public static function forbidden(Imagick $image)
+    {
+        $overlay = new Imagick();
+        $overlay->readImage(VPS_PATH."/Vps/Assets/Overlay/forbidden.png");
+        $image->compositeImage($overlay, Imagick::COMPOSITE_OVER, 16-10, 16-10);
     }
 }
