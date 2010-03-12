@@ -65,7 +65,7 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
 
         if ($xml->id) {
             $data['id'] = (string)$xml->id;
-        } else if ($xml->guid) {
+        } else if ($xml->guid && $xml->guid != $feed->link) {
             $data['id'] = (string)$xml->guid;
         } else {
             $data['id'] = $data['link'];
