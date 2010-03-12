@@ -171,7 +171,7 @@ class Vps_Util_Check_Config
     {
         exec("git --version", $out, $ret);
         if ($ret) {
-            throw new Vps_Exception("Svn command failed");
+            throw new Vps_Exception("Git command failed");
         }
     }
 
