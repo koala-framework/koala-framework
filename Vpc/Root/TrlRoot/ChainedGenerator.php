@@ -4,10 +4,16 @@ class Vpc_Root_TrlRoot_ChainedGenerator extends Vps_Component_Generator_PseudoPa
     protected $_idColumn = 'filename';
     protected $_hasNumericIds = false;
     protected $_inherits = true;
+
     public function getPagesControllerConfig($component, $generatorClass = null)
     {
         $ret = parent::getPagesControllerConfig($component, $generatorClass);
         $ret['icon'] = 'font';
+        $ret['actions']['visible'] = true;
+        if (!$component->visible) {
+            $ret['iconEffects'][] = 'invisible';
+        }
+        $ret['iconEffects'][] = 'chained';
         return $ret;
     }
 
@@ -28,6 +34,7 @@ class Vpc_Root_TrlRoot_ChainedGenerator extends Vps_Component_Generator_PseudoPa
     {
         $data = parent::_formatConfig($parentData, $row);
         $data['language'] = $row->filename;
+        $data['visible'] = $row->visible;
 
         //vielleicht flexibler machen?
         $data['chained'] = Vps_Component_Data_Root::getInstance()

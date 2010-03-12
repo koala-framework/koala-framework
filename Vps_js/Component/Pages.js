@@ -266,7 +266,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 handler : function() {
                     this.treePanel.onVisible();
                 },
-                icon    : '/assets/silkicons/page_red.png',
+                icon    : '/assets/fx_invisible/silkicons/page.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });

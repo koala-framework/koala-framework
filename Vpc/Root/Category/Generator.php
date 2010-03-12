@@ -253,13 +253,11 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $ret['actions']['visible'] = true;
         $ret['actions']['makeHome'] = true;
 
-        $ret['disabledIcon'] = 'page_white';
+        $ret['icon'] = 'page';
         if ($component->isHome) {
-            $ret['icon'] = 'application_home';
+            $ret['iconEffects'][] = 'home';
         } else if (!$component->visible) {
-            $ret['icon'] = 'page_red';
-        } else {
-            $ret['icon'] = 'page';
+            $ret['iconEffects'][] = 'invisible';
         }
         $ret['allowDrop'] = true;
 
