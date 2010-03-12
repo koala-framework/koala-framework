@@ -702,7 +702,7 @@ class Vps_Component_Data
         }
     }
 
-    public function trlStaticExecute(array $trlStaticData)
+    public function trlStaticExecute($trlStaticData)
     {
         return Zend_Registry::get('trl')->trlStaticExecute($trlStaticData, $this->getLanguage());
     }

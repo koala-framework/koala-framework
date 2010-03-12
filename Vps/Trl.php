@@ -183,8 +183,11 @@ class Vps_Trl
         }
     }
 
-    public function trlStaticExecute(array $trlStaticData, $language = null)
+    public function trlStaticExecute($trlStaticData, $language = null)
     {
+        // if e.g. trl() is set for placeholder, and not trlStatic()
+        if (!is_array($trlStaticData)) return $trlStaticData;
+
         if (strtolower(substr($trlStaticData['type'], -3)) == 'vps') {
             $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
             $source = Vps_Trl::SOURCE_VPS;
@@ -342,7 +345,7 @@ class Vps_Trl
         $linenumber = 0;
         $parts = array();
         while (true) {
-            $pattern = "#(.*?)((trl|trlVps|trlc|trlcVps|trlp|trlpVps|trlcp|trlcpVps) *\(['|\"].*)#s";
+            $pattern = "#(.*?)((trlc?p?(Vps)?(Static)?) *\(['|\"].*)#s";
             preg_match($pattern, $content, $m);
             if (!$m) break;
             $text = $m[2];
