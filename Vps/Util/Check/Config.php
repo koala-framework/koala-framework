@@ -191,7 +191,7 @@ class Vps_Util_Check_Config
 
     private static function _imagick_functionality()
     {
-        if (!class_exists('Imagick')) {
+        if (!class_exists('Imagick', false)) {
             throw new Vps_Exception("Imagick class doesn't exist");
         }
         $im = new Imagick();
