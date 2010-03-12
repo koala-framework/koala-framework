@@ -68,9 +68,15 @@ class Vps_Asset
         return $paths[$d['type']].'/'.$d['icon'];
     }
 
-    public function __toString()
+    public function __toString($effects = array())
     {
         $d = $this->_getIconAndType();
-        return '/assets/'.$d['type'].'/'.$d['icon'];
+        if ($effects) {
+            $str = 'fx';
+            foreach ($effects as $effect) $str .= '_' . $effect;
+            return '/assets/'.$str.'/'.$d['type'].'/'.$d['icon'];
+        } else {
+            return '/assets/'.$d['type'].'/'.$d['icon'];
+        }
     }
 }
