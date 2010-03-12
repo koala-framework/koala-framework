@@ -18,6 +18,7 @@ class Vpc_Root_TrlRoot_Model extends Vps_Model_FnF
             );
             $master = false;
         }
+        $config['toStringField'] = 'name';
         parent::__construct($config);
     }
 }
