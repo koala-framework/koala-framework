@@ -16,7 +16,7 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
             'nameColumn' => 'name',
             'uniqueFilename' => true,
         );
-        $ret['childModel'] = null; //TODO standard model in vps
+        $ret['childModel'] = new Vpc_Root_TrlRoot_Model(array('de' => 'Deutsch'));
         return $ret;
     }
 

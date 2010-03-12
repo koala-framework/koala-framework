@@ -1,7 +1,7 @@
 <?php
 class Vpc_Root_TrlRoot_MasterGenerator extends Vps_Component_Generator_PseudoPage_Static
 {
-    private $_langaugeRow = null;
+    private $_languageRow = null;
     protected $_inherits = true;
     protected $_loadTableFromComponent = true;
 
@@ -14,12 +14,12 @@ class Vpc_Root_TrlRoot_MasterGenerator extends Vps_Component_Generator_PseudoPag
 
     private function _getLanguageRow()
     {
-        if (!$this->_langaugeRow) {
+        if (!$this->_languageRow) {
             $s = new Vps_Model_Select();
             $s->whereEquals('master', 1);
-            $this->_langaugeRow = $this->_getModel()->getRow($s);
+            $this->_languageRow = $this->_getModel()->getRow($s);
         }
-        return $this->_langaugeRow;
+        return $this->_languageRow;
     }
 
     protected function _formatConfig($parentData, $componentKey)
@@ -29,7 +29,7 @@ class Vpc_Root_TrlRoot_MasterGenerator extends Vps_Component_Generator_PseudoPag
         $data['language'] = $this->_getLanguageRow()->filename;
         return $data;
     }
-    
+
     protected function _getFilenameFromRow($componentKey, $parentData)
     {
         return $this->_getLanguageRow()->filename;
