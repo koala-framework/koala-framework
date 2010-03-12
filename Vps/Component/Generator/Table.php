@@ -198,7 +198,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $select = parent::_formatSelect($parentData, $select);
         if (is_null($select)) return null;
 
-        if ($this->_getModel()->hasColumn('component_id')) {
+        if ($this->_getModel()->hasColumn('component_id') && $this->_getModel()->getPrimaryKey() != 'component_id') {
             if ($parentData) {
                 $select->whereEquals('component_id', $parentData->dbId);
             } else if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
