@@ -10,7 +10,7 @@ class Vpc_Trl_StaticTextsPlaceholder_TrlModelWeb extends Vps_Trl_Model_Web
                 array('id'=>'3', 'en' => 'reply', 'en_plural' => 'replies', 'de' => 'Antwort', 'de_plural' => 'Antworten'),
                 array('id'=>'4', 'context' => 'test', 'en' => 'reply', 'en_plural' => 'replies', 'de' => 'Antwort', 'de_plural' => 'Antworten'),
             ),
-            'uniqueIdentifier' => 'Vpc_Trl_StaticTexts_TrlModelWeb',
+            'uniqueIdentifier' => 'Vpc_Trl_StaticTextsPlaceholder_TrlModelWeb',
             'columns' => array('id', 'en', 'de', 'en_plural', 'de_plural', 'context')
         ));
         parent::__construct($config);

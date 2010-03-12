@@ -44,6 +44,25 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         }
     }
 
+    protected function _getTrlProperties()
+    {
+        return array('fieldLabel');
+    }
+
+    public function trlStaticExecute($language = null)
+    {
+        foreach ($this->_getTrlProperties() as $property) {
+            $trlStaticData = $this->getProperty($property);
+            $this->setProperty($property, Zend_Registry::get('trl')->trlStaticExecute($trlStaticData, $language));
+        }
+
+        if ($this->hasChildren()) {
+            foreach ($this->getChildren() as $field) {
+                $field->trlStaticExecute($language);
+            }
+        }
+    }
+
     public function setProperty($name, $value)
     {
         if (is_null($value)) {
