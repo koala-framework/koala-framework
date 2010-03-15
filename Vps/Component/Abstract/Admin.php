@@ -158,11 +158,15 @@ class Vps_Component_Abstract_Admin
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
 
         if (count($components) > 1) {
-            $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_news',
-                        array('text'=>$name, 'icon'=>$icon)), 'vps_component_root');
+            if (!$acl->has('vpc_news')) {
+                $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_news',
+                            array('text'=>$name, 'icon'=>$icon)), 'vps_component_root');
+            }
             foreach ($components as $c) {
+                $t = $c->getTitle();
+                if (!$t) $t = $c->componentId;
                 $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
-                        array('text'=>$c->getTitle(), 'icon'=>$icon),
+                        array('text'=>$t, 'icon'=>$icon),
                         Vpc_Admin::getInstance($c->componentClass)->getControllerUrl().'?componentId='.$c->dbId), 'vpc_news');
             }
         } else if (count($components) == 1) {
