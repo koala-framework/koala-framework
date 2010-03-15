@@ -125,10 +125,9 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
                 if ($field instanceof Vps_Form_Container_Card) {
-                    $name = $this->_combobox->getName();
-                    if ($field->getName() == $row->$name ||
-                        (isset($postData[$name]) && $field->getName() == $postData[$name])
-                    ) {
+                    $data = $this->_combobox->load($row, $postData);
+                    $c = $data[$this->_combobox->getFieldName()];
+                    if ($field->getName() == $c) {
                         $ret = array_merge($ret, $field->load($row, $postData));
                     }
                 } else {
