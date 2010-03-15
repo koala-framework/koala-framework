@@ -64,7 +64,8 @@ class Vpc_Basic_LinkTag_Generator extends Vps_Component_Generator_Static
             'dbId' => $dbId,
             'componentClass' => $this->_settings['component'][$row->component],
             'parent' => $parentData,
-            'isPage' => false
+            'isPage' => false,
+            'isPseudoPage' => false
         );
     }
 }
