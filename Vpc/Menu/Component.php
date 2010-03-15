@@ -17,12 +17,18 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret['separator'] = '';
         $ret['linkPrefix'] = '';
         $ret['cssClass'] = 'webStandard printHidden';
+        $ret['emptyIfSingleEntry'] = false;
         return $ret;
     }
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
         $ret['menu'] = $this->_getMenuData();
+        if ($this->_getSetting('emptyIfSingleEntry')) {
+            if (count($ret['menu']) == 1) {
+                $ret['menu'] = array();
+            }
+        }
         $ret['level'] = $this->_getSetting('level');
         $ret['subMenu'] = $this->getData()->getChildComponent('-subMenu');
         $ret['separator'] = $this->_getSetting('separator');
@@ -31,7 +37,12 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
     }
     public function hasContent()
     {
-        if (count($this->_getMenuData())) return true;
+        $c = count($this->_getMenuData());
+        if ($this->_getSetting('emptyIfSingleEntry')) {
+            if ($c > 1) return true;
+        } else if ($c > 0) {
+            return true;
+        }
         $sub = $this->getData()->getChildComponent('-subMenu');
         if ($sub && $sub->getComponent()->hasContent()) {
             return true;
