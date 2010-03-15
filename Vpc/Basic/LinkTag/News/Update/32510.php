@@ -22,10 +22,12 @@ class Vpc_Basic_LinkTag_News_Update_32510 extends Vps_Update
 
         $newsTagModel = Vps_Model_Abstract::getInstance('Vpc_Basic_LinkTag_News_Model');
         foreach ($rows as $row) {
-            $newsTagModel->createRow(array(
-                'component_id' => $row->component_id,
-                'news_id'      => $row->news_id
-            ))->save();
+            if ($row->news_id) {
+                $newsTagModel->createRow(array(
+                    'component_id' => $row->component_id,
+                    'news_id'      => $row->news_id
+                ))->save();
+            }
         }
     }
 }
