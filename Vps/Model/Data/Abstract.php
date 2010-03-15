@@ -243,6 +243,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 if ($m->hasColumn($field)) {
                     $row = $m->getRow($rowData[$this->getPrimaryKey()]);
                     if ($row) $ret = $row->$field;
+                    break;
                 }
             }
         }
