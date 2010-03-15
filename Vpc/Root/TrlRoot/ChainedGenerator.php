@@ -34,7 +34,7 @@ class Vpc_Root_TrlRoot_ChainedGenerator extends Vps_Component_Generator_PseudoPa
     {
         $data = parent::_formatConfig($parentData, $row);
         $data['language'] = $row->filename;
-        $data['visible'] = true;//isset($row->visible) ? $row->visible : true;
+        $data['visible'] = isset($row->visible) ? $row->visible : true;
 
         //vielleicht flexibler machen?
         $data['chained'] = Vps_Component_Data_Root::getInstance()
