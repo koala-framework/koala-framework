@@ -6,7 +6,7 @@ class Vpc_Abstract_Image_Trl_Component extends Vpc_Abstract_Composite_Trl_Compon
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['image'] = array(
             'class' => 'Vps_Component_Generator_Static',
-            'component' => $masterComponentClass
+            'component' => 'Vpc_Abstract_Image_Trl_Image_Component.'.$masterComponentClass
         );
         $ret['ownModel'] = 'Vps_Component_FieldModel';
         return $ret;
@@ -15,10 +15,9 @@ class Vpc_Abstract_Image_Trl_Component extends Vpc_Abstract_Composite_Trl_Compon
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['data'] = $ret['chained'];
-        $ret['ownImage'] = null;
+        $ret['image'] = $ret['chained']; //master bild anzeigen
         if ($this->getRow()->own_image) {
-            $ret['ownImage'] = $this->getData()->getChildComponent('-image');
+            $ret['image'] = $this->getData()->getChildComponent('-image');
         }
         return $ret;
     }
