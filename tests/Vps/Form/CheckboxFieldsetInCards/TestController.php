@@ -28,6 +28,8 @@ class Vps_Form_CheckboxFieldsetInCards_TestController extends Vps_Controller_Act
         $card2->setName('card3');
         $card2->setTitle('Card3');
         $subCards = $card2->add(new Vps_Form_Container_Cards('subcards', "SubCards"));
+        $cb = $subCards->getCombobox();
+        $cb->setCls('vps-test-subcards');
         $subCard1 = $subCards->add();
         $subCard1->setName('subcard1');
         $subCard1->setTitle('subcard1');
@@ -44,7 +46,8 @@ class Vps_Form_CheckboxFieldsetInCards_TestController extends Vps_Controller_Act
             ->setCheckboxToggle(true)
             ->setCheckboxName('fs3');
         $fs->add(new Vps_Form_Field_TextField("text4", "Text4"))
-            ->setAllowBlank(false);
+            ->setAllowBlank(false)
+            ->setCls('vps-test-text4');;
 
     }
 
