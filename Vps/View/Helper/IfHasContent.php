@@ -21,6 +21,6 @@ class Vps_View_Helper_IfHasContent
             $ret = "{{$tag}}";
             $componentId = null;
         }
-        echo $ret;
+        return $ret;
     }
 }
