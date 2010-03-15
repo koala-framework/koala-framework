@@ -8,22 +8,23 @@ class Vpc_Trl_StaticTextsOneLang_Test extends Vpc_TestAbstract
 {
     public function setUp()
     {
+        Vps_Registry::get('trl')->setWebCodeLanguage('de');
         Vps_Registry::get('trl')->setModel(new Vpc_Trl_StaticTextsOneLang_TrlModelWeb(), Vps_Trl::SOURCE_WEB);
         parent::setUp('Vpc_Trl_StaticTextsOneLang_Root');
     }
 
     public function tearDown()
     {
+        Vps_Registry::get('trl')->setWebCodeLanguage(null);
         Vps_Registry::get('trl')->setModel(null, Vps_Trl::SOURCE_WEB);
         parent::tearDown();
     }
 
     public function testOneLang()
     {
-        $webCodeLang = Vps_Registry::get('config')->webCodeLanguage;
-        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('config')->server->domain.'/trltest', $webCodeLang);
+        $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('config')->server->domain.'/trltest', 'de');
 
-        $this->assertEquals($webCodeLang, $c->getLanguage());
+        $this->assertEquals('de', $c->getLanguage());
 
         $render = $c->render();
         $this->assertContains('trlTest: Sichtbar', $render);
