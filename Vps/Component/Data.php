@@ -696,7 +696,7 @@ class Vps_Component_Data
     {
         $langData = $this->getLanguageData();
         if (!$langData) {
-            return Vps_Registry::get('config')->webCodeLanguage;
+            return Vps_Registry::get('trl')->getWebCodeLanguage();
         } else {
             return $langData->getComponent()->getLanguage();
         }
