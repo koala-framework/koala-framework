@@ -22,6 +22,7 @@ class Vpc_Basic_Text_Trl_Form extends Vpc_Abstract_Form
 
         $fs->add(new Vps_Form_Field_ShowField('original_text'))
             ->setHideLabel(true)
+            ->setCls('webStandard')
             ->setData(new Vpc_Basic_Text_Trl_Form_OriginalText());
 
         if (!$this->getModel()) {
