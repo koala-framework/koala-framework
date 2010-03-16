@@ -21,7 +21,7 @@ class Vpc_Guestbook_ActivatePost_Component extends Vpc_Form_Success_Component
 
     public function processMailRedirectInput($recipient, $params)
     {
-        $model = $this->getData()->parent->getComponent()->getModel();
+        $model = $this->getData()->parent->getComponent()->getChildModel();
         if (!empty($params['post_id']) && is_numeric($params['post_id'])) {
             $postRow = $model->getRow($params['post_id']);
         }
