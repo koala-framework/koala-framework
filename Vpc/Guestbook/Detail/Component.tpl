@@ -26,7 +26,7 @@
             <?= $this->component($this->actions) ?>
         </div>
         <div class="text">
-            <?=$this->content?>
+            <p><?=$this->content?></p>
         </div>
         <? if (isset($this->signature)) { ?>
             <?=$this->component($this->signature)?>
