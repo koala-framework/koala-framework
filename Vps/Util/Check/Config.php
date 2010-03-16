@@ -31,8 +31,11 @@ class Vps_Util_Check_Config
         $checks['log_write'] = array(
             'name' => 'log_write permissions'
         );
-        $checks['imagick_functionality'] = array(
-            'name' => 'imagick functionality'
+        $checks['imagick_functionality_1'] = array(
+            'name' => 'imagick functionality 1'
+        );
+        $checks['imagick_functionality_2'] = array(
+            'name' => 'imagick functionality 2'
         );
 
         //ab hier wird die config geladen
@@ -189,21 +192,34 @@ class Vps_Util_Check_Config
         rmdir('application/log/error/test-config-check');
     }
 
-    private static function _imagick_functionality()
+    private static function _imagick_functionality_1()
     {
         if (!class_exists('Imagick', false)) {
             throw new Vps_Exception("Imagick class doesn't exist");
         }
         $im = new Imagick();
         $im->readImage(dirname(__FILE__).'/Config/testImage.jpg');
-//        $im->readImage('/srv/www/web6/uploads/90');
         $im->scaleImage(10, 10);
         $im->setImagePage(0, 0, 0, 0);
         $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         $im->getImageBlob();
         $im->destroy();
-
     }
+
+    private static function _imagick_functionality_2()
+    {
+        if (!class_exists('Imagick', false)) {
+            throw new Vps_Exception("Imagick class doesn't exist");
+        }
+        $im = new Imagick();
+        $im->readImage(VPS_PATH.'/images/information.png');
+        $im->scaleImage(10, 10);
+        $im->setImagePage(0, 0, 0, 0);
+        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        $im->getImageBlob();
+        $im->destroy();
+    }
+
     private static function _uploads()
     {
         $m = Vps_Model_Abstract::getInstance('Vps_Uploads_Model');
