@@ -5538,13 +5538,29 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please mark the checkbox</en>
-<de>Bitte setzen Sie das Häkchen</de>
+<de>Bitte setzen Sie das H&#xE4;kchen</de>
 <id>1445</id>
 </text>
 <text>
 <en>entries</en>
-<de>einträge</de>
+<de>eintr&#xE4;ge</de>
 <id>1446</id>
+</text>
+<text>
+<en>Guestbook Settings</en>
+<id>1447</id>
+</text>
+<text>
+<en>Master Image</en>
+<id>1448</id>
+</text>
+<text>
+<en>Own Image</en>
+<id>1449</id>
+</text>
+<text>
+<en>Column</en>
+<id>1450</id>
 </text>
 </trl>
 
