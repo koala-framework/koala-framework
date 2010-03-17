@@ -20,24 +20,54 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
         );
     }
 
+    private function _update($path)
+    {
+        passthru('svn up '.$path, $ret);
+        if ($ret) throw new Vps_Exception("SVN Update failed");
+    }
+
     public function indexAction()
     {
-        echo "updating web\n";
-        passthru('svn up', $ret);
-        if ($ret) throw new Vps_Exception("SVN Update failed");
+        $doUpdate = true;
+        if (file_exists('.svn')) {
+            echo "updating web\n";
+            $this->_update('.');
 
-        echo "\nupdating vps\n";
-        passthru('svn up '.VPS_PATH, $ret);
-        if ($ret) throw new Vps_Exception("SVN Update failed");
+            echo "\nupdating vps\n";
+            $this->_update(VPS_PATH);
 
-        if ($this->_getParam('with-library')) {
-            echo "\nupdating library\n";
-            passthru('svn up '.Vps_Registry::get('config')->libraryPath, $ret);
-            if ($ret) throw new Vps_Exception("SVN Update failed");
+            if ($this->_getParam('with-library')) {
+                echo "\nupdating library\n";
+                $this->_update(Vps_Registry::get('config')->libraryPath);
+            } else {
+                echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
+            }
         } else {
-            echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
+            Vps_Util_Git::web()->fetch();
+            if (Vps_Util_Git::web()->getActiveBranch() == 'master') {
+                Vps_Util_Git::web()->system("rebase origin/master");
+            } else {
+                echo "web: {Vps_Util_Git::web()->getActiveBranch()} != master, daher wird kein autom. rebase ausgefuehrt.\n";
+                $doUpdate = false;
+            }
+
+            if (file_exists('application/include_path')) {
+                $vp = str_replace('%vps_branch%', trim(file_get_contents('application/vps_branch')), trim(file_get_contents('application/include_path')));
+            } else {
+                $vp = getcwd().'/vps-lib';
+            }
+            $g = new Vps_Util_Git($vp);
+            $g->fetch();
+            $vpsBranch = trim(file_get_contents('application/vps_branch'));
+            if ($g->getActiveBranch() == $vpsBranch) {
+                Vps_Util_Git::web()->system("rebase origin/$vpsBranch");
+            } else {
+                echo "vps: {$g->getActiveBranch()} != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
+                $doUpdate = false;
+            }
         }
 
+        /* TODO GIT
         $projectIds = array();
         if (Vps_Registry::get('config')->todo->projectIds) {
             $projectIds = Vps_Registry::get('config')->todo->projectIds->toArray();
@@ -60,21 +90,32 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
                 }
             }
         }
+        */
 
         echo "\n";
         if ($this->_getParam('skip-update')) {
             echo "\n\033[01;33mupdate skipped\033[00m\n";
         } else {
-            $this->_forward('index', 'update');
+            if ($doUpdate) {
+                system("php bootstrap.php update", $ret);
+                exit($ret);
+            } else {
+                echo "Updates wurden NICHT ausgefuehrt.\n";
+            }
         }
 
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
     private function _hasRevisionInHistory($path, $revision)
     {
-        $log = `svn log --xml --revision $revision $path`;
-        $log = new SimpleXMLElement($log);
-        if (count($log->logentry)) return true;
+        if (file_exists($path.'/.svn')) {
+            $log = `svn log --xml --revision $revision $path`;
+            $log = new SimpleXMLElement($log);
+            if (count($log->logentry)) return true;
+        } else {
+            //NOT YET IMPLEMENTED
+            return false;
+        }
     }
     public function checkForModifiedFilesAction()
     {
@@ -84,10 +125,19 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
 
     public static function checkForModifiedFiles($checkRemote)
     {
-        self::_check('.', $checkRemote);
-        echo "Web OK\n";
-        self::_check(VPS_PATH, $checkRemote);
-        echo "Vps OK\n";
+        if (file_exists($path.'/.svn')) {
+            self::_check('.', $checkRemote);
+            echo "Web OK\n";
+            self::_check(VPS_PATH, $checkRemote);
+            echo "Vps OK\n";
+        } else {
+            Vps_Util_Git::web()->checkClean();
+            Vps_Util_Git::web()->checkUpdated();
+            echo "Web OK\n";
+            Vps_Util_Git::vps()->checkClean();
+            Vps_Util_Git::vps()->checkUpdated();
+            echo "Vps OK\n";
+        }
     }
 
     private static function _check($path, $checkRemote)
@@ -122,5 +172,97 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             if ($path == '.') $path = getcwd();
             throw new Vps_ClientException("You must not have modified files in '$path'");
         }
+    }
+
+    public function convertToGitAction()
+    {
+        echo "Converting ".getcwd()." to git\n";
+        $this->_convertToGit();
+
+        $host = Vps_Registry::get('config')->server->host;
+        if ($host == 'vivid' || $host == 'vivid-test-server') {
+            echo "Converting ".VPS_PATH."\n";
+            chdir(VPS_PATH);
+            $this->_convertToGit();
+        } else {
+            if (!file_exists('vps-lib')) {
+                $cmd = "git clone git@github.com:vivid-planet/vps.git vps-lib";
+                echo "$cmd\n";
+                $this->_systemCheckRet($cmd);
+
+                $branch = file_get_contents('application/vps_branch');
+
+                chdir('vps-lib');
+
+                $cmd = "git branch --track $branch origin/$branch";
+                echo "$cmd\n";
+                $this->_systemCheckRet($cmd);
+
+                $cmd = "git checkout ".$branch;
+                echo "$cmd\n";
+                $this->_systemCheckRet($cmd);
+                chdir('..');
+
+                unlink('application/include_path');
+            }
+        }
+    }
+    private function _convertToGit()
+    {
+        if (!file_exists('.svn')) {
+            echo "is already converted\n";
+            return;
+        }
+        if (!file_exists('.git')) {
+            echo "strange, .svn AND .git exist\n";
+            return;
+        }
+        $id = Vps_Registry::get('config')->application->id;
+        $gitUrl = "git@github.com:vivid-planet/$id.git";
+
+        $cmd = "git clone $gitUrl gitwc";
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+
+        $cmd = "mv gitwc/.git .git";
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+
+        $cmd = "rm -rf gitwc";
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+
+        $cmd = "svn propget svn:ignore --recursive --xml";
+        echo "$cmd\n";
+        $xml = new SimpleXMLElement(shell_exec($cmd));
+        foreach ($xml->target as $target) {
+            $target['path'];
+            $svnIgnore = '';
+            foreach ($target->property as $property) {
+                if ($property['name'] == 'svn:ignore') {
+                    $svnIgnore = (string)$property;
+                }
+            }
+            if ($target['path'] == '') $target['path'] = '.';
+            if ($target['path'] == '.') $svnIgnore .= "\nvps-lib";
+            if (!file_exists($target['path'])) {
+                mkdir($target['path']);
+                $cmd = 'git add '.$target['path'];
+                echo "$cmd\n";
+                $this->_systemCheckRet($cmd);
+            }
+            if (!file_exists($target['path'].'/.gitignore')) {
+                echo "writing {$target['path']}/.gitignore\n";
+                file_put_contents($target['path'].'/.gitignore', $svnIgnore);
+                $cmd = 'git add -f '.$target['path']."/.gitignore";
+                echo "$cmd\n";
+                $this->_systemCheckRet($cmd);
+            }
+        }
+
+        $cmd = "find -name .svn | xargs rm -rf";
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+        exit;
     }
 }
