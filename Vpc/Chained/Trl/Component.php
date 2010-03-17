@@ -89,11 +89,24 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
         return $this->getData()->chained->getComponent()->getPartialParams();
     }
 
+    public function getPartialVars($partial, $nr, $info)
+    {
+        $ret = $this->getData()->chained->getComponent()->getPartialVars($partial, $nr, $info);
+        $ret['linkTemplate'] = self::getTemplateFile($this->getData()->chained->componentClass, 'Partial');
+        return $ret;
+    }
+
+    public function getPartialCacheVars($nr)
+    {
+        return $this->getData()->chained->getComponent()->getPartialCacheVars($nr);
+    }
+
     public static function getStaticCacheVars($componentClass)
     {
         $cls = substr($componentClass, strpos($componentClass, '.')+1);
         return call_user_func(array($cls, 'getStaticCacheVars'), $cls);
     }
+
 
     public static function getChainedByMaster($masterData, $chainedData)
     {
