@@ -68,4 +68,8 @@ class Vps_Media_Headline_Asset implements Vps_Assets_Dynamic_Interface
         return null;
     }
 
+    public function getIncludeInAll()
+    {
+        return true;
+    }
 }

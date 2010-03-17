@@ -39,20 +39,24 @@ class Vps_Assets_Dependencies
         foreach ($this->getAssetFiles($assetsType, $fileType, $section, $rootComponent) as $file) {
             if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
                 $ret[] = $file;
-            } else if (!$allUsed) {
+            } else {
                 if (substr($file, 0, 8) == 'dynamic/') {
                     $file = substr($file, 8);
                     $a = new $file($this->_loader, $assetsType, $rootComponent);
-                    $v = $this->_config->application->version;
-                    $f = "/assets/dynamic/$assetsType/"
-                        .($rootComponent?$rootComponent.'/':'')
-                        ."$file/?v=$v";
-                    if ($a->getMTime()) {
-                        $f .= "&t=".$file->getMTime();
+                    if (!$allUsed || !$a->getIncludeInAll()) {
+                        $v = $this->_config->application->version;
+                        $f = "/assets/dynamic/$assetsType/"
+                            .($rootComponent?$rootComponent.'/':'')
+                            ."$file?v=$v";
+                        if ($a->getMTime()) {
+                            $f .= "&t=".$a->getMTime();
+                        }
+                        $ret[] = $f;
                     }
-                    $ret[] = $f;
                 } else {
-                    $ret[] = "/assets/$file";
+                    if (!$allUsed) {
+                        $ret[] = "/assets/$file";
+                    }
                 }
             }
         }
