@@ -71,6 +71,69 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
             scope	: 	this
         });
 
+        this.progress = new Ext.ProgressBar();
+        // http://www.extjs.com/forum/showthread.php?t=93086
+        this.progress.setSize = Ext.ProgressBar.superclass.setSize;
+        this.progress.onResize =  function(w, h) {
+            var inner = Ext.get(this.el.child('.x-progress-inner')),
+                bar = inner.child('.x-progress-bar'),
+                pt = inner.child('.x-progress-text');
+                ptb = inner.child('.x-progress-text-back'),
+            Ext.ProgressBar.superclass.onResize.apply(this, arguments);
+            inner.setHeight(h);
+            bar.setHeight(h);
+            this.textEl.setHeight('auto');
+            pt.setHeight('auto');
+            ptb.setHeight('auto');
+            this.syncProgressBar();
+        }
+        this.progress.setSize(200, 16);
+        
+        this.startTimer = function() {
+            var self = this;
+            function updateTimer() {
+                self.hTimer = window.setTimeout(updateTimer, 5000)
+                self.tick()
+            }
+            this.hTimer = window.setTimeout(updateTimer, 5000)
+        }
+        
+        this.stopTimer = function() {
+            if (this.hTimer != null) window.clearTimeout(this.hTimer)
+            this.hTimer = null;
+        }
+        
+        this.tick = function() {
+        	if (this.timerBusy) return;
+        	this.timerBusy = true;
+            Ext.Ajax.request({
+                url: this.controllerUrl + '/json-status',
+                params : this.getBaseParams(),
+                success: function(response, options, r) {
+                	if (!this.setProgress(r.info))
+                		this.stopTimer();
+                    this.timerBusy = false;
+                },
+                failure: function(response) {
+                    this.timerBusy = false;
+                },
+                scope: this
+            });
+        }
+        
+        this.setProgress = function(info)
+        {
+            var progress = 0;
+            if (info.total > 0) progress = info.sent / info.total
+            this.progress.updateProgress(progress, Math.round(progress * 100) + '%');
+            this.status.el.innerHTML = info.text;
+            return (info.state == 'start' || info.state == 'sending');
+        }
+        
+        this.status = new Ext.Toolbar.TextItem({'text' : ' ' });
+
+        this.tbar = [this.progress, {xtype: 'tbspacer'}, this.status];
+
         this.on('load', function(r, s, t) {
         	var info = r.reader.jsonData.info;
         	if (info.state == 'finished') {
@@ -81,15 +144,14 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
         		if (info.state == 'sending') info.state = 'start';
         		this.button[info.state].toggle(true);
         	}
-        	this.status.setStatus({ text: info.statusText });
+            if (this.setProgress(info)) {
+                this.startTimer();
+            }
         }, this);
 
         this.on('loaded', function(r, s, t) {
         	this.getGrid().topToolbar.add('|', this.button.stop, this.button.pause, this.button.start, '->', reload);
         }, this);
-
-        this.status = new Ext.StatusBar();
-    	this.tbar = this.status;
 
         Vpc.Newsletter.Detail.MailingPanel.superclass.initComponent.call(this);
     },
@@ -138,7 +200,7 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
     			this.pressedButton = button.name;
     			if (r.info.state == 'sending') r.info.state = 'start';
     			if (r.info.state != this.pressedButton) this.button[r.info.state].toggle(true);
-            	this.status.setStatus({ text: r.info.statusText });
+    			if (this.setProgress(r.info)) this.startTimer();
             },
             failure: function(response) {
     			this.button[this.pressedButton].toggle(true);

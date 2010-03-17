@@ -106,11 +106,6 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
 
     public function jsonStatusAction()
     {
-        $row = $this->_getNewsletterRow();
-        $stat = $row->getInfo();
-        $this->view->info = array(
-            'statusText' => $stat['text'],
-            'state' => $row->status
-        );
+        $this->view->info = $this->_getNewsletterRow()->getInfo();
     }
 }
