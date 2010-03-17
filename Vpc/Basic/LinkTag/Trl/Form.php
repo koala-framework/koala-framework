@@ -7,6 +7,10 @@ class Vpc_Basic_LinkTag_Trl_Form_ComponentData extends Vps_Data_Abstract
             ->getComponentByDbId($row->id, array('ignoreVisible'=>true));
         return $c->chained->getComponent()->getRow()->component;
     }
+
+    public function save(Vps_Model_Row_Interface $row, $data)
+    {
+    }
 }
 
 class Vpc_Basic_LinkTag_Trl_Form extends Vpc_Abstract_Form
