@@ -8,7 +8,7 @@ class Vps_Assets_Dynamic_Asset implements Vps_Assets_Dynamic_Interface
 
     public function getContents()
     {
-        return file_Get_contents(self::$file);
+        return file_get_contents(self::$file);
     }
 
     public function getMTimeFiles()
@@ -24,5 +24,10 @@ class Vps_Assets_Dynamic_Asset implements Vps_Assets_Dynamic_Interface
     public function getType()
     {
         return 'css';
+    }
+
+    public function getIncludeInAll()
+    {
+        return true;
     }
 }

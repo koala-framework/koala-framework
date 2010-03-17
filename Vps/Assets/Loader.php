@@ -112,6 +112,7 @@ class Vps_Assets_Loader
                                 throw new Vps_Exception_NotFound();
                             }
                             $file = new $file($this, $assetsType, $rootComponent);
+                            if (!$file->getIncludeInAll()) continue;
                             $c = array();
                             $c['contents'] = $file->getContents();
                             $c['mtimeFiles'] = $file->getMTimeFiles();

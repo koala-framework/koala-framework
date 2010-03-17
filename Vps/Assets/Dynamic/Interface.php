@@ -12,4 +12,5 @@ interface Vps_Assets_Dynamic_Interface
     public function getMTimeFiles();
     public function getMTime();
     public function getType();
+    public function getIncludeInAll();
 }
