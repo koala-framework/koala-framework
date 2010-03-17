@@ -13,6 +13,7 @@ class Vpc_Root_TrlRoot_Chained_Component extends Vpc_Abstract
         foreach ($ret['generators'] as $k=>&$g) {
             if (!is_array($g['component'])) $g['component'] = array($k=>$g['component']);
             foreach ($g['component'] as &$c) {
+                if (!$c) continue;
                 $masterC = $c;
                 $c = Vpc_Admin::getComponentClass($c, 'Trl_Component');
                 if (!$c) $c = 'Vpc_Chained_Trl_Component';
