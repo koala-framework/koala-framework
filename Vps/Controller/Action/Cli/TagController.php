@@ -159,12 +159,14 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         file_put_contents($dir.'/config.ini', $c);
         passthru("svn ci $dir/config.ini -m \"version++\" >/dev/null");
         passthru("rm -rf $dir >/dev/null");
-        self::_createTag($branch, $version, $project);
+        self::_svnCreateTag($branch, $version, $project);
         system("svn up application/config.ini > /dev/null");
     }
 
     public static function getProjectName()
     {
+        if (!file_exists('.svn')) return false; //TODO GIT
+
         if (preg_match("#trunk/vps-projekte/(.*)\n#", `svn info`, $m)) {
             return $m[1];
         } else if (preg_match("#branches/(.*)\n#", `svn info`, $m)) {
@@ -176,16 +178,20 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
     }
     public static function createVpsTag($version)
     {
-        if (in_array($version, self::_getSvnDirs("tags/vps"))) {
-            echo "Vps Version $version exists already\n";
-            return;
-        }
+        if (file_exists('.svn')) {
+            if (in_array($version, self::_getSvnDirs("tags/vps"))) {
+                echo "Vps Version $version exists already\n";
+                return;
+            }
 
-        $branch = self::_getCurrentBranchDir(VPS_PATH);
-        self::_createTag($branch, $version, 'vps');
+            $branch = self::_getCurrentBranchDir(VPS_PATH);
+            self::_svnCreateTag($branch, $version, 'vps');
+        } else {
+            
+        }
     }
 
-    private static function _createTag($branch, $version, $project)
+    private static function _svnCreateTag($branch, $version, $project)
     {
         $b = self::$_svnBase;
 
@@ -195,6 +201,7 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
             throw new Vps_ClientException("Invalid version number: '$version'");
         }
 
+        
         passthru("svn mkdir $b/tags/$project -m \"created tags directory\"  > /dev/null 2>&1");
 
         $versions = self::_getSvnDirs("tags/$project");

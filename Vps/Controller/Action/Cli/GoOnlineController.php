@@ -3,7 +3,6 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 {
     public static function getHelp()
     {
-        if (!Vps_Controller_Action_Cli_TagController::getProjectName()) return null;
         if (Vps_Registry::get('config')->server->host != 'vivid') return null;
         return "go online";
     }
@@ -42,6 +41,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
     public function indexAction()
     {
+        $useSvn = file_exists('.svn');
 
         Zend_Session::start(); //wegen tests
 
@@ -84,25 +84,39 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         }
 
         echo "\n\n*** [01/13] vps-tag erstellen\n";
-        Vps_Controller_Action_Cli_TagController::createVpsTag($vpsVersion);
+        if ($useSvn) {
+            Vps_Controller_Action_Cli_TagController::createVpsTag($vpsVersion);
+        } else {
+            $appId = Vps_Registry::get('config')->application->id;
+            $cmd = "git tag -af $appId-staging";
+            Vps_Util_Git::vps()->tag("$appId-staging", '-f');
+        }
 
         echo "\n\n*** [02/13] web-tag erstellen\n";
-        Vps_Controller_Action_Cli_TagController::createWebTag($webVersion);
-
-        echo "\n\n*** [03/13] vps tag auschecken\n";
-        if ($testConfig) {
-            $this->_systemSshVpsWithSubSections("tag-checkout vps-checkout --version=$vpsVersion", 'test');
-        }
-        $this->_systemSshVpsWithSubSections("tag-checkout vps-checkout --version=$vpsVersion", 'production');
-
-        if ($testConfig) {
-            echo "\n\n*** [04/13] test: vps-version anpassen\n";
-            $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=$vpsVersion", 'test');
+        if ($useSvn) {
+            Vps_Controller_Action_Cli_TagController::createWebTag($webVersion);
+        } else {
+            Vps_Util_Git::web()->tag("staging", '-f');
         }
 
+        if ($useSvn) {
+            echo "\n\n*** [03/13] vps tag auschecken\n";
+            if ($testConfig) {
+                $this->_systemSshVpsWithSubSections("tag-checkout vps-checkout --version=$vpsVersion", 'test');
+            }
+            $this->_systemSshVpsWithSubSections("tag-checkout vps-checkout --version=$vpsVersion", 'production');
+        }
+
         if ($testConfig) {
-            echo "\n\n*** [05/13] test: web tag switchen\n";
-            $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=$webVersion", 'test');
+            if ($useSvn) {
+                echo "\n\n*** [04/13] test: vps-version anpassen\n";
+                $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=$vpsVersion", 'test');
+
+                echo "\n\n*** [05/13] test: web tag switchen\n";
+                $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=$webVersion", 'test');
+            } else {
+                $this->_systemSshVpsWithSubSections("git checkout-staging", 'test');
+            }
         }
 
         $skipCopyToTest = ($this->_getParam('skip-copy-to-test') || $this->_getParam('skip-copy-to-test'));
@@ -148,21 +162,25 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             $result = $runner->doRun($suite, $arguments);
             if (!$result->wasSuccessful()) {
                 if ($testConfig) {
-                    $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
-                    $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
+                    if ($useSvn) {
+                        $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
+                        $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
+                    } else {
+                        $this->_systemSshVpsWithSubSections("git checkout-master", 'test');
+                    }
                 }
                 throw new Vps_ClientException("Tests failed");
             }
         }
 
         if ($testConfig) {
-            echo "\n\n*** [08/13] test: web zurueck auf trunk switchen\n";
-            $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
-        }
-
-        if ($testConfig) {
-            echo "\n\n*** [09/13] test: vps-version zurueck auf trunk anpassen\n";
-            $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
+            echo "\n\n*** [08/13] test: zurueck auf trunk switchen\n";
+            if ($useSvn) {
+                $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
+                $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
+            } else {
+                $this->_systemSshVpsWithSubSections("git checkout-master", 'test');
+            }
         }
 
         $updateProd = false;
@@ -182,15 +200,20 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         if ($updateProd) {
             echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
             $this->_systemSshVpsWithSubSections("import backup-db", 'production');
+            
+            if ($useSvn) {
+                echo "\n\n*** [11/13] prod: vps-version anpassen\n";
+                $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=$vpsVersion", 'production');
 
-            echo "\n\n*** [11/13] prod: vps-version anpassen\n";
-            $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=$vpsVersion", 'production');
+                echo "\n\n*** [12/13] prod: web tag switchen\n";
+                $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=$webVersion", 'production');
 
-            echo "\n\n*** [12/13] prod: web tag switchen\n";
-            $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=$webVersion", 'production');
-
-            echo "\n\n*** [13/13] prod: update ausführen\n";
-            $this->_systemSshVpsWithSubSections("update", 'production');
+                echo "\n\n*** [13/13] prod: update ausführen\n";
+                $this->_systemSshVpsWithSubSections("update", 'production');
+            } else {
+                echo "\n\n*** [11/13] prod: updaten\n";
+                $this->_systemSshVpsWithSubSections("git checkout-production", 'production');
+            }
 
             $projectIds = array();
             if (Vps_Registry::get('config')->todo->projectIds) {
@@ -256,6 +279,10 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
     }
     private function _hasRevisionInHistory($project, $version, $revision)
     {
+        if (!file_exists('.svn')) {
+            //TODO GIT
+            return false;
+        }
         $log = `svn log --xml --revision $revision http://svn/tags/$project/$version`;
         $log = new SimpleXMLElement($log);
         if (count($log->logentry)) return true;
