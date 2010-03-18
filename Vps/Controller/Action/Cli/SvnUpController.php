@@ -125,7 +125,7 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
 
     public static function checkForModifiedFiles($checkRemote)
     {
-        if (file_exists($path.'/.svn')) {
+        if (file_exists('.svn')) {
             self::_check('.', $checkRemote);
             echo "Web OK\n";
             self::_check(VPS_PATH, $checkRemote);
