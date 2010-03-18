@@ -11,7 +11,31 @@ class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Ta
             $rows = $this->_getModel()->fetchAll($select);
         }
         foreach ($rows as $row) {
-            $ret[] = $this->_createData($parentData, $row, $select);
+            $currentPd = array($parentData);
+            if (!$parentData) {
+                $currentPd = $this->_getParentDataByRow($row, $select);
+            }
+            foreach ($currentPd as $pd) {
+                $ret[] = $this->_createData($pd, $row, $select);
+            }
+        }
+        return $ret;
+    }
+
+    protected function _getParentDataByRow($row, $select)
+    {
+        $constraints = array();
+        if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+            $constraints['subroot'] = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+        }
+        if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+            $constraints['ignoreVisible'] = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+        }
+        $news = Vps_Component_Data_Root::getInstance()
+            ->getComponentsByDbId($row->component_id, $constraints);
+        $ret = array();
+        foreach ($news as $new) {
+            $ret = array_merge($ret, $new->getChildComponents(array('componentClass'=>$this->_class)));
         }
         return $ret;
     }
@@ -45,7 +69,15 @@ class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Ta
         if (!$ret) return $ret;
         $ret->group(array('YEAR(publish_date)', 'MONTH(publish_date)'));
         $ret->order('publish_date', 'DESC');
-        $ret->whereEquals('component_id', $parentData->parent->dbId);
+        if (!$parentData) {
+            $page = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
+            if (!$page) {
+                return null;
+            }
+            $ret->where(new Vps_Model_Select_Expr_Like('component_id', $page->dbId.'-%'));
+        } else {
+            $ret->whereEquals('component_id', $parentData->parent->dbId);
+        }
         return $ret;
     }
 
