@@ -162,32 +162,27 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                 $svnBase = 'svn://intern.vivid-planet.com/'; //TODO: ist bei POI anders, in config einstellbar machen
             }
 
-            echo "\n$server: [1/10] svn checkout\n";
+            echo "\n$server: [1/9] svn checkout\n";
             $cmd = "svn co $svnBase/$projectPath .";
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [2/10] update vps\n";
+            echo "\n$server: [2/9] update vps\n";
             $cmd = "svn up {$config->libraryPath}/vps/".file_get_contents('application/vps_branch');
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [3/10] set include_path\n";
+            echo "\n$server: [3/9] set include_path\n";
             $cmd = "echo \"{$config->libraryPath}/vps/%vps_branch%\" > application/include_path";
             $this->_systemSshVps($config, $cmd);
 
             if ($config->uploads) {
-                echo "\n$server: [4/10] create uploads\n";
+                echo "\n$server: [4/9] create uploads\n";
                 $cmd = "mkdir {$config->uploads}";
                 try {
                     $this->_systemSshVps($config, $cmd);
                 } catch (Exception $e) {}
             }
 
-            echo "\n$server: [5/10] create include_path\n";
-            $cmd = "echo \"{$config->libraryPath}/vps/%vps_branch%\" > application/include_path";
-            $this->_systemSshVps($config, $cmd);
-
-
-            echo "\n$server: [6/10] create config.db.ini\n";
+            echo "\n$server: [5/9] create config.db.ini\n";
 
             $dbConfig = array();
             $dbConfig[] = "web.host = localhost";
@@ -209,14 +204,14 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
             }
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [7/10] set permissions\n";
+            echo "\n$server: [6/9] set permissions\n";
             $this->_systemSshVps($config, "chmod a+w application/cache/*");
             $this->_systemSshVps($config, "chmod a+w application/temp");
             $this->_systemSshVps($config, "chmod a+w application/log");
             $this->_systemSshVps($config, "chmod a+w application/log/*");
             $this->_systemSshVps($config, "chmod a+w $config->uploads");
 
-            echo "\n$server: [8/10] set mysql file rights\n";
+            echo "\n$server: [7/9] set mysql file rights\n";
             // globale file rechte für csv import setzen
             if ($server == 'vivid-test-server') {
                 echo "skipped for vivid-test-server - root user has all rights\n";
@@ -225,12 +220,12 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                 $this->_systemSshVps($config, $cmd);
             }
 
-            echo "\n$server: [9/10] import\n";
+            echo "\n$server: [8/9] import\n";
             $cmd = "php bootstrap.php import --server=".Vps_Setup::getConfigSection();
             if (!$this->_getParam('debug')) $cmd .= " --debug";
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [10/10] create-users\n";
+            echo "\n$server: [9/9] create-users\n";
             $cmd = "php bootstrap.php create-users";
             if (!$this->_getParam('debug')) $cmd .= " --debug";
             $this->_systemSshVps($config, $cmd);
