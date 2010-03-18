@@ -843,7 +843,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
             // if no data is recieved, quit
             if (!$data) return;
 
-            $filename = realpath('application/temp').'/modelcsvimport'.uniqid();
+            $tmpImportFolder = realpath('application/temp').'/modelcsv'.uniqid();
+            mkdir($tmpImportFolder, 0777);
+            $filename = $tmpImportFolder.'/csvimport';
             file_put_contents($filename.'.gz', $data);
 
             $cmd = "gunzip -c $filename.gz > $filename"
@@ -870,6 +872,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
             unlink($filename.'.gz');
             unlink($filename);
+            rmdir($tmpImportFolder);
             $this->_updateModelObserver();
         } else if ($format == self::FORMAT_ARRAY) {
             if (isset($options['buffer']) && $options['buffer']) {
