@@ -7,16 +7,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     protected $_idColumn = 'id';
     protected $_hasNumericIds = true;
 
-    /**
-     * wennn man das select anpassen will _formatSelect überschreiben
-     */
-    final public function select($parentData, array $select = array())
-    {
-        $select = new Vps_Component_Select($select);
-        $select->whereGenerator($this->_settings['generator']);
-        return $select;
-    }
-
     final public function getFormattedSelect($parentData)
     {
         $ret = $this->select($parentData);

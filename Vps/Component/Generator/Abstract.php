@@ -437,6 +437,16 @@ abstract class Vps_Component_Generator_Abstract
         return $ret;
     }
 
+    /**
+     * wennn man das select anpassen will _formatSelect überschreiben
+     */
+    final public function select($parentData, array $select = array())
+    {
+        $select = new Vps_Component_Select($select);
+        $select->whereGenerator($this->_settings['generator']);
+        return $select;
+    }
+
     public function getIdSeparator()
     {
         return $this->_idSeparator;
