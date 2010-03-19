@@ -50,10 +50,10 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
                 $card->setTitle($i['title']);
                 if (count($forms) == 1) {
                     $card->setName($name);
-                    $form->setName($name);
+                    if ($form) $form->setName($name);
                 } else {
                     $card->setName($name.'_'.$k); //damits eindeutig ist wenn zB news mehrere forms hat
-                    $form->setName($name.'_'.$k);
+                    if ($form) $form->setName($name.'_'.$k);
                 }
                 if ($form) $card->add($form);
             }
