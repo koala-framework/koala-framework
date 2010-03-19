@@ -162,4 +162,11 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         }
         return $ret;
     }
+
+    
+    public function getModel()
+    {
+        return $this->_getChainedGenerator()->getModel();
+    }
+    
 }
