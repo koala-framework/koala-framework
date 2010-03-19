@@ -1,6 +1,9 @@
 <?php
 abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Auto_Abstract
 {
+    /**
+     * @var Vps_Collection
+     **/
     protected $_columns = null;
     protected $_buttons = array('save', 'add', 'delete');
     protected $_editDialog = null;
@@ -13,6 +16,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_position;
 
     protected $_primaryKey;
+    /**
+     * @var Vps_Model_Interface
+     **/
     protected $_model;
     protected $_table;     // deprecated: use models!
     protected $_tableName; // deprecated: use models!
@@ -82,7 +88,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         $this->_initColumns();
 
-        if (isset($this->_model)) {
+        if (isset($this->_model) && !isset($this->_primaryKey)) {
             $this->_primaryKey = $this->_model->getPrimaryKey();
         }
 
