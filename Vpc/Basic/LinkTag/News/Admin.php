@@ -33,9 +33,21 @@ class Vpc_Basic_LinkTag_News_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
         return array();
     }
 
-    public function setup()
+    public function getLinkTagForms()
     {
-        $fields['news_id']   = "varchar(255) NOT NULL";
-        $this->createFormTable('vpc_basic_link_news', $fields);
+        $ret = array();
+        $news = Vps_Component_Data_Root::getInstance()
+            ->getComponentsByClass('Vpc_News_Directory_Component');
+        foreach ($news as $new) {
+            $form = Vpc_Abstract_Form::createComponentForm($this->_class, 'link');
+            $form->fields['news_id']->setBaseParams(array('newsComponentId'=>$new->dbId));
+            $form->fields['news_id']->setFieldLabel($new->getPage()->name);
+            $ret[$new->dbId] = array(
+                'form' => $form,
+                'title' => $new->getTitle()
+            );
+        }
+        return $ret;
     }
+    
 }
