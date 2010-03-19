@@ -88,7 +88,6 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             Vps_Controller_Action_Cli_TagController::createVpsTag($vpsVersion);
         } else {
             $appId = Vps_Registry::get('config')->application->id;
-            $cmd = "git tag -af $appId-staging";
             Vps_Util_Git::vps()->tag("$appId-staging", '-f');
         }
 
@@ -200,7 +199,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         if ($updateProd) {
             echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
             $this->_systemSshVpsWithSubSections("import backup-db", 'production');
-            
+
             if ($useSvn) {
                 echo "\n\n*** [11/13] prod: vps-version anpassen\n";
                 $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=$vpsVersion", 'production');
@@ -211,7 +210,19 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 echo "\n\n*** [13/13] prod: update ausführen\n";
                 $this->_systemSshVpsWithSubSections("update", 'production');
             } else {
-                echo "\n\n*** [11/13] prod: updaten\n";
+
+                echo "\n\n*** [12/13] prod: production tags erstellen\n";
+                $appId = Vps_Registry::get('config')->application->id;
+                Vps_Util_Git::vps()->tag("$appId-production-previous", '-f', "$appId-production");
+                Vps_Util_Git::web()->tag('production-previous', '-f', 'production');
+
+                Vps_Util_Git::vps()->tag("$appId-production", '-f', "$appId-staging");
+                Vps_Util_Git::web()->tag("staging", '-f', 'staging');
+
+                $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Util/Git.php'), 'production');
+                $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'), 'production');
+
+                echo "\n\n*** [13/13] prod: updaten\n";
                 $this->_systemSshVpsWithSubSections("git checkout-production", 'production');
             }
 
@@ -293,7 +304,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
             $msg = Vps_Registry::get('config')->application->name.' Go Online: '.$msg;
             $msg = str_replace(" ", "\ ", utf8_decode($msg));
-            system("ssh niko \"export DISPLAY=:0 && /usr/kde/3.5/bin/kdialog --passivepopup $msg 2\"");
+            system("ssh niko \"export DISPLAY=:0 && /usr/bin/kdialog --passivepopup $msg 10\"");
         }
     }
 }

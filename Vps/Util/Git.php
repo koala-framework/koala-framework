@@ -28,9 +28,11 @@ class Vps_Util_Git
     {
     }
 
-    public function tag($tag, $args)
+    public function tag($tag, $args = '', $object = '')
     {
-        $this->system("tag -a -m ".escapeshellarg('tagged').' '.$args.' '.escapeshellcmd($tag));
+        $cmd = "tag -a -m ".escapeshellarg('tagged').' '.$args.' '.escapeshellcmd($tag);
+        if ($object) $cmd .= escapeshellcmd($object);
+        $this->system($cmd);
         $this->system("push origin tag ".escapeshellcmd($tag));
     }
 
