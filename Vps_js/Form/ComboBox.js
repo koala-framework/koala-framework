@@ -91,6 +91,9 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 }
             }
         }
+        if (this.baseParams) {
+            this.store.baseParams = this.baseParams;
+        }
 
         if (this.addDialog) {
             var d = Vps.Auto.Form.Window;
@@ -198,7 +201,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         }
     },
     setFormBaseParams: function(params) {
-    	this.store.baseParams = params;
+    	Ext.apply(this.store.baseParams, params);
     }
 
 
