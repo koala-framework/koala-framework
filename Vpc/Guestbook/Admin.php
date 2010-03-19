@@ -27,6 +27,7 @@ class Vpc_Guestbook_Admin extends Vpc_Directories_Item_Directory_Admin
         parent::addResources($acl);
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
+        if (!$components) return;
         $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
         $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
