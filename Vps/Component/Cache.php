@@ -261,7 +261,7 @@ class Vps_Component_Cache
                     $component = Vps_Component_Data_Root::getInstance()
                         ->getComponentByDbId($metaRow->value, array('ignoreVisible' => true));
                     if ($component) {
-                        $component->getComponent()->onCacheCallback($row);
+                        $component->getComponent()->onCacheCallback($value);
                         Vps_Benchmark::cacheInfo("Cache: Callback for component {$component->componentId} ({$component->componentClass}) called.");
                     } else {
                         Vps_Benchmark::cacheInfo("Cache-ERROR: Callback for component {$metaRow->value} not found.");
