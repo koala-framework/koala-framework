@@ -54,7 +54,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         $this->_convertToGit();
 
         $host = Vps_Registry::get('config')->server->host;
-        if ($host == 'vivid' || $host == 'vivid-test-server') {
+        if ($host == 'vivid' && Vps_Setup::getConfigSection()!='vivid') {
             echo "Converting ".VPS_PATH."\n";
             chdir(VPS_PATH);
             $this->_convertToGit();
