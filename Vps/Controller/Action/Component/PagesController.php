@@ -39,7 +39,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             if (is_string($icon)) {
                 $icon = new Vps_Asset($icon);
             }
-            $data['bIcon'] = $icon->__toString($data['iconEffects']);
+            $data['bIcon'] = $icon->toString($data['iconEffects']);
             if (isset($data['icon'])) unset($data['icon']);
         }
 
@@ -229,7 +229,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         parent::_changeVisibility($row);
         $config = $row->getData()->generator->getPagesControllerConfig($row->getData());
         $icon = new Vps_Asset($config['icon']);
-        $this->view->icon = $icon->__toString($config['iconEffects']);
+        $this->view->icon = $icon->toString($config['iconEffects']);
         if (!$row->visible) {
             $this->_checkRowIndependence($row, trlVps('hide'));
         }

@@ -68,7 +68,7 @@ class Vps_Asset
         return $paths[$d['type']].'/'.$d['icon'];
     }
 
-    public function __toString($effects = array())
+    public function toString($effects = array())
     {
         $d = $this->_getIconAndType();
         if ($effects) {
@@ -78,5 +78,10 @@ class Vps_Asset
         } else {
             return '/assets/'.$d['type'].'/'.$d['icon'];
         }
+    }
+
+    public function __toString()
+    {
+        return $this->toString()
     }
 }
