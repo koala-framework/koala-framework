@@ -12,6 +12,18 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         $this->setTriggerAction('all');
     }
 
+
+    protected function _validateNotAllowBlank($data, $name)
+    {
+        $ret = array();
+        $v = new Vps_Validate_NotEmpty();
+        $v->setMessage(Vps_Validate_NotEmpty::IS_EMPTY, trlVps('Please select a value'));
+        if (!$v->isValid($data)) {
+            $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
+        }
+        return $ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
