@@ -14,7 +14,7 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
 
     protected function _getPassword()
     {
-        return $this->_getSetting('password');
+        return Vpc_Abstract::getSetting(get_class($this), 'password');
     }
 
     protected function _getLoginPassword()
