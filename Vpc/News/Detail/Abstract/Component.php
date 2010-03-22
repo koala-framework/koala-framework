@@ -13,6 +13,14 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Directories_Item_D
     {
         $ret = parent::getTemplateVars();
         $ret['title'] = $this->getData()->row->title;
+        $ret['publish_date'] = $this->getData()->row->publish_date;
         return $ret;
+    }
+
+
+    public static function modifyItemData(Vps_Component_Data $new)
+    {
+        parent::modifyItemData($new);
+        $new->publish_date = $new->row->publish_date;
     }
 }

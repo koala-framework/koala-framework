@@ -41,8 +41,9 @@ class Vpc_Directories_List_Trl_Component extends Vpc_Abstract_Composite_Trl_Comp
     {
         foreach (Vpc_Abstract::getChildComponentClasses($this->getData()->componentClass) as $c) {
             if (Vpc_Abstract::hasSetting($c, 'hasModifyItemData')
-                && Vpc_Abstract::getSetting($c, 'hasModifyItemData')) {
-                call_user_func(array($c, 'modifyItemData'), $item, $c);
+                && Vpc_Abstract::getSetting($c, 'hasModifyItemData')
+            ) {
+                call_user_func(array(strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c, 'modifyItemData'), $item, $c);
             }
         }
     }

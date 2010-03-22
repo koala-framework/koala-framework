@@ -3,6 +3,13 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
 {
     protected function _getChainedChildComponents($parentData, Vps_Component_Select $select)
     {
+        $limitCount = $limitOffset = null;
+        if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT) || $select->hasPart(Vps_Component_Select::LIMIT_OFFSET)) {
+            $limitCount = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
+            $limitOffset = $select->getPart(Vps_Component_Select::LIMIT_OFFSET);
+            $select->unsetPart(Vps_Component_Select::LIMIT_COUNT);
+            $select->unsetPart(Vps_Component_Select::LIMIT_OFFSET);
+        }
         $m = Vpc_Abstract::createChildModel($this->_class);
         $ret = parent::_getChainedChildComponents($parentData, $select);
         if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
@@ -13,7 +20,14 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
                 }
             }
         }
-        return array_values($ret);
+        $ret = array_values($ret);
+        if ($limitOffset) {
+            $ret = array_slice($ret, $limitOffset);
+        }
+        if ($limitCount) {
+            $ret = array_slice($ret, 0, $limitCount);
+        }
+        return $ret;
     }
     protected function _formatConfig($parentData, $row)
     {
