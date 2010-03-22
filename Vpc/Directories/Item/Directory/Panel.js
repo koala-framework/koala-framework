@@ -1,6 +1,8 @@
 Ext.namespace('Vpc.Directories.Item.Directory');
 Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
 {
+    idTemplate: false,
+    idPostfix: false,
     initComponent: function() {
         if (this.componentPlugins) {
             this.plugins = [ ];
@@ -27,11 +29,13 @@ Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
 
     fireEditComponent : function(row)
     {
-    	if (!this.idTemplate) {
-    		componentId = this.getBaseParams().componentId + this.idSeparator + row.data.id;
-    	} else {
-    		componentId = this.idTemplate.replace('{0}', row.data.id);
-    	}
+        var componentId;
+        if (!this.idTemplate) {
+            componentId = this.getBaseParams().componentId + this.idSeparator + row.data.id;
+            if (this.idPostfix) componentId += this.idPostfix;
+        } else {
+            componentId = this.idTemplate.replace('{0}', row.data.id);
+        }
         this.fireEvent('editcomponent', {
             componentClass: this.contentClass,
             type: this.contentType,
