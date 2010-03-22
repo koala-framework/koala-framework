@@ -1,9 +1,18 @@
 <?php
 class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['cssClass'] = 'webStandard';
+        $ret['separator'] = ' / ';
+        return $ret;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $ret['separator'] = $this->_getSetting('separator');
         $languages = Vps_Component_Data_Root::getInstance()
             ->getComponentsByClass('Vpc_Root_LanguageRoot_Language_Component');
         $languages = array_merge($languages, Vps_Component_Data_Root::getInstance()
