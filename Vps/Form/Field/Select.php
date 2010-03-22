@@ -61,7 +61,29 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
             $ret['html'] .= '<input type="submit" value="»" />';
         return $ret;
     }
-    
+
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'emptyText';
+        return $ret;
+    }
+
+    public function trlStaticExecute($language = null)
+    {
+        parent::trlStaticExecute($language = null);
+
+        $values = $this->getProperty('values');
+        if (is_array($values)) {
+            foreach ($values as $k => $v) {
+                $newKey = Zend_Registry::get('trl')->trlStaticExecute($k, $language);
+                $newValue = Zend_Registry::get('trl')->trlStaticExecute($v, $language);
+                $values[$newKey] = $newValue;
+            }
+            $this->setProperty('values', $values);
+        }
+    }
+
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
