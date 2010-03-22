@@ -102,7 +102,7 @@ class Vps_Srpc_Client
         file_put_contents('application/log/srpc-call', $log, FILE_APPEND);
         if ($b) $b->stop();
 
-        if (($result = @unserialize($response)) === false) {
+        if (($result = unserialize($response)) === false) {
             throw new Vps_Exception('Srpc Server Response is not serialized: '.$response);
         }
 
