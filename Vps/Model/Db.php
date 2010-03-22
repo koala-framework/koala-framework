@@ -762,7 +762,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $select = $this->select($select);
             }
 
-            $filename = realpath('application/temp').'/modelcsvexport'.uniqid();
+            $tmpExportFolder = realpath('application/temp').'/modelcsv'.uniqid();
+            mkdir($tmpExportFolder, 0777);
+            $filename = $tmpExportFolder.'/csvexport';
 
             $dbSelect = $this->createDbSelect($select);
             $sqlString = $dbSelect->assembleIntoOutfile($filename);
