@@ -82,6 +82,6 @@ class Vps_Asset
 
     public function __toString()
     {
-        return $this->toString()
+        return $this->toString();
     }
 }
