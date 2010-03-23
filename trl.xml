@@ -5562,5 +5562,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Column</en>
 <id>1450</id>
 </text>
+<text>
+<en>Please select a value</en>
+<de>Bitte wählen Sie eine Option aus</de>
+<id>1451</id>
+</text>
 </trl>
 
