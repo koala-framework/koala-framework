@@ -36,7 +36,7 @@ class Vpc_Columns_Trl_Controller extends Vps_Controller_Action_Auto_Grid
     
     protected function _fetchData($order, $limit, $start)
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($this->_getParam('componentId'));
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($this->_getParam('componentId'), array('ignoreVisible'=>true));
         $cols = $c->chained->getChildComponents(array('generator'=>'columns'));
         $ret = array();
         $i = 0;
