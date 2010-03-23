@@ -5,9 +5,8 @@
                 <? for ($i = 1; $i <= $this->settingsRow->columns; $i++) {
                     $tag = 'td';
                     if (!empty($dr->css_style)) {
-                        $rowStyles = Vpc_Abstract::getSetting($this->data->componentClass, 'rowStyles');
-                        if (is_array($rowStyles[$dr->css_style]) && !empty($rowStyles[$dr->css_style]['tag'])) {
-                            $tag = $rowStyles[$dr->css_style]['tag'];
+                        if (is_array($this->rowStyles[$dr->css_style]) && !empty($this->rowStyles[$dr->css_style]['tag'])) {
+                            $tag = $this->rowStyles[$dr->css_style]['tag'];
                         }
                     }
                 ?>
