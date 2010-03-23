@@ -35,6 +35,8 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         $dataSelect = new Vps_Model_Select();
         $dataSelect->order('pos', 'ASC');
         $ret['dataRows'] = $this->_getRow()->getChildRows('tableData', $dataSelect);
+
+        $ret['rowStyles'] = $this->_getSetting('rowStyles');
         return $ret;
     }
 
