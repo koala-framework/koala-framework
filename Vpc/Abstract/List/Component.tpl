@@ -5,6 +5,11 @@
             $class = '';
             if ($i == 0) $class .= 'vpcFirst ';
             if ($i == count($this->children)-1) $class .= 'vpcLast ';
+            if ($i % 2 == 0) {
+                $class .= ' vpcEven';
+            } else {
+                $class .= ' vpcOdd';
+            }
             $class = trim($class);
             $i++;
         ?>
