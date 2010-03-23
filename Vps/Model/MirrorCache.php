@@ -74,14 +74,21 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         }
 
         if ($this->_getMaxSyncDelay()) {
-            $cache = $this->_getSyncDelayCache();
+            $lastSyncFile = 'application/cache/model/mirrorcache_'.md5(
+                                $this->getSourceModel()->getUniqueIdentifier()
+                                .$this->getUniqueIdentifier()
+                                .$this->_syncTimeField
+                            );
             if ($overrideMaxSyncDelay === self::SYNC_AFTER_DELAY) {
-                $lastSync = $cache->load($this->_getSyncDelayCacheId());
+                $lastSync = false;
+                if (file_exists($lastSyncFile)) {
+                    $lastSync = file_get_contents($lastSyncFile);
+                }
                 if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
                     return false;
                 }
             }
-            $cache->save(time(), $this->_getSyncDelayCacheId());
+            file_put_contents($lastSyncFile, time());
         }
 
         $this->_synchronizeDone = true; //wegen endlosschleife ganz oben
@@ -149,29 +156,6 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             throw new Vps_Exception("Variable _maxSyncDelay must be of type integer and bigger or equal to 0");
         }
         return $this->_maxSyncDelay;
-    }
-
-    private function _getSyncDelayCacheId()
-    {
-        return 'mirrorcache_'.md5(
-            $this->getSourceModel()->getUniqueIdentifier()
-            .$this->getUniqueIdentifier()
-            .$this->_syncTimeField
-        );
-    }
-
-    private function _getSyncDelayCache()
-    {
-        return Vps_Cache::factory('Core', 'File',
-            array(
-                'lifetime' => $this->_getMaxSyncDelay(),
-                'automatic_serialization' => true
-            ),
-            array(
-                'cache_dir' => 'application/cache/model',
-                'file_name_prefix' => 'mirrorcache'
-            )
-        );
     }
 
     public function synchronizeAndUpdateRow($data)
