@@ -17,6 +17,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     protected $_maxSyncDelay = 300;
 
     private $_synchronizeDone = false;
+    private $_lockSync;
 
     public function __construct(array $config = array())
     {
@@ -37,22 +38,25 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
     public function countRows($where = array())
     {
-        $this->synchronize();
+        $this->_synchronize();
         $ret = parent::countRows($where);
+        $this->_unlockSync();
         return $ret;
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
-        $this->synchronize();
+        $this->_synchronize();
         $ret = parent::getIds($where, $order, $limit, $start);
+        $this->_unlockSync();
         return $ret;
     }
 
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
-        $this->synchronize();
+        $this->_synchronize();
         $ret = parent::getRows($where, $order, $limit, $start);
+        $this->_unlockSync();
         return $ret;
     }
 
@@ -74,6 +78,32 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                     );
     }
 
+    private function _unlockSync()
+    {
+        fclose($this->_lockSync);
+        $this->_lockSync = null;
+    }
+
+    private function _lockSync($write = false)
+    {
+        if ($this->_lockSync) {
+            throw new Vps_Exception('Already locked');
+        }
+        $this->_lockSync = fopen($this->_getLastSyncFile().'.lock', "w");
+
+        $startTime = microtime(true);
+        while(true) {
+            if (flock($this->_lockSync, ($write ? LOCK_EX : LOCK_SH) | LOCK_NB)) {
+                break;
+            }
+            if (microtime(true)-$startTime > 120) {
+                throw new Vps_Exception("Lock Failed, locked by");
+            }
+            usleep(rand(0, 100)*100);
+        }
+        fwrite($this->_lockSync, getmypid());
+    }
+
     /**
      * Rückgabewert false: kein sync notwendig
      *              null: alles syncen
@@ -83,6 +113,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     {
         if ($this->_synchronizeDone) {
             if ($overrideMaxSyncDelay !== self::SYNC_ALWAYS) {
+                $this->_lockSync();
                 return false; //es wurde bereits synchronisiert
             }
         }
@@ -95,6 +126,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                     $lastSync = file_get_contents($lastSyncFile);
                 }
                 if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
+                    $this->_lockSync();
                     return false; //maxSyncDelay wurde noch nicht erreicht
                 }
             }
@@ -128,6 +160,12 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             }
         }
 
+        if (is_null($select)) {
+            //wenn alles importiert wird write lock befor maxSyncFile geschrieben wird
+            $this->_lockSync(true);
+        } else {
+            $this->_lockSync();
+        }
         if ($this->_getMaxSyncDelay()) {
             //letzten sync zeitpunkt schreiben
             file_put_contents($this->_getLastSyncFile(), time());
@@ -136,6 +174,12 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     }
 
     public function synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
+    {
+        $this->_synchronize($overrideMaxSyncDelay);
+        $this->_unlockSync();
+    }
+
+    private function _synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
     {
         $select = $this->_getSynchronizeSelect($overrideMaxSyncDelay);
         if ($select !== false) {
@@ -189,6 +233,8 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $this->getProxyModel()->import(self::FORMAT_ARRAY,
             array($r['updateRow']),
             array('replace' => true));
+
+        $this->_unlockSync();
         return $r['updateRow'];
     }
 
@@ -209,6 +255,8 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $this->getProxyModel()->import(self::FORMAT_ARRAY,
             array($r['insertRow']),
             array('replace' => true));
+
+        $this->_unlockSync();
         return $r['insertRow'];
     }
 }
