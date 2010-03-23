@@ -16,17 +16,17 @@ class Vps_View_Helper_Assets
         $ret = '';
         $rootComponent = Vps_Component_Data_Root::getComponentClass();
         foreach ($this->_dep->getAssetUrls($type, 'css', $section, $rootComponent) as $file) {
-            $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"$file\" />\n";
+            $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($file)."\" />\n";
         }
         foreach ($this->_dep->getAssetUrls($type, 'printcss', $section, $rootComponent) as $file) {
-            $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"$file\" ";
+            $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($file)."\" ";
             if (!Zend_Registry::get('config')->debug->assets->usePrintCssForAllMedia) {
                 $ret .= "media=\"print\" ";
             }
             $ret .= "/>\n";
         }
         foreach ($this->_dep->getAssetUrls($type, 'js', $section, $rootComponent) as $file) {
-            $ret .= "$indent<script type=\"text/javascript\" src=\"$file\"></script>\n";
+            $ret .= "$indent<script type=\"text/javascript\" src=\"".htmlspecialchars($file)."\"></script>\n";
         }
         return $ret;
     }
