@@ -57,6 +57,9 @@ class Vps_Util_Check_Config
         $checks['uploads'] = array(
             'name' => 'uploads'
         );
+        $checks['setlocale'] = array(
+            'name' => 'setlocale'
+        );
 
 
         $res = '<h3>';
@@ -229,6 +232,27 @@ class Vps_Util_Check_Config
         }
         if (!is_writable($dir)) {
             throw new Vps_Exception("Path for uploads is not writeable");
+        }
+    }
+
+    private static function _setlocale()
+    {
+        $locale = setlocale(LC_ALL, 0); //backup locale
+
+        $l = Vps_Registry::get('trl')->trlc('locale', 'C', array(), Vps_Trl::SOURCE_VPS, 'de');
+        if (!setlocale(LC_ALL, explode(', ', $l))) {
+            throw new Vps_Exception("Locale not installed, tried: ".$l);
+        }
+
+        if (is_string($locale) && strpos($locale, ';')) {
+            $locales = array();
+            foreach (explode(';', $locale) as $l) {
+                $tmp = explode('=', $l);
+                $locales[$tmp[0]] = $tmp[1];
+            }
+            setlocale(LC_ALL, $locales);
+        } else {
+            setlocale(LC_ALL, $locale);
         }
     }
 }
