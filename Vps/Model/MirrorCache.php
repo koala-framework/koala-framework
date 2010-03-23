@@ -65,30 +65,39 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $this->synchronize();
     }
 
+    private function _getLastSyncFile()
+    {
+        return 'application/cache/model/mirrorcache_'.md5(
+                        $this->getSourceModel()->getUniqueIdentifier()
+                        .$this->getUniqueIdentifier()
+                        .$this->_syncTimeField
+                    );
+    }
+
+    /**
+     * Rückgabewert false: kein sync notwendig
+     *              null: alles syncen
+     *              Vps_Model_Select: das was im select steht syncen
+     */
     private function _getSynchronizeSelect($overrideMaxSyncDelay)
     {
         if ($this->_synchronizeDone) {
             if ($overrideMaxSyncDelay !== self::SYNC_ALWAYS) {
-                return false;
+                return false; //es wurde bereits synchronisiert
             }
         }
 
         if ($this->_getMaxSyncDelay()) {
-            $lastSyncFile = 'application/cache/model/mirrorcache_'.md5(
-                                $this->getSourceModel()->getUniqueIdentifier()
-                                .$this->getUniqueIdentifier()
-                                .$this->_syncTimeField
-                            );
             if ($overrideMaxSyncDelay === self::SYNC_AFTER_DELAY) {
+                $lastSyncFile = $this->_getLastSyncFile();
                 $lastSync = false;
                 if (file_exists($lastSyncFile)) {
                     $lastSync = file_get_contents($lastSyncFile);
                 }
                 if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
-                    return false;
+                    return false; //maxSyncDelay wurde noch nicht erreicht
                 }
             }
-            file_put_contents($lastSyncFile, time());
         }
 
         $this->_synchronizeDone = true; //wegen endlosschleife ganz oben
@@ -97,26 +106,31 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
         if (!$this->_syncTimeField) {
             // kein modified feld vorhanden, alle kopieren
-            return null;
-        }
-
-        $syncField = $this->_syncTimeField;
-        $proxyModel = $this->getProxyModel();
-        $pr = $proxyModel->getRow($proxyModel->select()->order($syncField, 'DESC'));
-        $cacheTimestamp = $pr ? $pr->$syncField : null;
-
-        if ($cacheTimestamp && !preg_match('/^[0-9]{4,4}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]$/', $cacheTimestamp)) {
-            throw new Vps_Exception("syncTimeField must be of type datetime (yyyy-mm-dd hh:mm:ss) when using mirror cache");
-        }
-
-        $sourceModel = $this->getSourceModel();
-        if (!$cacheTimestamp) {
-            // kein cache vorhanden, alle kopieren
             $select = null;
         } else {
-            $select = $sourceModel->select()->where(
-                new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
-            );
+            $syncField = $this->_syncTimeField;
+            $proxyModel = $this->getProxyModel();
+            $pr = $proxyModel->getRow($proxyModel->select()->order($syncField, 'DESC'));
+            $cacheTimestamp = $pr ? $pr->$syncField : null;
+
+            if ($cacheTimestamp && !preg_match('/^[0-9]{4,4}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]$/', $cacheTimestamp)) {
+                throw new Vps_Exception("syncTimeField must be of type datetime (yyyy-mm-dd hh:mm:ss) when using mirror cache");
+            }
+
+            $sourceModel = $this->getSourceModel();
+            if (!$cacheTimestamp) {
+                // kein cache vorhanden, alle kopieren
+                $select = null;
+            } else {
+                $select = $sourceModel->select()->where(
+                    new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
+                );
+            }
+        }
+
+        if ($this->_getMaxSyncDelay()) {
+            //letzten sync zeitpunkt schreiben
+            file_put_contents($this->_getLastSyncFile(), time());
         }
         return $select;
     }
