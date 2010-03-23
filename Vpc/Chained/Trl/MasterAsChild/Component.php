@@ -8,6 +8,12 @@ class Vpc_Chained_Trl_MasterAsChild_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Static',
             'component' => $masterComponentClass,
         );
+        try {
+            $ret['componentName'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentName');
+        } catch (Exception $e) {}
+        try {
+            $ret['componentIcon'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentIcon');
+        } catch (Exception $e) {}
         return $ret;
     }
 
