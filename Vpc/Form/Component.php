@@ -14,8 +14,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Vpc_Form_Success_Component';
         $ret['componentName'] = trlVps('Form');
-        $ret['placeholder']['submitButton'] = trlVps('Submit');
-        $ret['placeholder']['error'] = trlVps('An error has occurred');
+        $ret['placeholder']['submitButton'] = trlVpsStatic('Submit');
+        $ret['placeholder']['error'] = trlVpsStatic('An error has occurred');
         $ret['decorator'] = 'Vpc_Form_Decorator_Label';
         $ret['viewCache'] = false;
         $ret['method'] = 'post';
