@@ -399,6 +399,7 @@ class Vps_Setup
                 echo $b; // gibt 2,3 aus
                 echo $b * 2; // gibt 4 aus -> der teil hinterm , wird einfach ignoriert
         */
-        setlocale(LC_ALL ^ LC_NUMERIC, explode(', ', trlcVps('locale', 'C')));
+        setlocale(LC_ALL, explode(', ', trlcVps('locale', 'C')));
+        setlocale(LC_NUMERIC, 'C');
     }
 }
