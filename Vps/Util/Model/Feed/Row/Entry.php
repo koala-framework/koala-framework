@@ -31,6 +31,8 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
                 $quality = 0;
                 if ((string)$l['type'] == 'text/html') $quality++;
                 if ((string)$l['rel'] == 'alternate') $quality++;
+                if ((string)$l['rel'] == 'enclosure') $quality--;
+                if (substr((string)$l['type'], 0, 6) == 'image/') $quality--;
                 $links[$href] = $quality;
             }
             arsort($links);
