@@ -4,7 +4,7 @@ class Vpc_Basic_LinkTag_FirstChildPage_Component extends Vpc_Basic_LinkTag_Abstr
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Link.FirstChildPage'),
+            'componentName' => trlVps('Link.First Child Page'),
             'componentIcon' => new Vps_Asset('page_go'),
             'dataClass' => 'Vpc_Basic_LinkTag_FirstChildPage_Data'
         ));
