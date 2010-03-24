@@ -21,6 +21,8 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Directories_Item_D
     public static function modifyItemData(Vps_Component_Data $new)
     {
         parent::modifyItemData($new);
-        $new->publish_date = $new->row->publish_date;
+        if (isset($new->row->publish_date)) {
+            $new->publish_date = $new->row->publish_date;
+        }
     }
 }
