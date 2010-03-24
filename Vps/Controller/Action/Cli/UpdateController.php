@@ -66,11 +66,14 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                     if (!isset($allUpdates)) {
                         $allUpdates = array();
                         foreach (Vps_Update::getUpdates(0, 9999999) as $u) {
-                            $allUpdates[$u->getRevision()] = $u;
+                            if (!isset($allUpdates[$u->getRevision()])) $allUpdates[$u->getRevision()] = array();
+                            $allUpdates[$u->getRevision()][] = $u;
                         }
                     }
                     if (isset($allUpdates[$i])) {
-                        $doneNames[] = $allUpdates[$i]->getUniqueName();
+                        foreach ($allUpdates[$i] as $u) {
+                            $doneNames[] = $u->getUniqueName();
+                        }
                     }
                 } else {
                     $doneNames[] = $i;
