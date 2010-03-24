@@ -182,8 +182,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 Vps_Model_Abstract::clearInstances(); //wegen eventueller meta-data-caches die sich geändert haben
                 Vps_Component_Generator_Abstract::clearInstances();
                 Vps_Component_Data_Root::reset();
-                echo "\nexecuting $method ".get_class($update);
-                if ($update->getRevision()) echo " (".$update->getRevision().")";
+                echo "\nexecuting $method ".$update->getUniqueName();
                 echo "... ";
                 flush();
             }
