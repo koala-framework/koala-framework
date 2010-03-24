@@ -3,6 +3,7 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
 {
     public static function getHelp()
     {
+        if (!file_exists('.svn')) return null;
         //if (Vps_Registry::get('config')->server->host == 'vivid') return null;
         return "checkout vps tag";
     }
