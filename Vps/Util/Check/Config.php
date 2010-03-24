@@ -60,6 +60,9 @@ class Vps_Util_Check_Config
         $checks['setlocale'] = array(
             'name' => 'setlocale'
         );
+        $checks['fileinfo_functionality'] = array(
+            'name' => 'fileinfo functionality'
+        );
 
 
         $res = '<h3>';
@@ -255,5 +258,12 @@ class Vps_Util_Check_Config
             setlocale(LC_ALL, $locale);
         }
     }
-}
 
+    private static function _fileinfo_functionality()
+    {
+        $finfo = new finfo(FILEINFO_MIME, '/usr/share/file/magic');
+        if ($finfo->buffer(VPS_PATH.'/images/information.png') != 'image/png') {
+            throw new Vps_Exception("fileinfo returned wrong information");
+        }
+    }
+}
