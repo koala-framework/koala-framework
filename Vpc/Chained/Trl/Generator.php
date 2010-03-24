@@ -150,7 +150,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         $ret = parent::getGeneratorFlags();
         $flags = $this->_getChainedGenerator()->getGeneratorFlags();
 
-        $copyFlags = array('showInPageTreeAdmin', 'page', 'pseudoPage', 'box', 'multiBox', 'table', 'static', 'hasHome');
+        $copyFlags = array('pageGenerator', 'showInPageTreeAdmin', 'page', 'pseudoPage', 'box', 'multiBox', 'table', 'static', 'hasHome');
         foreach ($copyFlags as $f) {
             if (isset($flags[$f])) {
                 $ret[$f] = $flags[$f];
