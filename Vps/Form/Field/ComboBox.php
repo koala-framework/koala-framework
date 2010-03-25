@@ -108,9 +108,6 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
                 $store['data'][] = $d;
             }
         } else if (is_array($data)) {
-            if ($this->getFilterValue()) {
-                throw new Vps_Exception("Not possible (yet) to use array data + ComboBoxFilter");
-            }
             if (isset($data['data'])) $data = $data['data'];
             $store['data'] = array();
             foreach ($data as $k=>$i) {
