@@ -29,6 +29,7 @@ class Vps_Form_Cards_CardsTest extends Vps_Test_SeleniumTestCase
 
         $this->type("//input[@name = 'firstname']", 'newName');
         $this->click("//button[text()='".trlVps('Save')."']");
+        $this->waitForConnections();
         $this->open('/vps/test/vps_form_cards_test/get-model-data');
         $this->assertBodyText('newName');
 
