@@ -26,6 +26,8 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'enableStyles'      => true,
             'enableStylesEditor'=> true,
             'enableTagsWhitelist'=> true,
+
+            //veraltert NICHT VERWENDEN!! (in der Vpc_Mail komponente ist ein besserer ersatz)
             'emailStyles'       => array()
         ));
         $ret['generators']['child'] = array(
