@@ -48,6 +48,16 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
 
         return $ret;
     }
+/*
+    public function load(Vps_Model_Row_Interface $row, $postData)
+    {
+        $ret = parent::load($row, $postData);
+        $filteredCombo = $this->getFilteredCombo();
+        if ($filteredCombo->getSave() !== false && $filteredCombo->getInternalSave() !== false) {
+            $ret = array_merge($ret, $filteredCombo->load($row, $postData));
+        }
+        return $ret;
+    }
 
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
@@ -56,6 +66,18 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
         if ($filteredCombo->getSave() !== false && $filteredCombo->getInternalSave() !== false) {
             $filteredCombo->prepareSave($row, $postData);
         }
+    }
+*/
+    public function hasChildren()
+    {
+        return true;
+    }
+
+    public function getChildren()
+    {
+        $ret = parent::getChildren();
+        $ret[] = $this->getFilteredCombo();
+        return $ret;
     }
 
     public function processInput($row, $postData)
