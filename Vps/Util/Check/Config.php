@@ -261,8 +261,8 @@ class Vps_Util_Check_Config
 
     private static function _fileinfo_functionality()
     {
-        $finfo = new finfo(FILEINFO_MIME, '/usr/share/file/magic');
-        if ($finfo->buffer(VPS_PATH.'/images/information.png') != 'image/png') {
+        $mime = Vps_Uploads_Row::detectMimeType(false, file_get_contents(VPS_PATH.'/images/information.png'));
+        if ($mime != 'image/png') {
             throw new Vps_Exception("fileinfo returned wrong information");
         }
     }
