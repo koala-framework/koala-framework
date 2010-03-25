@@ -187,6 +187,9 @@ class Vps_Util_Check_Config
     private static function _log_write()
     {
         if (file_exists('application/log/error/test-config-check')) {
+            if (file_exists('application/log/error/test-config-check/test.log')) {
+                unlink('application/log/error/test-config-check/test.log');
+            }
             rmdir('application/log/error/test-config-check');
         }
         mkdir('application/log/error/test-config-check');
