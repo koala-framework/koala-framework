@@ -40,7 +40,7 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
         }, this);
 
         this.saveBox.store.on('beforeload', function() {
-            this.saveBox.store.baseParams.customer_id = this.filterBox.getValue();
+            this.saveBox.store.baseParams[this.saveBox.filterField] = this.filterBox.getValue();
         }, this);
 
         this.saveBox.on('expand', function(box, r, idx) {
