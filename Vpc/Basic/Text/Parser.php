@@ -191,7 +191,8 @@ class Vpc_Basic_Text_Parser
         $this->_tagsWhitelist = array(
             'p'=>array(), 'a'=>array('href'),
             'img'=>array('src'), 'br'=>array(), 'strong'=>array(), 'em'=>array(),
-            'u'=>array(), 'strike'=>array(), 'ul'=>array(), 'ol'=>array(), 'li'=>array()
+            'u'=>array(), 'strike'=>array(), 'ul'=>array(), 'ol'=>array(), 'li'=>array(),
+            'sup'=>array(), 'sub'=>array()
         );
         if ($this->_enableStyles) {
             $this->_tagsWhitelist = array_merge($this->_tagsWhitelist,
