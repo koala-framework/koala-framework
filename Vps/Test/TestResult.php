@@ -36,7 +36,7 @@ class Vps_Test_TestResult extends PHPUnit_Framework_TestResult
         if (isset($_SERVER['USER']) && $_SERVER['USER']=='niko') {
             $msg = Vps_Registry::get('config')->application->name.' Test failed. Try again?';
             $msg = str_replace(" ", "\ ", utf8_decode($msg));
-            system("ssh niko \"export DISPLAY=:0 && /usr/kde/3.5/bin/kdialog --passivepopup $msg 2\"");
+            system("ssh niko \"export DISPLAY=:0 && /usr/bin/kdialog --passivepopup $msg 2\"");
         }
         $stdin = fopen('php://stdin', 'r');
         $input = strtolower(trim(fgets($stdin, 2)));
