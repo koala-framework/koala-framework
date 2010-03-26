@@ -31,7 +31,7 @@ class Vps_Form_Field_TimeField extends Vps_Form_Field_SimpleAbstract
         if ($ret) {
             $ret = str_replace('"', '', $ret);
             $date = new Vps_Date($ret, Zend_Date::TIME_SHORT);
-            $ret = $date->get(Zend_Date::TIME_SHORT);
+            $ret = $date->get(Zend_Date::HOUR).':'.$date->get(Zend_Date::MINUTE);
         }
         return $ret;
     }
