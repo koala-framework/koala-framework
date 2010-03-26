@@ -20,24 +20,6 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret['emptyIfSingleEntry'] = false;
         return $ret;
     }
-
-    public function getMenuComponent()
-    {
-        $menuComponent = $this->getData();
-        $component = $menuComponent->parent;
-        while ($menuComponent &&
-            !Vpc_Abstract::getFlag($component->componentClass, 'menuCategory') &&
-            $component->componentId != $this->_getSetting('level')
-        ) {
-            $menuComponent = $menuComponent->getChildComponent('-subMenu');
-            $component = $component->parent;
-        }
-        $ret = null;
-        if ($menuComponent && $menuComponent->getComponent()->_getMenuData())
-            $ret = $menuComponent;
-        return $ret;
-    }
-
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -53,7 +35,6 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret['linkPrefix'] = $this->_getSetting('linkPrefix');
         return $ret;
     }
-
     public function hasContent()
     {
         $c = count($this->_getMenuData());
