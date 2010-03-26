@@ -112,7 +112,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $data = $this->_getImageDataOrEmptyImageData();
         if ($data && $data['filename']) {
             $id = $this->getData()->componentId;
-            return Vps_Media::getUrl(get_class($this), $id, 'default', $data['filename']);
+            return Vps_Media::getUrl($this->getData()->componentClass, $id, 'default', $data['filename']);
         }
         return null;
     }

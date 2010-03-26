@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_LinkTag_FirstChildPage_Trl_Component extends Vpc_Chained_Trl_Component
+class Vpc_Basic_LinkTag_FirstChildPage_Trl_Component extends Vpc_Basic_LinkTag_Abstract_Trl_Component
 {
     public static function getSettings($masterComponent)
     {
