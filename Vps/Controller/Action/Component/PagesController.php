@@ -58,9 +58,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         foreach ($this->getEditComponents($component) as $c) {
             $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c->dbId, Vpc_Admin::EXT_CONFIG_DEFAULT));
         }
-        foreach ($this->getMenuEditComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c->dbId, Vpc_Admin::EXT_CONFIG_DEFAULT));
-        }
         foreach ($this->getSharedComponents($component) as $componentClass => $c) {
             $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c->dbId, Vpc_Admin::EXT_CONFIG_SHARED));
         }
@@ -104,50 +101,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         );
         if ($component->isPage) {
             $editComponents[] = $component;
-        }
-        return $editComponents;
-    }
-
-    // static zum Testen
-    public static function getMenuEditComponents($component)
-    {
-        static $menuClasses = null;
-        if (!is_array($menuClasses)) {
-            $componentClasses = Vpc_Abstract::getComponentClasses();
-            $menuClasses = array();
-            foreach ($componentClasses as $class) {
-                if (is_instance_of($class, 'Vpc_Menu_Abstract_Component') &&
-                    Vpc_Abstract::hasSetting($class, 'level') &&
-                    Vpc_Abstract::getSetting($class, 'showAsEditComponent')
-                ) {
-                    $menuClasses[Vpc_Abstract::getSetting($class, 'level')] = $class;
-                }
-            }
-        }
-        $c = $component;
-        $componentLevel = 1;
-        while ($c->isPage) {
-            $componentLevel++;
-            $c = $c->parent;
-        }
-        if ($componentLevel == 1) {
-            if (strpos($component->componentId, '-') === false) {
-                $componentLevel = $component->componentId;
-            } else {
-                $componentLevel = substr(strrchr($component->componentId, '-'), 1);
-            }
-        }
-        $editComponents = array();
-        foreach ($menuClasses as $level => $class) {
-            if ($level == $componentLevel) {
-                $menuComponents = $component->getChildComponents(array(
-                    'componentClasses' => array($class)
-                ));
-                foreach ($menuComponents as $menuComponent) {
-                    $c = $menuComponent->getComponent()->getMenuComponent();
-                    if ($c) $editComponents[] = $c;
-                }
-            }
         }
         return $editComponents;
     }
