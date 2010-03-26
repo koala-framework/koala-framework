@@ -56,8 +56,12 @@ Ext.extend(Vps.Auto.GridFilter.DateRange, Vps.Auto.GridFilter.Abstract, {
     },
     getParams: function() {
         var params = {};
-        params[this.id+'_from'] = this.fieldFrom.getValue().format('Y-m-d');
-        params[this.id+'_to'] = this.fieldTo.getValue().format('Y-m-d');
+        if (this.fieldFrom.getValue()) {
+            params[this.id+'_from'] = this.fieldFrom.getValue().format('Y-m-d');
+        }
+        if (this.fieldTo.getValue()) {
+            params[this.id+'_to'] = this.fieldTo.getValue().format('Y-m-d');
+        }
         return params;
     }
 });
