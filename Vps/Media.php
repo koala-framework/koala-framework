@@ -72,14 +72,15 @@ class Vps_Media
 
     public static function getOutput($class, $id, $type)
     {
-        if (!class_exists($class) || !is_instance_of($class, 'Vps_Media_Output_Interface')) {
+        $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+        if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Vps_Media_Output_Interface')) {
             // TODO Ev. Mail senden, wenn Grafik nicht ausgeliefert wird
             throw new Vps_Exception_NotFound();
         }
 
         $cacheId = self::createCacheId($class, $id, $type);
         if (!Vps_Registry::get('config')->debug->mediaCache || !($output = self::getOutputCache()->load($cacheId))) {
-            $output = call_user_func(array($class, 'getMediaOutput'), $id, $type, $class);
+            $output = call_user_func(array($classWithoutDot, 'getMediaOutput'), $id, $type, $class);
             $specificLifetime = false;
             if (isset($output['lifetime'])) {
                 $specificLifetime = $output['lifetime'];
@@ -96,6 +97,6 @@ class Vps_Media
 
     public static function createCacheId($class, $id, $type)
     {
-        return $class . '_' . str_replace('-', '__', $id) . '_' . $type;
+        return str_replace('.', '___', $class) . '_' . str_replace('-', '__', $id) . '_' . $type;
     }
 }
