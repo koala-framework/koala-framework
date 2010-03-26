@@ -3699,6 +3699,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>User '%value%' does already exist</en>
+<de>Benutzer '%value%' existiert bereits</de>
 <id>1029</id>
 </text>
 <text>
@@ -5564,13 +5565,25 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please select a value</en>
-<de>Bitte wählen Sie eine Option aus</de>
+<de>Bitte w&#xE4;hlen Sie eine Option aus</de>
 <id>1451</id>
 </text>
 <text>
 <en>Link.First Child Page</en>
 <de>Link.Erste Unterseite</de>
 <id>1452</id>
+</text>
+<text>
+<en>Team member data</en>
+<id>1453</id>
+</text>
+<text>
+<en>Team member</en>
+<id>1454</id>
+</text>
+<text>
+<en>Team</en>
+<id>1455</id>
 </text>
 </trl>
 
