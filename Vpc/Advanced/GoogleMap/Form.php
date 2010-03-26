@@ -29,9 +29,11 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
 
 
         $this->fields->add(new Vps_Form_Field_Select('zoom_properties', 'Zoomeinstellungen'))
-            ->setValues(array(array('0', trlVps('Move + Zoom')),
-                              array('1', trlVps('Move + Zoom (without zoombar)')),
-                              array('2', trlVps('Just Zoom'))))
+            ->setValues(array(
+                '0' => trlVpsStatic('Move + Zoom'),
+                '1' => trlVpsStatic('Move + Zoom (without zoombar)'),
+                '2' => trlVpsStatic('Just Zoom')
+            ))
             ->setWidth(300)
             ->setAllowBlank(false);
 
