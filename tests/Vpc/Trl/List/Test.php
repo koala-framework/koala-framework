@@ -20,9 +20,9 @@ class Vpc_Trl_List_Test extends Vpc_TestAbstract
     public function testIt()
     {
         $c = $this->_root->getComponentById('root-master_test');
-        $this->assertTrue(substr_count($c->render(), 'child')==3);
+        $this->assertTrue(substr_count($c->render(), 'foo')==3);
 
         $c = $this->_root->getComponentById('root-en_test');
-        $this->assertTrue(substr_count($c->render(), 'child')==1);
+        $this->assertTrue(substr_count($c->render(), 'foo')==1);
     }
 }
