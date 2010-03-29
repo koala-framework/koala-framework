@@ -8,6 +8,8 @@ class Vpc_Abstract_List_Trl_Admin extends Vpc_Admin
         if (count($childConfig) > 1) {
             //wenn das mal benötigt wird möglicherwesie mit tabs
             throw new Vps_Exception("Vpc_Abstract_List can only have childs with one Controller '$class'");
+        } else if (!count($childConfig)) {
+            throw new Vps_Exception("Vpc_Abstract_List must have child with at least one ExtConfig");
         }
 
         return array(
