@@ -20,6 +20,27 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret['emptyIfSingleEntry'] = false;
         return $ret;
     }
+
+    public function getMenuComponent()
+    {
+        $menuComponent = $this->getData();
+        $component = $menuComponent->parent;
+        while ($component && $menuComponent &&
+            !Vpc_Abstract::getFlag($component->componentClass, 'menuCategory') &&
+            $component->componentId != $this->_getSetting('level')
+        ) {
+            $menuComponent = $menuComponent->getChildComponent('-subMenu');
+            $component = $component->parent;
+        }
+        $ret = null;
+        if ($this->getPageComponent() && $component->componentId == $this->getPageComponent()->componentId &&
+            $menuComponent && $menuComponent->getComponent()->_getMenuData()
+        ) {
+            $ret = $menuComponent;
+        }
+        return $ret;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -29,12 +50,12 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
                 $ret['menu'] = array();
             }
         }
-        $ret['level'] = $this->_getSetting('level');
         $ret['subMenu'] = $this->getData()->getChildComponent('-subMenu');
         $ret['separator'] = $this->_getSetting('separator');
         $ret['linkPrefix'] = $this->_getSetting('linkPrefix');
         return $ret;
     }
+
     public function hasContent()
     {
         $c = count($this->_getMenuData());
