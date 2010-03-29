@@ -17,6 +17,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret['liCssClasses'] = array(
             'offset' => trlVps('Offset')
         );
+        $ret['level'] = 'main';
         $ret['dataModel'] = 'Vpc_Menu_Abstract_Model';
         $ret['menuModel'] = 'Vpc_Menu_Abstract_MenuModel';
         return $ret;
@@ -66,8 +67,6 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                 $level = $this->getData()->level;
             } else if ($this->_hasSetting('level')) {
                 $level = $this->_getSetting('level');
-            } else {
-                throw new Vps_Exception("Standardsetting \"level='main'\" wurde rausgenommen, bitte selbst setzen.");
             }
             if (is_string($level)) {
                 $component = $this->getData()->parent;
