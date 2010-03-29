@@ -11,7 +11,7 @@ http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_List_Root/Vpc_Trl_
 EN bearbeiten
 http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_List_Root/Vpc_Trl_List_List_Trl_Component.Vpc_Trl_List_List_Component/?componentId=root-en_test
  */
-class Vpc_Trl_Paragraphs_Test extends Vpc_TestAbstract
+class Vpc_Trl_List_Test extends Vpc_TestAbstract
 {
     public function setUp()
     {
