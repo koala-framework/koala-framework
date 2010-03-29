@@ -6,8 +6,6 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'List',
             'childModel'     => 'Vpc_Abstract_List_Model',
-            'showVisible' => true,
-            'showPosition' => true
         ));
         $ret['generators']['child'] = array(
             'class' => 'Vps_Component_Generator_Table',
