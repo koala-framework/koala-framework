@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_List_Trl_Admin extends Vpc_Admin
+class Vpc_Abstract_List_Admin extends Vpc_Admin
 {
     public function getExtConfig()
     {
