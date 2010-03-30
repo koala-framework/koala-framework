@@ -202,6 +202,25 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
     },
     setFormBaseParams: function(params) {
     	Ext.apply(this.store.baseParams, params);
+    },
+
+
+    /*
+    Workaround für folgendes Problem:
+    - ComboBox onBeforeLoad ersetzt den DataView html code durch einen eigenen Loading
+    - this.view.all (da werden die gerenderten dom knoten gemerkt) wird aber nicht geleert
+    - dadurch sind da elemente drinnen die in der luft hängen
+    - wenn nun im onLoad this.select() aufgerufen wird, wird ein scrollChildIntoView für das Element
+      das in der luft hängt aufgerufen
+    - und das gibt einen JS-Error im IE
+     */
+    onBeforeLoad: function()
+    {
+        Vps.Form.ComboBox.superclass.onBeforeLoad.call(this);
+        if(!this.hasFocus){
+            return;
+        }
+        this.view.all.clear();
     }
 
 
