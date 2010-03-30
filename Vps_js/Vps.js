@@ -87,6 +87,7 @@ Vps.clone = function(o) {
 //workaround für Permission denied to access property 'dom' from non-chrome context
 //siehe http://www.extjs.com/forum/showthread.php?t=74765
 //fixed in Ext 3
+if (Ext.Element) {
 Ext.Element.prototype.contains = function(el) {
     try {
         return !el ? false : Ext.lib.Dom.isAncestor(this.dom, el.dom ? el.dom : el);
@@ -94,6 +95,7 @@ Ext.Element.prototype.contains = function(el) {
         return false;
     }
 };
+}
 
 Ext.onReady(function()
 {
@@ -132,6 +134,7 @@ Vps.log = function(msg) {
     Vps.debugDiv.innerHTML += msg+'<br />';
 };
 
+if (Ext.ux.ErrorHandler) {
 Ext.ux.ErrorHandler.on('error', function(ex) {
     if(Ext.get('loading')) {
         Ext.get('loading').fadeOut({remove: true});
@@ -155,6 +158,7 @@ Ext.ux.ErrorHandler.on('error', function(ex) {
 
 if (!Vps.Debug.displayErrors) {
     Ext.ux.ErrorHandler.init();
+}
 }
 
 //wird gesetzt in Vps.Connection
