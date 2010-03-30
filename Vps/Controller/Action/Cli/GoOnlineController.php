@@ -70,6 +70,17 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             throw new Vps_ClientException($msg);
         }
 
+        if (date('w')==5) {
+            echo "Heute ist aber Freitag!\n";
+            echo "Trotzdem weitermachen? [Y/n]";
+            $stdin = fopen('php://stdin', 'r');
+            $input = trim(strtolower(fgets($stdin, 2)));
+            fclose($stdin);
+            if (!($input == '' || $input == 'j' || $input == 'y')) {
+                exit;
+            }
+        }
+
         echo "\n\n*** [00/13] ueberpruefe auf nicht eingecheckte dateien\n";
 
         if ($this->_getParam('skip-check')) {
@@ -259,6 +270,9 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 $user = 'Jemand';
             }
             $msg = "$user hat soeben {$cfg->application->name} mit Version $webVersion (Vps $vpsVersion) online gestellt.\n";
+            if (date('w')==5) {
+                $msg .= "Und das obwohl heute Freitag ist!\n";
+            }
             if ($skipTest) {
                 $msg .= "\nUnit-Tests wurden NICHT ausgeführt.";
             } else if (!$testConfig) {
