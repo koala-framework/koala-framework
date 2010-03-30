@@ -127,7 +127,7 @@ class Vps_Assets_Loader
                         $cacheData['mtimeFiles'] = array_merge($cacheData['mtimeFiles'], $c['mtimeFiles']);
                     }
                 }
-                $cacheData['contents'] = $this->_pack($cacheData['contents'], $fileType);
+                $cacheData['contents'] = $this->pack($cacheData['contents'], $fileType);
                 $cacheData['contents'] = Vps_Media_Output::encode($cacheData['contents'], $encoding);
                 $cacheData['version'] = $this->_getConfig()->application->version;
                 if ($fileType == 'js') {
@@ -313,7 +313,7 @@ class Vps_Assets_Loader
         return $contents;
     }
 
-    private function _pack($contents, $fileType)
+    public function pack($contents, $fileType)
     {
         if ($fileType == 'js') {
             $contents = str_replace("\r", "\n", $contents);
