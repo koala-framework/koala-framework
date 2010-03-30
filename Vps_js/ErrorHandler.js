@@ -1,10 +1,4 @@
 Ext.ux.ErrorHandler.on('error', function(ex) {
-    if(Ext.get('loading')) {
-        Ext.get('loading').fadeOut({remove: true});
-    }
-    if (Ext.Msg) {
-        Ext.Msg.alert(trlVps('Error'), trlVps("An error has occured"));
-    }
     Ext.Ajax.request({
         url: '/vps/error/error/json-mail',
         ignoreErrors: true,
