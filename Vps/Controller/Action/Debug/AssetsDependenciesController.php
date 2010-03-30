@@ -128,7 +128,7 @@ class Vps_Controller_Action_Debug_AssetsDependenciesController extends Vps_Contr
             echo "<h1>$file</h1>\n";
             $l = new Vps_Assets_Loader();
             $c = $l->getFileContents("web-".$file);
-            echo round(strlen($c['contents'])/1024)."kB";
+            echo round(strlen($l->pack($c['contents'], 'js'))/1024)."kB";
             echo "<ul>";
             foreach ($this->_stack as $s) {
                 echo "<li>$s</li>";
