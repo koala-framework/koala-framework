@@ -23,6 +23,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Detail/Recipients.css';
         $ret['assetsAdmin']['files'][] = 'ext/src/widgets/StatusBar.js';
         $ret['componentName'] = 'Newsletter';
+        $ret['checkRtrList'] = true;
         return $ret;
     }
 
@@ -54,7 +55,10 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
             if ($recipient->getMailUnsubscribe()) return false;
         }
         // break if the account has not been activated
-        if ($recipient->getModel()->hasColumn('activated') && !$recipient->activated) {
+        if ($recipient instanceof Vps_Model_Abstract &&
+            $recipient->getModel()->hasColumn('activated') &&
+            !$recipient->activated
+        ) {
             return false;
         }
 
@@ -71,7 +75,7 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         );
 
         // if this receiver should be checked against the rtr-ecg
-        if (count($this->_toImport)) {
+        if (count($this->_toImport) && $this->_getSetting('checkRtrList')) {
             $this->_rtrCheck[count($this->_toImport) - 1] = $recipient->getMailEmail();
         }
 
