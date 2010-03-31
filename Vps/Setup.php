@@ -270,7 +270,7 @@ class Vps_Setup
         }
         if (file_exists('application/config_section')) {
             return trim(file_get_contents('application/config_section'));
-        } if (file_exists('/var/www/vivid-test-server')) {
+        } else if (file_exists('/var/www/vivid-test-server')) {
             return 'vivid-test-server';
         } else if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
             if ($m[2]=='vps-projekte') return 'vivid';
