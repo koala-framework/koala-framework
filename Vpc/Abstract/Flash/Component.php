@@ -22,8 +22,9 @@ abstract class Vpc_Abstract_Flash_Component extends Vpc_Abstract
         $ret['flash'] = array();
 
         $ret['flash']['data'] = $this->_getFlashData();
-        if (!isset($ret['flash']['data']['url']) || !isset($ret['flash']['data']['width'])
-            || !isset($ret['flash']['data']['height'])
+        if (!array_key_exists('url', $ret['flash']['data'])
+            || !array_key_exists('width', $ret['flash']['data'])
+            || !array_key_exists('height', $ret['flash']['data'])
         ) {
             throw new Vps_Exception("_getFlashData() must return an array with keys 'url', 'width' and 'height'");
         }
