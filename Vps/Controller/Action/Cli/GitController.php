@@ -1,6 +1,11 @@
 <?php
 class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_Abstract
 {
+    public static function getHelp()
+    {
+        return 'various git helpers';
+    }
+
     public function checkoutStagingAction()
     {
         if (!file_exists('.git')) $this->_convertToGit();
@@ -51,16 +56,17 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
     private function _convertToGit()
     {
         echo "Converting ".getcwd()." to git\n";
-        $this->_convertToGit();
+        $this->_convertWcToGit(Vps_Registry::get('config')->application->id);
 
         $host = Vps_Registry::get('config')->server->host;
         if ($host == 'vivid' && Vps_Setup::getConfigSection()!='vivid') {
             echo "Converting ".VPS_PATH."\n";
+            $branch = file_get_contents('application/vps_branch');
             chdir(VPS_PATH);
-            $this->_convertToGit();
+            $this->_convertWcToGit('vps', $branch);
         } else {
             if (!file_exists('vps-lib')) {
-                $cmd = "git clone git@github.com:vivid-planet/vps.git vps-lib";
+                $cmd = "git clone ssh@git.vivid-planet.com/git/vps vps-lib";
                 echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
 
@@ -82,22 +88,37 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         }
     }
 
-    private function _convertWcToGit()
+    private function _convertWcToGit($id, $branch = null)
     {
         if (!file_exists('.svn')) {
             echo "is already converted\n";
             return;
         }
-        if (!file_exists('.git')) {
+        if (file_exists('.git')) {
             echo "strange, .svn AND .git exist\n";
             return;
         }
-        $id = Vps_Registry::get('config')->application->id;
-        $gitUrl = "git@github.com:vivid-planet/$id.git";
+        $this->_systemCheckRet("svn up");
+
+        $gitUrl = "ssh://git.vivid-planet.com/git/$id";
 
         $cmd = "git clone $gitUrl gitwc";
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
+
+        if ($branch) {
+            chdir("gitwc");
+
+            $cmd = "git branch --track $branch origin/$branch";
+            echo "$cmd\n";
+            $this->_systemCheckRet($cmd);
+
+            $cmd = "git checkout ".$branch;
+            echo "$cmd\n";
+            $this->_systemCheckRet($cmd);
+
+            chdir("..");
+        }
 
         $cmd = "mv gitwc/.git .git";
         echo "$cmd\n";
