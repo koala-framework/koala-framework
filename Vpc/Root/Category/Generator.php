@@ -98,19 +98,9 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             $parentData = $p;
         }
         $pageIds = array();
-        if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
-            if (isset($this->_pageData[$id])) {
-                if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-                    $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-                    $class = $this->_settings['component'][$this->_pageData[$id]['component']];
-                    if (in_array($class, $selectClasses)) {
-                        $pageIds[] = $id;
-                    }
-                } else {
-                    $pageIds[] = $id;
-                }
-            }
-        } else if ($parentData) {
+
+        if ($parentData && !$select->hasPart(Vps_Component_Select::WHERE_ID)) {
+
             // diese Abfragen sind implizit recursive=true
             $parentId = $parentData->dbId;
             if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
@@ -160,21 +150,69 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                     }
                 }
             }
-        } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-            $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-            $keys = array();
-            foreach ($selectClasses as $selectClass) {
-                $key = array_search($selectClass, $this->_settings['component']);
-                if ($key) $keys[] = $key;
-            }
-            foreach ($keys as $key) {
-                if (isset($this->_pageComponent[$key])) {
-                    $pageIds = array_merge($pageIds, $this->_pageComponent[$key]);
-                }
-            }
+
         } else {
-            throw new Vps_Exception("This would return all pages. You don't want this.");
+
+            if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
+                if (isset($this->_pageData[$id])) {
+                    if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                        $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+                        $class = $this->_settings['component'][$this->_pageData[$id]['component']];
+                        if (in_array($class, $selectClasses)) {
+                            $pageIds[] = $id;
+                        }
+                    } else {
+                        $pageIds[] = $id;
+                    }
+                }
+            } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+                $keys = array();
+                foreach ($selectClasses as $selectClass) {
+                    $key = array_search($selectClass, $this->_settings['component']);
+                    if ($key) $keys[] = $key;
+                }
+                foreach ($keys as $key) {
+                    if (isset($this->_pageComponent[$key])) {
+                        $pageIds = array_merge($pageIds, $this->_pageComponent[$key]);
+                    }
+                }
+            } else {
+                throw new Vps_Exception("This would return all pages. You don't want this.");
+            }
+
+            if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+                $allowedPageIds = array();
+                foreach ($pageIds as $pageId) {
+                    $allowed = false;
+                    $subroot = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+                    $bases = Vps_Component_Data_Root::getInstance()->
+                        getComponentsBySameClass($this->getClass(), array('subroot' => $subroot[0]));
+                    foreach ($bases as $base) {
+                        $id = $pageId;
+                        while (!$allowed && isset($this->_pageData[$id])) {
+                            $id = $this->_pageData[$id]['parent_id'];
+                            if ($id == $base->componentId) $allowed = true;
+                        }
+                        if (!$allowed) {
+                            $component = Vps_Component_Data_Root::getInstance()
+                                ->getComponentById($id)->parent;
+                            while (!$allowed && $component) {
+                                if ($component->componentId == $base->componentId) {
+                                    $allowed = true;
+                                }
+                                $component = $component->parent;
+                            }
+                        }
+                    }
+                    if ($allowed) $allowedPageIds[] = $pageId;
+                }
+
+                $pageIds = $allowedPageIds;
+            }
+
         }
+
         return $pageIds;
     }
 
@@ -190,7 +228,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             $parentData = Vps_Component_Data_Root::getInstance()
                                 ->getComponentById($page['parent_id'], $c);
         }
-        if (!$parentData) return null;
         if ((int)$parentData->componentId == 0 && $parentData->componentClass != $this->_class) return null;
         return parent::_createData($parentData, $id, $select);
     }
