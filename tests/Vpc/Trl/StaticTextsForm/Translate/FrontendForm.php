@@ -18,6 +18,8 @@ class Vpc_Trl_StaticTextsForm_Translate_FrontendForm extends Vps_Form
         $this->add(new Vps_Form_Field_TextField('lastname2', trlVpsStatic('Lastname')));
         $this->add(new Vps_Form_Field_TextField('company2', trlVpsStatic('Company')));
 
+        $this->add(new Vps_Form_Field_TextField('company3', trlVpsStatic('Company').'-'.trlVpsStatic('Lastname')));
+
         parent::_init();
     }
 }

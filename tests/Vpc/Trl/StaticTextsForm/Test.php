@@ -37,5 +37,7 @@ class Vpc_Trl_StaticTextsForm_Test extends Vpc_TestAbstract
         $this->assertContains('<label for="form_firstname2">Firstname:</label>', $render);
         $this->assertContains('<label for="form_lastname2">Lastname:</label>', $render);
         $this->assertContains('<label for="form_company2">Company:</label>', $render);
+
+        $this->assertContains('<label for="form_company3">Company-Lastname:</label>', $render);
     }
 }
