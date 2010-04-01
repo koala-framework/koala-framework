@@ -20,9 +20,7 @@ class Vps_Data_Table_Parent extends Vps_Data_Abstract
     public function load($row)
     {
         $name = $this->_dataIndex;
-        if (is_string($this->_parentTable)) {
-            $tables = array(Vps_Dao::getTable($this->_parentTable));
-        } else if (!is_array($this->_parentTable)) {
+        if (is_string($this->_parentTable) || !is_array($this->_parentTable)) {
             $tables = array($this->_parentTable);
         } else {
             $tables = $this->_parentTable;
