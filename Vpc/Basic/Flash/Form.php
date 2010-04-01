@@ -8,7 +8,21 @@ class Vpc_Basic_Flash_Form extends Vpc_Abstract_Form
         $this->setLabelWidth(120);
 
         $fs = $this->fields->add(new Vps_Form_Container_FieldSet(trlVps('Flash file')));
-        $fs->add(new Vps_Form_Field_File('FileMedia', trlVps('Element')));
+        $cards = $fs->add(new Vps_Form_Container_Cards('flash_source_type', trlVps('Flash source')))
+            ->setDefaultValue('vps_upload_id_media');
+
+        $card = $cards->add();
+        $card->setTitle(trlVps('Upload a Flash file'));
+        $card->setName('vps_upload_id_media');
+        $card->add(new Vps_Form_Field_File('FileMedia', trlVps('Element')));
+
+        $card = $cards->add();
+        $card->setTitle(trlVps('From external source'));
+        $card->setName('external_flash_url');
+        $card->add(new Vps_Form_Field_TextField('external_flash_url', trlVps('URL to Flash file')))
+            ->setWidth(300);
+
+
         $fs->add(new Vps_Form_Field_NumberField('width', trlVps('Width')))
                 ->setMinValue(0)
                 ->setMaxValue(9999)
