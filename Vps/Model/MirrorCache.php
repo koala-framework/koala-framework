@@ -109,7 +109,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
      *              null: alles syncen
      *              Vps_Model_Select: das was im select steht syncen
      */
-    private function _getSynchronizeSelect($overrideMaxSyncDelay)
+    protected function _getSynchronizeSelect($overrideMaxSyncDelay)
     {
         if ($this->_synchronizeDone) {
             if ($overrideMaxSyncDelay !== self::SYNC_ALWAYS) {
@@ -173,7 +173,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         return $select;
     }
 
-    public function synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
+    public final function synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
     {
         $this->_synchronize($overrideMaxSyncDelay);
         $this->_unlockSync();
