@@ -370,6 +370,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                         $destRow->component = 'mail';
                     }
                 } else {
+                    d($linkClasses);
                     if (isset($linkClasses['intern']) && $linkClasses['intern']) {
                         $url = $part['href'];
                         $parsedUrl = parse_url($url);
