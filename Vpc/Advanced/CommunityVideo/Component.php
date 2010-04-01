@@ -2,22 +2,20 @@
 /**
  * For playing videos from community video services like YouTube or Vimeo
  */
-class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract
+class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract_Flash_Component
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlVps('Community Video'),
-            'componentIcon' => new Vps_Asset('film'),
             'ownModel'     => 'Vpc_Advanced_CommunityVideo_Model'
         ));
-        $ret['assets']['dep'][] = 'SwfObject';
         return $ret;
     }
 
-    public function getTemplateVars()
+    protected function _getFlashData()
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::_getFlashData();
 
         $url = $this->getRow()->url;
         if (!empty($url)) {
@@ -33,7 +31,9 @@ class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract
             }
         }
 
-        $ret['flashUrl'] = $url;
+        $ret['url'] = $url;
+        $ret['width'] = $this->getRow()->width;
+        $ret['height'] = $this->getRow()->height;
         return $ret;
     }
 

@@ -11,7 +11,11 @@ class Vpc_Basic_Flash_Component extends Vpc_Abstract_Flash_Upload_Component
     protected function _getFlashData()
     {
         $ret = parent::_getFlashData();
-        $ret['url'] = $this->_getUploadUrl();
+        if ($this->_getRow()->flash_source_type == 'external_flash_url') {
+            $ret['url'] = $this->_getRow()->external_flash_url;
+        } else {
+            $ret['url'] = $this->_getUploadUrl();
+        }
         $ret['width'] = $this->_getRow()->width;
         $ret['height'] = $this->_getRow()->height;
         return $ret;
@@ -29,5 +33,17 @@ class Vpc_Basic_Flash_Component extends Vpc_Abstract_Flash_Upload_Component
             }
         }
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        if ($this->_getRow()->flash_source_type == 'external_flash_url'
+            && !empty($this->_getRow()->external_flash_url)
+        ) {
+            return true;
+        } else if ($this->_getUploadUrl()) {
+            return true;
+        }
+        return false;
     }
 }
