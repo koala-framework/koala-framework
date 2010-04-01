@@ -210,7 +210,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         foreach ($rows as $k=>$r) {
             $found = false;
             foreach ($fieldPostData as $postDataKey=>$rowPostData) {
-                if ($rowPostData['id'] == $r->id) {
+                if (isset($rowPostData['id']) && $rowPostData['id'] == $r->id) {
                     $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>false, 'pos'=>$postDataKey+1);
                     unset($fieldPostData[$postDataKey]);
                     $found = true;
