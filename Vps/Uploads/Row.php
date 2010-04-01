@@ -22,7 +22,7 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
     public function writeFile($contents, $filename, $extension, $mimeType = null)
     {
         $this->_deleteFile();
-        $this->filename = Vps_Filter::filterStatic($filename, 'FileUpload');
+        $this->filename = $filename;
         $this->extension = $extension;
         $mimeType = self::detectMimeType($mimeType, $contents);
         $this->mime_type = $mimeType;
