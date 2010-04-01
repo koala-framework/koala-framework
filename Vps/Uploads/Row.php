@@ -22,7 +22,7 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
     public function writeFile($contents, $filename, $extension, $mimeType = null)
     {
         $this->_deleteFile();
-        $this->filename = $filename;
+        $this->filename = Vps_Filter::filterStatic($filename, 'FileUpload');
         $this->extension = $extension;
         $mimeType = $this->_detectMimeType($mimeType, $contents);
         $this->mime_type = $mimeType;
@@ -151,7 +151,7 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
 
     /*
     TODO
-    public function duplicate(array $data = array())
+    public function duplicate($data = array())
     {
         $new = parent::duplicate($data);
         if (file_exists($this->getFileSource())) {
