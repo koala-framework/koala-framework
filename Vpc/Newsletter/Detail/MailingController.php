@@ -6,6 +6,7 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
     protected $_paging = 20;
     protected $_modelName = 'Vpc_Newsletter_QueueModel';
     protected $_queryFields = array('searchtext');
+    protected $_sortable = false;
 
     public function preDispatch()
     {
