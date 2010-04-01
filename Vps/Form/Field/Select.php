@@ -71,13 +71,15 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
 
     public function trlStaticExecute($language = null)
     {
-        parent::trlStaticExecute($language = null);
+        parent::trlStaticExecute($language);
 
         $values = $this->getProperty('values');
         if (is_array($values)) {
             foreach ($values as $k => $v) {
                 $newKey = Zend_Registry::get('trl')->trlStaticExecute($k, $language);
                 $newValue = Zend_Registry::get('trl')->trlStaticExecute($v, $language);
+
+                unset($values[$k]);
                 $values[$newKey] = $newValue;
             }
             $this->setProperty('values', $values);
