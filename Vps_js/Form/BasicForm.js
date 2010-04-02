@@ -29,9 +29,14 @@ Ext.form.BasicForm.override({
     }
 });
 
-//E-Mail Validierung darf ab Ext 2.2 keine Bindestriche mehr haben, jetzt schon wieder
 Ext.apply(Ext.form.VTypes, {
+    //E-Mail Validierung darf ab Ext 2.2 keine Bindestriche mehr haben, jetzt schon wieder
 	email:  function(v) {
         return /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/.test(v);
-    }
+    },
+    time: function(val, field) {
+        return /^([0-9]{2}):([0-9]{2}):([0-9]{2})$/i.test(val);
+    },
+    timeText: trlVps('Not a valid time.  Must be in the format "12:34:00".'),
+    timeMask: /[\d:]/i
 });
