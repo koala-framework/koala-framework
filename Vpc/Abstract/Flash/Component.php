@@ -21,6 +21,7 @@ abstract class Vpc_Abstract_Flash_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['flash'] = array();
 
+        // flash data
         $ret['flash']['data'] = $this->_getFlashData();
         if (!array_key_exists('url', $ret['flash']['data'])
             || !array_key_exists('width', $ret['flash']['data'])
@@ -28,6 +29,12 @@ abstract class Vpc_Abstract_Flash_Component extends Vpc_Abstract
         ) {
             throw new Vps_Exception("_getFlashData() must return an array with keys 'url', 'width' and 'height'");
         }
+        if (!isset($ret['flash']['data']['params'])) {
+            $ret['flash']['data']['params'] = array();
+        }
+        $ret['flash']['data']['params'] = (object)$ret['flash']['data']['params'];
+
+        // flash vars
         $ret['flash']['vars'] = $this->_getFlashVars();
         foreach ($ret['flash']['vars'] as $k => $v) {
             $ret['flash']['vars'][$k] = urlencode($v);
@@ -42,6 +49,11 @@ abstract class Vpc_Abstract_Flash_Component extends Vpc_Abstract
         return array();
     }
 
+    /**
+     * Muss ein array mit 'url', 'width' und 'height' zurückgeben
+     * Optional 'params': ein array mit weiteren parametern die gesetzt
+     *                    werden sollen, zB: array('allowfullscreen' => 'true')
+     */
     protected function _getFlashData()
     {
         return array();

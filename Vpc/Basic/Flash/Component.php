@@ -18,6 +18,10 @@ class Vpc_Basic_Flash_Component extends Vpc_Abstract_Flash_Upload_Component
         }
         $ret['width'] = $this->_getRow()->width;
         $ret['height'] = $this->_getRow()->height;
+        $ret['params'] = array(
+            'allowfullscreen' => $this->_getRow()->allow_fullscreen ? 'true' : 'false',
+            'menu' => $this->_getRow()->menu ? 'true' : 'false'
+        );
         return $ret;
     }
 
