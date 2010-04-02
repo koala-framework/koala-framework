@@ -2,12 +2,12 @@
 
     <ul>
 
-        <? if (!empty($this->row->name)) { ?>
+        <? if (!empty($this->row->firstname) || !empty($this->row->lastname)) { ?>
             <li>
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['nameLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
-                <?= $this->row->name; ?>
+                <?= $this->row->firstname; ?> <?= $this->row->lastname; ?>
             </li>
         <? } ?>
 
@@ -44,6 +44,15 @@
                     <label><?= $this->placeholder['emailLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
                 <?=$this->mailLink($this->row->email); ?>
+            </li>
+        <? } ?>
+
+        <? if ($this->vcard) { ?>
+            <li>
+                <? if ($this->showLabels) { ?>
+                    <label><?= $this->placeholder['vcardLabel'].$this->labelSeparator; ?></label>
+                <? } ?>
+                <?= $this->componentLink($this->vcard, '<img src="/assets/web/images/vcard.png" height="11" width="16" /> vCard Download'); ?>
             </li>
         <? } ?>
 
