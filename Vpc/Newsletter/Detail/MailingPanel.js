@@ -160,8 +160,6 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
 
     toggleButton : function(button, pressed)
     {
-        console.log(button.name);
-        console.log(pressed);
         if (this.askOnStart && button.name == 'start') {
             Ext.Msg.confirm(
                 trlVps('Start Newsletter sending'),
