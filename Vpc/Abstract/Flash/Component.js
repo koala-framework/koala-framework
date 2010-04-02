@@ -26,6 +26,10 @@ Vps.onContentReady(function() {
             so.addParam("quality", "high");
             so.addParam("wmode", "opaque");
             so.addParam("allowscriptaccess", "always");
+            for (var i in cfg.data.params) {
+                so.addParam(i, cfg.data.params[i]);
+            }
+
             so.addParam("flashVars", flashVars);
             so.write(flashWrapper.id);
         }

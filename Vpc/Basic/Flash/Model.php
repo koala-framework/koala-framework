@@ -13,6 +13,8 @@ class Vpc_Basic_Flash_Model extends Vps_Model_Db_Proxy
     );
     protected $_default = array(
         'width' => 400,
-        'height' => 300
+        'height' => 300,
+        'allow_fullscreen' => 0,
+        'menu' => 1
     );
 }

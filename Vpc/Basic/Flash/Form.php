@@ -22,7 +22,6 @@ class Vpc_Basic_Flash_Form extends Vpc_Abstract_Form
         $card->add(new Vps_Form_Field_TextField('external_flash_url', trlVps('URL to Flash file')))
             ->setWidth(300);
 
-
         $fs->add(new Vps_Form_Field_NumberField('width', trlVps('Width')))
                 ->setMinValue(0)
                 ->setMaxValue(9999)
@@ -33,6 +32,8 @@ class Vpc_Basic_Flash_Form extends Vpc_Abstract_Form
                 ->setMaxValue(9999)
                 ->setWidth(75)
                 ->setAllowEmpty(false);
+        $fs->add(new Vps_Form_Field_Checkbox('allow_fullscreen', trlVps('Allow fullscreen')));
+        $fs->add(new Vps_Form_Field_Checkbox('menu', trlVps('Menu')));
 
         $fs = $this->fields->add(new Vps_Form_Container_FieldSet(trlVps('Flash variables')));
         $mf = $fs->add(new Vps_Form_Field_MultiFields('FlashVars'));
