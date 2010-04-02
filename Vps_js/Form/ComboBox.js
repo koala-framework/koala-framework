@@ -68,7 +68,6 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 } else {
                     var proxy = new Ext.data.HttpProxy(store);
                 }
-                debugger;
                 var storeConfig = {
                     proxy: proxy,
                     reader: reader
