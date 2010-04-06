@@ -235,7 +235,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $this->_hasColumnsCache[$col];
     }
 
-    public final function getExprColumns()
+    public function getExprColumns()
     {
         return array_keys($this->_exprs);
     }
