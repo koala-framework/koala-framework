@@ -1,4 +1,5 @@
 <?php
+//TODO zusammenführen mit Vps_Util_Model_Countries
 class Vps_Util_Country {
     
     const NAME = 'name';

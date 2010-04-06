@@ -1,4 +1,5 @@
 <?php
+//TODO Vps_Util_Model_Countries verwenden statt der datei selbst
 class Vps_Form_Field_SelectCountry extends Vps_Form_Field_Select
 {
     public function __construct($field_name = null, $field_label = null)
