@@ -119,6 +119,13 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         return false;
     }
 
+    public function getExprColumns()
+    {
+        $ret = parent::getExprColumns();
+        $ret = array_merge($this->_proxyModel->getExprColumns(), $ret);
+        return $ret;
+    }
+
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
         return $this->_proxyModel->getIds($where, $order, $limit, $start);
