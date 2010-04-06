@@ -92,7 +92,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->_primaryKey = $this->_model->getPrimaryKey();
         }
 
-        if (isset($this->_model) && $this->_position && in_array($this->_position, $this->_model->getColumns())) {
+        if (isset($this->_model) && $this->_position && !isset($this->_columns[$this->_position])
+            && in_array($this->_position, $this->_model->getColumns())
+        ) {
             $columnObject = new Vps_Grid_Column($this->_position);
             $columnObject->setHeader(' ')
                          ->setWidth(30)
