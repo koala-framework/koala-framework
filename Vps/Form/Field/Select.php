@@ -69,6 +69,7 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         return $ret;
     }
 
+    //TODO: sollte nach Vps_Form_Field_ComboBox verschoben werden
     public function trlStaticExecute($language = null)
     {
         parent::trlStaticExecute($language);
@@ -76,8 +77,10 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         $values = $this->getProperty('values');
         if (is_array($values)) {
             foreach ($values as $k => $v) {
-                $newKey = Zend_Registry::get('trl')->trlStaticExecute($k, $language);
-                $newValue = Zend_Registry::get('trl')->trlStaticExecute($v, $language);
+                $newKey = $k;
+                $newValue = $v;
+                if (is_string($k)) $newKey = Zend_Registry::get('trl')->trlStaticExecute($k, $language); //TODO key nicht (immer) übersetzen
+                if (is_string($v)) $newValue = Zend_Registry::get('trl')->trlStaticExecute($v, $language);
 
                 unset($values[$k]);
                 $values[$newKey] = $newValue;
