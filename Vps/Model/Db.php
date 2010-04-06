@@ -154,7 +154,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         $ret = $this->_formatFieldInternal($field, $select);
         if (!$ret) {
-            throw new Vps_Exception("Can't find field '$field'");
+            throw new Vps_Exception("Can't find field '$field' in model '".get_class($this)."' (Table '".$this->getTableName()."')");
         }
 
         return $ret;
@@ -536,6 +536,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 }
             }
             return '('.implode('+ ', $sqlExpressions).')';
+        } else if ($expr instanceof Vps_Model_Select_Expr_Sql) {
+            return '('.$expr->getSql().')';
         } else {
             throw new Vps_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
         }
