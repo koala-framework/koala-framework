@@ -67,7 +67,7 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
         return $where;
     }
 
-    private function _getSelect($row)
+    protected function _getSelect($row)
     {
         $ret = new Vps_Model_Select();
         foreach ($this->_groupBy as $k=>$field) {
