@@ -13,7 +13,7 @@ class Vps_Util_Git
     public static function web()
     {
         static $i;
-        if (!isset($i)) $i = new self('');
+        if (!isset($i)) $i = new self('.');
         return $i;
     }
 
@@ -22,10 +22,6 @@ class Vps_Util_Git
         static $i;
         if (!isset($i)) $i = new self(VPS_PATH);
         return $i;
-    }
-
-    public static function clone()
-    {
     }
 
     public function tag($tag, $args = '', $object = '')
@@ -78,7 +74,6 @@ class Vps_Util_Git
     public function getActiveBranch()
     {
         $d = getcwd();
-        $cmd = "git ".$cmd;
         $cmd = "git branch | grep '^*'";
         chdir($this->_path);
         $ret = system($cmd, $retVal);
