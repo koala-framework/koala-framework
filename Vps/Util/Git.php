@@ -40,10 +40,28 @@ class Vps_Util_Git
         return trim(`git config user.email`);
     }
 
+    public static function getCommiterName()
+    {
+        if (isset($_ENV['GIT_COMMITER_NAME'])) {
+            return $_ENV['GIT_COMMITER_NAME'];
+        }
+        return trim(`git config user.name`);
+    }
+
+    public static function getCommiterEMail()
+    {
+        if (isset($_ENV['GIT_COMMITER_EMAIL'])) {
+            return $_ENV['GIT_COMMITER_EMAIL'];
+        }
+        return trim(`git config user.email`);
+    }
+
     public static function getAuthorEnvVars()
     {
         return "GIT_AUTHOR_NAME=".escapeshellarg(Vps_Util_Git::getAuthorName()).
-               " GIT_AUTHOR_EMAIL=".escapeshellarg(Vps_Util_Git::getAuthorEMail());
+               " GIT_AUTHOR_EMAIL=".escapeshellarg(Vps_Util_Git::getAuthorEMail()).
+               " GIT_COMMITER_NAME=".escapeshellarg(Vps_Util_Git::getCommiterName()).
+               " GIT_COMMITER_EMAIL=".escapeshellarg(Vps_Util_Git::getCommiterEMail());
     }
 
     public function tag($tag, $args = '', $object = '')
@@ -98,11 +116,8 @@ class Vps_Util_Git
         $d = getcwd();
         $cmd = "git branch | grep '^*'";
         chdir($this->_path);
-        $ret = exec($cmd, $retVal);
+        $ret = exec($cmd);
         chdir($d);
-        if ($retVal) {
-            throw new Vps_Exception("Command failed: $cmd");
-        }
         if (!$ret) return false;
         if (!substr($ret, 0, 2)=='* ') return false;
         return substr($ret, 2);
