@@ -993,7 +993,17 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($this->getSiblingModels()) {
             return array(self::FORMAT_ARRAY);
         } else {
-            return $this->_supportedImportExportFormats;
+            $ret = $this->_supportedImportExportFormats;
+            foreach ($ret as $k => $v) {
+                if ($v === self::FORMAT_CSV) {
+                    // check if csv is possible with current database rights
+                    if (!Vps_Util_Mysql::getFileRight()) {
+                        unset($ret[$k]);
+                        $ret = array_values($ret);
+                    }
+                }
+            }
+            return $ret;
         }
     }
 }
