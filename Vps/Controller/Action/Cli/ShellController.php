@@ -45,7 +45,7 @@ class Vps_Controller_Action_Cli_ShellController extends Vps_Controller_Action_Cl
         $host = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
         $dir = $config->server->dir;
 
-        $cmd = "sudo -u vps sshvps $host $dir shell";
+        $cmd = "sudo -u vps ".Vps_Util_Git::getAuthorEnvVars()." sshvps $host $dir shell";
         if ($this->_getParam('debug')) $cmd .= " --debug";
         if ($this->_getParam('debug')) echo $cmd."\n";
         passthru($cmd);

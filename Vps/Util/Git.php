@@ -24,6 +24,28 @@ class Vps_Util_Git
         return $i;
     }
 
+    public static function getAuthorName()
+    {
+        if (isset($_ENV['GIT_AUTHOR_NAME'])) {
+            return $_ENV['GIT_AUTHOR_NAME'];
+        }
+        return trim(`git config user.name`);
+    }
+
+    public static function getAuthorEMail()
+    {
+        if (isset($_ENV['GIT_AUTHOR_EMAIL'])) {
+            return $_ENV['GIT_AUTHOR_EMAIL'];
+        }
+        return trim(`git config user.email`);
+    }
+
+    public static function getAuthorEnvVars()
+    {
+        return "GIT_AUTHOR_NAME=".escapeshellarg(Vps_Util_Git::getAuthorName()).
+               " GIT_AUTHOR_EMAIL=".escapeshellarg(Vps_Util_Git::getAuthorEMail());
+    }
+
     public function tag($tag, $args = '', $object = '')
     {
         $cmd = "tag -a -m ".escapeshellarg('tagged').' '.$args.' '.escapeshellcmd($tag);
@@ -76,7 +98,7 @@ class Vps_Util_Git
         $d = getcwd();
         $cmd = "git branch | grep '^*'";
         chdir($this->_path);
-        $ret = system($cmd, $retVal);
+        $ret = exec($cmd, $retVal);
         chdir($d);
         if ($retVal) {
             throw new Vps_Exception("Command failed: $cmd");
