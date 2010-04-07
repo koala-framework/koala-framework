@@ -485,6 +485,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 throw new Vps_Exception("row must be a Row_Interface");
             }
             $parent = $row->getParentRow($expr->getParent());
+            if (!$parent) return null;
             $field = $expr->getField();
             return $parent->$field;
         } else if ($expr instanceof Vps_Model_Select_Expr_Concat) {
