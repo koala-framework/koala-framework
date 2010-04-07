@@ -5,7 +5,7 @@ class Vps_Util_Check_Config
     {
         $checks = array();
         $checks['php'] = array(
-            'name' => 'Php > 5.2'
+            'name' => 'Php >= 5.2'
         );
         $checks['memcache'] = array(
             'name' => 'memcache Php extension'
@@ -52,7 +52,7 @@ class Vps_Util_Check_Config
             'name' => 'svn'
         );
         $checks['git'] = array(
-            'name' => 'git'
+            'name' => 'git >= 1.5'
         );
         $checks['uploads'] = array(
             'name' => 'uploads'
@@ -178,9 +178,16 @@ class Vps_Util_Check_Config
     }
     private static function _git()
     {
-        exec("git --version", $out, $ret);
+        $gitVersion = exec("git --version", $out, $ret);
         if ($ret) {
             throw new Vps_Exception("Git command failed");
+        }
+        if (!preg_match('#^git version ([0-9\\.]+)$#', $gitVersion, $m)) {
+            throw new Vps_Exception("Invalid git --version response");
+        }
+        $gitVersion = $m[1];
+        if (version_compare($gitVersion, "1.5.0") < 0) {
+            throw new Vps_Exception("Invalid git version '$gitVersion', >= 1.5.0 is required");
         }
     }
 
