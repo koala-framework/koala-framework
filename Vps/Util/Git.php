@@ -40,15 +40,15 @@ class Vps_Util_Git
         return trim(`git config user.email`);
     }
 
-    public static function getCommiterName()
+    public static function getCommitterName()
     {
-        if (isset($_ENV['GIT_COMMITER_NAME'])) {
-            return $_ENV['GIT_COMMITER_NAME'];
+        if (isset($_ENV['GIT_COMMITTER_NAME'])) {
+            return $_ENV['GIT_COMMITTER_NAME'];
         }
         return trim(`git config user.name`);
     }
 
-    public static function getCommiterEMail()
+    public static function getCommitterEMail()
     {
         if (isset($_ENV['GIT_COMMITER_EMAIL'])) {
             return $_ENV['GIT_COMMITER_EMAIL'];
@@ -60,8 +60,18 @@ class Vps_Util_Git
     {
         return "GIT_AUTHOR_NAME=".escapeshellarg(Vps_Util_Git::getAuthorName()).
                " GIT_AUTHOR_EMAIL=".escapeshellarg(Vps_Util_Git::getAuthorEMail()).
-               " GIT_COMMITER_NAME=".escapeshellarg(Vps_Util_Git::getCommiterName()).
-               " GIT_COMMITER_EMAIL=".escapeshellarg(Vps_Util_Git::getCommiterEMail());
+               " GIT_COMMITTER_NAME=".escapeshellarg(Vps_Util_Git::getCommitterName()).
+               " GIT_COMMITTER_EMAIL=".escapeshellarg(Vps_Util_Git::getCommitterEMail());
+    }
+
+    public static function getGitVersion()
+    {
+        $cmd = "git --version";
+        $gitVersion = trim(exec($cmd));
+        if (!preg_match('#^git version ([0-9\\.]+)$#', $gitVersion, $m)) {
+            throw new Vps_Exception("can't detect git version");
+        }
+        return $m[1];
     }
 
     public function tag($tag, $args = '', $object = '')
