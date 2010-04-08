@@ -46,7 +46,22 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
     public function getMenuComponent()
     {
-        return $this->_getMenuData() ? $this->getData() : null;
+        $component = $this->getData()->getPage();
+        $level = 1;
+        while ($component) {
+            $menuCategory = Vpc_Abstract::getFlag($component->componentClass, 'menuCategory');
+            if ($menuCategory) {
+                $component = null;
+                if ($level == 1) $level = $menuCategory;
+            } else {
+                $component = $component->parent;
+                $level++;
+            }
+        }
+        if ($level == $this->_getSetting('level') && $this->_getMenuData()) {
+            return $this->getData();
+        }
+        return null;
     }
 
     public function getMenuData($parentData = null)
