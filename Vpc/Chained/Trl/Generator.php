@@ -18,6 +18,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getChainedData($data)
     {
+        if (!$data) return $data;
         if (isset($data->chained)) return $data->chained;
 
         if (is_instance_of($this->_class, 'Vpc_Root_TrlRoot_Chained_Component')) {
@@ -69,13 +70,22 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         foreach ($parentDatas as $parentData) {
             foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
                 if (!$parentData) {
-                    $pData = Vpc_Chained_Trl_Component::getChainedByMaster($component->parent, $slaveData);
+                    if (!$slaveData) {
+                        $pData = array();
+                        foreach (Vps_Component_Data_Root::getInstance()->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component') as $d) {
+                            $pData[] = Vpc_Chained_Trl_Component::getChainedByMaster($component->parent, $d);
+                        }
+                    } else {
+                        $pData = array(Vpc_Chained_Trl_Component::getChainedByMaster($component->parent, $slaveData));
+                    }
                 } else {
-                    $pData = $parentData;
+                    $pData = array($parentData);
                 }
-                $data = $this->_createData($pData, $component, $select);
-                if ($data) {
-                    $ret[] = $data;
+                foreach ($pData as $d) {
+                    $data = $this->_createData($d, $component, $select);
+                    if ($data) {
+                        $ret[] = $data;
+                    }
                 }
             }
         }
