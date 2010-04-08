@@ -259,7 +259,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             scope: options.scope || this
         };
 
-        if (this.el) this.el.mask(trlVps('Saving...'));
+        if ((!options.hideMaskText || options.hideMaskText != true) && this.el) this.el.mask(trlVps('Saving...'));
 
         var params = Ext.apply({}, this.getBaseParams());
         params = Ext.apply(params, this.getForm().getValues());
