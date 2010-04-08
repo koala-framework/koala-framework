@@ -26,6 +26,7 @@ class Vpc_Root_TrlRoot_Chained_Component extends Vpc_Abstract
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;
+        $ret['flags']['subroot'] = 'language';
         if (Vpc_Abstract::hasSetting($masterComponentClass, 'editComponents', false)) {
             $ret['editComponents'] = Vpc_Abstract::getSetting($masterComponentClass, 'editComponents', false);
         }
