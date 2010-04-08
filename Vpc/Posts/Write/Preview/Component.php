@@ -6,6 +6,7 @@ class Vpc_Posts_Write_Preview_Component extends Vpc_Abstract
         $ret = parent::getSettings();
 
         $ret['assets']['dep'][] = 'ExtCore';
+        $ret['assets']['dep'][] = 'ExtDelayedTask';
         $ret['assets']['files'][] = 'vps/Vpc/Posts/Write/Preview/Component.js';
 
         $ret['placeholder']['preview'] = trlVps('Preview').':';
