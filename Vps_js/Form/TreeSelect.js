@@ -9,34 +9,36 @@ Vps.Form.TreeSelect = Ext.extend(Vps.Form.AbstractSelect,
 
     _getWindowItem: function()
     {
-        var ret = new Vps.Auto.TreePanel({
-            controllerUrl: this.controllerUrl,
-            listeners: {
-                click: function(node) {
-                    if (!this.displayField && node) {
-                        var nodeTexts = [];
-                        nodeTexts.push(node.text);
-                        var nd = node.parentNode;
-                        while (nd) {
-                            nodeTexts.push(nd.text);
-                            nd = nd.parentNode;
+        if (!this._windowItem) {
+            this._windowItem = new Vps.Auto.TreePanel({
+                controllerUrl: this.controllerUrl,
+                listeners: {
+                    click: function(node) {
+                        if (!this.displayField && node) {
+                            var nodeTexts = [];
+                            nodeTexts.push(node.text);
+                            var nd = node.parentNode;
+                            while (nd) {
+                                nodeTexts.push(nd.text);
+                                nd = nd.parentNode;
+                            }
+                            var nodeText = '';
+                            for (var i = 0; i < nodeTexts.length - (typeof this.cutNodes != 'undefined' ? this.cutNodes : 1); i++) {
+                                nodeText = nodeTexts[i] + ' » ' + nodeText;
+                            }
+                            if (nodeText) nodeText = nodeText.substr(0, nodeText.length-3);
                         }
-                        var nodeText = '';
-                        for (var i = 0; i < nodeTexts.length - (typeof this.cutNodes != 'undefined' ? this.cutNodes : 1); i++) {
-                            nodeText = nodeTexts[i] + ' » ' + nodeText;
-                        }
-                        if (nodeText) nodeText = nodeText.substr(0, nodeText.length-3);
-                    }
 
-                    this._selectWin.value = {
-                        id: node.id,
-                        name: this.displayField ? node.attributes.data[this.displayField] : nodeText
-                    };
-                },
-                scope: this
-            }
-        });
-        return ret;
+                        this._selectWin.value = {
+                            id: node.id,
+                            name: this.displayField ? node.attributes.data[this.displayField] : nodeText
+                        };
+                    },
+                    scope: this
+                }
+            });
+        }
+        return this._windowItem;
     }
 });
 Ext.reg('treeselect', Vps.Form.TreeSelect);
