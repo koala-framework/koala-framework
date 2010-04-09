@@ -44,7 +44,6 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('pos'));
         $this->_columns->add(new Vps_Grid_Column('component_class'))
             ->setData(new Vps_Data_Vpc_ComponentClass($this->_getParam('class')));
         $this->_columns->add(new Vps_Grid_Column('component_name'))
