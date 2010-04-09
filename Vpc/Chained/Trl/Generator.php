@@ -18,25 +18,19 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getChainedData($data)
     {
-        if (!$data) return $data;
-        if (isset($data->chained)) return $data->chained;
-
-        if (is_instance_of($this->_class, 'Vpc_Root_TrlRoot_Chained_Component')) {
-            /* auskommentiert, weil Vpc_Root_TrlRoot_ChainedGenerator setzt chained bereits
-            if ($data->componentClass == $this->_class) {
-                //vielleicht flexibler machen?
-                return Vps_Component_Data_Root::getInstance()
-                    ->getComponentByClass(Vpc_Abstract::getSetting($this->_class, 'masterComponentClass'));
-            }
-            */
-            throw new Vps_Exception_NotYetImplemented();
-        } else {
-            if ($data) {
-                $gen = Vps_Component_Generator_Abstract::getInstances($data, array('generatorFlag'=>'trlBase'));
-                return $gen[0]->_getChainedData($data);
-            }
-            return $data;
+        // TODO: Das ist nicht wirklich korrekt, reicht aber bis jetzt aus
+        /*
+         * Wenn man eine MasterAsChild hat und Boxen vererbt werden,
+         * haben diese Boxen kein chained gesetzt, brauchen es uU.
+         * aber. Daher wird nach oben gesucht und die erste chained
+         * zurückgegeben, eigentlich sollte aber wieder reingesucht
+         * werden, damit es korrekt ist.
+         */
+        while ($data) {
+            if (isset($data->chained)) return $data->chained;
+            $data = $data->parent;
         }
+        return null;
     }
 
     protected function _getChainedChildComponents($parentData, $select)
@@ -173,10 +167,10 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    
+
     public function getModel()
     {
         return $this->_getChainedGenerator()->getModel();
     }
-    
+
 }
