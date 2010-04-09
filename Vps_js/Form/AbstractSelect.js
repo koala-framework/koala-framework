@@ -3,6 +3,7 @@ Vps.Form.AbstractSelect = Ext.extend(Ext.form.TriggerField,
     triggerClass : 'x-form-search-trigger',
     readOnly: true,
     width: 200,
+    _windowItem: null,
 
     // mandatory parameters
     // controllerUrl
