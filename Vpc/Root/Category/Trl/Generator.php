@@ -28,10 +28,11 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
             $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
             $select->unsetPart(Vps_Component_Select::WHERE_FILENAME);
-            if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
-                $limit = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
-                $select->unsetPart(Vps_Component_Select::LIMIT_COUNT);
-            }
+        }
+        // Limit auch selbst beachten, da in slave eigenes visible gesetzt ist
+        if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
+            $limit = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
+            $select->unsetPart(Vps_Component_Select::LIMIT_COUNT);
         }
         $select->ignoreVisible();
 
