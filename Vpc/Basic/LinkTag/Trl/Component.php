@@ -4,6 +4,7 @@ class Vpc_Basic_LinkTag_Trl_Component extends Vpc_Chained_Trl_Component
     public static function getSettings($masterComponent)
     {
         $ret = parent::getSettings($masterComponent);
+        $ret['dataClass'] = 'Vpc_Basic_LinkTag_Data';
         return $ret;
     }
 
