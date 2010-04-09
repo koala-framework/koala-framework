@@ -1,17 +1,13 @@
 <?php
-class Vpc_Abstract_Image_Trl_Form_ImageData extends Vps_Data_Abstract
+class Vpc_Abstract_Image_Trl_Form_ImageData extends Vpc_Abstract_Image_Trl_ImageData
 {
     public function load($row)
     {
-        $ret = '';
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($row->component_id, array('ignoreVisible'=>true));
-        $row = $c->chained->getComponent()->getRow()->getParentRow('Image');
-        if ($row) {
-            $info = $row->getFileInfo();
-            $src = "/vps/media/upload/preview?uploadId=$info[uploadId]&hashKey=$info[hashKey]";
-            $ret = "<img src=\"$src\" />";
+        $src = $this->_getImageUrl($row->component_id);
+        if ($src) {
+            return "<img src=\"$src\" />";
         }
-        return $ret;
+        return '';
     }
 }
 
