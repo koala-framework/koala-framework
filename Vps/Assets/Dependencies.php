@@ -16,7 +16,7 @@ class Vps_Assets_Dependencies
         $this->_config = $loader->getConfig();
     }
 
-    public function getAssetUrls($assetsType, $fileType, $section, $rootComponent)
+    public function getAssetUrls($assetsType, $fileType, $section, $rootComponent, $language = null)
     {
         $b = Vps_Benchmark::start();
         if ($this->_config->debug->menu) {
@@ -29,7 +29,7 @@ class Vps_Assets_Dependencies
         $ret = array();
         if (!$this->_config->debug->assets->$fileType || (isset($session->$fileType) && !$session->$fileType)) {
             $v = $this->_config->application->version;
-            $language = Zend_Registry::get('trl')->getTargetLanguage();
+            if (!$language) $language = Zend_Registry::get('trl')->getTargetLanguage();
             $ret[] = "/assets/all/$section/"
                             .($rootComponent?$rootComponent.'/':'')
                             ."$language/$assetsType.$fileType?v=$v";
