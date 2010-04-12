@@ -63,6 +63,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         $parentDatas = is_array($parentDatas) ? $parentDatas : array($parentDatas);
         foreach ($parentDatas as $parentData) {
             foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
+
                 if (!$parentData) {
                     if (!$slaveData) {
                         $pData = array();
