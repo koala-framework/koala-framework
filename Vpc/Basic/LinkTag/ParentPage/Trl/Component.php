@@ -1,0 +1,10 @@
+<?php
+class Vpc_Basic_LinkTag_ParentPage_Trl_Component extends Vpc_Basic_LinkTag_Abstract_Trl_Component
+{
+    public static function getSettings($masterComponent)
+    {
+        $ret = parent::getSettings($masterComponent);
+        $ret['dataClass'] = 'Vpc_Basic_LinkTag_ParentPage_Data';
+        return $ret;
+    }
+}
