@@ -23,12 +23,11 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
             $g['class'] = 'Vpc_Chained_Trl_Generator';
             if (isset($g['dbIdShortcut'])) unset($g['dbIdShortcut']);
         }
-        try {
-            $ret['componentName'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentName');
-        } catch (Exception $e) {}
-        try {
-            $ret['componentIcon'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentIcon');
-        } catch (Exception $e) {}
+        foreach (array('componentName', 'componentIcon', 'editComponents') as $i) {
+            if (Vpc_Abstract::hasSetting($masterComponentClass, $i)) {
+                $ret[$i] = Vpc_Abstract::getSetting($masterComponentClass, $i);
+            }
+        }
 
         foreach (array('showInPageTreeAdmin', 'processInput', 'menuCategory') as $f) {
             $flags = Vpc_Abstract::getSetting($masterComponentClass, 'flags', false);
@@ -132,7 +131,14 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
             }
             if ((int)$id > 0) $id = '_' . $id;
             $c = $c->parent;
-            if ($c) $ids[] = $id;
+            if ($c) {
+                $ids[] = $id;
+
+                //bei pages die parent ids auslassen
+                while (is_numeric($c->componentId)) {
+                    $c = $c->parent;
+                }
+            }
         }
         $ret = $chainedData;
         foreach (array_reverse($ids) as $id) {
