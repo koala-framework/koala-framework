@@ -173,4 +173,8 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         return $this->_getChainedGenerator()->getModel();
     }
 
+    public function getCacheVars($parentData)
+    {
+        return $this->_getChainedGenerator()->getCacheVars($parentData->chained);
+    }
 }
