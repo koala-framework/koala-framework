@@ -89,7 +89,6 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         $ret['name'] = $dbRow->name;
         $ret['filename'] = $dbRow->filename;
         $ret['visible'] = $dbRow->visible;
-        $ret['tags'] = $row->getRow()->tags;
         $ret['isHome'] = $row->isHome;
         return $ret;
     }
