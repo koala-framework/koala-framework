@@ -45,7 +45,7 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
         } else {
             Vps_Util_Git::web()->fetch();
             if (Vps_Util_Git::web()->getActiveBranch() == 'master') {
-                Vps_Util_Git::web()->system("rebase origin master");
+                Vps_Util_Git::web()->system("rebase origin/master");
             } else {
                 echo "web: {Vps_Util_Git::web()->getActiveBranch()} != master, daher wird kein autom. rebase ausgefuehrt.\n";
                 $doUpdate = false;
@@ -60,7 +60,7 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             $g->fetch();
             $vpsBranch = trim(file_get_contents('application/vps_branch'));
             if ($g->getActiveBranch() == $vpsBranch) {
-                Vps_Util_Git::web()->system("rebase origin $vpsBranch");
+                $g->system("rebase origin/$vpsBranch");
             } else {
                 echo "vps: {$g->getActiveBranch()} != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
                 $doUpdate = false;
