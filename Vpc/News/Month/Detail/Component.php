@@ -12,10 +12,11 @@ class Vpc_News_Month_Detail_Component extends Vpc_Directories_List_Component
     public function getSelect()
     {
         $select = parent::getSelect();
-        $monthDate = substr($this->getData()->row->publish_date, 0, 7);
-        $select->where('publish_date >= ?', "$monthDate-01");
-        $select->where('publish_date <= ?', "$monthDate-31");
-        $select->order('publish_date', 'DESC');
+        $dateColumn = Vpc_Abstract::getSetting($this->parent->componentClass, 'dateColumn');
+        $monthDate = substr($this->getData()->row->$dateColumn, 0, 7);
+        $select->where($dateColumn.' >= ?', "$monthDate-01");
+        $select->where($dateColumn.' <= ?', "$monthDate-31");
+        $select->order($dateColumn, 'DESC');
         return $select;
     }
 
