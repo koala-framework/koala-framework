@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Link_Admin extends Vpc_Abstract_Composite_Admin
+class Vpc_Composite_TextImageLink_Admin extends Vpc_Abstract_Composite_Admin
 {
     public function gridColumns()
     {
