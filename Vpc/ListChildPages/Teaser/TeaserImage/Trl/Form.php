@@ -1,0 +1,4 @@
+<?php
+class Vpc_ListChildPages_Teaser_TeaserImage_Trl_Form extends Vpc_ListChildPages_Teaser_TeaserImage_Form
+{
+}
