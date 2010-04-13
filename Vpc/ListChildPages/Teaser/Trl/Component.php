@@ -11,12 +11,21 @@ class Vpc_ListChildPages_Teaser_Trl_Component extends Vpc_Chained_Trl_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-// d($this->getData()->getChildComponents(array(
-//             'generator' => 'child'
-//         )));
         $ret['children'] = $this->getData()->getChildComponents(array(
             'generator' => 'child'
         ));
+        return $ret;
+    }
+
+    public static function getStaticCacheVars()
+    {
+        $ret = array();
+        $ret[] = array(
+            'model' => 'Vps_Component_Model'
+        );
+        $ret[] = array(
+            'model' => 'Vpc_Root_Category_Trl_GeneratorModel'
+        );
         return $ret;
     }
 }
