@@ -45,8 +45,9 @@ class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Ta
         if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
             $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
             if (!preg_match('#^([0-9]{4})_([0-9]{2})$#', $filename, $m)) return null;
-            $select->where("YEAR(publish_date) = ?", $m[1]);
-            $select->where("MONTH(publish_date) = ?", $m[2]);
+            $dateColumn = Vpc_Abstract::getSetting($this->_class, 'dateColumn');
+            $select->where("YEAR($dateColumn) = ?", $m[1]);
+            $select->where("MONTH($dateColumn) = ?", $m[2]);
         }
         return $select;
     }
@@ -56,8 +57,9 @@ class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Ta
         if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
             $id = $select->getPart(Vps_Model_Select::WHERE_ID);
             if (!preg_match('#^_([0-9]{4})([0-9]{2})$#', $id, $m)) return null;
-            $select->where("YEAR(publish_date) = ?", $m[1]);
-            $select->where("MONTH(publish_date) = ?", $m[2]);
+            $dateColumn = Vpc_Abstract::getSetting($this->_class, 'dateColumn');
+            $select->where("YEAR($dateColumn) = ?", $m[1]);
+            $select->where("MONTH($dateColumn) = ?", $m[2]);
             $select->unsetPart(Vps_Model_Select::WHERE_ID);
         }
         return $select;
@@ -67,8 +69,9 @@ class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Ta
     {
         $ret = parent::_formatSelect($parentData, $select);
         if (!$ret) return $ret;
-        $ret->group(array('YEAR(publish_date)', 'MONTH(publish_date)'));
-        $ret->order('publish_date', 'DESC');
+        $dateColumn = Vpc_Abstract::getSetting($this->_class, 'dateColumn');
+        $ret->group(array('YEAR('.$dateColumn.')', 'MONTH('.$dateColumn.')'));
+        $ret->order($dateColumn, 'DESC');
         if (!$parentData) {
             $page = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
             if (!$page) {
@@ -83,16 +86,19 @@ class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Ta
 
     protected function _getNameFromRow($row)
     {
-        $date = new Vps_Date($row->publish_date);
+        $dateColumn = Vpc_Abstract::getSetting($this->_class, 'dateColumn');
+        $date = new Vps_Date($row->$dateColumn);
         return $date->get(Vps_Date::MONTH_NAME).' '.$date->get(Vps_Date::YEAR);
     }
 
     protected function _getFilenameFromRow($row)
     {
-        return date('Y_m', strtotime($row->publish_date));
+        $dateColumn = Vpc_Abstract::getSetting($this->_class, 'dateColumn');
+        return date('Y_m', strtotime($row->$dateColumn));
     }
     protected function _getIdFromRow($row)
     {
-        return date('Ym', strtotime($row->publish_date));
+        $dateColumn = Vpc_Abstract::getSetting($this->_class, 'dateColumn');
+        return date('Ym', strtotime($row->$dateColumn));
     }
 }

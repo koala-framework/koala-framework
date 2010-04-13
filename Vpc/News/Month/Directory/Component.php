@@ -16,6 +16,8 @@ class Vpc_News_Month_Directory_Component extends Vpc_Directories_ItemPage_Direct
         $ret['categoryChildId'] = 'month';
         $ret['categoryName'] = trlVps('Months');
 
+        $ret['dateColumn'] = 'publish_date';
+
         return $ret;
     }
     public function getSelect()
