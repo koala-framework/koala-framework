@@ -9,5 +9,5 @@
         <?= $this->component($this->text); ?>
     </div>
     <div class="clear"></div>
-    <p class="goTo"><?= $this->componentLink($this->data->targetPage, $this->row->link_text); ?></p>
+    <p class="goTo"><?= $this->componentLink($this->data->targetPage, $this->readMoreLinktext); ?></p>
 </div>

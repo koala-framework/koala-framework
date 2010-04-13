@@ -8,6 +8,13 @@ class Vpc_ListChildPages_Teaser_TeaserImage_Trl_Component extends Vpc_Abstract_C
         return $ret;
     }
 
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['readMoreLinktext'] = $this->getRow()->link_text;
+        return $ret;
+    }
+
     public function hasContent()
     {
         if ($this->getRow()->visible) return true;
