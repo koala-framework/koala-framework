@@ -1,6 +1,8 @@
 <?php
 class Vpc_ListChildPages_Teaser_Generator extends Vps_Component_Generator_Table
 {
+    protected $_hasNumericIds = false;
+
     protected function _formatSelect($parentData, $select)
     {
         $select = parent::_formatSelect($parentData, $select);
@@ -11,5 +13,13 @@ class Vpc_ListChildPages_Teaser_Generator extends Vps_Component_Generator_Table
         }
         $select->whereEquals('parent_component_id', $parentData->componentId);
         return $select;
+    }
+
+    protected function _formatConfig($parentData, $row)
+    {
+        $ret = parent::_formatConfig($parentData, $row);
+        $ret['targetPage'] = Vps_Component_Data_Root::getInstance()
+            ->getComponentById($row->target_page_id);
+        return $ret;
     }
 }
