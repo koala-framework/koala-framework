@@ -1,10 +1,9 @@
 <?php
-class Vpc_News_Month_Detail_Component extends Vpc_Directories_List_Component
+class Vpc_Directories_Month_Detail_Component extends Vpc_Directories_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['view'] = 'Vpc_News_List_View_Component';
         $ret['useDirectorySelect'] = false;
         return $ret;
     }
@@ -12,7 +11,7 @@ class Vpc_News_Month_Detail_Component extends Vpc_Directories_List_Component
     public function getSelect()
     {
         $select = parent::getSelect();
-        $dateColumn = Vpc_Abstract::getSetting($this->parent->componentClass, 'dateColumn');
+        $dateColumn = Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'dateColumn');
         $monthDate = substr($this->getData()->row->$dateColumn, 0, 7);
         $select->where($dateColumn.' >= ?', "$monthDate-01");
         $select->where($dateColumn.' <= ?', "$monthDate-31");
