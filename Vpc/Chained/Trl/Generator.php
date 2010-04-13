@@ -45,6 +45,18 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
             }
             $select->whereComponentClasses($cls);
         }
+        if ($sr = $select->getPart(Vps_Component_Select::WHERE_SUBROOT)) {
+            $newSr = array();
+            foreach ($sr as $i) {
+                if (isset($i->chained)) {
+                    $newSr[] = $i->chained;
+                } else {
+                    $newSr[] = $i;
+                }
+            }
+            $select->setPart(Vps_Component_Select::WHERE_SUBROOT, $newSr);
+        }
+
         return $this->_getChainedGenerator()
             ->getChildData($this->_getChainedData($parentData), $select);
     }
