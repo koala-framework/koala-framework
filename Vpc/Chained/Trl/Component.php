@@ -107,7 +107,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
     }
 
 
-    public static function getChainedByMaster($masterData, $chainedData)
+    public static function getChainedByMaster($masterData, $chainedData, $select = array())
     {
         if (!$masterData) return null;
 
@@ -141,8 +141,12 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
             }
         }
         $ret = $chainedData;
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
         foreach (array_reverse($ids) as $id) {
-            $ret = $ret->getChildComponent($id);
+            $select->whereId($id);
+            $ret = $ret->getChildComponent($select);
         }
         return $ret;
     }
