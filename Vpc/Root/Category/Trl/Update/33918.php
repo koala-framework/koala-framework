@@ -56,10 +56,10 @@ class Vpc_Root_Category_Trl_Update_33918 extends Vps_Update
                         $cid = $m[1].'_'.implode('_', array_slice(explode('_', $m[2].$m[3]), $k));
                     }
                     $sql = "DELETE FROM $table WHERE $field='$cid'";
-                    //echo "$sql\n";
+                    echo "$sql\n";
                     $db->query($sql);
                     $sql = "UPDATE $table SET $field='$cid' WHERE $primary='".$row['id']."'";
-                    //echo "$sql\n";
+                    echo "$sql\n";
                     $db->query($sql);
                 }
             }
@@ -82,7 +82,7 @@ class Vpc_Root_Category_Trl_Update_33918 extends Vps_Update
             }
             if ($changed) {
                 $sql = "UPDATE vpc_basic_text SET content=".$db->quote($row['content'])." WHERE component_id='$row[component_id]'";
-                //echo "$sql\n";
+                echo "$sql\n";
                 $db->query($sql);
             }
         }
