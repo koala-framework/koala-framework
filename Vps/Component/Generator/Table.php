@@ -90,16 +90,16 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
 
         foreach ($parentDatas as $parentData) {
-            $select = $this->_formatSelect($parentData, $select);
+            $s = $this->_formatSelect($parentData, clone $select);
             $rows = array();
-            if ($select) {
-                $rows = $this->_fetchRows($parentData, $select);
+            if ($s) {
+                $rows = $this->_fetchRows($parentData, $s);
             }
 
             foreach ($rows as $row) {
                 $currentPd = $parentData;
                 if (!$currentPd) {
-                    $currentPd = $this->_getParentDataByRow($row, $select);
+                    $currentPd = $this->_getParentDataByRow($row, $s);
                 }
                 if (!is_array($currentPd)) {
                     if ($currentPd) {
@@ -114,7 +114,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                     if ($currentPd->componentClass != $this->_class) {
                         throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$currentPd->componentClass}' instead of '$this->_class'");
                     }
-                    $data = $this->_createData($currentPd, $row, $select);
+                    $data = $this->_createData($currentPd, $row, $s);
                     if ($data) {
                         $ret[] = $data;
                     }
