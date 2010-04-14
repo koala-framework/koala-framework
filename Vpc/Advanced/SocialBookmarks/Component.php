@@ -30,8 +30,8 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         foreach ($this->getRow()->getChildRows('Networks', $s) as $net) {
             if (isset($networks[$net->network_id])) {
                 $icon = '/Vpc/Advanced/SocialBookmarks/Icons/';
-                if (file_exists(VPS_PATH.$icon.$net->network_id.'.jpg')) {
-                    $icon .= $net->network_id.'.jpg';
+                if (file_exists(VPS_PATH.$icon.$net->network_id.'.png')) {
+                    $icon .= $net->network_id.'.png';
                 } else {
                     $icon = false;
                 }
