@@ -8,7 +8,7 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         $ret['ownModel'] = 'Vpc_Advanced_SocialBookmarks_Model';
         $ret['inheritComponentClass'] = 'Vpc_Advanced_SocialBookmarks_Inherit_Component';
         $ret['cssClass'] = 'webStandard';
-        $ret['iconSet'] = 'default';
+        $ret['iconSet'] = 'Default';
         return $ret;
     }
 
