@@ -8,6 +8,7 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         $ret['ownModel'] = 'Vpc_Advanced_SocialBookmarks_Model';
         $ret['inheritComponentClass'] = 'Vpc_Advanced_SocialBookmarks_Inherit_Component';
         $ret['cssClass'] = 'webStandard';
+        $ret['iconSet'] = 'default';
         return $ret;
     }
 
@@ -25,9 +26,11 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         $ret = array();
         foreach ($this->getRow()->getChildRows('Networks', $s) as $net) {
             if (isset($networks[$net->network_id])) {
-                $icon = '/Vpc/Advanced/SocialBookmarks/Icons/';
+                $icon = '/Vpc/Advanced/SocialBookmarks/Icons/'.$this->_getSetting('iconSet').'/';
                 if (file_exists(VPS_PATH.$icon.$net->network_id.'.jpg')) {
                     $icon .= $net->network_id.'.jpg';
+                } else if (file_exists(VPS_PATH.$icon.$net->network_id.'.png')) {
+                    $icon .= $net->network_id.'.png';
                 } else {
                     $icon = false;
                 }
