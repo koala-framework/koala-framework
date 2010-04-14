@@ -13,6 +13,10 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
 
     public function getNetworks($currentPage)
     {
+        if ($this->getData()->parent->componentId != 'root') {
+            return $this->getData()->getParentPageOrRoot()->getChildComponent('-'.$this->getData()->id)
+                    ->getComponent()->getNetworks($currentPage);
+        }
         //TODO: funktioniert mit mehreren domains nicht korrekt
         $pageUrl = 'http://'.Vps_Registry::get('config')->server->domain.$currentPage->url;
 
