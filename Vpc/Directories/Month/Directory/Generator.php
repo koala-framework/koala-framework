@@ -73,6 +73,9 @@ class Vpc_Directories_Month_Directory_Generator extends Vps_Component_Generator_
         $ret->group(array('YEAR('.$dateColumn.')', 'MONTH('.$dateColumn.')'));
         $ret->order($dateColumn, 'DESC');
         if (!$parentData) {
+            //hier können wir nicht so wie unten den detail generator verwenden da wir
+            //die parent->componentClass nicht wissen
+            //wenn also kein $parentData übergeben stimmt der rückgabewert uU nicht
             if ($this->_getModel()->hasColumn('component_id')) {
                 $page = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
                 if (!$page) {
@@ -81,9 +84,10 @@ class Vpc_Directories_Month_Directory_Generator extends Vps_Component_Generator_
                 $ret->where(new Vps_Model_Select_Expr_Like('component_id', $page->dbId.'-%'));
             }
         } else {
-            if ($this->_getModel()->hasColumn('component_id')) {
-                $ret->whereEquals('component_id', $parentData->parent->dbId);
-            }
+            //den detail generator vom "haupt" directory holen und das select formatieren lassen
+            //der kann korrekt where component_id einfügen oder andere wheres
+            $g = Vps_Component_Generator_Abstract::getInstance($parentData->parent->componentClass, 'detail');
+            $ret->merge($g->_formatSelect($parentData->parent, array()));
         }
         return $ret;
     }
