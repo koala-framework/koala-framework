@@ -1,0 +1,56 @@
+<?php
+class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
+{
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['componentName'] = trlVps('Social Bookmarks');
+        $ret['ownModel'] = 'Vpc_Advanced_SocialBookmarks_Model';
+        $ret['inheritComponentClass'] = 'Vpc_Advanced_SocialBookmarks_Inherit_Component';
+        $ret['cssClass'] = 'webStandard';
+        return $ret;
+    }
+
+    public function getNetworks($currentPage)
+    {
+        if ($this->getData()->parent->componentId != 'root') {
+            return $this->getData()->getParentPageOrRoot()->getChildComponent('-'.$this->getData()->id)
+                    ->getComponent()->getNetworks($currentPage);
+        }
+        //TODO: funktioniert mit mehreren domains nicht korrekt
+        $pageUrl = 'http://'.Vps_Registry::get('config')->server->domain.$currentPage->url;
+
+        $networks = array();
+        foreach (Vps_Model_Abstract::getInstance('Vpc_Advanced_SocialBookmarks_AvaliableModel')->getRows() as $n) {
+            $networks[$n->id] = $n->toArray();
+        }
+        $s = new Vps_Model_Select();
+        $s->order('pos');
+        $ret = array();
+        foreach ($this->getRow()->getChildRows('Networks', $s) as $net) {
+            if (isset($networks[$net->network_id])) {
+                $icon = '/Vpc/Advanced/SocialBookmarks/Icons/';
+                if (file_exists(VPS_PATH.$icon.$net->network_id.'.jpg')) {
+                    $icon .= $net->network_id.'.jpg';
+                } else {
+                    $icon = false;
+                }
+                if ($icon) $icon = '/assets/vps'.$icon;
+                $url = str_replace('{0}', $pageUrl, $networks[$net->network_id]['url']);
+                $ret[] = array(
+                    'name' => $networks[$net->network_id]['name'],
+                    'url' => $url,
+                    'icon' => $icon
+                );
+            }
+        }
+        return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['networks'] = $this->getNetworks($this->getData()->parent);
+        return $ret;
+    }
+}
