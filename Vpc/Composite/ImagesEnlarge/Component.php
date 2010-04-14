@@ -36,7 +36,7 @@ class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Compone
         ));
         foreach ($images as $image) {
             $ret[] = array(
-                'model' => $image->getComponent()->getOwnModel(),
+                'model' => $image->getComponent()->getModel(),
                 'id' => $image->dbId,
                 'field' => 'component_id'
             );
