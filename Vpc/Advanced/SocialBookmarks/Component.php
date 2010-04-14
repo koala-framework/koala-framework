@@ -53,4 +53,14 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         $ret['networks'] = $this->getNetworks($this->getData()->parent);
         return $ret;
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        if ($this->getData()->parent->componentId != 'root') {
+            $ret = array_merge($ret, $this->getData()->getParentPageOrRoot()->getChildComponent('-'.$this->getData()->id)
+                    ->getComponent()->getCacheVars());
+        }
+        return $ret;
+    }
 }
