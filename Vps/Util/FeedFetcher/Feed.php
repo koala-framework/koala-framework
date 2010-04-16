@@ -136,7 +136,7 @@ class Vps_Util_FeedFetcher_Feed
             }
             if ($response->getHeader('Last-Modified')) {
 	        $v = $response->getHeader('Last-Modified');
-	        if (is_array($v)) $lm = $v[0];
+	        if (is_array($v)) $v = $v[0];
                 $feed['lastmodified'] = strtotime($v);
             }
         }
