@@ -34,7 +34,8 @@ class Vpc_Directories_Item_Directory_Trl_Admin extends Vpc_Admin
                 'contentClass' => $contentClass,
                 'contentType' => $cfgKeys ? $cfgKeys[0] : null,
                 'componentConfigs' => $componentConfigs,
-                'contentEditComponents' => $contentEditComponents
+                'contentEditComponents' => $contentEditComponents,
+                'componentPlugins' => array()
             )
         );
         return $ret;
