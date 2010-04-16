@@ -1,20 +1,19 @@
 <?php
 class Vpc_Abstract_List_Trl_Generator extends Vpc_Chained_Trl_Generator
 {
-    protected function _getChainedChildComponents($parentData, Vps_Component_Select $select)
+    protected function _createData($parentData, $row, $select)
     {
-        $m = Vpc_Abstract::createChildModel($this->_class);
-        $ret = parent::_getChainedChildComponents($parentData, $select);
+        $ret = parent::_createData($parentData, $row, $select);
         if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
-            foreach ($ret as $k=>$c) {
-                $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($c));
-                if (!$r || !$r->visible) {
-                    unset($ret[$k]);
-                }
+            $m = Vpc_Abstract::createChildModel($this->_class);
+            $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row));
+            if (!$r || !$r->visible) {
+                $ret = null;
             }
         }
-        return array_values($ret);
+        return $ret;
     }
+
     protected function _formatConfig($parentData, $row)
     {
         $ret = parent::_formatConfig($parentData, $row);
