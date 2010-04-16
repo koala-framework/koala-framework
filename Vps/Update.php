@@ -152,6 +152,7 @@ abstract class Vps_Update
             if (substr($file, 0, strlen($dir)) == $dir) {
                 $file = substr($file, strlen($dir)+1);
             }
+            if (strrchr($dir, '/') == '/tests') continue;
             $path = $dir . '/' . $file;
             if (is_dir($path)) {
                 $path =  $path . '/Update';
