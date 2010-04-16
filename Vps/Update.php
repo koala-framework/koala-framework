@@ -147,12 +147,11 @@ abstract class Vps_Update
     public static function getUpdatesForDir($file, $from, $to)
     {
         $ret = array();
-        foreach (array_reverse(explode(PATH_SEPARATOR, get_include_path())) as $dir) {
+        foreach (explode(PATH_SEPARATOR, get_include_path()) as $dir) {
             if ($dir == '.') $dir = getcwd();
             if (substr($file, 0, strlen($dir)) == $dir) {
                 $file = substr($file, strlen($dir)+1);
             }
-            if (strrchr($dir, '/') == '/tests') continue;
             $path = $dir . '/' . $file;
             if (is_dir($path)) {
                 $path =  $path . '/Update';
@@ -170,6 +169,7 @@ abstract class Vps_Update
                             if ($file != './update') {
                                 $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_';
                             }
+                            if (substr($n, 0, 8) == 'vps-lib_') continue;
                             $n .= 'Update_'.$nr;
                             if ($fileType == '.sql') {
                                 $u = new Vps_Update_Sql($nr, $n);
