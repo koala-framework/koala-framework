@@ -18,9 +18,11 @@
         </p>
     </div>
     <div class="clear"></div>
+    <? if (isset($this->item->previewImage)) { ?>
     <div class="image left">
         <?=$this->componentLink($this->item, $this->component($this->item->previewImage))?>
     </div>
+    <? } ?>
     <div class="teaser">
         <p><?=$this->item->row->teaser?></p>
         <?=$this->componentLink($this->item,trl('weiterlesen').' »');?>
