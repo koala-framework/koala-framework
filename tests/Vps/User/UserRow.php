@@ -1,1 +1,8 @@
-<?phpclass Vps_User_UserRow extends Vps_User_Row{    public static function getWebcode()    {        return 'wctest';    }}
+<?php
+class Vps_User_UserRow extends Vps_User_Row
+{
+    public static function getWebcode()
+    {
+        return 'wctest';
+    }
+}
