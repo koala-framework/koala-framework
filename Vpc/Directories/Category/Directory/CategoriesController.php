@@ -1,1 +1,36 @@
-<?phpclass Vpc_Directories_Category_Directory_CategoriesController    extends Vps_Controller_Action_Pool_PoolController{    protected function _isAllowedComponent()    {        if ($this->_getParam('componentId')) {            $class = $this->_getParam('class');            $c = Vps_Component_Data_Root::getInstance()                ->getComponentByDbId($this->_getParam('componentId'),                    array('ignoreVisible'=>true, 'limit'=>1));            $c = $c->getChildComponent(array('componentClass'=>$class));            $allowed = Vps_Registry::get('acl')                ->isAllowedComponentById($c->componentId, $class, $this->_getAuthData());        } else {            $allowed = false;            $class = $this->_getParam('class');            foreach (Vps_Registry::get('acl')->getAllResources() as $r) {                if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {                    if ($class == $r->getComponentClass()) {                        $allowed = Vps_Registry::get('acl')->getComponentAcl()                            ->isAllowed($this->_getAuthData(), $this->_getParam('class'));                        break;                    }                }            }        }        return $allowed;    }    protected function _getPool()    {        $class = $this->_getParam('class');        return Vpc_Abstract::getSetting($class, 'pool');    }}
+<?php
+class Vpc_Directories_Category_Directory_CategoriesController
+    extends Vps_Controller_Action_Pool_PoolController
+{
+    protected function _isAllowedComponent()
+    {
+        if ($this->_getParam('componentId')) {
+            $class = $this->_getParam('class');
+            $c = Vps_Component_Data_Root::getInstance()
+                ->getComponentByDbId($this->_getParam('componentId'),
+                    array('ignoreVisible'=>true, 'limit'=>1));
+            $c = $c->getChildComponent(array('componentClass'=>$class));
+            $allowed = Vps_Registry::get('acl')
+                ->isAllowedComponentById($c->componentId, $class, $this->_getAuthData());
+        } else {
+            $allowed = false;
+            $class = $this->_getParam('class');
+            foreach (Vps_Registry::get('acl')->getAllResources() as $r) {
+                if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {
+                    if ($class == $r->getComponentClass()) {
+                        $allowed = Vps_Registry::get('acl')->getComponentAcl()
+                            ->isAllowed($this->_getAuthData(), $this->_getParam('class'));
+                        break;
+                    }
+                }
+            }
+        }
+        return $allowed;
+    }
+
+    protected function _getPool()
+    {
+        $class = $this->_getParam('class');
+        return Vpc_Abstract::getSetting($class, 'pool');
+    }
+}

@@ -1,1 +1,3 @@
-<div class="<?= $this->cssClass; ?>">    <?= $this->component($this->list); ?></div>
+<div class="<?= $this->cssClass; ?>">
+    <?= $this->component($this->list); ?>
+</div>
