@@ -88,7 +88,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             $this->_convertWcToGit('vps', $branch);
         } else {
             if (!file_exists('vps-lib')) {
-                $cmd = "git clone ssh@git.vivid-planet.com/git/vps vps-lib";
+                $cmd = "git clone ssh://vivid@git.vivid-planet.com/git/vps vps-lib";
                 echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
 
@@ -129,7 +129,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             }
         }
 
-        $gitUrl = "ssh://git.vivid-planet.com/git/$id";
+        $gitUrl = "ssh://vivid@git.vivid-planet.com/git/$id";
 
         $cmd = "git clone $gitUrl gitwc";
         echo "$cmd\n";
