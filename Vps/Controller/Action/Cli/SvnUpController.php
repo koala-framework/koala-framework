@@ -20,6 +20,12 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
         );
     }
 
+    public function preDispatch()
+    {
+        if ($this->_getParam('debug')) Vps_Util_Git::setDebugOutput(true);
+        parent::preDispatch();
+    }
+
     private function _update($path)
     {
         passthru('svn up '.$path, $ret);
@@ -46,8 +52,10 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             Vps_Util_Git::web()->fetch();
             if (Vps_Util_Git::web()->getActiveBranch() == 'master') {
                 Vps_Util_Git::web()->system("rebase origin/master");
+            } else if (Vps_Util_Git::web()->getActiveBranch() == 'production') {
+                Vps_Util_Git::web()->system("rebase origin/production");
             } else {
-                echo "web: {Vps_Util_Git::web()->getActiveBranch()} != master, daher wird kein autom. rebase ausgefuehrt.\n";
+                echo "web: ".Vps_Util_Git::web()->getActiveBranch()." != master, daher wird kein autom. rebase ausgefuehrt.\n";
                 $doUpdate = false;
             }
 
@@ -61,8 +69,10 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             $vpsBranch = trim(file_get_contents('application/vps_branch'));
             if ($g->getActiveBranch() == $vpsBranch) {
                 $g->system("rebase origin/$vpsBranch");
+            } else if ($g->getActiveBranch() == 'production-'.Vps_Registry::get('config')->application->id) {
+                $g->system("rebase origin/production/".Vps_Registry::get('config')->application->id);
             } else {
-                echo "vps: {$g->getActiveBranch()} != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
+                echo "vps: ".$g->getActiveBranch()." != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
                 $doUpdate = false;
             }
         }
@@ -131,11 +141,11 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             self::_check(VPS_PATH, $checkRemote);
             echo "Vps OK\n";
         } else {
-            Vps_Util_Git::web()->checkClean();
-            Vps_Util_Git::web()->checkUpdated();
+            Vps_Util_Git::web()->fetch();
+            Vps_Util_Git::web()->checkClean("origin/master");
             echo "Web OK\n";
-            Vps_Util_Git::vps()->checkClean();
-            Vps_Util_Git::vps()->checkUpdated();
+            Vps_Util_Git::vps()->fetch();
+            Vps_Util_Git::vps()->checkClean("origin/".trim(file_get_contents('application/vps_branch')));
             echo "Vps OK\n";
         }
     }

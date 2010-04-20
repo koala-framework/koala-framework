@@ -6,6 +6,12 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         return 'various git helpers';
     }
 
+    public function preDispatch()
+    {
+        if ($this->_getParam('debug')) Vps_Util_Git::setDebugOutput(true);
+        parent::preDispatch();
+    }
+
     public function checkoutStagingAction()
     {
         if (!file_exists('.git')) $this->_convertToGit();
@@ -39,9 +45,25 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         Vps_Util_Git::vps()->fetch();
         Vps_Util_Git::web()->fetch();
 
+        //die werden von go-online raufkopiert
+        Vps_Util_Git::vps()->system("checkout ".escapeshellarg('Vps/Util/Git.php'));
+        Vps_Util_Git::vps()->system("checkout ".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'));
         $appId = Vps_Registry::get('config')->application->id;
-        Vps_Util_Git::vps()->checkout("$appId-production");
-        Vps_Util_Git::web()->checkout("production");
+        if (!Vps_Util_Git::vps()->revParse("production-$appId")) {
+            Vps_Util_Git::vps()->branch("production-$appId", '', "origin/production/$appId");
+        }
+        if (Vps_Util_Git::vps()->getActiveBranch() != "production-$appId") {
+            Vps_Util_Git::vps()->checkout("production-$appId");
+        }
+        Vps_Util_Git::vps()->system("rebase origin/production/$appId");
+
+        if (!Vps_Util_Git::web()->revParse("production")) {
+            Vps_Util_Git::web()->branch("production", '', "origin/production");
+        }
+        if (Vps_Util_Git::web()->getActiveBranch() != "production") {
+            Vps_Util_Git::web()->checkout("production");
+        }
+        Vps_Util_Git::web()->system("rebase origin/production");
 
         system("php bootstrap.php update", $ret);
         exit($ret);
@@ -100,15 +122,21 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         }
         $this->_systemCheckRet("svn up");
 
+        if (!$branch) {
+            $xml = simplexml_load_string(`svn info`);
+            if (preg_match('#branches/[^/]+/([^/]+)$#', (string)$xml->entry->url, $m)) {
+                $branch = $m[1];
+            }
+        }
+
         $gitUrl = "ssh://git.vivid-planet.com/git/$id";
 
         $cmd = "git clone $gitUrl gitwc";
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
-        if ($branch) {
-            chdir("gitwc");
-
+        chdir("gitwc");
+        if ($branch && $branch != 'trunk') {
             $cmd = "git branch --track $branch origin/$branch";
             echo "$cmd\n";
             $this->_systemCheckRet($cmd);
@@ -116,9 +144,13 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             $cmd = "git checkout ".$branch;
             echo "$cmd\n";
             $this->_systemCheckRet($cmd);
-
-            chdir("..");
         }
+
+        $cmd = "git checkout latest-svn-".($branch ? $branch : 'trunk');
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+
+        chdir("..");
 
         $cmd = "mv gitwc/.git .git";
         echo "$cmd\n";

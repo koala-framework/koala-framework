@@ -1,6 +1,7 @@
 <?php
 class Vps_Util_Git
 {
+    private static $_debug = false;
     private $_path;
     public function __construct($path)
     {
@@ -8,6 +9,11 @@ class Vps_Util_Git
         if (!file_exists($path.'/.git')) {
             throw new Vps_Exception("Invalid path '$path', no git wc");
         }
+    }
+
+    public static function setDebugOutput($enable = true)
+    {
+        self::$_debug = $enable;
     }
 
     public static function web()
@@ -77,14 +83,39 @@ class Vps_Util_Git
     public function tag($tag, $args = '', $object = '')
     {
         $cmd = "tag -a -m ".escapeshellarg('tagged').' '.$args.' '.escapeshellcmd($tag);
-        if ($object) $cmd .= escapeshellcmd($object);
+        if ($object) $cmd .= ' '.escapeshellcmd($object);
         $this->system($cmd);
         $this->system("push origin tag ".escapeshellcmd($tag));
+    }
+
+    public function branch($branch, $args = '', $object = '')
+    {
+        $cmd = "branch $args ".escapeshellcmd($branch).' '.escapeshellcmd($object);
+        $this->system($cmd);
+        $this->system("push origin ".escapeshellcmd($branch));
+    }
+
+    public function revParse($obj)
+    {
+        $d = getcwd();
+        chdir($this->_path);
+        $cmd = "git rev-parse ".escapeshellcmd($obj)." 2>/dev/null";
+        if (self::$_debug) echo $cmd."\n";
+        $ret = exec($cmd, $out, $retVar);
+        chdir($d);
+        if ($retVar) return false;
+        if (!$ret) return false;
+        return trim($ret);
     }
 
     public function checkout($target)
     {
         $this->system("checkout ".escapeshellcmd($target));
+    }
+
+    public function checkoutBranch($branch, $target)
+    {
+        $this->system("checkout -b ".escapeshellcmd($branch).' '.escapeshellcmd($target));
     }
 
     public function fetch()
@@ -97,28 +128,19 @@ class Vps_Util_Git
         $this->system("pull origin");
     }
 
-    public function checkClean()
+    public function checkClean($against)
     {
         $d = getcwd();
         chdir($this->_path);
-        system("git diff --quiet --exit-code", $ret);
+        $cmd = "git diff --quiet --exit-code $against";
+        if (self::$_debug) echo $cmd."\n";
+        system($cmd, $ret);
         chdir($d);
+        if (self::$_debug) echo "return $ret\n";
         if ($ret) {
             throw new Vps_ClientException("You must not have modified files in '$this->_path'");
         }
-    }
-
-    public function checkUpdated()
-    {
-        $this->system("fetch origin");
-
-        $d = getcwd();
-        chdir($this->_path);
-        system("git diff --quiet --exit-code HEAD..origin/$branch", $ret);
-        chdir($d);
-        if ($ret) {
-            throw new Vps_ClientException("Not up to date '$this->_path'");
-        }
+        //TODO GIT check if pushed
     }
 
     public function getActiveBranch()
@@ -126,6 +148,7 @@ class Vps_Util_Git
         $d = getcwd();
         $cmd = "git branch | grep '^*'";
         chdir($this->_path);
+        if (self::$_debug) echo $cmd."\n";
         $ret = exec($cmd);
         chdir($d);
         if (!$ret) return false;
@@ -138,6 +161,7 @@ class Vps_Util_Git
         $d = getcwd();
         $cmd = "git ".$cmd;
         chdir($this->_path);
+        if (self::$_debug) echo $cmd."\n";
         $ret = system($cmd, $retVal);
         chdir($d);
         if ($retVal) {
