@@ -123,7 +123,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         $this->_systemCheckRet("svn up");
 
         if (!$branch) {
-            $xml = simplexml_load_string(`svn info`);
+            $xml = simplexml_load_string(`svn info --xml`);
             if (preg_match('#branches/[^/]+/([^/]+)$#', (string)$xml->entry->url, $m)) {
                 $branch = $m[1];
             }
