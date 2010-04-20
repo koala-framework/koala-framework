@@ -4,19 +4,10 @@ class Vpc_Directories_Category_Detail_List_Component extends Vpc_Directories_Lis
     public function getSelect()
     {
         $select = parent::getSelect();
+        $s = new Vps_Model_Select();
+        $s->whereEquals('category_id', $this->getData()->parent->id);
+        $select->where(new Vps_Model_Select_Expr_Child_Contains('Categories', $s));
 
-        $modelName = Vpc_Abstract::getSetting(
-            $this->getData()->parent->parent->componentClass, 'categoryToItemModelName'
-        );
-        $refData = self::getTableReferenceData($modelName, 'Item');
-        if (!Vpc_Abstract::getSetting(get_class($this), 'generatorJoins')) {
-            $select->join($refData['tableName'],
-                          $refData['tableName'].'.'.$refData['itemColumn'].'='
-                            .$refData['refTableName'].'.'.$refData['refItemColumn'],
-                          array());
-        }
-        $categoryId = $this->getData()->parent->id;
-        $select->where($refData['tableName'].'.category_id = ?', $categoryId);
         return $select;
     }
 
@@ -25,6 +16,7 @@ class Vpc_Directories_Category_Detail_List_Component extends Vpc_Directories_Lis
         return $this->getData()->parent->parent->parent;
     }
 
+    //wurder ursprünglich hier verwendet was jedoch auf Expr_Child_Contains umgeschireben wurde
     static public function getTableReferenceData($relationModel, $rule/* = 'Item'*/)
     {
         if (is_string($relationModel)) {

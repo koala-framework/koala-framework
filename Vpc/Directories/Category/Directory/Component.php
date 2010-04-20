@@ -43,13 +43,8 @@ class Vpc_Directories_Category_Directory_Component extends Vpc_Directories_ItemP
         $rows = $model->getRows($model->select()->whereEquals($itemRef['column'], $item->row->id));
         $item->categories = array();
         foreach ($rows as $row) {
-            $cat = $item->parent->getRecursiveChildComponents(array(
-                'componentClass' => 'Vpc_Directories_Category_Detail_Component',
-                'id' => '_'.$row->{$catRef['column']}
-            ), array());
-            if (count($cat)) {
-                $item->categories[] = $cat[0];
-            }
+            $item->categories[] = $item->parent->getChildComponent(array('componentClass'=>$componentClass))
+                ->getChildComponent('_'.$row->{$catRef['column']});
         }
     }
 
