@@ -9,8 +9,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
 
-    private $_proxyContainerModels = array();
-
     private $_importBuffer;
     private $_importBufferOptions;
 
@@ -30,12 +28,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if (isset($this->_importBuffer)) {
             $this->writeBuffer();
         }
-    }
-
-    //kann gesetzt werden von proxy
-    public function addProxyContainerModel($m)
-    {
-        $this->_proxyContainerModels[] = $m;
     }
 
     protected function _init()
@@ -489,6 +481,33 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, $exprStr);
             return "($depDbSelect)";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Child_Contains) {
+            $depM = $depOf->getDependentModel($expr->getChild());
+            $depM = Vps_Model_Abstract::getInstance($depM);
+            $dbDepM = $depM;
+            while ($dbDepM instanceof Vps_Model_Proxy) {
+                $dbDepM = $dbDepM->getProxyModel();
+            }
+            if (!$dbDepM instanceof Vps_Model_Db) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
+            $dbDepOf = $depOf;
+            while ($dbDepOf instanceof Vps_Model_Proxy) {
+                $dbDepOf = $dbDepOf->getProxyModel();
+            }
+            if (!$dbDepOf instanceof Vps_Model_Db) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
+            $depTableName = $dbDepM->getTableName();
+            $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
+            $depSelect = $expr->getSelect();
+            if (!$depSelect) $depSelect = $dbDepM->select();
+            $col1 = $dbDepM->transformColumnName($ref['column']);
+            $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
+            $depDbSelect = $dbDepM->_getDbSelect($depSelect);
+            $depDbSelect->reset(Zend_Db_Select::COLUMNS);
+            $depDbSelect->from(null, "$depTableName.$col1");
+            return $this->getPrimaryKey()." IN ($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
             $refM = $depOf->getReferencedModel($expr->getParent());
             $refM = Vps_Model_Abstract::getInstance($refM);
@@ -521,6 +540,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
             return "($refDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
+            return $field;
+        } else if ($expr instanceof Vps_Model_Select_Expr_PrimaryKey) {
+            $field = $this->_formatField($this->getPrimaryKey(), $dbSelect);
             return $field;
         } else if ($expr instanceof Vps_Model_Select_Expr_SumFields) {
             $sqlExpressions = array();

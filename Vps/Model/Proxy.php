@@ -17,21 +17,14 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         if (is_string($this->_proxyModel)) {
             $this->_proxyModel = Vps_Model_Abstract::getInstance($this->_proxyModel);
         }
-        if ($this->_proxyModel instanceof Vps_Model_Db
-            || $this->_proxyModel instanceof Vps_Model_Proxy
-        ) {
-            $this->_proxyModel->addProxyContainerModel($this);
-        }
+        $this->_proxyModel->addProxyContainerModel($this);
     }
 
     //kann gesetzt werden von proxy (rekursiv bei proxys)
     public function addProxyContainerModel($m)
     {
-        if ($this->_proxyModel instanceof Vps_Model_Db
-            || $this->_proxyModel instanceof Vps_Model_Proxy
-        ) {
-            $this->_proxyModel->addProxyContainerModel($m);
-        }
+        parent::addProxyContainerModel($m);
+        $this->_proxyModel->addProxyContainerModel($m);
     }
 
     public function getProxyModel()

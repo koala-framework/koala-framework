@@ -344,6 +344,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 }
             }
             return true;
+        } else {
+            return (bool)$this->getExprValue($data, $expr);
         }
         return true;
     }

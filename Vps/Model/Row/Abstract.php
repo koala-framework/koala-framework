@@ -206,8 +206,11 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         // bezeichnung)
         if ($rule instanceof Vps_Model_Abstract) {
             $m = $rule;
+            $dependentOf = $this->_model;
         } else {
-            $m = $this->_model->getDependentModel($rule);
+            $dependent = $this->_model->getDependentModelWithDependentOf($rule);
+            $m = $dependent['model'];
+            $dependentOf = $dependent['dependentOf'];
         }
 
 //         if ($m instanceof Vps_Model_RowsSubModel_Interface) { geht aus irgendeinen komischen grund ned
@@ -217,7 +220,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             if (!$select instanceof Vps_Model_Select) {
                 $select = $m->select($select);
             }
-            $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
+            $ref = $m->getReferenceByModelClass(get_class($dependentOf), null);
             if (!$this->{$this->_getPrimaryKey()}) {
                 return array();
                 //throw new Vps_Exception("row does not yet have a primary id");
