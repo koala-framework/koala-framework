@@ -482,7 +482,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $depDbSelect->from(null, $exprStr);
             return "($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Child_Contains) {
-            $depM = $depOf->getDependentModel($expr->getChild());
+            $i = $depOf->getDependentModelWithDependentOf($expr->getChild());
+            $depM = $i['model'];
+            $depOf = $i['dependentOf'];
             $depM = Vps_Model_Abstract::getInstance($depM);
             $dbDepM = $depM;
             while ($dbDepM instanceof Vps_Model_Proxy) {
