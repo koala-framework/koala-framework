@@ -9,6 +9,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     private $_internalId;
     protected $_siblingRows;
     protected $_exprValues = array();
+    protected $_dirty = false;
     static private $_internalIdCounter = 0;
 
     //damit im save() die childRows autom. mitgespeichert werden können
@@ -457,5 +458,10 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         $new = $this->getModel()->createRow($data);
         $new->save();
         return $new;
+    }
+
+    public function isDirty()
+    {
+        return $this->_dirty;
     }
 }
