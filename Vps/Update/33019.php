@@ -4,7 +4,7 @@ class Vps_Update_33019 extends Vps_Update
     public function update()
     {
         $c = file_get_contents('bootstrap.php');
-        if (strpos($c, "define('VPS_PATH', dirname(__FILE__).'/vps-lib')")===false) {
+        if (strpos($c, "define('VPS_PATH', dirname(__FILE__).'/vps-lib')")===false && strpos($c, "503 Service Unavailable")===false) {
             $c = explode("\n", $c);
             foreach ($c as $k=>$i) {
                 $i = trim($i);
