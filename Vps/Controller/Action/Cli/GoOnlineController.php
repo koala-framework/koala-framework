@@ -14,7 +14,6 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $ret[] = array('param' => 'skip-test');
         $ret[] = array('param' => 'skip-prod');
         $ret[] = array('param' => 'skip-check');
-        $ret[] = array('param' => 'skip-notify');
         return $ret;
     }
 
@@ -286,16 +285,15 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                     $msg .= "\ntodo #{$todo->id} ({$todo->title})";
                 }
             }
-            $jids = array();
-            foreach ($cfg->developers as $user) {
-                if ($user->notifyGoOnline && $user->jid) {
-                    echo "\nsende jabber nachricht an $user->jid";
-                    $jids[] = $user->jid;
-                }
-            }
-            if ($jids) {
-                Vps_Util_Jabber_SendMessage::send($jids, $msg);
-            }
+            file_put_contents('/www/public/zeiterfassung/irc/messagequeue/'.date('Y-m-d_H:i:s').uniqid(), 'WICHTIG'.$msg);
+
+            $cmd = "cd /www/public/zeiterfassung && php bootstrap.php insert-go-online-log-entry";
+            $cmd .= " --applicationId=".escapeshellarg($cfg->application->id);
+            $cmd .= " --webBranch=".escapeshellarg('trunk'/*TODO GIT*/);
+            $cmd .= " --vpsBranch=".escapeshellarg(trim(file_get_contents('application/vps_branch')));
+            $cmd .= " --webVersion=".escapeshellarg($webVersion);
+            $cmd .= " --vpsVersion=".escapeshellarg($vpsVersion);
+            $this->_systemCheckRet($cmd);
         }
 
         echo "\n\n\n\033[32mF E R T I G ! ! !\033[0m\n";
