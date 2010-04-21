@@ -54,6 +54,9 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
             if (is_array($value) || is_object($value)) {
                 $value = 'vpsSerialized'.serialize($value);
             }
+            if ($this->$name !== $value) {
+                $this->_dirty = true;
+            }
             $this->_row->$n = $value;
         } else {
             parent::__set($name, $value);
@@ -72,7 +75,12 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         }
         $this->_beforeSaveSiblingMaster();
         $this->_beforeSave();
-        $ret = $this->_row->save();
+        if ($this->_dirty) {
+            $ret = $this->_row->save();
+            $this->_dirty = false;
+        } else {
+            $ret = $this->{$this->_getPrimaryKey()};
+        }
         if ($insert) {
             $this->_afterInsert();
             $this->_model->afterInsert($this);
