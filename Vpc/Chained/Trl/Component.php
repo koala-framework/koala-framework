@@ -135,7 +135,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
                 $ids[] = $id;
 
                 //bei pages die parent ids auslassen
-                while (is_numeric($c->componentId) && $c->parent && is_numeric($c->parent->componentId)) {
+                while (is_numeric($c->componentId)) {
                     $c = $c->parent;
                 }
             }
