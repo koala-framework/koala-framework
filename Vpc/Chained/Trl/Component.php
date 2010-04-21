@@ -147,6 +147,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
         foreach (array_reverse($ids) as $id) {
             $select->whereId($id);
             $ret = $ret->getChildComponent($select);
+            if (!$ret) return null;
         }
         return $ret;
     }
