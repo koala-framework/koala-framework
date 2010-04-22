@@ -15,4 +15,11 @@ class Vps_Form_Field_Panel extends Vps_Form_Container_Abstract
         }
         return $ret;
     }
+
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'html';
+        return $ret;
+    }
 }
