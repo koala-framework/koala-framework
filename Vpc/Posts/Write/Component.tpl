@@ -3,7 +3,7 @@
     <?=$this->component($this->form)?>
     <? if (!$this->isSaved) { ?>
         <?=$this->ifHasContent($this->lastPosts)?>
-            <h1 class="mainHeadline"><?=trlVps('Last Posts')?>:</h1>
+            <h1 class="mainHeadline"><?=$this->placeholder['lastPosts']?>:</h1>
             <?=$this->component($this->lastPosts)?>
         <?=$this->ifHasContent()?>
     <? } ?>

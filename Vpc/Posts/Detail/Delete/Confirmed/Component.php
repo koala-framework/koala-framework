@@ -4,7 +4,7 @@ class Vpc_Posts_Detail_Delete_Confirmed_Component extends Vpc_Posts_Success_Comp
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['success'] = trlVps('Comment was successfully deleted.');
+        $ret['placeholder']['success'] = trlVpsStatic('Comment was successfully deleted.');
         $ret['flags']['processInput'] = true;
         return $ret;
     }
