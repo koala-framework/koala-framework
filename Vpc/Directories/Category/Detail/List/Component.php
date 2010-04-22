@@ -30,7 +30,7 @@ class Vpc_Directories_Category_Detail_List_Component extends Vpc_Directories_Lis
         }
 
         return array(
-            'tableName' => $relationModel->getTableName(),
+            'tableName' => $relationModel->getProxyModel()->getTableName(),
             'itemColumn' => $reference['column'],
             'refItemColumn' => $dataModel->getPrimaryKey(),
             'refTableName' => $dataModel->getTableName()
