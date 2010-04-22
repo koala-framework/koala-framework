@@ -5,7 +5,7 @@
  * @group Model_DbWithConnection
  * @group Model_Db_Dirty
  */
-class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
+class Vps_Model_DbWithConnection_Dirty_Test extends PHPUnit_Extensions_OutputTestCase
 {
     private $_tableName;
     public function setUp()
@@ -33,14 +33,11 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
 
     public function testDontSaveNotDirtyRow()
     {
-        // warum auch immer das nicht automatisch geht...
-        require_once dirname(__FILE__).'/Row.php';
-
-        Vps_Model_DbWithConnection_Row::resetMock();
+        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
 
         $table = new Vps_Db_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Vps_Model_DbWithConnection_Row'
+            'rowClass' => 'Vps_Model_DbWithConnection_Dirty_Row'
         ));
         $model = new Vps_Model_Db(array(
             'table' => $table
@@ -49,25 +46,22 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
         $row = $model->getRow(1);
         $row->save();
 
-        $this->assertEquals(0, Vps_Model_DbWithConnection_Row::$saveCount);
+        $this->assertEquals(0, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
 
         $row = $model->getRow(1);
         $row->test1 = 'foo';
         $row->save();
 
-        $this->assertEquals(0, Vps_Model_DbWithConnection_Row::$saveCount);
+        $this->assertEquals(0, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
     }
 
     public function testSaveNewRowNotDirty()
     {
-        // warum auch immer das nicht automatisch geht...
-        require_once dirname(__FILE__).'/Row.php';
-
-        Vps_Model_DbWithConnection_Row::resetMock();
+        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
 
         $table = new Vps_Db_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Vps_Model_DbWithConnection_Row'
+            'rowClass' => 'Vps_Model_DbWithConnection_Dirty_Row'
         ));
         $model = new Vps_Model_Db(array(
             'table' => $table
@@ -75,19 +69,16 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
 
         $row = $model->createRow();
         $row->save();
-        $this->assertEquals(1, Vps_Model_DbWithConnection_Row::$saveCount);
+        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
     }
 
     public function testSaveDirtyRow()
     {
-        // warum auch immer das nicht automatisch geht...
-        require_once dirname(__FILE__).'/Row.php';
-
-        Vps_Model_DbWithConnection_Row::resetMock();
+        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
 
         $table = new Vps_Db_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Vps_Model_DbWithConnection_Row'
+            'rowClass' => 'Vps_Model_DbWithConnection_Dirty_Row'
         ));
         $model = new Vps_Model_Db(array(
             'table' => $table
@@ -97,14 +88,14 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
         $row->test1 = 'blubb';
         $row->save();
 
-        $this->assertEquals(1, Vps_Model_DbWithConnection_Row::$saveCount);
+        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
 
-        Vps_Model_DbWithConnection_Row::resetMock();
+        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
         $row = $model->createRow();
         $row->test1 = 'xx';
         $row->test2 = 'yy';
         $row->save();
 
-        $this->assertEquals(1, Vps_Model_DbWithConnection_Row::$saveCount);
+        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
     }
 }
