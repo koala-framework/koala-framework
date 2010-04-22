@@ -35,11 +35,11 @@ class Vps_Model_FieldRows_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($model->getData(), array(
             array('id'=>1, 'foo'=>'bar', 'data'=>serialize(
             array(
+                'autoId'=>2,
                 'data'=>array(
                     array('id'=>1, 'blub'=>'blub1', 'foo'=>'foo'),
                     array('id'=>2, 'blub'=>'blub2')
-                ),
-                'autoId'=>2
+                )
             )),
             'blub1'=>'blub1')
         ));
