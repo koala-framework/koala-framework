@@ -22,11 +22,6 @@ class Vpc_Chained_Trl_MasterAsChild_Component extends Vpc_Abstract
         $this->getData()->getChildComponent('-child')->getComponent()->sendContent();
     }
 
-    public function getChildModel()
-    {
-        return $this->getData()->getChildComponent('-child')->getComponent()->getChildModel();
-    }
-
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
