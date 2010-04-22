@@ -58,8 +58,31 @@ class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
         $this->assertEquals(0, Vps_Model_DbWithConnection_Row::$saveCount);
     }
 
+    public function testSaveNewRowNotDirty()
+    {
+        // warum auch immer das nicht automatisch geht...
+        require_once dirname(__FILE__).'/Row.php';
+
+        Vps_Model_DbWithConnection_Row::resetMock();
+
+        $table = new Vps_Db_Table(array(
+            'name' => $this->_tableName,
+            'rowClass' => 'Vps_Model_DbWithConnection_Row'
+        ));
+        $model = new Vps_Model_Db(array(
+            'table' => $table
+        ));
+
+        $row = $model->createRow();
+        $row->save();
+        $this->assertEquals(1, Vps_Model_DbWithConnection_Row::$saveCount);
+    }
+
     public function testSaveDirtyRow()
     {
+        // warum auch immer das nicht automatisch geht...
+        require_once dirname(__FILE__).'/Row.php';
+
         Vps_Model_DbWithConnection_Row::resetMock();
 
         $table = new Vps_Db_Table(array(
