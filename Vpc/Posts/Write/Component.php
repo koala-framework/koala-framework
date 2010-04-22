@@ -7,6 +7,7 @@ class Vpc_Posts_Write_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component']['preview'] = 'Vpc_Posts_Write_Preview_Component';
         $ret['generators']['child']['component']['form'] = 'Vpc_Posts_Write_Form_Component';
         $ret['generators']['child']['component']['lastPosts'] = 'Vpc_Posts_Write_LastPosts_Component';
+        $ret['placeholder']['lastPosts'] = trlVpsStatic('Last Posts');
         $ret['flags']['noIndex'] = true;
         $ret['cssClass'] = 'webStandard';
         $ret['plugins'] = array('Vps_Component_Plugin_Login_Component');
