@@ -109,7 +109,7 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
             $project = $m[2];
             $baseUrl = $m[1];
         } else {
-            throw new Vps_Exception("Can't detect web base url from $url");
+            throw new Vps_Exception("Can't detect web base url from $currentUrl");
         }
 
         if ($version == 'trunk') {
