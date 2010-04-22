@@ -396,6 +396,21 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $ret);
     }
 
+    public function testSaveNewRowNotDirty()
+    {
+        $model = $this->getMock('Vps_Model_FnF', array('insert'));
+        $model->setData(array(
+            array('id' => 1, 'value' => 'foo'),
+            array('id' => 2, 'value' => 'bar'),
+        ));
+
+        $model->expects($this->once())
+            ->method('insert');
+
+        $row = $model->createRow();
+        $row->save();
+    }
+
     public function testSaveDirtyRow()
     {
         $model = $this->getMock('Vps_Model_FnF', array('update', 'insert'));

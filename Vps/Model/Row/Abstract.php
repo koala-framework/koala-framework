@@ -459,9 +459,4 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         $new->save();
         return $new;
     }
-
-    public function isDirty()
-    {
-        return $this->_dirty;
-    }
 }

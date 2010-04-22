@@ -75,7 +75,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         }
         $this->_beforeSaveSiblingMaster();
         $this->_beforeSave();
-        if ($this->_dirty) {
+        if ($insert || $this->_dirty) {
             $ret = $this->_row->save();
             $this->_dirty = false;
         } else {
