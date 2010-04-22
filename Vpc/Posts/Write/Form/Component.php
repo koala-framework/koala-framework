@@ -11,7 +11,7 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        $this->_form->setModel($this->_getPostsComponent()->parent->getComponent()->getChildModel());
+        $this->_form->setModel($this->_getPostsComponent()->getComponent()->getChildModel());
     }
 
     protected function _getPostsComponent()

@@ -6,8 +6,8 @@ class Vpc_Guestbook_ActivatePost_Component extends Vpc_Form_Success_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['success'] = trlVps('The entry in your guestbook has been acitvated.');
-        $ret['placeholder']['toGuestbook'] = trlVps('Use this link to get to your guestbook:');
+        $ret['placeholder']['success'] = trlVpsStatic('The entry in your guestbook has been acitvated.');
+        $ret['placeholder']['toGuestbook'] = trlVpsStatic('Use this link to get to your guestbook:');
         return $ret;
     }
 
