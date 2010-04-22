@@ -46,7 +46,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
     public function getMenuComponent()
     {
-        $component = $this->getData()->getPage();
+        $component = $this->getData()->parent;
         $level = 1;
         while ($component) {
             $menuCategory = Vpc_Abstract::getFlag($component->componentClass, 'menuCategory');
