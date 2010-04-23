@@ -14,6 +14,10 @@ class Vps_Trl_ChainedByMaster_Master_Component extends Vpc_Abstract
             ),
             'model' => 'Vps_Trl_ChainedByMaster_Master_Model'
         );
+        $ret['generators']['99'] = array(
+            'class' => 'Vps_Component_Generator_Static',
+            'component' => 'Vpc_Basic_Empty_Component'
+        );
         $ret['flags']['hasLanguage'] = true;
         return $ret;
     }

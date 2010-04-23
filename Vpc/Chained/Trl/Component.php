@@ -132,7 +132,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
                 break;
             }
             $skipParents = false;
-            if (is_numeric($id)) {
+            if ((int)$id > 0) { // nicht mit is_numeric wegen Bindestrich, das als minus interpretiert wird
                 $id = '_' . $id;
                 $skipParents = true;
             }

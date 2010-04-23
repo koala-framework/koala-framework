@@ -18,6 +18,7 @@ class Vps_Trl_ChainedByMaster_Test extends Vpc_TestAbstract
         $this->assertEquals('root', $this->_getChainedId('root'));
         $this->assertEquals('root-en_1-switchLanguage', $this->_getChainedId('1-switchLanguage'));
         $this->assertEquals('root-en_2-switchLanguage', $this->_getChainedId('2-switchLanguage'));
+        $this->assertEquals('root-en-99', $this->_getChainedId('root-master-99'));
     }
 
     private function _getChainedId($masterId, $select = array())
