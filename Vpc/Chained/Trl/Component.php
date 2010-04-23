@@ -126,17 +126,22 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
                 strrpos($c->componentId, '_')
             );
             $id = substr($c->componentId, $pos);
-            if (is_instance_of($c->componentClass, 'Vpc_Root_TrlRoot_Master_Component')) { //wen nötig stattdessen ein neues erstellen
+            if (Vpc_Abstract::getFlag($c->componentClass, 'isTrlRoot')) {
                 break;
             }
-            if ((int)$id > 0) $id = '_' . $id;
+            $skipParents = false;
+            if (is_numeric($id)) {
+                $id = '_' . $id;
+                $skipParents = true;
+            }
             $c = $c->parent;
             if ($c) {
                 $ids[] = $id;
-
                 //bei pages die parent ids auslassen
-                while (is_numeric($c->componentId)) {
-                    $c = $c->parent;
+                if ($skipParents) {
+                    while (is_numeric($c->componentId)) {
+                        $c = $c->parent;
+                    }
                 }
             }
         }
@@ -144,6 +149,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
+        p($ids);
         foreach (array_reverse($ids) as $id) {
             $select->whereId($id);
             $ret = $ret->getChildComponent($select);
