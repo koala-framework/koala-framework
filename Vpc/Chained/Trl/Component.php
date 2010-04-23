@@ -112,7 +112,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
         if (!$masterData) return null;
 
         while ($chainedData) {
-            if (is_instance_of($chainedData->componentClass, 'Vpc_Root_TrlRoot_Chained_Component')) { //wen nötig stattdessen ein neues flag erstellen
+            if (Vpc_Abstract::getFlag($chainedData->componentClass, 'hasLanguage')) {
                 break;
             }
             $chainedData = $chainedData->parent;
@@ -120,6 +120,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
 
         $c = $masterData;
         $ids = array();
+        $hasLanguageReached = false;
         while ($c) {
             $pos = max(
                 strrpos($c->componentId, '-'),
@@ -127,6 +128,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
             );
             $id = substr($c->componentId, $pos);
             if (Vpc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
+                $hasLanguageReached = true;
                 break;
             }
             $skipParents = false;
@@ -145,11 +147,11 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
                 }
             }
         }
+        if (!$hasLanguageReached) return $masterData;
         $ret = $chainedData;
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-        p($ids);
         foreach (array_reverse($ids) as $id) {
             $select->whereId($id);
             $ret = $ret->getChildComponent($select);
