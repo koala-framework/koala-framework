@@ -83,6 +83,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
         }
 
+        if (!$this->_getParam('skip-files')) {
+
         if ($config->uploads && $ownConfig->uploads) {
             echo "kopiere uploads...\n";
             if ($ownConfig->server->host == $config->server->host) {
@@ -125,6 +127,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 $this->_importFiles($config, $ownConfig, $ignores);
             }
         }
+
+        }
+
         if ($this->_getParam('include-cache')) {
             echo "importing cache dirs...\n";
             $includes = array();
