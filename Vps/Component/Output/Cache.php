@@ -116,6 +116,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
                 'info' => $info
             );
         }
+        $ret = $this->_parseDynamic($ret, $componentClass, array('partial' => $info));
         return $ret;
     }
 

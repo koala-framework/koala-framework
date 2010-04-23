@@ -129,7 +129,11 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         Vps_Benchmark::count('rendered partial ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
         $output = new Vps_Component_Output_ComponentPartial();
         $output->setIgnoreVisible($this->ignoreVisible());
-        return $output->render($this->_getComponent($componentId), $partial, $id, $info);
+        $ret = $output->render($this->_getComponent($componentId), $partial, $id, $info);
+        if (!$useCache) { //hack
+            $ret = $this->_parseDynamic($ret, $componentClass, array('partial' => $info));
+        }
+        return $ret;
     }
 
     protected function _renderHasContent($componentId, $componentClass, $content, $counter, $inverse, $useCache = false)
