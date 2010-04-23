@@ -126,7 +126,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
                 strrpos($c->componentId, '_')
             );
             $id = substr($c->componentId, $pos);
-            if (Vpc_Abstract::getFlag($c->componentClass, 'isTrlRoot')) {
+            if (Vpc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
                 break;
             }
             $skipParents = false;
