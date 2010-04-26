@@ -11,44 +11,69 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Component extends Vpc_Abstract
 
     public function sendContent()
     {
-        $filename = 'vcard';
-        $dataRow = $this->_getDataRow();
+        $dataRow = (object)$this->getData()->parent->getComponent()->getRow()->toArray();
+        $imageData = $this->getData()->parent->parent->getChildComponent('-image');
+        $defaults = $this->_getDefaultValues();
+        self::outputVcard($dataRow, $defaults, $imageData);
+    }
+
+    /**
+     * Set default vCard settings here or in Team_Component
+     */
+    private function _getDefaultValues()
+    {
+        $teamComponent = $this->getData()->parent->parent->parent;
+        $setting = Vpc_Abstract::getSetting($teamComponent->componentClass, 'defaultVcardValues');
+
+        if ($setting) {
+            return $setting;
+        } else {
+            return $this->_getSetting('defaultVcardValues');
+        }
+    }
+
+    public static function outputVcard($dataRow, $defaults, $imageData)
+    {
+        $content = self::getVcardContent($dataRow, $defaults, $imageData);
+        $filename = self::getFilename($dataRow);
+
+        if (!$filename) $filename = 'vcard';
+        header('Content-Type: text/x-vcard');
+        header('Content-Disposition: attachment; filename="'.$filename.'.vcf"');
+        echo $content;
+    }
+
+    public static function getFilename($dataRow)
+    {
         if ($dataRow && (!empty($dataRow->firstname) || !empty($dataRow->lastname))) {
             $filename = $dataRow->lastname.'_'.$dataRow->firstname;
             $filter = new Vps_Filter_Ascii();
-            $filename = $filter->filter($filename);
+            return $filter->filter($filename);
         }
-        header('Content-Type: text/x-vcard');
-        header('Content-Disposition: attachment; filename="'.$filename.'.vcf"');
-        echo $this->_getVcardContent();
+        return null;
     }
 
-    protected function _getVcardImageData()
+    /**
+     * Gibt vCard Daten zurück. Statisch weil es auch von der Trl_Component
+     * aufgerufen wird.
+     */
+    public static function getVcardContent($dataRow, $defaults, $imageData)
     {
-        return $this->getData()->parent->parent->getChildComponent('-image');
-    }
-
-    private function _getDataRow()
-    {
-        return $this->getData()->parent->getComponent()->getRow();
-    }
-
-    private function _getVcardContent()
-    {
-        $dataRow = $this->_getDataRow();
-        $defaults = $this->_getSetting('defaultVcardValues');
-
         $lines = array();
         $lines[] = 'BEGIN:VCARD';
         $lines[] = 'VERSION:2.1';
-        if (!empty($dataRow->lastname) || !empty($dataRow->firstname)) {
-            $lines[] = 'N:'.$dataRow->lastname.';'.$dataRow->firstname.';;;';
+        if (!empty($dataRow->title) || !empty($dataRow->lastname) || !empty($dataRow->firstname)) {
+            // reihenfolge: nachname, vorname, weitere vornamen, titel vor name, titel nach name
+            $lines[] = 'N:'.$dataRow->lastname.';'.$dataRow->firstname.';;'.$dataRow->title.';';
         }
         if (!empty($dataRow->lastname) || !empty($dataRow->firstname)) {
             $lines[] = 'FN:'.$dataRow->firstname.' '.$dataRow->lastname;
         }
         if (isset($defaults['ORG'])) {
             $lines[] = 'ORG:'.$defaults['ORG'];
+        }
+        if (!empty($dataRow->working_position)) {
+            $lines[] = 'ROLE:'.$dataRow->working_position;
         }
         if (!empty($dataRow->phone)) {
             $lines[] = 'TEL;PREF;WORK;VOICE:'.$dataRow->phone;
@@ -71,7 +96,7 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Component extends Vpc_Abstract
         if (isset($defaults['ADR;WORK'])) {
             $lines[] = 'ADR;WORK;;ENCODING=QUOTED-PRINTABLE:'.Zend_Mime::encodeQuotedPrintable($defaults['ADR;WORK']);
         }
-        $imageData = $this->_getVcardImageData();
+        
         if ($imageData && $imageData->hasContent()) {
             $data = call_user_func_array(
                 array($imageData->componentClass, 'getMediaOutput'),

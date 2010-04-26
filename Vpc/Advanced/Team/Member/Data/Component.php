@@ -35,6 +35,9 @@ class Vpc_Advanced_Team_Member_Data_Component extends Vpc_Abstract
         $ret['labelSeparator'] = $this->_getSetting('labelSeparator');
         $ret['showLabels'] = $this->_getSetting('showLabels');
         $ret['vcard'] = $this->getData()->getChildComponent('_vcard');
+
+        $ret['workingPosition'] = $ret['row']->working_position;
+
         return $ret;
     }
 
