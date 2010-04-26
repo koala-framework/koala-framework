@@ -12,9 +12,22 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         parent::preDispatch();
     }
 
+    private function _eventuallyConvertToGitAndRestart()
+    {
+        if (!file_exists('.git')) {
+            $this->_convertToGit();
+
+            //nach git konvertierung script nochmal neu starten, da der VPS_PATH sich geändert haben kann
+            $argv = $_SERVER['argv'];
+            unset($argv[0]);
+            passthru('php bootstrap.php '.implode(' ', $argv));
+            exit;
+        }
+    }
+
     public function checkoutStagingAction()
     {
-        if (!file_exists('.git')) $this->_convertToGit();
+        $this->_eventuallyConvertToGitAndRestart();
 
         Vps_Util_Git::vps()->fetch();
         Vps_Util_Git::web()->fetch();
@@ -27,7 +40,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
     public function checkoutMasterAction()
     {
-        if (!file_exists('.git')) $this->_convertToGit();
+        $this->_eventuallyConvertToGitAndRestart();
 
         Vps_Util_Git::vps()->fetch();
         Vps_Util_Git::web()->fetch();
@@ -40,7 +53,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
     public function checkoutProductionAction()
     {
-        if (!file_exists('.git')) $this->_convertToGit();
+        $this->_eventuallyConvertToGitAndRestart();
 
         Vps_Util_Git::vps()->fetch();
         Vps_Util_Git::web()->fetch();
@@ -163,7 +176,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
-        echo "git stash";
+        $cmd = "git stash";
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
@@ -171,7 +184,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
-        echo "git stash pop";
+        $cmd = "git stash pop";
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
     }
