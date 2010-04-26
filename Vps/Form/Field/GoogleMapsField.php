@@ -10,6 +10,6 @@ class Vps_Form_Field_GoogleMapsField extends Vps_Form_Field_SimpleAbstract
     protected function _addValidators()
     {
         parent::_addValidators();
-        $this->addValidator(new Zend_Validate_Regex("#^(()|([0-9]+.[0-9]*;[0-9]+.[0-9]*))$#"));
+        $this->addValidator(new Zend_Validate_Regex("#^(()|(-?[0-9]+\.[0-9]*;-?[0-9]+\.[0-9]*))$#"));
     }
 }
