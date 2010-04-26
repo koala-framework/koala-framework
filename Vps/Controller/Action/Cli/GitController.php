@@ -160,34 +160,6 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
-        $cmd = "svn propget svn:ignore --recursive --xml";
-        echo "$cmd\n";
-        $xml = new SimpleXMLElement(shell_exec($cmd));
-        foreach ($xml->target as $target) {
-            $target['path'];
-            $svnIgnore = '';
-            foreach ($target->property as $property) {
-                if ($property['name'] == 'svn:ignore') {
-                    $svnIgnore = (string)$property;
-                }
-            }
-            if ($target['path'] == '') $target['path'] = '.';
-            if ($target['path'] == '.') $svnIgnore .= "\nvps-lib";
-            if (!file_exists($target['path'])) {
-                mkdir($target['path']);
-                $cmd = 'git add '.$target['path'];
-                echo "$cmd\n";
-                $this->_systemCheckRet($cmd);
-            }
-            if (!file_exists($target['path'].'/.gitignore')) {
-                echo "writing {$target['path']}/.gitignore\n";
-                file_put_contents($target['path'].'/.gitignore', $svnIgnore);
-                $cmd = 'git add -f '.$target['path']."/.gitignore";
-                echo "$cmd\n";
-                $this->_systemCheckRet($cmd);
-            }
-        }
-
         $cmd = "find -name .svn | xargs rm -rf";
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
