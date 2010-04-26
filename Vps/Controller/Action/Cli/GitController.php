@@ -103,7 +103,10 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
                 $cmd = "git checkout ".$branch;
                 echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
+
                 chdir('..');
+
+                copy(VPS_PATH.'/include_path', 'vps-lib/include_path');
 
                 unlink('application/include_path');
             }
@@ -140,10 +143,6 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             $cmd = "git branch --track $branch origin/$branch";
             echo "$cmd\n";
             $this->_systemCheckRet($cmd);
-
-            $cmd = "git checkout ".$branch;
-            echo "$cmd\n";
-            $this->_systemCheckRet($cmd);
         }
 
         $cmd = "git checkout latest-svn-".($branch ? $branch : 'trunk');
@@ -161,6 +160,18 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         $this->_systemCheckRet($cmd);
 
         $cmd = "find -name .svn | xargs rm -rf";
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+
+        echo "git stash";
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+
+        $cmd = "git checkout ".$branch;
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+
+        echo "git stash pop";
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
     }
