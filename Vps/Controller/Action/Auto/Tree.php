@@ -13,23 +13,27 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         $this->_saveSessionNodeOpened($parentId, true);
         $this->_saveNodeOpened();
 
-        if ($parentId) {
-            $parentRow = $this->_model->getRow($parentId);
+        if ($this->_getParam('searchValue') != '') {
+            $this->view->nodes = $this->_searchNodes($this->_getParam('searchValue'));
         } else {
-            $parentRow = null;
-        }
-        $rows = $this->_fetchData($parentRow);
-        $nodes = array();
-        foreach ($rows as $row) {
-            $data = $this->_formatNode($row);
-            foreach ($data as $k=>$i) {
-                if ($i instanceof Vps_Asset) {
-                    $data[$k] = $i->__toString();
-                }
+            if ($parentId) {
+                $parentRow = $this->_model->getRow($parentId);
+            } else {
+                $parentRow = null;
             }
-            $nodes[]= $data;
+            $rows = $this->_fetchData($parentRow);
+            $nodes = array();
+            foreach ($rows as $row) {
+                $data = $this->_formatNode($row);
+                foreach ($data as $k=>$i) {
+                    if ($i instanceof Vps_Asset) {
+                        $data[$k] = $i->__toString();
+                    }
+                }
+                $nodes[]= $data;
+            }
+            $this->view->nodes = $nodes;
         }
-        $this->view->nodes = $nodes;
     }
 
     protected function _formatNodes($parentId = null)

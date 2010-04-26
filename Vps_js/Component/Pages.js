@@ -34,9 +34,17 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             minSize     : 200,
             maxSize     : 600,
             autoScroll: true,
-            tbar: [this.pageButton, '->']
+            tbar: []
         });
-        this.treePanel.getTopToolbar().add(this.treePanel.getAction('reload'));
+        
+        var tbar = this.treePanel.getTopToolbar();
+        tbar.add(this.pageButton);
+        tbar.add('|');
+        tbar.add(trlVps('Search'));
+        tbar.add(this.treePanel.searchField);
+        tbar.add('->');
+        tbar.add(this.treePanel.getAction('reload'));
+        
         this.treePanel.onMoved = function (response) {
             this.tree.getRootNode().reload();
         };

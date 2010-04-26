@@ -6,6 +6,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     protected $_buttons = array();
     protected $_hasPosition = true;
     protected $_modelName = 'Vps_Component_Model';
+    protected $_searchFields = array('filename', 'name');
 
     private $_componentConfigs = array();
 
@@ -67,6 +68,13 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
         $data['editComponents'] = $ec;
         return $data;
+    }
+
+    protected function _getParentId($row)
+    {
+        $parent = $row->parent;
+        if (!$parent) return null;
+        return $parent->componentId;
     }
 
     private function _formatEditComponents($componentClass, $dbId, $configType)
