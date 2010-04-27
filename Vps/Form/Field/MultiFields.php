@@ -199,7 +199,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             }
         }
 
-        $fieldPostData = $postData[$this->getFieldName()];
+        $fieldPostData = array();
+        if (isset($postData[$this->getFieldName()])) {
+            $fieldPostData = $postData[$this->getFieldName()];
+        }
+
 
         $postData[$this->getFieldName()] = array(
             'save' => array(),
