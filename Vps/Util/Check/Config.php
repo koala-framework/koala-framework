@@ -28,6 +28,9 @@ class Vps_Util_Check_Config
         $checks['pdo_mysql'] = array(
             'name' => 'pdo_mysql Php extension'
         );
+        $checks['system'] = array(
+            'name' => 'executing system commands'
+        );
         $checks['log_write'] = array(
             'name' => 'log_write permissions'
         );
@@ -149,6 +152,14 @@ class Vps_Util_Check_Config
     {
         if (!extension_loaded('pdo_mysql')) {
             throw new Vps_Exception("Extension 'pdo_mysql' is not loaded");
+        }
+    }
+
+    private static function _system()
+    {
+        $out = shell_exec("ls");
+        if (!$out) {
+            throw new Vps_Exception("executing 'ls' returned nothing");
         }
     }
 
