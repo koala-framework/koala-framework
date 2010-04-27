@@ -1,4 +1,5 @@
 <div class="<?=$this->cssClass?>">
+    <? if ($this->product) { ?>
     <? if ($this->product->getItem()->MediumImage) { ?>
         <img class="cover" src="<?=$this->product->getItem()->MediumImage->Url->__toString()?>" width="<?=$this->product->getItem()->MediumImage->Width?>" height="<?=$this->product->getItem()->MediumImage->Height?>" alt="" />
     <? } ?>
@@ -15,4 +16,5 @@
         <? } ?></p>
     <? } ?>
     <a class="order" href="<?=$this->product->detailPageURL?>" rel="popup_blank"><?=trlVps('order now at amazon')?></a>
+    <? } ?>
 </div>
