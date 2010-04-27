@@ -17,9 +17,17 @@ class Vpc_Advanced_Amazon_Product_Component extends Vpc_Abstract
         $select = new Vps_Model_Select();
         $select->whereEquals('asin', $this->getRow()->asin);
         $select->whereEquals('AssociateTag', $this->_getSetting('associateTag'));
-        $ret['product'] = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products')
-            ->getRow($select);
+        try {
+            $ret['product'] = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products')
+                ->getRow($select);
+        } catch (Zend_Service_Exception $e) {
+            $ret['product'] = null;
+        }
         return $ret;
     }
 
+    public function getViewCacheLifetime()
+    {
+        return 24*60*60;
+    }
 }
