@@ -51,28 +51,33 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     {
         $id = $proxiedRow->getInternalId();
         if (!isset($this->_rows[$id])) {
-            $exprValues = array();
-            if ($this->_exprs) {
-                $r = $proxiedRow;
-                while ($r instanceof Vps_Model_Proxy_Row) {
-                    $r = $r->getProxiedRow();
-                }
-                if ($r instanceof Vps_Model_Db_Row) {
-                    $r = $r->getRow();
-                    foreach (array_keys($this->_exprs) as $k) {
-                        if (isset($r->$k)) {
-                            $exprValues[$k] = $r->$k;
-                        }
-                    }
-                }
-            }
             $this->_rows[$id] = new $this->_rowClass(array(
                 'row' => $proxiedRow,
                 'model' => $this,
-                'exprValues' => $exprValues
+                'exprValues' => $this->_getExprValues($proxiedRow)
             ));
         }
         return $this->_rows[$id];
+    }
+
+    protected function _getExprValues($proxiedRow)
+    {
+        $exprValues = array();
+        if ($this->_exprs) {
+            $r = $proxiedRow;
+            while ($r instanceof Vps_Model_Proxy_Row) {
+                $r = $r->getProxiedRow();
+            }
+            if ($r instanceof Vps_Model_Db_Row) {
+                $r = $r->getRow();
+                foreach (array_keys($this->_exprs) as $k) {
+                    if (isset($r->$k)) {
+                        $exprValues[$k] = $r->$k;
+                    }
+                }
+            }
+        }
+        return $exprValues;
     }
 
     public function getPrimaryKey()
