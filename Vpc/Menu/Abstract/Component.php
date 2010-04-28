@@ -64,9 +64,9 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return null;
     }
 
-    public function getMenuData($parentData = null)
+    public function getMenuData($parentData = null, $select = array())
     {
-        return $this->_getMenuData($parentData);
+        return $this->_getMenuData($parentData, $select);
     }
 
     public function getPageComponent($parentData = null)
@@ -116,12 +116,13 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    protected function _getMenuData($parentData = null)
+    protected function _getMenuData($parentData = null, $select = array())
     {
-        $constraints = array('showInMenu' => true);
+        if (is_array($select)) $select = new Vps_Component_Select($select);
+        $select->whereShowInMenu(true);
         $ret = array();
         $pageComponent = $this->getPageComponent($parentData);
-        if ($pageComponent) $ret = $pageComponent->getChildPages($constraints);
+        if ($pageComponent) $ret = $pageComponent->getChildPages($select);
         $currentPageIds = array();
         $currentPages = array_reverse($this->_getCurrentPages());
         foreach ($currentPages as $page) {

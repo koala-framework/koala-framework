@@ -4,7 +4,7 @@ abstract class Vpc_Menu_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret = array_merge($ret, $this->getData()->chained->getComponent()->getTemplateVars());
+        //$ret = array_merge($ret, $this->getData()->chained->getComponent()->getTemplateVars());
         return $ret;
     }
 
