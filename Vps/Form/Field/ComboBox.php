@@ -5,6 +5,7 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('combobox');
+        $this->setEmptyText(trlVpsStatic('no selection'));
     }
 
     protected function _addValidators()
@@ -74,6 +75,13 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
             }
             $this->setProperty('values', $values);
         }
+    }
+
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'emptyText';
+        return $ret;
     }
 
     protected function _getStoreData()

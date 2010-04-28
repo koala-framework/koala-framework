@@ -47,8 +47,7 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         //      => sollte sich gleich verhalten.
         $store = $this->_getStoreData();
         if ($this->getShowNoSelection()) {
-            $emptyText = $this->getEmptyText();
-            if (!$emptyText) $emptyText = '('.trlVps('no selection').')';
+            $emptyText = '('.$this->getEmptyText().')';
             array_unshift($store['data'], array('', $emptyText));
         }
         foreach ($store['data'] as $i) {
@@ -59,13 +58,6 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         $ret['html'] .= "</select>\n";
         if ($this->getSubmitOnChange())
             $ret['html'] .= '<input type="submit" value="»" />';
-        return $ret;
-    }
-
-    protected function _getTrlProperties()
-    {
-        $ret = parent::_getTrlProperties();
-        $ret[] = 'emptyText';
         return $ret;
     }
 
