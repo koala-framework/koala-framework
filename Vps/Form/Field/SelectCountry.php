@@ -1,5 +1,4 @@
 <?php
-//TODO Vps_Util_Model_Countries verwenden statt der datei selbst
 class Vps_Form_Field_SelectCountry extends Vps_Form_Field_Select
 {
     public function __construct($field_name = null, $field_label = null)
@@ -8,13 +7,17 @@ class Vps_Form_Field_SelectCountry extends Vps_Form_Field_Select
 
         $this->setEditable(true);
         $this->setForceSelection(true);
+    }
 
-        $file = Vps_Component_Abstract_Admin::getComponentFile($this, 'countries', 'xml');
-        $xml = simplexml_load_file($file);
-        $data = array();
-        foreach ($xml->country as $country) {
-            $data[] = array((string)$country->iso2, (string)$country->name);
+    public function trlStaticExecute($language = null)
+    {
+        parent::trlStaticExecute($language);
+
+        $values = array();
+        $nameColumn = 'name_'.$language;
+        foreach (Vps_Model_Abstract::getInstance('Vps_Util_Model_Countries')->getRows() as $row) {
+            $values[$row->id] = $row->$nameColumn;
         }
-        $this->setValues($data);
+        $this->setValues($values);
     }
 }
