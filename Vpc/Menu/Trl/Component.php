@@ -5,7 +5,8 @@ class Vpc_Menu_Trl_Component extends Vpc_Menu_Abstract_Trl_Component
     {
         $ret = parent::getTemplateVars();
         $menu = array();
-        foreach ($ret['menu'] as $m) {
+        $masterMenu = $this->getData()->chained->getComponent()->getMenuData(null, array('ignoreVisible'=>true));
+        foreach ($masterMenu as $m) {
             $component = $this->_getChainedComponent($m);
             if ($component) $menu[] = $component;
         }
