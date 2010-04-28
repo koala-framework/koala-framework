@@ -488,16 +488,22 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     public function backupDbAction()
     {
-        echo "erstelle backup...\n";
-        $dumpname = $this->_backupDb(Vps_Util_ClearCache::getInstance()->getDbCacheTables());
-        if ($dumpname) {
-            $this->_systemCheckRet("bzip2 --fast $dumpname");
-            echo $dumpname.".bz2";
-            echo "\n";
+        exec('which mysqldump', $out, $ret);
+        if ($ret) {
+            echo "mysqldump nicht gefunden, ES WIRD KEIN DB BACKUP ERSTELLT!!\n";
         } else {
-            echo "uebersprungen...\n";
+            echo "erstelle backup...\n";
+            $dumpname = $this->_backupDb(Vps_Util_ClearCache::getInstance()->getDbCacheTables());
+            if ($dumpname) {
+                $this->_systemCheckRet("bzip2 --fast $dumpname");
+                echo $dumpname.".bz2";
+                echo "\n";
+            } else {
+                echo "uebersprungen...\n";
+            }
+            $this->_helper->viewRenderer->setNoRender(true);
         }
-        $this->_helper->viewRenderer->setNoRender(true);
+
     }
 
     private function _getDumpCommand($dbConfig, array $cacheTables)
