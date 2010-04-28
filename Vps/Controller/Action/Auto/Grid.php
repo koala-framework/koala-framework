@@ -518,6 +518,19 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected function _afterDelete()
     {
     }
+    
+    protected function _getRowById($id)
+    {
+        if ($id) {
+            $row = $this->_model->find($id)->current();
+        } else {
+            if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
+                throw new Vps_Exception("Add is not allowed.");
+            }
+            $row = $this->_model->createRow();
+        }
+        return $row;
+    }
 
     public function jsonSaveAction()
     {
@@ -533,14 +546,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         Zend_Registry::get('db')->beginTransaction();
         foreach ($data as $submitRow) {
             $id = $submitRow[$this->_primaryKey];
-            if ($id) {
-                $row = $this->_model->find($id)->current();
-            } else {
-                if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
-                    throw new Vps_Exception("Add is not allowed.");
-                }
-                $row = $this->_model->createRow();
-            }
+            $row = $this->_getRowById($id);
             if (!$row) {
                 throw new Vps_Exception("Can't find row with id '$id'.");
             }
