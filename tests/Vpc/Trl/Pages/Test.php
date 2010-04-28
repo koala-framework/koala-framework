@@ -65,4 +65,21 @@ class Vpc_Trl_Pages_Test extends Vpc_TestAbstract
         $this->assertEquals($c->parent->componentId, '1');
         $this->assertEquals($c->parent->parent->componentId, 'root-master-main');
     }
+
+    public function testInvisibleInMaster()
+    {
+        $domain = Zend_Registry::get('config')->server->domain;
+
+        //de ist nicht visible
+        //$this->assertFalse(!!$this->_root->getComponentById('3'));
+        //$this->assertFalse(!!$this->_root->getPageByUrl('http://'.$domain.'/de/home/test2', 'de'));
+
+        //en ist visible
+        //$this->assertTrue(!!$this->_root->getComponentById('root-en-main_3'));
+
+        $c = $this->_root->getPageByUrl('http://'.$domain.'/en/home_en/test2_en', 'en');
+        $this->assertEquals($c->componentId, 'root-en-main_3');
+        $this->assertEquals($c->render(), 'test \'root-en-main_3\'');
+
+    }
 }
