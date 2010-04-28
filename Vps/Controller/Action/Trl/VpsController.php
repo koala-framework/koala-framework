@@ -54,7 +54,15 @@ class Vps_Controller_Action_Trl_VpsController extends Vps_Controller_Action_Auto
             }
             $langs = array_values(array_unique($langs));
         }
-        return $langs;
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            //TODO besser wär getComponentByFlag('hasLanguage') aber das gibt snicht
+            $lngs = Vps_Component_Data_Root::getInstance()
+                ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component', array('ignoreVisible'=>true)); 
+            foreach ($lngs as $c) {
+                $langs[] = $c->getComponent()->getLanguage();
+            }
+        }
+        return array_unique($langs);
     }
 
     public function indexAction ()
