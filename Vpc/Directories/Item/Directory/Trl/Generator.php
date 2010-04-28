@@ -48,21 +48,27 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         $masterCC = Vpc_Abstract::getSetting($this->_class, 'masterComponentClass');
         $masterGen = Vpc_Abstract::getSetting($masterCC, 'generators');
         $detailGen = $masterGen['detail'];
-        if (isset($detailGen['nameColumn'])) {
-            $ret['name'] = $ret['row']->{$detailGen['nameColumn']};
-        } else {
-            $ret['name'] = $ret['chained']->name;
+        if (isset($ret['chained']->name)) {
+            if (isset($detailGen['nameColumn'])) {
+                $ret['name'] = $ret['row']->{$detailGen['nameColumn']};
+            } else {
+                $ret['name'] = $ret['chained']->name;
+            }
         }
 
-        if (isset($detailGen['filenameColumn'])) {
-            $fn = $ret['row']->{$detailGen['filenameColumn']};
-        } else {
-            $fn = $ret['name'];
+        if (isset($ret['chained']->filename)) {
+            if (isset($detailGen['filenameColumn'])) {
+                $fn = $ret['row']->{$detailGen['filenameColumn']};
+            } else if (isset($ret['name'])) {
+                $fn = $ret['name'];
+            } else {
+                $fn = '';
+            }
+            if (!isset($detailGen['filenameColumn']) || !$detailGen['filenameColumn']) {
+                $ret['filename'] = $row->id.'_';
+            }
+            $ret['filename'] .= Vps_Filter::filterStatic($fn, 'Ascii');
         }
-        if (!isset($detailGen['filenameColumn']) || !$detailGen['filenameColumn']) {
-            $ret['filename'] = $row->id.'_';
-        }
-        $ret['filename'] .= Vps_Filter::filterStatic($fn, 'Ascii');
         return $ret;
     }
 
