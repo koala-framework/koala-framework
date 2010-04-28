@@ -194,6 +194,9 @@ Vps.GoogleMap.Map.prototype = {
         if (parseInt(this.config.overview)) {
             this.gmap.addControl(new GOverviewMapControl());
         }
+        if (typeof this.config.zoom_scrollwheel == 'undefined' || this.config.zoom_scrollwheel) {
+            this.gmap.enableScrollWheelZoom();
+        }
 
         if (typeof this.config.zoom == 'object'
             && this.config.zoom[0] && this.config.zoom[1]
