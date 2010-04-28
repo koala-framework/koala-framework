@@ -36,4 +36,13 @@ class Vpc_Directories_Item_Directory_Trl_Controller extends Vps_Controller_Actio
         $ret->whereEquals('component_id', $this->_getParam('componentId'));
         return $ret;
     }
+
+    protected function _getRowById($id)
+    {
+        if (!$id) return null;
+        $s = new Vps_Model_Select();
+        $s->whereEquals($this->_model->getPrimaryKey(), $id);
+        $s->whereEquals('component_id', $this->_getParam('componentId'));
+        return $this->_model->getRow($s);
+    }
 }
