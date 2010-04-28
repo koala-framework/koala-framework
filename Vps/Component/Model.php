@@ -84,14 +84,6 @@ class Vps_Component_Model extends Vps_Model_Abstract
         ));
     }
 
-    public function getRow($id)
-    {
-        $select = new Vps_Model_Select();
-        $select->whereEquals('componentId', $id);
-        $rows = $this->getRows($select);
-        return $rows->current();
-    }
-
     public function getRowByDataKey($component)
     {
         $key = $component->componentId;
