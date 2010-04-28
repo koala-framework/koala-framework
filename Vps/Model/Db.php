@@ -389,6 +389,18 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
             }
             return implode(" AND ", $sqlExpressions);
+        } else if ($expr instanceof Vps_Model_Select_Expr_Add) {
+            $sqlExpressions = array();
+            foreach ($expr->getExpressions() as $expression) {
+                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
+            }
+            return implode(" + ", $sqlExpressions);
+        } else if ($expr instanceof Vps_Model_Select_Expr_Subtract) {
+            $sqlExpressions = array();
+            foreach ($expr->getExpressions() as $expression) {
+                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
+            }
+            return implode(" - ", $sqlExpressions);
         } else if ($expr instanceof Vps_Model_Select_Expr_Concat) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {

@@ -56,6 +56,7 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
         }, this);
 
         this.saveBox.store.on('beforeload', function() {
+            this.saveBox.store.baseParams[this.saveBox.queryParam] = null;
             this.saveBox.store.baseParams[this.saveBox.filterField] = this.filterBox.getValue();
         }, this);
 
