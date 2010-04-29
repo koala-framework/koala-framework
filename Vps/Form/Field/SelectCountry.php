@@ -15,7 +15,9 @@ class Vps_Form_Field_SelectCountry extends Vps_Form_Field_Select
 
         $values = array();
         $nameColumn = 'name_'.$language;
-        foreach (Vps_Model_Abstract::getInstance('Vps_Util_Model_Countries')->getRows() as $row) {
+        $s = new Vps_Model_Select();
+        $s->order($nameColumn);
+        foreach (Vps_Model_Abstract::getInstance('Vps_Util_Model_Countries')->getRows($s) as $row) {
             $values[$row->id] = $row->$nameColumn;
         }
         $this->setValues($values);
