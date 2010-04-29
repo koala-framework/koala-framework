@@ -13,7 +13,7 @@ class Vpc_Advanced_SocialBookmarks_Inherit_Component extends Vpc_Abstract
         return $ret;
     }
 
-    private function _getBookmarksComponent()
+    protected function _getBookmarksComponent()
     {
         $d = $this->getData()->getParentPseudoPageOrRoot();
         while ($d) {
