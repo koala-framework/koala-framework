@@ -501,9 +501,8 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             } else {
                 echo "uebersprungen...\n";
             }
-            $this->_helper->viewRenderer->setNoRender(true);
         }
-
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 
     private function _getDumpCommand($dbConfig, array $cacheTables)
