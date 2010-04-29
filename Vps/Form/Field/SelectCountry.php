@@ -15,11 +15,10 @@ class Vps_Form_Field_SelectCountry extends Vps_Form_Field_Select
 
         $values = array();
         $nameColumn = 'name_'.$language;
-        $s = new Vps_Model_Select();
-        $s->order($nameColumn);
-        foreach (Vps_Model_Abstract::getInstance('Vps_Util_Model_Countries')->getRows($s) as $row) {
+        foreach (Vps_Model_Abstract::getInstance('Vps_Util_Model_Countries')->getRows() as $row) {
             $values[$row->id] = $row->$nameColumn;
         }
+        asort($values, SORT_LOCALE_STRING);
         $this->setValues($values);
     }
 }
