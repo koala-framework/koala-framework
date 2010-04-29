@@ -55,7 +55,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             $testConfig = false;
         }
         if ($testConfig) {
-            if ($testConfig->server->dir == $prodConfig->server->dir) {
+            if ($testConfig->server->dir == $prodConfig->server->dir && $testConfig->server->host == $prodConfig->server->host) {
                 throw new Vps_ClientException("Test-Server not configured, same dir as production");
             }
         }
