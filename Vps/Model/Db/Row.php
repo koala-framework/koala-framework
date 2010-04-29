@@ -54,7 +54,9 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
             if (is_array($value) || is_object($value)) {
                 $value = 'vpsSerialized'.serialize($value);
             }
-            if ($this->$name !== $value) {
+            // scheis php... bei $this->$name sucht er nur nach einem property
+            // und vergisst, dass es __get() auch gibt
+            if ($this->__get($name) !== $value) {
                 $this->_dirty = true;
             }
             $this->_row->$n = $value;
