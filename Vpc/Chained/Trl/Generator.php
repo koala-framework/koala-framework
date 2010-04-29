@@ -113,7 +113,7 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 
     protected function _formatConfig($parentData, $row)
     {
-        $componentClass = $this->_settings['masterComponentsMap'][$row->componentClass];
+        $componentClass = $this->_settings['component'][$this->_settings['masterComponentsMap'][$row->componentClass]];
         $id = $this->_getIdFromRow($row);
         $data = array(
             'componentId' => $parentData->componentId.$this->getIdSeparator().$id,
