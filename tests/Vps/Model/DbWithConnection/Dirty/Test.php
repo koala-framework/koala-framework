@@ -14,7 +14,8 @@ class Vps_Model_DbWithConnection_Dirty_Test extends PHPUnit_Extensions_OutputTes
         $sql = "CREATE TABLE $this->_tableName (
             `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
             `test1` VARCHAR( 200 ) character set utf8 NOT NULL,
-            `test2` VARCHAR( 200 ) character set utf8 NOT NULL
+            `test2` VARCHAR( 200 ) character set utf8 NOT NULL,
+            `test3` INT(10) UNSIGNED NULL
         ) ENGINE = INNODB DEFAULT CHARSET=utf8";
         Vps_Registry::get('db')->query($sql);
         $m = new Vps_Model_Db(array(
@@ -23,6 +24,7 @@ class Vps_Model_DbWithConnection_Dirty_Test extends PHPUnit_Extensions_OutputTes
         $r = $m->createRow();
         $r->test1 = 'foo';
         $r->test2 = 'bar';
+        $r->test3 = null;
         $r->save();
     }
 
@@ -86,6 +88,13 @@ class Vps_Model_DbWithConnection_Dirty_Test extends PHPUnit_Extensions_OutputTes
 
         $row = $model->getRow(1);
         $row->test1 = 'blubb';
+        $row->save();
+
+        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+
+        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
+        $row = $model->getRow(1);
+        $row->test3 = '77';
         $row->save();
 
         $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
