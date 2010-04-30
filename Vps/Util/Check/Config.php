@@ -48,6 +48,9 @@ class Vps_Util_Check_Config
         $checks['memcache_connection'] = array(
             'name' => 'memcache connection'
         );
+        $checks['memcache_connection2'] = array(
+            'name' => 'memcache connection2'
+        );
         $checks['db_connection'] = array(
             'name' => 'db connection'
         );
@@ -176,6 +179,23 @@ class Vps_Util_Check_Config
             throw new Vps_Exception("Memcache doesn't return the saved value correctly");
         }
     }
+
+    private static function _memcache_connection2()
+    {
+        $memcache = new Memcache;
+        $memcacheSettings = Vps_Registry::get('config')->server->memcache;
+        if (!$memcache->addServer($memcacheSettings->host, $memcacheSettings->port, true, 1, 1, 1)) {
+            throw new Vps_Exception("addServer returned false");
+        }
+        $value = uniqid();
+        if (!$memcache->set('check-config-test', $value)) {
+            throw new Vps_Exception("set returned false");
+        }
+        if ($memcache->get('check-config-test') != $value) {
+            throw new Vps_Exception("get returned a different value");
+        }
+    }
+
     private static function _db_connection()
     {
         Vps_Registry::get('db')->query("SHOW TABLES")->fetchAll();
