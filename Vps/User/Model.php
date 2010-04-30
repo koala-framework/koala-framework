@@ -32,7 +32,7 @@ class Vps_User_Model extends Vps_Model_Proxy
 
     public static function version()
     {
-        return Zend_Registry::get('config')->application->vps->version;
+        return 1;
     }
 
     public function getMailClass()
