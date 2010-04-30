@@ -34,7 +34,6 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
                 $this->_form = new Vps_Form();
             }
         }
-        $this->_form->trlStaticExecute();
 
         foreach ($this->_fields as $k=>$field) {
             if (!isset($field['type'])) throw new Vps_Exception("no type for field no $k specified");
@@ -65,6 +64,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
         $this->_initFields();
         $this->_form->initFields();
+        $this->_form->trlStaticExecute();
 
         if (!$this->_form->getId()) {
             if (is_array($this->_form->getPrimaryKey())) {
