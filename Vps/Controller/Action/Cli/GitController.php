@@ -101,7 +101,12 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             $this->_convertWcToGit('vps', $branch);
         } else {
             if (!file_exists('vps-lib')) {
-                $cmd = "git clone ssh://vivid@git.vivid-planet.com/git/vps vps-lib";
+                if (`hostname` == 'vivid') {
+                    $gitUrl = "ssh://git.vivid-planet.com/git/vps";
+                } else {
+                    $gitUrl = "ssh://vivid@git.vivid-planet.com/git/vps";
+                }
+                $cmd = "git clone $gitUrl vps-lib";
                 echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
 
@@ -139,26 +144,32 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         $this->_systemCheckRet("svn up");
 
         if (!$branch) {
+            $branch = 'master';
             $xml = simplexml_load_string(`svn info --xml`);
             if (preg_match('#branches/[^/]+/([^/]+)$#', (string)$xml->entry->url, $m)) {
                 $branch = $m[1];
             }
         }
+        if ($branch == 'trunk') $branch = 'master';
 
-        $gitUrl = "ssh://vivid@git.vivid-planet.com/git/$id";
+        if (`hostname` == 'vivid') {
+            $gitUrl = "ssh://git.vivid-planet.com/git/$id";
+        } else {
+            $gitUrl = "ssh://vivid@git.vivid-planet.com/git/$id";
+        }
 
         $cmd = "git clone $gitUrl gitwc";
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
         chdir("gitwc");
-        if ($branch && $branch != 'trunk') {
+        if ($branch && $branch != 'master') {
             $cmd = "git branch --track $branch origin/$branch";
             echo "$cmd\n";
             $this->_systemCheckRet($cmd);
         }
 
-        $cmd = "git checkout latest-svn-".($branch ? $branch : 'trunk');
+        $cmd = "git checkout latest-svn-".($branch=='master' ? 'trunk' : $branch);
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
@@ -167,6 +178,12 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         $cmd = "mv gitwc/.git .git";
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
+
+        chdir("gitwc");
+        $cmd = "find -name .gitignore | xargs -t -I xxx mv xxx ../xxx";
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+        chdir("..");
 
         $cmd = "rm -rf gitwc";
         echo "$cmd\n";
