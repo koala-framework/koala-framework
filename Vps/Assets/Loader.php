@@ -245,7 +245,6 @@ class Vps_Assets_Loader
                             }
                         }
 
-                        $version = $this->_getConfig()->application->version;
                         $cacheData['contents'] = str_replace(
                             '{$application.maxAssetsMTime}',
                             $this->getDependencies()->getMaxFileMTime(),
