@@ -24,16 +24,17 @@ class Vps_Form_Field_DateField extends Vps_Form_Field_SimpleAbstract
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
-        if ($ret == trlVps('yyyy-mm-dd')) $ret = null;
-        if ($ret == '') $ret = null;
-        if ($ret) {
-            $ret = str_replace('"', '', $ret);
-            $date = new Vps_Date($ret);
-            $ret = $date->get(Zend_Date::YEAR)
-                .'-'.$date->get(Zend_Date::MONTH)
-                .'-'.$date->get(Zend_Date::DAY);
+        if ($ret == trlVps('yyyy-mm-dd')) return null;
+        if (!$ret) return null;
+
+        //format das von ext kommt
+        if (preg_match('#"(\d{4}-\d{2}-\d{2})T\d{2}:\d{2}:\d{2}"#', $ret, $m)) {
+            return $m[1];
         }
-        return $ret;
+
+        //format das vom frontend kommt
+        if (!strtotime($ret)) return null;
+        return date('Y-m-d', strtotime($ret));
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '')
