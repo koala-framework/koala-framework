@@ -3,6 +3,7 @@ class Vps_Util_Git
 {
     private static $_debug = false;
     private $_path;
+    private $_fetched = false;
     public function __construct($path)
     {
         $this->_path = (string)$path;
@@ -120,7 +121,10 @@ class Vps_Util_Git
 
     public function fetch()
     {
-        $this->system("fetch origin");
+        if (!$this->_fetched) {
+            $this->system("fetch origin");
+            $this->_fetched = true;
+        }
     }
 
     public function pull()
@@ -167,5 +171,37 @@ class Vps_Util_Git
             throw new Vps_Exception("Command failed: $cmd");
         }
         return $ret;
+    }
+
+    private function _getBranches($args)
+    {
+        $d = getcwd();
+        $cmd = "git branch $args";
+        chdir($this->_path);
+        if (self::$_debug) echo $cmd."\n";
+        exec($cmd, $ret, $retVal);
+        chdir($d);
+        if ($retVal) {
+            throw new Vps_Exception("Command failed: $cmd");
+        }
+        foreach ($ret as &$i) {
+            $i = trim(trim(trim($i), '*'));
+        }
+        return $ret;
+    }
+
+    public function getBranchesNotMerged($args = '-a')
+    {
+         return $this->_getBranches($args.' --no-merged');
+    }
+
+    public function getBranchesContains($commit, $args = '-a')
+    {
+        return $this->_getBranches($args.' --contains '.$commit);
+    }
+
+    public function getActiveBranchContains($commit)
+    {
+        return in_array($this->getActiveBranch(),  $this->getBranchesContains($commit, ''));
     }
 }
