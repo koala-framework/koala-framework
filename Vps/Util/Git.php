@@ -140,7 +140,6 @@ class Vps_Util_Git
         if ($ret) {
             throw new Vps_ClientException("You must not have modified files in '$this->_path'");
         }
-        //TODO GIT check if pushed
     }
 
     public function getActiveBranch()
