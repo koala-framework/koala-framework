@@ -1,6 +1,8 @@
 <?php
 /**
  * @group Assets
+ * @group slow
+ * slow weil sie den assets cache löschen
  */
 class Vps_Assets_DynamicNotInAll_Test extends PHPUnit_Framework_TestCase
 {

@@ -2,6 +2,8 @@
 /**
  * @group Assets
  * @group Assets_Component
+ * @group slow
+ * slow weil sie den assets cache löschen
  */
  class Vps_Assets_WithTextComponent_Test extends PHPUnit_Framework_TestCase
 {

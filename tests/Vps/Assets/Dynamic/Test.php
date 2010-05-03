@@ -1,6 +1,8 @@
 <?php
 /**
  * @group Assets
+ * @group slow
+ * slow weil sie den assets cache löschen
  */
 class Vps_Assets_Dynamic_Test extends PHPUnit_Framework_TestCase
 {
@@ -37,6 +39,8 @@ class Vps_Assets_Dynamic_Test extends PHPUnit_Framework_TestCase
     public function testMTimeFiles()
     {
         Vps_Assets_Cache::getInstance()->clean();
+        $loader = new Vps_Assets_Loader();
+        $loader->getDependencies()->getMaxFileMTime();
         Vps_Benchmark::enable();
         Vps_Benchmark::reset();
 
