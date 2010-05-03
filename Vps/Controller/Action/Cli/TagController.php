@@ -166,7 +166,7 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
 
     public static function getProjectName()
     {
-        if (!file_exists('.svn')) return false; //TODO GIT
+        if (!file_exists('.svn')) return false;
 
         if (preg_match("#trunk/vps-projekte/(.*)\n#", `svn info`, $m)) {
             return $m[1];
