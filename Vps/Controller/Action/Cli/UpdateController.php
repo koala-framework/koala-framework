@@ -29,7 +29,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
     public static function update($rev = false, $debug = false, $skipClearCache = false)
     {
         echo "Update\n";
-
+/*
         if (in_array('vps', Vps_Registry::get('config')->server->updateTags->toArray())) {
             if (!file_exists('.git') && Vps_Registry::get('config')->application->id=="preview2") {
                 echo "\n\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
@@ -40,7 +40,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 }
             }
         }
-
+*/
         if (!file_exists('application/update')) {
             $doneNames = array();
             foreach (Vps_Update::getUpdates(0, 9999999) as $u) {
