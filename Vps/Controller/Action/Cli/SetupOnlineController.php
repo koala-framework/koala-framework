@@ -3,7 +3,6 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
 {
     public static function getHelp()
     {
-        if (!Vps_Controller_Action_Cli_TagController::getProjectName()) return null;
         return "setup online";
     }
 
