@@ -7,11 +7,6 @@ class Vpc_News_Detail_Component extends Vpc_News_Detail_Abstract_Component
         $ret['generators']['child']['component']['image'] = 'Vpc_News_Detail_PreviewImage_Component';
         return $ret;
     }
-/*
-    public function getCategories()
-    {
-        return array();
-    }*/
 
     public static function modifyItemData(Vps_Component_Data $new)
     {
