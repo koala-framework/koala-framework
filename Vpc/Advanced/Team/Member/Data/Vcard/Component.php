@@ -23,9 +23,11 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Component extends Vpc_Abstract
     private function _getDefaultValues()
     {
         $teamComponent = $this->getData()->parent->parent->parent;
-        $setting = Vpc_Abstract::getSetting($teamComponent->componentClass, 'defaultVcardValues');
+        if (Vpc_Abstract::hasSetting($teamComponent->componentClass, 'defaultVcardValues')) {
+            $setting = Vpc_Abstract::getSetting($teamComponent->componentClass, 'defaultVcardValues');
+        }
 
-        if ($setting) {
+        if (isset($setting)) {
             return $setting;
         } else {
             return $this->_getSetting('defaultVcardValues');
