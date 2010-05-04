@@ -1,5 +1,5 @@
 <?php
-class Vpc_ListSwitch_Preview_Large_Component extends Vpc_Basic_Image_Component
+class Vpc_List_Switch_Preview_Large_Component extends Vpc_Basic_Image_Component
 {
     public static function getSettings()
     {

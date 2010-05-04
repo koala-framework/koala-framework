@@ -1,5 +1,5 @@
 <?php
-class Vpc_ListChildPages_PageNameOnly_Component extends Vpc_Abstract
+class Vpc_List_ChildPages_PageNameOnly_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {

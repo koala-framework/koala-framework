@@ -1,5 +1,5 @@
 <?php
-class Vpc_ListChildPages_Teaser_Generator extends Vps_Component_Generator_Table
+class Vpc_List_ChildPages_Teaser_Generator extends Vps_Component_Generator_Table
 {
     protected $_hasNumericIds = false;
 

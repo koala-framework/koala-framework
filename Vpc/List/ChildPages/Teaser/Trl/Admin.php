@@ -1,4 +1,4 @@
 <?php
-class Vpc_ListChildPages_Teaser_Trl_Admin extends Vpc_ListChildPages_Teaser_Admin
+class Vpc_List_ChildPages_Teaser_Trl_Admin extends Vpc_List_ChildPages_Teaser_Admin
 {
 }

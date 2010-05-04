@@ -1,5 +1,5 @@
 <?php
-class Vpc_ListChildPages_Teaser_Form extends Vps_Form_NonTableForm
+class Vpc_List_ChildPages_Teaser_Form extends Vps_Form_NonTableForm
 {
     public function __construct($name, $class)
     {

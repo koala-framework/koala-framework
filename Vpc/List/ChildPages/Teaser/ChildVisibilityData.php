@@ -1,5 +1,5 @@
 <?php
-class Vpc_ListChildPages_Teaser_ChildVisibilityData extends Vps_Data_Abstract
+class Vpc_List_ChildPages_Teaser_ChildVisibilityData extends Vps_Data_Abstract
 {
     private $_childOwnModel = null;
     private $_componentId = null;

@@ -1,10 +1,10 @@
 <?php
-class Vpc_ListChildPages_Teaser_Trl_Component extends Vpc_Chained_Trl_Component
+class Vpc_List_ChildPages_Teaser_Trl_Component extends Vpc_Chained_Trl_Component
 {
     public static function getSettings($masterClass)
     {
         $ret = parent::getSettings($masterClass);
-        $ret['generators']['child']['class'] = 'Vpc_ListChildPages_Teaser_Trl_Generator';
+        $ret['generators']['child']['class'] = 'Vpc_List_ChildPages_Teaser_Trl_Generator';
         return $ret;
     }
 
