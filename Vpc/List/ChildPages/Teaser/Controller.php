@@ -1,8 +1,8 @@
 <?php
-class Vpc_ListChildPages_Teaser_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
+class Vpc_List_ChildPages_Teaser_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
     protected $_buttons = array();
-    protected $_model = 'Vpc_ListChildPages_Teaser_Model';
+    protected $_model = 'Vpc_List_ChildPages_Teaser_Model';
     protected $_defaultOrder = array('field' => 'pos', 'direction' => 'ASC');
 
     protected function _initColumns()
@@ -13,7 +13,7 @@ class Vpc_ListChildPages_Teaser_Controller extends Vps_Controller_Action_Auto_Vp
         $this->_columns->add(new Vps_Grid_Column('pos'));
         if ($childOwnModel) {
             $this->_columns->add(new Vps_Grid_Column_Checkbox('visible', ''))
-                ->setData(new Vpc_ListChildPages_Teaser_ChildVisibilityData($childOwnModel, $this->_getParam('componentId')))
+                ->setData(new Vpc_List_ChildPages_Teaser_ChildVisibilityData($childOwnModel, $this->_getParam('componentId')))
                 ->setRenderer('booleanTickCross')
                 ->setHeaderIcon(new Vps_Asset('visible'))
                 ->setTooltip('Visibility');

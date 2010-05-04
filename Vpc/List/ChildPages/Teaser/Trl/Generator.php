@@ -1,5 +1,5 @@
 <?php
-class Vpc_ListChildPages_Teaser_Trl_Generator extends Vpc_Chained_Trl_Generator
+class Vpc_List_ChildPages_Teaser_Trl_Generator extends Vpc_Chained_Trl_Generator
 {
     protected function _createData($parentData, $row, $select)
     {

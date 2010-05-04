@@ -1,5 +1,5 @@
 <?php
-class Vpc_ListChildPages_Teaser_TeaserImage_Image_Component extends Vpc_Basic_Image_Component
+class Vpc_List_ChildPages_Teaser_TeaserImage_Image_Component extends Vpc_Basic_Image_Component
 {
     public static function getSettings()
     {

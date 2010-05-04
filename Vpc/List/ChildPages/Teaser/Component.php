@@ -1,15 +1,15 @@
 <?php
-class Vpc_ListChildPages_Teaser_Component extends Vpc_Abstract
+class Vpc_List_ChildPages_Teaser_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
 
         $ret['generators']['child'] = array(
-            'class' => 'Vpc_ListChildPages_Teaser_Generator',
-            'component' => 'Vpc_ListChildPages_Teaser_TeaserImage_Component'
+            'class' => 'Vpc_List_ChildPages_Teaser_Generator',
+            'component' => 'Vpc_List_ChildPages_Teaser_TeaserImage_Component'
         );
-        $ret['childModel'] = 'Vpc_ListChildPages_Teaser_Model';
+        $ret['childModel'] = 'Vpc_List_ChildPages_Teaser_Model';
 
         $ret['componentName'] = trlVps('List child pages');
         $ret['cssClass'] = 'webStandard';

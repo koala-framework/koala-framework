@@ -1,7 +1,7 @@
 <?php
-class Vpc_ListChildPages_Teaser_Trl_Controller extends Vpc_ListChildPages_Teaser_Controller
+class Vpc_List_ChildPages_Teaser_Trl_Controller extends Vpc_List_ChildPages_Teaser_Controller
 {
-    protected $_model = 'Vpc_ListChildPages_Teaser_Trl_AdminModel';
+    protected $_model = 'Vpc_List_ChildPages_Teaser_Trl_AdminModel';
 
     public function preDispatch()
     {

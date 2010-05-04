@@ -1,5 +1,5 @@
 <?php
-class Vpc_ListChildPages_Teaser_Trl_AdminModel extends Vps_Model_Data_Abstract
+class Vpc_List_ChildPages_Teaser_Trl_AdminModel extends Vps_Model_Data_Abstract
 {
     public function setComponentId($componentId)
     {

@@ -1,10 +1,10 @@
 <?php
-class Vpc_ListChildPages_Teaser_TeaserImage_Trl_Component extends Vpc_Abstract_Composite_Trl_Component
+class Vpc_List_ChildPages_Teaser_TeaserImage_Trl_Component extends Vpc_Abstract_Composite_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['ownModel'] = 'Vpc_ListChildPages_Teaser_TeaserImage_Model';
+        $ret['ownModel'] = 'Vpc_List_ChildPages_Teaser_TeaserImage_Model';
         return $ret;
     }
 

@@ -1,5 +1,5 @@
 <?php
-class Vpc_ListChildPages_Teaser_Model extends Vps_Model_Abstract
+class Vpc_List_ChildPages_Teaser_Model extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Model_Row_Data_Abstract';
     private $_data = array();

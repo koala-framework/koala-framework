@@ -1,5 +1,5 @@
 <?php
-class Vpc_ListChildPages_Teaser_TeaserImage_Form extends Vpc_Abstract_Form
+class Vpc_List_ChildPages_Teaser_TeaserImage_Form extends Vpc_Abstract_Form
 {
     public function __construct($name, $class, $id = null)
     {

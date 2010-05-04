@@ -1,11 +1,11 @@
 <?php
-class Vpc_ListSwitch_Preview_Component extends Vpc_Basic_Image_Component
+class Vpc_List_Switch_Preview_Component extends Vpc_Basic_Image_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['large'] =
-            'Vpc_ListSwitch_Preview_Large_Component';
+            'Vpc_List_Switch_Preview_Large_Component';
         $ret['dimensions'] = array(
             'default'=>array(
                 'width' => 100,
