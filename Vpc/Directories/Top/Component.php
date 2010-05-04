@@ -12,7 +12,7 @@ abstract class Vpc_Directories_Top_Component extends Vpc_Directories_List_Compon
     {
         $select = parent::getSelect($overrideValues);
         if (!$select) return null;
-        $select->limit($this->_getSetting('limit'));
+        if ($this->_getSetting('limit')) $select->limit($this->_getSetting('limit'));
         return $select;
     }
 }
