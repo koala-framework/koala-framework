@@ -170,6 +170,7 @@ abstract class Vps_Update
                                 $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_';
                             }
                             if (substr($n, 0, 8) == 'vps-lib_') continue;
+                            if (substr($n, 0, 8) == 'library_') continue;
                             $n .= 'Update_'.$nr;
                             if ($fileType == '.sql') {
                                 $u = new Vps_Update_Sql($nr, $n);
