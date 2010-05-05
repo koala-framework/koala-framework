@@ -3,6 +3,7 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
 {
     public static function getHelp()
     {
+        if (!file_exists('.svn')) return null;
         //if (Vps_Registry::get('config')->server->host == 'vivid') return null;
         return "checkout vps tag";
     }
@@ -108,7 +109,7 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
             $project = $m[2];
             $baseUrl = $m[1];
         } else {
-            throw new Vps_Exception("Can't detect web base url from $url");
+            throw new Vps_Exception("Can't detect web base url from $currentUrl");
         }
 
         if ($version == 'trunk') {
