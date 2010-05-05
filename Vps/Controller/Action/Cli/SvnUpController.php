@@ -52,12 +52,8 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             if ($this->_getParam('skip-update')) {
                 echo "\n\033[01;33mupdate skipped\033[00m\n";
             } else {
-                if ($doUpdate) {
-                    system("php bootstrap.php update", $ret);
-                    exit($ret);
-                } else {
-                    echo "Updates wurden NICHT ausgefuehrt.\n";
-                }
+                system("php bootstrap.php update", $ret);
+                exit($ret);
             }
             exit;
 

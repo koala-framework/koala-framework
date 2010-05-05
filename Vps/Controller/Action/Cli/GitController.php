@@ -101,7 +101,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             $this->_convertWcToGit('vps', $branch);
         } else {
             if (!file_exists('vps-lib')) {
-                if (`hostname` == 'vivid') {
+                if (trim(`hostname`) == 'vivid') {
                     $gitUrl = "ssh://git.vivid-planet.com/git/vps";
                 } else {
                     $gitUrl = "ssh://vivid@git.vivid-planet.com/git/vps";
@@ -152,7 +152,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         }
         if ($branch == 'trunk') $branch = 'master';
 
-        if (`hostname` == 'vivid') {
+        if (trim(`hostname`) == 'vivid') {
             $gitUrl = "ssh://git.vivid-planet.com/git/$id";
         } else {
             $gitUrl = "ssh://vivid@git.vivid-planet.com/git/$id";
@@ -192,6 +192,13 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         $cmd = "find -name .svn | xargs rm -rf";
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
+
+        if ($id == 'vps') {
+            //die zwei wurden im svn im nachinhein geaendert
+            $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/SvnUpController.php";
+            echo "$cmd\n";
+            $this->_systemCheckRet($cmd);
+        }
 
         $cmd = "git stash";
         echo "$cmd\n";
