@@ -164,18 +164,14 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('report')) {
             $resultLogger->printResult($result);
 
-            $c = Vps_Registry::get('config');
-            $webVersion = $c->application->version;
-            $vpsVersion = $c->application->vps->version.' (Revision ' . $c->application->vps->revision.')';
-
             $reportData = array(
                 'tests' => $result->count(),
                 'failures' => $result->failureCount()+$result->errorCount(),
                 'skipped' => $result->skippedCount(),
                 'not_implemented' => $result->notImplementedCount(),
                 //'log' => $resultLogger->getContent(),
-                'web_version' => $webVersion,
-                'vps_version' => $vpsVersion
+                'web_version' => Vps_Util_Git::web()->revParse('HEAD'),
+                'vps_version' => Vps_Util_Git::vps()->revParse('HEAD')
             );
             echo "===REPORT===";
             echo serialize($reportData);
