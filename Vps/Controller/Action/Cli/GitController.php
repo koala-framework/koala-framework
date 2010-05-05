@@ -205,4 +205,121 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
     }
+
+    public function upAction()
+    {
+        $this->updateAction();
+    }
+
+    public function updateAction()
+    {
+        $doUpdate = true;
+
+        $previousVpsBranch = trim(file_get_contents('application/vps_branch'));
+
+        Vps_Util_Git::web()->fetch();
+        if (Vps_Util_Git::web()->getActiveBranch() == 'master') {
+            try {
+                Vps_Util_Git::web()->system("rebase origin/master");
+            } catch (Vps_Exception $e) {
+                exit(1);
+            }
+        } else if (Vps_Util_Git::web()->getActiveBranch() == 'production') {
+            try {
+                Vps_Util_Git::web()->system("rebase origin/production");
+            } catch (Vps_Exception $e) {
+                exit(1);
+            }
+        } else {
+            echo "web: ".Vps_Util_Git::web()->getActiveBranch()." != master, daher wird kein autom. rebase ausgefuehrt.\n";
+            $doUpdate = false;
+        }
+
+        //neu laden, da er sich geaendert haben kann
+        if (file_exists('application/include_path')) {
+            $vp = str_replace('%vps_branch%', trim(file_get_contents('application/vps_branch')), trim(file_get_contents('application/include_path')));
+        } else {
+            $vp = getcwd().'/vps-lib';
+        }
+        $g = new Vps_Util_Git($vp);
+        $g->fetch();
+        $vpsBranch = trim(file_get_contents('application/vps_branch'));
+        if ($previousVpsBranch != $vpsBranch) {
+            echo "vps: web hat vps_branch von $previousVpsBranch auf $vpsBranch geaendert;\n";
+            if ($g->getActiveBranch() == $previousVpsBranch) {
+                if (in_array($vpsBranch, $g->getBranches())) {
+                    try {
+                        $g->checkout($vpsBranch);
+                    } catch (Vps_Exception $e) {
+                        exit(1);
+                    }
+                } else {
+                    try {
+                        $g->checkoutBranch($vpsBranch, 'origin/'.$vpsBranch);
+                    } catch (Vps_Exception $e) {
+                        exit(1);
+                    }
+                }
+            } else {
+                echo "vps: ".$g->getActiveBranch()." != $previousVpsBranch, daher wird kein autom. checkout ausgefuehrt.\n";
+            }
+        } else if ($g->getActiveBranch() == $vpsBranch) {
+            try {
+                $g->system("rebase origin/$vpsBranch");
+            } catch (Vps_Exception $e) {
+                exit(1);
+            }
+        } else if ($g->getActiveBranch() == 'production-'.Vps_Registry::get('config')->application->id) {
+            try {
+                $g->system("rebase origin/production/".Vps_Registry::get('config')->application->id);
+            } catch (Vps_Exception $e) {
+                exit(1);
+            }
+        } else {
+            echo "vps: ".$g->getActiveBranch()." != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
+        }
+        if (!$g->getActiveBranchContains('origin/'.$vpsBranch)) {
+            echo "vps: ".$g->getActiveBranch()." branch beinhaltet nicht origin/$vpsBranch.\n";
+            $doUpdate = false;
+        }
+
+        $projectIds = Vps_Model_Abstract::getInstance('Vps_Util_Model_Projects')
+                            ->getApplicationProjectIds();
+        if ($projectIds && Vps_Registry::get('config')->todo->markAsOnTestOnUpdate) {
+            $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Todo');
+            $s = $m->select()
+                    ->whereEquals('project_id', $projectIds)
+                    ->whereEquals('status', 'committed');
+            $doneTodos = $m->getRows($s);
+            foreach ($doneTodos as $todo) {
+                if (!$todo->done_revision) continue;
+                if ($this->_hasRevisionInHistory($todo->done_revision)) {
+                    $todo->status = 'test';
+                    $todo->test_date = date('Y-m-d');
+                    $todo->save();
+                    echo "\ntodo #{$todo->id} ({$todo->title}) als auf test markiert";
+                }
+            }
+        }
+
+        echo "\n";
+        if ($this->_getParam('skip-update')) {
+            echo "\n\033[01;33mupdate skipped\033[00m\n";
+        } else {
+            if ($doUpdate) {
+                system("php bootstrap.php update", $ret);
+                exit($ret);
+            } else {
+                echo "Updates wurden NICHT ausgefuehrt.\n";
+            }
+        }
+
+        exit;
+    }
+
+    private function _hasRevisionInHistory($revision)
+    {
+        return Vps_Util_Git::web()->getActiveBranchContains($revision)
+                || Vps_Util_Git::vps()->getActiveBranchContains($revision);
+    }
 }

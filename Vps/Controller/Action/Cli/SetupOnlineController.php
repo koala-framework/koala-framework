@@ -23,23 +23,11 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
         $sshHost = $config->server->user.'@'.$config->server->host;
         $sshDir = $config->server->dir;
 
-        $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("cd $sshDir && $cmd");
+        $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("cd $sshDir && ".Vps_Util_Git::getAuthorEnvVars()." $cmd");
         if ($this->_getParam('debug')) {
             echo $cmd."\n";
         }
         return $this->_systemCheckRet($cmd);
-    }
-
-    private static function _getProjectPath()
-    {
-        if (preg_match("#(trunk/vps-projekte/.*)\n#", `svn info`, $m)) {
-            return $m[1];
-        } else if (preg_match("#(branches/.*)\n#", `svn info`, $m)) {
-            return $m[1];
-        } else if (preg_match("#(trunk/vw-projekte/.*)\n#", `svn info`, $m)) {
-            return $m[1];
-        }
-        return false;
     }
 
     private function _execSql($config, $sql)
@@ -60,8 +48,6 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
             throw new Vps_Exception("setup-online may only be called on local vivid server");
         }
 
-        $projectName = Vps_Controller_Action_Cli_TagController::getProjectName();
-        $projectPath = self::_getProjectPath();
         $servers = explode(',', $this->_getParam('server'));
         $setupVividTestServer = false;
         foreach ($servers as $server) {
@@ -109,13 +95,11 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
         foreach ($servers as $server) {
             $config = Vps_Config_Web::getInstance($server);
 
-            if ($server == 'vivid-test-server') {
-                $svnBase = 'http://svn/';
-            } else {
+            if ($server != 'vivid-test-server') {
                 if (!isset($dbPassword)) {
                     $filter = new Vps_Filter_Random(16);
                     $dbPassword = $filter->filter('');
-                    $dbUser = $projectName;
+                    $dbUser = Vps_Registry::get('config')->application->id;
                     while (strlen($dbUser) > 16) {
                         echo "Kann MySQL Benutzername $dbUser ist laenger als 16 Zeichen (".strlen($dbUser)."),\n";
                         echo "darf jedoch max. 16 Zeichen haben, neuer Name: ";
@@ -148,7 +132,8 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                         }
                     }
 
-                    $sql = "GRANT ALL PRIVILEGES ON `$projectName%` . * TO '$dbUser'@'localhost'";
+                    $dbName = Vps_Registry::get('config')->application->id;
+                    $sql = "GRANT ALL PRIVILEGES ON `$dbName%` . * TO '$dbUser'@'localhost'";
                     $cmd = "echo ".escapeshellarg($sql)." | mysql";
                     $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("$cmd");
                     if ($this->_getParam('debug')) echo "$cmd\n";
@@ -157,20 +142,26 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                         throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
                     }
                 }
-
-                $svnBase = 'svn://intern.vivid-planet.com/'; //TODO: ist bei POI anders, in config einstellbar machen
             }
 
-            echo "\n$server: [1/9] svn checkout\n";
-            $cmd = "svn co $svnBase/$projectPath .";
+            echo "\n$server: [1/9] git clone web\n";
+            $cmd = "git clone ";
+            $cmd .= "ssh://vivid@git.vivid-planet.com/git/".Vps_Registry::get('config')->application->id." wc && mv wc/* . && mv wc/.??* . && rmdir wc";
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [2/9] update vps\n";
-            $cmd = "svn up {$config->libraryPath}/vps/".file_get_contents('application/vps_branch');
+            echo "\n$server: [2/9] git clone vps-lib\n";
+            $cmd = "git clone ";
+            $cmd .= "ssh://vivid@git.vivid-planet.com/git/vps vps-lib";
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [3/9] set include_path\n";
-            $cmd = "echo \"{$config->libraryPath}/vps/%vps_branch%\" > application/include_path";
+            echo "\n$server: [2.3/9] git checkout branch\n";
+            $branch = trim(file_get_contents('application/vps_branch'));
+            $cmd = "cd vps-lib && git checkout -b $branch origin/$branch";
+            $this->_systemSshVps($config, $cmd);
+
+            echo "\n$server: [2.5/9] set vps-lib/include_path\n";
+            $path = "{$config->libraryPath}/zend/%version%";
+            $cmd = "echo -n ".escapeshellarg($path)." > vps-lib/include_path";
             $this->_systemSshVps($config, $cmd);
 
             if ($config->uploads) {
@@ -182,7 +173,6 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
             }
 
             echo "\n$server: [5/9] create config.db.ini\n";
-
             $dbConfig = array();
             $dbConfig[] = "web.host = localhost";
             if ($server == 'vivid-test-server') {
@@ -192,7 +182,7 @@ class Vps_Controller_Action_Cli_SetupOnlineController extends Vps_Controller_Act
                 $dbConfig[] = "web.username = $dbUser";
                 $dbConfig[] = "web.password = $dbPassword";
             }
-            $dbName = $projectName;
+            $dbName = Vps_Registry::get('config')->application->id;
             if ($server != 'production' && $server != 'vivid-test-server') {
                 $dbName .= "_$server";
             }
