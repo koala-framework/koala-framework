@@ -173,6 +173,11 @@ class Vps_Util_Git
         return $ret;
     }
 
+    public function getBranches($args = '')
+    {
+        return $this->_getBranches($args);
+    }
+
     private function _getBranches($args)
     {
         $d = getcwd();
@@ -187,6 +192,7 @@ class Vps_Util_Git
         foreach ($ret as &$i) {
             $i = trim(trim(trim($i), '*'));
         }
+        if (!$ret) $ret = array();
         return $ret;
     }
 

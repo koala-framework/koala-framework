@@ -34,7 +34,6 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
 
     public function indexAction()
     {
-        $doUpdate = true;
         if (file_exists('.svn')) {
             echo "updating web\n";
             $this->_update('.');
@@ -48,85 +47,25 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             } else {
                 echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
             }
-        } else {
-            Vps_Util_Git::web()->fetch();
-            if (Vps_Util_Git::web()->getActiveBranch() == 'master') {
-                Vps_Util_Git::web()->system("rebase origin/master");
-            } else if (Vps_Util_Git::web()->getActiveBranch() == 'production') {
-                Vps_Util_Git::web()->system("rebase origin/production");
-            } else {
-                echo "web: ".Vps_Util_Git::web()->getActiveBranch()." != master, daher wird kein autom. rebase ausgefuehrt.\n";
-                $doUpdate = false;
-            }
 
-            if (file_exists('application/include_path')) {
-                $vp = str_replace('%vps_branch%', trim(file_get_contents('application/vps_branch')), trim(file_get_contents('application/include_path')));
+            echo "\n";
+            if ($this->_getParam('skip-update')) {
+                echo "\n\033[01;33mupdate skipped\033[00m\n";
             } else {
-                $vp = getcwd().'/vps-lib';
-            }
-            $g = new Vps_Util_Git($vp);
-            $g->fetch();
-            $vpsBranch = trim(file_get_contents('application/vps_branch'));
-            if ($g->getActiveBranch() == $vpsBranch) {
-                $g->system("rebase origin/$vpsBranch");
-            } else if ($g->getActiveBranch() == 'production-'.Vps_Registry::get('config')->application->id) {
-                $g->system("rebase origin/production/".Vps_Registry::get('config')->application->id);
-            } else {
-                echo "vps: ".$g->getActiveBranch()." != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
-                $doUpdate = false;
-            }
-        }
-
-        /* TODO GIT
-        $projectIds = array();
-        if (Vps_Registry::get('config')->todo->projectIds) {
-            $projectIds = Vps_Registry::get('config')->todo->projectIds->toArray();
-        }
-        if ($projectIds && Vps_Registry::get('config')->todo->markAsOnTestOnUpdate) {
-            $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Todo');
-            $s = $m->select()
-                    ->whereEquals('project_id', $projectIds)
-                    ->whereEquals('status', 'committed');
-            $doneTodos = $m->getRows($s);
-            foreach ($doneTodos as $todo) {
-                if (!$todo->done_revision) continue;
-                if ($this->_hasRevisionInHistory('.', $todo->done_revision)
-                    || $this->_hasRevisionInHistory(VPS_PATH, $todo->done_revision)
-                ) {
-                    $todo->status = 'test';
-                    $todo->test_date = date('Y-m-d');
-                    $todo->save();
-                    echo "\ntodo #{$todo->id} ({$todo->title}) als auf test markiert";
+                if ($doUpdate) {
+                    system("php bootstrap.php update", $ret);
+                    exit($ret);
+                } else {
+                    echo "Updates wurden NICHT ausgefuehrt.\n";
                 }
             }
-        }
-        */
+            exit;
 
-        echo "\n";
-        if ($this->_getParam('skip-update')) {
-            echo "\n\033[01;33mupdate skipped\033[00m\n";
         } else {
-            if ($doUpdate) {
-                system("php bootstrap.php update", $ret);
-                exit($ret);
-            } else {
-                echo "Updates wurden NICHT ausgefuehrt.\n";
-            }
-        }
-
-        exit;
-    }
-    private function _hasRevisionInHistory($path, $revision)
-    {
-        if (file_exists($path.'/.svn')) {
-            $log = `svn log --xml --revision $revision $path`;
-            $log = new SimpleXMLElement($log);
-            if (count($log->logentry)) return true;
-        } else {
-            //NOT YET IMPLEMENTED
-            return false;
+            $this->_forward('update', 'git', 'vps_controller_action_cli');
         }
     }
+
     public function checkForModifiedFilesAction()
     {
         self::checkForModifiedFiles(false);

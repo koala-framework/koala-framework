@@ -80,7 +80,7 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
         } else {
             $cmd = "svn-up{$params}";
             $cmd = "sshvps $sshHost $sshDir $cmd";
-            $cmd = "sudo -u vps $cmd";
+            $cmd = "sudo -u vps ".Vps_Util_Git::getAuthorEnvVars()." $cmd";
             if ($this->_getParam('debug')) {
                 echo $cmd."\n";
             }
