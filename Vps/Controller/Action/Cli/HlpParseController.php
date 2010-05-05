@@ -9,9 +9,10 @@ class Vps_Controller_Action_Cli_HlpParseController extends Vps_Controller_Action
     public function indexAction()
     {
         $maskedTexts = $this->_findMaskedTexts('./');
-        $this->_createXmlFromTexts($maskedTexts, 'application/hlp.xml', Vps_Trl::getLanguages());
+        $trl = Vps_Registry::get('trl');
+        $this->_createXmlFromTexts($maskedTexts, 'application/hlp.xml', $trl->getLanguages());
 
-        $vpsLanguages = array_unique(array_merge(array('en'), Vps_Trl::getLanguages()));
+        $vpsLanguages = array_unique(array_merge(array('en'), $trl->getLanguages()));
         $maskedTexts = $this->_findMaskedTexts(VPS_PATH, true);
         $maskedTexts += $this->_findMaskedTexts('./application', true);
         $this->_createXmlFromTexts($maskedTexts, VPS_PATH . '/hlp.xml', $vpsLanguages);

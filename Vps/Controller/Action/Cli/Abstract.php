@@ -50,7 +50,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
     protected function _systemCheckRet($cmd)
     {
         $ret = null;
-        system($cmd, $ret);
+        passthru($cmd, $ret);
         if ($ret != 0) throw new Vps_ClientException("Command failed");
     }
 
@@ -99,5 +99,20 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
             }
         }
         return $ret;
+    }
+
+    protected static function _getConfigSectionsWithHost()
+    {
+        $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
+        $sections = array();
+        $processedDomains = array();
+        foreach ($webConfigFull as $k=>$i) {
+            if ($k == 'dependencies') continue;
+            $config = Vps_Config_Web::getInstance($k);
+            if ($config->server && $config->server->host) {
+                $sections[] = $k;
+            }
+        }
+        return $sections;
     }
 }
