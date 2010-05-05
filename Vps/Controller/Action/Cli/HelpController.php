@@ -19,6 +19,11 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
                 $commands[$cmd] = $class;
             }
         }
+        foreach ($this->_processModule('vps_e2_controller_cli') as $cmd=>$class) {
+            if (!isset($commands[$cmd])) {
+                $commands[$cmd] = $class;
+            }
+        }
         $maxLen = 0;
         foreach ($commands as $cmd=>$class) {
             if (strlen($cmd) > $maxLen) $maxLen = strlen($cmd);
@@ -72,12 +77,9 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
             $class = ucwords($class);
             $class = str_replace(' ', '_', $class);
             $file = substr($file, 0, -(strlen('Controller.php')));
-            $cmd = strtolower(Zend_Filter::get($file, 'Word_CamelCaseToDash'));
+            $cmd = strtolower(Zend_Filter::filterStatic($file, 'Word_CamelCaseToDash'));
             $ret[$cmd] = $class;
         }
         return $ret;
     }
 }
-//php bootstrap.php trl-parse --type=all
-//php bootstrap.php trl-parse --type=web
-//php bootstrap.php trl-parse --type=vps

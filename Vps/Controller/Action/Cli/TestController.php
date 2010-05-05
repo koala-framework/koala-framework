@@ -35,12 +35,17 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
                 'param'=> 'coverage',
                 'help' => 'Create a coverage report'
             ),
+            array(
+                'param'=> 'retry-on-error',
+            ),
             array('param'=> 'log-xml'),
             array('param'=> 'log-pmd'),
             array('param'=> 'log-metrics'),
             array('param'=> 'coverage-xml'),
             array('param'=> 'coverage-html'),
             array('param'=> 'report'),
+            array('param'=> 'no-progress'),
+            array('param'=> 'disable-debug'),
         );
         $value = self::_getConfigSectionsWithTestDomain();
         if (in_array('production', $value)) {
@@ -61,9 +66,9 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
     public static function initForTests()
     {
         Zend_Session::start();
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '512M');
         Zend_Registry::get('config')->debug->benchmark = false;
-        Zend_Registry::get('config')->debug->querylog = false;
+        //Zend_Registry::get('config')->debug->querylog = false;
         Zend_Registry::get('config')->hasIndex = false; //zwischenlösung bis index auf models umgestellt wurde und auch getestet werden muss
         Zend_Registry::get('config')->debug->error->log = false;
 
@@ -79,12 +84,15 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         self::initForTests();
         $arguments = array();
         $arguments['colors'] = true;
+        $arguments['filter'] = false;
         if ($this->_getParam('filter')) {
             $arguments['filter'] = $this->_getParam('filter');
         }
+        $arguments['groups'] = array();
         if ($this->_getParam('group')) {
             $arguments['groups'] = explode(',', $this->_getParam('group'));
         }
+        $arguments['excludeGroups'] = array();
         if ($this->_getParam('exclude-group')) {
             $arguments['excludeGroups'] = explode(',', $this->_getParam('exclude-group'));
         }
@@ -107,6 +115,10 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('coverage-xml')) {
             $arguments['coverageClover'] = $this->_getParam('coverage-xml');
         }
+        if ($this->_getParam('retry-on-error')) {
+            $arguments['retryOnError'] = $this->_getParam('retry-on-error');
+        }
+        
         if ($this->_getParam('coverage')) {
             if (!extension_loaded('tokenizer') || !extension_loaded('xdebug')) {
                 throw new Vps_ClientException('tokenizer and xdebug extensions must be loaded');
@@ -127,11 +139,15 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $resultLogger = new Vps_Test_ResultLogger(true/*verbose*/);
             $arguments['listeners'][] = $resultLogger;
         }
+        if ($this->_getParam('no-progress')) {
+            $arguments['noProgress'] = true;
+        }
+        if ($this->_getParam('disable-debug')) {
+            Vps_Debug::disable();
+        }
 
-        $runner = new PHPUnit_TextUI_TestRunner;
+        $runner = new Vps_Test_TestRunner();
         $suite = new Vps_Test_TestSuite();
-        $suite->setBackupGlobals(false);
-
 
         try {
             $result = $runner->doRun(
@@ -148,18 +164,14 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('report')) {
             $resultLogger->printResult($result);
 
-            $c = Vps_Registry::get('config');
-            $webVersion = $c->application->version;
-            $vpsVersion = $c->application->vps->version.' (Revision ' . $c->application->vps->revision.')';
-
             $reportData = array(
                 'tests' => $result->count(),
                 'failures' => $result->failureCount()+$result->errorCount(),
                 'skipped' => $result->skippedCount(),
                 'not_implemented' => $result->notImplementedCount(),
                 //'log' => $resultLogger->getContent(),
-                'web_version' => $webVersion,
-                'vps_version' => $vpsVersion
+                'web_version' => Vps_Util_Git::web()->revParse('HEAD'),
+                'vps_version' => Vps_Util_Git::vps()->revParse('HEAD')
             );
             echo "===REPORT===";
             echo serialize($reportData);
@@ -173,7 +185,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
                 $msg .= 'NICHT erfolgreich ausgeführt';
             }
             $msg = str_replace(" ", "\ ", utf8_decode($msg));
-            system("ssh niko \"export DISPLAY=:0 && /usr/kde/3.5/bin/kdialog --passivepopup $msg 2\"");
+            system("ssh niko \"export DISPLAY=:0 && /usr/bin/kdialog --passivepopup $msg 2\"");
         }
 
         Vps_Benchmark::shutDown();
