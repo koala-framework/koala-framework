@@ -160,9 +160,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         return null;
     }
 
-    public function getImageDimensions()
+    protected function _getImageDimensions()
     {
-        $data = $this->_getImageDataOrEmptyImageData();
         $row = $this->getRow();
         $dimension = $this->_getSetting('dimensions');
 
@@ -202,7 +201,13 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $s['height'] = $d['height'];
         }
         $s['scale'] = $d['scale'];
+        return $s;
+    }
 
+    public function getImageDimensions()
+    {
+        $data = $this->_getImageDataOrEmptyImageData();
+        $s = $this->_getImageDimensions();
         if ($data && $data['file'] && file_exists($data['file'])) {
             $sourceSize = @getimagesize($data['file']);
             if (!$sourceSize) return null;
