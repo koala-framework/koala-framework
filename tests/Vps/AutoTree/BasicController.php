@@ -1,8 +1,9 @@
 <?php
-class Vps_AutoTree_BasicController extends Vps_Controller_Action_Auto_Tree
+class Vps_AutoTree_BasicController extends Vps_Controller_Action_Auto_Synctree
 {
     protected $_modelName = 'Vps_AutoTree_Model';
-    protected $_searchFields = array('name', 'search');
+    protected $_queryFields = array('name', 'search');
+    protected $_filters = array('text' => true);
 
     public function indexAction()
     {
