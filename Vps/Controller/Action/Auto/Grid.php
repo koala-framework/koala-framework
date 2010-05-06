@@ -10,8 +10,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_paging = 0;
     protected $_defaultOrder;
     protected $_filters = array();
-    protected $_queryFields;
-    protected $_querySeparator = ' ';
+    protected $_queryFields; // deprecated, set in filterConfig
+    protected $_querySeparator = ' '; // deprecated, set in filterConfig
     protected $_sortable = true; //ob felder vom user sortiert werden können
     protected $_position;
 
@@ -129,24 +129,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
         }
 
-        //default durchsucht alle angezeigten felder
-        if (!isset($this->_queryFields)) {
-            $this->_queryFields = array();
-            foreach ($this->_columns as $column) {
-                $index = $column->getDataIndex();
-                if ($info = $this->_getTableInfo()) {
-                    if (!isset($info['metadata'][$index])) continue;
-                } else if ($this->_model) {
-                    if (!in_array($index, $this->_model->getColumns())) continue;
-                }
-                $this->_queryFields[] = $index;
-            }
-        }
-        $info = $this->_getTableInfo();
-        if (!in_array($this->_primaryKey, $this->_queryFields) && $info && !in_array($info['name'].'.'.$this->_primaryKey, $this->_queryFields)) {
-            $this->_queryFields[] = $this->_primaryKey;
-        }
-
         if (!isset($this->_defaultOrder)) {
             $this->_defaultOrder = $this->_columns->first()->getDataIndex();
         }
@@ -162,7 +144,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (method_exists($this, '_getWhereQuery')) {
             throw new Vps_Exception("_getWhereQuery doesn't exist anymore");
         }
-
 
         // Falls Filter einen Default-Wert hat:
         // - GET query-Parameter setzen,
@@ -205,63 +186,62 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
         }
 
-        $query = $this->getRequest()->getParam('query');
-        $sk = isset($this->_filters['text']['skipWhere']) &&
-            $this->_filters['text']['skipWhere'];
-
-
-        if ($query && !$sk) {
-            if (!isset($this->_queryFields)) {
-                throw new Vps_Exception("queryFields which is required to use query-filters is not set.");
-            }
-
-            if ($this->_querySeparator) {
-                $query = explode($this->_querySeparator, $query);
+        // Filter
+        if ($this->_getParam('query') && !isset($this->_filters['text'])) {
+            $this->_filters['text'] = true;
+        }
+        foreach ($this->_filters as $field => $config) {
+            if (isset($config['skipWhere']) && $config['skipWhere']) continue;
+            $params = $this->_getAllParams();
+            if ($field == 'text' && is_bool($config) && $config) {
+                $type = 'text';
+            } else if (isset($config['type'])) {
+                $type = $config['type'];
             } else {
-                $query = array($query);
+                throw new Vps_Exception('No filter-type defined');
             }
-
-            foreach ($query as $q) {
-                if (strpos($q, ':') !== false) { // falls nach einem bestimmten feld gesucht wird zB id:15
-                    $whereContainsColon = $this->_getQueryContainsColon($q);
-                    if (!is_null($whereContainsColon)) {
-                        $ret->where($whereContainsColon);
-                    } else {
-                        $ret->where($this->_getQueryExpression($q));
+            if (strtolower($type) == 'textfield') $type = 'text';
+            if (strtolower($type) == 'text') {
+                if (!is_array($config)) $config = array();
+                $config['model'] = $this->_getModel();
+                if (!isset($config['queryFields'])) {
+                    $queryFields = $this->_queryFields;
+                    if (!$queryFields) {
+                        $queryFields = array();
+                        foreach ($this->_columns as $column) {
+                            $index = $column->getDataIndex();
+                            if ($info = $this->_getTableInfo()) {
+                                if (!isset($info['metadata'][$index])) continue;
+                            } else if ($this->_model) {
+                                if (!in_array($index, $this->_model->getColumns())) continue;
+                            }
+                            $queryFields = $index;
+                        }
                     }
-                } else {
-                    $ret->where($this->_getQueryExpression($q));
+                    $info = $this->_getTableInfo();
+                    if (!in_array($this->_primaryKey, $this->_queryFields) && $info && !in_array($info['name'].'.'.$this->_primaryKey, $this->_queryFields)) {
+                        $queryFields = $this->_primaryKey;
+                    }
+                    $config['queryFields'] = $queryFields;
                 }
+                if (!isset($config['querySeparator'])) {
+                    $config['querySeparator'] = $this->_querySeparator;
+                }
+            } else {
+                $config['fieldname'] = $field;
+                $params['query'] = $this->_getParam('query_' . $field);
             }
+            if (!class_exists($class))
+                $class = 'Vps_Controller_Action_Auto_Filter_' . ucfirst($type);
+            if (!class_exists($class))
+                $class = 'Vps_Controller_Action_Auto_Filter_Query';
+            $filter = new $class($config);
+            $ret = $filter->formatSelect($ret, $params);
         }
 
-        //check von QueryId
         $queryId = $this->getRequest()->getParam('queryId');
         if ($queryId) {
             $ret->where(new Vps_Model_Select_Expr_Equals($this->_primaryKey, $queryId));
-        }
-
-        //erzeugen von Filtern
-        foreach ($this->_filters as $field=>$filter) {
-            if ($field=='text') continue; //handled above
-            if (isset($filter['skipWhere']) && $filter['skipWhere']) continue;
-            if ($this->_getParam('query_'.$field)) {
-                $ret->whereEquals($field, $this->_getParam('query_'.$field));
-            }
-            if ($filter['type'] == 'DateRange' && $this->_getParam($field.'_from')
-                                               && $this->_getParam($field.'_to')) {
-                $valueFrom = $this->_getParam($field.'_from');
-                $valueTo = $this->_getParam($field.'_to');
-
-                $ret->where(new Vps_Model_Select_Expr_Or(array(
-                    new Vps_Model_Select_Expr_And(array(
-                        new Vps_Model_Select_Expr_SmallerDate($field, $valueTo),
-                        new Vps_Model_Select_Expr_HigherDate($field, $valueFrom)
-                    )),
-                    new Vps_Model_Select_Expr_Equals($field, $valueTo),
-                    new Vps_Model_Select_Expr_Equals($field, $valueFrom)
-                )));
-            }
         }
 
         $where = $this->_getWhere();
@@ -274,30 +254,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
         }
         return $ret;
-    }
-
-    private function _getQueryContainsColon($query)
-    {
-        $availableColumns = $this->_model->getColumns();
-
-        list($field, $value) = explode(':', $query);
-        if (in_array($field, $availableColumns)) {
-            if (is_numeric($value)) {
-                return new Vps_Model_Select_Expr_Equals($field, $value);
-            } else {
-                return new Vps_Model_Select_Expr_Contains($field, $value);
-            }
-        } else {
-            return null;
-        }
-    }
-    protected function _getQueryExpression($query)
-    {
-        $containsExpression = array();
-        foreach ($this->_queryFields as $queryField) {
-            $containsExpression[] = new Vps_Model_Select_Expr_Contains($queryField, $query);
-        }
-        return new Vps_Model_Select_Expr_Or($containsExpression);
     }
 
     protected function _getWhere()
@@ -518,7 +474,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected function _afterDelete()
     {
     }
-    
+
     protected function _getRowById($id)
     {
         if ($id) {

@@ -52,13 +52,6 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             scope   : this
         });
 
-        this.searchField = new Ext.form.TextField({'name':  'searchField'});
-        this.searchField.on('render', function() {
-            this.searchField.getEl().on('keyup', function(o, e) {
-                this.onSearch(this.searchField.getValue(), this.getBaseParams());
-            }, this, {buffer: 500});
-        }, this);
-        
         Vps.Auto.SyncTreePanel.superclass.initComponent.call(this);
     },
     
@@ -95,9 +88,48 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             for (var button in meta.buttons) {
                 tbar.add(this.getAction(button));
             }
-            if (meta.search) {
-            	tbar.add(trlVps('Search: '));
-            	tbar.add(this.searchField);
+            this.filters = new Ext.util.MixedCollection();
+            var first = true;
+            if (meta.filters.text && typeof(meta.filters.text) != 'object') {
+                meta.filters.text = { type: 'TextField' };
+            }
+            for(var filter in meta.filters) {
+                var f = meta.filters[filter];
+                if (!Vps.Auto.GridFilter[f.type]) {
+                    throw "Unknown filter.type: "+f.type;
+                }
+                var type = Vps.Auto.GridFilter[f.type];
+                delete f.type;
+                f.id = filter;
+                var filterField = new type(f);
+    
+                if (f.right) {
+                    tbar.add('->');
+                    f.label += ' ';
+                } else if(first && tbar.length > 0) {
+                    tbar.add('-');
+                }
+                if (first && !f.label) f.label = 'Filter:';
+                if (f.label) {
+                    if (!first) {
+                        f.label = '  '+f.label;
+                    }
+                    tbar.add(f.label);
+                } else {
+                    if (!first) {
+                        tbar.add('  ');
+                    }
+                }
+                filterField.getToolbarItem().each(function(i) {
+                    tbar.add(i);
+                });
+                this.filters.add(filterField);
+                filterField.on('filter', function(f, params) {
+                	params.filter = true;
+                    this.applyBaseParams(params);
+                    this.tree.getRootNode().reload();
+                }, this);
+                first = false;
             }
         }
         
@@ -264,7 +296,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     onCollapseNode : function(node) {
-    	if (!node.attributes.search) {
+    	if (!node.attributes.filter) {
             Ext.Ajax.request({
                 url: this.controllerUrl + '/json-collapse',
                 params: Ext.apply({id:node.id}, this.getBaseParams())
@@ -273,7 +305,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     onExpandNode : function(node) {
-        if (node.attributes.children && node.attributes.children.length > 0 && !node.attributes.search) {
+        if (node.attributes.children && node.attributes.children.length > 0 && !node.attributes.filter) {
             Ext.Ajax.request({
                 url: this.controllerUrl + '/json-expand',
                 params: Ext.apply({id:node.id}, this.getBaseParams())
@@ -292,11 +324,6 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             },
             scope: this
         })
-    },
-
-    onSearch : function (o, e) {
-    	this.baseParams['searchValue'] = o;
-    	this.tree.getRootNode().reload();
     },
 
     getTree : function() {

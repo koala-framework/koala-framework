@@ -9,7 +9,9 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected $_tableName;
     protected $_model;
     protected $_modelName;
-    protected $_searchFields = array();
+    protected $_filters = array();
+    protected $_queryFields;
+    protected $_querySeparator = ' ';
 
     protected $_icons = array (
         'root'      => 'folder',
@@ -104,6 +106,16 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 'direction'   => 'ASC'
             );
         }
+
+        // Falls Filter einen Default-Wert hat:
+        // - GET query-Parameter setzen,
+        // - Im JavaScript nach rechts verschieben und Defaultwert setzen
+        foreach ($this->_filters as $key => $filter) {
+            $param = 'query_' . $key;
+            if (isset($filter['default']) && !$this->_getParam($param)) {
+                $this->_setParam($param, $filter['default']);
+            }
+        }
     }
 
     public function jsonMetaAction()
@@ -113,7 +125,12 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         foreach ($this->_icons as $k=>$i) {
             $this->view->icons[$k] = $i->__toString();
         }
-        $this->view->search = !empty($this->_searchFields);
+        $filters = array();
+        foreach ($this->_filters as $k=>$f) {
+            if (isset($f['field'])) $f['field'] = $f['field']->getMetaData($this->_getModel());
+            $filters[$k] = $f;
+        }
+        $this->view->filters = (object)$filters;
         $this->view->rootText = $this->_rootText;
         $this->view->rootVisible = $this->_rootVisible;
         $this->view->buttons = $this->_buttons;
@@ -135,8 +152,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $this->_saveSessionNodeOpened($parentId, true);
         $this->_saveNodeOpened();
 
-        if ($this->_getParam('searchValue') != '') {
-            $this->view->nodes = $this->_searchNodes($this->_getParam('searchValue'));
+        if ($this->_getParam('filter')) {
+            $this->view->nodes = $this->_filterNodes();
         } else {
             $this->view->nodes = $this->_formatNodes();
         }
@@ -183,14 +200,84 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         return $nodes;
     }
 
-    protected function _searchNodes($searchValue)
+    protected function _getQueryExpression($query)
+    {
+        $containsExpression = array();
+        foreach ($this->_queryFields as $queryField) {
+            $containsExpression[] = new Vps_Model_Select_Expr_Contains($queryField, $query);
+        }
+        return new Vps_Model_Select_Expr_Or($containsExpression);
+    }
+
+    protected function _filterNodes()
     {
         $select = $this->_getSelect();
+        $query = $this->getRequest()->getParam('query');
+        $sk = isset($this->_filters['text']['skipWhere']) &&
+            $this->_filters['text']['skipWhere'];
+
+
+        if ($query && !$sk) {
+            if (!isset($this->_queryFields)) {
+                throw new Vps_Exception("queryFields which is required to use query-filters is not set.");
+            }
+
+            if ($this->_querySeparator) {
+                $query = explode($this->_querySeparator, $query);
+            } else {
+                $query = array($query);
+            }
+
+            foreach ($query as $q) {
+                if (strpos($q, ':') !== false) { // falls nach einem bestimmten feld gesucht wird zB id:15
+                    $whereContainsColon = $this->_getQueryContainsColon($q);
+                    if (!is_null($whereContainsColon)) {
+                        $select->where($whereContainsColon);
+                    } else {
+                        $select->where($this->_getQueryExpression($q));
+                    }
+                } else {
+                    $select->where($this->_getQueryExpression($q));
+                }
+            }
+        }
+
+        //check von QueryId
+        $queryId = $this->getRequest()->getParam('queryId');
+        if ($queryId) {
+            $select->where(new Vps_Model_Select_Expr_Equals($this->_primaryKey, $queryId));
+        }
+
+        //erzeugen von Filtern
+        foreach ($this->_filters as $field=>$filter) {
+            if ($field=='text') continue; //handled above
+            if (isset($filter['skipWhere']) && $filter['skipWhere']) continue;
+            if ($this->_getParam('query_'.$field)) {
+                $select->whereEquals($field, $this->_getParam('query_'.$field));
+            }
+            if ($filter['type'] == 'DateRange' && $this->_getParam($field.'_from')
+                                               && $this->_getParam($field.'_to')) {
+                $valueFrom = $this->_getParam($field.'_from');
+                $valueTo = $this->_getParam($field.'_to');
+
+                $select->where(new Vps_Model_Select_Expr_Or(array(
+                    new Vps_Model_Select_Expr_And(array(
+                        new Vps_Model_Select_Expr_SmallerDate($field, $valueTo),
+                        new Vps_Model_Select_Expr_HigherDate($field, $valueFrom)
+                    )),
+                    new Vps_Model_Select_Expr_Equals($field, $valueTo),
+                    new Vps_Model_Select_Expr_Equals($field, $valueFrom)
+                )));
+            }
+        }
+
+/*
         $or = array();
         foreach ($this->_searchFields as $searchField) {
             $or[] = new Vps_Model_Select_Expr_Like($searchField, '%' . $searchValue . '%');
         }
         $select->where(new Vps_Model_Select_Expr_Or($or));
+        */
         $rows = $this->_model->getRows($select);
 
         $plainNodes = array();
@@ -204,7 +291,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $node = $this->_formatNode($row);
                 $node['leaf'] = true;
                 $node['allowDrag'] = false;
-                $node['search'] = true;
+                $node['filter'] = true;
                 $plainNodes[$pV][$row->$primaryKey] = $node;
             }
             $plainNodes[$pV][$row->$primaryKey]['disabled'] = false;
@@ -219,7 +306,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                     $node['expanded'] = true;
                     $node['expanded'] = true;
                     $node['allowDrag'] = false;
-                    $node['search'] = true;
+                    $node['filter'] = true;
                     $plainNodes[$pV][$primaryValue] = $node;
                 }
             }
