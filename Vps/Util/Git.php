@@ -86,6 +86,12 @@ class Vps_Util_Git
         $cmd = "tag -a -m ".escapeshellarg('tagged').' '.$args.' '.escapeshellcmd($tag);
         if ($object) $cmd .= ' '.escapeshellcmd($object);
         $this->system($cmd);
+
+        if ($args == '-f') {
+            if ($this->revParse("refs/tags/$tag")) {
+                $this->system("push origin :refs/tags/$tag"); //tag loeschen
+            }
+        }
         $this->system("push origin tag ".escapeshellcmd($tag));
     }
 
@@ -209,5 +215,54 @@ class Vps_Util_Git
     public function getActiveBranchContains($commit)
     {
         return in_array($this->getActiveBranch(),  $this->getBranchesContains($commit, ''));
+    }
+
+    public function productionBranch($branch, $staging)
+    {
+        $activeBranch = $this->getActiveBranch();
+        $this->fetch();
+        if ($this->revParse('refs/remotes/origin/'.$branch)) {
+            //production-previous tag loeschen
+            if ($this->revParse("refs/tags/$branch-previous")) {
+                $this->system("tag -d $branch-previous");
+                $this->system("push origin :refs/tags/$branch-previous"); //tag loeschen
+            }
+            //aktuellen production mit production-previous taggen
+            $this->tag($branch.'-previous', '', 'refs/remotes/origin/'.$branch);
+
+            //production branch auschecken falls noch nicht vorhanden
+            if (!$this->revParse($branch)) {
+                $this->system("branch $branch origin/$branch");
+            }
+
+            //staging in production mergen, --ff-only geht leider nicht im git 1.5
+            $this->system("checkout $branch");
+            $this->system("merge $staging");
+
+            $this->system("push");
+        } else {
+            if ($this->revParse("$branch")) {
+                //lokalen production branch loeschen (boese)
+                $this->system("branch -D $branch");
+            }
+            //es wurde noch nie online gegangen mit dem web, neuen production branch erstellen
+            $this->branch("$branch", '', $staging);
+        }
+        $this->system("checkout $activeBranch");
+    }
+
+    public function isEmptyLog($ref)
+    {
+        $d = getcwd();
+        $cmd = "git log --no-pager $ref";
+        chdir($this->_path);
+        if (self::$_debug) echo $cmd."\n";
+        exec($cmd, $ret, $retVal);
+        chdir($d);
+        if ($retVal) {
+            throw new Vps_Exception("Command failed: $cmd");
+        }
+        $ret = trim(implode("\n", $ret));
+        return empty($ret);
     }
 }
