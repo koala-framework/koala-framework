@@ -105,32 +105,40 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             //      zweiteres ist schoener, ersters sollte entfernt werden
             Vps_Util_Git::web()->fetch();
             $activeBranch = Vps_Util_Git::web()->getActiveBranch();
-            $branches = Vps_Util_Git::web()->getBranchesNotMerged();
-            if (in_array('production', $branches)
-                || !Vps_Util_Git::web()->isEmptyLog("$activeBranch..production")
-            ) {
-                throw new Vps_Exception_Client("web: production branch is NOT merged into your current branch.");
+            if (Vps_Util_Git::web()->revParse('production')) {
+                $branches = Vps_Util_Git::web()->getBranchesNotMerged();
+                if (in_array('production', $branches)
+                    || !Vps_Util_Git::web()->isEmptyLog("$activeBranch..production")
+                ) {
+                    throw new Vps_Exception_Client("web: production branch is NOT merged into your current branch.");
+                }
             }
-            if (in_array('remotes/origin/production', $branches)
-                || in_array('origin/production', $branches)
-                || !Vps_Util_Git::web()->isEmptyLog("$activeBranch..origin/production")
-            ) {
-                throw new Vps_Exception_Client("web: production branch is NOT merged into your current branch.");
+            if (Vps_Util_Git::web()->revParse('origin/production')) {
+                if (in_array('remotes/origin/production', $branches)
+                    || in_array('origin/production', $branches)
+                    || !Vps_Util_Git::web()->isEmptyLog("$activeBranch..origin/production")
+                ) {
+                    throw new Vps_Exception_Client("web: production branch is NOT merged into your current branch.");
+                }
             }
 
             Vps_Util_Git::vps()->fetch();
             $activeBranch = Vps_Util_Git::vps()->getActiveBranch();
-            $branches = Vps_Util_Git::vps()->getBranchesNotMerged();
-            if (in_array('production/'.$appId, $branches)
-                || !Vps_Util_Git::vps()->isEmptyLog("$activeBranch..production/$appId")
-            ) {
-                throw new Vps_Exception_Client("vps: production branch is NOT merged into your current branch.");
+            if (Vps_Util_Git::vps()->revParse("production/$appId")) {
+                $branches = Vps_Util_Git::vps()->getBranchesNotMerged();
+                if (in_array('production/'.$appId, $branches)
+                    || !Vps_Util_Git::vps()->isEmptyLog("$activeBranch..production/$appId")
+                ) {
+                    throw new Vps_Exception_Client("vps: production branch is NOT merged into your current branch.");
+                }
             }
-            if (in_array('remotes/origin/production/'.$appId, $branches)
-                || in_array('origin/production/'.$appId, $branches)
-                || !Vps_Util_Git::vps()->isEmptyLog("$activeBranch..origin/production/$appId")
-            ) {
-                throw new Vps_Exception_Client("vps: production branch is NOT merged into your current branch.");
+            if (Vps_Util_Git::vps()->revParse("origin/production/$appId")) {
+                if (in_array('remotes/origin/production/'.$appId, $branches)
+                    || in_array('origin/production/'.$appId, $branches)
+                    || !Vps_Util_Git::vps()->isEmptyLog("$activeBranch..origin/production/$appId")
+                ) {
+                    throw new Vps_Exception_Client("vps: production branch is NOT merged into your current branch.");
+                }
             }
 
             Vps_Controller_Action_Cli_SvnUpController::checkForModifiedFiles(true);
