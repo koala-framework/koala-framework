@@ -193,6 +193,17 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
+        $cmd = "find -executable -type f | xargs chmod -x";
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+
+        if ($id == 'vps') {
+            //die zwei wurden im svn im nachinhein geaendert
+            $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/SvnUpController.php";
+            echo "$cmd\n";
+            $this->_systemCheckRet($cmd);
+        }
+
         $cmd = "git stash";
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
