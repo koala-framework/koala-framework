@@ -253,7 +253,7 @@ class Vps_Util_Git
     public function isEmptyLog($ref)
     {
         $d = getcwd();
-        $cmd = "git log --no-pager $ref";
+        $cmd = "git --no-pager log $ref";
         chdir($this->_path);
         if (self::$_debug) echo $cmd."\n";
         exec($cmd, $ret, $retVal);
