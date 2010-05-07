@@ -62,11 +62,11 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         Vps_Util_Git::vps()->system("checkout ".escapeshellarg('Vps/Util/Git.php'));
         Vps_Util_Git::vps()->system("checkout ".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'));
         $appId = Vps_Registry::get('config')->application->id;
-        if (!Vps_Util_Git::vps()->revParse("production-$appId")) {
-            Vps_Util_Git::vps()->branch("production-$appId", '', "origin/production/$appId");
+        if (!Vps_Util_Git::vps()->revParse("production/$appId")) {
+            Vps_Util_Git::vps()->branch("production/$appId", '', "origin/production/$appId");
         }
-        if (Vps_Util_Git::vps()->getActiveBranch() != "production-$appId") {
-            Vps_Util_Git::vps()->checkout("production-$appId");
+        if (Vps_Util_Git::vps()->getActiveBranch() != "production/$appId") {
+            Vps_Util_Git::vps()->checkout("production/$appId");
         }
         Vps_Util_Git::vps()->system("rebase origin/production/$appId");
 
@@ -193,6 +193,10 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
+        $cmd = "find -executable -type f | xargs chmod -x";
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+
         if ($id == 'vps') {
             //die zwei wurden im svn im nachinhein geaendert
             $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/SvnUpController.php";
@@ -276,7 +280,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             } catch (Vps_Exception $e) {
                 exit(1);
             }
-        } else if ($g->getActiveBranch() == 'production-'.Vps_Registry::get('config')->application->id) {
+        } else if ($g->getActiveBranch() == 'production/'.Vps_Registry::get('config')->application->id) {
             try {
                 $g->system("rebase origin/production/".Vps_Registry::get('config')->application->id);
             } catch (Vps_Exception $e) {
