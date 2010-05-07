@@ -122,7 +122,7 @@ class Vps_Util_Git
 
     public function checkoutBranch($branch, $target, $args = '')
     {
-        $this->system("checkout -b $args ".escapeshellcmd($branch).' '.escapeshellcmd($target));
+        $this->system("checkout $args -b ".escapeshellcmd($branch).' '.escapeshellcmd($target));
     }
 
     public function fetch()
