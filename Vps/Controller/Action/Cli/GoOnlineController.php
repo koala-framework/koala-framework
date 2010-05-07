@@ -100,21 +100,36 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         } else {
             echo "lokal:\n";
 
+
+            //TODO: getBranchesNotMerged und isEmptyLog machen das gleiche
+            //      zweiteres ist schoener, ersters sollte entfernt werden
             Vps_Util_Git::web()->fetch();
+            $activeBranch = Vps_Util_Git::web()->getActiveBranch();
             $branches = Vps_Util_Git::web()->getBranchesNotMerged();
-            if (in_array('production', $branches)) {
+            if (in_array('production', $branches)
+                || !Vps_Util_Git::web()->isEmptyLog("$activeBranch..production")
+            ) {
                 throw new Vps_Exception_Client("web: production branch is NOT merged into your current branch.");
             }
-            if (in_array('remotes/origin/production', $branches) || in_array('origin/production', $branches)) {
+            if (in_array('remotes/origin/production', $branches)
+                || in_array('origin/production', $branches)
+                || !Vps_Util_Git::web()->isEmptyLog("$activeBranch..origin/production")
+            ) {
                 throw new Vps_Exception_Client("web: production branch is NOT merged into your current branch.");
             }
 
             Vps_Util_Git::vps()->fetch();
+            $activeBranch = Vps_Util_Git::vps()->getActiveBranch();
             $branches = Vps_Util_Git::vps()->getBranchesNotMerged();
-            if (in_array('production-'.$appId, $branches)) {
+            if (in_array('production/'.$appId, $branches)
+                || !Vps_Util_Git::vps()->isEmptyLog("$activeBranch..production/$appId")
+            ) {
                 throw new Vps_Exception_Client("vps: production branch is NOT merged into your current branch.");
             }
-            if (in_array('remotes/origin/production/'.$appId, $branches) || in_array('origin/production/'.$appId, $branches)) {
+            if (in_array('remotes/origin/production/'.$appId, $branches)
+                || in_array('origin/production/'.$appId, $branches)
+                || !Vps_Util_Git::vps()->isEmptyLog("$activeBranch..origin/production/$appId")
+            ) {
                 throw new Vps_Exception_Client("vps: production branch is NOT merged into your current branch.");
             }
 
@@ -263,36 +278,10 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 $this->_systemSshVpsWithSubSections("update", 'production');
             } else {
 
-                echo "\n\n*** [12/13] prod: production tags erstellen\n";
+                echo "\n\n*** [12/13] prod: production branches erstellen\n";
 
-                Vps_Util_Git::vps()->fetch();
-                if (Vps_Util_Git::vps()->revParse("refs/remotes/origin/production/$appId")) {
-                    if (Vps_Util_Git::vps()->revParse("refs/tags/production-previous/$appId")) {
-                        Vps_Util_Git::vps()->system("tag -d production-previous/$appId");
-                        Vps_Util_Git::vps()->system("push origin :refs/tags/production-previous/$appId"); //tag loeschen
-                    }
-                    Vps_Util_Git::vps()->tag("production-previous/$appId", '', "refs/remotes/origin/production/$appId");
-                    Vps_Util_Git::vps()->system("push origin :heads/production/$appId"); //branch loeschen
-                }
-                if (Vps_Util_Git::vps()->revParse("production/$appId")) {
-                    Vps_Util_Git::vps()->system("branch -D production/$appId"); //branch loeschen
-                }
-
-                Vps_Util_Git::web()->fetch();
-                if (Vps_Util_Git::web()->revParse('refs/remotes/origin/production')) {
-                    if (Vps_Util_Git::web()->revParse("refs/tags/production-previous")) {
-                        Vps_Util_Git::web()->system('tag -d production-previous');
-                        Vps_Util_Git::web()->system("push origin :refs/tags/production-previous"); //tag loeschen
-                    }
-                    Vps_Util_Git::web()->tag('production-previous', '', 'refs/remotes/origin/production');
-                    Vps_Util_Git::web()->system("push origin :heads/production"); //branch loeschen
-                }
-                if (Vps_Util_Git::web()->revParse("production")) {
-                    Vps_Util_Git::web()->system("branch -D production"); //branch loeschen
-                }
-
-                Vps_Util_Git::vps()->branch("production/$appId", '', "$appId-staging");
-                Vps_Util_Git::web()->branch("production", '', 'staging');
+                Vps_Util_Git::vps()->productionBranch('production/'.$appId, "$appId-staging");
+                Vps_Util_Git::web()->productionBranch('production', 'staging');
 
                 $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Util/Git.php'), 'production');
                 $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'), 'production');
