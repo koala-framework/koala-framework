@@ -63,7 +63,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         Vps_Util_Git::vps()->system("checkout ".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'));
         $appId = Vps_Registry::get('config')->application->id;
         if (!Vps_Util_Git::vps()->revParse("production/$appId")) {
-            Vps_Util_Git::vps()->branch("production/$appId", '', "origin/production/$appId");
+            Vps_Util_Git::vps()->checkoutBranch("production/$appId", "origin/production/$appId", '--track');
         }
         if (Vps_Util_Git::vps()->getActiveBranch() != "production/$appId") {
             Vps_Util_Git::vps()->checkout("production/$appId");
@@ -71,7 +71,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         Vps_Util_Git::vps()->system("rebase origin/production/$appId");
 
         if (!Vps_Util_Git::web()->revParse("production")) {
-            Vps_Util_Git::web()->branch("production", '', "origin/production");
+            Vps_Util_Git::web()->checkoutBranch("production", "origin/production", '--track');
         }
         if (Vps_Util_Git::web()->getActiveBranch() != "production") {
             Vps_Util_Git::web()->checkout("production");
