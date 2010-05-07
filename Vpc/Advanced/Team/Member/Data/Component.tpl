@@ -11,12 +11,12 @@
             </li>
         <? } ?>
 
-        <? if (!empty($this->working_position)) { ?>
+        <? if (!empty($this->workingPosition)) { ?>
             <li>
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['positionLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
-                <?= $this->working_position; ?>
+                <?= $this->workingPosition; ?>
             </li>
         <? } ?>
 
