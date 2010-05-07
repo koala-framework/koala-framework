@@ -120,9 +120,9 @@ class Vps_Util_Git
         $this->system("checkout ".escapeshellcmd($target));
     }
 
-    public function checkoutBranch($branch, $target)
+    public function checkoutBranch($branch, $target, $args = '')
     {
-        $this->system("checkout -b ".escapeshellcmd($branch).' '.escapeshellcmd($target));
+        $this->system("checkout -b $args ".escapeshellcmd($branch).' '.escapeshellcmd($target));
     }
 
     public function fetch()
@@ -232,12 +232,11 @@ class Vps_Util_Git
 
             //production branch auschecken falls noch nicht vorhanden
             if (!$this->revParse($branch)) {
-                $this->system("branch $branch origin/$branch");
+                $this->system("branch --track $branch origin/$branch");
             }
 
-            //staging in production mergen, --ff-only geht leider nicht im git 1.5
             $this->system("checkout $branch");
-            $this->system("merge $staging");
+            $this->system("reset --hard $staging");
 
             $this->system("push");
         } else {
@@ -246,7 +245,7 @@ class Vps_Util_Git
                 $this->system("branch -D $branch");
             }
             //es wurde noch nie online gegangen mit dem web, neuen production branch erstellen
-            $this->branch("$branch", '', $staging);
+            $this->branch("$branch", '--track', $staging);
         }
         $this->system("checkout $activeBranch");
     }
