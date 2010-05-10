@@ -168,22 +168,6 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
     {
         $ret = true;
         foreach ($updates as $update) {
-            if ($update->getTags() && !in_array('web', $update->getTags())) {
-                if (!array_intersect(
-                    $update->getTags(),
-                    Vps_Registry::get('config')->server->updateTags->toArray()
-                ) && !($update->getTags()==array('db') && get_class($update)=='Vps_Update_Sql')) {
-                    if ($method != 'checkSettings') {
-                        echo "$method: skipping ".get_class($update);
-                        if ($update->getRevision()) echo " (".$update->getRevision().")";
-                        echo ", tags '".implode(', ', $update->getTags())."' don't match ";
-                        echo "(".implode(', ', Vps_Registry::get('config')->server->updateTags->toArray()).")";
-                        echo "\n";
-                        flush();
-                    }
-                    continue; //skip
-                }
-            }
             if ($method != 'checkSettings') {
                 if ($method != 'postClearCache' && !$skipClearCache) {
                     Vps_Util_ClearCache::getInstance()->clearCache('all', false, false);
