@@ -31,7 +31,9 @@ Vpc.ListSwitch.View.prototype = {
             this.previewElements.push(previewLink);
         }, this);
 
-        this.setLarge(this.previewElements[0]);
+        if (this.previewElements.length && this.previewElements[0]) {
+            this.setLarge(this.previewElements[0]);
+        }
     },
 
     setLarge: function(previewEl) {
