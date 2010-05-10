@@ -1,18 +1,32 @@
 <?php
 abstract class Vps_Update
 {
+    protected $_tags = array();
+
     protected $_actions = array();
     protected $_revision;
+    protected $_uniqueName;
 
-    public function __construct($revision)
+    public function __construct($revision, $uniqueName)
     {
         $this->_revision = (int)$revision;
+        $this->_uniqueName = $uniqueName;
         $this->_init();
+    }
+
+    public function getTags()
+    {
+        return $this->_tags;
     }
 
     public function getRevision()
     {
         return $this->_revision;
+    }
+
+    public function getUniqueName()
+    {
+        return $this->_uniqueName;
     }
 
     protected function _init()
@@ -89,6 +103,7 @@ abstract class Vps_Update
                     && is_dir('./Vps/'.$d->__toString().'/Update')
                 ) {
                     $u = self::getUpdatesForDir('Vps/'.$d->__toString(), $from, $to);
+                    foreach ($u as $i) $i->_tags[] = 'web';
                     $ret = array_merge($ret, $u);
                 }
             }
@@ -97,7 +112,12 @@ abstract class Vps_Update
         $u = self::getUpdatesForDir(VPS_PATH.'/Vps', $from, $to);
         $ret = array_merge($ret, $u);
         $u = self::getUpdatesForDir('./update', $from, $to);
+        foreach ($u as $i) $i->_tags[] = 'web';
         $ret = array_merge($ret, $u);
+        if (defined('DOC_CMS')) { //HACK
+            $u = self::getUpdatesForDir(DOC_CMS.'/Vps', $from, $to);
+            $ret = array_merge($ret, $u);
+        }
         $ret = self::_sortByRevision($ret);
         return $ret;
     }
@@ -108,6 +128,7 @@ abstract class Vps_Update
         $processed = array();
         foreach (Vps_Component_Abstract::getComponentClasses(false) as $class) {
             while ($class != '') {
+                $class = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
                 if (!in_array($class, $processed)) {
                     $processed[] = $class;
                     $curClass = $class;
@@ -144,18 +165,24 @@ abstract class Vps_Update
                         if (!is_numeric($f)) continue;
                         $nr = (int)$f;
                         if ($nr >= $from && $nr < $to) {
+                            $n = '';
+                            if ($file != './update') {
+                                $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_';
+                            }
+                            if (substr($n, 0, 8) == 'vps-lib_') continue;
+                            if (substr($n, 0, 8) == 'library_') continue;
+                            $n .= 'Update_'.$nr;
                             if ($fileType == '.sql') {
-                                $u = new Vps_Update_Sql($nr);
+                                $u = new Vps_Update_Sql($nr, $n);
                                 $u->sql = file_get_contents($i->getPathname());
+                                if (preg_match("#\\#\\s*tags:(.*)#", $u->sql, $m)) {
+                                    $u->_tags = explode(' ', trim($m[1]));
+                                }
+                                $u->_tags[] = 'db';
                                 $ret[] = $u;
                             } else {
-                                $n = '';
-                                if ($file != './update') {
-                                    $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_';
-                                }
-                                $n .= 'Update_'.$nr;
                                 if (is_instance_of($n, 'Vps_Update')) {
-                                    $ret[] = new $n($nr);
+                                    $ret[] = new $n($nr, $n);
                                 }
                             }
                         }
@@ -167,7 +194,7 @@ abstract class Vps_Update
                         if (!$i->isFile()) continue;
                         $f = $i->__toString();
                         $fileType = substr($f, -4);
-                        if ($fileType != '.php' && $fileType != '.sql') continue;
+                        if ($fileType != '.php') continue;
                         $f = substr($f, 0, -4);
                         $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_Update_Always_'.$f;
                         if (is_instance_of($n, 'Vps_Update')) {
