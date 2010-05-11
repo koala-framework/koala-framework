@@ -76,11 +76,20 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
             self::_check(VPS_PATH, $checkRemote);
             echo "Vps OK\n";
         } else {
+            $appId = Vps_Registry::get('config')->application->id;
             Vps_Util_Git::web()->fetch();
-            Vps_Util_Git::web()->checkClean("origin/master");
+            if (Vps_Util_Git::web()->getActiveBranch() == 'production') {
+                Vps_Util_Git::web()->checkClean("origin/production");
+            } else {
+                Vps_Util_Git::web()->checkClean("origin/master");
+            }
             echo "Web OK\n";
             Vps_Util_Git::vps()->fetch();
-            Vps_Util_Git::vps()->checkClean("origin/".trim(file_get_contents('application/vps_branch')));
+            if (Vps_Util_Git::vps()->getActiveBranch() == 'production/'.$appId) {
+                Vps_Util_Git::vps()->checkClean("origin/production/$appId");
+            } else {
+                Vps_Util_Git::vps()->checkClean("origin/".trim(file_get_contents('application/vps_branch')));
+            }
             echo "Vps OK\n";
         }
     }
