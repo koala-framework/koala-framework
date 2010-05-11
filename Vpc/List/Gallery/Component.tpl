@@ -10,11 +10,20 @@
             } else {
                 $class .= 'vpcOdd ';
             }
+            if ($i%$this->imagesPerLine == $this->imagesPerLine-1) {
+                $class .= 'lastInLine ';
+            }
             $class = trim($class);
-            $i++;
         ?>
         <div class="<?=$class;?>">
             <?=$this->component($child);?>
         </div>
+        <?
+            if ($i%$this->imagesPerLine == $this->imagesPerLine-1) {
+                echo '<div class="clear"></div>';
+            }
+            $i++;
+        ?>
     <? } ?>
+    <div class="clear"></div>
 </div>
