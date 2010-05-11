@@ -28,6 +28,12 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
                 ->setDimensions($dimensions);
         }
 
+        // Bildunterschrift
+        if (Vpc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
+            $this->add(new Vps_Form_Field_TextField('image_caption', trlVps('Image caption')))
+                ->setWidth(300);
+        }
+
         //absichtlich nicht aufrufen: parent::_initFields();
         //benötigen wir hier nicht, und abgeleitete komponenten können es noch tun
     }
