@@ -26,6 +26,5 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Directories_Item_D
     {
         parent::modifyItemData($new);
         $new->publish_date = $new->row->publish_date;
-        $new->teaser = $new->row->teaser;
     }
 }

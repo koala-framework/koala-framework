@@ -9,10 +9,10 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
     public function preDispatch()
     {
         if (!$this instanceof Vps_Controller_Action_Error_ErrorController
-                && $this->_getParam('application_max_assets_mtime')
+                && $this->_getParam('application_version')
                 && $this->getHelper('ViewRenderer')->isJson()) {
-            $l = new Vps_Assets_Loader();
-            if ($l->getDependencies()->getMaxFileMTime()!= $this->_getParam('application_max_assets_mtime')) {
+            $version = Zend_Registry::get('config')->application->version;
+            if ($version != $this->_getParam('application_version')) {
                 $this->_forward('json-wrong-version', 'error',
                                     'vps_controller_action_error');
                 return;

@@ -104,7 +104,7 @@ Ext.onReady(function()
     }
 });
 
-Vps.application = { maxAssetsMTime: '{$application.maxAssetsMTime}' };
+Vps.application = { version: '{$application.version}' };
 
 //log das auch ohne irgendwelche abh�nigkeiten funktioniert (zB im Selenium)
 Vps.log = function(msg) {

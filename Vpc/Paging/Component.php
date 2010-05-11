@@ -15,7 +15,6 @@ class Vpc_Paging_Component extends Vpc_Abstract
             'previous' => '&lt;',
             'next'     => '&gt;',
             'last'     => '&gt;&gt;',
-            'prefix'   => trlVpsStatic('Page').':'
         );
         $ret['cssClass'] = 'webPaging webStandard';
         return $ret;

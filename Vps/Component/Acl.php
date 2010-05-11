@@ -79,11 +79,9 @@ class Vps_Component_Acl
 
         $rules = $this->_getRules('Component', $componentClass, $role);
         if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) return true;
-        if ($rules && $rules['type'] == Vps_Acl::TYPE_DENY) return false;
 
         $rules = $this->_getRules('Component', null, $role);
         if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) return true;
-        if ($rules && $rules['type'] == Vps_Acl::TYPE_DENY) return false;
 
         //überklassen überprüfen
         //cache ist nötig wegen endlos-rekursion + performance
@@ -148,15 +146,6 @@ class Vps_Component_Acl
         if (!is_null($role)) $role = $this->_roleRegistry->get($role);
         $rules =& $this->_getRules('Component', $componentClass, $role, true);
         $rules['type'] = Vps_Acl::TYPE_ALLOW;
-        return $this;
-    }
-
-    public function denyComponent($role, $componentClass, $privilege = null)
-    {
-        if ($privilege) throw new Vps_Exception("Not yet implemented");
-        if (!is_null($role)) $role = $this->_roleRegistry->get($role);
-        $rules =& $this->_getRules('Component', $componentClass, $role, true);
-        $rules['type'] = Vps_Acl::TYPE_DENY;
         return $this;
     }
 

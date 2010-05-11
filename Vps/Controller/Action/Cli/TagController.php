@@ -166,15 +166,13 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
 
     public static function getProjectName()
     {
-        if (!file_exists('.svn')) return false;
+        if (!file_exists('.svn')) return false; //TODO GIT
 
         if (preg_match("#trunk/vps-projekte/(.*)\n#", `svn info`, $m)) {
             return $m[1];
-        } else if (preg_match("#branches/([^/]*)#", `svn info`, $m)) {
+        } else if (preg_match("#branches/(.*)\n#", `svn info`, $m)) {
             return $m[1];
         } else if (preg_match("#trunk/vw-projekte/(.*)\n#", `svn info`, $m)) {
-            return $m[1];
-        } else if (preg_match("#trunk/(.*)\n#", `svn info`, $m)) {
             return $m[1];
         }
         return false;

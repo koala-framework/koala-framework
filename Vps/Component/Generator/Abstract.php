@@ -656,11 +656,9 @@ abstract class Vps_Component_Generator_Abstract
             $c = $c->parent;
         }
 
-        if ($c) { //TODO warum tritt das auf?
-            $data['editControllerComponentId'] = $c->componentId;
-            $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
-                ->getControllerUrl('Generator');
-        }
+        $data['editControllerComponentId'] = $c->componentId;
+        $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
+            ->getControllerUrl('Generator');
 
         $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
             'pageGenerator' => true

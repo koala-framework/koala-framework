@@ -12,7 +12,6 @@ class Vpc_News_Detail_Abstract_Trl_Component extends Vpc_Directories_Item_Detail
     {
         parent::modifyItemData($new);
         $new->publish_date = $new->chained->row->publish_date;
-        $new->teaser = $new->row->teaser;
     }
 
 }

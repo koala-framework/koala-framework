@@ -1,9 +1,17 @@
 <?php
-/**
- * @deprecated
- * @since 04.05.2010
- * @see Vpc_List_ChildPages_Teaser_Form
- */
-class Vpc_ListChildPages_Teaser_Form extends Vpc_List_ChildPages_Teaser_Form
+class Vpc_ListChildPages_Teaser_Form extends Vps_Form_NonTableForm
 {
+    public function __construct($name, $class)
+    {
+        parent::__construct($name, $class);
+        $this->setProperty('class', $class);
+        $this->add($this->_getChildForm());
+    }
+
+    protected function _getChildForm()
+    {
+        $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), 'child');
+        $form->setIdTemplate('{component_id}-{id}');
+        return $form;
+    }
 }

@@ -193,8 +193,6 @@ class Vps_Component_Abstract_Admin
             return $data->getComponent()->getRow()->__toString();
         } catch (Zend_Db_Table_Row_Exception $e) {
             throw new Vps_Exception("__toString failed for component ".$data->componentClass.' you might want to set _toStringField or override componentToString');
-        } catch (Vps_Exception $e) {
-            throw new Vps_Exception("__toString failed for component ".$data->componentClass.' you might want to set _toStringField or override componentToString');
         }
     }
 
