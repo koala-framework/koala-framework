@@ -289,10 +289,6 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         } else {
             echo "vps: ".$g->getActiveBranch()." != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
         }
-        if (!$g->getActiveBranchContains('origin/'.$vpsBranch)) {
-            echo "vps: ".$g->getActiveBranch()." branch beinhaltet nicht origin/$vpsBranch.\n";
-            $doUpdate = false;
-        }
 
         $projectIds = Vps_Model_Abstract::getInstance('Vps_Util_Model_Projects')
                             ->getApplicationProjectIds();
