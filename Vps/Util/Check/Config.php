@@ -5,7 +5,7 @@ class Vps_Util_Check_Config
     {
         $checks = array();
         $checks['php'] = array(
-            'name' => 'Php >= 5.2'
+            'name' => 'Php > 5.2'
         );
         $checks['memcache'] = array(
             'name' => 'memcache Php extension'
@@ -28,9 +28,6 @@ class Vps_Util_Check_Config
         $checks['pdo_mysql'] = array(
             'name' => 'pdo_mysql Php extension'
         );
-        $checks['system'] = array(
-            'name' => 'executing system commands'
-        );
         $checks['log_write'] = array(
             'name' => 'log_write permissions'
         );
@@ -48,9 +45,6 @@ class Vps_Util_Check_Config
         $checks['memcache_connection'] = array(
             'name' => 'memcache connection'
         );
-        $checks['memcache_connection2'] = array(
-            'name' => 'memcache connection2'
-        );
         $checks['db_connection'] = array(
             'name' => 'db connection'
         );
@@ -58,7 +52,7 @@ class Vps_Util_Check_Config
             'name' => 'svn'
         );
         $checks['git'] = array(
-            'name' => 'git >= 1.5'
+            'name' => 'git'
         );
         $checks['uploads'] = array(
             'name' => 'uploads'
@@ -158,14 +152,6 @@ class Vps_Util_Check_Config
         }
     }
 
-    private static function _system()
-    {
-        $out = shell_exec("ls");
-        if (!$out) {
-            throw new Vps_Exception("executing 'ls' returned nothing");
-        }
-    }
-
     private static function _setup_vps()
     {
         Vps_Setup::setUpVps();
@@ -179,23 +165,6 @@ class Vps_Util_Check_Config
             throw new Vps_Exception("Memcache doesn't return the saved value correctly");
         }
     }
-
-    private static function _memcache_connection2()
-    {
-        $memcache = new Memcache;
-        $memcacheSettings = Vps_Registry::get('config')->server->memcache;
-        if (!$memcache->addServer($memcacheSettings->host, $memcacheSettings->port, true, 1, 1, 1)) {
-            throw new Vps_Exception("addServer returned false");
-        }
-        $value = uniqid();
-        if (!$memcache->set('check-config-test', $value)) {
-            throw new Vps_Exception("set returned false");
-        }
-        if ($memcache->get('check-config-test') != $value) {
-            throw new Vps_Exception("get returned a different value");
-        }
-    }
-
     private static function _db_connection()
     {
         Vps_Registry::get('db')->query("SHOW TABLES")->fetchAll();
@@ -209,16 +178,9 @@ class Vps_Util_Check_Config
     }
     private static function _git()
     {
-        $gitVersion = exec("git --version", $out, $ret);
+        exec("git --version", $out, $ret);
         if ($ret) {
             throw new Vps_Exception("Git command failed");
-        }
-        if (!preg_match('#^git version ([0-9\\.]+)$#', $gitVersion, $m)) {
-            throw new Vps_Exception("Invalid git --version response");
-        }
-        $gitVersion = $m[1];
-        if (version_compare($gitVersion, "1.5.0") < 0) {
-            throw new Vps_Exception("Invalid git version '$gitVersion', >= 1.5.0 is required");
         }
     }
 

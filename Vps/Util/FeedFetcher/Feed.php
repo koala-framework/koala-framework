@@ -130,14 +130,10 @@ class Vps_Util_FeedFetcher_Feed
         }
         if (!$error && $response) {
             if ($response->getHeader('ETag')) {
-	        $v = $response->getHeader('ETag');
-	        if (is_array($v)) $v = $v[0];
-                $feed['etag'] = $v;
+                $feed['etag'] = $response->getHeader('ETag');
             }
             if ($response->getHeader('Last-Modified')) {
-	        $v = $response->getHeader('Last-Modified');
-	        if (is_array($v)) $v = $v[0];
-                $feed['lastmodified'] = strtotime($v);
+                $feed['lastmodified'] = strtotime($response->getHeader('Last-Modified'));
             }
         }
         return $feed;

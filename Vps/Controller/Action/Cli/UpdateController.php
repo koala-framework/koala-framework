@@ -30,17 +30,6 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
     {
         echo "Update\n";
 
-        if (in_array('vps', Vps_Registry::get('config')->server->updateTags->toArray())) {
-            if (!file_exists('.git')) {
-                echo "\n\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-                echo "ACHTUNG web (und eventuell vps) wurden auf git umgestellt.\n";
-                system("php bootstrap.php git convert-to-git", $ret);
-                if ($ret) {
-                    throw new Vps_ClientException("Git konvertierung fehlgeschlagen! Bitte manuell konvertieren.");
-                }
-            }
-        }
-
         if (!file_exists('application/update')) {
             $doneNames = array();
             foreach (Vps_Update::getUpdates(0, 9999999) as $u) {

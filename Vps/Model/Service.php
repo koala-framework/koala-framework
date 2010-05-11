@@ -115,7 +115,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
         }
         $this->_rows[$savedRowData[$pk]] = $row;
 
-        return $savedRowData[$pk];
+        return $rowData[$pk];
     }
 
     public function delete(Vps_Model_Row_Interface $row)

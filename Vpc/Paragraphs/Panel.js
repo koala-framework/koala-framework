@@ -42,10 +42,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
                 changeVisible: this.onChangeVisible,
                 changePos: this.onChangePos,
                 addParagraphMenuShow: this.onAddParagraphMenuShow,
-                addParagraph: this.onParagraphAdd,
-                copyParagraph: this.onCopyParagraph,
-                pasteParagraph: this.onPasteParagraph,
-                copyPasteMenuShow: this.onCopyPasteMenuShow
+                addParagraph: this.onParagraphAdd
             }
         });
 
@@ -90,36 +87,12 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
                     }
                 }
             });
-            this.actions.copyPaste = {
-                text: trlVps('copy/paste'),
-                menu: [{
-                    text: trlVps('Copy Paragraph'),
-                    icon: '/assets/silkicons/page_white_copy.png',
-                    disabled: true
-                },{
-                    text: trlVps('Paste Paragraph'),
-                    icon: '/assets/silkicons/page_white_copy.png',
-                    scope: this,
-                    handler: function() {
-                        this.onPasteParagraph();
-                    }
-                }],
-                icon: '/assets/silkicons/page_white_copy.png',
-                cls  : 'x-btn-text-icon',
-                listeners: {
-                    scope: this,
-                    menushow: function(btn) {
-                        this.copyPasteParagraphPos = 1;
-                    }
-                }
-            };
         }
 
         this.tbar = [ this.actions.showPreview ];
         if (this.actions.addparagraph) {
             this.tbar.push('-');
             this.tbar.push(this.actions.addparagraph);
-            this.tbar.push(this.actions.copyPaste);
         }
 
         Vpc.Paragraphs.Panel.superclass.initComponent.call(this);
@@ -333,35 +306,6 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             },
             scope: this
         });
-    },
-
-    onCopyParagraph: function(record) {
-        var params = Vps.clone(this.getBaseParams());
-        params.id = record.get('id');
-        Ext.Ajax.request({
-            url: this.controllerUrl+'/json-copy',
-            params: params,
-            mask: this.el
-        });
-    },
-
-    onPasteParagraph: function() {
-        var params = Vps.clone(this.getBaseParams());
-        params.pos = this.copyPasteParagraphPos;
-        Ext.Ajax.request({
-            url: this.controllerUrl+'/json-paste',
-            params: params,
-            mask: this.el,
-            scope: this,
-            success: function() {
-                this.reload();
-                this.fireEvent('datachange');
-            }
-        });
-    },
-
-    onCopyPasteMenuShow: function(record) {
-        this.copyPasteParagraphPos = parseInt(record.get('pos'))+1;
     }
 
 });

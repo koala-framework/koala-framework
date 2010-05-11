@@ -10,7 +10,6 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
         $childConfig = Vpc_Admin::getInstance($ret['generators']['child']['component']['child'])->getExtConfig();
         if (array_keys($childConfig) == array('form')) {
             $ret['hasVisible'] = true;
-            $ret['editComponents'] = array();
         } else {
             $ret['hasVisible'] = false;
             $ret['editComponents'] = array('child');

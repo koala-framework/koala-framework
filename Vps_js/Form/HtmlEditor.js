@@ -209,7 +209,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                         }
                     }
                 }
-                /*  auskommentiert, so ist es fehlerhaft
                 if (Ext.isIE) {
                     if (!e.shiftKey && e.getCharCode() == 13) {
                         this.relayCmd('insertParagraph', 'specialHackToRemoveBr');
@@ -222,7 +221,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                         }).defer(100, this);
                     }
                 }
-                */
             }, this);
         }
     },

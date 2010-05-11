@@ -38,7 +38,6 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
-        $ret['imageCaption'] = false;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
         $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
@@ -96,11 +95,6 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $ret['image'] = $this->getData();
-        $imageCaptionSetting = $this->_getSetting('imageCaption');
-        if ($imageCaptionSetting) {
-            $ret['image_caption'] = $this->_getRow()->image_caption;
-            $ret['showImageCaption'] = $imageCaptionSetting;
-        }
         return $ret;
     }
 
@@ -166,8 +160,9 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         return null;
     }
 
-    protected function _getImageDimensions()
+    public function getImageDimensions()
     {
+        $data = $this->_getImageDataOrEmptyImageData();
         $row = $this->getRow();
         $dimension = $this->_getSetting('dimensions');
 
@@ -207,13 +202,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $s['height'] = $d['height'];
         }
         $s['scale'] = $d['scale'];
-        return $s;
-    }
 
-    public function getImageDimensions()
-    {
-        $data = $this->_getImageDataOrEmptyImageData();
-        $s = $this->_getImageDimensions();
         if ($data && $data['file'] && file_exists($data['file'])) {
             $sourceSize = @getimagesize($data['file']);
             if (!$sourceSize) return null;

@@ -61,9 +61,6 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
             return;
         }
         $n = $this->_transformColumnName($name);
-        if ($this->$name !== $value) {
-            $this->_dirty = true;
-        }
         $this->_data[$n] = $value;
         $this->_postSet($name, $value);
     }
@@ -93,15 +90,9 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         }
 
         if ($update) {
-            if ($this->_dirty) {
-                $ret = $this->_model->update($this, $this->_data);
-                $this->_dirty = false;
-            } else {
-                $ret = $this->{$this->_getPrimaryKey()};
-            }
+            $ret = $this->_model->update($this, $this->_data);
         } else {
             $ret = $this->_model->insert($this, $this->_data);
-            $this->_data[$this->_getPrimaryKey()] = $ret;
         }
         $this->_cleanData = $this->_data;
 

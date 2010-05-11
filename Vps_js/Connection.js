@@ -5,8 +5,6 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
      * Options:
      * - mask (true für body, sonst element)
      * - maskText (default Loading...)
-     * - progress
-     * - progressTitle (default Progress)
      */
     request: function(options)
     {
@@ -53,7 +51,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             options.scope = this;
         }
         if (!options.params) options.params = {};
-        options.params.application_max_assets_mtime = Vps.application.maxAssetsMTime;
+        options.params.application_version = Vps.application.version;
         if (!options.url.match(':\/\/')) {
             //absolute url incl. http:// erstellen
             //wird benötigt wenn fkt über mozrepl aufgerufen wird

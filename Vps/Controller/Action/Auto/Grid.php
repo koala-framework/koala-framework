@@ -92,9 +92,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->_primaryKey = $this->_model->getPrimaryKey();
         }
 
-        if (isset($this->_model) && $this->_position && !isset($this->_columns[$this->_position])
-            && in_array($this->_position, $this->_model->getColumns())
-        ) {
+        if (isset($this->_model) && $this->_position && in_array($this->_position, $this->_model->getColumns())) {
             $columnObject = new Vps_Grid_Column($this->_position);
             $columnObject->setHeader(' ')
                          ->setWidth(30)
@@ -518,19 +516,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected function _afterDelete()
     {
     }
-    
-    protected function _getRowById($id)
-    {
-        if ($id) {
-            $row = $this->_model->find($id)->current();
-        } else {
-            if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
-                throw new Vps_Exception("Add is not allowed.");
-            }
-            $row = $this->_model->createRow();
-        }
-        return $row;
-    }
 
     public function jsonSaveAction()
     {
@@ -546,7 +531,14 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         Zend_Registry::get('db')->beginTransaction();
         foreach ($data as $submitRow) {
             $id = $submitRow[$this->_primaryKey];
-            $row = $this->_getRowById($id);
+            if ($id) {
+                $row = $this->_model->find($id)->current();
+            } else {
+                if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
+                    throw new Vps_Exception("Add is not allowed.");
+                }
+                $row = $this->_model->createRow();
+            }
             if (!$row) {
                 throw new Vps_Exception("Can't find row with id '$id'.");
             }
@@ -555,6 +547,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
             foreach ($this->_columns as $column) {
                 if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID)) continue;
+                //p($column->validate($row, $submitRow));
                 $invalid = $column->validate($row, $submitRow);
                 if ($invalid) {
                     throw new Vps_ClientException(implode("<br />", $invalid));

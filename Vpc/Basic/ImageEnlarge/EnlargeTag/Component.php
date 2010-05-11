@@ -49,25 +49,15 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
                     $this->getData()->componentId, 'original', $data['filename']);
             }
         }
-
-        if (Vpc_Abstract::getSetting($this->_getImageEnlargeComponentData()->componentClass, 'imageCaption')) {
-            $ret['imageCaption'] = $this->_getImageEnlargeComponentData()->getComponent()->getRow()->image_caption;
-        }
         return $ret;
     }
 
-    private function _getImageEnlargeComponentData()
+    public function getImageData()
     {
         $d = $this->getData();
         while (!is_instance_of($d->componentClass, 'Vpc_Basic_ImageEnlarge_Component')) {
             $d = $d->parent;
         }
-        return $d;
-    }
-
-    public function getImageData()
-    {
-        $d = $this->_getImageEnlargeComponentData();
         return $d->getComponent()->getOwnImageData();
     }
 

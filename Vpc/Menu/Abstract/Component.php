@@ -46,27 +46,12 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
     public function getMenuComponent()
     {
-        $component = $this->getData()->parent;
-        $level = 1;
-        while ($component) {
-            $menuCategory = Vpc_Abstract::getFlag($component->componentClass, 'menuCategory');
-            if ($menuCategory) {
-                $component = null;
-                if ($level == 1) $level = $menuCategory;
-            } else {
-                $component = $component->parent;
-                $level++;
-            }
-        }
-        if ($level == $this->_getSetting('level') && $this->_getMenuData()) {
-            return $this->getData();
-        }
-        return null;
+        return $this->_getMenuData() ? $this->getData() : null;
     }
 
-    public function getMenuData($parentData = null, $select = array())
+    public function getMenuData($parentData = null)
     {
-        return $this->_getMenuData($parentData, $select);
+        return $this->_getMenuData($parentData);
     }
 
     public function getPageComponent($parentData = null)
@@ -116,13 +101,12 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    protected function _getMenuData($parentData = null, $select = array())
+    protected function _getMenuData($parentData = null)
     {
-        if (is_array($select)) $select = new Vps_Component_Select($select);
-        $select->whereShowInMenu(true);
+        $constraints = array('showInMenu' => true);
         $ret = array();
         $pageComponent = $this->getPageComponent($parentData);
-        if ($pageComponent) $ret = $pageComponent->getChildPages($select);
+        if ($pageComponent) $ret = $pageComponent->getChildPages($constraints);
         $currentPageIds = array();
         $currentPages = array_reverse($this->_getCurrentPages());
         foreach ($currentPages as $page) {

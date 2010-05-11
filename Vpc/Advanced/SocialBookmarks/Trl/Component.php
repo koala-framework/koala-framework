@@ -1,11 +1,22 @@
 <?php
-class Vpc_Advanced_SocialBookmarks_Trl_Component extends Vpc_Chained_Trl_MasterAsChild_Component
+class Vpc_Advanced_SocialBookmarks_Trl_Component extends Vpc_Abstract
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['editComponents'][] = 'child'; //kann das vielleicht im parent gemacht werden?
-        $ret['inheritComponentClass'] = 'Vpc_Advanced_SocialBookmarks_Trl_Inherit_Component';
+        unset($ret['generators']['child']);
+        $ret['generators']['socialBookmarks'] = array(
+            'class' => 'Vps_Component_Generator_Static',
+            'component' => $masterComponentClass,
+        );
+        $ret['editComponents'][] = 'socialBookmarks';
+        return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['socialBookmarks'] = $this->getData()->getChildComponent('-socialBookmarks');
         return $ret;
     }
 }

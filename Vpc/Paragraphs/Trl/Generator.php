@@ -1,19 +1,20 @@
 <?php
 class Vpc_Paragraphs_Trl_Generator extends Vpc_Chained_Trl_Generator
 {
-    protected function _createData($parentData, $row, $select)
+    protected function _getChainedChildComponents($parentData, Vps_Component_Select $select)
     {
-        $ret = parent::_createData($parentData, $row, $select);
+        $m = Vpc_Abstract::createChildModel($this->_class);
+        $ret = parent::_getChainedChildComponents($parentData, $select);
         if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
-            $m = Vpc_Abstract::createChildModel($this->_class);
-            $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row));
-            if (!$r || !$r->visible) {
-                $ret = null;
+            foreach ($ret as $k=>$c) {
+                $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($c));
+                if (!$r || !$r->visible) {
+                    unset($ret[$k]);
+                }
             }
         }
-        return $ret;
+        return array_values($ret);
     }
-
     protected function _formatConfig($parentData, $row)
     {
         $ret = parent::_formatConfig($parentData, $row);

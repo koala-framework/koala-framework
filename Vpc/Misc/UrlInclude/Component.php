@@ -11,7 +11,7 @@ class Vpc_Misc_UrlInclude_Component extends Vpc_Abstract
 
     public function getViewCacheLifetime()
     {
-        return 15*60;
+        return 60*60;
     }
 
     public function getTemplateVars()
