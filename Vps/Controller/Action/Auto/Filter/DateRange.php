@@ -7,18 +7,14 @@ class Vps_Controller_Action_Auto_Filter_DateRange extends Vps_Controller_Action_
 
         if (isset($params[$field . '_from'])) {
             $valueFrom = $params[$field . '_from'];
-        } else if ($this->getConfig('from')) {
-            $valueFrom = $this->getConfig('from');
         } else {
-            $valueFrom = null;
+            $valueFrom = $this->getFrom();
         }
 
         if (isset($params[$field . '_to'])) {
             $valueTo = $params[$field . '_to'];
-        } else if ($this->getConfig('to')) {
-            $valueTo = $this->getConfig('to');
         } else {
-            $valueTo = null;
+            $valueTo = $this->getTo();
         }
 
         $field = $this->getFieldname();

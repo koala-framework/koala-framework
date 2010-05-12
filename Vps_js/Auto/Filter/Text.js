@@ -5,6 +5,7 @@ Vps.Auto.Filter.Text = function(config)
     this.textField = new Ext.form.TextField({
         width: config.width
     });
+    this.paramName = config.paramName;
     this.textField.on('render', function() {
         // TODO:
         // event darf nicht "keypress" sein, da sonst zB backspace und del tasten
@@ -23,11 +24,8 @@ Ext.extend(Vps.Auto.Filter.Text, Vps.Auto.Filter.Abstract, {
         this.textField.reset();
     },
     getParams: function() {
-        var key = 'query';
-        if (this.id != 'text') key = 'query_'+this.id;
-
         var params = {};
-        params[key] = this.textField.getValue();
+        params[this.paramName] = this.textField.getValue();
         return params;
     },
     setValue: function(v) {

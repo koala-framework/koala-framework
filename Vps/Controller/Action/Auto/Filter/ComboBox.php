@@ -4,6 +4,6 @@ class Vps_Controller_Action_Auto_Filter_ComboBox extends Vps_Controller_Action_A
     protected function _init()
     {
         parent::_init();
-        $this->_defaults['data'] = null;
+        $this->_mandatoryProperties['data'] = null;
     }
 }

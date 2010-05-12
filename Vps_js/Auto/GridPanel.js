@@ -456,44 +456,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             }
         }
 
-        this.filters = new Ext.util.MixedCollection();
-        var first = true;
-        for (var i = 0; i < meta.filters.length; i++) {
-            var f = meta.filters[i];
-            if (!Vps.Auto.Filter[f.type]) {
-                throw "Unknown filter.type: "+f.type;
-            }
-            var type = Vps.Auto.Filter[f.type];
-            delete f.type;
-            var filterField = new type(f);
-
-            if (f.right) {
-				gridConfig.tbar.add('->');
-				f.label += ' ';
-			} else if(first && gridConfig.tbar.length > 0) {
-                gridConfig.tbar.add('-');
-            }
-            if (first && !f.label) f.label = 'Filter:';
-            if (f.label) {
-                if (!first) {
-                    f.label = '  '+f.label;
-                }
-                gridConfig.tbar.add(f.label);
-            } else {
-                if (!first) {
-                    gridConfig.tbar.add('  ');
-                }
-            }
-            filterField.getToolbarItem().each(function(i) {
-                gridConfig.tbar.add(i);
-            });
-            this.filters.add(filterField);
-            filterField.on('filter', function(f, params) {
+        this.filters = new Vps.Auto.FilterCollection(meta.filters, this);
+        this.filters.each(function(filter) {
+            filter.on('filter', function(f, params) {
                 this.applyBaseParams(params);
                 this.load();
             }, this);
-            first = false;
-        }
+        }, this);
+        this.filters.applyToTbar(gridConfig.tbar);
 
         if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv || meta.buttons.reload) {
             gridConfig.tbar.add('->');

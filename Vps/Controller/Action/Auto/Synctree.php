@@ -9,7 +9,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected $_tableName;
     protected $_model;
     protected $_modelName;
-    protected $_filters = array();
+    protected $_filters;
 
     protected $_icons = array (
         'root'      => 'folder',
@@ -51,6 +51,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         ));
     }
 
+    protected function _init() {}
+
     public function preDispatch()
     {
         parent::preDispatch();
@@ -66,6 +68,12 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         if (!isset($this->_model)) {
             throw new Vps_Exception('$_model oder $_modelName not set');
         }
+
+        $this->_filters = new Vps_Collection();
+
+        $this->_init();
+
+        foreach ($this->_filters as $filter) $filter->setModel($this->_model);
 
         // PrimaryKey setzen
         if (!isset($this->_primaryKey)) {
@@ -108,7 +116,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         // Falls Filter einen Default-Wert hat:
         // - GET query-Parameter setzen,
         // - Im JavaScript nach rechts verschieben und Defaultwert setzen
-        foreach ($this->_getFilters() as $filter) {
+        foreach ($this->_filters as $filter) {
             if ($filter instanceof Vps_Controller_Action_Auto_Filter_Text) continue;
             $param = $filter->getParamName();
             if ($filter->getConfig('default') && !$this->_getParam($param)) {
@@ -125,7 +133,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $this->view->icons[$k] = $i->__toString();
         }
         $filters = array();
-        foreach ($this->_getFilters() as $filter) {
+        foreach ($this->_filters as $filter) {
             $filters[] = $filter->getExtConfig();
         }
         $this->view->filters = $filters;
@@ -146,15 +154,14 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     public function jsonDataAction()
     {
         $parentId = $this->_getParam('node');
-
         $this->_saveSessionNodeOpened($parentId, true);
         $this->_saveNodeOpened();
 
-        if ($this->_getParam('filter') == 'true') {
-            $this->view->nodes = $this->_filterNodes();
-        } else {
-            $this->view->nodes = $this->_formatNodes();
+        $method = '_formatNodes';
+        foreach ($this->_filters as $filter) {
+            if ($this->_getParam($filter->getParamName())) $method = '_filterNodes';
         }
+        $this->view->nodes = $this->$method();
     }
 
     public function jsonNodeDataAction()
@@ -212,8 +219,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $select = $this->_getSelect();
 
         //erzeugen von Filtern
-        foreach ($this->_getFilters() as $filter) {
-            if ($filter->isSkipWhere()) continue;
+        foreach ($this->_filters as $filter) {
+            if ($filter->getSkipWhere()) continue;
             $select = $filter->formatSelect($select, $this->_getAllParams());
         }
 
@@ -507,26 +514,5 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         $this->_saveSessionNodeOpened($id, true);
-    }
-
-    protected function _getFilters()
-    {
-        $ret = array();
-        foreach ($this->_filters as $field => $config) {
-            if ($field == 'text' && is_bool($config) && $config) {
-                $type = 'text';
-                if (!is_array($config)) $config = array();
-            } else if (isset($config['type'])) {
-                $config['fieldname'] = $field;
-                $type = $config['type'];
-            } else {
-                throw new Vps_Exception('No filter-type defined');
-            }
-            $config['model'] = $this->_model;
-            $class = 'Vps_Controller_Action_Auto_Filter_' . ucfirst($type);
-            if (!class_exists($class)) throw new Vps_Exception('Unknown Filter: ' . $type);
-            $ret[] = new $class($config);
-        }
-        return $ret;
     }
 }
