@@ -4,6 +4,7 @@
  * @group Model_Db
  * @group Model_DbWithConnection
  * @group Model_Db_Import_Export
+ * @group slow
  */
 class Vps_Model_DbWithConnection_ImportExport_Test extends PHPUnit_Framework_TestCase
 {
