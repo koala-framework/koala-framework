@@ -2,6 +2,7 @@
 /**
  * @group Model
  * @group Model_FnFFile
+ * @group slow
  */
 class Vps_Model_FnFFile_Test extends PHPUnit_Framework_TestCase
 {

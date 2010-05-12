@@ -2,6 +2,7 @@
 /**
  * @group Vpc_Trl
  * @group Vpc_Trl_Posts
+ * @group slow
  *
 ansicht frontend:
 /vps/vpctest/Vpc_Trl_Posts_Root/de/test
