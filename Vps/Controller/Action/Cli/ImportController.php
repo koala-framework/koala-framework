@@ -147,7 +147,13 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
         }
 
-        exec("echo \"SHOW DATABASES\" | mysql", $existingDatabases);
+        exec('which mysqldump 2>&1 >/dev/null', $out, $ret);
+        $hasMysqlBinary = !$ret;
+        
+
+        if ($hasMysqlBinary) {
+            exec("echo \"SHOW DATABASES\" | mysql", $existingDatabases);
+        }
 
         $databases = $config->server->databases->toArray();
         if (!$databases) $databases = array('web');
@@ -158,7 +164,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 echo "ignoriere $dbKey, nicht in lokaler db config vorhanden...\n";
                 continue;
             }
-            if (!in_array($dbConfig['dbname'], $existingDatabases)) {
+            if (isset($existingDatabases) && !in_array($dbConfig['dbname'], $existingDatabases)) {
                 echo "Datenbank {$dbConfig['dbname']} nicht vorhanden, versuche sie zu erstellen...\n";
                 system("echo \"CREATE DATABASE \`{$dbConfig['dbname']}\`;\" | mysql", $ret);
                 if ($ret != 0) {
@@ -168,11 +174,13 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
             $db = Zend_Registry::get('dao')->getDb($dbKey);
 
-            $mysqlLocalOptions = "--host=$dbConfig[host] ";
-            //auskommentiert weil: es muss in ~/.my.cnf ein benutzer der das machen darf eingestellt sein!
-            //ansonsten gibt es probleme für das erstellen von triggers, dazu benötigt man SUPER priviliges
-            // -> scheiß mysql
-            //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
+            $mysqlLocalOptions = "--host=localhost "; //immer localhost da per ssh auf remote host verbunden wird
+            
+            //doch wida einkommentiert da 1. sicherer und 2. bei POI probleme und 3. im neuen mysql hoffenltich kein problem mehr
+            ////auskommentiert weil: es muss in ~/.my.cnf ein benutzer der das machen darf eingestellt sein!
+            ////ansonsten gibt es probleme für das erstellen von triggers, dazu benötigt man SUPER priviliges
+            //// -> scheiß mysql
+            $mysqlLocalOptions .= "--user=$dbConfig[username] --password=$dbConfig[password] ";
 
 
             echo "erstelle datenbank-backup '$dbKey'...\n";
@@ -217,21 +225,22 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 echo $dumpname.".bz2\n";
             }
 
-
-            if ($keepTables) {
-                echo "erstelle dump fuer KeepTables '$dbKey'...\n";
-                $keepTablesDump = tempnam('/tmp', 'importkeep');
-                $cmd = "mysqldump --add-drop-table=false --no-create-info=true $mysqlLocalOptions $dbConfig[dbname] ".implode(' ', $keepTables).">> $keepTablesDump";
-                if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
+            echo "loesche lokale tabellen in datenbank '$dbKey'...\n";
+            $deleteTables = array();
+            foreach ($tables as $i) {
+                if (!in_array($i, $keepTables)) {
+                    $deleteTables[] = $i;
+                }
+            }
+            if ($deleteTables) {
+                $cmd = "echo \"SET foreign_key_checks = 0;  DROP TABLE ".implode(', ', $deleteTables)."; SET foreign_key_checks = 1; \"";
+                $cmd .= " | mysql $mysqlLocalOptions $dbConfig[dbname] ";
+                if ($dbConfig['host'] != 'localhost') {
+                    $cmd = "ssh $dbConfig[host] ".escapeshellarg($cmd);
+                }
+                if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             }
-
-            echo "loesche lokale datenbank '$dbKey'...\n";
-            $this->_systemCheckRet("echo \"SET foreign_key_checks = 0; DROP DATABASE \`$dbConfig[dbname]\`; SET foreign_key_checks = 1;\" | mysql $mysqlLocalOptions");
-
-            echo "erstelle neue datenbank '$dbKey'...\n";
-            $this->_systemCheckRet("echo \"CREATE DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
-
 
             echo "importiere datenbank '$dbKey'...\n";
             if ($ownConfig->server->host == $config->server->host) {
@@ -254,7 +263,12 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
                 $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
-                $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg($cmd);
+                if ($dbConfig['host'] != 'localhost') { //TODO: diese if-abfrage ist nicht immer richtig
+                    //fuer poi, nur maja2 darf zu pbk-sql im moment
+                    $cmd = "ssh $dbConfig[host] ".escapeshellarg($cmd);
+                } else {
+                    $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg($cmd);
+                }
             }
             $descriptorspec = array(
                 1 => array("pipe", "w")
@@ -263,6 +277,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $procDump = new Vps_Util_Proc($cmd, $descriptorspec);
 
             $cmd = "mysql $mysqlLocalOptions --default-character-set=utf8 $dbConfig[dbname]";
+            if ($dbConfig['host'] != 'localhost') {
+                $cmd = "ssh $dbConfig[host] ".escapeshellarg($cmd);
+            }
+            if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
             $descriptorspec = array(
                 0 => array("pipe", "r")
             );
@@ -285,14 +303,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             fclose($procImport->pipe(0));
             $procImport->close();
             $procDump->close();
-
-            if ($keepTables) {
-                echo "spiele KeepTables ein '$dbKey'...\n";
-                $cmd = "mysql $mysqlLocalOptions $dbConfig[dbname] < $keepTablesDump";
-                if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
-                $this->_systemCheckRet($cmd);
-                unlink($keepTablesDump);
-            }
         }
         echo "\n";
 
@@ -488,10 +498,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     public function backupDbAction()
     {
-        exec('which mysqldump', $out, $ret);
-        if ($ret) {
-            echo "mysqldump nicht gefunden, ES WIRD KEIN DB BACKUP ERSTELLT!!\n";
-        } else {
+        //exec('which mysqldump', $out, $ret);
+        //if ($ret) {
+        //    echo "mysqldump nicht gefunden, ES WIRD KEIN DB BACKUP ERSTELLT!!\n";
+        //} else {
             echo "erstelle backup...\n";
             $dumpname = $this->_backupDb(Vps_Util_ClearCache::getInstance()->getDbCacheTables());
             if ($dumpname) {
@@ -501,7 +511,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             } else {
                 echo "uebersprungen...\n";
             }
-        }
+        //}
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
@@ -509,7 +519,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     {
         $ret = '';
 
-        $mysqlOptions = "--host=$dbConfig[host] --user=$dbConfig[username] --password=$dbConfig[password] ";
+                        //immer localhost, denn wenn es ein anderer host ist wird dahin per ssh verbunden (siehe unten)
+        $mysqlOptions = "--host=localhost --user=$dbConfig[username] --password=$dbConfig[password] ";
+        if (!Vps_Util_Mysql::hasPrivilege('LOCK TABLES')) {
+            $mysqlOptions .= " --skip-lock-tables --skip-add-locks";
+        }
         $config = Zend_Registry::get('config');
 
         $mysqlDir = '';
@@ -526,6 +540,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $ret .= " && {$mysqlDir}mysqldump --no-data $mysqlOptions $dbConfig[dbname] $t";
         }
         $ret .= "; }";
+        if ($dbConfig['host'] != 'localhost') {
+            $ret = "ssh $dbConfig[host] ".escapeshellarg($ret);
+        }
 
         return $ret;
     }
@@ -547,6 +564,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
         $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";
+        if ($this->_getParam('debug')) echo $cmd."\n";
         $this->_systemCheckRet($cmd);
 
         return $dumpname;
