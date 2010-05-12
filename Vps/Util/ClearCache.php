@@ -196,7 +196,7 @@ class Vps_Util_ClearCache
             foreach ($dir as $fileinfo) {
                 if ($fileinfo->isFile()) {
                     unlink($fileinfo->getPathName());
-                } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn') {
+                } elseif (!$fileinfo->isDot() && $fileinfo->isDir() && $fileinfo->getFilename() != '.svn' && $fileinfo->getFilename() != '.gitignore') {
                     $this->_removeDirContents($fileinfo->getPathName(), $server);
                     @rmdir($fileinfo->getPathName());
                 }
