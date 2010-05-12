@@ -88,45 +88,14 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             for (var button in meta.buttons) {
                 tbar.add(this.getAction(button));
             }
-            this.filters = new Ext.util.MixedCollection();
-            var first = true;
-            for (var i = 0; i < meta.filters.length; i++) {
-                var f = meta.filters[i];
-                if (!Vps.Auto.Filter[f.type]) {
-                    throw "Unknown filter.type: "+f.type;
-                }
-                var type = Vps.Auto.Filter[f.type];
-                delete f.type;
-                var filterField = new type(f);
-            
-                if (f.right) {
-                    tbar.add('->');
-                    f.label += ' ';
-                } else if(first && tbar.length > 0) {
-                    tbar.add('-');
-                }
-                if (first && !f.label) f.label = 'Filter:';
-                if (f.label) {
-                    if (!first) {
-                        f.label = '  '+f.label;
-                    }
-                    tbar.add(f.label);
-                } else {
-                    if (!first) {
-                        tbar.add('  ');
-                    }
-                }
-                filterField.getToolbarItem().each(function(i) {
-                    tbar.add(i);
-                });
-                this.filters.add(filterField);
-                filterField.on('filter', function(filter, params) {
-                	params.filter = params[f.paramName] != '';
+            this.filters = new Vps.Auto.FilterCollection(meta.filters);
+            this.filters.each(function(filter) {
+                filter.on('filter', function(f, params) {
                     this.applyBaseParams(params);
                     this.tree.getRootNode().reload();
                 }, this);
-                first = false;
-            }
+            }, this);
+            this.filters.applyToTbar(tbar);
         }
         
         // Tree

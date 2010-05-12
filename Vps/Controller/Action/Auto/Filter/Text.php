@@ -1,19 +1,18 @@
 <?php
 class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_Filter_Abstract
 {
-    protected $_defaults = array(
-        'queryFields' => null,
+    protected $_defaultPropertyValues = array(
         'querySeparator' => ' ',
-        'model' => null
     );
+    protected $_mandatoryProperties = array('queryFields');
 
     public function formatSelect($select, $params = array())
     {
         if (!isset($params['query']) || !$params['query']) return $select;
 
         $query = str_replace(': ', ':', $params['query']);
-        if ($this->getConfig('querySeparator')) {
-            $query = explode($this->getConfig('querySeparator'), $query);
+        if ($this->getQuerySeparator()) {
+            $query = explode($this->getQuerySeparator(), $query);
         } else {
             $query = array($query);
         }
@@ -35,10 +34,9 @@ class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_
 
     private function _getQueryContainsColon($query)
     {
-        $availableColumns = $this->getConfig('model')->getColumns();
-
+        $model = $this->getModel();
         list($field, $value) = explode(':', $query);
-        if (in_array($field, $availableColumns)) {
+        if (in_array($field, $model->getColumns())) {
             if (is_numeric($value)) {
                 return new Vps_Model_Select_Expr_Equals($field, $value);
             } else {
@@ -49,10 +47,10 @@ class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_
         }
     }
 
-    private function _getQueryExpression($query)
+    protected function _getQueryExpression($query)
     {
         $containsExpression = array();
-        foreach ($this->getConfig('queryFields') as $queryField) {
+        foreach ($this->getQueryFields() as $queryField) {
             $containsExpression[] = new Vps_Model_Select_Expr_Contains($queryField, $query);
         }
         return new Vps_Model_Select_Expr_Or($containsExpression);
@@ -61,12 +59,11 @@ class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_
     public function getExtConfig()
     {
         $ret = parent::getExtConfig();
-        unset($ret['model']);
         unset($ret['queryFields']);
         return $ret;
     }
 
-    public function getId()
+    public function getName()
     {
         return 'text';
     }

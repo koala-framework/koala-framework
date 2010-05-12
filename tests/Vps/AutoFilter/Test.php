@@ -14,10 +14,9 @@ class Vps_AutoFilter_Test extends PHPUnit_Framework_TestCase
                 array('id' => 3, 'value' => 'bar'),
             )
         ));
-        $filter = new Vps_Controller_Action_Auto_Filter_Text(array(
-            'model' => $model,
-            'queryFields' => array('value')
-        ));
+        $filter = new Vps_Controller_Action_Auto_Filter_Text();
+        $filter->setModel($model);
+        $filter->setQueryFields(array('value'));
 
         $select = $filter->formatSelect($model->select());
         $this->assertEquals(3, $model->countRows($select));
@@ -54,10 +53,9 @@ class Vps_AutoFilter_Test extends PHPUnit_Framework_TestCase
                 array('id' => 3, 'value' => 'bar'),
             )
         ));
-        $filter = new Vps_Controller_Action_Auto_Filter_Query(array(
-            'fieldname' => 'value',
-            'model' => $model
-        ));
+        $filter = new Vps_Controller_Action_Auto_Filter_Query();
+        $filter->setModel($model);
+        $filter->setFieldname('value');
 
         $select = $filter->formatSelect($model->select());
         $this->assertEquals(3, $model->countRows($select));
@@ -81,10 +79,9 @@ class Vps_AutoFilter_Test extends PHPUnit_Framework_TestCase
                 array('id' => 3, 'date' => '2010-05-03'),
             )
         ));
-        $filter = new Vps_Controller_Action_Auto_Filter_DateRange(array(
-            'fieldname' => 'date',
-            'model' => $model
-        ));
+        $filter = new Vps_Controller_Action_Auto_Filter_DateRange();
+        $filter->setModel($model);
+        $filter->setFieldname('date');
 
         $select = $filter->formatSelect($model->select());
         $this->assertEquals(3, $model->countRows($select));
@@ -114,11 +111,10 @@ class Vps_AutoFilter_Test extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals(1, $model->countRows($select));
 
-        $filter = new Vps_Controller_Action_Auto_Filter_DateRange(array(
-            'fieldname' => 'date',
-            'from' => '2010-05-02',
-            'model' => $model
-        ));
+        $filter = new Vps_Controller_Action_Auto_Filter_DateRange();
+        $filter->setModel($model);
+        $filter->setFieldname('date');
+        $filter->setFrom('2010-05-02');
 
         $select = $filter->formatSelect($model->select());
         $this->assertEquals(2, $model->countRows($select));

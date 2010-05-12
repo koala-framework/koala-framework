@@ -1,17 +1,16 @@
 <?php
-class Vps_AutoTree_BasicController extends Vps_Controller_Action_Auto_Synctree
+class Vps_AutoTree_BasicController extends Vps_Controller_Action_Auto_Tree
 {
     protected $_modelName = 'Vps_AutoTree_Model';
-    protected $_filters = array(
-        'foo' => array(
-            'type' => 'Text',
-            'queryFields' => array('name', 'search')
-        ),
-        'search' => array(
-            'type' => 'ComboBox',
-            'data' => array(array('root', 'root'), array('l1', 'l1'), array('l2', 'l2'))
-        )
-    );
+
+    protected function _init()
+    {
+        $this->_filters->add(new Vps_Controller_Action_Auto_Filter_Text())
+            ->setQueryFields(array('name', 'search'));
+        $this->_filters->add(new Vps_Controller_Action_Auto_Filter_ComboBox())
+            ->setFieldname('search')
+            ->setData(array(array('root', 'root'), array('l1', 'l1'), array('l2', 'l2')));
+    }
 
     public function indexAction()
     {
