@@ -3,25 +3,25 @@ class Vps_Controller_Action_Auto_Filter_DateRange extends Vps_Controller_Action_
 {
     public function formatSelect($select, $params = array())
     {
-        $field = $this->_fieldname;
+        $field = $this->getParamName();
 
         if (isset($params[$field . '_from'])) {
             $valueFrom = $params[$field . '_from'];
-        } else if (isset($this->_from)) {
-            $valueFrom = $this->_from;
+        } else if ($this->getConfig('from')) {
+            $valueFrom = $this->getConfig('from');
         } else {
             $valueFrom = null;
         }
 
         if (isset($params[$field . '_to'])) {
             $valueTo = $params[$field . '_to'];
-        } else if (isset($this->_to)) {
-            $valueTo = $this->_to;
+        } else if ($this->getConfig('to')) {
+            $valueTo = $this->getConfig('to');
         } else {
             $valueTo = null;
         }
 
-        $field = $this->_fieldname;
+        $field = $this->getFieldname();
         if ($valueFrom && $valueTo) {
             $select->where(new Vps_Model_Select_Expr_Or(array(
                 new Vps_Model_Select_Expr_And(array(
@@ -43,5 +43,10 @@ class Vps_Controller_Action_Auto_Filter_DateRange extends Vps_Controller_Action_
             )));
         }
         return $select;
+    }
+
+    public function getParamName()
+    {
+        return $this->getFieldname();
     }
 }

@@ -1,18 +1,37 @@
 <?php
 class Vps_Controller_Action_Auto_Filter_Query extends Vps_Controller_Action_Auto_Filter_Abstract
 {
-    protected $_fieldname;
-
-    public function __construct($config = array())
+    protected function _init()
     {
-        if (!isset($config['fieldname'])) throw new Vps_Exception('Parameter "fieldname" ist needed for Query-Filter');
-        parent::__construct($config);
+        parent::_init();
+        $this->_defaults['model'] = null;
+        $this->_defaults['fieldname'] = null;
     }
 
     public function formatSelect($select, $params = array()) {
-        if (isset($params['query']) && $params['query']) {
-            $select->whereEquals($this->_fieldname, $params['query']);
+        $column = $this->getFieldname();
+        if (!$this->getConfig('model')->hasColumn($column))
+            throw new Vps_Exception("Model has to have column \"$column\" to filter");
+        if (isset($params[$this->getParamName()]) && $params[$this->getParamName()]) {
+            $select->whereEquals($column, $params[$this->getParamName()]);
         }
         return $select;
+    }
+
+    public function getExtConfig()
+    {
+        $ret = parent::getExtConfig();
+        unset($ret['model']);
+        return $ret;
+    }
+
+    public function getFieldname()
+    {
+        return $this->getConfig('fieldname');
+    }
+
+    public function getId()
+    {
+        return $this->getFieldname();
     }
 }

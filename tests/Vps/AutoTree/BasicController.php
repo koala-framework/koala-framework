@@ -2,8 +2,16 @@
 class Vps_AutoTree_BasicController extends Vps_Controller_Action_Auto_Synctree
 {
     protected $_modelName = 'Vps_AutoTree_Model';
-    protected $_queryFields = array('name', 'search');
-    protected $_filters = array('text' => true);
+    protected $_filters = array(
+        'foo' => array(
+            'type' => 'Text',
+            'queryFields' => array('name', 'search')
+        ),
+        'search' => array(
+            'type' => 'ComboBox',
+            'data' => array(array('root', 'root'), array('l1', 'l1'), array('l2', 'l2'))
+        )
+    );
 
     public function indexAction()
     {

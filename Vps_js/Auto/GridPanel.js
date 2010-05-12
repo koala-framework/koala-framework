@@ -458,14 +458,13 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
         this.filters = new Ext.util.MixedCollection();
         var first = true;
-        for(var filter in meta.filters) {
-            var f = meta.filters[filter];
-            if (!Vps.Auto.GridFilter[f.type]) {
+        for (var i = 0; i < meta.filters.length; i++) {
+            var f = meta.filters[i];
+            if (!Vps.Auto.Filter[f.type]) {
                 throw "Unknown filter.type: "+f.type;
             }
-            var type = Vps.Auto.GridFilter[f.type];
+            var type = Vps.Auto.Filter[f.type];
             delete f.type;
-            f.id = filter;
             var filterField = new type(f);
 
             if (f.right) {

@@ -55,19 +55,20 @@ class Vps_AutoFilter_Test extends PHPUnit_Framework_TestCase
             )
         ));
         $filter = new Vps_Controller_Action_Auto_Filter_Query(array(
-            'fieldname' => 'value'
+            'fieldname' => 'value',
+            'model' => $model
         ));
 
         $select = $filter->formatSelect($model->select());
         $this->assertEquals(3, $model->countRows($select));
 
-        $select = $filter->formatSelect($model->select(), array('query' => 'foo'));
+        $select = $filter->formatSelect($model->select(), array('query_value' => 'foo'));
         $this->assertEquals(1, $model->countRows($select));
 
-        $select = $filter->formatSelect($model->select(), array('query' => 'foobar'));
+        $select = $filter->formatSelect($model->select(), array('query_value' => 'foobar'));
         $this->assertEquals(1, $model->countRows($select));
 
-        $select = $filter->formatSelect($model->select(), array('query' => 'xxx'));
+        $select = $filter->formatSelect($model->select(), array('query_value' => 'xxx'));
         $this->assertEquals(0, $model->countRows($select));
     }
 
@@ -81,7 +82,8 @@ class Vps_AutoFilter_Test extends PHPUnit_Framework_TestCase
             )
         ));
         $filter = new Vps_Controller_Action_Auto_Filter_DateRange(array(
-            'fieldname' => 'date'
+            'fieldname' => 'date',
+            'model' => $model
         ));
 
         $select = $filter->formatSelect($model->select());
@@ -114,7 +116,8 @@ class Vps_AutoFilter_Test extends PHPUnit_Framework_TestCase
 
         $filter = new Vps_Controller_Action_Auto_Filter_DateRange(array(
             'fieldname' => 'date',
-            'from' => '2010-05-02'
+            'from' => '2010-05-02',
+            'model' => $model
         ));
 
         $select = $filter->formatSelect($model->select());
