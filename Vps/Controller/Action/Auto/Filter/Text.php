@@ -1,21 +1,19 @@
 <?php
 class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_Filter_Abstract
 {
-    protected $_queryFields;
-    protected $_querySeparator = ' ';
-    protected $_model;
+    protected $_defaults = array(
+        'queryFields' => null,
+        'querySeparator' => ' ',
+        'model' => null
+    );
 
     public function formatSelect($select, $params = array())
     {
         if (!isset($params['query']) || !$params['query']) return $select;
 
-        if (!$this->_queryFields) {
-            throw new Vps_Exception("queryFields which is required to use Filter_Text is not set.");
-        }
-
         $query = str_replace(': ', ':', $params['query']);
-        if ($this->_querySeparator) {
-            $query = explode($this->_querySeparator, $query);
+        if ($this->getConfig('querySeparator')) {
+            $query = explode($this->getConfig('querySeparator'), $query);
         } else {
             $query = array($query);
         }
@@ -37,8 +35,7 @@ class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_
 
     private function _getQueryContainsColon($query)
     {
-        if (!$this->_model) throw new Vps_Exception('Model has to be set for Text-Filter');
-        $availableColumns = $this->_model->getColumns();
+        $availableColumns = $this->getConfig('model')->getColumns();
 
         list($field, $value) = explode(':', $query);
         if (in_array($field, $availableColumns)) {
@@ -55,10 +52,27 @@ class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_
     private function _getQueryExpression($query)
     {
         $containsExpression = array();
-        foreach ($this->_queryFields as $queryField) {
+        foreach ($this->getConfig('queryFields') as $queryField) {
             $containsExpression[] = new Vps_Model_Select_Expr_Contains($queryField, $query);
         }
         return new Vps_Model_Select_Expr_Or($containsExpression);
     }
 
+    public function getExtConfig()
+    {
+        $ret = parent::getExtConfig();
+        unset($ret['model']);
+        unset($ret['queryFields']);
+        return $ret;
+    }
+
+    public function getId()
+    {
+        return 'text';
+    }
+
+    public function getParamName()
+    {
+        return 'query';
+    }
 }

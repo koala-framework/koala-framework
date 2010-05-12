@@ -1,6 +1,6 @@
-Vps.Auto.GridFilter.DateRange = function(config)
+Vps.Auto.Filter.DateRange = function(config)
 {
-    Vps.Auto.GridFilter.DateRange.superclass.constructor.call(this, config);
+    Vps.Auto.Filter.DateRange.superclass.constructor.call(this, config);
     this.fieldFrom = new Vps.Form.DateField({
         width: 80,
         value: config.from
@@ -14,6 +14,8 @@ Vps.Auto.GridFilter.DateRange = function(config)
         value: config.to
     });
     this.toolbarItems.add(this.fieldTo);
+    
+    this.paramName = config.paramName;
 
     if (config.button) {
 	    this.toolbarItems.add(new Ext.Button({
@@ -49,7 +51,7 @@ Vps.Auto.GridFilter.DateRange = function(config)
 
 
 
-Ext.extend(Vps.Auto.GridFilter.DateRange, Vps.Auto.GridFilter.Abstract, {
+Ext.extend(Vps.Auto.Filter.DateRange, Vps.Auto.Filter.Abstract, {
     reset: function() {
         this.fieldFrom.reset();
         this.fieldTo.reset();
@@ -57,10 +59,10 @@ Ext.extend(Vps.Auto.GridFilter.DateRange, Vps.Auto.GridFilter.Abstract, {
     getParams: function() {
         var params = {};
         if (this.fieldFrom.getValue()) {
-            params[this.id+'_from'] = this.fieldFrom.getValue().format('Y-m-d');
+            params[this.paramName+'_from'] = this.fieldFrom.getValue().format('Y-m-d');
         }
         if (this.fieldTo.getValue()) {
-            params[this.id+'_to'] = this.fieldTo.getValue().format('Y-m-d');
+            params[this.paramName+'_to'] = this.fieldTo.getValue().format('Y-m-d');
         }
         return params;
     }

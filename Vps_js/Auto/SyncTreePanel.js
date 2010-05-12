@@ -90,19 +90,15 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             }
             this.filters = new Ext.util.MixedCollection();
             var first = true;
-            if (meta.filters.text && typeof(meta.filters.text) != 'object') {
-                meta.filters.text = { type: 'TextField' };
-            }
-            for(var filter in meta.filters) {
-                var f = meta.filters[filter];
-                if (!Vps.Auto.GridFilter[f.type]) {
+            for (var i = 0; i < meta.filters.length; i++) {
+                var f = meta.filters[i];
+                if (!Vps.Auto.Filter[f.type]) {
                     throw "Unknown filter.type: "+f.type;
                 }
-                var type = Vps.Auto.GridFilter[f.type];
+                var type = Vps.Auto.Filter[f.type];
                 delete f.type;
-                f.id = filter;
                 var filterField = new type(f);
-    
+            
                 if (f.right) {
                     tbar.add('->');
                     f.label += ' ';
@@ -124,8 +120,8 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     tbar.add(i);
                 });
                 this.filters.add(filterField);
-                filterField.on('filter', function(f, params) {
-                	params.filter = true;
+                filterField.on('filter', function(filter, params) {
+                	params.filter = params[f.paramName] != '';
                     this.applyBaseParams(params);
                     this.tree.getRootNode().reload();
                 }, this);

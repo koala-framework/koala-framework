@@ -1,11 +1,11 @@
-Ext.ns('Vps.Auto.GridFilter');
-Vps.Auto.GridFilter.Abstract = function(config) {
-    Vps.Auto.GridFilter.Abstract.superclass.constructor.call(this);
+Ext.ns('Vps.Auto.Filter');
+Vps.Auto.Filter.Abstract = function(config) {
+    Vps.Auto.Filter.Abstract.superclass.constructor.call(this);
     this.addEvents('filter');
     this.toolbarItems = [];
     this.id = config.id;
 };
-Ext.extend(Vps.Auto.GridFilter.Abstract, Ext.util.Observable, {
+Ext.extend(Vps.Auto.Filter.Abstract, Ext.util.Observable, {
     reset: function() {
     },
     getParams: function() {

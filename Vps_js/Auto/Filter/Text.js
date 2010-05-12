@@ -1,6 +1,6 @@
-Vps.Auto.GridFilter.TextField = function(config)
+Vps.Auto.Filter.Text = function(config)
 {
-    Vps.Auto.GridFilter.TextField.superclass.constructor.call(this, config);
+    Vps.Auto.Filter.Text.superclass.constructor.call(this, config);
 
     this.textField = new Ext.form.TextField({
         width: config.width
@@ -18,7 +18,7 @@ Vps.Auto.GridFilter.TextField = function(config)
     this.toolbarItems.add(this.textField);
 };
 
-Ext.extend(Vps.Auto.GridFilter.TextField, Vps.Auto.GridFilter.Abstract, {
+Ext.extend(Vps.Auto.Filter.Text, Vps.Auto.Filter.Abstract, {
     reset: function() {
         this.textField.reset();
     },
