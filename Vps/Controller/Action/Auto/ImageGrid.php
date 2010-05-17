@@ -1,14 +1,16 @@
 <?php
 abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Action_Auto_Abstract
 {
-    // srcField muss überschrieben werden (bildpfad), labelField ist standard __toString()
-    protected $_srcField;
-    protected $_labelField;
+    // the rule to the image. defaults to the first rule with model Vps_Uploads_Model
+    protected $_imageRule = null;
+    protected $_labelField; // default is __toString()
 
     protected $_model;
 
     protected $_primaryKey;
     protected $_paging = 0;
+
+    protected $_maxLabelLength = 18;
 
     protected $_textField = 'name';
     protected $_buttons = array(
@@ -46,6 +48,14 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
                 'direction'   => 'ASC'
             );
         }
+        if (!$this->_imageRule) {
+            $this->_imageRule = $this->_model->getReferenceRuleByModelClass('Vps_Uploads_Model');
+        }
+    }
+
+    private function _getImageReference()
+    {
+        return $this->_model->getReference($this->_imageRule);
     }
 
     public function jsonDataAction()
@@ -66,6 +76,8 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
         }
         $order = $this->_defaultOrder;
         $primaryKey = $this->_primaryKey;
+
+        $truncateHelper = new Vps_View_Helper_Truncate();
 
         $rowSet = $this->_fetchData($order, $limit, $start);
         if (!is_null($rowSet)) {
@@ -90,12 +102,14 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
                     throw new Vps_Exception("You have to set _labelField in the ImageGrid Controller");
                 }
 
-                if ($this->_srcField) {
-                    $r['src'] = $row->{$this->_srcField};
-                } else {
-                    throw new Vps_Exception("You have to set _srcField in the ImageGrid Controller");
+                if (!empty($r['label']) && $this->_maxLabelLength) {
+                    $r['label'] = $truncateHelper->truncate($r['label'], $this->_maxLabelLength, '...', true, false);
                 }
 
+                $imageRef = $this->_getImageReference();
+                $hashKey = md5($row->{$imageRef['column']}.Vps_Uploads_Row::HASH_KEY);
+                $r['src'] = '/vps/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
+                    '&hashKey='.$hashKey.'&size=imageGrid';
                 $rows[] = $r;
             }
 
