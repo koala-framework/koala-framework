@@ -1,36 +1,39 @@
-div.imageGrid .x-panel-body{
+div.imageGrid .x-panel-body {
     background: white;
     font: 11px Arial, Helvetica, sans-serif;
 }
-div.imageGrid .thumb{
+div.imageGrid .thumb {
     background: #dddddd;
-    padding: 3px;
 }
-div.imageGrid .thumb-wrap{
+div.imageGrid .thumb td {
+    width: 100px; height: 100px;
+    text-align: center; vertical-align: middle;
+    line-height: 0px;
+}
+div.imageGrid .thumb-wrap {
     float: left;
     margin: 4px;
     margin-right: 0;
     padding: 5px;
 }
-div.imageGrid .thumb-wrap span{
-    display: block;
+div.imageGrid .thumb-wrap div.label {
     overflow: hidden;
     text-align: center;
     font:11px tahoma,verdana,helvetica;
 }
 
-div.imageGrid .x-view-over{
+div.imageGrid .x-view-over {
     border:1px solid #dddddd;
     background: #efefef url(/assets/ext/resources/images/default/grid/row-over.gif) repeat-x left top;
     padding: 4px;
 }
 
-div.imageGrid .x-view-selected{
+div.imageGrid .x-view-selected {
     background-color: #eff5fb;
     border:1px solid #99bbe8;
     padding: 4px;
 }
-div.imageGrid .x-view-selected .thumb{
+div.imageGrid .x-view-selected .thumb {
     background:transparent;
 }
 

@@ -14,8 +14,11 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.tpl = new Ext.XTemplate(
             '<tpl for=".">',
                 '<div class="thumb-wrap">',
-                '<div class="thumb"><tpl if="src"><img src="{src}" title="{label}"></tpl></div>',
-                '<span>{label}</span></div>',
+                    '<table class="thumb" cellpadding="0" cellspacing="3" border="0"><tr><td>',
+                        '<tpl if="src"><img src="{src}" title="{label}" /></tpl>',
+                    '</td></tr></table>',
+                    '<div class="label">{label}</div>',
+                '</div>',
             '</tpl>',
             '<div class="x-clear"></div>'
         );
@@ -279,7 +282,8 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             tbar: this.topToolBar ? this.topToolBar : null,
             bbar: this.bottomToolBar ? this.bottomToolBar : null,
             items: [ this.view],
-            border: false
+            border: false,
+            autoScroll: true
         });
         this.add(panel);
         this.doLayout();
