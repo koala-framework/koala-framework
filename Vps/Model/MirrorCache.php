@@ -214,6 +214,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     {
         $this->_synchronize($overrideMaxSyncDelay);
         $this->_unlockSync();
+        $this->_afterSync();
     }
 
     private function _synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
@@ -295,5 +296,9 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
         $this->_unlockSync();
         return $r['insertRow'];
+    }
+
+    protected function _afterSync()
+    {
     }
 }
