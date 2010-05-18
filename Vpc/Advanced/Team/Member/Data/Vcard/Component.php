@@ -40,7 +40,8 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Component extends Vpc_Abstract
         $filename = self::getFilename($dataRow);
 
         if (!$filename) $filename = 'vcard';
-        header('Content-Type: text/x-vcard');
+        header('Content-Type: text/x-vcard; charset=us-ascii');
+        header('Content-Length: '.strlen($content));
         header('Content-Disposition: attachment; filename="'.$filename.'.vcf"');
         echo $content;
     }
@@ -61,57 +62,79 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Component extends Vpc_Abstract
      */
     public static function getVcardContent($dataRow, $defaults, $imageData)
     {
-        $lines = array();
-        $lines[] = 'BEGIN:VCARD';
-        $lines[] = 'VERSION:2.1';
-        if (!empty($dataRow->title) || !empty($dataRow->lastname) || !empty($dataRow->firstname)) {
-            // reihenfolge: nachname, vorname, weitere vornamen, titel vor name, titel nach name
-            $lines[] = 'N:'.$dataRow->lastname.';'.$dataRow->firstname.';;'.$dataRow->title.';';
-        }
-        if (!empty($dataRow->lastname) || !empty($dataRow->firstname)) {
-            $lines[] = 'FN:'.$dataRow->firstname.' '.$dataRow->lastname;
-        }
+        $vcard = new Contact_Vcard_Build('2.1');
+
+        $vcard->setName(utf8_decode($dataRow->lastname), utf8_decode($dataRow->firstname), '',
+            utf8_decode($dataRow->title), '');
+        $vcard->addParam('CHARSET', 'ISO-8859-1');
+
+        $vcard->setFormattedName(utf8_decode($dataRow->firstname).' '.utf8_decode($dataRow->lastname));
+        $vcard->addParam('CHARSET', 'ISO-8859-1');
+
         if (isset($defaults['ORG'])) {
-            $lines[] = 'ORG:'.$defaults['ORG'];
+            $vcard->addOrganization(utf8_decode($defaults['ORG']));
+            $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
         if (!empty($dataRow->working_position)) {
-            $lines[] = 'ROLE:'.$dataRow->working_position;
+            $vcard->setRole(utf8_decode($dataRow->working_position));
+            $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
         if (!empty($dataRow->phone)) {
-            $lines[] = 'TEL;PREF;WORK;VOICE:'.$dataRow->phone;
+            $vcard->addTelephone(utf8_decode($dataRow->phone));
+            $vcard->addParam('TYPE', 'WORK');
+            $vcard->addParam('TYPE', 'PREF');
+            $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
         if (!empty($dataRow->mobile)) {
-            $lines[] = 'TEL;WORK;CELL:'.$dataRow->mobile;
+            $vcard->addTelephone(utf8_decode($dataRow->mobile), 'mobile');
+            $vcard->addParam('TYPE', 'WORK');
+            $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
         if (isset($defaults['TEL;WORK;FAX'])) {
-            $lines[] = 'TEL;WORK;FAX:'.$defaults['TEL;WORK;FAX'];
+            $vcard->addTelephone(utf8_decode($defaults['TEL;WORK;FAX']), 'fax');
+            $vcard->addParam('TYPE', 'WORK');
+            $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
         if (!empty($dataRow->email)) {
-            $lines[] = 'EMAIL;WORK:'.$dataRow->email;
+            $vcard->addEmail(utf8_decode($dataRow->email));
+            $vcard->addParam('TYPE', 'WORK');
+            $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
         if (isset($defaults['URL;WORK'])) {
-            $lines[] = 'URL;WORK:'.$defaults['URL;WORK'];
+            $vcard->setURL(utf8_decode($defaults['URL;WORK']));
+            $vcard->addParam('TYPE', 'WORK');
+            $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
         if (isset($defaults['NOTE'])) {
-            $lines[] = 'NOTE;ENCODING=QUOTED-PRINTABLE:'.Zend_Mime::encodeQuotedPrintable($defaults['NOTE']);
+            $vcard->setNote(utf8_decode($defaults['NOTE']));
+            $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
         if (isset($defaults['ADR;WORK'])) {
-            $lines[] = 'ADR;WORK;;ENCODING=QUOTED-PRINTABLE:'.Zend_Mime::encodeQuotedPrintable($defaults['ADR;WORK']);
+            $values = explode(';', utf8_decode($defaults['ADR;WORK']));
+            for ($i=0; $i<=6; $i++) {
+                if (!isset($values[$i])) $values[$i] = '';
+            }
+            $vcard->addAddress($values[0], $values[1], $values[2], $values[3], $values[4], $values[5], $values[6]);
+            $vcard->addParam('TYPE', 'WORK');
+            $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
-        
+
         if ($imageData && $imageData->hasContent()) {
             $data = call_user_func_array(
                 array($imageData->componentClass, 'getMediaOutput'),
                 array($imageData->componentId, 'default', $imageData->componentClass)
             );
             $type = explode('/', $data['mimeType']);
-            $lines[] = 'PHOTO;TYPE='.strtoupper($type[1]).';ENCODING=BASE64:'.base64_encode($data['contents']);
+            $type[1] = strtoupper($type[1]);
+            if ($type[1] == 'PJPEG') $type[1] = 'JPEG';
+
+            $vcard->setPhoto(base64_encode($data['contents']));
+            $vcard->addParam('TYPE', $type[1]);
+            $vcard->addParam('ENCODING', 'BASE64');
         }
 
-        $lines[] = 'REV:'.date('Y-m-d').'T'.date('H:i:s').'Z';
-        $lines[] = 'MAILER:';
-        $lines[] = 'END:VCARD';
+        $vcard->setRevision(date('Y-m-d').'T'.date('H:i:s').'Z');
 
-        return implode("\n", $lines);
+        return $vcard->fetch();
     }
 }
