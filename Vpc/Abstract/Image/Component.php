@@ -38,6 +38,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
+        $ret['imageCaption'] = false;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
         $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
@@ -95,6 +96,11 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $ret['image'] = $this->getData();
+        $imageCaptionSetting = $this->_getSetting('imageCaption');
+        if ($imageCaptionSetting) {
+            $ret['image_caption'] = $this->_getRow()->image_caption;
+            $ret['showImageCaption'] = $imageCaptionSetting;
+        }
         return $ret;
     }
 

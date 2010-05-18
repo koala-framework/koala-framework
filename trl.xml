@@ -5655,5 +5655,57 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Senden</de>
 <id>1471</id>
 </text>
+<text>
+<en>Search: </en>
+<de>Suche: </de>
+<id>1472</id>
+</text>
+<text>
+<en>copy/paste</en>
+<de>Kopieren/Verschieben</de>
+<id>1473</id>
+</text>
+<text>
+<en>Copy Paragraph</en>
+<de>Absatz kopieren</de>
+<id>1474</id>
+</text>
+<text>
+<en>Paste Paragraph</en>
+<de>Absatz einfügen</de>
+<id>1475</id>
+</text>
+<text>
+<en>Clipboard is empty</en>
+<de>Zwischenablage ist leer</de>
+<id>1476</id>
+</text>
+<text>
+<en>Source and target paragraphs are not compatible.</en>
+<id>1477</id>
+</text>
+<text>
+<en>Image caption</en>
+<de>Bildunterschrift</de>
+<id>1478</id>
+</text>
+<text>
+<en>Fade images</en>
+<id>1479</id>
+</text>
+<text>
+<en>Advanced Gallery</en>
+<de>Erweiterte Galerie</de>
+<id>1480</id>
+</text>
+<text>
+<en>zwei Bilder</en>
+<id>1481</id>
+</text>
+<text>
+<en>Variant</en>
+<de>Varianten</de>
+<id>1482</id>
+</text>
 </trl>
 
