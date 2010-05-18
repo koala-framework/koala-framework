@@ -201,7 +201,10 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                         c = String.fromCharCode(c).toLowerCase();
                         if (c == 'v') {
                             //tidy on paste
-                            Ext.getBody().mask('Cleaning...');
+                            // defer bei mask wird benötigt, da sonst das eingefügte
+                            // am ende angehängt wird, auch wenn text im editor markiert ist,
+                            // der eigentlich überschrieben werden sollte
+                            Ext.getBody().mask.defer(1, Ext.getBody(), [trlVps('Cleaning...')]);
                             (function() {
                                 this.syncValue();
                                 this.tidyHtml();
