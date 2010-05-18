@@ -90,8 +90,14 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Component extends Vpc_Abstract
             $vcard->addParam('TYPE', 'WORK');
             $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
-        if (isset($defaults['TEL;WORK;FAX'])) {
-            $vcard->addTelephone(utf8_decode($defaults['TEL;WORK;FAX']), 'fax');
+        $fax = null;
+        if (!empty($dataRow->fax)) {
+            $fax = $dataRow->fax;
+        } else if (isset($defaults['TEL;WORK;FAX'])) {
+            $fax = $defaults['TEL;WORK;FAX'];
+        }
+        if ($fax) {
+            $vcard->addTelephone(utf8_decode($fax), 'fax');
             $vcard->addParam('TYPE', 'WORK');
             $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
