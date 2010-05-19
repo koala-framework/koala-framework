@@ -202,7 +202,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
 
     protected function _getPageLinks($pages, $currentPage)
     {
-        $buttonTexts = $this->_getSetting('placeholder');
+        $buttonTexts = $this->_getPlaceholder();
 
         $pageLinks = array();
         if ($currentPage >= 3 && !$this->_getSetting('nextPrevOnly')) {
