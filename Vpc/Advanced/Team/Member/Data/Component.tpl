@@ -38,6 +38,15 @@
             </li>
         <? } ?>
 
+        <? if (!empty($this->row->fax)) { ?>
+            <li>
+                <? if ($this->showLabels) { ?>
+                    <label><?= $this->placeholder['faxLabel'].$this->labelSeparator; ?></label>
+                <? } ?>
+                <?= $this->row->fax; ?>
+            </li>
+        <? } ?>
+
         <? if (!empty($this->row->email)) { ?>
             <li>
                 <? if ($this->showLabels) { ?>
