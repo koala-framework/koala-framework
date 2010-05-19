@@ -58,7 +58,7 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getStaticCacheVars($componentClass)
+    public static function getStaticCacheVars($componentClass)
     {
         $ret = array();
         $ret[] = array(
