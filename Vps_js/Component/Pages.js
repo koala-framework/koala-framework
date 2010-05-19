@@ -39,9 +39,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         
         var tbar = this.treePanel.getTopToolbar();
         tbar.add(this.pageButton);
-        tbar.add('|');
-        tbar.add(trlVps('Search'));
-        tbar.add(this.treePanel.searchField);
         tbar.add('->');
         tbar.add(this.treePanel.getAction('reload'));
         
