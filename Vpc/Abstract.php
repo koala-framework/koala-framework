@@ -18,6 +18,9 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         Vps_Benchmark::count('components', $data->componentClass.' '.$data->componentId);
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getData()
     {
         return $this->_data;
