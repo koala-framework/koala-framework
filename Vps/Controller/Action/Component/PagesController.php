@@ -6,7 +6,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     protected $_buttons = array();
     protected $_hasPosition = true;
     protected $_modelName = 'Vps_Component_Model';
-    protected $_searchFields = array('filename', 'name');
 
     private $_componentConfigs = array();
 
