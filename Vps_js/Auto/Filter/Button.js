@@ -1,6 +1,6 @@
-Vps.Auto.GridFilter.Button = function(config)
+Vps.Auto.Filter.Button = function(config)
 {
-    Vps.Auto.GridFilter.Button.superclass.constructor.call(this, config);
+    Vps.Auto.Filter.Button.superclass.constructor.call(this, config);
 
     this.button = new Ext.Button({
         icon: config.icon,
@@ -11,18 +11,18 @@ Vps.Auto.GridFilter.Button = function(config)
         enableToggle: true
     });
     this.button.on('toggle', function() {
-        this.fireEvent('filter', this, this.getParams());
+        this.fireEvent('filter', this, this.getParams(config.paramName));
     }, this);
     this.toolbarItems.add(this.button);
 };
 
-Ext.extend(Vps.Auto.GridFilter.Button, Vps.Auto.GridFilter.Abstract, {
+Ext.extend(Vps.Auto.Filter.Button, Vps.Auto.Filter.Abstract, {
     reset: function() {
         this.button.toggle(false);
     },
-    getParams: function() {
+    getParams: function(paramName) {
         var params = {};
-        params['query_'+this.id] = this.button.pressed ? 1 : 0;
+        params[paramName] = this.button.pressed ? 1 : 0;
         return params;
     }
 });
