@@ -238,7 +238,7 @@ class Vps_Util_Git
             $this->system("checkout $branch");
             $this->system("reset --hard $staging");
 
-            $this->system("push origin $branch:origin/$branch");
+            $this->system("push origin $branch:$branch");
         } else {
             if ($this->revParse("$branch")) {
                 //lokalen production branch loeschen (boese)
