@@ -4,6 +4,10 @@ class Vpc_Chained_Trl_MasterAsChild_Component extends Vpc_Abstract
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings();
+        if (!$masterComponentClass) {
+            throw new Vps_Exception("This component requires a parameter");
+        }
+        $ret['masterComponentClass'] = $masterComponentClass;
         $ret['generators']['child'] = array(
             'class' => 'Vps_Component_Generator_Static',
             'component' => $masterComponentClass,
