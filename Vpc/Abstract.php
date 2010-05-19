@@ -333,13 +333,19 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     public function getTemplateVars()
     {
         $ret = array();
-        $ret['placeholder'] = $this->_getSetting('placeholder');
-        foreach ($ret['placeholder'] as $k => $v) {
-            $ret['placeholder'][$k] = $this->getData()->trlStaticExecute($v);
-        }
+        $ret['placeholder'] = $this->_getPlaceholder();
         $ret['cssClass'] = self::getCssClass($this);
         $ret['data'] = $this->getData();
         $ret['row'] = $this->_getRow();
+        return $ret;
+    }
+
+    protected function _getPlaceholder()
+    {
+        $ret = $this->_getSetting('placeholder');
+        foreach ($ret as $k => $v) {
+            $ret[$k] = $this->getData()->trlStaticExecute($v);
+        }
         return $ret;
     }
 
