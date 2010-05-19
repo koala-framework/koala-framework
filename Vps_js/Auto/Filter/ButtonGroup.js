@@ -1,6 +1,6 @@
-Vps.Auto.GridFilter.ButtonGroup = function(config)
+Vps.Auto.Filter.ButtonGroup = function(config)
 {
-    Vps.Auto.GridFilter.ButtonGroup.superclass.constructor.call(this, config);
+    Vps.Auto.Filter.ButtonGroup.superclass.constructor.call(this, config);
 	this.toggleButtons = new Array();
 	for (var i in config.buttons) {
 		var cfg = config.buttons[i];
@@ -26,7 +26,7 @@ Vps.Auto.GridFilter.ButtonGroup = function(config)
 	}
 };
 
-Ext.extend(Vps.Auto.GridFilter.ButtonGroup, Vps.Auto.GridFilter.Abstract, {
+Ext.extend(Vps.Auto.Filter.ButtonGroup, Vps.Auto.Filter.Abstract, {
     getParams: function() {
         var params = {};
 		var value = '';

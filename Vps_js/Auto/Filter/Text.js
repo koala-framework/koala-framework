@@ -1,10 +1,11 @@
-Vps.Auto.GridFilter.TextField = function(config)
+Vps.Auto.Filter.Text = function(config)
 {
-    Vps.Auto.GridFilter.TextField.superclass.constructor.call(this, config);
+    Vps.Auto.Filter.Text.superclass.constructor.call(this, config);
 
     this.textField = new Ext.form.TextField({
         width: config.width
     });
+    this.paramName = config.paramName;
     this.textField.on('render', function() {
         // TODO:
         // event darf nicht "keypress" sein, da sonst zB backspace und del tasten
@@ -18,16 +19,13 @@ Vps.Auto.GridFilter.TextField = function(config)
     this.toolbarItems.add(this.textField);
 };
 
-Ext.extend(Vps.Auto.GridFilter.TextField, Vps.Auto.GridFilter.Abstract, {
+Ext.extend(Vps.Auto.Filter.Text, Vps.Auto.Filter.Abstract, {
     reset: function() {
         this.textField.reset();
     },
     getParams: function() {
-        var key = 'query';
-        if (this.id != 'text') key = 'query_'+this.id;
-
         var params = {};
-        params[key] = this.textField.getValue();
+        params[this.paramName] = this.textField.getValue();
         return params;
     },
     setValue: function(v) {

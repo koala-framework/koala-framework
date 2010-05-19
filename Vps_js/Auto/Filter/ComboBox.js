@@ -1,6 +1,6 @@
-Vps.Auto.GridFilter.ComboBox = function(config)
+Vps.Auto.Filter.ComboBox = function(config)
 {
-    Vps.Auto.GridFilter.ComboBox.superclass.constructor.call(this, config);
+    Vps.Auto.Filter.ComboBox.superclass.constructor.call(this, config);
 
     if (config.field) {
         this.combo = Ext.ComponentMgr.create(config.field);
@@ -26,18 +26,18 @@ Vps.Auto.GridFilter.ComboBox = function(config)
     }
     this.combo.setValue(config['default']);
     this.combo.on('select', function() {
-        this.fireEvent('filter', this, this.getParams());
+        this.fireEvent('filter', this, this.getParams(config.paramName));
     }, this);
     this.toolbarItems.add(this.combo);
 };
 
-Ext.extend(Vps.Auto.GridFilter.ComboBox, Vps.Auto.GridFilter.Abstract, {
+Ext.extend(Vps.Auto.Filter.ComboBox, Vps.Auto.Filter.Abstract, {
     reset: function() {
         this.combo.setValue(0);
     },
-    getParams: function() {
+    getParams: function(paramName) {
         var params = {};
-        params['query_'+this.id] = this.combo.getValue();
+        params[paramName] = this.combo.getValue();
         return params;
     }
 });
