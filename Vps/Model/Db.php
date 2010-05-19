@@ -23,6 +23,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
         parent::__construct($config);
     }
 
+    public function __sleep()
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
     public function __destruct()
     {
         if (isset($this->_importBuffer)) {

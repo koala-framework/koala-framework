@@ -17,7 +17,13 @@ class Vpc_Abstract_Image_Trl_Form extends Vpc_Abstract_Composite_Trl_Form
     {
         parent::_initFields();
 
-        $this->add(new Vps_Form_Field_TextField('image_caption', trlVps('Image caption')));
+        $imageCaption = Vpc_Abstract::getSetting(
+            Vpc_Abstract::getSetting($this->getClass(), 'masterComponentClass'),
+            'imageCaption'
+        );
+        if ($imageCaption) {
+            $this->add(new Vps_Form_Field_TextField('image_caption', trlVps('Image caption')));
+        }
 
         $this->add(new Vps_Form_Field_ShowField('image', trlVps('Master Image')))
             ->setData(new Vpc_Abstract_Image_Trl_Form_ImageData());
