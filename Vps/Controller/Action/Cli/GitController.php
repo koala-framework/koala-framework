@@ -27,14 +27,16 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
     public function checkoutStagingAction()
     {
+        if (!$this->_getParam('revWeb') || !$this->_getParam('revVps')) {
+            throw new Vps_ClientException("revWeb and revVps parameters required");
+        }
         $this->_eventuallyConvertToGitAndRestart();
 
         Vps_Util_Git::vps()->fetch();
         Vps_Util_Git::web()->fetch();
 
-        Vps_Util_Git::web()->checkout("staging");
-        $appId = Vps_Registry::get('config')->application->id;
-        Vps_Util_Git::vps()->checkout("$appId-staging");
+        Vps_Util_Git::web()->checkout($this->_getParam('revWeb'));
+        Vps_Util_Git::vps()->checkout($this->_getParam('revVps'));
         exit;
     }
 
