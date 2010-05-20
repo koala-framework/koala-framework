@@ -1,10 +1,8 @@
 <?php
-class Vps_View_Helper_ImageUrl extends Vps_View_Helper_Image
+class Vps_View_Helper_ImageUrl extends Vps_View_Helper_ImageParam
 {
     public function imageUrl($image, $type = 'default')
     {
-        $data = $this->_getImageParams($image, $type);
-        if (!$data) return '';
-        return $data['url'];
+        return $this->imageParam($image, 'url', $type);
     }
 }
