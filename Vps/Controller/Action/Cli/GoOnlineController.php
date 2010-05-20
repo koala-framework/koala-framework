@@ -158,18 +158,18 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             throw new Vps_Exception_Client("vps: current branch is not ".trim(file_get_contents('application/vps_branch')).". This is not yet supported.");
         }
 
-        echo "\n\n*** [01/13] vps-tag erstellen\n";
         if ($useSvn) {
+            echo "\n\n*** [01/13] vps-tag erstellen\n";
             Vps_Controller_Action_Cli_TagController::createVpsTag($vpsVersion);
         } else {
-            Vps_Util_Git::vps()->tag("$appId-staging", '-f');
+            $stagingVps = Vps_Util_Git::vps()->revParse("HEAD");
         }
 
-        echo "\n\n*** [02/13] web-tag erstellen\n";
         if ($useSvn) {
+            echo "\n\n*** [02/13] web-tag erstellen\n";
             Vps_Controller_Action_Cli_TagController::createWebTag($webVersion);
         } else {
-            Vps_Util_Git::web()->tag("staging", '-f');
+            $stagingWeb = Vps_Util_Git::web()->revParse("HEAD");
         }
 
         if ($useSvn) {
@@ -189,7 +189,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=$webVersion", 'test');
             } else {
                 echo "\n\n*** [04/13] test: checkout staging\n";
-                $this->_systemSshVpsWithSubSections("git checkout-staging", 'test');
+                $this->_systemSshVpsWithSubSections("git checkout-staging --revVps=$stagingVps --revWeb=$stagingWeb", 'test');
             }
         }
 
@@ -290,8 +290,8 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
                 echo "\n\n*** [12/13] prod: production branches erstellen\n";
 
-                Vps_Util_Git::vps()->productionBranch('production/'.$appId, "$appId-staging");
-                Vps_Util_Git::web()->productionBranch('production', 'staging');
+                Vps_Util_Git::vps()->productionBranch('production/'.$appId, $stagingVps);
+                Vps_Util_Git::web()->productionBranch('production', $stagingWeb);
 
                 $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Util/Git.php'), 'production');
                 $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'), 'production');
