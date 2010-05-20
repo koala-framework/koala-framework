@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass;?>">
+<div class="<?=$this->cssClass;?> vpsEnlargeNextPrevious">
     <? $i = 0; ?>
     <? foreach ($this->children as $child) { ?>
         <?

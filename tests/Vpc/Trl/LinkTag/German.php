@@ -14,6 +14,11 @@ class Vpc_Trl_LinkTag_German extends Vpc_Abstract
             'component' => 'Vpc_Trl_LinkTag_LinkTag_Component',
             'name' => 'test2',
         );
+        $ret['generators']['test3'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'component' => 'Vpc_Trl_LinkTag_LinkTag_Component',
+            'name' => 'test3',
+        );
         return $ret;
     }
 }
