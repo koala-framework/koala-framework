@@ -219,36 +219,13 @@ class Vps_Util_Git
 
     public function productionBranch($branch, $staging)
     {
-        $activeBranch = $this->getActiveBranch();
         $this->fetch();
         if ($this->revParse('refs/remotes/origin/'.$branch)) {
-            //production-previous tag loeschen
-            if ($this->revParse("refs/tags/$branch-previous")) {
-                $this->system("tag -d $branch-previous");
-                $this->system("push origin :refs/tags/$branch-previous"); //tag loeschen
-            }
-            //aktuellen production mit production-previous taggen
-            $this->tag($branch.'-previous', '', 'refs/remotes/origin/'.$branch);
-
-            //production branch auschecken falls noch nicht vorhanden
-            if (!$this->revParse($branch)) {
-                $this->system("branch $branch origin/$branch");
-            }
-
-            //staging in production mergen, --ff-only geht leider nicht im git 1.5
-            $this->system("checkout $branch");
-            $this->system("merge $staging");
-
-            $this->system("push origin $branch:$branch");
-        } else {
-            if ($this->revParse("$branch")) {
-                //lokalen production branch loeschen (boese)
-                $this->system("branch -D $branch");
-            }
-            //es wurde noch nie online gegangen mit dem web, neuen production branch erstellen
-            $this->branch("$branch", '', $staging);
+            //aktuellen production in previous/ kopieren
+            $this->system("push --force origin origin/$branch:refs/heads/previous/$branch");
         }
-        $this->system("checkout $activeBranch");
+        $this->system("push --force origin $staging:refs/heads/$branch");
+        $this->system("git fetch origin");
     }
 
     public function isEmptyLog($ref)
