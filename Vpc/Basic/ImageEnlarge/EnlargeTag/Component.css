@@ -3,8 +3,8 @@
 .lightbox {
     display: none;
     position: absolute;
-    width: 800px;
-    min-height: 600px;
+    min-width: 400px;
+    min-height: 400px;
     padding: 10px;
     background: #fff;
     z-index: 100;
