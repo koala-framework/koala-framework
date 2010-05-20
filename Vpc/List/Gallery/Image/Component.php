@@ -20,4 +20,21 @@ class Vpc_List_Gallery_Image_Component extends Vpc_Basic_ImageEnlarge_Component
         $variant = $this->getData()->parent->getComponent()->getVariant();
         return $dimensions[$variant];
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $settingsRow = $this->getData()->parent->getComponent()->getRow();
+
+        $ret[] = array(
+            'model' => $settingsRow->getModel(),
+            'id' => $settingsRow->component_id
+        );
+        $ret[] = array(
+            'model' => $settingsRow->getModel(),
+            'id' => $settingsRow->component_id,
+            'callback' => true
+        );
+        return $ret;
+    }
 }
