@@ -40,7 +40,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
             $openedNodes = $this->_saveSessionNodeOpened(null, null);
             if ($openedNodes == 'all' ||
                 isset($openedNodes[$row->{$this->_primaryKey}]) ||
-                isset($this->_openedNodes[$row->{$this->_primaryKey}])
+                isset($this->_openedNodes[$row->{$this->_primaryKey}]) ||
+                $this->_getParam('openedId') == $row->{$this->_primaryKey}
             ) {
                 $data['expanded'] = true;
             } else {
