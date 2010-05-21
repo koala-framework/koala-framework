@@ -4,6 +4,7 @@ Stable: 09.06.10
 Neue Features:
 - AutoFilter
 - Vpc_Tabs
+- Generator Plugins
 
 möglicherweise nicht kompatible Änderungen:
 - LightBox restyling
