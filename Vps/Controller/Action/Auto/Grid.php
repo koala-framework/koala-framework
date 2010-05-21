@@ -131,7 +131,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     $info &&
                     !in_array($info['name'].'.'.$this->_primaryKey, $queryFields)
                 ) {
-                    $queryFields = $this->_primaryKey;
+                    $queryFields[] = $this->_primaryKey;
                 }
                 $filter->setQueryFields($queryFields);
             }
@@ -209,8 +209,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         foreach ($this->_filters as $filter) {
             if ($filter instanceof Vps_Controller_Action_Auto_Filter_Text) continue;
             $param = $filter->getParamName();
-            if ($filter->getConfig('default') && !$this->_getParam($param)) {
-                $this->_setParam($param, $filter->getConfig('default'));
+            if ($filter->getDefault() && !$this->_getParam($param)) {
+                $this->_setParam($param, $filter->getDefault());
             }
         }
     }
