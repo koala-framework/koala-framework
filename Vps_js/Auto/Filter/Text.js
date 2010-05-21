@@ -2,8 +2,10 @@ Vps.Auto.Filter.Text = function(config)
 {
     Vps.Auto.Filter.Text.superclass.constructor.call(this, config);
 
-    this.textField = new Ext.form.TextField({
-        width: config.width
+    this.textField = new Ext.form.TriggerField({
+        width:config.width,
+        triggerClass:'x-form-clear-trigger',
+        onTriggerClick: this.clear.createDelegate(this)
     });
     this.paramName = config.paramName;
     this.textField.on('render', function() {
@@ -20,6 +22,14 @@ Vps.Auto.Filter.Text = function(config)
 };
 
 Ext.extend(Vps.Auto.Filter.Text, Vps.Auto.Filter.Abstract, {
+	clear: function()
+	{
+        if (this.textField.getValue()) {
+            this.textField.setValue('');
+            this.fireEvent('filter', this, this.getParams());
+        }
+	},
+	
     reset: function() {
         this.textField.reset();
     },
