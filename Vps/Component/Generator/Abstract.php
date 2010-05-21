@@ -12,6 +12,7 @@ abstract class Vps_Component_Generator_Abstract
     protected $_idSeparator;
     protected $_inherits = false;
     private $_model;
+    private $_plugins;
 
     private static $instances = array();
     private static $_cachedInstances = array();
@@ -20,7 +21,7 @@ abstract class Vps_Component_Generator_Abstract
     {
         $ret = array();
         foreach (array_keys(get_object_vars($this)) as $i) {
-            if ($i != '_model') {
+            if ($i != '_model' && $i != '_plugins') {
                 $ret[] = $i;
             }
         }
@@ -691,5 +692,18 @@ abstract class Vps_Component_Generator_Abstract
         $flags = $this->getGeneratorFlags();
         if (!isset($flags[$flag])) return null;
         return $flags[$flag];
+    }
+
+    public final function getGeneratorPlugins()
+    {
+        if (!isset($this->_plugins)) {
+            $this->_plugins = array();
+            if (isset($this->_settings['plugins'])) {
+                foreach ($this->_settings['plugins'] as &$p) {
+                    $this->_plugins[] = new $p();
+                }
+            }
+        }
+        return $this->_plugins;
     }
 }
