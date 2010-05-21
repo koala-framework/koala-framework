@@ -341,7 +341,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $data['uiProvider'] = 'Vps.Tree.Node';
         if ($openedNodes == 'all' ||
             isset($openedNodes[$row->$primaryKey]) ||
-            isset($this->_openedNodes[$row->id])
+            isset($this->_openedNodes[$row->id]) ||
+            $this->_getParam('openedId') == $row->{$this->_primaryKey}
         ) {
             $data['expanded'] = true;
         } else {
@@ -354,6 +355,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         $session = new Zend_Session_Namespace('admin');
         $key = 'treeNodes_' . get_class($this);
+        if ($this->_getParam('openedId')) $session->$key = array();
         $ids = is_array($session->$key) ? $session->$key : array();
         if ($id) {
             if (!$activate && isset($ids[$id])) {

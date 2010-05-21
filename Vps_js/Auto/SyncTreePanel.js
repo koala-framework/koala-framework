@@ -45,7 +45,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         });
         this.actions.reload = new Ext.Action({
             text    : '',
-            handler : function () { this.tree.getRootNode().reload(); },
+            handler : function () { this.reload(); },
             icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
             cls     : 'x-btn-icon',
             tooltip : trlVps('Reload'),
@@ -73,6 +73,24 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             scope: this
         });
     },
+    
+    reload: function()
+    {
+    	var node = this.getSelectedNode();
+    	if (!node ) {
+    		this.tree.getRootNode().reload
+    	} else {
+            var path = node.getPath();
+            this.tree.initialConfig.loader.baseParams.openedId = node.id;
+            this.tree.getRootNode().reload(
+                function(node){
+                    var tree = node.getOwnerTree();
+                    tree.selectPath(path);
+                    delete tree.initialConfig.loader.baseParams.openedId;
+                }
+            );
+    	}
+    },
 
     onMetaChange: function(response, options, meta) {
         this.icons = meta.icons;
@@ -92,7 +110,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.filters.each(function(filter) {
                 filter.on('filter', function(f, params) {
                     this.applyBaseParams(params);
-                    this.tree.getRootNode().reload();
+                    this.reload();
                 }, this);
             }, this);
             this.filters.applyToTbar(tbar);
