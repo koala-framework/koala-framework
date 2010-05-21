@@ -1,0 +1,4 @@
+<?php
+class Vps_Component_Generator_Plugin_Tags_Component extends Vps_Component_Generator_Plugin_Abstract
+{
+}

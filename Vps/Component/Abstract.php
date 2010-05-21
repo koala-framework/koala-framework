@@ -418,6 +418,9 @@ class Vps_Component_Abstract
             } else {
                 $classes[] = $generator['component'];
             }
+            if (isset($generator['plugins'])) {
+                $classes = array_merge($classes, $generator['plugins']);
+            }
         }
         $plugins = Vpc_Abstract::getSetting($class, 'plugins');
         if (is_array($plugins)) {
