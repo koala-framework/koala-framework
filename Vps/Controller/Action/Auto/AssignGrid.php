@@ -2,11 +2,8 @@
 abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Action_Auto_Grid
 {
     protected $_textAssignField = null;
-
-    private function _getAssignModel()
-    {
-        return Vps_Model_Abstract::getInstance($this->_modelName);
-    }
+    protected $_assignToReference;
+    protected $_assignFromReference;
 
     public function jsonAssignAction()
     {
@@ -15,7 +12,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
         $ids = Zend_Json::decode($this->_getParam('foreign_keys'));
         if (!count($ids)) throw new Vps_ClientException(trlVps("There's no row selected"));
 
-        $assignModel = $this->_getAssignModel();
+        $assignModel = $this->_getModel();
 
         $assignToRef = $assignModel->getReference($this->_assignToReference);
         $assignToColumn = $assignToRef['column'];
@@ -52,7 +49,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
             throw new Vps_ClientException('Textinput was empty');
         }
 
-        $assignModel = $this->_getAssignModel();
+        $assignModel = $this->_getModel();
 
         $assignToRef = $assignModel->getReference($this->_assignToReference);
         $assignToColumn = $assignToRef['column'];
