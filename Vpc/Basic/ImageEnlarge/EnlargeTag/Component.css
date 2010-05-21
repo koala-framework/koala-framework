@@ -4,6 +4,7 @@
     display: none;
     position: absolute;
     min-width: 400px;
+    max-width: 800px;
     min-height: 400px;
     padding: 10px;
     background: #fff;
