@@ -62,13 +62,13 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         // EditComponents
         $ec = array();
         foreach ($this->getEditComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c->dbId, Vpc_Admin::EXT_CONFIG_DEFAULT));
+            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vpc_Admin::EXT_CONFIG_DEFAULT));
         }
         foreach ($this->getMenuEditComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c->dbId, Vpc_Admin::EXT_CONFIG_DEFAULT));
+            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vpc_Admin::EXT_CONFIG_DEFAULT));
         }
         foreach ($this->getSharedComponents($component) as $componentClass => $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c->dbId, Vpc_Admin::EXT_CONFIG_SHARED));
+            $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c, Vpc_Admin::EXT_CONFIG_SHARED));
         }
 
         $data['editComponents'] = $ec;
@@ -82,7 +82,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         return $parent->componentId;
     }
 
-    private function _formatEditComponents($componentClass, $dbId, $configType)
+    private function _formatEditComponents($componentClass, Vps_Component_Data $component, $configType)
     {
         $ret = array();
         $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig($configType);
@@ -97,8 +97,23 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $ret[] = array(
                 'componentClass' => $componentClass,
                 'type' => $type,
-                'componentId' => $dbId
+                'componentId' => $component->dbId
             );
+        }
+        foreach ($component->generator->getGeneratorPlugins() as $generatorPlugin) {
+            $admin = Vpc_Admin::getInstance(get_class($generatorPlugin));
+            $cfg = $admin->getExtConfig($configType);
+            foreach ($cfg as $type=>$c) {
+                $k = get_class($generatorPlugin).'-'.$type;
+                if (!isset($this->_componentConfigs[$k])) {
+                    $this->_componentConfigs[$k] = $c;
+                }
+                $ret[] = array(
+                    'componentClass' => get_class($generatorPlugin),
+                    'type' => $type,
+                    'componentId' => $component->dbId
+                );
+            }
         }
         return $ret;
     }
