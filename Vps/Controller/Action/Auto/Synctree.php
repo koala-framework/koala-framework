@@ -238,6 +238,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $node['leaf'] = true;
                 $node['allowDrag'] = false;
                 $node['filter'] = true;
+                $node['sort'] = $select->getPart('order');
                 $plainNodes[$pV][$row->$primaryKey] = $node;
             }
             $plainNodes[$pV][$row->$primaryKey]['disabled'] = false;
@@ -253,6 +254,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                     $node['expanded'] = true;
                     $node['allowDrag'] = false;
                     $node['filter'] = true;
+                    $node['sort'] = $select->getPart('order');
                     $plainNodes[$pV][$primaryValue] = $node;
                 }
             }
@@ -273,7 +275,25 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $node['children'] = $this->_structurePlainNodes($nodes, $primaryValue);
             $ret[] = $node;
         }
+        usort(&$ret, array("Vps_Controller_Action_Auto_Synctree", "_sortFilteredNodes"));
+        foreach ($ret as &$r) unset($r['sort']);
         return $ret;
+    }
+
+    private static function _sortFilteredNodes($a, $b)
+    {
+        foreach ($a['sort'] as $s) {
+            $value1 = ord(strtolower($a['data'][$s['field']]));
+            $value2 = ord(strtolower($b['data'][$s['field']]));
+            if ($value1 != $value2) {
+                if ($s['direction'] == 'DESC') {
+                    return $value1 > $value2;
+                } else {
+                    return $value1 > $value2;
+                }
+            }
+        }
+        return 0;
     }
 
     protected function _fetchData($parentRow)
