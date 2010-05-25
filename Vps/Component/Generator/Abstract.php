@@ -91,6 +91,9 @@ abstract class Vps_Component_Generator_Abstract
         self::$_cachedInstances = array();
     }
 
+    /**
+     * @return Vps_Component_Generator_Abstract
+     */
     public static function getInstance($componentClass, $key, $settings = array(), $pluginBaseComponentClass = false, $inherited = false)
     {
         $instanceKey = $componentClass . '_' . $key . '_' . $pluginBaseComponentClass . '_' . $inherited;
