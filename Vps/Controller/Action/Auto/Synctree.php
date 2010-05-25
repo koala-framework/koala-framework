@@ -244,6 +244,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $plainNodes[$pV][$row->$primaryKey]['disabled'] = false;
             while ($parentValue) {
                 $parentRow = $this->_model->getRow($parentValue);
+                if (!$parentRow) {
+                    $parentValue = null;
+                    continue;
+                }
                 $parentValue = $this->_getParentId($parentRow);
                 $pV = is_null($parentValue) ? 0 : $parentValue;
                 $primaryValue = $parentRow->$primaryKey;
