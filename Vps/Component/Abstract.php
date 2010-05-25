@@ -436,20 +436,4 @@ class Vps_Component_Abstract
             }
         }
     }
-
-    /**
-     * @deprecated Wird im Vps nirgends verwendet
-     */
-    protected function _getPlaceholder($name)
-    {
-        // Wenn das benötigt wird, muss trlExecute() aufgerufen werden
-        // siehe Vpc_Abstract
-        throw new Vps_Exception_NotYetImplemented();
-
-        $s = $this->_getSetting('placeholder');
-        if (!isset($s[$name])) {
-            throw new Vps_Exception("Unknown placeholder '$name'");
-        }
-        return $s[$name];
-    }
 }
