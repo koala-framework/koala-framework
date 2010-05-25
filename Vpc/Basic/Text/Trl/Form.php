@@ -1,16 +1,4 @@
 <?php
-class Vpc_Basic_Text_Trl_Form_OriginalText extends Vps_Data_Abstract
-{
-    public function load($row)
-    {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($row->id, array('ignoreVisible'=>true));
-        return $c->chained
-            ->getComponent()
-            ->getRow()
-            ->content;
-    }
-}
-
 class Vpc_Basic_Text_Trl_Form extends Vpc_Abstract_Form
 {
     protected function _initFields()
@@ -20,10 +8,10 @@ class Vpc_Basic_Text_Trl_Form extends Vpc_Abstract_Form
 
         $fs = $this->add(new Vps_Form_Container_FieldSet(trlVps("Original")));
 
-        $fs->add(new Vps_Form_Field_ShowField('original_text'))
+        $fs->add(new Vps_Form_Field_ShowField('content'))
             ->setHideLabel(true)
             ->setCls('webStandard')
-            ->setData(new Vpc_Basic_Text_Trl_Form_OriginalText());
+            ->setData(new Vps_Data_Trl_OriginalComponent());
 
         if (!$this->getModel()) {
             $this->setModel(new Vps_Model_FnF());
