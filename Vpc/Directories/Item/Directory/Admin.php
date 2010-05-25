@@ -1,29 +1,64 @@
 <?php
 class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
 {
-    protected function _getContentClass()
+    /** entfernt, stattdessen editComponent setting in detail setzen **/
+    //(final damit exception kommt)
+    protected final function _getContentClass()
+    { return null; }
+
+    private function _getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate)
     {
-        return null;
+        $ret = array(
+            'componentConfigs' => array(),
+            'contentEditComponents' => array(),
+        );
+        $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig();
+        foreach ($cfg as $k=>$c) {
+            $ret['componentConfigs'][$componentClass.'-'.$k] = $c;
+            $ret['contentEditComponents'][] = array(
+                'componentClass' => $componentClass,
+                'type' => $k,
+                'idTemplate' => $idTemplate
+            );
+        }
+        foreach ($gen->getGeneratorPlugins() as $plugin) {
+            $cls = get_class($plugin);
+            $cfg = Vpc_Admin::getInstance($cls)->getExtConfig();
+            foreach ($cfg as $k=>$c) {
+                $ret['componentConfigs'][$cls.'-'.$k] = $c;
+                $ret['contentEditComponents'][] = array(
+                    'componentClass' => $cls,
+                    'type' => $k,
+                    'idTemplate' => $idTemplate
+                );
+            }
+        }
+        if (Vpc_Abstract::hasSetting($componentClass, 'editComponents')) {
+            $editComponents = Vpc_Abstract::getSetting($componentClass, 'editComponents');
+            foreach ($editComponents as $c) {
+                $childGen = Vps_Component_Generator_Abstract::getInstances($componentClass, array('componentKey'=>$c));
+                $childGen = $childGen[0];
+                $childIdTemplate = $idTemplate.$childGen->getIdSeparator().$c;
+                $c = Vpc_Abstract::getChildComponentClass($componentClass, null, $c);
+                $edit = $this->_getEditConfigs($c, $childGen, $childIdTemplate);
+                $ret['componentConfigs'] = array_merge($ret['componentConfigs'], $edit['componentConfigs']);
+                $ret['contentEditComponents'] = array_merge($ret['contentEditComponents'], $edit['contentEditComponents']);
+            }
+        }
+        return $ret;
     }
 
     public function getExtConfig()
     {
-        $componentConfigs = array();
-        $contentEditComponents = array();
-
-        $contentClass = $this->_getContentClass();
-        $cfgKeys = array();
-        if ($contentClass) {
-            $cfg = Vpc_Admin::getInstance($contentClass)->getExtConfig();
-            foreach ($cfg as $k=>$c) {
-                $componentConfigs[$contentClass.'-'.$k] = $c;
-                $contentEditComponents[] = array(
-                    'componentClass' => $contentClass,
-                    'type' => $k
-                );
-            }
-            $cfgKeys = array_keys($cfg);
+        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
+        $gen = Vps_Component_Generator_Abstract::getInstance($this->_class, 'detail');
+        $generators = Vpc_Abstract::getSetting($this->_class, 'generators');
+        if (isset($generators['detail']['dbIdShortcut'])) {
+            $idTemplate = $generators['detail']['dbIdShortcut'].'{0}';
+        } else {
+            $idTemplate = '{componentId}'.$gen->getIdSeparator().'{0}';
         }
+        $edit = $this->_getEditConfigs($detail, $gen, $idTemplate);
 
         $componentPlugins = array();
         foreach ($this->_getPluginAdmins() as $a) {
@@ -36,10 +71,8 @@ class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
                 'controllerUrl' => $this->getControllerUrl(),
                 'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
                 'icon' => $this->_getSetting('componentIcon')->__toString(),
-                'contentClass' => $contentClass,
-                'contentType' => $cfgKeys ? $cfgKeys[0] : null,
-                'componentConfigs' => $componentConfigs,
-                'contentEditComponents' => $contentEditComponents,
+                'componentConfigs' => $edit['componentConfigs'],
+                'contentEditComponents' => $edit['contentEditComponents'],
                 'componentPlugins' => $componentPlugins
             )
         );
