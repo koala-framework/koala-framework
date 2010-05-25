@@ -12,10 +12,16 @@ class Vps_Component_Generator_Plugin_Tags_Controller extends Vps_Controller_Acti
         return $row;
     }
 
-    
     protected function _initColumns()
     {
         parent::_initColumns();
         $this->_columns->add(new Vps_Grid_Column('tag_text', trlVps('Tag')));
+    }
+
+    protected function _getSelect()
+    {
+        $ret = parent::_getSelect();
+        $ret->whereEquals('component_id', $this->_getParam('componentId'));
+        return $ret;
     }
 }
