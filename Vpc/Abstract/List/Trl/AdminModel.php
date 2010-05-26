@@ -1,6 +1,10 @@
 <?php
 class Vpc_Abstract_List_Trl_AdminModel extends Vps_Model_Data_Abstract
 {
+    protected $_dependentModels = array(
+        'Children' => 'Vpc_Abstract_List_Trl_Model'
+    );
+
     public function setComponentId($componentId)
     {
         $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($componentId, array('ignoreVisible'=>true));
