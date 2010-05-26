@@ -279,7 +279,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $node['children'] = $this->_structurePlainNodes($nodes, $primaryValue);
             $ret[] = $node;
         }
-        usort(&$ret, array("Vps_Controller_Action_Auto_Synctree", "_sortFilteredNodes"));
+        $fieldname = $node['sort'][0]['field'];
+        if ($node && isset($node['data'][$fieldname])) {
+            usort(&$ret, array("Vps_Controller_Action_Auto_Synctree", "_sortFilteredNodes"));
+        }
         foreach ($ret as &$r) unset($r['sort']);
         return $ret;
     }
@@ -287,8 +290,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     private static function _sortFilteredNodes($a, $b)
     {
         foreach ($a['sort'] as $s) {
-            $value1 = ord(strtolower($a['data'][$s['field']]));
-            $value2 = ord(strtolower($b['data'][$s['field']]));
+            $field = $s['field'];
+            if (!isset($a['data'][$field])) continue;
+            $value1 = ord(strtolower($a['data'][$field]));
+            $value2 = ord(strtolower($b['data'][$field]));
             if ($value1 != $value2) {
                 if ($s['direction'] == 'DESC') {
                     return $value1 > $value2;

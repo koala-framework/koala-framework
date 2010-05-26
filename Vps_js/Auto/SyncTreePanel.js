@@ -77,8 +77,8 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     reload: function()
     {
     	var node = this.getSelectedNode();
-    	if (!node ) {
-    		this.tree.getRootNode().reload
+    	if (!node || !node.getOwnerTree()) {
+    		this.tree.getRootNode().reload();
     	} else {
             var path = node.getPath();
             this.tree.initialConfig.loader.baseParams.openedId = node.id;
