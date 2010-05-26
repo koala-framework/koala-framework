@@ -1,14 +1,19 @@
-Ext.namespace('Vpc.Columns');
-Vpc.Columns.EditButton = Ext.extend(Ext.form.Field, {
+Ext.namespace('Vpc.Abstract.List');
+Vpc.Abstract.List.EditButton = Ext.extend(Ext.form.Field, {
     //bodyStyle: 'margin-left: 110px',
     defaultAutoCreate : {tag: "input", type: "hidden"},
-    initComponent: function() {
-        Vpc.Columns.EditButton.superclass.initComponent.call(this);
+
+    initComponent: function()
+    {
+        if (!this.editButtonText) this.editButtonText = trlVps('Edit');
+
+        Vpc.Abstract.List.EditButton.superclass.initComponent.call(this);
     },
+
     afterRender: function() {
-        Vpc.Columns.EditButton.superclass.afterRender.apply(this, arguments);
+        Vpc.Abstract.List.EditButton.superclass.afterRender.apply(this, arguments);
         this.button = new Ext.Button({
-            text: trlVps('Edit Column'),
+            text: this.editButtonText,
             renderTo: this.el.parent(),
             icon: '/assets/silkicons/page_white_edit.png',
             cls: 'x-btn-text-icon',
@@ -16,7 +21,7 @@ Vpc.Columns.EditButton = Ext.extend(Ext.form.Field, {
             enabled: false,
             handler: function() {
                 this.bubble(function(i) {
-                    if (i instanceof Vpc.Columns.Panel) {
+                    if (i instanceof Vpc.Abstract.List.PanelWithEditButton) {
                         var data = Vps.clone(i.editComponents[0]);
                         data.componentId = i.getBaseParams().componentId + '-' + this.value;
                         data.editComponents = i.editComponents;
@@ -27,9 +32,10 @@ Vpc.Columns.EditButton = Ext.extend(Ext.form.Field, {
             }
         });
     },
+
     setValue: function(v) {
-        Vpc.Columns.EditButton.superclass.setValue.apply(this, arguments);
+        Vpc.Abstract.List.EditButton.superclass.setValue.apply(this, arguments);
         this.button.setDisabled(!v);
     }
 });
-Ext.reg('vpc.columns.editbutton', Vpc.Columns.EditButton);
+Ext.reg('vpc.listeditbutton', Vpc.Abstract.List.EditButton);
