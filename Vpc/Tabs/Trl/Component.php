@@ -5,7 +5,7 @@ class Vpc_Tabs_Trl_Component extends Vpc_Abstract_List_Trl_Component
     {
         $ret = parent::getTemplateVars();
         foreach($ret['listItems'] as $k => $v) {
-            $ret['listItems'][$k]['title'] = $v['data']->chained->row->title;
+            $ret['listItems'][$k]['title'] = $v['data']->row->title;
         }
         return $ret;
     }
