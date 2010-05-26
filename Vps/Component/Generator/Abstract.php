@@ -709,4 +709,11 @@ abstract class Vps_Component_Generator_Abstract
         }
         return $this->_plugins;
     }
+
+    public final function getGeneratorPlugin($key)
+    {
+        $plugins = $this->getGeneratorPlugins();
+        if (isset($plugins[$key])) return $plugins[$key];
+        return null;
+    }
 }
