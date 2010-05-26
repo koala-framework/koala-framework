@@ -6,6 +6,7 @@ Neue Features:
 Änderungen:
 - LightBox restyling
 - News Styling im Vps
+- Vpc_Columns erben von Abstract_List
 
 == 1.8 ==
 Erstellt: 15.01.10

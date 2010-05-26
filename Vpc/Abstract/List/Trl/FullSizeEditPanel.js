@@ -1,5 +1,5 @@
-Ext.namespace('Vpc.Columns.Trl');
-Vpc.Columns.Trl.Panel = Ext.extend(Vps.Auto.GridPanel, {
+Ext.namespace('Vpc.Abstract.List');
+Vpc.Abstract.List.FullSizeEditPanel = Ext.extend(Vps.Auto.GridPanel, {
     initComponent: function() {
         this.addEvents('editcomponent', 'gotComponentConfigs');
         this.fireEvent('gotComponentConfigs', this.componentConfigs);
@@ -17,8 +17,8 @@ Vpc.Columns.Trl.Panel = Ext.extend(Vps.Auto.GridPanel, {
             }
         };
 
-        Vpc.Columns.Trl.Panel.superclass.initComponent.call(this);
+        Vpc.Abstract.List.FullSizeEditPanel.superclass.initComponent.call(this);
     }
 });
 
-Ext.reg('vpc.columns.trl', Vpc.Columns.Trl.Panel);
+Ext.reg('vpc.listfullsizeeditpanel', Vpc.Abstract.List.FullSizeEditPanel);
