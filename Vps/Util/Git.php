@@ -225,7 +225,7 @@ class Vps_Util_Git
             $this->system("push --force origin origin/$branch:refs/heads/previous/$branch");
         }
         $this->system("push --force origin $staging:refs/heads/$branch");
-        $this->system("git fetch origin");
+        $this->system("fetch origin");
     }
 
     public function isEmptyLog($ref)
