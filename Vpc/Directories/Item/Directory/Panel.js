@@ -21,6 +21,7 @@ Vpc.Directories.Item.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
             this.fireEvent('editcomponent', {
                 componentClass: col.editComponentClass,
                 type: col.editType,
+                componentIdSuffix: col.editComponentIdSuffix,
                 editComponents: this.contentEditComponents,
                 componentId: componentId,
                 text: trlVps('Details') //TODO stimmt des?
