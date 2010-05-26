@@ -9,6 +9,12 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     private $_componentConfigs = array();
 
+    protected function _init()
+    {
+        $this->_filters->add(new Vps_Controller_Action_Auto_Filter_Text())
+            ->setQueryFields(array('name'));
+    }
+
     public function indexAction()
     {
         $this->view->xtype = 'vps.component.pages';

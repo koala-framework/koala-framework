@@ -39,6 +39,18 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         
         var tbar = this.treePanel.getTopToolbar();
         tbar.add(this.pageButton);
+        tbar.add('-');
+        tbar.add(trlVps('Search: '));
+        
+        var filter = new Vps.Auto.Filter.Text({name: 'text', 'paramName': 'query'});
+        filter.on('filter', function(f, params) {
+            this.applyBaseParams(params);
+            this.reload();
+        }, this.treePanel);
+        filter.getToolbarItem().each(function(i) {
+            tbar.add(i);
+        });
+        
         tbar.add('->');
         tbar.add(this.treePanel.getAction('reload'));
         
