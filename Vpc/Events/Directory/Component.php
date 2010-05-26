@@ -16,11 +16,10 @@ class Vpc_Events_Directory_Component extends Vpc_News_Directory_Component
         return $ret;
     }
 
-    public function getSelect($overrideValues = array())
+    public function getSelect()
     {
         $select = parent::getSelect();
-        $date = isset($overrideValues['date']) ? $overrideValues['date'] : 'NOW()';
-        $select->where("IF(ISNULL(end_date), start_date, end_date) >= {$date}");
+        $select->where("IF(ISNULL(end_date), start_date, end_date) >= NOW()");
         return $select;
     }
 }
