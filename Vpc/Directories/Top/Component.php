@@ -8,9 +8,9 @@ abstract class Vpc_Directories_Top_Component extends Vpc_Directories_List_Compon
         return $ret;
     }
 
-    public function getSelect($overrideValues = array())
+    public function getSelect()
     {
-        $select = parent::getSelect($overrideValues);
+        $select = parent::getSelect();
         if (!$select) return null;
         if ($this->_getSetting('limit')) $select->limit($this->_getSetting('limit'));
         return $select;

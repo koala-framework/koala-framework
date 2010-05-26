@@ -25,9 +25,9 @@ class Vpc_Guestbook_Component extends Vpc_Posts_Directory_Component
         return $ret;
     }
 
-    public function getSelect($overrideValues = array())
+    public function getSelect()
     {
-        $ret = parent::getSelect($overrideValues);
+        $ret = parent::getSelect();
         $ret->order('id', 'DESC');
         return $ret;
     }
