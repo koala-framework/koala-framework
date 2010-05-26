@@ -702,8 +702,8 @@ abstract class Vps_Component_Generator_Abstract
         if (!isset($this->_plugins)) {
             $this->_plugins = array();
             if (isset($this->_settings['plugins'])) {
-                foreach ($this->_settings['plugins'] as &$p) {
-                    $this->_plugins[] = new $p();
+                foreach ($this->_settings['plugins'] as $k=>&$p) {
+                    $this->_plugins[$k] = new $p($this);
                 }
             }
         }
