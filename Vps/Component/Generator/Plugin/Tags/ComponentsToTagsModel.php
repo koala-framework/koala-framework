@@ -8,7 +8,7 @@ class Vps_Component_Generator_Plugin_Tags_ComponentsToTagsModel extends Vps_Mode
             'column' => 'tag_id'
         ),
         'Component' => array(
-            'refModelClass' => null,
+            'refModelClass' => 'Vps_Component_Model', //ungetestet
             'column' => 'component_id'
         )
     );
