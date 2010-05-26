@@ -8,6 +8,7 @@ class Vpc_Box_Tags_RelatedNews_Component extends Vpc_Directories_List_Component
         $ret['useDirectorySelect'] = false;
         return $ret;
     }
+
     protected function _getItemDirectory()
     {
         return 'Vpc_News_Directory_Component';
