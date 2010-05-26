@@ -6,7 +6,7 @@ class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
     protected final function _getContentClass()
     { return null; }
 
-    private function _getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate)
+    private function _getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate, $componentIdSuffix)
     {
         $ret = array(
             'componentConfigs' => array(),
@@ -18,7 +18,8 @@ class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
             $ret['contentEditComponents'][] = array(
                 'componentClass' => $componentClass,
                 'type' => $k,
-                'idTemplate' => $idTemplate
+                'idTemplate' => $idTemplate,
+                'componentIdSuffix' => $componentIdSuffix
             );
         }
         foreach ($gen->getGeneratorPlugins() as $plugin) {
@@ -29,7 +30,8 @@ class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
                 $ret['contentEditComponents'][] = array(
                     'componentClass' => $cls,
                     'type' => $k,
-                    'idTemplate' => $idTemplate
+                    'idTemplate' => $idTemplate,
+                    'componentIdSuffix' => $componentIdSuffix
                 );
             }
         }
@@ -38,9 +40,10 @@ class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
             foreach ($editComponents as $c) {
                 $childGen = Vps_Component_Generator_Abstract::getInstances($componentClass, array('componentKey'=>$c));
                 $childGen = $childGen[0];
-                $childIdTemplate = $idTemplate.$childGen->getIdSeparator().$c;
-                $c = Vpc_Abstract::getChildComponentClass($componentClass, null, $c);
-                $edit = $this->_getEditConfigs($c, $childGen, $childIdTemplate);
+                $cls = Vpc_Abstract::getChildComponentClass($componentClass, null, $c);
+                $edit = $this->_getEditConfigs($cls, $childGen,
+                                               $idTemplate,
+                                               $componentIdSuffix.$childGen->getIdSeparator().$c);
                 $ret['componentConfigs'] = array_merge($ret['componentConfigs'], $edit['componentConfigs']);
                 $ret['contentEditComponents'] = array_merge($ret['contentEditComponents'], $edit['contentEditComponents']);
             }
@@ -58,7 +61,7 @@ class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
         } else {
             $idTemplate = '{componentId}'.$gen->getIdSeparator().'{0}';
         }
-        $edit = $this->_getEditConfigs($detail, $gen, $idTemplate);
+        $edit = $this->_getEditConfigs($detail, $gen, $idTemplate, '');
 
         $componentPlugins = array();
         foreach ($this->_getPluginAdmins() as $a) {
