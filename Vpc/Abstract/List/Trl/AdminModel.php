@@ -1,9 +1,7 @@
 <?php
 class Vpc_Abstract_List_Trl_AdminModel extends Vps_Model_Data_Abstract
 {
-    protected $_dependentModels = array(
-        'Children' => 'Vpc_Abstract_List_Trl_Model'
-    );
+    protected $_translateFields = array('visible');
 
     public function setComponentId($componentId)
     {
@@ -16,16 +14,20 @@ class Vpc_Abstract_List_Trl_AdminModel extends Vps_Model_Data_Abstract
                 'id' => $c->chained->row->id,
                 'component_id' => $componentId,
                 'row' => $c->row,
-                'visible' => $c->row->visible,
                 'pos' => $c->chained->row->pos
             );
+            foreach ($this->_translateFields as $tf) {
+                $this->_data[$c->componentId][$tf] = $c->row->{$tf};
+            }
         }
     }
 
     public function update(Vps_Model_Row_Interface $row, $rowData)
     {
         parent::update($row, $rowData);
-        $rowData['row']->visible = $row->visible;
+        foreach ($this->_translateFields as $tf) {
+            $rowData['row']->{$tf} = $row->{$tf};
+        }
         $rowData['row']->save();
     }
 }

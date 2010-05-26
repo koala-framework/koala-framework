@@ -1,0 +1,3 @@
+.vpsTabs .vpsTabsContent { display: none; }
+/* das important muss bleiben weil es das selbe element ist  wie .vpsTabsContent */
+.vpsTabs .vpsTabsContentActive { display: block !important; }
