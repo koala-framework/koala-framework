@@ -1,13 +1,6 @@
 <?php
 class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
 {
-    public function getExtConfig()
-    {
-        $ret = parent::getExtConfig();
-        $ret['items']['idTemplate'] = 'news_{0}-content';
-        return $ret;
-    }
-
     protected function _getPluginParentComponents()
     {
         $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
