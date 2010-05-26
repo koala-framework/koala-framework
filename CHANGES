@@ -1,3 +1,9 @@
+== 1.10 ==
+Erstellt: 09.06.10
+- editComponents werden im Seitenbaum nur mehr berücksichtigt wenn direkt unter der bearbeitenden Komponente liegen
+  (indirekt nur wenn der ganze Pfad editComponents eingestellt hat)
+
+
 == 1.9 ==
 Erstellt: 07.05.10
 Stable: 09.06.10
