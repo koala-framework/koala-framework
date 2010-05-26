@@ -127,7 +127,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 'ignoreVisible' => true,
                 'flags' => array('showInPageTreeAdmin' => false)
             ), array(
-                'flags' => array('showInPageTreeAdmin' => false)
+                'flags' => array('showInPageTreeAdmin' => false),
+                'hasEditComponents' => true,
             )
         );
         if ($component->isPage) {
