@@ -13,9 +13,8 @@ class Vpc_Box_Tags_RelatedPages_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['related'] = array();
-        $plugins = $this->getData()->getPage()->generator->getGeneratorPlugins();
-        if (isset($plugins['tags'])) {
-            $plugin = $plugins['tags'];
+        $plugin = $this->getData()->getPage()->generator->getGeneratorPlugin('tags');
+        if ($plugin) {
             $ret['related'] = $plugin->getComponentsWithSameTags($this->getData()->getPage());
         }
         return $ret;
