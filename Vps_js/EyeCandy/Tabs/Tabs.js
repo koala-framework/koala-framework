@@ -15,7 +15,7 @@ Vps.Tabs = function(el) {
 
     var tabsWrapper = this.el.createChild({
         tag: 'div', cls: 'vpsTabsLinks'
-    }, this.el);
+    }, this.el.first());
 
     for (var i = 0; i < this.switchEls.length; i++) {
         tabsWrapper.appendChild(this.switchEls[i]);
@@ -29,13 +29,19 @@ Vps.Tabs = function(el) {
             this.tabsObject.activateTab(this.idx);
         }, { tabsObject: this, idx: i } );
     }
+
+    tabsWrapper.createChild({
+        tag: 'div', cls: 'clear'
+    });
 };
 
 Ext.extend(Vps.Tabs, Ext.util.Observable, {
     activateTab: function(idx) {
         if (this._activeTabIdx !== null) {
+            Ext.get(this.switchEls[this._activeTabIdx]).removeClass('vpsTabsLinkActive');
             Ext.get(this.contentEls[this._activeTabIdx]).removeClass('vpsTabsContentActive');
         }
+        Ext.get(this.switchEls[idx]).addClass('vpsTabsLinkActive');
         Ext.get(this.contentEls[idx]).addClass('vpsTabsContentActive');
 
         this._activeTabIdx = idx;
