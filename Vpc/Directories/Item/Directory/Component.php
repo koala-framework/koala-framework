@@ -12,6 +12,7 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
         $ret['useDirectorySelect'] = false;
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/EditFormPanel.js';
         return $ret;
     }
 

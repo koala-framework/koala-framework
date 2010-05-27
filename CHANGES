@@ -4,12 +4,15 @@ Neue Features:
 - AutoFilter
 - Vpc_Tabs
 
-Änderungen:
+möglicherweise nicht kompatible Änderungen:
 - LightBox restyling
 - News und Events Html verbessert Vps
 - Vpc_Columns erben von Abstract_List
-    TemplateVars: columns umbenannt in listItems
-    generator columns umbenannt in child
+    o TemplateVars: columns umbenannt in listItems
+    o generator columns umbenannt in child
+- Directories Kategorien sind jetzt pro Komponente
+    o eigene Tabelle, kein Pool mehr
+    o Updatescript gibts für News und Events
 
 == 1.8 ==
 Erstellt: 15.01.10
