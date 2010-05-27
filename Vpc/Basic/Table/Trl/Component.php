@@ -11,4 +11,11 @@ class Vpc_Basic_Table_Trl_Component extends Vpc_Chained_Trl_Component
         $ret['dataRows'] = $model->getRows($dataSelect);
         return $ret;
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $ret['tableData']['componentId'] = $this->getData()->componentId;
+        return $ret;
+    }
 }
