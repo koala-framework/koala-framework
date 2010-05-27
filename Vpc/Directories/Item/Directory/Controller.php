@@ -10,7 +10,8 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
 
     protected $_editDialog = array(
         'width' =>  500,
-        'height' =>  400
+        'height' =>  400,
+        'autoForm' => 'Vpc.Directories.Item.Directory.EditFormPanel'
     );
 
     public function preDispatch()
