@@ -14,6 +14,7 @@ abstract class Vps_Component_Generator_Abstract
     private $_model;
 
     private static $instances = array();
+    private static $_cachedInstances = array();
 
     public function __sleep()
     {
@@ -82,10 +83,11 @@ abstract class Vps_Component_Generator_Abstract
         return $this->_getModel();
     }
 
-    //um den speicherverbrauch zu reduzieren
+    //um den speicherverbrauch zu reduzieren und fuer tests
     public static function clearInstances()
     {
         self::$instances = array();
+        self::$_cachedInstances = array();
     }
 
     public static function getInstance($componentClass, $key, $settings = array(), $pluginBaseComponentClass = false, $inherited = false)
@@ -168,10 +170,9 @@ abstract class Vps_Component_Generator_Abstract
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));
         }
-        static $cachedGenerators;
-        if (isset($cachedGenerators[$cacheId])) {
+        if (isset(self::$_cachedInstances[$cacheId])) {
             Vps_Benchmark::countBt('Generator::getInst hit');
-            $generators = $cachedGenerators[$cacheId];
+            $generators = self::$_cachedInstances[$cacheId];
         } else if (($cachedGeneratorData = $cache->load($cacheId)) !== false) {
             Vps_Benchmark::count('Generator::getInst semi-hit');
             $generators = array();
@@ -256,7 +257,7 @@ abstract class Vps_Component_Generator_Abstract
             }
             $cache->save($cachedGeneratorData, $cacheId);
         }
-        $cachedGenerators[$cacheId] = $generators;
+        self::$_cachedInstances[$cacheId] = $generators;
 
         $selectParts = $select->getParts();
 

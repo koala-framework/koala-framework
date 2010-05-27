@@ -21,10 +21,13 @@ class Vpc_Advanced_Team_Member_Data_Component extends Vpc_Abstract
         $ret['placeholder']['positionLabel'] = trlVpsStatic('Position');
         $ret['placeholder']['phoneLabel'] = trlVpsStatic('Phone');
         $ret['placeholder']['mobileLabel'] = trlVpsStatic('Mobile');
+        $ret['placeholder']['faxLabel'] = trlVpsStatic('Fax');
         $ret['placeholder']['emailLabel'] = trlVpsStatic('E-Mail');
         $ret['placeholder']['vcardLabel'] = trlVpsStatic('vCard');
 
         $ret['cssClass'] = 'webStandard webListNone';
+
+        $ret['faxPerPerson'] = false;
 
         return $ret;
     }

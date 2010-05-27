@@ -12,7 +12,8 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         }
         $m = Vpc_Abstract::createChildModel($this->_class);
         $ret = parent::_getChainedChildComponents($parentData, $select);
-        if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
+        if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
+            //kann nur gemacht werden nur wenn parentData vorhanden
             foreach ($ret as $k=>$c) {
                 $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($c));
                 if (!$r || !$r->visible) {
@@ -29,6 +30,22 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         }
         return $ret;
     }
+
+    protected function _createData($parentData, $row, $select)
+    {
+        //visible überprüfung wird _getChainedChildComponents auch schon gemacht
+        //aber nur wenn parentData dort schon verfügbar ist
+        //für fälle wo es das nicht war hier unten nochmal überprüfen
+        $m = Vpc_Abstract::createChildModel($this->_class);
+        if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
+            $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row));
+            if (!$r || !$r->visible) {
+                return null;
+            }
+        }
+        return parent::_createData($parentData, $row, $select);
+    }
+
     protected function _formatConfig($parentData, $row)
     {
         $ret = parent::_formatConfig($parentData, $row);

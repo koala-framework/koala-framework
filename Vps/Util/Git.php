@@ -86,6 +86,12 @@ class Vps_Util_Git
         $cmd = "tag -a -m ".escapeshellarg('tagged').' '.$args.' '.escapeshellcmd($tag);
         if ($object) $cmd .= ' '.escapeshellcmd($object);
         $this->system($cmd);
+
+        if ($args == '-f') {
+            if ($this->revParse("refs/tags/$tag")) {
+                $this->system("push origin :refs/tags/$tag"); //tag loeschen
+            }
+        }
         $this->system("push origin tag ".escapeshellcmd($tag));
     }
 
@@ -114,9 +120,9 @@ class Vps_Util_Git
         $this->system("checkout ".escapeshellcmd($target));
     }
 
-    public function checkoutBranch($branch, $target)
+    public function checkoutBranch($branch, $target, $args = '')
     {
-        $this->system("checkout -b ".escapeshellcmd($branch).' '.escapeshellcmd($target));
+        $this->system("checkout $args -b ".escapeshellcmd($branch).' '.escapeshellcmd($target));
     }
 
     public function fetch()
@@ -209,5 +215,31 @@ class Vps_Util_Git
     public function getActiveBranchContains($commit)
     {
         return in_array($this->getActiveBranch(),  $this->getBranchesContains($commit, ''));
+    }
+
+    public function productionBranch($branch, $staging)
+    {
+        $this->fetch();
+        if ($this->revParse('refs/remotes/origin/'.$branch)) {
+            //aktuellen production in previous/ kopieren
+            $this->system("push --force origin origin/$branch:refs/heads/previous/$branch");
+        }
+        $this->system("push --force origin $staging:refs/heads/$branch");
+        $this->system("fetch origin");
+    }
+
+    public function isEmptyLog($ref)
+    {
+        $d = getcwd();
+        $cmd = "git --no-pager log $ref";
+        chdir($this->_path);
+        if (self::$_debug) echo $cmd."\n";
+        exec($cmd, $ret, $retVal);
+        chdir($d);
+        if ($retVal) {
+            throw new Vps_Exception("Command failed: $cmd");
+        }
+        $ret = trim(implode("\n", $ret));
+        return empty($ret);
     }
 }

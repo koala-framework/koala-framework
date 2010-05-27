@@ -24,8 +24,10 @@ class Vpc_Basic_LinkTag_News_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
             if (count($linkingRows)) {
                 $ret = array();
                 foreach ($linkingRows as $linkingRow) {
-                    $ret[] = Vps_Component_Data_Root::getInstance()
-                        ->getComponentById($linkingRow->component_id);
+                    $c = Vps_Component_Data_Root::getInstance()
+                        ->getComponentByDbId($linkingRow->component_id);
+                    //$c kann null sein wenn es nicht online ist
+                    if ($c) $ret[] = $c;
                 }
                 return $ret;
             }

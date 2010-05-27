@@ -27,14 +27,16 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
     public function checkoutStagingAction()
     {
+        if (!$this->_getParam('revWeb') || !$this->_getParam('revVps')) {
+            throw new Vps_ClientException("revWeb and revVps parameters required");
+        }
         $this->_eventuallyConvertToGitAndRestart();
 
         Vps_Util_Git::vps()->fetch();
         Vps_Util_Git::web()->fetch();
 
-        Vps_Util_Git::web()->checkout("staging");
-        $appId = Vps_Registry::get('config')->application->id;
-        Vps_Util_Git::vps()->checkout("$appId-staging");
+        Vps_Util_Git::web()->checkout($this->_getParam('revWeb'));
+        Vps_Util_Git::vps()->checkout($this->_getParam('revVps'));
         exit;
     }
 
@@ -62,16 +64,16 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         Vps_Util_Git::vps()->system("checkout ".escapeshellarg('Vps/Util/Git.php'));
         Vps_Util_Git::vps()->system("checkout ".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'));
         $appId = Vps_Registry::get('config')->application->id;
-        if (!Vps_Util_Git::vps()->revParse("production-$appId")) {
-            Vps_Util_Git::vps()->branch("production-$appId", '', "origin/production/$appId");
+        if (!Vps_Util_Git::vps()->revParse("production/$appId")) {
+            Vps_Util_Git::vps()->checkoutBranch("production/$appId", "origin/production/$appId", '--track');
         }
-        if (Vps_Util_Git::vps()->getActiveBranch() != "production-$appId") {
-            Vps_Util_Git::vps()->checkout("production-$appId");
+        if (Vps_Util_Git::vps()->getActiveBranch() != "production/$appId") {
+            Vps_Util_Git::vps()->checkout("production/$appId");
         }
         Vps_Util_Git::vps()->system("rebase origin/production/$appId");
 
         if (!Vps_Util_Git::web()->revParse("production")) {
-            Vps_Util_Git::web()->branch("production", '', "origin/production");
+            Vps_Util_Git::web()->checkoutBranch("production", "origin/production", '--track');
         }
         if (Vps_Util_Git::web()->getActiveBranch() != "production") {
             Vps_Util_Git::web()->checkout("production");
@@ -193,6 +195,10 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         echo "$cmd\n";
         $this->_systemCheckRet($cmd);
 
+        $cmd = "find -executable -type f | xargs chmod -x";
+        echo "$cmd\n";
+        $this->_systemCheckRet($cmd);
+
         if ($id == 'vps') {
             //die zwei wurden im svn im nachinhein geaendert
             $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/SvnUpController.php";
@@ -276,7 +282,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             } catch (Vps_Exception $e) {
                 exit(1);
             }
-        } else if ($g->getActiveBranch() == 'production-'.Vps_Registry::get('config')->application->id) {
+        } else if ($g->getActiveBranch() == 'production/'.Vps_Registry::get('config')->application->id) {
             try {
                 $g->system("rebase origin/production/".Vps_Registry::get('config')->application->id);
             } catch (Vps_Exception $e) {
@@ -284,10 +290,6 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             }
         } else {
             echo "vps: ".$g->getActiveBranch()." != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
-        }
-        if (!$g->getActiveBranchContains('origin/'.$vpsBranch)) {
-            echo "vps: ".$g->getActiveBranch()." branch beinhaltet nicht origin/$vpsBranch.\n";
-            $doUpdate = false;
         }
 
         $projectIds = Vps_Model_Abstract::getInstance('Vps_Util_Model_Projects')

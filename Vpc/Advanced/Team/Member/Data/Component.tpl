@@ -11,12 +11,12 @@
             </li>
         <? } ?>
 
-        <? if (!empty($this->working_position)) { ?>
+        <? if (!empty($this->workingPosition)) { ?>
             <li>
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['positionLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
-                <?= $this->working_position; ?>
+                <?= $this->workingPosition; ?>
             </li>
         <? } ?>
 
@@ -35,6 +35,15 @@
                     <label><?= $this->placeholder['mobileLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
                 <?= $this->row->mobile; ?>
+            </li>
+        <? } ?>
+
+        <? if (!empty($this->row->fax)) { ?>
+            <li>
+                <? if ($this->showLabels) { ?>
+                    <label><?= $this->placeholder['faxLabel'].$this->labelSeparator; ?></label>
+                <? } ?>
+                <?= $this->row->fax; ?>
             </li>
         <? } ?>
 

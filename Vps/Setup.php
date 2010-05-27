@@ -329,11 +329,12 @@ class Vps_Setup
 
             Vps_Benchmark::shutDown();
 
-            if ($page instanceof Vpc_Abstract_Feed_Component) {
+            //TODO: ein flag oder sowas ähnliches stattdessen verwenden
+            if ($page instanceof Vpc_Abstract_Feed_Component || $page instanceof Vpc_Export_Xml_Component || $page instanceof Vpc_Export_Xml_Trl_Component) {
                 echo "<!--";
             }
             Vps_Benchmark::output();
-            if ($page instanceof Vpc_Abstract_Feed_Component) {
+            if ($page instanceof Vpc_Abstract_Feed_Component || $page instanceof Vpc_Export_Xml_Component || $page instanceof Vpc_Export_Xml_Trl_Component) {
                 echo "-->";
             }
             exit;

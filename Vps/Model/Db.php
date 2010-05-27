@@ -23,6 +23,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
         parent::__construct($config);
     }
 
+    public function __sleep()
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
     public function __destruct()
     {
         if (isset($this->_importBuffer)) {
@@ -225,8 +230,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private function _fixStupidQuoteBug($v)
     {
         if ((strpos($v, '?') !== false || strpos($v, ':') !== false) && strpos($v, '\'') !== false) {
-            $e = new Vps_Exception("(? or :) and a single quote are used together in an sql query value. This is a problem because of an Php bug. The single quote is ignored.");
-            $e->notify();
             $v = str_replace('\'', '', $v);
         }
         return $v;

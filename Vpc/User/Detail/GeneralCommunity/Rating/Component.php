@@ -50,7 +50,7 @@ class Vpc_User_Detail_GeneralCommunity_Rating_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getStaticCacheVars()
+    public static function getStaticCacheVars()
     {
         $ret = array();
         $ret[] = array(
