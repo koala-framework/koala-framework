@@ -532,6 +532,9 @@ class Vps_Component_Data
         return $ret;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getChildComponent($select = array())
     {
         $select = $this->_formatSelect($select);
@@ -541,6 +544,9 @@ class Vps_Component_Data
         return current($cc);
     }
 
+    /**
+     * @return Vpc_Abstract
+     */
     public function getComponent()
     {
         if (!isset($this->_component)) {
@@ -552,6 +558,9 @@ class Vps_Component_Data
         return $this->_component;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getPage()
     {
         $page = $this;
@@ -561,6 +570,9 @@ class Vps_Component_Data
         return $page;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getPageOrRoot()
     {
         $page = $this;
@@ -571,6 +583,9 @@ class Vps_Component_Data
         return $page;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getPseudoPageOrRoot()
     {
         $page = $this;
@@ -581,6 +596,9 @@ class Vps_Component_Data
         return $page;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getPseudoPage()
     {
         $page = $this;
@@ -590,6 +608,9 @@ class Vps_Component_Data
         return $page;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getParentPage()
     {
         $page = $this->getPage();
@@ -599,6 +620,9 @@ class Vps_Component_Data
         return null;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getParentPageOrRoot()
     {
         $page = $this->getPageOrRoot();
@@ -608,6 +632,9 @@ class Vps_Component_Data
         return null;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getParentPseudoPage()
     {
         $page = $this->getPseudoPage();
@@ -618,6 +645,9 @@ class Vps_Component_Data
     }
 
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getParentPseudoPageOrRoot()
     {
         $page = $this->getPseudoPage();
@@ -627,6 +657,9 @@ class Vps_Component_Data
         return null;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getParentByClass($cls)
     {
         $d = $this;
@@ -663,6 +696,9 @@ class Vps_Component_Data
         return $ret;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getChildPageByPath($path)
     {
         $page = $this;
@@ -678,6 +714,9 @@ class Vps_Component_Data
         return $page;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getLanguageData()
     {
         // search parents for flag hasLanguage
