@@ -43,7 +43,7 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();
-        $ret[] = array(
+        $ret['tableData'] = array(
             'model' => $this->getChildModel(),
             'componentId' => $this->getData()->componentId
         );
