@@ -19,7 +19,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
     {
         // Wenn es eine Search-Form gibt und diese nicht unter der eigenen Page
         // liegt, manuell processen - das Flag muss allerdings manuell gesetzt
-        // werden! 
+        // werden!
         $searchForm = $this->_getSearchForm();
         if ($searchForm && !$searchForm->getComponent()->isProcessed()) {
             $searchForm->getComponent()->processInput($postData);

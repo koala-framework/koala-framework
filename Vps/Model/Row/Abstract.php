@@ -219,6 +219,8 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         } else {
             if (!$select instanceof Vps_Model_Select) {
                 $select = $m->select($select);
+            } else {
+                $select = clone $select; //nicht select objekt ändern
             }
             $ref = $m->getReferenceByModelClass(get_class($dependentOf), null);
             if (!$this->{$this->_getPrimaryKey()}) {

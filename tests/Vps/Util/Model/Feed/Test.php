@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Feed
+ * @group slow
  */
 class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
 {

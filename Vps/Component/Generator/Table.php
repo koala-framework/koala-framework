@@ -302,7 +302,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $newRow = $source->row->duplicate($data);
 
         $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
-        $target = $parentTarget->getChildComponent($id);
+        $target = $parentTarget->getChildComponent(array('id'=>$id, 'ignoreVisible'=>true));
         Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
         return $target;
     }

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_TestComponent_Controller extends Vpc_Abstract_Composite_Controller
+class Vpc_Basic_Text_TestComponent_Controller extends Vpc_Basic_Text_Controller
 {
     public function indexAction()
     {

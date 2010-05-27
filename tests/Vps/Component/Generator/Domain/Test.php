@@ -64,7 +64,6 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('1', $this->_root->getComponentById('2')->parent->componentId);
         $this->assertEquals('root-at-main', $this->_root->getComponentById('2')->parent->parent->componentId);
 
-        $this->markTestIncomplete('test korrekt, code kaputt');
         // ch
         $page = $this->_root->getComponentById('5');
         $this->assertNotNull($page);
@@ -84,8 +83,6 @@ class Vps_Component_Generator_Domain_Test extends PHPUnit_Framework_TestCase
         $this->assertNotNull($home);
         $this->assertNotNull($home->getChildPseudoPage(array('filename' => 'foo')));
         $this->assertEquals(1, count($ch->getChildComponent('-main')->getChildPseudoPages()));
-
-        $this->markTestIncomplete('getChildPseudoPage ist rekursiv, es m�ssen daher zwei sein');
         $this->assertEquals(2, count($ch->getChildPseudoPages()));
     }
 
