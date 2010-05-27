@@ -196,6 +196,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getComponentByDbId($dbId, $select = array())
     {
         $components = $this->getComponentsByDbId($dbId, $select);
