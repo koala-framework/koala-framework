@@ -8,6 +8,8 @@ Neue Features:
 - LightBox restyling
 - News und Events Html verbessert Vps
 - Vpc_Columns erben von Abstract_List
+    TemplateVars: columns umbenannt in listItems
+    generator columns umbenannt in child
 
 == 1.8 ==
 Erstellt: 15.01.10
