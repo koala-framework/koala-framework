@@ -11,6 +11,8 @@ class Vpc_Directories_Item_Directory_Trl_Controller extends Vps_Controller_Actio
         'height' =>  400
     );
 
+    protected $_paging = 25;
+
     public function preDispatch()
     {
         $this->setModel(new Vpc_Directories_Item_Directory_Trl_AdminModel(array(
