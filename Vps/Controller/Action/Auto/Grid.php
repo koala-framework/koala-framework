@@ -107,6 +107,11 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->_filters = $filters;
         }
 
+        $filters = is_array($this->_filters) ? $this->_filters : array();
+        if ($this->_getParam('query') && !isset($this->_filters['text'])) {
+            $this->_filters['text'] = true;
+        }
+
         foreach ($this->_filters as $filter) {
             $filter->setModel($this->_model);
 
@@ -195,12 +200,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         if (method_exists($this, '_getWhereQuery')) {
             throw new Vps_Exception("_getWhereQuery doesn't exist anymore");
-        }
-
-        $ret = array();
-        $filters = is_array($this->_filters) ? $this->_filters : array();
-        if ($this->_getParam('query') && !isset($this->_filters['text'])) {
-            $this->_filters['text'] = true;
         }
 
         // Falls Filter einen Default-Wert hat:
