@@ -4,7 +4,6 @@ class Vpc_Directories_Category_Directory_CategoriesController
 {
     protected $_buttons = array('save', 'add', 'delete');
     protected $_position = 'pos';
-    protected $_modelName = 'Vpc_Directories_Category_Directory_CategoriesModel';
 
     protected function _isAllowedComponent()
     {
@@ -48,6 +47,7 @@ class Vpc_Directories_Category_Directory_CategoriesController
 
     protected function _initColumns()
     {
+        $this->setModel(Vpc_Abstract::createChildModel($this->_getParam('class')));
         $this->_columns->add(new Vps_Grid_Column('name', trlVps('Category'), 300))
             ->setEditor(new Vps_Form_Field_TextField());
         $this->_columns->add(new Vps_Grid_Column_Visible());
