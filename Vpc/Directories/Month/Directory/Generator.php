@@ -65,12 +65,17 @@ class Vpc_Directories_Month_Directory_Generator extends Vps_Component_Generator_
         return $select;
     }
 
+    protected function _getSelectGroup($dateColumn)
+    {
+        return array('YEAR('.$dateColumn.')', 'MONTH('.$dateColumn.')');
+    }
+
     protected function _formatSelect($parentData, $select)
     {
         $ret = parent::_formatSelect($parentData, $select);
         if (!$ret) return $ret;
         $dateColumn = Vpc_Abstract::getSetting($this->_class, 'dateColumn');
-        $ret->group(array('YEAR('.$dateColumn.')', 'MONTH('.$dateColumn.')'));
+        $ret->group($this->_getSelectGroup($dateColumn));
         $ret->order($dateColumn, 'DESC');
         if (!$parentData) {
             //hier können wir nicht so wie unten den detail generator verwenden da wir
