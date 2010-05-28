@@ -40,7 +40,7 @@
         <p><?=$this->mailEncodeText($this->item->row->teaser)?></p>
         <p class="readMore">
             <?=$this->ifHasContent($this->item)?>
-                <?=$this->componentLink($this->item, $this->data->trlVps('read more').' »');?>
+                <?=$this->componentLink($this->item, $this->data->trlVps('Read more &#xBB;'));?>
             <?=$this->ifHasContent()?>
         </p>
     </div>
