@@ -22,6 +22,6 @@ class Vpc_Basic_LinkTag_News_Form extends Vpc_Abstract_Form
     {
         $row = $this->getRow($parentRow);
         $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId('news_'.$row->news_id);
-        return 'news_'.$c->parent->dbId = $this->getName();
+        return 'news_'.$c->parent->dbId == $this->getName();
     }
 }
