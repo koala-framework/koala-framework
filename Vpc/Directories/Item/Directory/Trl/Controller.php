@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Directory_Trl_Controller extends Vps_Controller_Action_Auto_Grid
+class Vpc_Directories_Item_Directory_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
     protected $_buttons = array(
         'save',
@@ -28,13 +28,6 @@ class Vpc_Directories_Item_Directory_Trl_Controller extends Vps_Controller_Actio
     {
         parent::_initColumns();
         $this->_columns->add(new Vps_Grid_Column('id'));
-    }
-
-    protected function _getSelect()
-    {
-        $ret = parent::_getSelect();
-        $ret->whereEquals('component_id', $this->_getParam('componentId'));
-        return $ret;
     }
 
     protected function _getRowById($id)
