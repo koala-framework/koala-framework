@@ -6,7 +6,8 @@ Neue Features:
 
 möglicherweise nicht kompatible Änderungen:
 - LightBox restyling
-- News und Events Html verbessert Vps
+- News und Events View Html verbessert Vps
+- NewsCategories Detail im Vps das die Kategorien ausgibt
 - Vpc_Columns erben von Abstract_List
     o TemplateVars: columns umbenannt in listItems
     o generator columns umbenannt in child
