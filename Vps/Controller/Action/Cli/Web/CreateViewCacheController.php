@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_CreateViewCacheController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_Web_CreateViewCacheController extends Vps_Controller_Action_Cli_Abstract
 {
     private $_processed = array();
     public static function getHelp()

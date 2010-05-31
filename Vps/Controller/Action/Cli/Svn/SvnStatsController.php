@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_Svn_SvnStatsController extends Vps_Controller_Action_Cli_Abstract
 {
     private $_interval = 1;
     public static function getHelp()

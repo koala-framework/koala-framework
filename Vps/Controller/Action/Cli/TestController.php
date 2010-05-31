@@ -118,7 +118,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('retry-on-error')) {
             $arguments['retryOnError'] = $this->_getParam('retry-on-error');
         }
-        
+
         if ($this->_getParam('coverage')) {
             if (!extension_loaded('tokenizer') || !extension_loaded('xdebug')) {
                 throw new Vps_ClientException('tokenizer and xdebug extensions must be loaded');

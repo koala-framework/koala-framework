@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_NewsletterController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_Web_NewsletterController extends Vps_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {

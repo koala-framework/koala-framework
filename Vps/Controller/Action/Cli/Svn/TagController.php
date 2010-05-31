@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_Svn_TagController extends Vps_Controller_Action_Cli_Abstract
 {
     private static $_svnBase = 'file:///var/lib/svn';
 
