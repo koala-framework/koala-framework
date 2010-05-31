@@ -1,6 +1,6 @@
 <?php
 
-abstract class Vps_Controller_Action_Cli_DbUpdate extends Vps_Controller_Action_Cli_Abstract
+abstract class Vps_Controller_Action_Cli_Web_DbUpdate extends Vps_Controller_Action_Cli_Abstract
 {
     protected $_db = null;
 

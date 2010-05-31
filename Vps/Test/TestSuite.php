@@ -6,7 +6,6 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
         parent::__construct($name);
         $this->setBackupGlobals(false);
         $classes = $this->_addDirectory('./tests', false);
-        $classes = array_merge($classes, $this->_addDirectory(VPS_PATH.'/tests', true));
 
         if (file_exists("/www/testtimes")) {
             $app = Vps_Registry::get('config')->application->id;

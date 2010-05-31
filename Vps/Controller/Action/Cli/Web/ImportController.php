@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Action_Cli_Abstract
 {
     private $_useSshVps;
     private $_sshHost;
@@ -352,7 +352,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             echo "schreibe application/update...\n";
             file_put_contents('application/update', $onlineRevision);
 
-            Vps_Controller_Action_Cli_UpdateController::update();
+            Vps_Controller_Action_Cli_Web_UpdateController::update();
         } else {
             echo "update uebersprungen, da include-cache aktiv\n";
         }

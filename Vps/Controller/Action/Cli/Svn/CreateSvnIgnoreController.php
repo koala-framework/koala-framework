@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_CreateSvnIgnoreController_DirectoryFilter
+class Vps_Controller_Action_Cli_Svn_CreateSvnIgnoreController_DirectoryFilter
     extends RecursiveFilterIterator
 {
     private $it;
@@ -19,8 +19,8 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController_DirectoryFilter
 
 }
 
-class Vps_Controller_Action_Cli_CreateSvnIgnoreController_IgnoredFilter
-    extends Vps_Controller_Action_Cli_CreateSvnIgnoreController_DirectoryFilter
+class Vps_Controller_Action_Cli_Svn_CreateSvnIgnoreController_IgnoredFilter
+    extends Vps_Controller_Action_Cli_Svn_CreateSvnIgnoreController_DirectoryFilter
 {
     private $it;
 
@@ -47,7 +47,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController_IgnoredFilter
 
 }
 
-class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_Svn_CreateSvnIgnoreController extends Vps_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -71,7 +71,7 @@ class Vps_Controller_Action_Cli_CreateSvnIgnoreController extends Vps_Controller
             throw new Vps_ClientException("Parameter dir wird benoetigt");
         }
         foreach (new RecursiveIteratorIterator(
-                    new Vps_Controller_Action_Cli_CreateSvnIgnoreController_DirectoryFilter(
+                    new Vps_Controller_Action_Cli_Svn_CreateSvnIgnoreController_DirectoryFilter(
                         new RecursiveDirectoryIterator($dir)),
                     RecursiveIteratorIterator::SELF_FIRST) as $d
         ) {

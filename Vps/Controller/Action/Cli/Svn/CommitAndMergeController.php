@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_CommitAndMergeController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_Svn_CommitAndMergeController extends Vps_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -35,7 +35,7 @@ class Vps_Controller_Action_Cli_CommitAndMergeController extends Vps_Controller_
             throw new Vps_ClientException("Can't use this script while on trunk");
         }
 
-        $trunkUrl = Vps_Controller_Action_Cli_TagCheckoutController::getWebSvnPathForVersion('trunk');
+        $trunkUrl = Vps_Controller_Action_Cli_Svn_TagCheckoutController::getWebSvnPathForVersion('trunk');
 
         $cmd = "svn ci -m ".escapeshellarg($message);
         if ($this->_getParam('debug')) echo $cmd."\n";

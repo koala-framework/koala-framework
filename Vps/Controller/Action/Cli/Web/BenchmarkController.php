@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_BenchmarkController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_Web_BenchmarkController extends Vps_Controller_Action_Cli_Abstract
 {
     private $_rrds;
     public function preDispatch()

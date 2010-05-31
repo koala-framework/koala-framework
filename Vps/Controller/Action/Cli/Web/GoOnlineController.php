@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -11,7 +11,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
     {
         $ret = array();
         if (file_exists('.svn')) {
-            $ret = Vps_Controller_Action_Cli_TagController::getHelpOptions();
+            $ret = Vps_Controller_Action_Cli_Web_TagController::getHelpOptions();
         }
         $ret[] = array('param' => 'skip-copy-to-test');
         $ret[] = array('param' => 'skip-test');
@@ -75,7 +75,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             $webVersion = $this->_getParam('web-version');
             if (!$vpsVersion || !$webVersion) {
                 $msg = "Parameters --vps-version and --web-version are required.\n";
-                $o = Vps_Controller_Action_Cli_TagController::getHelpOptions();
+                $o = Vps_Controller_Action_Cli_Web_TagController::getHelpOptions();
                 $msg .= "--web-version=".implode(' --web-version=', $o['webVersion']['value'])."\n";
                 $msg .= "--vps-version=".implode(' --vps-version=', $o['vpsVersion']['value'])."";
                 throw new Vps_ClientException($msg);
@@ -143,7 +143,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 }
             }
 
-            Vps_Controller_Action_Cli_SvnUpController::checkForModifiedFiles(true);
+            Vps_Controller_Action_Cli_Web_SvnUpController::checkForModifiedFiles(true);
 
             if ($testConfig) {
                 $this->_systemSshVpsWithSubSections("svn-up check-for-modified-files", 'test');
@@ -160,14 +160,14 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
         if ($useSvn) {
             echo "\n\n*** [01/13] vps-tag erstellen\n";
-            Vps_Controller_Action_Cli_TagController::createVpsTag($vpsVersion);
+            Vps_Controller_Action_Cli_Web_TagController::createVpsTag($vpsVersion);
         } else {
             $stagingVps = Vps_Util_Git::vps()->revParse("HEAD");
         }
 
         if ($useSvn) {
             echo "\n\n*** [02/13] web-tag erstellen\n";
-            Vps_Controller_Action_Cli_TagController::createWebTag($webVersion);
+            Vps_Controller_Action_Cli_Web_TagController::createWebTag($webVersion);
         } else {
             $stagingWeb = Vps_Util_Git::web()->revParse("HEAD");
         }
@@ -215,7 +215,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         if ($skipTest) {
             echo "(uebersprungen)\n";
         } else {
-            Vps_Controller_Action_Cli_TestController::initForTests();
+            Vps_Controller_Action_Cli_Web_TestController::initForTests();
             $runner = new Vps_Test_TestRunner();
             $suite = new Vps_Test_TestSuite();
 
@@ -309,7 +309,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                         ->whereNotEquals('status', 'prod');
                 foreach ($m->getRows($s) as $todo) {
                     if (!$todo->done_revision) continue;
-                    $project = Vps_Controller_Action_Cli_TagController::getProjectName();
+                    $project = Vps_Controller_Action_Cli_Web_TagController::getProjectName();
 
                     if (Vps_Util_Git::web()->getActiveBranchContains($todo->done_revision)
                         || Vps_Util_Git::vps()->getActiveBranchContains($todo->done_revision)

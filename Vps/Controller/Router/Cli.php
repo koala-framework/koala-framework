@@ -7,6 +7,14 @@ class Vps_Controller_Router_Cli extends Zend_Controller_Router_Abstract
         if (!$this->getFrontController()->getDispatcher()->isDispatchable($request)) {
             $request->setModuleName('vps_controller_action_cli');
         }
+        if ($request->getControllerName()) {
+            if (!$this->getFrontController()->getDispatcher()->isDispatchable($request)) {
+                $request->setModuleName('vps_controller_action_cli_web');
+            }
+            if (!$this->getFrontController()->getDispatcher()->isDispatchable($request)) {
+                $request->setModuleName('vps_controller_action_cli_svn');
+            }
+        }
         return $request;
     }
 
