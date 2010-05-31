@@ -124,7 +124,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         $url = '/vps/componentedittest/'.
                 Vps_Component_Data_Root::getComponentClass().'/'.
-                $componentClass.
+                $componentClass.'/Index'.
                 '?componentId='.$componentId;
         return $this->open($url);
     }
