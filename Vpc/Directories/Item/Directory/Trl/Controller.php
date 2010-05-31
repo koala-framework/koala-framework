@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Directory_Trl_Controller extends Vps_Controller_Action_Auto_Grid
+class Vpc_Directories_Item_Directory_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
     protected $_buttons = array(
         'save',
@@ -10,6 +10,9 @@ class Vpc_Directories_Item_Directory_Trl_Controller extends Vps_Controller_Actio
         'width' =>  500,
         'height' =>  400
     );
+    protected $_hasComponentId = false; //component_id nicht speichern
+
+    protected $_paging = 25;
 
     public function preDispatch()
     {
