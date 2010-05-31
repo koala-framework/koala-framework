@@ -32,13 +32,18 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
     {
         $page = $this->getData();
         do {
+            $ids = array();
             while ($page && !$page->inherits) {
+                $ids[] = $page->id;
                 $page = $page->parent;
                 if ($page instanceof Vps_Component_Data_Root) break;
             }
-            $ic = $page->getChildComponent('-'.$this->getData()->id);
-            if (!$ic) {
-                return null;
+            $ic = $page;
+            foreach (array_reverse($ids) as $id) {
+                $ic = $ic->getChildComponent('-'.$id);
+                if (!$ic) {
+                    return null;
+                }
             }
             $c = $ic->getChildComponent(array('generator' => 'child'));
             if ($page instanceof Vps_Component_Data_Root) break;
