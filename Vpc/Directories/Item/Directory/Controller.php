@@ -14,6 +14,9 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
         'autoForm' => 'Vpc.Directories.Item.Directory.EditFormPanel'
     );
 
+    protected $_filters = array('text'=>true);
+    protected $_paging = 25;
+
     public function preDispatch()
     {
         parent::preDispatch();

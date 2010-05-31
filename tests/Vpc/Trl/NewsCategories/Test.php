@@ -6,8 +6,8 @@ ansicht frontend:
 http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_NewsCategories_Root/de/test
 http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_NewsCategories_Root/en/test
 
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_NewsCategories_Root/Vpc_Trl_NewsCategories_News_Component?componentId=root-master_test
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_NewsCategories_Root/Vpc_Trl_NewsCategories_News_Trl_Component.Vpc_Trl_NewsCategories_News_Component?componentId=root-en_test
+http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_NewsCategories_Root/Vpc_Trl_NewsCategories_News_Component/Index?componentId=root-master_test
+http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_NewsCategories_Root/Vpc_Trl_NewsCategories_News_Trl_Component.Vpc_Trl_NewsCategories_News_Component/Index?componentId=root-en_test
  */
 class Vpc_Trl_NewsCategories_Test extends Vpc_TestAbstract
 {
