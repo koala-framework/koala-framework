@@ -226,7 +226,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             }
             $parentData = Vps_Component_Data_Root::getInstance()
                                 ->getComponentById($page['parent_id'], $c);
-            if (!$parentData) throw new Vps_Exception("parentData with id {$page['parent_id']} for page with id $id not found.");
+            if (!$parentData) return null; // Kommt vor wenn data gefunden wird, parentData aber invisible ist
         }
         $pData = $parentData;
         while (is_numeric($pData->componentId)) $pData = $pData->parent;

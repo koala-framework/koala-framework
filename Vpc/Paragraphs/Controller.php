@@ -145,13 +145,17 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         $session = new Zend_Session_Namespace('Vpc_Paragraphs:copy');
         $id = $session->id;
         if (!$id || !Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
-            throw new Vps_ClientException(trlVps('Clipboard is empty'));
+            throw new Vps_Exception_Client(trlVps('Clipboard is empty'));
         }
         $source = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
         $target = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
-        if ($source->parent->componentClass != $target->componentClass) {
-            //das koennte intelligenter sein
-            throw new Vps_ClientException(trlVps('Source and target paragraphs are not compatible.'));
+        $classes = Vpc_Abstract::getChildComponentClasses($target->componentClass, 'paragraphs');
+        $targetCls = false;
+        if (isset($classes[$source->row->component])) {
+            $targetCls = $classes[$source->row->component];
+        }
+        if ($source->componentClass != $targetCls) {
+            throw new Vps_Exception_Client(trlVps('Source and target paragraphs are not compatible.'));
         }
 
         $newParagraph = $source->generator->duplicateChild($source, $target);

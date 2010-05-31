@@ -14,14 +14,16 @@ class Vpc_Advanced_Amazon_Product_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $select = new Vps_Model_Select();
-        $select->whereEquals('asin', $this->getRow()->asin);
-        $select->whereEquals('AssociateTag', $this->_getSetting('associateTag'));
-        try {
-            $ret['product'] = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products')
-                ->getRow($select);
-        } catch (Zend_Service_Exception $e) {
-            $ret['product'] = null;
+        $ret['product'] = null;
+        if ($this->getRow()->asin) {
+            $select = new Vps_Model_Select();
+            $select->whereEquals('asin', $this->getRow()->asin);
+            $select->whereEquals('AssociateTag', $this->_getSetting('associateTag'));
+            try {
+                $ret['product'] = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products')
+                    ->getRow($select);
+            } catch (Zend_Service_Exception $e) {
+            }
         }
         return $ret;
     }
