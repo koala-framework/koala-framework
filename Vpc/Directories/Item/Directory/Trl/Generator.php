@@ -95,7 +95,7 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         if ($parentData) {
             foreach ($parentData->getChildComponents(array('generator'=>'detail', 'ignoreVisible'=>true)) as $c) {
                 $ret[] = array(
-                    'model' => $this->getModel(),
+                    'model' => Vpc_Abstract::createChildModel($this->_class),
                     'id' => $c->dbId,
                     'field' => 'component_id'
                 );
