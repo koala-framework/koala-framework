@@ -21,11 +21,24 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
             ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component'));
         $ret['languages'] = array();
         foreach ($languages as $l) {
+            $masterPage = $this->getData()->getPage();
+            if (isset($masterPage->chained)) {
+                $masterPage = $masterPage->chained; //TODO: nicht sauber
+            }
+            $page = null;
+            if ($masterPage) {
+                if (is_instance_of($l->componentClass, 'Vpc_Root_TrlRoot_Chained_Component')) {
+                    $page = Vpc_Chained_Trl_Component::getChainedByMaster($masterPage, $l);
+                } else if (is_instance_of($l->componentClass, 'Vpc_Root_TrlRoot_Master_Component')) {
+                    $page = $masterPage;
+                }
+            }
             $home = $l->getChildPage(array('home'=>true));
             if ($home) {
                 $ret['languages'][] = array(
                     'language' => $l->id,
                     'home' => $home,
+                    'page' => $page ? $page : $home,
                     'flag' => $l->getChildComponent('-flag'),
                     'name' => $l->name
                 );

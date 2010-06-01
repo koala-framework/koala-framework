@@ -9,7 +9,7 @@
             $text = $l['name'];
         }
 
-        echo $this->componentLink($l['home'], $text);
+        echo $this->componentLink($l['page'], $text);
 
         $i++;
     } ?>
