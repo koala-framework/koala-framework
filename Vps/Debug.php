@@ -1,4 +1,29 @@
 <?php
+function _pArray($src, $indent = '')
+{
+    $ret = '';
+    if (is_array($src)) {
+        foreach ($src as $k=>$i) {
+            $ret .= $indent."$k =>\n";
+            $ret .= _pArray($i, $indent . '  ');
+        }
+    } else {
+        if (is_object($src) && method_exists($src, 'toDebug')) {
+            $src = $src->toDebug();
+            $src = str_replace('<pre>', '', $src);
+            $src = str_replace('</pre>', '', $src);
+        } else if (is_object($src) && method_exists($src, '__toString')) {
+            $src = $src->__toString();
+        } else if (!is_string($src)) {
+            $src = print_r($src, true);
+        }
+        foreach (explode("\n", $src) as $l) {
+            $ret .= $indent.$l."\n";
+        }
+    }
+    return $ret;
+}
+
 function p($src, $Type = 'LOG')
 {
     if (!Vps_Debug::isEnabled()) return;
@@ -18,6 +43,10 @@ function p($src, $Type = 'LOG')
     }
     if (is_object($src) && method_exists($src, '__toString')) {
         $src = $src->__toString();
+    }
+    if (is_array($src)) {
+        $isToDebug = true;
+        $src = "<pre>\n"._pArray($src).'</pre>';
     }
     if ($isToDebug) {
         echo $src;
