@@ -319,7 +319,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (!$col = $this->_formatFieldExpr($field, $dbSelect)) {
                     throw new Vps_Exception("Expression '$field' not found");
                 }
-                $dbSelect->from(null, array($field=>$col));
+                $dbSelect->from(null, array($field=>new Zend_Db_Expr($col)));
             }
         }
     }
