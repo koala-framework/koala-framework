@@ -158,6 +158,14 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             throw new Vps_Exception_Client(trlVps('Source and target paragraphs are not compatible.'));
         }
 
+        $c = $target;
+        while ($c->parent) {
+            if ($c->dbId == $source->dbId) {
+                throw new Vps_Exception_Client(trlVps("You can't paste a paragraph into itself."));
+            }
+            $c = $c->parent;
+        }
+
         $newParagraph = $source->generator->duplicateChild($source, $target);
 
         $row = $newParagraph->row;
