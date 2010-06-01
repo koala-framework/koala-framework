@@ -563,28 +563,28 @@ wurde soeben erstellt.</de>
 <id>240</id>
 </text>
 <text>
-<en>Properties of selected Page</en>
-<de>Eigenschaften der gew&#xE4;hlten Seite</de>
+<en>Page properties</en>
+<de>Seiteneigenschaften</de>
 <id>242</id>
 </text>
 <text>
-<en>Add new Subpage</en>
+<en>Add new child page</en>
 <de>Neue Unterseite hinzuf&#xFC;gen</de>
 <id>243</id>
 </text>
 <text>
-<en>Delete selected Page</en>
-<de>Ausgew&#xE4;hlte Seite l&#xF6;schen</de>
+<en>Delete page</en>
+<de>Seite l&#xF6;schen</de>
 <id>244</id>
 </text>
 <text>
-<en>Toggle Visibility of selected Page</en>
-<de>Sichtbarkeit der gew&#xE4;hlten Seite &#xE4;ndern</de>
+<en>Show / hide page</en>
+<de>Seite ein-/ausblenden</de>
 <id>245</id>
 </text>
 <text>
-<en>Make selected Page Homepage</en>
-<de>Gew&#xE4;hlte Seite zur Homepage machen</de>
+<en>Use as homepage</en>
+<de>Als Startseite verwenden</de>
 <id>246</id>
 </text>
 <text>
@@ -598,7 +598,7 @@ wurde soeben erstellt.</de>
 <id>249</id>
 </text>
 <text>
-<en>Open Preview</en>
+<en>Open preview</en>
 <de>Vorschau &#xF6;ffnen</de>
 <id>250</id>
 </text>
@@ -5748,4 +5748,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Weiterlesen</de>
 <id>1492</id>
 </text>
+<text>
+<en>Original Category</en>
+<id>1493</id>
+</text>
+<text>
+<en>Attention! You are about to set the selected page as the homepage of your website. This may affect the entire website. Do you wish to proceed?</en>
+<de>Achtung! Mit dieser Aktion machen Sie die ausgew&#xE4;hlte Seite zur Startseite Ihrer Website. Dies hat Auswirkungen auf die gesamte Website. Wollen Sie diese Aktion jetzt durchf&#xFC;hren?</de>
+<id>1494</id>
+</text>
 </trl>
+
