@@ -4,12 +4,14 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
     public function jsonUploadAction()
     {
         if (!isset($_FILES['Filedata'])) {
-            throw new Vps_ClientException(trlVps("No Filedata received."));
+            throw new Vps_Exception_Client(trlVps("No Filedata received."));
         }
         $file = $_FILES['Filedata'];
         if ($file['error']) {
             if ($file['error'] == UPLOAD_ERR_NO_FILE) {
-                throw new Vps_ClientException(trlVps("No File uploaded, please select a file."));
+                throw new Vps_Exception_Client(trlVps("No File uploaded, please select a file."));
+            } else if ($file['error'] == UPLOAD_ERR_PARTIAL) {
+                throw new Vps_Exception_Client(trlVps("The uploaded file was only partially uploaded."));
             } else {
                 throw new Vps_Exception("Upload error $file[error]");
             }
