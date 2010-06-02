@@ -31,6 +31,12 @@ class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testNotZeroHeight()
+    {
+        //weil eine dimension von 0 gibt (logischerweise) einen imagick fehler
+        $this->_testBestFit(array(100, 1), array(10, 10), array(10, 1));
+    }
+
     public function testAvoidDivideByZero()
     {
         $dimension = array('width' => 300, 'height' => 400, 'scale' => Vps_Media_Image::SCALE_BESTFIT);
