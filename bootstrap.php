@@ -9,6 +9,8 @@ set_include_path($include_path);
 require_once 'Vps/Setup.php';
 Vps_Setup::setUp();
 
+Vps_Assets_Loader::load();
+
 $front = Vps_Controller_Front::getInstance();
 $response = $front->dispatch();
 $response->sendResponse();
