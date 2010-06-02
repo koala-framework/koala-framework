@@ -130,11 +130,9 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             }
         }
 
-        if ($this->_getParam('server')) {
-            $cfg = Vps_Config_Web::getInstance($this->_getParam('server'));
-            Vps_Registry::set('testDomain', $cfg->server->domain);
-            Vps_Registry::set('testServerConfig', $cfg);
-        }
+        Vps_Registry::set('testDomain', Vps_Registry::get('config')->server->domain);
+        Vps_Registry::set('testServerConfig', Vps_Registry::get('config'));
+
         if ($this->_getParam('report')) {
             $resultLogger = new Vps_Test_ResultLogger(true/*verbose*/);
             $arguments['listeners'][] = $resultLogger;
