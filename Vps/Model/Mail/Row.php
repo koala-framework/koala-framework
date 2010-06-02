@@ -69,7 +69,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             $mail->setReturnPath($returnPath);
         }
         $from = $this->getFrom();
-        if ($from) {
+        if ($from && $from['email']) {
             $mail->setFrom($from['email'], $from['name']);
         }
 
