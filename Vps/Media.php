@@ -16,7 +16,10 @@ class Vps_Media
                 $prefix = '/'.$r->filename;
             }
         }
-        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.urlencode($filename);
+        self::getOutput($class, $id, $type);
+        $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
+        if (!$time) $time = time();
+        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.urlencode($filename);
     }
 
     public static function getChecksum($class, $id, $type, $filename)

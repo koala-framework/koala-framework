@@ -357,14 +357,15 @@ class Vps_Setup
         ) {
             Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text'], $_GET['assetsType']);
         } else if (is_array($urlParts) && $urlParts[0] == 'media') {
-            if (sizeof($urlParts) != 6) {
+            if (sizeof($urlParts) != 7) {
                 throw new Vps_Exception_NotFound();
             }
             $class = $urlParts[1];
             $id = $urlParts[2];
             $type = $urlParts[3];
             $checksum = $urlParts[4];
-            $filename = $urlParts[5];
+            // time() wäre der 5er, wird aber nur wegen browsercache benötigt
+            $filename = $urlParts[6];
 
             if ($checksum != Vps_Media::getChecksum($class, $id, $type, $filename)) {
                 throw new Vps_Exception_AccessDenied('Access to file not allowed.');
