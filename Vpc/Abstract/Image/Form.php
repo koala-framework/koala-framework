@@ -15,7 +15,7 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
             ->setAllowOnlyImages(true);
         if (Vpc_Abstract::getSetting($this->getClass(), 'showHelpText')) {
             $dimensions = Vpc_Abstract::getSetting($this->getClass(), 'dimensions');
-            $helptext = trlVps('Size of Target Image') . ': ' . $dimensions[0]['width'] . 'x' . $dimensions[0]['width'] . 'px';
+            $helptext = trlVps('Size of Target Image') . ': ' . $dimensions[0]['width'] . 'x' . $dimensions[0]['height'] . 'px';
             $helptext .= "<br />" . trlVps('If size does not fit, scale method will be') . ': ' . $dimensions[0]['scale'];
             $this->getByName('Image')->setHelpText($helptext);
         }
