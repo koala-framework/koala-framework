@@ -1,5 +1,7 @@
 <div class="<?=$this->cssClass?> vpsFadeElements">
+    <? /* fadeSelector ist pflicht, alles andere optional */ ?>
     <input type="hidden" name="fadeSelector" class="fadeSelector" value="<?= $this->selector; ?>" />
+    <input type="hidden" name="fadeConfig" class="fadeConfig" value="<?= htmlspecialchars(Zend_Json::encode($this->fadeConfig)); ?>" />
 
     <? $i = 0; ?>
     <? foreach ($this->children as $child) { ?>
@@ -15,7 +17,7 @@
             $class = trim($class);
             $i++;
         ?>
-        <div class="<?= $class; ?>">
+        <div class="subComponents <?= $class; ?>">
             <?=$this->component($child);?>
         </div>
     <? } ?>
