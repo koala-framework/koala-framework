@@ -89,7 +89,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Zoomlevel</en>
-<de>Vergr&#xF6;&#xDF;erungsfaktor</de>
+<de>Zoomebene</de>
 <id>36</id>
 </text>
 <text>
@@ -113,8 +113,8 @@ wurde soeben erstellt.</de>
 <id>40</id>
 </text>
 <text>
-<en>Just Zoom</en>
-<de>Nur Vergr&#xF6;&#xDF;ern.</de>
+<en>Zoom only</en>
+<de>Nur vergr&#xF6;&#xDF;ern</de>
 <id>41</id>
 </text>
 <text>
@@ -5756,6 +5756,21 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Attention! You are about to set the selected page as the homepage of your website. This may affect the entire website. Do you wish to proceed?</en>
 <de>Achtung! Mit dieser Aktion machen Sie die ausgew&#xE4;hlte Seite zur Startseite Ihrer Website. Dies hat Auswirkungen auf die gesamte Website. Wollen Sie diese Aktion jetzt durchf&#xFC;hren?</de>
 <id>1494</id>
+</text>
+<text>
+<en>Zoom properties</en>
+<de>Zoomeinstellungen</de>
+<id>1495</id>
+</text>
+<text>
+<en>You can't paste a paragraph into itself.</en>
+<de>Sie k&#xF6;nnen einen Absatz nicht in sich selbst hinein kopieren.</de>
+<id>1496</id>
+</text>
+<text>
+<en>The uploaded file was only partially uploaded.</en>
+<de>Die Datei wurde nur teilweise hochgeladen.</de>
+<id>1497</id>
 </text>
 </trl>
 
