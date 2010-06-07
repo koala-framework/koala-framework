@@ -202,7 +202,6 @@ abstract class Vps_Update
                         }
                     }
                 }
-                break;
             }
         }
         $ret = self::_sortByRevision($ret);
