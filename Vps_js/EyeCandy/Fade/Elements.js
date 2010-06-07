@@ -116,13 +116,19 @@ Vps.Fade.Elements.prototype = {
 
     pause: function() {
         if (this._timeoutId) window.clearTimeout(this._timeoutId);
-        if (this._playPauseButton) this._playPauseButton.update('play');
+        if (this._playPauseButton) {
+            this._playPauseButton.removeClass('elementAccessPause');
+            this._playPauseButton.addClass('elementAccessPlay');
+        }
         this._playPause = 'pause';
     },
 
     play: function() {
         this.doFade();
-        if (this._playPauseButton) this._playPauseButton.update('pause');
+        if (this._playPauseButton) {
+            this._playPauseButton.removeClass('elementAccessPlay');
+            this._playPauseButton.addClass('elementAccessPause');
+        }
         this._playPause = 'play';
     },
 
@@ -156,7 +162,7 @@ Vps.Fade.Elements.prototype = {
                 this.next = opt.activateIdx;
                 this.doFade();
                 this.pause();
-                
+
             }, this, { activateIdx: j });
             this._elementAccessLinkEls.push(a);
             j += 1;
@@ -166,8 +172,8 @@ Vps.Fade.Elements.prototype = {
         this._playPauseButton = ul.createChild({ tag: 'li' })
             .createChild({
                 tag: 'a',
-                cls: 'elementAccessPlayPause',
-                html: 'pause',
+                cls: 'elementAccessPlayPauseButton elementAccessPause',
+                html: '&nbsp;',
                 href: '#'
             });
         this._playPauseButton.on('click', function(ev, el, opt) {
