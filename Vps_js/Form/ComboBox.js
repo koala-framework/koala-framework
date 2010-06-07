@@ -152,7 +152,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 
     setValue : function(v)
     {
-        if (v == '') v = null;
+        if (v === '') v = null;
         if (v == this.emptyText) v = null;
         if (v && this.store.proxy && this.valueField && this.mode == 'remote') {
             //wenn proxy vorhanden können daten nachgeladen werden
