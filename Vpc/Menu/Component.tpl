@@ -4,15 +4,17 @@
             <h2 class="parentPageName"><?=$this->parentPage->name;?></h2>
         <? } ?>
         <ul class="menu">
-            <? foreach ($this->menu as $i=>$m) { ?>
+            <? $i = 0;
+            foreach ($this->menu as $m) { ?>
                 <li class="<?=$m->class;?>">
                     <?=$this->componentLink($m, $this->linkPrefix.$m->name);?>
-                    <? if($i < count($this->menu)-1) { ?><?=$this->separator;?><? } ?>
+                    <? if ($i < count($this->menu)-1) { ?><?=$this->separator;?><? } ?>
                     <? if (isset($this->subMenu) && isset($m->current) && $m->current) { ?>
                         <?=$this->component($this->subMenu);?>
                     <? } ?>
                 </li>
-            <? } ?>
+            <? $i++;
+            } ?>
         </ul>
         <div class="clear"></div>
     </div>
