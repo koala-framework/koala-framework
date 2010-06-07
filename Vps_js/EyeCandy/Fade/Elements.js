@@ -69,7 +69,7 @@ Vps.Fade.Elements = function(cfg) {
 
 
     // create the element access link if needed
-    if (this.elementAccessLinks && i >= 2) {
+    if (this.elementAccessLinks && i >= 1) {
         this._createElementAccessLinks(this.active);
     }
 };
@@ -168,22 +168,24 @@ Vps.Fade.Elements.prototype = {
             j += 1;
         }, this);
 
-        // play / pause button
-        this._playPauseButton = ul.createChild({ tag: 'li' })
-            .createChild({
-                tag: 'a',
-                cls: 'elementAccessPlayPauseButton elementAccessPause',
-                html: '&nbsp;',
-                href: '#'
-            });
-        this._playPauseButton.on('click', function(ev, el, opt) {
-            ev.stopEvent();
+        // play / pause button if there are at least 2 images
+        if (this.fadeElements.length >= 2) {
+            this._playPauseButton = ul.createChild({ tag: 'li' })
+                .createChild({
+                    tag: 'a',
+                    cls: 'elementAccessPlayPauseButton elementAccessPause',
+                    html: '&nbsp;',
+                    href: '#'
+                });
+            this._playPauseButton.on('click', function(ev, el, opt) {
+                ev.stopEvent();
 
-            if (this._playPause == 'play') {
-                this.pause();
-            } else if (this._playPause == 'pause') {
-                this.play();
-            }
-        }, this);
+                if (this._playPause == 'play') {
+                    this.pause();
+                } else if (this._playPause == 'pause') {
+                    this.play();
+                }
+            }, this);
+        }
     }
 };
