@@ -36,9 +36,6 @@ class Vps_Test_TestSuite extends PHPUnit_Framework_TestSuite
     {
         if (!file_exists($basePath)) return array();
 
-        set_include_path(
-            get_include_path().PATH_SEPARATOR.$basePath
-        );
         $dir = new Vps_Iterator_Filter_Php(
             new RecursiveIteratorIterator(new RecursiveDirectoryIterator($basePath), true)
         );
