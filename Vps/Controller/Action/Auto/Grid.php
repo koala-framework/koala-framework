@@ -849,7 +849,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             throw new Vps_Exception("XLS is not allowed.");
         }
 
-        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_XLS, 3000);
+        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_XLS, 5000);
 
         $xls = new PHPExcel();
         $xls->getProperties()->setCreator("Vivid Planet Software GmbH");
