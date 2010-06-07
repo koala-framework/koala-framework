@@ -72,10 +72,9 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
     {
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($this->_root->getComponentById(1600));
-
-        $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">'.
-            '\s*<img src="/media/Vpc_Basic_Image_FixDimensionComponent/1600/default/74d187822e02d6b7e96b53938519c028/foo.png" width="100" height="100" alt="" class="" />'.
-            '\s*</div>\s*$#ms', $html);
+        $this->assertEquals('<div class="vpcBasicImageFixDimensionComponent">'.
+            '<img src="/media/Vpc_Basic_Image_FixDimensionComponent/1600/default/74d187822e02d6b7e96b53938519c028/foo.png" width="100" height="100" alt="" class="" />'.
+            '</div>', $html);
     }
 
     public function testEmpty()
@@ -85,7 +84,8 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c);
-        $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">\s*</div>\s*$#ms', $html);
+        $this->assertEquals('<div class="vpcBasicImageFixDimensionComponent">'.
+            '</div>', $html);
     }
 
     public function testDimensionSetByRow()

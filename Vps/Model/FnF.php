@@ -41,13 +41,6 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
         foreach (array_keys(get_object_vars($this)) as $v) {
             if ($v == '_rows') continue;
             $ret[$v] = $this->$v;
-            if ($v == '_siblingModels' || $v == '_proxyContainerModels' ) {
-                foreach ($ret[$v] as &$i) {
-                    if (is_object($i) && !($i instanceof Serializable)) {
-                        $i = get_class($i);
-                    }
-                }
-            }
         }
         return serialize($ret);
     }
@@ -55,11 +48,6 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
     public function unserialize($str)
     {
         foreach (unserialize($str) as $i=>$v) {
-            if ($i == '_siblingModels' || $i == '_proxyContainerModels') {
-                foreach ($v as &$model) {
-                    $model = Vps_Model_Abstract::getInstance($model);
-                }
-            }
             $this->$i = $v;
         }
     }

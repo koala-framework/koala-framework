@@ -35,21 +35,17 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
             }
         }
         $content = '';
-        $row = $source->getComponent()->getRow();
-        foreach ($row->getContentParts() as $p) {
-            if (!is_string($p) && ($p['type'] == 'image' || $p['type'] == 'link' || $p['type'] == 'download')) {
-                $componentId = $row->component_id.'-'.substr($p['type'], 0, 1).$p['nr'];
-            }
+        foreach ($source->getComponent()->getRow()->getContentParts() as $p) {
             if (is_string($p)) {
                 $content .= $p;
-            } else if ($p['type'] == 'image' && isset($idMap[$componentId])) {
-                $imageComponent = $idMap[$componentId]->getComponent();
+            } else if ($p['type'] == 'image' && isset($idMap[$p['componentId']])) {
+                $imageComponent = $idMap[$p['componentId']]->getComponent();
                 $dimension = $imageComponent->getImageDimensions();
                 $content .= "<img src=\"".$imageComponent->getImageUrl()."\" ".
                             "width=\"$dimension[width]\" ".
                             "height=\"$dimension[height]\" />";
-            } else if (($p['type'] == 'link' || $p['type'] == 'download') && isset($idMap[$componentId])) {
-                $content .= "<a href=\"".$idMap[$componentId]->dbId."\">";
+            } else if (($p['type'] == 'link' || $p['type'] == 'download') && isset($idMap[$p['componentId']])) {
+                $content .= "<a href=\"".$idMap[$p['componentId']]->dbId."\">";
             }
         }
 

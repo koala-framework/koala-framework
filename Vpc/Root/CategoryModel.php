@@ -2,7 +2,7 @@
 class Vpc_Root_CategoryModel extends Vps_Model_Data_Abstract
 {
     private $_pageCategories;
-    protected $_columns = array('id', 'name', 'component');
+    protected $_columns = array('id', 'name');
 
     public function __construct($config = array())
     {
@@ -18,7 +18,7 @@ class Vpc_Root_CategoryModel extends Vps_Model_Data_Abstract
     {
         $this->_data = array();
         foreach ($this->_pageCategories as $key => $val) {
-            $this->_data[] = array('id' => $key, 'name' => $val, 'component'=>$key);
+            $this->_data[] = array('id' => $key, 'name' => $val);
         }
         parent::_init();
     }

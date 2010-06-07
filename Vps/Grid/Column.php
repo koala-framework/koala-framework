@@ -48,7 +48,6 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
         if ($ed) {
             if (!$ed->getName()) $ed->setName($this->getDataIndex());
             $ed->setData($this->getData());
-            $ed->trlStaticExecute();
         }
         return $ret;
     }

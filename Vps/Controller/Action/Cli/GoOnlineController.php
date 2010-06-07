@@ -9,14 +9,12 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
     public static function getHelpOptions()
     {
-        $ret = array();
-        if (file_exists('.svn')) {
-            $ret = Vps_Controller_Action_Cli_TagController::getHelpOptions();
-        }
+        $ret = Vps_Controller_Action_Cli_TagController::getHelpOptions();
         $ret[] = array('param' => 'skip-copy-to-test');
         $ret[] = array('param' => 'skip-test');
         $ret[] = array('param' => 'skip-prod');
         $ret[] = array('param' => 'skip-check');
+        $ret[] = array('param' => 'skip-notify');
         return $ret;
     }
 
@@ -25,11 +23,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $sshHost = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
         $sshDir = $config->server->dir;
         $cmd = "sshvps $sshHost $sshDir $cmd";
-        $cmd = "sudo -u vps ".Vps_Util_Git::getAuthorEnvVars()." $cmd";
-        if ($this->_getParam('debug')) {
-            $cmd .= " --debug";
-            echo $cmd."\n";
-        }
+        $cmd = "sudo -u vps $cmd";
         return $this->_systemCheckRet($cmd);
     }
 
@@ -47,11 +41,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
     public function indexAction()
     {
-        if ($this->_getParam('debug')) {
-            Vps_Util_Git::setDebugOutput(true);
-        }
         $useSvn = file_exists('.svn');
-        $appId = Vps_Registry::get('config')->application->id;
 
         Zend_Session::start(); //wegen tests
 
@@ -66,20 +56,18 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             $testConfig = false;
         }
         if ($testConfig) {
-            if ($testConfig->server->dir == $prodConfig->server->dir && $testConfig->server->host == $prodConfig->server->host) {
+            if ($testConfig->server->dir == $prodConfig->server->dir) {
                 throw new Vps_ClientException("Test-Server not configured, same dir as production");
             }
         }
-        if ($useSvn) {
-            $vpsVersion = $this->_getParam('vps-version');
-            $webVersion = $this->_getParam('web-version');
-            if (!$vpsVersion || !$webVersion) {
-                $msg = "Parameters --vps-version and --web-version are required.\n";
-                $o = Vps_Controller_Action_Cli_TagController::getHelpOptions();
-                $msg .= "--web-version=".implode(' --web-version=', $o['webVersion']['value'])."\n";
-                $msg .= "--vps-version=".implode(' --vps-version=', $o['vpsVersion']['value'])."";
-                throw new Vps_ClientException($msg);
-            }
+        $vpsVersion = $this->_getParam('vps-version');
+        $webVersion = $this->_getParam('web-version');
+        if (!$vpsVersion || !$webVersion) {
+            $msg = "Parameters --vps-version and --web-version are required.\n";
+            $o = Vps_Controller_Action_Cli_TagController::getHelpOptions();
+            $msg .= "--web-version=".implode(' --web-version=', $o['webVersion']['value'])."\n";
+            $msg .= "--vps-version=".implode(' --vps-version=', $o['vpsVersion']['value'])."";
+            throw new Vps_ClientException($msg);
         }
 
         if (date('w')==5) {
@@ -99,77 +87,26 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             echo "(uebersprungen)\n";
         } else {
             echo "lokal:\n";
-
-
-            //TODO: getBranchesNotMerged und isEmptyLog machen das gleiche
-            //      zweiteres ist schoener, ersters sollte entfernt werden
-            Vps_Util_Git::web()->fetch();
-            $activeBranch = Vps_Util_Git::web()->getActiveBranch();
-            if (Vps_Util_Git::web()->revParse('production')) {
-                $branches = Vps_Util_Git::web()->getBranchesNotMerged();
-                if (in_array('production', $branches)
-                    || !Vps_Util_Git::web()->isEmptyLog("$activeBranch..production")
-                ) {
-                    throw new Vps_Exception_Client("web: production branch is NOT merged into your current branch.");
-                }
-            }
-            if (Vps_Util_Git::web()->revParse('origin/production')) {
-                $branches = Vps_Util_Git::web()->getBranchesNotMerged();
-                if (in_array('remotes/origin/production', $branches)
-                    || in_array('origin/production', $branches)
-                    || !Vps_Util_Git::web()->isEmptyLog("$activeBranch..origin/production")
-                ) {
-                    throw new Vps_Exception_Client("web: production branch is NOT merged into your current branch.");
-                }
-            }
-
-            Vps_Util_Git::vps()->fetch();
-            $activeBranch = Vps_Util_Git::vps()->getActiveBranch();
-            if (Vps_Util_Git::vps()->revParse("production/$appId")) {
-                $branches = Vps_Util_Git::vps()->getBranchesNotMerged();
-                if (in_array('production/'.$appId, $branches)
-                    || !Vps_Util_Git::vps()->isEmptyLog("$activeBranch..production/$appId")
-                ) {
-                    throw new Vps_Exception_Client("vps: production branch is NOT merged into your current branch.");
-                }
-            }
-            if (Vps_Util_Git::vps()->revParse("origin/production/$appId")) {
-                $branches = Vps_Util_Git::vps()->getBranchesNotMerged();
-                if (in_array('remotes/origin/production/'.$appId, $branches)
-                    || in_array('origin/production/'.$appId, $branches)
-                    || !Vps_Util_Git::vps()->isEmptyLog("$activeBranch..origin/production/$appId")
-                ) {
-                    throw new Vps_Exception_Client("vps: production branch is NOT merged into your current branch.");
-                }
-            }
-
             Vps_Controller_Action_Cli_SvnUpController::checkForModifiedFiles(true);
-
             if ($testConfig) {
                 $this->_systemSshVpsWithSubSections("svn-up check-for-modified-files", 'test');
             }
             $this->_systemSshVpsWithSubSections("svn-up check-for-modified-files", 'production');
         }
 
-        if (Vps_Util_Git::web()->getActiveBranch() != 'master') {
-            throw new Vps_Exception_Client("web: current branch is not master. This is not yet supported.");
-        }
-        if (Vps_Util_Git::vps()->getActiveBranch() != trim(file_get_contents('application/vps_branch'))) {
-            throw new Vps_Exception_Client("vps: current branch is not ".trim(file_get_contents('application/vps_branch')).". This is not yet supported.");
-        }
-
+        echo "\n\n*** [01/13] vps-tag erstellen\n";
         if ($useSvn) {
-            echo "\n\n*** [01/13] vps-tag erstellen\n";
             Vps_Controller_Action_Cli_TagController::createVpsTag($vpsVersion);
         } else {
-            $stagingVps = Vps_Util_Git::vps()->revParse("HEAD");
+            $appId = Vps_Registry::get('config')->application->id;
+            Vps_Util_Git::vps()->tag("$appId-staging", '-f');
         }
 
+        echo "\n\n*** [02/13] web-tag erstellen\n";
         if ($useSvn) {
-            echo "\n\n*** [02/13] web-tag erstellen\n";
             Vps_Controller_Action_Cli_TagController::createWebTag($webVersion);
         } else {
-            $stagingWeb = Vps_Util_Git::web()->revParse("HEAD");
+            Vps_Util_Git::web()->tag("staging", '-f');
         }
 
         if ($useSvn) {
@@ -188,8 +125,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 echo "\n\n*** [05/13] test: web tag switchen\n";
                 $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=$webVersion", 'test');
             } else {
-                echo "\n\n*** [04/13] test: checkout staging\n";
-                $this->_systemSshVpsWithSubSections("git checkout-staging --revVps=$stagingVps --revWeb=$stagingWeb", 'test');
+                $this->_systemSshVpsWithSubSections("git checkout-staging", 'test');
             }
         }
 
@@ -271,9 +207,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 $updateProd = true;
             }
         }
-
         if ($updateProd) {
-
             echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
             $this->_systemSshVpsWithSubSections("import backup-db", 'production');
 
@@ -288,10 +222,13 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 $this->_systemSshVpsWithSubSections("update", 'production');
             } else {
 
-                echo "\n\n*** [12/13] prod: production branches erstellen\n";
+                echo "\n\n*** [12/13] prod: production tags erstellen\n";
+                $appId = Vps_Registry::get('config')->application->id;
+                Vps_Util_Git::vps()->tag("$appId-production-previous", '-f', "$appId-production");
+                Vps_Util_Git::web()->tag('production-previous', '-f', 'production');
 
-                Vps_Util_Git::vps()->productionBranch('production/'.$appId, $stagingVps);
-                Vps_Util_Git::web()->productionBranch('production', $stagingWeb);
+                Vps_Util_Git::vps()->tag("$appId-production", '-f', "$appId-staging");
+                Vps_Util_Git::web()->tag("staging", '-f', 'staging');
 
                 $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Util/Git.php'), 'production');
                 $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'), 'production');
@@ -300,9 +237,11 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 $this->_systemSshVpsWithSubSections("git checkout-production", 'production');
             }
 
-            $projectIds = Vps_Model_Abstract::getInstance('Vps_Util_Model_Projects')
-                                ->getApplicationProjectIds();
-            if ($projectIds && !$useSvn) {
+            $projectIds = array();
+            if (Vps_Registry::get('config')->todo->projectIds) {
+                $projectIds = Vps_Registry::get('config')->todo->projectIds->toArray();
+            }
+            if ($projectIds) {
                 $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Todo');
                 $s = $m->select()
                         ->whereEquals('project_id', $projectIds)
@@ -310,9 +249,8 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 foreach ($m->getRows($s) as $todo) {
                     if (!$todo->done_revision) continue;
                     $project = Vps_Controller_Action_Cli_TagController::getProjectName();
-
-                    if (Vps_Util_Git::web()->getActiveBranchContains($todo->done_revision)
-                        || Vps_Util_Git::vps()->getActiveBranchContains($todo->done_revision)
+                    if ($this->_hasRevisionInHistory($project, $webVersion, $todo->done_revision)
+                        || $this->_hasRevisionInHistory('vps', $vpsVersion, $todo->done_revision)
                     ) {
                         $todo->status = 'prod';
                         $todo->prod_date = date('Y-m-d');
@@ -331,9 +269,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
             } else {
                 $user = 'Jemand';
             }
-            $msg = "$user hat soeben {$cfg->application->name} ";
-            if ($useSvn) $msg .= "mit Version $webVersion (Vps $vpsVersion) ";
-            $msg .= "online gestellt.\n";
+            $msg = "$user hat soeben {$cfg->application->name} mit Version $webVersion (Vps $vpsVersion) online gestellt.\n";
             if (date('w')==5) {
                 $msg .= "Und das obwohl heute Freitag ist!\n";
             }
@@ -350,15 +286,16 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                     $msg .= "\ntodo #{$todo->id} ({$todo->title})";
                 }
             }
-            file_put_contents('/www/public/zeiterfassung/irc/messagequeue/'.date('Y-m-d_H:i:s').uniqid(), 'WICHTIG'.$msg);
-
-            $cmd = "cd /www/public/zeiterfassung && php bootstrap.php insert-go-online-log-entry";
-            $cmd .= " --applicationId=".escapeshellarg($cfg->application->id);
-            $cmd .= " --webBranch=".escapeshellarg(Vps_Util_Git::web()->getActiveBranch());
-            $cmd .= " --vpsBranch=".escapeshellarg(Vps_Util_Git::vps()->getActiveBranch());
-            $cmd .= " --webVersion=".escapeshellarg(Vps_Util_Git::web()->revParse('production'));
-            $cmd .= " --vpsVersion=".escapeshellarg(Vps_Util_Git::vps()->revParse('production/'.$appId));
-            $this->_systemCheckRet($cmd);
+            $jids = array();
+            foreach ($cfg->developers as $user) {
+                if ($user->notifyGoOnline && $user->jid) {
+                    echo "\nsende jabber nachricht an $user->jid";
+                    $jids[] = $user->jid;
+                }
+            }
+            if ($jids) {
+                Vps_Util_Jabber_SendMessage::send($jids, $msg);
+            }
         }
 
         echo "\n\n\n\033[32mF E R T I G ! ! !\033[0m\n";
@@ -368,6 +305,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
     private function _hasRevisionInHistory($project, $version, $revision)
     {
         if (!file_exists('.svn')) {
+            //TODO GIT
             return false;
         }
         $log = `svn log --xml --revision $revision http://svn/tags/$project/$version`;

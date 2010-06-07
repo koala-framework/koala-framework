@@ -28,16 +28,11 @@ class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
 
         $x = 0;
         $unique = $value;
-        if (!$unique) $unique = 1;
         while (in_array($unique, $values)) {
-            if ($value) {
-                $unique = $value . '_' . ++$x;
-            } else {
-                $unique = ++$x;
-            }
+            $unique = $value . '_' . ++$x;
         }
 
-        return (string)$unique;
+        return $unique;
     }
 
     protected function _getComponentId($row)

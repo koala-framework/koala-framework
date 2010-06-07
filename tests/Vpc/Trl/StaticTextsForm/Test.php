@@ -8,7 +8,6 @@ class Vpc_Trl_StaticTextsForm_Test extends Vpc_TestAbstract
 {
     public function setUp()
     {
-        Vps_Registry::get('config')->languages = array('de', 'en');
         Vps_Registry::get('trl')->setWebCodeLanguage('de');
         Vps_Registry::get('trl')->setModel(new Vpc_Trl_StaticTextsForm_TrlModelWeb(), Vps_Trl::SOURCE_WEB);
         parent::setUp('Vpc_Trl_StaticTextsForm_Root');
@@ -38,7 +37,5 @@ class Vpc_Trl_StaticTextsForm_Test extends Vpc_TestAbstract
         $this->assertContains('<label for="form_firstname2">Firstname:</label>', $render);
         $this->assertContains('<label for="form_lastname2">Lastname:</label>', $render);
         $this->assertContains('<label for="form_company2">Company:</label>', $render);
-
-        $this->assertContains('<label for="form_company3">Company-Lastname:</label>', $render);
     }
 }

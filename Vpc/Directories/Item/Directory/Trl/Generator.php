@@ -12,8 +12,7 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         }
         $m = Vpc_Abstract::createChildModel($this->_class);
         $ret = parent::_getChainedChildComponents($parentData, $select);
-        if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
-            //kann nur gemacht werden nur wenn parentData vorhanden
+        if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
             foreach ($ret as $k=>$c) {
                 $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($c));
                 if (!$r || !$r->visible) {
@@ -30,79 +29,31 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         }
         return $ret;
     }
-
-    protected function _createData($parentData, $row, $select)
-    {
-        //visible überprüfung wird _getChainedChildComponents auch schon gemacht
-        //aber nur wenn parentData dort schon verfügbar ist
-        //für fälle wo es das nicht war hier unten nochmal überprüfen
-        $m = Vpc_Abstract::createChildModel($this->_class);
-        if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
-            $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row));
-            if (!$r || !$r->visible) {
-                return null;
-            }
-        }
-        return parent::_createData($parentData, $row, $select);
-    }
-
     protected function _formatConfig($parentData, $row)
     {
         $ret = parent::_formatConfig($parentData, $row);
         $m = Vpc_Abstract::createChildModel($this->_class);
-        if ($m) {
-            $id = $parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row);
-            $ret['row'] = $m->getRow($id);
-            if (!$ret['row']) {
-                $ret['row'] = $m->createRow();
-                $ret['row']->component_id = $id;
-            }
-        } else {
-            $ret['row'] = $ret['chained']->row;
+        $id = $parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row);
+        $ret['row'] = $m->getRow($id);
+        if (!$ret['row']) {
+            $ret['row'] = $m->createRow();
+            $ret['row']->component_id = $id;
         }
 
         //TODO: nicht mit settings direkt arbeiten, besser das echte generator objekt holen
         $masterCC = Vpc_Abstract::getSetting($this->_class, 'masterComponentClass');
         $masterGen = Vpc_Abstract::getSetting($masterCC, 'generators');
         $detailGen = $masterGen['detail'];
-        if (isset($ret['chained']->name)) {
-            if (isset($detailGen['nameColumn'])) {
-                $ret['name'] = $ret['row']->{$detailGen['nameColumn']};
-            } else {
-                $ret['name'] = $ret['chained']->name;
-            }
-        }
-
-        if (isset($ret['chained']->filename)) {
-            if (isset($detailGen['filenameColumn'])) {
-                $fn = $ret['row']->{$detailGen['filenameColumn']};
-            } else if (isset($ret['name'])) {
-                $fn = $ret['name'];
-            } else {
-                $fn = '';
-            }
-            if (!isset($detailGen['filenameColumn']) || !$detailGen['filenameColumn']) {
-                $ret['filename'] = $row->id.'_';
-            }
-            $ret['filename'] .= Vps_Filter::filterStatic($fn, 'Ascii');
-        }
-        return $ret;
-    }
-
-    public function getCacheVars($parentData)
-    {
-        $ret = parent::getCacheVars($parentData);
-        if ($parentData) {
-            foreach ($parentData->getChildComponents(array('generator'=>'detail', 'ignoreVisible'=>true)) as $c) {
-                $ret[] = array(
-                    'model' => $this->getModel(),
-                    'id' => $c->dbId,
-                    'field' => 'component_id'
-                );
-            }
+        $ret['name'] = $ret['row']->{$detailGen['nameColumn']};
+        if (isset($detailGen['filenameColumn'])) {
+            $fn = $ret['row']->{$detailGen['filenameColumn']};
         } else {
-            //TODO
+            $fn = $ret['name'];
         }
+        if (!isset($detailGen['filenameColumn']) || !$detailGen['filenameColumn']) {
+            $ret['filename'] = $row->id.'_';
+        }
+        $ret['filename'] .= Vps_Filter::filterStatic($fn, 'Ascii');
         return $ret;
     }
 }

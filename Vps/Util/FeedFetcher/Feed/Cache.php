@@ -10,22 +10,22 @@ class Vps_Util_FeedFetcher_Feed_Cache extends Vps_Cache_Core
         $options['checkComponentSettings'] = false;
         $options['automatic_cleaning_factor'] = 0;
         parent::__construct($options);
-        if (!$this->getBackend()) {
-            $backend = new Vps_Cache_Backend_TwoLevels(array(
-                'cache_dir' => 'application/cache/feeds',
-            ));
-            $this->setBackend($backend);
-        }
+
+        $backend = new Vps_Cache_Backend_TwoLevels(array(
+            'cache_dir' => 'application/cache/feeds',
+        ));
+        $this->setBackend($backend);
     }
 
     public static function clearInstance()
     {
-        Vps_Cache::clearInstance('feed');
+        self::$_instance = null;
     }
 
     public static function getInstance()
     {
-        return Vps_Cache::getInstance('feed');
+        if (!isset(self::$_instance)) self::$_instance = new self();
+        return self::$_instance;
     }
 
     public function load($cacheId, $doNotTestCacheValidity = false, $doNotUnserialize = false)

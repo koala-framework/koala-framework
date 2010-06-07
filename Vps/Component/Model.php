@@ -50,13 +50,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
         $where = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
         $parts = $select->getPart(Vps_Model_Select::WHERE_NULL);
 
-        if ($select->hasPart(Vps_Model_Select::WHERE_EXPRESSION)) { // Suchfeld
-            $model = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
-            $rowset = array();
-            foreach ($model->getRows($select) as $row) {
-                $rowset[] = $this->getRow($row->id);
-            }
-        } else if ($parts && in_array('parent_id', $parts)) {
+        if ($parts && in_array('parent_id', $parts)) {
             $rowset = array($root);
         } else if (isset($where['parent_id'])) {
             $page = $root->getComponentById($where['parent_id'], array('ignoreVisible' => true));

@@ -5,7 +5,6 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('combobox');
-        $this->setEmptyText(trlVpsStatic('no selection'));
     }
 
     protected function _addValidators()
@@ -57,33 +56,7 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
 
         return $ret;
     }
-
-    public function trlStaticExecute($language = null)
-    {
-        parent::trlStaticExecute($language);
-
-        $values = $this->getProperty('values');
-        if (is_array($values)) {
-            foreach ($values as $k => $v) {
-                $newKey = $k;
-                $newValue = $v;
-                if (is_string($k)) $newKey = Zend_Registry::get('trl')->trlStaticExecute($k, $language); //TODO key nicht (immer) übersetzen
-                if (is_string($v)) $newValue = Zend_Registry::get('trl')->trlStaticExecute($v, $language);
-
-                unset($values[$k]);
-                $values[$newKey] = $newValue;
-            }
-            $this->setProperty('values', $values);
-        }
-    }
-
-    protected function _getTrlProperties()
-    {
-        $ret = parent::_getTrlProperties();
-        $ret[] = 'emptyText';
-        return $ret;
-    }
-
+    
     protected function _getStoreData()
     {
         $store = $this->getStore();

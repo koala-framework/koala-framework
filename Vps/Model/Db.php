@@ -7,7 +7,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private $_tableName;
     private $_columns;
 
+    // CSV deaktiviert, weil character set bei LOAD DATA INFILE an der online
+    // mysql version nicht möglich ist
     protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
+
+    private $_proxyContainerModels = array();
 
     private $_importBuffer;
     private $_importBufferOptions;
@@ -23,16 +27,17 @@ class Vps_Model_Db extends Vps_Model_Abstract
         parent::__construct($config);
     }
 
-    public function __sleep()
-    {
-        throw new Vps_Exception_NotYetImplemented();
-    }
-
     public function __destruct()
     {
         if (isset($this->_importBuffer)) {
             $this->writeBuffer();
         }
+    }
+
+    //kann gesetzt werden von proxy
+    public function addProxyContainerModel($m)
+    {
+        $this->_proxyContainerModels[] = $m;
     }
 
     protected function _init()
@@ -151,7 +156,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         $ret = $this->_formatFieldInternal($field, $select);
         if (!$ret) {
-            throw new Vps_Exception("Can't find field '$field' in model '".get_class($this)."' (Table '".$this->getTableName()."')");
+            throw new Vps_Exception("Can't find field '$field'");
         }
 
         return $ret;
@@ -230,6 +235,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private function _fixStupidQuoteBug($v)
     {
         if ((strpos($v, '?') !== false || strpos($v, ':') !== false) && strpos($v, '\'') !== false) {
+            $e = new Vps_Exception("(? or :) and a single quote are used together in an sql query value. This is a problem because of an Php bug. The single quote is ignored.");
+            $e->notify();
             $v = str_replace('\'', '', $v);
         }
         return $v;
@@ -319,7 +326,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (!$col = $this->_formatFieldExpr($field, $dbSelect)) {
                     throw new Vps_Exception("Expression '$field' not found");
                 }
-                $dbSelect->from(null, array($field=>new Zend_Db_Expr($col)));
+                $dbSelect->from(null, array($field=>$col));
             }
         }
     }
@@ -392,18 +399,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
             }
             return implode(" AND ", $sqlExpressions);
-        } else if ($expr instanceof Vps_Model_Select_Expr_Add) {
-            $sqlExpressions = array();
-            foreach ($expr->getExpressions() as $expression) {
-                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
-            }
-            return implode(" + ", $sqlExpressions);
-        } else if ($expr instanceof Vps_Model_Select_Expr_Subtract) {
-            $sqlExpressions = array();
-            foreach ($expr->getExpressions() as $expression) {
-                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
-            }
-            return implode(" - ", $sqlExpressions);
         } else if ($expr instanceof Vps_Model_Select_Expr_Concat) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {
@@ -496,35 +491,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, $exprStr);
             return "($depDbSelect)";
-        } else if ($expr instanceof Vps_Model_Select_Expr_Child_Contains) {
-            $i = $depOf->getDependentModelWithDependentOf($expr->getChild());
-            $depM = $i['model'];
-            $depOf = $i['dependentOf'];
-            $depM = Vps_Model_Abstract::getInstance($depM);
-            $dbDepM = $depM;
-            while ($dbDepM instanceof Vps_Model_Proxy) {
-                $dbDepM = $dbDepM->getProxyModel();
-            }
-            if (!$dbDepM instanceof Vps_Model_Db) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
-            $dbDepOf = $depOf;
-            while ($dbDepOf instanceof Vps_Model_Proxy) {
-                $dbDepOf = $dbDepOf->getProxyModel();
-            }
-            if (!$dbDepOf instanceof Vps_Model_Db) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
-            $depTableName = $dbDepM->getTableName();
-            $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
-            $depSelect = $expr->getSelect();
-            if (!$depSelect) $depSelect = $dbDepM->select();
-            $col1 = $dbDepM->transformColumnName($ref['column']);
-            $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
-            $depDbSelect = $dbDepM->_getDbSelect($depSelect);
-            $depDbSelect->reset(Zend_Db_Select::COLUMNS);
-            $depDbSelect->from(null, "$depTableName.$col1");
-            return $this->getPrimaryKey()." IN ($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
             $refM = $depOf->getReferencedModel($expr->getParent());
             $refM = Vps_Model_Abstract::getInstance($refM);
@@ -558,9 +524,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
             return $field;
-        } else if ($expr instanceof Vps_Model_Select_Expr_PrimaryKey) {
-            $field = $this->_formatField($this->getPrimaryKey(), $dbSelect);
-            return $field;
         } else if ($expr instanceof Vps_Model_Select_Expr_SumFields) {
             $sqlExpressions = array();
             foreach ($expr->getFields() as $expression) {
@@ -575,8 +538,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 }
             }
             return '('.implode('+ ', $sqlExpressions).')';
-        } else if ($expr instanceof Vps_Model_Select_Expr_Sql) {
-            return '('.$expr->getSql().')';
         } else {
             throw new Vps_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
         }
@@ -1032,17 +993,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($this->getSiblingModels()) {
             return array(self::FORMAT_ARRAY);
         } else {
-            $ret = $this->_supportedImportExportFormats;
-            foreach ($ret as $k => $v) {
-                if ($v === self::FORMAT_CSV) {
-                    // check if csv is possible with current database rights
-                    if (!Vps_Util_Mysql::getFileRight()) {
-                        unset($ret[$k]);
-                        $ret = array_values($ret);
-                    }
-                }
-            }
-            return $ret;
+            return $this->_supportedImportExportFormats;
         }
     }
 }

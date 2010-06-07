@@ -14,7 +14,6 @@ abstract class Vps_Component_Generator_Abstract
     private $_model;
 
     private static $instances = array();
-    private static $_cachedInstances = array();
 
     public function __sleep()
     {
@@ -83,11 +82,10 @@ abstract class Vps_Component_Generator_Abstract
         return $this->_getModel();
     }
 
-    //um den speicherverbrauch zu reduzieren und fuer tests
+    //um den speicherverbrauch zu reduzieren
     public static function clearInstances()
     {
         self::$instances = array();
-        self::$_cachedInstances = array();
     }
 
     public static function getInstance($componentClass, $key, $settings = array(), $pluginBaseComponentClass = false, $inherited = false)
@@ -170,9 +168,10 @@ abstract class Vps_Component_Generator_Abstract
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));
         }
-        if (isset(self::$_cachedInstances[$cacheId])) {
+        static $cachedGenerators;
+        if (isset($cachedGenerators[$cacheId])) {
             Vps_Benchmark::countBt('Generator::getInst hit');
-            $generators = self::$_cachedInstances[$cacheId];
+            $generators = $cachedGenerators[$cacheId];
         } else if (($cachedGeneratorData = $cache->load($cacheId)) !== false) {
             Vps_Benchmark::count('Generator::getInst semi-hit');
             $generators = array();
@@ -257,7 +256,7 @@ abstract class Vps_Component_Generator_Abstract
             }
             $cache->save($cachedGeneratorData, $cacheId);
         }
-        self::$_cachedInstances[$cacheId] = $generators;
+        $cachedGenerators[$cacheId] = $generators;
 
         $selectParts = $select->getParts();
 
@@ -657,11 +656,9 @@ abstract class Vps_Component_Generator_Abstract
             $c = $c->parent;
         }
 
-        if ($c) { //TODO warum tritt das auf?
-            $data['editControllerComponentId'] = $c->componentId;
-            $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
-                ->getControllerUrl('Generator');
-        }
+        $data['editControllerComponentId'] = $c->componentId;
+        $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
+            ->getControllerUrl('Generator');
 
         $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
             'pageGenerator' => true

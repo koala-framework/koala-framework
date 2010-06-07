@@ -9,7 +9,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected $_tableName;
     protected $_model;
     protected $_modelName;
-    protected $_searchFields = array();
 
     protected $_icons = array (
         'root'      => 'folder',
@@ -55,16 +54,16 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         parent::preDispatch();
 
-        if (isset($this->_tableName)) {
-            $this->_table = new $this->_tableName();
-        } else if (isset($this->_modelName)) {
-            $this->_model = new $this->_modelName();
-        }
-        if (isset($this->_table)) {
-            $this->_model = new Vps_Model_Db(array('table' => $this->_table));
-        }
-        if (!isset($this->_model)) {
-            throw new Vps_Exception('$_model oder $_modelName not set');
+        if (isset($this->_modelName)) {
+            $modelName = $this->_modelName;
+            $this->_model = new $modelName();
+        } else if (!$this->_model) {
+            if (!isset($this->_table)) {
+                $this->_table = new $this->_tableName();
+            }
+            $this->_model = new Vps_Model_Db(array(
+                'table' => $this->_table
+            ));
         }
 
         // PrimaryKey setzen
@@ -113,7 +112,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         foreach ($this->_icons as $k=>$i) {
             $this->view->icons[$k] = $i->__toString();
         }
-        $this->view->search = !empty($this->_searchFields);
         $this->view->rootText = $this->_rootText;
         $this->view->rootVisible = $this->_rootVisible;
         $this->view->buttons = $this->_buttons;
@@ -135,11 +133,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $this->_saveSessionNodeOpened($parentId, true);
         $this->_saveNodeOpened();
 
-        if ($this->_getParam('searchValue') != '') {
-            $this->view->nodes = $this->_searchNodes($this->_getParam('searchValue'));
-        } else {
-            $this->view->nodes = $this->_formatNodes();
-        }
+        $this->view->nodes = $this->_formatNodes();
     }
 
     public function jsonNodeDataAction()
@@ -173,86 +167,21 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $nodes = array();
         $rows = $this->_fetchData($parentRow);
         foreach ($rows as $row) {
-            $node = $this->_formatNode($row);
-            $childNodes = $this->_formatNodes($row);
-            if (count($childNodes) == 0) $node['expanded'] = true;
-            $node['children'] = $childNodes;
-
-            $nodes[] = $node;
+            $nodes[] = $this->_formatNode($row);
         }
         return $nodes;
     }
 
-    protected function _searchNodes($searchValue)
-    {
-        $select = $this->_getSelect();
-        $or = array();
-        foreach ($this->_searchFields as $searchField) {
-            $or[] = new Vps_Model_Select_Expr_Like($searchField, '%' . $searchValue . '%');
-        }
-        $select->where(new Vps_Model_Select_Expr_Or($or));
-        $rows = $this->_model->getRows($select);
-
-        $plainNodes = array();
-        foreach ($rows as $row) {
-            $primaryKey = $this->_primaryKey;
-
-            $parentValue = $this->_getParentId($row);
-            $pV = is_null($parentValue) ? 0 : $parentValue;
-            $primaryValue = $row->$primaryKey;
-            if (!isset($plainNodes[$pV][$primaryValue])) {
-                $node = $this->_formatNode($row);
-                $node['leaf'] = true;
-                $node['allowDrag'] = false;
-                $node['search'] = true;
-                $plainNodes[$pV][$row->$primaryKey] = $node;
-            }
-            $plainNodes[$pV][$row->$primaryKey]['disabled'] = false;
-            while ($parentValue) {
-                $parentRow = $this->_model->getRow($parentValue);
-                $parentValue = $this->_getParentId($parentRow);
-                $pV = is_null($parentValue) ? 0 : $parentValue;
-                $primaryValue = $parentRow->$primaryKey;
-                if (!isset($plainNodes[$pV][$primaryValue])) {
-                    $node = $this->_formatNode($parentRow);
-                    $node['disabled'] = true;
-                    $node['expanded'] = true;
-                    $node['expanded'] = true;
-                    $node['allowDrag'] = false;
-                    $node['search'] = true;
-                    $plainNodes[$pV][$primaryValue] = $node;
-                }
-            }
-        }
-        return $this->_structurePlainNodes($plainNodes, 0);
-    }
-
-    protected function _getParentId($row)
-    {
-        return $row->{$this->_parentField};
-    }
-
-    private function _structurePlainNodes($nodes, $parentValue)
-    {
-        $ret = array();
-        if (!isset($nodes[$parentValue])) return array();
-        foreach ($nodes[$parentValue] as $primaryValue => $node) {
-            $node['children'] = $this->_structurePlainNodes($nodes, $primaryValue);
-            $ret[] = $node;
-        }
-        return $ret;
-    }
-
     protected function _fetchData($parentRow)
     {
-        $select = $this->_getSelect();
         if ($this->_model instanceof Vps_Model_Tree_Interface) {
             if (!$parentRow) {
-                return $this->_model->getRootNodes($select);
+                return $this->_model->getRootNodes($this->_getSelect());
             } else {
-                return $parentRow->getChildNodes($select);
+                return $parentRow->getChildNodes($this->_getSelect());
             }
         } else {
+            $select = $this->_getSelect();
             $where = $this->_getTreeWhere($parentRow);
             foreach ($where as $w) {
                 $select->where($w);
@@ -266,7 +195,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             } else {
                 $select->whereEquals($this->_parentField, $parentRow->{$this->_primaryKey});
             }
-            return $this->_model->getRows($select);
+            return $this->_model->fetchAll($select);
         }
     }
 
@@ -289,9 +218,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $data = array();
         $primaryKey = $this->_primaryKey;
         $data['id'] = $row->$primaryKey;
-        if (!$row->hasColumn($this->_textField)) {
-            throw new Vps_Exception("Column '{$this->_textField}' not found, please overwrite \$_textField");
-        }
         $data['text'] = $row->{$this->_textField};
         $data['data'] = $row->toArray();
         $data['leaf'] = false;
@@ -313,6 +239,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $data['expanded'] = true;
         } else {
             $data['expanded'] = false;
+        }
+        $data['children'] = $this->_formatNodes($row);
+        if (sizeof($data['children']) == 0) {
+            $data['expanded'] = true;
         }
         return $data;
     }

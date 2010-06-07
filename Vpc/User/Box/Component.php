@@ -5,7 +5,6 @@ class Vpc_User_Box_Component extends Vpc_User_BoxWithoutLogin_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['login'] = 'Vpc_User_Box_Login_Component';
-        $ret['placeholder']['loginHeadline'] = trlVpsStatic('Login:');
         return $ret;
     }
 

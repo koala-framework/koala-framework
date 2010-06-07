@@ -11,7 +11,8 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
     {
         parent::__construct($enable);
 
-        $writer = new Zend_Log_Writer_Stream('querylog', 'w');
+        file_put_contents('querylog', ''); //leeren
+        $writer = new Zend_Log_Writer_Stream('querylog');
         $writer->setFormatter(new Zend_Log_Formatter_Simple("%message%\n"));
         $this->_logger = new Zend_Log($writer);
 

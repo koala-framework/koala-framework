@@ -58,7 +58,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
         // deshalb unterkomponente gleich mitlöschen
         $link = $this->getData()->getChildComponent('-link');
         if ($link) {
-            $ret['linkTagLink'] = array(
+            $ret[] = array(
                 'model' => $row->getModel(),
                 'id' => $row->component_id,
                 'componentId' => $link->componentId

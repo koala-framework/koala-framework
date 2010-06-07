@@ -12,16 +12,10 @@ class Vpc_Basic_LinkTag_Intern_Data extends Vps_Component_Data
     protected function _getData()
     {
         if ($row = $this->_getRow()) {
-            $ret = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
+            return Vps_Component_Data_Root::getInstance()->getComponentByDbId(
                 $row->target,
                 array('subroot' => $this)
             );
-            if (!$ret) {
-                $ret = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
-                    $row->target
-                );
-            }
-            return $ret;
         }
         return false;
     }

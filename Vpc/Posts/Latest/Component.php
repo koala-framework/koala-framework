@@ -46,7 +46,7 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheVars()
+    public function getStaticCacheVars()
     {
         $ret = array();
         $ret[] = array(

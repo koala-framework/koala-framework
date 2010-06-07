@@ -344,20 +344,6 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 }
             }
             return true;
-        } else if ($expr instanceof Vps_Model_Select_Expr_Add) {
-            $ret = 0;
-            foreach ($expr->getExpressions() as $andExpr) {
-                $ret += $this->_checkExpressions($andExpr, $data);
-            }
-            return $ret;
-        } else if ($expr instanceof Vps_Model_Select_Expr_Subtract) {
-            $ret = 0;
-            foreach ($expr->getExpressions() as $andExpr) {
-                $ret -= $this->_checkExpressions($andExpr, $data);
-            }
-            return $ret;
-        } else {
-            return (bool)$this->getExprValue($data, $expr);
         }
         return true;
     }

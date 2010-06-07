@@ -24,6 +24,8 @@ class Vps_Exception_JsErrorHandler_Test extends Vps_Test_SeleniumTestCase
         $start = file_get_contents('http://'.Vps_Registry::get('testDomain').'/vps/test/vps_exception_js-error-handler_test/get-time');
         $this->click('link=testError'.$num);
         sleep(1);
+        $this->assertTextPresent(trlVps('An error has occured'));
+        $this->click("//button[text()='OK']");
         $error = file_get_contents('http://'.Vps_Registry::get('testDomain').'/vps/test/vps_exception_js-error-handler_test/get-error-log-entry?start='.$start);
         if (!$error) {
             $this->fail('error file not found');

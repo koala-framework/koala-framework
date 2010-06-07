@@ -68,22 +68,26 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 } else {
                     var proxy = new Ext.data.HttpProxy(store);
                 }
-                var storeConfig = {
-                    proxy: proxy,
-                    reader: reader
-                };
-                Ext.apply(storeConfig, this.storeConfig);
                 if (store.type && Ext.data[store.type]) {
-                    this.store = new Ext.data[store.type](storeConfig);
+                    this.store = new Ext.data[store.type]({
+                        proxy: proxy,
+                        reader: reader
+                    });
                 } else if (store.type) {
                     try {
                         var storeType = eval(store.type)
                     } catch(e) {
                         throw "invalid storeType: "+store.type;
                     }
-                    this.store = new storeType(storeConfig);
+                    this.store = new storeType({
+                        proxy: proxy,
+                        reader: reader
+                    });
                 } else {
-                    this.store = new Ext.data.Store(storeConfig);
+                    this.store = new Ext.data.Store({
+                        proxy: proxy,
+                        reader: reader
+                    });
                 }
             }
         }

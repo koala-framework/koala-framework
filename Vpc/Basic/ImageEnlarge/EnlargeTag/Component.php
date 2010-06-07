@@ -12,7 +12,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['dimensions'] = array(array('width'=>640, 'height'=>480, 'scale'=>Vps_Media_Image::SCALE_BESTFIT));
 
         $ret['assets']['files'][] = 'vps/Vpc/Basic/ImageEnlarge/EnlargeTag/Component.js';
-        $ret['assets']['dep'][] = 'ExtElement';
+        $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtXTemplate';
         $ret['assets']['dep'][] = 'ExtUtilJson';
 
@@ -49,25 +49,15 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
                     $this->getData()->componentId, 'original', $data['filename']);
             }
         }
-
-        if (Vpc_Abstract::getSetting($this->_getImageEnlargeComponentData()->componentClass, 'imageCaption')) {
-            $ret['imageCaption'] = $this->_getImageEnlargeComponentData()->getComponent()->getRow()->image_caption;
-        }
         return $ret;
     }
 
-    private function _getImageEnlargeComponentData()
+    public function getImageData()
     {
         $d = $this->getData();
         while (!is_instance_of($d->componentClass, 'Vpc_Basic_ImageEnlarge_Component')) {
             $d = $d->parent;
         }
-        return $d;
-    }
-
-    public function getImageData()
-    {
-        $d = $this->_getImageEnlargeComponentData();
         return $d->getComponent()->getOwnImageData();
     }
 

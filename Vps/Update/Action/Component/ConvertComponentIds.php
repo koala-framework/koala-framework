@@ -17,7 +17,6 @@ class Vps_Update_Action_Component_ConvertComponentIds extends Vps_Update_Action_
         $search = $this->search;
         $replace = $this->replace;
         $pattern = isset($this->pattern) ? $this->pattern : $search . '%';
-        $overwrite = isset($this->overwrite) && $this->overwrite;
 
         $db = Zend_Registry::get('db');
         foreach ($db->query("SHOW TABLES")->fetchAll() as $table) {
@@ -28,18 +27,9 @@ class Vps_Update_Action_Component_ConvertComponentIds extends Vps_Update_Action_
                 if ($field['Field'] == 'component_id') $hasComponentId = true;
             }
             if ($hasComponentId) {
-                $dbPattern = str_replace('_', '\_', $pattern);
-                if ($overwrite) {
-                    $sql = "(SELECT REPLACE(component_id, '$search', '$replace')
-                            FROM $table WHERE component_id LIKE '$dbPattern')";
-                    $ids = $db->fetchCol($sql);
-                    $sql = "DELETE FROM $table
-                        WHERE component_id IN ('" . implode("', '", $ids) . "')";
-                    $db->query($sql);
-                }
                 $db->query("UPDATE $table SET component_id =
                         REPLACE(component_id, '$search', '$replace')
-                        WHERE component_id LIKE '$dbPattern'");
+                        WHERE component_id LIKE '".str_replace('_', '\_', $pattern)."'");
             }
         }
         $db->query("UPDATE vpc_basic_text SET content =

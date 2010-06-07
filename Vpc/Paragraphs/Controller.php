@@ -44,6 +44,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     protected function _initColumns()
     {
+        $this->_columns->add(new Vps_Grid_Column('pos'));
         $this->_columns->add(new Vps_Grid_Column('component_class'))
             ->setData(new Vps_Data_Vpc_ComponentClass($this->_getParam('class')));
         $this->_columns->add(new Vps_Grid_Column('component_name'))
@@ -128,41 +129,5 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     protected function _preforeAddParagraph($row)
     {
         $row->component_id = $this->_getParam('componentId');
-    }
-
-    public function jsonCopyAction()
-    {
-        $id = $this->_getParam('componentId').'-'.$this->_getParam('id');
-        if (!Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
-            throw new Vps_Exception("Component with id '$id' not found");
-        }
-        $session = new Zend_Session_Namespace('Vpc_Paragraphs:copy');
-        $session->id = $id;
-    }
-
-    public function jsonPasteAction()
-    {
-        $session = new Zend_Session_Namespace('Vpc_Paragraphs:copy');
-        $id = $session->id;
-        if (!$id || !Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
-            throw new Vps_Exception_Client(trlVps('Clipboard is empty'));
-        }
-        $source = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
-        $target = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
-        $classes = Vpc_Abstract::getChildComponentClasses($target->componentClass, 'paragraphs');
-        $targetCls = false;
-        if (isset($classes[$source->row->component])) {
-            $targetCls = $classes[$source->row->component];
-        }
-        if ($source->componentClass != $targetCls) {
-            throw new Vps_Exception_Client(trlVps('Source and target paragraphs are not compatible.'));
-        }
-
-        $newParagraph = $source->generator->duplicateChild($source, $target);
-
-        $row = $newParagraph->row;
-        $row->pos = $this->_getParam('pos');
-        $row->visible = null;
-        $row->save();
     }
 }

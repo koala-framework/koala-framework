@@ -3228,12 +3228,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Size of Target Image</en>
-<de>Gr&#xF6;&#xDF;e des Bildes</de>
+<de>Gr&#xF6;&#xDF;e des Zielbildes</de>
 <id>915</id>
 </text>
 <text>
 <en>If size does not fit, scale method will be</en>
-<de>Falls die Gr&#xF6;&#xDF;e des Bildes nicht passt, wird folgende Skalierungsmethode angewendet</de>
+<de>Falls die gr&#xF6;&#xDF;e des Bildes nicht passt, wird eine Skalirungsmethode</de>
 <id>916</id>
 </text>
 <text>
@@ -5587,7 +5587,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Own Download</en>
-<de>Eigener Download</de>
 <id>1456</id>
 </text>
 <text>
@@ -5597,115 +5596,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Format of entry</en>
 <id>1458</id>
-</text>
-<text>
-<en>Not a valid time.  Must be in the format "12:34:00".</en>
-<id>1459</id>
-</text>
-<text>
-<en>Amazon.Product</en>
-<de>Amazon.Produkt</de>
-<id>1460</id>
-</text>
-<text>
-<en>ASIN</en>
-<id>1461</id>
-</text>
-<text>
-<en>Show similar videos (YouTube only)</en>
-<id>1462</id>
-</text>
-<text>
-<en>vCard</en>
-<id>1463</id>
-</text>
-<text>
-<en>Flash source</en>
-<de>Flash Quelle</de>
-<id>1464</id>
-</text>
-<text>
-<en>Upload a Flash file</en>
-<id>1465</id>
-</text>
-<text>
-<en>From external source</en>
-<de>Von externer Quelle</de>
-<id>1466</id>
-</text>
-<text>
-<en>URL to Flash file</en>
-<id>1467</id>
-</text>
-<text>
-<en>Allow fullscreen</en>
-<de>Vollbild erlauben</de>
-<id>1468</id>
-</text>
-<text>
-<en>Start Newsletter sending</en>
-<id>1469</id>
-</text>
-<text>
-<en>The newsletter will be sent in the background. You can leave this page or close the browser window. Start sending?</en>
-<id>1470</id>
-</text>
-<text>
-<en>Sending</en>
-<de>Senden</de>
-<id>1471</id>
-</text>
-<text>
-<en>Search: </en>
-<de>Suche: </de>
-<id>1472</id>
-</text>
-<text>
-<en>copy/paste</en>
-<de>Kopieren/Verschieben</de>
-<id>1473</id>
-</text>
-<text>
-<en>Copy Paragraph</en>
-<de>Absatz kopieren</de>
-<id>1474</id>
-</text>
-<text>
-<en>Paste Paragraph</en>
-<de>Absatz einfügen</de>
-<id>1475</id>
-</text>
-<text>
-<en>Clipboard is empty</en>
-<de>Zwischenablage ist leer</de>
-<id>1476</id>
-</text>
-<text>
-<en>Source and target paragraphs are not compatible.</en>
-<id>1477</id>
-</text>
-<text>
-<en>Image caption</en>
-<de>Bildunterschrift</de>
-<id>1478</id>
-</text>
-<text>
-<en>Fade images</en>
-<id>1479</id>
-</text>
-<text>
-<en>Advanced Gallery</en>
-<de>Erweiterte Galerie</de>
-<id>1480</id>
-</text>
-<text>
-<en>zwei Bilder</en>
-<id>1481</id>
-</text>
-<text>
-<en>Variant</en>
-<de>Varianten</de>
-<id>1482</id>
 </text>
 </trl>
 

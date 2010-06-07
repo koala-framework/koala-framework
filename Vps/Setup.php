@@ -145,12 +145,6 @@ class Vps_Setup
             ob_start();
         }
 
-        if (trim(file_get_contents('application/vps_branch')) != $config->application->vps->version) {
-            $required = trim(file_get_contents('application/vps_branch'));
-            $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
-            throw new Vps_Exception("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
-        }
-
         if (isset($_POST['PHPSESSID'])) {
             //für swfupload
             Zend_Session::setId($_POST['PHPSESSID']);
@@ -335,12 +329,11 @@ class Vps_Setup
 
             Vps_Benchmark::shutDown();
 
-            //TODO: ein flag oder sowas ähnliches stattdessen verwenden
-            if ($page instanceof Vpc_Abstract_Feed_Component || $page instanceof Vpc_Export_Xml_Component || $page instanceof Vpc_Export_Xml_Trl_Component) {
+            if ($page instanceof Vpc_Abstract_Feed_Component) {
                 echo "<!--";
             }
             Vps_Benchmark::output();
-            if ($page instanceof Vpc_Abstract_Feed_Component || $page instanceof Vpc_Export_Xml_Component || $page instanceof Vpc_Export_Xml_Trl_Component) {
+            if ($page instanceof Vpc_Abstract_Feed_Component) {
                 echo "-->";
             }
             exit;
