@@ -11,6 +11,15 @@ abstract class Vpc_List_Fade_Component extends Vpc_Abstract_List_Component
 
         $ret['selector'] = '> div';
 
+        $ret['fadeConfig'] = array(
+            'elementAccessLinks' => false,
+            'fadeDuration'       => 1.5,
+            'fadeEvery'          => 7,
+            'easingFadeOut'      => 'easeIn',
+            'easingFadeIn'       => 'easeIn',
+            'startRandom'        => true
+        );
+
         return $ret;
     }
 
@@ -18,6 +27,7 @@ abstract class Vpc_List_Fade_Component extends Vpc_Abstract_List_Component
     {
         $ret = parent::getTemplateVars();
         $ret['selector'] = $this->_getSetting('selector');
+        $ret['fadeConfig'] = $this->_getSetting('fadeConfig');
         return $ret;
     }
 }
