@@ -42,7 +42,7 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
                 $commands[$cmd] = $class;
             }
         }
-        if (Vps_Registry::get('config')->application->id != 'vpstest') {
+        if (Vps_Registry::get('config')->application->id != 'vps') {
             foreach ($this->_processModule('vps_controller_action_cli_web', $controllerName) as $cmd=>$class) {
                 if (!isset($commands[$cmd])) {
                     $commands[$cmd] = $class;
