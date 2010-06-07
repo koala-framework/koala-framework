@@ -173,7 +173,11 @@ class Vps_Util_FeedFetcher_Feed
             if (isset($feed['hub']) && $feed['hub'] && !$row->hub_subscribed) {
                 $row->hub_subscribed = 'requested';
                 $row->hub_url = $feed['hub'];
-                $s = new Vps_Util_PubSubHubbub_Subscriber($feed['hub']);
+                $hubUrl = $feed['hub'];
+                if (!preg_match("|^https?://|i",$hubUrl)) {
+                    $hubUrl = parse_url($row->url, PHP_URL_SCHEME).'://'.parse_url($row->url, PHP_URL_HOST).$hubUrl;
+                }
+                $s = new Vps_Util_PubSubHubbub_Subscriber($hubUrl);
                 $s->setCallbackUrl($cbUrl.'?feedId='.$row->id);
                 $s->setVerifyToken($row->id);
                 $row->save(); //hier erstmal speichern damit schon hub_subscribed gesetzt ist und damit der callback das auch schon sieht
@@ -186,7 +190,11 @@ class Vps_Util_FeedFetcher_Feed
                 }
             } else if ((!isset($feed['hub']) || !$feed['hub']) && $row->hub_subscribed) {
                 $row->hub_subscribed = null;
-                $s = new Vps_Util_PubSubHubbub_Subscriber($row->hub_url);
+                $hubUrl = $row->hub_url;
+                if (!preg_match("|^https?://|i",$hubUrl)) {
+                    $hubUrl = parse_url($row->url, PHP_URL_SCHEME).'://'.parse_url($row->url, PHP_URL_HOST).$hubUrl;
+                }
+                $s = new Vps_Util_PubSubHubbub_Subscriber($hubUrl);
                 $s->setCallbackUrl($cbUrl.'?feedId='.$row->id);
                 $s->setVerifyToken($row->id);
                 try {
