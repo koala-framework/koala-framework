@@ -18,16 +18,6 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getExportData()
-    {
-        $ret = array('list' => array());
-        $children = $this->getData()->getChildComponents(array('generator' => 'child'));
-        foreach ($children as $child) {
-            $ret['list'][] = $child->getComponent()->getExportData();
-        }
-        return $ret;
-    }
-
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();

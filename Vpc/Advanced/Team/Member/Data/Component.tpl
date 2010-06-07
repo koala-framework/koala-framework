@@ -2,21 +2,21 @@
 
     <ul>
 
-        <? if (!empty($this->row->title) || !empty($this->row->firstname) || !empty($this->row->lastname)) { ?>
+        <? if (!empty($this->row->name)) { ?>
             <li>
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['nameLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
-                <?= $this->row->title; ?> <?= $this->row->firstname; ?> <?= $this->row->lastname; ?>
+                <?= $this->row->name; ?>
             </li>
         <? } ?>
 
-        <? if (!empty($this->workingPosition)) { ?>
+        <? if (!empty($this->row->working_position)) { ?>
             <li>
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['positionLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
-                <?= $this->workingPosition; ?>
+                <?= $this->row->working_position; ?>
             </li>
         <? } ?>
 
@@ -38,30 +38,12 @@
             </li>
         <? } ?>
 
-        <? if (!empty($this->row->fax)) { ?>
-            <li>
-                <? if ($this->showLabels) { ?>
-                    <label><?= $this->placeholder['faxLabel'].$this->labelSeparator; ?></label>
-                <? } ?>
-                <?= $this->row->fax; ?>
-            </li>
-        <? } ?>
-
         <? if (!empty($this->row->email)) { ?>
             <li>
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['emailLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
                 <?=$this->mailLink($this->row->email); ?>
-            </li>
-        <? } ?>
-
-        <? if ($this->vcard) { ?>
-            <li>
-                <? if ($this->showLabels) { ?>
-                    <label><?= $this->placeholder['vcardLabel'].$this->labelSeparator; ?></label>
-                <? } ?>
-                <?= $this->componentLink($this->vcard, '<img src="/assets/vps/images/fileicons/vcard.png" height="11" width="16" /> vCard Download'); ?>
             </li>
         <? } ?>
 

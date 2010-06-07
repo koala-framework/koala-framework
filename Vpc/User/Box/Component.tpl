@@ -11,9 +11,7 @@
         </ul>
     </div>
 <? } else { ?>
-    <? if ($this->placeholder['loginHeadline']) { ?>
-        <h2><?=$this->placeholder['loginHeadline']?></h2>
-    <? } ?>
+    <h2><?=trlVps('Login')?>:</h2>
     <?=$this->component($this->login)?>
     <ul>
         <li><?=$this->componentLink($this->register, trlVps('Register'))?><?=$this->linkPostfix?></li>

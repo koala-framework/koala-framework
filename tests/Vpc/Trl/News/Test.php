@@ -7,9 +7,8 @@ http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_News_Root/de/test
 http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_News_Root/en/test
 
 http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_News_Root/Vpc_Trl_News_News_Component?componentId=root-master_test
-http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_News_Root/Vpc_Trl_News_News_Trl_Component.Vpc_Trl_News_News_Component?componentId=root-en_test
-
-*/
+http://doleschal.vps.niko.vivid/vps/componentedittest/Vpc_Trl_News_Root/Vpc_News_Trl_Component.Vpc_Trl_News_News_Component?componentId=root-en_test
+ */
 class Vpc_Trl_News_Test extends Vpc_TestAbstract
 {
     public function setUp()

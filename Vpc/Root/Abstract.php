@@ -23,11 +23,7 @@ class Vpc_Root_Abstract extends Vpc_Abstract
 
     public function formatPath($parsedUrl)
     {
-        $b = Zend_Registry::get('config')->server->domain == $parsedUrl['host'];
-        if (!$b && isset($parsedUrl['port'])) {
-            $b = Zend_Registry::get('config')->server->domain == $parsedUrl['host'].':'.$parsedUrl['port'];
-        }
-        if (!$b) {
+        if (Zend_Registry::get('config')->server->domain != $parsedUrl['host']) {
             $p =  Zend_Registry::get('config')->server->noRedirectPattern;
             if (!$p) return null;
             if (!preg_match('/'.$p.'/', $parsedUrl['host'])) {

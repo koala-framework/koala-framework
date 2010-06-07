@@ -26,6 +26,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         ) {
              return;
         }
+
         $select = $this->_getModel()->select()->order('pos');
         $rows = $this->_getModel()->fetchAll($select)->toArray();
         foreach ($rows as $row) {
@@ -226,11 +227,8 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             }
             $parentData = Vps_Component_Data_Root::getInstance()
                                 ->getComponentById($page['parent_id'], $c);
-            if (!$parentData) return null; // Kommt vor wenn data gefunden wird, parentData aber invisible ist
         }
-        $pData = $parentData;
-        while (is_numeric($pData->componentId)) $pData = $pData->parent;
-        if ($pData->componentClass != $this->_class) return null;
+        if ((int)$parentData->componentId == 0 && $parentData->componentClass != $this->_class) return null;
         return parent::_createData($parentData, $id, $select);
     }
 

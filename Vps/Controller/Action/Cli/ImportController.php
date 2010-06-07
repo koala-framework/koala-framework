@@ -83,8 +83,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
         }
 
-        if (!$this->_getParam('skip-files')) {
-
         if ($config->uploads && $ownConfig->uploads) {
             echo "kopiere uploads...\n";
             if ($ownConfig->server->host == $config->server->host) {
@@ -113,7 +111,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($config->server->import && $config->server->import->dirs) {
             foreach ($config->server->import->dirs as $dir) {
                 echo "importing $dir...\n";
-                $ignores = array();
                 $ig = trim(`svn propget --recursive svn:ignore $dir`);
                 if (substr($ig, 0, strlen($dir))==$dir) $ig = substr($ig, strlen($dir));
                 foreach (preg_split("#\n".preg_quote($dir)."#", $ig) as $p) {
@@ -127,9 +124,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 $this->_importFiles($config, $ownConfig, $ignores);
             }
         }
-
-        }
-
         if ($this->_getParam('include-cache')) {
             echo "importing cache dirs...\n";
             $includes = array();
@@ -488,19 +482,14 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     public function backupDbAction()
     {
-        exec('which mysqldump', $out, $ret);
-        if ($ret) {
-            echo "mysqldump nicht gefunden, ES WIRD KEIN DB BACKUP ERSTELLT!!\n";
+        echo "erstelle backup...\n";
+        $dumpname = $this->_backupDb(Vps_Util_ClearCache::getInstance()->getDbCacheTables());
+        if ($dumpname) {
+            $this->_systemCheckRet("bzip2 --fast $dumpname");
+            echo $dumpname.".bz2";
+            echo "\n";
         } else {
-            echo "erstelle backup...\n";
-            $dumpname = $this->_backupDb(Vps_Util_ClearCache::getInstance()->getDbCacheTables());
-            if ($dumpname) {
-                $this->_systemCheckRet("bzip2 --fast $dumpname");
-                echo $dumpname.".bz2";
-                echo "\n";
-            } else {
-                echo "uebersprungen...\n";
-            }
+            echo "uebersprungen...\n";
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }

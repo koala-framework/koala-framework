@@ -7,32 +7,32 @@ class Vpc_Posts_Detail_Actions_Component extends Vpc_Abstract_Composite_Componen
         $ret['generators']['edit'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Posts_Detail_Edit_Component',
-            'name' => trlVpsStatic('edit')
+            'name' => trlVps('edit')
         );
         $ret['generators']['report'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Posts_Detail_Report_Component',
-            'name' => trlVpsStatic('report')
+            'name' => trlVps('report')
         );
         $ret['generators']['delete'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Posts_Detail_Delete_Component',
-            'name' => trlVpsStatic('delete')
+            'name' => trlVps('delete')
         );
         $ret['generators']['quote'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Posts_Detail_Quote_Component',
-            'name' => trlVpsStatic('quote')
+            'name' => trlVps('quote')
         );
         $ret['viewCache'] = false;
         return $ret;
     }
-
+    
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
         $data = $this->getData();
-
+        
         $ret['edit'] = null;
         $ret['delete'] = null;
         if ($this->mayEditPost()) {

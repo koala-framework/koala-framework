@@ -52,16 +52,8 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             scope   : this
         });
 
-        this.searchField = new Ext.form.TextField({'name':  'searchField'});
-        this.searchField.on('render', function() {
-            this.searchField.getEl().on('keyup', function(o, e) {
-                this.onSearch(this.searchField.getValue(), this.getBaseParams());
-            }, this, {buffer: 500});
-        }, this);
-        
         Vps.Auto.SyncTreePanel.superclass.initComponent.call(this);
     },
-    
     doAutoLoad : function()
     {
         //autoLoad kann in der zwischenzeit abgeschaltet werden, zB wenn
@@ -94,10 +86,6 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             var tbar = [];
             for (var button in meta.buttons) {
                 tbar.add(this.getAction(button));
-            }
-            if (meta.search) {
-            	tbar.add(trlVps('Search: '));
-            	tbar.add(this.searchField);
             }
         }
         
@@ -264,16 +252,14 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     onCollapseNode : function(node) {
-    	if (!node.attributes.search) {
-            Ext.Ajax.request({
-                url: this.controllerUrl + '/json-collapse',
-                params: Ext.apply({id:node.id}, this.getBaseParams())
-            });
-    	}
+        Ext.Ajax.request({
+            url: this.controllerUrl + '/json-collapse',
+            params: Ext.apply({id:node.id}, this.getBaseParams())
+        });
     },
 
     onExpandNode : function(node) {
-        if (node.attributes.children && node.attributes.children.length > 0 && !node.attributes.search) {
+        if (node.attributes.children && node.attributes.children.length > 0) {
             Ext.Ajax.request({
                 url: this.controllerUrl + '/json-expand',
                 params: Ext.apply({id:node.id}, this.getBaseParams())
@@ -292,11 +278,6 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             },
             scope: this
         })
-    },
-
-    onSearch : function (o, e) {
-    	this.baseParams['searchValue'] = o;
-    	this.tree.getRootNode().reload();
     },
 
     getTree : function() {

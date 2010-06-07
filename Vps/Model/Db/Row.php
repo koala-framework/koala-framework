@@ -54,11 +54,6 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
             if (is_array($value) || is_object($value)) {
                 $value = 'vpsSerialized'.serialize($value);
             }
-            // scheis php... bei $this->$name sucht er nur nach einem property
-            // und vergisst, dass es __get() auch gibt
-            if ($this->__get($name) !== $value) {
-                $this->_dirty = true;
-            }
             $this->_row->$n = $value;
         } else {
             parent::__set($name, $value);
@@ -77,12 +72,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         }
         $this->_beforeSaveSiblingMaster();
         $this->_beforeSave();
-        if ($insert || $this->_dirty) {
-            $ret = $this->_row->save();
-            $this->_dirty = false;
-        } else {
-            $ret = $this->{$this->_getPrimaryKey()};
-        }
+        $ret = $this->_row->save();
         if ($insert) {
             $this->_afterInsert();
             $this->_model->afterInsert($this);

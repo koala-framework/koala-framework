@@ -81,13 +81,7 @@ class Vps_Assets_Loader
             $encoding = Vps_Media_Output::getEncoding();
             $cacheId = md5($file.$encoding.$this->_getHostForCacheId());
             $cache = Vps_Assets_Cache::getInstance();
-            $cacheData = $cache->load($cacheId);
-            if ($cacheData) {
-                if ($cacheData['maxFileMTime'] != $this->getDependencies()->getMaxFileMTime()) {
-                    $cacheData = false;
-                }
-            }
-            if (!$cacheData) {
+            if (!$cacheData = $cache->load($cacheId)) {
                 Vps_Benchmark::count('load asset all');
                 if (strpos($file, '?') !== false) {
                     $file = substr($file, 0, strpos($file, '?'));
@@ -135,7 +129,7 @@ class Vps_Assets_Loader
                 }
                 $cacheData['contents'] = $this->pack($cacheData['contents'], $fileType);
                 $cacheData['contents'] = Vps_Media_Output::encode($cacheData['contents'], $encoding);
-                $cacheData['maxFileMTime'] = $this->getDependencies()->getMaxFileMTime();
+                $cacheData['version'] = $this->_getConfig()->application->version;
                 if ($fileType == 'js') {
                     $cacheData['mimeType'] = 'text/javascript; charset=utf8';
                 } else if ($fileType == 'css' || $fileType == 'printcss') {
@@ -181,13 +175,7 @@ class Vps_Assets_Loader
                 $cacheId = 'fileContents'.$language.$section.$this->_getHostForCacheId().
                     str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $file).
                     Vps_Component_Data_Root::getComponentClass();
-                $cacheData = $cache->load($cacheId);
-                if ($cacheData) {
-                    if ($cacheData['maxFileMTime'] != $this->getDependencies()->getMaxFileMTime()) {
-                        $cacheData = false;
-                    }
-                }
-                if (!$cacheData) {
+                if (!$cacheData = $cache->load($cacheId)) {
                     Vps_Benchmark::count('load asset');
                     $cacheData['contents'] = file_get_contents($this->_getDep()->getAssetPath($file));
                     $cacheData['mtimeFiles'] = array($this->_getDep()->getAssetPath($file));
@@ -209,7 +197,6 @@ class Vps_Assets_Loader
                             $cacheData['contents'] = str_replace('var('.$k.')', $i, $cacheData['contents']);
                         }
                     }
-                    $cacheData['maxFileMTime'] = $this->getDependencies()->getMaxFileMTime();
                     if (substr($ret['mimeType'], 0, 8) == 'text/css') {
                         $cssClass = $file;
                         if (substr($cssClass, 0, strlen($section)+5) == $section.'-web/') {
@@ -245,10 +232,8 @@ class Vps_Assets_Loader
                             }
                         }
 
-                        $cacheData['contents'] = str_replace(
-                            '{$application.maxAssetsMTime}',
-                            $this->getDependencies()->getMaxFileMTime(),
-                            $cacheData['contents']);
+                        $version = $this->_getConfig()->application->version;
+                        $cacheData['contents'] = str_replace('{$application.version}', $version, $cacheData['contents']);
 
                         $cacheData['contents'] = $this->_getJsLoader()->trlLoad($cacheData['contents'], $language);
                         $cacheData['contents'] = $this->_hlp($cacheData['contents'], $language);

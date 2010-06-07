@@ -41,35 +41,35 @@ function trlcpVps($context, $single, $plural, $text = array()) {
 
 // trl functions for e.g. placeholders
 function trlStatic($string, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trl', 'args' => array($string, $text))).'-trlserialized*';
+    return array('type' => 'trl', 'args' => array($string, $text));
 }
 
 function trlcStatic($context, $string, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlc', 'args' => array($context, $string, $text))).'-trlserialized*';
+    return array('type' => 'trlc', 'args' => array($context, $string, $text));
 }
 
 function trlpStatic($single, $plural, $text =  array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlp', 'args' => array($single, $plural, $text))).'-trlserialized*';
+    return array('type' => 'trlp', 'args' => array($single, $plural, $text));
 }
 
 function trlcpStatic($context, $single, $plural, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlcp', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
+    return array('type' => 'trlcp', 'args' => array($context, $single, $plural, $text));
 }
 
 function trlVpsStatic($string, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlVps', 'args' => array($string, $text))).'-trlserialized*';
+    return array('type' => 'trlVps', 'args' => array($string, $text));
 }
 
 function trlcVpsStatic($context, $string, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlcVps', 'args' => array($context, $string, $text))).'-trlserialized*';
+    return array('type' => 'trlcVps', 'args' => array($context, $string, $text));
 }
 
 function trlpVpsStatic($single, $plural, $text =  array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlpVps', 'args' => array($single, $plural, $text))).'-trlserialized*';
+    return array('type' => 'trlpVps', 'args' => array($single, $plural, $text));
 }
 
 function trlcpVpsStatic($context, $single, $plural, $text = array()) {
-    return '*trlserialized-'.serialize(array('type' => 'trlcpVps', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
+    return array('type' => 'trlcpVps', 'args' => array($context, $single, $plural, $text));
 }
 
 
@@ -185,30 +185,23 @@ class Vps_Trl
 
     public function trlStaticExecute($trlStaticData, $language = null)
     {
-        $ret = $trlStaticData;
+        // if e.g. trl() is set for placeholder, and not trlStatic()
+        if (!is_array($trlStaticData)) return $trlStaticData;
 
-        if (preg_match_all('/\*trlserialized-(.+?)-trlserialized\*/m', $trlStaticData, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $k => $match) {
-                $trlStaticData = unserialize($match[1]);
-                if (strtolower(substr($trlStaticData['type'], -3)) == 'vps') {
-                    $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
-                    $source = Vps_Trl::SOURCE_VPS;
-                } else {
-                    $source = Vps_Trl::SOURCE_WEB;
-                }
-
-                $args = $trlStaticData['args'];
-                $args[] = $source;
-                $args[] = $language;
-
-                $replaceString = call_user_func_array(
-                    array($this, $trlStaticData['type']), $args
-                );
-                $ret = str_replace($match[0], $replaceString, $ret);
-            }
+        if (strtolower(substr($trlStaticData['type'], -3)) == 'vps') {
+            $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
+            $source = Vps_Trl::SOURCE_VPS;
+        } else {
+            $source = Vps_Trl::SOURCE_WEB;
         }
 
-        return $ret;
+        $args = $trlStaticData['args'];
+        $args[] = $source;
+        $args[] = $language;
+
+        return call_user_func_array(
+            array($this, $trlStaticData['type']), $args
+        );
     }
 
     public function trl($string, $params, $source, $language = null)

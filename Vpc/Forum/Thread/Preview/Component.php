@@ -28,7 +28,7 @@ class Vpc_Forum_Thread_Preview_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheVars()
+    public function getStaticCacheVars()
     {
         $ret = array();
         $ret[] = array(

@@ -1,3 +1,1 @@
-<div class="<?=$this->cssClass?>">
-    <?=$this->component($this->view)?>
-</div>
+<div class="<?=$this->cssClass?>">    <?=$this->component($this->view)?></div>

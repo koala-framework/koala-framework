@@ -284,6 +284,7 @@ class Vps_Component_Cache
 
         } else if ($mode == Vps_Component_Cache::CLEANING_MODE_ID) {
 
+            if (!is_string($value)) throw new Vps_Exception("value must be an id");
             $select = $this->getModel()->select()->whereEquals('id', $value);
             $count = $this->getModel()->countRows($select);
             $this->getModel()->deleteRows($select);

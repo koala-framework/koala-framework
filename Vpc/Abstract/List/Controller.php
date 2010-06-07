@@ -7,6 +7,7 @@ class Vpc_Abstract_List_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     protected function _initColumns()
     {
         parent::_initColumns();
+
         $c = Vpc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
         foreach (Vpc_Admin::getInstance($c)->gridColumns() as $i) {
             $this->_columns->add($i);

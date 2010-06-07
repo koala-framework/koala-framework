@@ -90,16 +90,16 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
 
         foreach ($parentDatas as $parentData) {
-            $s = $this->_formatSelect($parentData, clone $select);
+            $select = $this->_formatSelect($parentData, $select);
             $rows = array();
-            if ($s) {
-                $rows = $this->_fetchRows($parentData, $s);
+            if ($select) {
+                $rows = $this->_fetchRows($parentData, $select);
             }
 
             foreach ($rows as $row) {
                 $currentPd = $parentData;
                 if (!$currentPd) {
-                    $currentPd = $this->_getParentDataByRow($row, $s);
+                    $currentPd = $this->_getParentDataByRow($row, $select);
                 }
                 if (!is_array($currentPd)) {
                     if ($currentPd) {
@@ -114,7 +114,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                     if ($currentPd->componentClass != $this->_class) {
                         throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$currentPd->componentClass}' instead of '$this->_class'");
                     }
-                    $data = $this->_createData($currentPd, $row, $s);
+                    $data = $this->_createData($currentPd, $row, $select);
                     if ($data) {
                         $ret[] = $data;
                     }
@@ -302,7 +302,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $newRow = $source->row->duplicate($data);
 
         $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
-        $target = $parentTarget->getChildComponent(array('id'=>$id, 'ignoreVisible'=>true));
+        $target = $parentTarget->getChildComponent($id);
         Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
         return $target;
     }
@@ -310,24 +310,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     {
         $ret = parent::getGeneratorFlags();
         $ret['table'] = true;
-        return $ret;
-    }
-
-    public function getCacheVars($parentData)
-    {
-        $field = null;
-        $id = null;
-        if ($parentData && $this->_getModel()->hasColumn('component_id') && $this->_getModel()->getPrimaryKey() != 'component_id') {
-            $field = 'component_id';
-            $id = $parentData->dbId;
-        }
-        $ret = array(
-            array(
-                'model' => $this->getModel(),
-                'field' => $field,
-                'id' => $id
-            )
-        );
         return $ret;
     }
 }

@@ -9,7 +9,6 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     private $_internalId;
     protected $_siblingRows;
     protected $_exprValues = array();
-    protected $_dirty = false;
     static private $_internalIdCounter = 0;
 
     //damit im save() die childRows autom. mitgespeichert werden können
@@ -207,34 +206,30 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         // bezeichnung)
         if ($rule instanceof Vps_Model_Abstract) {
             $m = $rule;
-            $dependentOf = $this->_model;
         } else {
-            $dependent = $this->_model->getDependentModelWithDependentOf($rule);
-            $m = $dependent['model'];
-            $dependentOf = $dependent['dependentOf'];
+            $m = $this->_model->getDependentModel($rule);
         }
 
-        if ($m instanceof Vps_Model_RowsSubModel_Interface) {
-            $ret = $m->getRowsByParentRow($this, $select);
+//         if ($m instanceof Vps_Model_RowsSubModel_Interface) { geht aus irgendeinen komischen grund ned
+        if (method_exists($m, 'getRowsByParentRow')) {
+            return $m->getRowsByParentRow($this, $select);
         } else {
             if (!$select instanceof Vps_Model_Select) {
                 $select = $m->select($select);
-            } else {
-                $select = clone $select; //nicht select objekt ändern
             }
-            $ref = $m->getReferenceByModelClass(get_class($dependentOf), null);
+            $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
             if (!$this->{$this->_getPrimaryKey()}) {
                 return array();
                 //throw new Vps_Exception("row does not yet have a primary id");
             }
             $select->whereEquals($ref['column'], $this->{$this->_getPrimaryKey()});
             $ret = $m->getRows($select);
+            foreach ($ret as $r) {
+                $this->_childRows[] = $r;
+            }
+            $ret->rewind();
+            return $ret;
         }
-        foreach ($ret as $r) {
-            $this->_childRows[] = $r;
-        }
-        $ret->rewind();
-        return $ret;
     }
 
     public function createChildRow($rule, array $data = array())
@@ -245,15 +240,16 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             $m = $this->_model->getDependentModel($rule);
         }
 
-        if ($m instanceof Vps_Model_RowsSubModel_Interface) {
-            $ret = $m->createRowByParentRow($this, $data);
+        //if ($m instanceof Vps_Model_RowsSubModel_Interface) { geht aus irgendeinen komischen grund ned
+        if (method_exists($m, 'createRowByParentRow')) {
+            return $m->createRowByParentRow($this, $data);
         } else {
             $ret = $m->createRow();
             $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
             $ret->{$ref['column']} = $this->{$this->_getPrimaryKey()};
+            $this->_childRows[] = $ret;
+            return $ret;
         }
-        $this->_childRows[] = $ret;
-        return $ret;
     }
 
     public function getParentRow($rule)
@@ -311,14 +307,6 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     protected function _beforeSave()
     {
         $this->_updateFilters(false);
-        foreach ($this->_childRows as $row) {
-            if ($row->_isDeleted) continue;
-            //if (method_exists($row->getModel(), 'createRowByParentRow')) {
-            if ($row->getModel() instanceof Vps_Model_RowsSubModel_Interface) {
-                //FieldRows müssen *vor* der row gespeichert werden, damit das data Feld die korrekten Werte hat
-                $row->save();
-            }
-        }
     }
 
     protected function _callObserver($fn)
@@ -332,15 +320,11 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     {
         foreach ($this->_childRows as $row) {
             if ($row->_isDeleted) continue;
-            if (!($row->getModel() instanceof Vps_Model_RowsSubModel_Interface)) {
-                if (!$row->{$row->_getPrimaryKey()}) {
-                    //Tabellen Relationen müssen *nach* der row gespeichert werden,
-                    //da beim hinzufügen die id noch nicht verfügbar ist
-                    $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
-                    $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
-                }
-                $row->save();
+            if (!$row->{$row->_getPrimaryKey()}) {
+                $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
+                $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
             }
+            $row->save();
         }
         $this->_updateFilters(true);
         $this->_callObserver('save');

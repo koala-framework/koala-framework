@@ -15,6 +15,5 @@ class Vpc_Advanced_CommunityVideo_Form extends Vpc_Abstract_Form
         $this->fields->add(new Vps_Form_Field_NumberField('height', trlVps('Height')))
             ->setMinValue(1)
             ->setMaxValue(9999);
-        $this->fields->add(new Vps_Form_Field_Checkbox('show_similar_videos', trlVps('Show similar videos (YouTube only)')));
     }
 }
