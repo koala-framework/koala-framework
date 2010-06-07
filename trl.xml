@@ -3228,12 +3228,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Size of Target Image</en>
-<de>Gr&#xF6;&#xDF;e des Zielbildes</de>
+<de>Gr&#xF6;&#xDF;e des Bildes</de>
 <id>915</id>
 </text>
 <text>
 <en>If size does not fit, scale method will be</en>
-<de>Falls die gr&#xF6;&#xDF;e des Bildes nicht passt, wird eine Skalirungsmethode</de>
+<de>Falls die Gr&#xF6;&#xDF;e des Bildes nicht passt, wird folgende Skalierungsmethode angewendet</de>
 <id>916</id>
 </text>
 <text>
