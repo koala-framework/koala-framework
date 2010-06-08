@@ -14,6 +14,7 @@ möglicherweise nicht kompatible Änderungen:
 - Directories Kategorien sind jetzt pro Komponente
     o eigene Tabelle, kein Pool mehr
     o Updatescript gibts für News und Events
+- Vps_Component_Plugin_Password_Component::isLoggedId in isLoggedIn umbenannt
 
 == 1.8 ==
 Erstellt: 15.01.10
