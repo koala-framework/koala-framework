@@ -8,7 +8,7 @@ class Vps_Component_Plugin_Login_Component extends Vps_Component_Plugin_Password
         return $ret;
     }
 
-    public function isLoggedId()
+    public function isLoggedIn()
     {
         return !is_null(Zend_Registry::get('userModel')->getAuthedUser());
     }
