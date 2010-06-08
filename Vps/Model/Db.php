@@ -519,11 +519,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
             $depSelect = $expr->getSelect();
             if (!$depSelect) $depSelect = $dbDepM->select();
-            $col1 = $dbDepM->transformColumnName($ref['column']);
+            $col1 = $dbDepM->_formatField($ref['column'], $depSelect);
             $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
-            $depDbSelect->from(null, "$depTableName.$col1");
+            $depDbSelect->from(null, "$col1");
             return $this->getPrimaryKey()." IN ($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
             $refM = $depOf->getReferencedModel($expr->getParent());
