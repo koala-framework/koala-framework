@@ -3,7 +3,7 @@ class Vpc_Abstract_Image_Trl_Form_ImageData extends Vpc_Abstract_Image_Trl_Image
 {
     public function load($row)
     {
-        $src = $this->_getImageUrl($row->component_id);
+        $src = $this->_getMasterImageUrl($row->component_id);
         if ($src) {
             return "<img src=\"$src\" />";
         }
