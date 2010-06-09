@@ -154,6 +154,9 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                 throw new Vps_Exception("setPool with MultiCheckbox only works if relationToValues references to an instance of Vps_Util_Model_Pool");
             }
         }
+        if ($this->getValuesModel()->hasColumn('pos') && !$this->_valuesSelect->getPart(Vps_Model_Select::ORDER)) {
+            $this->_valuesSelect->order('pos', 'ASC');
+        }
         return $this->_valuesSelect;
     }
 
