@@ -13,7 +13,7 @@ class Vps_Component_Plugin_Login_Component extends Vps_Component_Plugin_Password
     {
         $user = Zend_Registry::get('userModel')->getAuthedUser();
         if (is_null($user)) return false;
-        if (!$this->_getSetting('validUserGroups')) return true;
+        if (!$this->_getSetting('validUserRoles')) return true;
         if (in_array($user->role, $this->_getSetting('validUserRoles'))) {
             return true;
         }
