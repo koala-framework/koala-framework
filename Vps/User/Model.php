@@ -96,7 +96,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             if ($row) {
                 if (!$row->deleted) {
                     $this->unlockCreateUser();
-                    throw new Vps_ClientException(
+                    throw new Vps_Exception_Client(
                         trlVps('An account with this email address already exists')
                     );
                 }
@@ -122,7 +122,7 @@ class Vps_User_Model extends Vps_Model_Proxy
                     $relRow->deleted = 0;
                     $relRow->save();
 
-                    $allRow->save(); // damit last_modified geschrieben wird
+                    $allRow->forceSave(); // damit last_modified geschrieben wird
 
                     $this->getProxyModel()->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
 
