@@ -6,6 +6,7 @@ class Vps_Component_Generator_Plugin_Tags_Component extends Vps_Component_Genera
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Tags');
         $ret['assetsAdmin']['dep'][] = 'VpsAutoAssignGrid';
+        $ret['childModel'] = 'Vps_Component_Generator_Plugin_Tags_ComponentsToTagsModel';
         return $ret;
     }
 
@@ -14,7 +15,7 @@ class Vps_Component_Generator_Plugin_Tags_Component extends Vps_Component_Genera
         if ($data->generator != $this->_generator) {
             throw new Vps_Exception("invalid data, must be from same generator as the generator plugin");
         }
-        $m = Vps_Model_Abstract::getInstance('Vps_Component_Generator_Plugin_Tags_ComponentsToTagsModel');
+        $m = self::createChildModel(get_class($this));
         $s = $m->select()
             ->whereEquals('component_id', $data->dbId);
         $ret = array();
