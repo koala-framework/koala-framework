@@ -4,7 +4,7 @@ class Vps_Media
     private static $_ouputCache;
     const PASSWORD = 'l4Gx8SFe';
 
-    public static function getUrl($class, $id, $type, $filename)
+    public static function getUrl($class, $id, $type, $filename, $time = null)
     {
         if ($filename instanceof Vps_Uploads_Row) {
             $filename = $filename->filename . '.' . $filename->extension;
@@ -16,9 +16,11 @@ class Vps_Media
                 $prefix = '/'.$r->filename;
             }
         }
-        self::getOutput($class, $id, $type);
-        $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
-        if (!$time) $time = time();
+        if (is_null($time)) {
+            self::getOutput($class, $id, $type);
+            $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
+            if (!$time) $time = time();
+        }
         return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.urlencode($filename);
     }
 
