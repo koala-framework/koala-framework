@@ -96,21 +96,22 @@ class Vps_Component_Data
                 $this->_inheritClasses = array();
                 if ($this->inherits) {
                     $page = $this;
-                    $foundInheritGeneratorPage = false;
-                    while (($page = $page->parent) && !$foundInheritGeneratorPage) {
-                        if (!$page->inherits) continue;
+                    while (($page = $page->parent)) {
                         foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $gKey=> $g) {
                             if (isset($g['inherit']) && $g['inherit']) {
-                                if (!$foundInheritGeneratorPage) {
+                                if (!in_array($page->componentClass, $this->_inheritClasses)) {
                                     $this->_inheritClasses[] = $page->componentClass;
-                                    $this->_inheritClasses = array_merge($this->_inheritClasses, $page->inheritClasses);
-                                    $this->_uniqueParentDatas = $page->_uniqueParentDatas;
                                 }
                                 if (isset($g['unique']) && $g['unique']) {
                                     $this->_uniqueParentDatas[$page->componentClass.$gKey] = $page;
                                 }
-                                $foundInheritGeneratorPage = true;
                             }
+                        }
+                        if ($page->inherits) {
+                            //wenn page selbst erbt einfach von da übernehmen (rekursiver aufruf)
+                            $this->_inheritClasses = array_merge($this->_inheritClasses, $page->inheritClasses);
+                            $this->_uniqueParentDatas = array_merge($this->_uniqueParentDatas, $page->_uniqueParentDatas);
+                            break; //aufhören, rest kommt durch rekursion daher
                         }
                     }
                 }
