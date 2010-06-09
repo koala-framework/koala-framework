@@ -23,7 +23,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             }
         }
         if (Vps_Setup::getConfigSection() == $server) {
-            throw new Vps_ClientException("Von dir selbst importieren ist natuerlich nicht moeglich.");
+            throw new Vps_Exception_Client("Von dir selbst importieren ist natuerlich nicht moeglich.");
         }
         if (Vps_Setup::getConfigSection() == 'production') {
             echo "ACHTUNG!!!!\n";
@@ -40,11 +40,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         $config = Vps_Config_Web::getInstance($server);
         if (!$config->server || !$config->server->host) {
-            throw new Vps_ClientException("kein server host konfiguriert");
+            throw new Vps_Exception_Client("kein server host konfiguriert");
         }
         if (in_array($config->server->host, $localHosts) && !in_array($ownConfig->server->host, $localHosts)) {
             if ($config->server->host != 'vivid') {
-                throw new Vps_ClientException("Nur von vivid kann nach online importiert werden");
+                throw new Vps_Exception_Client("Nur von vivid kann nach online importiert werden");
             }
             $config->server->host = 'intern.vivid-planet.com';
         }
@@ -61,11 +61,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         }
         if ($this->_getParam('debug')) echo $cmd."\n";
         exec($cmd, $onlineRevision, $ret);
-        if ($ret != 0) throw new Vps_ClientException();
+        if ($ret != 0) throw new Vps_Exception_Client();
         $onlineRevision = implode('', $onlineRevision);
 
         if (!$onlineRevision) {
-            throw new Vps_ClientException("Can't get onlineRevision");
+            throw new Vps_Exception_Client("Can't get onlineRevision");
         }
 
         if (!$this->_getParam('skip-users') && Vps_Registry::get('config')->application->id != 'service') {
@@ -87,24 +87,35 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         if ($config->uploads && $ownConfig->uploads) {
             echo "kopiere uploads...\n";
+
+            $uploadExcludes = array();
+            $uploadExcludeRsyncString = '';
+            if ($ownConfig->server->import->excludeUploadFolders) {
+                $uploadExcludes = $ownConfig->server->import->excludeUploadFolders->toArray();
+                foreach ($uploadExcludes as $ex) {
+                    $uploadExcludeRsyncString .= ' --exclude='.$ex;
+                }
+            }
+
             if ($ownConfig->server->host == $config->server->host) {
                 if ($ownConfig->uploads == $config->uploads) {
-                    throw new Vps_ClientException("Uplodas-Pfade für beide Server sind gleich!");
+                    throw new Vps_Exception_Client("Uplodas-Pfade für beide Server sind gleich!");
                 }
                 if (!file_exists($ownConfig->uploads)) {
                     mkdir($ownConfig->uploads);
                 }
-                $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads}/ {$ownConfig->uploads}/";
+
+                $cmd = "rsync --progress --delete --times".$uploadExcludeRsyncString." --recursive {$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             } else if ($this->_useSshVps) {
-                $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
+                $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/ --excludes='.escapeshellarg(implode(';', $uploadExcludes)), $config->uploads);
             } else if ($config->server->host == 'vivid' && !in_array($ownConfig->server->host, $localHosts)) {
-                $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
+                $cmd = "rsync --progress --delete --times".$uploadExcludeRsyncString." --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             } else {
-                $cmd = "rsync -e 'ssh -p $this->_sshPort' --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
+                $cmd = "rsync -e 'ssh -p $this->_sshPort' --progress --delete --times".$uploadExcludeRsyncString." --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             }
@@ -162,7 +173,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 echo "Datenbank {$dbConfig['dbname']} nicht vorhanden, versuche sie zu erstellen...\n";
                 system("echo \"CREATE DATABASE \`{$dbConfig['dbname']}\`;\" | mysql", $ret);
                 if ($ret != 0) {
-                    throw new Vps_ClientException("Kann Datenbank '{$dbConfig['dbname']}' nicht erstellen, bitte manuell anlegen od. config anpassen.");
+                    throw new Vps_Exception_Client("Kann Datenbank '{$dbConfig['dbname']}' nicht erstellen, bitte manuell anlegen od. config anpassen.");
                 }
                 echo "OK\n";
             }
@@ -403,7 +414,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($this->_getParam('debug')) echo $cmd."\n";
         passthru($cmd, $ret);
         if ($ret) {
-            throw new Vps_ClientException("");
+            throw new Vps_Exception_Client("");
         }
     }
 
@@ -562,7 +573,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
                 $onlineRevision = (int)$info->entry['revision'];
             } catch (Exception $e) {}
             if (!$onlineRevision) {
-                throw new Vps_ClientException("Can't detect online revision");
+                throw new Vps_Exception_Client("Can't detect online revision");
             }
             echo $onlineRevision;
         }
