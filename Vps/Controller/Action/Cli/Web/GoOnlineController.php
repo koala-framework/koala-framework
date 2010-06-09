@@ -210,15 +210,21 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             }
         }
 
-        echo "\n\n*** [07/13] test: unit-tests laufen lassen\n";
+        echo "\n\n*** [07/13] test: unit-tests laufen lassen (zuerst Web-Tests, dann VPS-Tests)\n";
         $skipTest = ($this->_getParam('skip-test') || $this->_getParam('skip-tests'));
         if ($skipTest) {
             echo "(uebersprungen)\n";
         } else {
-            Vps_Controller_Action_Cli_Web_TestController::initForTests();
+            Vps_Controller_Action_Cli_TestController::initForTests();
             $runner = new Vps_Test_TestRunner();
-            $suite = new Vps_Test_TestSuite();
+            $arguments = array();
+            $arguments['colors'] = true;
+            $arguments['stopOnFailure'] = true;
+            $arguments['excludeGroups'] = array('skipGoOnline');
+            $arguments['retryOnError'] = true;
+            if ($this->_getParam('verbose')) $arguments['verbose'] = true;
 
+            // Web
             if ($testConfig) {
                 $cfg = $testConfig;
             } else {
@@ -226,14 +232,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             }
             Vps_Registry::set('testDomain', $cfg->server->domain);
             Vps_Registry::set('testServerConfig', $cfg);
-
-            $arguments = array();
-            $arguments['colors'] = true;
-            $arguments['stopOnFailure'] = true;
-            $arguments['excludeGroups'] = array('skipGoOnline');
-            $arguments['retryOnError'] = true;
-            if ($this->_getParam('verbose')) $arguments['verbose'] = true;
-            $result = $runner->doRun($suite, $arguments);
+            $result = $runner->doRun(new Vps_Test_TestSuite(), $arguments);
             if (!$result->wasSuccessful()) {
                 if ($testConfig) {
                     if ($useSvn) {
@@ -245,6 +244,25 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
                 }
                 throw new Vps_ClientException("Tests failed");
             }
+
+            // VPS
+            $dir = getcwd();
+            chdir(VPS_PATH);
+            $config = Vps_Registry::get('config');
+            $trl = Vps_Registry::get('trl');
+            Vps_Registry::set('trl', new Vps_Trl());
+            $cfg = new Vps_Config_Web(Vps_Setup::getConfigSection());
+            Vps_Registry::set('config', $cfg);
+            Vps_Registry::set('testDomain', $cfg->server->domain);
+            Vps_Registry::set('testServerConfig', $cfg);
+            $result = $runner->doRun(new Vps_Test_TestSuite(), $arguments);
+            if (!$result->wasSuccessful()) {
+                throw new Vps_ClientException("Tests failed");
+            }
+
+            chdir($dir);
+            Vps_Registry::set('config', $config);
+            Vps_Registry::set('trl', $trl);
         }
 
         if ($testConfig) {
