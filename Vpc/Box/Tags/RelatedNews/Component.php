@@ -28,6 +28,7 @@ class Vpc_Box_Tags_RelatedNews_Component extends Vpc_Directories_List_Component
 
         $ret->join('vpc_components_to_tags', "vpc_components_to_tags.component_id = CONCAT('news_', vpc_news.id)", array());
         $ret->where('vpc_components_to_tags.tag_id IN ('.implode(',', $tagIds).')');
+        $ret->group('vpc_news.id');
 
         return $ret;
     }
