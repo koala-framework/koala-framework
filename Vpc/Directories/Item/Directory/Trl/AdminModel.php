@@ -39,6 +39,22 @@ class Vpc_Directories_Item_Directory_Trl_AdminModel extends Vps_Model_Proxy
         ));
     }
 
+    public function countRows($where = array())
+    {
+        $select = $this->select($where);
+        $componentId = null;
+        foreach ($select->getPart(Vps_Model_Select::WHERE_EQUALS) as $k=>$i) {
+            if ($k == 'component_id') $componentId = $i;
+        }
+        if (!$componentId) throw new Vps_Exception_NotYetImplemented();
+
+        $c = Vps_Component_Data_Root::getInstance()
+            ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
+        $select->whereEquals('component_id', $c->chained->dbId);
+
+        return $this->_proxyModel->countRows($select);
+    }
+
     public function getRowByProxiedRow($proxiedRow, $componentId)
     {
         $id = $proxiedRow->getInternalId().$componentId;
