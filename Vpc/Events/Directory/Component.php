@@ -7,20 +7,19 @@ class Vpc_Events_Directory_Component extends Vpc_News_Directory_Component
         $ret['componentName'] = trlVps('Events.Events');
         $ret['childModel'] = 'Vpc_Events_Directory_Model';
 
+        $ret['generators']['detail']['class'] = 'Vpc_News_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Vpc_Events_Detail_Component';
         $ret['generators']['detail']['dbIdShortcut'] = 'events_';
-        
+
         $ret['generators']['child']['component']['view'] = 'Vpc_Events_List_View_Component';
-        
+
         return $ret;
     }
-    
-    public function getSelect($overrideValues = array())
+
+    public function getSelect()
     {
-        $select = Vpc_Directories_ItemPage_Directory_Component::getSelect();
-        $date = isset($overrideValues['date']) ? $overrideValues['date'] : 'NOW()';
-        $select->where("IF(ISNULL(end_date), start_date, end_date) >= {$date}");
-        $select->order('start_date', 'ASC');
+        $select = parent::getSelect();
+        $select->where("IF(ISNULL(end_date), start_date, end_date) >= NOW()");
         return $select;
     }
 }

@@ -391,6 +391,16 @@ class Vps_Acl extends Zend_Acl
                 $allowCheck = ($component->componentClass == $sharedDataClass);
             }
 
+            //generator plugins erlauben
+            if (!$allowCheck) {
+                foreach ($component->generator->getGeneratorPlugins() as $p) {
+                    if ($class == get_class($p)) {
+                        $allowCheck = true;
+                        break;
+                    }
+                }
+            }
+
             // Nötig für news-link in link-komponente die einen eigenen controller hat
             // wo dann die componentId für die link-komponente aber die componentClass der News-Link Komponente daher kommt
             // das ganze muss statisch gemacht werden, da die link-komponente möglicherweise noch nicht gespeichert wurde

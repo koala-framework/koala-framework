@@ -1,3 +1,16 @@
+== 1.10 ==
+Erstellt: 09.06.10
+Neue Features:
+- Generator Plugins
+- Generator Plugin: Tags
+
+möglicherweise nicht kompatible Änderungen:
+- editComponents werden im Seitenbaum nur mehr berücksichtigt wenn direkt unter der bearbeitenden Komponente liegen
+  (indirekt nur wenn der ganze Pfad editComponents eingestellt hat)
+- Directories Administration: o Admin::_getContentClass gibts nicht mehr
+                              o idTemplate muss nicht mehr gesetzt werden
+
+
 == 1.9 ==
 Erstellt: 07.05.10
 Stable: 09.06.10

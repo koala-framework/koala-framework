@@ -298,6 +298,11 @@ class Vps_Assets_Dependencies
 
         $classes = Vpc_Abstract::getChildComponentClasses($class);
         $classes = array_merge($classes, Vpc_Abstract::getSetting($class, 'plugins'));
+        foreach (Vpc_Abstract::getSetting($class, 'generators') as $g) {
+            if (isset($g['plugins'])) {
+                $classes = array_merge($classes, $g['plugins']);
+            }
+        }
         foreach ($classes as $class) {
             if ($class) {
                 $this->_processComponentDependency($assetsType, $class, $rootComponent, $includeAdminAssets);

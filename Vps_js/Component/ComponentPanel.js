@@ -42,8 +42,12 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         var params;
         if (data.componentId) {
             params = { componentId: data.componentId };
-            if (componentConfig.componentIdSuffix) {
-                params.componentId += componentConfig.componentIdSuffix;
+            if (data.componentIdSuffix) {
+                params.componentId += data.componentIdSuffix;
+            } else if (componentConfig.componentIdSuffix) {
+                //deprecated!
+                throw new Error("don't use componentConfig.componentIdSuffix");
+                //params.componentId += componentConfig.componentIdSuffix;
             }
         } else {
             params = this.getBaseParams();
@@ -141,14 +145,16 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     stackIndex: i,
                     componentClass: ec.componentClass,
                     type: ec.type,
+                    componentIdTemplate: ec.componentIdTemplate,
+                    componentIdSuffix: ec.componentIdSuffix,
                     componentId: ec.componentId, //gesetzt wenn aus Pages - weil da gibts unterschiedliche
                     handler: function(o) {
                         var data = Vps.clone(this.componentsStack[o.stackIndex]);
-                        if (o.componentId) {
-                            data.componentId = o.componentId;
-                        }
+                        if (o.componentId) data.componentId = o.componentId;
                         data.componentClass = o.componentClass;
                         data.type = o.type;
+                        data.componentIdTemplate = o.componentIdTemplate;
+                        data.componentIdSuffix = o.componentIdSuffix;
                         this.componentsStack = this.componentsStack.slice(0, o.stackIndex);
                         this.loadComponent(data);
                     },

@@ -158,7 +158,7 @@ class Vps_Component_Abstract
                     );
 
                     //*** parentClasses
-                    self::$_settings[$c]['parentClasses'] = self::getSetting($c, 'parentClasses', false/*don't use settings cache*/);
+                    self::$_settings[$c]['parentClasses'] = self::getSetting($c, 'parentClasses');
 
                     //*** processedCssClass
                     self::$_settings[$c]['processedCssClass'] = '';
@@ -412,19 +412,22 @@ class Vps_Component_Abstract
     private static function _getChildComponentClasses(&$componentClasses, $class)
     {
         $classes = array();
-        foreach (Vpc_Abstract::getSetting($class, 'generators', false) as $generator) {
+        foreach (Vpc_Abstract::getSetting($class, 'generators') as $generator) {
             if (is_array($generator['component'])) {
                 $classes = array_merge($classes, $generator['component']);
             } else {
                 $classes[] = $generator['component'];
             }
+            if (isset($generator['plugins'])) {
+                $classes = array_merge($classes, $generator['plugins']);
+            }
         }
-        $plugins = Vpc_Abstract::getSetting($class, 'plugins', false);
+        $plugins = Vpc_Abstract::getSetting($class, 'plugins');
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
         }
-        if (Vpc_Abstract::hasSetting($class, 'inheritComponentClass', false)) {
-            $classes[] = Vpc_Abstract::getSetting($class, 'inheritComponentClass', false);
+        if (Vpc_Abstract::hasSetting($class, 'inheritComponentClass')) {
+            $classes[] = Vpc_Abstract::getSetting($class, 'inheritComponentClass');
         }
         foreach ($classes as $c) {
             if ($c&& !in_array($c, $componentClasses)) {
@@ -435,5 +438,10 @@ class Vps_Component_Abstract
                 self::_getChildComponentClasses($componentClasses, $c);
             }
         }
+    }
+
+    public static function getStaticCacheVars()
+    {
+        return array();
     }
 }
