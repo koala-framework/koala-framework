@@ -10,6 +10,8 @@ Vpc.ListSwitch.View.prototype = {
     activePreviewLink: null,
 
     init: function() {
+        if (this.componentWrapper.initDone) return;
+
         this.previousEl = this.componentWrapper.down('.listSwitchLargeWrapper a.listSwitchPrevious');
         this.nextEl = this.componentWrapper.down('.listSwitchLargeWrapper a.listSwitchNext');
 
@@ -34,6 +36,8 @@ Vpc.ListSwitch.View.prototype = {
         if (this.previewElements.length && this.previewElements[0]) {
             this.setLarge(this.previewElements[0]);
         }
+
+        this.componentWrapper.initDone = true;
     },
 
     setLarge: function(previewEl) {
