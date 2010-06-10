@@ -4,7 +4,7 @@ abstract class Vps_Controller_Action_Auto_Filter_Abstract implements Vps_Collect
     private $_properties = array();
     protected $_defaultPropertyValues = array();
     protected $_mandatoryProperties = array();
-
+    protected $_type = null;
 
     public function __construct()
     {
@@ -52,8 +52,12 @@ abstract class Vps_Controller_Action_Auto_Filter_Abstract implements Vps_Collect
 
     public function getExtConfig()
     {
+        if (!$this->_type) {
+            throw new Vps_Exception("property '_type' must be set.");
+        }
+
         $ret = $this->_properties;
-        $ret['type'] = ucfirst(substr(strrchr(get_class($this), '_'), 1));
+        $ret['type'] = $this->_type;
         $ret['name'] = $this->getName();
         $ret['paramName'] = $this->getParamName();
         foreach ($ret as $key => $val) {

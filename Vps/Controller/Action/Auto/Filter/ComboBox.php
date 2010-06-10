@@ -1,6 +1,8 @@
 <?php
 class Vps_Controller_Action_Auto_Filter_ComboBox extends Vps_Controller_Action_Auto_Filter_Query
 {
+    protected $_type = 'ComboBox';
+
     protected function _init()
     {
         parent::_init();

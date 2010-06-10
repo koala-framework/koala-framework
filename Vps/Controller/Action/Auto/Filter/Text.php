@@ -1,6 +1,8 @@
 <?php
 class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_Filter_Abstract
 {
+    protected $_type = 'Text';
+
     protected $_defaultPropertyValues = array(
         'querySeparator' => ' ',
     );
