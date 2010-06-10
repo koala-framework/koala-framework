@@ -5,6 +5,8 @@ class Vpc_News_Detail_Abstract_Trl_Component extends Vpc_Directories_Item_Detail
     {
         $ret = parent::getTemplateVars();
         $ret['title'] = $this->getData()->row->title;
+
+        $ret['editComponents'] = array('content');
         return $ret;
     }
 

@@ -18,12 +18,11 @@ class Vpc_Events_Category_ShowCategories_Archive_Component extends Vpc_Directori
         return $this->getData()->parent->getComponent()->getCategoryIds();
     }
 
-    public function getSelect($overrideValues = array())
+    public function getSelect()
     {
-        $ret = parent::getSelect($overrideValues);
+        $ret = parent::getSelect();
         if (!$ret) return null;
         $ret->where('IF(ISNULL(end_date), start_date, end_date) < NOW()');
-        $ret->order('start_date', 'DESC');
         return $ret;
     }
 

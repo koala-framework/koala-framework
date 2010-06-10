@@ -15,6 +15,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             'rendergrid',
             'beforerendergrid',
             'deleterow',
+            'cellclick',
             'celldblclick',
             'rowdblclick'
         );
@@ -517,6 +518,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.ignoreCellClicks = false;
             }).defer(500, this);
 
+            this.fireEvent('cellclick', grid, rowIndex, columnIndex, e);
             var col = grid.getColumnModel().config[columnIndex];
             if (col.clickHandler) {
                 col.clickHandler.call(col.scope || this, grid, rowIndex, col, e);

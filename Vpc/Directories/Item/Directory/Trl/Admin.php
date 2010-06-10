@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Item_Directory_Trl_Admin extends Vpc_Admin
+class Vpc_Directories_Item_Directory_Trl_Admin extends Vpc_Directories_Item_Directory_Admin
 {
     protected function _getContentClass()
     {

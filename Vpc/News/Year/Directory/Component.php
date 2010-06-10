@@ -4,7 +4,6 @@ class Vpc_News_Year_Directory_Component extends Vpc_News_Month_Directory_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['categoryChildId'] = 'year';
         $ret['categoryName'] = trlVps('Years');
         $ret['generators']['detail']['class'] = 'Vpc_Directories_Year_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Vpc_Directories_Year_Detail_Component';
