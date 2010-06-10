@@ -545,6 +545,19 @@ class Vps_Component_Data
         return current($cc);
     }
 
+
+    /**
+     * @return Vps_Component_Data
+     */
+    public function getRecursiveChildComponent($select = array(), $childSelect = array('page'=>false))
+    {
+        $select = $this->_formatSelect($select);
+        $select->limit(1);
+        $cc = $this->getRecursiveChildComponents($select);
+        if (!$cc) return null;
+        return current($cc);
+    }
+
     /**
      * @return Vpc_Abstract
      */
