@@ -56,7 +56,13 @@ abstract class Vps_Controller_Action_Auto_Filter_Abstract implements Vps_Collect
         $ret['type'] = ucfirst(substr(strrchr(get_class($this), '_'), 1));
         $ret['name'] = $this->getName();
         $ret['paramName'] = $this->getParamName();
-        foreach ($ret as $key => $val) if (is_object($val)) unset($ret[$key]);
+        foreach ($ret as $key => $val) {
+            if ($key == 'icon' && is_object($val)) {
+                $ret[$key] = $val->__toString();
+            } else if (is_object($val)) {
+                unset($ret[$key]);
+            }
+        }
         return $ret;
     }
 
