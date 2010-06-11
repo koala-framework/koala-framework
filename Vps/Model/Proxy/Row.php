@@ -50,6 +50,16 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
         }
     }
 
+    protected function _setDirty($var = true)
+    {
+        $this->_row->_setDirty($var);
+    }
+
+    protected function _isDirty()
+    {
+        return $this->_row->_isDirty();
+    }
+
     public function save()
     {
         $this->_beforeSave();

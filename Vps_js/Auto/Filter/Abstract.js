@@ -4,6 +4,7 @@ Vps.Auto.Filter.Abstract = function(config) {
     this.addEvents('filter');
     this.toolbarItems = [];
     this.id = config.name;
+    this.label = config.label || null;
 };
 Ext.extend(Vps.Auto.Filter.Abstract, Ext.util.Observable, {
     reset: function() {

@@ -62,7 +62,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         }
         $n = $this->_transformColumnName($name);
         if ($this->$name !== $value) {
-            $this->_dirty = true;
+            $this->_setDirty();
         }
         $this->_data[$n] = $value;
         $this->_postSet($name, $value);
@@ -93,9 +93,9 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         }
 
         if ($update) {
-            if ($this->_dirty) {
+            if ($this->_isDirty()) {
                 $ret = $this->_model->update($this, $this->_data);
-                $this->_dirty = false;
+                $this->_setDirty(false);
             } else {
                 $ret = $this->{$this->_getPrimaryKey()};
             }
