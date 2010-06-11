@@ -8,7 +8,8 @@ class Vps_Config_Cache extends Zend_Cache_Frontend_File
         parent::__construct(array(
             'master_files' => array(
                 'application/config.ini',
-                VPS_PATH . '/config.ini'
+                VPS_PATH . '/config.ini',
+                'application/vps_branch'
             ),
             'automatic_serialization' => true
         ));
