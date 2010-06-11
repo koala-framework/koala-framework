@@ -113,7 +113,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
 
         foreach ($this->_filters as $filter) {
-            $filter->setModel($this->_model);
+            if ($this->_model) $filter->setModel($this->_model);
 
             // Abwärtskompatibilität für Textfilter mit queryFields und querySeparator
             if (!$filter instanceof Vps_Controller_Action_Auto_Filter_Text) continue;
