@@ -78,11 +78,12 @@ class Vpc_Directories_Item_Directory_Trl_AdminModel extends Vps_Model_Proxy
 
     protected function _getTrlRow($proxiedRow, $componentId)
     {
-        $proxyId = $this->_getProxyRowId($proxiedRow, $componentId);
+        $proxyId = $componentId . '_' . $proxiedRow->id;
         $trlRow = $this->_trlModel->getRow($proxyId);
         if (!$trlRow) {
             $trlRow = $this->_trlModel->createRow();
             $trlRow->component_id = $proxyId;
         }
+        return $trlRow;
     }
 }
