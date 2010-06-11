@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract
+class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract_Component
 {
     public function getTemplateVars()
     {
