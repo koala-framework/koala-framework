@@ -141,7 +141,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $this->_rows[$id];
     }
 
-    private function _formatField($field, $select)
+    private function _formatField($field, Zend_Db_Select $select = null)
     {
         if ($field instanceof Zend_Db_Expr) return $field->__toString();
 
@@ -519,7 +519,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
             $depSelect = $expr->getSelect();
             if (!$depSelect) $depSelect = $dbDepM->select();
-            $col1 = $dbDepM->_formatField($ref['column'], $depSelect);
+            $col1 = $dbDepM->_formatField($ref['column'], null /* select fehlt - welches ist das korrekte?*/);
             $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
@@ -546,10 +546,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $ref = $depOf->getReference($expr->getParent());
             $refSelect = $dbRefM->select();
 
-            $col1 = $dbDepOf->transformColumnName($ref['column']);
+            $col1 = $dbDepOf->_formatField($ref['column'], null /* select fehlt - welches sollte das sein? */ );
             $col2 = $dbRefM->transformColumnName($dbRefM->getPrimaryKey());
 
-            $refSelect->where("$refTableName.$col2={$dbDepOf->getTableName()}.$col1");
+            $refSelect->where("$refTableName.$col2=$col1");
             $refDbSelect = $dbRefM->createDbSelect($refSelect);
             $exprStr = $dbRefM->_formatField($expr->getField(), $refDbSelect);
             $refDbSelect->reset(Zend_Db_Select::COLUMNS);
