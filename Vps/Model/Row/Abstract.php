@@ -167,6 +167,25 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         }
     }
 
+    /**
+     * Speichert in jedem Fall, auch wenn sich keine daten geändert haben.
+     */
+    final public function forceSave()
+    {
+        $this->_setDirty();
+        return $this->save();
+    }
+
+    protected function _setDirty($var = true)
+    {
+        $this->_dirty = $var;
+    }
+
+    protected function _isDirty()
+    {
+        return $this->_dirty;
+    }
+
     public function save()
     {
         foreach ($this->_getSiblingRows() as $k=>$r) {

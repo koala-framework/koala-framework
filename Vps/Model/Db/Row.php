@@ -57,7 +57,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
             // scheis php... bei $this->$name sucht er nur nach einem property
             // und vergisst, dass es __get() auch gibt
             if ($this->__get($name) !== $value) {
-                $this->_dirty = true;
+                $this->_setDirty();
             }
             $this->_row->$n = $value;
         } else {
@@ -77,9 +77,9 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         }
         $this->_beforeSaveSiblingMaster();
         $this->_beforeSave();
-        if ($insert || $this->_dirty) {
+        if ($insert || $this->_isDirty()) {
             $ret = $this->_row->save();
-            $this->_dirty = false;
+            $this->_setDirty(false);
         } else {
             $ret = $this->{$this->_getPrimaryKey()};
         }

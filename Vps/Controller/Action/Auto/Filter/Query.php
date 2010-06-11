@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Auto_Filter_Query extends Vps_Controller_Action_Auto_Filter_Abstract
+abstract class Vps_Controller_Action_Auto_Filter_Query extends Vps_Controller_Action_Auto_Filter_Abstract
 {
     protected function _init()
     {
@@ -9,7 +9,7 @@ class Vps_Controller_Action_Auto_Filter_Query extends Vps_Controller_Action_Auto
     }
 
     public function formatSelect($select, $params = array()) {
-        $column = $this->getFieldname();
+        $column = $this->getFieldName();
         if (!$this->getModel()->hasColumn($column))
             throw new Vps_Exception("Model has to have column \"$column\" to filter");
         if (isset($params[$this->getParamName()]) && $params[$this->getParamName()]) {
@@ -20,6 +20,6 @@ class Vps_Controller_Action_Auto_Filter_Query extends Vps_Controller_Action_Auto
 
     public function getName()
     {
-        return $this->getFieldname();
+        return $this->getFieldName();
     }
 }
