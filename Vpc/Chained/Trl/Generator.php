@@ -1,10 +1,50 @@
 <?php
 class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
 {
+    private $_rows = array();
+
     protected function _init()
     {
         parent::_init();
         $this->_inherits = $this->_getChainedGenerator()->getInherits();
+    }
+
+    protected function _getRows($ids)
+    {
+        $idsToLoad = array();
+        foreach ($ids as $i) {
+            if (!array_key_exists($i, $this->_rows)) {
+                $idsToLoad[] = $i;
+            }
+        }
+        if ($idsToLoad) {
+            //nicht $this->getModel, das ist das master model
+            $m = Vpc_Abstract::createChildModel($this->_class);
+            if (!$m) throw new Vps_Exception("No child model set for '$this->_class'");
+            $s = $m->select();
+            $s->whereEquals('component_id', $idsToLoad);
+            $visible = array();
+            Vps_Benchmark::count('DirectoryTrlGenerator getRows', count($idsToLoad));
+            foreach ($m->getRows($s) as $r) {
+                $this->_rows[$r->component_id] = $r;
+            }
+            foreach ($idsToLoad as $i) {
+                if (!array_key_exists($i, $this->_rows)) {
+                    $this->_rows[$i] = null;
+                }
+            }
+        }
+        $ret = array();
+        foreach ($ids as $i) {
+            $ret[$i] = $this->_rows[$i];
+        }
+        return $ret;
+    }
+
+    protected function _getRow($id)
+    {
+        $r = $this->_getRows(array($id));
+        return $r[$id];
     }
 
     public function getPagesControllerConfig($component)
