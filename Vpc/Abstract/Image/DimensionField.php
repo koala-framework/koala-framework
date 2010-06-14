@@ -65,7 +65,7 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
                 if (!isset($dimensions[$data['dimension']])) {
                     $name = $this->getFieldLabel();
                     if (!$name) $name = $this->getName();
-                    $ret[] = $name.': '.trlVps("Value is empty, but a non-empty value is required");
+                    $ret[] = $name.': '.trlVps("Please fill out the field");
                 }
             }
 

@@ -2398,7 +2398,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>708</id>
 </text>
 <text>
-<en>Value is empty, but a non-empty value is required</en>
+<en>Please fill out the field</en>
 <de>Bitte f&#xFC;llen Sie das Feld aus</de>
 <id>709</id>
 </text>
@@ -2413,7 +2413,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>711</id>
 </text>
 <text>
-<en>'%value%' is not a valid email address in the basic format local-part@hostname</en>
+<en>'%value%' is not a valid email address</en>
 <de>'%value%' ist keine g&#xFC;ltige E-Mail-Adresse</de>
 <id>712</id>
 </text>

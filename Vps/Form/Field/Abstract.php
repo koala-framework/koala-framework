@@ -3,6 +3,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     implements Vps_Collection_Item_Interface
 {
     private $_properties;
+    private $_validatorsAdded = false;
     protected $_validators = array();
     private $_data;
     private $_mask;
@@ -53,7 +54,14 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     {
         foreach ($this->_getTrlProperties() as $property) {
             $trlStaticData = $this->getProperty($property);
-            $this->setProperty($property, Zend_Registry::get('trl')->trlStaticExecute($trlStaticData, $language));
+            $this->setProperty(
+                $property,
+                Zend_Registry::get('trl')->trlStaticExecute($trlStaticData, $language)
+            );
+        }
+
+        foreach ($this->getValidators() as $v) {
+            $v->setTranslator(new Vps_Trl_ZendAdapter($language));
         }
 
         if ($this->hasChildren()) {
@@ -129,8 +137,6 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
 
     public function validate($row, $postData)
     {
-        $this->_addValidators();
-
         $ret = array();
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
@@ -208,11 +214,24 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
 
     public function getValidators()
     {
+        if (!$this->_validatorsAdded) {
+            $this->_addValidators();
+            $this->_validatorsAdded = true;
+        }
         return $this->_validators;
     }
-    public function addValidator(Zend_Validate_Interface $v)
+    /**
+     * @param Zend_Validate_Interface $v Der validator
+     * @param string $key Um zB einen Validator zu finden und durch einen
+     *                    anderen zu ersetzen, zB bei {@link Vps_Form_Field_Checkbox}
+     */
+    public function addValidator(Zend_Validate_Interface $v, $key = null)
     {
-        $this->_validators[] = $v;
+        if (is_null($key)) {
+            $this->_validators[] = $v;
+        } else {
+            $this->_validators[$key] = $v;
+        }
         return $this;
     }
 
