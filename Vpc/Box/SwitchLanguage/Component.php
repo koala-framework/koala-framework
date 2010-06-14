@@ -32,6 +32,14 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
                 } else if (is_instance_of($l->componentClass, 'Vpc_Root_TrlRoot_Master_Component')) {
                     $page = $masterPage;
                 }
+                $p = $page;
+                while ($p && $page) {
+                    //TODO dafür müsste es eine bessere methode geben
+                    if (isset($p->row) && isset($p->row->visible) && !$p->row->visible) {
+                        $page = null;
+                    }
+                    $p = $p->parent;
+                }
             }
             $home = $l->getChildPage(array('home'=>true));
             if ($home) {
@@ -42,6 +50,24 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
                     'flag' => $l->getChildComponent('-flag'),
                     'name' => $l->name
                 );
+            }
+        }
+        return $ret;
+    }
+
+    public static function getStaticCacheVars()
+    {
+        $ret = Vpc_Menu_Abstract_Component::getStaticCacheVars();
+        foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+            foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
+                if (is_instance_of($generator['class'], 'Vpc_Root_TrlRoot_ChainedGenerator')) {
+                    $generator = current(Vps_Component_Generator_Abstract::getInstances(
+                        $componentClass, array('generator' => $key))
+                    );
+                    $ret[] = array(
+                        'model' => $generator->getModel()
+                    );
+                }
             }
         }
         return $ret;

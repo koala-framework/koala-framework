@@ -46,9 +46,9 @@ class Vpc_Directories_Category_Directory_Trl_CategoriesController
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('original_name', trlVps('Original Category'), 150));
         $this->_columns->add(new Vps_Grid_Column('name', trlVps('Category'), 200))
             ->setEditor(new Vps_Form_Field_TextField());
+        $this->_columns->add(new Vps_Grid_Column('original_name', trlVps('Original Category'), 150));
         $this->_columns->add(new Vps_Grid_Column_Visible());
     }
 }
