@@ -103,7 +103,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
 
     protected function _checkNecessaryProperties()
     {
-        if (!$this->_modelName) {
+        if (!$this->_getModel()) {
             throw new Vps_Exception('$this->_modelName not set');
         }
         if (!$this->_assignFromReference) {
