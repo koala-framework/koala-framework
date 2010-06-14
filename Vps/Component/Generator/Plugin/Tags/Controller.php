@@ -1,7 +1,6 @@
 <?php
 class Vps_Component_Generator_Plugin_Tags_Controller extends Vps_Controller_Action_Auto_AssignGrid
 {
-    protected $_modelName = 'Vps_Component_Generator_Plugin_Tags_ComponentsToTagsModel';
     protected $_assignFromReference = 'Tag';
 
     protected function _createAssignRow($id)
@@ -15,6 +14,7 @@ class Vps_Component_Generator_Plugin_Tags_Controller extends Vps_Controller_Acti
     protected function _initColumns()
     {
         parent::_initColumns();
+        $this->setModel(Vpc_Abstract::createChildModel($this->_getParam('class')));
         $this->_columns->add(new Vps_Grid_Column('tag_text', trlVps('Tag')));
     }
 
