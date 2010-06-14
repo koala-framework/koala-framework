@@ -18,6 +18,7 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateManyAndSync()
     {
+        $this->markTestIncomplete();
         $debugOutput = false;
         $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 läuft der server heiß
 
@@ -66,6 +67,7 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
 
     public function testCreateOneMultipleTimes()
     {
+        $this->markTestIncomplete();
         $debugOutput = false;
         $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 läuft der server heiß
 

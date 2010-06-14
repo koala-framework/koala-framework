@@ -84,7 +84,7 @@ class Vps_Component_ModelObserver
                     return array();
                 }
             }
-            $id = $row->$primary;
+            $id = is_array($primary) ? null : $row->$primary;
             $componentId = isset($row->component_id) ? $row->component_id : null;
         }
         if (get_class($model) == 'Vps_Db_Table') return array();
