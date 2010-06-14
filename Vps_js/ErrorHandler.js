@@ -1,4 +1,10 @@
 Ext.ux.ErrorHandler.on('error', function(ex) {
+    // zeitweise kommt aus ein fehler von chrome://skype_ff_toolbar_win/content/injection_graph_func.js:1
+    // der hier ignoriert wird. (falsche / nicht mehr verfügbare toolbar?)
+    // gefunden bei 2F Stargate
+    if (ex.url.substr(0, 14) == 'chrome:/'+'/skype') {
+        return;
+    }
     Ext.Ajax.request({
         url: '/vps/error/error/json-mail',
         ignoreErrors: true,
