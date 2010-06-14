@@ -165,6 +165,8 @@ Vpc.Basic.ImageEnlarge.prototype =
 
         tpls.tpl.overwrite(this.lightbox, data);
 
+        this.lightbox.child('.lightboxFooter').setWidth(m[1]);
+
         var applyNextPreviousEvents = function(imageLink, type) {
             // preload next image
             var tmpNextImage = new Image();
