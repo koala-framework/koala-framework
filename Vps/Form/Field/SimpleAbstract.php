@@ -26,6 +26,17 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
     protected function _addValidators()
     {
         parent::_addValidators();
+
+        if ($this->getAllowBlank() === false
+            || $this->getAllowBlank() === 0
+            || $this->getAllowBlank() === '0'
+        ) {
+            $v = new Vps_Validate_NotEmpty();
+            if ($this->getEmptyMessage()) {
+                $v->setMessage(Vps_Validate_NotEmpty::IS_EMPTY, $this->getEmptyMessage());
+            }
+            $this->addValidator($v, 'notEmpty');
+        }
     }
 
     public function validate($row, $postData)
@@ -38,34 +49,24 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
 
             $name = $this->getFieldLabel();
             if (!$name) $name = $this->getName();
-            if ($this->getAllowBlank() === false
-                || $this->getAllowBlank() === 0
-                || $this->getAllowBlank() === '0') {
-                $ret = array_merge($ret, $this->_validateNotAllowBlank($data, $name));
-            }
-            if ($data) {
-                foreach ($this->getValidators() as $v) {
-                    if ($v instanceof Vps_Validate_Row_Abstract) {
-                        $v->setField($this->getName());
-                        $isValid = $v->isValidRow($data, $row);
-                    } else {
-                        $isValid = $v->isValid($data);
-                    }
-                    if (!$isValid) {
-                        $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
-                    }
+            foreach ($this->getValidators() as $v) {
+                // folgende if ist, weils es zB bei einem Date Validator keinen
+                // sinn macht zu validieren wenn kein wert da ist. da macht dann
+                // nur mehr der NotEmpty sinn
+                if (!$data && !($v instanceof Zend_Validate_NotEmpty)) {
+                    continue;
+                }
+
+                if ($v instanceof Vps_Validate_Row_Abstract) {
+                    $v->setField($this->getName());
+                    $isValid = $v->isValidRow($data, $row);
+                } else {
+                    $isValid = $v->isValid($data);
+                }
+                if (!$isValid) {
+                    $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
                 }
             }
-        }
-        return $ret;
-    }
-
-    protected function _validateNotAllowBlank($data, $name)
-    {
-        $ret = array();
-        $v = new Vps_Validate_NotEmpty();
-        if (!$v->isValid($data)) {
-            $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
         }
         return $ret;
     }

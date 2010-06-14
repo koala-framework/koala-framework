@@ -14,18 +14,14 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
         return $ret;
     }
 
-    protected function _validateNotAllowBlank($data, $name)
+    protected function _addValidators()
     {
-        $ret = array();
-        if (!$data) {
-            $msg = '';
-            if (trim($name)) {
-                $msg .= $name.': ';
-            }
-            $msg .= trlVps("Please mark the checkbox");
-            $ret[] = $msg;
+        parent::_addValidators();
+        if (isset($this->_validators['notEmpty'])) {
+            $this->_validators['notEmpty'] = new Vps_Validate_NotEmptyCheckbox();
+        } else {
+            $this->addValidator(new Vps_Validate_NotEmptyCheckbox(), 'notEmpty');
         }
-        return $ret;
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '')
