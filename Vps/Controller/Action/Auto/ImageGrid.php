@@ -10,7 +10,7 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     protected $_primaryKey;
     protected $_paging = 0;
 
-    protected $_maxLabelLength = 18;
+    protected $_maxLabelLength = 17;
 
     protected $_textField = 'name';
     protected $_buttons = array(

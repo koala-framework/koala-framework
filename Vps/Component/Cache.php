@@ -215,7 +215,11 @@ class Vps_Component_Cache
                 $or = array(new Vps_Model_Select_Expr_Equals('id', ''));
                 $sqlOr = '';
                 foreach ($fields as $field) {
-                    $id = $field != '' ? $row->$field : $row->$primaryKey;
+                    if ($field != '') {
+                        $id = $row->$field;
+                    } else {
+                        $id = is_array($primaryKey) ? null : $row->$primaryKey;
+                    }
                     $sqlOr .= "OR (m.id='$id' AND m.field='$field')";
                     $or[] = new Vps_Model_Select_Expr_And(array(
                         new Vps_Model_Select_Expr_Equals('id', $id),

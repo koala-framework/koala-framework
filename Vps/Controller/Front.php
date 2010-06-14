@@ -28,6 +28,10 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                 'vps_controller_action_debug');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Cli',
                                 'vps_controller_action_cli');
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Cli/Web',
+                                'vps_controller_action_cli_web');
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Cli/Svn',
+                                'vps_controller_action_cli_svn');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Media',
                                 'vps_controller_action_media');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Spam',

@@ -145,7 +145,7 @@ class Vps_Setup
             ob_start();
         }
 
-        if (trim(file_get_contents('application/vps_branch')) != $config->application->vps->version) {
+        if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != $config->application->vps->version) {
             $required = trim(file_get_contents('application/vps_branch'));
             $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
             throw new Vps_Exception("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
@@ -258,6 +258,9 @@ class Vps_Setup
 
     public static function createDao()
     {
+        if (!file_exists('application/config.db.ini')) {
+            return null;
+        }
         return new Vps_Dao();
     }
 
