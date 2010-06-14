@@ -106,7 +106,8 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     public function jsonSaveAction()
     {
         ignore_user_abort(true);
-        Zend_Registry::get('db')->beginTransaction();
+        $db = Zend_Registry::get('db');
+        if ($db) $db->beginTransaction();
 
         // zuvor war statt diesem kommentar das $row = $this->_form->getRow();
         // drin und wurde bei processInput und validate übergeben, aber die form
@@ -170,7 +171,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
                 }
                 $this->_afterSave($row);
             }
-            Zend_Registry::get('db')->commit();
+            if ($db) $db->commit();
 
             $this->view->data = $data;
 
@@ -197,9 +198,10 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         if (!$this->_hasPermissions($row, 'delete')) {
             throw new Vps_Exception("Delete is not allowed for this row.");
         }
-        Zend_Registry::get('db')->beginTransaction();
+        $db = Zend_Registry::get('db');
+        if ($db) $db->beginTransaction();
         $this->_form->delete(null);
-        Zend_Registry::get('db')->commit();
+        if ($db) $db->commit();
     }
 
     protected function _beforeSave(Vps_Model_Row_Interface $row)
