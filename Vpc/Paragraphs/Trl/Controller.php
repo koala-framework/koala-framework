@@ -47,6 +47,7 @@ class Vpc_Paragraphs_Trl_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         $this->_columns->add(new Vps_Grid_Column('component_class'));
         $this->_columns->add(new Vps_Grid_Column('component_name'));
         $this->_columns->add(new Vps_Grid_Column('component_icon'));
+        $this->_columns->add(new Vps_Grid_Column('pos'));
 
         $this->_columns->add(new Vps_Grid_Column('preview'))
             ->setData(new Vps_Data_Vpc_Frontend($this->_getParam('class')))
