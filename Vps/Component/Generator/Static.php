@@ -134,6 +134,15 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
         return $target;
     }
+
+    public function makeChildrenVisible($source)
+    {
+        if ($source->generator !== $this) {
+            throw new Vps_Exception("you must call this only with the correct source");
+        }
+        Vpc_Admin::getInstance($source->componentClass)->makeVisible($source);
+    }
+
     public function getGeneratorFlags()
     {
         $ret = parent::getGeneratorFlags();

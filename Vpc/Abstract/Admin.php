@@ -49,6 +49,13 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
         }
     }
 
+    public function makeVisible($source)
+    {
+        foreach ($source->getChildComponents(array('inherit' => false, 'ignoreVisible'=>true)) as $c) {
+            $c->generator->makeChildrenVisible($c);
+        }
+    }
+
     function createFormTable($tablename, $fields)
     {
         if (!$this->_tableExists($tablename)) {

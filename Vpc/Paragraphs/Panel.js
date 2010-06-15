@@ -72,6 +72,36 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             scope: this
         });
 
+        this.actions.makeAllVisible = new Ext.Action({
+            text : trlVps('All Visible'),
+            icon : '/assets/silkicons/tick.png',
+            cls  : 'x-btn-text-icon',
+            enableToggle: true,
+            handler: function(b) {
+                Ext.Msg.show({
+                    title: trlVps('All Visible'),
+                    msg: trlVps('Do you really wish to set everything to visible?'),
+                    buttons: Ext.Msg.YESNO,
+                    scope: this,
+                    fn: function(button) {
+                        if (button == 'yes') {
+                            Ext.Ajax.request({
+                                mask: this.el,
+                                maskText: trlVps('Setting visible...'),
+                                url: this.controllerUrl+'/json-make-all-visible',
+                                params: this.getBaseParams(),
+                                success: function() {
+                                    this.reload();
+                                },
+                                scope: this
+                            });
+                        }
+                    }
+                })
+            },
+            scope: this
+        });
+
         if (this.components) {
             this.actions.addparagraph = new Vpc.Paragraphs.AddParagraphButton({
                 components: this.components,
@@ -121,6 +151,8 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             this.tbar.push(this.actions.addparagraph);
             this.tbar.push(this.actions.copyPaste);
         }
+        this.tbar.push('->');
+        this.tbar.push(this.actions.makeAllVisible);
 
         Vpc.Paragraphs.Panel.superclass.initComponent.call(this);
     },
