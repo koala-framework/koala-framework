@@ -34,4 +34,8 @@ class Vpc_Chained_Trl_MasterAsChild_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function hasContent()
+    {
+        return $this->getData()->getChildComponent('-child')->hasContent();
+    }
 }
