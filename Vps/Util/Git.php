@@ -24,10 +24,6 @@ class Vps_Util_Git
         return $i;
     }
 
-    public static function clone()
-    {
-    }
-
     public function tag($tag, $args = '', $object = '')
     {
         $cmd = "tag -a -m ".escapeshellarg('tagged').' '.$args.' '.escapeshellcmd($tag);
