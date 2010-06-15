@@ -236,4 +236,25 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
     {
         return $this->_getChainedGenerator()->getCacheVars($parentData->chained);
     }
+
+    public function makeChildrenVisible($source)
+    {
+        if ($source->generator !== $this) {
+            throw new Vps_Exception("you must call this only with the correct source");
+        }
+
+        $m = Vpc_Abstract::createChildModel($this->_class);
+        if ($m && $m->hasColumn('visible')) {
+            $row = $this->_getRow($source->dbId);
+            if (!$row) {
+                $row = $m->createRow();
+                $row->component_id = $source->dbId;
+            }
+            if (!$row->visible) {
+                $row->visible = 1;
+                $row->save();
+            }
+        }
+        Vpc_Admin::getInstance($source->componentClass)->makeVisible($source);
+    }
 }
