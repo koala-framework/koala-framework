@@ -154,7 +154,9 @@ abstract class Vps_Update
                 $file = substr($file, strlen($dir)+1);
             }
             $path = $dir . '/' . $file;
-            $path = str_replace('.', getcwd(), $path);
+            if (substr($path, 0, 1)=='.') {
+                $path = getcwd().substr($path, 1);
+            }
             if (in_array($path, $paths)) continue;
             $paths[] = $path;
             if (is_dir($path)) {
