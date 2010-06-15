@@ -49,7 +49,7 @@ class Vpc_Directories_Item_Directory_Trl_AdminModel extends Vps_Model_Proxy
 
     public function countRows($where = array())
     {
-        $select = $this->select($where, $order, $limit, $start);
+        $select = $this->select($where);
         $componentId = $this->_getComponentId($select);
 
         if ($componentId) {
