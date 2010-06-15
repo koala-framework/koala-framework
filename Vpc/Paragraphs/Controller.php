@@ -9,23 +9,58 @@ class Vpc_Paragraphs_Controller_EditComponentsData extends Vps_Data_Abstract
         $this->_componentClass = $componentClass;
     }
 
-    public function load($row)
+    //teilw. übernommen von Vpc_Directories_Item_Directory_Admin
+    //TODO: code sharen
+    private function _getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate, $componentIdSuffix)
     {
-        $generators = Vpc_Abstract::getSetting($this->_componentClass, 'generators');
-        $classes = $generators['paragraphs']['component']; 
-        $admin = Vpc_Admin::getInstance($classes[$row->component]);
         $ret = array();
-        foreach ($admin->getExtConfig() as $k=>$cfg) {
-            $cls = $classes[$row->component];
-            if (!isset($this->_componentConfigs[$cls.'-'.$k])) {
-                $this->_componentConfigs[$cls.'-'.$k] = $cfg;
+        $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig();
+        foreach ($cfg as $k=>$c) {
+            if (!isset($this->_componentConfigs[$componentClass.'-'.$k])) {
+                $this->_componentConfigs[$componentClass.'-'.$k] = $c;
             }
             $ret[] = array(
-                'componentClass' => $cls,
-                'type' => $k
+                'componentClass' => $componentClass,
+                'type' => $k,
+                'idTemplate' => $idTemplate,
+                'componentIdSuffix' => $componentIdSuffix
             );
         }
+        foreach ($gen->getGeneratorPlugins() as $plugin) {
+            $cls = get_class($plugin);
+            $cfg = Vpc_Admin::getInstance($cls)->getExtConfig();
+            foreach ($cfg as $k=>$c) {
+                if (!isset($this->_componentConfigs[$cls.'-'.$k])) {
+                    $this->_componentConfigs[$cls.'-'.$k] = $c;
+                }
+                $ret[] = array(
+                    'componentClass' => $cls,
+                    'type' => $k,
+                    'idTemplate' => $idTemplate,
+                    'componentIdSuffix' => $componentIdSuffix
+                );
+            }
+        }
+        if (Vpc_Abstract::hasSetting($componentClass, 'editComponents')) {
+            $editComponents = Vpc_Abstract::getSetting($componentClass, 'editComponents');
+            foreach ($editComponents as $c) {
+                $childGen = Vps_Component_Generator_Abstract::getInstances($componentClass, array('componentKey'=>$c));
+                $childGen = $childGen[0];
+                $cls = Vpc_Abstract::getChildComponentClass($componentClass, null, $c);
+                $edit = $this->_getEditConfigs($cls, $childGen,
+                                               $idTemplate,
+                                               $componentIdSuffix.$childGen->getIdSeparator().$c);
+                $ret = array_merge($ret, $edit);
+            }
+        }
         return $ret;
+    }
+
+    public function load($row)
+    {
+        $gen = Vps_Component_Generator_Abstract::getInstance($this->_componentClass, 'paragraphs');
+        $classes = Vpc_Abstract::getChildComponentClasses($this->_componentClass, 'paragraphs');
+        return $this->_getEditConfigs($classes[$row->component], $gen, '{componentId}-{0}', '');
     }
 
     public function getComponentConfigs()

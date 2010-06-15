@@ -419,7 +419,6 @@ abstract class Vps_Component_Generator_Abstract
                 unset($ret[$key]);
             }
         }
-
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS)) {
             $flags = $select->getPart(Vps_Component_Select::WHERE_FLAGS);
             foreach ($ret as $k=>$c) {

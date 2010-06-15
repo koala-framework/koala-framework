@@ -9,7 +9,7 @@ möglicherweise nicht kompatible Änderungen:
   (indirekt nur wenn der ganze Pfad editComponents eingestellt hat)
 - Directories Administration: o Admin::_getContentClass gibts nicht mehr
                               o idTemplate muss nicht mehr gesetzt werden
-
+- editComponents werden auch bei Paragraphs berücksichtigt
 
 == 1.9 ==
 Erstellt: 07.05.10
