@@ -58,7 +58,7 @@ class Vps_Controller_Action_Cli_Web_SvnUpController extends Vps_Controller_Actio
             exit;
 
         } else {
-            $this->_forward('update', 'git', 'vps_controller_action_cli');
+            $this->_forward('update', 'git', 'vps_controller_action_cli_web');
         }
     }
 
