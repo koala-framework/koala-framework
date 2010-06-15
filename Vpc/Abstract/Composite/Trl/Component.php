@@ -9,4 +9,12 @@ class Vpc_Abstract_Composite_Trl_Component extends Vpc_Chained_Trl_Component
         }
         return $ret;
     }
+
+    public function hasContent()
+    {
+        foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
+            if ($c->hasContent()) return true;
+        }
+        return false;
+    }
 }
