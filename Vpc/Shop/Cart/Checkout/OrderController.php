@@ -13,7 +13,8 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
                 //TODO: im web einstellbar machen, pool oder so
                 'internet' => trlVps('Internet'),
                 'phone' => trlVps('Phone'),
-                'folder' => trlVps('Folder')
+                'folder' => trlVps('Folder'),
+                'fair'   => trlVps('Fair')
             ))
             ->setAllowBlank(false);
 
