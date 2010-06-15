@@ -180,7 +180,7 @@ class Vps_Component_Data
         } else {
             $select = clone $select;
         }
-        Vps_Benchmark::count('getRecursiveChildComponents', $this->componentId.' '.$select->toDebug());
+        Vps_Benchmark::count('getRecursiveChildComponents', $this->componentId);
         if (is_array($childSelect)) {
             $childSelect = new Vps_Component_Select($childSelect);
         }
@@ -209,13 +209,13 @@ class Vps_Component_Data
         $cacheId = 'recCCGen'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
         $cacheId = str_replace('.', '_', $cacheId);
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
-            Vps_Benchmark::count('getRecCC Gen hit', $this->componentClass.' '.$genSelect->toDebug());
+            Vps_Benchmark::count('getRecCC Gen hit', $this->componentClass);
             $generators = $this->_recursiveGeneratorsCache[$cacheId];
         } else if (($generators = $cache->load($cacheId)) !== false) {
-            Vps_Benchmark::count('getRecCC Gen semi-hit', $this->componentClass.' '.$genSelect->toDebug());
+            Vps_Benchmark::count('getRecCC Gen semi-hit', $this->componentClass);
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
         } else {
-            Vps_Benchmark::count('getRecCC Gen miss', $this->componentClass.' '.$genSelect->toDebug());
+            Vps_Benchmark::count('getRecCC Gen miss', $this->componentClass);
             $generators = $this->_getRecursiveGenerators(
                         Vpc_Abstract::getChildComponentClasses($this, $childSelect),
                         $genSelect, $childSelect, $selectHash);
@@ -393,7 +393,7 @@ class Vps_Component_Data
         $select = $this->_formatSelect($select);
         $sc = $select->getHash();
         if (isset($this->_constraintsCache[$sc])) {
-            Vps_Benchmark::count('getChildComponents cached', $select->toDebug());
+            Vps_Benchmark::count('getChildComponents cached');
         } else {
             Vps_Benchmark::count('getChildComponents uncached');
         }

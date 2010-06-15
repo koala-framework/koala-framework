@@ -201,7 +201,7 @@ class Vps_Controller_Action_Cli_Web_GitController extends Vps_Controller_Action_
 
         if ($id == 'vps') {
             //die zwei wurden im svn im nachinhein geaendert
-            $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/SvnUpController.php";
+            $cmd = "git checkout Vps/Controller/Action/Cli/Web/GitController.php Vps/Controller/Action/Cli/Web/SvnUpController.php";
             echo "$cmd\n";
             $this->_systemCheckRet($cmd);
         }

@@ -19,7 +19,7 @@ class Vps_Controller_Action_Auto_Filter_DateRange extends Vps_Controller_Action_
             $valueTo = $this->getTo();
         }
 
-        $field = $this->getFieldname();
+        $field = $this->getFieldName();
         if ($valueFrom && $valueTo) {
             $select->where(new Vps_Model_Select_Expr_Or(array(
                 new Vps_Model_Select_Expr_And(array(
@@ -45,6 +45,6 @@ class Vps_Controller_Action_Auto_Filter_DateRange extends Vps_Controller_Action_
 
     public function getParamName()
     {
-        return $this->getFieldname();
+        return $this->getFieldName();
     }
 }

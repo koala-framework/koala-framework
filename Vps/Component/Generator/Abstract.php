@@ -642,6 +642,11 @@ abstract class Vps_Component_Generator_Abstract
         throw new Vps_Exception_NotYetImplemented();
     }
 
+    public function makeChildrenVisible($source)
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
     public function getPagesControllerConfig($component, $generatorClass = null)
     {
         $data = array();

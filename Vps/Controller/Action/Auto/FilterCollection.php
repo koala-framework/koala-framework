@@ -25,7 +25,7 @@ class Vps_Controller_Action_Auto_FilterCollection extends Vps_Collection
         if (!class_exists($class)) throw new Vps_Exception('Unknown Filter: ' . $type);
         $filter = new $class();
         if (!is_array($config)) $config = array();
-        $config['fieldname'] = $field;
+        $config['fieldName'] = $field;
         foreach ($config as $key => $val) $filter->setProperty($key, $val);
         return $filter;
     }

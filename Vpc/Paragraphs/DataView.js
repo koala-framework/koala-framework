@@ -104,6 +104,8 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                 });
                 posCombo.setValue(record.get('pos'));
                 tb.add(posCombo);
+            } else {
+                tb.add(record.get('pos'));
             }
             if (this.showDelete) {
                 tb.add({
