@@ -99,7 +99,7 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
     public function getCacheVars($parentData)
     {
         $ret = parent::getCacheVars($parentData);
-        if ($parentData) {
+        if (Vpc_Abstract::createChildModel($this->_class)) {
             $ret[] = array(
                 'model' => Vpc_Abstract::createChildModel($this->_class),
                 //TODO: type regExp mit dieser id verwenden: (im moment wird alles gelöscht)
