@@ -312,7 +312,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
                 Vps_Util_Git::web()->productionBranch('production', $stagingWeb);
 
                 $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Util/Git.php'), 'production');
-                $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'), 'production');
+                $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Controller/Action/Cli/Web/GitController.php'), 'production');
 
                 echo "\n\n*** [13/13] prod: updaten\n";
                 $this->_systemSshVpsWithSubSections("git checkout-production", 'production');
