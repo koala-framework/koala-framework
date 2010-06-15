@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Cli_Web_GitController extends Vps_Controller_Action_Cli_Abstract
+class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
     {
@@ -201,7 +201,7 @@ class Vps_Controller_Action_Cli_Web_GitController extends Vps_Controller_Action_
 
         if ($id == 'vps') {
             //die zwei wurden im svn im nachinhein geaendert
-            $cmd = "git checkout Vps/Controller/Action/Cli/Web/GitController.php Vps/Controller/Action/Cli/Web/SvnUpController.php";
+            $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/Web/SvnUpController.php";
             echo "$cmd\n";
             $this->_systemCheckRet($cmd);
         }
