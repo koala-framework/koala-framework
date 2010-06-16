@@ -10,7 +10,6 @@ class Vps_View extends Zend_View
         $this->addScriptPath('');
         $this->addScriptPath(VPS_PATH . '/views');
         $this->addScriptPath('application/views');
-        $this->addHelperPath(VPS_PATH . '/Vps/View/Helper', 'Vps_View_Helper');
     }
 
     public function render($name)
