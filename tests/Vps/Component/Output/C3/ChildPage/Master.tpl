@@ -1,1 +1,1 @@
-master2 <?= $this->component($this->component) ?>
+c3_childpagemaster <?= $this->component($this->component) ?>
