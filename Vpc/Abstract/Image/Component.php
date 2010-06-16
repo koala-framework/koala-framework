@@ -131,7 +131,9 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
         $filename = null;
         if ($fileRow) {
-            $filename = $row->filename;
+            if ($this->_getSetting('editFilename')) {
+                $filename = $row->filename;
+            }
             if (!$filename) {
                 $filename = $fileRow->filename;
             }
