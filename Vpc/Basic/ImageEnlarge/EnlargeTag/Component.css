@@ -10,6 +10,7 @@
     background: #fff;
     z-index: 100;
 }
+.ext-ie6 .lightbox { width: 800px; }
 
 .lightbox .lightboxHeader { position: relative; z-index: 102; }
 .lightbox .lightboxHeader a.closeButton {
