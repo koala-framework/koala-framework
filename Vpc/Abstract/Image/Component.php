@@ -216,6 +216,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     {
         $data = $this->_getImageDataOrEmptyImageData();
         $s = $this->_getImageDimensions();
+
         if ($data && $data['file'] && file_exists($data['file'])) {
             $sourceSize = @getimagesize($data['file']);
             if (!$sourceSize) return null;
@@ -234,7 +235,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             return null;
         }
 
-        $dim = $component->getComponent()->getImageDimensions();
+        $dim = $component->getComponent()->_getImageDimensions();
         if ($dim) {
             $output = Vps_Media_Image::scale($data['file'], $dim);
         } else {
