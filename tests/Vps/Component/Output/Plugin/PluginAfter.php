@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Output_PluginAfter extends Vps_Component_Output_Plugin
+class Vps_Component_Output_Plugin_PluginAfter extends Vps_Component_Output_Plugin_Plugin
 {
     public function processOutput($output)
     {
