@@ -166,7 +166,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $c = $c->parent;
         }
 
-        $newParagraph = $source->generator->duplicateChild($source, $target);
+        $newParagraph = Vps_Util_Component::duplicate($source, $target);
 
         $row = $newParagraph->row;
         $row->pos = $this->_getParam('pos');
