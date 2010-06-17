@@ -1,6 +1,6 @@
 <?php
 /**
- * @group Component_Output
+ * @group Component_OutputPlaceholder
  */
 class Vps_Component_OutputPlaceholdersPlugin_Test extends PHPUnit_Framework_TestCase
 {
