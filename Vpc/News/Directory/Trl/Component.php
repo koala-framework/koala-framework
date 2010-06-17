@@ -5,6 +5,8 @@ class Vpc_News_Directory_Trl_Component extends Vpc_Directories_Item_Directory_Tr
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['childModel'] = 'Vpc_News_Directory_Trl_Model';
+
+        $ret['flags']['hasResources'] = true;
         return $ret;
     }
 
