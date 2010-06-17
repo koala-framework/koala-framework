@@ -11,6 +11,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->markTestIncomplete();
         $this->_setup();
     }
 
