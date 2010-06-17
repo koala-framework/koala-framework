@@ -17,10 +17,7 @@ class Vps_Component_Output_Component
 
     public static function getHelperOutput(Vps_Component_Data $component)
     {
-        $plugins = $component->getPlugins('Vps_Component_Plugin_Interface_View');
-        $plugins = implode(' ', $plugins);
-        if ($plugins) $plugins = ' '.$plugins;
         $componentId = $component->componentId;
-        return "{component: $componentId$plugins}";
+        return "{component: $componentId}";
     }
 }

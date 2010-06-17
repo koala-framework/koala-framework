@@ -3,6 +3,7 @@ class Vps_Component_Output
 {
     private $_ignoreVisible = false;
     private $_enableCache = false;
+    private $_masterTemplates = array();
 
     public function setIgnoreVisible($ignoreVisible)
     {
@@ -27,25 +28,41 @@ class Vps_Component_Output
         return $ret;
     }
 
-    private function _getMasterTemplates($component)
+    private function _getMasterTemplate($component, $renderMaster = true)
     {
-        $ret = array();
-        $renderComponent = $component;
-        while ($component) {
-            $master = Vpc_Abstract::getTemplateFile($component->componentClass, 'Master');
-            if ($master) $ret[] = $master;
-            if ($renderComponent->componentId == $component->componentId &&
-                !$component->isPage)
-            {
-                break; // Auf der Page alle Master holen, sonst nur eigenes Master
+        $componentId = $component->componentId;
+        if (!isset($this->_masterTemplates[$componentId])) {
+            $templates = array();
+            $renderComponent = $component;
+            while ($component) {
+                $master = Vpc_Abstract::getTemplateFile($component->componentClass, 'Master');
+                if ($master) $templates[] = $master;
+                if (!$renderMaster &&
+                    $renderComponent->componentId == $component->componentId &&
+                    !$component->isPage)
+                {
+                    break; // Auf der Page alle Master holen, sonst nur eigenes Master
+                }
+                $component = $component->parent;
             }
-            $component = $component->parent;
+            $this->_masterTemplates[$componentId] = $templates;
         }
-        return $ret;
+
+        if (count($this->_masterTemplates[$componentId])) {
+            return array_pop($this->_masterTemplates[$componentId]);
+        } else {
+            return array();
+        }
     }
 
-    public function render($component)
+    public function renderMaster($component)
     {
+        return $this->render($component, true);
+    }
+
+    public function render($component, $renderMaster = false)
+    {
+        $this->_masterTemplates = array();
         $matches = array(
             array('{component}'),
             array('component'),
@@ -66,18 +83,10 @@ class Vps_Component_Output
                 }
 
                 if ($type == 'component') {
-                    if (!isset($masterTemplates[$componentId])) {
-                        $masterTemplates[$componentId] = $this->_getMasterTemplates($component);
-                    }
-                    $c = $component;
-                    while ($c) {
-                        if ($masterTemplates[$componentId]) {
-                            $masterTemplate = array_pop($masterTemplates[$componentId]);
-                            $config = array(array_pop($masterTemplates[$componentId]));
-                            $type = 'master';
-                            break;
-                        }
-                        $c = $c->parent;
+                    $masterTemplate = $this->_getMasterTemplate($component, $renderMaster);
+                    if ($masterTemplate) {
+                        $config = array($masterTemplate);
+                        $type = 'master';
                     }
                 }
 
