@@ -16,6 +16,7 @@ Vpc.Basic.Text.Trl.CopyButton = Ext.extend(Ext.form.Field, {
             handler: function() {
                 var masterHtml = this.ownerCt.findByType('showfield')[0].getRawValue();
                 this.ownerCt.ownerCt.findByType('htmleditor')[0].setValue(masterHtml);
+                this.ownerCt.ownerCt.findByType('htmleditor')[0].tidyHtml(); //damit link korrigiert werden
             }
         });
     }
