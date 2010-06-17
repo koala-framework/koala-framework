@@ -209,7 +209,11 @@ class Vps_Util_Git
 
     public function getBranchesContains($commit, $args = '-a')
     {
-        return $this->_getBranches($args.' --contains '.$commit);
+        try {
+            return $this->_getBranches($args.' --contains '.$commit);
+        } catch (Vps_Exception $e) {
+            return array();
+        }
     }
 
     public function getActiveBranchContains($commit)
