@@ -19,7 +19,7 @@ class Vps_Component_Output_Master
             $vars['boxes'][$box->box] = $box;
         }
 
-        $view = new Vps_Component_View();
+        $view = new Vps_View();
         $view->assign($vars);
         return $view->render($template);
     }

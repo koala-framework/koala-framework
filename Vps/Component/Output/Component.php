@@ -7,10 +7,9 @@ class Vps_Component_Output_Component
         if (!$template) throw new Vps_Exception("No Component-Template found for '{$component->componentClass}'");
 
         $vars = $component->getComponent()->getTemplateVars();
-        if (is_null($vars)) throw new Vps_Exception('Return value of
-            getTemplateVars() returns null. Maybe forgot "return $ret?"');
+        if (is_null($vars)) throw new Vps_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
 
-        $view = new Vps_Component_View();
+        $view = new Vps_View();
         $view->assign($vars);
         return $view->render($template);
     }
