@@ -21,14 +21,14 @@ class Vpc_Advanced_Amazon_Nodes_Test extends Vps_Test_SeleniumTestCase
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesTestComponent", "Php");
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesTestComponent", "JavaScript");
         $this->clickAndWait('link=Php');
-        $this->assertElementPresent('link=Das Zend Framework: Von den Grundlagen bis zur fertigen Anwendung');
-        $this->clickAndWait('link=Das Zend Framework: Von den Grundlagen bis zur fertigen Anwendung');
-        $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h1", "Das Zend Framework");
-        $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h2", "Ralf Eggert");
+        $this->assertElementPresent('link=PHP 5.3 + MySQL 5.1: Der Einstieg in die Programmierung dynamischer Websites');
+        $this->clickAndWait('link=PHP 5.3 + MySQL 5.1: Der Einstieg in die Programmierung dynamischer Websites');
+        $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h1", "Der Einstieg");
+        $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h2", "Florence Maurice");
         $this->assertElementPresent('link='.trlVps('order now at amazon'));
         $href = $this->getAttribute('link='.trlVps('order now at amazon').'@href');
         $this->assertEquals('http://www.amazon.de', substr($href, 0, 20));
-        $this->assertContains('3827327857', $href);
+        $this->assertContains('3827327237', $href);
         $this->assertContains('prosalzburgat-21', $href);
     }
 }

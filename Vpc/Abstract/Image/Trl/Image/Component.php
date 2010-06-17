@@ -18,8 +18,8 @@ class Vpc_Abstract_Image_Trl_Image_Component extends Vpc_Abstract_Image_Componen
         return $ret;
     }
 
-    public function getImageDimensions()
+    protected function _getImageDimensions()
     {
-        return $this->getData()->parent->chained->getComponent()->getImageDimensions();
+        return $this->getData()->parent->chained->getComponent()->_getImageDimensions();
     }
 }

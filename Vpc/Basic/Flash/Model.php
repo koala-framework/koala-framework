@@ -17,4 +17,6 @@ class Vpc_Basic_Flash_Model extends Vps_Model_Db_Proxy
         'allow_fullscreen' => 0,
         'menu' => 1
     );
+
+    protected $_rowClass = 'Vpc_Basic_Flash_Row';
 }
