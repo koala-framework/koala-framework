@@ -3,6 +3,8 @@ class Vps_User_BruteForceInsertController extends Vps_Controller_Action
 {
     public function indexAction()
     {
+        Vps_Registry::set('db', Vps_Test::getTestDb($this->_getParam('testDb')));
+
         $model = Vps_Model_Abstract::getInstance('Vps_User_BruteForceModel');
 
         $prefix = uniqid('usr');
@@ -21,6 +23,7 @@ class Vps_User_BruteForceInsertController extends Vps_Controller_Action
 
     public function createOneUserAction()
     {
+        Vps_Registry::set('db', Vps_Test::getTestDb($this->_getParam('testDb')));
         try {
             $model = Vps_Model_Abstract::getInstance('Vps_User_BruteForceModel');
             $prefix = $this->_getParam('prefix');
@@ -37,7 +40,7 @@ class Vps_User_BruteForceInsertController extends Vps_Controller_Action
 
             $row->save();
 
-        } catch (Vps_ClientException $e) {
+        } catch (Vps_Exception_Client $e) {
             echo "0";
             exit;
         }
