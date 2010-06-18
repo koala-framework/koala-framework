@@ -8,6 +8,7 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
 
     public function setUp($componentClass)
     {
+        parent::setUp();
         Vps_Component_Data_Root::setComponentClass($componentClass);
         $this->_root = Vps_Component_Data_Root::getInstance();
         $this->_root->setFilename('vps/vpctest/'.$componentClass);
@@ -25,6 +26,7 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
         Vps_Component_Data_Root::reset();
         Vps_Component_Cache::clearInstance();
+        parent::tearDown();
     }
 
     protected final function _process()
