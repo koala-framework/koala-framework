@@ -18,6 +18,7 @@ class Vpc_Root_TrlRoot_Test extends Vpc_TestAbstract
     public function setUp()
     {
         parent::setUp('Vpc_Root_TrlRoot_TestComponent');
+        $this->_root->setFilename(null);
     }
 
     public function testIt()
