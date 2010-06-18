@@ -1,13 +1,13 @@
 <?php
 class Vps_Test
 {
-    public static function getTestDb()
+    public static function getTestDb($dbName = 'test')
     {
         $db = Zend_Db::factory('PDO_MYSQL', array(
             'host'=>'localhost',
             'username'=>'test',
             'password'=>'test',
-            'dbname'=>'test'
+            'dbname'=>$dbName
         ));
         $db->query('SET names UTF8');
         if (Zend_Registry::get('config')->debug->querylog) {
