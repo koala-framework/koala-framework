@@ -257,4 +257,40 @@ class Vpc_Chained_Trl_Generator extends Vps_Component_Generator_Abstract
         }
         Vpc_Admin::getInstance($source->componentClass)->makeVisible($source);
     }
+
+    public function duplicateChild($source, $parentTarget)
+    {
+        if ($source->generator !== $this) {
+            throw new Vps_Exception("you must call this only with the correct source");
+        }
+
+        //Annahme: sourceChildren und targetChildren müssen in der gleichen Reinhenfolge daherkommen
+        //gibt es einen generator ohne pos oder datum oder ähnlichem?
+        $sourceChildren = array_values($source->parent->getChildComponents(array('ignoreVisible'=>true, 'generator'=>$this->getGeneratorKey())));
+        $targetChildren = array_values($parentTarget->getChildComponents(array('ignoreVisible'=>true, 'generator'=>$this->getGeneratorKey())));
+        $target = null;
+        foreach ($sourceChildren as $i=>$sc) {
+            if ($sc->componentId == $source->componentId) {
+                $target = $targetChildren[$i];
+            }
+        }
+        if ($m = Vpc_Abstract::createChildModel($this->_class)) {
+            $targetRow = $this->_getRow($target->dbId);
+            if (!$targetRow) {
+                $targetRow = $m->createRow();
+                $targetRow->component_id = $target->dbId;
+            }
+            $sourceRow = $this->_getRow($source->dbId);
+            if ($sourceRow) {
+                foreach ($sourceRow->toArray() as $k=>$i) {
+                    if ($this->_getRow($source->dbId)->getModel()->getPrimaryKey() != $k) {
+                        $targetRow->$k = $i;
+                    }
+                }
+            }
+            $targetRow->save();
+        }
+        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
+        return $target;
+    }
 }

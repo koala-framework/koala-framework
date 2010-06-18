@@ -1,6 +1,9 @@
 <?php
 abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Vps_Component_Data_Root
+     */
     protected $_root;
 
     public function setUp($componentClass)

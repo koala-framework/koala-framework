@@ -24,7 +24,7 @@ class Vpc_Composite_Images_Test extends Vpc_TestAbstract
         $this->assertEquals(100, (string)$img[0]['height']);
         $src = (string)$img[0]['src'];
 
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();

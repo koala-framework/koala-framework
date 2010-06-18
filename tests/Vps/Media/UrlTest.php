@@ -7,6 +7,7 @@ class Vps_Media_UrlTest extends Vpc_TestAbstract
     public function setUp()
     {
         parent::setUp('Vpc_Basic_Image_Root');
+        $this->_root->setFilename(null);
     }
 
     public function testUrl()

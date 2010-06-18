@@ -44,7 +44,8 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
             }
         }
 
-        foreach ($source->getChildComponents(array('inherit' => false, 'ignoreVisible'=>true)) as $c) {
+        $s = array('inherit' => false, 'ignoreVisible'=>true);
+        foreach ($source->getChildComponents($s) as $c) {
             $c->generator->duplicateChild($c, $target);
         }
     }
