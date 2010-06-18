@@ -1,6 +1,9 @@
 <?php
 class Vps_Component_ModelObserver
 {
+    /**
+     * @var Vps_Component_ModelObserver
+     */
     static private $_instance;
     private $_process = array(
         'insert' => array(),
