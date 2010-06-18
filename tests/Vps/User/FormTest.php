@@ -7,13 +7,23 @@
  */
 class Vps_User_FormTest extends Vps_Test_SeleniumTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        Vps_Test_SeparateDb::createSeparateTestDb(dirname(__FILE__).'/bootstrap.sql');
+    }
+
+    public function tearDown()
+    {
+        Vps_Test_SeparateDb::restoreTestDb();
+        parent::tearDown();
+    }
+
     public function testForm()
     {
-        $this->markTestIncomplete();
+        $email = 'seltest_abc@vivid-planet.com';
 
-        $email = 'seltest123@vivid-planet.com';
-
-        $this->open('/vps/test/vps_user_form');
+        $this->open('/vps/test/vps_user_form?testDb='.Vps_Test_SeparateDb::getDbName());
         $this->waitForConnections();
         $this->type("//input[contains(@name, 'email')]", $email);
         $this->type("//input[contains(@name, 'firstname')]", 'Sel');
@@ -26,5 +36,4 @@ class Vps_User_FormTest extends Vps_Test_SeleniumTestCase
         sleep(1);
         $this->waitForConnections();
     }
-
 }

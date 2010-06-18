@@ -5,6 +5,13 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     protected $_unitTestCookie;
     protected $_domain = null;
 
+
+protected function _createSeparateTestDb($bootstrapFile)
+{
+    Vps_Test_OwnDbTestCase::createSeparateTestDb($bootstrapFile);
+    $this->_dbName = Vps_Test_OwnDbTestCase::getSeparateTestDbName();
+}
+
     public static function suite($className)
     {
         self::$browsers = array();

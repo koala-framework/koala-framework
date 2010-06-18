@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_TestAbstract extends Vps_Test_OwnDbTestCase
+abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
 {
     protected $_root;
 

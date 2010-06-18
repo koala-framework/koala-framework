@@ -12,15 +12,15 @@ class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->markTestIncomplete();
-        Vps_Registry::set('db', Vps_Registry::get('dao')->getDb());
-        Vps_Model_Abstract::clearInstances();
+        parent::setUp();
+        Vps_Test_SeparateDb::createSeparateTestDb(dirname(__FILE__).'/bootstrap.sql');
     }
 
     public function tearDown()
     {
         $this->assertFalse(Vps_User_Model::isLockedCreateUser());
-        Vps_Registry::set('db', Vps_Test::getTestDb());
+        Vps_Test_SeparateDb::restoreTestDb();
+        parent::tearDown();
     }
 
     private function _getNewMailAddress()

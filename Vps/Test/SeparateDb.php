@@ -1,38 +1,53 @@
 <?php
-class Vps_Test_OwnDbTestCase extends PHPUnit_Framework_TestCase
+class Vps_Test_SeparateDb
 {
-    private $_dbName = null;
+    private static $_dbName = null;
+
+    public static function getDbName()
+    {
+        return Vps_Test_SeparateDb::$_dbName;
+    }
+
+    public static function setDbAndCreateCookie($dbName)
+    {
+        setcookie('test_special_db', $dbName, time()+(10*60), '/');
+        Vps_Registry::set('db', Vps_Test::getTestDb($dbName));
+        Vps_Model_Abstract::clearInstances();
+    }
+
+    public static function setDbFromCookie()
+    {
+        Vps_Registry::set('db', Vps_Test::getTestDb($_COOKIE['test_special_db']));
+    }
 
     /**
      * Muss im Test separat aufgerufen werden wenn für den Test eine eigene DB
      * benötigt wird
      */
-    protected function _createSeparateTestDb($bootstrapFile)
+    public static function createSeparateTestDb($bootstrapFile)
     {
         if (substr($bootstrapFile, 0, 1) != '/') {
             throw new Vps_Exception("First argument 'bootstrapFile' must be an absolute path to the file");
         }
 
         $section = preg_replace('/[^a-zA-Z0-9]/', '', Vps_Registry::get('config')->getSectionName());
-        $this->_dbName = 'test_'.$section.date('_Ymd_His_').substr(uniqid(), -5);
+        Vps_Test_SeparateDb::$_dbName = 'test_'.$section.date('_Ymd_His_').substr(uniqid(), -5);
         $testDb = Vps_Test::getTestDb();
-        $testDb->query('CREATE DATABASE '.$this->_dbName);
+        $testDb->query('CREATE DATABASE '.Vps_Test_SeparateDb::getDbName());
 
-        Vps_Registry::set('db', Vps_Test::getTestDb($this->_dbName));
+        Vps_Registry::set('db', Vps_Test::getTestDb(Vps_Test_SeparateDb::getDbName()));
 
         $ret = null;
-        passthru('mysql '.$this->_dbName.' < '.$bootstrapFile, $ret);
+        passthru('mysql '.Vps_Test_SeparateDb::getDbName().' < '.$bootstrapFile, $ret);
         if ($ret != 0) throw new Vps_Exception("bootstrap file could not be processed through mysql");
-    }
 
-    public function setUp()
-    {
         Vps_Model_Abstract::clearInstances();
     }
 
-    public function tearDown()
+    public static function restoreTestDb()
     {
-        if ($this->_dbName) {
+        $dbName = Vps_Test_SeparateDb::getDbName();
+        if ($dbName) {
             $testDb = Vps_Test::getTestDb();
             // alte test-dbs löschen
             $testDatabases = $testDb->query('SHOW DATABASES')->fetchAll();
@@ -44,8 +59,8 @@ class Vps_Test_OwnDbTestCase extends PHPUnit_Framework_TestCase
                     }
                 }
             }
-            $testDb->query('DROP DATABASE '.$this->_dbName);
-            $this->_dbName = null;
+            $testDb->query('DROP DATABASE '.$dbName);
+            Vps_Test_SeparateDb::$_dbName = null;
             Vps_Registry::set('db', $testDb);
         }
     }
