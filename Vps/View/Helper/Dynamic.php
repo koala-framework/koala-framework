@@ -1,11 +1,9 @@
 <?php
 class Vps_View_Helper_Dynamic
 {
-    public function dynamic($class)
+    public function dynamic(Vps_Component_Data $component, $class)
     {
-        $args = func_get_args();
-        $class = array_shift($args);
-        $serializedContent = serialize($args);
-        return "{dynamic: $class }$serializedContent{/dynamic}";
+        $args = array_slice(func_get_args(), 2);
+        return Vps_Component_Output_Dynamic::getHelperOutput($component, $class, $args);
     }
 }

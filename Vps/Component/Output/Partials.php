@@ -1,7 +1,7 @@
 <?php
 class Vps_Component_Output_Partials
 {
-    public function render($component, $config)
+    public function render($component, $config, $view)
     {
         $partialsClass = $config[0];
         $partial = new $partialsClass(unserialize(base64_decode(($config[1]))));
@@ -13,12 +13,12 @@ class Vps_Component_Output_Partials
                 'total' => $count,
                 'number' => $number++
             );
-            $ret .= $this->_renderPartial($component, $partial, $id, $info);
+            $ret .= $this->_renderPartial($component, $partial, $id, $info, $view);
         }
         return $ret;
     }
 
-    public function _renderPartial($component, $partial, $id, $info)
+    public function _renderPartial($component, $partial, $id, $info, $view)
     {
         // Normaler Output
         $componentClass = $component->componentClass;
@@ -30,7 +30,10 @@ class Vps_Component_Output_Partials
         if (is_null($vars)) {
             throw new Vps_Exception('Return value of getPartialVars() returns null. Maybe forgot "return $ret?"');
         }
-        $view = new Vps_View();
+        $vars['info'] = $info;
+        $vars['data'] = $component;
+        $view->setParam('info', $info);
+        //$view = new Vps_View();
         $view->assign($vars);
         return $view->render($template);
     }
