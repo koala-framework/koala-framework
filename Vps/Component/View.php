@@ -6,6 +6,9 @@ class Vps_Component_View extends Vps_View
     private $_masterTemplates = null;
     private $_componentMasterTemplates = array();
     private $_plugins = array();
+    private $_renderMaster = false;
+    private $_renderComponentId;
+    private $_params = array();
 
     public function setIgnoreVisible($ignoreVisible)
     {
@@ -98,6 +101,11 @@ class Vps_Component_View extends Vps_View
 
     public function renderComponent($component, $renderMaster = false)
     {
+        $this->_masterTemplates = null;
+        $this->_componentMasterTemplates = array();
+        $this->_plugins = array();
+        $this->_renderMaster = $renderMaster;
+        $this->_renderComponentId = $component->componentId;
         $matches = array(
             array('{component}'),
             array('component'),
@@ -105,7 +113,7 @@ class Vps_Component_View extends Vps_View
             array('')
         );
         $ret = '{component}';
-        return $this->_render($ret, $matches, $renderMaster, $component->componentId);
+        return $this->_render($ret, $matches);
     }
 
     public function render($template)
@@ -115,12 +123,8 @@ class Vps_Component_View extends Vps_View
         return $this->_render($ret);
     }
 
-    protected function _render($ret, $matches = array(array()), $renderMaster = false, $renderComponentId = null)
+    protected function _render($ret, $matches = array(array()))
     {
-        $this->_masterTemplates = null;
-        $this->_componentMasterTemplates = array();
-        $this->_plugins = array();
-
         $afterPlugins = array();
         do {
             foreach ($matches[0] as $key => $search) {
@@ -135,7 +139,7 @@ class Vps_Component_View extends Vps_View
                 }
 
                 // Master
-                if ($type == 'component' && $renderMaster) {
+                if ($type == 'component' && $this->_renderMaster) {
                     $masterTemplate = $this->_getMasterTemplate($component);
                     if ($masterTemplate) {
                         $config = array($masterTemplate);
@@ -145,7 +149,7 @@ class Vps_Component_View extends Vps_View
                 // Plugins
                 $plugins = array();
                 if ($type == 'component' &&
-                    (   $renderComponentId != $componentId || // keine Plugins bei Startkomponente außer es ist die root
+                    (   $this->_renderComponentId != $componentId || // keine Plugins bei Startkomponente außer es ist die root
                         $componentId == Vps_Component_Data_Root::getInstance()->componentId)
                     )
                 {
@@ -153,7 +157,7 @@ class Vps_Component_View extends Vps_View
                 }
                 // ComponentMaster
                 if ($type == 'component') {
-                    $componentMasterTemplate = $this->_getComponentMasterTemplate($component, $renderMaster);
+                    $componentMasterTemplate = $this->_getComponentMasterTemplate($component, $this->_renderMaster);
                     if ($componentMasterTemplate) {
                         $config = array($componentMasterTemplate);
                         $type = 'master';
@@ -162,7 +166,7 @@ class Vps_Component_View extends Vps_View
 
                 $class = 'Vps_Component_Output_' . ucfirst($type);
                 $output = new $class();
-                $content = $output->render($component, $config);
+                $content = $output->render($component, $config, $this);
                 foreach ($plugins as $plugin) {
                     if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
                         $content = $plugin->processOutput($content);
@@ -189,5 +193,16 @@ class Vps_Component_View extends Vps_View
             }
         }
         return $ret;
+    }
+
+    // Hier kann das Output was reinspeichern, was eventuell nachfolgende Outputs brauchen können (zB. Dynamic in Partials)
+    public function setParam($param, $data)
+    {
+        $this->_params[$param] = $data;
+    }
+
+    public function getParam($param)
+    {
+        return isset($this->_params[$param]) ? $this->_params[$param] : null;
     }
 }

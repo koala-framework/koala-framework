@@ -84,20 +84,19 @@ class Vps_Component_Output_Test extends PHPUnit_Framework_TestCase
 
     public function testDynamic()
     {
-        $this->markTestIncomplete();
-        $output = new Vps_Component_Output_NoCache();
-
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_Dynamic_Component');
+        $output = new Vps_Component_View();
+
         $value = $output->renderMaster(Vps_Component_Data_Root::getInstance());
-        $this->assertEquals('dynamic bar2foo', $value);
+        $this->assertEquals('dynamic |bar0-1|bar1-2|bar2-1', $value);
     }
 
     public function testHasContent()
     {
         $this->markTestIncomplete();
-        $output = new Vps_Component_Output_NoCache();
-
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_HasContent_Component');
+        $output = new Vps_Component_View();
+
         $value = $output->renderMaster(Vps_Component_Data_Root::getInstance());
         $this->assertEquals('root child2', $value);
     }
