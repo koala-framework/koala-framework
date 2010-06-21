@@ -86,6 +86,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             if (!$this->_hasPermissions($row, 'load')) {
                 throw new Vps_Exception('You don\'t have the permission for this entry.');
             }
+            $this->_beforeLoad($row);
             $this->view->data = $this->_form->load(null);
         }
 
@@ -217,6 +218,10 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     }
 
     protected function _afterInsert(Vps_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _beforeLoad(Vps_Model_Row_Interface $row)
     {
     }
 
