@@ -9,6 +9,7 @@ abstract class Vps_View_Helper_Abstract_MailLink
     // wird zB in LinkTag_Mail_Data.php verwendet, deshalb public
     public function encodeMail($address)
     {
+        $address = trim($address);
         $address = preg_replace('/^(.+)@(.+)\.([^\.\s]+)$/i',
             '$1'.$this->_atEncoding.'$2'.$this->_dotEncoding.'$3',
             $address
