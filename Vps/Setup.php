@@ -325,7 +325,7 @@ class Vps_Setup
                 exit;
             }
             // hickedy-hack: Für Formular Validierung. Im 1.10 ist das bereits schön gelöst
-            Vps_Registry::get('trl')->setWebCodeLanguage($data->getLanguage());
+            Vps_Registry::get('trl')->overrideTargetLanguage($data->getLanguage());
             $page = $data->getComponent();
             $page->sendContent();
 
