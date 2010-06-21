@@ -93,11 +93,10 @@ class Vps_Component_Output_Test extends PHPUnit_Framework_TestCase
 
     public function testHasContent()
     {
-        $this->markTestIncomplete();
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_HasContent_Component');
         $output = new Vps_Component_View();
 
         $value = $output->renderMaster(Vps_Component_Data_Root::getInstance());
-        $this->assertEquals('root child2', $value);
+        $this->assertEquals('root ', $value);
     }
 }
