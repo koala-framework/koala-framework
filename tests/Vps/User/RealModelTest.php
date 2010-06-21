@@ -443,7 +443,7 @@ class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Vps_ClientException
+     * @expectedException Vps_Exception_Client
      */
     public function testCreateUserRowExisting()
     {
