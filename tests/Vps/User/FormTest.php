@@ -29,11 +29,13 @@ class Vps_User_FormTest extends Vps_Test_SeleniumTestCase
             ->whereEquals('email', $email)
         );
 
-        $model = Vps_Model_Abstract::getInstance('Vps_User_Relation_Model');
-        $row = $model->getRow($model->select()
-            ->whereEquals('user_id', $allRow->id)
-        );
-        if ($row) $row->delete();
+        if ($allRow && $allRow->id) {
+            $model = Vps_Model_Abstract::getInstance('Vps_User_Relation_Model');
+            $row = $model->getRow($model->select()
+                ->whereEquals('user_id', $allRow->id)
+            );
+            if ($row) $row->delete();
+        }
 
         $this->open('/vps/test/vps_user_form?testDb='.Vps_Test_SeparateDb::getDbName());
         $this->waitForConnections();
