@@ -25,7 +25,7 @@ class Vpc_Basic_LinkTagParentPage_Test extends PHPUnit_Framework_TestCase
 
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($this->_root->getComponentById(1402));
         $this->assertEquals('<a href="/foo1">', $html);
     }

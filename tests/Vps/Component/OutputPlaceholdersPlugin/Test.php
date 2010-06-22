@@ -11,6 +11,7 @@ class Vps_Component_OutputPlaceholdersPlugin_Test extends PHPUnit_Framework_Test
 
     public function setUp()
     {
+        $this->markTestIncomplete();
         Vps_Component_Data_Root::setComponentClass('Vps_Component_OutputPlaceholdersPlugin_Root_Component');
         $this->_root = Vps_Component_Data_Root::getInstance();
 

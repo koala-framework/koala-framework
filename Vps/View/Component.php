@@ -16,9 +16,9 @@ class Vps_View_Component extends Vps_View
     public static function renderComponent($component, $ignoreVisible = false, $masterTemplate = false, array $plugins = array())
     {
         if (Zend_Registry::get('config')->debug->componentCache->disable) {
-            $output = new Vps_Component_Output_NoCache();
+            $output = new Vps_Component_View();
         } else {
-            $output = new Vps_Component_Output_Cache();
+            $output = new Vps_Component_View();
         }
         $output->setIgnoreVisible($ignoreVisible);
         return $output->render($component, $masterTemplate, $plugins);
