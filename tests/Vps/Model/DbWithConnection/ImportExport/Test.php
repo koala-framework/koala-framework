@@ -29,11 +29,6 @@ class Vps_Model_DbWithConnection_ImportExport_Test extends PHPUnit_Framework_Tes
     public function testServiceFormatSql()
     {
         $d = Zend_Registry::get('testDomain');
-        if (substr($d, -6) != '.vivid' && substr($d, -18) != '.vivid-test-server') {
-            //online gibts keine test-datenbank
-            $this->markTestSkipped();
-        }
-
         $client = new Vps_Srpc_Client(array(
             'serverUrl' => "http://$d/vps/test/vps_model_db-with-connection_import-export_test/export",
             'extraParams' => array('table' => $this->_tableName)
@@ -65,11 +60,6 @@ class Vps_Model_DbWithConnection_ImportExport_Test extends PHPUnit_Framework_Tes
     public function testServiceFormatCsv()
     {
         $d = Zend_Registry::get('testDomain');
-        if (substr($d, -6) != '.vivid' && substr($d, -18) != '.vivid-test-server') {
-            //online gibts keine test-datenbank
-            $this->markTestSkipped();
-        }
-
         $client = new Vps_Srpc_Client(array(
             'serverUrl' => "http://$d/vps/test/vps_model_db-with-connection_import-export_test/export",
             'extraParams' => array('table' => $this->_tableName)
