@@ -2,12 +2,11 @@
 <div class="entry">
     <div class="text">
         <h3>
-            <?=$this->ifHasContent($this->item);?>
-                <?=$this->componentLink($this->item);?>
-            <?=$this->ifHasContent();?>
-            <?=$this->ifHasNoContent($this->item);?>
+            <?if ($this->hasContent($this->item)) {?>
+                <?=$this->componentLink($this->item)?>
+            <?} else { ?>
                 <?=$this->item->row->title?>
-            <?=$this->ifHasNoContent();?>
+            <?}?>
         </h3>
     </div>
 
@@ -18,9 +17,9 @@
     <div class="teaser">
         <p><?=nl2br($this->mailEncodeText($this->item->row->teaser));?></p>
         <p class="readMore">
-            <?=$this->ifHasContent($this->item);?>
-                <?=$this->componentLink($this->item, $this->item->trlVps('Read more') . ' &raquo;');?>
-            <?=$this->ifHasContent();?>
+            <?if ($this->hasContent($this->item)) {?>
+                <?=$this->componentLink($this->item, $this->item->trlVps('Read more') . ' &#xBB;')?>
+            <?}?>
         </p>
     </div>
     <div class="clear"></div>
