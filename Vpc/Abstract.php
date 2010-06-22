@@ -317,11 +317,12 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
     }
 
-    public function sendContent($masterTemplate = null, $ignoreVisible = false)
+    public function sendContent()
     {
         header('Content-Type: text/html; charset=utf-8');
         $process = $this->_callProcessInput();
-        echo Vps_View_Component::renderMasterComponent($this->getData(), $masterTemplate, $ignoreVisible);
+        $view = new Vps_Component_View();
+        echo $view->renderMaster($this->getData());
         $this->_callPostProcessInput($process);
     }
 

@@ -24,7 +24,8 @@ class Vps_View_Helper_FormField
                 $ret .= $this->returnFormField($i);
             }
         } elseif (isset($component)) {
-            $ret .= Vps_View_Component::renderComponent($component);
+            $view = new Vps_Component_View();
+            $ret .= $view->renderComponent($component);
         }
         if (isset($postHtml)) { $ret .= $postHtml; }
         if (isset($mask)) $ret .= '{/' . $mask . '}';
