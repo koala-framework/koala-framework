@@ -58,7 +58,7 @@ class Vps_View_Helper_Image
 
         if ($url) {
             //bei vps_view_mail soll das image als attachment hinzugefügt werden
-            if ($this->_view instanceof Vps_Component_View_Mail && $this->_view->getAttachImages()) {
+            if ($this->_view instanceof Vps_View_MailInterface && $this->_view->getAttachImages()) {
                 if (is_string($image)){
                     $loader = new Vps_Assets_Loader();
                     $path = $this->_dep->getAssetPath($depUrl);

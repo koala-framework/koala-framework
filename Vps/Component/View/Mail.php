@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_View_Mail extends Vps_Component_View_Abstract
+class Vps_Component_View_Mail extends Vps_Component_View_Abstract implements Vps_View_MailInterface
 {
     const TYPE_HTML = 'html';
     const TYPE_TXT = 'txt';

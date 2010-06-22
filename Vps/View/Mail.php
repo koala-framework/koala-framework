@@ -12,4 +12,9 @@ class Vps_View_Mail extends Vps_View implements Vps_View_MailInterface
     {
         return $this->_images;
     }
+
+    public function getAttachImages()
+    {
+        return true;
+    }
 }
