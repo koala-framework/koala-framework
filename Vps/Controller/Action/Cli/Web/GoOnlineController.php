@@ -384,6 +384,9 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             $cmd .= " --vpsBranch=".escapeshellarg(Vps_Util_Git::vps()->getActiveBranch());
             $cmd .= " --webVersion=".escapeshellarg(Vps_Util_Git::web()->revParse('production'));
             $cmd .= " --vpsVersion=".escapeshellarg(Vps_Util_Git::vps()->revParse('production/'.$appId));
+            if ($this->_getParam('debug')) {
+                echo $cmd."\n";
+            }
             $this->_systemCheckRet($cmd);
         }
 
