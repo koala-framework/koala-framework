@@ -51,7 +51,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($c->getData());
 
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
@@ -94,7 +94,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row = $rows->current();
         $this->assertEquals('1001', $row->target);
 
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($c->getData());
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"/vps/vpctest/Vpc_Basic_Text_Root/foo1\">foo</a>\n</p>".
@@ -109,7 +109,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($c->getData());
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"mailto:foo(vpsat)example(vpsdot)com\">foo</a>\n</p>".
@@ -124,7 +124,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($c->getData());
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"http://vivid.com\">foo</a>\n</p>".
@@ -174,7 +174,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($c->getData());
 
         $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'.
@@ -193,7 +193,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($c->getData());
         $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
@@ -210,7 +210,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($c->getData());
         $this->assertRegExp("#^<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/a1b024ef219bcfe6b3f5ac9916d8f722/[0-9]+/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
@@ -227,7 +227,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $html = $row->content;
         $this->assertEquals("<p>\n  <img src=\n  \"/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/File/small/e73520d11dee6ff49859b8bb26fc631f/filename.jpg?319\" />\n</p>", $html);
 
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($c->getData());
         $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'

@@ -833,7 +833,7 @@ class Vps_Component_Data
     // Nur zum Testen!
     public function render()
     {
-        $output = new Vps_Component_Output_Cache();
+        $output = new Vps_Component_View();
         return $output->render($this);
     }
 }

@@ -13,7 +13,7 @@ class Vpc_Composite_Images_Test extends Vpc_TestAbstract
 
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($this->_root->getComponentById(2100));
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;

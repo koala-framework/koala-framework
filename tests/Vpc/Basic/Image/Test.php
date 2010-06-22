@@ -70,7 +70,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
 
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($this->_root->getComponentById(1600));
 
         $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">'.
@@ -83,7 +83,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $c = $this->_root->getComponentById('1602');
         $this->assertFalse($c->hasContent());
 
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($c);
         $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">\s*</div>\s*$#ms', $html);
     }

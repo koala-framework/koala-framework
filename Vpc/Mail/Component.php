@@ -108,13 +108,13 @@ class Vpc_Mail_Component extends Vpc_Abstract
      *
      * @param bool forMail: ob images als attachment angehängt werden sollen oder nicht
      */
-    public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null, $forMail = false)
+    public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
     {
-        $output = new Vps_Component_Output_Mail();
-        $output->setType(Vps_Component_Output_Mail::TYPE_HTML);
-        $output->setRecipient($recipient);
-        $output->setViewClass($forMail ? 'Vps_View_ComponentMail' : 'Vps_View_Component');
-        $ret = $output->render($this->getData());
+        $view = new Vps_Component_View_Mail();
+        $view->setType(Vps_Component_View_Mail::TYPE_HTML);
+        $view->setRecipient($recipient);
+        $view->setAttachImages($attachImages);
+        $ret = $view->renderComponent($this->getData());
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
         if ($this->_getSetting('mailHtmlStyles')) {
@@ -131,10 +131,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
      */
     public function getText(Vpc_Mail_Recipient_Interface $recipient = null)
     {
-        $output = new Vps_Component_Output_Mail();
-        $output->setType(Vps_Component_Output_Mail::TYPE_TXT);
-        $output->setRecipient($recipient);
-        $ret = $output->render($this->getData());
+        $view = new Vps_Component_View_Mail();
+        $view->setType(Vps_Component_View_Mail::TYPE_TXT);
+        $view->setRecipient($recipient);
+        $ret = $view->renderComponent($this->getData());
         $ret = str_replace('&nbsp;', ' ', $ret);
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);

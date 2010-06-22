@@ -28,11 +28,11 @@ class Vpc_Basic_LinkTagExtern_Test extends PHPUnit_Framework_TestCase
     }
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($this->_root->getComponentById(1200));
         $this->assertEquals('<a href="http://example.com">', $html);
 
-        $output = new Vps_Component_Output_NoCache();
+        $output = new Vps_Component_View();
         $html = $output->render($this->_root->getComponentById(1201));
         $this->assertEquals('<a href="http://example.com" rel="popup_blank">', $html);
     }
