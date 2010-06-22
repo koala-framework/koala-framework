@@ -9,7 +9,6 @@ class Vps_Component_Output_Component
         $vars = $component->getComponent()->getTemplateVars();
         if (is_null($vars)) throw new Vps_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
 
-        //$view = new Vps_View_Component();
         $view->assign($vars);
         return $view->render($template);
     }
