@@ -107,7 +107,7 @@ abstract class Vps_Component_View_Abstract extends Vps_View
 
                 $class = 'Vps_Component_Output_' . ucfirst($outputConfig['type']);
                 $output = new $class();
-                $content = $output->render($component, $outputConfig['config'], $this);
+                $content = $output->render($component, $outputConfig['config']);
                 foreach ($outputConfig['plugins'] as $plugin) {
                     if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
                         $content = $plugin->processOutput($content);
@@ -136,14 +136,4 @@ abstract class Vps_Component_View_Abstract extends Vps_View
         return $ret;
     }
 
-    // Hier kann das Output was reinspeichern, was eventuell nachfolgende Outputs brauchen können (zB. Dynamic in Partials)
-    public function setParam($param, $data)
-    {
-        $this->_params[$param] = $data;
-    }
-
-    public function getParam($param)
-    {
-        return isset($this->_params[$param]) ? $this->_params[$param] : null;
-    }
 }

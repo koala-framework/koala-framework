@@ -1,7 +1,7 @@
 <?php
 class Vps_Component_Output_Master
 {
-    public function render($component, $config, $view)
+    public function render($component, $config)
     {
         if (isset($config[0]) && $config[0] != '') {
             $template = $config[0];
@@ -19,7 +19,7 @@ class Vps_Component_Output_Master
             $vars['boxes'][$box->box] = $box;
         }
 
-        //$view = new Vps_View();
+        $view = new Vps_View();
         $view->assign($vars);
         return $view->render($template);
     }
