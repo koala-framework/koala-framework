@@ -1,1 +1,1 @@
-|<?=$this->item?>-<?=$this->dynamic($this->data, 'Alternate')?>
+|<?=$this->item?>-<?=$this->dynamic('Alternate')?>

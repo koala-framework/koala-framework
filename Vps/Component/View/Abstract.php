@@ -6,6 +6,7 @@ abstract class Vps_Component_View_Abstract extends Vps_View
     private $_plugins = array();
     private $_renderComponentId;
     private $_params = array();
+    protected $_view;
 
     public function setIgnoreVisible($ignoreVisible)
     {
@@ -85,6 +86,8 @@ abstract class Vps_Component_View_Abstract extends Vps_View
 
     protected function _render($ret, $matches = array(array()))
     {
+        $childView = $this->_getChildView();
+
         $afterPlugins = array();
         do {
             foreach ($matches[0] as $key => $search) {
@@ -107,7 +110,8 @@ abstract class Vps_Component_View_Abstract extends Vps_View
 
                 $class = 'Vps_Component_Output_' . ucfirst($outputConfig['type']);
                 $output = new $class();
-                $content = $output->render($component, $outputConfig['config']);
+                $childView->clearVars();
+                $content = $output->render($component, $outputConfig['config'], $childView);
                 foreach ($outputConfig['plugins'] as $plugin) {
                     if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
                         $content = $plugin->processOutput($content);
@@ -136,4 +140,8 @@ abstract class Vps_Component_View_Abstract extends Vps_View
         return $ret;
     }
 
+    protected function _getChildView()
+    {
+        return new Vps_View();
+    }
 }

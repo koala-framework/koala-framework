@@ -1,16 +1,9 @@
 <?php
-class Vps_View_Helper_Dynamic
+class Vps_View_Helper_Dynamic extends Vps_View_Helper_Abstract
 {
-    private $_view;
-
-    public function setView($view)
+    public function dynamic($class)
     {
-        $this->_view = $view;
-    }
-
-    public function dynamic(Vps_Component_Data $component, $class)
-    {
-        $args = array_slice(func_get_args(), 2);
-        return Vps_Component_Output_Dynamic::getHelperOutput($component, $class, $args, $this->_view->info);
+        $args = array_slice(func_get_args(), 1);
+        return Vps_Component_Output_Dynamic::getHelperOutput($this->_getView()->data, $class, $args, $this->_getView()->info);
     }
 }
