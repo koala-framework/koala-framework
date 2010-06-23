@@ -34,7 +34,10 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
         $classes = $gen['link']['component'];
         $cards = $this->add(new Vps_Form_Container_Cards('component', trlVps('Link type')))
             ->setDefaultValue(key($classes));
-        $cards->getCombobox()->setData(new Vpc_Basic_LinkTag_Form_Data());
+        $cards->getCombobox()
+            ->setData(new Vpc_Basic_LinkTag_Form_Data())
+            ->setWidth(250)
+            ->setListWidth(250);
 
         foreach ($classes as $name => $class) {
             $forms = Vpc_Admin::getInstance($class)->getLinkTagForms();
