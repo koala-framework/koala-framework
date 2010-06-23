@@ -1,7 +1,7 @@
 <?php
 class Vps_Component_Output_Partials
 {
-    public function render($component, $config, $view)
+    public function render($component, $config)
     {
         $componentId = $component->componentId;
         $partialsClass = $config[0];

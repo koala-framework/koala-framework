@@ -1,7 +1,7 @@
 <?php
 class Vps_Component_Output_Partial
 {
-    public function render($component, $config, $view)
+    public function render($component, $config)
     {
         $partialsClass = $config[0];
         $partial = new $partialsClass(unserialize(base64_decode(($config[1]))));
@@ -20,7 +20,7 @@ class Vps_Component_Output_Partial
         }
         $vars['info'] = $info;
         $vars['data'] = $component;
-        $view->setParam('info', $info);
+        $view = new Vps_View();
         $view->assign($vars);
         return $view->render($template);
     }

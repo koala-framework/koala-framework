@@ -1,7 +1,7 @@
 <?php
 class Vps_Component_Output_Mail
 {
-    public function render($component, $config, $view)
+    public function render($component, $config)
     {
         $type = $config[0];
         $recipient = $config[1];
@@ -15,6 +15,7 @@ class Vps_Component_Output_Mail
         if (is_null($vars)) {
             throw new Vps_Exception('Return value of getMailVars() returns null. Maybe forgot "return $ret?"');
         }
+        $view = new Vps_View();
         $view->assign($vars);
         return $view->render($template);
     }
