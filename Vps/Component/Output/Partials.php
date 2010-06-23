@@ -3,39 +3,21 @@ class Vps_Component_Output_Partials
 {
     public function render($component, $config, $view)
     {
+        $componentId = $component->componentId;
         $partialsClass = $config[0];
-        $partial = new $partialsClass(unserialize(base64_decode(($config[1]))));
+        $config = $config[1];
+        $partial = new $partialsClass(unserialize(base64_decode(($config))));
         $ids = $partial->getIds();
         $ret = '';
         $number = 0; $count = count($ids);
         foreach ($ids as $id) {
-            $info = array(
+            $info = base64_encode(serialize(array(
                 'total' => $count,
                 'number' => $number++
-            );
-            $ret .= $this->_renderPartial($component, $partial, $id, $info, $view);
+            )));
+            $ret .= "{partial: $componentId $partialsClass $config $id $info}";
         }
         return $ret;
-    }
-
-    public function _renderPartial($component, $partial, $id, $info, $view)
-    {
-        // Normaler Output
-        $componentClass = $component->componentClass;
-        $template = Vpc_Abstract::getTemplateFile($componentClass, 'Partial');
-        if (!$template) {
-            throw new Vps_Exception("No Partial-Template found for '$componentClass'");
-        }
-        $vars = $component->getComponent()->getPartialVars($partial, $id, $info);
-        if (is_null($vars)) {
-            throw new Vps_Exception('Return value of getPartialVars() returns null. Maybe forgot "return $ret?"');
-        }
-        $vars['info'] = $info;
-        $vars['data'] = $component;
-        $view->setParam('info', $info);
-        //$view = new Vps_View();
-        $view->assign($vars);
-        return $view->render($template);
     }
 
     public static function getHelperOutput(Vps_Component_Data $component, $partialClass = null, $params = array())
