@@ -16,6 +16,7 @@ class Vpc_Basic_LinkTag_Event_EventsController extends Vps_Controller_Action_Aut
     {
         $ret = parent::_getSelect();
         $ret->whereEquals('visible', 1);
+        $ret->whereEquals('component_id', $this->_getParam('eventsComponentId'));
         return $ret;
     }
 }
