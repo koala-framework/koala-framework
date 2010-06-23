@@ -275,20 +275,6 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $this->assertTrue(!!$entries->current()->author_name);
     }
 
-    public function testContentEncoded()
-    {
-        /* deaktiviert weil feed nicht mehr funktioniert
-        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
-            ->getRow('http://www.swgemu.com/forums/external.php?type=RSS2&forumids=107');
-        $entries = $feed->getChildRows('Entries');
-        if (!count($entries)) {
-            $this->markTestSkipped("Feed is empty.");
-        }
-        $this->assertTrue(!!$entries->current()->description);
-        $this->assertTrue(!!$entries->current()->content_encoded);
-        */
-    }
-
     public function testContentEncoded2()
     {
         $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')

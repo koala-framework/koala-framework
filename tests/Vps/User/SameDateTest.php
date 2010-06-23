@@ -79,9 +79,6 @@ class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
     {
         $webId = Vps_Registry::get('config')->application->id;
         $webcode = Vps_Registry::get('config')->service->users->webcode;
-        if (!$webcode) {
-            $this->markTestSkipped();
-        }
 
         $m = new Vps_User_Model();
 
