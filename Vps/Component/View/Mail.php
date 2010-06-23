@@ -54,4 +54,9 @@ class Vps_Component_View_Mail extends Vps_Component_View_Abstract implements Vps
         }
         return $outputConfig;
     }
+
+    protected function _getChildView()
+    {
+        return $this;
+    }
 }

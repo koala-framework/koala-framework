@@ -1,12 +1,7 @@
 <?php
-class Vps_View_Helper_Image
+class Vps_View_Helper_Image extends Vps_View_Helper_Abstract
 {
-    private $_view;
     private $_dep;
-    public function setView($view)
-    {
-        $this->_view = $view;
-    }
 
     // wird auch von ImageUrl helper verwendet
     protected function _getImageParams($image, $type = 'default', $alt = '', $cssClass = null)
@@ -58,7 +53,7 @@ class Vps_View_Helper_Image
 
         if ($url) {
             //bei vps_view_mail soll das image als attachment hinzugefügt werden
-            if ($this->_view instanceof Vps_View_MailInterface && $this->_view->getAttachImages()) {
+            if ($this->_getView() instanceof Vps_View_MailInterface && $this->_getView()->getAttachImages()) {
                 if (is_string($image)){
                     $loader = new Vps_Assets_Loader();
                     $path = $this->_dep->getAssetPath($depUrl);
@@ -80,7 +75,7 @@ class Vps_View_Helper_Image
                 $img->encoding = Zend_Mime::ENCODING_BASE64;
                 $img->filename = substr(strrchr($url, '/'), 1); //filename wird gesucht
                 $img->id = md5($url);
-                $this->_view->addImage($img);
+                $this->_getView()->addImage($img);
                 $url = "cid:".$img->id;
             }
             return array(

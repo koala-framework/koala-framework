@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_ComponentLink
+class Vps_View_Helper_ComponentLink extends Vps_View_Helper_Abstract
 {
     public function componentLink($m, $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
