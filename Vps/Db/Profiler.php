@@ -25,6 +25,11 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
         }
     }
 
+    public function getLogger()
+    {
+        return $this->_logger;
+    }
+
     public function queryStart($queryText, $queryType = null)
     {
         if (!$this->_enabled) {
