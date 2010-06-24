@@ -321,7 +321,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         header('Content-Type: text/html; charset=utf-8');
         $process = $this->_callProcessInput();
-        $view = new Vps_Component_View();
+        $view = new Vps_Component_Renderer();
         echo $view->renderMaster($this->getData());
         $this->_callPostProcessInput($process);
     }

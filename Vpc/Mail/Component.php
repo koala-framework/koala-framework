@@ -110,8 +110,8 @@ class Vpc_Mail_Component extends Vpc_Abstract
      */
     public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
     {
-        $view = new Vps_Component_View_Mail();
-        $view->setType(Vps_Component_View_Mail::TYPE_HTML);
+        $view = new Vps_Component_Renderer_Mail();
+        $view->setType(Vps_Component_Renderer_Mail::TYPE_HTML);
         $view->setRecipient($recipient);
         $view->setAttachImages($attachImages);
         $ret = $view->renderComponent($this->getData());
@@ -131,8 +131,8 @@ class Vpc_Mail_Component extends Vpc_Abstract
      */
     public function getText(Vpc_Mail_Recipient_Interface $recipient = null)
     {
-        $view = new Vps_Component_View_Mail();
-        $view->setType(Vps_Component_View_Mail::TYPE_TXT);
+        $view = new Vps_Component_Renderer_Mail();
+        $view->setType(Vps_Component_Renderer_Mail::TYPE_TXT);
         $view->setRecipient($recipient);
         $ret = $view->renderComponent($this->getData());
         $ret = str_replace('&nbsp;', ' ', $ret);

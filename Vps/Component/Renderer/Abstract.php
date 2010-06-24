@@ -1,12 +1,11 @@
 <?php
-abstract class Vps_Component_View_Abstract extends Vps_View
+abstract class Vps_Component_Renderer_Abstract
 {
     private $_ignoreVisible = false;
     private $_enableCache = false;
     private $_plugins = array();
     private $_renderComponentId;
     private $_params = array();
-    protected $_view;
 
     public function setIgnoreVisible($ignoreVisible)
     {
@@ -69,14 +68,7 @@ abstract class Vps_Component_View_Abstract extends Vps_View
             array('')
         );
         $ret = '{component}';
-        return $this->_render($ret, $matches);
-    }
-
-    public function render($template)
-    {
-        if ($template instanceof Vps_Component_Data) return $this->renderComponent($template);
-        $ret = parent::render($template);
-        return $this->_render($ret);
+        return $this->render($ret, $matches);
     }
 
     protected function _formatOutputConfig($outputConfig, $component)
@@ -84,9 +76,11 @@ abstract class Vps_Component_View_Abstract extends Vps_View
         return $outputConfig;
     }
 
-    protected function _render($ret, $matches = array(array()))
+    public function render($ret, $matches = array(array()))
     {
-        $childView = $this->_getChildView();
+        if ($ret instanceof Vps_Component_Data) return $this->renderComponent($ret);
+
+        $view = $this->_getView();
 
         $afterPlugins = array();
         do {
@@ -110,8 +104,8 @@ abstract class Vps_Component_View_Abstract extends Vps_View
 
                 $class = 'Vps_Component_Output_' . ucfirst($outputConfig['type']);
                 $output = new $class();
-                $childView->clearVars();
-                $content = $output->render($component, $outputConfig['config'], $childView);
+                $view->clearVars();
+                $content = $output->render($component, $outputConfig['config'], $view);
                 foreach ($outputConfig['plugins'] as $plugin) {
                     if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
                         $content = $plugin->processOutput($content);
@@ -140,7 +134,7 @@ abstract class Vps_Component_View_Abstract extends Vps_View
         return $ret;
     }
 
-    protected function _getChildView()
+    protected function _getView()
     {
         return new Vps_View();
     }

@@ -50,7 +50,7 @@ class Vpc_Advanced_GoogleMapView_Test extends PHPUnit_Framework_TestCase
 
     public function testHtml()
     {
-        $output = new Vps_Component_View();
+        $output = new Vps_Component_Renderer();
         $html = $output->render($this->_root->getComponentById(2002));
         $this->assertContains('<div class="webStandard vpcAdvancedGoogleMapView vpcAdvancedGoogleMapViewTestComponent">', $html);
 
