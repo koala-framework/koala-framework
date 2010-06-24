@@ -61,14 +61,8 @@ abstract class Vps_Component_Renderer_Abstract
     {
         $this->_plugins = array();
         $this->_renderComponentId = $component->componentId;
-        $matches = array(
-            array('{component}'),
-            array('component'),
-            array($component->componentId),
-            array('')
-        );
-        $ret = '{component}';
-        return $this->render($ret, $matches);
+        $ret = Vps_Component_Output_Component::getHelperOutput($component);
+        return $this->render($ret);
     }
 
     protected function _formatOutputConfig($outputConfig, $component)
@@ -76,61 +70,54 @@ abstract class Vps_Component_Renderer_Abstract
         return $outputConfig;
     }
 
-    public function render($ret, $matches = array(array()))
+    public function render($ret)
     {
         if ($ret instanceof Vps_Component_Data) return $this->renderComponent($ret);
 
         $view = $this->_getView();
+        $pluginNr = 0;
 
-        $afterPlugins = array();
-        do {
-            foreach ($matches[0] as $key => $search) {
-                $type = $matches[1][$key];
-                $componentId = trim($matches[2][$key]);
-                $config = trim($matches[3][$key]);
-                $config = $config != '' ? explode(' ', trim($config)) : array();
+        while (preg_match('/{([^ }]+): ([^ }]+)([^}]*)}/', $ret, $matches)) {
+            $type = $matches[1];
+            $componentId = trim($matches[2]);
+            $config = trim($matches[3]);
+            $config = $config != '' ? explode(' ', trim($config)) : array();
 
-                $component = $this->_getComponent($componentId);
-                if (!$component) {
-                    throw new Vps_Exception("Could not find component with id $componentId for rendering.");
-                }
-
-                $outputConfig = array(
-                    'type' => $type,
-                    'config' => $config,
-                    'plugins' => array()
-                );
-                $outputConfig = $this->_formatOutputConfig($outputConfig, $component);
-
-                $class = 'Vps_Component_Output_' . ucfirst($outputConfig['type']);
-                $output = new $class();
-                $view->clearVars();
-                $content = $output->render($component, $outputConfig['config'], $view);
-                foreach ($outputConfig['plugins'] as $plugin) {
-                    if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
-                        $content = $plugin->processOutput($content);
-                    } else if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_AFTER) {
-                        $afterPlugins[] = $plugin;
-                        $index = count($afterPlugins) - 1;
-                        $content = "{plugin_$index}$content{/plugin_$index}";
-                    }
-                }
-                $ret = str_replace($search, $content, $ret);
+            $component = $this->_getComponent($componentId);
+            if (!$component) {
+                throw new Vps_Exception("Could not find component with id $componentId for rendering.");
             }
-            preg_match_all('/{([^ }]+): ([^ }]+)([^}]*)}/', $ret, $matches);
-        } while ($matches[0]);
 
-        foreach ($afterPlugins as $index => $plugin) {
-            $name = "plugin_$index";
-            $len = strlen($name) + 2;
-            $start = strpos($ret, '{' . $name . '}');
-            if ($start !== false) {
-                $stop = strpos($ret, '{/' . $name . '}');
-                $content = substr($ret, $start + $len, $stop - $start - $len);
-                $content = $plugin->processOutput($content);
-                $ret = substr($ret, 0, $start) . $content . substr($ret, $stop + $len + 1);
+            $outputConfig = array(
+                'type' => $type,
+                'config' => $config,
+                'plugins' => array()
+            );
+            $outputConfig = $this->_formatOutputConfig($outputConfig, $component);
+
+            $class = 'Vps_Component_Output_' . ucfirst($outputConfig['type']);
+            $output = new $class();
+            $view->clearVars();
+            $content = $output->render($component, $outputConfig['config'], $view);
+            foreach ($outputConfig['plugins'] as $plugin) {
+                if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
+                    $content = $plugin->processOutput($content);
+                } else if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_AFTER) {
+                    $pluginNr++;
+                    $pluginClass = get_class($plugin);
+                    $content = "{plugin $pluginNr $pluginClass $componentId}$content{/plugin $pluginNr}";
+                }
             }
+            $ret = str_replace($matches[0], $content, $ret);
         }
+
+        while (preg_match('/{plugin (\d) ([^}]*) ([^}]*)}(.*){\/plugin \\1}/', $ret, $matches)) {
+            $pluginClass = $matches[2];
+            $plugin = new $pluginClass($matches[3]);
+            $content = $plugin->processOutput($matches[4]);
+            $ret = str_replace($matches[0], $content, $ret);
+        }
+
         return $ret;
     }
 
