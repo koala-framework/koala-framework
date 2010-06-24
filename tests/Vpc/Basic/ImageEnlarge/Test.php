@@ -31,7 +31,7 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
 
     public function testWithoutSmallImageComponentHtml()
     {
-        $output = new Vps_Component_View();
+        $output = new Vps_Component_Renderer();
         $html = $output->render($this->_root->getComponentById(1800));
 
         $doc = new DOMDocument();
@@ -82,7 +82,7 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
 
     public function testWithoutSmallImageUploadedHtml()
     {
-        $output = new Vps_Component_View();
+        $output = new Vps_Component_Renderer();
         $html = $output->render($this->_root->getComponentById(1801));
 
         $doc = new DOMDocument();
@@ -142,7 +142,7 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
 
     public function testWithSmallImageUploadedHtml()
     {
-        $output = new Vps_Component_View();
+        $output = new Vps_Component_Renderer();
         $html = $output->render($this->_root->getComponentById(1802));
 
         $doc = new DOMDocument();
@@ -180,7 +180,7 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
 
     public function testWithOriginalHtml()
     {
-        $output = new Vps_Component_View();
+        $output = new Vps_Component_Renderer();
         $html = $output->render($this->_root->getComponentById(1803));
 
         $doc = new DOMDocument();

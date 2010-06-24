@@ -45,7 +45,7 @@ class Vps_Controller_Action_Component_ShowComponentController extends Vps_Contro
 
         //zwischenlösung:
         //(unschön: keine assets, kein html-header usw)
-        $output = new Vps_Component_View();
+        $output = new Vps_Component_Renderer();
         echo $output->render($c);
 
         Vps_Benchmark::output();

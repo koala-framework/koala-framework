@@ -22,9 +22,4 @@ class Vps_Component_Output_Master
         $view->assign($vars);
         return $view->render($template);
     }
-
-    public static function getHelperOutput(Vps_Component_Data $component)
-    {
-        return "{master: {$component->componentId}}";
-    }
 }

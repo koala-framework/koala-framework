@@ -833,7 +833,7 @@ class Vps_Component_Data
     // Nur zum Testen!
     public function render()
     {
-        $output = new Vps_Component_View();
+        $output = new Vps_Component_Renderer();
         return $output->render($this);
     }
 }

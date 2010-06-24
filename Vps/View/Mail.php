@@ -2,6 +2,7 @@
 class Vps_View_Mail extends Vps_View implements Vps_View_MailInterface
 {
     private $_images = array();
+    protected $_attachImages = true;
 
     public function addImage(Zend_Mime_Part $image)
     {
@@ -15,6 +16,11 @@ class Vps_View_Mail extends Vps_View implements Vps_View_MailInterface
 
     public function getAttachImages()
     {
-        return true;
+        return $this->_attachImages;
+    }
+
+    public function setAttachImages($attachImages)
+    {
+        $this->_attachImages = $attachImages;
     }
 }

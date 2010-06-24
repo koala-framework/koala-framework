@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_View extends Vps_Component_View_Abstract
+class Vps_Component_Renderer extends Vps_Component_Renderer_Abstract
 {
     private $_masterTemplates = null;
     private $_componentMasterTemplates = array();
