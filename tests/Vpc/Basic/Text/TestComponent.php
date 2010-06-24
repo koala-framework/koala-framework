@@ -5,6 +5,7 @@ class Vpc_Basic_Text_TestComponent extends Vpc_Basic_Text_Component
     {
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Vpc_Basic_Text_TestModel';
+        $ret['stylesModel'] = 'Vpc_Basic_Text_TestStylesModel';
         $ret['generators']['child']['model'] = 'Vpc_Basic_Text_TestChildComponentsModel';
         $ret['generators']['child']['component']['link'] = 'Vpc_Basic_Text_Link_TestComponent';
         $ret['generators']['child']['component']['image'] = 'Vpc_Basic_Text_Image_TestComponent';
