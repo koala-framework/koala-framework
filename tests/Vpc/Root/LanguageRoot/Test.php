@@ -8,6 +8,7 @@ class Vpc_Root_LanguageRoot_Test extends Vpc_TestAbstract
     public function setUp()
     {
         parent::setUp('Vpc_Root_LanguageRoot_TestComponent');
+        $this->_root->setFilename(null);
     }
 
     public function testIt()

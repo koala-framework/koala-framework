@@ -1,7 +1,6 @@
 <?php
 class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
 {
-    protected $_stylesModel = 'Vpc_Basic_Text_StylesModel';
     public function __construct($name, $class, $id = null)
     {
         $this->setModel(Vpc_Basic_Text_Component::getTextModel($class));
@@ -43,7 +42,7 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
             ));
         }
 
-        $t = Vps_Model_Abstract::getInstance($this->_stylesModel);
+        $t = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($class, 'stylesModel'));
         $styles = $t->getStyles();
         $field->setInlineStyles($styles['inline']);
         $field->setBlockStyles($styles['block']);

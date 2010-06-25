@@ -7,6 +7,7 @@ class Vps_Util_Git
     public function __construct($path)
     {
         $this->_path = (string)$path;
+        if ($this->_path == '.') $this->_path = getcwd();
         if (!file_exists($path.'/.git')) {
             throw new Vps_Exception("Invalid path '$path', no git wc");
         }
@@ -209,7 +210,11 @@ class Vps_Util_Git
 
     public function getBranchesContains($commit, $args = '-a')
     {
-        return $this->_getBranches($args.' --contains '.$commit);
+        try {
+            return $this->_getBranches($args.' --contains '.$commit);
+        } catch (Vps_Exception $e) {
+            return array();
+        }
     }
 
     public function getActiveBranchContains($commit)

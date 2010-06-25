@@ -257,6 +257,14 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             Vps_Registry::set('testServerConfig', $cfg);
             $result = $runner->doRun(new Vps_Test_TestSuite(), $arguments);
             if (!$result->wasSuccessful()) {
+                if ($testConfig) {
+                    if ($useSvn) {
+                        $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
+                        $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
+                    } else {
+                        $this->_systemSshVpsWithSubSections("git checkout-master", 'test');
+                    }
+                }
                 throw new Vps_ClientException("Tests failed");
             }
 
@@ -376,6 +384,9 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             $cmd .= " --vpsBranch=".escapeshellarg(Vps_Util_Git::vps()->getActiveBranch());
             $cmd .= " --webVersion=".escapeshellarg(Vps_Util_Git::web()->revParse('production'));
             $cmd .= " --vpsVersion=".escapeshellarg(Vps_Util_Git::vps()->revParse('production/'.$appId));
+            if ($this->_getParam('debug')) {
+                echo $cmd."\n";
+            }
             $this->_systemCheckRet($cmd);
         }
 

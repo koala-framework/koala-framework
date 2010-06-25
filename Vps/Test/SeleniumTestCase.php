@@ -5,6 +5,13 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     protected $_unitTestCookie;
     protected $_domain = null;
 
+
+protected function _createSeparateTestDb($bootstrapFile)
+{
+    Vps_Test_OwnDbTestCase::createSeparateTestDb($bootstrapFile);
+    $this->_dbName = Vps_Test_OwnDbTestCase::getSeparateTestDbName();
+}
+
     public static function suite($className)
     {
         self::$browsers = array();
@@ -39,7 +46,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
         $this->_unitTestCookie = md5(uniqid('testId', true));
 
-        $this->captureScreenshotOnFailure = false;
+        $this->captureScreenshotOnFailure = true;
         $this->screenshotPath = '/mnt/screenshots';
         $this->screenshotUrl = 'http://screenshots.vivid';
         parent::setUp();
