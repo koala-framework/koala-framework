@@ -59,12 +59,17 @@ class Vps_User_Form extends Vps_Form
     {
         $id = $this->_getIdByParentRow($parentRow);
         if ($id === 0 || $id === '0' || is_null($id)) {
-            $webcode = $this->getByName('webcode');
-            if ($webcode && $postData[$webcode->getFieldName()]) {
-                // webcode setzt sich von selbst wenn er gewünscht ist
+            $webcodeField = $this->getByName('webcode');
+            // webcode = null setzt sich von selbst wenn er gewünscht ist (config)
+            if (!$webcodeField) {
+                // normaler benutzer der das hakerl im backend nicht setzen darf
+                $webcode = null;
+            } else if ($postData[$webcodeField->getFieldName()]) {
+                // hakerl darf gesetzt werden und ist auch gesetzt
                 $webcode = null;
             } else {
-                // global user
+                // hakerl darf gesetzt werden und ist nicht gesetzt
+                // webcode = '' bedeutet global
                 $webcode = '';
             }
             $this->_newUserRow = $this->_model->createUserRow(
