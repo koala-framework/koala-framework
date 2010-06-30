@@ -5,6 +5,9 @@ Ext.ux.ErrorHandler.on('error', function(ex) {
     if (ex.url && ex.url.substr(0, 14) == 'chrome:/'+'/skype') {
         return;
     }
+    if (Vps.Debug.displayErrors) {
+        throw ex;
+    }
     Ext.Ajax.request({
         url: '/vps/error/error/json-mail',
         ignoreErrors: true,

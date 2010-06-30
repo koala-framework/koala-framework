@@ -108,7 +108,7 @@ class Vps_Media_Output
     static public function encode($contents, $encoding)
     {
         if ($encoding != 'none') {
-            return gzencode($contents, null, ($encoding=='gzip') ? FORCE_GZIP : FORCE_DEFLATE);
+            return gzencode($contents, 9, ($encoding=='gzip') ? FORCE_GZIP : FORCE_DEFLATE);
         } else {
             return $contents;
         }
