@@ -1,4 +1,7 @@
 Ext.ux.ErrorHandler.on('error', function(ex) {
+    if (Vps.Debug.displayErrors) {
+        throw ex;
+    }
     Ext.Ajax.request({
         url: '/vps/error/error/json-mail',
         ignoreErrors: true,
