@@ -22,6 +22,11 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
 
     private function _systemSshVps($cmd, $config)
     {
+        if (!$config->server->host) {
+            echo " -> Kommando nicht ausgefuehrt, host in section '".($config->getSectionName())."' nicht gesetzt: $cmd \n";
+            return 0;
+        }
+
         $sshHost = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
         $sshDir = $config->server->dir;
         $cmd = "sshvps $sshHost $sshDir $cmd";
@@ -40,6 +45,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         $this->_systemSshVps($cmd, $config);
         if ($config->server->subSections) {
             foreach ($config->server->subSections as $s) {
+                if (!$s) continue;
                 $this->_systemSshVpsWithSubSections($cmd, $s);
             }
         }
@@ -56,16 +62,26 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         Zend_Session::start(); //wegen tests
 
         $prodConfig = Vps_Config_Web::getInstance('production');
+        $hasProdHost = true;
         if (!$prodConfig || !$prodConfig->server->host || !$prodConfig->server->dir) {
-            throw new Vps_ClientException("Prod-Server not configured");
+            echo "Prod-Server not configured.\n";
+            $hasProdHost = false;
+        }
+        if (!$hasProdHost && !$prodConfig->server->subSections) {
+            throw new Vps_ClientException("Prod-Server not configured and no subsections are set");
         }
 
         $testConfig = Vps_Config_Web::getInstance('test');
+        $hasTestHost = true;
         if (!$testConfig || !$testConfig->server->host || !$testConfig->server->dir) {
             echo "Test-Server not configured.\n";
-            $testConfig = false;
+            $hasTestHost = false;
         }
-        if ($testConfig) {
+        $hasTestSubsections = false;
+        if ($testConfig->server->subSections) {
+            $hasTestSubsections  = true;
+        }
+        if ($hasTestHost && $hasProdHost) {
             if ($testConfig->server->dir == $prodConfig->server->dir && $testConfig->server->host == $prodConfig->server->host) {
                 throw new Vps_ClientException("Test-Server not configured, same dir as production");
             }
@@ -145,7 +161,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
 
             Vps_Controller_Action_Cli_Web_SvnUpController::checkForModifiedFiles(true);
 
-            if ($testConfig) {
+            if ($hasTestHost || $hasTestSubsections) {
                 $this->_systemSshVpsWithSubSections("svn-up check-for-modified-files", 'test');
             }
             $this->_systemSshVpsWithSubSections("svn-up check-for-modified-files", 'production');
@@ -174,13 +190,13 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
 
         if ($useSvn) {
             echo "\n\n*** [03/13] vps tag auschecken\n";
-            if ($testConfig) {
+            if ($hasTestHost || $hasTestSubsections) {
                 $this->_systemSshVpsWithSubSections("tag-checkout vps-checkout --version=$vpsVersion", 'test');
             }
             $this->_systemSshVpsWithSubSections("tag-checkout vps-checkout --version=$vpsVersion", 'production');
         }
 
-        if ($testConfig) {
+        if ($hasTestHost || $hasTestSubsections) {
             if ($useSvn) {
                 echo "\n\n*** [04/13] test: vps-version anpassen\n";
                 $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=$vpsVersion", 'test');
@@ -194,7 +210,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         }
 
         $skipCopyToTest = ($this->_getParam('skip-copy-to-test') || $this->_getParam('skip-copy-to-test'));
-        if ($testConfig) {
+        if ($hasTestHost || $hasTestSubsections) {
             echo "\n\n*** [06/13] prod daten auf test uebernehmen\n";
             if ($skipCopyToTest) {
                 echo "(uebersprungen)\n";
@@ -214,6 +230,8 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         $skipTest = ($this->_getParam('skip-test') || $this->_getParam('skip-tests'));
         if ($skipTest) {
             echo "(uebersprungen)\n";
+        } else if (!$hasTestHost) {
+            echo "(uebersprungen, kein test server angegeben)\n";
         } else {
             Vps_Controller_Action_Cli_TestController::initForTests();
             $runner = new Vps_Test_TestRunner();
@@ -273,7 +291,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             Vps_Registry::set('trl', $trl);
         }
 
-        if ($testConfig) {
+        if ($hasTestHost || $hasTestSubsections) {
             echo "\n\n*** [08/13] test: zurueck auf trunk switchen\n";
             if ($useSvn) {
                 $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
