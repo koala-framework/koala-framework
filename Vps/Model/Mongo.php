@@ -1,0 +1,182 @@
+<?php
+class Vps_Model_Mongo extends Vps_Model_Abstract
+{
+    protected $_rowClass = 'Vps_Model_Mongo_Row';
+    protected $_data = array();
+    protected $_collection;
+
+    public function __construct(array $config = array())
+    {
+        if (is_string($this->_collection)) {
+            $this->_collection = Vps_Registry::get('dao')->getMongoDb()->{$this->_collection};
+        }
+    }
+
+    protected function _init()
+    {
+    }
+
+    public function update(Vps_Model_Row_Interface $row, $rowData)
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
+    public function insert(Vps_Model_Row_Interface $row, $rowData)
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
+    public function delete(Vps_Model_Row_Interface $row)
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
+    public function getRowByDataKey($key)
+    {
+        if (!isset($this->_rows[$key])) {
+            $this->_rows[$key] = new $this->_rowClass(array(
+                'data' => $this->_data[$key],
+                'model' => $this
+            ));
+        }
+        return $this->_rows[$key];
+    }
+
+    public function getData()
+    {
+        return $this->_data;
+    }
+
+    public function countRows($where = array())
+    {
+        if (!is_object($where)) {
+            if (is_string($where)) $where = array($where);
+            $select = $this->select($where);
+        } else {
+            $select = $where;
+        }
+        $ret = $this->_collection->find($this->_getQuery($select))->count();
+        return $ret;
+    }
+
+    private function _getQuery(Vps_Model_Select $select)
+    {
+        $where = array();
+        if ($equals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
+            foreach ($equals as $k=>$v) {
+                $where[$k] = $v;
+            }
+        }
+        if ($id = $select->getPart(Vps_Model_Select::WHERE_ID)) {
+            $where['id'] = $id; //TODO dynam.
+        }
+        return $where;
+    }
+
+    public function getIds($where=null, $order=null, $limit=null, $start=null)
+    {
+        if (!is_object($where)) {
+            if (is_string($where)) $where = array($where);
+            $select = $this->select($where, $order, $limit, $start);
+        } else {
+            $select = $where;
+        }
+        $cursor = $this->_getCursor($select)->fields(array('id'=>1)); //TODO 'id' dynam.
+        $ret = array();
+        $p = Vps_Registry::get('db')->getProfiler()->queryStart(print_r($this->_getQuery($select), true));
+        foreach ($cursor as $row) {
+            $ret[] = $row['id']; //TODO: dynam.
+        }
+        $p = Vps_Registry::get('db')->getProfiler()->queryEnd($p);
+        return $ret;
+    }
+
+    private function _getCursor($select)
+    {
+        $cursor = $this->_collection->find($this->_getQuery($select));
+        if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
+            $o = array();
+            foreach ($order as $i) {
+                if (isset($i['direction']) && $i['direction']=='DESC') {
+                    $o[$i['field']] = -1;
+                } else {
+                    $o[$i['field']] = 1;
+                }
+            }
+            $cursor->sort($o);
+        }
+        if ($select->getPart(Vps_Model_Select::LIMIT_COUNT)) {
+            $cursor->limit($select->getPart(Vps_Model_Select::LIMIT_COUNT));
+        }
+        if ($select->getPart(Vps_Model_Select::LIMIT_OFFSET)) {
+            $cursor->skip($select->getPart(Vps_Model_Select::LIMIT_OFFSET));
+        }
+        return $cursor;
+    }
+
+    public function getRow($select)
+    {
+        if (!is_object($select)) {
+            $select = $this->select($select);
+        }
+        $p = Vps_Registry::get('db')->getProfiler()->queryStart(print_r($this->_getQuery($select), true));
+        $row = $this->_collection->findOne($this->_getQuery($select));
+        $p = Vps_Registry::get('db')->getProfiler()->queryEnd($p);
+        $this->_data[$row['_id']->__toString()] = $row;
+        $ret =  new $this->_rowClass(array(
+            'data' => $row,
+            'model' => $this
+        ));
+        return $ret;
+    }
+
+    public function getRows($where=null, $order=null, $limit=null, $start=null)
+    {
+        if (!is_object($where)) {
+            if (is_string($where)) $where = array($where);
+            $select = $this->select($where, $order, $limit, $start);
+        } else {
+            $select = $where;
+        }
+
+        $keys = array();
+        $cursor = $this->_getCursor($select);
+
+        $p = Vps_Registry::get('db')->getProfiler()->queryStart(print_r($this->_getQuery($select), true));
+        foreach($cursor as $row) {
+            if (!isset($this->_data[$row['_id']->__toString()])) {
+                $this->_data[$row['_id']->__toString()] = $row;
+            }
+            $keys[] = $row['_id']->__toString();
+        }
+        $p = Vps_Registry::get('db')->getProfiler()->queryEnd($p);
+
+        $ret =  new $this->_rowsetClass(array(
+            'dataKeys' => $keys,
+            'model' => $this
+        ));
+        return $ret;
+    }
+
+    public function hasColumn($c)
+    {
+        if ($c == 'component_id') return false; //TODO
+        if ($c == 'visible') return false; //TODO
+        return parent::hasColumn($c);
+    }
+
+    protected function _getOwnColumns()
+    {
+        return array();
+    }
+
+    public function getPrimaryKey()
+    {
+        return 'id'; //TODO: _id verwenden, id soll optional sein
+    }
+
+    public function deleteRows($where)
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+}
