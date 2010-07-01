@@ -5712,5 +5712,92 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Messe</de>
 <id>1483</id>
 </text>
+<text>
+<en>Original Filename</en>
+<id>1499</id>
+</text>
+<text>
+<en>Headlines</en>
+<id>1500</id>
+</text>
+<text>
+<en>Headline 1</en>
+<id>1501</id>
+</text>
+<text>
+<en>Headline 2</en>
+<id>1502</id>
+</text>
+<text>
+<en>Original headline 1</en>
+<id>1503</id>
+</text>
+<text>
+<en>Original headline 2</en>
+<id>1504</id>
+</text>
+<text>
+<en>2 Columns</en>
+<id>1505</id>
+</text>
+<text>
+<en>Left column</en>
+<id>1506</id>
+</text>
+<text>
+<en>Right column</en>
+<id>1507</id>
+</text>
+<text>
+<en>All Visible</en>
+<id>1508</id>
+</text>
+<text>
+<en>Do you really wish to set everything to visible?</en>
+<id>1509</id>
+</text>
+<text>
+<en>Setting visible...</en>
+<de>Sichtbar setzen...</de>
+<id>1510</id>
+</text>
+<text>
+<en>Toolbox</en>
+<id>1511</id>
+</text>
+<text>
+<en>Time recording</en>
+<de>Zeiterfassung</de>
+<id>1512</id>
+</text>
+<text>
+<en>Year</en>
+<de>Jahr</de>
+<id>1513</id>
+</text>
+<text>
+<en>Spent time</en>
+<de>Verbrauchte Zeit</de>
+<id>1514</id>
+</text>
+<text>
+<en>Included time</en>
+<de>Inkludierte Zeit</de>
+<id>1515</id>
+</text>
+<text>
+<en>Year {0}</en>
+<de>{0}. Jahr</de>
+<id>1516</id>
+</text>
+<text>
+<en>Timer</en>
+<id>1517</id>
+</text>
+<text>
+<en>Spent time by years</en>
+<de>Verbrauchte Zeite nach Jahren</de>
+<id>1518</id>
+</text>
 </trl>
 
