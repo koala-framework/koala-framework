@@ -52,6 +52,7 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
                 }
             }
             $c = $ic->getChildComponent(array('generator' => 'child'));
+            if (!$c) break; //box wurde überschrieben
             if ($page instanceof Vps_Component_Data_Root) break;
             $page = $page->parent;
         } while(!$c->hasContent());
