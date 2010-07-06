@@ -1,4 +1,7 @@
 Ext.ux.ErrorHandler.on('error', function(ex) {
+    if (ex.url && ex.url.substr(0, 8) == 'chrome:/') {
+        return;
+    }
     Ext.Ajax.request({
         url: '/vps/error/error/json-mail',
         ignoreErrors: true,
