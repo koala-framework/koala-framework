@@ -280,21 +280,25 @@ wurde soeben erstellt.</de>
 <text>
 <en>Title</en>
 <de>Titel</de>
+<es>Tratamiento</es>
 <id>96</id>
 </text>
 <text>
 <en>Firstname</en>
 <de>Vorname</de>
+<es>Nombre</es>
 <id>97</id>
 </text>
 <text>
 <en>Lastname</en>
 <de>Nachname</de>
+<es>Apellidos</es>
 <id>98</id>
 </text>
 <text>
 <en>Email</en>
 <de>E-Mail</de>
+<es>E-Mail</es>
 <id>99</id>
 </text>
 <text>
@@ -2828,6 +2832,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Street</en>
 <de>Stra&#xDF;e</de>
+<es>Calle</es>
 <id>803</id>
 </text>
 <text>
@@ -2843,11 +2848,13 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Country</en>
 <de>Land</de>
+<es>País</es>
 <id>806</id>
 </text>
 <text>
 <en>Phone</en>
 <de>Telefon</de>
+<es>Teléfono</es>
 <id>807</id>
 </text>
 <text>
@@ -2933,11 +2940,13 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Mr.</en>
 <de>Herr</de>
+<es>Señor</es>
 <id>829</id>
 </text>
 <text>
 <en>Ms.</en>
 <de>Frau</de>
+<es>Señora</es>
 <id>830</id>
 </text>
 <text>
@@ -3179,6 +3188,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Fax</en>
 <de>Fax</de>
+<es>Fax</es>
 <id>897</id>
 </text>
 <text>
@@ -3604,6 +3614,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Company</en>
 <de>Firma</de>
+<es>Empresa</es>
 <id>1004</id>
 </text>
 <text>
@@ -4416,6 +4427,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Message</en>
 <de>Mitteilung</de>
+<es>Mensaje</es>
 <id>1207</id>
 </text>
 <text>
@@ -4607,6 +4619,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>ZIP / City</en>
 <de>PLZ / Ort</de>
+<es>Código postal / Localidad</es>
 <id>1248</id>
 </text>
 <text>
