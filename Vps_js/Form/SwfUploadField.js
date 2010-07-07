@@ -76,7 +76,6 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         }
         if (this.infoPosition == 'south') this.createInfoContainer();
 
-        //return; // Flash Uploader deaktiviert
         if (this.allowOnlyImages) {
             fileTypes = '*.jpg;*.jpeg;*.gif;*.png';
             fileTypesDescription = trlVps('Web Image Files');
@@ -97,10 +96,6 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         });
         params.maxResolution = this.maxResolution;
         if (!params.PHPSESSID) return;
-        if (!(navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"])){
-            return;
-        }
-//         if (Ext.isLinux) return; //für markus deaktivert
 
         this.useSwf = false;
         this.swfu = new SWFUpload({
