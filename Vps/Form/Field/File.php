@@ -14,6 +14,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         parent::__construct($fieldname, $fieldLabel);
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->setAllowOnlyImages(false);
+        $this->setMaxResolution(false);
         $this->setXtype('swfuploadfield');
         $maxSize = ini_get('upload_max_filesize');
         if (strtolower(substr($maxSize, -1))=='k') {
