@@ -95,6 +95,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
                 params.PHPSESSID = c[1];
             }
         });
+        params.maxResolution = this.maxResolution;
         if (!params.PHPSESSID) return;
         if (!(navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"])){
             return;
