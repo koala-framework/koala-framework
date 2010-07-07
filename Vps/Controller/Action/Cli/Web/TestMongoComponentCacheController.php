@@ -85,9 +85,6 @@ class Vps_Controller_Action_Cli_Web_TestMongoComponentCacheController extends Vp
         $db = Vps_Registry::get('dao')->getMongoDb();
 
         $db->component_cache->ensureIndex(array(
-            'expired' => 1,
-        ));
-        $db->component_cache->ensureIndex(array(
             'meta.type' => 1,
             'meta.model' => 1,
             'meta.id' => 1,
