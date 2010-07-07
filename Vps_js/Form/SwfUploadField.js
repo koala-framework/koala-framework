@@ -99,7 +99,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         if (!(navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"])){
             return;
         }
-        if (Ext.isLinux) return; //für markus deaktivert
+//         if (Ext.isLinux) return; //für markus deaktivert
 
         this.useSwf = false;
         this.swfu = new SWFUpload({
