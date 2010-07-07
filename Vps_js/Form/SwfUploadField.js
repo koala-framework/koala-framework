@@ -116,6 +116,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             button_text_top_padding: 2,
             button_window_mode: SWFUpload.WINDOW_MODE.OPAQUE,
             button_action : SWFUpload.BUTTON_ACTION.SELECT_FILE,
+            button_cursor : SWFUpload.CURSOR.HAND,
 
             file_queued_handler: function(file) {
                 this.progress = Ext.MessageBox.show({
