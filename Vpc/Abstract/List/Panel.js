@@ -5,12 +5,12 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
     afterRender: function() {
         Vpc.Abstract.List.MultiFileUploadPanel.superclass.afterRender.call(this);
 
-        if (this.allowOnlyImages) {
+        if (this.list.multiFileUpload.allowOnlyImages) {
             fileTypes = '*.jpg;*.jpeg;*.gif;*.png';
-            fileTypesDescription = 'Web Image Files';
+            fileTypesDescription = trlVps('Web Image Files');
         } else {
             fileTypes = '*.*';
-            fileTypesDescription = 'All Files';
+            fileTypesDescription = trlVps('All Files');
         }
 
         //cookie als post mitschicken
@@ -23,15 +23,19 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                 params.PHPSESSID = c[1];
             }
         });
+        params.maxResolution = this.list.multiFileUpload.maxResolution;
         if (!params.PHPSESSID) return;
-//         if (!(navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"])){
-//             return;
-//         }
+
         var container = this.body.createChild();
 
         this.swf = new SWFUpload({
-            upload_url: location.protocol+'/'+'/'+location.host+this.controllerUrl+'/json-multi-upload',
+            custom_settings: {list: this.list},
+            upload_url: location.protocol+'/'+'/'+location.host+'/vps/media/upload/json-upload',
             flash_url: '/assets/swfupload/Flash/swfupload.swf',
+            file_size_limit: this.list.multiFileUpload.fileSizeLimit,
+            file_types: fileTypes,
+            file_types_description: fileTypesDescription,
+            post_params: params,
             button_placeholder_id: container.id,
             button_image_url: "/assets/vps/Vps_js/Form/SwfUploadField/button.jpg",
             button_width: "120",
@@ -41,6 +45,8 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
             button_text_left_padding: 28,
             button_text_top_padding: 2,
             button_window_mode: SWFUpload.WINDOW_MODE.OPAQUE,
+            button_cursor : SWFUpload.CURSOR.HAND,
+            button_action : SWFUpload.BUTTON_ACTION.SELECT_FILES,
 
             file_queued_handler: function(file) {
                 if (!this.vpsFiles) this.vpsFiles = [];
@@ -50,10 +56,11 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                     return;
                 }
 
+                this.uploadedIds = [];
                 this.running = true;
                 this.progress = Ext.MessageBox.show({
                     title : trlVps('Upload'),
-                    msg : trlVps('Uploading file'),
+                    msg : trlVps('Uploading files'),
                     buttons: false,
                     progress:true,
                     closable:false,
@@ -79,21 +86,20 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                         sumDone += this.getFile(i).size;
                     }
                 }
-                console.log(total, sumDone);
                 this.progress.updateProgress(sumDone/total);
             },
             upload_success_handler: function(file, response) {
-                console.log(response);
                 try {
                     var r = Ext.util.JSON.decode(response);
                 } catch(e) {
                     Vps.handleError('Upload Error');
                     return;
                 }
-                console.log(r);
                 if (r.success) {
+
+                    this.uploadedIds.push(r.value.uploadId);
+
                     for(var i=0;i<this.vpsFiles.length;i++) {
-                        console.log(i, this.getFile(i).name, this.getFile(i).filestatus);
                         if (this.getFile(i).filestatus == SWFUpload.FILE_STATUS.QUEUED) {
                             //neeext
                             this.startUpload(this.getFile(i).id);
@@ -102,7 +108,16 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                     }
                     this.running = false;
                     this.progress.hide();
-                    //TODO: reload grid
+
+                    var params = Ext.apply(this.customSettings.list.getBaseParams(), { uploadIds: this.uploadedIds.join(',')});
+                    Ext.Ajax.request({
+                        url: location.protocol+'/'+'/'+location.host+this.customSettings.list.controllerUrl+'/json-multi-upload',
+                        params: params,
+                        success: function() {
+                            this.customSettings.list.grid.reload();
+                        },
+                        scope: this
+                    })
                 } else {
                     this.progress.hide();
                     if (r.wrongversion) {
@@ -138,7 +153,6 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                 }
             },
             upload_error_handler: function(file, errorCode, errorMessage) {
-                console.log('upload_error_handler');
                 this.progress.hide();
                 // Upload Errors
                 var message = errorMessage;
@@ -169,7 +183,6 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                 }
             },
             file_queue_error_handler: function(file, errorCode, errorMessage) {
-                console.log('file_queue_error_handler');
                 var message = trlVps("File is zero bytes or cannot be accessed and cannot be uploaded.");
                 if (errorCode == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
                     message = trlVps("File size exceeds allowed limit.");
@@ -181,16 +194,6 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                     message = trlVps("File is not an allowed file type.");
                 }
                 Ext.Msg.alert(trlVps("Upload Error"), message);
-            },
-            swfupload_loaded_handler: function() {
-                console.log('swfupload_loaded_handler');
-                //wenn CallFunction nicht vorhanden funktioniert der uploader nicht.
-                //dann einfach durch die html version ersetzen
-                if (!this.getMovieElement().CallFunction) {
-                    this.customSettings.field.createUploadButton(true);
-                    return;
-                }
-                this.customSettings.field.useSwf = true;
             }
         });
     }
@@ -221,9 +224,11 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
 
         if (this.multiFileUpload) {
             this.multiFileUploadPanel = new Vpc.Abstract.List.MultiFileUploadPanel({
+                border: false,
                 region: 'south',
-                height: 150,
-                controllerUrl: this.controllerUrl
+                height: 50,
+                bodyStyle: 'padding-top: 15px; padding-left:80px;',
+                list: this
             });
             westItems.push(this.multiFileUploadPanel);
         }

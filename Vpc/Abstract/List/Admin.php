@@ -14,8 +14,13 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
 
         $multiFileUpload = false;
         $form = Vpc_Abstract_Form::createChildComponentForm($this->_class, 'child');
-        if ($this->_getFileUploadField($form)) {
-            $multiFileUpload = true;
+        if ($field = $this->_getFileUploadField($form)) {
+            $multiFileUpload = array(
+                'allowOnlyImages' => $field->getAllowOnlyImages(),
+                'maxResolution' => $field->getMaxResolution(),
+                'maxResolution' => $field->getMaxResolution(),
+                'fileSizeLimit' => $field->getFileSizeLimit(),
+            );
         }
 
         return array(

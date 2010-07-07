@@ -23,17 +23,25 @@ class Vpc_Abstract_List_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     {
         Zend_Registry::get('db')->beginTransaction();
 
-        $row = $this->_model->createRow();
-        $this->_beforeInsert($row);
-        $this->_beforeSave($row);
-        $row->save();
-
-        $multiFileUpload = false;
-        $form = Vpc_Abstract_Form::createChildComponentForm($this->_class, 'child');
-        if ($this->_getFileUploadField($form)) {
-            $multiFileUpload = true;
+        $uploadIds = explode(',', $this->_getParam('uploadIds'));
+        foreach ($uploadIds as $uploadId) {
+            $row = $this->_model->createRow();
+            $this->_beforeInsert($row);
+            $this->_beforeSave($row);
+            $row->save();
+            $form = Vpc_Abstract_Form::createChildComponentForm($this->_getParam('class'), 'child');
+            $form->setIdTemplate(null);
+            $field = $this->_getFileUploadField($form);
+            if (!$field) throw new Vps_Exception("can't find file field");
+            $form->setId($this->_getParam('componentId').'-'.$row->id);
+            $postData = array(
+                $field->getFieldName() => $uploadId
+            );
+            $postData = $form->processInput(null, $postData);
+            $form->validate(null, $postData);
+            $form->prepareSave(null, $postData);
+            $form->save(null, $postData);
         }
-
 
         Zend_Registry::get('db')->commit();
     }
