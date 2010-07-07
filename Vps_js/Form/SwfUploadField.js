@@ -79,10 +79,10 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         //return; // Flash Uploader deaktiviert
         if (this.allowOnlyImages) {
             fileTypes = '*.jpg;*.jpeg;*.gif;*.png';
-            fileTypesDescription = 'Web Image Files';
+            fileTypesDescription = trlVps('Web Image Files');
         } else {
             fileTypes = '*.*';
-            fileTypesDescription = 'All Files';
+            fileTypesDescription = trlVps('All Files');
         }
 
         //cookie als post mitschicken
