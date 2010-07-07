@@ -65,16 +65,19 @@ wurde soeben erstellt.</de>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
 <de>Ort der Abreise: Postleitzahl, Ort, Stra&#xDF;e</de>
+<es>Place of departure: zip code, Town, Street</es>
 <id>31</id>
 </text>
 <text>
 <en>Entered place could not been found!</en>
 <de>Eingetragener Ort konnte nicht gefunden werden!</de>
+<es>Entered place could not been found!</es>
 <id>32</id>
 </text>
 <text>
 <en>Show Route</en>
 <de>Route zeigen</de>
+<es>Show Route</es>
 <id>33</id>
 </text>
 <text>
