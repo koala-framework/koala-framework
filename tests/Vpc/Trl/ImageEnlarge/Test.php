@@ -4,6 +4,8 @@
  * @group Vpc_Trl
  * @group Vpc_Trl_ImageEnlarge
  *
+ * Was wo angezeigt werden soll siehe Vpc_Trl_ImageEnlarge_Master
+ *
 ansicht frontend:
 http://fnprofile.markus.vivid/vps/vpctest/Vpc_Trl_ImageEnlarge_Root/de/test1 (...2,3,4,5,6)
 http://fnprofile.markus.vivid/vps/vpctest/Vpc_Trl_ImageEnlarge_Root/en/test1 (...2,3,4,5,6)
@@ -122,6 +124,31 @@ class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
 
         $c = $this->_root->getComponentById('root-en_test6');
         $this->_checkTheSizes($c->render(), 1, 560, 560, 5, 95, 120);
+    }
+
+    public function testDeClearCache()
+    {
+        $c = $this->_root->getComponentById('root-master_test1');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
+        $row = $c->getComponent()->getRow();
+        $row->vps_upload_id = '6';
+        $row->save();
+        $this->_process();
+        $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
+    }
+
+    public function testEnClearCache()
+    {
+        $c = $this->_root->getComponentById('root-en_test1');
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
+        $row = $c->getComponent()->getRow();
+        $row->own_image = 1;
+        $row->save();
+        $row = $this->_root->getComponentById('root-en_test1-image')->getComponent()->getRow();
+        $row->vps_upload_id = '6';
+        $row->save();
+        $this->_process();
+        $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
     }
 
     private function _checkTheSizes($html, $largeImageNum, $largeWidth, $largeHeight, $smallImageNum, $smallWidth, $smallHeight)
