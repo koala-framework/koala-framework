@@ -19,7 +19,7 @@ class Vpc_Basic_LinkTag_Event_Form extends Vpc_Abstract_Form
     {
         $row = $this->getRow($parentRow);
         $c = Vps_Component_Data_Root::getInstance()
-            ->getComponentByDbId('events_'.$row->events_id, array('ignoreVisible'=>true));
-        return 'events_'.$c->parent->dbId == $this->getName();
+            ->getComponentByDbId('events_'.$row->event_id, array('ignoreVisible'=>true));
+        return 'event_'.$c->parent->dbId == $this->getName();
     }
 }
