@@ -82,7 +82,7 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
     protected function _getValueFromPostData($postData)
     {
         $fieldName = $this->getFieldName();
-        if (!isset($postData[$fieldName])) $postData[$fieldName] = null;
+        if (!isset($postData[$fieldName])) $postData[$fieldName] = $this->getDefaultValue();
         return $postData[$fieldName];
     }
 }
