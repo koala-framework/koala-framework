@@ -13,6 +13,73 @@ class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
     public function setUp()
     {
         parent::setUp('Vpc_Trl_ImageEnlarge_Root');
+
+        //master image
+        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-master_test1', 'vps_upload_id'=>'1'),
+                array('component_id'=>'root-master_test2', 'vps_upload_id'=>'1'),
+                array('component_id'=>'root-master_test3', 'vps_upload_id'=>'1'),
+                array('component_id'=>'root-master_test4', 'vps_upload_id'=>'1'),
+                array('component_id'=>'root-master_test5', 'vps_upload_id'=>'1'),
+                array('component_id'=>'root-master_test6', 'vps_upload_id'=>'1'),
+            ));
+
+        //image trl
+        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_Trl_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-en_test1', 'own_image'=>0),
+                array('component_id'=>'root-en_test2', 'own_image'=>0),
+                array('component_id'=>'root-en_test3', 'own_image'=>1),
+                array('component_id'=>'root-en_test4', 'own_image'=>1),
+                array('component_id'=>'root-en_test5', 'own_image'=>1),
+                array('component_id'=>'root-en_test6', 'own_image'=>0),
+            ));
+
+        //image trl own image
+        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_Trl_Image_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-en_test1-image', 'vps_upload_id'=>null),
+                array('component_id'=>'root-en_test2-image', 'vps_upload_id'=>null),
+                array('component_id'=>'root-en_test3-image', 'vps_upload_id'=>'6'),
+                array('component_id'=>'root-en_test4-image', 'vps_upload_id'=>'6'),
+                array('component_id'=>'root-en_test5-image', 'vps_upload_id'=>'6'),
+                array('component_id'=>'root-en_test6-image', 'vps_upload_id'=>null),
+            ));
+
+
+        //master enlarge tag
+        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-master_test1-linkTag', 'vps_upload_id'=>null, 'preview_image' => 0),
+                array('component_id'=>'root-master_test2-linkTag', 'vps_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test3-linkTag', 'vps_upload_id'=>null, 'preview_image' => 0),
+                array('component_id'=>'root-master_test4-linkTag', 'vps_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test5-linkTag', 'vps_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test6-linkTag', 'vps_upload_id'=>'2', 'preview_image' => 1),
+            ));
+
+        //enlarge tag trl
+        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-en_test1-linkTag', 'own_image'=>0),
+                array('component_id'=>'root-en_test2-linkTag', 'own_image'=>0),
+                array('component_id'=>'root-en_test3-linkTag', 'own_image'=>0),
+                array('component_id'=>'root-en_test4-linkTag', 'own_image'=>0),
+                array('component_id'=>'root-en_test5-linkTag', 'own_image'=>1),
+                array('component_id'=>'root-en_test6-linkTag', 'own_image'=>1),
+            ));
+
+        //enlarge tag trl own image
+        Vps_Model_Abstract::getInstance('Vpc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_Image_TestModel')
+            ->getProxyModel()->setData(array(
+                array('component_id'=>'root-en_test1-linkTag-image', 'vps_upload_id'=>null),
+                array('component_id'=>'root-en_test2-linkTag-image', 'vps_upload_id'=>null),
+                array('component_id'=>'root-en_test3-linkTag-image', 'vps_upload_id'=>null),
+                array('component_id'=>'root-en_test4-linkTag-image', 'vps_upload_id'=>null),
+                array('component_id'=>'root-en_test5-linkTag-image', 'vps_upload_id'=>'5'),
+                array('component_id'=>'root-en_test6-linkTag-image', 'vps_upload_id'=>'5'),
+            ));
     }
 
     public function testDe()
