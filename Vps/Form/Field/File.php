@@ -14,13 +14,8 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         parent::__construct($fieldname, $fieldLabel);
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->setAllowOnlyImages(false);
+        $this->setMaxResolution(false);
         $this->setXtype('swfuploadfield');
-    }
-
-    public function getMetaData($model)
-    {
-        $ret = parent::getMetaData($model);
-        unset($ret['ruleKey']);
         $maxSize = ini_get('upload_max_filesize');
         if (strtolower(substr($maxSize, -1))=='k') {
             $maxSize = substr($maxSize, 0, -1)*1024;
@@ -29,7 +24,13 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         } else if (strtolower(substr($maxSize, -1))=='g') {
             $maxSize = substr($maxSize, 0, -1)*1024*1024*1024;
         }
-        $ret['fileSizeLimit'] = $maxSize.' B';
+        $this->setFileSizeLimit($maxSize.' B');
+    }
+
+    public function getMetaData($model)
+    {
+        $ret = parent::getMetaData($model);
+        unset($ret['ruleKey']);
         return $ret;
     }
 

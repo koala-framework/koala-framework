@@ -9,7 +9,8 @@ Vps.onContentReady(function()
         new Ext.ToolTip({
             target: tooltipActivator,
             html: contentHtml,
-            dismissDelay:0
+            dismissDelay:0,
+            showDelay:100
         });
     });
 });

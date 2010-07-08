@@ -107,9 +107,10 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
 
     public function validate($row, $postData)
     {
+        $value = isset($postData[$this->_combobox->getFieldName()]) ? $postData[$this->_combobox->getFieldName()] : $this->_combobox->getDefaultValue();
         foreach ($this->fields as $card) {
             if ($card != $this->_combobox
-                && $card->getName() != $postData[$this->_combobox->getFieldName()]) {
+                && $card->getName() != $value) {
                 $card->setInternalSave(false);
             } else {
                 $card->setInternalSave(true);

@@ -1,0 +1,4 @@
+.projectTimerYears span.year { color: #666; }
+.projectTimerYears span.year strong { font-weight: bold; color: #15428B; }
+.projectTimerYears .projectTimerRed { color: #f00; }
+.projectTimerYears .projectTimerGreen { color: #080; }
