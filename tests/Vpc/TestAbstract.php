@@ -37,5 +37,6 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         Vps_Component_Data_Root::reset();
         Vps_Component_Generator_Abstract::clearInstances();
         $this->_root = Vps_Component_Data_Root::getInstance();
+        $this->_root->setFilename('vps/vpctest/'.Vps_Component_Data_Root::getComponentClass());
     }
 }
