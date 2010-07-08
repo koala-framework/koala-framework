@@ -4,6 +4,7 @@ Stable: 09.06.10
 Neue Features:
 - AutoFilter
 - Vpc_Tabs
+- Vpc_List: Multi File Upload
 
 möglicherweise nicht kompatible Änderungen:
 - LightBox restyling
