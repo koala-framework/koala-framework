@@ -214,23 +214,9 @@ class Vps_Setup
             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
         ) {
-            $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
-            if (empty($sessionPhpAuthed->success)) {
-                if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
-                    $loginResponse = Zend_Registry::get('userModel')
-                        ->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    if ($loginResponse['zendAuthResultCode'] == Zend_Auth_Result::SUCCESS) {
-                        $sessionPhpAuthed->success = 1;
-                    } else {
-                        unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    }
-                }
-
-                // separate if abfrage, damit login wieder kommt, falls gerade falsch eingeloggt wurde
-                if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
-                    header('WWW-Authenticate: Basic realm="Testserver"');
-                    throw new Vps_Exception_AccessDenied();
-                }
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                header('WWW-Authenticate: Basic realm="Testserver"');
+                throw new Vps_Exception_AccessDenied();
             }
         }
 
