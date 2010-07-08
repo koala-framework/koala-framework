@@ -9,6 +9,12 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
         return $ret;
     }
 
+    protected function _initForm()
+    {
+        parent::_initForm();
+        $this->_form->setProduct($this->_getProduct());
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
