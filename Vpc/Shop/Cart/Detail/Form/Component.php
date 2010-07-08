@@ -17,6 +17,7 @@ class Vpc_Shop_Cart_Detail_Form_Component extends Vpc_Form_Component
                     'order'.$this->getData()->parent
                     ->row->id);
             $this->_form->setId($this->getData()->parent->row->id);
+            $this->_form->setProduct($this->getData()->parent->row->getParentRow('ProductPrice')->getParentRow('Product'));
         }
     }
 }

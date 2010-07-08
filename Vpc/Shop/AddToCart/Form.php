@@ -2,6 +2,7 @@
 class Vpc_Shop_AddToCart_Form extends Vps_Form
 {
     protected $_modelName = 'Vpc_Shop_Cart_OrderProducts';
+    protected $_product;
     protected function _init()
     {
         parent::_init();
@@ -9,6 +10,11 @@ class Vpc_Shop_AddToCart_Form extends Vps_Form
             ->setValues(array(
                 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9, 10=>10
             ));
+    }
+
+    public function setProduct(Vpc_Shop_Product $product)
+    {
+        $this->_product = $product;
     }
 
     public function setProductId($productId)
