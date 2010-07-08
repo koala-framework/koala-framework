@@ -10,6 +10,11 @@ class Vpc_News_Detail_Abstract_Trl_Component extends Vpc_Directories_Item_Detail
         return $ret;
     }
 
+    public function hasContent()
+    {
+        return $this->getData()->getChildComponent('-content')->hasContent();
+    }
+
     public static function modifyItemData(Vps_Component_Data $new)
     {
         parent::modifyItemData($new);

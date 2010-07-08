@@ -2,6 +2,7 @@
 class Vpc_Shop_AddToCart_FrontendForm extends Vps_Form
 {
     protected $_modelName = 'Vpc_Shop_Cart_OrderProducts';
+    protected $_product;
     protected function _init()
     {
         parent::_init();
@@ -11,22 +12,8 @@ class Vpc_Shop_AddToCart_FrontendForm extends Vps_Form
             ));
     }
 
-    public function setProductId($productId)
+    public function setProduct(Vpc_Shop_Product $product)
     {
-        if (!Vpc_Shop_Cart_Orders::getCartOrderId()) {
-            $this->setId(null);
-        } else {
-            $where = array(
-                'shop_product_id = ?' => $productId,
-                'shop_order_id = ?' => Vpc_Shop_Cart_Orders::getCartOrderId()
-            );
-            //TODO: verbessern (speed?), nicht sinnlos row holen und nur id übergebn
-            $row = $this->getModel()->fetchAll($where)->current();
-            if ($row) {
-                $this->setId($row->id);
-            } else {
-                $this->setId(null);
-            }
-        }
+        $this->_product = $product;
     }
 }
