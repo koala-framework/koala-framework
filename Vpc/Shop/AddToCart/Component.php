@@ -9,15 +9,6 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
         return $ret;
     }
 
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        if ($this->_form->getId()) {
-            $ret['placeholder']['submitButton'] = trlVps('Update');
-        }
-        return $ret;
-    }
-
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
