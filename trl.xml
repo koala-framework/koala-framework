@@ -2949,12 +2949,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Mr.</en>
 <de>Herr</de>
+<fr>Monsieur</fr>
 <es>Señor</es>
 <id>829</id>
 </text>
 <text>
 <en>Ms.</en>
 <de>Frau</de>
+<fr>Madame</fr>
 <es>Señora</es>
 <id>830</id>
 </text>
