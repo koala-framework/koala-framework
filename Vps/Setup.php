@@ -224,7 +224,9 @@ class Vps_Setup
             set_time_limit((int)$tl);
         }
 
-        self::_setLocale();
+        if (!isset($_SERVER['REDIRECT_URL']) || substr($_SERVER['REDIRECT_URL'], 0, 7) != '/media/') {
+            self::_setLocale();
+        }
     }
 
     public static function shutDown()
