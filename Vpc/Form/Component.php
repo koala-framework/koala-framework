@@ -74,7 +74,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         if (!$this->getForm()) return;
 
-        $m = $this->getForm->getModel();
+        $m = $this->getForm()->getModel();
         while ($m instanceof Vps_Model_Proxy) {
             $m = $m->getProxyModel();
         }
