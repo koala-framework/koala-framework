@@ -119,26 +119,6 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return parent::validate($row, $postData);
     }
 
-    public function load($parentRow, $postData = array())
-    {
-        $row = (object)$this->_getRowByParentRow($parentRow);
-        $ret = array();
-        if ($this->hasChildren()) {
-            foreach ($this->getChildren() as $field) {
-                if ($field instanceof Vps_Form_Container_Card) {
-                    $data = $this->_combobox->load($row, $postData);
-                    $c = $data[$this->_combobox->getFieldName()];
-                    if ($field->getName() == $c) {
-                        $ret = array_merge($ret, $field->load($row, $postData));
-                    }
-                } else {
-                    $ret = array_merge($ret, $field->load($row, $postData));
-                }
-            }
-        }
-        return $ret;
-    }
-    
     public function getTemplateVars($values)
     {
         $ret = array();
