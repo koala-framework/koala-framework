@@ -73,6 +73,8 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
             foreach ($exprs as $e) {
                 if ($e instanceof Vps_Model_Select_Expr_Equals) {
                     $where[$e->getField()] = $e->getValue();
+                } else if ($e instanceof Vps_Model_Select_Expr_NotEquals) {
+                    $where[$e->getField()]['$ne'] = $e->getValue();
                 } else if ($e instanceof Vps_Model_Select_Expr_HigherDate) {
                     $where[$e->getField()]['$gt'] = new MongoDate(strtotime($e->getValue()));
                 } else if ($e instanceof Vps_Model_Select_Expr_SmallerDate) {
