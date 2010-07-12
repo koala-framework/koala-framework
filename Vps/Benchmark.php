@@ -146,7 +146,7 @@ class Vps_Benchmark
             } else {
                 echo "Memory: ".round(memory_get_usage()/1024)." kb<br />\n";
             }
-            if (Zend_Registry::get('dao')->hasDb() && Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
+            if (Zend_Registry::get('dao') && Zend_Registry::get('dao')->hasDb() && Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
                 echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
             }
         }
