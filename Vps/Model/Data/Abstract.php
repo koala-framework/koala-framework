@@ -300,6 +300,32 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             } else {
                 return false;
             }
+        } else if ($expr instanceof Vps_Model_Select_Expr_HigherEqualDate) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if ($v) {
+                $fieldTime = strtotime($v);
+                $exprTime = strtotime($expr->getValue());
+                if ($fieldTime >= $exprTime) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_SmallerEqualDate) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if ($v) {
+                $fieldTime = strtotime($v);
+                $exprTime = strtotime($expr->getValue());
+                if ($fieldTime <= $exprTime) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {
             $v = $this->_rowValue($expr->getField(), $data);
             if (!($v && strpos(strtolower($v), strtolower($expr->getValue())) !== false )) {
