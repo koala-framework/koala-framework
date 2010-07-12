@@ -55,7 +55,9 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         } else {
             $select = $where;
         }
+        $p = Vps_Registry::get('db')->getProfiler()->queryStart(print_r($this->_getQuery($select), true));
         $ret = $this->_collection->find($this->_getQuery($select))->count();
+        $p = Vps_Registry::get('db')->getProfiler()->queryEnd($p);
         return $ret;
     }
 
@@ -65,6 +67,21 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         if ($equals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
             foreach ($equals as $k=>$v) {
                 $where[$k] = $v;
+            }
+        }
+        if ($exprs = $select->getPart(Vps_Model_Select::WHERE_EXPRESSION)) {
+            foreach ($exprs as $e) {
+                if ($e instanceof Vps_Model_Select_Expr_Equals) {
+                    $where[$e->getField()] = $e->getValue();
+                } else if ($e instanceof Vps_Model_Select_Expr_HigherDate) {
+                    $where[$e->getField()]['$gt'] = new MongoDate(strtotime($e->getValue()));
+                } else if ($e instanceof Vps_Model_Select_Expr_SmallerDate) {
+                    $where[$e->getField()]['$lt'] = new MongoDate(strtotime($e->getValue()));
+                } else if ($e instanceof Vps_Model_Select_Expr_HigherEqualDate) {
+                    $where[$e->getField()]['$gte'] = new MongoDate(strtotime($e->getValue()));
+                } else if ($e instanceof Vps_Model_Select_Expr_SmallerEqualDate) {
+                    $where[$e->getField()]['$lte'] = new MongoDate(strtotime($e->getValue()));
+                }
             }
         }
         if ($id = $select->getPart(Vps_Model_Select::WHERE_ID)) {
