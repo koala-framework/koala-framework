@@ -362,6 +362,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else if ($expr instanceof Vps_Model_Select_Expr_Higher
                 || $expr instanceof Vps_Model_Select_Expr_HigherDate) {
             return $field." > ".$quotedValue;
+        } else if ($expr instanceof Vps_Model_Select_Expr_SmallerEqualDate) {
+            return $field." <= ".$quotedValue;
+        } else if ($expr instanceof Vps_Model_Select_Expr_HigherEqualDate) {
+            return $field." >= ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_Like) {
             $quotedValue = str_replace("_", "\\_", $quotedValue);
             if ($expr instanceof Vps_Model_Select_Expr_Contains) {
