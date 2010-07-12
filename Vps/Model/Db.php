@@ -354,6 +354,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
             } else {
                 return $field." = ".$quotedValue;
             }
+        } else if ($expr instanceof Vps_Model_Select_Expr_NotEquals) {
+            if (is_array($quotedValue)) {
+                return $field." NOT IN (".implode(',', $quotedValue).")";
+            } else {
+                return $field." != ".$quotedValue;
+            }
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
             return $field." IS NULL";
         } else if ($expr instanceof Vps_Model_Select_Expr_Smaller
