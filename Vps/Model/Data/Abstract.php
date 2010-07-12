@@ -259,6 +259,13 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             if (!in_array($v, $values)) {
                 return false;
             }
+        } else if ($expr instanceof Vps_Model_Select_Expr_NotEquals) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            $values = $expr->getValue();
+            if (!is_array($values)) $values = array($values);
+            if (in_array($v, $values)) {
+                return false;
+            }
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
             $v = $this->_rowValue($expr->getField(), $data);
             if (!is_null($v)) {
