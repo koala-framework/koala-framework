@@ -1,6 +1,8 @@
 <?php
 class Vps_Component_Output_Partial
 {
+    private $_currentId;
+
     public function render($component, $config, $view)
     {
         $partialsClass = $config[0];
@@ -21,6 +23,12 @@ class Vps_Component_Output_Partial
         $vars['info'] = $info;
         $vars['data'] = $component;
         $view->assign($vars);
+        $this->_currentId = $id;
         return $view->render($template);
+    }
+
+    public function getCacheValue()
+    {
+        return $this->_currentId;
     }
 }

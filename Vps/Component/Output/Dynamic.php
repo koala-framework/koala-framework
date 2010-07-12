@@ -20,6 +20,6 @@ class Vps_Component_Output_Dynamic
         $serializedArgs = base64_encode(serialize($args));
         $componentId = $component->componentId;
         $info = base64_encode(serialize($info));
-        return "{dynamic: $componentId $dynamicClass $serializedArgs, $info}";
+        return "{dynamic: $componentId $dynamicClass $serializedArgs $info}";
     }
 }

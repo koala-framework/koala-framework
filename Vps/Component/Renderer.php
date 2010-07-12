@@ -1,29 +1,30 @@
 <?php
 class Vps_Component_Renderer extends Vps_Component_Renderer_Abstract
 {
-    private $_masterTemplates = null;
+    private $_masterComponents = null;
     private $_componentMasterTemplates = array();
     private $_renderMaster = false;
     private $_renderComponentId;
 
-    protected function _getMasterTemplate($component)
+    protected function _getMasterComponent($component)
     {
-        $componentId = $component->componentId;
-        if (is_null($this->_masterTemplates)) {
-            $this->_masterTemplates = array();
-            if ($componentId != Vps_Component_Data_Root::getInstance()->componentId) {
+        if (is_null($this->_masterComponents)) {
+            $this->_masterComponents = array();
+            if ($component->componentId != Vps_Component_Data_Root::getInstance()->componentId) {
                 $component = $component->parent;
             }
             while ($component) {
                 $master = Vpc_Abstract::getTemplateFile($component->componentClass, 'Master');
-                if ($master) $this->_masterTemplates[] = $master;
+                if ($master) {
+                    $component->masterTemplate = $master;
+                    $this->_masterComponents[] = $component;
+                }
                 $component = $component->parent;
             }
         }
 
         $ret = null;
-        if (count($this->_masterTemplates))
-            $ret = array_pop($this->_masterTemplates);
+        if (count($this->_masterComponents)) $ret = array_pop($this->_masterComponents);
         return $ret;
     }
 
@@ -53,7 +54,7 @@ class Vps_Component_Renderer extends Vps_Component_Renderer_Abstract
 
     public function renderComponent($component, $renderMaster = false)
     {
-        $this->_masterTemplates = null;
+        $this->_masterComponents = null;
         $this->_componentMasterTemplates = array();
         $this->_renderMaster = $renderMaster;
         return parent::renderComponent($component);
@@ -63,10 +64,11 @@ class Vps_Component_Renderer extends Vps_Component_Renderer_Abstract
     {
         // Master
         if ($outputConfig['type'] == 'component' && $this->_renderMaster) {
-            $masterTemplate = $this->_getMasterTemplate($component);
-            if ($masterTemplate) {
-                $outputConfig['config'] = array($masterTemplate);
+            $masterComponent = $this->_getMasterComponent($component);
+            if ($masterComponent) {
+                $outputConfig['config'] = array($masterComponent->masterTemplate, $masterComponent->componentId);
                 $outputConfig['type'] = 'master';
+                $outputConfig['value'] = $masterComponent->componentId;
             }
         }
         // Plugins

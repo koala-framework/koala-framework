@@ -1,4 +1,5 @@
 <?php
+/*
 class Vps_Component_Cache_CacheModel extends Vps_Component_Cache_Model
 {
     public function __construct(array $config = array())
@@ -12,3 +13,4 @@ class Vps_Component_Cache_CacheModel extends Vps_Component_Cache_Model
         parent::__construct($config);
     }
 }
+*/

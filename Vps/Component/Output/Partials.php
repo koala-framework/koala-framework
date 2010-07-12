@@ -15,9 +15,14 @@ class Vps_Component_Output_Partials
                 'total' => $count,
                 'number' => $number++
             )));
-            $ret .= "{partial: $componentId $partialsClass $config $id $info}";
+            $ret .= "{partial: $componentId($id) $partialsClass $config $id $info}";
         }
         return $ret;
+    }
+
+    public function getCacheValue()
+    {
+        return null;
     }
 
     public static function getHelperOutput(Vps_Component_Data $component, $partialClass = null, $params = array())

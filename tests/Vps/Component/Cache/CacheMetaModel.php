@@ -1,4 +1,5 @@
 <?php
+/*
 class Vps_Component_Cache_CacheMetaModel extends Vps_Component_Cache_MetaModel
 {
     public function __construct(array $config = array())
@@ -13,3 +14,4 @@ class Vps_Component_Cache_CacheMetaModel extends Vps_Component_Cache_MetaModel
         parent::__construct($config);
     }
 }
+*/
