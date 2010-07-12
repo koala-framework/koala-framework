@@ -1,6 +1,8 @@
 <?php
 class Vps_Component_Output_Master
 {
+    private $_templateComponentId;
+
     public function render($component, $config, $view)
     {
         if (isset($config[0]) && $config[0] != '') {
@@ -9,6 +11,7 @@ class Vps_Component_Output_Master
             $template = Vpc_Abstract::getTemplateFile($component->componentClass, 'Master');
             if (!$template) throw new Vps_Exception("No Component-Template found for '{$component->componentClass}'");
         }
+        if (isset($config[1])) $this->_templateComponentId = $config[1];
 
         $vars = array();
         $vars['component'] = $component;
@@ -21,5 +24,10 @@ class Vps_Component_Output_Master
 
         $view->assign($vars);
         return $view->render($template);
+    }
+
+    public function getCacheValue()
+    {
+        return $this->_templateComponentId;
     }
 }
