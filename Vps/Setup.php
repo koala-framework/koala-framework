@@ -224,7 +224,11 @@ class Vps_Setup
             set_time_limit((int)$tl);
         }
 
-        if (!isset($_SERVER['REDIRECT_URL']) || substr($_SERVER['REDIRECT_URL'], 0, 7) != '/media/') {
+        if (!isset($_SERVER['REDIRECT_URL']) ||
+            (substr($_SERVER['REDIRECT_URL'], 0, 7) != '/media/'
+             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/assets/'
+             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output') //rssinclude
+        ) {
             self::_setLocale();
         }
     }
