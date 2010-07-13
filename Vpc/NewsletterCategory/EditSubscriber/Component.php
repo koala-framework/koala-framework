@@ -9,5 +9,6 @@ class Vpc_NewsletterCategory_EditSubscriber_Component extends Vpc_Newsletter_Edi
         $this->_form = new Vpc_NewsletterCategory_Subscribe_FrontendForm(
             'form', $component->componentId
         );
+        parent::_initForm();
     }
 }
