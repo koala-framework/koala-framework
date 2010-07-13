@@ -142,11 +142,11 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }
         
         for (var action in data.actions) {
-        	if (data.actions[action]) {
+            if (data.actions[action]) {
                 this.getAction(action).enable();
-        	} else {
+            } else {
                 this.getAction(action).disable();
-        	}
+            }
         }
 
         for (var i in this.editActions) {
