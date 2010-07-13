@@ -68,30 +68,6 @@ class Vps_Component_Abstract
                 if (!array_key_exists($setting, $settings)) {
                     throw new Vps_Exception("Couldn't find required setting '$setting' for $c.");
                 }
-                if ($setting == 'generators' && Vps_Registry::get('config')->vpc->rootComponent == Vps_Component_Data_Root::getComponentClass()) {
-                    $classes = self::getSetting($class, 'parentClasses');
-                    $cc = array();
-                    if (isset(Vps_Registry::get('config')->vpc->childComponents)) {
-                        $cc = Vps_Registry::get('config')->vpc->childComponents->toArray();
-                    }
-                    foreach ($classes as $c) {
-                        if (isset($cc[$c])) {
-                            if (!isset($settings['configChildComponentsGenerator'])) {
-                                throw new Vps_Exception("configChildComponentsGenerator setting not set for '$class', but vpc.childComponents in config is used");
-                            }
-                            $gen = $settings['configChildComponentsGenerator'];
-                            if (!isset($settings['generators'][$gen])) {
-                                throw new Vps_Exception("invalid configChildComponentsGenerator for '$class'");
-                            }
-                            if (!is_array($settings['generators'][$gen]['component'])) {
-                                throw new Vps_Exception("component must be an array for generator '$gen' for '$class'");
-                            }
-                            foreach ($cc[$c] as $componentKey=>$componentClass) {
-                                $settings['generators'][$gen]['component'][$componentKey] = $componentClass;
-                            }
-                        }
-                    }
-                }
                 return $settings[$setting];
             }
 

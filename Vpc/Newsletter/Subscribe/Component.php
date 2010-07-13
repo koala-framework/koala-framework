@@ -23,7 +23,7 @@ class Vpc_Newsletter_Subscribe_Component extends Vpc_Form_Component
 
         return $ret;
     }
-    
+
     public function insertSubscription(Vpc_Newsletter_Subscribe_Row $row)
     {
         if ($row->id) {
@@ -60,7 +60,7 @@ class Vpc_Newsletter_Subscribe_Component extends Vpc_Form_Component
         }
 
         $nlData = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Newsletter_Component');
+            ->getComponentByClass('Vpc_Newsletter_Component', array('subroot' => $this->getData()));
         if (!$nlData) {
             throw new Vps_Exception('Cannot find newsletter component');
         }
