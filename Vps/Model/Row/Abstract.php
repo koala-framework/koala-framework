@@ -186,6 +186,11 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         return $this->_dirty;
     }
 
+    public final function isDirty()
+    {
+        return $this->_isDirty();
+    }
+
     public function save()
     {
         foreach ($this->_getSiblingRows() as $k=>$r) {
