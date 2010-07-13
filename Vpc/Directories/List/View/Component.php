@@ -48,6 +48,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
     protected function _getSelect()
     {
         $ret = $this->getData()->parent->getComponent()->getSelect();
+        if (!$ret) return $ret;
 
         $searchForm = $this->_getSearchForm();
         if ($searchForm && $searchForm->getComponent()->isSaved()) {
