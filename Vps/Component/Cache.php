@@ -180,6 +180,7 @@ class Vps_Component_Cache
                 Vps_Component_Cache::getInstance()->saveMeta($model, null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
             }
         }
+        Vps_Component_Cache::getInstance()->getMetaModel()->writeBuffer();
     }
 
     public function clean($mode = self::CLEANING_MODE_META, $value = null)
