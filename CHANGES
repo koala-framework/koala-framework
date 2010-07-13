@@ -19,6 +19,10 @@ möglicherweise nicht kompatible Änderungen:
 - Vps_Component_Plugin_Password_Component::isLoggedId in isLoggedIn umbenannt
 - config->vpc->childComponents wird direkt in getSetting verwendet und 
   nicht mehr druebergespielt, ist flexibler (commit cf4a0a2)
+- Newsletter: 
+    o Strukturänderungen
+    o Standardmodel von Users auf Subscribers umgestellt
+    o auf jeden Fall alles durchtesten beim Umstellen
 
 == 1.8 ==
 Erstellt: 15.01.10
