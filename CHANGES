@@ -17,6 +17,8 @@ möglicherweise nicht kompatible Änderungen:
     o eigene Tabelle, kein Pool mehr
     o Updatescript gibts für News und Events
 - Vps_Component_Plugin_Password_Component::isLoggedId in isLoggedIn umbenannt
+- config->vpc->childComponents wird direkt in getSetting verwendet und 
+  nicht mehr druebergespielt, ist flexibler (commit cf4a0a2)
 
 == 1.8 ==
 Erstellt: 15.01.10
