@@ -121,19 +121,22 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     // static zum Testen
     public static function getEditComponents($component)
     {
-        $editComponents = $component->getRecursiveChildComponents(
-            array(
-                'hasEditComponents' => true,
-                'ignoreVisible' => true,
-                'flags' => array('showInPageTreeAdmin' => false)
-            ), array(
-                'flags' => array('showInPageTreeAdmin' => false),
-                'hasEditComponents' => true,
-            )
-        );
+        $editComponents = array();
         if ($component->isPage) {
             $editComponents[] = $component;
         }
+        $editComponents = array_merge($editComponents,
+            $component->getRecursiveChildComponents(
+                array(
+                    'hasEditComponents' => true,
+                    'ignoreVisible' => true,
+                    'flags' => array('showInPageTreeAdmin' => false)
+                ), array(
+                    'flags' => array('showInPageTreeAdmin' => false),
+                    'hasEditComponents' => true,
+                )
+            )
+        );
         return $editComponents;
     }
 

@@ -6,18 +6,15 @@ class Vpc_NewsletterCategory_Subscribe_RecipientsController extends Vpc_Newslett
         $this->_model = Vps_Model_Abstract::getInstance('Vpc_NewsletterCategory_Subscribe_Model');
         parent::_initColumns();
 
-        $pool = Vps_Model_Abstract::getInstance('Vps_Util_Model_Pool');
-        $categories = $pool->getRows($pool->select()
-            ->whereEquals('pool', 'Newsletterkategorien')
-            ->order('pos')
-        );
+        $model = Vps_Model_Abstract::getInstance('Vpc_NewsletterCategory_CategoriesModel');
+        $categories = $model->getRows($model->select()->order('pos'));
 
         // filter by category
         $categorySelects = array(array('all', '- '.trlVps('All').' -'));
         foreach ($categories as $row) {
-            $categorySelects[] = array($row->id, $row->value);
+            $categorySelects[] = array($row->id, $row->category);
         }
-        $this->_filters['pool_id'] = array(
+        $this->_filters['category_id'] = array(
             'type'=>'ComboBox',
             'label' => trlVps('Categorie').':',
             'width'=>110,
@@ -28,7 +25,7 @@ class Vpc_NewsletterCategory_Subscribe_RecipientsController extends Vpc_Newslett
 
         foreach ($categories as $c) {
             $this->_columns->add(
-                new Vps_Grid_Column_Checkbox('poolcheck'.$c->id, $c->value, 70)
+                new Vps_Grid_Column_Checkbox('categorycheck'.$c->id, $c->category, 70)
             )
             ->setData(new Vpc_NewsletterCategory_Detail_RecipientCategoryData($c->id));
         }
@@ -38,10 +35,10 @@ class Vpc_NewsletterCategory_Subscribe_RecipientsController extends Vpc_Newslett
     {
         $select = parent::_getSelect();
 
-        if ($this->_getParam('query_pool_id') && $this->_getParam('query_pool_id') != 'all') {
-            $model = Vps_Model_Abstract::getInstance('Vpc_NewsletterCategory_Subscribe_SubscriberToPool');
+        if ($this->_getParam('query_category_id') && $this->_getParam('query_category_id') != 'all') {
+            $model = Vps_Model_Abstract::getInstance('Vpc_NewsletterCategory_Subscribe_SubscriberToCategory');
             $rows = $model->getRows($model->select()
-                ->whereEquals('pool_id', $this->_getParam('query_pool_id'))
+                ->whereEquals('category_id', $this->_getParam('query_category_id'))
             );
             $ids = array();
             foreach ($rows as $row) {
