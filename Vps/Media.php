@@ -77,14 +77,37 @@ class Vps_Media
 
     public static function getOutput($class, $id, $type)
     {
-        $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-        if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Vps_Media_Output_Interface')) {
-            // TODO Ev. Mail senden, wenn Grafik nicht ausgeliefert wird
-            throw new Vps_Exception_NotFound();
+        $cacheId = self::createCacheId($class, $id, $type);
+
+        $isValidCache = Vps_Cache::factory('Core', 'File',
+            array('lifetime'=>60*60, 'automatic_serialization'=>true),
+            array('file_name_prefix' => 'isValid',
+                'cache_dir' => 'application/cache/media',
+                'cache_file_umask' => 0666,
+                'hashed_directory_umask' => 0777
+            ));
+        if (!$isValidCache->load($cacheId)) {
+            $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            if (!class_exists($classWithoutDot)) throw new Vps_Exception_NotFound();
+            $isValid = Vps_Media_Output_IsValidInterface::VALID;
+            if (is_instance_of($classWithoutDot, 'Vps_Media_Output_IsValidInterface')) {
+                $isValid = call_user_func(array($classWithoutDot, 'isValidMediaOutput'), $id, $type, $class);
+                if ($isValid == Vps_Media_Output_IsValidInterface::INVALID) {
+                    throw new Vps_Exception_NotFound();
+                }
+            }
+            if ($isValid != Vps_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
+                $data = array('valid'=>true);
+                $isValidCache->save($data, $cacheId);
+            }
         }
 
-        $cacheId = self::createCacheId($class, $id, $type);
         if (!Vps_Registry::get('config')->debug->mediaCache || !($output = self::getOutputCache()->load($cacheId))) {
+            $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Vps_Media_Output_Interface')) {
+                // TODO Ev. Mail senden, wenn Grafik nicht ausgeliefert wird
+                throw new Vps_Exception_NotFound();
+            }
             $output = call_user_func(array($classWithoutDot, 'getMediaOutput'), $id, $type, $class);
             $specificLifetime = false;
             if (isset($output['lifetime'])) {

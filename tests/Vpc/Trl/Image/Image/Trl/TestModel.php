@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_ImageEnlarge_ImageEnlarge_Trl_TestModel extends Vps_Model_Proxy
+class Vpc_Trl_Image_Image_Trl_TestModel extends Vps_Model_Proxy
 {
     public function __construct()
     {

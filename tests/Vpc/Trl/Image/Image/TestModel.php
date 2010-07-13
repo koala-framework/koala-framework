@@ -1,5 +1,5 @@
 <?php
-class Vpc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_Image_TestModel extends Vpc_Abstract_Image_Model
+class Vpc_Trl_Image_Image_TestModel extends Vpc_Abstract_Image_Model
 {
     public function __construct()
     {
@@ -7,7 +7,7 @@ class Vpc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_Image_TestModel extends V
             'primaryKey' => 'component_id',
             'uniqueIdentifier' => get_class($this).'-Proxy'
         ));
-        $this->_referenceMap['Image']['refModelClass'] = 'Vpc_Trl_ImageEnlarge_UploadsModel';
+        $this->_referenceMap['Image']['refModelClass'] = 'Vpc_Trl_Image_UploadsModel';
         parent::__construct($config);
     }
 

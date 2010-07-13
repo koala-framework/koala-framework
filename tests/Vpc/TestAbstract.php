@@ -18,6 +18,7 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         Vps_Component_ModelObserver::getInstance()->clear();
         Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
         Vps_Component_ModelObserver::getInstance()->setDisableCache(false);
+        Vps_Media::getOutputCache()->clean();
     }
 
     public function tearDown()
@@ -26,6 +27,8 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
         Vps_Component_Data_Root::reset();
         Vps_Component_Cache::clearInstance();
+        Vps_Component_Data_Root::reset();
+        Vps_Component_Generator_Abstract::clearInstances();
         parent::tearDown();
     }
 
@@ -35,5 +38,6 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         Vps_Component_Data_Root::reset();
         Vps_Component_Generator_Abstract::clearInstances();
         $this->_root = Vps_Component_Data_Root::getInstance();
+        $this->_root->setFilename('vps/vpctest/'.Vps_Component_Data_Root::getComponentClass());
     }
 }
