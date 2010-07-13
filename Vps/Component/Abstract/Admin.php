@@ -182,7 +182,9 @@ class Vps_Component_Abstract_Admin
     //falls es wo anders gebraucht wird bitte flexibler machen
     protected function _addResourcesBySameClassResourceName($c)
     {
-        return Vpc_Abstract::getSetting($this->_class, 'componentName');
+        $ret = Vpc_Abstract::getSetting($this->_class, 'componentName');
+        if (strpos($ret, '.') !== false) $ret = substr(strrchr($ret, '.'), 1);
+        return $ret;
     }
 
     protected final function _getSetting($name)

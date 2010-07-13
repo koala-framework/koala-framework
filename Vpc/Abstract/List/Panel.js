@@ -220,6 +220,10 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
         });
         this.proxyItem = this.grid;
 
+        this.grid.on('datachange', function() {
+            this.childPanel.reload();
+        }, this);
+
         var westItems = [this.grid];
 
         if (this.multiFileUpload) {

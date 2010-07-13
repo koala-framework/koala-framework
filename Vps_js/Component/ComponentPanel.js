@@ -60,12 +60,17 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             }
         }, this);
 
+        this.componentsStack.push(data);
+        this.updateToolbar();
+
         if (item) {
             item.applyBaseParams(params);
             item.load();
             if (item.getAction && item.getAction('saveBack')) {
-                if (this.getTopToolbar().items.getCount() > 0) {
+                if (this.getTopToolbar().items.getCount() > 3) {
                     item.getAction('saveBack').show();
+                } else {
+                    item.getAction('saveBack').hide();
                 }
             }
         } else {
@@ -94,16 +99,16 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             item.on('loaded', function() {
                 //muss hier auch nochmal gemacht werden
                 if (item.getAction && item.getAction('saveBack')) {
-                    if (this.getTopToolbar().items.getCount() > 0) {
+                    if (this.getTopToolbar().items.getCount() > 3) {
                         item.getAction('saveBack').show();
+                    } else {
+                        item.getAction('saveBack').hide();
                     }
                 }
             }, this);
             this.add(item);
             this.doLayout();
         }
-        this.componentsStack.push(data);
-        this.updateToolbar();
         this.getLayout().setActiveItem(item);
     },
 

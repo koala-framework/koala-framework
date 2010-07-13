@@ -11,7 +11,7 @@ class Vps_Data_Vpc_Table extends Vps_Data_Table_Parent
         $this->_tagSuffix = $tagSuffix;
     }
 
-    public function load($row)
+    private function _getParentRow($row)
     {
         $table = new $this->_parentTable(array('componentClass' => $this->_componentClass));
         if ($this->_tagSuffix) {
@@ -22,12 +22,27 @@ class Vps_Data_Vpc_Table extends Vps_Data_Table_Parent
         $where = array(
             'component_id = ?' => $componentId
         );
-        $row = $table->fetchAll($where)->current();
-        if ($row) {
-            $name = $this->_dataIndex;
-            return $row->$name;
-        } else {
-            return '';
+        $ret = $table->fetchAll($where)->current();
+        if (!$ret) {
+            $ret = $table->createRow();
+            $ret->component_id = $componentId;
         }
+        return $ret;
     }
+
+    public function load($row)
+    {
+        $row = $this->_getParentRow($row);
+        $name = $this->_dataIndex;
+        return $row->$name;
+    }
+
+    public function save(Vps_Model_Row_Interface $row, $data)
+    {
+        $row = $this->_getParentRow($row);
+        $name = $this->_dataIndex;
+        $row->$name = $data;
+        $row->save();
+    }
+
 }
