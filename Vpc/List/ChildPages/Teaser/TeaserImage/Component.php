@@ -26,4 +26,13 @@ class Vpc_List_ChildPages_Teaser_TeaserImage_Component extends Vpc_Abstract_Comp
         if ($this->getRow()->visible) return true;
         return false;
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        if (isset($this->getData()->targetPage->row)) {
+            $ret[] = $this->getData()->targetPage->row;
+        }
+        return $ret;
+    }
 }
