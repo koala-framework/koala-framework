@@ -177,12 +177,12 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                     icon    : this.componentConfigs[actionKey].icon,
                     cls     : 'x-btn-text-icon',
                     scope   : this,
-                    disabled : data.disabled,
                     actionKey: actionKey
                 });
                 this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
                 this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
             }
+            this.editActions[actionKey].setDisabled(data.disabled);
             this.editActions[actionKey].show();
         }, this);
     },
