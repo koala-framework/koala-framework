@@ -9,7 +9,11 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Static',
             'component' => array()
         );
-        $ret['configChildComponentsGenerator'] = 'child';
+        $cc = Vps_Registry::get('config')->vpc->childComponents;
+        if (isset($cc->Vpc_Abstract_Composite_Component)) {
+            $ret['generators']['child']['component'] =
+                $cc->Vpc_Abstract_Composite_Component->toArray();
+        }
         return $ret;
     }
 
