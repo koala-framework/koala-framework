@@ -111,6 +111,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         } else {
             $ret = $this->_model->insert($this, $this->_data);
             $this->_data[$this->_getPrimaryKey()] = $ret;
+            $this->_setDirty(false);
         }
         $this->_cleanData = $this->_data;
 
