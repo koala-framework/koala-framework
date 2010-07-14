@@ -30,6 +30,9 @@ class Vpc_Box_Tags_RelatedNews_Component extends Vpc_Directories_List_Component
         $ret->where('vpc_components_to_tags.tag_id IN ('.implode(',', $tagIds).')');
         $ret->group('vpc_news.id');
 
+        //eigene seite nicht anzeigen
+        $ret->where('vpc_components_to_tags.component_id != ?', $this->getData()->getPage()->dbId);
+
         return $ret;
     }
 }
