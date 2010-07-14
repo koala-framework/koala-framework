@@ -10,6 +10,8 @@ class Vpc_Form_Dynamic_Paragraphs_Component extends Vpc_Paragraphs_Component
                 'checkbox' => 'Vpc_Form_Field_Checkbox_Component',
                 'textArea' => 'Vpc_Form_Field_TextArea_Component',
                 'fieldSet' => 'Vpc_Form_Container_FieldSet_Component',
+                'select' => 'Vpc_Form_Field_Select_Component',
+                'radio' => 'Vpc_Form_Field_Radio_Component',
             ),
             $ret['generators']['paragraphs']['component']
         );
