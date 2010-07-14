@@ -19,6 +19,7 @@ class Vpc_Box_Tags_RelatedPages_Component extends Vpc_Abstract
     protected function _getRelatedPages()
     {
         $ret = array();
+        if (!$this->getData()->getPage() || !$this->getData()->getPage()->generator) return $ret;
         $plugin = $this->getData()->getPage()->generator->getGeneratorPlugin('tags');
         if ($plugin) {
             $ret = $plugin->getComponentsWithSameTags($this->getData()->getPage());
