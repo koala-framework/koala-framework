@@ -17,6 +17,7 @@ class Vpc_Box_Tags_RelatedNews_Component extends Vpc_Directories_List_Component
     public function getSelect()
     {
         $ret = parent::getSelect();
+        if (!$this->getData()->getPage() || !$this->getData()->getPage()->generator) return null;
         $plugin = $this->getData()->getPage()->generator->getGeneratorPlugin('tags');
         if (!$plugin) return null;
 
