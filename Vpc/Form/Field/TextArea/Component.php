@@ -10,7 +10,7 @@ class Vpc_Form_Field_TextArea_Component extends Vpc_Form_Field_TextField_Compone
 
     protected function _getFormField()
     {
-        $ret = new Vps_Form_Field_TextArea();
+        $ret = new Vps_Form_Field_TextArea($this->getData()->componentId);
         $ret->setFieldLabel($this->getRow()->field_label);
         $ret->setWidth($this->getRow()->width);
         $ret->setWidth($this->getRow()->height);
