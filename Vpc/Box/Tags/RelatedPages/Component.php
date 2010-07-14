@@ -22,6 +22,11 @@ class Vpc_Box_Tags_RelatedPages_Component extends Vpc_Abstract
         $plugin = $this->getData()->getPage()->generator->getGeneratorPlugin('tags');
         if ($plugin) {
             $ret = $plugin->getComponentsWithSameTags($this->getData()->getPage());
+            foreach ($ret as $k=>$i) {
+                if ($i->getPage()->componentId == $this->getData()->getPage()->componentId) {
+                    unset($ret[$k]);
+                }
+            }
         }
         return $ret;
     }
