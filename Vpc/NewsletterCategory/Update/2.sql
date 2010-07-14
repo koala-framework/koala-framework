@@ -10,4 +10,4 @@ CREATE TABLE IF NOT EXISTS `vpc_newsletter_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 RENAME TABLE `vpc_newsletter_subscribers_to_pool`  TO `vpc_newsletter_subscribers_to_category`;
- ALTER TABLE `vpc_newsletter_subscribers_to_category` CHANGE `pool_id` `category_id` SMALLINT UNSIGNED NOT NULL;
+ALTER TABLE `vpc_newsletter_subscribers_to_category` CHANGE `pool_id` `category_id` SMALLINT UNSIGNED NOT NULL;
