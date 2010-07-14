@@ -15,7 +15,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
     public function setData($data)
     {
         foreach (array_keys($this->_cleanData) as $k) {
-            if ($this->_cleanData[$k] === $this->_data[$k]) {
+            if (!isset($this->_data[$k]) || $this->_cleanData[$k] === $this->_data[$k]) {
                 //nicht geändert
                 if (isset($data[$k])) {
                     $this->_data[$k] = $data[$k];
