@@ -1,6 +1,6 @@
 <?=trlVps('You got a requst');?>.
 
 <?
-foreach($this->vars->toArray() as $k=>$i) {
-    echo "$k: $i\n";
+foreach(unserialize($this->field_labels) as $k=>$i) {
+    echo "$i:\n".$this->$k."\n\n";
 }
