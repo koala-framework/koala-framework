@@ -12,12 +12,23 @@ class Vpc_Box_Tags_RelatedPages_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['related'] = array();
+        $ret['related'] = $this->_getRelatedPages();
+        return $ret;
+    }
+
+    protected function _getRelatedPages()
+    {
+        $ret = array();
         $plugin = $this->getData()->getPage()->generator->getGeneratorPlugin('tags');
         if ($plugin) {
-            $ret['related'] = $plugin->getComponentsWithSameTags($this->getData()->getPage());
+            $ret = $plugin->getComponentsWithSameTags($this->getData()->getPage());
         }
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        return !!$this->_getRelatedPages();
     }
 
     public static function getStaticCacheVars($componentClass)
