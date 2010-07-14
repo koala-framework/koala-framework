@@ -890,7 +890,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>The value in this field is invalid</en>
-<de>Die Variable in diesem Feld ist falsch</de>
+<de>Wert in diesem Feld ist ungültig</de>
 <id>314</id>
 </text>
 <text>
@@ -1325,7 +1325,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Value</en>
-<de>Variable</de>
+<de>Wert</de>
 <id>402</id>
 </text>
 <text>
@@ -1790,7 +1790,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Values</en>
-<de>Variablen</de>
+<de>Werte</de>
 <id>555</id>
 </text>
 <text>
