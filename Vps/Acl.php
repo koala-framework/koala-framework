@@ -392,7 +392,7 @@ class Vps_Acl extends Zend_Acl
             }
 
             //generator plugins erlauben
-            if (!$allowCheck) {
+            if (!$allowCheck && $component->componentId != 'root') { //root hat keinen generator
                 foreach ($component->generator->getGeneratorPlugins() as $p) {
                     if ($class == get_class($p)) {
                         $allowCheck = true;
