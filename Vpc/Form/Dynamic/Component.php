@@ -32,5 +32,14 @@ class Vpc_Form_Dynamic_Component extends Vpc_Form_Component
         $row->setFrom("noreply@$host");
         $row->addTo($this->getRow()->recipient);
         $row->subject = $this->getRow()->subject;
+
+        $labels = array();
+        foreach ($this->getData()->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
+            $f = $c->getComponent()->getFormField();
+            if ($f->getName() && $f->getFieldLabel()) {
+                $labels[$f->getName()] = $f->getFieldLabel();
+            }
+        }
+        $row->field_labels = serialize($labels); //ouch TODO bessere loesung
     }
 }
