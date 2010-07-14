@@ -115,14 +115,9 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }, this);
 
         tree.on('dblclick', function (o, e) {
-            var action;
-            for (var i in this.editActions) {
-                if (!this.editActions[i].isHidden()) {
-                    action = this.editActions[i];
-                }
-            }
-            if (action) {
-                action.execute(action.initialConfig);
+            var i = this.contextMenu.items.first();
+            if (i) {
+                i.handler.call(i.scope, i, e);
             }
         }, this);
 
