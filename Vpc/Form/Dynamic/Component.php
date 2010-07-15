@@ -14,7 +14,6 @@ class Vpc_Form_Dynamic_Component extends Vpc_Form_Component
     protected function _initForm()
     {
         $this->_form = new Vps_Form('form');
-        $this->_form->setModel(new Vps_Model_FnF()); //TODO
         foreach ($this->getData()->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
             $this->_form->fields->add($c->getComponent()->getFormField());
         }
