@@ -872,7 +872,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             doc.getElementsByTagName("head")[0].appendChild(s);
         };
         reloadCss.call(this, document);
-        reloadCss.call(this, this.doc);
+        if (this.doc) reloadCss.call(this, this.doc);
         Ext.Ajax.request({
             params: {
                 componentId: this.componentId
