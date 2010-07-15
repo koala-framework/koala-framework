@@ -65,6 +65,7 @@ wurde soeben erstellt.</de>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
 <de>Ort der Abreise: Postleitzahl, Ort, Stra&#xDF;e</de>
+<fr>Place of departure: zip code, Town, Street</fr>
 <es>Place of departure: zip code, Town, Street</es>
 <id>31</id>
 </text>
@@ -288,18 +289,21 @@ wurde soeben erstellt.</de>
 <text>
 <en>Firstname</en>
 <de>Vorname</de>
+<fr>Prénom</fr>
 <es>Nombre</es>
 <id>97</id>
 </text>
 <text>
 <en>Lastname</en>
 <de>Nachname</de>
+<fr>Nom</fr>
 <es>Apellidos</es>
 <id>98</id>
 </text>
 <text>
 <en>Email</en>
 <de>E-Mail</de>
+<fr>E-mail</fr>
 <es>E-Mail</es>
 <id>99</id>
 </text>
@@ -2834,6 +2838,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Street</en>
 <de>Stra&#xDF;e</de>
+<fr>Rue</fr>
 <es>Calle</es>
 <id>803</id>
 </text>
@@ -2850,12 +2855,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Country</en>
 <de>Land</de>
+<fr>Pays</fr>
 <es>País</es>
 <id>806</id>
 </text>
 <text>
 <en>Phone</en>
 <de>Telefon</de>
+<fr>Téléphone</fr>
 <es>Teléfono</es>
 <id>807</id>
 </text>
@@ -2942,12 +2949,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Mr.</en>
 <de>Herr</de>
+<fr>Monsieur</fr>
 <es>Señor</es>
 <id>829</id>
 </text>
 <text>
 <en>Ms.</en>
 <de>Frau</de>
+<fr>Madame</fr>
 <es>Señora</es>
 <id>830</id>
 </text>
@@ -2955,6 +2964,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <context>sex</context>
 <en>Title</en>
 <de>Anrede</de>
+<fr>Civilité</fr>
 <es>Tratamiento</es>
 <id>832</id>
 </text>
@@ -3191,6 +3201,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Fax</en>
 <de>Fax</de>
+<fr>Fax</fr>
 <es>Fax</es>
 <id>897</id>
 </text>
@@ -3617,6 +3628,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Company</en>
 <de>Firma</de>
+<fr>Entreprise</fr>
 <es>Empresa</es>
 <id>1004</id>
 </text>
@@ -4622,6 +4634,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>ZIP / City</en>
 <de>PLZ / Ort</de>
+<fr>CP / localité</fr>
 <es>Código postal / Localidad</es>
 <id>1248</id>
 </text>
@@ -4633,6 +4646,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Send message</en>
 <de>Nachricht absenden</de>
+<fr>Envoyer le message</fr>
 <id>1250</id>
 </text>
 <text>
@@ -5385,6 +5399,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Read more &#xBB;</en>
 <de>Weiterlesen &#xBB;</de>
+<fr>Davantage &#xBB;</fr>
+<es>Más &#xBB;</es>
 <id>1405</id>
 </text>
 <text>
@@ -5762,6 +5778,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Read more</en>
 <de>Weiterlesen</de>
+<fr>Davantage</fr>
+<es>Más</es>
 <id>1492</id>
 </text>
 <text>
