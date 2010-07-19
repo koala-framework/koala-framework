@@ -4,81 +4,8 @@ abstract class Vps_Component_Renderer_Abstract
     private $_ignoreVisible = false;
     private $_enableCache = false;
     private $_plugins = array();
-    private $_renderComponentId;
     private $_stats = array();
-
-    private $_cacheModel;
-    private $_cache = array();
-
-    protected function _saveCache(Vps_Component_Data $component, $type, $value, $content)
-    {
-        $settings = $component->getComponent()->getViewCacheSettings();
-        if (!$settings['enabled']) return false;
-
-        $page = $component;
-        while ($page && !$page->isPage) $page = $page->parent;
-        $expire = is_null($settings['lifetime']) ? 0 : time() + $settings['lifetime'];
-
-        $model = $this->_getCacheModel();
-        $data = array(
-            'component_id' => $component->componentId,
-            'page_id' => $page ? $page->componentId : null,
-            'component_class' => $component->componentClass,
-            'type' => $type,
-            'value' => $value,
-            'expire' => $expire,
-            'deleted' => 0,
-            'content' => $content
-        );
-        $options = array(
-            'buffer' => true,
-            'replace' => true
-        );
-        $this->_getCacheModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
-        return true;
-    }
-
-    protected function _loadCache($component)
-    {
-        $ret = array();
-        $select = $this->_getCacheModel()->select();
-        $or = array();
-        while ($component && !$component->isPage) $component = $component->parent;
-        if ($component) {
-            $or[] = new Vps_Model_Select_Expr_Equals('page_id', $component->componentId);
-        } else {
-            $or[] = new Vps_Model_Select_Expr_IsNull('page_id');
-        }
-        while ($component) {
-            $component = $component->parent;
-            if ($component && $component->isPage) {
-                $or[] = new Vps_Model_Select_Expr_And(array(
-                    new Vps_Model_Select_Expr_Equals('page_id', $component->componentId),
-                    new Vps_Model_Select_Expr_Equals('type', 'box')
-                ));
-            }
-        }
-        $select->where(new Vps_Model_Select_Expr_Or($or));
-        foreach ($this->_getCacheModel()->export(Vps_Model_Db::FORMAT_ARRAY, $select) as $row) {
-            if ($row['expire'] == 0 || $row['expire'] > time()) {
-                $ret[$row['type']][(string)$row['component_id']][$row['value']] = $row['content'];
-            }
-        }
-        return $ret;
-    }
-
-    private function _getCacheModel()
-    {
-        if (!$this->_cacheModel) {
-            $this->_cacheModel = Vps_Model_Abstract::getInstance('Vps_Component_Renderer_CacheModel');
-        }
-        return $this->_cacheModel;
-    }
-
-    public function setCacheModel(Vps_Component_Renderer_CacheModel $model)
-    {
-        $this->_cacheModel = $model;
-    }
+    protected $_renderComponent;
 
     public function setIgnoreVisible($ignoreVisible)
     {
@@ -109,7 +36,7 @@ abstract class Vps_Component_Renderer_Abstract
         $componentId = $component->componentId;
 
         // Keine Plugins bei Startkomponente außer es ist die root
-        if ($this->_renderComponentId == $componentId &&
+        if ($this->_renderComponent->componentId == $componentId &&
             $componentId != Vps_Component_Data_Root::getInstance()->componentId
         ) return $ret;
 
@@ -133,7 +60,7 @@ abstract class Vps_Component_Renderer_Abstract
     public function renderComponent($component)
     {
         $this->_plugins = array();
-        $this->_renderComponentId = $component->componentId;
+        $this->_renderComponent = $component;
         $this->_stats = array(
             'rendered' => array(),
             'cacheSaved' => array(),
@@ -141,11 +68,21 @@ abstract class Vps_Component_Renderer_Abstract
             'cacheLoaded' => array()
         );
         if ($this->_enableCache) {
-            $this->_cache = $this->_loadCache($component);
-            $this->_stats['cachePreloaded'] = $this->_cache;
+            $this->_cache = Vps_Component_Cache::getInstance()->load($component);
+            foreach ($this->_cache as $type => $componentIds) {
+                foreach ($componentIds as $componentId => $values) {
+                    foreach ($values as $value => $null) {
+                        $statId = $componentId;
+                        if ($value) $statId .= ' (' . $value .')';
+                        if ($type != 'component') $statId .= ': ' . $type;
+                        $this->_stats['cachePreloaded'][] = $statId;
+                    }
+                }
+            }
         }
         $ret = Vps_Component_Output_Component::getHelperOutput($component);
-        return $this->render($ret);
+        $ret = $this->render($ret);
+        return $ret;
     }
 
     protected function _formatOutputConfig($outputConfig, $component)
@@ -161,20 +98,20 @@ abstract class Vps_Component_Renderer_Abstract
         $pluginNr = 0;
         $stats = $this->_stats;
 
-        while (preg_match('/{([^ }]+): ([^ }]+)(\([^ }]+\) )?([^}]*)}/', $ret, $matches)) {
+        while (preg_match('/{([^ }]+): ([^ }\(]+)(\([^ }]+\) )?([^}]*)}/', $ret, $matches)) {
             $type = $matches[1];
             $componentId = trim($matches[2]);
-            $value = trim($matches[3]);
-            if ($value == '') $value = null;
+            $value = (string)trim($matches[3]);
+            if ($value) $value = substr($value, 1, -1);
             $config = trim($matches[4]);
             $config = $config != '' ? explode(' ', trim($config)) : array();
 
+
+            $statId = $componentId;
+            if ($value) $statId .= " ($value)";
+            if ($type != 'component') $statId .= ': ' . $type;
+
             $component = $this->_getComponent($componentId);
-
-            if (!$component) {
-                throw new Vps_Exception("Could not find component with id $componentId for rendering.");
-            }
-
             $outputConfig = array(
                 'type' => $type,
                 'value' => $value,
@@ -190,7 +127,8 @@ abstract class Vps_Component_Renderer_Abstract
             if ($this->_enableCache && isset($this->_cache[$type][$componentId][$value])) {
 
                 $content = $this->_cache[$type][$componentId][$value];
-                $stats['cacheLoaded'][] = $componentId;
+                $stats['cacheRendered'][] = $statId;
+                $statType = 'cache';
 
             } else {
 
@@ -198,7 +136,7 @@ abstract class Vps_Component_Renderer_Abstract
                 $output = new $class();
                 $view->clearVars();
                 $content = $output->render($component, $config, $view);
-                $stats['rendered'][] = $componentId;
+                $stats['rendered'][] = $statId;
                 foreach ($plugins as $plugin) {
                     if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
                         $content = $plugin->processOutput($content);
@@ -209,17 +147,28 @@ abstract class Vps_Component_Renderer_Abstract
                     }
                 }
 
-                if ($this->_enableCache) {
-                    $written = $this->_saveCache(
+                $cacheSettings = $component->getComponent()->getViewCacheSettings();
+                $statType = $this->_enableCache && $cacheSettings['enabled'] ?
+                    'nocache' : 'noviewcache';
+
+                if ($this->_enableCache && $cacheSettings['enabled']) {
+                    $written = Vps_Component_Cache::getInstance()->save(
                         $component,
+                        $content,
                         $type,
-                        $output->getCacheValue(),
-                        $content
+                        $output->getCacheValue()
                     );
-                    if ($written) $stats['cacheSaved'][] = $componentId;
+                    if ($written) $stats['cacheSaved'][] = $statId;
+                    $page = $component->getPage();
+                    $cPage = $this->_renderComponent->getPage();
+                    if ($page && $cPage && $page->componentId != $cPage->componentId) {
+                        Vps_Component_Cache::getInstance()->savePreload($this->_renderComponent, $component);
+                    }
                 }
 
             }
+
+            Vps_Benchmark::count("rendered $statType", $statId);
             $ret = str_replace($matches[0], $content, $ret);
         }
 

@@ -112,6 +112,7 @@ class Vps_Component_ModelObserver
 
     public function process()
     {
+        return;
         $ret = array();
 
         // View Cache

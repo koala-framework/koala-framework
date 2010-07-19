@@ -4,7 +4,6 @@ class Vps_Component_Renderer extends Vps_Component_Renderer_Abstract
     private $_masterComponents = null;
     private $_componentMasterTemplates = array();
     private $_renderMaster = false;
-    private $_renderComponentId;
 
     protected function _getMasterComponent($component)
     {
