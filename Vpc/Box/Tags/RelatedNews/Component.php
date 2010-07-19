@@ -17,14 +17,7 @@ class Vpc_Box_Tags_RelatedNews_Component extends Vpc_Directories_List_Component
     public function getSelect()
     {
         $ret = parent::getSelect();
-        if (!$this->getData()->getPage() || !$this->getData()->getPage()->generator) return null;
-        $plugin = $this->getData()->getPage()->generator->getGeneratorPlugin('tags');
-        if (!$plugin) return null;
-
-        $tagIds = array();
-        foreach ($plugin->getTags($this->getData()->getPage()) as $tag) {
-            $tagIds[] = (int)$tag->id;
-        }
+        $tagIds = $this->_getTagIds();
         if (!$tagIds) return null;
 
         $ret->join('vpc_components_to_tags', "vpc_components_to_tags.component_id = CONCAT('news_', vpc_news.id)", array());
@@ -34,6 +27,19 @@ class Vpc_Box_Tags_RelatedNews_Component extends Vpc_Directories_List_Component
         //eigene seite nicht anzeigen
         $ret->where('vpc_components_to_tags.component_id != ?', $this->getData()->getPage()->dbId);
 
+        return $ret;
+    }
+
+    protected function _getTagIds()
+    {
+        if (!$this->getData()->getPage() || !$this->getData()->getPage()->generator) return null;
+        $plugin = $this->getData()->getPage()->generator->getGeneratorPlugin('tags');
+        if (!$plugin) return null;
+
+        $ret = array();
+        foreach ($plugin->getTags($this->getData()->getPage()) as $tag) {
+            $ret[] = (int)$tag->id;
+        }
         return $ret;
     }
 }
