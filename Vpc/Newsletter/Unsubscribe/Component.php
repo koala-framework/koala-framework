@@ -28,13 +28,19 @@ class Vpc_Newsletter_Unsubscribe_Component extends Vpc_Form_Component
             $this->_form->setModel($this->_recipient->getModel());
             $this->_form->setId($this->_recipient->id);
 
-            $this->_form->add(new Vps_Form_Field_ShowField('firstname_interface', trlVps('Firstname')))
+            $this->getParentField()->add(new Vps_Form_Field_ShowField('firstname_interface', trlVps('Firstname')))
                 ->setData(new Vpc_Newsletter_Unsubscribe_RecipientData('getMailFirstname'));
-            $this->_form->add(new Vps_Form_Field_ShowField('lastname_interface', trlVps('Lastname')))
+            $this->getParentField()->add(new Vps_Form_Field_ShowField('lastname_interface', trlVps('Lastname')))
                 ->setData(new Vpc_Newsletter_Unsubscribe_RecipientData('getMailLastname'));
-            $this->_form->add(new Vps_Form_Field_ShowField('email_interface', trlVps('E-Mail')))
+            $this->getParentField()->add(new Vps_Form_Field_ShowField('email_interface', trlVps('E-Mail')))
                 ->setData(new Vpc_Newsletter_Unsubscribe_RecipientData('getMailEmail'));
         }
+    }
+
+    // Falls Unterkomponente will, das Felder zB in ein Fieldset hinzugefügt werden
+    protected function getParentField()
+    {
+        return $this->_form;
     }
 
     public function getTemplateVars()
