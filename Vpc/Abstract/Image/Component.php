@@ -297,8 +297,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $ret['mtime'] = filemtime($data['file']);
         }
         if (isset($data['row'])) {
-            Vps_Component_Cache::getInstance()->saveMeta(
-                get_class($data['row']->getModel()), $data['row']->component_id, $id, Vps_Component_Cache::META_CALLBACK
+            Vps_Component_Cache::getInstance()->saveMetaCallback(
+                $component, $data['row']
             );
         }
         return $ret;
