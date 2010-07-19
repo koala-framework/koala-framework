@@ -102,8 +102,8 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
         if (!$file || !file_exists($file)) {
             return null;
         }
-        Vps_Component_Cache::getInstance()->saveMeta(
-            get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+        Vps_Component_Cache::getInstance()->saveMetaCallback(
+            Vps_Component_Data_Root::getInstance()->getComponentById($id), $row
         );
         return array(
             'file' => $file,

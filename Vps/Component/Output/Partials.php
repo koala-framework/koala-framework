@@ -3,7 +3,11 @@ class Vps_Component_Output_Partials
 {
     public function render($component, $config)
     {
-        $componentId = $component->componentId;
+        if ($component instanceof Vps_Component_Data) {
+            $componentId = $component->componentId;
+        } else {
+            $componentId = $component;
+        }
         $partialsClass = $config[0];
         $config = $config[1];
         $partial = new $partialsClass(unserialize(base64_decode(($config))));
@@ -43,6 +47,6 @@ class Vps_Component_Output_Partials
             $params = array_merge($component->getComponent()->getPartialParams(), $params);
         }
         $serializedParams = base64_encode(serialize($params));
-        return "{partials: $componentId $partialClass $serializedParams}";
+        return "{!partials: $componentId $partialClass $serializedParams}";
     }
 }

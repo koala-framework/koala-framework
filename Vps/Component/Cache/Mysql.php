@@ -6,13 +6,18 @@ class Vps_Component_Cache_Mysql
     public function __construct()
     {
         $this->_models = array (
-            'cache' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_Model'),
-            'preload' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_PreloadModel'),
-            'metaModel' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaModelModel'),
-            'metaRow' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaRowModel'),
-            'metaCallback' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaCallbackModel'),
-            'metaComponent' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaComponentModel')
+            'cache' => new Vps_Component_Cache_Mysql_Model(),
+            'preload' => new Vps_Component_Cache_Mysql_PreloadModel(),
+            'metaModel' => new Vps_Component_Cache_Mysql_MetaModelModel(),
+            'metaRow' => new Vps_Component_Cache_Mysql_MetaRowModel(),
+            'metaCallback' => new Vps_Component_Cache_Mysql_MetaCallbackModel(),
+            'metaComponent' => new Vps_Component_Cache_Mysql_MetaComponentModel()
         );
+    }
+
+    public function getModel($type = 'cache')
+    {
+        return isset($this->_models[$type]) ? $this->_models[$type] : null;
     }
 
     public function save(Vps_Component_Data $component, $content, $type = 'component', $value = null)
@@ -120,8 +125,9 @@ class Vps_Component_Cache_Mysql
 
         $data = array(
             'model' => $modelName,
-            'id' => $id,
-            'component_class' => $component->componentClass
+            'field' => $field,
+            'value' => $id,
+            'component_id' => $component->componentId
         );
         $options = array(
             'buffer' => true,

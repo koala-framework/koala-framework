@@ -26,13 +26,13 @@ class Vps_Component_Output_Test extends PHPUnit_Framework_TestCase
         $root = Vps_Component_Data_Root::getInstance();
         $view = new Vps_Component_Renderer();
 
-        $value = $view->render($root->getChildComponent('-child'));
+        $value = $view->renderComponent($root->getChildComponent('-child'));
         $this->assertEquals('c1_childmaster c1_child c1_childchild', $value);
 
         $value = $view->renderMaster($root);
         $this->assertEquals('c1_rootmaster c1_box c1_root plugin(plugin(c1_childmaster c1_child c1_childchild))', $value);
 
-        $value = $view->render($root);
+        $value = $view->renderComponent($root);
         $this->assertEquals('c1_root plugin(plugin(c1_childmaster c1_child c1_childchild))', $value);
     }
 
@@ -48,7 +48,7 @@ class Vps_Component_Output_Test extends PHPUnit_Framework_TestCase
         $value = $view->renderMaster($root->getChildComponent('_childpage'));
         $this->assertEquals('c3_rootmaster c3_box c3_childpagemaster c3_childpage', $value);
 
-        $value = $view->render($root->getChildComponent('_childpage'));
+        $value = $view->renderComponent($root->getChildComponent('_childpage'));
         $this->assertEquals('c3_childpagemaster c3_childpage', $value);
 
         $value = $view->renderMaster($root->getChildComponent('_childpage')->getChildComponent('_childpage'));

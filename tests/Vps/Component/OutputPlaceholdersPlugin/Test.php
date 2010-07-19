@@ -16,10 +16,7 @@ class Vps_Component_OutputPlaceholdersPlugin_Test extends PHPUnit_Framework_Test
         $this->_root = Vps_Component_Data_Root::getInstance();
 
         $this->_output = new Vps_Component_Output_Cache();
-        $this->_output->getCache()->setModel(new Vps_Component_Cache_CacheModel());
-        $this->_output->getCache()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
-        $this->_output->getCache()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
-        $this->_output->getCache()->emptyPreload();
+        Vps_Component_Cache::setBackend(Vps_Component_Cache::CACHE_BACKEND_FNF);
     }
 
     public function testCached()
