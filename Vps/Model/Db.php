@@ -524,7 +524,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, "$depTableName.$col1");
-            return $this->getPrimaryKey()." IN ($depDbSelect)";
+            return $this->_fieldWithTableName($this->getPrimaryKey())." IN ($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
             $refM = $depOf->getReferencedModel($expr->getParent());
             $refM = Vps_Model_Abstract::getInstance($refM);
