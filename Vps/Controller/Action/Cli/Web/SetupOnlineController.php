@@ -203,7 +203,9 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
             $this->_systemSshVps($config, "chmod a+w application/temp");
             $this->_systemSshVps($config, "chmod a+w application/log");
             $this->_systemSshVps($config, "chmod a+w application/log/*");
-            $this->_systemSshVps($config, "chmod a+w $config->uploads");
+            if ($config->uploads) {
+                $this->_systemSshVps($config, "chmod a+w $config->uploads");
+            }
 
             echo "\n$server: [7/9] set mysql file rights\n";
             // globale file rechte für csv import setzen
