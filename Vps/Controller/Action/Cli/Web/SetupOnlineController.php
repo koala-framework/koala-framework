@@ -212,8 +212,10 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
             if ($server == 'vivid-test-server') {
                 echo "skipped for vivid-test-server - root user has all rights\n";
             } else {
-                $cmd = "php bootstrap.php setup-online set-mysql-file-right --user=$dbUser";
-                $this->_systemSshVps($config, $cmd);
+                if (in_array('web', $config->server->databases->toArray())) {
+                    $cmd = "php bootstrap.php setup-online set-mysql-file-right --user=$dbUser";
+                    $this->_systemSshVps($config, $cmd);
+                }
             }
 
             echo "\n$server: [8/9] import\n";
