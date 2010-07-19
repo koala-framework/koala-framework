@@ -7,6 +7,9 @@ class Vps_Component_Cache
     const CACHE_BACKEND_MONGO = 'Vps_Component_Cache_Mongo';
     const CACHE_BACKEND_FNF = 'Vps_Component_Cache_Fnf';
 
+    /**
+     * @return Vps_Component_Cache_Mysql
+     */
     public static function getInstance()
     {
         if (!self::$_instance) {
@@ -18,6 +21,7 @@ class Vps_Component_Cache
 
     public static function setBackend($backend)
     {
+        self::clearInstance();
         self::$_backend = $backend;
     }
 

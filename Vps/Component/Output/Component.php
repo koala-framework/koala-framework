@@ -17,10 +17,4 @@ class Vps_Component_Output_Component
     {
         return null;
     }
-
-    public static function getHelperOutput(Vps_Component_Data $component)
-    {
-        $componentId = $component->componentId;
-        return "{component: $componentId}";
-    }
 }

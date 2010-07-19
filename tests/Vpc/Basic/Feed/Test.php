@@ -14,9 +14,7 @@ class Vpc_Basic_Feed_Test extends PHPUnit_Framework_TestCase
 
     public function testFeed()
     {
-        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
-        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
-        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
+        Vps_Component_Cache::setBackend(Vps_Component_Cache::CACHE_BACKEND_FNF);
         $feed = Vps_Component_Data_Root::getInstance()->getChildComponent('_feed');
         $xml = $feed->getComponent()->getXml();
         $rows = Vps_Component_Cache::getInstance()->getModel()->getRows();

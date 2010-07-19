@@ -68,6 +68,7 @@ class Vps_Component_ModelObserver
 
     protected function _processCache($source)
     {
+        return;
         if ($source instanceof Vps_Model_Interface) {
             $model = $source;
             $id = null;

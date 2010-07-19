@@ -25,7 +25,7 @@ class Vps_Component_Output_Plugin_Plugin_Component extends Vps_Component_Plugin_
                 ->getChildComponent('-pluginChild');
             $ret = $view->render($template);
             $renderer = new Vps_Component_Renderer();
-            return $renderer->render($ret);
+            return $renderer->render($view, $ret);
         }
     }
 
