@@ -100,7 +100,36 @@ class Vps_Component_Abstract
                 if (!array_key_exists($setting, $settings)) {
                     throw new Vps_Exception("Couldn't find required setting '$setting' for $c.");
                 }
-                return $settings[$setting];
+                $ret = $settings[$setting];
+                if ($setting == 'generators') {
+                    $ret = array();
+                    static $cache;
+                    foreach ($settings[$setting] as $k=>$g) {
+                        if (is_array($g['component'])) {
+                            foreach ($g['component'] as $l=>$cc) {
+                                if (!$cc) continue;
+                                if (!isset($cache[$cc])) {
+                                    $cache[$cc] = Vpc_Abstract::hasSetting($cc, 'needsParentComponentClass')
+                                        && Vpc_Abstract::getSetting($cc, 'needsParentComponentClass');
+                                }
+                                if ($cache[$cc]) {
+                                    $g['component'][$l] .= '.'.$class;
+                                }
+                            }
+                        } else {
+                            if (!$g['component']) continue;
+                            if (!isset($cache[$g['component']])) {
+                                $cache[$g['component']] = Vpc_Abstract::hasSetting($g['component'], 'needsParentComponentClass')
+                                    && Vpc_Abstract::getSetting($g['component'], 'needsParentComponentClass');
+                            }
+                            if ($cache[$g['component']]) {
+                                $g['component'] .= '.'.$class;
+                            }
+                        }
+                        $ret[$k] = $g;
+                    }
+                }
+                return $ret;
             }
 
         }
@@ -205,6 +234,9 @@ class Vps_Component_Abstract
                         self::$_settings['mtimeFiles'][] = $f;
                         self::$_settings['mtimeFiles'][] = $incPath.DIRECTORY_SEPARATOR.$file.'.css';
                     } while ($p = get_parent_class($p));
+
+                    //*** generators
+                    self::$_settings[$c]['generators'] = self::getSetting($c, 'generators');
                 }
                 self::$_rebuildingSettings = false;
 
