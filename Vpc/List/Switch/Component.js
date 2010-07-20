@@ -54,9 +54,9 @@ Vpc.ListSwitch.View.prototype = {
         this.activePreviewLink = previewEl;
         this.activePreviewLink.addClass('active');
 
-        this.previousEl.setDisplayed(this.activePreviewLink.switchIndex == 0 ? false : true);
+        this.previousEl.setDisplayed(this.activePreviewLink.switchIndex == 0 ? false : 'block');
         this.nextEl.setDisplayed(
-            this.activePreviewLink.switchIndex >= (this.previewElements.length -1) ? false : true
+            this.activePreviewLink.switchIndex >= (this.previewElements.length -1) ? false : 'block'
         );
     },
 

@@ -1,2 +1,4 @@
 .$cssClass .largeContent { display: none; }
 .$cssClass .listSwitchItem { float: left; }
+.$cssClass a.listSwitchNext,
+.$cssClass a.listSwitchPrevious { display: none; }
