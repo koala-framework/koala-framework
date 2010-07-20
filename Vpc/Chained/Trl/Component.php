@@ -103,6 +103,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
     public static function getStaticCacheVars($componentClass)
     {
         $cls = substr($componentClass, strpos($componentClass, '.')+1);
+        $cls = strpos($cls, '.') ? substr($cls, 0, strpos($cls, '.')) : $cls;
         return call_user_func(array($cls, 'getStaticCacheVars'), $cls);
     }
 
