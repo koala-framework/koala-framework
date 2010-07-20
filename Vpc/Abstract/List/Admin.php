@@ -41,8 +41,10 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
             if ($i instanceof Vps_Form_Field_File) {
                 return $i;
             }
-            $ret = $this->_getFileUploadField($i);
-            if ($ret) return $ret;
+            if (!($i instanceof Vps_Form_Container_Cards)) { //in cards nicht reinschaun, bei Links wollen wir keinen multi upload
+                $ret = $this->_getFileUploadField($i);
+                if ($ret) return $ret;
+            }
         }
         return null;
     }
