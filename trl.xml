@@ -4696,7 +4696,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Newsletter subscription</en>
-<de>Newsletter abonnement</de>
+<de>Newsletter Abonnement</de>
 <id>1260</id>
 </text>
 <text>
@@ -5984,6 +5984,11 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Spent time by years</en>
 <de>Verbrauchte Zeite nach Jahren</de>
 <id>1518</id>
+</text>
+<text>
+<en>Dear Sir or Madam</en>
+<de>Sehr geehrte Damen und Herren</de>
+<id>1519</id>
 </text>
 </trl>
 
