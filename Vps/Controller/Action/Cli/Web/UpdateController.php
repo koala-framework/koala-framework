@@ -204,12 +204,16 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
                 $databases = array('web');
             }
             foreach ($databases as $db) {
+                if (!$db) continue;
                 if ($method != 'checkSettings') {
                     echo $db.' ';
                     flush();
                 }
                 try {
-                    $db = Vps_Registry::get('dao')->getDb($db);
+                    $db = null;
+                    if (Vps_Registry::get('dao')) {
+                        $db = Vps_Registry::get('dao')->getDb($db);
+                    }
                 } catch (Exception $e) {
                     echo "skipping, invalid db\n";
                     flush();
@@ -235,7 +239,9 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
                 }
 
                 //reset to default database
-                Vps_Registry::set('db', Vps_Registry::get('dao')->getDb());
+                $db = null;
+                if (Vps_Registry::get('dao')) $db = Vps_Registry::get('dao')->getDb();
+                Vps_Registry::set('db', $db);
             }
             if ($method != 'checkSettings' && $ret) {
                 echo "\033[32 OK \033[0m\n";
