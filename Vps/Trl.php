@@ -113,8 +113,8 @@ class Vps_Trl
 
     public function setModel($model, $type)
     {
-            $this->_cache = array();
-        if ($type == 'vps') {
+        $this->_cache = array();
+        if ($type == self::SOURCE_VPS) {
             $this->_modelVps = $model;
         } else {
             $this->_modelWeb = $model;
@@ -181,10 +181,10 @@ class Vps_Trl
     private function _getModel($type)
     {
         if ($type == self::SOURCE_WEB) {
-            if (!$this->_modelWeb) $this->_modelWeb = new Vps_Trl_Model_Web();
+            if (!isset($this->_modelWeb)) return Vps_Model_Abstract::getInstance('Vps_Trl_Model_Web');
             return $this->_modelWeb;
         } else {
-            if (!$this->_modelVps) $this->_modelVps = new Vps_Trl_Model_Vps();
+            if (!isset($this->_modelVps)) return Vps_Model_Abstract::getInstance('Vps_Trl_Model_Vps');
             return $this->_modelVps;
         }
     }
@@ -256,36 +256,41 @@ class Vps_Trl
         return is_array($placeolders) ? $placeolders : array($placeolders);
     }
 
-    private function _loadCache($source, $target)
+    private function _loadCache($source, $target, $plural)
     {
         if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
         else $codeLanguage = "en";
 
-        if ($source == self::SOURCE_WEB) {
-            $file = 'application/trl.xml';
-        } else {
-            $file = VPS_PATH.'/trl.xml';
-        }
-        $c = array();
-        if (!file_exists($file)) {
+        if ($codeLanguage == $target) {
             $this->_cache[$source][$target] = array();
             return;
         }
 
-        $cache = Vps_Cache::factory('File', 'Memcached', array('automatic_serialization'=>true, 'master_files' => array($file)));
-        $cacheId = 'trl_'.$source.$target;
+        if ($plural) $target = $target.'_plural';
+        $cache = Vps_Cache::factory('Core', 'Memcached',
+            array(
+                'automatic_serialization'=>true,
+                'caching' => !isset($this->_modelVps) && !isset($this->_modelWeb)
+            )
+        );
+        $cacheId = 'trl_'.$source.$target.$plural;
+
         if (($c = $cache->load($cacheId)) === false) {
-            Vps_Benchmark::count('Trl::_loadCache uncached', $cacheId);
-            if ($source == self::SOURCE_WEB) {
-                $file = 'application/trl.xml';
-            } else {
-                $file = VPS_PATH.'/trl.xml';
-            }
             $c = array();
-            $xml = simplexml_load_file($file);
-            foreach ($xml->text as $row) {
+            $m = $this->_getModel($source);
+            if ($m instanceof Vps_Model_Xml) {
+                $rows = array();
+                if (file_exists($m->getFilePath())) {
+                    $xml = simplexml_load_file($m->getFilePath());
+                    $rows = $xml->text;
+                }
+            } else {
+                $rows = $m->getRows();
+            }
+            foreach ($rows as $row) {
                 if ($row->$target != '' && $row->$target != '_') {
-                    $c[$row->$codeLanguage.'-'.$row->context] = (string)$row->$target;
+                    $ctx = isset($row->context) ? $row->context : '';
+                    $c[$row->{$codeLanguage.($plural ? '_plural' : '')}.'-'.$ctx] = (string)$row->$target;
                 }
             }
             $cache->save($c, $cacheId);
@@ -299,7 +304,7 @@ class Vps_Trl
         else $target = $this->getTargetLanguage();
 
         if (!isset($this->_cache[$source][$target])) {
-            $this->_loadCache($source, $target);
+            $this->_loadCache($source, $target, false);
         }
         if (isset($this->_cache[$source][$target][$needle.'-'.$context])) {
             return $this->_cache[$source][$target][$needle.'-'.$context];
@@ -312,13 +317,12 @@ class Vps_Trl
     {
         if ($language) $target = $language;
         else $target = $this->getTargetLanguage();
-        $target = $target.'_plural';
 
-        if (!isset($this->_cache[$source][$target])) {
-            $this->_loadCache($source, $target);
+        if (!isset($this->_cache[$source][$target.'_plural'])) {
+            $this->_loadCache($source, $target, true);
         }
-        if (isset($this->_cache[$source][$target][$plural.'-'.$context])) {
-            return $this->_cache[$source][$target][$plural.'-'.$context];
+        if (isset($this->_cache[$source][$target.'_plural'][$plural.'-'.$context])) {
+            return $this->_cache[$source][$target.'_plural'][$plural.'-'.$context];
         } else {
             return $plural;
         }
