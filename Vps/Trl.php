@@ -75,6 +75,8 @@ function trlcpVpsStatic($context, $single, $plural, $text = array()) {
 
 class Vps_Trl
 {
+    private $_cache = array();
+
     private $_modelWeb;
     private $_modelVps;
     private $_languages; //cache
@@ -111,8 +113,12 @@ class Vps_Trl
 
     public function setModel($model, $type)
     {
-        if ($type == 'vps') $this->_modelVps = $model;
-        else $this->_modelWeb = $model;
+            $this->_cache = array();
+        if ($type == 'vps') {
+            $this->_modelVps = $model;
+        } else {
+            $this->_modelWeb = $model;
+        }
     }
 
     public function getLanguages()
@@ -250,47 +256,72 @@ class Vps_Trl
         return is_array($placeolders) ? $placeolders : array($placeolders);
     }
 
-    protected function _findElement($needle, $source, $context, $language = null)
+    private function _loadCache($source, $target)
     {
         if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
         else $codeLanguage = "en";
 
+        if ($source == self::SOURCE_WEB) {
+            $file = 'application/trl.xml';
+        } else {
+            $file = VPS_PATH.'/trl.xml';
+        }
+        $c = array();
+        if (!file_exists($file)) {
+            $this->_cache[$source][$target] = array();
+            return;
+        }
+
+        $cache = Vps_Cache::factory('File', 'Memcached', array('automatic_serialization'=>true, 'master_files' => array($file)));
+        $cacheId = 'trl_'.$source.$target;
+        if (($c = $cache->load($cacheId)) === false) {
+            Vps_Benchmark::count('Trl::_loadCache uncached', $cacheId);
+            if ($source == self::SOURCE_WEB) {
+                $file = 'application/trl.xml';
+            } else {
+                $file = VPS_PATH.'/trl.xml';
+            }
+            $c = array();
+            $xml = simplexml_load_file($file);
+            foreach ($xml->text as $row) {
+                if ($row->$target != '' && $row->$target != '_') {
+                    $c[$row->$codeLanguage.'-'.$row->context] = (string)$row->$target;
+                }
+            }
+            $cache->save($c, $cacheId);
+        }
+        $this->_cache[$source][$target] = $c;
+    }
+
+    protected function _findElement($needle, $source, $context, $language = null)
+    {
         if ($language) $target = $language;
         else $target = $this->getTargetLanguage();
-        $model = $this->_getModel($source);
-        if (!$model) return $needle;
-        $select = $model->select();
-        $select->whereEquals($codeLanguage, $needle);
-        if ($context) $select->whereEquals('context', $context);
-        else $select->whereNull('context');
-        $row = $rows = $model->getRows($select)->current();
 
-        if ($row && $row->$target != '' && $row->$target != '_') { //unterstrich entfernt
-            return (string) $row->$target;
+        if (!isset($this->_cache[$source][$target])) {
+            $this->_loadCache($source, $target);
         }
-        return $needle;
+        if (isset($this->_cache[$source][$target][$needle.'-'.$context])) {
+            return $this->_cache[$source][$target][$needle.'-'.$context];
+        } else {
+            return $needle;
+        }
     }
 
     protected function _findElementPlural($needle, $plural, $source, $context = '', $language = null)
     {
-        if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
-        else $codeLanguage = "en";
         if ($language) $target = $language;
         else $target = $this->getTargetLanguage();
         $target = $target.'_plural';
-        $model = $this->_getModel($source);
-        if (!$model) return $needle;
-        $select = $model->select();
-        $select->whereEquals($codeLanguage, $needle);
-        if ($context) $select->whereEquals('context', $context);
-        else $select->whereNull('context');
 
-        $rows = $model->getRows($select);
-        foreach ($rows as $row) {
-            if ($row->$target && $row->$target != '' && $row->$target != '_') return (string) $row->$target; //unterstrich entfernt
+        if (!isset($this->_cache[$source][$target])) {
+            $this->_loadCache($source, $target);
         }
-
-        return $plural;
+        if (isset($this->_cache[$source][$target][$plural.'-'.$context])) {
+            return $this->_cache[$source][$target][$plural.'-'.$context];
+        } else {
+            return $plural;
+        }
     }
 
     function getTrlpValues($context, $single, $plural, $source, $language = null)
