@@ -1,7 +1,5 @@
 <?php
-class Vpc_NewsletterCategory_Admin extends Vpc_Newsletter_Admin
-    implements Vpc_Directories_Item_Directory_PluginAdminInterface
-{
+class Vpc_NewsletterCategory_Admin extends Vpc_Newsletter_Admin {
     public function addResources(Vps_Acl $acl)
     {
         $components = Vps_Component_Data_Root::getInstance()
@@ -18,18 +16,5 @@ class Vpc_NewsletterCategory_Admin extends Vpc_Newsletter_Admin
             'vpc_newsletter'
         );
         parent::addResources($acl);
-    }
-
-    public function getPluginExtConfig()
-    {
-        $ret = array();
-        $ret['pluginClass'] = 'Vpc.NewsletterCategory.Plugin';
-        $ret['controllerUrl'] = $this->getControllerUrl('SubscribeCategories');
-        return $ret;
-    }
-
-    protected function _getPluginAdmins()
-    {
-        return array($this);
     }
 }
