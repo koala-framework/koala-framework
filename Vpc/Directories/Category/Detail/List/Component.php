@@ -3,10 +3,16 @@ class Vpc_Directories_Category_Detail_List_Component extends Vpc_Directories_Lis
 {
     public function getSelect()
     {
+        $class = $this->getData()->parent->parent->componentClass;
+        $childReference =
+            Vpc_Abstract::hasSetting($class, 'childReferenceName') ?
+            Vpc_Abstract::getSetting($class, 'childReferenceName') :
+            'Categories';
+
         $select = parent::getSelect();
         $s = new Vps_Model_Select();
         $s->whereEquals('category_id', $this->getData()->parent->id);
-        $select->where(new Vps_Model_Select_Expr_Child_Contains('Categories', $s));
+        $select->where(new Vps_Model_Select_Expr_Child_Contains($childReference, $s));
 
         return $select;
     }
