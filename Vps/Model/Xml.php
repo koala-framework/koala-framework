@@ -85,7 +85,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         }
         $this->_data = $data;
         if ($this->_filepath) {
-            file_put_contents($this->_filepath, $this->_asPrettyXML($simpleXml->asXML()));
+            file_put_contents($this->_filepath, self::asPrettyXML($simpleXml->asXML()));
         }
         return $row->{$this->getPrimaryKey()};
     }
@@ -129,7 +129,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         }
 
         if ($this->_filepath) {
-            file_put_contents($this->_filepath, $this->_asPrettyXML($simpleXml->asXML()));
+            file_put_contents($this->_filepath, self::asPrettyXML($simpleXml->asXML()));
         }
         $row->{$this->getPrimaryKey()} = $id;
         $rowData[$this->getPrimaryKey()] = $id;
@@ -176,7 +176,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         }
 
         if ($this->_filepath) {
-            file_put_contents($this->_filepath, $this->_asPrettyXML($xml->asXML()));
+            file_put_contents($this->_filepath, self::asPrettyXML($xml->asXML()));
         }
         if (!$check) throw new Vps_Exception("Can't find entry with id '$id'");
     }
@@ -250,7 +250,6 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         }
     }
 
-
     public function isEqual(Vps_Model_Interface $other)
     {
         if ($other instanceof Vps_Model_Xml && $this->getFilepath() ==  $other->getFilepath()) {
@@ -260,7 +259,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         }
     }
 
-    protected function _asPrettyXML($string)
+    public static function asPrettyXML($string)
     {
         $indent = 3;
         /**
