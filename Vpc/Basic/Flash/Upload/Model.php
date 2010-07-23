@@ -1,15 +1,11 @@
 <?php
-class Vpc_Basic_Flash_Model extends Vps_Model_Db_Proxy
+class Vpc_Basic_Flash_Upload_Model extends Vps_Component_FieldModel
 {
-    protected $_table = 'vpc_basic_flash';
     protected $_referenceMap = array(
         'FileMedia' => array(
             'column'            => 'vps_upload_id_media',
             'refModelClass'     => 'Vps_Uploads_Model'
         )
-    );
-    protected $_dependentModels = array(
-        'FlashVars' => 'Vpc_Basic_Flash_FlashVarsModel'
     );
     protected $_default = array(
         'width' => 400,
@@ -18,5 +14,13 @@ class Vpc_Basic_Flash_Model extends Vps_Model_Db_Proxy
         'menu' => 1
     );
 
-    protected $_rowClass = 'Vpc_Basic_Flash_Row';
+    $_rowClass = 'Vpc_Basic_Flash_Upload_Row';
+
+    protected function _init()
+    {
+        parent::_init();
+        $this->_dependentModels['FlashVars'] = new Vps_Model_FieldRows(array(
+            'fieldName' => 'flash_vars'
+        ));
+    }
 }
