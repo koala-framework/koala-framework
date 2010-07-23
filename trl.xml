@@ -289,7 +289,7 @@ wurde soeben erstellt.</de>
 <text>
 <en>Firstname</en>
 <de>Vorname</de>
-<fr>Prénom</fr>
+<fr>Pr&#xE9;nom</fr>
 <es>Nombre</es>
 <id>97</id>
 </text>
@@ -524,7 +524,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Can't save, please fill all red underlined fields correctly.</en>
-<de>Speichern ist nicht möglich, bitte füllen Sie alle rot unterstrichenen Felder korrekt aus.</de>
+<de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle rot unterstrichenen Felder korrekt aus.</de>
 <id>230</id>
 </text>
 <text>
@@ -894,7 +894,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>The value in this field is invalid</en>
-<de>Wert in diesem Feld ist ungültig</de>
+<de>Wert in diesem Feld ist ung&#xFC;ltig</de>
 <id>314</id>
 </text>
 <text>
@@ -2856,14 +2856,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Country</en>
 <de>Land</de>
 <fr>Pays</fr>
-<es>País</es>
+<es>Pa&#xED;s</es>
 <id>806</id>
 </text>
 <text>
 <en>Phone</en>
 <de>Telefon</de>
-<fr>Téléphone</fr>
-<es>Teléfono</es>
+<fr>T&#xE9;l&#xE9;phone</fr>
+<es>Tel&#xE9;fono</es>
 <id>807</id>
 </text>
 <text>
@@ -2950,21 +2950,21 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Mr.</en>
 <de>Herr</de>
 <fr>Monsieur</fr>
-<es>Señor</es>
+<es>Se&#xF1;or</es>
 <id>829</id>
 </text>
 <text>
 <en>Ms.</en>
 <de>Frau</de>
 <fr>Madame</fr>
-<es>Señora</es>
+<es>Se&#xF1;ora</es>
 <id>830</id>
 </text>
 <text>
 <context>sex</context>
 <en>Title</en>
 <de>Anrede</de>
-<fr>Civilité</fr>
+<fr>Civilit&#xE9;</fr>
 <es>Tratamiento</es>
 <id>832</id>
 </text>
@@ -3944,12 +3944,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Link-Action</en>
 <de>Link-Aktion</de>
-<id>1067</id>
+<id>1519</id>
 </text>
 <text>
 <en>Text/Image - Alignment</en>
 <de>Text/Bild - Ausrichtung</de>
-<id>1068</id>
+<id>1520</id>
 </text>
 <text>
 <en>Seitenbaum</en>
@@ -4634,8 +4634,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>ZIP / City</en>
 <de>PLZ / Ort</de>
-<fr>CP / localité</fr>
-<es>Código postal / Localidad</es>
+<fr>CP / localit&#xE9;</fr>
+<es>C&#xF3;digo postal / Localidad</es>
 <id>1248</id>
 </text>
 <text>
@@ -5400,7 +5400,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Read more &#xBB;</en>
 <de>Weiterlesen &#xBB;</de>
 <fr>Davantage &#xBB;</fr>
-<es>Más &#xBB;</es>
+<es>M&#xE1;s &#xBB;</es>
 <id>1405</id>
 </text>
 <text>
@@ -5779,7 +5779,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Read more</en>
 <de>Weiterlesen</de>
 <fr>Davantage</fr>
-<es>Más</es>
+<es>M&#xE1;s</es>
 <id>1492</id>
 </text>
 <text>
@@ -5900,90 +5900,90 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Original Filename</en>
-<id>1499</id>
+<id>1521</id>
 </text>
 <text>
 <en>Headlines</en>
-<id>1500</id>
+<id>1522</id>
 </text>
 <text>
 <en>Headline 1</en>
-<id>1501</id>
+<id>1523</id>
 </text>
 <text>
 <en>Headline 2</en>
-<id>1502</id>
+<id>1524</id>
 </text>
 <text>
 <en>Original headline 1</en>
-<id>1503</id>
+<id>1525</id>
 </text>
 <text>
 <en>Original headline 2</en>
-<id>1504</id>
+<id>1526</id>
 </text>
 <text>
 <en>2 Columns</en>
-<id>1505</id>
+<id>1527</id>
 </text>
 <text>
 <en>Left column</en>
-<id>1506</id>
+<id>1528</id>
 </text>
 <text>
 <en>Right column</en>
-<id>1507</id>
+<id>1529</id>
 </text>
 <text>
 <en>All Visible</en>
-<id>1508</id>
+<id>1530</id>
 </text>
 <text>
 <en>Do you really wish to set everything to visible?</en>
-<id>1509</id>
+<id>1531</id>
 </text>
 <text>
 <en>Setting visible...</en>
 <de>Sichtbar setzen...</de>
-<id>1510</id>
+<id>1532</id>
 </text>
 <text>
 <en>Toolbox</en>
-<id>1511</id>
+<id>1533</id>
 </text>
 <text>
 <en>Time recording</en>
 <de>Zeiterfassung</de>
-<id>1512</id>
+<id>1534</id>
 </text>
 <text>
 <en>Year</en>
 <de>Jahr</de>
-<id>1513</id>
+<id>1535</id>
 </text>
 <text>
 <en>Spent time</en>
 <de>Verbrauchte Zeit</de>
-<id>1514</id>
+<id>1536</id>
 </text>
 <text>
 <en>Included time</en>
 <de>Inkludierte Zeit</de>
-<id>1515</id>
+<id>1537</id>
 </text>
 <text>
 <en>Year {0}</en>
 <de>{0}. Jahr</de>
-<id>1516</id>
+<id>1538</id>
 </text>
 <text>
 <en>Timer</en>
-<id>1517</id>
+<id>1539</id>
 </text>
 <text>
 <en>Spent time by years</en>
 <de>Verbrauchte Zeite nach Jahren</de>
-<id>1518</id>
+<id>1540</id>
 </text>
 </trl>
 
