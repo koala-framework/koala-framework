@@ -5,7 +5,7 @@ class Vpc_Root_TrlRoot_Chained_Admin extends Vpc_Abstract_Admin
     public static function duplicated(Vps_Component_Data $source, Vps_Component_Data $new)
     {
         $chained = Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component', array('ignoreVisible'=>true)); //bySameClass wenn fkt nicht static
+            ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component', array('ignoreVisible'=>true)); //bySameClass wenn fkt nicht mehr static (todo oben erledigt)
         foreach ($chained as $c) {
             $sourceChained = Vpc_Chained_Trl_Component::getChainedByMaster($source, $c, array('ignoreVisible'=>true));
             $newChained = Vpc_Chained_Trl_Component::getChainedByMaster($new, $c, array('ignoreVisible'=>true));
