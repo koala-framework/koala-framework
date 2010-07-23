@@ -16,7 +16,7 @@ class Vpc_NewsletterCategory_Subscribe_FrontendForm extends Vpc_Newsletter_Subsc
 
         $categories = $this->_getCategories();
         if (count($categories) > 1) {
-            $this->add(new Vps_Form_Field_MultiCheckbox('ToCategory', 'Category', trlVps('Categories')))
+            $this->add(new Vps_Form_Field_MultiCheckbox('ToCategory', 'Category', trlVpsStatic('Categories')))
                 ->setValues($categories)
                 ->setWidth(255)
                 ->setAllowBlank(false);
