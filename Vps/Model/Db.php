@@ -1040,10 +1040,20 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     // check if csv is possible with current database rights
                     if (!Vps_Util_Mysql::getFileRight()) {
                         unset($ret[$k]);
-                        $ret = array_values($ret);
+                    }
+                } else if ($v === self::FORMAT_SQL) {
+                    // check if mysql is available (mainly because of POI Servers,
+                    // where mysql is on another server)
+                    exec("whereis mysql", $output, $execRet);
+
+                    if ($output && is_array($output) && trim($output[0]) != 'mysql:') {
+                        // hier bleibts drin
+                    } else {
+                        unset($ret[$k]);
                     }
                 }
             }
+            $ret = array_values($ret);
             return $ret;
         }
     }
