@@ -21,7 +21,7 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Advanced_GoogleMapView_Compon
     {
         $row = $this->_getRow();
         $fields = array('coordinates', 'zoom', 'width', 'height', 'zoom_properties',
-                        'scale', 'satelite', 'overview');
+                        'scale', 'satelite', 'overview', 'routing');
         foreach ($fields as $f) {
             $ret[$f] = $row->$f;
         }
