@@ -29,13 +29,26 @@ Vpc.Advanced.GoogleMap.renderMap = function(map) {
 Vps.onContentReady(function() {
     var maps = Ext.DomQuery.select('div.vpcAdvancedGoogleMapView');
     Ext.each(maps, function(map) {
-        var up = Ext.get(map).up('div.vpsSwitchDisplay');
-        if (up) {
-            (function(up, map) {
-                Ext.get(up).switchDisplayObject.on('opened', function() {
+        // wenn in vpsSwitchDisplay (Klappbox)
+        var switchDisplayUp = Ext.get(map).up('div.vpsSwitchDisplay');
+        // wenn in vpsTabs
+        var tabsContentUp = Ext.get(map).up('div.vpsTabsContent');
+
+        if (switchDisplayUp) {
+            (function(switchDisplayUp, map) {
+                Ext.get(switchDisplayUp).switchDisplayObject.on('opened', function() {
                     Vpc.Advanced.GoogleMap.renderMap(map);
                 });
-            }).defer(1, this, [up, map]);
+            }).defer(1, this, [switchDisplayUp, map]);
+        } else if (tabsContentUp && !tabsContentUp.hasClass('vpsTabsContentActive')) {
+            (function(tabsContentUp, map) {
+                var tabsUp = Ext.get(tabsContentUp).up('div.vpsTabs');
+                Ext.get(tabsUp).tabsObject.on('tabActivate', function(tabs, newIdx, oldIdx) {
+                    if (tabsContentUp.dom === tabs.getContentElByIdx(newIdx)) {
+                        Vpc.Advanced.GoogleMap.renderMap(map);
+                    }
+                }, Ext.get(tabsUp).tabsObject);
+            }).defer(1, this, [tabsContentUp, map]);
         } else {
             Vpc.Advanced.GoogleMap.renderMap(map);
         }
