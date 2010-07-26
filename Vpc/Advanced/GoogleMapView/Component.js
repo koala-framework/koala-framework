@@ -34,6 +34,8 @@ Vps.onContentReady(function() {
         // wenn in vpsTabs
         var tabsContentUp = Ext.get(map).up('div.vpsTabsContent');
 
+        // TODO: wenn da noch mehr so ausnahmen kommen, könnte man sich eine generelle
+        // lösung mit einer 'vpsGmapDelayedRender' cssClass o.Ä. überlegen
         if (switchDisplayUp) {
             (function(switchDisplayUp, map) {
                 Ext.get(switchDisplayUp).switchDisplayObject.on('opened', function() {

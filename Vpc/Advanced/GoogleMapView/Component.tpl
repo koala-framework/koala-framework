@@ -1,14 +1,15 @@
 <div class="<?=$this->cssClass?>">
 <? if($this->data->hasContent()) { ?>
 
-    <? if ($this->text) { ?>
+    <? if ($this->text && ($this->text instanceof Vps_Component_Data)) { ?>
+        <?= $this->ifHasContent($this->text); ?>
+            <div class="text">
+                <?= $this->component($this->text); ?>
+            </div>
+        <?= $this->ifHasContent(); ?>
+    <? } else if ($this->text) { ?>
         <div class="text">
-        <? if ($this->text instanceof Vps_Component_Data) { ?>
-        <?php echo $this->component($this->text) ?>
-        <? } else { ?>
-        <?php echo $this->text ?>
-        <? } ?>
-        <br />
+            <?= $this->text; ?>
         </div>
     <? } ?>
 

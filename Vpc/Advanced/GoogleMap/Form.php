@@ -36,6 +36,7 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
         $this->fields->add(new Vps_Form_Field_Checkbox('scale', trlVps('Scale')));
         $this->fields->add(new Vps_Form_Field_Checkbox('satelite', trlVps('Satelitemap')));
         $this->fields->add(new Vps_Form_Field_Checkbox('overview', trlVps('Overviewmap')));
+        $this->fields->add(new Vps_Form_Field_Checkbox('routing', trlVps('Routing')));
 
         $form = Vpc_Abstract_Form::createChildComponentForm($class, '-text');
         $form->fields->getByName('content')->setHeight(170);
