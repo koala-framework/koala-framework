@@ -12,13 +12,17 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
         $ret['generators']['shippedMail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_ShippedMail_Component';
 
         $ret['business'] = '';
-        $ret['itemName'] = trlVps('Order at {0}', Vps_Registry::get('config')->application->name);
         return $ret;
     }
 
     public function confirmOrder($order)
     {
         throw new Vps_Exception("Not valid for PayPal");
+    }
+
+    public function getItemName($order)
+    {
+        return trlVps('Order at {0}', Vps_Registry::get('config')->application->name).' ('.$order->id.')';
     }
 
     public function processIpn(Vps_Util_PayPal_Ipn_LogModel_Row $row, $param)
