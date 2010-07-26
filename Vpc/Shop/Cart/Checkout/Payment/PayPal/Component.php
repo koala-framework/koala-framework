@@ -22,7 +22,7 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
 
     public function getItemName($order)
     {
-        return trlVps('Order at {0}', Vps_Registry::get('config')->application->name).' ('.$order->id.')';
+        return trlVps('Order at {0}', Vps_Registry::get('config')->application->name);
     }
 
     public function processIpn(Vps_Util_PayPal_Ipn_LogModel_Row $row, $param)
