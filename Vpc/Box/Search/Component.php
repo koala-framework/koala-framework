@@ -13,6 +13,7 @@ abstract class Vpc_Box_Search_Component extends Vpc_Abstract_Composite_Component
 
         $ret['assets']['dep'][] = 'ExtUpdateManager';
         $ret['assets']['dep'][] = 'VpsClearOnFocus';
+        $ret['assets']['dep'][] = 'ExtDelayedTask';
         $ret['assets']['files'][] = 'vps/Vpc/Box/Search/Component.js';
 
         $ret['placeholder']['searchButton'] = trlVps('Search');
