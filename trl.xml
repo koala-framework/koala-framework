@@ -289,7 +289,7 @@ wurde soeben erstellt.</de>
 <text>
 <en>Firstname</en>
 <de>Vorname</de>
-<fr>Prénom</fr>
+<fr>Pr&#xE9;nom</fr>
 <es>Nombre</es>
 <id>97</id>
 </text>
@@ -524,7 +524,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Can't save, please fill all red underlined fields correctly.</en>
-<de>Speichern ist nicht möglich, bitte füllen Sie alle rot unterstrichenen Felder korrekt aus.</de>
+<de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle rot unterstrichenen Felder korrekt aus.</de>
 <id>230</id>
 </text>
 <text>
@@ -894,7 +894,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>The value in this field is invalid</en>
-<de>Wert in diesem Feld ist ungültig</de>
+<de>Wert in diesem Feld ist ung&#xFC;ltig</de>
 <id>314</id>
 </text>
 <text>
@@ -2856,14 +2856,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Country</en>
 <de>Land</de>
 <fr>Pays</fr>
-<es>País</es>
+<es>Pa&#xED;s</es>
 <id>806</id>
 </text>
 <text>
 <en>Phone</en>
 <de>Telefon</de>
-<fr>Téléphone</fr>
-<es>Teléfono</es>
+<fr>T&#xE9;l&#xE9;phone</fr>
+<es>Tel&#xE9;fono</es>
 <id>807</id>
 </text>
 <text>
@@ -2950,21 +2950,21 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Mr.</en>
 <de>Herr</de>
 <fr>Monsieur</fr>
-<es>Señor</es>
+<es>Se&#xF1;or</es>
 <id>829</id>
 </text>
 <text>
 <en>Ms.</en>
 <de>Frau</de>
 <fr>Madame</fr>
-<es>Señora</es>
+<es>Se&#xF1;ora</es>
 <id>830</id>
 </text>
 <text>
 <context>sex</context>
 <en>Title</en>
 <de>Anrede</de>
-<fr>Civilité</fr>
+<fr>Civilit&#xE9;</fr>
 <es>Tratamiento</es>
 <id>832</id>
 </text>
@@ -4634,8 +4634,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>ZIP / City</en>
 <de>PLZ / Ort</de>
-<fr>CP / localité</fr>
-<es>Código postal / Localidad</es>
+<fr>CP / localit&#xE9;</fr>
+<es>C&#xF3;digo postal / Localidad</es>
 <id>1248</id>
 </text>
 <text>
@@ -5400,7 +5400,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Read more &#xBB;</en>
 <de>Weiterlesen &#xBB;</de>
 <fr>Davantage &#xBB;</fr>
-<es>Más &#xBB;</es>
+<es>M&#xE1;s &#xBB;</es>
 <id>1405</id>
 </text>
 <text>
@@ -5779,7 +5779,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Read more</en>
 <de>Weiterlesen</de>
 <fr>Davantage</fr>
-<es>Más</es>
+<es>M&#xE1;s</es>
 <id>1492</id>
 </text>
 <text>
@@ -5837,6 +5837,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>2 Columns</en>
+<de>2 Spalten</de>
 <id>1505</id>
 </text>
 <text>
@@ -5849,10 +5850,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>All Visible</en>
+<de>Alle Sichtbar</de>
 <id>1508</id>
 </text>
 <text>
 <en>Do you really wish to set everything to visible?</en>
+<de>Möchten Sie wirklich alles auf Sichtbar setzen?</de>
 <id>1509</id>
 </text>
 <text>
@@ -5994,6 +5997,86 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Copy of</en>
 <de>Kopie von</de>
 <id>1520</id>
+</text>
+<text>
+<en>Web Image Files</en>
+<id>1521</id>
+</text>
+<text>
+<en>All Files</en>
+<id>1522</id>
+</text>
+<text>
+<en>Upload Files</en>
+<id>1523</id>
+</text>
+<text>
+<en>Uploading files</en>
+<id>1524</id>
+</text>
+<text>
+<en>You got a requst</en>
+<id>1525</id>
+</text>
+<text>
+<en>E-Mail Recipient</en>
+<id>1526</id>
+</text>
+<text>
+<en>E-Mail Subject</en>
+<id>1527</id>
+</text>
+<text>
+<en>Form.Fieldset</en>
+<id>1528</id>
+</text>
+<text>
+<en>Required</en>
+<id>1529</id>
+</text>
+<text>
+<en>Form.Checkbox</en>
+<id>1530</id>
+</text>
+<text>
+<en>Box Label</en>
+<id>1531</id>
+</text>
+<text>
+<en>Form.Radio</en>
+<id>1532</id>
+</text>
+<text>
+<en>Output Type</en>
+<id>1533</id>
+</text>
+<text>
+<en>horizontal</en>
+<id>1534</id>
+</text>
+<text>
+<en>vertical</en>
+<id>1535</id>
+</text>
+<text>
+<en>Form.Select</en>
+<id>1536</id>
+</text>
+<text>
+<en>Form.Textarea</en>
+<id>1537</id>
+</text>
+<text>
+<en>Form.Textfield</en>
+<id>1538</id>
+</text>
+<text>
+<en>Alphanumeric</en>
+<id>1539</id>
+</text>
+<text>
+<en>Bezeichnung</en>
+<id>1540</id>
 </text>
 </trl>
 
