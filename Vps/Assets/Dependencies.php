@@ -3,6 +3,7 @@ class Vps_Assets_Dependencies
 {
     private $_files = array();
     private $_config;
+    private $_path;
     private $_loader;
     private $_dependenciesConfig;
     private $_processedDependencies = array();
@@ -15,6 +16,7 @@ class Vps_Assets_Dependencies
     {
         $this->_loader = $loader;
         $this->_config = $loader->getConfig();
+        $this->_path = $this->_config->path->toArray();
     }
 
     public function getMaxFileMTime()
@@ -314,12 +316,12 @@ class Vps_Assets_Dependencies
     {
         if (is_string($file) && substr($file, -2)=="/*") {
             $pathType = substr($file, 0, strpos($file, '/'));
-            if (!isset($this->_config->path->$pathType)) {
+            if (!isset($this->_path[$pathType])) {
                 throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
             }
             $file = substr($file, strpos($file, '/')); //pathtype abschneiden
             $file = substr($file, 0, -1); //* abschneiden
-            $path = $this->_config->path->$pathType.$file;
+            $path = $this->_path[$pathType].$file;
             if (!file_exists($path)) {
                 throw new Vps_Exception("Path '$path' does not exist.");
             }
@@ -329,7 +331,7 @@ class Vps_Assets_Dependencies
                     && (substr($file->getPathname(), -3) == '.js'
                         || substr($file->getPathname(), -4) == '.css')) {
                     $f = $file->getPathname();
-                    $f = substr($f, strlen($this->_config->path->$pathType));
+                    $f = substr($f, strlen($this->_path[$pathType]));
                     $f = $pathType . $f;
                     if (!$this->_hasFile($assetsType, $f)) {
                         $this->_files[$assetsType][] = $f;
@@ -345,7 +347,6 @@ class Vps_Assets_Dependencies
     public function getAssetPath($url)
     {
         if (file_exists($url)) return $url;
-        $paths = $this->_config->path;
 
         $type = substr($url, 0, strpos($url, '/'));
         $url = substr($url, strpos($url, '/')+1);
@@ -356,10 +357,10 @@ class Vps_Assets_Dependencies
         if (strpos($type, '-')!==false) {
             $type = substr($type, strpos($type, '-')+1); //section abschneiden
         }
-        if (!isset($paths->$type)) {
+        if (!isset($this->_path[$type])) {
             throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' for url '$url' not found in config.");
         }
-        $p = $paths->$type;
+        $p = $this->_path[$type];
         if (!file_exists($p.'/'.$url)) {
             throw new Vps_Assets_NotFoundException("Assets '$p/$url' not found");
         }
