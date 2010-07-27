@@ -27,15 +27,13 @@ class Vps_Assets_Dependencies
         $cache = Vps_Assets_Cache::getInstance();
         if (($ret = $cache->load('maxFileMTime')) === false) {
             $ret = 0;
-            foreach ($this->_config->assets->toArray() as $assetType=>$v) {
-                $files = $this->getAssetFiles($assetType, null, 'web', Vps_Component_Data_Root::getComponentClass());
-                unset($files['mtime']);
-                foreach ($files as $file) {
-                    if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
-                    } else if (substr($file, 0, 8) == 'dynamic/') {
-                    } else {
-                        $ret = max($ret, filemtime($this->getAssetPath($file)));
-                    }
+            $files = $this->getAssetFiles('Admin', null, 'web', Vps_Component_Data_Root::getComponentClass());
+            unset($files['mtime']);
+            foreach ($files as $file) {
+                if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
+                } else if (substr($file, 0, 8) == 'dynamic/') {
+                } else {
+                    $ret = max($ret, filemtime($this->getAssetPath($file)));
                 }
             }
             $ret = array($ret);
@@ -47,7 +45,6 @@ class Vps_Assets_Dependencies
 
     public function getAssetUrls($assetsType, $fileType, $section, $rootComponent, $language = null)
     {
-        $b = Vps_Benchmark::start();
         if ($this->_config->debug->menu) {
             $session = new Zend_Session_Namespace('debug');
             if (isset($session->enable) && $session->enable) {
@@ -229,6 +226,8 @@ class Vps_Assets_Dependencies
 
     private function _hasFile($assetsType, $file)
     {
+        return in_array($file, $this->_files[$assetsType], true);
+        /*
         //in_array scheint mit php 5.1 mit objekten nicht zu funktionieren
         foreach ($this->_files[$assetsType] as $f) {
             if (gettype($f) == gettype($file) && $f == $file) {
@@ -236,6 +235,7 @@ class Vps_Assets_Dependencies
             }
         }
         return false;
+        */
     }
 
     private function _processComponentDependency($assetsType, $class, $rootComponent, $includeAdminAssets)
@@ -293,6 +293,7 @@ class Vps_Assets_Dependencies
                 $classes = array_merge($classes, $g['plugins']);
             }
         }
+
         foreach ($classes as $class) {
             if ($class) {
                 $this->_processComponentDependency($assetsType, $class, $rootComponent, $includeAdminAssets);
