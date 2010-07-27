@@ -61,6 +61,38 @@ class Vps_Component_Abstract
                     $ret[] = $p;
                 } while ($p = get_parent_class($p));
                 return $ret;
+            } else if ($setting == 'parentFilePaths') {
+                //value = klasse, key=pfad
+                $ret = array();
+                foreach (self::getSetting($class, 'parentClasses') as $c) {
+                    $file = str_replace('_', DIRECTORY_SEPARATOR, $c) . '.php';
+                    $dirs = explode(PATH_SEPARATOR, get_include_path());
+                    foreach ($dirs as $dir) {
+                        if ($dir == '.') $dir = getcwd();
+                        $path = $dir . '/' . $file;
+                        if (is_file($path)) {
+                            if (substr($path, -14) == '/Component.php') {
+                                $ret[substr($path, 0, -14)] = substr($c, 0, -10);
+                            } else {
+                                $ret[substr($path, 0, -3)] = $c; //nur .php
+                            }
+                            break;
+                        }
+                    }
+                }
+                return $ret;
+            } else if ($setting == 'componentFiles') {
+                return Vps_Component_Abstract_Admin::getComponentFiles($class, array(
+                    'Master.tpl' => array('filename'=>'Master', 'ext'=>'tpl', 'returnClass'=>false),
+                    'Component.tpl' => array('filename'=>'Component', 'ext'=>'tpl', 'returnClass'=>false),
+                    'Partial.tpl' => array('filename'=>'Partial', 'ext'=>'tpl', 'returnClass'=>false),
+                    'Admin' => array('filename'=>'Admin', 'ext'=>'php', 'returnClass'=>true),
+                    'Controller' => array('filename'=>'Controller', 'ext'=>'php', 'returnClass'=>false),
+
+                    //verwendet bei dependencies
+                    'css' => array('filename'=>'Component', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
+                    'printcss' => array('filename'=>'Component', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
+                ));
             } else {
                 $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
                 $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
@@ -120,21 +152,15 @@ class Vps_Component_Abstract
                     //generators �ber getSetting holen, da dort noch die aus der config dazugemixt werden
                     self::$_settings[$c]['generators'] = self::getSetting($c, 'generators', false/*don't use settings cache*/);
 
-                    try {
-                        call_user_func(array($realCls, 'validateSettings'), self::$_settings[$c], $c);
-                    } catch (Vps_Exception $e) {
-                        throw new Vps_Exception("$c: ".$e->getMessage());
-                    }
-
-                    //*** templates
-                    self::$_settings[$c]['templates'] = array(
-                        'Master' => Vpc_Admin::getComponentFile($c, 'Master', 'tpl'),
-                        'Component' => Vpc_Admin::getComponentFile($c, 'Component', 'tpl'),
-                        'Partial' => Vpc_Admin::getComponentFile($c, 'Partial', 'tpl')
-                    );
+                    //*** load templates + componentFiles
+                    //vorladen fuer Vps_Component_Abstract_Admin::getComponentFile
+                    self::$_settings[$c]['componentFiles'] = self::getSetting($c, 'componentFiles');
 
                     //*** parentClasses
                     self::$_settings[$c]['parentClasses'] = self::getSetting($c, 'parentClasses');
+
+                    //*** parentFilePaths
+                    self::$_settings[$c]['parentFilePaths'] = self::getSetting($c, 'parentFilePaths');
 
                     //*** processedCssClass
                     self::$_settings[$c]['processedCssClass'] = '';
@@ -176,6 +202,15 @@ class Vps_Component_Abstract
                     } while ($p = get_parent_class($p));
                 }
                 self::$_rebuildingSettings = false;
+
+                foreach (self::getComponentClasses() as $c) {
+                    $realCls = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
+                    try {
+                        call_user_func(array($realCls, 'validateSettings'), self::$_settings[$c], $c);
+                    } catch (Vps_Exception $e) {
+                        throw new Vps_Exception("$c: ".$e->getMessage());
+                    }
+                }
 
                 $cache->save(self::$_settings, $cacheId);
             }

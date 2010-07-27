@@ -270,31 +270,19 @@ class Vps_Assets_Dependencies
         }
 
         //alle css-dateien der vererbungshierache includieren
+        $files = Vpc_Abstract::getSetting($class, 'componentFiles');
         $componentCssFiles = array();
-
-        foreach (Vpc_Abstract::getParentClasses($class) as $c) {
-            $curClass = $c;
-            if (substr($curClass, -10) == '_Component') {
-                $curClass = substr($curClass, 0, -10);
+        foreach (array_merge($files['css'], $files['printcss']) as $f) {
+            if (substr($f, 0, strlen(VPS_PATH)) == VPS_PATH) { //zuerst, da vps in web liegen kann
+                //kann nur aus vps
+                $f = 'vps'.substr($f, strlen(VPS_PATH));
+            } else {
+                //oder web kommen
+                $f = 'web'.substr($f, strlen(getcwd()));
             }
-            $curClass =  $curClass . '_Component';
-            $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass);
-            foreach ($this->_config->path as $type=>$dir) {
-                if ($dir == '.') $dir = getcwd();
-                if (is_file($dir . '/' . $file.'.css')) {
-                    $f = $type . '/' . $file.'.css';
-                    if (!$this->_hasFile($assetsType, $f)) {
-                        $componentCssFiles[] = $f;
-                    }
-                }
-                if (is_file($dir . '/' . $file.'.printcss')) {
-                    $f = $type . '/' . $file.'.printcss';
-                    if (!$this->_hasFile($assetsType, $f)) {
-                        $componentCssFiles[] = $f;
-                    }
-                }
-            }
+            $componentCssFiles[] = $f;
         }
+
         //reverse damit css von weiter unten in der vererbungshierachie überschreibt
         $this->_files[$assetsType] = array_merge($this->_files[$assetsType], array_reverse($componentCssFiles));
 

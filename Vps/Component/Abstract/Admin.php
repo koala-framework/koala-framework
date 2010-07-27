@@ -108,31 +108,54 @@ class Vps_Component_Abstract_Admin
 
     public static function getComponentFile($class, $filename = '', $ext = 'php', $returnClass = false)
     {
-        if (is_object($class)) $class = get_class($class);
-        $class = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-        $ret = null;
-        while (!$ret && $class != '') {
-            $curClass = $class;
-            if ($filename != '') {
-                if (substr($curClass, -10) == '_Component') {
-                    $curClass = substr($curClass, 0, -10);
-                }
-                $curClass =  $curClass . '_' . $filename;
+        $files = Vpc_Abstract::getSetting($class, 'componentFiles');
+        $key = false;
+
+        //precomputed aus Vps/Component/Abstract.php
+        if ($ext == 'php' && $returnClass) {
+            $key = $filename;
+        } else if ($ext == 'tpl' && !$returnClass) {
+            $key = $filename.'.tpl';
+        }
+        if ($key) {
+            Vps_Benchmark::count('getComponentFile precomputed');
+            if (isset($files[$key])) return $files[$key];
+        }
+        Vps_Benchmark::count('getComponentFile slow');
+        $ret = self::getComponentFiles($class, array(array('filename'=>$filename, 'ext'=>$ext, 'returnClass'=>$returnClass)));
+        return $ret[0];
+    }
+
+    public static function getComponentFiles($class, $files)
+    {
+        $ret = array();
+        $paths = Vpc_Abstract::getSetting($class, 'parentFilePaths'); //teuer, nur einmal aufrufen
+        foreach ($files as $kFile => $file) {
+            if (isset($file['multiple']) && $file['multiple']) {
+                $ret[$kFile] = array();
+            } else {
+                $ret[$kFile] = false;
             }
-            $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass) . '.' . $ext;
-            $dirs = explode(PATH_SEPARATOR, get_include_path());
-            foreach ($dirs as $dir) {
-                if ($dir == '.') $dir = getcwd();
-                $path = $dir . '/' . $file;
-                if (is_file($path)) {
-                    $ret = $returnClass ? $curClass : $path;
-                    break;
+            foreach ($paths as $path => $c) {
+                $f = $path.'/'.$file['filename'].'.'.$file['ext'];
+                if (file_exists($f)) {
+                    if ($file['returnClass']) {
+                        $i = $c.'_'.$file['filename'];
+                    } else {
+                        $i = $f;
+                    }
+                    if (isset($file['multiple']) && $file['multiple']) {
+                        $ret[$kFile][] = $i;
+                    } else {
+                        $ret[$kFile] = $i;
+                        continue 2;
+                    }
                 }
             }
-            $class = get_parent_class($class);
         }
         return $ret;
     }
+
     public static function getComponentClass($class, $filename)
     {
         return self::getComponentFile($class, $filename, 'php', true);
