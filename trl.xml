@@ -5837,6 +5837,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>2 Columns</en>
+<de>2 Spalten</de>
 <id>1505</id>
 </text>
 <text>
@@ -5849,10 +5850,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>All Visible</en>
+<de>Alle Sichtbar</de>
 <id>1508</id>
 </text>
 <text>
 <en>Do you really wish to set everything to visible?</en>
+<de>M&#xF6;chten Sie wirklich alles auf Sichtbar setzen?</de>
 <id>1509</id>
 </text>
 <text>
