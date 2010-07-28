@@ -22,7 +22,7 @@ class Vps_Component_Abstract_Admin
     {
         static $instances = array();
         if (!isset($instances[$componentClass])) {
-            $c = self::getComponentFile($componentClass, 'Admin', 'php', true);
+            $c = self::getComponentClass($componentClass, 'Admin');
             if (!$c) { return null; }
             $instances[$componentClass] = new $c($componentClass);
         }
