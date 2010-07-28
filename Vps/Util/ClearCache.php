@@ -92,9 +92,11 @@ class Vps_Util_ClearCache
             Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(Vps_Setup::getConfigSection()));
             if ($output) echo " [\033[00;32mOK\033[00m]\n";
 
-            if ($output) echo "Refresh component......";
-            Vpc_Abstract::getSettingMtime();
-            if ($output) echo " [\033[00;32mOK\033[00m]\n";
+            if (Vps_Component_Data_Root::getComponentClass()) {
+                if ($output) echo "Refresh component......";
+                Vpc_Abstract::getSettingMtime();
+                if ($output) echo " [\033[00;32mOK\033[00m]\n";
+            }
 
             if (in_array('cache_component_meta', $this->getDbCacheTables())
                 && (in_array('component', $types) || in_array('cache_component_meta', $types))
