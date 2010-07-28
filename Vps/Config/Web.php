@@ -49,9 +49,15 @@ class Vps_Config_Web extends Vps_Config_Ini
         if (!empty($webConfig->vpsConfigSection)) {
             $vpsSection = $webConfig->vpsConfigSection;
         } else {
-            $vpsConfigFull = new Vps_Config_Ini($vpsPath.'/config.ini', null);
-            if (isset($vpsConfigFull->$section)) {
-                $vpsSection = $section;
+            $vpsConfigFull = array_keys(parse_ini_file($vpsPath.'/config.ini', true));
+            foreach ($vpsConfigFull as $i) {
+                if ($i == $section
+                    || substr($i, 0, strlen($section)+1)==$section.' '
+                    || substr($i, 0, strlen($section)+1)==$section.':'
+                ) {
+                    $vpsSection = $section;
+                    break;
+                }
             }
         }
         if (!$vpsSection) {
@@ -103,15 +109,24 @@ class Vps_Config_Web extends Vps_Config_Ini
 
     private function _getWebSection($file, $section)
     {
-        $webConfigFull = new Vps_Config_Ini($file, null);
-        if (isset($webConfigFull->$section)) {
-            $webSection = $section;
-        } else if (isset($webConfigFull->vivid)) {
-            $webSection = 'vivid';
-        } else {
-            $webSection = 'production';
+        $webConfigSections = array_keys(parse_ini_file($file, true));
+        foreach ($webConfigSections as $i) {
+            if ($i == $section
+                || substr($i, 0, strlen($section)+1)==$section.' '
+                || substr($i, 0, strlen($section)+1)==$section.':'
+            ) {
+                return $section;
+            }
         }
-        return $webSection;
+        foreach ($webConfigSections as $i) {
+            if ($i == $section
+                || substr($i, 0, 6)=='vivid '
+                || substr($i, 0, 6)=='vivid:'
+            ) {
+                return 'vivid';
+            }
+        }
+        return 'production';
     }
 
     protected function _mergeWebConfig($path, $section)
