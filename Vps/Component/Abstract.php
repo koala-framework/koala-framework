@@ -51,6 +51,12 @@ class Vps_Component_Abstract
         if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
         if (self::$_rebuildingSettings || !$settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
+
+            static $rebuildingSettingsCache = array();
+            if (isset($rebuildingSettingsCache[$class][$setting])) {
+                return $rebuildingSettingsCache[$class][$setting];
+            }
+
             if (!class_exists(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class)) {
                 throw new Vps_Exception("Invalid component '$class'");
             }
@@ -60,7 +66,6 @@ class Vps_Component_Abstract
                 do {
                     $ret[] = $p;
                 } while ($p = get_parent_class($p));
-                return $ret;
             } else if ($setting == 'parentFilePaths') {
                 //value = klasse, key=pfad
                 $ret = array();
@@ -80,9 +85,8 @@ class Vps_Component_Abstract
                         }
                     }
                 }
-                return $ret;
             } else if ($setting == 'componentFiles') {
-                return Vps_Component_Abstract_Admin::getComponentFiles($class, array(
+                $ret = Vps_Component_Abstract_Admin::getComponentFiles($class, array(
                     'Master.tpl' => array('filename'=>'Master', 'ext'=>'tpl', 'returnClass'=>false),
                     'Component.tpl' => array('filename'=>'Component', 'ext'=>'tpl', 'returnClass'=>false),
                     'Partial.tpl' => array('filename'=>'Partial', 'ext'=>'tpl', 'returnClass'=>false),
@@ -129,9 +133,9 @@ class Vps_Component_Abstract
                         $ret[$k] = $g;
                     }
                 }
-                return $ret;
             }
-
+            $rebuildingSettingsCache[$class][$setting] = $ret;
+            return $ret;
         }
 
         if (!self::$_settings) self::_getSettingsCached();
