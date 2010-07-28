@@ -140,7 +140,7 @@ class Vps_Component_Abstract_Admin
                 $f = $path.'/'.$file['filename'].'.'.$file['ext'];
                 if (file_exists($f)) {
                     if ($file['returnClass']) {
-                        $i = $c.'_'.$file['filename'];
+                        $i = $c.'_'.str_replace('/', '_', $file['filename']);
                     } else {
                         $i = $f;
                     }
@@ -158,7 +158,7 @@ class Vps_Component_Abstract_Admin
 
     public static function getComponentClass($class, $filename)
     {
-        return self::getComponentFile($class, $filename, 'php', true);
+        return self::getComponentFile($class, str_replace('_', '/', $filename), 'php', true);
     }
 
     public function delete()
