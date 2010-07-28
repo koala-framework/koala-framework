@@ -74,7 +74,7 @@ class Vps_Component_Abstract
                             if (substr($path, -14) == '/Component.php') {
                                 $ret[substr($path, 0, -14)] = substr($c, 0, -10);
                             } else {
-                                $ret[substr($path, 0, -3)] = $c; //nur .php
+                                $ret[substr($path, 0, -4)] = $c; //nur .php
                             }
                             break;
                         }
