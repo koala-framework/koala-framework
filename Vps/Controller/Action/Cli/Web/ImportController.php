@@ -169,6 +169,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         $databases = $config->server->databases->toArray();
         if (!$databases) $databases = array('web');
         foreach ($databases as $dbKey) {
+            if (!$dbKey) continue;
             try {
                 $dbConfig = Vps_Registry::get('dao')->getDbConfig($dbKey);
             } catch (Vps_Dao_Exception $e) {

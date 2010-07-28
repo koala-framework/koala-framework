@@ -1,7 +1,7 @@
 <?php
-class Vpc_NewsletterCategory_SubscribeCategoriesController extends Vps_Controller_Action_Auto_Vpc_Grid
+class Vpc_NewsletterCategory_Subscribe_CategoriesController extends Vps_Controller_Action_Auto_Vpc_Grid
 {
-    protected $_modelName = 'Vpc_NewsletterCategory_SubscribeCategoriesModel';
+    protected $_modelName = 'Vpc_NewsletterCategory_Subscribe_CategoriesModel';
     protected $_position = 'pos';
 
     protected function _initColumns()
@@ -13,7 +13,7 @@ class Vpc_NewsletterCategory_SubscribeCategoriesController extends Vps_Controlle
         }
         $select = new Vps_Form_Field_Select();
         $select->setValues($values);
-        $this->_columns->add(new Vps_Grid_Column('name', trlVps('Category'), 200))
+        $this->_columns->add(new Vps_Grid_Column('name', trlVps('Bezeichnung'), 200))
             ->setEditor(new Vps_Form_Field_TextField());
         $this->_columns->add(new Vps_Grid_Column('category'))
             ->setData(new Vps_Data_Table_Parent('Category'));
