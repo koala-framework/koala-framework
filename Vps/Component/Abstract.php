@@ -52,11 +52,6 @@ class Vps_Component_Abstract
         if (self::$_rebuildingSettings || !$settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
 
-            static $rebuildingSettingsCache = array();
-            if (isset($rebuildingSettingsCache[$class][$setting])) {
-                return $rebuildingSettingsCache[$class][$setting];
-            }
-
             if (!class_exists(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class)) {
                 throw new Vps_Exception("Invalid component '$class'");
             }
@@ -129,7 +124,6 @@ class Vps_Component_Abstract
                     }
                 }
             }
-            $rebuildingSettingsCache[$class][$setting] = $ret;
             return $ret;
         }
 
