@@ -84,5 +84,40 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
+    public function checkIdsAction()
+    {
+        $models = array(
+            Vps_Model_Abstract::getInstance('Vps_Trl_Model_Vps'),
+            Vps_Model_Abstract::getInstance('Vps_Trl_Model_Web')
+        );
+        foreach ($models as $m) {
+            while ($m instanceof Vps_Model_Proxy) $m = $m->getProxyModel();
+            if (!file_exists($m->getFilePath())) continue;
+            $ids = array();
+            $duplicate = 0;
+            $xml = simplexml_load_file($m->getFilePath());
+            $maxId = 0;
+            foreach ($xml->text as $row) {
+                $maxId = max($maxId, (int)$row->id);
+            }
+            foreach ($xml->text as $row) {
+                $id = (int)$row->id;
+                if (in_array($id, $ids)) {
+                    echo $m->getFilePath().": $id doppelt\n";
+                    $duplicate++;
+                    $row->id = ++$maxId;
+                    continue;
+                }
+                $ids[] = $id;
+            }
+            if (!$duplicate) {
+                echo $m->getFilePath().": alles ok\n";
+            } else {
+                file_put_contents($m->getFilePath(), Vps_Model_Xml::asPrettyXML($xml->asXML()));
+            }
+        }
+        exit;
+    }
+
 }
 

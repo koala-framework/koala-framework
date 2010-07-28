@@ -1,5 +1,5 @@
 <?php
-class Vpc_NewsletterCategory_Update_3 extends Vps_Update {
+class Vpc_NewsletterCategory_Update_35002 extends Vps_Update {
     public function update()
     {
         $db = Zend_Registry::get('db');

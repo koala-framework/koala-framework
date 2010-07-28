@@ -1,5 +1,5 @@
 <?php
-class Vpc_NewsletterCategory_SubscribeCategoriesModel extends Vps_Model_Db
+class Vpc_NewsletterCategory_Subscribe_CategoriesModel extends Vps_Model_Db
 {
     protected $_table = 'vpc_newsletter_subscribecategories';
     protected $_referenceMap = array(

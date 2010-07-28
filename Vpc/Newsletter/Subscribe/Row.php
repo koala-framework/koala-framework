@@ -28,10 +28,9 @@ class Vpc_Newsletter_Subscribe_Row extends Vps_Model_Db_Row
 
     public function getMailGender()
     {
-        return ($this->gender == 'male' ?
-            Vpc_Mail_Recipient_GenderInterface::MAIL_GENDER_MALE :
-            Vpc_Mail_Recipient_GenderInterface::MAIL_GENDER_FEMALE
-        );
+        if ($this->gender == 'male') return Vpc_Mail_Recipient_GenderInterface::MAIL_GENDER_MALE;
+        if ($this->gender == 'female') return Vpc_Mail_Recipient_GenderInterface::MAIL_GENDER_FEMALE;
+        return null;
     }
 
     public function getMailTitle()

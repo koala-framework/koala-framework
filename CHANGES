@@ -10,6 +10,8 @@ möglicherweise nicht kompatible Änderungen:
 - Directories Administration: o Admin::_getContentClass gibts nicht mehr
                               o idTemplate muss nicht mehr gesetzt werden
 - editComponents werden auch bei Paragraphs berücksichtigt
+- Vpc_Basic_Flash_Component gibts nicht mehr, stattdessen Flash_Code und Flash_Upload
+  Vpc_Basic_Flash_Component mit Upload (nicht Url) wird nicht autom. konvertiert
 
 == 1.9 ==
 Erstellt: 07.05.10

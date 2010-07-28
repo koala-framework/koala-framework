@@ -45,6 +45,14 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         }
     }
 
+    public function setName($name)
+    {
+        if ($name && !preg_match('#^[a-z0-9_-]+$#i', $name)) {
+            throw new Vps_Exception("Invalid field name '$name'");
+        }
+        return $this->__call('setName', array($name));
+    }
+
     protected function _getTrlProperties()
     {
         return array('fieldLabel');

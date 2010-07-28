@@ -515,7 +515,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
             if (!$dbDepOf instanceof Vps_Model_Db) {
                 throw new Vps_Exception_NotYetImplemented();
             }
-            $depTableName = $dbDepM->getTableName();
             $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
             $depSelect = $expr->getSelect();
             if (!$depSelect) $depSelect = $dbDepM->select();
@@ -523,8 +522,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
-            $depDbSelect->from(null, "$col1");
-            return $this->getPrimaryKey()." IN ($depDbSelect)";
+            $depDbSelect->from(null, $col1);
+            return $this->_fieldWithTableName($this->getPrimaryKey())." IN ($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
             $refM = $depOf->getReferencedModel($expr->getParent());
             $refM = Vps_Model_Abstract::getInstance($refM);
@@ -1040,10 +1039,20 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     // check if csv is possible with current database rights
                     if (!Vps_Util_Mysql::getFileRight()) {
                         unset($ret[$k]);
-                        $ret = array_values($ret);
+                    }
+                } else if ($v === self::FORMAT_SQL) {
+                    // check if mysql is available (mainly because of POI Servers,
+                    // where mysql is on another server)
+                    exec("whereis mysql", $output, $execRet);
+
+                    if ($output && is_array($output) && trim($output[0]) != 'mysql:') {
+                        // hier bleibts drin
+                    } else {
+                        unset($ret[$k]);
                     }
                 }
             }
+            $ret = array_values($ret);
             return $ret;
         }
     }
