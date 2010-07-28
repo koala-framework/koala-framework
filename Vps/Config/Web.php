@@ -3,10 +3,10 @@ require_once 'Vps/Config/Ini.php';
 
 class Vps_Config_Web extends Vps_Config_Ini
 {
+    static private $_instances = array();
     public static function getInstance($section)
     {
-        static $instances = array();
-        if (!isset($instances[$section])) {
+        if (!isset(self::$_instances[$section])) {
             require_once 'Vps/Config/Cache.php';
             $cache = Vps_Config_Cache::getInstance();
             $cacheId = 'config_'.str_replace('-', '_', $section);
@@ -17,9 +17,14 @@ class Vps_Config_Web extends Vps_Config_Ini
                 $mtime = time();
                 $cache->save($ret, $cacheId);
             }
-            $instances[$section] = $ret;
+            self::$_instances[$section] = $ret;
         }
-        return $instances[$section];
+        return self::$_instances[$section];
+    }
+
+    public static function clearInstances()
+    {
+        self::$_instances = array();
     }
 
     public static function getInstanceMtime($section)
