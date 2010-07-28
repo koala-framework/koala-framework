@@ -5855,7 +5855,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Do you really wish to set everything to visible?</en>
-<de>Möchten Sie wirklich alles auf Sichtbar setzen?</de>
+<de>M&#xF6;chten Sie wirklich alles auf Sichtbar setzen?</de>
 <id>1509</id>
 </text>
 <text>
@@ -6077,6 +6077,16 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Bezeichnung</en>
 <id>1540</id>
+</text>
+<text>
+<en>This account has already been activated.</en>
+<de>Dieser Account wurde bereits aktiviert.</de>
+<id>1541</id>
+</text>
+<text>
+<en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
+<de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollständig in den Browser kopiert?</de>
+<id>1542</id>
 </text>
 </trl>
 
