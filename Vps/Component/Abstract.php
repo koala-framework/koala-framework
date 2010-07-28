@@ -51,6 +51,7 @@ class Vps_Component_Abstract
         if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
         if (self::$_rebuildingSettings || !$settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
+
             if (!class_exists(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class)) {
                 throw new Vps_Exception("Invalid component '$class'");
             }
@@ -60,7 +61,6 @@ class Vps_Component_Abstract
                 do {
                     $ret[] = $p;
                 } while ($p = get_parent_class($p));
-                return $ret;
             } else if ($setting == 'parentFilePaths') {
                 //value = klasse, key=pfad
                 $ret = array();
@@ -80,9 +80,8 @@ class Vps_Component_Abstract
                         }
                     }
                 }
-                return $ret;
             } else if ($setting == 'componentFiles') {
-                return Vps_Component_Abstract_Admin::getComponentFiles($class, array(
+                $ret = Vps_Component_Abstract_Admin::getComponentFiles($class, array(
                     'Master.tpl' => array('filename'=>'Master', 'ext'=>'tpl', 'returnClass'=>false),
                     'Component.tpl' => array('filename'=>'Component', 'ext'=>'tpl', 'returnClass'=>false),
                     'Partial.tpl' => array('filename'=>'Partial', 'ext'=>'tpl', 'returnClass'=>false),
@@ -100,9 +99,32 @@ class Vps_Component_Abstract
                 if (!array_key_exists($setting, $settings)) {
                     throw new Vps_Exception("Couldn't find required setting '$setting' for $c.");
                 }
-                return $settings[$setting];
+                $ret = $settings[$setting];
+                if ($setting == 'generators') {
+                    $ret = array();
+                    foreach ($settings[$setting] as $k=>$g) {
+                        if (is_array($g['component'])) {
+                            foreach ($g['component'] as $l=>$cc) {
+                                if (!$cc) continue;
+                                if (Vpc_Abstract::hasSetting($cc, 'needsParentComponentClass')
+                                    && Vpc_Abstract::getSetting($cc, 'needsParentComponentClass')
+                                ) {
+                                    $g['component'][$l] .= '.'.$class;
+                                }
+                            }
+                        } else {
+                            if (!$g['component']) continue;
+                            if (Vpc_Abstract::hasSetting($g['component'], 'needsParentComponentClass')
+                                && Vpc_Abstract::getSetting($g['component'], 'needsParentComponentClass')
+                            ) {
+                                $g['component'] .= '.'.$class;
+                            }
+                        }
+                        $ret[$k] = $g;
+                    }
+                }
             }
-
+            return $ret;
         }
 
         if (!self::$_settings) self::_getSettingsCached();
@@ -205,6 +227,9 @@ class Vps_Component_Abstract
                         self::$_settings['mtimeFiles'][] = $f;
                         self::$_settings['mtimeFiles'][] = $incPath.DIRECTORY_SEPARATOR.$file.'.css';
                     } while ($p = get_parent_class($p));
+
+                    //*** generators
+                    self::$_settings[$c]['generators'] = self::getSetting($c, 'generators');
                 }
                 self::$_rebuildingSettings = false;
 
