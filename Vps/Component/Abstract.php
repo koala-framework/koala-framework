@@ -104,19 +104,24 @@ class Vps_Component_Abstract
             }
 
         }
-        //& für performance
-        $s =& self::_getSettingsCached();
-        if (!is_string($class)) {
-            throw new Vps_Exception("Invalid component '$class'");
+
+        if (!self::$_settings) self::_getSettingsCached();
+        try {
+            return self::$_settings[$class][$setting];
+        } catch (ErrorException $e) {
+            //diese checks im nachhinein machen damit sie nicht immer gemacht werden (diese fkt wird am meisten von allen aufgerufen)
+            //und hier dann versuchen eine bessere exception msg zu erstellen
+            if (!is_string($class)) {
+                throw new Vps_Exception("Invalid component '$class'");
+            } else if (!isset(self::$_settings[$class])) {
+                throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
+            } else if (!array_key_exists($setting, self::$_settings[$class])) {
+                // man könnte hier isset() machen, nur wenn das setting NULL ist, gibt es false zurück... scheis PHP :)
+                throw new Vps_Exception("Setting '$setting' does not exist for Component '$class'");
+            } else {
+                throw $e;
+            }
         }
-        if (!isset($s[$class])) {
-            throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
-        }
-        // man könnte hier isset() machen, nur wenn das setting NULL ist, gibt es false zurück... scheis PHP :)
-        if (!array_key_exists($setting, $s[$class])) {
-            throw new Vps_Exception("Setting '$setting' does not exist for Component '$class'");
-        }
-        return $s[$class][$setting];
     }
 
     public static function getSettingMtime()
