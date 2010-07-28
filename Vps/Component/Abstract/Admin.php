@@ -108,6 +108,11 @@ class Vps_Component_Abstract_Admin
 
     public static function getComponentFile($class, $filename = '', $ext = 'php', $returnClass = false)
     {
+        if (is_object($class)) {
+            if ($class instanceof Vps_Component_Abstract) $class = get_class($class);
+            else if ($class instanceof Vps_Component_Data) $class = $class->componentClass;
+            else throw new Vps_Exception("invalid class");
+        }
         $files = Vpc_Abstract::getSetting($class, 'componentFiles');
         $key = false;
 
