@@ -45,10 +45,19 @@ class Vps_Config_Web extends Vps_Config_Ini
         $vpsSection = false;
 
         $webSection = $this->_getWebSection($webPath.'/application/config.ini', $section);
-        $webConfig = new Vps_Config_Ini($webPath.'/application/config.ini', $webSection);
-        if (!empty($webConfig->vpsConfigSection)) {
-            $vpsSection = $webConfig->vpsConfigSection;
-        } else {
+        $webConfig = parse_ini_file($webPath.'/application/config.ini', true);
+        foreach ($webConfig as $i=>$cfg) {
+            if ($i == $webSection
+                || substr($i, 0, strlen($webSection)+1)==$webSection.' '
+                || substr($i, 0, strlen($webSection)+1)==$webSection.':'
+            ) {
+                if (isset($cfg['vpsConfigSection'])) {
+                    $vpsSection = $cfg['vpsConfigSection'];
+                }
+                break;
+            }
+        }
+        if (!$vpsSection) {
             $vpsConfigFull = array_keys(parse_ini_file($vpsPath.'/config.ini', true));
             foreach ($vpsConfigFull as $i) {
                 if ($i == $section
