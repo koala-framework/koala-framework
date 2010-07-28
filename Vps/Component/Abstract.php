@@ -107,26 +107,21 @@ class Vps_Component_Abstract
                 $ret = $settings[$setting];
                 if ($setting == 'generators') {
                     $ret = array();
-                    static $cache;
                     foreach ($settings[$setting] as $k=>$g) {
                         if (is_array($g['component'])) {
                             foreach ($g['component'] as $l=>$cc) {
                                 if (!$cc) continue;
-                                if (!isset($cache[$cc])) {
-                                    $cache[$cc] = Vpc_Abstract::hasSetting($cc, 'needsParentComponentClass')
-                                        && Vpc_Abstract::getSetting($cc, 'needsParentComponentClass');
-                                }
-                                if ($cache[$cc]) {
+                                if (Vpc_Abstract::hasSetting($cc, 'needsParentComponentClass')
+                                    && Vpc_Abstract::getSetting($cc, 'needsParentComponentClass')
+                                ) {
                                     $g['component'][$l] .= '.'.$class;
                                 }
                             }
                         } else {
                             if (!$g['component']) continue;
-                            if (!isset($cache[$g['component']])) {
-                                $cache[$g['component']] = Vpc_Abstract::hasSetting($g['component'], 'needsParentComponentClass')
-                                    && Vpc_Abstract::getSetting($g['component'], 'needsParentComponentClass');
-                            }
-                            if ($cache[$g['component']]) {
+                            if (Vpc_Abstract::hasSetting($g['component'], 'needsParentComponentClass')
+                                && Vpc_Abstract::getSetting($g['component'], 'needsParentComponentClass')
+                            ) {
                                 $g['component'] .= '.'.$class;
                             }
                         }
