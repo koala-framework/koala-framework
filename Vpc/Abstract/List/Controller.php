@@ -38,7 +38,9 @@ class Vpc_Abstract_List_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
                 $field->getFieldName() => $uploadId
             );
             $postData = $form->processInput(null, $postData);
-            $form->validate(null, $postData);
+            if ($form->validate(null, $postData)) {
+                throw new Vps_Exception('validate failed');
+            }
             $form->prepareSave(null, $postData);
             $form->save(null, $postData);
         }
