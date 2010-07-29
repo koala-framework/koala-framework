@@ -8,6 +8,7 @@ class Vpc_Form_Dynamic_Component extends Vpc_Form_Component
         $ret['componentIcon'] = new Vps_Asset('application_form');
         $ret['generators']['child']['component']['paragraphs'] = 'Vpc_Form_Dynamic_Paragraphs_Component';
         $ret['ownModel'] = 'Vps_Component_FieldModel';
+        $ret['editComponents'] = array('paragraphs');
         return $ret;
     }
 
