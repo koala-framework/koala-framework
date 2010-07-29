@@ -4,6 +4,7 @@ Neue Features:
 - Generator Plugins
 - Generator Plugin: Tags
 - Kaltstart Performance
+- Vpc_Form: vpsFieldError klasse wird für Felder mit Validierungs-Fehler gesetzt
 
 möglicherweise nicht kompatible Änderungen:
 - editComponents werden im Seitenbaum nur mehr berücksichtigt wenn direkt unter der bearbeitenden Komponente liegen
