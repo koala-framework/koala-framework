@@ -86,7 +86,7 @@ class Vps_Component_Abstract
                     'Component.tpl' => array('filename'=>'Component', 'ext'=>'tpl', 'returnClass'=>false),
                     'Partial.tpl' => array('filename'=>'Partial', 'ext'=>'tpl', 'returnClass'=>false),
                     'Admin' => array('filename'=>'Admin', 'ext'=>'php', 'returnClass'=>true),
-                    'Controller' => array('filename'=>'Controller', 'ext'=>'php', 'returnClass'=>false),
+                    'Controller' => array('filename'=>'Controller', 'ext'=>'php', 'returnClass'=>true),
 
                     //verwendet bei dependencies
                     'css' => array('filename'=>'Component', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
