@@ -25,7 +25,7 @@ abstract class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
         $dec = Vpc_Abstract::getSetting($form->componentClass, 'decorator');
         if ($dec && is_string($dec)) {
             $dec = new $dec();
-            $fieldVars = $dec->processItem($fieldVars);
+            $fieldVars = $dec->processItem($fieldVars, $this->_getForm()->getComponent()->getErrors());
         }
         $ret = array_merge($ret, $fieldVars);
         return $ret;
