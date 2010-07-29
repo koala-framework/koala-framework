@@ -3,6 +3,7 @@ Erstellt: 09.06.10
 Neue Features:
 - Generator Plugins
 - Generator Plugin: Tags
+- Kaltstart Performance
 
 möglicherweise nicht kompatible Änderungen:
 - editComponents werden im Seitenbaum nur mehr berücksichtigt wenn direkt unter der bearbeitenden Komponente liegen
@@ -12,6 +13,8 @@ möglicherweise nicht kompatible Änderungen:
 - editComponents werden auch bei Paragraphs berücksichtigt
 - Vpc_Basic_Flash_Component gibts nicht mehr, stattdessen Flash_Code und Flash_Upload
   Vpc_Basic_Flash_Component mit Upload (nicht Url) wird nicht autom. konvertiert
+- Form_Field::validate gibt jetzt nicht nur mehr ein array mit Validierungsmessages zurueck sondern
+  ein array mit field und message
 
 == 1.9 ==
 Erstellt: 07.05.10
