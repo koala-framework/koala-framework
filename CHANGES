@@ -3,6 +3,8 @@ Erstellt: 09.06.10
 Neue Features:
 - Generator Plugins
 - Generator Plugin: Tags
+- needsParentComponentClass Setting, damit wird die $parentComponentClass bei getSettings
+  übergeben
 
 möglicherweise nicht kompatible Änderungen:
 - editComponents werden im Seitenbaum nur mehr berücksichtigt wenn direkt unter der bearbeitenden Komponente liegen
@@ -12,6 +14,8 @@ möglicherweise nicht kompatible Änderungen:
 - editComponents werden auch bei Paragraphs berücksichtigt
 - Vpc_Basic_Flash_Component gibts nicht mehr, stattdessen Flash_Code und Flash_Upload
   Vpc_Basic_Flash_Component mit Upload (nicht Url) wird nicht autom. konvertiert
+- Vpc_Columns::getSettings beöntigt $parentComponentClass Argument, muss bei abgeleiteten
+  durchgeschliffen werden
 
 == 1.9 ==
 Erstellt: 07.05.10
