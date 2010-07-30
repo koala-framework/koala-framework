@@ -280,7 +280,9 @@ class Vps_Assets_Dependencies
                 //oder web kommen
                 $f = 'web'.substr($f, strlen(getcwd()));
             }
-            $componentCssFiles[] = $f;
+            if (!$this->_hasFile($assetsType, $f)) {
+                $componentCssFiles[] = $f;
+            }
         }
 
         //reverse damit css von weiter unten in der vererbungshierachie überschreibt

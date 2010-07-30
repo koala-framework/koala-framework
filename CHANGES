@@ -5,6 +5,8 @@ Neue Features:
 - Generator Plugin: Tags
 - Kaltstart Performance
 - Vpc_Form: vpsFieldError klasse wird für Felder mit Validierungs-Fehler gesetzt
+- needsParentComponentClass Setting, damit wird die $parentComponentClass bei getSettings
+  übergeben
 
 möglicherweise nicht kompatible Änderungen:
 - editComponents werden im Seitenbaum nur mehr berücksichtigt wenn direkt unter der bearbeitenden Komponente liegen
@@ -16,6 +18,8 @@ möglicherweise nicht kompatible Änderungen:
   Vpc_Basic_Flash_Component mit Upload (nicht Url) wird nicht autom. konvertiert
 - Form_Field::validate gibt jetzt nicht nur mehr ein array mit Validierungsmessages zurueck sondern
   ein array mit field und message
+- Vpc_Columns::getSettings beöntigt $parentComponentClass Argument, muss bei abgeleiteten
+  durchgeschliffen werden
 
 == 1.9 ==
 Erstellt: 07.05.10

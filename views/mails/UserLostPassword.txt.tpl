@@ -5,7 +5,7 @@
 
 <?= trlVps('Please use the following link to choose yourself a new password.'); ?>
 
-<?= $this->activationUrl; ?>
+<?= $this->lostPasswordUrl; ?>
 
 
 <?= trlVps('If you did not request this email you may just ignore it and use the login as before.'); ?>
