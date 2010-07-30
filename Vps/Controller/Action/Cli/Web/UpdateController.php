@@ -210,9 +210,10 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
                     flush();
                 }
                 try {
-                    $db = null;
                     if (Vps_Registry::get('dao')) {
                         $db = Vps_Registry::get('dao')->getDb($db);
+                    } else {
+                        $db = null;
                     }
                 } catch (Exception $e) {
                     echo "skipping, invalid db\n";
