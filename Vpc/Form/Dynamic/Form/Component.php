@@ -17,10 +17,26 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
     protected function _initForm()
     {
         $this->_form = new Vps_Form('form');
+        $referenceMap= array();
         foreach ($this->getData()->parent->getChildComponent('-paragraphs')->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
-            $this->_form->fields->add($c->getComponent()->getFormField());
+            $f = $c->getComponent()->getFormField();
+            $this->_form->fields->add($f);
+            if ($f instanceof Vps_Form_Field_File) {
+                $referenceMap[$f->getName()] = array(
+                    'refModelClass' => 'Vps_Uploads_Model',
+                    'column' => $f->getName()
+                );
+            }
         }
-        $this->_form->setModel(new Vps_Model_Mail(array('componentClass' => get_class($this))));
+        $this->_form->setModel($this->_createModel($referenceMap));
+    }
+
+    protected function _createModel($referenceMap)
+    {
+        return new Vps_Model_Mail(array(
+            'componentClass' => get_class($this),
+            'referenceMap' => $referenceMap
+        ));
     }
 
     protected function _beforeSave(Vps_Model_Row_Interface $row)
@@ -36,13 +52,18 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
         $row->addTo($settings->recipient);
         $row->subject = $settings->subject;
 
-        $labels = array();
+        $msg = '';
         foreach ($this->getData()->parent->getChildComponent('-paragraphs')->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
             $f = $c->getComponent()->getFormField();
             if ($f->getName() && $f->getFieldLabel()) {
-                $labels[$f->getName()] = $f->getFieldLabel();
+                if ($f instanceof Vps_Form_Field_File) {
+                    $uploadRow = $row->getParentRow($f->getName());
+                    //$row->addAttachment(....);
+                } else {
+                    $msg .= $f->getFieldLabel().': '.$row->{$f->getName()}."\n";
+                }
             }
         }
-        $row->field_labels = serialize($labels); //ouch TODO bessere loesung
+        $row->body = $msg;
     }
 }

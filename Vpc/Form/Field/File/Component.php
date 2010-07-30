@@ -12,7 +12,6 @@ class Vpc_Form_Field_File_Component extends Vpc_Form_Field_Abstract_Component
     protected function _getFormField()
     {
         $ret = new Vps_Form_Field_File($this->getData()->componentId);
-        $ret->setSave(false);//TODO: entfernen
         $ret->setFieldLabel($this->getRow()->field_label);
         $ret->setAllowBlank(!$this->getRow()->required);
         return $ret;
