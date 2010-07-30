@@ -3,6 +3,9 @@
  * @group slow
  * @group selenium
  * @group Vpc_FormDynamic
+ *
+ * http://vps.vps.niko.vivid/vps/vpctest/Vpc_FormDynamic_Basic_Root/form
+ * http://vps.vps.niko.vivid/vps/vpctest/Vpc_FormDynamic_Basic_Root/form2
  */
 class Vpc_FormDynamic_Basic_Test extends Vps_Test_SeleniumTestCase
 {
