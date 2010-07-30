@@ -48,6 +48,7 @@ class Vpc_Form_Field_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
     {
         $ret = $this->getData()->chained->getComponent()->getFormField();
         $ret->setName($this->getData()->componentId);
+        if ($this->getRow()->field_label) $ret->setFieldLabel($this->getRow()->field_label);
         return $ret;
     }
 
