@@ -1,11 +1,9 @@
 <?php
-class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
+class Vpc_Form_Field_Abstract_Trl_Component extends Vpc_Chained_Trl_Component
 {
-    private $_formField;
-
-    public static function getSettings()
+    public static function getSettings($masterComponentClass)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($masterComponentClass);
         $ret['ownModel'] = 'Vps_Component_FieldModel';
         $ret['flags']['formField'] = true;
         $ret['viewCache'] = false;
@@ -14,7 +12,7 @@ class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = Vpc_Abstract::getTemplateVars();
         $form = $this->_getForm();
         $postData = array();
         $errors = array();
@@ -36,7 +34,7 @@ class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
     private function _getForm()
     {
         $ret = $this->getData();
-        while ($ret && !is_instance_of($ret->componentClass, 'Vpc_Form_Dynamic_Component')) {
+        while ($ret && !is_instance_of($ret->componentClass, 'Vpc_Form_Dynamic_Trl_Component')) {
             $ret = $ret->parent;
         }
         $ret = $ret->getChildComponent('-form');
@@ -48,7 +46,9 @@ class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
     */
     protected function _getFormField()
     {
-        return $this->getData()->chained->getComponent()->getFormField();
+        $ret = $this->getData()->chained->getComponent()->getFormField();
+        $ret->setName($this->getData()->componentId);
+        return $ret;
     }
 
     /**
