@@ -69,10 +69,10 @@ class Vps_Form extends Vps_Form_NonTableForm
         }
         $this->_beforeSave($row);
 
+        parent::save($parentRow, $postData);
         if (!$this->_rowIsParentRow($parentRow)) {
             $row->save();
         }
-        parent::save($parentRow, $postData);
 
         if (!$this->getId()) {
             $this->_afterInsert($row);
