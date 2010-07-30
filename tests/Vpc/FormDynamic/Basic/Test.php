@@ -44,6 +44,16 @@ class Vpc_FormDynamic_Basic_Test extends Vps_Test_SeleniumTestCase
         $this->assertChecked('css=#form_root_form-paragraphs-6');
     }
 
+    public function testFile()
+    {
+        //required
+        $this->openVpc('/form2');
+        $this->markTestIncomplete('file ist noch nicht fertig implementiert');
+        $this->clickAndWait('css=button');
+        $this->assertTextPresent('Required: Please fill out');
+        $this->assertElementPresent('css=.vpsFieldError #form_root_form-paragraphs-8');
+    }
+
     public function testAdmin()
     {
         $this->openVpcEdit('Vpc_FormDynamic_Basic_Form_Paragraphs_Component', 'root_form-paragraphs');
