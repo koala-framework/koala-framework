@@ -1,21 +1,46 @@
 <?php
 /**
- * @group 
+ * @group slow
+ * @group selenium
+ * @group Vpc_FormDynamic
  */
-class Vpc_FormDynamic_Basic_Test extends Vpc_TestAbstract
+class Vpc_FormDynamic_Basic_Test extends Vps_Test_SeleniumTestCase
 {
     public function setUp()
     {
-        parent::setUp('Vpc_FormDynamic_Basic_Root');
+        parent::setUp();
+        Vps_Component_Data_Root::setComponentClass('Vpc_FormDynamic_Basic_Root');
     }
 
-    public function testIt()
+    public function testTextField()
     {
+        //default value
+        $this->openVpc('/form');
+        $this->assertElementValueEquals('css=#form_root_form-paragraphs-4', 'Def');
+        $this->clickAndWait('css=button');
+        $this->assertElementValueEquals('css=#form_root_form-paragraphs-4', 'Def');
 
-//         $ret->setFieldLabel($this->getRow()->field_label);
-//         $ret->setWidth($this->getRow()->width);
-//         $ret->setDefaultValue($this->getRow()->default_value);
-//         $ret->setAllowBlank(!$this->getRow()->required);
-//         $ret->setVtype($this->getRow()->vtype);
+        //required
+        $this->openVpc('/form');
+        $this->assertElementPresent('css=#form_root_form-paragraphs-2');
+        $this->assertElementNotPresent('css=.vpsFieldError #form_root_form-paragraphs-2');
+        $this->clickAndWait('css=button');
+        $this->assertTextPresent('Required: Please fill out');
+        $this->assertElementPresent('css=.vpsFieldError #form_root_form-paragraphs-2');
+
+        //vtype email
+        $this->openVpc('/form');
+        $this->type('css=#form_root_form-paragraphs-3', 'foo');
+        $this->clickAndWait('css=button');
+        $this->assertTextPresent('EMail: \'foo\' is not a valid');
+        $this->assertElementPresent('css=.vpsFieldError #form_root_form-paragraphs-3');
     }
+
+    public function testAdmin()
+    {
+        $this->openVpcEdit('Vpc_FormDynamic_Basic_Form_Paragraphs_Component', 'root_form-paragraphs');
+        $this->waitForConnections();
+        //test könnte natürlich verbessert werden, aber zumindest testen ob kein fehler kommt
+    }
+
 }
