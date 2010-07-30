@@ -36,9 +36,10 @@ abstract class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
     private function _getForm()
     {
         $ret = $this->getData();
-        while ($ret && !is_instance_of($ret->componentClass, 'Vpc_Form_Component')) {
+        while ($ret && !is_instance_of($ret->componentClass, 'Vpc_Form_Dynamic_Component')) {
             $ret = $ret->parent;
         }
+        $ret = $ret->getChildComponent('-form');
         return $ret;
     }
 
