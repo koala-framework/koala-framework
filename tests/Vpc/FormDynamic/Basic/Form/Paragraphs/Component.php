@@ -6,7 +6,8 @@ class Vpc_FormDynamic_Basic_Form_Paragraphs_Component extends Vpc_Form_Dynamic_P
         $ret = parent::getSettings();
         $ret['childModel'] = 'Vpc_FormDynamic_Basic_Form_Paragraphs_TestModel';
         $ret['generators']['paragraphs']['component'] = array(
-            'textField' => 'Vpc_FormDynamic_Basic_Form_Paragraphs_TextField_Component'
+            'textField' => 'Vpc_FormDynamic_Basic_Form_Paragraphs_TextField_Component',
+            'checkbox' => 'Vpc_FormDynamic_Basic_Form_Paragraphs_Checkbox_Component',
         );
         return $ret;
     }
