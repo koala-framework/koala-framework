@@ -10,7 +10,6 @@ class Vpc_Form_Field_TextField_Trl_Component extends Vpc_Form_Field_Abstract_Trl
     protected function _getFormField()
     {
         $ret = parent::_getFormField();
-        $ret->setFieldLabel($this->getRow()->field_label);
         $ret->setDefaultValue($this->getRow()->default_value);
         return $ret;
     }
