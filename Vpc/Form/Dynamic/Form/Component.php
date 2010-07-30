@@ -17,7 +17,7 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
     protected function _initForm()
     {
         $this->_form = new Vps_Form('form');
-        foreach ($this->getData()->parent->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
+        foreach ($this->getData()->parent->getChildComponent('-paragraphs')->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
             $this->_form->fields->add($c->getComponent()->getFormField());
         }
         $this->_form->setModel(new Vps_Model_Mail(array('componentClass' => get_class($this))));
@@ -37,7 +37,7 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
         $row->subject = $settings->subject;
 
         $labels = array();
-        foreach ($this->getData()->parent->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
+        foreach ($this->getData()->parent->getChildComponent('-paragraphs')->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
             $f = $c->getComponent()->getFormField();
             if ($f->getName() && $f->getFieldLabel()) {
                 $labels[$f->getName()] = $f->getFieldLabel();
