@@ -17,15 +17,17 @@ abstract class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $form = $this->_getForm();
         $postData = array();
+        $errors = array();
         if ($form->getComponent()->isProcessed()) {
             //kann nicht processed sein wenn paragraphs der form im backend bearbeitet werden
             $postData = $form->getComponent()->getPostData();
+            $errors = $this->_getForm()->getComponent()->getErrors();
         }
         $fieldVars = $this->getFormField()->getTemplateVars($postData);
         $dec = Vpc_Abstract::getSetting($form->componentClass, 'decorator');
         if ($dec && is_string($dec)) {
             $dec = new $dec();
-            $fieldVars = $dec->processItem($fieldVars, $this->_getForm()->getComponent()->getErrors());
+            $fieldVars = $dec->processItem($fieldVars, $errors);
         }
         $ret = array_merge($ret, $fieldVars);
         return $ret;
