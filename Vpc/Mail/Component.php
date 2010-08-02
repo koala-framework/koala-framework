@@ -35,6 +35,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
 
         $ret['mailHtmlStyles'] = array();
         $ret['bcc'] = false;
+        $ret['viewCache'] = false;
         return $ret;
     }
 

@@ -61,6 +61,11 @@ abstract class Vps_Component_Renderer_Abstract
         return $this->render($view, $view->component($component));
     }
 
+    protected function _getOutputConfig($type)
+    {
+        return array();
+    }
+
     public function render($view, $ret = null)
     {
         if ($view instanceof Vps_Component_Data) return $this->renderComponent($view);
@@ -80,6 +85,10 @@ abstract class Vps_Component_Renderer_Abstract
             if (!$plugins) $plugins = array();
             $config = trim($matches[6]);
             $config = $config != '' ? explode(' ', trim($config)) : array();
+
+            foreach ($this->_getOutputConfig($type) as $key => $val) {
+                $$key = $val;
+            }
 
             $statId = $componentId;
             if ($value) $statId .= " ($value)";
