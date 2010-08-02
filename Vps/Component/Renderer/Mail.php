@@ -28,14 +28,15 @@ class Vps_Component_Renderer_Mail extends Vps_Component_Renderer_Abstract
         $this->_attachImages = $attachImages;
     }
 
-    protected function _formatOutputConfig($outputConfig, $component)
+    protected function _getOutputConfig($type)
     {
-        // Plugins
-        if ($outputConfig['type'] == 'component') {
-            $outputConfig['type'] = 'mail';
-            $outputConfig['config'] = array($this->_type, $this->_recipient);
+        // Muss hier gemacht werden, da recipient in config
+        $ret = array();
+        if ($type == 'component') {
+            $ret['type'] = 'mail';
+            $ret['config'] = array($this->_type, $this->_recipient);
         }
-        return $outputConfig;
+        return $ret;
     }
 
     protected function _getView()
