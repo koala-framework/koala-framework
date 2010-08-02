@@ -3,10 +3,20 @@ class Vps_View extends Zend_View
 {
     private $_masterComponents = null;
     private $_componentMasterTemplates = array();
-    private $_renderMaster = false;
     private $_plugins = array();
     private $_isRenderMaster = false;
     private $_renderComponent;
+
+    public function init()
+    {
+        // je weiter unten, desto wichtiger ist der pfad
+        $this->addScriptPath(VPS_PATH); // für tests, damit man eigene templates wo ablegen kann für Vps_Mail_Template ohne komponente
+        $this->addScriptPath('');
+        $this->addScriptPath(VPS_PATH . '/views');
+        $this->addScriptPath('application/views');
+        $this->addHelperPath(VPS_PATH . '/Vps/View/Helper', 'Vps_View_Helper');
+        $this->addHelperPath(VPS_PATH . '/Vps/Component/View/Helper', 'Vps_View_Helper');
+    }
 
     public function getPlugins($component)
     {
@@ -71,40 +81,9 @@ class Vps_View extends Zend_View
         return $ret;
     }
 
-    public function formatOutputConfig($outputConfig, $component)
-    {
-        // Master
-        if ($outputConfig['type'] == 'component' && $this->_isRenderMaster) {
-            $masterComponent = $this->_getMasterComponent($component);
-            if ($masterComponent) {
-                $outputConfig['config'] = array($masterComponent->masterTemplate, $masterComponent->componentId);
-                $outputConfig['type'] = 'master';
-                $outputConfig['value'] = $masterComponent->componentId;
-            }
-        }
-        // Plugins
-        if ($outputConfig['type'] == 'component') {
-            $outputConfig['plugins'] = $this->_getPlugins($component);
-        }
-        // ComponentMaster
-        if ($outputConfig['type'] == 'component') {
-            $componentMasterTemplate = $this->_getComponentMasterTemplate($component, $this->_isRenderMaster);
-            if ($componentMasterTemplate) {
-                $outputConfig['config'] = array($componentMasterTemplate);
-                $outputConfig['type'] = 'master';
-            }
-        }
-        return $outputConfig;
-    }
-
     public function setIsRenderMaster($isRenderMaster)
     {
         $this->_isRenderMaster = $isRenderMaster;
-    }
-
-    public function setRenderComponent($renderComponent)
-    {
-        $this->_renderComponent = $renderComponent;
     }
 
     public function getIsRenderMaster()
@@ -112,64 +91,13 @@ class Vps_View extends Zend_View
         return $this->_isRenderMaster;
     }
 
+    public function setRenderComponent($renderComponent)
+    {
+        $this->_renderComponent = $renderComponent;
+    }
+
     public function getRenderComponent()
     {
         return $this->_renderComponent;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    protected $_masterTemplate = null;
-    protected $_renderer = null;
-
-    public function init()
-    {
-        // je weiter unten, desto wichtiger ist der pfad
-        $this->addScriptPath(VPS_PATH); // für tests, damit man eigene templates wo ablegen kann für Vps_Mail_Template ohne komponente
-        $this->addScriptPath('');
-        $this->addScriptPath(VPS_PATH . '/views');
-        $this->addScriptPath('application/views');
-        $this->addHelperPath(VPS_PATH . '/Vps/View/Helper', 'Vps_View_Helper');
-    }
-
-    public function render($name)
-    {
-        if (!is_null($this->_masterTemplate)) {
-            //TODO: partial von Zend_View verwenden
-            $this->renderedTemplate = parent::render($name);
-            $name = $this->getMasterTemplate();
-        }
-        return parent::render($name);
-    }
-
-    public function setMasterTemplate($tpl)
-    {
-        $this->_masterTemplate = $tpl;
-    }
-
-    public function getMasterTemplate()
-    {
-        return $this->_masterTemplate;
-    }
-
-    public function setRenderer($renderer)
-    {
-        $this->_renderer = $renderer;
-    }
-
-    public function getRenderer()
-    {
-        return $this->_renderer;
     }
 }
