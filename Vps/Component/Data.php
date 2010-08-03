@@ -81,7 +81,7 @@ class Vps_Component_Data
             }
             return trim($rel);
         } else if ($var == 'filename') {
-            return $this->getPseudoPageOrRoot()->_filename;
+            return rawurlencode($this->getPseudoPageOrRoot()->_filename);
         } else if ($var == 'inherits') {
             return false;
         } else if ($var == 'visible') {

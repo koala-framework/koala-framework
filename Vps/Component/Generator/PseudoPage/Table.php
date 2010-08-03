@@ -73,13 +73,16 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     {
         $data = parent::_formatConfig($parentData, $row);
 
-        $data['filename'] = '';
         if (!$this->_settings['uniqueFilename']) {
-            $data['filename'] .= $this->_getIdFromRow($row).'_';
-        }
-        $data['filename'] .= Vps_Filter::filterStatic($this->_getFilenameFromRow($row), 'Ascii');
-        if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
-            $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
+            $data['filename'] = $this->_getIdFromRow($row).'_';
+            $data['filename'] .= Vps_Filter::filterStatic($this->_getFilenameFromRow($row), 'Ascii');
+            if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
+                $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
+            }
+        } else {
+            //wenn uniqueFilename muss er exakt so belassen werden wie er ist
+            //(weil danach ja die andere richtung gesucht wird)
+            $data['filename'] = $this->_getFilenameFromRow($row);
         }
         $data['name'] = $this->_getNameFromRow($row);
         $data['rel'] = '';
