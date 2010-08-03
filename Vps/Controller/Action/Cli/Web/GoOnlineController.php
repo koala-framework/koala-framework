@@ -396,12 +396,14 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             }
             file_put_contents('/www/public/zeiterfassung/irc/messagequeue/'.date('Y-m-d_H:i:s').uniqid(), 'WICHTIG'.$msg);
 
+            Vps_Util_Git::web()->fetch();
+            Vps_Util_Git::vps()->fetch();
             $cmd = "cd /www/public/zeiterfassung && php bootstrap.php insert-go-online-log-entry";
             $cmd .= " --applicationId=".escapeshellarg($cfg->application->id);
             $cmd .= " --webBranch=".escapeshellarg(Vps_Util_Git::web()->getActiveBranch());
             $cmd .= " --vpsBranch=".escapeshellarg(Vps_Util_Git::vps()->getActiveBranch());
-            $cmd .= " --webVersion=".escapeshellarg(Vps_Util_Git::web()->revParse('production'));
-            $cmd .= " --vpsVersion=".escapeshellarg(Vps_Util_Git::vps()->revParse('production/'.$appId));
+            $cmd .= " --webVersion=".escapeshellarg(Vps_Util_Git::web()->revParse('origin/production'));
+            $cmd .= " --vpsVersion=".escapeshellarg(Vps_Util_Git::vps()->revParse('origin/production/'.$appId));
             if ($this->_getParam('debug')) {
                 echo $cmd."\n";
             }
