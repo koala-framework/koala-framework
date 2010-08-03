@@ -27,7 +27,12 @@ class Vps_Assets_Dependencies
         $cache = Vps_Assets_Cache::getInstance();
         if (($ret = $cache->load('maxFileMTime')) === false) {
             $ret = 0;
-            $files = $this->getAssetFiles('Admin', null, 'web', Vps_Component_Data_Root::getComponentClass());
+            $assetsType = 'Admin';
+            if (!isset($this->_config->assets->Admin)) {
+                //für tests wenn keine Admin da, erste aus config nehmen
+                $assetsType = key($this->_config->assets->toArray());
+            }
+            $files = $this->getAssetFiles($assetsType, null, 'web', Vps_Component_Data_Root::getComponentClass());
             unset($files['mtime']);
             foreach ($files as $file) {
                 if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
