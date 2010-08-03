@@ -353,8 +353,6 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
                         ->whereNotEquals('status', 'prod');
                 foreach ($m->getRows($s) as $todo) {
                     if (!$todo->done_revision) continue;
-                    $project = Vps_Controller_Action_Cli_Svn_TagController::getProjectName();
-
                     if (Vps_Util_Git::web()->getActiveBranchContains($todo->done_revision)
                         || Vps_Util_Git::vps()->getActiveBranchContains($todo->done_revision)
                     ) {

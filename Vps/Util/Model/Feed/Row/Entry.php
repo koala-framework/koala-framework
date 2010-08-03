@@ -29,7 +29,9 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
                 //es kann mehrere links geben, am liebsten ist uns ein alternate text/html
                 //aber wir nehmen auch was anderes
                 $quality = 0;
-                if ((string)$l['type'] == 'text/html') $quality++;
+                if ((string)$l['type'] == 'text/html') $quality+=2;
+                if ((string)$l['type'] == 'application/atom+xml') $quality--;
+                if (!(string)$l['type']) $quality++;
                 if ((string)$l['rel'] == 'alternate') $quality++;
                 if ((string)$l['rel'] == 'enclosure') $quality--;
                 if (substr((string)$l['type'], 0, 6) == 'image/') $quality--;
