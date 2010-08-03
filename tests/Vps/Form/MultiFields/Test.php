@@ -22,6 +22,7 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
                 array('id'=>5, 'model1_id'=>3, 'foo'=>'foo1', 'pos'=>2),
                 array('id'=>6, 'model1_id'=>3, 'foo'=>'foo2', 'pos'=>3),
             ));
+        Vps_Component_Data_Root::setComponentClass(false); //damit ModelObserver nichts macht
     }
 
     public function testSimple()
