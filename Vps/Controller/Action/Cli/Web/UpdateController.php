@@ -241,7 +241,9 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
 
                 //reset to default database
                 $db = null;
-                if (Vps_Registry::get('dao')) $db = Vps_Registry::get('dao')->getDb();
+                try {
+                    if (Vps_Registry::get('dao')) $db = Vps_Registry::get('dao')->getDb();
+                } catch (Exception $e) {}
                 Vps_Registry::set('db', $db);
             }
             if ($method != 'checkSettings' && $ret) {
