@@ -166,6 +166,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             }
             $data = $this->_form->save(null, $postData);
 
+            $this->_form->afterSave(null, $postData);
             if ($row) {
                 if ($insert) {
                     $this->_afterInsert($row);

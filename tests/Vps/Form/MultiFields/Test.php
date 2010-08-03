@@ -49,6 +49,7 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
         $form->validate(null, $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $r = $m1->getRow(1);
         $this->assertEquals('blub', $r->test1);
@@ -106,6 +107,7 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
         $form->validate(null, $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $r = Vps_Model_Abstract::getInstance('Vps_Form_MultiFields_TestModel1')->getRow(4);
         $this->assertEquals('blab', $r->blub);
@@ -134,6 +136,7 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
         $form->validate(null, $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $s = new Vps_Model_Select();
         $s->order('pos');
@@ -163,6 +166,7 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
         $form->validate(null, $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $s = new Vps_Model_Select();
         $s->order('foo');
@@ -192,6 +196,7 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
         $form->validate(null, $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $s = new Vps_Model_Select();
         $s->order('pos');
@@ -235,6 +240,7 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
         $form->validate(null, $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $data = $model->getData();
         $data = unserialize($data[0]['data']);

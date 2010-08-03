@@ -311,7 +311,21 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         foreach ($postData['save'] as $i) {
             $r = $i['row'];
             $rowPostData = $i['data'];
-            if ($i['insert'] && !isset($this->_referenceName)) {
+            foreach ($this->fields as $field) {
+                $field->save($r, $rowPostData);
+            }
+        }
+    }
+
+    public function afterSave($row, $postData)
+    {
+        $postData = $postData[$this->getFieldName()];
+
+        foreach ($postData['save'] as $i) {
+            $r = $i['row'];
+            if ($i['insert']
+                && !isset($this->_referenceName) //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
+            ) {
                 if ($this->_model instanceof Vps_Model_FieldRows) {
                     //nichts zu tun, keine parent_id muss gesetzt werden
                 } else {
@@ -320,14 +334,8 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                     foreach (array_keys($ref['columns']) as $k) {
                         $r->{$ref['columns'][$k]} = $row->{$ref['refColumns'][$k]};
                     }
+                    $r->save();
                 }
-            }
-            if (!isset($this->_referenceName)) {
-                //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
-                $r->save();
-            }
-            foreach ($this->fields as $field) {
-                $field->save($r, $rowPostData);
             }
         }
     }
