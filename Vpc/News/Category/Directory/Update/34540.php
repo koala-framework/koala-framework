@@ -6,6 +6,7 @@ class Vpc_News_Category_Directory_Update_34540 extends Vps_Update
         $entries = Vps_Registry::get('db')->query('SELECT COUNT(*) FROM vpc_news_to_categories')->fetchColumn();
         if (!$entries) return;
 
+        Vps_Registry::get('db')->query('ALTER TABLE `vpc_news_to_categories` CHANGE `category_id` `category_id` INT( 11 ) NOT NULL DEFAULT \'0\'');
         Vps_Registry::get('db')->query('UPDATE vpc_news_to_categories SET category_id=-category_id');
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Pool');
         $s = $m->select()->whereEquals('pool', 'Newskategorien');

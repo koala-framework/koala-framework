@@ -207,6 +207,29 @@ class Vps_Util_FeedFetcher_Feed
         }
         $row->updated($updateServer, $status);
 
+        if (isset($row->log_activated) && $row->log_activated) {
+            $log = $row->createChildRow('UpdateLog');
+            $log->date = date('Y-m-d H:i:s');
+            $log->server = $updateServer;
+            $log->duration = $duration;
+            $log->status = $status;
+
+            $cache = Vps_Util_FeedFetcher_Feed_Cache::getInstance();
+            $cacheId = self::getCacheId($row->id);
+            if ($data = $cache->load($cacheId)) {
+                $log->entries = count($data['entries']);
+                $titles = array();
+                foreach ($data['entries'] as $e) {
+                    $t = $e->title;
+                    if (!$t) $t = $e->url;
+                    if (strlen($t) > 50) $t = substr($t, 0, 50);
+                    $titles[] = $t;
+                }
+                $log->titles = implode(', ', $titles);;
+            }
+            $log->save();
+        }
+
         $row->save();
     }
 

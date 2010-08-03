@@ -78,6 +78,8 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
             $data['author_name'] = (string)$xml->author->name;
         } else if (isset($xml->author)) {
             $data['author_name'] = (string)$xml->author;
+        } else if (isset($xml->children('http://purl.org/dc/elements/1.1/')->creator)) {
+            $data['author_name'] = (string)$xml->children('http://purl.org/dc/elements/1.1/')->creator;
         }
 
         if ($xml->children('http://purl.org/rss/1.0/modules/content/')->encoded) {
