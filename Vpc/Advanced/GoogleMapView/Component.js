@@ -12,18 +12,22 @@ Vpc.Advanced.GoogleMap.renderMap = function(map) {
 
     var text = mapContainer.down("div.text");
     cfg.mapContainer = mapContainer;
-    cfg.markers = {
-        longitude : cfg.longitude,
-        latitude  : cfg.latitude,
-        autoOpenInfoWindow: true
-    };
-    if (text) cfg.markers.infoHtml = text.dom.innerHTML;
+    if (!cfg.markers) {
+        cfg.markers = {
+            longitude : cfg.longitude,
+            latitude  : cfg.latitude,
+            autoOpenInfoWindow: true
+        };
+        if (text) cfg.markers.infoHtml = text.dom.innerHTML;
+    }
 
     var myMap = new Vps.GoogleMap.Map(cfg);
 
     Vps.GoogleMap.load(function() {
         this.show();
     }, myMap);
+
+    return myMap;
 };
 
 Vps.onContentReady(function() {
@@ -39,7 +43,7 @@ Vps.onContentReady(function() {
         if (switchDisplayUp) {
             (function(switchDisplayUp, map) {
                 Ext.get(switchDisplayUp).switchDisplayObject.on('opened', function() {
-                    Vpc.Advanced.GoogleMap.renderMap(map);
+                    map.gmapObject = Vpc.Advanced.GoogleMap.renderMap(map);
                 });
             }).defer(1, this, [switchDisplayUp, map]);
         } else if (tabsContentUp && !tabsContentUp.hasClass('vpsTabsContentActive')) {
@@ -47,12 +51,12 @@ Vps.onContentReady(function() {
                 var tabsUp = Ext.get(tabsContentUp).up('div.vpsTabs');
                 Ext.get(tabsUp).tabsObject.on('tabActivate', function(tabs, newIdx, oldIdx) {
                     if (tabsContentUp.dom === tabs.getContentElByIdx(newIdx)) {
-                        Vpc.Advanced.GoogleMap.renderMap(map);
+                        map.gmapObject = Vpc.Advanced.GoogleMap.renderMap(map);
                     }
                 }, Ext.get(tabsUp).tabsObject);
             }).defer(1, this, [tabsContentUp, map]);
         } else {
-            Vpc.Advanced.GoogleMap.renderMap(map);
+            map.gmapObject = Vpc.Advanced.GoogleMap.renderMap(map);
         }
     });
 });
