@@ -34,7 +34,6 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
         $form->add(new Vps_Form_Field_TextField('test1'));
         $form->add(new Vps_Form_Field_MultiFields($m2))
             ->setReferences(array(
-                //TODO: sollte auch mit models automatisch funktionieren
                 'columns' => array('test1_id'),
                 'refColumns' => array('id'),
             ))
@@ -73,7 +72,6 @@ class Vps_Form_MultiFields_Test extends PHPUnit_Framework_TestCase
         $form->add(new Vps_Form_Field_TextField('test1'));
         $form->add(new Vps_Form_Field_MultiFields($m2))
             ->setReferences(array(
-                //TODO: sollte auch mit models automatisch funktionieren
                 'columns' => array('test1_id'),
                 'refColumns' => array('id'),
             ))
