@@ -10,6 +10,14 @@ class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
         $ret['placeholder']['prev'] = trlVps('previous');
         $ret['placeholder']['next'] = trlVps('next');
         $ret['previewCssClass'] = '';
+
+        // transition kann auch auf false gesetzt werden um "direkt" umzuschalten
+        $ret['transition'] = array(
+            'type'               => 'fade',   // possible values: fade
+            'duration'           => 0.8,      // use with types: fade
+            'easingOut'          => 'easeIn', // use with types: fade
+            'easingIn'           => 'easeIn'  // use with types: fade
+        );
         return $ret;
     }
 
@@ -17,6 +25,7 @@ class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
     {
         $ret = parent::getTemplateVars();
         $ret['previewCssClass'] = $this->_getSetting('previewCssClass');
+        $ret['options']['transition'] = $this->_getSetting('transition');
         return $ret;
     }
 }
