@@ -30,6 +30,8 @@ class Vpc_User_BoxAbstract_Component extends Vpc_Abstract_Composite_Component
         if (isset($postData['logout'])) {
             Vps_Auth::getInstance()->clearIdentity();
             setcookie('feAutologin', '', time() - 3600);
+            header('Location: '.$_SERVER['REDIRECT_URL']); //damit logout get parameter verschwindet
+            exit;
         }
     }
 
