@@ -13,10 +13,10 @@ class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
 
         // transition kann auch auf false gesetzt werden um "direkt" umzuschalten
         $ret['transition'] = array(
-            'type'               => 'fade',   // possible values: fade
-            'duration'           => 0.8,      // use with types: fade
-            'easingOut'          => 'easeIn', // use with types: fade
-            'easingIn'           => 'easeIn'  // use with types: fade
+            'type'               => 'fade',   // possible values: fade, slide
+            'duration'           => 0.8,      // use with types: fade, slide
+            'easingOut'          => 'easeIn', // use with types: fade, slide
+            'easingIn'           => 'easeIn'  // use with types: fade, slide
         );
         $ret['hideArrowsAtEnds'] = false; // false = wenn man beim letzten element ankommt und auf "weiter" klickt, kommt man wieder zum ersten
         return $ret;

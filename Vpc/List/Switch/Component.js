@@ -84,6 +84,30 @@ Vpc.ListSwitch.View.prototype = {
             } else {
                 previewEl.largeContent.style.display = 'block';
             }
+        } else if (this.switchOptions.transition.type == 'slide') {
+            if (this.activePreviewLink) {
+                var activeEl = Ext.get(this.activePreviewLink.largeContent);
+                activeEl.slideOut(
+                    this.activePreviewLink.switchIndex < previewEl.switchIndex ? 'l' : 'r',
+                    { easing: this.switchOptions.transition.easingOut,
+                      duration: this.switchOptions.transition.duration,
+                      remove: false,
+                      useDisplay: true
+                    }
+                );
+
+                var nextEl = Ext.get(previewEl.largeContent);
+                nextEl.slideIn(
+                    this.activePreviewLink.switchIndex < previewEl.switchIndex ? 'r' : 'l',
+                    { easing: this.switchOptions.transition.easingIn,
+                      duration: this.switchOptions.transition.duration,
+                      remove: false,
+                      useDisplay: true
+                    }
+                );
+            } else {
+                previewEl.largeContent.style.display = 'block';
+            }
         }
 
         // preview link classes and set active preview link
