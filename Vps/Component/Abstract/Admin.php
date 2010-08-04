@@ -2,8 +2,6 @@
 class Vps_Component_Abstract_Admin
 {
     protected $_class;
-    const EXT_CONFIG_DEFAULT = 'default';
-    const EXT_CONFIG_SHARED = 'shared';
 
     protected function __construct($class)
     {
@@ -59,31 +57,12 @@ class Vps_Component_Abstract_Admin
         return $return;
     }
 
-    public function getExtConfig($type = self::EXT_CONFIG_DEFAULT)
+    public final function getExtConfig($type = Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT)
     {
-        if ($type == self::EXT_CONFIG_DEFAULT && Vpc_Abstract::getFlag($this->_class, 'sharedDataClass')) return array();
-        if ($type == self::EXT_CONFIG_SHARED && !Vpc_Abstract::getFlag($this->_class, 'sharedDataClass')) return array();
-
-        if (!self::getComponentFile($this->_class, 'Controller')) {
-            return array();
-        }
-        if (!Vpc_Abstract::hasSetting($this->_class, 'componentName')
-            || !Vpc_Abstract::getSetting($this->_class, 'componentName'))
-        {
-            //wenn das probleme verursact ignorieren - aber es erspart lange fehlersuche warum eine komp. nicht angezeigt wird :D
-            throw new Vps_Exception("Component '$this->_class' does have no componentName but must have one for editing");
-        }
-        $ret = array(
-            'form' => array(
-                'xtype' => 'vps.autoform',
-                'controllerUrl' => $this->getControllerUrl(),
-                'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
-                'icon' => $this->_getSetting('componentIcon')->__toString()
-            )
-        );
-        return $ret;
+        return Vps_Component_Abstract_ExtConfig_Abstract::getInstance($this->_class)->getConfig($type);
     }
 
+    //TODO: in ExtConfig/Abstract verschieben
     public function getControllerUrl($class = 'Index')
     {
         $urlOptions = array(
