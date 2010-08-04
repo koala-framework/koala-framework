@@ -15,6 +15,8 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
         $ret['assetsAdmin']['dep'][] = 'VpsListWithEditButtons';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/Panel.js';
+
+        $ret['extConfig'] = 'Vpc_Abstract_List_ExtConfigList';
         return $ret;
     }
 

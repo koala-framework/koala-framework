@@ -62,13 +62,13 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         // EditComponents
         $ec = array();
         foreach ($this->getEditComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vpc_Admin::EXT_CONFIG_DEFAULT));
+            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
         }
         foreach ($this->getMenuEditComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vpc_Admin::EXT_CONFIG_DEFAULT));
+            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
         }
         foreach ($this->getSharedComponents($component) as $componentClass => $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c, Vpc_Admin::EXT_CONFIG_SHARED));
+            $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED));
         }
 
         $data['editComponents'] = $ec;
