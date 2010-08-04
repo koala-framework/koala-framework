@@ -18,6 +18,7 @@ class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
             'easingOut'          => 'easeIn', // use with types: fade
             'easingIn'           => 'easeIn'  // use with types: fade
         );
+        $ret['hideArrowsAtEnds'] = false; // false = wenn man beim letzten element ankommt und auf "weiter" klickt, kommt man wieder zum ersten
         return $ret;
     }
 
@@ -26,6 +27,7 @@ class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
         $ret = parent::getTemplateVars();
         $ret['previewCssClass'] = $this->_getSetting('previewCssClass');
         $ret['options']['transition'] = $this->_getSetting('transition');
+        $ret['options']['hideArrowsAtEnds'] = $this->_getSetting('hideArrowsAtEnds');
         return $ret;
     }
 }
