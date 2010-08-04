@@ -67,6 +67,15 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         Vps_Component_Abstract::resetSettingsCache();
     }
 
+    public function __get($var)
+    {
+        if ($var == 'filename') {
+            //hier ohne rawurlencode, ist bei tetss auf 'vps/vpctest/...' gesetzt
+            return $this->_filename;
+        }
+        return parent::__get($var);
+    }
+
     public function getPageByUrl($url, $acceptLangauge)
     {
         $parsedUrl = parse_url($url);

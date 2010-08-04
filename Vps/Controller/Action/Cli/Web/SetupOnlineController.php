@@ -203,15 +203,19 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
             $this->_systemSshVps($config, "chmod a+w application/temp");
             $this->_systemSshVps($config, "chmod a+w application/log");
             $this->_systemSshVps($config, "chmod a+w application/log/*");
-            $this->_systemSshVps($config, "chmod a+w $config->uploads");
+            if ($config->uploads) {
+                $this->_systemSshVps($config, "chmod a+w $config->uploads");
+            }
 
             echo "\n$server: [7/9] set mysql file rights\n";
             // globale file rechte für csv import setzen
             if ($server == 'vivid-test-server') {
                 echo "skipped for vivid-test-server - root user has all rights\n";
             } else {
-                $cmd = "php bootstrap.php setup-online set-mysql-file-right --user=$dbUser";
-                $this->_systemSshVps($config, $cmd);
+                if (in_array('web', $config->server->databases->toArray())) {
+                    $cmd = "php bootstrap.php setup-online set-mysql-file-right --user=$dbUser";
+                    $this->_systemSshVps($config, $cmd);
+                }
             }
 
             echo "\n$server: [8/9] import\n";
