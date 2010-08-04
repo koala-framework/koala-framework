@@ -18,6 +18,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                         'vps_controller_action_welcome');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/User',
                                         'vps_controller_action_user');
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/ProjectTimer',
+                                        'vps_controller_action_project-timer');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Error',
                                         'vps_controller_action_error');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Pool',

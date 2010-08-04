@@ -210,6 +210,7 @@ class Vps_Setup
             && isset($_SERVER['REDIRECT_URL'])
             && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
+            && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
@@ -238,7 +239,13 @@ class Vps_Setup
             set_time_limit((int)$tl);
         }
 
-        self::_setLocale();
+        if (!isset($_SERVER['REDIRECT_URL']) ||
+            (substr($_SERVER['REDIRECT_URL'], 0, 7) != '/media/'
+             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/assets/'
+             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output') //rssinclude
+        ) {
+            self::_setLocale();
+        }
     }
 
     public static function shutDown()
@@ -329,7 +336,7 @@ class Vps_Setup
                throw new Vps_Exception_NotFound();
             }
             $root->setCurrentPage($data);
-            if ($data->url != $_SERVER['REDIRECT_URL']) {
+            if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
                 header('Location: '.$data->url);
                 exit;
             }

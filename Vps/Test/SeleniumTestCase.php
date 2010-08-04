@@ -46,7 +46,7 @@ protected function _createSeparateTestDb($bootstrapFile)
 
         $this->_unitTestCookie = md5(uniqid('testId', true));
 
-        $this->captureScreenshotOnFailure = true;
+        $this->captureScreenshotOnFailure = Vps_Setup::getConfigSection()=='vivid-test-server';
         $this->screenshotPath = '/mnt/screenshots';
         $this->screenshotUrl = 'http://screenshots.vivid';
         parent::setUp();
