@@ -1,8 +1,7 @@
 <?php
-class Vpc_Trl_InheritContentWithVisible_Box_Child_Trl_Admin extends Vpc_Admin
+class Vpc_Trl_InheritContentWithVisible_Box_Child_Trl_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstract
 {
-
-    public function getExtConfig($type = self::EXT_CONFIG_DEFAULT)
+    protected function _getConfig()
     {
         $ret = array(
             'form' => array(
@@ -11,5 +10,4 @@ class Vpc_Trl_InheritContentWithVisible_Box_Child_Trl_Admin extends Vpc_Admin
         );
         return $ret;
     }
-  
 }

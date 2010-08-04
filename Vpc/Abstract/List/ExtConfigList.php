@@ -1,7 +1,7 @@
 <?php
-class Vpc_Abstract_List_Admin extends Vpc_Admin
+class Vpc_Abstract_List_ExtConfigList extends Vps_Component_Abstract_ExtConfig_Abstract
 {
-    public function getExtConfig()
+    protected function _getConfig()
     {
         $class = Vpc_Abstract::getChildComponentClass($this->_class, 'child');
         $childConfig = array_values(Vpc_Admin::getInstance($class)->getExtConfig());
@@ -23,15 +23,11 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
             );
         }
 
+        $config = $this->_getStandardConfig('vpc.list');
+        $config['childConfig'] = $childConfig[0];
+        $config['multiFileUpload'] = $multiFileUpload;
         return array(
-            'list' => array(
-                'xtype'=>'vpc.list',
-                'controllerUrl' => $this->getControllerUrl(),
-                'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
-                'icon' => $this->_getSetting('componentIcon')->__toString(),
-                'childConfig'=>$childConfig[0],
-                'multiFileUpload' => $multiFileUpload
-            )
+            'list' => $config
         );
     }
 

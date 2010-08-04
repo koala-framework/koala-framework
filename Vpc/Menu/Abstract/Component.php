@@ -20,6 +20,8 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret['level'] = 'main';
         $ret['dataModel'] = 'Vpc_Menu_Abstract_Model';
         $ret['menuModel'] = 'Vpc_Menu_Abstract_MenuModel';
+
+        $ret['extConfig'] = 'Vpc_Menu_Abstract_ExtConfig';
         return $ret;
     }
 

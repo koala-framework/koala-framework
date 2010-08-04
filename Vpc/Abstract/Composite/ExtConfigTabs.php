@@ -1,16 +1,12 @@
 <?php
-class Vpc_Abstract_Composite_TabsAdmin extends Vpc_Abstract_Composite_Admin
+class Vpc_Abstract_Composite_ExtConfigTabs extends Vps_Component_Abstract_ExtConfig_Abstract
 {
-    public function getExtConfig()
+    protected function _getConfig()
     {
         $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'child');
 
-        $config = array(
-            'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
-            'icon' => $this->_getSetting('componentIcon')->__toString(),
-            'activeTab' => 0,
-            'xtype' => 'vps.tabpanel'
-        );
+        $config = $this->_getStandardConfig('vps.tabpanel', null);
+        $config['activeTab'] = 0;
 
         foreach ($classes as $id=>$cls) {
             $c = array_values(Vpc_Admin::getInstance($cls)->getExtConfig());

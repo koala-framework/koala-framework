@@ -1,9 +1,9 @@
 <?php
-class Vpc_Abstract_List_AdminWithEditButton extends Vpc_Admin
+class Vpc_Abstract_List_ExtConfigEditButton extends Vps_Component_Abstract_ExtConfig_Form
 {
-    public function getExtConfig()
+    protected function _getConfig()
     {
-        $ret = parent::getExtConfig();
+        $ret = parent::_getConfig();
         $ret['form']['xtype'] = 'vpc.listwitheditbutton';
         $generators = Vpc_Abstract::getSetting($this->_class, 'generators');
         $cls = $generators['child']['component'];
