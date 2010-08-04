@@ -45,6 +45,11 @@ Vpc.ListSwitch.View.prototype = {
             this.setLarge(this.previewElements[0]);
         }
 
+        if (!this.switchOptions.hideArrowsAtEnds && this.previewElements.length > 1) {
+            this.previousEl.setDisplayed('block');
+            this.nextEl.setDisplayed('block');
+        }
+
         this.componentWrapper.initDone = true;
     },
 
@@ -89,15 +94,19 @@ Vpc.ListSwitch.View.prototype = {
         this.activePreviewLink.addClass('active');
 
         // pfeile ein / ausblenden
-        this.previousEl.setDisplayed(this.activePreviewLink.switchIndex == 0 ? false : 'block');
-        this.nextEl.setDisplayed(
-            this.activePreviewLink.switchIndex >= (this.previewElements.length -1) ? false : 'block'
-        );
+        if (this.switchOptions.hideArrowsAtEnds) {
+            this.previousEl.setDisplayed(this.activePreviewLink.switchIndex == 0 ? false : 'block');
+            this.nextEl.setDisplayed(
+                this.activePreviewLink.switchIndex >= (this.previewElements.length -1) ? false : 'block'
+            );
+        }
     },
 
     showNext: function(ev) {
         if (this.previewElements[this.activePreviewLink.switchIndex+1]) {
             this.setLarge(this.previewElements[this.activePreviewLink.switchIndex+1]);
+        } else {
+            this.setLarge(this.previewElements[0]);
         }
         ev.stopEvent();
     },
@@ -105,6 +114,8 @@ Vpc.ListSwitch.View.prototype = {
     showPrevious: function(ev) {
         if (this.activePreviewLink.switchIndex >= 1) {
             this.setLarge(this.previewElements[this.activePreviewLink.switchIndex-1]);
+        } else {
+            this.setLarge(this.previewElements[this.previewElements.length-1]);
         }
         ev.stopEvent();
     }
