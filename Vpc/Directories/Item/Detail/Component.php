@@ -5,6 +5,7 @@ class Vpc_Directories_Item_Detail_Component extends Vpc_Abstract_Composite_Compo
     {
         $ret = parent::getSettings();
         $ret['hasModifyItemData'] = true;
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
     public function getTemplateVars()

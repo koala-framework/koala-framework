@@ -276,7 +276,8 @@ class Vps_Component_Abstract
             'placeholder'   => array(),
             'plugins'       => array(),
             'generators'    => array(),
-            'flags'         => array()
+            'flags'         => array(),
+            'extConfig'     => 'Vps_Component_Abstract_ExtConfig_None'
         );
     }
 

@@ -5,6 +5,7 @@ Neue Features:
 - Generator Plugin: Tags
 - needsParentComponentClass Setting, damit wird die $parentComponentClass bei getSettings
   übergeben
+- ExtConfig ist eigene Klasse - statt Admin::getExtConfig, setzen über extConfig Setting
 
 möglicherweise nicht kompatible Änderungen:
 - editComponents werden im Seitenbaum nur mehr berücksichtigt wenn direkt unter der bearbeitenden Komponente liegen
@@ -16,6 +17,9 @@ möglicherweise nicht kompatible Änderungen:
   Vpc_Basic_Flash_Component mit Upload (nicht Url) wird nicht autom. konvertiert
 - Vpc_Columns::getSettings beöntigt $parentComponentClass Argument, muss bei abgeleiteten
   durchgeschliffen werden
+- Admin::getExtConfig gibts nicht mehr, durch extConfig Setting ersetzen
+- Vpc_Abstract_List_*Admin und Vpc_Abstract_Composite_*Admin gibts nicht mehr, stattdessen
+  sollte die passende extConfig Einstellung gesetzt werden
 
 == 1.9 ==
 Erstellt: 07.05.10

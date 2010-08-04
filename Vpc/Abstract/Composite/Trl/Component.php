@@ -1,6 +1,13 @@
 <?php
 class Vpc_Abstract_Composite_Trl_Component extends Vpc_Chained_Trl_Component
 {
+    public static function getSettings($masterComponentClass)
+    {
+        $ret = parent::getSettings($masterComponentClass);
+        $ret['extConfig'] = Vpc_Abstract::getSetting($masterComponentClass, 'extConfig');
+        return $ret;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
