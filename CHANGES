@@ -16,6 +16,8 @@ möglicherweise nicht kompatible Änderungen:
   Vpc_Basic_Flash_Component mit Upload (nicht Url) wird nicht autom. konvertiert
 - Vpc_Columns::getSettings beöntigt $parentComponentClass Argument, muss bei abgeleiteten
   durchgeschliffen werden
+- Vpc_List_Switch hat transitions (fade ist jetzt standard) und die weiter-pfeile
+  funktionieren über das ende hinaus und fangen wieder von vorn an
 
 == 1.9 ==
 Erstellt: 07.05.10
