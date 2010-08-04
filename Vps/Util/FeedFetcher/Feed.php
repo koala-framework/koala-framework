@@ -78,7 +78,7 @@ class Vps_Util_FeedFetcher_Feed
                     }
                 }
                 foreach ($feed['entries'] as $e) {
-                    if (in_array($e->id, $oldIds)) {
+                    if (!in_array($e->id, $oldIds)) {
                         $status = self::UPDATE_SUCCESS_NEW_ENTRIES;
                         break;
                     }
