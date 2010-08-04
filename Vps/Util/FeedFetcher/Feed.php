@@ -223,7 +223,7 @@ class Vps_Util_FeedFetcher_Feed
                     $t = $e->title;
                     if (!$t) $t = $e->url;
                     if (strlen($t) > 50) $t = substr($t, 0, 50);
-                    $titles[] = $t->id.' '.$t;
+                    $titles[] = $e->id.' '.$t;
                 }
                 $log->titles = implode('; ', $titles);;
             }
