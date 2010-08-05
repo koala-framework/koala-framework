@@ -66,8 +66,8 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
             {
                 throw new Vps_Exception("Component '$this->_class' does have no componentName but must have one for editing");
             }
-
-            $title = trlVps('Edit {0}', $this->_getSetting('componentName'));
+            $title = $this->_getSetting('componentName');
+            if (strpos($title, '.') !== false) $title = substr(strrchr($title, '.'), 1);
         }
 
         if (!$icon) $icon = $this->_getSetting('componentIcon');
