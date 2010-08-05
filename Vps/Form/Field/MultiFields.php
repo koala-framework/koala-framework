@@ -258,6 +258,10 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                 $d['row']->pos = $d['pos'];
             }
         }
+
+        foreach ($postData['delete'] as $d) {
+            $d->delete();
+        }
     }
 
     public function validate($row, $postData)
@@ -303,10 +307,6 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     public function save(Vps_Model_Row_Interface $row, $postData)
     {
         $postData = $postData[$this->getFieldName()];
-
-        foreach ($postData['delete'] as $d) {
-            $d->delete();
-        }
 
         foreach ($postData['save'] as $i) {
             $r = $i['row'];
