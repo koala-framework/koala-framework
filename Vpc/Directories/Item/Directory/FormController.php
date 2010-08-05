@@ -1,11 +1,14 @@
 <?php
 class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Action_Auto_Form
 {
-    protected $_buttons = array('save');
+    protected $_buttons = array();
     protected $_permissions = array('save', 'add');
 
     public function _initFields()
     {
+        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigTabs')) {
+            $this->_buttons['save'] = true;
+        }
         $this->_form = Vpc_Abstract_Form::createChildComponentForm(
                 $this->_getParam('class'), '-detail', $this->_getParam('class'));
         $this->_form->setIdTemplate(null);
