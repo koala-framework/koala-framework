@@ -18,6 +18,7 @@ class Vpc_Abstract_List_ExtConfigEditButton extends Vps_Component_Abstract_ExtCo
                 'type' => $k
             );
         }
+        $ret['form']['needsComponentPanel'] = true;
         return $ret;
     }
 }
