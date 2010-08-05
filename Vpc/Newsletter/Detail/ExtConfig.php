@@ -1,9 +1,9 @@
 <?php
-class Vpc_Newsletter_Detail_Admin extends Vpc_Admin
+class Vpc_Newsletter_Detail_ExtConfig extends Vps_Component_Abstract_ExtConfig_Form
 {
-    public function getExtConfig()
+    protected function _getConfig()
     {
-        $ret = parent::getExtConfig();
+        $ret = parent::_getConfig();
         $mailClass = Vpc_Abstract::getChildComponentClass($this->_class, 'mail');
         $mailContentClass = Vpc_Abstract::getChildComponentClass($mailClass, 'content');
         $cfg = Vpc_Admin::getInstance($mailContentClass)->getExtConfig();

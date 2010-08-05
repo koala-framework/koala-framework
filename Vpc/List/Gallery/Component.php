@@ -12,6 +12,8 @@ abstract class Vpc_List_Gallery_Component extends Vpc_Abstract_List_Component
 
         $ret['ownModel'] = 'Vps_Component_FieldModel';
 
+        $ret['extConfig'] = 'Vpc_List_Gallery_ExtConfig';
+
         // muss im web überschrieben werden, zB:
         // vorsicht: imagesPerLine MUSS auch gesetzt sein
 /*        $ret['dimensions'] = array(

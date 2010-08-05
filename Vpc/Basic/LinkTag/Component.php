@@ -33,6 +33,8 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
             );
         }
         $ret['assetsAdmin']['dep'][] = 'VpsFormCards';
+
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
     public function getTemplateVars()

@@ -7,21 +7,6 @@ class Vpc_Guestbook_Admin extends Vpc_Directories_Item_Directory_Admin
         return Vpc_Abstract::getChildComponentClass($detail, 'child', 'content');
     }
 
-    public function getExtConfig()
-    {
-        $ret = parent::getExtConfig();
-
-        $url = Vpc_Admin::getInstance($this->_class)->getControllerUrl('Settings');
-        $icon = new Vps_Asset('wrench_orange');
-        $arr = array('settings' => array(
-            'xtype' => 'vps.autoform',
-            'controllerUrl' => $url,
-            'title' => trlVps('Guestbook Settings'),
-            'icon' => $icon->__toString()
-        ));
-        return array_merge($arr, $ret);
-    }
-
     public function addResources(Vps_Acl $acl)
     {
         parent::addResources($acl);
