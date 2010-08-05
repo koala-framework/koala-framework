@@ -1,7 +1,7 @@
 <?php
 class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Action_Auto_Form
 {
-    protected $_buttons = array();
+    protected $_buttons = array('save');
     protected $_permissions = array('save', 'add');
 
     public function _initFields()
