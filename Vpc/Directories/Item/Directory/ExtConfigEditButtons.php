@@ -1,7 +1,7 @@
 <?php
 class Vpc_Directories_Item_Directory_ExtConfigEditButtons extends Vps_Component_Abstract_ExtConfig_Abstract
 {
-    private function _getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate, $componentIdSuffix)
+    protected final function _getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate, $componentIdSuffix)
     {
         $ret = array(
             'componentConfigs' => array(),
@@ -62,19 +62,14 @@ class Vpc_Directories_Item_Directory_ExtConfigEditButtons extends Vps_Component_
         foreach ($this->_getAdmin()->getPluginAdmins() as $a) {
             $componentPlugins[] = $a->getPluginExtConfig();
         }
-        $name = $this->_getSetting('componentName');
-        if (strpos($name, '.') !== false) $name = substr(strrchr($name, '.'), 1);
 
+        $config = $this->_getStandardConfig('vpc.directories.item.directory', 'EditButtons');
+        $config['componentConfigs'] = $edit['componentConfigs'];
+        $config['contentEditComponents'] = $edit['contentEditComponents'];
+        $config['componentPlugins'] = $componentPlugins;
+        $config['needsComponentPanel'] = true;
         return array(
-            'items' => array(
-                'xtype'=>'vpc.directories.item.directory',
-                'controllerUrl' => $this->getControllerUrl(),
-                'title' => trlVps('Edit {0}', $name),
-                'icon' => $this->_getSetting('componentIcon')->__toString(),
-                'componentConfigs' => $edit['componentConfigs'],
-                'contentEditComponents' => $edit['contentEditComponents'],
-                'componentPlugins' => $componentPlugins
-            )
+            'items' => $config
         );
     }
 
