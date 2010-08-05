@@ -11,11 +11,24 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
 
     public function getMailContent($type = self::GET_MAIL_CONTENT_AUTO)
     {
-        $mail = $this->_prepareMail();
-        if ($mail instanceof Vps_Mail_Template) {
-            return $mail->getMailContent($type);
+        if ($this->mail_sent) {
+            if ($type == self::GET_MAIL_CONTENT_AUTO) {
+                if ($this->sent_mail_content_html) return $this->sent_mail_content_html;
+                return $this->sent_mail_content_text;
+            } else if ($type == self::GET_MAIL_CONTENT_HTML) {
+                return $this->sent_mail_content_html;
+            } else if ($type == self::GET_MAIL_CONTENT_TEXT) {
+                return $this->sent_mail_content_text;
+            } else {
+                throw new Vps_Exception_NotYetImplemented();
+            }
         } else {
-            throw new Vps_Exception_NotYetImplemented();
+            $mail = $this->_prepareMail();
+            if ($mail instanceof Vps_Mail_Template) {
+                return $mail->getMailContent($type);
+            } else {
+                throw new Vps_Exception_NotYetImplemented();
+            }
         }
     }
 
@@ -79,10 +92,39 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
 
     public function sendMail()
     {
-        $mail = $this->_prepareMail();
-        $mail->send();
-    }
+        if (!$this->mail_sent) {
+            $mail = $this->_prepareMail();
+            $mail->send();
 
+            // save sent mail in database
+            $this->sent_mail_content_text = $mail->getMailContent(self::GET_MAIL_CONTENT_TEXT);
+            $this->sent_mail_content_html = $mail->getMailContent(self::GET_MAIL_CONTENT_HTML);
+            $this->save();
+        } else {
+            $mail = new Vps_Mail();
+
+            $items = $this->getTo();
+            if ($items) { foreach ($items as $item) $mail->addTo($item['email'], $item['name']); }
+
+            $item = $this->getFrom();
+            if ($item) $mail->setFrom($item['email'], $item['name']);
+
+            $item = $this->getReturnPath();
+            if ($item) $mail->setReturnPath($item);
+
+            $items = $this->getBcc();
+            if ($items) { foreach ($items as $item) $mail->addBcc($item['email'], $item['name']); }
+
+            $items = $this->getCc();
+            if ($items) { foreach ($items as $item) $mail->addCc($item['email'], $item['name']); }
+
+            $mail->setSubject($this->subject);
+            $mail->setBodyText($this->sent_mail_content_text);
+            if ($this->sent_mail_content_html) $mail->setBodyHtml($this->sent_mail_content_html);
+
+            $mail->send();
+        }
+    }
 
     protected function _beforeInsert()
     {
@@ -119,7 +161,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         }
 
         $additionalData = array(
-            'http_host' => $_SERVER['HTTP_HOST'],
+            'http_host' => (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''),
             'ham_url' => '/vps/spam/set?id='.$this->id.'&value=0&key='.self::getSpamKey($this)
         );
 
