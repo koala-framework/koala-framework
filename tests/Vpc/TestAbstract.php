@@ -13,7 +13,6 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         $this->_root = Vps_Component_Data_Root::getInstance();
         $this->_root->setFilename('vps/vpctest/'.$componentClass);
         Vps_Component_Cache::setBackend(Vps_Component_Cache::CACHE_BACKEND_FNF);
-        Vps_Component_ModelObserver::getInstance()->clear();
         Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
         Vps_Component_ModelObserver::getInstance()->setDisableCache(false);
         Vps_Media::getOutputCache()->clean();
@@ -22,8 +21,7 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        Vps_Component_ModelObserver::getInstance()->clear();
-        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
+        Vps_Component_ModelObserver::getInstance()->clearInstance();
         Vps_Component_Data_Root::reset();
         Vps_Component_Cache::clearInstance();
         Vps_Component_Data_Root::reset();

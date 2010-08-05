@@ -7,8 +7,7 @@ class Vps_View_Helper_HasContent extends Vps_View_Helper_Abstract
         $sourcePageId = $component->getPage() ? $component->getPage()->componentId : null;
         $targetPageId = $target->getPage() ? $target->getPage()->componentId : null;
         if ($sourcePageId != $targetPageId) {
-            Vps_Component_Cache::getInstance()
-                ->saveMetaComponent($component, $target);
+            Vps_Component_Cache::getInstance()->saveMetaComponent($component, $target);
         }
         return $component->getComponent()->hasContent();
     }

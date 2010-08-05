@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Output_Partials
+class Vps_Component_Output_Partials extends Vps_Component_Output_Abstract
 {
     public function render($component, $config)
     {
@@ -22,31 +22,5 @@ class Vps_Component_Output_Partials
             $ret .= "{partial: $componentId($id) $partialsClass $config $id $info}";
         }
         return $ret;
-    }
-
-    public function getCacheValue()
-    {
-        return null;
-    }
-
-    public static function getHelperOutput(Vps_Component_Data $component, $partialClass = null, $params = array())
-    {
-        if (!$component instanceof Vps_Component_Data ||
-            !method_exists($component->getComponent(), 'getPartialVars')
-        )
-            throw new Vps_Exception('Component has to implement Vps_Component_Partial_Interface');
-        if (!$partialClass) {
-            if (!method_exists($component->getComponent(), 'getPartialClass')) {
-                throw new Vps_Exception('If no partial class is given, component musst implement method "getPartialClass"');
-            }
-            $partialClass = $component->getComponent()->getPartialClass();
-        }
-        $componentId = $component->componentId;
-        $componentClass = $component->componentClass;
-        if (method_exists($component->getComponent(), 'getPartialParams')) {
-            $params = array_merge($component->getComponent()->getPartialParams(), $params);
-        }
-        $serializedParams = base64_encode(serialize($params));
-        return "{!partials: $componentId $partialClass $serializedParams}";
     }
 }

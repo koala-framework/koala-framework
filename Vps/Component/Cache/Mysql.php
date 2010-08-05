@@ -15,12 +15,15 @@ class Vps_Component_Cache_Mysql
         );
     }
 
+    /**
+     * @return Vps_Model_Abstract
+     */
     public function getModel($type = 'cache')
     {
         return isset($this->_models[$type]) ? $this->_models[$type] : null;
     }
 
-    public function save(Vps_Component_Data $component, $content, $type = 'component', $value = null)
+    public function save(Vps_Component_Data $component, $content, $type = 'component', $value = '')
     {
         $settings = $component->getComponent()->getViewCacheSettings();
 
@@ -46,7 +49,18 @@ class Vps_Component_Cache_Mysql
         return true;
     }
 
-    public function load(Vps_Component_Data $component)
+    public function load(Vps_Component_Data $component, $type = 'component', $value = '')
+    {
+        $select = $this->_models['cache']->select()
+            ->whereEquals('component_id', $component->componentId)
+            ->whereEquals('type', $type)
+            ->whereEquals('value', $value);
+        $row = $this->_models['cache']->export(Vps_Model_Db::FORMAT_ARRAY, $select);
+        if ($row) return $row[0]['content'];
+        return null;
+    }
+
+    public function preload(Vps_Component_Data $component)
     {
         $ret = array();
 
@@ -147,6 +161,7 @@ class Vps_Component_Cache_Mysql
             throw new Vps_Exception('Source and target component must be different, both have ' . $source->componentId);
         $data = array(
             'component_id' => $target->componentId,
+            'component_class' => $target->componentClass,
             'source_component_id' => $source->componentId,
             'source_component_class' => $source->componentClass
         );
@@ -172,6 +187,80 @@ class Vps_Component_Cache_Mysql
         $this->_models['preload']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
-    public function clean() {}
+    protected function _getComponentIds($row, $metaModel)
+    {
+        $select = $metaModel->select()
+            ->whereEquals('model', get_class($row->getModel()));
+        $fields = array();
+        foreach ($metaModel->getRows($select) as $r) {
+            $fields[] = $r->field;
+        }
+        $fields = array_unique($fields);
 
+        $and = array();
+        foreach ($fields as $field) {
+            if ($field == '') {
+                $primaryKey = $row->getModel()->getPrimaryKey();
+                $value = $row->$primaryKey;
+            } else if (!$row->hasColumn($field)) {
+                continue;
+            } else {
+                $value = $row->$field;
+            }
+            $and[] = new Vps_Model_Select_Expr_And(array(
+                new Vps_Model_Select_Expr_Equals('field', $field),
+                new Vps_Model_Select_Expr_Equals('value', $value)
+            ));
+        }
+        $select->where(new Vps_Model_Select_Expr_Or($and));
+        $componentIds = array();
+        foreach ($metaModel->getRows($select) as $r) {
+            $componentIds[] = $r->component_id;
+        }
+
+        do {
+            $componentSelect = $this->getModel('metaComponent')->select();
+            $componentSelect->whereEquals('source_component_id', $componentIds);
+            $componentIds2 = array();
+            foreach ($this->getModel('metaComponent')->getRows($componentSelect) as $r) {
+                $componentIds2[] = $r->component_id;
+            }
+            $componentIds2 = array_diff($componentIds2, $componentIds);
+            $componentIds = array_unique(array_merge($componentIds, $componentIds2));
+        } while ($componentIds2);
+
+        return $componentIds;
+    }
+
+    public function cleanByRow(Vps_Model_Row_Abstract $row)
+    {
+        $componentIds = $this->_getComponentIds($row, $this->getModel('metaRow'));
+        $this->getModel('cache')->deleteRows(
+            $this->getModel('cache')->select()->whereEquals('component_id', $componentIds)
+        );
+        foreach ($componentIds as $componentId) {
+            $component = Vps_Component_Data_Root::getInstance()
+                ->getComponentById($componentId, array('ignoreVisible' => true));
+            if ($component) $component->getComponent()->onCacheCallback($row);
+        }
+    }
+
+    public function cleanByModel(Vps_Model_Abstract $model)
+    {
+        $select = $this->getModel('metaModel')->select()
+            ->whereEquals('model', get_class($model));
+        $componentClasses = array();
+        $componentSelect = $this->getModel('metaComponent')->select();
+        foreach ($this->getModel('metaModel')->getRows($select) as $r) {
+            $componentClasses[] = $r->component_class;
+            $componentSelect->whereEquals('source_component_class', $r->component_class);
+        }
+        foreach ($this->getModel('metaComponent')->getRows($componentSelect) as $r) {
+            $componentClasses[] = $r->component_class;
+        }
+        $componentClasses = array_unique($componentClasses);
+        $this->getModel('cache')->deleteRows(
+            $this->getModel('cache')->select()->whereEquals('component_class', $componentClasses)
+        );
+    }
 }

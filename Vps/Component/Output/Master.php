@@ -1,7 +1,7 @@
 <?php
-class Vps_Component_Output_Master
+class Vps_Component_Output_Master extends Vps_Component_Output_Abstract
 {
-    private $_templateComponentId;
+    private $_templateComponentId = '';
 
     public function render($component, $config, $view)
     {
@@ -26,7 +26,7 @@ class Vps_Component_Output_Master
         return $view->render($template);
     }
 
-    public function getCacheValue()
+    protected function _getCacheValue()
     {
         return $this->_templateComponentId;
     }
