@@ -172,6 +172,15 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         }
     }
 
+    public function afterSave($row, $postData)
+    {
+        if ($this->hasChildren()) {
+            foreach ($this->getChildren() as $field) {
+                $field->afterSave($row, $postData);
+            }
+        }
+    }
+
     public function delete(Vps_Model_Row_Interface $row)
     {
         if ($this->hasChildren()) {

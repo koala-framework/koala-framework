@@ -7,6 +7,9 @@ Neue Features:
 - Vpc_Form: vpsFieldError klasse wird für Felder mit Validierungs-Fehler gesetzt
 - needsParentComponentClass Setting, damit wird die $parentComponentClass bei getSettings
   übergeben
+- ExtConfig ist eigene Klasse - statt Admin::getExtConfig, setzen über extConfig Setting
+- Vpc_List_Switch hat transitions (fade ist jetzt standard) und die weiter-pfeile
+  funktionieren über das ende hinaus und fangen wieder von vorn an
 
 möglicherweise nicht kompatible Änderungen:
 - editComponents werden im Seitenbaum nur mehr berücksichtigt wenn direkt unter der bearbeitenden Komponente liegen
@@ -20,6 +23,10 @@ möglicherweise nicht kompatible Änderungen:
   ein array mit field und message
 - Vpc_Columns::getSettings beöntigt $parentComponentClass Argument, muss bei abgeleiteten
   durchgeschliffen werden
+- Vpc_List_Switch hat options, müssen im Template ausgegeben werden
+- Admin::getExtConfig gibts nicht mehr, durch extConfig Setting ersetzen
+- Vpc_Abstract_List_*Admin und Vpc_Abstract_Composite_*Admin gibts nicht mehr, stattdessen
+  sollte die passende extConfig Einstellung gesetzt werden
 
 == 1.9 ==
 Erstellt: 07.05.10

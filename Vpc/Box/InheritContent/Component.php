@@ -13,6 +13,8 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
         //TODO: viewcache nicht deaktiveren
         //cache löschen muss dazu korrekt eingebaut werden
         $ret['viewCache'] = false;
+
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 

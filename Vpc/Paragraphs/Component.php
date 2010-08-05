@@ -31,7 +31,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
             );
         }
         $ret['previewWidth'] = 600;
-        $ret['default'] = array();
+        $ret['extConfig'] = 'Vpc_Paragraphs_ExtConfig';
         return $ret;
     }
 

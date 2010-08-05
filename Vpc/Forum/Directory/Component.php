@@ -29,6 +29,8 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['flags']['processInput'] = true;
 
+        $ret['extConfig'] = 'Vpc_Forum_Directory_ExtConfig';
+
         return $ret;
     }
 

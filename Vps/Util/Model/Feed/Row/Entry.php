@@ -29,7 +29,9 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
                 //es kann mehrere links geben, am liebsten ist uns ein alternate text/html
                 //aber wir nehmen auch was anderes
                 $quality = 0;
-                if ((string)$l['type'] == 'text/html') $quality++;
+                if ((string)$l['type'] == 'text/html') $quality+=2;
+                if ((string)$l['type'] == 'application/atom+xml') $quality--;
+                if (!(string)$l['type']) $quality++;
                 if ((string)$l['rel'] == 'alternate') $quality++;
                 if ((string)$l['rel'] == 'enclosure') $quality--;
                 if (substr((string)$l['type'], 0, 6) == 'image/') $quality--;
@@ -78,6 +80,8 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
             $data['author_name'] = (string)$xml->author->name;
         } else if (isset($xml->author)) {
             $data['author_name'] = (string)$xml->author;
+        } else if (isset($xml->children('http://purl.org/dc/elements/1.1/')->creator)) {
+            $data['author_name'] = (string)$xml->children('http://purl.org/dc/elements/1.1/')->creator;
         }
 
         if ($xml->children('http://purl.org/rss/1.0/modules/content/')->encoded) {

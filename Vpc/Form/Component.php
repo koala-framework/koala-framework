@@ -27,6 +27,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['assets']['files'][] = 'vps/Vps_js/Form/FieldSet/Component.js';
 
         $ret['flags']['processInput'] = true;
+
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 
@@ -104,6 +106,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
                     $this->_beforeInsert($this->_form->getRow());
                 }
                 $this->_form->save(null, $postData);
+                $this->_form->afterSave(null, $postData);
                 $this->_afterSave($this->_form->getRow());
                 if ($isInsert) {
                     $this->_afterInsert($this->_form->getRow());

@@ -121,6 +121,15 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
         parent::save($row, $postData);
     }
 
+    public function afterSave($parentRow, $postData)
+    {
+        //wenn form zB in einem CardLayout liegt und deaktivert wurde nicht speichern
+        if ($this->getSave() === false || $this->getInternalSave() === false) return array();
+
+        $row = $this->_getRowByParentRow($parentRow);
+        parent::afterSave($row, $postData);
+    }
+
     public function delete($parentRow)
     {
         $row = (object)$this->_getRowByParentRow($parentRow);
