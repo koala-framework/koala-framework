@@ -16,6 +16,8 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
             $ret['editComponents'] = array('child');
         }
 
+        $ret['extConfig'] = 'Vpc_Box_InheritContent_Trl_ExtConfig';
+
         return $ret;
     }
 

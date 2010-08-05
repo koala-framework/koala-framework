@@ -12,6 +12,8 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
         $ret['assetsAdmin']['dep'][] = 'VpsComponent';
 
+        $ret['extConfig'] = 'Vpc_Abstract_List_Trl_ExtConfigList';
+
         return $ret;
     }
 

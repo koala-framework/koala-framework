@@ -9,6 +9,7 @@ class Vpc_Paragraphs_Trl_Component extends Vpc_Chained_Trl_Component
         $ret['generators']['paragraphs']['class'] = 'Vpc_Paragraphs_Trl_Generator';
         $ret['childModel'] = 'Vpc_Paragraphs_Trl_Model';
         $ret['previewWidth'] = Vpc_Abstract::getSetting($masterComponentClass, 'previewWidth');
+        $ret['extConfig'] = 'Vpc_Paragraphs_Trl_ExtConfig';
         return $ret;
     }
 

@@ -24,6 +24,8 @@ class Vpc_Newsletter_Detail_Component extends Vpc_Directories_Item_Detail_Compon
         $ret['assetsAdmin']['files'][] = 'ext/src/widgets/StatusBar.js';
         $ret['componentName'] = 'Newsletter';
         $ret['checkRtrList'] = true;
+
+        $ret['extConfig'] = 'Vpc_Newsletter_Detail_ExtConfig';
         return $ret;
     }
 
