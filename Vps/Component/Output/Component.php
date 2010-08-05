@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Output_Component
+class Vps_Component_Output_Component extends Vps_Component_Output_Abstract
 {
     public function render($component, $config, $view)
     {
@@ -13,8 +13,8 @@ class Vps_Component_Output_Component
         return $view->render($template);
     }
 
-    public function getCacheValue()
+    protected function _saveMeta($component)
     {
-        return null;
+        return $component->getComponent()->saveCache();
     }
 }

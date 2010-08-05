@@ -1,7 +1,7 @@
 <?php
-class Vps_Component_Output_Partial
+class Vps_Component_Output_Partial extends Vps_Component_Output_Abstract
 {
-    private $_currentId;
+    private $_currentId = '';
 
     public function render($component, $config, $view)
     {
@@ -27,8 +27,13 @@ class Vps_Component_Output_Partial
         return $view->render($template);
     }
 
-    public function getCacheValue()
+    protected function _getCacheValue()
     {
         return $this->_currentId;
+    }
+
+    protected function _saveMeta($component)
+    {
+        return $component->getComponent()->savePartialCache($this->_getCacheValue());
     }
 }

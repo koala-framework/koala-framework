@@ -17,8 +17,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        Vps_Component_ModelObserver::getInstance()->clear();
-        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
+        Vps_Component_ModelObserver::getInstance()->clearInstance();
     }
 
     public function testUrl()

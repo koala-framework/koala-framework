@@ -45,7 +45,7 @@ abstract class Vps_Component_Renderer_Abstract
             'cacheRendered' => array()
         );
         if ($this->_enableCache) {
-            $this->_cache = Vps_Component_Cache::getInstance()->load($component);
+            $this->_cache = Vps_Component_Cache::getInstance()->preload($component);
             foreach ($this->_cache as $type => $componentIds) {
                 foreach ($componentIds as $componentId => $values) {
                     foreach ($values as $value => $null) {
@@ -75,7 +75,7 @@ abstract class Vps_Component_Renderer_Abstract
         $stats = $this->_stats;
 
         while (preg_match('/{(!)?([^ }]+): ([^ \[}\(]+)(\([^ }]+\))?(\[[^}]+\])?( [^}]*)}/', $ret, $matches)) {
-            $isCache = $matches[1] != '!';
+            $useCache = $matches[1] != '!';
             $type = $matches[2];
             $componentId = trim($matches[3]);
             $value = (string)trim($matches[4]);
@@ -105,7 +105,7 @@ abstract class Vps_Component_Renderer_Abstract
                 $class = 'Vps_Component_Output_' . ucfirst($type);
                 $output = new $class();
                 $view->clearVars();
-                if ($isCache) {
+                if ($useCache) {
                     $component = $this->_getComponent($componentId);
                 } else {
                     $component = $componentId;
@@ -124,28 +124,25 @@ abstract class Vps_Component_Renderer_Abstract
                     }
                 }
 
-                if ($isCache) {
-                    $cacheSettings = $component->getComponent()->getViewCacheSettings();
-                    if (!$cacheSettings['enabled']) $isCache = false;
-                }
-                $statType = $this->_enableCache && $cacheSettings['enabled'] ?
-                    'nocache' : 'noviewcache';
-
-                if ($this->_enableCache && $isCache) {
-                    $written = Vps_Component_Cache::getInstance()->save(
-                        $component,
-                        $content,
-                        $type,
-                        $output->getCacheValue()
-                    );
-                    if ($written) $stats['cacheSaved'][] = $statId;
-                    $page = $component->getPage();
-                    $cPage = $this->_renderComponent->getPage();
-                    if ($page && $cPage && $page->componentId != $cPage->componentId) {
-                        Vps_Component_Cache::getInstance()->savePreload($this->_renderComponent, $component);
+                if ($this->_enableCache) {
+                    if ($useCache) {
+                        $cacheSettings = $component->getComponent()->getViewCacheSettings();
+                        if (!$cacheSettings['enabled']) $useCache = false;
+                    }
+                    if ($useCache) {
+                        $written = $output->saveCache($component, $content);
+                        if ($written) {
+                            $stats['cacheSaved'][] = $statId;
+                            $page = $component->getPage();
+                            $cPage = $this->_renderComponent->getPage();
+                            if ($page && $cPage && $page->componentId != $cPage->componentId) {
+                                Vps_Component_Cache::getInstance()->savePreload($this->_renderComponent, $component);
+                            }
+                        }
                     }
                 }
 
+                $statType = $useCache ? 'nocache' : 'noviewcache';
             }
 
             Vps_Benchmark::count("rendered $statType", $statId);

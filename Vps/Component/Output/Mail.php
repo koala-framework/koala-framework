@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Output_Mail
+class Vps_Component_Output_Mail extends Vps_Component_Output_Abstract
 {
     public function render($component, $config, $view)
     {

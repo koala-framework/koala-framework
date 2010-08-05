@@ -831,9 +831,10 @@ class Vps_Component_Data
     }
 
     // Nur zum Testen!
-    public function render()
+    public function render($enableCache = true)
     {
         $output = new Vps_Component_Renderer();
+        $output->setEnableCache($enableCache);
         return $output->render($this);
     }
 }

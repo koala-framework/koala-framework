@@ -23,6 +23,11 @@ class Vps_Component_ModelObserver
         return self::$_instance;
     }
 
+    public static function clearInstance()
+    {
+        self::$_instance = null;
+    }
+
     //für tests
     public function setSkipFnF($v)
     {
@@ -68,10 +73,10 @@ class Vps_Component_ModelObserver
 
     protected function _processCache($source)
     {
-        return;
         if ($source instanceof Vps_Model_Interface) {
             $model = $source;
             $id = null;
+            $row = null;
         } else {
             $row = $source;
             if ($row instanceof Zend_Db_Table_Row_Abstract) {
@@ -102,9 +107,11 @@ class Vps_Component_ModelObserver
             if (!isset($this->_processed[$modelname])) $this->_processed[$modelname] = array();
             $this->_processed[$modelname][] = $id;
             if (!$this->_disableCache) {
-                Vps_Component_Cache::getInstance()->clean(
-                    Vps_Component_Cache::CLEANING_MODE_META, $source
-                );
+                if ($row) {
+                    Vps_Component_Cache::getInstance()->cleanByRow($row);
+                } else {
+                    Vps_Component_Cache::getInstance()->cleanByModel($model);
+                }
             }
             return array($modelname => $id);
         }
@@ -113,7 +120,6 @@ class Vps_Component_ModelObserver
 
     public function process()
     {
-        return;
         $ret = array();
 
         // View Cache
