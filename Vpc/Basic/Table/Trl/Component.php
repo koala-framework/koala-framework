@@ -5,6 +5,7 @@ class Vpc_Basic_Table_Trl_Component extends Vpc_Chained_Trl_Component
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['childModel'] = 'Vpc_Basic_Table_Trl_DataModel';
+        $ret['extConfig'] = 'Vpc_Basic_Table_Trl_ExtConfig';
         return $ret;
     }
 

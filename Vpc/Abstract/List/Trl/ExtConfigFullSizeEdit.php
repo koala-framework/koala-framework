@@ -1,9 +1,9 @@
 <?php
-class Vpc_Abstract_List_Trl_AdminFullSizeEdit extends Vpc_Abstract_List_Trl_Admin
+class Vpc_Abstract_List_Trl_ExtConfigFullSizeEdit extends Vpc_Abstract_List_Trl_ExtConfigList
 {
-    public function getExtConfig()
+    protected function _getConfig()
     {
-        $ret = parent::getExtConfig();
+        $ret = parent::_getConfig();
         $ret['list']['xtype'] = 'vpc.listfullsizeeditpanel';
         $ret['list']['childConfig'] = array();
 

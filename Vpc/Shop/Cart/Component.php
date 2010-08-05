@@ -23,6 +23,8 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         $ret['assets']['files'][] = 'vps/Vpc/Shop/Cart/Keepalive.js';
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtConnection';
+
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 

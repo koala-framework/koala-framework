@@ -1,11 +1,6 @@
 <?php
 class Vpc_Shop_Cart_Checkout_Admin extends Vpc_Admin
 {
-    public function getExtConfig()
-    {
-        return array();
-    }
-
     public function addResources(Vps_Acl $acl)
     {
         parent::addResources($acl);

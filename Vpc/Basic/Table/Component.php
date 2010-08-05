@@ -24,6 +24,8 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         // e.g.: 'green' => trlVps('Green')
         $ret['tableStyles'] = array('green' => trlVps('Green'));
         $ret['cssClass'] = 'webStandard';
+
+        $ret['extConfig'] = 'Vpc_Basic_Table_ExtConfig';
         return $ret;
     }
 

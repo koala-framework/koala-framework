@@ -22,6 +22,8 @@ class Vpc_Guestbook_Component extends Vpc_Posts_Directory_Component
         $ret['ownModel'] = 'Vps_Component_FieldModel';
         $ret['flags']['hasResources'] = true;
 
+        $ret['extConfig'] = 'Vpc_Guestbook_ExtConfig';
+
         return $ret;
     }
 
