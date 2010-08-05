@@ -24,22 +24,29 @@ Vpc.Directories.Item.Directory.TabsPanel = Ext.extend(Vps.Binding.ProxyPanel,
             controllerUrl: this.detailsControllerUrl,
             title: trlVps('Details')
         });
+        grid.addBinding(this.detailsForm);
 
         this.editPanels = [this.detailsForm];
         this.contentEditComponents.each(function(ec) {
             var componentConfig = this.componentConfigs[ec.componentClass+'-'+ec.type];
-            this.editPanels.push(new Vps.Component.ComponentPanel({
-                title: componentConfig.title,
-                mainComponentClass: ec.componentClass,
-                mainType: ec.type,
-                mainComponentId: ec.idTemplate+ec.componentIdSuffix,
-                componentConfigs: this.componentConfigs,
-                mainEditComponents: [ec]
-            }));
-        }, this);
-
-        this.editPanels.each(function(p) {
-            grid.addBinding(p);
+            if (componentConfig.needsComponentPanel) {
+                var panel = new Vps.Component.ComponentPanel({
+                    title: componentConfig.title,
+                    mainComponentClass: ec.componentClass,
+                    mainType: ec.type,
+                    mainComponentId: ec.idTemplate+ec.componentIdSuffix,
+                    componentConfigs: this.componentConfigs,
+                    mainEditComponents: [ec]
+                });
+                grid.addBinding(panel);
+            } else {
+                var panel = Ext.ComponentMgr.create(componentConfig);
+                grid.addBinding({
+                    item: panel,
+                    componentId: ec.idTemplate+ec.componentIdSuffix
+                });
+            }
+            this.editPanels.push(panel);
         }, this);
 
         var tabs = new Ext.TabPanel({
