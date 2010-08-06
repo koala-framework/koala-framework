@@ -4,6 +4,8 @@ class Vps_Component_View_Helper_HasContent extends Vps_Component_View_Helper_Abs
     public function hasContent(Vps_Component_Data $component)
     {
         $target = $this->_getView()->data;
+        // TODO: wenn source andere Komponenten nach hascontent fragt, landet
+        // das nicht hier drinnen
         $sourcePageId = $component->getPage() ? $component->getPage()->componentId : null;
         $targetPageId = $target->getPage() ? $target->getPage()->componentId : null;
         if ($sourcePageId != $targetPageId) {
