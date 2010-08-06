@@ -58,7 +58,6 @@ class Vpc_Basic_Image_Cache_Test extends Vpc_TestAbstract
 
         $this->_process();
         $html = $this->_root->render();
-        d($html);
         $this->assertContains('vpcBasicImageCacheRootImagesEnlargeComponent', $html);
         $this->assertContains('vpcBasicImageCacheRootImageEnlargeComponent', $html);
         $this->assertNotContains('/media/Vpc_Basic_Image_Cache_Root_ImageEnlargeComponent', $html);

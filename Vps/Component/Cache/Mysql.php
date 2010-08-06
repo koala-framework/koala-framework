@@ -245,9 +245,18 @@ class Vps_Component_Cache_Mysql
         $this->getModel('cache')->deleteRows(
             $this->getModel('cache')->select()->whereEquals('component_id', $componentIds)
         );
+        $this->cleanByCallback($row);
+    }
+
+    public function cleanByCallback(Vps_Model_Row_Abstract $row)
+    {
+        $componentIds = $this->_getComponentIds($row, $this->getModel('metaCallback'));
+        $root = Vps_Component_Data_Root::getInstance();
+        if (!$root) return;
         foreach ($componentIds as $componentId) {
-            $component = Vps_Component_Data_Root::getInstance()
-                ->getComponentById($componentId, array('ignoreVisible' => true));
+            $component = $root->getComponentById(
+                $componentId, array('ignoreVisible' => true)
+            );
             if ($component) $component->getComponent()->onCacheCallback($row);
         }
     }
