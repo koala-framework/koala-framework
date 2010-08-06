@@ -1,6 +1,21 @@
 <?php
-abstract class Vps_Component_Output_Abstract
+abstract class Vps_Component_View_Renderer
 {
+    protected $_view;
+
+    public function setView(Vps_View $view)
+    {
+        $this->_view = $view;
+    }
+
+    /**
+     * @return Vps_View
+     */
+    protected function _getView()
+    {
+        return $this->_view;
+    }
+
     public abstract function render($component, $config, $view);
 
     protected function _getCacheValue()
@@ -22,7 +37,7 @@ abstract class Vps_Component_Output_Abstract
         }
         return $ret;
     }
-
+/*
     protected function _saveMeta() {}
 
 
@@ -73,4 +88,5 @@ abstract class Vps_Component_Output_Abstract
             $this->getCache()->saveMeta($model, $id, $value, $type, $field);
         }
     }
+    */
 }

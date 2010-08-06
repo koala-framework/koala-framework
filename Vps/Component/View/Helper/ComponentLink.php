@@ -1,9 +1,10 @@
 <?php
-class Vps_View_Helper_ComponentLink extends Vps_View_Helper_Abstract
+class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
 {
     public function componentLink($m, $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
         if ($m instanceof Vps_Component_Data) {
+            $component = $m;
             $m = $m->getPage();
             if (is_instance_of($m->componentClass, 'Vpc_Basic_LinkTag_Abstract_Component')) {
                 if (!$m->getComponent()->hasContent()) {

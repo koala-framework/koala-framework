@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_Image extends Vps_View_Helper_Abstract
+class Vps_Component_View_Helper_Image extends Vps_Component_View_Helper_Abstract
 {
     private $_dep;
 

@@ -121,6 +121,22 @@ class Vps_Component_Cache_Mysql
         $this->_models['metaModel']()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
+    public function saveMetaModelId(Vps_Component_Data $component, $modelname, $value, $field = null, $type = 'metaRow')
+    {
+        // TODO: checken, ob component->componentClass eh nicht schon in cache_component_meta_model mit gleichem Model steht
+        $data = array(
+            'model' => $modelname,
+            'field' => $field,
+            'value' => $value,
+            'component_id' => $component->componentId
+        );
+        $options = array(
+            'buffer' => true,
+            'replace' => true
+        );
+        $this->_models[$type]->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+    }
+
     public function saveMetaRow(Vps_Component_Data $component, $row, $field = null, $type = 'metaRow')
     {
         if (!$row instanceof Vps_Model_Row_Abstract &&
@@ -129,25 +145,14 @@ class Vps_Component_Cache_Mysql
 
         if (get_class($row) == 'Vps_Model_Db_Row' || $row instanceof Zend_Db_Table_Row) {
             $row = $row->getRow();
-            $modelName = get_class($row->getTable());
+            $modelname = get_class($row->getTable());
             if (!$field) $field = current($row->getTable()->info('primary'));
         } else {
-            $modelName = get_class($row->getModel());
+            $modelname = get_class($row->getModel());
             if (!$field) $field = $row->getModel()->getPrimaryKey();
         }
         $id = $row->$field;
-
-        $data = array(
-            'model' => $modelName,
-            'field' => $field,
-            'value' => $id,
-            'component_id' => $component->componentId
-        );
-        $options = array(
-            'buffer' => true,
-            'replace' => true
-        );
-        $this->_models[$type]->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+        $this->saveMetaModelId($component, $modelname, $id, $type);
     }
 
     public function saveMetaCallback(Vps_Component_Data $component, $row, $field = null)
@@ -228,6 +233,8 @@ class Vps_Component_Cache_Mysql
             $componentIds2 = array_diff($componentIds2, $componentIds);
             $componentIds = array_unique(array_merge($componentIds, $componentIds2));
         } while ($componentIds2);
+        // TODO: wenn row instanceof pages-row, alle unterseiten durchgehen und
+        // alle einträge in meta_component mit page_id_* mitzurückgeben
 
         return $componentIds;
     }

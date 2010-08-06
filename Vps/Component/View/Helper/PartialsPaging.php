@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_PartialsPaging extends Vps_View_Helper_Partials
+class Vps_Component_View_Helper_PartialsPaging extends Vps_Component_View_Helper_Partials
 {
     public function partialsPaging($component)
     {

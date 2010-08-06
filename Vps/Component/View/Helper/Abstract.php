@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_View_Helper_Abstract
+abstract class Vps_Component_View_Helper_Abstract
 {
     protected $_view;
 
