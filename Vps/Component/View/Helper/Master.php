@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Output_Master extends Vps_Component_Output_Abstract
+class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
 {
     private $_templateComponentId = '';
 

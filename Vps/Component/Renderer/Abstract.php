@@ -102,7 +102,7 @@ abstract class Vps_Component_Renderer_Abstract
 
             } else {
 
-                $class = 'Vps_Component_Output_' . ucfirst($type);
+                $class = 'Vps_Component_View_Helper_' . ucfirst($type);
                 $output = new $class();
                 $view->clearVars();
                 if ($useCache) {

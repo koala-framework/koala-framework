@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_Component extends Vps_View_Helper_Abstract
+class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
 {
     public function component(Vps_Component_Data $component = null)
     {
@@ -42,5 +42,22 @@ class Vps_View_Helper_Component extends Vps_View_Helper_Abstract
         if ($value) $componentId .= "($value)";
         if ($plugins) $componentId .= '[' . implode(' ', $plugins) . ']';
         return '{' . "$type: $componentId $config" . '}';
+    }
+
+    public function render($component, $config, $view)
+    {
+        $template = Vpc_Abstract::getTemplateFile($component->componentClass);
+        if (!$template) throw new Vps_Exception("No Component-Template found for '{$component->componentClass}'");
+
+        $vars = $component->getComponent()->getTemplateVars();
+        if (is_null($vars)) throw new Vps_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
+
+        $view->assign($vars);
+        return $view->render($template);
+    }
+
+    protected function _saveMeta($component)
+    {
+        return $component->getComponent()->saveCache();
     }
 }
