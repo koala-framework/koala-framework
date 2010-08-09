@@ -27,10 +27,14 @@ class Vps_Acl_Component_IsiWeb extends Vps_Acl_Component
                     array('text'=>trlVps('Time recording'), 'icon'=>'clock.png'),
                     '/vps/project-timer/timer'), 'settings');
                 $this->add(new Zend_Acl_Resource('vps_project-timer_years'), 'vps_project-timer_timer');
+            $this->add(new Vps_Acl_Resource_MenuUrl('vps_component_clear-cache',
+                    array('text'=>trlVps('Clear Cache'), 'icon'=>'database.png'),
+                    '/admin/component/clear-cache'), 'settings');
 
 
         $this->allow('admin', null);
         $this->allow('superuser', 'settings');
         $this->allow('superuser', 'vps_enquiries_enquiries');
+        $this->deny('superuser', 'vps_component_clear-cache');
     }
 }
