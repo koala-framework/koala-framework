@@ -10,11 +10,11 @@ class Vps_Model_Mail extends Vps_Model_Db_Proxy
     protected $_additionalStore = null;
     protected $_spamFields = array('*');
 
-
     protected function _init()
     {
         $this->_siblingModels['vars'] = new Vps_Model_Mail_VarsSibling(array('fieldName' => 'serialized_mail_vars'));
         $this->_siblingModels['essentials'] = new Vps_Model_Field(array('fieldName' => 'serialized_mail_essentials'));
+        $this->_dependentModels['Attachments'] = new Vps_Model_FieldRows(array('fieldName'=>'mail_attachments'));
         parent::_init();
     }
 

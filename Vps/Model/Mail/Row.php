@@ -86,6 +86,12 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         if ($from && $from['email']) {
             $mail->setFrom($from['email'], $from['name']);
         }
+        $attachments = $this->getAttachments();
+        if ($attachments) {
+            foreach ($attachments as $attachment) {
+                $mail->addAttachment($attachment);
+            }
+        }
 
         return $mail;
     }
@@ -113,10 +119,13 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             if ($item) $mail->setReturnPath($item);
 
             $items = $this->getBcc();
-            if ($items) { foreach ($items as $item) $mail->addBcc($item['email'], $item['name']); }
+            if ($items) { foreach ($items as $item) $mail->addBcc($item); }
 
             $items = $this->getCc();
             if ($items) { foreach ($items as $item) $mail->addCc($item['email'], $item['name']); }
+
+            $items = $this->getAttachments();
+            if ($items) { foreach ($items as $item) $mail->addAttachment($item); }
 
             $mail->setSubject($this->subject);
             $mail->setBodyText($this->sent_mail_content_text);
@@ -225,6 +234,25 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
     }
 
 
+    public function addAttachment($file, $mailFilename = null)
+    {
+        $attachRow = $this->createChildRow('Attachments');
+        if (is_object($file) && is_instance_of($file, 'Vps_Uploads_Row')) {
+            $attachRow->is_upload = 1;
+            $attachRow->uploads_id = $file->id;
+            $attachRow->filepath = $file->getFileSource();
+            $attachRow->mail_filename = (!is_null($mailFilename) ? $mailFilename : $file->filename.'.'.$file->extension);
+            $attachRow->mime_type = $file->mime_type;
+        } else {
+            $attachRow->is_upload = 0;
+            $attachRow->filepath = $file;
+            $attachRow->mail_filename = (!is_null($mailFilename) ? $mailFilename : basename($file));
+            $attachRow->mime_type = Vps_Uploads_Row::detectMimeType(false, file_get_contents($file));
+        }
+
+        $attachRow->save();
+    }
+
     public function addCc($email, $name = '')
     {
         $this->_addToSerializedEssentialsColumn(
@@ -302,5 +330,23 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         $row = $this->_getEssentialsRow();
         if (!$row->from) return array();
         return unserialize($row->from);
+    }
+
+    /**
+     * @return An array of Zend_Mime_Part elements
+     */
+    public function getAttachments()
+    {
+        $ret = array();
+        $attachmentRows = $this->getChildRows('Attachments');
+        foreach ($attachmentRows as $attachmentRow) {
+            $mime = new Zend_Mime_Part(file_get_contents($attachmentRow->filepath));
+            $mime->filename = $attachmentRow->mail_filename;
+            $mime->encoding = Zend_Mime::ENCODING_BASE64;
+            $mime->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+            $mime->type = $attachmentRow->mime_type;
+            $ret[] = $mime;
+        }
+        return $ret;
     }
 }
