@@ -32,18 +32,22 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
 
     public function testText()
     {
-        $model = new Vps_Model_Mail(array(
-            'tpl' => 'UserDeleted',
-        ));
-
         $uploads = Vps_Model_Abstract::getInstance('Vps_Uploads_TestModel');
+
+        $model = new Vps_Model_Mail(array(
+            'tpl' => 'tests/Vps/Model/Mail/Resend/Mail',
+        ));
+        $model->setAttachmentSaveFolder($uploads->getUploadDir().'/mailattachments');
+        if (!file_exists($uploads->getUploadDir().'/mailattachments') || !is_dir($uploads->getUploadDir().'/mailattachments')) {
+            mkdir($uploads->getUploadDir().'/mailattachments');
+        }
+
         $ulRow = $uploads->createRow();
         $ulRow->writeFile('foocontent', 'modelmail', 'txt');
 
         $row = $model->createRow();
         $row->fullname = 'Test Tester';
-        $row->webUrl = 'http://mytesturl.vivid';
-        $row->applicationName = 'myapp';
+        $row->imagepath = realpath(dirname(__FILE__));
 
         $row->addTo('mytest@vivid.vps', 'Test1');
         $row->addTo('mytest2@vivid.vps', 'Test2');
