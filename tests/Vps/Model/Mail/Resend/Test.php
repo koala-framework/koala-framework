@@ -4,6 +4,7 @@
  * @group Model_Mail
  * @group Model_Mail_Resend
  * @group Mail
+ * @group slow
  */
 class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
 {
@@ -16,7 +17,7 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->assertFalse(Vps_User_Model::isLockedCreateUser());
-//         Vps_Test_SeparateDb::restoreTestDb();
+        Vps_Test_SeparateDb::restoreTestDb();
         parent::tearDown();
     }
 
@@ -35,16 +36,32 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
             'tpl' => 'UserDeleted',
         ));
 
+        $uploads = Vps_Model_Abstract::getInstance('Vps_Uploads_TestModel');
+        $ulRow = $uploads->createRow();
+        $ulRow->writeFile('foocontent', 'modelmail', 'txt');
+
         $row = $model->createRow();
         $row->fullname = 'Test Tester';
         $row->webUrl = 'http://mytesturl.vivid';
         $row->applicationName = 'myapp';
 
-        $row->addTo('mytest@vivid.vps');
+        $row->addTo('mytest@vivid.vps', 'Test1');
+        $row->addTo('mytest2@vivid.vps', 'Test2');
+        $row->setFrom('test-from@vivid.vps', 'Test From');
+        $row->addBcc('test-bcc1@vivid.vps');
+        $row->addBcc('test-bcc2@vivid.vps');
+        $row->addCc('test-cc1@vivid.vps', 'Test cc 1');
+        $row->addCc('test-cc2@vivid.vps', 'Test cc 2');
+        $row->setReturnPath('test-return@vivid.vps');
         $row->subject = 'myblubb subject';
 
-        $row->save();
+        $row->addAttachment(realpath(dirname(__FILE__).'/rtr.png'));
+        $row->addAttachment(realpath(dirname(__FILE__).'/rtr.png'), 'rtrtest.png');
 
+        $row->addAttachment($ulRow);
+        $row->addAttachment($ulRow, 'myfoomodelmail.txt');
+
+        $row->save();
         $mailFirst = $this->_getLatestMail();
 
         $row->sendMail();
@@ -53,6 +70,13 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
 
         $this->assertNotEquals($mailFirst->id, $mailSecond->id);
         $this->assertEquals($mailFirst->subject, $mailSecond->subject);
+        $this->assertEquals($mailFirst->to, $mailSecond->to);
+        $this->assertEquals($mailFirst->from, $mailSecond->from);
+        $this->assertEquals($mailFirst->return_path, $mailSecond->return_path);
+        $this->assertEquals($mailFirst->bcc, $mailSecond->bcc);
+        $this->assertEquals($mailFirst->cc, $mailSecond->cc);
+        $this->assertEquals($mailFirst->attachment_filenames, $mailSecond->attachment_filenames);
+        $this->assertEquals('rtr.png;rtrtest.png;modelmail.txt;myfoomodelmail.txt', $mailSecond->attachment_filenames);
         $this->assertEquals($mailFirst->body_text->getContent(), $mailSecond->body_text->getContent());
         $this->assertEquals($mailFirst->body_html->getContent(), $mailSecond->body_html->getContent());
     }

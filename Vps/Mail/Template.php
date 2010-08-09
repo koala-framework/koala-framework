@@ -174,6 +174,18 @@ class Vps_Mail_Template
         return $this;
     }
 
+    public function setReturnPath($email)
+    {
+        $this->_mail->setReturnPath($email);
+        return $this;
+    }
+
+    public function addAttachment(Zend_Mime_Part $attachment)
+    {
+        $this->_mail->addAttachment($attachment);
+        return $this;
+    }
+
     // constants for type defined in Vps_Model_Mail_Row
     public function getMailContent($type = Vps_Model_Mail_Row::GET_MAIL_CONTENT_AUTO)
     {
