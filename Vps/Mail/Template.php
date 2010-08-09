@@ -39,17 +39,15 @@ class Vps_Mail_Template
             }
             $this->_templateForDbVars = $template;
 
-            $template = "mails/$template";
-
-            if (!file_exists("application/views/$template.txt.tpl")
-                && !file_exists(VPS_PATH."/views/$template.txt.tpl")
-            ) {
-                throw new Vps_Exception("There has to exist at least a .txt.tpl mail template for '$template'.");
+            if (false === $this->_view->getScriptPath("$template.txt.tpl")) {
+                $template = "mails/$template";
+                if (false === $this->_view->getScriptPath("$template.txt.tpl")) {
+                    throw new Vps_Exception("There has to exist at least a .txt.tpl mail template for '$template'.");
+                }
             }
             $this->_txtTemplate = "$template.txt.tpl";
-            if (file_exists("application/views/$template.html.tpl")
-                || file_exists(VPS_PATH."/views/$template.html.tpl")
-            ) {
+
+            if (false !== $this->_view->getScriptPath("$template.html.tpl")) {
                 $this->_htmlTemplate = "$template.html.tpl";
             }
         }

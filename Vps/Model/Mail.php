@@ -9,6 +9,7 @@ class Vps_Model_Mail extends Vps_Model_Db_Proxy
     protected $_mailMasterTemplate;
     protected $_additionalStore = null;
     protected $_spamFields = array('*');
+    protected $_attachmentSaveFolder = null;
 
     protected function _init()
     {
@@ -47,6 +48,25 @@ class Vps_Model_Mail extends Vps_Model_Db_Proxy
             }
             $this->_spamFields = $config['spamFields'];
         }
+    }
+
+    public function setAttachmentSaveFolder($path)
+    {
+        $this->_attachmentSaveFolder = $path;
+    }
+
+    public function getAttachmentSaveFolder()
+    {
+        if (!is_null($this->_attachmentSaveFolder)) return $this->_attachmentSaveFolder;
+
+        $ret = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')->getUploadDir();
+        if (substr($ret, -1) != '/') $ret .= '/';
+        $ret .= 'mailattachments';
+        if (!file_exists($ret) || !is_dir($ret)) {
+            mkdir($ret);
+        }
+        $this->_attachmentSaveFolder = $ret;
+        return $this->_attachmentSaveFolder;
     }
 
     public function getAdditionalStore()

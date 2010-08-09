@@ -93,6 +93,17 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             }
         }
 
+        // image helper bilder zu attachments hängen
+
+
+/** TODO: das funzt noch nicht weil die image helper attachments im
+Vps_Mail_Template direkt vor dem senden hinzugefügt werden. wie soll man da rankommen???
+**/
+d($mail->getView()->getImages());
+foreach ($mail->getView()->getImages() as $image) {
+    $this->_mail->addAttachment($image);
+}
+
         return $mail;
     }
 
@@ -233,21 +244,32 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         $row->mailerClass = $mailerClass;
     }
 
-
     public function addAttachment($file, $mailFilename = null)
     {
         $attachRow = $this->createChildRow('Attachments');
         if (is_object($file) && is_instance_of($file, 'Vps_Uploads_Row')) {
+            // sollten uploads mal gelöscht werden, müssen diese auch in den
+            // unterordner kopiert werden
             $attachRow->is_upload = 1;
-            $attachRow->uploads_id = $file->id;
-            $attachRow->filepath = $file->getFileSource();
+            $attachRow->upload_model = get_class($file->getModel());
+            $attachRow->filename = $file->id;
             $attachRow->mail_filename = (!is_null($mailFilename) ? $mailFilename : $file->filename.'.'.$file->extension);
             $attachRow->mime_type = $file->mime_type;
         } else {
+            // die datei in einen uploads unterordner kopieren, könnte ja
+            // zwischendurch mal geloescht werden
+            $copyDir = $this->getModel()->getAttachmentSaveFolder();
+
+            $fileMd5 = md5_file($file);
+            $newFilepath = $copyDir.'/'.$fileMd5;
+            if (!file_exists($newFilepath)) {
+                copy($file, $newFilepath);
+            }
+
             $attachRow->is_upload = 0;
-            $attachRow->filepath = $file;
+            $attachRow->filename = $fileMd5;
             $attachRow->mail_filename = (!is_null($mailFilename) ? $mailFilename : basename($file));
-            $attachRow->mime_type = Vps_Uploads_Row::detectMimeType(false, file_get_contents($file));
+            $attachRow->mime_type = Vps_Uploads_Row::detectMimeType(false, file_get_contents($newFilepath));
         }
 
         $attachRow->save();
@@ -340,13 +362,30 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         $ret = array();
         $attachmentRows = $this->getChildRows('Attachments');
         foreach ($attachmentRows as $attachmentRow) {
-            $mime = new Zend_Mime_Part(file_get_contents($attachmentRow->filepath));
-            $mime->filename = $attachmentRow->mail_filename;
-            $mime->encoding = Zend_Mime::ENCODING_BASE64;
-            $mime->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-            $mime->type = $attachmentRow->mime_type;
-            $ret[] = $mime;
+            if ($attachmentRow->is_upload) {
+                $uploadRow = Vps_Model_Abstract::getInstance($attachmentRow->upload_model)
+                    ->getRow($attachmentRow->filename);
+                if (!$uploadRow) {
+                    throw new Vps_Exception("UploadRow '".$attachmentRow->filename."' konnte in Upload Model '".$attachmentRow->upload_model."' nicht gefunden werden");
+                }
+                $mime = new Zend_Mime_Part(file_get_contents($uploadRow->getFileSource()));
+                $mime->filename = $attachmentRow->mail_filename;
+                $mime->encoding = Zend_Mime::ENCODING_BASE64;
+                $mime->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+                $mime->type = $attachmentRow->mime_type;
+                $ret[] = $mime;
+            } else {
+                $copyDir = $this->getModel()->getAttachmentSaveFolder();
+
+                $mime = new Zend_Mime_Part(file_get_contents($copyDir.'/'.$attachmentRow->filename));
+                $mime->filename = $attachmentRow->mail_filename;
+                $mime->encoding = Zend_Mime::ENCODING_BASE64;
+                $mime->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+                $mime->type = $attachmentRow->mime_type;
+                $ret[] = $mime;
+            }
         }
+
         return $ret;
     }
 }
