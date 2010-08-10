@@ -1,2 +1,2 @@
 Das ist der Test:<br /> <?= $this->fullname; ?>
-<?= $this->image($this->imagepath.'/visible.png'); ?>
+<?= $this->image($this->imagepath.'/paragraphDelete.png'); ?>

@@ -86,23 +86,12 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         if ($from && $from['email']) {
             $mail->setFrom($from['email'], $from['name']);
         }
-        $attachments = $this->getAttachments();
+        $attachments = $this->_getAttachments();
         if ($attachments) {
             foreach ($attachments as $attachment) {
                 $mail->addAttachment($attachment);
             }
         }
-
-        // image helper bilder zu attachments hängen
-
-
-/** TODO: das funzt noch nicht weil die image helper attachments im
-Vps_Mail_Template direkt vor dem senden hinzugefügt werden. wie soll man da rankommen???
-**/
-d($mail->getView()->getImages());
-foreach ($mail->getView()->getImages() as $image) {
-    $this->_mail->addAttachment($image);
-}
 
         return $mail;
     }
@@ -113,37 +102,54 @@ foreach ($mail->getView()->getImages() as $image) {
             $mail = $this->_prepareMail();
             $mail->send();
 
+            if ($mail->getView()->getImages()) {
+                $addedImages = array();
+                foreach ($mail->getView()->getImages() as $image) {
+                    if (in_array($image, $addedImages)) continue;
+                    $this->_saveAttachmentData($image);
+                    $addedImages[] = $image;
+                }
+            }
+
             // save sent mail in database
             $this->sent_mail_content_text = $mail->getMailContent(self::GET_MAIL_CONTENT_TEXT);
             $this->sent_mail_content_html = $mail->getMailContent(self::GET_MAIL_CONTENT_HTML);
             $this->save();
         } else {
-            $mail = new Vps_Mail();
-
-            $items = $this->getTo();
-            if ($items) { foreach ($items as $item) $mail->addTo($item['email'], $item['name']); }
-
-            $item = $this->getFrom();
-            if ($item) $mail->setFrom($item['email'], $item['name']);
-
-            $item = $this->getReturnPath();
-            if ($item) $mail->setReturnPath($item);
-
-            $items = $this->getBcc();
-            if ($items) { foreach ($items as $item) $mail->addBcc($item); }
-
-            $items = $this->getCc();
-            if ($items) { foreach ($items as $item) $mail->addCc($item['email'], $item['name']); }
-
-            $items = $this->getAttachments();
-            if ($items) { foreach ($items as $item) $mail->addAttachment($item); }
-
-            $mail->setSubject($this->subject);
-            $mail->setBodyText($this->sent_mail_content_text);
-            if ($this->sent_mail_content_html) $mail->setBodyHtml($this->sent_mail_content_html);
-
-            $mail->send();
+            throw new Vps_Exception("'sendMail' may only be called once (usually in _afterInsert). Maybe you wanted to call 'resendMail()'");
         }
+    }
+
+    public function resendMail()
+    {
+        $mail = new Vps_Mail();
+
+        $items = $this->getTo();
+        if ($items) { foreach ($items as $item) $mail->addTo($item['email'], $item['name']); }
+
+        $item = $this->getFrom();
+        if ($item) $mail->setFrom($item['email'], $item['name']);
+
+        $item = $this->getReturnPath();
+        if ($item) $mail->setReturnPath($item);
+
+        $items = $this->getBcc();
+        if ($items) { foreach ($items as $item) $mail->addBcc($item); }
+
+        $items = $this->getCc();
+        if ($items) { foreach ($items as $item) $mail->addCc($item['email'], $item['name']); }
+
+        $items = $this->_getAttachments();
+        if ($items) {
+            $mail->setType(Zend_Mime::MULTIPART_RELATED);
+            foreach ($items as $item) $mail->addAttachment($item);
+        }
+
+        $mail->setSubject($this->subject);
+        $mail->setBodyText($this->sent_mail_content_text);
+        if ($this->sent_mail_content_html) $mail->setBodyHtml($this->sent_mail_content_html);
+
+        $mail->send();
     }
 
     protected function _beforeInsert()
@@ -244,35 +250,61 @@ foreach ($mail->getView()->getImages() as $image) {
         $row->mailerClass = $mailerClass;
     }
 
-    public function addAttachment($file, $mailFilename = null)
+    private function _saveAttachmentData($file, $mailFilename = null, $mimeType = null)
     {
         $attachRow = $this->createChildRow('Attachments');
-        if (is_object($file) && is_instance_of($file, 'Vps_Uploads_Row')) {
-            // sollten uploads mal gelöscht werden, müssen diese auch in den
-            // unterordner kopiert werden
-            $attachRow->is_upload = 1;
-            $attachRow->upload_model = get_class($file->getModel());
-            $attachRow->filename = $file->id;
-            $attachRow->mail_filename = (!is_null($mailFilename) ? $mailFilename : $file->filename.'.'.$file->extension);
-            $attachRow->mime_type = $file->mime_type;
-        } else {
-            // die datei in einen uploads unterordner kopieren, könnte ja
-            // zwischendurch mal geloescht werden
-            $copyDir = $this->getModel()->getAttachmentSaveFolder();
+        $attachRow->is_upload = 0;
 
+        // die datei in einen uploads unterordner kopieren, könnte ja
+        // zwischendurch mal geloescht werden
+        $copyDir = $this->getModel()->getAttachmentSaveFolder();
+
+        if ($file instanceof Zend_Mime_Part) {
+            $fileContent = $file->getContent();
+            if ($file->encoding == Zend_Mime::ENCODING_BASE64) {
+                $fileContent = base64_decode($fileContent);
+            } else {
+                throw new Vps_Exception_NotYetImplemented("File encoding type '".$file->encoding."' not supported yet");
+            }
+            $fileMd5 = md5($file->getContent());
+            $newFilepath = $copyDir.'/'.$fileMd5;
+            if (!file_exists($newFilepath)) {
+                file_put_contents($newFilepath, $fileContent);
+            }
+
+            $attachRow->mail_filename = $file->filename;
+            $attachRow->mime_type = $file->type;
+            if ($file->id) $attachRow->cid = $file->id;
+        } else {
             $fileMd5 = md5_file($file);
             $newFilepath = $copyDir.'/'.$fileMd5;
             if (!file_exists($newFilepath)) {
                 copy($file, $newFilepath);
             }
 
-            $attachRow->is_upload = 0;
-            $attachRow->filename = $fileMd5;
             $attachRow->mail_filename = (!is_null($mailFilename) ? $mailFilename : basename($file));
-            $attachRow->mime_type = Vps_Uploads_Row::detectMimeType(false, file_get_contents($newFilepath));
+            $attachRow->mime_type = (!is_null($mimeType) ? $mimeType : Vps_Uploads_Row::detectMimeType(false, file_get_contents($newFilepath)));
         }
 
+        $attachRow->filename = $fileMd5;
         $attachRow->save();
+    }
+
+    public function addAttachment($file, $mailFilename = null)
+    {
+        if (is_object($file) && is_instance_of($file, 'Vps_Uploads_Row')) {
+            // sollten uploads mal gelöscht werden, müssen diese auch in den
+            // unterordner kopiert werden
+            $attachRow = $this->createChildRow('Attachments');
+            $attachRow->is_upload = 1;
+            $attachRow->upload_model = get_class($file->getModel());
+            $attachRow->filename = $file->id;
+            $attachRow->mail_filename = (!is_null($mailFilename) ? $mailFilename : $file->filename.'.'.$file->extension);
+            $attachRow->mime_type = $file->mime_type;
+            $attachRow->save();
+        } else {
+            $this->_saveAttachmentData($file, $mailFilename);
+        }
     }
 
     public function addCc($email, $name = '')
@@ -357,7 +389,7 @@ foreach ($mail->getView()->getImages() as $image) {
     /**
      * @return An array of Zend_Mime_Part elements
      */
-    public function getAttachments()
+    private function _getAttachments()
     {
         $ret = array();
         $attachmentRows = $this->getChildRows('Attachments');
@@ -382,6 +414,7 @@ foreach ($mail->getView()->getImages() as $image) {
                 $mime->encoding = Zend_Mime::ENCODING_BASE64;
                 $mime->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
                 $mime->type = $attachmentRow->mime_type;
+                if ($attachmentRow->cid) $mime->id = $attachmentRow->cid;
                 $ret[] = $mime;
             }
         }
