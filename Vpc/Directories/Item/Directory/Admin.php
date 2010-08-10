@@ -6,7 +6,6 @@ class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
     protected final function _getContentClass()
     { return null; }
 
-
     protected function _getPluginAdmins()
     {
         $lookForPluginClasses = $this->_getPluginParentComponents();

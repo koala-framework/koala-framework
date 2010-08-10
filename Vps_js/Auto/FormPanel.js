@@ -94,26 +94,26 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 if (!meta.form.tbar) meta.form.tbar = [];
                 meta.form.tbar.push(this.getAction(b));
             }
-	        if (meta.helpText) {
-				meta.form.tbar.push('->');
-	            meta.form.tbar.push(new Ext.Action({
-	                icon : '/assets/silkicons/information.png',
-	                cls : 'x-btn-icon',
-	                handler : function (a) {
-	                    var helpWindow = new Ext.Window({
-	                        html: meta.helpText,
-	                        width: 400,
-	                        bodyStyle: 'padding: 10px; background-color: white;',
-	                        autoHeight: true,
-	                        bodyBorder : false,
-	                        title: trlVps('Info'),
-	                        resize: false
-	                    });
-	                    helpWindow.show();
-	                },
-	                scope: this
-	            }));
-	        }
+            if (meta.helpText) {
+                meta.form.tbar.push('->');
+                meta.form.tbar.push(new Ext.Action({
+                    icon : '/assets/silkicons/information.png',
+                    cls : 'x-btn-icon',
+                    handler : function (a) {
+                        var helpWindow = new Ext.Window({
+                            html: meta.helpText,
+                            width: 400,
+                            bodyStyle: 'padding: 10px; background-color: white;',
+                            autoHeight: true,
+                            bodyBorder : false,
+                            title: trlVps('Info'),
+                            resize: false
+                        });
+                        helpWindow.show();
+                    },
+                    scope: this
+                }));
+            }
         }
         if (this.formPanel != undefined) {
             this.remove(this.formPanel, true);

@@ -258,6 +258,10 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                 $d['row']->pos = $d['pos'];
             }
         }
+
+        foreach ($postData['delete'] as $d) {
+            $d->delete();
+        }
     }
 
     public function validate($row, $postData)
@@ -307,25 +311,13 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     {
         $postData = $postData[$this->getFieldName()];
 
-        foreach ($postData['delete'] as $d) {
-            $d->delete();
-        }
-
         foreach ($postData['save'] as $i) {
             $r = $i['row'];
             $rowPostData = $i['data'];
             foreach ($this->fields as $field) {
                 $field->save($r, $rowPostData);
             }
-        }
-    }
 
-    public function afterSave($row, $postData)
-    {
-        $postData = $postData[$this->getFieldName()];
-
-        foreach ($postData['save'] as $i) {
-            $r = $i['row'];
             if ($i['insert']
                 && !isset($this->_referenceName) //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
             ) {
