@@ -69,10 +69,13 @@ class Vps_Form extends Vps_Form_NonTableForm
         }
         $this->_beforeSave($row);
 
-        parent::save($parentRow, $postData);
         if (!$this->_rowIsParentRow($parentRow)) {
+            //speichern *vor* parent::save wegen:
+            //- verschachtelten forms, beim hinzufügen brauchen die kinder die neue id
+            //- MultiFields auch beim hinzufügen ohne Model Relation brauchen wir die neue id
             $row->save();
         }
+        parent::save($parentRow, $postData);
 
         if (!$this->getId()) {
             $this->_afterInsert($row);

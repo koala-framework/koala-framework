@@ -80,14 +80,11 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
 
     public function testEnAlternativeClearCache()
     {
-//         file_put_contents('log', "\ntest start testEnAlternativeClearCache\n", FILE_APPEND);
         $c = $this->_root->getComponentById('root-en_test1');
 
-//         file_put_contents('log', "\n120x120 zum ersten mal\n", FILE_APPEND);
         $this->_checkTheSizes($c->render(), 1, 120, 120);
 
         $this->_process();
-//         file_put_contents('log', "\n120x120 gleich nochmal, jetzt gecached\n", FILE_APPEND);
         $this->_checkTheSizes($c->render(), 1, 120, 120);
 
         $row = $c->getComponent()->getRow();
@@ -99,8 +96,7 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
         $row->vps_upload_id = 2;
         $row->save();
         $this->_process();
-        
-//         file_put_contents('log', "\n120x101 wurde geaendert, ungecached\n", FILE_APPEND);
+
         $this->_checkTheSizes($c->render(), 2, 120, 101);
     }
 
@@ -110,7 +106,6 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
 
         preg_match('#src="(.+?)"#ms', $html, $matches);
 
-        file_put_contents('log', "\nhttp request\n", FILE_APPEND);
         $smallSrcSize = getimagesize('http://'.Vps_Registry::get('testDomain').$matches[1]);
 
         $this->assertEquals($smallWidth, $smallSrcSize[0]);

@@ -16,6 +16,7 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
         }
 
         $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+
         return $ret;
     }
 

@@ -7,6 +7,8 @@ class Vps_Component_Generator_Plugin_Tags_Component extends Vps_Component_Genera
         $ret['componentName'] = trlVps('Tags');
         $ret['assetsAdmin']['dep'][] = 'VpsAutoAssignGrid';
         $ret['childModel'] = 'Vps_Component_Generator_Plugin_Tags_ComponentsToTagsModel';
+
+        $ret['extConfig'] = 'Vps_Component_Generator_Plugin_Tags_ExtConfig';
         return $ret;
     }
 

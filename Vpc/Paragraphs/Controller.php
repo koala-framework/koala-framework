@@ -63,7 +63,7 @@ class Vpc_Paragraphs_Controller_EditComponentsData extends Vps_Data_Abstract
         $ret = $this->_getEditConfigs($classes[$row->component], $gen, '{componentId}-{0}', '');
         $component = Vps_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id.'-'.$row->id, array('ignoreVisible'=>true));
         foreach (Vps_Controller_Action_Component_PagesController::getSharedComponents($component) as $cls=>$cmp) {
-            $cfg = Vpc_Admin::getInstance($cls)->getExtConfig(Vpc_Admin::EXT_CONFIG_SHARED);
+            $cfg = Vpc_Admin::getInstance($cls)->getExtConfig(Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED);
             foreach ($cfg as $k=>$c) {
                 if (!isset($this->_componentConfigs[$cls.'-'.$k])) {
                     $this->_componentConfigs[$cls.'-'.$k] = $c;
