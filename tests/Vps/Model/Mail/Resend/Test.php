@@ -68,7 +68,7 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
         $row->save();
         $mailFirst = $this->_getLatestMail();
 
-        $row->sendMail();
+        $row->resendMail();
 
         $mailSecond = $this->_getLatestMail();
 
@@ -80,7 +80,7 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($mailFirst->bcc, $mailSecond->bcc);
         $this->assertEquals($mailFirst->cc, $mailSecond->cc);
         $this->assertEquals($mailFirst->attachment_filenames, $mailSecond->attachment_filenames);
-        $this->assertEquals('rtr.png;rtrtest.png;modelmail.txt;myfoomodelmail.txt', $mailSecond->attachment_filenames);
+        $this->assertEquals('rtr.png;rtrtest.png;modelmail.txt;myfoomodelmail.txt;paragraphDelete.png', $mailSecond->attachment_filenames);
         $this->assertEquals($mailFirst->body_text->getContent(), $mailSecond->body_text->getContent());
         $this->assertEquals($mailFirst->body_html->getContent(), $mailSecond->body_html->getContent());
     }
