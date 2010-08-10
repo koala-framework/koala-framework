@@ -35,7 +35,8 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
     {
         return new Vps_Model_Mail(array(
             'componentClass' => get_class($this),
-            'referenceMap' => $referenceMap
+            'referenceMap' => $referenceMap,
+            'mailerClass' => 'Vps_Mail'
         ));
     }
 
@@ -58,7 +59,10 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
             if ($f->getName() && $f->getFieldLabel()) {
                 if ($f instanceof Vps_Form_Field_File) {
                     $uploadRow = $row->getParentRow($f->getName());
-                    //$row->addAttachment(....);
+                    if ($uploadRow) {
+                        $row->addAttachment($uploadRow);
+                        $msg .= $f->getFieldLabel().": {$uploadRow->filename}.{$uploadRow->extension} ".trlVps('attached')."\n";
+                    }
                 } else {
                     $msg .= $f->getFieldLabel().': '.$row->{$f->getName()}."\n";
                 }
