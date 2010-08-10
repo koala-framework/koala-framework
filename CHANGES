@@ -10,6 +10,7 @@ Neue Features:
 - Vpc_List_Switch hat transitions (fade ist jetzt standard) und die weiter-pfeile
   funktionieren über das ende hinaus und fangen wieder von vorn an
 - Directory Administration: es gibt jetzt ExtConfigTabs
+- Neues EyeCandy: Vps.Switch.Overlay
 
 möglicherweise nicht kompatible Änderungen:
 - editComponents werden im Seitenbaum nur mehr berücksichtigt wenn direkt unter der bearbeitenden Komponente liegen
