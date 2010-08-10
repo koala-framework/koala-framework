@@ -25,6 +25,7 @@ möglicherweise nicht kompatible Änderungen:
 - Admin::getExtConfig gibts nicht mehr, durch extConfig Setting ersetzen
 - Vpc_Abstract_List_*Admin und Vpc_Abstract_Composite_*Admin gibts nicht mehr, stattdessen
   sollte die passende extConfig Einstellung gesetzt werden
+- Update auf Zend 1.10.7
 
 == 1.9 ==
 Erstellt: 07.05.10
