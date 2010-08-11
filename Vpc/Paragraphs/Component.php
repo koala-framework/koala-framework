@@ -63,4 +63,11 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         );
         return $ret;
     }
+
+    public static function getStaticCacheMeta()
+    {
+        return array(
+            new Vps_Component_Cache_Meta_Static_ChildModel()
+        );
+    }
 }

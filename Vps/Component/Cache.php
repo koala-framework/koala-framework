@@ -29,4 +29,18 @@ class Vps_Component_Cache
     {
         self::$_instance = null;
     }
+
+    public static function refreshStaticCache()
+    {
+        foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+            $class = $componentClass;
+            if (($pos = strpos($class, '.')) !== false)
+                $class = substr($componentClass, 0, $pos);
+            if (!is_instance_of($class, 'Vpc_Abstract')) continue;
+            $metas = call_user_func(array($class, 'getStaticCacheMeta'), $componentClass);
+            foreach ($metas as $meta) {
+                self::getInstance()->saveMetaStatic($componentClass, $meta);
+            }
+        }
+    }
 }

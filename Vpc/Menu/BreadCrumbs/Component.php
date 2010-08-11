@@ -38,9 +38,9 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheVars()
+    public static function getStaticCacheMeta()
     {
-        $ret = array();
+        $ret = parent::getStaticCacheMeta();
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
             foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
                 if (!is_instance_of($generator['class'], 'Vps_Component_Generator_PseudoPage_Table') &&
@@ -49,19 +49,11 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
                 $generator = current(Vps_Component_Generator_Abstract::getInstances(
                     $componentClass, array('generator' => $key))
                 );
-                $model = $generator->getModel();
-                if ($model instanceof Vps_Model_Db) $model = $model->getTable();
-                $ret[] = array(
-                    'model' => get_class($model)
-                );
+                $ret[] = Vps_Component_Cache_Meta_Static_Model($generator->getModel());
             }
         }
-        $ret[] = array(
-            'model' => 'Vps_Component_Model'
-        );
-        $ret[] = array(
-            'model' => 'Vpc_Root_Category_GeneratorModel'
-        );
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel');
         return $ret;
     }
 }

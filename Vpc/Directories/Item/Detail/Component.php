@@ -22,18 +22,10 @@ class Vpc_Directories_Item_Detail_Component extends Vpc_Abstract_Composite_Compo
     {
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        if (isset($this->getData()->row)) {
-            $row = $this->getData()->row;
-            $model = $row->getModel();
-            $primaryKey = $model->getPrimaryKey();
-            $ret[] = array(
-                'model' => $model,
-                'id' => $row->$primaryKey
-            );
-        }
+        $ret = parent::getStaticCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_GeneratorRow();
         return $ret;
     }
 }

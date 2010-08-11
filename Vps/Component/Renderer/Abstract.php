@@ -103,14 +103,14 @@ abstract class Vps_Component_Renderer_Abstract
             } else {
 
                 $class = 'Vps_Component_View_Helper_' . ucfirst($type);
-                $output = new $class();
+                $helper = new $class();
                 $view->clearVars();
                 if ($useCache) {
                     $component = $this->_getComponent($componentId);
                 } else {
                     $component = $componentId;
                 }
-                $content = $output->render($component, $config, $view);
+                $content = $helper->render($component, $config, $view);
                 $stats['rendered'][] = $statId;
                 foreach ($plugins as $pluginClass) {
                     $plugin = new $pluginClass($componentId);
@@ -130,7 +130,7 @@ abstract class Vps_Component_Renderer_Abstract
                         if (!$cacheSettings['enabled']) $useCache = false;
                     }
                     if ($useCache) {
-                        $written = $output->saveCache($component, $content);
+                        $written = $helper->saveCache($component, $content);
                         if ($written) {
                             $stats['cacheSaved'][] = $statId;
                             $page = $component->getPage();
