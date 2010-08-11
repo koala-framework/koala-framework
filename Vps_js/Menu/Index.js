@@ -126,17 +126,22 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 
         this.add(new Ext.Toolbar.Fill());
 
-        if (result.hasFrontend) {
-            this.add({
-                tooltip: trlVps('Open frontend in a new window'),
-                cls: 'x-btn-icon',
-                icon: '/assets/silkicons/world.png',
-                handler: function() {
-                    window.open('/');
-                },
-                scope: this
-            });
-        }
+        this.showUserMenu = new Ext.Button({
+            tooltip: trlVps('Show User Menu'),
+            cls: 'x-btn-icon',
+            icon: '/assets/silkicons/bullet_arrow_down.png',
+            handler: function() {
+                if (!this.userToolbar.isVisible()) {
+                    this.showUserMenu.btnEl.setStyle('background-image', 'url(/assets/silkicons/bullet_arrow_up.png)');
+                    this.userToolbar.show();
+                } else {
+                    this.showUserMenu.btnEl.setStyle('background-image', 'url(/assets/silkicons/bullet_arrow_down.png)');
+                    this.userToolbar.hide();
+                }
+            },
+            scope: this
+        });
+        this.add(this.showUserMenu);
 
         if (result.changeUser) {
             var changeUser = new Vps.Form.ComboBox({
@@ -169,10 +174,18 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 });
             }, this);
             this.add(changeUser);
+            this.add(' ');
+            this.add(' ');
+            this.add('-');
         }
 
+        this.userToolbar = new Ext.Toolbar({
+            renderTo: this.el,
+            style: 'position:absolute;right:0',
+        });
+
         if (result.fullname && result.userSelfControllerUrl) {
-            this.add({
+            this.userToolbar.add({
                 id: 'currentUser',
                 text: result.fullname,
                 cls: 'x-btn-text-icon',
@@ -194,7 +207,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
             });
         }
         if (result.showLogout) {
-            this.add({
+            this.userToolbar.add({
                 cls: 'x-btn-icon',
                 tooltip: trlVps('Logout'),
                 icon: '/assets/silkicons/door_out.png',
@@ -212,7 +225,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 scope: this
             });
         }
-        this.add({
+        this.userToolbar.add({
             cls: 'x-btn-icon',
             icon: '/assets/vps/images/information.png',
             tooltip: trlVps('Information'),
@@ -224,21 +237,35 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         });
 
         if (Vps.Debug.showMenu) {
-            this.add('-');
-            this.add({
+            this.userToolbar.add('-');
+            this.userToolbar.add({
                 cls: 'x-btn-icon',
                 icon: '/assets/silkicons/bug.png',
                 menu: new Vps.Debug.Menu()
             });
         } else if (Vps.Debug.showActivator) {
-            this.add('-');
-            this.add({
+            this.userToolbar.add('-');
+            this.userToolbar.add({
                 tooltip: 'Activate Debugging',
                 cls: 'x-btn-icon',
                 icon: '/assets/silkicons/bug.png',
                 handler: function() {
                     location.href = '/vps/debug/activate?url=' + location.href;
                 }
+            });
+        }
+        this.userToolbar.hide();
+
+
+        if (result.hasFrontend) {
+            this.add({
+                tooltip: trlVps('Open frontend in a new window'),
+                cls: 'x-btn-icon',
+                icon: '/assets/silkicons/world.png',
+                handler: function() {
+                    window.open('/');
+                },
+                scope: this
             });
         }
     }
