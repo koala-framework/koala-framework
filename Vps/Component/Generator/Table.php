@@ -330,24 +330,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    public function getCacheVars($parentData)
-    {
-        $field = null;
-        $id = null;
-        if ($parentData && $this->_getModel()->hasColumn('component_id') && $this->_getModel()->getPrimaryKey() != 'component_id') {
-            $field = 'component_id';
-            $id = $parentData->dbId;
-        }
-        $ret = array(
-            array(
-                'model' => $this->getModel(),
-                'field' => $field,
-                'id' => $id
-            )
-        );
-        return $ret;
-    }
-
+    // TODO Cache
     public function getStaticCacheVarsForMenu()
     {
         $ret = array();

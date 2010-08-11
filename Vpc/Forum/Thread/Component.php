@@ -70,14 +70,10 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        $row = $this->getData()->row;
-        $ret[] = array(
-            'model' => get_class($row->getModel()),
-            'id' => $row->id
-        );
+        $ret = parent::getStaticCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_GeneratorRow();
         return $ret;
     }
 }

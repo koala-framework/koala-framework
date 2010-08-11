@@ -50,13 +50,10 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         return $this->getRow()->columns;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        $ret['tableData'] = array(
-            'model' => $this->getChildModel(),
-            'componentId' => $this->getData()->componentId
-        );
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
         return $ret;
     }
 }

@@ -280,33 +280,21 @@ class Vps_Component_Cache_Mysql
         );
     }
 
-    public function saveMeta(Vps_Component_Data $component, Vps_Component_Cache_Meta_Abstract $meta)
+    public function saveMeta($componentClass, Vps_Component_Cache_Meta_Abstract $meta)
     {
-        if ($meta instanceof Vps_Component_Cache_Meta_ModelField) {
-            //d($meta->getValue($component));
-            //$this->saveMetaRow();
-        } else {
-            throw new Vps_Exception('Unknow Meta: ' . get_class($meta));
-        }
-    }
-
-    public function saveMetaStatic($componentClass, Vps_Component_Cache_Meta_Static_Abstract $meta)
-    {
-        if ($meta instanceof Vps_Component_Cache_Meta_Static_ChildModel) {
-            $modelName = $meta->getModelname($componentClass);
-            echo ('ChildModel: ' . $componentClass . ': ' . $modelName . "\n");
-        } else if ($meta instanceof Vps_Component_Cache_Meta_Static_GeneratorRow) {
-            foreach ($meta->getModelnames($componentClass) as $modelName) {
-                echo ('GeneratorRow: ' . $componentClass . ': ' . $modelName . "\n");
+        if ($meta instanceof Vps_Component_Cache_Meta_Static_GeneratorRow) {
+            foreach ($meta->getCacheMeta($componentClass) as $meta) {
+                $this->saveMeta($componentClass, $meta);
             }
-        } else if ($meta instanceof Vps_Component_Cache_Meta_Static_OwnModel) {
+        } else if ($meta instanceof Vps_Component_Cache_Meta_Static_Abstract) {
             $modelName = $meta->getModelname($componentClass);
             if ($modelName) {
-                echo ('OwnModel: ' . $componentClass . ': ' . $modelName . "\n");
+                $pattern = $meta->getPattern();
+                echo substr(strrchr(get_class($meta), '_'), 1) . ': ' .
+                    $componentClass . ': ' .
+                    $modelName . ' (' .
+                    $pattern . ")\n";
             }
-        } else if ($meta instanceof Vps_Component_Cache_Meta_Static_Model) {
-            $modelName = $meta->getModelname($componentClass);
-            echo ('OwnModel: ' . $componentClass . ': ' . $modelName . "\n");
         } else {
             throw new Vps_Exception('Unknow Meta: ' . get_class($meta));
         }

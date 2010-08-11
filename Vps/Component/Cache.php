@@ -39,7 +39,7 @@ class Vps_Component_Cache
             if (!is_instance_of($class, 'Vpc_Abstract')) continue;
             $metas = call_user_func(array($class, 'getStaticCacheMeta'), $componentClass);
             foreach ($metas as $meta) {
-                self::getInstance()->saveMetaStatic($componentClass, $meta);
+                self::getInstance()->saveMeta($componentClass, $meta);
             }
         }
     }

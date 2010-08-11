@@ -48,17 +48,4 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
         }
         return $ret;
     }
-
-    public function getCacheVars()
-    {
-        $ret = parent::getCacheVars();
-        foreach ($this->getData()->getChildComponents(array('generator'=>'child', 'ignoreVisible'=>true)) as $p) {
-            $ret[] = array(
-                'model' => $this->getChildModel(),
-                'id' => $p->dbId,
-                'field' => 'component_id'
-            );
-        }
-        return $ret;
-    }
 }

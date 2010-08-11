@@ -69,19 +69,10 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         return false;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        $ret[] = $this->_getCacheVars();
+        $ret = parent::getStaticCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
         return $ret;
-    }
-
-    protected function _getCacheVars()
-    {
-        return array(
-            'model' => $this->getChildModel(),
-            'id' => $this->getData()->dbId,
-            'field' => 'component_id'
-        );
     }
 }

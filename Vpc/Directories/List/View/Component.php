@@ -203,14 +203,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         }
     }
 
-    public function getCacheVars()
-    {
-        $ret = parent::getCacheVars();
-        $ret = array_merge($ret, $this->_getCacheData());
-        return $ret;
-    }
-
-    private function _getCacheData($nr = null)
+    public function getCacheMeta()
     {
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
         $generator = null;
@@ -221,31 +214,8 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
                 Vpc_Abstract::getComponentClassByParentClass($dir), 'detail'
             );
         }
-
-        if ($generator) {
-            $ret = $generator->getCacheVars($dir instanceof Vps_Component_Data ? $dir : null);
-            if ($nr) {
-                foreach ($ret as $k=>$i) {
-                    if (!$i['field']) {
-                        $ret[$k]['id'] = $nr;
-                    }
-                }
-            }
-            return $ret;
-        }
-        return array();
-    }
-
-    public function getPartialCacheVars($nr)
-    {
-        $ret = array();
-        if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Id')) {
-            $ret = array_merge($ret, $this->_getCacheData($nr));
-        } else if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Paging')) {
-            $ret = array_merge($ret, $this->_getCacheData());
-        } else if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Random')) {
-            $ret = array_merge($ret, $this->_getCacheData());
-        }
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), "{component_id}-view");
         return $ret;
     }
 }

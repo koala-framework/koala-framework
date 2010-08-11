@@ -367,37 +367,20 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $this->getTemplateVars();
     }
 
-    public function getCacheVars()
+    // deprecated
+    public final function getCacheVars() {}
+    public final static function getStaticCacheVars() {}
+
+    public function getCacheMeta()
     {
-        $ret = array();
-        $row = $this->_getCacheRow();
-        if ($row) {
-            $model = $row->getModel();
-            $primaryKey = $model->getPrimaryKey();
-            $ret[] = array(
-                'model' => $model,
-                'id' => $row->$primaryKey
-            );
-        }
-        // Seite im Seitanbaum wird gelöscht, wenn Eigenschaften im Admin geändert werden
-        if ($this->getData()->isPage && is_numeric($this->getData()->componentId)) {
-            $ret[] = array(
-                'model' => 'Vpc_Root_Category_GeneratorModel',
-                'id' => $this->getData()->componentId
-            );
-        }
-        return $ret;
+        return array();
     }
 
     public static function getStaticCacheMeta() {
         return array(
-            new Vps_Component_Cache_Meta_Static_OwnModel()
+            new Vps_Component_Cache_Meta_Static_OwnModel(),
+            new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel'),
         );
-    }
-
-    protected function _getCacheRow()
-    {
-        return $this->_getRow();
     }
 
     public function onCacheCallback($row) {}
