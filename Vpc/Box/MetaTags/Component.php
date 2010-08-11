@@ -74,11 +74,11 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getCacheVars()
+    public function getCacheMeta()
     {
-        $ret = parent::getCacheVars();
+        $ret = parent::getCacheMeta();
         foreach ($this->_getMetaTagComponents() as $component) {
-            $ret = array_merge($ret, $component->getComponent()->getMetaTagCacheVars());
+            $ret[] = new Vps_Component_Cache_Meta_Component($component);
         }
         return $ret;
     }

@@ -9,21 +9,22 @@ class Vpc_Forum_Thread_Preview_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getCacheVars()
+    public function getCacheMeta()
     {
-        $ret = parent::getCacheVars();
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($row->getModel(), '{component_id}-moderate-close');
+        return $ret;
+    }
+
+    public function getCacheMeta()
+    {
+        $ret = parent::getCacheMeta();
         $threadVars = $this->getData()->parent->getComponent()->getThreadVars();
         if ($threadVars['lastPost']->user) {
-            $ret[] = array(
-                'model' => Vps_Registry::get('config')->user->model,
-                'id' => $threadVars['lastPost']->user->row->id
-            );
+            $ret[] = new Vps_Component_Cache_Meta_Row($threadVars['lastPost']->user->row);
         }
         if ($threadVars['firstPost']->user) {
-            $ret[] = array(
-                'model' => Vps_Registry::get('config')->user->model,
-                'id' => $threadVars['firstPost']->user->row->id
-            );
+            $ret[] = new Vps_Component_Cache_Meta_Row($threadVars['firstPost']->user->row);
         }
         return $ret;
     }

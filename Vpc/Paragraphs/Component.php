@@ -53,21 +53,10 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         return false;
     }
 
-    public function getCacheVars()
-    {
-        $ret = parent::getCacheVars();
-        $ret[] = array(
-            'model' => $this->getChildModel(),
-            'id' => $this->getData()->dbId,
-            'field' => 'component_id'
-        );
-        return $ret;
-    }
-
     public static function getStaticCacheMeta()
     {
-        return array(
-            new Vps_Component_Cache_Meta_Static_ChildModel()
-        );
+        $ret = parent::getStaticCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
+        return $ret;
     }
 }

@@ -187,17 +187,10 @@ class Vpc_Paging_Component extends Vpc_Abstract
         );
     }
 
-    public function getCacheVars()
+    public function getCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        $ret = array_merge($ret, $this->getData()->parent->getComponent()->getCacheVars());
-        return $ret;
-    }
-
-    public function getPartialCacheVars($nr)
-    {
-        $ret = array();
-        $ret = array_merge($ret, $this->getData()->parent->getComponent()->getCacheVars());
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Component($this->getData()->parent);
         return $ret;
     }
 

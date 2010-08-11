@@ -30,16 +30,10 @@ class Vpc_Paragraphs_Trl_Component extends Vpc_Chained_Trl_Component
         return false;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        foreach ($this->getData()->getChildComponents(array('generator'=>'paragraphs', 'ignoreVisible'=>true)) as $p) {
-            $ret[] = array(
-                'model' => $this->getChildModel(),
-                'id' => $p->dbId,
-                'field' => 'component_id'
-            );
-        }
+        $ret = parent::getStaticCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
         return $ret;
     }
 }

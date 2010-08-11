@@ -69,4 +69,11 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
             ->order('id', 'DESC')
             ->limit($this->_getSetting('limit'));
     }
+
+    public function getCacheMeta()
+    {
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($this->_getParentModel());
+        return $ret;
+    }
 }
