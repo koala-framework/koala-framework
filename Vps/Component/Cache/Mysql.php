@@ -45,7 +45,7 @@ class Vps_Component_Cache_Mysql
             'buffer' => true,
             'replace' => true
         );
-        $this->_models['cache']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+        //$this->_models['cache']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
         return true;
     }
 
@@ -106,13 +106,13 @@ class Vps_Component_Cache_Mysql
         return $ret;
     }
 
-    public function saveMetaModel(Vps_Component_Data $component, $model)
+    public function saveMetaModel($componentClass, $model)
     {
         if (is_object($model) && get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
         if (!is_string($model)) $model = get_class($model);
         $data = array(
             'model' => $model,
-            'component_class' => $component->componentClass
+            'component_class' => $componentClass
         );
         $options = array(
             'buffer' => true,
@@ -278,5 +278,37 @@ class Vps_Component_Cache_Mysql
         $this->getModel('cache')->deleteRows(
             $this->getModel('cache')->select()->whereEquals('component_class', $componentClasses)
         );
+    }
+
+    public function saveMeta(Vps_Component_Data $component, Vps_Component_Cache_Meta_Abstract $meta)
+    {
+        if ($meta instanceof Vps_Component_Cache_Meta_ModelField) {
+            //d($meta->getValue($component));
+            //$this->saveMetaRow();
+        } else {
+            throw new Vps_Exception('Unknow Meta: ' . get_class($meta));
+        }
+    }
+
+    public function saveMetaStatic($componentClass, Vps_Component_Cache_Meta_Static_Abstract $meta)
+    {
+        if ($meta instanceof Vps_Component_Cache_Meta_Static_ChildModel) {
+            $modelName = $meta->getModelname($componentClass);
+            echo ('ChildModel: ' . $componentClass . ': ' . $modelName . "\n");
+        } else if ($meta instanceof Vps_Component_Cache_Meta_Static_GeneratorRow) {
+            foreach ($meta->getModelnames($componentClass) as $modelName) {
+                echo ('GeneratorRow: ' . $componentClass . ': ' . $modelName . "\n");
+            }
+        } else if ($meta instanceof Vps_Component_Cache_Meta_Static_OwnModel) {
+            $modelName = $meta->getModelname($componentClass);
+            if ($modelName) {
+                echo ('OwnModel: ' . $componentClass . ': ' . $modelName . "\n");
+            }
+        } else if ($meta instanceof Vps_Component_Cache_Meta_Static_Model) {
+            $modelName = $meta->getModelname($componentClass);
+            echo ('OwnModel: ' . $componentClass . ': ' . $modelName . "\n");
+        } else {
+            throw new Vps_Exception('Unknow Meta: ' . get_class($meta));
+        }
     }
 }

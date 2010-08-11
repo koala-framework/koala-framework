@@ -70,18 +70,16 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheVars()
+    public static function getStaticCacheMeta()
     {
-        $ret = Vpc_Menu_Abstract_Component::getStaticCacheVars();
+        $ret = Vpc_Menu_Abstract_Component::getStaticCacheMeta();
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
             foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
                 if (is_instance_of($generator['class'], 'Vpc_Chained_Abstract_ChainedGenerator')) {
                     $generator = current(Vps_Component_Generator_Abstract::getInstances(
                         $componentClass, array('generator' => $key))
                     );
-                    $ret[] = array(
-                        'model' => $generator->getModel()
-                    );
+                    $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel());
                 }
             }
         }

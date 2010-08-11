@@ -58,15 +58,11 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheVars($componentClass)
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = array();
-        $ret[] = array(
-            'model' => 'Vpc_Posts_Directory_Model'
-        );
-        $ret[] = array(
-            'model' => Vps_Registry::get('config')->user->model
-        );
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Posts_Directory_Model');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model(Vps_Registry::get('config')->user->model);
         return $ret;
     }
 }

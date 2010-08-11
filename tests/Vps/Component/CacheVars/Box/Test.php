@@ -8,6 +8,7 @@ class Vps_Component_CacheVars_Box_Test extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->markTestIncomplete();
         Vps_Component_Data_Root::setComponentClass('Vps_Component_CacheVars_Box_Root');
         $this->_root = Vps_Component_Data_Root::getInstance();
     }

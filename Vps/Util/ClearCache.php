@@ -99,8 +99,8 @@ class Vps_Util_ClearCache
                 if ($output) echo " [\033[00;32mOK\033[00m]\n";
             }
 
-            if (in_array('cache_component_meta', $this->getDbCacheTables())
-                && (in_array('component', $types) || in_array('cache_component_meta', $types))
+            if (in_array('cache_component', $this->getDbCacheTables())
+                && (in_array('component', $types) || in_array('cache_component', $types))
             ) {
                 if ($output) echo "Refresh static cache...";
                 try {

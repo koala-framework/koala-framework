@@ -493,9 +493,4 @@ class Vps_Component_Abstract
             }
         }
     }
-
-    public static function getStaticCacheVars()
-    {
-        return array();
-    }
 }

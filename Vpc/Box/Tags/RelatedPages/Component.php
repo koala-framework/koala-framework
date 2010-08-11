@@ -37,12 +37,10 @@ class Vpc_Box_Tags_RelatedPages_Component extends Vpc_Abstract
         return !!$this->_getRelatedPages();
     }
 
-    public static function getStaticCacheVars($componentClass)
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = array();
-        $ret[] = array(
-            'model' => 'Vps_Component_Generator_Plugin_Tags_ComponentsToTagsModel'
-        );
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Generator_Plugin_Tags_ComponentsToTagsModel');
         return $ret;
     }
 }

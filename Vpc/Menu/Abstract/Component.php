@@ -199,9 +199,9 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheVars()
+    public static function getStaticCacheMeta()
     {
-        $ret = array();
+        $ret = parent::getStaticCacheMeta();
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
             foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
                 if (!isset($generator['showInMenu']) || !$generator['showInMenu']) continue;
@@ -209,19 +209,12 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                     $componentClass, array('generator' => $key))
                 );
                 if (!$generator->getGeneratorFlag('page') || !$generator->getGeneratorFlag('table')) continue;
-                $ret = array_merge($ret, $generator->getStaticCacheVarsForMenu());
+                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel());
             }
         }
-        $ret[] = array(
-            'model' => 'Vps_Component_Model'
-        );
-        $ret[] = array(
-            'model' => 'Vpc_Menu_Abstract_Model'
-        );
-        // Falls Nickname geändert wird, ändert sich Url zum User
-        $ret[] = array(
-            'model' => Vps_Registry::get('config')->user->model
-        );
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Menu_Abstract_Model');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model(Vps_Registry::get('config')->user->model);
         return $ret;
     }
 }

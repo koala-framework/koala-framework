@@ -10,6 +10,75 @@ class Vpc_Chained_Trl_Component extends Vpc_Chained_Abstract_Component
         return $ret;
     }
 
+    public function preProcessInput($postData)
+    {
+        $c = $this->getData()->chained->getComponent();
+        if (method_exists($c, 'preProcessInput')) {
+            $c->preProcessInput($postData);
+        }
+    }
+
+    public function processInput($postData)
+    {
+        $c = $this->getData()->chained->getComponent();
+        if (method_exists($c, 'processInput')) {
+            $c->processInput($postData);
+        }
+    }
+
+    public function getTemplateVars()
+    {
+        $data = $this->getData();
+        $ret = $data->chained->getComponent()->getTemplateVars();
+        $ret['data'] = $data;
+        $ret['chained'] = $data->chained;
+        $ret['linkTemplate'] = self::getTemplateFile($data->chained->componentClass);
+
+        $ret['componentClass'] = get_class($this);
+
+        $ret['placeholder'] = Vpc_Abstract::getSetting($data->chained->componentClass, 'placeholder');
+        foreach ($ret['placeholder'] as $k => $v) {
+            $ret['placeholder'][$k] = $this->getData()->trlStaticExecute($v);
+        }
+        return $ret;
+    }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $ret = array_merge($ret, $this->getData()->chained->getComponent()->getCacheVars());
+        return $ret;
+    }
+
+    public function getPartialClass()
+    {
+        return $this->getData()->chained->getComponent()->getPartialClass();
+    }
+
+    public function getPartialParams()
+    {
+        return $this->getData()->chained->getComponent()->getPartialParams();
+    }
+
+    public function getPartialVars($partial, $nr, $info)
+    {
+        $ret = $this->getData()->chained->getComponent()->getPartialVars($partial, $nr, $info);
+        $ret['linkTemplate'] = self::getTemplateFile($this->getData()->chained->componentClass, 'Partial');
+        return $ret;
+    }
+
+    public function getPartialCacheVars($nr)
+    {
+        return $this->getData()->chained->getComponent()->getPartialCacheVars($nr);
+    }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $cls = substr($componentClass, strpos($componentClass, '.')+1);
+        $cls = strpos($cls, '.') ? substr($cls, 0, strpos($cls, '.')) : $cls;
+        return call_user_func(array($cls, 'getStaticCacheMeta'), $cls);
+    }
+
     public static function getChainedByMaster($masterData, $chainedData, $select = array())
     {
         return Vpc_Chained_Abstract_Component::_getChainedByMaster($masterData, $chainedData, 'Trl', $select);
