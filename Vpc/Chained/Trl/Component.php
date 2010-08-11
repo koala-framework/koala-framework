@@ -50,11 +50,6 @@ class Vpc_Chained_Trl_Component extends Vpc_Chained_Abstract_Component
         return $ret;
     }
 
-    public function getPartialClass()
-    {
-        return $this->getData()->chained->getComponent()->getPartialClass();
-    }
-
     public function getPartialParams()
     {
         return $this->getData()->chained->getComponent()->getPartialParams();

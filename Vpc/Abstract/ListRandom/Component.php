@@ -6,6 +6,7 @@ class Vpc_Abstract_ListRandom_Component extends Vpc_Abstract_List_Component
     {
         $ret = parent::getSettings();
         $ret['limit'] = 1;
+        $ret['partialClass'] = 'Vps_Component_Partial_Random';
         return $ret;
     }
 
@@ -31,11 +32,6 @@ class Vpc_Abstract_ListRandom_Component extends Vpc_Abstract_List_Component
         $ret['count'] = $this->getData()->countChildComponents(array('generator' => 'child'));
         $ret['limit'] = $this->_getSetting('limit');
         return $ret;
-    }
-    
-    public function getPartialClass()
-    {
-        return 'Vps_Component_Partial_Random';
     }
 
     public function getPartialCacheVars($nr)

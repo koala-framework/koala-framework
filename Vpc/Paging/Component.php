@@ -18,6 +18,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
             'prefix'   => trlVpsStatic('Page').':'
         );
         $ret['cssClass'] = 'webPaging webStandard';
+        $ret['partialClass'] = 'Vps_Component_Partial_Pager';
         return $ret;
     }
 

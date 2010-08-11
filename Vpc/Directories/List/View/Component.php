@@ -12,6 +12,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         $ret['groupById'] = true;
         $ret['cssClass'] = 'webStandard';
         $ret['searchQueryFields'] = '*';
+        $ret['partialClass'] = 'Vps_Component_Partial_Id'; // Eigentlich nur nötig wenn es Suche gibt, ansonsten reicht Vps_Component_Partial_Paging
         return $ret;
     }
 
@@ -150,15 +151,6 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
             throw new Vps_Exception('Unsupported partial type '.get_class($partial));
         }
         return $ret;
-    }
-
-    public function getPartialClass()
-    {
-        $partialClass = 'Vps_Component_Partial_Paging';
-        if ($this->_getSearchForm()) {
-            $partialClass = 'Vps_Component_Partial_Id';
-        }
-        return $partialClass;
     }
 
     public function getPagingCount($select = null)
