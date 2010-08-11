@@ -3,7 +3,7 @@ Ext.namespace('Vps.Menu');
 Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 {
     controllerUrl: '/vps/user/menu',
-	changeUserTpl: ['<tpl for=".">',
+    changeUserTpl: ['<tpl for=".">',
                         '<div class="x-combo-list-item changeuser-list-item<tpl if="locked != 0"> changeuser-locked</tpl>">',
                             '<h3>{lastname}&nbsp;{firstname}</h3>',
                             '{email} <span class="changeuser-role">({role})</span>',
@@ -141,7 +141,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 maxHeight: 350,
                 listWidth: 280,
                 tpl: new Ext.XTemplate(
-				        this.changeUserTpl
+                        this.changeUserTpl
                       )
             });
             changeUser.on('render', function(combo) {
