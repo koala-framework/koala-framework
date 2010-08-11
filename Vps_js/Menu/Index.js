@@ -9,7 +9,6 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                             '{email} <span class="changeuser-role">({role})</span>',
                         '</div>',
                       '</tpl>'],
-    tplDataControllerUrl: '/vps/user/changeUser/json-data',
 
     initComponent : function()
     {
@@ -130,7 +129,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         if (result.changeUser) {
             var changeUser = new Vps.Form.ComboBox({
                 store: {
-                    url: this.tplDataControllerUrl
+                    url: '/vps/user/changeUser/json-data'
                 },
                 mode: 'remote',
                 editable: true,
