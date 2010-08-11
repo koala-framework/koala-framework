@@ -1,5 +1,5 @@
 <?php
-class Vps_Mail extends Zend_Mail
+class Vps_Mail extends Zend_Mail implements Vps_Mail_Interface
 {
     // die folgenden 5 sind für maillog
     protected $_ownFrom = '';
@@ -14,6 +14,20 @@ class Vps_Mail extends Zend_Mail
             throw new Vps_Exception("Vps_Mail got replaced with Vps_Mail_Template");
         }
         parent::__construct('utf-8');
+    }
+
+    public function getMailContent($type = Vps_Model_Mail_Row::GET_MAIL_CONTENT_AUTO)
+    {
+        if ($type == Vps_Model_Mail_Row::GET_MAIL_CONTENT_AUTO) {
+            $ret = $this->getBodyHtml(true);
+            if (!$ret) $ret = $this->getBodyText(true);
+            return $ret;
+        } else if ($type == Vps_Model_Mail_Row::GET_MAIL_CONTENT_HTML) {
+            return $this->getBodyHtml(true);
+        } else if ($type == Vps_Model_Mail_Row::GET_MAIL_CONTENT_TEXT) {
+            return $this->getBodyText(true);
+        }
+        return null;
     }
 
     public function addCc($email, $name='')
