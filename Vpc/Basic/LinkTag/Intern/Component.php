@@ -12,8 +12,7 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
             'ownModel'     => 'Vpc_Basic_LinkTag_Intern_Model',
             'componentName' => trlVps('Link.Intern'),
         ));
-        $ret['assetsAdmin']['dep'][] = 'VpsAutoTree';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/LinkTag/Intern/LinkField.js';
+        $ret['assetsAdmin']['dep'][] = 'VpsPageSelectField';
         return $ret;
     }
     public function getCacheVars()
