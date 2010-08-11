@@ -126,6 +126,18 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 
         this.add(new Ext.Toolbar.Fill());
 
+        if (result.hasFrontend) {
+            this.add({
+                tooltip: trlVps('Open frontend in a new window'),
+                cls: 'x-btn-icon',
+                icon: '/assets/silkicons/world.png',
+                handler: function() {
+                    window.open('/');
+                },
+                scope: this
+            });
+        }
+
         if (result.changeUser) {
             var changeUser = new Vps.Form.ComboBox({
                 store: {
@@ -210,17 +222,6 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
             },
             scope: this
         });
-        if (result.hasFrontend) {
-            this.add({
-                tooltip: trlVps('Open frontend in a new window'),
-                cls: 'x-btn-icon',
-                icon: '/assets/silkicons/world.png',
-                handler: function() {
-                    window.open('/');
-                },
-                scope: this
-            });
-        }
 
         if (Vps.Debug.showMenu) {
             this.add('-');
