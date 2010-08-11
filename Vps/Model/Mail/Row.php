@@ -24,7 +24,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             }
         } else {
             $mail = $this->_prepareMail();
-            if ($mail instanceof Vps_Mail_Template) {
+            if ($mail instanceof Vps_Mail_Interface) {
                 return $mail->getMailContent($type);
             } else {
                 throw new Vps_Exception_NotYetImplemented();
@@ -43,15 +43,22 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         $essentialsRow = $siblingRows['essentials'];
         $varsRow = $siblingRows['vars'];
 
-        if (!empty($essentialsRow->masterTemplate)) {
-            $mail = new $essentialsRow->mailerClass($essentialsRow->template, $essentialsRow->masterTemplate);
-        } else {
-            $mail = new $essentialsRow->mailerClass($essentialsRow->template);
-        }
+        if (is_instance_of($essentialsRow->mailerClass, 'Vps_Mail_Template')) {
+            if (!empty($essentialsRow->masterTemplate)) {
+                $mail = new $essentialsRow->mailerClass($essentialsRow->template, $essentialsRow->masterTemplate);
+            } else {
+                $mail = new $essentialsRow->mailerClass($essentialsRow->template);
+            }
 
-        $mail->vars = $varsRow;
-        foreach ($varsRow->toArray() as $k => $v) {
-            $mail->$k = $v;
+            $mail->vars = $varsRow;
+            foreach ($varsRow->toArray() as $k => $v) {
+                $mail->$k = $v;
+            }
+        } else {
+            $mail = new $essentialsRow->mailerClass();
+            if ($this->body_text) $mail->setBodyText($this->body_text);
+            if ($this->body_html) $mail->setBodyHtml($this->body_html);
+            if ($this->getSubject()) $mail->setSubject($this->getSubject());
         }
 
         $cc = $this->getCc();
@@ -102,12 +109,14 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             $mail = $this->_prepareMail();
             $mail->send();
 
-            if ($mail->getView()->getImages()) {
-                $addedImages = array();
-                foreach ($mail->getView()->getImages() as $image) {
-                    if (in_array($image, $addedImages)) continue;
-                    $this->_saveAttachmentData($image);
-                    $addedImages[] = $image;
+            if (is_instance_of($mail, 'Vps_Mail_Template')) {
+                if ($mail->getView()->getImages()) {
+                    $addedImages = array();
+                    foreach ($mail->getView()->getImages() as $image) {
+                        if (in_array($image, $addedImages)) continue;
+                        $this->_saveAttachmentData($image);
+                        $addedImages[] = $image;
+                    }
                 }
             }
 
@@ -333,6 +342,16 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         );
     }
 
+    public function setBodyText($text)
+    {
+        $this->body_text = $text;
+    }
+
+    public function setBodyHtml($html)
+    {
+        $this->body_html = $html;
+    }
+
     public function setReturnPath($email)
     {
         $row = $this->_getEssentialsRow();
@@ -343,6 +362,17 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
     {
         $row = $this->_getEssentialsRow();
         $row->from = serialize(array('email' => $email, 'name' => $name));
+    }
+
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+    }
+
+    public function getSubject()
+    {
+        if (!empty($this->subject)) return $this->subject;
+        return null;
     }
 
     public function getCc()

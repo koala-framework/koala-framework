@@ -1,5 +1,5 @@
 <?php
-class Vps_Mail_Template
+class Vps_Mail_Template implements Vps_Mail_Interface
 {
     protected $_mail;
     protected $_view;
@@ -142,6 +142,21 @@ class Vps_Mail_Template
         return $this->_mail->getHeaders();
     }
 
+    public function getSubject()
+    {
+        return $this->_mail->getSubject();
+    }
+
+    public function getReturnPath()
+    {
+        return $this->_mail->getReturnPath();
+    }
+
+    public function setSubject($subject)
+    {
+        $this->_mail->setSubject($subject);
+    }
+
     public function addCc($email, $name='')
     {
         $this->_mail->addCc($email, $name);
@@ -182,6 +197,18 @@ class Vps_Mail_Template
     {
         $this->_mail->addAttachment($attachment);
         return $this;
+    }
+
+    public function setBodyText($text)
+    {
+        throw new Vps_Exception("Text body may not be set manual when using 'Vps_Mail_Template', "
+            ."because it is automatically build by a template.");
+    }
+
+    public function setBodyHtml($html)
+    {
+        throw new Vps_Exception("Html body may not be set manual when using 'Vps_Mail_Template', "
+            ."because it is automatically build by a template.");
     }
 
     // constants for type defined in Vps_Model_Mail_Row
@@ -272,7 +299,10 @@ class Vps_Mail_Template
                 $addedImages[] = $image;
             }
         }
-        $this->_mail->setSubject($this->_view->subject);
+
+        if (!($this->getSubject()) && $this->_view->subject) {
+            $this->setSubject($this->_view->subject);
+        }
 
         return $this->_mail->send();
     }

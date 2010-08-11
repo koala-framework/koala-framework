@@ -78,12 +78,15 @@ class Vps_Model_Mail extends Vps_Model_Db_Proxy
     {
         $row = parent::createRow($data);
 
-        if (empty($this->_mailTemplate)) {
-            throw new Vps_Exception("mail template not set for class '".get_class($this)."' in construct-config");
+        if (is_instance_of($this->_mailerClass, 'Vps_Mail_Template')) {
+            if (empty($this->_mailTemplate)) {
+                throw new Vps_Exception("mail template not set for class '".get_class($this)."' in construct-config");
+            }
+            if (!is_string($this->_mailTemplate)) {
+                throw new Vps_Exception("mail template must be of type 'string' but type '".gettype($this->_mailTemplate)."' has been set");
+            }
         }
-        if (!is_string($this->_mailTemplate)) {
-            throw new Vps_Exception("mail template must be of type 'string' but type '".gettype($this->_mailTemplate)."' has been set");
-        }
+
         $row->setTemplate($this->_mailTemplate);
         $row->setMailerClass($this->_mailerClass);
         $row->setSpamFields($this->_spamFields);
