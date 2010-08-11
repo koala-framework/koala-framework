@@ -836,6 +836,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
                 $ret = file_get_contents($filename.'.gz');
                 unlink($filename.'.gz');
+                rmdir($tmpExportFolder);
                 return $ret;
             } else {
                 return '';
