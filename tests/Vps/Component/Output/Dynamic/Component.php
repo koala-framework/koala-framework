@@ -2,6 +2,13 @@
 class Vps_Component_Output_Dynamic_Component extends Vpc_Abstract
     implements Vps_Component_Partial_Interface
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['partialClass'] = 'Vps_Component_Partial_Paging';
+        return $ret;
+    }
+
     public function getPartialVars($partial, $nr, $info)
     {
         return array('item' => 'bar' . $nr);
@@ -15,11 +22,6 @@ class Vps_Component_Output_Dynamic_Component extends Vpc_Abstract
     public function getPartialParams()
     {
         return array('count' => 3);
-    }
-
-    public function getPartialClass()
-    {
-        return 'Vps_Component_Partial_Paging';
     }
 }
 ?>

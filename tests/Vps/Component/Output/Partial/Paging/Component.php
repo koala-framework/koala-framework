@@ -6,6 +6,7 @@ class Vps_Component_Output_Partial_Paging_Component extends Vpc_Abstract_Composi
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['paging'] = 'Vps_Component_Output_Partial_Paging_Paging';
+        $ret['partialClass'] = 'Vps_Component_Partial_Paging';
         return $ret;
     }
 
@@ -25,11 +26,6 @@ class Vps_Component_Output_Partial_Paging_Component extends Vpc_Abstract_Composi
         $ret = $paging->getComponent()->getPartialParams();
         $ret['count'] = $this->getPagingCount();
         return $ret;
-    }
-
-    public function getPartialClass()
-    {
-        return 'Vps_Component_Partial_Paging';
     }
 
     public function getPagingCount()
