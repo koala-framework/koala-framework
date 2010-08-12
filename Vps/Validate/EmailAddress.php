@@ -1,9 +1,9 @@
 <?php
 class Vps_Validate_EmailAddress extends Zend_Validate_EmailAddress
 {
-    public function __construct($allow = Zend_Validate_Hostname::ALLOW_DNS, $validateMx = false, Zend_Validate_Hostname $hostnameValidator = null)
+    public function __construct($options = array())
     {
-        parent::__construct($allow, $validateMx, $hostnameValidator);
+        parent::__construct($options);
         $this->_messageTemplates[self::INVALID] = trlVpsStatic("'%value%' is not a valid email address");
         $this->_messageTemplates[self::INVALID_HOSTNAME] = trlVpsStatic("'%hostname%' is not a valid hostname for email address '%value%'");
         $this->_messageTemplates[self::INVALID_MX_RECORD] = trlVpsStatic("'%hostname%' does not appear to have a valid MX record for the email address '%value%'");
@@ -17,6 +17,6 @@ class Vps_Validate_EmailAddress extends Zend_Validate_EmailAddress
         if ($hostnameValidator === null) {
             $hostnameValidator = new Vps_Validate_Hostname($allow);
         }
-        $this->hostnameValidator = $hostnameValidator;
+        return parent::setHostnameValidator($hostnameValidator);
     }
 }

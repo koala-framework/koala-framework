@@ -127,26 +127,26 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
         if ($value < 1) $value = 1;
         if ($value > $count) $value = $count;
 
-        $x = 0;
+        //ermittel ob eine andere row dirty ist
+        $dirty = false;
         if ($row instanceof Vps_Model_Row_Interface) {
             $select->order($fieldname);
             $rows = $row->getModel()->getRows($select);
+            foreach ($rows as $r) {
+                if ($r->isDirty()) {
+                    $dirty = true;
+                    break;
+                }
+            }
         } else {
             $rows = $row->getTable()->fetchAll($where, $fieldname);
         }
 
-        //ermittel ob eine andere row dirty ist
-        $dirty = false;
-        foreach ($rows as $r) {
-            if ($r->isDirty()) {
-                $dirty = true;
-                break;
-            }
-        }
 
         if (!$dirty) {
             //wenn keine dirty ist alle durchgehen und nummerierung ev. korrigieren
             //annahme: dirty row wird noch gespeichert
+            $x = 0;
             foreach ($rows as $r) {
                 $x++;
                 if ($x == $value) $x++;

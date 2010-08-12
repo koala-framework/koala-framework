@@ -10,7 +10,7 @@ Vps.onContentReady(function()
             config = { };
         }
         var textSelector = Ext.query('.textSelector', c); // optional
-        if (textSelector) {
+        if (textSelector && textSelector[0]) {
             config.textSelector = textSelector[0].value;
         }
 
