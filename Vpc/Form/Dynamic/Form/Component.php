@@ -63,6 +63,12 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
                         $row->addAttachment($uploadRow);
                         $msg .= $f->getFieldLabel().": {$uploadRow->filename}.{$uploadRow->extension} ".trlVps('attached')."\n";
                     }
+                } else if ($f instanceof Vps_Form_Field_Checkbox) {
+                    if ($row->{$f->getName()}) {
+                        $msg .= $f->getFieldLabel().': '.$this->getData()->trlVps('on')."\n";
+                    } else {
+                        $msg .= $f->getFieldLabel().': '.$this->getData()->trlVps('off')."\n";
+                    }
                 } else {
                     $msg .= $f->getFieldLabel().': '.$row->{$f->getName()}."\n";
                 }
