@@ -190,7 +190,18 @@ class Vps_Setup
                 $redirect = $config->server->domain;
             }
             if ($redirect) {
-                header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
+                $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
+                    ->findRedirectUrl('domainPath', array($host.$_SERVER['REQUEST_URI'], 'http://'.$host.$_SERVER['REQUEST_URI']));
+                if (!$target) {
+                    $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
+                        ->findRedirectUrl('domain', $host);
+                }
+                if ($target) {
+                    //TODO: funktioniert nicht bei mehreren domains
+                    header("Location: http://".$redirect.$target, true, 301);
+                } else {
+                    header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
+                }
                 exit;
             }
         }
