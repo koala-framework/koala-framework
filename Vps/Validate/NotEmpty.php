@@ -17,7 +17,7 @@ class Vps_Validate_NotEmpty extends Zend_Validate_NotEmpty
         $valueString = (string) $value;
         $this->_setValue($valueString);
         if (empty($value) && $value != '0') {
-            $this->_error();
+            $this->_error(self::IS_EMPTY);
             return false;
         }
 
