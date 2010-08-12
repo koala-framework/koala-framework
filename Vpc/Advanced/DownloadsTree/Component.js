@@ -32,7 +32,7 @@ Vps.onContentReady(function() {
             height: options.height,
             renderTo: i,
             layout: 'border',
-            items: [downloads, projects]
+            items: [this.downloads, this.projects]
         });
     }, this); 
 });
