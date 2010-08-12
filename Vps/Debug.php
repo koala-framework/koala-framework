@@ -7,6 +7,9 @@ function _pArray($src, $indent = '')
             $ret .= $indent."$k =>\n";
             $ret .= _pArray($i, $indent . '  ');
         }
+        if (!$src) {
+            $ret .= $indent."(empty array)\n";
+        }
     } else {
         if (is_object($src) && method_exists($src, 'toDebug')) {
             $src = $src->toDebug();
