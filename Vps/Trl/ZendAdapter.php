@@ -14,7 +14,7 @@ class Vps_Trl_ZendAdapter extends Zend_Translate_Adapter
 
     public function isTranslated($msg)
     {
-        return true;
+        return false;
     }
 
     public function translate($messageId)
