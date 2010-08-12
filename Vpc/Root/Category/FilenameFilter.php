@@ -27,6 +27,12 @@ class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
             if ($c->componentId == $componentId) continue;
             $values[] = $c->filename;
         }
+        if ($parent instanceof Vps_Component_Data_Root) {
+            $values[] = 'admin';
+            $values[] = 'vps';
+            $values[] = 'media';
+            $values[] = 'assets';
+        }
 
         $x = 0;
         $unique = $value;

@@ -221,36 +221,7 @@ class Vps_Debug
         if (!$exception instanceof Vps_Exception_Abstract) {
             $exception = new Vps_Exception_Other($exception);
         }
-
-        if (!$ignoreCli && php_sapi_name() == 'cli') {
-            file_put_contents('php://stderr', $exception->getException()->__toString()."\n");
-            exit(1);
-        }
-
-        $view = self::getView();
-        $view->exception = $exception->getException();
-        $view->message = $exception->getException()->getMessage();
-        $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
-            $_SERVER['REQUEST_URI'] : '' ;
-        $view->debug = Vps_Exception::isDebug();
-
-        $header = $exception->getHeader();
-        $template = $exception->getTemplate();
-        $template = strtolower(Zend_Filter::filterStatic($template, 'Word_CamelCaseToDash').'.tpl');
-        if ($exception instanceof Vps_Exception_Abstract) $exception->log();
-
-        if (!headers_sent()) header($header);
-        try {
-            echo $view->render($template);
-        } catch (Exception $e) {
-            echo '<pre>';
-            echo $exception->getException()->__toString();
-            echo "\n\n\nError happened while handling exception:";
-            echo $e->__toString();
-            echo '</pre>';
-        }
-        Vps_Benchmark::shutDown();
-        Vps_Benchmark::output();
+        $exception->render($ignoreCli);
     }
 
     public static function setView(Vps_View $view)
