@@ -46,30 +46,45 @@ class Vps_Component_Cache
 
     public function saveMeta($componentClass, Vps_Component_Cache_Meta_Abstract $meta)
     {
+        $component = null;
         if ($componentClass instanceof Vps_Component_Data) {
             $component = $componentClass;
             $componentClass = $component->componentClass;
         }
+
         if ($meta instanceof Vps_Component_Cache_Meta_Static_GeneratorRow) {
+
             foreach ($meta->getCacheMeta($componentClass) as $meta) {
                 $this->saveMeta($componentClass, $meta);
             }
+
         } else if ($meta instanceof Vps_Component_Cache_Meta_Static_Abstract) {
+
             $modelName = $meta->getModelname($componentClass);
             if ($modelName) {
                 $pattern = $meta->getPattern();
-                /*
-                echo substr(strrchr(get_class($meta), '_'), 1) . ': ' .
-                    $componentClass . ': ' .
-                    $modelName . ' (' .
-                    $pattern . ")\n";
-                    */
+                $this->_saveMetaModel($componentClass, $modelName, $pattern, $meta->isCallback());
             }
+
         } else if ($meta instanceof Vps_Component_Cache_Meta_ModelField) {
+
+            $this->_saveMetaRow($component, $meta->getModelname(), $meta->getColumn(), $meta->getValue($component), $meta->isCallback());
+
         } else if ($meta instanceof Vps_Component_Cache_Meta_Component) {
 
+            $source = $meta->getSourceComponent();
+            if ($source->componentId == $component->componentId)
+                throw new Vps_Exception('Source and target component must be different, both have ' . $component->componentId);
+            $this->_saveMetaComponent($component, $source);
+
         } else {
+
             throw new Vps_Exception('Unknow Meta: ' . get_class($meta));
+
         }
     }
+
+    public abstract function _saveMetaModel($componentClass, $modelName, $pattern, $isCallback);
+    public abstract function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $isCallback);
+    public abstract function _saveMetaComponent(Vps_Component_Data $component, Vps_Component_Data $source);
 }

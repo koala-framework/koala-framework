@@ -30,4 +30,9 @@ abstract class Vps_Component_Cache_Meta_Abstract
         if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
         return get_class($model);
     }
+
+    public function isCallback()
+    {
+        return false;
+    }
 }

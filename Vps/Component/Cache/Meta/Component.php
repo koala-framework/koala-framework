@@ -3,12 +3,17 @@
  * Wenn bei $targetComponent der Cache gelöscht wird, soll er auch hier gelöscht
  * werden
  */
-class Vps_Component_Cache_Meta_Component extends Vps_Component_Cache_Meta_Abstract
+class Vps_Component_Cache_Meta_Component
 {
-    private $_targetComponent;
+    private $_sourceComponent;
 
-    public function __construct(Vps_Component_Data $targetComponent)
+    public function __construct(Vps_Component_Data $sourceComponent)
     {
-        $this->_targetComponent = $targetComponent;
+        $this->_sourceComponent = $sourceComponent;
+    }
+
+    public function getSourceComponent()
+    {
+        return $this->_sourceComponent;
     }
 }
