@@ -49,6 +49,7 @@ interface Vps_Model_Interface
     public function insertRow(array $data);
 
     public function deleteRows($where);
+    public function updateRows($data, $where); // in db-model werden rows umgangen (kein aftersave...), in data-model nicht
 
     public function callMultiple(array $call);
 

@@ -53,6 +53,16 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         foreach ($this->getRows($where) as $row) $row->delete();
     }
 
+    public function updateRows($data, $where)
+    {
+        foreach ($this->getRows($where) as $row) {
+            foreach ($data as $key => $val) {
+                $row->$key = $val;
+            }
+            $row->save();
+        }
+    }
+
     private function _getDataKeys($where, $order, $limit, $start)
     {
         if (!is_object($where) || $where instanceof Vps_Model_Select_Expr_Interface) {
