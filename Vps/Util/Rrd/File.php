@@ -111,18 +111,34 @@ abstract class Vps_Util_Rrd_File
         return $value;
     }
 
-    abstract public function getRecordValues();
-
-    public function record()
+    public function getRecordValues()
     {
-        $values = $this->getRecordValues();
+        return $this->getRecordValuesForDate(time());
+    }
+
+    public function getRecordValuesForDate($date)
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
+    public function record($date = null)
+    {
+        if ($date) {
+            $values = $this->getRecordValuesForDate($date);
+        } else {
+            $values = $this->getRecordValues();
+        }
 
         if (!file_exists($this->_fileName)) {
             $this->createFile(time()-1);
         }
 
         $cmd = "rrdtool update $this->_fileName ";
-        $cmd .= "N:";
+        if ($date) {
+            $cmd .= $date.":";
+        } else {
+            $cmd .= "N:";
+        }
         $cmd .= implode(':', $values);
 
         $ret = null;
