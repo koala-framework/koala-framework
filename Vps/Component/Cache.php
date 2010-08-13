@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache
+abstract class Vps_Component_Cache
 {
     static private $_instance;
     static private $_backend = self::CACHE_BACKEND_MYSQL;
@@ -73,9 +73,10 @@ class Vps_Component_Cache
         } else if ($meta instanceof Vps_Component_Cache_Meta_Component) {
 
             $source = $meta->getSourceComponent();
-            if ($source->componentId == $component->componentId)
+            $target = $component;
+            if ($component->componentId == $target->componentId)
                 throw new Vps_Exception('Source and target component must be different, both have ' . $component->componentId);
-            $this->_saveMetaComponent($component, $source);
+            $this->_saveMetaComponent($source, $target);
 
         } else {
 
@@ -84,7 +85,7 @@ class Vps_Component_Cache
         }
     }
 
-    public abstract function _saveMetaModel($componentClass, $modelName, $pattern, $isCallback);
-    public abstract function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $isCallback);
-    public abstract function _saveMetaComponent(Vps_Component_Data $component, Vps_Component_Data $source);
+    protected abstract function _saveMetaModel($componentClass, $modelName, $pattern, $isCallback);
+    protected abstract function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $isCallback);
+    protected abstract function _saveMetaComponent(Vps_Component_Data $component, Vps_Component_Data $target);
 }
