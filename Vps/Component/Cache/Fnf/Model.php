@@ -11,4 +11,10 @@ class Vps_Component_Cache_Fnf_Model extends Vps_Component_Cache_Mysql_Model
         ));
         parent::__construct($config);
     }
+
+    // zum Testen
+    public function countActiveRows()
+    {
+        return $this->countRows($this->select()->whereEquals('deleted', 0));
+    }
 }
