@@ -83,6 +83,10 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
         $order->date = date('Y-m-d H:i:s');
         $order->save();
 
+        foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
+            $p->orderConfirmed($order);
+        }
+
         $this->sendConfirmMail($order);
     }
 }

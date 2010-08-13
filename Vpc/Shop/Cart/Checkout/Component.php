@@ -50,24 +50,31 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = $order->getSubTotal();
         $ret += $this->getShipping($order);
-        $ret += $this->_getAdditionalSum($order);
+        $ret += $this->_getAdditionalSum($order, $ret);
         return $ret;
     }
 
     //kann überschrieben werden um zeilen für alle payments zu ändern
-    protected function _getAdditionalSumRows($order)
+    protected function _getAdditionalSumRows($order, $total)
     {
         $ret = array();
         if ($c = $this->_getPaymentComponent($order)) {
-            $ret = array_merge($ret, $c->getAdditionalSumRows($order));
+            $rows = $c->getAdditionalSumRows($order);
+            foreach ($rows as $r) $total += $r['amount'];
+            $ret = array_merge($ret, $rows);
+        }
+        foreach ($this->getData()->parent->getComponent()->getShopCartPlugins() as $p) {
+            $rows = $p->getAdditionalSumRows($order, $total);
+            foreach ($rows as $r) $total += $r['amount'];
+            $ret = array_merge($ret, $rows);
         }
         return $ret;
     }
  
-    private final function _getAdditionalSum($order)
+    private final function _getAdditionalSum($order, $total)
     {
         $ret = 0;
-        foreach ($this->_getAdditionalSumRows($order) as $r) {
+        foreach ($this->_getAdditionalSumRows($order, $total) as $r) {
             $ret += $r['amount'];
         }
         return $ret;
@@ -77,16 +84,18 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
     public function getSumRows($order)
     {
         $ret = array();
+        $subTotal = $order->getSubTotal();
         $ret[] = array(
             'class' => 'subtotal',
             'text' => trlVps('Subtotal').':',
-            'amount' => $order->getSubTotal()
+            'amount' => $subTotal
         );
+        $shipping = $this->getShipping($order);
         $ret[] = array(
             'text' => trlVps('Shipping and Handling').':',
-            'amount' => $this->getShipping($order)
+            'amount' => $shipping
         );
-        $ret = array_merge($ret, $this->_getAdditionalSumRows($order));
+        $ret = array_merge($ret, $this->_getAdditionalSumRows($order, $subTotal+$shipping));
         $ret[] = array(
             'class' => 'totalAmount',
             'text' => trlVps('Total Amount').':',
