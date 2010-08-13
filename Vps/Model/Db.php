@@ -630,7 +630,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         ));
     }
 
-    public function deleteRows($where)
+    private function _getTableUpdateWhere($where)
     {
         if (!is_object($where)) {
             if (is_string($where)) $where = array($where);
@@ -641,7 +641,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($select->getPart(Vps_Model_Select::OTHER) ||
             $select->getPart(Vps_Model_Select::LIMIT_COUNT) ||
             $select->getPart(Vps_Model_Select::LIMIT_OFFSET))
-            throw new Vps_Exception('Select for delete must only contain where* parts');
+            throw new Vps_Exception('Select for update must only contain where* parts');
         $dbSelect = new Zend_Db_Select($this->getAdapter());
         $this->_applySelect($dbSelect, $select);
         $where = array();
@@ -649,7 +649,17 @@ class Vps_Model_Db extends Vps_Model_Abstract
             if (substr($part, 0, 4) == 'AND ') $part = substr($part, 4);
             $where[] = $part;
         }
-        return $this->_table->delete($where);
+        return $where;
+    }
+
+    public function deleteRows($where)
+    {
+        return $this->_table->delete($this->_getTableUpdateWhere($where));
+    }
+
+    public function updateRows($data, $where)
+    {
+        return $this->_table->update($data, $this->_getTableUpdateWhere($where));
     }
 
     private function _getDbSelect($where, $order=null, $limit=null, $start=null)
