@@ -1,6 +1,8 @@
 <?php
 class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
 {
+    private $_chartPlugins;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -32,5 +34,19 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         $ret['countProducts'] = $this->getData()->countChildComponents(array('generator'=>'detail'));
         $ret['checkout'] = $this->getData()->getChildComponent('_checkout');
         return $ret;
+    }
+
+    public function getShopCartPlugins()
+    {
+        if (!isset($this->_chartPlugins)) {
+            $this->_chartPlugins = array();
+            $plugins = $this->_getSetting('plugins');
+            foreach ($plugins as $plugin) {
+                if (is_instance_of($plugin, 'Vpc_Shop_Cart_Plugins_Interface')) {
+                    $this->_chartPlugins[] = new $plugin();
+                }
+            }
+        }
+        return $this->_chartPlugins;
     }
 }
