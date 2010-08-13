@@ -10,7 +10,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'preload' => new Vps_Component_Cache_Mysql_PreloadModel(),
             'metaModel' => new Vps_Component_Cache_Mysql_MetaModelModel(),
             'metaRow' => new Vps_Component_Cache_Mysql_MetaRowModel(),
-            'metaCallback' => new Vps_Component_Cache_Mysql_MetaCallbackModel(),
             'metaComponent' => new Vps_Component_Cache_Mysql_MetaComponentModel()
         );
     }
@@ -106,6 +105,20 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return $ret;
     }
 
+    public function savePreload(Vps_Component_Data $source, Vps_Component_Data $target)
+    {
+        if ($source->componentId == $target->componentId)
+            throw new Vps_Exception('Source and target component must be different, both have ' . $source->componentId);
+        $data = array(
+            'page_id' => $source->getPage()->componentId,
+            'preload_id' => $target->componentId
+        );
+        $options = array(
+            'buffer' => true,
+            'replace' => true
+        );
+        $this->_models['preload']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+    }
 
     protected function _getComponentIds($row, $metaModel)
     {
@@ -195,13 +208,13 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         );
     }
 
-    public function saveMetaModel($componentClass, $model)
+    protected function _saveMetaModel($componentClass, $modelName, $pattern)
     {
-        if (is_object($model) && get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
-        if (!is_string($model)) $model = get_class($model);
         $data = array(
-            'model' => $model,
-            'component_class' => $componentClass
+            'model' => $modelName,
+            'component_class' => $componentClass,
+            'pattern' => $pattern,
+            'callback' => $isCallback ? 1 : 0
         );
         $options = array(
             'buffer' => true,
@@ -210,14 +223,15 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $this->_models['metaModel']()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
-    public function saveMetaRow(Vps_Component_Data $component, $modelname, $value, $field = null, $type = 'metaRow')
+    protected function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $isCallback)
     {
         // TODO: checken, ob component->componentClass eh nicht schon in cache_component_meta_model mit gleichem Model steht
         $data = array(
-            'model' => $modelname,
-            'field' => $field,
+            'model' => $modelName,
+            'column' => $column,
             'value' => $value,
-            'component_id' => $component->componentId
+            'component_id' => $component->componentId,
+            'callback' => $isCallback ? 1 : 0
         );
         $options = array(
             'buffer' => true,
@@ -226,18 +240,11 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $this->_models[$type]->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
-    public function saveMetaCallback(Vps_Component_Data $component, $row, $field = null)
+    protected function _saveMetaComponent(Vps_Component_Data $component, Vps_Component_Data $source)
     {
-        $this->saveMetaRow($component, $row, $field, 'metaCallback');
-    }
-
-    public function saveMetaComponent(Vps_Component_Data $source, Vps_Component_Data $target)
-    {
-        if ($source->componentId == $target->componentId)
-            throw new Vps_Exception('Source and target component must be different, both have ' . $source->componentId);
         $data = array(
-            'component_id' => $target->componentId,
-            'component_class' => $target->componentClass,
+            'component_id' => $component->componentId,
+            'component_class' => $component->componentClass,
             'source_component_id' => $source->componentId,
             'source_component_class' => $source->componentClass
         );
@@ -246,20 +253,5 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'replace' => true
         );
         $this->_models['metaComponent']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
-    }
-
-    public function savePreload(Vps_Component_Data $source, Vps_Component_Data $target)
-    {
-        if ($source->componentId == $target->componentId)
-            throw new Vps_Exception('Source and target component must be different, both have ' . $source->componentId);
-        $data = array(
-            'page_id' => $source->getPage()->componentId,
-            'preload_id' => $target->componentId
-        );
-        $options = array(
-            'buffer' => true,
-            'replace' => true
-        );
-        $this->_models['preload']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 }

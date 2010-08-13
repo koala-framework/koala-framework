@@ -5,8 +5,8 @@ class Vps_Component_Cache_Fnf_MetaRowModel extends Vps_Component_Cache_Mysql_Met
     {
         $config['proxyModel'] = new Vps_Model_FnF(array(
             'primaryKey' => 'fakeId',
-            'columns' => array('fakeId', 'model', 'field', 'value', 'component_id'),
-            'uniqueColumns' => array('model', 'field', 'value')
+            'columns' => array('fakeId', 'model', 'column', 'value', 'component_id', 'callback'),
+            'uniqueColumns' => array('model', 'column', 'value', 'component_id')
         ));
         parent::__construct($config);
     }
