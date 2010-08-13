@@ -50,7 +50,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Chained_Abstract_Component
         return call_user_func(array($cls, 'getStaticCacheMeta'), $cls);
     }
 
-    public function getCacheMeta($componentClass)
+    public function getCacheMeta()
     {
         $ret = parent::getCacheMeta();
         $ret[] = new Vps_Component_Cache_Meta_Component($this->getData()->chained);
