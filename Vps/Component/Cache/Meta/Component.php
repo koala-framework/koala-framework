@@ -5,10 +5,10 @@
  */
 class Vps_Component_Cache_Meta_Component extends Vps_Component_Cache_Meta_Abstract
 {
-    private $_component;
+    private $_targetComponent;
 
     public function __construct(Vps_Component_Data $targetComponent)
     {
-        $this->_component = $component;
+        $this->_targetComponent = $targetComponent;
     }
 }

@@ -32,11 +32,9 @@ abstract class Vps_Component_View_Renderer
             $this->_getCacheValue()
         );
         if ($ret) {
-            /*
             foreach ($component->getComponent()->getCacheMeta() as $m) {
                 Vps_Component_Cache::getInstance()->saveMeta($component, $m);
             }
-            */
         }
         return $ret;
     }

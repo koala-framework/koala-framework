@@ -25,8 +25,9 @@ class Vpc_Paging_Component extends Vpc_Abstract
     public function getViewCacheSettings()
     {
         $ret = parent::getViewCacheSettings();
-        if ($this->getData()->parent->getComponent() instanceof Vpc_Directories_List_View_Component &&
-            is_instance_of($this->getData()->parent->getComponent()->getPartialClass(), 'Vps_Component_Partial_Id'))
+        $c = $this->getData()->parent;
+        if ($c->getComponent() instanceof Vpc_Directories_List_View_Component &&
+            Vpc_Abstract::getSetting($c->componentClass, 'partialClass') == 'Vps_Component_Partial_Id')
         {
             $ret['enabled'] = false;
         }

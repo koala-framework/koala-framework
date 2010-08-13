@@ -30,7 +30,7 @@ class Vps_Component_Cache
         self::$_instance = null;
     }
 
-    public static function refreshStaticCache()
+    public static function saveStaticMeta()
     {
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
             $class = $componentClass;
@@ -41,6 +41,35 @@ class Vps_Component_Cache
             foreach ($metas as $meta) {
                 self::getInstance()->saveMeta($componentClass, $meta);
             }
+        }
+    }
+
+    public function saveMeta($componentClass, Vps_Component_Cache_Meta_Abstract $meta)
+    {
+        if ($componentClass instanceof Vps_Component_Data) {
+            $component = $componentClass;
+            $componentClass = $component->componentClass;
+        }
+        if ($meta instanceof Vps_Component_Cache_Meta_Static_GeneratorRow) {
+            foreach ($meta->getCacheMeta($componentClass) as $meta) {
+                $this->saveMeta($componentClass, $meta);
+            }
+        } else if ($meta instanceof Vps_Component_Cache_Meta_Static_Abstract) {
+            $modelName = $meta->getModelname($componentClass);
+            if ($modelName) {
+                $pattern = $meta->getPattern();
+                /*
+                echo substr(strrchr(get_class($meta), '_'), 1) . ': ' .
+                    $componentClass . ': ' .
+                    $modelName . ' (' .
+                    $pattern . ")\n";
+                    */
+            }
+        } else if ($meta instanceof Vps_Component_Cache_Meta_ModelField) {
+        } else if ($meta instanceof Vps_Component_Cache_Meta_Component) {
+
+        } else {
+            throw new Vps_Exception('Unknow Meta: ' . get_class($meta));
         }
     }
 }
