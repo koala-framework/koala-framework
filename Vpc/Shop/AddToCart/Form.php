@@ -1,7 +1,6 @@
 <?php
-class Vpc_Shop_AddToCart_Form extends Vps_Form
+class Vpc_Shop_AddToCart_Form extends Vpc_Shop_AddToCartAbstract_Form
 {
-    protected $_modelName = 'Vpc_Shop_Cart_OrderProducts';
     protected $_product;
     protected function _init()
     {
