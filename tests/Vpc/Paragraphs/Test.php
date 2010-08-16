@@ -63,14 +63,4 @@ class Vpc_Paragraphs_Test extends Vpc_TestAbstract
         $this->assertNull($cache->load($this->_root));
         $this->assertEquals(2, $cacheModel->getRows()->count());
     }
-
-    public function testCacheVars()
-    {
-        $p = $this->_root;
-
-        $cacheVars = $p->getComponent()->getCacheVars();
-        $this->assertEquals(1, count($cacheVars));
-        $this->assertEquals('Vpc_Paragraphs_ParagraphsModel', get_class($cacheVars[0]['model']));
-        $this->assertEquals('root', $cacheVars[0]['id']);
-    }
 }

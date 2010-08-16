@@ -379,7 +379,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     public static function getStaticCacheMeta() {
         return array(
             new Vps_Component_Cache_Meta_Static_OwnModel(),
-            new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel'),
+            // TODO: brauch ma das für den Cache, wenn ja wie gehen dann die tests?
+            //new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel', '{id}'),
         );
     }
 

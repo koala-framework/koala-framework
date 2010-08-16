@@ -52,8 +52,8 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
                 $ret[] = Vps_Component_Cache_Meta_Static_Model($generator->getModel());
             }
         }
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model', '{componentId}');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel', '{id}');
         return $ret;
     }
 }
