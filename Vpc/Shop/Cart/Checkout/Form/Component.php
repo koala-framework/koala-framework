@@ -18,10 +18,6 @@ class Vpc_Shop_Cart_Checkout_Form_Component extends Vpc_Form_Component
         $this->_form->setId(Vpc_Shop_Cart_Orders::getCartOrderId());
 
         $this->_form->setPayments($this->_getFrontendPayments());
-
-        foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
-            $p->alterCheckoutForm($this->_form);
-        }
     }
 
     protected function _getFrontendPayments()
