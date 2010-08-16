@@ -18,7 +18,7 @@ class Vpc_Shop_VoucherProduct_AddToCart_Component extends Vpc_Shop_AddToCartAbst
         $ret[] = array(
             'class' => 'amount',
             'name' => trlcVps('Amount of Money', 'Amount'),
-            'value' => $row->amount.' €'
+            'value' => Vps_View_Helper_Money::money($row->amount)
         );
         return $ret;
     }
