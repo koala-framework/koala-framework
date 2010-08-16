@@ -102,7 +102,6 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
 
     /**
      * @group slow
-     */
     public function testRandomFeeds()
     {
         $urls = array();
@@ -127,6 +126,7 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
             }
         }
     }
+    */
 
     /**
      * @group slow
