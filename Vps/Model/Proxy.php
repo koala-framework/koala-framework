@@ -180,7 +180,9 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function import($format, $data, $options = array())
     {
+        Vps_Component_ModelObserver::getInstance()->disable();
         $this->_proxyModel->import($format, $data, $options);
+        Vps_Component_ModelObserver::getInstance()->enable();
     }
 
     public function writeBuffer()

@@ -14,7 +14,6 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         $this->_root->setFilename('vps/vpctest/'.$componentClass);
         Vps_Component_Cache::setBackend(Vps_Component_Cache::CACHE_BACKEND_FNF);
         Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
-        Vps_Component_ModelObserver::getInstance()->setDisableCache(false);
         Vps_Media::getOutputCache()->clean();
         Vps_Component_Cache::refreshStaticCache();
     }

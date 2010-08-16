@@ -12,7 +12,6 @@ class Vps_Component_ModelObserver_Test extends PHPUnit_Framework_TestCase
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Data_Root');
         $this->_observer = Vps_Component_ModelObserver::getInstance();
         $this->_observer->clear();
-        $this->_observer->setDisableCache(true);
         $this->_observer->setSkipFnF(false);
         $this->_model = new Vps_Model_FnF(array(
             'columns' => array('component_id'),
