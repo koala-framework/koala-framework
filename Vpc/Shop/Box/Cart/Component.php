@@ -27,7 +27,8 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
             $ret['items'][] = (object)array(
                 'product' => $addComponent->parent,
                 'row' => $i,
-                'additionalOrderData' => $addComponent->getComponent()->getAdditionalOrderData($i)
+                'additionalOrderData' => $addComponent->getComponent()->getAdditionalOrderData($i),
+                'price' => $addComponent->getComponent()->getPrice($i),
             );
         }
         $ret['sumRows'] = $ret['checkout']->getComponent()->getSumRows($ret['order']);

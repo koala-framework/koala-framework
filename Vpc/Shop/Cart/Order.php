@@ -53,8 +53,8 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     {
         $ret = 0;
         foreach ($this->getChildRows('Products') as $op) {
-            $p = $op->getParentRow('ProductPrice');
-            $ret += $p->price * $op->amount;
+            $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($op->add_component_id);
+            $ret += $c->getComponent()->getPrice($op) * $op->amount;
         }
         return $ret;
     }
