@@ -32,6 +32,8 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
 
     public function testText()
     {
+        $this->markTestIncomplete();
+
         $uploads = Vps_Model_Abstract::getInstance('Vps_Uploads_TestModel');
 
         $model = new Vps_Model_Mail(array(
