@@ -13,7 +13,7 @@ class Vps_Component_ModelObserver
     );
     private $_skipFnF = true;
     private $_processed = array();
-    private $_disableCache = false; // für Tests
+    private $_enabled = true; // wird zB. beim Import in Proxy ausgeschaltet
 
     public static function getInstance()
     {
@@ -34,10 +34,14 @@ class Vps_Component_ModelObserver
         $this->_skipFnF = $v;
     }
 
-    //für tests
-    public function setDisableCache($disable)
+    public function enable()
     {
-        $this->_disableCache = $disable;
+        $this->_enabled = true;
+    }
+
+    public function disable()
+    {
+        $this->_enabled = false;
     }
 
     public function clear()
@@ -51,24 +55,24 @@ class Vps_Component_ModelObserver
 
     public function insert($source)
     {
-        $this->_process['insert'][] = $source;
+        if ($this->_enabled) $this->_process['insert'][] = $source;
     }
 
     public function update($source)
     {
-        $this->_process['update'][] = $source;
+        if ($this->_enabled) $this->_process['update'][] = $source;
     }
 
     public function save($source)
     {
-        $this->_process['save'][] = $source;
+        if ($this->_enabled) $this->_process['save'][] = $source;
     }
 
     public function delete($source)
     {
         // Wird hier direkt aufgerufen, weil wenn später aufgerufen, ist row schon gelöscht
         if (!Vps_Component_Data_Root::getComponentClass()) return;
-        $this->_processCache($source);
+        if ($this->_enabled) $this->_processCache($source);
     }
 
     protected function _processCache($source)
@@ -106,12 +110,10 @@ class Vps_Component_ModelObserver
         if (!isset($this->_processed[$modelname]) || !in_array($id, $this->_processed[$modelname])) {
             if (!isset($this->_processed[$modelname])) $this->_processed[$modelname] = array();
             $this->_processed[$modelname][] = $id;
-            if (!$this->_disableCache) {
-                if ($row) {
-                    Vps_Component_Cache::getInstance()->cleanByRow($row);
-                } else {
-                    Vps_Component_Cache::getInstance()->cleanByModel($model);
-                }
+            if ($row) {
+                Vps_Component_Cache::getInstance()->cleanByRow($row);
+            } else {
+                Vps_Component_Cache::getInstance()->cleanByModel($model);
             }
             return array($modelname => $id);
         }
