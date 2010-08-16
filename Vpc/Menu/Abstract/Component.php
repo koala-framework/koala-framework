@@ -209,7 +209,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                     $componentClass, array('generator' => $key))
                 );
                 if (!$generator->getGeneratorFlag('page') || !$generator->getGeneratorFlag('table')) continue;
-                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel());
+                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), '{' . $generator->getModel()->getPrimaryKey() . '}');
             }
         }
         $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');

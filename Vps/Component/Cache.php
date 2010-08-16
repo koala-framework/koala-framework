@@ -23,6 +23,7 @@ abstract class Vps_Component_Cache
     {
         self::clearInstance();
         self::$_backend = $backend;
+        self::saveStaticMeta();
     }
 
     public static function clearInstance()
@@ -74,7 +75,7 @@ abstract class Vps_Component_Cache
 
             $source = $meta->getSourceComponent();
             $target = $component;
-            if ($component->componentId == $target->componentId)
+            if ($source->componentId == $target->componentId)
                 throw new Vps_Exception('Source and target component must be different, both have ' . $component->componentId);
             $this->_saveMetaComponent($source, $target);
 

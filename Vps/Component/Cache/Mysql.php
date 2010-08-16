@@ -53,6 +53,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $select = $this->_models['cache']->select()
             ->whereEquals('component_id', $component->componentId)
             ->whereEquals('type', $type)
+            ->whereEquals('deleted', 0)
             ->whereEquals('value', $value);
         $row = $this->_models['cache']->export(Vps_Model_Db::FORMAT_ARRAY, $select);
         if ($row) return $row[0]['content'];
@@ -64,6 +65,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $ret = array();
 
         $select = $this->_models['cache']->select();
+        $select->whereEquals('deleted', 0);
         $preloadSelect = $this->_models['preload']->select();
         $or = array();
         while ($component && !$component->isPage) $component = $component->parent;
@@ -223,14 +225,15 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             ));
         }
         $expr = new Vps_Model_Select_Expr_Or($or);
-        $modelComponentIds = $this->_addMetaComponentIds($componentIds, $expr);
-        $componentIds = array_unique(array_merge($componentIds, $modelComponentIds));
+        $modelComponentIds = $this->_addMetaComponentIds($modelComponentIds, $expr);
+        $componentIds = array_unique(array_merge($componentIds, array_values($modelComponentIds)));
 
         $or[] = new Vps_Model_Select_Expr_Equals('component_id', $componentIds);
         $expr = new Vps_Model_Select_Expr_Or($or);
+        $select = $this->getModel('cache')->select()->where($expr);
         $this->getModel('cache')->updateRows(
             array('deleted' => 1),
-            $this->getModel('cache')->select()->where($expr)
+            $select
         );
 
         // Callback
@@ -278,7 +281,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'buffer' => true,
             'replace' => true
         );
-        $this->_models['metaModel']()->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+        $this->_models['metaModel']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
     protected function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $isCallback)

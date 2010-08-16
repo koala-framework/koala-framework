@@ -74,7 +74,9 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
             $this->_beforeUpdate();
         }
         $this->_beforeSaveSiblingMaster();
+        Vps_Component_ModelObserver::getInstance()->disable();
         $ret = $this->_row->save();
+        Vps_Component_ModelObserver::getInstance()->enable();
         $this->_afterSave();
         if (!$id) {
             $this->_afterInsert();
@@ -89,7 +91,9 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
     {
         parent::delete();
         $this->_beforeDelete();
+        Vps_Component_ModelObserver::getInstance()->disable();
         $this->_row->delete();
+        Vps_Component_ModelObserver::getInstance()->enable();
         $this->_afterDelete();
     }
 

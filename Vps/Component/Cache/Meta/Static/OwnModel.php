@@ -9,6 +9,10 @@ class Vps_Component_Cache_Meta_Static_OwnModel extends Vps_Component_Cache_Meta_
     public function getModelname($componentClass)
     {
         if (!Vpc_Abstract::hasSetting($componentClass, 'ownModel')) return null;
-        return Vpc_Abstract::getSetting($componentClass, 'ownModel');
+        $model = Vpc_Abstract::getSetting($componentClass, 'ownModel');
+        if (is_instance_of($model, 'Vpc_Basic_Text_Model')) {
+            $model = new $model(array('componentClass' => $componentClass));
+        }
+        return $this->_getModelname($model);
     }
 }

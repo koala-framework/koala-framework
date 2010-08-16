@@ -20,7 +20,10 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Helper_
             $sourcePageId = $component->getPage() ? $component->getPage()->componentId : null;
             $targetPageId = $target->getPage() ? $target->getPage()->componentId : null;
             if ($sourcePageId != $targetPageId) {
-                Vps_Component_Cache::getInstance()->saveMetaComponent($component, $target);
+                Vps_Component_Cache::getInstance()->saveMeta(
+                    $component,
+                    new Vps_Component_Cache_Meta_Component($target)
+                );
             }
         }
         if (!$get) $get = array();
