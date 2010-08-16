@@ -5292,5 +5292,15 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Gutschein Einlösen</de>
 <id>1390</id>
 </text>
+<text>
+<en>Remaining Amount {0}</en>
+<de>Restbetrag {0}</de>
+<id>1391</id>
+</text>
+<text>
+<en>The Voucher has been successfully registered.</en>
+<de>Der Gutschein wurde erfolgreich eingetragen.</de>
+<id>1392</id>
+</text>
 </trl>
 

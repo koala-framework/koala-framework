@@ -22,8 +22,6 @@ class Vpc_Shop_Cart_Checkout_Form_Component extends Vpc_Form_Component
         foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
             $p->alterCheckoutForm($this->_form);
         }
-
-        $this->_form;
     }
 
     protected function _getFrontendPayments()

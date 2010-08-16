@@ -27,9 +27,16 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
 
         if (!$row || $row->amount - $row->used_amount <= 0) return array();
 
+        $amount = -min($total, $row->amount - $row->used_amount);
+        $text = trlVps('Voucher');
+        $remainingAmount = $row->amount - $row->used_amount + $amount;
+        if ($remainingAmount > 0) {
+            $text .= ' ('.trlVps('Remaining Amount {0}', Vps_View_Helper_Money::money($remainingAmount)).')';
+        }
+
         return array(array(
-            'amount' => -min($total, $row->amount - $row->used_amount),
-            'text' => trlVps('Voucher').':',
+            'amount' => $amount,
+            'text' => $text.':',
             'type' => 'voucher'
         ));
     }
