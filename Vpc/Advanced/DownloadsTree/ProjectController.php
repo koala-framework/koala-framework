@@ -5,7 +5,8 @@ class Vpc_Advanced_DownloadsTree_ProjectController extends Vps_Controller_Action
 
     protected function _initFields()
     {
-        $this->_form->setModel(Vps_Model_Abstract::getInstance('Vpc_Advanced_DownloadsTree_Projects'));
+        $modelName = Vpc_Abstract::getSetting($this->_getParam('class'), 'projectsModel');
+        $this->_form->setModel(Vps_Model_Abstract::getInstance($modelName));
 
         $this->_form->add(new Vps_Form_Field_TextField('text', trlVps('Text')));
         $this->_form->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
