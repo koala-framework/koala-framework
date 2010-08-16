@@ -20,9 +20,11 @@
             <? } ?>
         </p>
     </div>
+    <? if ($this->paymentTypeText) { ?>
     <div class="orderInfo">
         <p>
             <?=trlVps('You pay by')?> <strong><?=$this->paymentTypeText?></strong>.
         </p>
     </div>
+    <? } ?>
 </div>

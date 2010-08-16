@@ -12,6 +12,7 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
                 'prePayment' => 'Vpc_Shop_Cart_Checkout_Payment_PrePayment_Component',
                 'cashOnDelivery' => 'Vpc_Shop_Cart_Checkout_Payment_CashOnDelivery_Component',
                 'payPal' => 'Vpc_Shop_Cart_Checkout_Payment_PayPal_Component',
+                'none' => 'Vpc_Shop_Cart_Checkout_Payment_None_Component'
             )
         );
         $ret['cssClass'] = 'webForm webStandard';
