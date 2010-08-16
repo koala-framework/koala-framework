@@ -15,6 +15,13 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
         $this->_defaultClass = $defaultClass;
     }
 
+    public function __clone()
+    {
+        foreach ($this->_array as $k=>$i) {
+            $this->_array[$k] = clone $i;
+        }
+    }
+
     public function count()
     {
         return count($this->_array);
