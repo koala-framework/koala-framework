@@ -10,9 +10,15 @@ class Vpc_Advanced_DownloadsTree_ViewDownloadsControllerDownloadData extends Vps
 
 class Vpc_Advanced_DownloadsTree_ViewDownloadsController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_modelName = 'Vpc_Advanced_DownloadsTree_Downloads';
     protected $_buttons = array();
     protected $_defaultOrder = array('field'=>'date', 'direction'=>'DESC');
+
+    public function preDispatch()
+    {
+        $this->_modelName = Vpc_Abstract::getSetting($this->_getParam('class'), 'downloadsModel');
+        parent::preDispatch();
+    }
+
     protected function _initColumns()
     {
         parent::_initColumns();
