@@ -13,11 +13,17 @@ class Vpc_Shop_Cart_Plugins_Voucher_Redeem_Component extends Vpc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        if (!Vpc_Shop_Cart_Orders::getCartOrderId()) {
-            throw new Vps_Exception_AccessDenied("No Order exists");
-        }
         $this->_form->setId(Vpc_Shop_Cart_Orders::getCartOrderId());
     }
+
+    //wenn warenkorb noch ler wird erst beim einfügen der neuen order (mit dem gutschein)
+    //die id in der session gespeichert
+    protected function _afterInsert(Vps_Model_Row_Interface $row)
+    {
+        parent::_afterInsert($row);
+        Vpc_Shop_Cart_Orders::setCartOrderId($row->id);
+    }
+
 
     /*
     drei möglichkeiten:

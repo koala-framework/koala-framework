@@ -11,11 +11,6 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
         return $ret;
     }
 
-    public function alterCheckoutForm(Vpc_Shop_Cart_Checkout_Form_Form $form)
-    {
-        //atm leer
-    }
-
     public function getAdditionalSumRows(Vpc_Shop_Cart_Order $order, $total)
     {
         if (!$order->voucher_code) return array();
@@ -55,6 +50,9 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
                 $h->order_id = $order->id;
                 $h->date = $order->date;
                 $h->save();
+
+                //verbrauchten betrag auch noch bei der order speichern
+                $order->voucher_amount = $h->amount;
                 break;
             }
         }

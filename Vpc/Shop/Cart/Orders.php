@@ -57,6 +57,13 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
         return $session->orderId;
     }
 
+    public static function setCartOrderId($cartOrderId)
+    {
+        self::$_cartOrderId = $cartOrderId;
+        $session = new Zend_Session_Namespace('vpcShopCart');
+        $session->orderId = $cartOrderId;
+    }
+
     public static function setOverriddenCartOrderId($id)
     {
         self::$_cartOrderId = $id;
