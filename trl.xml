@@ -5287,5 +5287,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>'%value%' ist ein ungültiger Gutschein Code</de>
 <id>1389</id>
 </text>
+<text>
+<en>Redeem Voucher</en>
+<de>Gutschein Einlösen</de>
+<id>1390</id>
+</text>
 </trl>
 
