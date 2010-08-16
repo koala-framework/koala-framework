@@ -40,13 +40,10 @@
                 <? } ?>
             </ul>
     </div>
-        <div class="cartOrder">
-            <div class="cart">
-                <?=$this->componentLink($this->cart, $this->placeholder['toCart'])?>
-            </div>
-            <div class="checkout">
-                <?=$this->componentLink($this->checkout, $this->placeholder['toCheckout'])?>
-            </div>
-        </div>
+    <ul class="links">
+        <? foreach ($this->links as $link) { ?>
+            <li><?=$this->componentLink($link['component'], $link['text'])?></li>
+        <? } ?>
+    </ul>
     <? } ?>
 </div>

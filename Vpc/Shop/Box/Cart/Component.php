@@ -14,8 +14,6 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['cart'] = $this->_getCart();
-        $ret['checkout'] = $ret['cart']->getChildComponent('_checkout');
 
         $ret['order'] = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
                             ->getCartOrder();
@@ -31,8 +29,25 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
                 'price' => $addComponent->getComponent()->getPrice($i),
             );
         }
-        $ret['sumRows'] = $ret['checkout']->getComponent()->getSumRows($ret['order']);
+        $ret['sumRows'] = $this->_getCart()->getChildComponent('_checkout')
+                                ->getComponent()->getSumRows($ret['order']);
 
+        $ret['links'] = $this->_getLinks();
+
+        return $ret;
+    }
+
+    protected function _getLinks()
+    {
+        $ret = array();
+        $ret['cart'] = array(
+            'component' => $this->_getCart(),
+            'text' => $this->_getPlaceholder('toCart')
+        );
+        $ret['checkout'] = array(
+            'component' => $this->_getCart()->getChildComponent('_checkout'),
+            'text' => $this->_getPlaceholder('toCheckout')
+        );
         return $ret;
     }
 
