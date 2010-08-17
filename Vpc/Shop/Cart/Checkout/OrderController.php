@@ -67,5 +67,8 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
         parent::_beforeInsert($row);
         $row->status = 'ordered';
         $row->checkout_component_id = $this->_getParam('componentId');
+        $row->cart_component_class = Vps_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'))
+            ->parent->componentClass;
     }
 }
