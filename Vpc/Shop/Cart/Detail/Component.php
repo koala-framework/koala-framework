@@ -27,6 +27,7 @@ class Vpc_Shop_Cart_Detail_Component extends Vpc_Abstract_Composite_Component
         $ret['product'] = $addCmp->parent;
         $ret['row'] = $this->getData()->row;
         $ret['price'] = $addCmp->getComponent()->getPrice($ret['row']);
+        $ret['text'] = $addCmp->getComponent()->getProductText($ret['row']);
         return $ret;
     }
 }
