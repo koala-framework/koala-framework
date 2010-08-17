@@ -33,6 +33,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Vpc_A
                 'row' => $i,
                 'additionalOrderData' => $additionalOrderData,
                 'price' => $addComponent->getComponent()->getPrice($i),
+                'text' => $addComponent->getComponent()->getProductText($i),
             );
         }
 
