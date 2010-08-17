@@ -54,7 +54,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
         $ret = 0;
         foreach ($this->getChildRows('Products') as $op) {
             $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($op->add_component_id);
-            $ret += $c->getComponent()->getPrice($op) * $op->amount;
+            $ret += $c->getComponent()->getPrice($op);
         }
         return $ret;
     }
@@ -85,6 +85,25 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
             $ret .= trlVps('Ms.');
         }
         $ret .= ' '.trim($this->title.' '.$this->lastname);
+        return $ret;
+    }
+
+    public function getProductsData()
+    {
+        $ret = array();
+
+        $items = $this->getChildRows('Products');
+        $ret = array();
+        foreach ($items as $i) {
+            $addComponent = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByDbId($i->add_component_id);
+            $ret[] = (object)array(
+                'product' => $addComponent->parent,
+                'row' => $i,
+                'additionalOrderData' => $addComponent->getComponent()->getAdditionalOrderData($i),
+                'price' => $addComponent->getComponent()->getPrice($i),
+            );
+        }
         return $ret;
     }
 }

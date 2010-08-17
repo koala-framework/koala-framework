@@ -31,7 +31,8 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Vpc_A
             $ret['items'][] = (object)array(
                 'product' => $addComponent->parent,
                 'row' => $i,
-                'additionalOrderData' => $additionalOrderData
+                'additionalOrderData' => $additionalOrderData,
+                'price' => $addComponent->getComponent()->getPrice($i),
             );
         }
 

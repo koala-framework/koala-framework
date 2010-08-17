@@ -30,7 +30,7 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Shop_AddToCartAbstract_Component
 
     public function getPrice(Vpc_Shop_Cart_OrderProduct $orderProduct)
     {
-        return $orderProduct->getParentRow('ProductPrice')->price;
+        return $orderProduct->getParentRow('ProductPrice')->price * $orderProduct->amount;
     }
 
     public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
