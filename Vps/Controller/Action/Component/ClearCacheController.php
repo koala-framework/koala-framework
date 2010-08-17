@@ -55,7 +55,7 @@ class Vps_Controller_Action_Component_ClearCacheController extends Vps_Controlle
 
         $mail = new Vps_Mail();
         $user = Vps_Registry::get('userModel')->getAuthedUser();
-        $mail->setFrom($user->email, $user->->__toString());
+        $mail->setFrom($user->email, $user->__toString());
         $mail->addTo('ufx@vivid-planet.com', 'Franz Unger');
         $mail->addTo('ns@vivid-planet.com', 'Niko Sams');
         $mail->addTo('mh@vivid-planet.com', 'Markus Hauser');
