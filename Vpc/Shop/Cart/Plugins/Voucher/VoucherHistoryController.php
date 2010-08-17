@@ -6,11 +6,11 @@ class Vpc_Shop_Cart_Plugins_Voucher_VoucherHistoryController extends Vps_Control
     protected function _initColumns()
     {
         parent::_initColumns();
+        $this->_columns->add(new Vps_Grid_Column_Date('date', trlVps('Date')))
+            ->setEditor(new Vps_Form_Field_DateField());
         $this->_columns->add(new Vps_Grid_Column('amount', trlcVps('Amount of Money', 'Amount'), 50))
             ->setRenderer('euroMoney')
             ->setEditor(new Vps_Form_Field_NumberField());
-        $this->_columns->add(new Vps_Grid_Column_Date('date', trlVps('Date')))
-            ->setEditor(new Vps_Form_Field_DateField());
         $this->_columns->add(new Vps_Grid_Column('comment', trlVps('Comment'), 300))
             ->setEditor(new Vps_Form_Field_TextField());
     }

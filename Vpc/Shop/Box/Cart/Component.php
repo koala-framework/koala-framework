@@ -17,18 +17,7 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
 
         $ret['order'] = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
                             ->getCartOrder();
-        $items = $ret['order']->getChildRows('Products');
-        $ret['items'] = array();
-        foreach ($items as $i) {
-            $addComponent = Vps_Component_Data_Root::getInstance()
-                            ->getComponentByDbId($i->add_component_id);
-            $ret['items'][] = (object)array(
-                'product' => $addComponent->parent,
-                'row' => $i,
-                'additionalOrderData' => $addComponent->getComponent()->getAdditionalOrderData($i),
-                'price' => $addComponent->getComponent()->getPrice($i),
-            );
-        }
+        $ret['items'] = $ret['order']->getProductsData();
         $ret['sumRows'] = $this->_getCart()->getChildComponent('_checkout')
                                 ->getComponent()->getSumRows($ret['order']);
 

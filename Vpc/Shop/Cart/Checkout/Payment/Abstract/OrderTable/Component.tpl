@@ -17,13 +17,11 @@
         $i = 1;
         foreach ($this->items as $item) { ?>
             <tr class="products<?=($i%2==1 ? ' row1' : ' row2');?>">
-                <td class="product"><?=$item->product->name?></td>
-                <td class="unitPrice"><?=$this->money($item->row->price,'')?></td>
-                <td class="amount"><?=$item->row->amount?></td>
+                <td class="product"><?=$item->product->getPage()->name?></td>
                 <? foreach($item->additionalOrderData as $d) { ?>
-                    <td class="<?=$d['class']?>"><?=$d['value']?></td>
+                    <td class="<?=$d['class']?>"><?=$d['name']?>: <?=$d['value']?></td>
                 <? } ?>
-                <td class="price"><?=$this->money($item->row->price * $item->row->amount,'')?></td>
+                <td class="price"><?=$this->money($item->price)?></td>
             </tr>
             <tr class="<?=($c==$i ? 'lastline' : 'line');?>">
                 <td colspan="<?=(4+count($this->additionalOrderDataHeaders))?>">
