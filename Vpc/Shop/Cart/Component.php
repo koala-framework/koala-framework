@@ -25,6 +25,8 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         $ret['assets']['files'][] = 'vps/Vpc/Shop/Cart/Keepalive.js';
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtConnection';
+
+        $ret['orderData'] = 'Vpc_Shop_Cart_OrderData';
         return $ret;
     }
 
@@ -36,17 +38,9 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         return $ret;
     }
 
-    public function getShopCartPlugins()
+    public final function getShopCartPlugins()
     {
-        if (!isset($this->_chartPlugins)) {
-            $this->_chartPlugins = array();
-            $plugins = $this->_getSetting('plugins');
-            foreach ($plugins as $plugin) {
-                if (is_instance_of($plugin, 'Vpc_Shop_Cart_Plugins_Interface')) {
-                    $this->_chartPlugins[] = new $plugin();
-                }
-            }
-        }
-        return $this->_chartPlugins;
+        return Vpc_Shop_Cart_OrderData::getInstance($this->getData()->componentClass)
+                    ->getShopCartPlugins();
     }
 }

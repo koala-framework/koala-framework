@@ -36,6 +36,7 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
 
             $order->payment_component_id = $this->getData()->componentId;
             $order->checkout_component_id = $this->getData()->parent->componentId;
+            $order->cart_component_class = $this->getData()->parent->parent->componentClass;
 
             $order->status = 'payed';
             $order->date = date('Y-m-d H:i:s');
