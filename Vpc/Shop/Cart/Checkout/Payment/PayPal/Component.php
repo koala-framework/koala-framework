@@ -45,7 +45,11 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
             foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
                 $p->orderConfirmed($order);
             }
-
+            foreach ($order->getChildRows('Products') as $p) {
+                $addComponent = Vps_Component_Data_Root::getInstance()
+                    ->getComponentByDbId($p->add_component_id);
+                $addComponent->getComponent()->orderConfirmed($p);
+            }
             $this->sendConfirmMail($order);
 
             return true;

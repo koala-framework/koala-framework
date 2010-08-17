@@ -75,6 +75,8 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
         $mail->send($order, $data);
     }
 
+    //diese fkt wird bei paypal nicht verwendet!
+    //wenn also da was hinzugefuegt wird muss das bei paypal auch gemacht werden
     public function confirmOrder($order)
     {
         $order->payment_component_id = $this->getData()->componentId;
@@ -85,6 +87,11 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
 
         foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
             $p->orderConfirmed($order);
+        }
+        foreach ($order->getChildRows('Products') as $p) {
+            $addComponent = Vps_Component_Data_Root::getInstance()
+                ->getComponentByDbId($p->add_component_id);
+            $addComponent->getComponent()->orderConfirmed($p);
         }
 
         $this->sendConfirmMail($order);
