@@ -135,7 +135,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
         $added = false;
         $value = $this->_preInsertValue($value);
         foreach ($this->_array as $i=>$v) {
-            if ($v->getName() == $where) {
+            if ($v === $where || $v->getName() == $where) {
                 array_splice($this->_array, $i, 0, array($value));
                 $added = true;
                 break;
@@ -153,7 +153,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate, Countable
         $added = false;
         $value = $this->_preInsertValue($value);
         foreach ($this->_array as $i=>$v) {
-            if ($v->getName() == $where) {
+            if ($v === $where || $v->getName() == $where) {
                 array_splice($this->_array, $i+1, 0, array($value));
                 $added = true;
                 break;
