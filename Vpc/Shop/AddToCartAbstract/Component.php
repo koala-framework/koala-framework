@@ -46,4 +46,8 @@ abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
     }
 
     abstract public function getPrice(Vpc_Shop_Cart_OrderProduct $orderProduct);
+
+    public function orderConfirmed(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    {
+    }
 }

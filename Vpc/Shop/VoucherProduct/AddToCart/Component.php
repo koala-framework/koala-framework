@@ -22,4 +22,14 @@ class Vpc_Shop_VoucherProduct_AddToCart_Component extends Vpc_Shop_AddToCartAbst
         );
         return $ret;
     }
+
+    public function orderConfirmed(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    {
+        //gutschein erstellen
+        $row = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Plugins_Voucher_Vouchers')->createRow();
+        $row->amount = $orderProduct->amount;
+        $row->date = date('Y-m-d H:i:s');
+        $row->comment = trlVps('Order').' '.$orderProduct->getParentRow('Order')->order_number;
+        $row->save();
+    }
 }
