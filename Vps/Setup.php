@@ -146,9 +146,12 @@ class Vps_Setup
         }
 
         if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != $config->application->vps->version) {
-            $required = trim(file_get_contents('application/vps_branch'));
-            $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
-            throw new Vps_Exception("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
+            $validCommands = array('shell', 'export', 'copy-to-test');
+            if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
+                $required = trim(file_get_contents('application/vps_branch'));
+                $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
+                throw new Vps_Exception_Client("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
+            }
         }
 
         if (isset($_POST['PHPSESSID'])) {
