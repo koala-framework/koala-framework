@@ -1,4 +1,4 @@
-<div class="product"><?=$this->placeholder['product'];?><?=$this->componentLink($this->product)?></div>
+<div class="product"><?=$this->placeholder['product'];?><?=$this->componentLink($this->product, $this->text)?></div>
 <div class="amount"><?=$this->component($this->form)?></div>
 <div class="price"><?=$this->placeholder['unitPrice'];?><strong><?=$this->money($this->price,'')?></strong></div>
 <div class="delete">
