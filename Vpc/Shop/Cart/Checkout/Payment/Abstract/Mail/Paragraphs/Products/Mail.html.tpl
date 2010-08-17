@@ -10,7 +10,7 @@
     $c=0;
     foreach ($this->items as $item) { ?>
         <tr class="products<?=($c%2==0 ? ' row1' : ' row2');?>">
-            <td class="product"><?=$item->product->getPage()->name?></td>
+            <td class="product"><?=$item->text?></td>
             <? foreach($item->additionalOrderData as $d) { ?>
                 <td class="<?=$d['class']?>"><?=$d['name']?>: <?=$d['value']?></td>
             <? } ?>

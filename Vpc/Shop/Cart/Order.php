@@ -104,6 +104,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
                 'row' => $i,
                 'additionalOrderData' => $addComponent->getComponent()->getAdditionalOrderData($i),
                 'price' => $addComponent->getComponent()->getPrice($i),
+                'text' => $addComponent->getComponent()->getProductText($i),
             );
         }
         return $ret;

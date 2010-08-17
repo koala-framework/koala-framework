@@ -38,6 +38,11 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Shop_AddToCartAbstract_Component
         return $orderProduct->amount;
     }
 
+    public function getProductText(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    {
+        return $this->getPage()->name;
+    }
+
     public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
     {
         $ret = parent::getAdditionalOrderData($row);

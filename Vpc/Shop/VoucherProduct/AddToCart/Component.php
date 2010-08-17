@@ -37,4 +37,9 @@ class Vpc_Shop_VoucherProduct_AddToCart_Component extends Vpc_Shop_AddToCartAbst
         $row->comment = trlVps('Order').' '.$orderProduct->getParentRow('Order')->order_number;
         $row->save();
     }
+
+    public function getProductText(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    {
+        return trlVps('Voucher');
+    }
 }
