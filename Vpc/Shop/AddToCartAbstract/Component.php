@@ -6,21 +6,13 @@ abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
         $ret = parent::getSettings();
         $ret['placeholder']['submitButton'] = trlVps('add to cart');
         $ret['generators']['child']['component']['success'] = 'Vpc_Shop_AddToCartAbstract_Success_Component';
+        $ret['orderProductData'] = 'Vpc_Shop_AddToCartAbstract_OrderProductData';
         return $ret;
     }
 
     protected function _initForm()
     {
         parent::_initForm();
-    }
-
-    //TODO ned optimal, aber wir müssen mehere forms machen können
-    public function createForm()
-    {
-        unset($this->_form);
-        $this->_initForm();
-        $ret = $this->_form;
-        return $ret;
     }
 
     public function getTemplateVars()
@@ -38,17 +30,30 @@ abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
         $orders = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders');
         $row->shop_order_id = $orders->getCartOrderAndSave()->id;
         $row->add_component_id = $this->getData()->dbId;
+        $row->add_component_class = $this->getData()->componentClass;
     }
 
-    public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
+    public final function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
     {
-        return array();
+        return Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+            ->getAdditionalOrderData($orderProduct);
     }
 
-    abstract public function getPrice(Vpc_Shop_Cart_OrderProduct $orderProduct);
-    abstract public function getAmount(Vpc_Shop_Cart_OrderProduct $orderProduct);
-
-    public function orderConfirmed(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    public function getPrice(Vpc_Shop_Cart_OrderProduct $orderProduct)
     {
+        return Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+            ->getAmount($orderProduct);
+    }
+
+    public final function getAmount(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    {
+        return Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+            ->getAmount($orderProduct);
+    }
+
+    public final function orderConfirmed(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    {
+        Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+            ->orderConfirmed($orderProduct);
     }
 }
