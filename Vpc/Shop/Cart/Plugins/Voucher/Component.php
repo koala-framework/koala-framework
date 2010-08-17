@@ -49,6 +49,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
                 $h->amount = -$sumRow['amount'];
                 $h->order_id = $order->id;
                 $h->date = $order->date;
+                $h->comment = trlVps('Order').' '.$order->order_number;
                 $h->save();
 
                 //verbrauchten betrag auch noch bei der order speichern
