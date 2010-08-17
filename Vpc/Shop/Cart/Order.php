@@ -62,8 +62,10 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     public function getTotalAmount()
     {
         $ret = 0;
+
         foreach ($this->getChildRows('Products') as $op) {
-            $ret += $op->amount;
+            $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($op->add_component_id);
+            $ret += $c->getComponent()->getAmount($op);
         }
         return $ret;
     }

@@ -12,6 +12,11 @@ class Vpc_Shop_VoucherProduct_AddToCart_Component extends Vpc_Shop_AddToCartAbst
         return $orderProduct->amount;
     }
 
+    public function getAmount(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    {
+        return 1;
+    }
+
     public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
     {
         $ret = parent::getAdditionalOrderData($row);
