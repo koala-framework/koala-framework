@@ -7,6 +7,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_VoucherController extends Vps_Controller_Act
     protected function _initFields()
     {
         parent::_initFields();
+        $this->_form->add(new Vps_Form_Field_ShowField('code', trlVps('Code')));
         $this->_form->add(new Vps_Form_Field_NumberField('amount', trlcVps('Amount of Money', 'Amount')))
             ->setWidth(50)
             ->setComment('€');
