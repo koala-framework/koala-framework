@@ -54,11 +54,12 @@ class Vps_Controller_Action_Component_ClearCacheController extends Vps_Controlle
         if ($ret != 0) throw new Vps_Exception_Client("Cache clearing failed");
 
         $mail = new Vps_Mail();
-        $mail->setFrom('clear-cache-report@vivid-planet.com', 'Clear Cache Report');
+        $user = Vps_Registry::get('userModel')->getAuthedUser();
+        $mail->setFrom($user->email, $user->__toString());
         $mail->addTo('ufx@vivid-planet.com', 'Franz Unger');
         $mail->addTo('ns@vivid-planet.com', 'Niko Sams');
         $mail->addTo('mh@vivid-planet.com', 'Markus Hauser');
-        $mail->setSubject('Clear Cache Report. Affected: '.$row->clear_cache_affected." (by ".Vps_Registry::get('userModel')->getAuthedUser()->__toString().")");
+        $mail->setSubject('Clear Cache Report. Affected: '.$row->clear_cache_affected);
         $mail->setBodyText(
             "Clear Cache Report\n\n"
             ."Web: ".(Vps_Registry::get('config')->application->name)." (".Vps_Registry::get('config')->application->id.")\n"
