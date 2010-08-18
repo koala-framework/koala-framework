@@ -64,26 +64,26 @@ class Vps_Model_Select_Expr_Not implements Vps_Model_Select_Expr_Interface
 {
     __construct(Vps_Model_Select_Expr_Interface $expr);
 }
-class Vps_Model_Select_Expr_Equals extends Vps_Model_Select_Expr_CompareField_Abstract {}
+class Vps_Model_Select_Expr_Equal extends Vps_Model_Select_Expr_CompareField_Abstract {}
 class Vps_Model_Select_Expr_Lower extends Vps_Model_Select_Expr_CompareField_Abstract {}
 class Vps_Model_Select_Expr_Higher extends Vps_Model_Select_Expr_CompareField_Abstract {}
 class Vps_Model_Select_Expr_NotEquals implements Vps_Model_Select_Expr_Not
 {
     __construct($field, $value)
     {
-        parent::__construct(new Vps_Model_Select_Expr_Equals($field, $value);
+        parent::__construct(new Vps_Model_Select_Expr_Equal($field, $value);
     }
 }
 class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
 {
     __construct($field, $value)
     {
-        parent::__construct(array(new Vps_Model_Select_Expr_Lower($field, $value), new Vps_Model_Select_Expr_Equals($field, $value));
+        parent::__construct(array(new Vps_Model_Select_Expr_Lower($field, $value), new Vps_Model_Select_Expr_Equal($field, $value));
     }
 }
-    return $this->where(new Vps_Model_Select_Expr_Equals($field, $value));
-    return $this->where(new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_Equals($field, $value)));
-    return $this->where(new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Equals($field, $value),
+    return $this->where(new Vps_Model_Select_Expr_Equal($field, $value));
+    return $this->where(new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_Equal($field, $value)));
+    return $this->where(new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Equal($field, $value),
                                                         new Vps_Model_Select_Expr_Higher($field, $value)));
     */
     public function whereEquals($field, $value = null)

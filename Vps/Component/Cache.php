@@ -199,7 +199,7 @@ class Vps_Component_Cache
                 }
                 $modelname = get_class($model);
                 $select = $this->getMetaModel()->select()->where(
-                    new Vps_Model_Select_Expr_Equals('model', $modelname)
+                    new Vps_Model_Select_Expr_Equal('model', $modelname)
                 );
                 $sqlInsert = '';
             } else {
@@ -218,7 +218,7 @@ class Vps_Component_Cache
                 $modelname = get_class($model);
                 $fields = $this->_getFields($modelname);
                 if (!$fields) $fields = array('');
-                $or = array(new Vps_Model_Select_Expr_Equals('id', ''));
+                $or = array(new Vps_Model_Select_Expr_Equal('id', ''));
                 $sqlOr = '';
                 foreach ($fields as $field) {
                     if ($field != '') {
@@ -228,14 +228,14 @@ class Vps_Component_Cache
                     }
                     $sqlOr .= "OR (m.id='$id' AND m.field='$field')";
                     $or[] = new Vps_Model_Select_Expr_And(array(
-                        new Vps_Model_Select_Expr_Equals('id', $id),
-                        new Vps_Model_Select_Expr_Equals('field', $field)
+                        new Vps_Model_Select_Expr_Equal('id', $id),
+                        new Vps_Model_Select_Expr_Equal('field', $field)
                     ));
                 }
                 $sqlInsert = "AND (m.id = '' $sqlOr)";
                 $select = $this->getMetaModel()->select()->where(
                     new Vps_Model_Select_Expr_And(array(
-                        new Vps_Model_Select_Expr_Equals('model', $modelname),
+                        new Vps_Model_Select_Expr_Equal('model', $modelname),
                         new Vps_Model_Select_Expr_Or($or)
                     ))
                 );
@@ -390,7 +390,7 @@ class Vps_Component_Cache
                 $pageId = $this->_getPageIdFromComponentId($id);
                 $or[] = new Vps_Model_Select_Expr_And(array(
                     new Vps_Model_Select_Expr_Like('id', $id . '%'),
-                    new Vps_Model_Select_Expr_Equals('page_id', $pageId)
+                    new Vps_Model_Select_Expr_Equal('page_id', $pageId)
                 ));
                 $values[$id] = null;
             }

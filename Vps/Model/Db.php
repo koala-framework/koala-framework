@@ -353,7 +353,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         ) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
         }
-        if ($expr instanceof Vps_Model_Select_Expr_Equals) {
+        if ($expr instanceof Vps_Model_Select_Expr_Equal) {
             if (is_array($quotedValue)) {
                 return $field." IN (".implode(',', $quotedValue).")";
             } else {
