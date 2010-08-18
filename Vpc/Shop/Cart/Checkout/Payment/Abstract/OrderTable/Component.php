@@ -12,6 +12,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Vpc_A
     {
         $ret = parent::getTemplateVars();
         $ret['order'] = $this->_getOrder();
+        $ret['items'] = $ret['order']->getProductsData();
 
         $items = $ret['order']->getChildRows('Products');
         $ret['items'] = array();

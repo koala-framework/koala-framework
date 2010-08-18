@@ -1,17 +1,5 @@
 <div class="<?=$this->cssClass?>">
     <table class="tblCheckout" cellspacing="0" cellpadding="0">
-        <tr class="firstRow">
-            <th class="product"><?=trlVps('Product')?></th>
-            <th class="unitPrice"><?=trlVps('Unit Price')?></th>
-            <th class="amount"><?=trlVps('Amount')?></th>
-            <? foreach($this->additionalOrderDataHeaders as $h) { ?>
-            <th class="<?=$h['class']?>"><?=$h['text']?></th>
-            <? } ?>
-            <th class="price"><?=trlVps('Price')?></th>
-        </tr>
-        <tr class="empty first">
-            <td colspan="<?=(4+count($this->additionalOrderDataHeaders))?>">&nbsp;</td>
-        </tr>
         <?
         $c = count($this->items);
         $i = 1;
