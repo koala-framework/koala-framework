@@ -69,7 +69,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                     scope: this,
                     fn: function(button) {
                         for(var i=0;i<this.vpsFiles.length;i++) {
-                            this.cancelUpload(this.getFile(i).id);
+                            if (this.getFile(i)) this.cancelUpload(this.getFile(i).id);
                         }
                         this.running = false;
                     }
