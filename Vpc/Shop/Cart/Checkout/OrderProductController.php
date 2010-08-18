@@ -37,9 +37,5 @@ class Vpc_Shop_Cart_Checkout_OrderProductController extends Vps_Controller_Actio
     {
         parent::_beforeInsert($row);
         $row->shop_order_id = $this->_getParam('shop_order_id');
-        $productId = $row->getParentRow('ProductPrice')->shop_product_id;
-        $addToCart = Vps_Component_Data_Root::getInstance()
-            ->getComponentByDbId('shopProducts_'.$productId.'-addToCart');
-        $row->add_component_id = $addToCart->dbId;
     }
 }
