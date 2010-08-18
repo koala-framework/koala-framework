@@ -10,7 +10,6 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
     protected function _init()
     {
         parent::_init();
-        $this->_exprs['sum_amount'] = new Vps_Model_Select_Expr_Child_Sum('Products', 'amount');
         $this->_exprs['order_number'] = new Vps_Model_Select_Expr_SumFields(
             array('number', 11000)
         );
