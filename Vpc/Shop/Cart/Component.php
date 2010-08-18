@@ -1,6 +1,8 @@
 <?php
 class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
 {
+    private $_chartPlugins;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -23,6 +25,8 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         $ret['assets']['files'][] = 'vps/Vpc/Shop/Cart/Keepalive.js';
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtConnection';
+
+        $ret['orderData'] = 'Vpc_Shop_Cart_OrderData';
         return $ret;
     }
 
@@ -32,5 +36,11 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         $ret['countProducts'] = $this->getData()->countChildComponents(array('generator'=>'detail'));
         $ret['checkout'] = $this->getData()->getChildComponent('_checkout');
         return $ret;
+    }
+
+    public final function getShopCartPlugins()
+    {
+        return Vpc_Shop_Cart_OrderData::getInstance($this->getData()->componentClass)
+                    ->getShopCartPlugins();
     }
 }
