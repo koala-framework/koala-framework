@@ -25,8 +25,10 @@ class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Shop_AddToCart
     {
         parent::_beforeInsert($row);
         $id = $this->_getProduct()->id;
-        $row->add_component_id = $this->getData()->parent->getComponent()->getItemDirectory()
+        $addToCart = $this->getData()->parent->getComponent()->getItemDirectory()
             ->getChildComponent('_'.$id)
-            ->getChildComponent('-addToCart')->dbId;
+            ->getChildComponent('-addToCart');
+        $row->add_component_id = $addToCart->dbId;
+        $row->add_component_class = $addToCart->componentClass;
     }
 }
