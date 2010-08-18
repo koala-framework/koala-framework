@@ -54,6 +54,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
 
                 //verbrauchten betrag auch noch bei der order speichern
                 $order->voucher_amount = $h->amount;
+                $order->save();
                 break;
             }
         }
