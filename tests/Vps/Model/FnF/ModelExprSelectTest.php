@@ -158,7 +158,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         ));
 
         $select = $model->select();
-        $smallExpression = new Vps_Model_Select_Expr_Smaller('value', 13);
+        $smallExpression = new Vps_Model_Select_Expr_Lower('value', 13);
 
         $select = $model->select();
         $select->where($smallExpression);
@@ -241,7 +241,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         ));
 
         $select = $model->select();
-        $orExpression = new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Smaller('value', 8),
+        $orExpression = new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Lower('value', 8),
                                                            new Vps_Model_Select_Expr_Higher('value', 13)));
 
         $notExpression = new Vps_Model_Select_Expr_Not($orExpression);
