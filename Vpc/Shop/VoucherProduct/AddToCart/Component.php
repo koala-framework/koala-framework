@@ -5,6 +5,7 @@ class Vpc_Shop_VoucherProduct_AddToCart_Component extends Vpc_Shop_AddToCartAbst
     {
         $ret = parent::getSettings();
         $ret['orderProductData'] = 'Vpc_Shop_VoucherProduct_AddToCart_OrderProductData';
+        $ret['productTypeText'] = trlVps('Voucher');
         return $ret;
     }
 }

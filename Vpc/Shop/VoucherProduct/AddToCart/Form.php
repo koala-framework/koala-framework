@@ -9,6 +9,7 @@ class Vpc_Shop_VoucherProduct_AddToCart_Form extends Vpc_Shop_AddToCartAbstract_
             $values[$i*10] = Vps_View_Helper_Money::money($i*10);
         }
         $this->add(new Vps_Form_Field_Select('amount', trlcVps('Amount of Money', 'Amount')))
-            ->setValues($values);
+            ->setValues($values)
+            ->setAllowBlank(false);
     }
 }

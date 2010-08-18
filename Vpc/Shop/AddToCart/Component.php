@@ -5,6 +5,7 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Shop_AddToCartAbstract_Component
     {
         $ret = parent::getSettings();
         $ret['orderProductData'] = 'Vpc_Shop_AddToCart_OrderProductData';
+        $ret['productTypeText'] = trlVps('Product');
         return $ret;
     }
 
