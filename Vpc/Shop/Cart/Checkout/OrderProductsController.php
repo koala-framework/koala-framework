@@ -35,7 +35,7 @@ class Vpc_Shop_Cart_Checkout_OrderProductsController extends Vps_Controller_Acti
         $this->_editDialog = array(
             'controllerUrl' => Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('OrderProduct'),
             'width' => 400,
-            'height' => 200
+            'height' => 250
         );
         $this->_columns->add(new Vps_Grid_Column('product', trlVps('Product')))
             ->setData(new Vpc_Shop_Cart_Checkout_OrderProductsController_ProductText());

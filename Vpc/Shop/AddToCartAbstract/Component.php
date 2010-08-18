@@ -7,6 +7,7 @@ abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
         $ret['placeholder']['submitButton'] = trlVps('add to cart');
         $ret['generators']['child']['component']['success'] = 'Vpc_Shop_AddToCartAbstract_Success_Component';
         $ret['orderProductData'] = 'Vpc_Shop_AddToCartAbstract_OrderProductData';
+        $ret['productTypeText'] = null;
         return $ret;
     }
 
