@@ -2,9 +2,13 @@
 Erstellt: 17.08.10
 Stable:
 Neue Features:
+- Vps_Date, Vps_DateTime
 
 möglicherweise nicht kompatible Änderungen:
-
+- Vps_Date ist komplett inkompatibel (erbt nicht mehr von Zend_Date)
+- Expr_Smaller -> Expr_Lower
+- Expr_SmallerDate, Expr_HigherDate -> entfernt; Expr_Smaller kann dafür auch mit
+  Vps_Date und Vps_DateTime umgehen
 
 == 1.10 ==
 Erstellt: 09.06.10

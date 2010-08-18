@@ -266,38 +266,40 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Higher) {
             $v = $this->_rowValue($expr->getField(), $data);
-            if (!($v && $v > $expr->getValue())) {
+            $exprValue = $expr->getValue();
+            if ($exprValue instanceof Vps_Date) {
+                $exprValue = $exprValue->getTimestamp();
+                $v = strtotime($v);
+            }
+            if (!($v && $v > $exprValue)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_Smaller) {
+        } else if ($expr instanceof Vps_Model_Select_Expr_Lower) {
             $v = $this->_rowValue($expr->getField(), $data);
+            if ($exprValue instanceof Vps_Date) {
+                $exprValue = $exprValue->getTimestamp();
+                $v = strtotime($v);
+            }
             if (!($v && $v < $expr->getValue())) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_HigherDate) {
+        } else if ($expr instanceof Vps_Model_Select_Expr_HigherEqual) {
             $v = $this->_rowValue($expr->getField(), $data);
-            if ($v) {
-                $fieldTime = strtotime($v);
-                $exprTime = strtotime($expr->getValue());
-                if ($fieldTime > $exprTime) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
+            $exprValue = $expr->getValue();
+            if ($exprValue instanceof Vps_Date) {
+                $exprValue = $exprValue->getTimestamp();
+                $v = strtotime($v);
+            }
+            if (!($v && $v >= $exprValue)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_SmallerDate) {
+        } else if ($expr instanceof Vps_Model_Select_Expr_LowerEqual) {
             $v = $this->_rowValue($expr->getField(), $data);
-            if ($v) {
-                $fieldTime = strtotime($v);
-                $exprTime = strtotime($expr->getValue());
-                if ($fieldTime < $exprTime) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
+            if ($exprValue instanceof Vps_Date) {
+                $exprValue = $exprValue->getTimestamp();
+                $v = strtotime($v);
+            }
+            if (!($v && $v <= $expr->getValue())) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {

@@ -64,12 +64,12 @@ class Vps_Controller_Action_ProjectTimer_YearsController extends Vps_Controller_
             $timer = $projectTimer->getRows($projectTimer->select()
                 ->whereEquals('project_id', $projectIds)
                 ->where(new Vps_Model_Select_Expr_Or(array(
-                    new Vps_Model_Select_Expr_Equals('start', $year['from']),
-                    new Vps_Model_Select_Expr_HigherDate('start', $year['from'])
+                    new Vps_Model_Select_Expr_Equals('start', new Vps_DateTime($year['from'])),
+                    new Vps_Model_Select_Expr_HigherDate('start', new Vps_DateTime($year['from']))
                 )))
                 ->where(new Vps_Model_Select_Expr_Or(array(
-                    new Vps_Model_Select_Expr_Equals('start', $year['to']),
-                    new Vps_Model_Select_Expr_SmallerDate('start', $year['to'])
+                    new Vps_Model_Select_Expr_Equals('start', new Vps_DateTime($year['to'])),
+                    new Vps_Model_Select_Expr_Lower('start', new Vps_DateTime($year['to']))
                 )))
             );
             // timer zusammenzählen - ist schwierig mit nem child von projects

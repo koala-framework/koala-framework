@@ -339,6 +339,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     $v = $this->_table->getAdapter()->quote($v);
                 }
             } else {
+                if ($quotedValue instanceof Vps_DateTime) {
+                    $quotedValue = $quotedValue->format('Y-m-d');
+                } else if ($quotedValue instanceof Vps_Date) {
+                    $quotedValue = $quotedValue->format('Y-m-d H:i:s');
+                }
                 $quotedValue = $this->_fixStupidQuoteBug($quotedValue);
                 $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
             }
@@ -356,12 +361,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
             return $field." IS NULL";
-        } else if ($expr instanceof Vps_Model_Select_Expr_Smaller
-                || $expr instanceof Vps_Model_Select_Expr_SmallerDate) {
+        } else if ($expr instanceof Vps_Model_Select_Expr_Lower) {
             return $field." < ".$quotedValue;
-        } else if ($expr instanceof Vps_Model_Select_Expr_Higher
-                || $expr instanceof Vps_Model_Select_Expr_HigherDate) {
+        } else if ($expr instanceof Vps_Model_Select_Expr_Higher) {
             return $field." > ".$quotedValue;
+        } else if ($expr instanceof Vps_Model_Select_Expr_LowerEqual) {
+            return $field." <= ".$quotedValue;
+        } else if ($expr instanceof Vps_Model_Select_Expr_HigherEqual) {
+            return $field." >= ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_Like) {
             $quotedValue = str_replace("_", "\\_", $quotedValue);
             if ($expr instanceof Vps_Model_Select_Expr_Contains) {
