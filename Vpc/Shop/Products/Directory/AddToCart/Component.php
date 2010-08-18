@@ -1,11 +1,18 @@
 <?php
-class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Shop_AddToCart_Component
+class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Form_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['flags']['processInput'] = false;
+        $ret['placeholder']['submitButton'] = trlVps('add to cart');
+        $ret['generators']['child']['component']['success'] = 'Vpc_Shop_AddToCartAbstract_Success_Component';
         return $ret;
+    }
+
+    protected function _getProduct()
+    {
+        return $this->getData()->row;
     }
 
     protected function _initForm()
@@ -28,7 +35,6 @@ class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Shop_AddToCart
         $addToCart = $this->getData()->parent->getComponent()->getItemDirectory()
             ->getChildComponent('_'.$id)
             ->getChildComponent('-addToCart');
-        $row->add_component_id = $addToCart->dbId;
-        $row->add_component_class = $addToCart->componentClass;
+        $addToCart->getComponent()->_beforeInsert($row);
     }
 }
