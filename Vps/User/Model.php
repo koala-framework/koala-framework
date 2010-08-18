@@ -16,6 +16,8 @@ class Vps_User_Model extends Vps_Model_Proxy
 
     private $_lock = null;
 
+    protected $_noLogColumns = array();
+
     public function __construct(array $config = array())
     {
         if (!isset($config['proxyModel'])) {
@@ -378,6 +380,11 @@ class Vps_User_Model extends Vps_Model_Proxy
     public function getPasswordColumn()
     {
         return $this->_passwordColumn;
+    }
+
+    public function getNoLogColumns()
+    {
+        return $this->_noLogColumns;
     }
 
 }
