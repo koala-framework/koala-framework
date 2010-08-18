@@ -174,7 +174,7 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
 
         $queryId = $this->getRequest()->getParam('queryId');
         if ($queryId) {
-            $ret->where(new Vps_Model_Select_Expr_Equals($this->_primaryKey, $queryId));
+            $ret->where(new Vps_Model_Select_Expr_Equal($this->_primaryKey, $queryId));
         }
 
         return $ret;

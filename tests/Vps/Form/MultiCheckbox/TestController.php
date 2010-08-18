@@ -22,8 +22,8 @@ class Vps_Form_MultiCheckbox_TestController extends Vps_Controller_Action_Auto_F
 
         $sel = new Vps_Model_Select();
         $sel->where(new Vps_Model_Select_Expr_Or(array(
-            new Vps_Model_Select_Expr_Equals('id', 1),
-            new Vps_Model_Select_Expr_Equals('id', 2)
+            new Vps_Model_Select_Expr_Equal('id', 1),
+            new Vps_Model_Select_Expr_Equal('id', 2)
         )));
         $fs->add(new Vps_Form_Field_MultiCheckbox('Relation', 'Value', 'Relations only'))
             ->setValuesSelect($sel);

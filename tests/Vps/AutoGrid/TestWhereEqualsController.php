@@ -3,7 +3,7 @@ class Vps_AutoGrid_TestWhereEqualsController extends Vps_AutoGrid_BasicControlle
 {
     protected function _getSelect()
     {
-        $expr = new Vps_Model_Select_Expr_Equals('value', 'Herbert');
+        $expr = new Vps_Model_Select_Expr_Equal('value', 'Herbert');
         return $this->_model->select()->where($expr);
     }
 

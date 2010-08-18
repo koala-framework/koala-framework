@@ -66,7 +66,7 @@ AUSKOMMENTIERT WEIL:
             $s = $model->select()->whereEquals('test1', $v);
             $model->getRow($s);
 
-            $s = $model->select()->where(new Vps_Model_Select_Expr_Equals('test1', $v));
+            $s = $model->select()->where(new Vps_Model_Select_Expr_Equal('test1', $v));
             $model->getRow($s);
         }
     }

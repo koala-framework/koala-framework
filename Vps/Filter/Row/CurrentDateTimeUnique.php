@@ -14,7 +14,7 @@ class Vps_Filter_Row_CurrentDateTimeUnique extends Vps_Filter_Row_CurrentDateTim
         $highestRow = $m->getRow($m->select()
             ->where(new Vps_Model_Select_Expr_Or(array(
                 new Vps_Model_Select_Expr_HigherDate($this->_field, $ret),
-                new Vps_Model_Select_Expr_Equals($this->_field, $ret)
+                new Vps_Model_Select_Expr_Equal($this->_field, $ret)
             )))
             ->order($this->_field, 'DESC')
         );

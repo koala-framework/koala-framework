@@ -40,7 +40,7 @@ class Vps_Controller_Action_Auto_Filter_Text extends Vps_Controller_Action_Auto_
         list($field, $value) = explode(':', $query);
         if (in_array($field, $model->getColumns())) {
             if (is_numeric($value)) {
-                return new Vps_Model_Select_Expr_Equals($field, $value);
+                return new Vps_Model_Select_Expr_Equal($field, $value);
             } else {
                 return new Vps_Model_Select_Expr_Contains($field, $value);
             }
