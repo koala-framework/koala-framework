@@ -90,22 +90,41 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
         return $ret;
     }
 
+    /**
+     * Nur verwenden wenn Bestellung noch nicht abgeschlossen
+     */
+    public function getProductsDataWithProduct()
+    {
+        return $this->_getProductsData(true);
+    }
+    /**
+     * Kann immer verwendet werden, auch wenn es add_compoment_id gar nicht mehr gibt
+     */
     public function getProductsData()
+    {
+        return $this->_getProductsData(false);
+    }
+
+    private function _getProductsData($includeProduct)
     {
         $ret = array();
 
         $items = $this->getChildRows('Products');
         $ret = array();
         foreach ($items as $i) {
-            $addComponent = Vps_Component_Data_Root::getInstance()
-                            ->getComponentByDbId($i->add_component_id);
-            $ret[] = (object)array(
-                'product' => $addComponent->parent,
-                'row' => $i,
-                'additionalOrderData' => $addComponent->getComponent()->getAdditionalOrderData($i),
-                'price' => $addComponent->getComponent()->getPrice($i),
-                'text' => $addComponent->getComponent()->getProductText($i),
+            $data = Vpc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($i->add_component_class);
+            $r = array(
+                'additionalOrderData' => $data->getAdditionalOrderData($i),
+                'price' => $data->getPrice($i),
+                'amount' => $data->getAmount($i),
+                'text' => $data->getProductText($i),
             );
+            if ($includeProduct) {
+                $addComponent = Vps_Component_Data_Root::getInstance()
+                                ->getComponentByDbId($i->add_component_id);
+                $r['product'] = $addComponent->parent;
+            }
+            $ret[] = (object)$r;
         }
         return $ret;
     }
