@@ -340,9 +340,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 }
             } else {
                 if ($quotedValue instanceof Vps_DateTime) {
-                    $quotedValue = $quotedValue->format('Y-m-d');
-                } else if ($quotedValue instanceof Vps_Date) {
                     $quotedValue = $quotedValue->format('Y-m-d H:i:s');
+                } else if ($quotedValue instanceof Vps_Date) {
+                    $quotedValue = $quotedValue->format('Y-m-d');
                 }
                 $quotedValue = $this->_fixStupidQuoteBug($quotedValue);
                 $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
