@@ -188,7 +188,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 );
             } else {
                 $select = $sourceModel->select()->where(
-                    new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
+                    new Vps_Model_Select_Expr_Higher($this->_syncTimeField, new Vps_DateTime($cacheTimestamp))
                 );
                 $ret = array(
                     'type' => self::SYNC_SELECT_TYPE_SELECT,

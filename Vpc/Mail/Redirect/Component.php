@@ -60,7 +60,7 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
             ->whereEquals('redirect_id', $params['redirectId'])
             ->whereEquals('recipient_id', $params['recipientId'])
             ->whereEquals('recipient_model_shortcut', $params['recipientModelShortcut'])
-            ->where(new Vps_Model_Select_Expr_HigherDate('click_date', date('Y-m-d H:i:s', time() - 10)));
+            ->where(new Vps_Model_Select_Expr_Higher('click_date', new Vps_DateTime(time() - 10)));
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $statSel->whereEquals('ip', $_SERVER['REMOTE_ADDR']);
         }
