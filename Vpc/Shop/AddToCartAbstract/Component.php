@@ -33,7 +33,7 @@ abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
         $row->add_component_class = $this->getData()->componentClass;
     }
 
-    public final function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
+    public final function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $orderProduct)
     {
         return Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
             ->getAdditionalOrderData($orderProduct);
@@ -42,7 +42,7 @@ abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
     public function getPrice(Vpc_Shop_Cart_OrderProduct $orderProduct)
     {
         return Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
-            ->getAmount($orderProduct);
+            ->getPrice($orderProduct);
     }
 
     public final function getAmount(Vpc_Shop_Cart_OrderProduct $orderProduct)
@@ -55,5 +55,11 @@ abstract class Vpc_Shop_AddToCartAbstract_Component extends Vpc_Form_Component
     {
         Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
             ->orderConfirmed($orderProduct);
+    }
+
+    public final function getProductText(Vpc_Shop_Cart_OrderProduct $orderProduct)
+    {
+        return Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
+            ->getProductText($orderProduct);
     }
 }

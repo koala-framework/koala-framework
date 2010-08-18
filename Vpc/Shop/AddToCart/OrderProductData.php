@@ -13,7 +13,8 @@ class Vpc_Shop_AddToCart_OrderProductData extends Vpc_Shop_AddToCartAbstract_Ord
 
     public function getProductText(Vpc_Shop_Cart_OrderProduct $orderProduct)
     {
-        return $this->getData()->getPage()->name;
+        $product = $orderProduct->getParentRow('ProductPrice')->getParentRow('Product');
+        return $product->__toString();
     }
 
     public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
