@@ -14,7 +14,8 @@ class Vpc_Root_TrlRoot_Model extends Vps_Model_FnF
                 'component_id' => 'root-' . $key,
                 'filename' => $key,
                 'name' => $language,
-                'master' => $master
+                'master' => $master,
+                'visible' => 1
             );
             $master = false;
         }
