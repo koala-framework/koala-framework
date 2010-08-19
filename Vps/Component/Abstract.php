@@ -3,6 +3,7 @@ class Vps_Component_Abstract
 {
     private static $_settings = null;
     private static $_rebuildingSettings = false;
+    private static $_cacheSettings = array();
 
     public function __construct()
     {
@@ -34,7 +35,12 @@ class Vps_Component_Abstract
                 throw new Vps_Exception("Invalid component '$class'");
             }
             $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
-            $settings = call_user_func(array($c, 'getSettings'), $param);
+            if (isset(self::$_cacheSettings[$c][$param])) {
+                $settings = self::$_cacheSettings[$c][$param];
+            } else {
+                $settings = call_user_func(array($c, 'getSettings'), $param);
+                self::$_cacheSettings[$c][$param] = $settings;
+            }
             return isset($settings[$setting]);
         }
         //& für performance
@@ -95,7 +101,12 @@ class Vps_Component_Abstract
             } else {
                 $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
                 $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
-                $settings = call_user_func(array($c, 'getSettings'), $param);
+                if (isset(self::$_cacheSettings[$c][$param])) {
+                    $settings = self::$_cacheSettings[$c][$param];
+                } else {
+                    $settings = call_user_func(array($c, 'getSettings'), $param);
+                    self::$_cacheSettings[$c][$param] = $settings;
+                }
                 if (!array_key_exists($setting, $settings)) {
                     throw new Vps_Exception("Couldn't find required setting '$setting' for $c.");
                 }
@@ -161,6 +172,7 @@ class Vps_Component_Abstract
 
     private static function &_getSettingsCached()
     {
+        self::$_cacheSettings = array();
         if (!self::$_settings) {
             $cache = new Vps_Assets_Cache(array('checkComponentSettings' => false));
             $cacheId = 'componentSettings'.Vps_Registry::get('trl')->getTargetLanguage()
