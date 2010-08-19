@@ -13,6 +13,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_VoucherController extends Vps_Controller_Act
             ->setComment('€');
         $this->_form->add(new Vps_Form_Field_DateField('date', trlVps('Date')))
             ->setDefaultValue(date('Y-m-d'));
-        $this->_form->add(new Vps_Form_Field_TextField('comment', trlVps('Comment')));
+        $this->_form->add(new Vps_Form_Field_TextArea('comment', trlVps('Comment')))
+            ->setWidth(250)->setHeight(70);
     }
 }

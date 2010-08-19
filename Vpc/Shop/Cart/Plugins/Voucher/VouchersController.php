@@ -24,6 +24,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_VouchersController extends Vps_Controller_Ac
         $this->_columns->add(new Vps_Grid_Column('used_amount', trlcVps('Amount of Money', 'Used Amount'), 50))
             ->setType('float')
             ->setRenderer('euroMoney');
-        $this->_columns->add(new Vps_Grid_Column('comment', trlVps('Comment')));
+        $this->_columns->add(new Vps_Grid_Column('comment', trlVps('Comment')))
+            ->setRenderer('nl2br');
     }
 }
