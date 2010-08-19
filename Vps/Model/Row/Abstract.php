@@ -399,6 +399,15 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                 $this->save();
             }
         }
+
+        $called = array();
+        foreach ($this->getModel()->getDependentModels() as $depName=>$m) {
+            if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
+            if (!in_array($m, $called, true)) {
+                $m->dependentModelRowUpdated($this);
+                $called[] = $m;
+            }
+        }
     }
 
     //Speichern und abei die Filter nicht verwenden
