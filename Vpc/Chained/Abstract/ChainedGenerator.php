@@ -1,5 +1,5 @@
 <?php
-class Vpc_Root_TrlRoot_ChainedGenerator extends Vps_Component_Generator_PseudoPage_Table
+class Vpc_Chained_Abstract_ChainedGenerator extends Vps_Component_Generator_PseudoPage_Table
 {
     protected $_idColumn = 'filename';
     protected $_hasNumericIds = false;
