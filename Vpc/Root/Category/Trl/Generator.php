@@ -88,4 +88,13 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         $ret['isHome'] = $row->isHome;
         return $ret;
     }
+
+    protected function _getDataClass($config, $id)
+    {
+        if (isset($config['isHome']) && $config['isHome']) {
+            return 'Vps_Component_Data_Home';
+        } else {
+            return parent::_getDataClass($config, $id);
+        }
+    }
 }
