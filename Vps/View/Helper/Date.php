@@ -8,7 +8,7 @@ class Vps_View_Helper_Date
         if (!$date) return '';
 
         $d = new Vps_Date($date);
-        return $d->toString($format);
+        return $d->format($format);
 
         /*
         Das ist schneller, kann aber keine übersetzung bei Monatsnamen etc
