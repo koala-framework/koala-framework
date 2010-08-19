@@ -3,13 +3,29 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Model_Mongo_Row';
     protected $_data = array();
+
+    /**
+     * @var MongoCollection
+     */
     protected $_collection;
 
     public function __construct(array $config = array())
     {
-        if (is_string($this->_collection)) {
-            $this->_collection = Vps_Registry::get('dao')->getMongoDb()->{$this->_collection};
+        if (!isset($config['db'])) {
+            $config['db'] = Vps_Registry::get('dao')->getMongoDb();
         }
+        if (isset($config['collection'])) {
+            $this->_collection = $config['collection'];
+        }
+        if (is_string($this->_collection)) {
+            $this->_collection = $config['db']->{$this->_collection};
+        }
+        parent::__construct($config);
+    }
+
+    public function getCollection()
+    {
+        return $this->_collection;
     }
 
     protected function _init()
