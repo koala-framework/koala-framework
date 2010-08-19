@@ -7,6 +7,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_Redeem_Form extends Vpc_Abstract_Form
     {
         parent::_initFields();
         $this->fields->add(new Vps_Form_Field_TextField('voucher_code', trlVps('Voucher Code')))
-            ->addValidator(new Vpc_Shop_Cart_Plugins_Voucher_VoucherValidator());
+            ->addValidator(new Vpc_Shop_Cart_Plugins_Voucher_VoucherValidator())
+            ->setAllowBlank(false);
     }
 }
