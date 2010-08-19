@@ -395,6 +395,15 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $ret['model'];
     }
 
+    /**
+     * @internal return value will change, don't use it
+     */
+    public function getDependentModels()
+    {
+        //TODO _proxyContainerModels berücksichtigen
+        return $this->_dependentModels;
+    }
+
     public function getRowsetClass()
     {
         return $this->_rowsetClass;
@@ -678,5 +687,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             $ret[$method] = call_user_func_array(array($this, $method), $arguments);
         }
         return $ret;
+    }
+
+    /**
+     * @internal
+     */
+    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row)
+    {
     }
 }

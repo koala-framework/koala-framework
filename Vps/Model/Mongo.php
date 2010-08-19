@@ -32,9 +32,41 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     {
     }
 
+    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row)
+    {
+        parent::dependentModelRowUpdated($row);
+        foreach ($this->_exprs as $column=>$expr) {
+            if ($expr instanceof Vps_Model_Select_Expr_Parent) {
+                if ($this->getReferencedModel($expr->getParent()) === $row->getModel()) {
+
+                    //blöd dass diese schleife hier notwendig ist
+                    //TODO: getDependentModels sollte was anderes zurückgeben
+                    //gleiches problem wie bei getChildRows
+                    foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
+                        if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
+                        if ($m === $this) {
+                            $rows = $row->getChildRows($depName); //TODO effizienter machen, nicht über rows
+                            foreach ($rows as $r) {
+                                $r->$column = $row->{$expr->getField()};
+                                $r->save();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public function update(Vps_Model_Row_Interface $row, $rowData)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        $ret = $this->_collection->update(
+            array('_id' => $row->_id),
+            $rowData,
+            array('safe'=>true, 'multiple'=>false)
+        );
+        if (!$ret || $ret['ok'] != 1) {
+            throw new Vps_Exception("update failed");
+        }
     }
 
     public function insert(Vps_Model_Row_Interface $row, $rowData)

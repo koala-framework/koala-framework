@@ -10,7 +10,9 @@ class Vps_Model_Mongo_ExprTest_Test extends PHPUnit_Framework_TestCase
         Vps_Model_Abstract::clearInstances();
 
         $mongoModel = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ExprTest_MongoModel');
-        $mongoModel->getCollection()->insert(array('a'=>'a', 'parent_id'=>1), array('safe'=>true));
+        $mongoModel->getCollection()->insert(
+            array('id'=>100, 'a'=>'a', 'parent_id'=>1, 'parent_name'=>'one') //TODO id sollte nicht nötig sein
+        , array('safe'=>true));
     }
 
     protected function tearDown()
@@ -32,10 +34,13 @@ class Vps_Model_Mongo_ExprTest_Test extends PHPUnit_Framework_TestCase
         $parentModel = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ExprTest_ParentModel');
         $parentRow = $parentModel->getRow(1);
         $parentRow->name = 'onex';
+        $parentRow->save();
 
         $mongoModel = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ExprTest_MongoModel');
         $row = $mongoModel->getRow(array());
         $this->assertEquals('onex', $row->parent_name);
         $this->assertEquals('onex', $row->getParentRow('Parent')->name);
+        $r = $mongoModel->getCollection()->findOne();
+        $this->assertEquals('onex', $r['parent_name']);
     }
 }
