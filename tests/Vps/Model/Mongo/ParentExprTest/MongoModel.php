@@ -1,11 +1,11 @@
 <?php
-class Vps_Model_Mongo_ExprTest_MongoModel extends Vps_Model_Mongo_TestModel
+class Vps_Model_Mongo_ParentExprTest_MongoModel extends Vps_Model_Mongo_TestModel
 {
     protected $_collection = 'foo';
 
     protected $_referenceMap = array(
         'Parent' => array(
-            'refModelClass' => 'Vps_Model_Mongo_ExprTest_ParentModel',
+            'refModelClass' => 'Vps_Model_Mongo_ParentExprTest_ParentModel',
             'column' => 'parent_id'
         )
     );
