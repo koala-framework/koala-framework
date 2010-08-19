@@ -9,4 +9,11 @@ class Vpc_Chained_Trl_Generator extends Vpc_Chained_Abstract_Generator
         }
         return $ret;
     }
+
+    protected function _getChainedSelect($select)
+    {
+        $select = parent::_getChainedSelect($select);
+        $select->ignoreVisible(); // Visible ist bei Trl immer extra zu setzen
+        return $select;
+    }
 }
