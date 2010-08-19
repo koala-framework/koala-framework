@@ -75,6 +75,13 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getChainedChildComponents($parentData, $select)
     {
+        return $this->_getChainedGenerator()->getChildData(
+            $this->_getChainedData($parentData), $this->_getChainedSelect($select)
+        );
+    }
+
+    protected function _getChainedSelect($select)
+    {
         $select = clone $select;
         if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
             $select->whereChildOfSamePage($this->_getChainedData($p));
@@ -96,11 +103,7 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
             }
             $select->setPart(Vps_Component_Select::WHERE_SUBROOT, $newSr);
         }
-
-        $select->ignoreVisible();
-
-        return $this->_getChainedGenerator()
-            ->getChildData($this->_getChainedData($parentData), $select);
+        return $select;
     }
 
     public function getChildData($parentDatas, $select = array())
@@ -209,8 +212,9 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
 
     protected function _getChainedGenerator()
     {
-        return Vps_Component_Generator_Abstract
-            ::getInstance(Vpc_Abstract::getSetting($this->_class, 'masterComponentClass'), $this->_settings['generator']);
+        $class = Vpc_Abstract::getSetting($this->_class, 'masterComponentClass');
+        $generatorKey = $this->_settings['generator'];
+        return Vps_Component_Generator_Abstract::getInstance($class, $generatorKey);;
     }
 
     public function getIdSeparator()
