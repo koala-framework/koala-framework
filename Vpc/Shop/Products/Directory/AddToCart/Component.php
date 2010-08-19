@@ -10,21 +10,14 @@ class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Form_Component
         return $ret;
     }
 
-    protected function _getProduct()
-    {
-        return $this->getData()->row;
-    }
-
     protected function _initForm()
     {
-        $id = $this->_getProduct()->id;
+        $id = $this->getData()->row->id;
         $addToCart = $this->getData()->parent->getComponent()->getItemDirectory()
             ->getChildComponent('_'.$id)
             ->getChildComponent('-addToCart');
-
-        $this->_form = Vpc_Abstract_Form::createComponentForm($addToCart->componentClass,
-                'order'.$id);
-
+        $this->_form = $addToCart->getComponent()->getForm();
+        $this->_form->setName('order'.$id);
         parent::_initForm();
     }
 
