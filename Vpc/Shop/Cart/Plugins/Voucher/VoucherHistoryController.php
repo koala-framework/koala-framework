@@ -11,8 +11,11 @@ class Vpc_Shop_Cart_Plugins_Voucher_VoucherHistoryController extends Vps_Control
         $this->_columns->add(new Vps_Grid_Column('amount', trlcVps('Amount of Money', 'Amount'), 50))
             ->setRenderer('euroMoney')
             ->setEditor(new Vps_Form_Field_NumberField());
+        $ed = new Vps_Form_Field_TextArea();
+        $ed->setWidth(300)->setHeight(70);
         $this->_columns->add(new Vps_Grid_Column('comment', trlVps('Comment'), 300))
-            ->setEditor(new Vps_Form_Field_TextField());
+            ->setRenderer('nl2br')
+            ->setEditor($ed);
     }
 
     protected function _getSelect()
