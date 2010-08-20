@@ -8,6 +8,7 @@ class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
     public function __construct()
     {
         $mongoDir = "/home/niko/mongodb-linux-i686-1.6.1"; //TODO, obviously
+        $timeLimit = 20;
         $debugOutput = false;
 
         if (!file_exists($mongoDir.'/bin/mongod')) {
@@ -18,7 +19,7 @@ class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
         mkdir($this->_dir);
 
         $this->_port = Vps_Util_Tcp::getFreePort(27020);
-        $cmd = "$mongoDir/bin/mongod --port=$this->_port --dbpath=$this->_dir";
+        $cmd = "timeout -15 $timeLimit $mongoDir/bin/mongod --port=$this->_port --dbpath=$this->_dir";
         $descriptorspec = array();
         if ($debugOutput) {
             echo $cmd."\n";

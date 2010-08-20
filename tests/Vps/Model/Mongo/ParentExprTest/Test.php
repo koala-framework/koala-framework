@@ -42,4 +42,35 @@ class Vps_Model_Mongo_ParentExprTest_Test extends PHPUnit_Framework_TestCase
         $r = $this->_model->getCollection()->findOne();
         $this->assertEquals('onex', $r['parent_name']);
     }
+
+    public function testNewRow()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testDeleteParent()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testUnsetParent()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testSetParentThatWasNotSet()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testWithProxies()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testWithMultipleRelations()
+    {
+        $this->markTestIncomplete();
+    }
+
 }

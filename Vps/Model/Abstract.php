@@ -326,6 +326,16 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         throw new Vps_Exception("No reference from '".get_class($this)."' to '$modelClassName'");
     }
 
+    /**
+     * Namen der verfügbaren References
+     *
+     * Details zu einer Reference über getReferencedModel() bzw. getReference() holen
+     */
+    public function getReferences()
+    {
+        return array_keys($this->_referenceMap);
+    }
+
     public function getReference($rule)
     {
         if (!isset($this->_referenceMap[$rule])) {
@@ -693,6 +703,13 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
      * @internal
      */
     public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row)
+    {
+    }
+
+    /**
+     * @internal
+     */
+    public function childModelRowUpdated(Vps_Model_Row_Abstract $row)
     {
     }
 }
