@@ -9,7 +9,6 @@ class Vpc_Root_TrlRoot_Chained_Component extends Vpc_Abstract
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;
         $ret['chainedType'] = 'Trl';
-        $ret['flags']['subroot'] = 'language';
         return $ret;
     }
 
