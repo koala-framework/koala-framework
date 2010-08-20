@@ -3,6 +3,7 @@ Erstellt: 17.08.10
 Stable:
 Neue Features:
 - Vps_Date, Vps_DateTime
+- CopyContent
 
 möglicherweise nicht kompatible Änderungen:
 - Vps_Date ist komplett inkompatibel (erbt nicht mehr von Zend_Date)
@@ -10,6 +11,7 @@ möglicherweise nicht kompatible Änderungen:
 - Expr_SmallerDate, Expr_HigherDate -> entfernt; Expr_Smaller kann dafür auch mit
   Vps_Date und Vps_DateTime umgehen
 - Expr_Equal (Equals ist deprected)
+- Trl sollte sich nicht geändert haben, kann man aber nicht ausschließen
 
 == 1.10 ==
 Erstellt: 09.06.10
