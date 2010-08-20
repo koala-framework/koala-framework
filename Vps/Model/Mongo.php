@@ -57,6 +57,21 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         }
     }
 
+    public function childModelRowUpdated(Vps_Model_Row_Abstract $row)
+    {
+        parent::childModelRowUpdated($row);
+        foreach ($this->_exprs as $column=>$expr) {
+            if ($expr instanceof Vps_Model_Select_Expr_Child) {
+                if ($this->getDependentModel($expr->getChild()) === $row->getModel()) {
+                    $rule = $row->getModel()->getReferenceRuleByModelClass(get_class($this));
+                    $parentRow = $row->getParentRow($rule);
+                    $parentRow->$column = $this->getExprValue($parentRow, $expr);
+                    $parentRow->save();
+                }
+            }
+        }
+    }
+
     public function update(Vps_Model_Row_Interface $row, $rowData)
     {
         $ret = $this->_collection->update(

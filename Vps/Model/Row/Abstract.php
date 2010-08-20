@@ -339,11 +339,29 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                     $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
                     $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
                 }
-                $row->save();
+                if ($row->_dirty) $row->save();
             }
         }
         $this->_updateFilters(true);
         $this->_callObserver('save');
+
+        $called = array();
+        foreach ($this->getModel()->getDependentModels() as $depName=>$m) {
+            if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
+            if (!in_array($m, $called, true)) {
+                $m->dependentModelRowUpdated($this);
+                $called[] = $m;
+            }
+        }
+
+        $called = array();
+        foreach ($this->getModel()->getReferences() as $refName) {
+            $m = $this->getModel()->getReferencedModel($refName);
+            if (!in_array($m, $called, true)) {
+                $m->childModelRowUpdated($this);
+                $called[] = $m;
+            }
+        }
     }
 
     protected function _beforeUpdate()
@@ -397,15 +415,6 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             if ($filterAfterSave) {
                 $this->_skipFilters = true;
                 $this->save();
-            }
-        }
-
-        $called = array();
-        foreach ($this->getModel()->getDependentModels() as $depName=>$m) {
-            if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
-            if (!in_array($m, $called, true)) {
-                $m->dependentModelRowUpdated($this);
-                $called[] = $m;
             }
         }
     }
