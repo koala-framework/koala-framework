@@ -1,6 +1,10 @@
 <div class="<?=$this->cssClass?>">
     <table class="tblCheckout" cellspacing="0" cellpadding="0">
         <?
+        $maxAddOrderData = 0;
+        foreach ($this->items as $item) {
+            $maxAddOrderData = max($maxAddOrderData, count($item->additionalOrderData));
+        }
         $c = count($this->items);
         $i = 1;
         foreach ($this->items as $item) { ?>
@@ -9,7 +13,7 @@
                 <? foreach($item->additionalOrderData as $d) { ?>
                     <td class="<?=$d['class']?>"><?=$d['name']?>: <?=$d['value']?></td>
                 <? } ?>
-                <td class="price"><?=$this->money($item->price)?></td>
+                <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>"><?=$this->money($item->price)?></td>
             </tr>
             <tr class="<?=($c==$i ? 'lastline' : 'line');?>">
                 <td colspan="<?=(4+count($this->additionalOrderDataHeaders))?>">

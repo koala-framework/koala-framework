@@ -7,6 +7,10 @@
 </table>
 <table width="100%" class="tblBoxCart" cellspacing="0" cellpadding="0">
     <?
+    $maxAddOrderData = 0;
+    foreach ($this->items as $item) {
+        $maxAddOrderData = max($maxAddOrderData, count($item->additionalOrderData));
+    }
     $c=0;
     foreach ($this->items as $item) { ?>
         <tr class="products<?=($c%2==0 ? ' row1' : ' row2');?>">
@@ -14,7 +18,7 @@
             <? foreach($item->additionalOrderData as $d) { ?>
                 <td class="<?=$d['class']?>"><?=$d['name']?>: <?=$d['value']?></td>
             <? } ?>
-            <td class="price"><?=$this->money($item->price)?></td>
+            <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>" align="right"><?=$this->money($item->price)?></td>
         </tr>
         <? $c++;
     } ?>
