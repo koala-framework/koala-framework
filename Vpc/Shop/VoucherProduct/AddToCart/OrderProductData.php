@@ -11,14 +11,16 @@ class Vpc_Shop_VoucherProduct_AddToCart_OrderProductData extends Vpc_Shop_AddToC
         return 1;
     }
 
-    public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $row)
+    public function getAdditionalOrderData(Vpc_Shop_Cart_OrderProduct $orderProduct)
     {
-        $ret = parent::getAdditionalOrderData($row);
+        $ret = parent::getAdditionalOrderData($orderProduct);
+        /*
         $ret[] = array(
             'class' => 'amount',
             'name' => trlcVps('Amount of Money', 'Amount'),
-            'value' => Vps_View_Helper_Money::money($row->amount)
+            'value' => Vps_View_Helper_Money::money($orderProduct->amount)
         );
+        */
         return $ret;
     }
 
