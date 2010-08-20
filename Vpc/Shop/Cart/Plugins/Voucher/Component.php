@@ -15,17 +15,22 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
     {
         if (!$order->voucher_code) return array();
 
-        $s = new Vps_Model_Select();
-        $s->whereEquals('code', $order->voucher_code);
-        $row = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Plugins_Voucher_Vouchers')->getRow($s);
-
-        if (!$row || $row->amount - $row->used_amount <= 0) return array();
-
-        $amount = -min($total, $row->amount - $row->used_amount);
         $text = trlVps('Voucher');
-        $remainingAmount = $row->amount - $row->used_amount + $amount;
-        if ($remainingAmount > 0) {
-            $text .= ' ('.trlVps('Remaining Amount {0}', Vps_View_Helper_Money::money($remainingAmount)).')';
+        if ($order->voucher_amount) {
+            $amount = -(float)$order->voucher_amount;
+        } else {
+
+            $s = new Vps_Model_Select();
+            $s->whereEquals('code', $order->voucher_code);
+            $row = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Plugins_Voucher_Vouchers')->getRow($s);
+
+            if (!$row || $row->amount - $row->used_amount <= 0) return array();
+
+            $amount = -min($total, $row->amount - $row->used_amount);
+            $remainingAmount = $row->amount - $row->used_amount + $amount;
+            if ($remainingAmount > 0) {
+                $text .= ' ('.trlVps('Remaining Amount {0}', Vps_View_Helper_Money::money($remainingAmount)).')';
+            }
         }
 
         return array(array(
@@ -53,7 +58,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
                 $h->save();
 
                 //verbrauchten betrag auch noch bei der order speichern
-                $order->voucher_amount = $h->amount;
+                $order->voucher_amount = (float)$h->amount;
                 $order->save();
                 break;
             }
