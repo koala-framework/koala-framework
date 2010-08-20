@@ -18,7 +18,6 @@ class Vpc_Shop_Cart_Checkout_OrdersController_SumAmount extends Vps_Data_Abstrac
     {
         $ret = 0;
         foreach ($row->getChildRows('Products') as $p) {
-            if (!$p->add_component_class) d($p);
             $data = Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($p->add_component_class);
             $ret += $data->getAmount($p);
         }
