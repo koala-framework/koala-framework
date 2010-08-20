@@ -4,17 +4,14 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
     public function getPagesControllerConfig($component)
     {
         $ret = parent::getPagesControllerConfig($component);
-
         foreach ($ret['actions'] as &$a) $a = false;
         $ret['actions']['properties'] = true;
         $ret['actions']['visible'] = true;
-
         return $ret;
     }
 
     public function getChildData($parentData, $select = array())
     {
-
         $filename = null;
         $limit = null;
         $ignoreVisible = $select->hasPart(Vps_Component_Select::IGNORE_VISIBLE) ?
@@ -75,7 +72,6 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         $ret['parent'] = $parentData;
 
         $dbRow = $this->_getModel()->getRow($ret['componentId']);
-
         if (!$dbRow) {
             $dbRow = $this->_getModel()->createRow(array(
                 'component_id' => $ret['componentId'],

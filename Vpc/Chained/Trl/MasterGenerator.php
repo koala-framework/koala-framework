@@ -1,16 +1,7 @@
 <?php
-class Vpc_Root_TrlRoot_MasterGenerator extends Vps_Component_Generator_PseudoPage_Static
+class Vpc_Chained_Trl_MasterGenerator extends Vpc_Chained_Abstract_MasterGenerator
 {
     private $_languageRow = null;
-    protected $_inherits = true;
-    protected $_loadTableFromComponent = true;
-
-    public function getPagesControllerConfig($component, $generatorClass = null)
-    {
-        $ret = parent::getPagesControllerConfig($component, $generatorClass);
-        $ret['icon'] = 'font';
-        return $ret;
-    }
 
     private function _getLanguageRow()
     {
