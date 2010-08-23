@@ -2,11 +2,11 @@
 /**
  * @group cc
  */
-class Vps_Cc_Test extends Vpc_TestAbstract
+class Vpc_Cc_RootWithTrl_Test extends Vpc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Vps_Cc_Root');
+        parent::setUp('Vpc_Cc_RootWithTrl_Root');
     }
 
     public function testPages()
@@ -30,10 +30,10 @@ class Vps_Cc_Test extends Vpc_TestAbstract
         $this->assertEquals('Vps_Component_Data_Home', get_class($root->getComponentById('root-master-slave-main_1')));
         $this->assertEquals('Vps_Component_Data_Home', get_class($root->getComponentById('root-slave-master-main_1')));
         $this->assertEquals('Vps_Component_Data_Home', get_class($root->getComponentById('root-slave-slave-main_1')));
-        $this->assertEquals('/vps/vpctest/Vps_Cc_Root/master/master', $root->getComponentById('1')->url);
-        $this->assertEquals('/vps/vpctest/Vps_Cc_Root/master/slave', $root->getComponentById('root-master-slave-main_1')->url);
-        $this->assertEquals('/vps/vpctest/Vps_Cc_Root/slave/master', $root->getComponentById('root-slave-master-main_1')->url);
-        $this->assertEquals('/vps/vpctest/Vps_Cc_Root/slave/slave', $root->getComponentById('root-slave-slave-main_1')->url);
+        $this->assertEquals('/vps/vpctest/Vpc_Cc_RootWithTrl_Root/master/master', $root->getComponentById('1')->url);
+        $this->assertEquals('/vps/vpctest/Vpc_Cc_RootWithTrl_Root/master/slave', $root->getComponentById('root-master-slave-main_1')->url);
+        $this->assertEquals('/vps/vpctest/Vpc_Cc_RootWithTrl_Root/slave/master', $root->getComponentById('root-slave-master-main_1')->url);
+        $this->assertEquals('/vps/vpctest/Vpc_Cc_RootWithTrl_Root/slave/slave', $root->getComponentById('root-slave-slave-main_1')->url);
     }
 
     public function testChildPages()

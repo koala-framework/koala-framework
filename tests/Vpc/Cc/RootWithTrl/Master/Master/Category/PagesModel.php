@@ -1,5 +1,5 @@
 <?php
-class Vps_Cc_Master_Master_Category_PagesModel extends Vpc_Root_Category_GeneratorModel {
+class Vpc_Cc_RootWithTrl_Master_Master_Category_PagesModel extends Vpc_Root_Category_GeneratorModel {
 
     public function __construct($config = array())
     {
