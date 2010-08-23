@@ -1,5 +1,5 @@
 <?php
-class Vps_Cc_Slave_Component extends Vpc_Abstract
+class Vpc_Cc_RootWithTrl_Slave_Component extends Vpc_Abstract
 {
     public static function getSettings($masterComponentClass)
     {
