@@ -1,8 +1,8 @@
 <?php
 class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_buttons = array('add', 'userlock', 'userdelete'); // original delete button entfernt
-    protected $_permissions = array('userlock' => true, 'userdelete' => true);
+    protected $_buttons = array('add', 'userlock', 'userdelete', 'xls'); // original delete button entfernt
+    protected $_permissions = array('userlock' => true, 'userdelete' => true, 'xls' => true);
     protected $_sortable = true;
     protected $_defaultOrder = 'id';
     protected $_paging = 20;
@@ -67,14 +67,16 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         }
 
         $this->_columns->add(new Vps_Grid_Column('password', trlVps('Activated'), 60))
-            ->setRenderer('boolean');
+            ->setRenderer('boolean')
+            ->setShowIn(Vps_Grid_Column::SHOW_IN_ALL ^ Vps_Grid_Column::SHOW_IN_XLS);
         $this->_columns->add(new Vps_Grid_Column_Checkbox('locked', trlVps('Locked'), 60));
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $acl = Zend_Registry::get('acl');
         if ($acl->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
             $this->_columns->add(new Vps_Grid_Column_Checkbox('webcode', trlVps('Only for this web'), 110))
-                 ->setData(new Vps_Controller_Action_User_Users_WebcodeData());
+                 ->setData(new Vps_Controller_Action_User_Users_WebcodeData())
+                 ->setShowIn(Vps_Grid_Column::SHOW_IN_ALL ^ Vps_Grid_Column::SHOW_IN_XLS);
         }
         $this->_columns->add(new Vps_Grid_Column_Button('resend_mails', trlVps('E-Mails')))
             ->setTooltip(trlVps('Sent E-Mail again'))
