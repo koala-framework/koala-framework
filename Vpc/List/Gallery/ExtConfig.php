@@ -15,7 +15,7 @@ class Vpc_List_Gallery_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstra
         $config['activeTab'] = 0;
         $config['tabs'] = array();
 
-        $config['tabs']['settings'] = $this->_getStandardConfig('vps.autoform', 'Index', trlVps('Settings'));
+        $config['tabs']['settings'] = $this->_getStandardConfig('vps.autoform', 'Settings', trlVps('Settings'));
 
         $listConfig = $this->_listExtConfig->_getConfig();
         $config['tabs']['images'] = $listConfig['list'];
