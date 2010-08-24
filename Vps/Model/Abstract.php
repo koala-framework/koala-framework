@@ -376,6 +376,13 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $ret;
     }
 
+    protected function _createDependentModel($rule)
+    {
+        $ret = $this->_dependentModels[$rule];
+        if (!$ret instanceof Vps_Model_Abstract) $ret = Vps_Model_Abstract::getInstance($ret);
+        return $ret;
+    }
+
     public function getDependentModelWithDependentOf($rule)
     {
         if (!$rule) {
@@ -388,8 +395,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         $models[] = $this;
         foreach ($models as $m) {
             if (isset($m->_dependentModels[$rule])) {
-                $ret = $m->_dependentModels[$rule];
-                if (!$ret instanceof Vps_Model_Abstract) $ret = Vps_Model_Abstract::getInstance($ret);
+                $ret = $m->_createDependentModel($rule);
                 return array(
                     'model' => $ret,
                     'dependentOf' => $m
@@ -410,8 +416,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
      */
     public function getDependentModels()
     {
+        $ret = array();
         //TODO _proxyContainerModels berücksichtigen
-        return $this->_dependentModels;
+        foreach (array_keys($this->_dependentModels) as $rule) {
+            $ret[$rule] = $this->_createDependentModel($rule);
+        }
+        return $ret;
     }
 
     public function getRowsetClass()
