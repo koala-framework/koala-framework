@@ -17,6 +17,9 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         if (is_string($this->_proxyModel)) {
             $this->_proxyModel = Vps_Model_Abstract::getInstance($this->_proxyModel);
         }
+        if (!$this->_proxyModel) {
+            throw new Vps_Exception("proxyModel config is required for model '".get_class($this)."'");
+        }
         $this->_proxyModel->addProxyContainerModel($this);
     }
 
