@@ -2797,7 +2797,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Products</en>
-<de>Shop - Produkte</de>
+<de>Shop.Produkte</de>
 <id>795</id>
 </text>
 <text>
@@ -2943,7 +2943,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Cart</en>
-<de>Shop - Warenkorb</de>
+<de>Shop.Warenkorb</de>
 <id>828</id>
 </text>
 <text>
@@ -6088,6 +6088,56 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
 <de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollst&#xE4;ndig in den Browser kopiert?</de>
 <id>1542</id>
+<en>Voucher</en>
+<de>Gutschein</de>
+<id>1543</id>
+</text>
+<text>
+<en>Vouchers</en>
+<de>Gutscheine</de>
+<id>1544</id>
+</text>
+<text>
+<en>Voucher Code</en>
+<de>Gutscheint Code</de>
+<id>1545</id>
+</text>
+<text>
+<en>Amount</en>
+<context>Amount of Money</context>
+<de>Betrag</de>
+<id>1546</id>
+</text>
+<text>
+<en>Used Amount</en>
+<context>Amount of Money</context>
+<de>Benutzer Betrag</de>
+<id>1547</id>
+</text>
+<text>
+<en>'%value%' code was already used</en>
+<de>'%value%' Code wurde bereits benutzt</de>
+<id>1548</id>
+</text>
+<text>
+<en>'%value%' is not a valid voucher code</en>
+<de>'%value%' ist ein ungültiger Gutschein Code</de>
+<id>1549</id>
+</text>
+<text>
+<en>Redeem Voucher</en>
+<de>Gutschein einlösen</de>
+<id>1550</id>
+</text>
+<text>
+<en>Remaining Amount {0}</en>
+<de>Restbetrag {0}</de>
+<id>1551</id>
+</text>
+<text>
+<en>The Voucher has been successfully registered.</en>
+<de>Der Gutschein wurde erfolgreich eingetragen.</de>
+<id>1552</id>
 </text>
 <text>
 <en>Set password</en>
