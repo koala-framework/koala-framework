@@ -4,6 +4,7 @@ Stable:
 Neue Features:
 - Vps_Date, Vps_DateTime
 - CopyContent
+- editComponents geht jetzt auch mit Table Generator
 
 möglicherweise nicht kompatible Änderungen:
 - Vps_Date ist komplett inkompatibel (erbt nicht mehr von Zend_Date)
