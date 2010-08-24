@@ -1,6 +1,7 @@
 <?php
 /**
- * @group cc
+ * @group Cc
+ * @group Cc_RootWithTrl
  */
 class Vpc_Cc_RootWithTrl_Test extends Vpc_TestAbstract
 {
