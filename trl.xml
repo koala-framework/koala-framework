@@ -6121,23 +6121,23 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%value%' is not a valid voucher code</en>
-<de>'%value%' ist ein ungültiger Gutschein Code</de>
-<id>1549</id>
+<de>'%value%' ist ein ung&#xFC;ltiger Gutschein Code</de>
+<id>1571</id>
 </text>
 <text>
 <en>Redeem Voucher</en>
-<de>Gutschein einlösen</de>
-<id>1550</id>
+<de>Gutschein einl&#xF6;sen</de>
+<id>1572</id>
 </text>
 <text>
 <en>Remaining Amount {0}</en>
 <de>Restbetrag {0}</de>
-<id>1551</id>
+<id>1573</id>
 </text>
 <text>
 <en>The Voucher has been successfully registered.</en>
 <de>Der Gutschein wurde erfolgreich eingetragen.</de>
-<id>1552</id>
+<id>1574</id>
 </text>
 <text>
 <en>Set password</en>
@@ -6147,27 +6147,27 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Set a new password</en>
 <de>Ein neues Passwort setzen</de>
-<id>1544</id>
+<id>1575</id>
 </text>
 <text>
 <en>After entering your new password you are automatically logged in.</en>
 <de>Nach eingabe des neuen Passworts werden Sie automatisch eingeloggt.</de>
-<id>1545</id>
+<id>1576</id>
 </text>
 <text>
 <en>Set new Password</en>
 <de>Neues Passwort setzen</de>
-<id>1546</id>
+<id>1577</id>
 </text>
 <text>
 <en>Maybe you have already set your password, or the link was not copied correct out of the email.</en>
 <de>Eventuell haben Sie das Passwort bereits neu gesetzt, oder der Link wurde falsch aus dem E-Mail kopiert.</de>
-<id>1547</id>
+<id>1578</id>
 </text>
 <text>
 <en>Your new password has been set.</en>
 <de>Ihr neues Passwort wurde gesetzt.</de>
-<id>1548</id>
+<id>1579</id>
 </text>
 </trl>
 
