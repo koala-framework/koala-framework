@@ -2,9 +2,14 @@
 
 class Vpc_Advanced_DownloadsTree_DownloadsController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_modelName = 'Vpc_Advanced_DownloadsTree_Downloads';
     protected $_buttons = array('save', 'add', 'edit', 'delete');
     protected $_defaultOrder = array('field'=>'date', 'direction'=>'DESC');
+
+    public function preDispatch()
+    {
+        $this->_modelName = Vpc_Abstract::getSetting($this->_getParam('class'), 'downloadsModel');
+        parent::preDispatch();
+    }
 
     public function init()
     {
@@ -16,6 +21,7 @@ class Vpc_Advanced_DownloadsTree_DownloadsController extends Vps_Controller_Acti
         );
         parent::init();
     }
+
     protected function _initColumns()
     {
         parent::_initColumns();

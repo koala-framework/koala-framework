@@ -12,6 +12,12 @@ class Vps_Form_Field_DoublePassword extends Vps_Form_Field_Abstract
         parent::__construct(null, null);
     }
 
+    public function __clone()
+    {
+        $this->_passwordField1 = clone $this->_passwordField1;
+        $this->_passwordField2 = clone $this->_passwordField2;
+    }
+
     public function hasChildren()
     {
         return true;

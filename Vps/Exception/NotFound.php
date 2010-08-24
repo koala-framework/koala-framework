@@ -36,7 +36,7 @@ class Vps_Exception_NotFound extends Vps_Exception_Abstract
 
     public function render($ignoreCli = false)
     {
-        if (isset($_SERVER['REQUEST_URI'])) {
+        if (isset($_SERVER['REQUEST_URI']) && Vps_Registry::get('db')) {
             $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
                 ->findRedirectUrl('path', $_SERVER['REQUEST_URI']);
             if ($target) {
