@@ -340,6 +340,7 @@ class Vps_Component_Data
             );
         }
         // Nur bei hasEditComponents, Root soll keine Domain-Komponenten anzeigen
+        // Hack-Alarm :D
         if ($select->hasPart(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS) &&
             $this instanceof Vps_Component_Data_Root
         ) {
