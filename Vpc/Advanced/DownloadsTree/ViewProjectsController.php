@@ -1,12 +1,17 @@
 <?php
 class Vpc_Advanced_DownloadsTree_ViewProjectsController extends Vps_Controller_Action_Auto_Tree
 {
-    protected $_modelName = 'Vpc_Advanced_DownloadsTree_Projects';
     protected $_rootVisible = false;
     protected $_textField = 'text';
     protected $_buttons = array();
     protected $_enableDD = false;
     protected $_hasPosition = true;
+
+    public function preDispatch()
+    {
+        $this->_modelName = Vpc_Abstract::getSetting($this->_getParam('class'), 'projectsModel');
+        parent::preDispatch();
+    }
 
     protected function _getSelect()
     {
