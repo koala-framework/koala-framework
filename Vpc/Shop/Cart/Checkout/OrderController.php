@@ -48,6 +48,18 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
             }
         }
         $customerForm->fields['email']->setAllowBlank(true);
+
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            $g = Vpc_Abstract::getSetting($c, 'generators');
+            if (isset($g['checkout']) && $g['checkout']['component'] == $this->_getParam('class')) {
+                foreach (Vpc_Abstract::getSetting($c, 'plugins') as $p) {
+                    if (is_instance_of($p, 'Vpc_Shop_Cart_Plugins_Interface')) {
+                        $p = new $p();
+                        $p->alterBackendOrderForm($this->_form);
+                    }
+                }
+            }
+        }
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
@@ -55,5 +67,8 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
         parent::_beforeInsert($row);
         $row->status = 'ordered';
         $row->checkout_component_id = $this->_getParam('componentId');
+        $row->cart_component_class = Vps_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'))
+            ->parent->componentClass;
     }
 }
