@@ -7,13 +7,13 @@ class Vps_View_Helper_Date
 
         if (!$date) return '';
 
+        /*
         $d = new Vps_Date($date);
         return $d->toString($format);
+        */
 
-        /*
-        Das ist schneller, kann aber keine übersetzung bei Monatsnamen etc
+        //Das ist schneller, kann aber keine übersetzung bei Monatsnamen etc
         $datetime = new DateTime($date);
         return $datetime->format($format);
-        */
     }
 }
