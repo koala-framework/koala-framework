@@ -1,0 +1,1 @@
+testx <?=$this->data->componentId?>
