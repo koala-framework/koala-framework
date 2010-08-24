@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_AddToCart_Success_Component extends Vpc_Form_Success_Component
+class Vpc_Shop_AddToCartAbstract_Success_Component extends Vpc_Form_Success_Component
 {
     public static function getSettings()
     {
