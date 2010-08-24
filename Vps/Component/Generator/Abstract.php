@@ -354,21 +354,32 @@ abstract class Vps_Component_Generator_Abstract
                     continue;
                 }
                 $editComponents = Vpc_Abstract::getSetting($g->_class, 'editComponents');
-                if (is_array($g->_settings['component'])) {
-                    $continue = true;
-                    foreach (array_keys($g->_settings['component']) as $componentKey) {
-                        if (in_array($componentKey, $editComponents)) {
-                            $continue = false;
-                            break;
-                        }
+                if ($g->getGeneratorFlag('table')) {
+                    //es kann entweder ein table generator angegeben werden
+                    //da kommen dann alle unterkomponenten daher
+                    if (!in_array($g->_settings['generator'], $editComponents)) {
+                        continue;
                     }
-                    if ($continue) continue;
-                } else if (!in_array($key, $editComponents)) {
-                    continue;
-                }
-                if (isset($g->_settings['unique']) && $g->_settings['unique']) {
-                    //vererbte, unique nur bei eigener komponente zurückgeben
-                    if ($g->_class != $componentClass) continue;
+                } else {
+                    
+                    if (is_array($g->_settings['component'])) {
+                        //oder eine komponente eines static generators
+                        $continue = true;
+                        foreach (array_keys($g->_settings['component']) as $componentKey) {
+                            if (in_array($componentKey, $editComponents)) {
+                                $continue = false;
+                                break;
+                            }
+                        }
+                        if ($continue) continue;
+                    } else if (!in_array($key, $editComponents)) {
+                        //oder ein static generator (wenn er nur eine unter komponente hat)
+                        continue;
+                    }
+                    if (isset($g->_settings['unique']) && $g->_settings['unique']) {
+                        //vererbte, unique nur bei eigener komponente zurückgeben
+                        if ($g->_class != $componentClass) continue;
+                    }
                 }
             }
             if (isset($selectParts[Vps_Component_Select::WHERE_COMPONENT_CLASSES])) {
