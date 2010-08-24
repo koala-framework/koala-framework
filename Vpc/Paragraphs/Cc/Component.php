@@ -4,6 +4,7 @@ class Vpc_Paragraphs_Cc_Component extends Vpc_Chained_Cc_Component
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
+        $ret['editComponents'] = array('paragraphs');
         return $ret;
     }
 
