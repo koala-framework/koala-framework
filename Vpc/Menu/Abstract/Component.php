@@ -118,13 +118,19 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    protected function _getMenuData($parentData = null, $select = array())
+    protected function _getMenuPages($parentData, $select)
     {
         if (is_array($select)) $select = new Vps_Component_Select($select);
         $select->whereShowInMenu(true);
         $ret = array();
         $pageComponent = $this->getPageComponent($parentData);
         if ($pageComponent) $ret = $pageComponent->getChildPages($select);
+        return $ret;
+    }
+
+    protected function _getMenuData($parentData = null, $select = array())
+    {
+        $ret = $this->_getMenuPages($parentData, $select);
         $currentPageIds = array();
         $currentPages = array_reverse($this->_getCurrentPages());
         foreach ($currentPages as $page) {
