@@ -130,7 +130,6 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
     protected function _getMenuData($parentData = null, $select = array())
     {
-        $ret = $this->_getMenuPages($parentData, $select);
         $currentPageIds = array();
         $currentPages = array_reverse($this->_getCurrentPages());
         foreach ($currentPages as $page) {
@@ -139,17 +138,24 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
             }
         }
         $i = 0;
-        foreach ($ret as $r) {
+        $ret = array();
+        $pages = $this->_getMenuPages($parentData, $select);
+        foreach ($pages as $p) {
+            $r = array(
+                'data' => $p,
+                'text' => $p->name
+            );
             $class = array();
             if ($i == 0) { $class[] = 'first'; }
-            if ($i == count($ret)-1) { $class[] = 'last'; }
-            if (in_array($r->componentId, $currentPageIds)) {
+            if ($i == count($pages)-1) { $class[] = 'last'; }
+            if (in_array($p->componentId, $currentPageIds)) {
                 $class[] ='current';
-                $r->current = true;
+                $r['current'] = true;
             }
             $cssClass = $this->_getConfig($r, 'cssClass');
             if ($cssClass) $class[] = $cssClass;
-            $r->class = implode(' ', $class);
+            $r['class'] = implode(' ', $class);
+            $ret[] = $r;
             $i++;
         }
         return $ret;

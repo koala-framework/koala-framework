@@ -4,7 +4,7 @@
  * für das Menü benötigt werden.
  * @package Vpc
  */
-class Vpc_Menu_Component extends Vpc_Menu_Abstract
+class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
 {
     public static function getSettings()
     {

@@ -13,7 +13,8 @@ möglicherweise nicht kompatible Änderungen:
 - Expr_SmallerDate, Expr_HigherDate -> entfernt; Expr_Smaller kann dafür auch mit
   Vps_Date und Vps_DateTime umgehen
 - Expr_Equal (Equals ist deprected)
-
+- Menü-Komponenten: TemplateVars wurden geändert, ist jetzt ein array. Alle überschriebenen
+  Templates müssen angepasst werden (bzw. schaun obs wirklich überschrieben werden muss)
 
 == 1.10 ==
 Erstellt: 09.06.10
