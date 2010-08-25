@@ -6,10 +6,10 @@
         <ul class="menu">
             <? $i = 0;
             foreach ($this->menu as $m) { ?>
-                <li class="<?=$m->class;?>">
-                    <?=$this->componentLink($m, $this->linkPrefix.$m->name);?>
+                <li class="<?=$m['class'];?>">
+                    <?=$this->componentLink($m['data'], $this->linkPrefix.$m['text']);?>
                     <? if ($i < count($this->menu)-1) { ?><?=$this->separator;?><? } ?>
-                    <? if (isset($this->subMenu) && isset($m->current) && $m->current) { ?>
+                    <? if (isset($this->subMenu) && isset($m['current']) && $m['current']) { ?>
                         <?=$this->component($this->subMenu);?>
                     <? } ?>
                 </li>

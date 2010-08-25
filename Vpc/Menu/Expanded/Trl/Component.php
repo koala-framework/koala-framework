@@ -9,15 +9,19 @@ class Vpc_Menu_Expanded_Trl_Component extends Vpc_Menu_Abstract_Trl_Component
         foreach ($masterMenu as $m) {
             $component = $this->_getChainedComponent($m);
             if ($component) {
-                $component->submenu = array();
+                $m['submenu'] = array();
                 $masterSubMenu = $this->getData()->chained->getComponent()->getMenuData($m, array('ignoreVisible'=>true));
                 foreach ($masterSubMenu as $sm) {
                     $sComponent = $this->_getChainedComponent($sm);
                     if ($sComponent) {
-                        $component->submenu[] = $sComponent;
+                        $sm['data'] = $sComponent;
+                        $sm['text'] = $sComponent->name;
+                        $m['submenu'][] = $sm;
                     }
                 }
-                $menu[] = $component;
+                $m['data'] = $component;
+                $m['text'] = $component->name;
+                $menu[] = $m;
             }
         }
         $ret['menu'] = $menu;
