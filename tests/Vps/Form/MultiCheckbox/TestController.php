@@ -41,6 +41,9 @@ class Vps_Form_MultiCheckbox_TestController extends Vps_Controller_Action_Auto_F
             'Value',
             'Model and relation (no dataToRelation)'
         ));
+
+        $fs->add(new Vps_Form_Field_MultiCheckbox('Relation', 'Value', 'setShowCheckAllLinks(false)'))
+            ->setShowCheckAllLinks(false);
     }
 
     public function indexAction()
