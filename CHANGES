@@ -5,6 +5,7 @@ Neue Features:
 - Vps_Date, Vps_DateTime
 - CopyContent
 - editComponents geht jetzt auch mit Table Generator
+- MultiCheckbox: Alle / keine Links (standardmäßig aktiv)
 
 möglicherweise nicht kompatible Änderungen:
 - Vps_Date ist komplett inkompatibel (erbt nicht mehr von Zend_Date)

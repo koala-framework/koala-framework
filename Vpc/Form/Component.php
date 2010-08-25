@@ -23,6 +23,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         //todo: wenn mehrere verbessern
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
+        $ret['assets']['files'][] = 'vps/Vps/Form/Field/MultiCheckbox/Component.js';
         $ret['assets']['files'][] = 'vps/Vpc/Form/Component.js';
         $ret['assets']['files'][] = 'vps/Vps_js/Form/FieldSet/Component.js';
 

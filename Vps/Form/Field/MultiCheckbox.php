@@ -16,6 +16,10 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
      */
     protected $_pool = null;
 
+    // setShowCheckAllLinks(true) | default=true, zeigt "alle" und "keine" links an, die alle checkboxes auf einmal setzen
+    // setCheckAllText($txt)
+    // setCheckNoneText($txt)
+
     /**
      * Zeigt mehrere Checkboxes an und speichert diese in einer Relationstabelle
      *
@@ -48,8 +52,11 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             $this->setFieldLabel($title);
         }
         $this->setAutoHeight(true);
+        $this->setShowCheckAllLinks(true);
+        $this->setCheckAllText(trlVpsStatic('all'));
+        $this->setCheckNoneText(trlVpsStatic('none'));
         $this->setLayout('form');
-        $this->setXtype('fieldset');
+        $this->setXtype('multicheckbox');
     }
 
     public function setRelationToData($rel)
@@ -276,6 +283,14 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         }
     }
 
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'checkAllText';
+        $ret[] = 'checkNoneText';
+        return $ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
@@ -288,6 +303,14 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             $i++;
         }
         $ret['html'] .= '<div class="checkboxItemEnd"></div>';
+        if ($this->getShowCheckAllLinks()) {
+            $ret['html'] .=
+                '<div class="checkAllLinksWrapper">'
+                    .'<a href="#" class="vpsMultiCheckboxCheckAll">'.$this->getCheckAllText().'</a>'
+                    .' / '
+                    .'<a href="#" class="vpsMultiCheckboxCheckNone">'.$this->getCheckNoneText().'</a>'
+                .'</div>';
+        }
         return $ret;
     }
 }
