@@ -1,5 +1,6 @@
 <?php
-class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Component implements Vps_Media_Output_Interface
+class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Component
+    implements Vps_Media_Output_IsValidInterface
 {
     public static function getSettings()
     {
@@ -52,6 +53,27 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
     public function getFileRow()
     {
         return $this->_getRow();
+    }
+
+    public static function isValidMediaOutput($id, $type, $className)
+    {
+        if (Vps_Component_Data_Root::getInstance()->getComponentById($id)) {
+            return self::VALID;
+        }
+        if (Vps_Registry::get('config')->showInvisible) {
+            //preview im frontend
+            if (Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
+                return self::VALID_DONT_CACHE;
+            }
+        }
+
+        //paragraphs vorschau im backend
+        $authData = Vps_Registry::get('userModel')->getAuthedUser();
+        if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, $authData)) {
+            return self::VALID_DONT_CACHE;
+        }
+
+        return self::INVALID;
     }
 
     public static function getMediaOutput($id, $type, $className)
