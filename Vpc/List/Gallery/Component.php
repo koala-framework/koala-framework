@@ -5,7 +5,7 @@ abstract class Vpc_List_Gallery_Component extends Vpc_Abstract_List_Component
     {
         $ret = parent::getSettings();
         $ret['assets']['dep'][] = 'VpsEnlargeNextPrevious';
-        $ret['componentName'] = trlVps('Advanced Gallery');
+        $ret['componentName'] = trlVps('Gallery');
         $ret['componentIcon'] = new Vps_Asset('images.png');
         $ret['generators']['child']['component'] = 'Vpc_List_Gallery_Image_Component';
         $ret['cssClass'] = 'webStandard';
