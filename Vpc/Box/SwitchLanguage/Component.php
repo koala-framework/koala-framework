@@ -6,6 +6,7 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['cssClass'] = 'webStandard';
         $ret['separator'] = ' / ';
+        $ret['showCurrent'] = true;
         return $ret;
     }
 
@@ -21,6 +22,11 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
             ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component'));
         $ret['languages'] = array();
         foreach ($languages as $l) {
+            if (!$this->_getSetting('showCurrent')) {
+                if ($this->getData()->getLanguageData()->componentId == $l->componentId) {
+                    continue;
+                }
+            }
             $masterPage = $this->getData()->getPage();
             if (isset($masterPage->chained)) {
                 $masterPage = $masterPage->chained; //TODO: nicht sauber
@@ -51,6 +57,9 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
                     'name' => $l->name
                 );
             }
+        }
+        if ($this->_getSetting('showCurrent') && count($ret['languages']) == 1) {
+            $ret['languages'] = array();
         }
         return $ret;
     }
