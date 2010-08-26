@@ -52,16 +52,6 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
         return $c;
     }
 
-    public static function getNextContentChild($page, $inheritContentChildId)
-    {
-        while ($page && !$page->inherits) {
-            $page = $page->parent;
-            if ($page instanceof Vps_Component_Data_Root) break;
-        }
-        return $page->getChildComponent('-'.$inheritContentChildId)
-                ->getChildComponent(array('generator' => 'child'));
-    }
-
     public function getExportData()
     {
         return $this->_getContentChild()->getComponent()->getExportData();
