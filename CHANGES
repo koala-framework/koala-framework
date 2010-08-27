@@ -15,6 +15,7 @@ möglicherweise nicht kompatible Änderungen:
 - Expr_Equal (Equals ist deprected)
 - Menü-Komponenten: TemplateVars wurden geändert, ist jetzt ein array. Alle überschriebenen
   Templates müssen angepasst werden (bzw. schaun obs wirklich überschrieben werden muss)
+- frontControllerClass MUSS in application/config.ini angegeben werden
 
 == 1.10 ==
 Erstellt: 09.06.10
