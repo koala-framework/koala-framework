@@ -47,6 +47,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             }
         } else {
             params = this.getBaseParams();
+            data.componentId = params.componentId;
         }
         var item;
         this.items.each(function(i) {
