@@ -118,8 +118,9 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         } else {
             $select = $where;
         }
-        $p = Vps_Registry::get('db')->getProfiler()->queryStart(print_r($this->_getQuery($select), true));
+        $p = Vps_Registry::get('db')->getProfiler()->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         $ret = $this->_collection->find($this->_getQuery($select))->count();
+        Vps_Registry::get('db')->getProfiler()->getLogger()->info('(count) count result '.$ret);
         $p = Vps_Registry::get('db')->getProfiler()->queryEnd($p);
         return $ret;
     }
@@ -165,10 +166,11 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         }
         $cursor = $this->_getCursor($select)->fields(array('id'=>1)); //TODO 'id' dynam.
         $ret = array();
-        $p = Vps_Registry::get('db')->getProfiler()->queryStart(print_r($this->_getQuery($select), true));
+        $p = Vps_Registry::get('db')->getProfiler()->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         foreach ($cursor as $row) {
             $ret[] = $row['id']; //TODO: dynam.
         }
+        Vps_Registry::get('db')->getProfiler()->getLogger()->info('(ids) count result '.count($ret));
         $p = Vps_Registry::get('db')->getProfiler()->queryEnd($p);
         return $ret;
     }
@@ -201,7 +203,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         if (!is_object($select)) {
             $select = $this->select($select);
         }
-        $p = Vps_Registry::get('db')->getProfiler()->queryStart(print_r($this->_getQuery($select), true));
+        $p = Vps_Registry::get('db')->getProfiler()->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         $row = $this->_collection->findOne($this->_getQuery($select));
         $p = Vps_Registry::get('db')->getProfiler()->queryEnd($p);
         $this->_data[$row['_id']->__toString()] = $row;
@@ -224,13 +226,14 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         $keys = array();
         $cursor = $this->_getCursor($select);
 
-        $p = Vps_Registry::get('db')->getProfiler()->queryStart(print_r($this->_getQuery($select), true));
+        $p = Vps_Registry::get('db')->getProfiler()->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         foreach($cursor as $row) {
             if (!isset($this->_data[$row['_id']->__toString()])) {
                 $this->_data[$row['_id']->__toString()] = $row;
             }
             $keys[] = $row['_id']->__toString();
         }
+        Vps_Registry::get('db')->getProfiler()->getLogger()->debug('(rows) count result '.count($keys));
         $p = Vps_Registry::get('db')->getProfiler()->queryEnd($p);
 
         $ret =  new $this->_rowsetClass(array(
