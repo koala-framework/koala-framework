@@ -1,6 +1,7 @@
 <?php
 class Vps_Date
 {
+    //TODO: DateTime verwenden, das unterstützt datum vor 1970 und nach 2038
     protected $_timestamp;
 
     public function __construct($date)
