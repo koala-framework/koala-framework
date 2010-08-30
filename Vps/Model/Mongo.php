@@ -86,12 +86,24 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
 
     public function insert(Vps_Model_Row_Interface $row, $rowData)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        //TODO: id?
+        $res = $this->getCollection()->insert(
+            $rowData
+        , array('safe'=>true));
+        if (!$ret || $ret['ok'] != 1) {
+            throw new Vps_Exception("insert failed");
+        }
     }
 
     public function delete(Vps_Model_Row_Interface $row)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        $ret = $this->_collection->remove(
+            array('_id' => $row->_id),
+            array('safe'=>true, 'multiple'=>false)
+        );
+        if (!$ret || $ret['ok'] != 1) {
+            throw new Vps_Exception("delete failed");
+        }
     }
 
     public function getRowByDataKey($key)

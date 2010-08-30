@@ -1,6 +1,8 @@
 <?php
 class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
 {
+    protected $_collection = 'foo';
+
     private $_dir;
     private $_proc;
     private $_port;
@@ -18,8 +20,9 @@ class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
         unlink($this->_dir);
         mkdir($this->_dir);
 
-        $this->_port = Vps_Util_Tcp::getFreePort(27020);
-        $cmd = "timeout -15 $timeLimit $mongoDir/bin/mongod --port=$this->_port --dbpath=$this->_dir";
+        $this->_port = Vps_Util_Tcp::getFreePort(rand(27020, 30000));
+        $cmd = "timeout -15 $timeLimit ";
+        $cmd = "$mongoDir/bin/mongod --port=$this->_port --dbpath=$this->_dir";
         $descriptorspec = array();
         if ($debugOutput) {
             echo $cmd."\n";

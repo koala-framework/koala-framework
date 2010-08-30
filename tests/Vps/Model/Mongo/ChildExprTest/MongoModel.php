@@ -1,8 +1,6 @@
 <?php
 class Vps_Model_Mongo_ChildExprTest_MongoModel extends Vps_Model_Mongo_TestModel
 {
-    protected $_collection = 'foo';
-
     protected $_dependentModels = array(
         'Child' => 'Vps_Model_Mongo_ChildExprTest_ChildModel'
     );
