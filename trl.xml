@@ -5302,5 +5302,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Der Gutschein wurde erfolgreich eingetragen.</de>
 <id>1392</id>
 </text>
+<text>
+<en>Product: Voucher</en>
+<de>Produkt: Gutschein</de>
+<id>1393</id>
+</text>
 </trl>
 
