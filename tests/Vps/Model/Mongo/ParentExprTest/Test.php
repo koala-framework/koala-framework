@@ -18,7 +18,7 @@ class Vps_Model_Mongo_ParentExprTest_Test extends PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->_model->cleanUp();
+        if ($this->_model) $this->_model->cleanUp();
         Vps_Model_Abstract::clearInstances();
     }
 
