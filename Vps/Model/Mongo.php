@@ -87,7 +87,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     public function insert(Vps_Model_Row_Interface $row, $rowData)
     {
         //TODO: id?
-        $res = $this->getCollection()->insert(
+        $ret = $this->getCollection()->insert(
             $rowData
         , array('safe'=>true));
         if (!$ret || $ret['ok'] != 1) {

@@ -35,4 +35,11 @@ class Vps_Model_Mongo_Row extends Vps_Model_Row_Data_Abstract
         return $ret;
     }
 
+    protected function _beforeSave()
+    {
+        parent::_beforeSave();
+        foreach ($this->getModel()->getExprColumns() as $name) {
+            $this->$name = $this->getModel()->getExprValue($this, $name);
+        }
+    }
 }

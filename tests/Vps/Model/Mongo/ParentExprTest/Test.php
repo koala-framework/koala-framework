@@ -1,6 +1,6 @@
 <?php
 /**
- * @group Mongo
+ * @group Mongo_ParentExpr
  * @group slow
  */
 class Vps_Model_Mongo_ParentExprTest_Test extends PHPUnit_Framework_TestCase
@@ -45,7 +45,14 @@ class Vps_Model_Mongo_ParentExprTest_Test extends PHPUnit_Framework_TestCase
 
     public function testNewRow()
     {
-        $this->markTestIncomplete();
+        $row = $this->_model->createRow();
+        $row->blub = 1;
+        $row->parent_id = 1;
+        $row->save();
+
+        $this->assertEquals('one', $row->parent_name);
+        $r = $this->_model->getCollection()->findOne(array('blub'=>1));
+        $this->assertEquals('one', $r['parent_name']);
     }
 
     public function testDeleteParent()
