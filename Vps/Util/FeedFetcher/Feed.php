@@ -155,11 +155,22 @@ class Vps_Util_FeedFetcher_Feed
         } else {
             $row->avg_update = ($row->avg_update*($row->updates) + $duration) / ($row->updates + 1);
         }
+        $benchmarkType = false;
+        $feedHost = parse_url($row->url, PHP_URL_HOST);
+        if (substr($feedHost, -11) == 'twitter.com') {
+            $benchmarkType = 'twitter';
+        } else if (substr($feedHost, -10) == 'google.com') {
+            $benchmarkType = 'google';
+        } else if (substr($feedHost, -9, -2) == 'google.') {
+            $benchmarkType = 'google';
+        }
+        if ($benchmarkType) Vps_Benchmark::count('feed-update-'.$benchmarkType);
         if ($status == self::UPDATE_ERROR) {
             $row->update_errors++;
             $row->last_update_error = date('Y-m-d H:i:s');
             $row->consecutive_update_errors++;
             Vps_Benchmark::count('feed-update-error');
+            if ($benchmarkType) Vps_Benchmark::count('feed-update-error-'.$benchmarkType);
         } else {
             $row->consecutive_update_errors = 0;
             $row->last_successful_update = date('Y-m-d H:i:s');
