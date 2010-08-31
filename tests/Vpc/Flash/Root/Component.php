@@ -1,4 +1,6 @@
 <?php
+// /vps/vpctest/Vpc_Flash_Root_Component/flash
+// /vps/vpctest/Vpc_Flash_Root_Component/community
 class Vpc_Flash_Root_Component extends Vps_Component_NoCategoriesRoot
 {
     public static function getSettings()
