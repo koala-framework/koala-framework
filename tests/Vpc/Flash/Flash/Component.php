@@ -2,12 +2,13 @@
 /*
  * http://vps11.franz.vivid/vps/vpctest/Vpc_Flash_Component
  *
- */class Vpc_Flash_Component extends Vpc_Abstract_Flash_Component
+ */
+class Vpc_Flash_Flash_Component extends Vpc_Abstract_Flash_Component
 {
     protected function _getFlashData()
     {
         $ret = parent::_getFlashData();
-        $ret['url'] = '/assets/vps/tests/Vpc/Flash/demo.swf';
+        $ret['url'] = '/assets/vps/tests/Vpc/Flash/Flash/demo.swf';
         $ret['width'] = 558;
         $ret['height'] = 168;
         $ret['params'] = array(
