@@ -69,7 +69,15 @@ class Vps_Model_Mongo_ChildRowsTest_Test extends PHPUnit_Framework_TestCase
 
     public function testUpdateChild()
     {
-        $this->markTestIncomplete();
+        $row = $this->_model->getRow(1);
+        $crows = $row->getChildRows('Foo');
+        $crows->current()->x = 1234;
+        $row->save();
+        $this->assertEquals(2, count($row->getChildRows('Foo')));
+
+        $row = $this->_model->getCollection()->findOne(array('a'=>'a'));
+        $this->assertEquals(2, count($row['foo']));
+        $this->assertEquals(1234, $row['foo'][0]['x']);
     }
 
 }
