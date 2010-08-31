@@ -32,9 +32,9 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     {
     }
 
-    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row)
+    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
-        parent::dependentModelRowUpdated($row);
+        parent::dependentModelRowUpdated($row, $action);
         foreach ($this->_exprs as $column=>$expr) {
             if ($expr instanceof Vps_Model_Select_Expr_Parent) {
                 if ($this->getReferencedModel($expr->getParent()) === $row->getModel()) {
@@ -57,9 +57,9 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         }
     }
 
-    public function childModelRowUpdated(Vps_Model_Row_Abstract $row)
+    public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
-        parent::childModelRowUpdated($row);
+        parent::childModelRowUpdated($row, $action);
         foreach ($this->_exprs as $column=>$expr) {
             if ($expr instanceof Vps_Model_Select_Expr_Child) {
                 if ($this->getDependentModel($expr->getChild()) === $row->getModel()) {
