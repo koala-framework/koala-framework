@@ -31,6 +31,17 @@ class Vps_Model_Mongo_ChildRowsTest_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $rows->current()->x);
     }
 
+    public function testReadAutomaticInternalId()
+    {
+        $row = $this->_model->getRow(1);
+        $rows = $row->getChildRows('Foo');
+        $this->assertEquals(2, count($rows));
+
+        $pk = $rows->current()->getModel()->getPrimaryKey();
+        $this->assertEquals('intern_id', $pk);
+        $this->assertEquals(1, $rows->current()->$pk);
+    }
+
     public function testCreateChild()
     {
         $row = $this->_model->getRow(1);
@@ -46,7 +57,6 @@ class Vps_Model_Mongo_ChildRowsTest_Test extends PHPUnit_Framework_TestCase
 
     public function testDeleteChild()
     {
-        $this->markTestIncomplete();
         $row = $this->_model->getRow(1);
         $crows = $row->getChildRows('Foo');
         $crows->current()->delete();

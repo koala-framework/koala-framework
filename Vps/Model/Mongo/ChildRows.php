@@ -4,6 +4,7 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
 {
     protected $_rowClass = 'Vps_Model_Mongo_ChildRows_Row';
     protected $_rowsetClass = 'Vps_Model_Mongo_ChildRows_Rowset';
+    protected $_primaryKey = 'intern_id';
     protected $_fieldName;
 
     public function __construct(array $config = array())
@@ -31,6 +32,12 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
         $v = $parentRow->{$this->_fieldName};
         if ($v) {
             if (!is_array($v)) throw new Vps_Exception("value is not an array but a ".gettype($v));
+            //TODO: _data nicht duplizieren, sondern in getRowByDataKey erst machen (performance)
+            $i = 0;
+            foreach (array_keys($v) as $k) {
+                $v[$k]['intern_id'] = ++$i; //TODO ist das eindeutig genug (ist nur eindeutig PRO parentRow)
+                                            // aber nachdem man hierher eh nur per getRowsByParentRow kommt müsste es passen
+            }
             $this->_data[$parentRow->getInternalId()] = $v;
         } else {
             $this->_data[$parentRow->getInternalId()] = array();
@@ -66,6 +73,9 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
     private function _updateParentRow($parentRow)
     {
         $v = $this->_data[$parentRow->getInternalId()];
+        foreach ($v as $k=>$i) {
+            unset($v[$k]['intern_id']);
+        }
         $parentRow->{$this->_fieldName} = $v;
     }
 
