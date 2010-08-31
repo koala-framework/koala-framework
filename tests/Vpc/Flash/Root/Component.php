@@ -5,7 +5,11 @@ class Vpc_Flash_Root_Component extends Vps_Component_NoCategoriesRoot
     {
         $ret = parent::getSettings();
         $ret['generators']['flash'] = array(
-            'component' => 'Vpc_Flash_Component',
+            'component' => 'Vpc_Flash_Flash_Component',
+            'class' => 'Vps_Component_Generator_Page_Static',
+        );
+        $ret['generators']['community'] = array(
+            'component' => 'Vpc_Flash_Community_Component',
             'class' => 'Vps_Component_Generator_Page_Static',
         );
         unset($ret['generators']['page']);
