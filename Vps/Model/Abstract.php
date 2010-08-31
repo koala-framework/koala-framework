@@ -712,14 +712,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     /**
      * @internal
      */
-    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row)
+    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
     }
 
     /**
      * @internal
      */
-    public function childModelRowUpdated(Vps_Model_Row_Abstract $row)
+    public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
     }
 }

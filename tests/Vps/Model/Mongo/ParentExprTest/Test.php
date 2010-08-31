@@ -55,14 +55,39 @@ class Vps_Model_Mongo_ParentExprTest_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('one', $r['parent_name']);
     }
 
+    public function testChangedParent()
+    {
+        $row = $this->_model->getRow(array());
+        $row->parent_id = 2;
+        $row->save();
+        $this->assertEquals('two', $row->parent_name);
+        $this->assertEquals('two', $row->getParentRow('Parent')->name);
+        $r = $this->_model->getCollection()->findOne();
+        $this->assertEquals('two', $r['parent_name']);
+    }
+
     public function testDeleteParent()
     {
-        $this->markTestIncomplete();
+        $parentModel = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ParentExprTest_ParentModel');
+        $parentRow = $parentModel->getRow(1);
+        $parentRow->delete();
+
+        $row = $this->_model->getRow(array());
+        $this->assertEquals(null, $row->parent_name);
+        $this->assertEquals(null, $row->getParentRow('Parent'));
+        $r = $this->_model->getCollection()->findOne();
+        $this->assertEquals(null, $r['parent_name']);
     }
 
     public function testUnsetParent()
     {
-        $this->markTestIncomplete();
+        $row = $this->_model->getRow(array());
+        $row->parent_id = null;
+        $row->save();
+        $this->assertEquals(null, $row->parent_name);
+        $this->assertEquals(null, $row->getParentRow('Parent'));
+        $r = $this->_model->getCollection()->findOne();
+        $this->assertEquals(null, $r['parent_name']);
     }
 
     public function testSetParentThatWasNotSet()
