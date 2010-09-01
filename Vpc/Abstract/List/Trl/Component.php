@@ -29,7 +29,12 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
             $childrenById[$c->id] = $c;
         }
         foreach (array_keys($ret['listItems']) as $k) {
-            $ret['listItems'][$k]['data'] = $childrenById[$ret['listItems'][$k]['data']->id];
+            $id = $ret['listItems'][$k]['data']->id;
+            if (isset($childrenById[$id])) {
+                $ret['listItems'][$k]['data'] = $childrenById[$id];
+            } else {
+                unset($ret['listItems'][$k]);
+            }
         }
         return $ret;
     }
