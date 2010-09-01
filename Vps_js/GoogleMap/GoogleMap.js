@@ -211,6 +211,8 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
                 new GLatLng(this.config.zoom[2], this.config.zoom[3]),
                 new GLatLng(this.config.zoom[0], this.config.zoom[1])
             ));
+            if (this.config.maximumInitialResolution < this.config.zoom)
+            	this.config.zoom = this.config.maximumInitialResolution;
         }
 
         this.gmap.setCenter(
