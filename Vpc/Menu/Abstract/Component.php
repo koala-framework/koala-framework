@@ -152,7 +152,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                 $class[] ='current';
                 $r['current'] = true;
             }
-            $cssClass = $this->_getConfig($r, 'cssClass');
+            $cssClass = $this->_getConfig($p, 'cssClass');
             if ($cssClass) $class[] = $cssClass;
             $r['class'] = implode(' ', $class);
             $ret[] = $r;
