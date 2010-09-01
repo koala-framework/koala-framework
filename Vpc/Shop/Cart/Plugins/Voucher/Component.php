@@ -50,6 +50,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
                 $s = new Vps_Model_Select();
                 $s->whereEquals('code', $order->voucher_code);
                 $row = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Plugins_Voucher_Vouchers')->getRow($s);
+                $remainingAmount = $row->amount - $row->used_amount + $sumRow['amount'];
                 $h = $row->createChildRow('history');
                 $h->amount = -$sumRow['amount'];
                 $h->order_id = $order->id;
@@ -59,6 +60,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
 
                 //verbrauchten betrag auch noch bei der order speichern
                 $order->voucher_amount = (float)$h->amount;
+                $order->voucher_remaining_amount = (float)$remainingAmount;
                 $order->save();
                 break;
             }
@@ -72,5 +74,13 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
         $fs->add(new Vps_Form_Field_NumberField('voucher_amount', trlcVps('Amount of Money', 'Amount')))
             ->setComment('€')
             ->setWidth(50);
+    }
+
+    public function getPlaceholders(Vpc_Shop_Cart_Order $order)
+    {
+        $remainingAmount = (float)$order->voucher_remaining_amount;
+        return array(
+            'voucherRemainingAmount' => Vps_View_Helper_Money::money($remainingAmount)
+        );
     }
 }

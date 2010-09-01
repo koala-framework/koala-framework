@@ -5811,7 +5811,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Voucher Code</en>
-<de>Gutscheint Code</de>
+<de>Gutschein Code</de>
 <id>1385</id>
 </text>
 <text>
@@ -5850,6 +5850,11 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>The Voucher has been successfully registered.</en>
 <de>Der Gutschein wurde erfolgreich eingetragen.</de>
 <id>1392</id>
+</text>
+<text>
+<en>Product: Voucher</en>
+<de>Produkt: Gutschein</de>
+<id>1393</id>
 </text>
 </trl>
 
