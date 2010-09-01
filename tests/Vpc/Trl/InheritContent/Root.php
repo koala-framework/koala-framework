@@ -14,12 +14,12 @@ class Vpc_Trl_InheritContent_Root extends Vpc_Root_Abstract
             )
         ));
         $ret['generators']['de'] = array(
-            'class' => 'Vpc_Root_TrlRoot_MasterGenerator',
+            'class' => 'Vpc_Chained_Abstract_MasterGenerator',
             'component' => 'Vpc_Trl_InheritContent_German',
             'name' => 'de'
         );
         $ret['generators']['en'] = array(
-            'class' => 'Vpc_Root_TrlRoot_ChainedGenerator',
+            'class' => 'Vpc_Chained_Abstract_ChainedGenerator',
             'component' => 'Vpc_Trl_InheritContent_English.Vpc_Trl_InheritContent_German',
             'name' => 'en'
         );
