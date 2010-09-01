@@ -673,12 +673,19 @@ class Vps_Component_Data
     }
 
     /**
+     * @param string|array
      * @return Vps_Component_Data
      */
     public function getParentByClass($cls)
     {
+        if (!is_array($cls)) $cls = array($cls);
         $d = $this;
-        while ($d && !is_instance_of($d->componentClass, $cls)) {
+        while ($d) {
+            foreach ($cls as $i) {
+                if (is_instance_of($d->componentClass, $i)) {
+                    return $d;
+                }
+            }
             $d = $d->parent;
         }
         return $d;
