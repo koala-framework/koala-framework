@@ -15,7 +15,7 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
                 $cc->Vpc_Abstract_Composite_Component->toArray();
         }
 
-        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
+        $ret['extConfig'] = 'Vpc_Abstract_Composite_ExtConfigForm';
 
         return $ret;
     }
