@@ -11,10 +11,10 @@ class Vps_Util_Tcp
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         $ret = $from;
         while (true) {
-            if (@socket_bind($socket, $host, $port)) {
+            if (@socket_bind($socket, $host, $ret)) {
                 break;
             }
-            $this->_port++;
+            $ret++;
             if ($ret > $from+100) {
                 $this->fail('can\'t get free port number');
             }

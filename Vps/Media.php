@@ -17,7 +17,7 @@ class Vps_Media
             }
         }
         if (is_null($time)) {
-            self::getOutput($class, $id, $type);
+            self::_getOutputWithoutCheckingIsValid($class, $id, $type);
             $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
             if (!$time) $time = time();
         }
@@ -94,6 +94,12 @@ class Vps_Media
                 $isValid = call_user_func(array($classWithoutDot, 'isValidMediaOutput'), $id, $type, $class);
                 if ($isValid == Vps_Media_Output_IsValidInterface::INVALID) {
                     throw new Vps_Exception_NotFound();
+                } else if ($isValid == Vps_Media_Output_IsValidInterface::ACCESS_DENIED) {
+                    throw new Vps_Exception_AccessDenied();
+                } else if ($isValid == Vps_Media_Output_IsValidInterface::VALID) {
+                } else if ($isValid == Vps_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
+                } else {
+                    throw new Vps_Exception("unknown isValidMediaOutput return value");
                 }
             }
             if ($isValid != Vps_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
@@ -101,6 +107,13 @@ class Vps_Media
                 $isValidCache->save($data, $cacheId);
             }
         }
+        $output = self::_getOutputWithoutCheckingIsValid($class, $id, $type);
+        return $output;
+    }
+
+    private static function _getOutputWithoutCheckingIsValid($class, $id, $type)
+    {
+        $cacheId = self::createCacheId($class, $id, $type);
 
         if (!Vps_Registry::get('config')->debug->mediaCache || !($output = self::getOutputCache()->load($cacheId))) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;

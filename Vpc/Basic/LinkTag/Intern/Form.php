@@ -7,7 +7,8 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vpc_Abstract_Form
 
         $this->add(new Vps_Form_Field_PageSelect('target', trlVps('Target')))
             ->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl('Pages'))
-            ->setWidth(233);
+            ->setWidth(233)
+            ->setAllowBlank(false);
     }
 
     public function prepareSave($parentRow, $postData)
