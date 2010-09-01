@@ -24,11 +24,12 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
 
         // wird zweimal gesetzt. siehe kommentar in nicht-trl component
         $ret['children'] = $children;
-        $ret['listItems'] = array();
-        foreach ($children as $child) {
-            $ret['listItems'][] = array(
-                'data' => $child
-            );
+        $childrenById = array();
+        foreach ($children as $c) {
+            $childrenById[$c->id] = $c;
+        }
+        foreach (array_keys($ret['listItems']) as $k) {
+            $ret['listItems'][$k]['data'] = $childrenById[$ret['listItems'][$k]['data']->id];
         }
         return $ret;
     }
