@@ -128,4 +128,20 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
         }
         return $ret;
     }
+
+    public function getPlaceholders()
+    {
+        $ret = array();
+        $m = new Vps_View_Helper_Money();
+        $ret['total'] = $m->money($this->getTotal());
+        $ret['orderNumber'] = $this->order_number;
+
+        $plugins = Vpc_Shop_Cart_OrderData::getInstance($this->cart_component_class)
+                    ->getShopCartPlugins();
+        foreach ($plugins as $plugin) {
+            $ret = array_merge($ret, $plugin->getPlaceholders($this));
+        }
+        return $ret;
+
+    }
 }
