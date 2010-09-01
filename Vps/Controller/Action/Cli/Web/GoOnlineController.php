@@ -17,6 +17,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         $ret[] = array('param' => 'skip-test');
         $ret[] = array('param' => 'skip-prod');
         $ret[] = array('param' => 'skip-check');
+        $ret[] = array('param' => 'skip-backup');
         return $ret;
     }
 
@@ -318,8 +319,10 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
 
         if ($updateProd) {
 
-            echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
-            $this->_systemSshVpsWithSubSections("import backup-db", 'production');
+            if (!$this->_getParam('skip-backup')) {
+                echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
+                $this->_systemSshVpsWithSubSections("import backup-db", 'production');
+            }
 
             if ($useSvn) {
                 echo "\n\n*** [11/13] prod: vps-version anpassen\n";
