@@ -2,6 +2,7 @@
 /**
  * @group DownloadTag
  * @group DownloadTagLogin
+ * @group slow
  */
 class Vpc_Basic_DownloadTagBehindLogin_Test extends Vps_Test_SeleniumTestCase
 {
