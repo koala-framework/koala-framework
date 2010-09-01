@@ -280,4 +280,19 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     {
         throw new Vps_Exception_NotYetImplemented();
     }
+
+    public function import($format, $data, array $options = array())
+    {
+        if ($format == self::FORMAT_ARRAY) {
+            if (isset($options['replace']) && $options['replace']) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
+            $ret = $this->getCollection()->batchInsert($data, array('safe'=>true));
+            if (!$ret || $ret['ok'] != count($data)) {
+                throw new Vps_Exception("import failed");
+            }
+        } else {
+            parent::import($format, $data, $options);
+        }
+    }
 }
