@@ -22,7 +22,7 @@ class Vpc_Box_InheritContent_Trl_Cc_Component extends Vpc_Chained_Cc_Component
                 $c = null;
                 break;
             }
-            $masterChild = $page->chained->getChildComponent('-'.$this->getData()->id)
+            $masterChild = $page->chained->chained->getChildComponent('-'.$this->getData()->id)
                     ->getChildComponent(array('generator' => 'child'));
             $c = Vpc_Chained_Cc_Component::getChainedByMaster($masterChild, $this->getData());
             if ($page instanceof Vps_Component_Data_Root) break;
