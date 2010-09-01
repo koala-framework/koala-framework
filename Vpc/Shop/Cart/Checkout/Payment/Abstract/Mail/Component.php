@@ -15,9 +15,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component extends Vpc_Mail_Ed
     public function getPlaceholders(Vpc_Mail_Recipient_Interface $o = null)
     {
         $ret = parent::getPlaceholders($o);
-        $m = new Vps_View_Helper_Money();
-        $ret['total'] = $m->money($o->getTotal());
-        $ret['orderNumber'] = $o->order_number;
+        $ret = array_merge($ret, $o->getPlaceholders());
         return $ret;
     }
 }
