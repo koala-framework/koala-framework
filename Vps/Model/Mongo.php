@@ -221,6 +221,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         $p = $profiler->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         $row = $this->_collection->findOne($this->_getQuery($select));
         $p = $profiler->queryEnd($p);
+        if (!$row) return null;
         $this->_data[$row['_id']->__toString()] = $row;
         $ret =  new $this->_rowClass(array(
             'data' => $row,
