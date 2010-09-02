@@ -460,7 +460,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.filters = new Vps.Auto.FilterCollection(meta.filters, this);
         this.filters.each(function(filter) {
             filter.on('filter', function(f, params) {
-                this.load(params);
+                this.applyBaseParams(params);
+                this.load();
             }, this);
         }, this);
         this.filters.applyToTbar(gridConfig.tbar);
