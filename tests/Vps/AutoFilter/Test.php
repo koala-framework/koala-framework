@@ -68,6 +68,14 @@ class Vps_AutoFilter_Test extends PHPUnit_Framework_TestCase
 
         $select = $filter->formatSelect($model->select(), array('query_value' => 'xxx'));
         $this->assertEquals(0, $model->countRows($select));
+
+        $filter->setSelectType(Vps_Controller_Action_Auto_Filter_Query::SELECT_TYPE_CONTAINS);
+        $select = $filter->formatSelect($model->select(), array('query_value' => 'foo'));
+        $this->assertEquals(2, $model->countRows($select));
+        $select = $filter->formatSelect($model->select(), array('query_value' => 'bar'));
+        $this->assertEquals(2, $model->countRows($select));
+        $select = $filter->formatSelect($model->select(), array('query_value' => 'foobar'));
+        $this->assertEquals(1, $model->countRows($select));
     }
 
     public function testDateRangeFilter()
