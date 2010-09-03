@@ -49,8 +49,17 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
         for ($offset=0; $offset < $count; $offset += $stepSize) {
             $s = new Vps_Model_Select();
             $s->limit($stepSize, $offset);
+            /*
             $data = $this->_sourceModel->export($format, $s);
             $this->getProxyModel()->import($format, $data);
+            */
+            //warning: slow code ahead
+            foreach ($this->_sourceModel->getRows($s) as $row) {
+                $data = $row->toArray();
+                $this->getProxyModel()->import(self::FORMAT_ARRAY, array($data));
+            }
+            $this->_sourceModel->cleanRows();
+            
             if ($progress) $progress->next($stepSize);
         }
     }
