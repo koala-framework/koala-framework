@@ -1,6 +1,9 @@
 <?php
 class Vps_Model_Proxy extends Vps_Model_Abstract
 {
+    /**
+     * @var Vps_Model_Interface
+     */
     protected $_proxyModel;
     protected $_rowClass = 'Vps_Model_Proxy_Row';
     protected $_rowsetClass = 'Vps_Model_Proxy_Rowset';
