@@ -56,10 +56,24 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
             //warning: slow code ahead
             foreach ($this->_sourceModel->getRows($s) as $row) {
                 $data = $row->toArray();
-                $this->getProxyModel()->import(self::FORMAT_ARRAY, array($data));
+                $newRow = $this->getProxyModel()->createRow($data);
+                foreach ($this->getDependentModels() as $rule=>$depModel) {
+                    if ($depModel instanceof Vps_Model_SubModelMirrorCacheSimple) {
+                        //dieser code könne vielleicht im SubModelMirrorCacheSimple liegen
+                        $m = $depModel->getSourceModel();
+                        $ref = $m->getReferenceByModelClass(get_class($this), null);
+                        $select = new Vps_Model_Select();
+                        $select->whereEquals($ref['column'], $row->{$this->getPrimaryKey()});
+                        $childRows = $m->getRows($select);
+                        foreach ($childRows as $childRow) {
+                            $newCRow = $newRow->createChildRow($rule, $childRow->toArray());
+                        }
+                    }
+                }
+                $newRow->save();
             }
             $this->_sourceModel->cleanRows();
-            
+
             if ($progress) $progress->next($stepSize);
         }
     }
