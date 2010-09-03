@@ -192,4 +192,10 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     {
         return $this->_proxyModel->getSqlForSelect($select);
     }
+
+    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    {
+        parent::dependentModelRowUpdated($row, $action);
+        $this->_proxyModel->dependentModelRowUpdated($row, $action);
+    }
 }
