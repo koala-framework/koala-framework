@@ -70,4 +70,9 @@ class Vps_Util_Model_Amazon_ProductsToNodes extends Vps_Model_Abstract
     {
         throw new Vps_Exception_NotYetImplemented();
     }
+
+    public function createRowByParentRow(Vps_Model_Row_Interface $parentRow, array $data = array())
+    {
+        throw new Vps_Exception("read only");
+    }
 }
