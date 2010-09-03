@@ -279,7 +279,22 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
 
     public function deleteRows($where)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        if (!is_object($where)) {
+            if (is_string($where)) $where = array($where);
+            $select = $this->select($where);
+        } else {
+            $select = $where;
+        }
+        $profiler = Vps_Registry::get('db')->getProfiler();
+        $p = $profiler->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
+        $ret = $this->_collection->remove(
+            $this->_getQuery($select),
+            array('safe'=>true, 'multiple'=>false)
+        );
+        $p = $profiler->queryEnd($p);
+        if (!$ret || !$ret['ok']) {
+            throw new Vps_Exception("delete failed");
+        }
     }
 
     public function import($format, $data, $options = array())
@@ -289,7 +304,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
                 throw new Vps_Exception_NotYetImplemented();
             }
             $ret = $this->getCollection()->batchInsert($data, array('safe'=>true));
-            if (!$ret || $ret['ok'] != count($data)) {
+            if (!$ret || !$ret['ok']) {
                 throw new Vps_Exception("import failed");
             }
         } else {
