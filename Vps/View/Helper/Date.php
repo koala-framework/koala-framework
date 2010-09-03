@@ -5,7 +5,7 @@ class Vps_View_Helper_Date
     {
         if (!$format) $format = trlVps('Y-m-d');
 
-        if (!$date) return '';
+        if (!$date || substr($date, 0, 10) == '0000-00-00') return '';
 
         $d = new Vps_Date($date);
         return $d->format($format);
