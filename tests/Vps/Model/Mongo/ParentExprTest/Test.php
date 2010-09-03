@@ -95,11 +95,6 @@ class Vps_Model_Mongo_ParentExprTest_Test extends PHPUnit_Framework_TestCase
         $this->markTestIncomplete();
     }
 
-    public function testWithProxies()
-    {
-        $this->markTestIncomplete();
-    }
-
     public function testWithMultipleRelations()
     {
         $this->markTestIncomplete();
