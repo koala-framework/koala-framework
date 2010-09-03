@@ -20,6 +20,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     // setCheckAllText($txt)
     // setCheckNoneText($txt)
 
+    // setValuesBoxLabelField(true) | feldname aus valuesModel fuer boxLabel
+
     /**
      * Zeigt mehrere Checkboxes an und speichert diese in einer Relationstabelle
      *
@@ -178,7 +180,14 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                 if (isset($pk)) {
                     $key = $i->$pk;
                 }
-                if (!is_string($i)) $i = $i->__toString();
+                if (!is_string($i)) {
+                    if ($this->getValuesBoxLabelField()) {
+                        $boxLabelField = $this->getValuesBoxLabelField();
+                        $i = $i->$boxLabelField;
+                    } else {
+                        $i = $i->__toString();
+                    }
+                }
                 $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName().'_'.$key))
                     ->setKey($key)
                     ->setBoxLabel($i)
