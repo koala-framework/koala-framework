@@ -32,7 +32,6 @@ class Vps_Model_Mongo_ParentExprWithProxyTest_Test extends PHPUnit_Framework_Tes
 
     public function testChangedName()
     {
-        $this->markTestIncomplete();
         $parentModel = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ParentExprWithProxyTest_ParentModel');
         $parentRow = $parentModel->getRow(1);
         $parentRow->name = 'onex';
@@ -41,7 +40,7 @@ class Vps_Model_Mongo_ParentExprWithProxyTest_Test extends PHPUnit_Framework_Tes
         $row = $this->_model->getRow(array());
         $this->assertEquals('onex', $row->parent_name);
         $this->assertEquals('onex', $row->getParentRow('Parent')->name);
-        $r = $this->_model->getCollection()->findOne();
+        $r = $this->_model->getProxyModel()->getCollection()->findOne();
         $this->assertEquals('onex', $r['parent_name']);
     }
 }

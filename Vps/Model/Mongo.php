@@ -35,20 +35,24 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
         parent::dependentModelRowUpdated($row, $action);
-        foreach ($this->_exprs as $column=>$expr) {
-            if ($expr instanceof Vps_Model_Select_Expr_Parent) {
-                if ($this->getReferencedModel($expr->getParent()) === $row->getModel()) {
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+        foreach ($models as $model) {
+            foreach ($model->_exprs as $column=>$expr) {
+                if ($expr instanceof Vps_Model_Select_Expr_Parent) {
+                    if ($model->getReferencedModel($expr->getParent()) === $row->getModel()) {
 
-                    //blöd dass diese schleife hier notwendig ist
-                    //TODO: getDependentModels sollte was anderes zurückgeben
-                    //gleiches problem wie bei getChildRows
-                    foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
-                        if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
-                        if ($m === $this) {
-                            $rows = $row->getChildRows($depName); //TODO effizienter machen, nicht über rows
-                            foreach ($rows as $r) {
-                                $r->$column = $row->{$expr->getField()};
-                                $r->save();
+                        //blöd dass diese schleife hier notwendig ist
+                        //TODO: getDependentModels sollte was anderes zurückgeben
+                        //gleiches problem wie bei getChildRows
+                        foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
+                            if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
+                            if ($m === $model) {
+                                $rows = $row->getChildRows($depName); //TODO effizienter machen, nicht über rows
+                                foreach ($rows as $r) {
+                                    $r->$column = $row->{$expr->getField()};
+                                    $r->save();
+                                }
                             }
                         }
                     }
