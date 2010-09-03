@@ -722,4 +722,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
     }
+
+    /**
+     * Kann zum Speicher-Sparen aufgerufen werden
+     */
+    public function cleanRows()
+    {
+        $this->_rows = array();
+    }
 }
