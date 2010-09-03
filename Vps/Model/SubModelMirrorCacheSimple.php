@@ -18,6 +18,9 @@ class Vps_Model_SubModelMirrorCacheSimple extends Vps_Model_Proxy
         if (is_string($this->_sourceModel)) {
             $this->_sourceModel = Vps_Model_Abstract::getInstance($this->_sourceModel);
         }
+        if (!($this->_proxyModel instanceof Vps_Model_RowsSubModel_Interface)) {
+            throw  new Vps_Exception("Proxy model doesn't implement Vps_Model_RowsSubModel_Interface");
+        }
     }
 
     public function getSourceModel()
