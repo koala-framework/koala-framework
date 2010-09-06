@@ -123,4 +123,56 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
     public function getUniqueIdentifier() {
         throw new Vps_Exception("no unique identifier set");
     }
+
+
+
+
+    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    {
+        parent::dependentModelRowUpdated($row, $action);
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+        foreach ($models as $model) {
+            foreach ($model->_exprs as $column=>$expr) {
+                if ($expr instanceof Vps_Model_Select_Expr_Parent) {
+                    if ($model->getReferencedModel($expr->getParent()) === $row->getModel()) {
+
+                        //blöd dass diese schleife hier notwendig ist
+                        //TODO: getDependentModels sollte was anderes zurückgeben
+                        //gleiches problem wie bei getChildRows
+                        foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
+                            if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
+                            if ($m === $model) {
+                                $rows = $row->getChildRows($depName); //TODO effizienter machen, nicht über rows
+                                foreach ($rows as $r) {
+                                    $r->$column = $row->{$expr->getField()};
+                                    $r->save();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    {
+        parent::childModelRowUpdated($row, $action);
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+        foreach ($models as $model) {
+            foreach ($model->_exprs as $column=>$expr) {
+                if ($expr instanceof Vps_Model_Select_Expr_Child) {
+                    if ($model->getDependentModel($expr->getChild()) === $row->getModel()) {
+                        $rule = $row->getModel()->getReferenceRuleByModelClass(get_class($model));
+                        $parentRow = $row->getParentRow($rule);
+                        $parentRow->$column = $model->getExprValue($parentRow, $expr);
+                        $parentRow->save();
+                    }
+                }
+            }
+        }
+    }
+
 }
