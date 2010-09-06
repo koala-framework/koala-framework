@@ -198,4 +198,12 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         parent::dependentModelRowUpdated($row, $action);
         $this->_proxyModel->dependentModelRowUpdated($row, $action);
     }
+
+    /**
+     * @internal
+     */
+    public function getExistingRows()
+    {
+        return $this->_rows;
+    }
 }

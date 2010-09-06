@@ -43,4 +43,16 @@ class Vps_Model_Mongo_ParentExprWithProxyTest_Test extends PHPUnit_Framework_Tes
         $r = $this->_model->getProxyModel()->getCollection()->findOne();
         $this->assertEquals('onex', $r['parent_name']);
     }
+
+    public function testNewRow()
+    {
+        $row = $this->_model->createRow();
+        $row->blub = 1;
+        $row->parent_id = 1;
+        $row->save();
+
+        $this->assertEquals('one', $row->parent_name);
+        $r = $this->_model->getProxyModel()->getCollection()->findOne(array('blub'=>1));
+        $this->assertEquals('one', $r['parent_name']);
+    }
 }
