@@ -4,12 +4,6 @@ class Vps_Component_Acl
     private $_isAllowedComponentClassCache = array();
     protected $_roleRegistry;
     protected $_rules = array(
-        'allTags' => array(
-            'allRoles' => array(
-                'type' => Vps_Acl::TYPE_DENY
-            )
-        ),
-        'byTagId' => array(),
         'allComponents' => array(
             'allRoles' => array(
                 'type' => Vps_Acl::TYPE_DENY
@@ -27,10 +21,8 @@ class Vps_Component_Acl
 
     protected function _init()
     {
-        $this->allowTag('admin', null);
         $this->allowComponent('admin', null);
         if ($this->_roleRegistry->has('superuser')) {
-            $this->allowTag('superuser', null);
             $this->allowComponent('superuser', null);
         }
     }
@@ -108,38 +100,7 @@ class Vps_Component_Acl
 
     protected function _isAllowedComponentData($userRow, Vps_Component_Data $component)
     {
-        $role = $this->_getRole($userRow);
-
-        $allowed = false;
-        while ($component) {
-            if (isset($component->tags) && $component->tags) {
-                foreach ($component->tags as $t) {
-                    $rules = $this->_getRules('Tag', $t, $role);
-                    if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) {
-                        $allowed = true;
-                        break;
-                    }
-                }
-            }
-            if ($component && $component->isPage) break;
-            $component = $component->parent;
-        }
-        if (!$allowed) {
-            $rules = $this->_getRules('Tag', null, $role);
-            if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) {
-                $allowed = true;
-            }
-        }
-        return $allowed;
-    }
-
-    public function allowTag($role, $tag, $privilege = null)
-    {
-        if ($privilege) throw new Vps_Exception("Not yet implemented");
-        if (!is_null($role)) $role = $this->_roleRegistry->get($role);
-        $rules =& $this->_getRules('Tag', $tag, $role, true);
-        $rules['type'] = Vps_Acl::TYPE_ALLOW;
-        return $this;
+        return true;
     }
 
     public function allowComponent($role, $componentClass, $privilege = null)
@@ -160,7 +121,7 @@ class Vps_Component_Acl
         return $this;
     }
 
-    protected function &_getRules($type, $tag, Zend_Acl_Role_Interface $role = null, $create = false)
+    protected function &_getRules($type, $name, Zend_Acl_Role_Interface $role = null, $create = false)
     {
         // create a reference to null
         $null = null;
@@ -168,17 +129,17 @@ class Vps_Component_Acl
 
         // follow $resource
         do {
-            if (null === $tag) {
+            if (null === $name) {
                 $visitor =& $this->_rules['all'.$type.'s'];
                 break;
             }
-            if (!isset($this->_rules['by'.$type.'Id'][$tag])) {
+            if (!isset($this->_rules['by'.$type.'Id'][$name])) {
                 if (!$create) {
                     return $nullRef;
                 }
-                $this->_rules['by'.$type.'Id'][$tag] = array();
+                $this->_rules['by'.$type.'Id'][$name] = array();
             }
-            $visitor =& $this->_rules['by'.$type.'Id'][$tag];
+            $visitor =& $this->_rules['by'.$type.'Id'][$name];
         } while (false);
 
 
