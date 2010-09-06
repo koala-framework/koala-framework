@@ -55,8 +55,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         }
         $this->setAutoHeight(true);
         $this->setShowCheckAllLinks(true);
-        $this->setCheckAllText(trlVpsStatic('all'));
-        $this->setCheckNoneText(trlVpsStatic('none'));
+        $this->setCheckAllText(trlVpsStatic('All'));
+        $this->setCheckNoneText(trlVpsStatic('None'));
         $this->setLayout('form');
         $this->setXtype('multicheckbox');
     }
