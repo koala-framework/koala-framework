@@ -43,6 +43,7 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
                                     Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
             $progress = new Zend_ProgressBar($c, 0, $count);
         }
+        $startTime = microtime(true);
 
         $this->getProxyModel()->deleteRows(array()); //alles löschen
 
@@ -73,8 +74,13 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
                 $newRow->save();
             }
             $this->_sourceModel->cleanRows();
+            $this->getProxyModel()->cleanRows();
+            $this->cleanRows();
 
-            if ($progress) $progress->next($stepSize);
+            if ($progress) {
+                $text = round(($offset + $stepSize) / (microtime(true)-$startTime)).' rows/sec';
+                $progress->next($stepSize, $text);
+            }
         }
     }
 }
