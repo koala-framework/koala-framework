@@ -56,4 +56,24 @@ class Vps_Component_Acl_Test extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_acl->isAllowed('test', 'Vps_Component_Acl_Empty2'));
         $this->assertTrue($this->_acl->isAllowed('test', 'Vps_Component_Acl_TestComponent'));
     }
+
+    public function testDynamicComponent()
+    {
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root));
+        $this->_acl->allowComponent('test', 'Vps_Component_Acl_Root');
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root));
+        foreach ($this->_root->getChildComponents() as $c) {
+            $this->assertTrue($this->_acl->isAllowed('test', $c));
+        }
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('4')));
+    }
+
+    public function testDynamicComponent2()
+    {
+        $this->_acl->allowComponent('test', 'Vps_Component_Acl_TestComponent');
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root));
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById('1')));
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('3')));
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('4')));
+    }
 }
