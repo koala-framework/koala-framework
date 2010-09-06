@@ -287,7 +287,8 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function getReferenceRulesByModelClass($modelClassName)
     {
         $ret = array();
-        foreach ($this->_referenceMap as $k=>$ref) {
+        foreach ($this->getReferences() as $rule) {
+            $ref = $this->getReference($rule);
             if (isset($ref['refModelClass'])) {
                 $c = $ref['refModelClass'];
             } else if (isset($ref['refModel'])) {
@@ -315,12 +316,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
             if (count($matchingRules) > 1) {
                 if ($rule && in_array($rule, $matchingRules)) {
-                    return $m->_referenceMap[$rule];
+                    return $m->getReference($rule);
                 } else {
                     throw new Vps_Exception("Multiple references from '".get_class($this)."' to '$modelClassName' found, but none with rule-name '$rule'");
                 }
             } else if (count($matchingRules) == 1) {
-                return $m->_referenceMap[$matchingRules[0]];
+                return $m->getReference($matchingRules[0]);
             }
         }
         throw new Vps_Exception("No reference from '".get_class($this)."' to '$modelClassName'");
@@ -346,10 +347,8 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function getReferencedModel($rule)
     {
-        if (!isset($this->_referenceMap[$rule])) {
-            throw new Vps_Exception("No Reference from '".get_class($this)."' with rule '$rule'");
-        }
-        return self::getInstance($this->_referenceMap[$rule]['refModelClass']);
+        $ref = $this->getReference($rule);
+        return self::getInstance($ref['refModelClass']);
     }
 
     public function getDependentRuleByModelClass($modelClassName)
