@@ -297,7 +297,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 throw new Vps_Exception("refModelClass and refModel not set");
             }
             if (is_instance_of($modelClassName, $c)) {
-                $ret[$k] = $ref;
+                $ret[$rule] = $ref;
             }
         }
         if (count($ret) >= 1) {
@@ -342,7 +342,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         if (!isset($this->_referenceMap[$rule])) {
             throw new Vps_Exception("Reference '$rule' for model '".get_class($this)."' not set, set are '".implode(', ', array_keys($this->_referenceMap))."'");
         }
-        return $this->_referenceMap[$rule];
+        $ret = $this->_referenceMap[$rule];
+        if (is_string($ret)) {
+            $ret = array(
+                'refModelClass' => substr($ret, strpos($ret, '->')+2),
+                'column' => substr($ret, 0, strpos($ret, '->')),
+            );
+        }
+        return $ret;
     }
 
     public function getReferencedModel($rule)
