@@ -730,4 +730,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
         $this->_rows = array();
     }
+
+    /**
+     * @internal
+     */
+    public function getProxyContainerModels()
+    {
+        return $this->_proxyContainerModels;
+    }
 }
