@@ -69,13 +69,8 @@ class Vps_Component_Acl
     {
         $role = $this->_getRole($userRow);
 
-        $rules = $this->_getRules('Component', $componentClass, $role);
-        if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) return true;
-        if ($rules && $rules['type'] == Vps_Acl::TYPE_DENY) return false;
-
-        $rules = $this->_getRules('Component', null, $role);
-        if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) return true;
-        if ($rules && $rules['type'] == Vps_Acl::TYPE_DENY) return false;
+        $ret = $this->_isAllowedComponentClassNonRek($role, $componentClass);
+        if (!is_null($ret)) return $ret;
 
         //überklassen überprüfen
         //cache ist nötig wegen endlos-rekursion + performance
@@ -98,9 +93,27 @@ class Vps_Component_Acl
         return false;
     }
 
+    private function _isAllowedComponentClassNonRek($role, $componentClass)
+    {
+        $rules = $this->_getRules('Component', $componentClass, $role);
+        if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) return true;
+        if ($rules && $rules['type'] == Vps_Acl::TYPE_DENY) return false;
+
+        $rules = $this->_getRules('Component', null, $role);
+        if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) return true;
+        if ($rules && $rules['type'] == Vps_Acl::TYPE_DENY) return false;
+    }
+
     protected function _isAllowedComponentData($userRow, Vps_Component_Data $component)
     {
-        return true;
+        $role = $this->_getRole($userRow);
+        $ret = false;
+        while (!$ret && $component) { // irgendeine Komponente auf dem Weg nach oben muss allowed sein
+            $allowed = $this->_isAllowedComponentClassNonRek($role, $component->componentClass);
+            if ($allowed) $ret = true;
+            $component = $component->parent;
+        }
+        return $ret;
     }
 
     public function allowComponent($role, $componentClass, $privilege = null)
