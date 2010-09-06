@@ -379,7 +379,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     protected function _createDependentModel($rule)
     {
         $ret = $this->_dependentModels[$rule];
-        if (!$ret instanceof Vps_Model_Abstract) $ret = Vps_Model_Abstract::getInstance($ret);
+        if (is_string($ret)) {
+            if (strpos($ret, '->') !== false) {
+                $m = Vps_Model_Abstract::getInstance(substr($ret, 0, strpos($ret, '->')));
+                $ret = $m->_createDependentModel(substr($ret, strpos($ret, '->')+2));
+            } else {
+                $ret = Vps_Model_Abstract::getInstance($ret);
+            }
+        }
         return $ret;
     }
 
