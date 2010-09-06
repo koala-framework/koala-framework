@@ -64,13 +64,17 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
         parent::childModelRowUpdated($row, $action);
-        foreach ($this->_exprs as $column=>$expr) {
-            if ($expr instanceof Vps_Model_Select_Expr_Child) {
-                if ($this->getDependentModel($expr->getChild()) === $row->getModel()) {
-                    $rule = $row->getModel()->getReferenceRuleByModelClass(get_class($this));
-                    $parentRow = $row->getParentRow($rule);
-                    $parentRow->$column = $this->getExprValue($parentRow, $expr);
-                    $parentRow->save();
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+        foreach ($models as $model) {
+            foreach ($model->_exprs as $column=>$expr) {
+                if ($expr instanceof Vps_Model_Select_Expr_Child) {
+                    if ($model->getDependentModel($expr->getChild()) === $row->getModel()) {
+                        $rule = $row->getModel()->getReferenceRuleByModelClass(get_class($model));
+                        $parentRow = $row->getParentRow($rule);
+                        $parentRow->$column = $model->getExprValue($parentRow, $expr);
+                        $parentRow->save();
+                    }
                 }
             }
         }

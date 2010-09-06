@@ -199,6 +199,12 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         $this->_proxyModel->dependentModelRowUpdated($row, $action);
     }
 
+    public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    {
+        parent::childModelRowUpdated($row, $action);
+        $this->_proxyModel->childModelRowUpdated($row, $action);
+    }
+
     /**
      * @internal
      */
