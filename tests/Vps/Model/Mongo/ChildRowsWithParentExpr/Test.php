@@ -63,14 +63,12 @@ class Vps_Model_Mongo_ChildRowsWithParentExpr_Test extends PHPUnit_Framework_Tes
 
     public function testParentExprParentChanged()
     {
-        $this->markTestIncomplete();
         $pRow = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithParentExpr_ParentModel')->getRow(1);
         $pRow->name = 'onex';
         $pRow->save();
 
         $row = $this->_model->getRow(1);
-        p($row);
         $rows = $row->getChildRows('Foo');
-        $this->assertEquals('one', $rows->current()->parent_name);
+        $this->assertEquals('onex', $rows->current()->parent_name);
     }
 }

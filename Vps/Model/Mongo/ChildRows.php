@@ -6,6 +6,10 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
     protected $_rowsetClass = 'Vps_Model_Mongo_ChildRows_Rowset';
     protected $_primaryKey = 'intern_id';
     protected $_fieldName;
+
+    /**
+     * @var Vps_Model_Mongo
+     */
     protected $_parentModel;
 
     public function __construct(array $config = array())
@@ -158,16 +162,17 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
                         //nothing to do in that case
                     } else if ($model->getReferencedModel($expr->getParent()) === $row->getModel()) {
 
+                        $ref = $model->getReference($expr->getParent());
                         foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
                             if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
                             if ($m === $model) {
-                                $rows = $row->getChildRows($depName); //TODO effizienter machen, nicht über rows
-                                throw new Vps_Exception_NotYetImplemented();
-                                d($rows->toArray());
-                                //UPDATE collection.foo.parent_name = xyz WHERE collection.foo.parent_id=1
-                                foreach ($rows as $r) {
-                                    $r->$column = $row->{$expr->getField()};
-                                    $r->save();
+                                $res = $this->_parentModel->getCollection()->update(
+                                    array($this->_fieldName.'.'.$ref['column'] => $row->{$row->getModel()->getPrimaryKey()}),
+                                    array('$set' => array($this->_fieldName.'.$.'.$column => $row->{$expr->getField()})),
+                                    array('multiple' => true, 'safe' => true)
+                                );
+                                if (!$res || !$res['ok']) {
+                                    throw new Vps_Exception("update failed");
                                 }
                             }
                         }
