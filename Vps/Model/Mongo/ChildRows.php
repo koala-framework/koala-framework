@@ -135,7 +135,9 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
         foreach ($models as $model) {
             foreach ($model->_exprs as $column=>$expr) {
                 if ($expr instanceof Vps_Model_Select_Expr_Parent) {
-                    if ($model->getReferencedModel($expr->getParent()) === $row->getModel()) {
+                    if ($model->getReference($expr->getParent()) === Vps_Model_SubModel_Interface::SUBMODEL_PARENT) {
+                        //nothing to do in that case
+                    } else if ($model->getReferencedModel($expr->getParent()) === $row->getModel()) {
 
                         //blöd dass diese schleife hier notwendig ist
                         //TODO: getDependentModels sollte was anderes zurückgeben
