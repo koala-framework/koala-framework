@@ -13,7 +13,7 @@ class Vps_Model_Mongo_ChildRowsWithParentExpr_Test extends PHPUnit_Framework_Tes
 
         $this->_model = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithParentExpr_MongoModel');
         $this->_model->getCollection()->insert(
-            array('id'=>1, 'name'=>'a', 'foo'=>array(array('x'=>1), array('x'=>2))) //TODO id sollte nicht nötig sein
+            array('id'=>1, 'name'=>'a', 'foo'=>array(array('x'=>1, 'parent_id'=>1, 'parent_name' => 'one'), array('x'=>2))) //TODO id sollte nicht nötig sein
         , array('safe'=>true));
     }
 
@@ -32,7 +32,7 @@ class Vps_Model_Mongo_ChildRowsWithParentExpr_Test extends PHPUnit_Framework_Tes
         $this->assertSame($rows->current()->getParentRow('Mongo'), $row);
     }
 
-    public function testParentExpr()
+    public function testParentMongoExpr()
     {
         $row = $this->_model->getRow(1);
         $rows = $row->getChildRows('Foo');
@@ -40,6 +40,7 @@ class Vps_Model_Mongo_ChildRowsWithParentExpr_Test extends PHPUnit_Framework_Tes
 
         $row->name = 'b';
         $row->save();
+
         $this->_model->cleanRows();
 
         $row = $this->_model->getRow(1);
@@ -47,5 +48,29 @@ class Vps_Model_Mongo_ChildRowsWithParentExpr_Test extends PHPUnit_Framework_Tes
         $this->assertSame($rows->current()->getParentRow('Mongo'), $row);
         $this->assertEquals('b', $rows->current()->getParentRow('Mongo')->name);
         $this->assertEquals('b', $rows->current()->mongo_name);
+    }
+
+    public function testParentExpr()
+    {
+        $row = $this->_model->getRow(1);
+        $rows = $row->getChildRows('Foo');
+        $this->assertEquals('one', $rows->current()->parent_name);
+        $this->assertEquals('one', $rows->current()->getParentRow('Parent')->name);
+
+        $rows->current()->getParentRow('Parent')->name = 'onex';
+        $rows->current()->getParentRow('Parent')->save();
+    }
+
+    public function testParentExprParentChanged()
+    {
+        $this->markTestIncomplete();
+        $pRow = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithParentExpr_ParentModel')->getRow(1);
+        $pRow->name = 'onex';
+        $pRow->save();
+
+        $row = $this->_model->getRow(1);
+        p($row);
+        $rows = $row->getChildRows('Foo');
+        $this->assertEquals('one', $rows->current()->parent_name);
     }
 }
