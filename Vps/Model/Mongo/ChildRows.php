@@ -6,14 +6,33 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
     protected $_rowsetClass = 'Vps_Model_Mongo_ChildRows_Rowset';
     protected $_primaryKey = 'intern_id';
     protected $_fieldName;
+    protected $_parentModel;
 
     public function __construct(array $config = array())
     {
         if (isset($config['fieldName'])) {
             $this->_fieldName = $config['fieldName'];
         }
+        if (isset($config['parentModel'])) {
+            $this->_parentModel = $config['parentModel'];
+        }
         parent::__construct($config);
     }
+
+    protected function _init()
+    {
+        parent::_init();
+        if (!isset($this->_parentModel)) {
+            throw new Vps_Exception("parentModel not set");
+        }
+        if (is_string($this->_parentModel)) {
+            $this->_parentModel = Vps_Model_Abstract::getInstance($this->_parentModel);
+        }
+        if (!$this->_parentModel instanceof Vps_Model_Mongo) {
+            throw new Vps_Exception("parentModel is not a Mongo");
+        }
+    }
+
 
     public function createRow(array $data=array())
     {

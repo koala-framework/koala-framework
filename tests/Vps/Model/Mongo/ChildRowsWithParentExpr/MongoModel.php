@@ -5,6 +5,7 @@ class Vps_Model_Mongo_ChildRowsWithParentExpr_MongoModel extends Vps_Model_Mongo
     {
         parent::_init();
         $this->_dependentModels['Foo'] = new Vps_Model_Mongo_ChildRows(array(
+            'parentModel' => $this,
             'fieldName' => 'foo',
             'referenceMap' => array(
                 'Parent' => array(
