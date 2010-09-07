@@ -13,8 +13,12 @@ class Vps_Model_Relations_MultipleReferencesToSameModel_Test extends PHPUnit_Fra
 
     public function testGetChildRows()
     {
-        $this->markTestIncomplete();
-        $user = Vps_Model_Abstract::getInstance('Vps_Model_Relations_MultipleReferencesToSameModel_User')->getRow(1);
-        $user->getChildRows('tja');
+        $user = Vps_Model_Abstract::getInstance('Vps_Model_Relations_MultipleReferencesToSameModel_User')->getRow(100);
+        $this->assertEquals($user->getChildRows('TodoCreator')->count(), 1);
+        $this->assertEquals($user->getChildRows('TodoAssignee')->count(), 0);
+
+        $user = Vps_Model_Abstract::getInstance('Vps_Model_Relations_MultipleReferencesToSameModel_User')->getRow(101);
+        $this->assertEquals($user->getChildRows('TodoCreator')->count(), 0);
+        $this->assertEquals($user->getChildRows('TodoAssignee')->count(), 1);
     }
 }

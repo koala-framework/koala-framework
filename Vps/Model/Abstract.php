@@ -394,6 +394,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     protected function _createDependentModel($rule)
     {
         $ret = $this->_dependentModels[$rule];
+        if (is_array($ret)) {
+            if (!isset($ret['model'])) {
+                throw new Vps_Exception("model not set for dependentModel");
+            }
+            $ret = $ret['model'];
+        }
         if (is_string($ret)) {
             if (strpos($ret, '->') !== false) {
                 $m = Vps_Model_Abstract::getInstance(substr($ret, 0, strpos($ret, '->')));
@@ -417,11 +423,10 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         $models[] = $this;
         foreach ($models as $m) {
             if (isset($m->_dependentModels[$rule])) {
-                $ret = $m->_createDependentModel($rule);
-                return array(
-                    'model' => $ret,
-                    'dependentOf' => $m
-                );
+                $ret = $m->_dependentModels[$rule];
+                $ret['model'] = $m->_createDependentModel($rule);
+                $ret['dependentOf'] = $m;
+                return $ret;
             }
         }
         throw new Vps_Exception("dependent Model with rule '$rule' does not exist for '".get_class($this)."'");
