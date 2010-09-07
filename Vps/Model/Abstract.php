@@ -344,13 +344,16 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         }
         $ret = $this->_referenceMap[$rule];
         if (is_string($ret)) {
-            if (strpos($ret, '->') === false) {
-                throw new Vps_Exception("Reference '$rule' for model '".get_class($this)."' is a string but doesn't contain ->");
+            if ($ret === Vps_Model_SubModel_Interface::SUBMODEL_PARENT) {
+            } else {
+                if (strpos($ret, '->') === false) {
+                    throw new Vps_Exception("Reference '$rule' for model '".get_class($this)."' is a string but doesn't contain ->");
+                }
+                $ret = array(
+                    'refModelClass' => substr($ret, strpos($ret, '->')+2),
+                    'column' => substr($ret, 0, strpos($ret, '->')),
+                );
             }
-            $ret = array(
-                'refModelClass' => substr($ret, strpos($ret, '->')+2),
-                'column' => substr($ret, 0, strpos($ret, '->')),
-            );
         }
         return $ret;
     }
