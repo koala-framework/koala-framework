@@ -13,6 +13,20 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
         this.groups = [];
     },
 
+    enableRecursive: function() {
+        Vps.Form.MultiFields.superclass.enableRecursive.call(this);
+        this.groups.each(function(g) {
+            g.item.enableRecursive();
+        });
+    },
+
+    disableRecursive: function() {
+        Vps.Form.MultiFields.superclass.disableRecursive.call(this);
+        this.groups.each(function(g) {
+            g.item.disableRecursive();
+        });
+    },
+
     // private
     onRender : function(ct, position){
         Vps.Form.MultiFields.superclass.onRender.call(this, ct, position);
@@ -86,6 +100,12 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
         //firefox schiebt den button ned nach unten
         this.addGroupButton.hide();
         this.addGroupButton.show.defer(100, this.addGroupButton);
+
+        if (this.disabled) {
+            item.disableRecursive();
+        } else {
+            item.enableRecursive();
+        }
 
         this.groups.push({
             item: item,
