@@ -366,6 +366,9 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
         $called = array();
         foreach ($this->getModel()->getReferences() as $refName) {
+            if ($this->getModel()->getReference($refName) === Vps_Model_SubModel_Interface::SUBMODEL_PARENT) {
+                continue;
+            }
             $m = $this->getModel()->getReferencedModel($refName);
             if (!in_array($m, $called, true)) {
                 $m->childModelRowUpdated($this, $action);

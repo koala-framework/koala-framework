@@ -361,6 +361,9 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function getReferencedModel($rule)
     {
         $ref = $this->getReference($rule);
+        if (!is_array($ref) || !isset($ref['refModelClass'])) {
+            throw new Vps_Exception("refModelClass not set for '$rule'");
+        }
         return self::getInstance($ref['refModelClass']);
     }
 
@@ -756,5 +759,13 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function getProxyContainerModels()
     {
         return $this->_proxyContainerModels;
+    }
+
+    /**
+     * @internal
+     */
+    public function getExpr($name)
+    {
+        return $this->_exprs[$name];
     }
 }
