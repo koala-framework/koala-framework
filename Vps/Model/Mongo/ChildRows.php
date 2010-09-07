@@ -146,6 +146,9 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
                             if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
                             if ($m === $model) {
                                 $rows = $row->getChildRows($depName); //TODO effizienter machen, nicht über rows
+                                throw new Vps_Exception_NotYetImplemented();
+                                d($rows->toArray());
+                                //UPDATE collection.foo.parent_name = xyz WHERE collection.foo.parent_id=1
                                 foreach ($rows as $r) {
                                     $r->$column = $row->{$expr->getField()};
                                     $r->save();
