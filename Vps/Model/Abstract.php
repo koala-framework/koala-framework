@@ -424,6 +424,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         foreach ($models as $m) {
             if (isset($m->_dependentModels[$rule])) {
                 $ret = $m->_dependentModels[$rule];
+                if (!is_array($ret)) $ret = array();
                 $ret['model'] = $m->_createDependentModel($rule);
                 $ret['dependentOf'] = $m;
                 return $ret;
