@@ -9,8 +9,7 @@ class Vpc_Chained_Abstract_ChainedGenerator extends Vps_Component_Generator_Pseu
     public function getPagesControllerConfig($component, $generatorClass = null)
     {
         $ret = parent::getPagesControllerConfig($component, $generatorClass);
-        $ret['icon'] = 'font';
-        $ret['actions']['visible'] = true;
+        $ret['icon'] = 'layout_content';
         if (!$component->visible) {
             $ret['iconEffects'][] = 'invisible';
         }
