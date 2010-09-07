@@ -52,7 +52,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     /**
      * @param Vps_Model_Abstract|string wenn string: entweder aus config (models.modelName)
      *                                               oder Klassenname von Model
-     * @return Vps_Model_Abstract
+     * @return Vps_Model_Interface
      **/
     public static function getInstance($modelName)
     {
