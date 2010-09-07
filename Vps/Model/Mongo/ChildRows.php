@@ -139,9 +139,6 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
                         //nothing to do in that case
                     } else if ($model->getReferencedModel($expr->getParent()) === $row->getModel()) {
 
-                        //blöd dass diese schleife hier notwendig ist
-                        //TODO: getDependentModels sollte was anderes zurückgeben
-                        //gleiches problem wie bei getChildRows
                         foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
                             if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
                             if ($m === $model) {
