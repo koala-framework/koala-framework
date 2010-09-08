@@ -14,17 +14,18 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
 
     public function rebuildAction()
     {
-        $MSGKey = 1234;
-        $seg = msg_get_queue($MSGKey);
-        msg_remove_queue($seg);
-        $seg = msg_get_queue($MSGKey);
+        $queueFile = 'application/temp/fulltextRebuildQueue';
 
         Vpc_Abstract::getComponentClasses(); //lädt component-settings-cache
         $db = Vps_Registry::get('db');
         $db->closeConnection();
 
+        $processed = array();
+
         $componentId = 'root';
+        file_put_contents($queueFile, $componentId);
         while(true) {
+            $processed[] = $componentId;
             $pid = pcntl_fork();
             if ($pid == -1) {
                 throw new Vps_Exception("fork failed");
@@ -36,25 +37,29 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                 }
 
                 //echo "memory_usage: ".(memory_get_usage()/(1024*1024))."MB\n";
-                $stat = msg_stat_queue($seg);
-                echo "queued: ".$stat['msg_qnum']."\n";
-                if ($stat['msg_qnum'] > 0) {
-                    msg_receive($seg, 0, $msgtype, 1024, $data);
-                    $componentId = $data;
-                } else {
-                    //echo "fertig.\n";
-                    msg_remove_queue($seg);
+                $queue = file_get_contents($queueFile);
+                if (!$queue) {
+                    echo "fertig.\n";
                     exit;
                 }
+                $queue = explode("\n", $queue);
+                echo "queued: ".count($queue)."\n";
+                $componentId = array_shift($queue);
+                file_put_contents($queueFile, implode("\n", $queue));
             } else {
                 //child process
                 //echo $componentId."\n";
                 $page = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
                 foreach ($page->getChildPseudoPages(array()) as $c) {
+                    if (in_array($c->componentId, $processed)) {
+                        throw new Vps_Exception("already processed");
+                    }
                     //echo "queued $c->componentId\n";
-                    msg_send($seg, 1, $c->componentId);
+                    file_put_contents($queueFile, "\n".$c->componentId, FILE_APPEND);
                 }
+                set_time_limit(5);
 
+                //echo "checking for childComponents\n";
                 $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext'));
                 if ($fulltextComponents) {
                     echo "indexing $page->componentId $page->url...\n";
@@ -108,9 +113,11 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                         $row->save();
                     }
                 }
+                //echo "child finished\n";
                 exit(0);
             }
         }
+        Vps_Util_Fulltext::getInstance()->optimize();
         exit;
     }
 
