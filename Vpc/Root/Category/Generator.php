@@ -249,11 +249,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $data['parent'] = $parentData;
         $data['isHome'] = $page['is_home'];
         $data['visible'] = $page['visible'];
-        if (isset($page['tags']) && $page['tags']) {
-            $data['tags'] = explode(',', $page['tags']);
-        } else {
-            $data['tags'] = array();
-        }
         return $data;
     }
     protected function _getIdFromRow($id)

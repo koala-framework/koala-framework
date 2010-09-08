@@ -38,9 +38,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
         }
         if ($name == 'id') $name = 'componentId';
         if (isset($this->_data->$name)) {
-            $ret = $this->_data->$name;
-            if ($name == 'tags') $ret = implode(',', $ret);
-            return $ret;
+            return $this->_data->$name;;
         } else if ($name == 'parent_id' && $this->_data->parent) {
             return $this->_data->parent->componentId;
         } else {
