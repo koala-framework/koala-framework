@@ -85,11 +85,11 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                         $field = Zend_Search_Lucene_Field::UnStored('dummy', 'dummy', 'utf-8');
                         $doc->addField($field);
 
-                        $field = Zend_Search_Lucene_Field::Keyword('componentId', $page->componentId, 'utf-8');
+                        $field = Zend_Search_Lucene_Field::Keyword('componentId', $page->dbId, 'utf-8');
                         $field->boost = 0.0001;
                         $doc->addField($field);
 
-                        $query = new Zend_Search_Lucene_Search_Query_Term(new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId'));
+                        $query = new Zend_Search_Lucene_Search_Query_Term(new Zend_Search_Lucene_Index_Term($page->dbId, 'componentId'));
                         $hits = $index->find($query);
                         foreach ($hits as $hit) {
                             echo "deleting $hit->componentId\n";
@@ -97,6 +97,15 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                         }
 
                         $index->addDocument($doc);
+
+                        $m = Vps_Model_Abstract::getInstance('Vpc_FulltextSearch_MetaModel');
+                        $row = $m->getRow($page->dbId);
+                        if (!$row) {
+                            $row = $m->createRow();
+                            $row->page_id = $page->dbId;
+                        }
+                        $row->indexed_date = date('Y-m-d H:i:s');
+                        $row->save();
                     }
                 }
                 exit(0);
