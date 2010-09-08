@@ -361,7 +361,7 @@ abstract class Vps_Component_Generator_Abstract
                         continue;
                     }
                 } else {
-                    
+
                     if (is_array($g->_settings['component'])) {
                         //oder eine komponente eines static generators
                         $continue = true;
@@ -662,25 +662,16 @@ abstract class Vps_Component_Generator_Abstract
     {
         $data = array();
 
-        $disabled = !Vps_Registry::get('acl')->getComponentAcl()
-            ->isAllowed(Zend_Registry::get('userModel')->getAuthedUser(), $component);
-        if (!$generatorClass) $generatorClass = $this->getClass();
 
         $data['icon'] = 'bullet_yellow';
         $data['iconEffects'] = array();
         $data['allowDrag'] = false;
         $data['allowDrop'] = false;
 
-        $c = $component;
-        while ($c && $c->componentClass != $generatorClass) {
-            $c = $c->parent;
-        }
-
-        if ($c) { //TODO warum tritt das auf?
-            $data['editControllerComponentId'] = $c->componentId;
-            $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
-                ->getControllerUrl('Generator');
-        }
+        if (!$generatorClass) $generatorClass = $this->getClass();
+        $data['editControllerComponentId'] = $component->componentId;
+        $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
+            ->getControllerUrl('Generator');
 
         $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
             'pageGenerator' => true

@@ -57,35 +57,31 @@ class Vps_Component_Acl_Test extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_acl->isAllowed('test', 'Vps_Component_Acl_TestComponent'));
     }
 
-    public function testAllowTag()
+    public function testAllowedComponentClasses()
     {
-        $this->_acl->allowComponent('test', null);
-        $this->_acl->allowTag('test', 'test');
-        $this->assertFalse($this->_acl->isAllowed(null, $this->_root->getComponentById(1)));
-        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById(1)));
+        $this->_acl->allowComponent('test', 'Vps_Component_Acl_Root');
+        $this->assertEquals(null, $this->_acl->getAllowedComponentClasses('admin'));
+        $this->assertEquals(array(), $this->_acl->getAllowedComponentClasses('guest'));
+        $this->assertEquals(array('Vps_Component_Acl_Root'), $this->_acl->getAllowedComponentClasses('test'));
     }
 
-    public function testAllowAllTag()
+    public function testDynamicComponent()
     {
-        $this->_acl->allowComponent('test', null);
-        $this->_acl->allowTag('test', null);
-        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById(2)));
-        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById(1)));
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root));
+        $this->_acl->allowComponent('test', 'Vps_Component_Acl_Root');
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root));
+        foreach ($this->_root->getChildComponents() as $c) {
+            $this->assertTrue($this->_acl->isAllowed('test', $c));
+        }
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('4')));
     }
 
-    public function testAllowTagChildComponent()
+    public function testDynamicComponent2()
     {
-        $this->_acl->allowComponent('test', null);
-        $this->_acl->allowTag('test', 'blub');
-        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById(3)));
-        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('3-blub')));
-    }
-
-    public function testAllowTagChildPage()
-    {
-        $this->_acl->allowComponent('test', null);
-        $this->_acl->allowTag('test', 'blub');
-        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById(3)));
-        $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById(4)));
+        $this->_acl->allowComponent('test', 'Vps_Component_Acl_TestComponent');
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root));
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById('1')));
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('3')));
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('4')));
     }
 }
