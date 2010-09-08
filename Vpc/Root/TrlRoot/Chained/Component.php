@@ -9,7 +9,7 @@ class Vpc_Root_TrlRoot_Chained_Component extends Vpc_Abstract
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;
-        $ret['chainedType'] = 'Trl';
+        $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
 

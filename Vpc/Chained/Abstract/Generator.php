@@ -122,9 +122,7 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
 
         $slaveData = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
         while ($slaveData) {
-            if (Vpc_Abstract::hasSetting($slaveData->componentClass, 'chainedType') &&
-                Vpc_Abstract::getSetting($slaveData->componentClass, 'chainedType') == $chainedType)
-            {
+            if (Vpc_Abstract::getFlag($slaveData->componentClass, 'chainedType') == $chainedType) {
                 break;
             }
             $slaveData = $slaveData->parent;
@@ -142,9 +140,7 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
                     if (!$slaveData) {
                         $chainedData = $component;
                         while ($chainedData) {
-                            if (Vpc_Abstract::hasSetting($chainedData->componentClass, 'chainedType') &&
-                                Vpc_Abstract::getSetting($chainedData->componentClass, 'chainedType') == $chainedType)
-                            {
+                            if (Vpc_Abstract::getFlag($chainedData->componentClass, 'chainedType') == $chainedType) {
                                 break;
                             }
                             $chainedData = $chainedData->parent;
@@ -152,8 +148,7 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
                         $slaveDataClass = null;
                         foreach (Vpc_Abstract::getChildComponentClasses($chainedData->parent->componentClass) as $chainedClass) {
                             if ($chainedClass != $chainedData->componentClass &&
-                                Vpc_Abstract::hasSetting($chainedClass, 'chainedType') &&
-                                Vpc_Abstract::getSetting($chainedClass, 'chainedType') == $chainedType
+                                Vpc_Abstract::getFlag($chainedClass, 'chainedType') == $chainedType
                             ) {
                                 $slaveDataClass = substr($chainedClass, 0, strpos($chainedClass, '.'));
                             }
