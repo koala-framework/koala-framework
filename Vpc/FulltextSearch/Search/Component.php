@@ -22,20 +22,35 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract
         } else {
             $queryString = '';
         }
-        $query = Zend_Search_Lucene_Search_QueryParser::parse($queryString);
+        $userQuery = Zend_Search_Lucene_Search_QueryParser::parse($queryString);
+        $query = new Zend_Search_Lucene_Search_Query_Boolean();
+        $query->addSubquery($userQuery, true /* required */);
+
+        $subRoot = $this->getData();
+        while ($subRoot) {
+            if (Vpc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
+            $subRoot = $subRoot->parent;
+        }
+        if ($subRoot) {
+            $pathTerm  = new Zend_Search_Lucene_Index_Term($subRoot->dbId, 'subroot');
+            $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
+            $query->addSubquery($pathQuery, true /* required */);
+        }
+
         $time = microtime(true);
         $allHits = $index->find($query);
-        $hitCount = count($allHits);
-        $ret['hitCount'] = $hitCount;
+        $ret['hitCount'] = count($allHits);
         $hits = array();
         $numStart = min(($page-1)*$perPage + 1, count($allHits));
         $numEnd = min(($page)*$perPage, count($allHits));
         if (count($allHits)) {
             for($i=$numStart; $i <= $numEnd; $i++) {
                 $h = $allHits[$i-1];
-                $h->data = Vps_Component_Data_Root::getInstance()->getComponentByDbId($h->componentId, array('subroot'=>$this->getData()));
-                if ($h->data) {
-                    $hits[] = $h;
+                $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($h->componentId);
+                if ($c) {
+                    $hits[] = array(
+                        'data' => $c
+                    );
                 }
             }
         }
