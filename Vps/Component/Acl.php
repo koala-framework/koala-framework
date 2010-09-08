@@ -116,7 +116,7 @@ class Vps_Component_Acl
     }
 
     // Langsam
-    public function hasAllowedChildComponents($userRow, $component)
+    public function hasAllowedRecursiveChildComponents($userRow, $component)
     {
         // Alle Unterkomponenten mit erlaubten Klassen suchen, dann noch
         // dynamisch prüfen ob Komponente wirklich erlaubt ist
@@ -129,6 +129,15 @@ class Vps_Component_Acl
             if ($this->isAllowed($userRow, $c)) return true;
         }
         return false;
+    }
+
+    public function getAllowedChildComponents($userRow, $component)
+    {
+        $allowedComponentClasses = $this->_getAllowedComponentClasses($userRow);
+        return $component->getRecursiveChildComponents(array(
+            'componentClasses' => $allowedComponentClasses,
+            'ignoreVisible' => true
+        ), array('pseudoPage' => false));
     }
 
     protected function _getAllowedComponentClasses($userRow)
