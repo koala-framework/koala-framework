@@ -662,7 +662,6 @@ abstract class Vps_Component_Generator_Abstract
     {
         $data = array();
 
-
         $data['icon'] = 'bullet_yellow';
         $data['iconEffects'] = array();
         $data['allowDrag'] = false;
@@ -687,6 +686,7 @@ abstract class Vps_Component_Generator_Abstract
         if ($component->isPage) {
             $data['actions']['preview'] = true;
         }
+        $data['loadChildren'] = false;
 
         return $data;
     }

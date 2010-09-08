@@ -8,6 +8,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     protected $_modelName = 'Vps_Component_Model';
 
     private $_componentConfigs = array();
+    private $_allowedComponents;
 
     protected function _init()
     {
@@ -30,10 +31,31 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $acl = Vps_Registry::get('acl')->getComponentAcl();
         $user = Zend_Registry::get('userModel')->getAuthedUser();
         $enabled = $acl->isAllowed($user, $component);
-        if (!$enabled && !$acl->hasAllowedRecursiveChildComponents($user, $component))
-            return null;
+        if (!$enabled) {
+
+            if (is_null($this->_allowedComponents)) {
+                $this->_allowedComponents = $acl->getAllowedRecursiveChildComponents($user, $component);
+            }
+            $allowed = false;
+            foreach ($this->_allowedComponents as $allowedComponent) {
+                $c = $allowedComponent;
+                while ($c) {
+                    if ($c->componentId == $component->componentId) {
+                        $allowed = true;
+                        break 2;
+                    }
+                    $c = $c->parent;
+                }
+            }
+            if (!$allowed) return null;
+        }
         if (!$enabled) {
             $editComponents = $acl->getAllowedChildComponents($user, $component);
+            foreach ($editComponents as $key => $ec) {
+                if (is_instance_of($ec->componentClass, 'Vpc_Root_Category_Component') || is_instance_of($ec->componentClass, 'Vpc_Root_Category_Trl_Component')) {
+                    unset($editComponents[$key]);
+                }
+            }
             if ($editComponents) $enabled = true;
         } else {
             $editComponents = array($component);
@@ -46,9 +68,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['bIcon'] = new Vps_Asset('world');
             $data['bIcon'] = $data['bIcon']->__toString();
             $data['expanded'] = true;
+            $data['loadChildren'] = true;
         } else {
             $data = array_merge($data, $component->generator->getPagesControllerConfig($component));
-
             if (!$enabled) $data['iconEffects'][] = 'forbidden';
             $icon = $data['icon'];
             if (is_string($icon)) {
@@ -67,6 +89,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             'preview' => false
         ), $data['actions']);
 
+        if ($data['loadChildren'] || $data['expanded'] || !$enabled) {
+            $data['children'] = $this->_formatNodes($component->componentId);
+        }
 
         // EditComponents
         $ec = array();
