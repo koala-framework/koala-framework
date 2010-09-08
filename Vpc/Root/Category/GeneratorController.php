@@ -5,6 +5,22 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
     protected $_permissions = array('save' => true, 'add' => true);
     protected $_modelName = 'Vpc_Root_Category_GeneratorModel';
 
+    protected function _hasPermissions($row, $action)
+    {
+        $component = Vps_Component_Data_Root::getInstance()
+            ->getComponentById($row->parent_id, array('ignoreVisible' => true));
+        $ret = false;
+        while ($component) {
+            if ($component->componentId == $this->_getParam('componentId')) $ret = true;
+            $component = $component->parent;
+        }
+        if ($ret) {
+            return parent::_hasPermissions($row, $action);
+        } else {
+            return false;
+        }
+    }
+
     private function _getComponentId()
     {
         if ($this->_getParam('id')) {

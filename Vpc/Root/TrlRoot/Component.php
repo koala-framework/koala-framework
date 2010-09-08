@@ -16,7 +16,7 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
             'nameColumn' => 'name',
             'uniqueFilename' => true,
         );
-        $ret['childModel'] = new Vpc_Chained_Abstract_ChainedModel(array('de' => 'Deutsch'));
+        $ret['childModel'] = new Vpc_Root_TrlRoot_Model(array('de' => 'Deutsch'));
         return $ret;
     }
 
