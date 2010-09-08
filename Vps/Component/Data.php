@@ -222,12 +222,24 @@ class Vps_Component_Data
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
             $cache->save($generators, $cacheId);
         }
-        $select->whereChildOfSamePage($this);
+        $querySubPages = $childSelect->hasPart('wherePage') && !$childSelect->getPart('wherePage');
+        if ($querySubPages) {
+            $select->whereChildOfSamePage($this);
+        }
         foreach ($generators as $g) {
             if (!$g['static']) {
                 $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
                 foreach ($gen->getChildData(null, $select) as $d) {
-                    if (!in_array($d, $ret, true)) {
+                    $add = true;
+                    if (!$querySubPages) { // sucht über unterseiten hinweg, wird hier erst im Nachhinein gehandelt, langsam
+                        $add = false;
+                        $c = $d;
+                        while (!$add && $c) {
+                            if ($c->componentId == $this->componentId) $add = true;
+                            $c = $c->parent;
+                        }
+                    }
+                    if ($add && !in_array($d, $ret, true)) {
                         $ret[] = $d;
                     }
                 }
