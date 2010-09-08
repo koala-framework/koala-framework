@@ -84,7 +84,9 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
     {
         $select = clone $select;
         if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
-            $select->whereChildOfSamePage($this->_getChainedData($p));
+            $cd = $this->_getChainedData($p);
+            if (!$cd) $cd = $p; // Falls Data ein parent von Komponente mit chainedType ist
+            $select->whereChildOfSamePage($cd);
         }
         if ($cls = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
             foreach ($cls as &$c) {

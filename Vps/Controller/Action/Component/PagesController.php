@@ -26,12 +26,16 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
         $data = parent::_formatNode($row);
         $data['uiProvider'] = 'Vps.Component.PagesNode';
-        $disabled = !Vps_Registry::get('acl')->getComponentAcl()
-            ->isAllowed(Zend_Registry::get('userModel')->getAuthedUser(), $component);
+
+        $acl = Vps_Registry::get('acl')->getComponentAcl();
+        $user = Zend_Registry::get('userModel')->getAuthedUser();
+        $enabled = $acl->isAllowed($user, $component);
+        if (!$enabled && !$acl->hasAllowedChildComponents($user, $component))
+            return null;
 
         $data['actions'] = array();
         $data['allowDrop'] = false;
-        $data['disabled'] = $disabled;
+        $data['disabled'] = !$enabled;
         $data['editControllerUrl'] = '';
         if ($component->componentId == 'root') { // Root hat keinen Generator
             $data['bIcon'] = new Vps_Asset('world');
@@ -40,7 +44,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         } else {
             $data = array_merge($data, $component->generator->getPagesControllerConfig($component));
 
-            if ($disabled) $data['iconEffects'][] = 'forbidden';
+            if (!$enabled) $data['iconEffects'][] = 'forbidden';
             $icon = $data['icon'];
             if (is_string($icon)) {
                 $icon = new Vps_Asset($icon);
