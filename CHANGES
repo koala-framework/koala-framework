@@ -16,6 +16,7 @@ möglicherweise nicht kompatible Änderungen:
 - Menü-Komponenten: TemplateVars wurden geändert, ist jetzt ein array. Alle überschriebenen
   Templates müssen angepasst werden (bzw. schaun obs wirklich überschrieben werden muss)
 - frontControllerClass MUSS in application/config.ini angegeben werden
+- Tags in Seitenbaum gibts nicht mehr (kein Vps_Component_Acl->allowTag())
 
 == 1.10 ==
 Erstellt: 09.06.10
