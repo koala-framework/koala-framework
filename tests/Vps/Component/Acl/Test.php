@@ -57,6 +57,14 @@ class Vps_Component_Acl_Test extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_acl->isAllowed('test', 'Vps_Component_Acl_TestComponent'));
     }
 
+    public function testAllowedComponentClasses()
+    {
+        $this->_acl->allowComponent('test', 'Vps_Component_Acl_Root');
+        $this->assertEquals(null, $this->_acl->getAllowedComponentClasses('admin'));
+        $this->assertEquals(array(), $this->_acl->getAllowedComponentClasses('guest'));
+        $this->assertEquals(array('Vps_Component_Acl_Root'), $this->_acl->getAllowedComponentClasses('test'));
+    }
+
     public function testDynamicComponent()
     {
         $this->assertFalse($this->_acl->isAllowed('test', $this->_root));

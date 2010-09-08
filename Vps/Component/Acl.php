@@ -107,12 +107,37 @@ class Vps_Component_Acl
     protected function _isAllowedComponentData($userRow, Vps_Component_Data $component)
     {
         $role = $this->_getRole($userRow);
-        $ret = false;
-        while (!$ret && $component) { // irgendeine Komponente auf dem Weg nach oben muss allowed sein
+        while ($component) { // irgendeine Komponente auf dem Weg nach oben muss allowed sein
             $allowed = $this->_isAllowedComponentClassNonRek($role, $component->componentClass);
-            if ($allowed) $ret = true;
+            if ($allowed) return true;
             $component = $component->parent;
         }
+        return false;
+    }
+
+    public function getAllowedComponentClasses($userRow)
+    {
+        $role = $this->_getRole($userRow);
+
+        $ret = array();
+        $r = $this->_getRules('Component', null, $this->_getRole($userRow));
+        if (isset($r['type']) && $r['type'] == Vps_Acl::TYPE_ALLOW) {
+            $ret = null;
+        }
+
+        $role = $role->getRoleId();
+        foreach ($this->_rules['byComponentId'] as $componentClass => $rights) {
+            if (isset($rights['byRoleId'][$role])) {
+                $r = $rights['byRoleId'][$role];
+                if ($r['type'] == Vps_Acl::TYPE_ALLOW) {
+                    if (!is_array($ret)) $ret = array();
+                    $ret[] = $componentClass;
+                } else if ($r['type'] == Vps_Acl::TYPE_DENY) {
+                    throw new Vps_Exception_NotYetImplemented('Klasseneinschränkung wird noch nicht unterstützt.');
+                }
+            }
+        }
+
         return $ret;
     }
 
