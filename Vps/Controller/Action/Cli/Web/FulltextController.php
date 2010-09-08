@@ -33,7 +33,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                     throw new Vps_Exception("child process failed");
                 }
 
-                echo "memory_usage (parent): ".(memory_get_usage()/(1024*1024))."MB\n";
+                //echo "memory_usage (parent): ".(memory_get_usage()/(1024*1024))."MB\n";
                 if (!file_get_contents($queueFile)) {
                     echo "fertig.\n";
                     exit;
@@ -49,12 +49,12 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                     if (!$queue) break;
 
                     $queue = explode("\n", $queue);
-                    echo "queued: ".count($queue)."\n";
+                    //echo "queued: ".count($queue)."\n";
                     $componentId = array_shift($queue);
                     file_put_contents($queueFile, implode("\n", $queue));
 
                     $page = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
-                    echo "==> ".$componentId." $page->url\n";
+                    //echo "==> ".$componentId." $page->url\n";
                     foreach ($page->getChildPseudoPages(array()) as $c) {
                         //echo "queued $c->componentId\n";
                         $queue[] = $c->componentId;
@@ -92,16 +92,29 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                             //das wird verwendet um alle dokumente im index zu finden
                             //ned wirklisch a schöne lösung :(
                             $field = Zend_Search_Lucene_Field::UnStored('dummy', 'dummy', 'utf-8');
+                            $field->boost = 0.0001;
                             $doc->addField($field);
 
                             $field = Zend_Search_Lucene_Field::Keyword('componentId', $page->dbId, 'utf-8');
                             $field->boost = 0.0001;
                             $doc->addField($field);
 
+                            $subRoot = $page;
+                            while ($subRoot) {
+                                if (Vpc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
+                                $subRoot = $subRoot->parent;
+                            }
+                            if ($subRoot) {
+                                echo "subroot $subRoot->dbId\n";
+                                $field = Zend_Search_Lucene_Field::Keyword('subroot', $subRoot->dbId, 'utf-8');
+                                $field->boost = 0.0001;
+                                $doc->addField($field);
+                            }
+
                             $query = new Zend_Search_Lucene_Search_Query_Term(new Zend_Search_Lucene_Index_Term($page->dbId, 'componentId'));
                             $hits = $index->find($query);
                             foreach ($hits as $hit) {
-                                echo "deleting $hit->componentId\n";
+                                //echo "deleting $hit->componentId\n";
                                 $index->delete($hit->id);
                             }
 
@@ -137,12 +150,23 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
 
         $queryStr = $this->_getParam('query');
         $query = Zend_Search_Lucene_Search_QueryParser::parse($queryStr);
+
+        $userQuery = Zend_Search_Lucene_Search_QueryParser::parse($queryStr);
+        $query = new Zend_Search_Lucene_Search_Query_Boolean();
+        $query->addSubquery($userQuery, true /* required */);
+
+        $pathTerm  = new Zend_Search_Lucene_Index_Term('root-8-master', 'subroot');
+        $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
+        $query->addSubquery($pathQuery, true /* required */);
+
+
+        
         $hits = $index->find($query);
         echo "searched in ".(microtime(true)-$start)."s\n";
 
         foreach ($hits as $hit) {
             echo "score ".$hit->score."\n";
-            echo "".$hit->componentId."\n";
+            echo "".$hit->componentId." $hit->subroot\n";
             echo "\n";
         }
         exit;
