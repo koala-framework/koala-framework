@@ -3,6 +3,13 @@ class Vpc_Chained_Trl_MasterGenerator extends Vpc_Chained_Abstract_MasterGenerat
 {
     private $_languageRow = null;
 
+    public function getPagesControllerConfig($component, $generatorClass = null)
+    {
+        $ret = parent::getPagesControllerConfig($component, $generatorClass);
+        $ret['icon'] = 'plugin';
+        return $ret;
+    }
+
     private function _getLanguageRow()
     {
         if (!$this->_languageRow) {
