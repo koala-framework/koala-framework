@@ -9,3 +9,14 @@ Ext.grid.EditorGridPanel.prototype.onEditComplete = function(ed, value, startVal
     Ext.grid.EditorGridPanel.baseOnEditComplete.apply(this, arguments);
     this.fireEvent("aftereditcomplete", ed, value, startValue);
 };
+
+Ext.grid.EditorGridPanel.baseOnRender = Ext.grid.EditorGridPanel.prototype.onRender;
+Ext.grid.EditorGridPanel.prototype.onRender = function(ct, position){
+    Ext.grid.EditorGridPanel.baseOnRender.apply(this, arguments);
+
+    if (this.filtersInSeparateTbar) {
+        var tb2 = new Ext.Toolbar(this.getTopToolbar().el);
+        this.filters.applyToTbar(tb2);
+    }
+
+};

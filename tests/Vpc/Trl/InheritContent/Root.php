@@ -9,8 +9,8 @@ class Vpc_Trl_InheritContent_Root extends Vpc_Root_Abstract
         $ret['childModel'] = new Vps_Model_FnF(array(
             'toStringField' => 'name',
             'data' => array(
-                array('id'=>'1', 'filename'=>'de', 'name'=>'de', 'master'=>true),
-                array('id'=>'2', 'filename'=>'en', 'name'=>'en', 'master'=>false),
+                array('id'=>'de', 'filename'=>'de', 'name'=>'de', 'master'=>true),
+                array('id'=>'en', 'filename'=>'en', 'name'=>'en', 'master'=>false),
             )
         ));
         $ret['generators']['de'] = array(
@@ -19,7 +19,7 @@ class Vpc_Trl_InheritContent_Root extends Vpc_Root_Abstract
             'name' => 'de'
         );
         $ret['generators']['en'] = array(
-            'class' => 'Vpc_Chained_Abstract_ChainedGenerator',
+            'class' => 'Vpc_Chained_Trl_ChainedGenerator',
             'component' => 'Vpc_Trl_InheritContent_English.Vpc_Trl_InheritContent_German',
             'name' => 'en'
         );

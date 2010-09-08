@@ -11,13 +11,13 @@ class Vpc_Cc_Composite_Root extends Vpc_Root_Abstract
             'component' => 'Vpc_Cc_Composite_Master_Component',
         );
         $ret['generators']['slave'] = array(
-            'class' => 'Vpc_Chained_Abstract_ChainedGenerator',
+            'class' => 'Vpc_Chained_Trl_ChainedGenerator',
             'component' => 'Vpc_Cc_Composite_Slave_Component.Vpc_Cc_Composite_Master_Component',
             'filenameColumn' => 'filename',
             'nameColumn' => 'name',
             'uniqueFilename' => true,
         );
-        $ret['childModel'] = new Vpc_Chained_Abstract_ChainedModel(array(
+        $ret['childModel'] = new Vpc_Root_TrlRoot_Model(array(
             'master' => 'master',
             'slave' => 'slave'
         ));
