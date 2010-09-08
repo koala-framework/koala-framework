@@ -23,8 +23,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
         $db = Vps_Registry::get('db');
         $db->closeConnection();
 
-        //$componentId = 'root';
-        $componentId = 'root-verband-master';
+        $componentId = 'root';
         while(true) {
             $pid = pcntl_fork();
             if ($pid == -1) {
@@ -52,6 +51,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                 //echo $componentId."\n";
                 $page = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
                 foreach ($page->getChildPseudoPages(array()) as $c) {
+                    //echo "queued $c->componentId\n";
                     msg_send($seg, 1, $c->componentId);
                 }
 
