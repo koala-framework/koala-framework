@@ -118,7 +118,7 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
             }
         }
 
-        $chainedType = substr(strrchr(str_replace('_Generator', '', get_class($this)), '_'), 1);
+        $chainedType = $this->getGeneratorFlag('chainedType');
 
         $slaveData = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
         while ($slaveData) {
