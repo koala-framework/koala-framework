@@ -27,6 +27,18 @@ class Vps_Component_Acl
         }
     }
 
+    protected function _getRole($userRow)
+    {
+        if (is_null($userRow)) {
+            $role = 'guest';
+        } else if (is_string($userRow)) {
+            $role = $userRow;
+        } else {
+            $role = $userRow->role;
+        }
+        return $this->_roleRegistry->get($role);
+    }
+
     /**
      * @param User-Row / null für guest
      * @param Vps_Component_Data/string
@@ -49,18 +61,6 @@ class Vps_Component_Acl
         if (!$allowed) return false;
 
         return true;
-    }
-
-    protected function _getRole($userRow)
-    {
-        if (is_null($userRow)) {
-            $role = 'guest';
-        } else if (is_string($userRow)) {
-            $role = $userRow;
-        } else {
-            $role = $userRow->role;
-        }
-        return $this->_roleRegistry->get($role);
     }
 
     //beim überschreiben aufpassen wegen dem _isAllowedComponentClassCache
@@ -115,7 +115,23 @@ class Vps_Component_Acl
         return false;
     }
 
-    public function getAllowedComponentClasses($userRow)
+    // Langsam
+    public function hasAllowedChildComponents($userRow, $component)
+    {
+        // Alle Unterkomponenten mit erlaubten Klassen suchen, dann noch
+        // dynamisch prüfen ob Komponente wirklich erlaubt ist
+        $allowedComponentClasses = $this->_getAllowedComponentClasses($userRow);
+        $cc = $component->getRecursiveChildComponents(array(
+            'componentClasses' => $allowedComponentClasses,
+            'ignoreVisible' => true
+        ), array());
+        foreach ($cc as $c) {
+            if ($this->isAllowed($userRow, $c)) return true;
+        }
+        return false;
+    }
+
+    protected function _getAllowedComponentClasses($userRow)
     {
         $role = $this->_getRole($userRow);
 
