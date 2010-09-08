@@ -213,6 +213,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $id = $this->_getParam('id');
         $table = $this->_model->getTable();
         $row = $table->find($id)->current();
+        if (!$this->_hasPermissions($row, 'makeHome')) {
+            throw new Vps_Exception("Making home this row is not allowed.");
+        }
         $root = Vps_Component_Data_Root::getInstance();
         $component = $root->getComponentById($id, array('ignoreVisible' => true));
         while ($component) {
@@ -235,6 +238,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                         if ($component == $homeComponent) {
                             $oldId = $oldRow->id;
                             $oldVisible = $oldRow->visible;
+                            if (!$this->_hasPermissions($row, 'makeHome')) {
+                                throw new Vps_Exception("Making home this row is not allowed.");
+                            }
                             $oldRow->is_home = 0;
                             $oldRow->save();
                         }
@@ -332,4 +338,25 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         }
     }
 
+    protected function _hasPermissions($row, $action)
+    {
+        $user = Zend_Registry::get('userModel')->getAuthedUser();
+        if ($row instanceof Vps_Component_Model_Row) {
+            $component = $row->getData();
+        } else {
+            $component = Vps_Component_Data_Root::getInstance()
+                ->getComponentById($row->id, array('ignoreVisible' => true));
+        }
+
+        // darf man die action?
+        $config = $component->generator->getPagesControllerConfig($component);
+        $actions = $config['actions'];
+        $actions['move'] = $config['allowDrag'];
+        $actions['moveTo'] = $config['allowDrop'];
+        if (in_array($action, array_keys($actions)) && !$config['actions'][$action]) return false;
+
+        // wenn ja, darf man die Komponente bearbeiten?
+        $acl = Vps_Registry::get('acl')->getComponentAcl();
+        return $acl->isAllowed($user, $component);
+    }
 }
