@@ -23,7 +23,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        $fields = array('parent_id', 'pos', 'visible', 'name', 'is_home');
+        $fields = array('parent_id', 'pos', 'visible', 'is_home');
         if (!$this->_tableLoaded &&
             in_array($name, $fields) &&
             is_numeric($this->componentId)

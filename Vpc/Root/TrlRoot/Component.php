@@ -10,7 +10,7 @@ class Vpc_Root_TrlRoot_Component extends Vpc_Root_Abstract
             'component' => 'Vpc_Root_TrlRoot_Master_Component',
         );
         $ret['generators']['chained'] = array(
-            'class' => 'Vpc_Chained_Abstract_ChainedGenerator',
+            'class' => 'Vpc_Chained_Trl_ChainedGenerator',
             'component' => 'Vpc_Root_TrlRoot_Chained_Component.Vpc_Root_TrlRoot_Master_Component',
             'filenameColumn' => 'filename',
             'nameColumn' => 'name',
