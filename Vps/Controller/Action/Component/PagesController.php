@@ -30,9 +30,14 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $acl = Vps_Registry::get('acl')->getComponentAcl();
         $user = Zend_Registry::get('userModel')->getAuthedUser();
         $enabled = $acl->isAllowed($user, $component);
-        if (!$enabled && !$acl->hasAllowedChildComponents($user, $component))
+        if (!$enabled && !$acl->hasAllowedRecursiveChildComponents($user, $component))
             return null;
-
+        if (!$enabled) {
+            $editComponents = $acl->getAllowedChildComponents($user, $component);
+            if ($editComponents) $enabled = true;
+        } else {
+            $editComponents = array($component);
+        }
         $data['actions'] = array();
         $data['allowDrop'] = false;
         $data['disabled'] = !$enabled;
@@ -65,17 +70,19 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
         // EditComponents
         $ec = array();
-        foreach ($this->getEditComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
+        foreach ($editComponents as $editComponent) {
+            foreach ($this->getEditComponents($editComponent) as $c) {
+                $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
+            }
+            foreach ($this->getMenuEditComponents($editComponent) as $c) {
+                $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
+            }
+            foreach ($this->getSharedComponents($editComponent) as $componentClass => $c) {
+                $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED));
+            }
         }
-        foreach ($this->getMenuEditComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
-        }
-        foreach ($this->getSharedComponents($component) as $componentClass => $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED));
-        }
-
         $data['editComponents'] = $ec;
+
         return $data;
     }
 
