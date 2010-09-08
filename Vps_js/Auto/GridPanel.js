@@ -1,6 +1,7 @@
 Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     layout: 'fit',
+    filtersInSeparateTbar: false,
 
     initComponent : function()
     {
@@ -509,6 +510,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             delete gridConfig.tbar;
         }
 
+        gridConfig.filtersInSeparateTbar = this.filtersInSeparateTbar;
+        if (this.filtersInSeparateTbar) {
+            gridConfig.filters = this.filters;
+        }
+
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
         this.relayEvents(this.grid, ['beforeedit', 'aftereditcomplete', 'validateedit']);
 
@@ -548,11 +554,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
         this.add(this.grid);
         this.doLayout();
-
-        if (this.filtersInSeparateTbar) {
-            var tb2 = new Ext.Toolbar(this.grid.getTopToolbar().el);
-            this.filters.applyToTbar(tb2);
-        }
 
         this.fireEvent('rendergrid', this.grid);
         this.fireEvent('loaded', this.grid);
