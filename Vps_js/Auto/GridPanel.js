@@ -463,7 +463,10 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.load();
             }, this);
         }, this);
-        this.filters.applyToTbar(gridConfig.tbar);
+
+        if (!this.filtersInSeparateTbar) {
+            this.filters.applyToTbar(gridConfig.tbar);
+        }
 
         if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv || meta.buttons.reload) {
             gridConfig.tbar.add('->');
@@ -545,6 +548,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
         this.add(this.grid);
         this.doLayout();
+
+        if (this.filtersInSeparateTbar) {
+            var tb2 = new Ext.Toolbar(this.grid.getTopToolbar().el);
+            this.filters.applyToTbar(tb2);
+        }
 
         this.fireEvent('rendergrid', this.grid);
         this.fireEvent('loaded', this.grid);
