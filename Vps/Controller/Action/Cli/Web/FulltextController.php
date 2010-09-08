@@ -61,6 +61,8 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                         file_put_contents($queueFile, implode("\n", $queue));
                     }
 
+                    if (!$page->isPage) continue;
+
                     //echo "checking for childComponents\n";
                     $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext'));
                     if ($fulltextComponents) {
