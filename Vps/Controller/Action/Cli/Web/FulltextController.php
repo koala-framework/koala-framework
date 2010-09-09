@@ -66,7 +66,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                     //echo "checking for childComponents\n";
                     $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext'));
                     if ($fulltextComponents) {
-                        echo "indexing $page->componentId $page->url...\n";
+                        echo " *** indexing $page->componentId $page->url...\n";
                         $index = Vps_Util_Fulltext::getInstance();
 
                         $doc = new Zend_Search_Lucene_Document();
@@ -95,7 +95,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                             $field->boost = 0.0001;
                             $doc->addField($field);
 
-                            $field = Zend_Search_Lucene_Field::Keyword('componentId', $page->dbId, 'utf-8');
+                            $field = Zend_Search_Lucene_Field::Keyword('componentId', $page->componentId, 'utf-8');
                             $field->boost = 0.0001;
                             $doc->addField($field);
 
@@ -105,13 +105,16 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                                 $subRoot = $subRoot->parent;
                             }
                             if ($subRoot) {
-                                echo "subroot $subRoot->dbId\n";
-                                $field = Zend_Search_Lucene_Field::Keyword('subroot', $subRoot->dbId, 'utf-8');
+                                echo "subroot $subRoot->componentId\n";
+                                $field = Zend_Search_Lucene_Field::Keyword('subroot', $subRoot->componentId, 'utf-8');
                                 $field->boost = 0.0001;
                                 $doc->addField($field);
                             }
+                            foreach ($doc->getFieldNames() as $fieldName) {
+                                echo "$fieldName: ".substr($doc->$fieldName, 0, 80)."\n";
+                            }
 
-                            $query = new Zend_Search_Lucene_Search_Query_Term(new Zend_Search_Lucene_Index_Term($page->dbId, 'componentId'));
+                            $query = new Zend_Search_Lucene_Search_Query_Term(new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId'));
                             $hits = $index->find($query);
                             foreach ($hits as $hit) {
                                 //echo "deleting $hit->componentId\n";
@@ -121,10 +124,10 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                             $index->addDocument($doc);
 
                             $m = Vps_Model_Abstract::getInstance('Vpc_FulltextSearch_MetaModel');
-                            $row = $m->getRow($page->dbId);
+                            $row = $m->getRow($page->componentId);
                             if (!$row) {
                                 $row = $m->createRow();
-                                $row->page_id = $page->dbId;
+                                $row->page_id = $page->componentId;
                             }
                             $row->indexed_date = date('Y-m-d H:i:s');
                             $row->save();

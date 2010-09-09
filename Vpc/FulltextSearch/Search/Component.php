@@ -32,7 +32,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract
             $subRoot = $subRoot->parent;
         }
         if ($subRoot) {
-            $pathTerm  = new Zend_Search_Lucene_Index_Term($subRoot->dbId, 'subroot');
+            $pathTerm  = new Zend_Search_Lucene_Index_Term($subRoot->componentId, 'subroot');
             $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
             $query->addSubquery($pathQuery, true /* required */);
         }
@@ -46,7 +46,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract
         if (count($allHits)) {
             for($i=$numStart; $i <= $numEnd; $i++) {
                 $h = $allHits[$i-1];
-                $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($h->componentId);
+                $c = Vps_Component_Data_Root::getInstance()->getComponentById($h->componentId);
                 if ($c) {
                     $hits[] = array(
                         'data' => $c
