@@ -228,10 +228,11 @@ class Vps_Component_Data
         if ($noSubPages) {
             $select->whereChildOfSamePage($this);
         }
+
         foreach ($generators as $g) {
             if (!$g['static']) {
                 $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
-                foreach ($gen->getChildData(null, $select) as $d) {
+                foreach ($gen->getChildData(null, clone $select) as $d) {
                     $add = true;
                     if (!$noSubPages) { // sucht über unterseiten hinweg, wird hier erst im Nachhinein gehandelt, langsam
                         $add = false;
