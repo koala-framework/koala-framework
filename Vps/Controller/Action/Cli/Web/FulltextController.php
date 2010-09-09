@@ -32,7 +32,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                 //echo "memory_usage (parent): ".(memory_get_usage()/(1024*1024))."MB\n";
                 if (!file_get_contents($queueFile)) {
                     echo "fertig.\n";
-                    exit;
+                    break;
                 }
             } else {
 
@@ -140,6 +140,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                 exit(0);
             }
         }
+        echo "optimizing...\n";
         Vps_Util_Fulltext::getInstance()->optimize();
         exit;
     }
