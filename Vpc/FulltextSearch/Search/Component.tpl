@@ -1,7 +1,7 @@
 <div class="<?=$this->cssClass?>">
     <form action="<?=$this->data->url?>">
         <input name="query" value="<?=htmlspecialchars($this->queryString)?>" />
-        <input type="submit" />
+        <input type="submit" value="<?=$this->data->trlVps('Search')?>" />
     </form>
     <? if ($this->hits) { ?>
 
