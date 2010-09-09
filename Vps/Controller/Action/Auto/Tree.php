@@ -9,7 +9,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
 
     protected function _formatNodes($parentId = null)
     {
-        $parentId = $this->_getParam('node');
+        if (!$parentId) $parentId = $this->_getParam('node');
         if ($parentId) {
             $parentRow = $this->_model->getRow($parentId);
         } else {
