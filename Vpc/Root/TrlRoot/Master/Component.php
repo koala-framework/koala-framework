@@ -24,7 +24,7 @@ class Vpc_Root_TrlRoot_Master_Component extends Vpc_Abstract
         $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;
-        $ret['chainedType'] = 'Trl';
+        $ret['flags']['chainedType'] = 'Trl';
         $ret['editComponents'] = array('flag');
         return $ret;
     }

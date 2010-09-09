@@ -115,9 +115,7 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
         if (!$masterData) return null;
 
         while ($chainedData) {
-            if (Vpc_Abstract::hasSetting($chainedData->componentClass, 'chainedType') &&
-                Vpc_Abstract::getSetting($chainedData->componentClass, 'chainedType') == $chainedType)
-            {
+            if (Vpc_Abstract::getFlag($chainedData->componentClass, 'chainedType') == $chainedType) {
                 break;
             }
             $chainedData = $chainedData->parent;
@@ -132,9 +130,7 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
                 strrpos($c->componentId, '_')
             );
             $id = substr($c->componentId, $pos);
-            if (Vpc_Abstract::hasSetting($c->componentClass, 'chainedType') &&
-                Vpc_Abstract::getSetting($c->componentClass, 'chainedType') == $chainedType)
-            {
+            if (Vpc_Abstract::getFlag($c->componentClass, 'chainedType') == $chainedType) {
                 $subrootReached = true;
                 break;
             }

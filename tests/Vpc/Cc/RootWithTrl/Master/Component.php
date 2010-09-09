@@ -19,7 +19,7 @@ class Vpc_Cc_RootWithTrl_Master_Component extends Vpc_Abstract
             'master' => 'master',
             'slave' => 'slave'
         ));
-        $ret['chainedType'] = 'Cc';
+        $ret['flags']['chainedType'] = 'Cc';
         return $ret;
     }
 }

@@ -228,10 +228,11 @@ class Vps_Component_Data
         if ($noSubPages) {
             $select->whereChildOfSamePage($this);
         }
+
         foreach ($generators as $g) {
             if (!$g['static']) {
                 $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
-                foreach ($gen->getChildData(null, $select) as $d) {
+                foreach ($gen->getChildData(null, clone $select) as $d) {
                     $add = true;
                     if (!$noSubPages) { // sucht über unterseiten hinweg, wird hier erst im Nachhinein gehandelt, langsam
                         $add = false;
@@ -471,7 +472,7 @@ class Vps_Component_Data
         return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
-    public function getChildPseudoPages($select = array())
+    public function getChildPseudoPages($select = array(), $childSelect = array('page'=>false))
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
@@ -479,7 +480,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->wherePseudoPage(true);
-        return $this->getRecursiveChildComponents($select);
+        return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
     public function getChildBoxes($select = array())
