@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mongo_ChildRows_Row extends Vps_Model_Row_Data_Abstract implements Vps_Model_SubModel_Row_Interface
+class Vps_Model_Mongo_ChildRows_Row extends Vps_Model_Row_Data_Abstract implements Vps_Model_RowsSubModel_Row_Interface
 {
     protected $_parentRow;
     public function __construct(array $config)

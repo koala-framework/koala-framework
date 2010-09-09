@@ -1,5 +1,5 @@
 <?php
-interface Vps_Model_SubModel_Row_Interface
+interface Vps_Model_RowsSubModel_Row_Interface
 {
     public function getSubModelParentRow();
 }
