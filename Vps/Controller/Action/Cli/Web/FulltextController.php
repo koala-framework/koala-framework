@@ -40,7 +40,10 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                     //child process
 
                     //echo "memory_usage (child): ".(memory_get_usage()/(1024*1024))."MB\n";
-                    if (memory_get_usage() > 50*1024*1024) break;
+                    if (memory_get_usage() > 50*1024*1024) {
+                        echo "new process...\n";
+                        break;
+                    }
 
                     $queue = file_get_contents($queueFile);
                     if (!$queue) break;
@@ -50,10 +53,10 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                     $componentId = array_shift($queue);
                     file_put_contents($queueFile, implode("\n", $queue));
 
-                    echo "==> ".$componentId;
+                    //echo "==> ".$componentId.' ';
                     $page = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
-                    echo " $page->url\n";
-                    foreach ($page->getChildPseudoPages(array()) as $c) {
+                    //echo "$page->url\n";
+                    foreach ($page->getChildPseudoPages(array(), array('pseudoPage'=>false)) as $c) {
                         //echo "queued $c->componentId\n";
                         $queue[] = $c->componentId;
                         file_put_contents($queueFile, implode("\n", $queue));
@@ -103,13 +106,13 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                                 $subRoot = $subRoot->parent;
                             }
                             if ($subRoot) {
-                                echo "subroot $subRoot->componentId\n";
+                                //echo "subroot $subRoot->componentId\n";
                                 $field = Zend_Search_Lucene_Field::Keyword('subroot', $subRoot->componentId, 'utf-8');
                                 $field->boost = 0.0001;
                                 $doc->addField($field);
                             }
                             foreach ($doc->getFieldNames() as $fieldName) {
-                                echo "$fieldName: ".substr($doc->$fieldName, 0, 80)."\n";
+                                //echo "$fieldName: ".substr($doc->$fieldName, 0, 80)."\n";
                                 //echo "$fieldName: ".$doc->$fieldName."\n";
                             }
 
