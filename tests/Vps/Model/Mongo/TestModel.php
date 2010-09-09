@@ -2,46 +2,40 @@
 class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
 {
     protected $_collection = 'foo';
-
-    private $_dir;
-    private $_proc;
-    private $_port;
+    static private $_proc;
 
     public function __construct()
     {
-        $mongoDir = "/home/niko/mongodb-linux-i686-1.6.1"; //TODO, obviously
-        $timeLimit = 20;
         $debugOutput = false;
 
+        $mongoDir = "/home/niko/mongodb-linux-i686-1.6.1"; //TODO, obviously
         if (!file_exists($mongoDir.'/bin/mongod')) {
             throw new PHPUnit_Framework_SkippedTestError('mongo daemon not found');
         }
-        $this->_dir = tempnam('/tmp', 'mongodata');
-        unlink($this->_dir);
-        mkdir($this->_dir);
+        static $m;
+        if (!isset($m)) {
+            $port = Vps_Util_Tcp::getFreePort(rand(27020, 30000));
+            $cmd = "vps test forward --controller=vps_model_mongo_run-temp-mongo --port=$port";
+            if ($debugOutput) {
+                echo $cmd."\n";
+                $descriptorspec = array(
+                    1 => STDOUT,
+                    2 => STDOUT
+                );
+            } else {
+                $descriptorspec = array(
+                    1 => array('pipe', 'w'),
+                    2 => STDOUT //should be empty
+                );
+            }
+            self::$_proc = new Vps_Util_Proc($cmd, $descriptorspec);
+            sleep(3);
+            $m = new Mongo("mongodb://localhost:$port");
 
-        $this->_port = Vps_Util_Tcp::getFreePort(rand(27020, 30000));
-        $cmd = "timeout -15 $timeLimit ";
-        $cmd = "$mongoDir/bin/mongod --port=$this->_port --dbpath=$this->_dir";
-        $descriptorspec = array();
-        if ($debugOutput) {
-            echo $cmd."\n";
-            $descriptorspec = array(
-                1 => STDOUT,
-                2 => STDOUT
-            );
-        } else {
-            $descriptorspec = array(
-                1 => array('pipe', 'w'),
-                2 => STDOUT //should be empty
-            );
+            register_shutdown_function(array('Vps_Model_Mongo_TestModel', 'shutDown'));
         }
-        $this->_proc = new Vps_Util_Proc($cmd, $descriptorspec);
-        sleep(1);
-
-        $m = new Mongo("mongodb://localhost:$this->_port");
         $db = $m->selectDB("modeltest");
-
+        $db->selectCollection($this->_collection)->drop();
         $config = array(
             'db' => $db
         );
@@ -50,8 +44,11 @@ class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
 
     public function cleanUp()
     {
-        $this->_proc->terminate();
-        $this->_proc->close(false);
-        system("rm -r ".escapeshellarg($this->_dir));
+    }
+
+    public static function shutDown()
+    {
+        self::$_proc->terminate();
+        self::$_proc->close(false);
     }
 }
