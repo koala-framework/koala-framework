@@ -471,7 +471,7 @@ class Vps_Component_Data
         return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
-    public function getChildPseudoPages($select = array())
+    public function getChildPseudoPages($select = array(), $childSelect = array('page'=>false))
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
@@ -479,7 +479,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->wherePseudoPage(true);
-        return $this->getRecursiveChildComponents($select);
+        return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
     public function getChildBoxes($select = array())
