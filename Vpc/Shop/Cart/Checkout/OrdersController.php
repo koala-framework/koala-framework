@@ -168,6 +168,7 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
         if ($order->getMailEmail()) {
             $checkout = Vps_Component_Data_Root::getInstance()
                 ->getComponentById($order->checkout_component_id);
+            if (!$checkout) throw new Vps_Exception("Can't find checkout component");
             $mail = $checkout->getChildComponent('-'.$order->payment)
                 ->getChildComponent('-shippedMail')
                 ->getComponent();
