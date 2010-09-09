@@ -1,9 +1,9 @@
 <?php
-class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
+class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
     implements Vps_Model_RowsSubModel_Interface
 {
-    protected $_rowClass = 'Vps_Model_Mongo_ChildRows_Row';
-    protected $_rowsetClass = 'Vps_Model_Mongo_ChildRows_Rowset';
+    protected $_rowClass = 'Vps_Model_Mongo_RowsSubModel_Row';
+    protected $_rowsetClass = 'Vps_Model_Mongo_RowsSubModel_Rowset';
     protected $_primaryKey = 'intern_id';
     protected $_fieldName;
 
@@ -40,12 +40,12 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
 
     public function createRow(array $data=array())
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Mongo_ChildRows');
+        throw new Vps_Exception('getRows is not possible for Vps_Model_Mongo_RowsSubModel');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Mongo_ChildRows');
+        throw new Vps_Exception('getRows is not possible for Vps_Model_Mongo_RowsSubModel');
     }
 
     public function getRowsByParentRow(Vps_Model_Row_Interface $parentRow, $select = array())
@@ -102,7 +102,7 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
         $parentRow->{$this->_fieldName} = $v;
     }
 
-    public function update(Vps_Model_Mongo_ChildRows_Row $row, $rowData)
+    public function update(Vps_Model_Mongo_RowsSubModel_Row $row, $rowData)
     {
         $iId = $row->getSubModelParentRow()->getInternalId();
         foreach ($this->_rows[$iId] as $k=>$i) {
@@ -116,7 +116,7 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
         throw new Vps_Exception("Can't find entry");
     }
 
-    public function insert(Vps_Model_Mongo_ChildRows_Row $row, $rowData)
+    public function insert(Vps_Model_Mongo_RowsSubModel_Row $row, $rowData)
     {
         $iId = $row->getSubModelParentRow()->getInternalId();
         if (!isset($this->_data[$iId])) {
@@ -129,7 +129,7 @@ class Vps_Model_Mongo_ChildRows extends Vps_Model_Data_Abstract
         //return $rowData[$this->getPrimaryKey()];
     }
 
-    public function delete(Vps_Model_Mongo_ChildRows_Row $row)
+    public function delete(Vps_Model_Mongo_RowsSubModel_Row $row)
     {
         foreach ($this->_rows[$row->getSubModelParentRow()->getInternalId()] as $k=>$i) {
             if ($row === $i) {
