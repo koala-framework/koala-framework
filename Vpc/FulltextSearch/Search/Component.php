@@ -1,24 +1,25 @@
 <?php
-class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract
+class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Component
 {
+    private $_hits;
+    private $_time;
+    private $_queryString;
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
+        $ret['generators']['child']['component']['paging'] = 'Vpc_Paging_Component';
+        $ret['flags']['processInput'] = true;
         return $ret;
     }
 
-    public function getTemplateVars()
+
+    public function processInput($postData)
     {
-        $ret = parent::getTemplateVars();
         $index = Vps_Util_Fulltext::getInstance();
 
-        $perPage = 20;
-
-        $page = 1;
-
-        if (isset($_GET['query'])) {
-            $queryString = $_GET['query'];
+        if (isset($postData['query'])) {
+            $queryString = $postData['query'];
         } else {
             $queryString = '';
         }
@@ -38,30 +39,49 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract
         }
 
         $time = microtime(true);
-        $allHits = $index->find($query);
-        $ret['hitCount'] = count($allHits);
-        $hits = array();
-        $numStart = min(($page-1)*$perPage + 1, count($allHits));
-        $numEnd = min(($page)*$perPage, count($allHits));
-        if (count($allHits)) {
+        $this->_hits = $index->find($query);
+        $this->_time = microtime(true)-$time;
+        $this->_queryString = $queryString;
+    }
+
+    public function getPagingCount()
+    {
+        return count($this->_hits);
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+
+        $perPage = 20;
+
+        $page = 1;
+
+
+        $numStart = min(($page-1)*$perPage + 1, count($this->_hits));
+        $numEnd = min(($page)*$perPage, count($this->_hits));
+        $ret['hits'] = array();
+        if (count($this->_hits)) {
             for($i=$numStart; $i <= $numEnd; $i++) {
-                $h = $allHits[$i-1];
+                $h = $this->_hits[$i-1];
                 $c = Vps_Component_Data_Root::getInstance()->getComponentById($h->componentId);
                 if ($c) {
-                    $hits[] = array(
-                        'data' => $c
+                    $ret['hits'][] = array(
+                        'data' => $c,
+                        'content' => $h->content
                     );
                 }
             }
         }
-        $ret['hits'] = $hits;
 
-        $time = microtime(true)-$time;
-        $ret['queryTime'] = $time;
-        $ret['query'] = $query;
+        $ret['queryTime'] = $this->_time;
+        $ret['queryString'] = $this->_queryString;
+        $ret['queryParts'] = preg_split('/[^a-zA-Z0-9äöüÄÖÜß]/', $this->_queryString);
+
 
         $ret['numStart'] = $numStart;
         $ret['numEnd'] = $numEnd;
+        $ret['hitCount'] = count($this->_hits);
 
         return $ret;
     }
