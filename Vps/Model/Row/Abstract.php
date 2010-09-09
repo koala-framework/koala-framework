@@ -254,7 +254,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     public function getParentRow($rule)
     {
         $ref = $this->_model->getReference($rule);
-        if ($ref === Vps_Model_SubModel_Interface::SUBMODEL_PARENT) {
+        if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
             if (!($this instanceof  Vps_Model_SubModel_Row_Interface)) {
                 throw new Vps_Exception("row must implement Vps_Model_SubModel_Row_Interface");
             }
@@ -361,7 +361,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
         $called = array();
         foreach ($this->getModel()->getReferences() as $refName) {
-            if ($this->getModel()->getReference($refName) === Vps_Model_SubModel_Interface::SUBMODEL_PARENT) {
+            if ($this->getModel()->getReference($refName) === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
                 continue;
             }
             $m = $this->getModel()->getReferencedModel($refName);
