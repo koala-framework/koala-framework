@@ -32,7 +32,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
             if (Vpc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
             $subRoot = $subRoot->parent;
         }
-        if (false && $subRoot) {
+        if ($subRoot) {
             $pathTerm  = new Zend_Search_Lucene_Index_Term($subRoot->componentId, 'subroot');
             $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
             $query->addSubquery($pathQuery, true /* required */);
