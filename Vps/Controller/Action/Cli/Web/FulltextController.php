@@ -16,10 +16,6 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
     {
         $queueFile = 'application/temp/fulltextRebuildQueue';
 
-        Vpc_Abstract::getComponentClasses(); //lädt component-settings-cache
-        $db = Vps_Registry::get('db');
-        $db->closeConnection();
-
         $componentId = 'root';
         file_put_contents($queueFile, $componentId);
         while(true) {
@@ -39,6 +35,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                     exit;
                 }
             } else {
+
                 while (true) {
                     //child process
 
@@ -53,8 +50,9 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                     $componentId = array_shift($queue);
                     file_put_contents($queueFile, implode("\n", $queue));
 
+                    echo "==> ".$componentId;
                     $page = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
-                    //echo "==> ".$componentId." $page->url\n";
+                    echo " $page->url\n";
                     foreach ($page->getChildPseudoPages(array()) as $c) {
                         //echo "queued $c->componentId\n";
                         $queue[] = $c->componentId;
@@ -112,6 +110,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                             }
                             foreach ($doc->getFieldNames() as $fieldName) {
                                 echo "$fieldName: ".substr($doc->$fieldName, 0, 80)."\n";
+                                //echo "$fieldName: ".$doc->$fieldName."\n";
                             }
 
                             $query = new Zend_Search_Lucene_Search_Query_Term(new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId'));
@@ -158,18 +157,18 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
         $query = new Zend_Search_Lucene_Search_Query_Boolean();
         $query->addSubquery($userQuery, true /* required */);
 
-        $pathTerm  = new Zend_Search_Lucene_Index_Term('root-8-master', 'subroot');
-        $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
-        $query->addSubquery($pathQuery, true /* required */);
+        if ($this->_getParam('subroot')) {
+            $pathTerm  = new Zend_Search_Lucene_Index_Term($this->_getParam('subroot'), 'subroot');
+            $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
+            $query->addSubquery($pathQuery, true /* required */);
+        }
 
-
-        
         $hits = $index->find($query);
         echo "searched in ".(microtime(true)-$start)."s\n";
 
         foreach ($hits as $hit) {
             echo "score ".$hit->score."\n";
-            echo "".$hit->componentId." $hit->subroot\n";
+            echo "  componentId: ".$hit->componentId."\n";
             echo "\n";
         }
         exit;
