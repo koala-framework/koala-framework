@@ -8,7 +8,7 @@ class Vpc_Cc_Composite_Master_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Cc_Composite_Master_Composite_Component',
         );
-        $ret['chainedType'] = 'Cc';
+        $ret['flags']['chainedType'] = 'Cc';
         return $ret;
     }
 }
