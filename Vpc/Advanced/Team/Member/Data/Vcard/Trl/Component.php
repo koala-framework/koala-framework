@@ -18,12 +18,14 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Trl_Component extends Vpc_Chained_Trl_
     private function _getDefaultValues()
     {
         $teamComponent = $this->getData()->chained->parent->parent->parent;
-        $setting = Vpc_Abstract::getSetting($teamComponent->componentClass, 'defaultVcardValues');
+        if (Vpc_Abstract::hasSetting($teamComponent->componentClass, 'defaultVcardValues')) {
+            $setting = Vpc_Abstract::getSetting($teamComponent->componentClass, 'defaultVcardValues');
+        }
 
-        if ($setting) {
+        if (isset($setting)) {
             return $setting;
         } else {
-            return $this->_getSetting('defaultVcardValues');
+            return Vpc_Abstract::getSetting($this->getData()->chained->componentClass, 'defaultVcardValues');
         }
     }
 }
