@@ -68,7 +68,6 @@ class Vpc_Root_Category_GeneratorController extends Vps_Controller_Action_Auto_F
             ->setTpl('<tpl for="."><div class="x-combo-list-item">{name}</div></tpl>')
             ->setAllowBlank(false);
         $fields->add(new Vps_Form_Field_Checkbox('hide',  trlVps('Hide in Menu')));
-        $fields->add(new Vps_Form_Field_TextField('tags', trlVps('Tags')));
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)

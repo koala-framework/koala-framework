@@ -59,9 +59,9 @@ class Vps_Component_Acl_Test extends PHPUnit_Framework_TestCase
 
     public function testHasAllowedChildComponents()
     {
-        $this->assertFalse($this->_acl->hasAllowedChildComponents('test', $this->_root));
+        $this->assertEquals(0, count($this->_acl->getAllowedRecursiveChildComponents('test', $this->_root)));
         $this->_acl->allowComponent('test', 'Vps_Component_Acl_TestComponent');
-        $this->assertTrue($this->_acl->hasAllowedChildComponents('test', $this->_root));
+        $this->assertEquals(1, count($this->_acl->getAllowedRecursiveChildComponents('test', $this->_root)));
     }
 
     public function testDynamicComponent()

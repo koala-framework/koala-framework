@@ -8,7 +8,6 @@ class Vpc_Root_CategoryGenerator extends Vps_Component_Generator_Table
     {
         $ret = parent::getPagesControllerConfig($component, $generatorClass);
         $ret['icon'] = 'folder';
-        $ret['expanded'] = true;
         return $ret;
     }
 
