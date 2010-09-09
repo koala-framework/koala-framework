@@ -71,7 +71,11 @@ abstract class Vps_Exception_Abstract extends Exception
         $template = strtolower(Zend_Filter::filterStatic($template, 'Word_CamelCaseToDash').'.tpl');
         $this->log();
 
-        if (!headers_sent()) header($header);
+        if (!headers_sent()) {
+            header($header);
+            header('Content-Type: text/html; charset=utf-8');
+        }
+
         try {
             echo $view->render($template);
         } catch (Exception $e) {

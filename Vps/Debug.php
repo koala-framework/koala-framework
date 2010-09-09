@@ -222,6 +222,7 @@ class Vps_Debug
             $exception = new Vps_Exception_Other($exception);
         }
         $exception->render($ignoreCli);
+        exit;
     }
 
     public static function setView(Vps_View $view)
