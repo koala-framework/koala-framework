@@ -6177,8 +6177,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Can't paste paragraph type '{0}', as it is not avaliable here.</en>
-<de>Absatz vom Typ '{0}' kann nicht eingefügt werden, da er hier nicht verfügbar ist.</de>
-<id>1549</id>
+<de>Absatz vom Typ '{0}' kann nicht eingef&#xFC;gt werden, da er hier nicht verf&#xFC;gbar ist.</de>
+<id>1581</id>
 </text>
 </trl>
 
