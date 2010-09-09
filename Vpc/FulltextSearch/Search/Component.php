@@ -1,5 +1,5 @@
 <?php
-class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Component
+class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Component implements Vpc_Paging_ParentInterface
 {
     private $_hits;
     private $_time;
@@ -8,7 +8,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
-        $ret['generators']['child']['component']['paging'] = 'Vpc_Paging_Component';
+        $ret['generators']['child']['component']['paging'] = 'Vpc_FulltextSearch_Search_Paging_Component';
         $ret['flags']['processInput'] = true;
         return $ret;
     }
@@ -32,7 +32,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
             if (Vpc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
             $subRoot = $subRoot->parent;
         }
-        if ($subRoot) {
+        if (false && $subRoot) {
             $pathTerm  = new Zend_Search_Lucene_Index_Term($subRoot->componentId, 'subroot');
             $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
             $query->addSubquery($pathQuery, true /* required */);
@@ -53,17 +53,13 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
     {
         $ret = parent::getTemplateVars();
 
-        $perPage = 20;
-
-        $page = 1;
-
-
-        $numStart = min(($page-1)*$perPage + 1, count($this->_hits));
-        $numEnd = min(($page)*$perPage, count($this->_hits));
+        $limit = $this->getData()->getChildComponent('-paging')->getComponent()->getLimit();
+        $numStart = $limit['start'];
+        $numEnd = min(count($this->_hits), $limit['start'] + $limit['limit']);
         $ret['hits'] = array();
         if (count($this->_hits)) {
-            for($i=$numStart; $i <= $numEnd; $i++) {
-                $h = $this->_hits[$i-1];
+            for($i=$numStart; $i < $numEnd; $i++) {
+                $h = $this->_hits[$i];
                 $c = Vps_Component_Data_Root::getInstance()->getComponentById($h->componentId);
                 if ($c) {
                     $ret['hits'][] = array(
@@ -77,12 +73,9 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
         $ret['queryTime'] = $this->_time;
         $ret['queryString'] = $this->_queryString;
         $ret['queryParts'] = preg_split('/[^a-zA-Z0-9äöüÄÖÜß]/', $this->_queryString);
-
-
-        $ret['numStart'] = $numStart;
-        $ret['numEnd'] = $numEnd;
         $ret['hitCount'] = count($this->_hits);
-
+        $ret['numStart'] = $numStart+1;
+        $ret['numEnd'] = $numEnd;
         return $ret;
     }
 }
