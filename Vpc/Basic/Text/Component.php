@@ -145,10 +145,6 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 
         $doc->getField('content')->value .= ' '.$this->_stripTags($html);
 
-        //TODO für vorschau
-        //$field = Zend_Search_Lucene_Field::UnIndexed($fieldName, $this->_stripTags($html), 'utf-8');
-        //$doc->addField($field);
-
         $tags = array(
             'h1' => 5,
             'h2' => 3,
@@ -171,6 +167,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
                 }
             }
         }
+
         $html = $this->_stripTags($html);
         if ($html) {
             $field = Zend_Search_Lucene_Field::UnStored($fieldName.'p', $html, 'utf-8');
