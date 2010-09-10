@@ -26,17 +26,29 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
     protected function _init()
     {
         parent::_init();
-        if (!isset($this->_parentModel)) {
-            throw new Vps_Exception("parentModel not set");
-        }
-        if (is_string($this->_parentModel)) {
+        if (isset($this->_parentModel) && is_string($this->_parentModel)) {
             $this->_parentModel = Vps_Model_Abstract::getInstance($this->_parentModel);
         }
-        if (!$this->_parentModel instanceof Vps_Model_Mongo) {
+        if (isset($this->_parentModel)) {
+            $this->setParentModel($this->_parentModel);
+        }
+    }
+
+    public function setParentModel(Vps_Model_Interface $m)
+    {
+        $this->_parentModel = $m;
+        while ($m instanceof Vps_Model_Proxy) $m = $m->getProxyModel();
+        if (!$m instanceof Vps_Model_Mongo) {
             throw new Vps_Exception("parentModel is not a Mongo");
         }
     }
 
+    private function _getParentMongoModel()
+    {
+        $m = $this->_parentModel;
+        while ($m instanceof Vps_Model_Proxy) $m = $m->getProxyModel();
+        return $m;
+    }
 
     public function createRow(array $data=array())
     {
@@ -166,7 +178,7 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
                         foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
                             if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
                             if ($m === $model) {
-                                $res = $this->_parentModel->getCollection()->update(
+                                $res = $this->_getParentMongoModel()->getCollection()->update(
                                     array($this->_fieldName.'.'.$ref['column'] => $row->{$row->getModel()->getPrimaryKey()}),
                                     array('$set' => array($this->_fieldName.'.$.'.$column => $row->{$expr->getField()})),
                                     array('multiple' => true, 'safe' => true)
