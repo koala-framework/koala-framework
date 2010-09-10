@@ -59,8 +59,8 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
                 $data = $row->toArray();
                 $newRow = $this->createRow($data);
                 foreach ($this->getDependentModels() as $rule=>$depModel) {
-                    if ($depModel instanceof Vps_Model_SubModelMirrorCacheSimple) {
-                        //dieser code könne vielleicht im SubModelMirrorCacheSimple liegen
+                    if ($depModel instanceof Vps_Model_RowsSubModel_MirrorCacheSimple) {
+                        //dieser code könne vielleicht im Vps_Model_RowsSubModel_MirrorCacheSimple liegen
                         $m = $depModel->getSourceModel();
                         $ref = $m->getReferenceByModelClass(get_class($this), null);
                         $select = new Vps_Model_Select();
