@@ -34,10 +34,13 @@ class Vps_Model_Mongo_RowsSubModel extends Vps_Model_Data_Abstract
         }
     }
 
-    public function setParentModel(Vps_Model_Interface $m)
+    public function setParentModel($m)
     {
+        $m = Vps_Model_Abstract::getInstance($m);
         $this->_parentModel = $m;
-        while ($m instanceof Vps_Model_Proxy) $m = $m->getProxyModel();
+        while (is_instance_of($m, 'Vps_Model_Proxy')) {
+            $m = $m->getProxyModel();
+        }
         if (!$m instanceof Vps_Model_Mongo) {
             throw new Vps_Exception("parentModel is not a Mongo");
         }
