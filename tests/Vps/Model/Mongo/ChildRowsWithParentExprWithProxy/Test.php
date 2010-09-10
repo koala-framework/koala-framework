@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Mongo_ChildRowsWithParentExprWithProxy
  * @group Mongo
  * @group slow

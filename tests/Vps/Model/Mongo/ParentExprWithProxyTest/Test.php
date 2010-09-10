@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Mongo_ParentExprWithProxy
  * @group Mongo
  */
