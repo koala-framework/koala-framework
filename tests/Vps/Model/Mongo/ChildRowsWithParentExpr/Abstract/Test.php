@@ -1,27 +1,20 @@
 <?php
-/**
- * @group Model
- * @group Mongo
- * @group Mongo_ChildRowsWithParentExpr
- * @group slow
- */
-class Vps_Model_Mongo_ChildRowsWithParentExpr_Test extends PHPUnit_Framework_TestCase
+abstract class Vps_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends PHPUnit_Framework_TestCase
 {
+    protected $_modelClass;
+    protected $_parentModelClass;
+
     private $_model;
     public function setUp()
     {
         Vps_Model_Abstract::clearInstances();
 
-        $this->_model = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithParentExpr_MongoModel');
-        $this->_model->getCollection()->insert(
+        $this->_model = Vps_Model_Abstract::getInstance($this->_modelClass);
+        $m = $this->_model;
+        while($m instanceof Vps_Model_Proxy) $m = $m->getProxyModel();
+        $m->getCollection()->insert(
             array('id'=>1, 'name'=>'a', 'foo'=>array(array('x'=>1, 'parent_id'=>1, 'parent_name' => 'one'), array('x'=>2))) //TODO id sollte nicht nötig sein
         , array('safe'=>true));
-    }
-
-    protected function tearDown()
-    {
-        if (isset($this->_model)) $this->_model->cleanUp();
-        Vps_Model_Abstract::clearInstances();
     }
 
     public function testParentRowFromSubModel()
@@ -37,7 +30,8 @@ class Vps_Model_Mongo_ChildRowsWithParentExpr_Test extends PHPUnit_Framework_Tes
     {
         $row = $this->_model->getRow(1);
         $rows = $row->getChildRows('Foo');
-        $this->assertEquals('a', $rows->current()->mongo_name);
+        $cRow = $rows->current();
+        $this->assertEquals('a', $cRow->mongo_name);
 
         $row->name = 'b';
         $row->save();
@@ -64,7 +58,7 @@ class Vps_Model_Mongo_ChildRowsWithParentExpr_Test extends PHPUnit_Framework_Tes
 
     public function testParentExprParentChanged()
     {
-        $pRow = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithParentExpr_ParentModel')->getRow(1);
+        $pRow = Vps_Model_Abstract::getInstance($this->_parentModelClass)->getRow(1);
         $pRow->name = 'onex';
         $pRow->save();
 
