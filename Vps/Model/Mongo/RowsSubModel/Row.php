@@ -43,9 +43,9 @@ class Vps_Model_Mongo_RowsSubModel_Row extends Vps_Model_Row_Data_Abstract
             $this->$name = $this->getModel()->getExprValue($this, $name);
         }
         foreach ($this->getModel()->getProxyContainerModels() as $model) {
-            foreach ($model->getExprColumns() as $name) {
-                foreach ($model->getExistingRows() as $proxyRow) {
-                    if ($proxyRow->getProxiedRow() === $this) {
+            foreach ($model->getExistingRows() as $proxyRow) {
+                if ($proxyRow->getProxiedRow() === $this) {
+                    foreach ($model->getExprColumns() as $name) {
                         $this->$name = $model->getExprValue($proxyRow, $name);
                     }
                 }
