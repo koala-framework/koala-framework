@@ -166,6 +166,7 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
 
         $where = $this->_getWhere($row);
 
+        $dirty = false;
         if ($row instanceof Vps_Model_Row_Interface) {
             $select = $this->_getSelect($row);
             $pk = $row->getModel()->getPrimaryKey();
@@ -174,6 +175,13 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
             }
             $select->order($fieldname);
             $rows = $row->getModel()->getRows($select);
+            //ermittel ob eine andere row dirty ist
+            foreach ($rows as $r) {
+                if ($r->isDirty()) {
+                    $dirty = true;
+                    break;
+                }
+            }
         } else {
             $where = $this->_getWhere($row);
             foreach ($row->getPrimaryKey() as $k=>$i) {
@@ -184,14 +192,6 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
             $rows = $row->getTable()->fetchAll($where, $fieldname);
         }
 
-        //ermittel ob eine andere row dirty ist
-        $dirty = false;
-        foreach ($rows as $r) {
-            if ($r->isDirty()) {
-                $dirty = true;
-                break;
-            }
-        }
         if (!$dirty) {
             //wenn keine dirty ist alle durchgehen und nummerierung ev. korrigieren
             //annahme: dirty row wird noch gespeichert
