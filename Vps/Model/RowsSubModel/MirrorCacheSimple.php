@@ -1,7 +1,7 @@
 <?php
-class Vps_Model_SubModelMirrorCacheSimple extends Vps_Model_RowsSubModel_Proxy
+class Vps_Model_RowsSubModel_MirrorCacheSimple extends Vps_Model_RowsSubModel_Proxy
 {
-    protected $_rowClass = 'Vps_Model_SubModelMirrorCacheSimple_Row';
+    protected $_rowClass = 'Vps_Model_RowsSubModel_MirrorCacheSimple_Row';
 
     protected $_sourceModel;
 
@@ -29,11 +29,11 @@ class Vps_Model_SubModelMirrorCacheSimple extends Vps_Model_RowsSubModel_Proxy
 
     public function createRow(array $data=array())
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_SubModelMirrorCacheSimple');
+        throw new Vps_Exception('getRows is not possible for Vps_Model_RowsSubModel_MirrorCacheSimple');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_SubModelMirrorCacheSimple');
+        throw new Vps_Exception('getRows is not possible for Vps_Model_RowsSubModel_MirrorCacheSimple');
     }
 }

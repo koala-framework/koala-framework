@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_SubModelMirrorCacheSimple_Row extends Vps_Model_Proxy_Row
+class Vps_Model_RowsSubModel_MirrorCacheSimple_Row extends Vps_Model_Proxy_Row
 {
     protected function _beforeSave()
     {
@@ -7,7 +7,7 @@ class Vps_Model_SubModelMirrorCacheSimple_Row extends Vps_Model_Proxy_Row
         $sourceModel = $this->getModel()->getSourceModel();
         $pk = $sourceModel->getPrimaryKey();
         $sourceRow = $sourceModel->getRow($this->$pk);
-        if (!$sourceRow) 
+        if (!$sourceRow) $sourceRow = $sourceModel->createRow();
         foreach ($this->getProxiedRow()->toArray() as $k=>$i) {
             if ($sourceModel->hasColumn($k)) {
                 $sourceRow->$k = $i;
