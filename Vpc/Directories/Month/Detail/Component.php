@@ -19,8 +19,8 @@ class Vpc_Directories_Month_Detail_Component extends Vpc_Directories_List_Compon
     protected function _getDateSelect($select, $dateColumn)
     {
         $monthDate = substr($this->getData()->row->$dateColumn, 0, 7);
-        $select->where($dateColumn.' >= ?', "$monthDate-01 00:00:00");
-        $select->where($dateColumn.' <= ?', "$monthDate-31 23:59:59");
+        $select->where(new Vps_Model_Select_Expr_HigherEqualDate($dateColumn, "$monthDate-01 00:00:00"));
+        $select->where(new Vps_Model_Select_Expr_SmallerEqualDate($dateColumn, "$monthDate-31 23:59:59"));
         $select->order($dateColumn, 'DESC');
         return $select;
     }

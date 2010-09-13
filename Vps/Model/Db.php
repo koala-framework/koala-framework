@@ -359,6 +359,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
             } else {
                 return $field." = ".$quotedValue;
             }
+        } else if ($expr instanceof Vps_Model_Select_Expr_NotEquals) {
+            if (is_array($quotedValue)) {
+                return $field." NOT IN (".implode(',', $quotedValue).")";
+            } else {
+                return $field." != ".$quotedValue;
+            }
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
             return $field." IS NULL";
         } else if ($expr instanceof Vps_Model_Select_Expr_Lower) {
@@ -774,7 +780,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     if (is_string($select)) $select = array($select);
                     $select = $this->select($select);
                 }
-                $dbSelect = $this->createDbSelect($select);
+                $dbSelect = $this->_getDbSelect($select);
                 $whereParts = $dbSelect->getPart(Zend_Db_Select::WHERE);
                 $wherePart = implode(' ', $whereParts);
 
@@ -811,7 +817,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             mkdir($tmpExportFolder, 0777);
             $filename = $tmpExportFolder.'/csvexport';
 
-            $dbSelect = $this->createDbSelect($select);
+            $dbSelect = $this->_getDbSelect($select);
             $sqlString = $dbSelect->assembleIntoOutfile($filename);
 
             $dbSelect->limit(1);
@@ -842,7 +848,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (is_string($select)) $select = array($select);
                 $select = $this->select($select);
             }
-            $dbSelect = $this->createDbSelect($select);
+            $dbSelect = $this->_getDbSelect($select);
             if (!$dbSelect) return array();
             return $dbSelect->query()->fetchAll();
         } else {
