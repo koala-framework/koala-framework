@@ -2,6 +2,7 @@
 class Vpc_Basic_Text_Model extends Vps_Model_Db_Proxy
 {
     protected $_componentClass;
+    private $_childComponentsModel;
 
     protected $_table = 'vpc_basic_text';
     protected $_rowClass = 'Vpc_Basic_Text_Row';
@@ -35,5 +36,20 @@ class Vpc_Basic_Text_Model extends Vps_Model_Db_Proxy
     public function getComponentClass()
     {
         return $this->_componentClass;
+    }
+
+    protected function _createDependentModel($rule)
+    {
+        if ($rule == 'ChildComponents') {
+            if (!isset($this->_childComponentsModel)) {
+                $c = $this->_dependentModels[$rule];
+                $this->_childComponentsModel = new $c(array(
+                    'componentClass' => $this->_componentClass
+                ));
+            }
+            return $this->_childComponentsModel;
+        } else {
+            return parent::_createDependentModel($rule);
+        }
     }
 }
