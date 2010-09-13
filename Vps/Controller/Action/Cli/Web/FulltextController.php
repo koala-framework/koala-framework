@@ -26,8 +26,45 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
         exit;
     }
 
+    public function checkForInvalidAction()
+    {
+        $this->_checkForInvalid();
+        echo "\noptimize index...\n";
+        Vps_Util_Fulltext::getInstance()->optimize();
+        echo "done.\n";
+        exit;
+    }
+
+    private function _checkForInvalid()
+    {
+        $index = Vps_Util_Fulltext::getInstance();
+        echo "numDocs: ".$index->numDocs()."\n";
+        $query = Zend_Search_Lucene_Search_QueryParser::parse('dummy:dummy');
+        echo "checking: ".count($index->find($query))."\n";
+        $c = new Zend_ProgressBar_Adapter_Console();
+        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_ETA));
+        $progress = new Zend_ProgressBar($c, 0, count($index->find($query)));
+        foreach ($index->find($query) as $doc) {
+            $progress->next();
+            if (!Vps_Component_Data_Root::getInstance()->getComponentById($doc->componentId)) {
+                echo "\n$doc->componentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
+                $index->delete($doc->id);
+                $m = Vps_Model_Abstract::getInstance('Vpc_FulltextSearch_MetaModel');
+                $row = $m->getRow($page->componentId);
+                if ($row) {
+                    $row->delete();
+                }
+            }
+        }
+        $progress->finish();
+    }
+
     public function rebuildAction()
     {
+        $this->_checkForInvalid();
+
         $queueFile = 'application/temp/fulltextRebuildQueue';
 
         $componentId = 'root';
