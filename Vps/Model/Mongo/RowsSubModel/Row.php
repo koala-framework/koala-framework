@@ -46,6 +46,13 @@ class Vps_Model_Mongo_RowsSubModel_Row extends Vps_Model_Row_Data_Abstract
             foreach ($model->getExistingRows() as $proxyRow) {
                 if ($proxyRow->getProxiedRow() === $this) {
                     foreach ($model->getExprColumns() as $name) {
+                        $expr = $model->getExpr($name);
+                        if ($expr instanceof Vps_Model_Select_Expr_Parent) {
+                            $ref = $model->getReference($expr->getParent());
+                            if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                                continue;
+                            }
+                        }
                         $this->$name = $model->getExprValue($proxyRow, $name);
                     }
                 }
