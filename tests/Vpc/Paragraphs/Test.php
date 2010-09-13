@@ -43,24 +43,25 @@ class Vpc_Paragraphs_Test extends Vpc_TestAbstract
 
         $cache = Vps_Component_Cache::getInstance();
         $cacheModel = $cache->getModel();
+        $select = $cacheModel->select()->whereEquals('deleted', 0);
 
         // Cache wird geschrieben
         $this->assertNull($cache->load($this->_root));
-        $this->assertEquals(0, $cacheModel->getRows()->count());
+        $this->assertEquals(0, $cacheModel->getRows($select)->count());
         $p->render();
         $this->assertNotNull($cache->load($this->_root));
-        $this->assertEquals(3, $cacheModel->getRows()->count());
+        $this->assertEquals(2, $cacheModel->getRows($select)->count());
 
         // Row, die nicht zum aktuellen Paragraphs gehört, speichern, Cache darf nicht gelöscht werden
         $p->getComponent()->getChildModel()->getRow(11)->save();
         $this->_process();
         $this->assertNotNull($cache->load($this->_root));
-        $this->assertEquals(3, $cacheModel->getRows()->count());
+        $this->assertEquals(2, $cacheModel->getRows($select)->count());
 
         // Eigene Row speichern, Cache muss gelöscht werden
         $p->getComponent()->getChildModel()->getRow(2)->save();
         $this->_process();
         $this->assertNull($cache->load($this->_root));
-        $this->assertEquals(2, $cacheModel->getRows()->count());
+        $this->assertEquals(1, $cacheModel->getRows($select)->count());
     }
 }
