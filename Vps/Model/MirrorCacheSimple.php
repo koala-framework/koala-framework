@@ -73,14 +73,21 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
                 }
                 $newRow->save();
             }
-            $this->_sourceModel->cleanRows();
-            $this->getProxyModel()->cleanRows();
             $this->cleanRows();
+            foreach ($this->getDependentModels() as $rule=>$depModel) {
+                $depModel->cleanRows();
+            }
 
             if ($progress) {
                 $text = round(($offset + $stepSize) / (microtime(true)-$startTime)).' rows/sec';
                 $progress->next($stepSize, $text);
             }
         }
+    }
+
+    public function cleanRows()
+    {
+        parent::cleanRows();
+        $this->_sourceModel->cleanRows();
     }
 }

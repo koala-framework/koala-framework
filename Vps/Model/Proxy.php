@@ -212,4 +212,10 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     {
         return $this->_rows;
     }
+
+    public function cleanRows()
+    {
+        parent::cleanRows();
+        $this->_proxyModel->cleanRows();
+    }
 }
