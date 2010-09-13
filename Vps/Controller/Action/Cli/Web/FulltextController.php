@@ -6,6 +6,20 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
         return "various fulltext index commands";
     }
 
+    public function termsAction()
+    {
+        //d(Vps_Util_Fulltext::getInstance()->terms());
+        $i = Vps_Util_Fulltext::getInstance();
+        $i->resetTermsStream();
+        $i->skipTo(new Zend_Search_Lucene_Index_Term('w', 'title'));
+        while ($i->currentTerm()) {
+            p($i->currentTerm());
+            $i->nextTerm();
+        }
+        $i->closeTermsStream();
+        exit;
+    }
+
     public function optimizeAction()
     {
         Vps_Util_Fulltext::getInstance()->optimize();
