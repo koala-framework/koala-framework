@@ -43,20 +43,6 @@ class Vpc_Chained_Trl_Component extends Vpc_Chained_Abstract_Component
         return $ret;
     }
 
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $cls = substr($componentClass, strpos($componentClass, '.')+1);
-        $cls = strpos($cls, '.') ? substr($cls, 0, strpos($cls, '.')) : $cls;
-        return call_user_func(array($cls, 'getStaticCacheMeta'), $cls);
-    }
-
-    public function getCacheMeta()
-    {
-        $ret = parent::getCacheMeta();
-        $ret[] = new Vps_Component_Cache_Meta_Component($this->getData()->chained);
-        return $ret;
-    }
-
     public function getPartialParams()
     {
         return $this->getData()->chained->getComponent()->getPartialParams();
@@ -79,6 +65,13 @@ class Vpc_Chained_Trl_Component extends Vpc_Chained_Abstract_Component
         $cls = substr($componentClass, strpos($componentClass, '.')+1);
         $cls = strpos($cls, '.') ? substr($cls, 0, strpos($cls, '.')) : $cls;
         return call_user_func(array($cls, 'getStaticCacheMeta'), $cls);
+    }
+
+    public function getCacheMeta()
+    {
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Component($this->getData()->chained);
+        return $ret;
     }
 
     public static function getChainedByMaster($masterData, $chainedData, $select = array())

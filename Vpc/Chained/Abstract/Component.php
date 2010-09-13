@@ -72,13 +72,6 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getCacheVars()
-    {
-        $ret = parent::getCacheVars();
-        $ret = array_merge($ret, $this->getData()->chained->getComponent()->getCacheVars());
-        return $ret;
-    }
-
     public function getPartialClass()
     {
         return $this->getData()->chained->getComponent()->getPartialClass();
@@ -101,11 +94,11 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
         return $this->getData()->chained->getComponent()->getPartialCacheVars($nr);
     }
 
-    public static function getStaticCacheVars($componentClass)
+    public static function getStaticCacheMeta($componentClass)
     {
         $cls = substr($componentClass, strpos($componentClass, '.')+1);
         $class = strpos($cls, '.') ? substr($cls, 0, strpos($cls, '.')) : $cls;
-        return call_user_func(array($class, 'getStaticCacheVars'), $cls);
+        return call_user_func(array($class, 'getStaticCacheMeta'), $cls);
     }
 
     public abstract static function getChainedByMaster($masterData, $chainedData, $select = array());
