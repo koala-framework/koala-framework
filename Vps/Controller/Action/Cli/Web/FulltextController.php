@@ -116,11 +116,11 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                                 //echo "$fieldName: ".$doc->$fieldName."\n";
                             }
 
-                            $query = new Zend_Search_Lucene_Search_Query_Term(new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId'));
-                            $hits = $index->find($query);
-                            foreach ($hits as $hit) {
+                            $term = new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId');
+                            $hits = $index->termDocs($term);
+                            foreach ($hits as $id) {
                                 //echo "deleting $hit->componentId\n";
-                                $index->delete($hit->id);
+                                $index->delete($id);
                             }
 
                             $index->addDocument($doc);
