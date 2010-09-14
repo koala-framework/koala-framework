@@ -10,7 +10,8 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'preload' => new Vps_Component_Cache_Mysql_PreloadModel(),
             'metaModel' => new Vps_Component_Cache_Mysql_MetaModelModel(),
             'metaRow' => new Vps_Component_Cache_Mysql_MetaRowModel(),
-            'metaComponent' => new Vps_Component_Cache_Mysql_MetaComponentModel()
+            'metaComponent' => new Vps_Component_Cache_Mysql_MetaComponentModel(),
+            'metaChained' => new Vps_Component_Cache_Mysql_MetaChainedModel()
         );
     }
 
@@ -152,8 +153,8 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $and = array();
         foreach ($columns as $column) {
             $and[] = new Vps_Model_Select_Expr_And(array(
-                new Vps_Model_Select_Expr_Equals('column', $column),
-                new Vps_Model_Select_Expr_Equals('value', $row->$column)
+                new Vps_Model_Select_Expr_Equal('column', $column),
+                new Vps_Model_Select_Expr_Equal('value', $row->$column)
             ));
         }
         $select->where(new Vps_Model_Select_Expr_Or($and));
@@ -221,14 +222,14 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         foreach ($modelComponentIds as $componentClass => $componentId) {
             $or[] = new Vps_Model_Select_Expr_And(array(
                 new Vps_Model_Select_Expr_Like('component_id', $componentId),
-                new Vps_Model_Select_Expr_Equals('component_class', $componentClass)
+                new Vps_Model_Select_Expr_Equal('component_class', $componentClass)
             ));
         }
         $expr = new Vps_Model_Select_Expr_Or($or);
         $modelComponentIds = $this->_addMetaComponentIds($modelComponentIds, $expr);
         $componentIds = array_unique(array_merge($componentIds, array_values($modelComponentIds)));
 
-        $or[] = new Vps_Model_Select_Expr_Equals('component_id', $componentIds);
+        $or[] = new Vps_Model_Select_Expr_Equal('component_id', $componentIds);
         $expr = new Vps_Model_Select_Expr_Or($or);
         $select = $this->getModel('cache')->select()->where($expr);
         $this->getModel('cache')->updateRows(
@@ -314,5 +315,19 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'replace' => true
         );
         $this->_models['metaComponent']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+    }
+
+    protected function _saveMetaChained($sourceComponentClass, $targetComponentClass, $chainedType)
+    {
+        $data = array(
+            'source_component_class' => $sourceComponentClass,
+            'target_component_class' => $targetComponentClass,
+            'chained_type' => $chainedType
+        );
+        $options = array(
+            'buffer' => true,
+            'replace' => true
+        );
+        $this->_models['metaChained']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 }

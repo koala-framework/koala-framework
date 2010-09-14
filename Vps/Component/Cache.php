@@ -79,6 +79,14 @@ abstract class Vps_Component_Cache
                 throw new Vps_Exception('Source and target component must be different, both have ' . $component->componentId);
             $this->_saveMetaComponent($source, $target);
 
+        } else if ($meta instanceof Vps_Component_Cache_Meta_Static_Chained) {
+
+            $sourceComponentClass = $meta->getTargetComponentClass();
+            $targetComponentClass = $componentClass;
+            if ($sourceComponentClass == $targetComponentClass)
+                throw new Vps_Exception('Source and target component Class must be different, both have ' . $sourceComponentClass);
+            $this->_saveMetaChained($sourceComponentClass, $targetComponentClass, $meta->chainedType);
+
         } else {
 
             throw new Vps_Exception('Unknow Meta: ' . get_class($meta));
