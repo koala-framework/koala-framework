@@ -36,7 +36,7 @@ abstract class Vps_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends PHP
         $row->name = 'b';
         $row->save();
 
-        $this->_model->cleanRows();
+        $this->_model->clearRows();
 
         $row = $this->_model->getRow(1);
         $rows = $row->getChildRows('Foo');

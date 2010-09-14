@@ -760,7 +760,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     /**
      * Kann zum Speicher-Sparen aufgerufen werden
      */
-    public function cleanRows()
+    public function clearRows()
     {
         $this->_rows = array();
     }
