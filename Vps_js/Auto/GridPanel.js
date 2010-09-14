@@ -1,6 +1,8 @@
 Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     layout: 'fit',
+
+    // true, false, integer. If integer: after x filters another new tbar is generated
     filtersInSeparateTbar: false,
 
     initComponent : function()
@@ -465,8 +467,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             }, this);
         }, this);
 
-        if (!this.filtersInSeparateTbar) {
-            this.filters.applyToTbar(gridConfig.tbar);
+        if (this.filtersInSeparateTbar === false || (
+            typeof this.filtersInSeparateTbar != 'boolean' && this.filtersInSeparateTbar >= 1
+        )) {
+            if (this.filtersInSeparateTbar) {
+                this.filters.applyToTbar(gridConfig.tbar, this.filtersInSeparateTbar);
+            } else {
+                this.filters.applyToTbar(gridConfig.tbar);
+            }
         }
 
         if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv || meta.buttons.reload) {
