@@ -28,8 +28,13 @@ class Vps_Controller_Action_Cli_Web_SvnUpController extends Vps_Controller_Actio
 
     private function _update($path)
     {
-        passthru('svn up '.$path, $ret);
-        if ($ret) throw new Vps_Exception("SVN Update failed");
+        if (file_exists($path.'/.svn')) {
+            passthru('svn up '.$path, $ret);
+            if ($ret) throw new Vps_Exception("SVN Update failed");
+        } else {
+            $git = new Vps_Util_Git($path);
+            $git->system("pull --rebase");
+        }
     }
 
     public function indexAction()

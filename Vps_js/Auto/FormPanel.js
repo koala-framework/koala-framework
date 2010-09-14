@@ -243,7 +243,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     {
         if (!this.getForm().isValid()) {
             Ext.Msg.alert(trlVps('Save'),
-                trlVps("Can't save, please fill all marked fields correctly."));
+                trlVps("Can't save, please fill all red underlined fields correctly."));
             return;
         }
 
@@ -302,7 +302,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     onSubmitFailure: function(form, action) {
         if(action.failureType == Ext.form.Action.CLIENT_INVALID) {
             Ext.Msg.alert(trlVps('Save'),
-                trlVps("Can't save, please fill all marked fields correctly."));
+                trlVps("Can't save, please fill all red underlined fields correctly."));
         }
         this.getAction('save').enable();
     },

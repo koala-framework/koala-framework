@@ -59,7 +59,7 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
         $name = $this->getFieldName();
-        $value = $values[$name];
+        $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
 
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $store = $this->_getStoreData();

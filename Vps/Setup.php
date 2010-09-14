@@ -210,27 +210,14 @@ class Vps_Setup
             && isset($_SERVER['REDIRECT_URL'])
             && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
+            && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
         ) {
-            $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
-            if (empty($sessionPhpAuthed->success)) {
-                if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
-                    $loginResponse = Zend_Registry::get('userModel')
-                        ->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    if ($loginResponse['zendAuthResultCode'] == Zend_Auth_Result::SUCCESS) {
-                        $sessionPhpAuthed->success = 1;
-                    } else {
-                        unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    }
-                }
-
-                // separate if abfrage, damit login wieder kommt, falls gerade falsch eingeloggt wurde
-                if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
-                    header('WWW-Authenticate: Basic realm="Testserver"');
-                    throw new Vps_Exception_AccessDenied();
-                }
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                header('WWW-Authenticate: Basic realm="Testserver"');
+                throw new Vps_Exception_AccessDenied();
             }
         }
 
@@ -238,7 +225,13 @@ class Vps_Setup
             set_time_limit((int)$tl);
         }
 
-        self::_setLocale();
+        if (!isset($_SERVER['REDIRECT_URL']) ||
+            (substr($_SERVER['REDIRECT_URL'], 0, 7) != '/media/'
+             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/assets/'
+             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output') //rssinclude
+        ) {
+            self::_setLocale();
+        }
     }
 
     public static function shutDown()
@@ -329,7 +322,7 @@ class Vps_Setup
                throw new Vps_Exception_NotFound();
             }
             $root->setCurrentPage($data);
-            if ($data->url != $_SERVER['REDIRECT_URL']) {
+            if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
                 header('Location: '.$data->url);
                 exit;
             }

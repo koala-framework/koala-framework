@@ -6,7 +6,7 @@ class Vpc_Newsletter_EditSubscriber_Component extends Vpc_Form_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlVps('Save');
+        $ret['placeholder']['submitButton'] = trlVpsStatic('Save');
         $ret['generators']['child']['component']['success'] =
             'Vpc_Newsletter_EditSubscriber_Success_Component';
         return $ret;

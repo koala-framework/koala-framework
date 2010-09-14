@@ -11,8 +11,8 @@ class Vpc_Columns_SeleniumTest extends Vps_Test_SeleniumTestCase
         Vps_Component_Data_Root::setComponentClass('Vpc_Columns_Root');
     }
 
-    // http://iphone.vps.niko.vivid/vps/vpctest/Vpc_Columns_Root/foo
-    // http://iphone.vps.niko.vivid/vps/componentedittest/Vpc_Columns_Root/Vpc_Columns_TestComponent?componentId=3000
+    // http://vps.vps.niko.vivid/vps/vpctest/Vpc_Columns_Root/foo
+    // http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Columns_Root/Vpc_Columns_TestComponent/Index?componentId=3000
 
     public function testAdmin()
     {

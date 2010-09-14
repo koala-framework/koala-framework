@@ -4,6 +4,7 @@ Stable: 09.06.10
 Neue Features:
 - AutoFilter
 - Vpc_Tabs
+- Vpc_List: Multi File Upload
 
 möglicherweise nicht kompatible Änderungen:
 - LightBox restyling
@@ -16,6 +17,12 @@ möglicherweise nicht kompatible Änderungen:
     o eigene Tabelle, kein Pool mehr
     o Updatescript gibts für News und Events
 - Vps_Component_Plugin_Password_Component::isLoggedId in isLoggedIn umbenannt
+- config->vpc->childComponents wird direkt in getSetting verwendet und 
+  nicht mehr druebergespielt, ist flexibler (commit cf4a0a2)
+- Newsletter: 
+    o Strukturänderungen
+    o Standardmodel von Users auf Subscribers umgestellt
+    o auf jeden Fall alles durchtesten beim Umstellen
 
 == 1.8 ==
 Erstellt: 15.01.10
@@ -24,3 +31,5 @@ Stable: 20.05.10
 Bugfixes:
 - RTE einfügen
 
+Änderungen:
+- List_Fade kann Text-Balken ausblenden wenn nix drin is
