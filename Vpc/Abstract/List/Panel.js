@@ -71,6 +71,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                         for(var i=0;i<this.vpsFiles.length;i++) {
                             if (this.getFile(i)) this.cancelUpload(this.getFile(i).id);
                         }
+                        this.vpsFiles = [];
                         this.running = false;
                     }
                 });
@@ -108,6 +109,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                         }
                     }
                     this.running = false;
+                    this.vpsFiles = [];
                     this.progress.hide();
 
                     var params = Ext.apply(this.customSettings.list.getBaseParams(), { uploadIds: this.uploadedIds.join(',')});
@@ -151,6 +153,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                     for(var i=0;i<this.vpsFiles.length;i++) {
                         this.cancelUpload(this.getFile(i).id, false);
                     }
+                    this.vpsFiles = [];
                 }
             },
             upload_error_handler: function(file, errorCode, errorMessage) {
