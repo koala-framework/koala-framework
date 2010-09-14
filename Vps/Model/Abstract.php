@@ -294,10 +294,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         $ret = array();
         foreach ($this->getReferences() as $rule) {
             $ref = $this->getReference($rule);
-            if (isset($ref['refModelClass'])) {
+            if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                $c = $this->getParentModel();
+            } else if (isset($ref['refModelClass'])) {
                 $c = $ref['refModelClass'];
             } else if (isset($ref['refModel'])) {
-                $c = get_class($ref['refModel']);
+                $c = $ref['refModel'];
             } else {
                 throw new Vps_Exception("refModelClass and refModel not set");
             }
@@ -314,8 +316,8 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function getReferenceByModelClass($modelClassName, $rule)
     {
-        $models = $this->_proxyContainerModels;
-        $models[] = $this;
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
         foreach ($models as $m) {
             $matchingRules = $m->getReferenceRulesByModelClass($modelClassName);
 
@@ -366,8 +368,10 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function getReferencedModel($rule)
     {
         $ref = $this->getReference($rule);
-        if (!is_array($ref) || !isset($ref['refModelClass'])) {
-            throw new Vps_Exception("refModelClass not set for '$rule'");
+        if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+            return $this->getParentModel();
+        } if (!is_array($ref) || !isset($ref['refModelClass'])) {
+            throw new Vps_Exception("refModelClass not set for reference '$rule'");
         }
         return self::getInstance($ref['refModelClass']);
     }
