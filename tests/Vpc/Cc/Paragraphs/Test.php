@@ -35,7 +35,7 @@ class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
 
     public function testClearCacheOnVisibilityChange()
     {
-        $c = $this->_root->getComponentById('root-master_paragraphs');
+        $c = $this->_root->getComponentById('root-slave_paragraphs');
         $html = $c->render(); //cache it
         $this->assertEquals(2, substr_count($html, 'simple'));
 
@@ -43,35 +43,39 @@ class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
         $r = $model->getRow('1');
         $r->visible = 0;
         $r->save();
-
         $this->_process();
-        $c = $this->_root->getComponentById('root-master_paragraphs');
+        /*
+        d($r->toArray());
+d(Vps_Component_Cache::getInstance()->getModel('metaModel')->getRows()->toArray());
+d(Vps_Component_Cache::getInstance()->getModel()->getRows()->toArray());
+*/
+        $c = $this->_root->getComponentById('root-slave_paragraphs');
         $html = $c->render();
         $this->assertEquals(1, substr_count($html, 'simple'));
     }
 
     public function testClearCacheOnAddRow()
     {
-        $c = $this->_root->getComponentById('root-master_paragraphs');
+        $c = $this->_root->getComponentById('root-slave_paragraphs');
         $html = $c->render(); //cache it
         $this->assertEquals(2, substr_count($html, 'simple'));
 
         $model = Vps_Model_Abstract::getInstance('Vpc_Cc_Paragraphs_Master_Paragraphs_TestModel');
         $r = $model->createRow();
-        $r->component_id = 'root-master_paragraphs';
+        $r->component_id = 'root-slave_paragraphs';
         $r->component = 'simple';
         $r->visible = 1;
         $r->save();
 
         $this->_process();
-        $c = $this->_root->getComponentById('root-master_paragraphs');
+        $c = $this->_root->getComponentById('root-slave_paragraphs');
         $html = $c->render();
         $this->assertEquals(3, substr_count($html, 'simple'));
     }
 
     public function testClearCacheOnRemoveRow()
     {
-        $c = $this->_root->getComponentById('root-master_paragraphs');
+        $c = $this->_root->getComponentById('root-slave_paragraphs');
         $html = $c->render(); //cache it
         $this->assertEquals(2, substr_count($html, 'simple'));
 
@@ -80,7 +84,7 @@ class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
         $r->delete();
 
         $this->_process();
-        $c = $this->_root->getComponentById('root-master_paragraphs');
+        $c = $this->_root->getComponentById('root-slave_paragraphs');
         $html = $c->render();
         $this->assertEquals(1, substr_count($html, 'simple'));
     }
