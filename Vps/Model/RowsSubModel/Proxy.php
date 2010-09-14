@@ -31,6 +31,11 @@ class Vps_Model_RowsSubModel_Proxy extends Vps_Model_Proxy
         $this->_proxyModel->setParentModel($m);
     }
 
+    public function getParentModel()
+    {
+        return $this->_parentModel;
+    }
+
     public function createRowByParentRow(Vps_Model_Row_Interface $parentRow, array $data = array())
     {
         while ($parentRow instanceof Vps_Model_Proxy_Row) $parentRow = $parentRow->getProxiedRow();
