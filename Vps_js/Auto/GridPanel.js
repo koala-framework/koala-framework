@@ -779,16 +779,17 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                         url: this.controllerUrl+'/json-delete',
                         params: params,
                         success: function(response, options, r) {
-                            this.reload();
-                            this.fireEvent('deleterow', this.grid);
-                            this.fireEvent('datachange', r);
-
                             this.activeId = null;
                             //wenn gelöscht alle anderen disablen
                             this.bindings.each(function(i) {
                                 i.item.disable();
                                 i.item.reset();
                             }, this);
+
+                            this.reload();
+                            this.fireEvent('deleterow', this.grid);
+                            this.fireEvent('datachange', r);
+
                         },
                         callback: function() {
                             this.el.unmask();

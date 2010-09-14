@@ -115,14 +115,9 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }, this);
 
         tree.on('dblclick', function (o, e) {
-            var action;
-            for (var i in this.editActions) {
-                if (!this.editActions[i].isHidden()) {
-                    action = this.editActions[i];
-                }
-            }
-            if (action) {
-                action.execute(action.initialConfig);
+            var i = this.contextMenu.items.first();
+            if (i) {
+                i.handler.call(i.scope, i, e);
             }
         }, this);
 
@@ -149,9 +144,17 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         	}
         }
 
-        for (var i in this.editActions) {
-            this.editActions[i].hide();
-        }
+        this.contextMenu.items.each(function(i) {
+            if (i.initialConfig.actionKey) {
+                this.contextMenu.remove(i);
+            }
+        }, this);
+        this.pageButtonMenu.items.each(function(i) {
+            if (i.initialConfig.actionKey) {
+                this.pageButtonMenu.remove(i);
+            }
+        }, this);
+        var actionsAdded = 0;
         data.editComponents.each(function(editComponent) {
             var actionKey = editComponent.componentClass+'-'+editComponent.type;
             if (!this.editActions[actionKey]) {
@@ -177,13 +180,13 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                     icon    : this.componentConfigs[actionKey].icon,
                     cls     : 'x-btn-text-icon',
                     scope   : this,
-                    disabled : data.disabled,
                     actionKey: actionKey
                 });
-                this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
-                this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
             }
-            this.editActions[actionKey].show();
+            this.editActions[actionKey].setDisabled(data.disabled);
+            this.contextMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[actionKey]));
+            this.pageButtonMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[actionKey]));
+            actionsAdded++;
         }, this);
     },
 

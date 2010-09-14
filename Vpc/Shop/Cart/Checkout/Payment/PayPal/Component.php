@@ -12,13 +12,17 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
         $ret['generators']['shippedMail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_ShippedMail_Component';
 
         $ret['business'] = '';
-        $ret['itemName'] = trlVps('Order at {0}', Vps_Registry::get('config')->application->name);
         return $ret;
     }
 
     public function confirmOrder($order)
     {
         throw new Vps_Exception("Not valid for PayPal");
+    }
+
+    public function getItemName($order)
+    {
+        return trlVps('Order at {0}', Vps_Registry::get('config')->application->name);
     }
 
     public function processIpn(Vps_Util_PayPal_Ipn_LogModel_Row $row, $param)
@@ -32,12 +36,21 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
 
             $order->payment_component_id = $this->getData()->componentId;
             $order->checkout_component_id = $this->getData()->parent->componentId;
+            $order->cart_component_class = $this->getData()->parent->parent->componentClass;
 
             $order->status = 'payed';
             $order->date = date('Y-m-d H:i:s');
             $order->payed = date('Y-m-d H:i:s');
             $order->save();
 
+            foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
+                $p->orderConfirmed($order);
+            }
+            foreach ($order->getChildRows('Products') as $p) {
+                $addComponent = Vps_Component_Data_Root::getInstance()
+                    ->getComponentByDbId($p->add_component_id);
+                $addComponent->getComponent()->orderConfirmed($p);
+            }
             $this->sendConfirmMail($order);
 
             return true;

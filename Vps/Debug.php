@@ -16,6 +16,10 @@ function _pArray($src, $indent = '')
             $src = $src->__toString();
         } else if (!is_string($src)) {
             $src = print_r($src, true);
+        } else {
+            if (strlen($src) > 400) {
+                $src = substr($src, 0, 400)."...".' (length='.strlen($src).')';
+            }
         }
         foreach (explode("\n", $src) as $l) {
             $ret .= $indent.$l."\n";
@@ -235,7 +239,10 @@ class Vps_Debug
         $template = strtolower(Zend_Filter::filterStatic($template, 'Word_CamelCaseToDash').'.tpl');
         if ($exception instanceof Vps_Exception_Abstract) $exception->log();
 
-        if (!headers_sent()) header($header);
+        if (!headers_sent()) {
+            header($header);
+            header('Content-Type: text/html; charset=utf-8');
+        }
         try {
             echo $view->render($template);
         } catch (Exception $e) {

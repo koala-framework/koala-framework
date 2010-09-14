@@ -222,6 +222,15 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             }
         }
 
+        this.filters = new Vps.Auto.FilterCollection(meta.filters, this);
+        this.filters.each(function(filter) {
+            filter.on('filter', function(f, params) {
+                this.applyBaseParams(params);
+                this.load();
+            }, this);
+        }, this);
+        this.filters.applyToTbar(this.topToolBar);
+
         if (meta.buttons.reload) {
             this.topToolBar.add('->');
         }
@@ -293,6 +302,10 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (result.rows) {
             this.store.loadData(result);
         }
+    },
+
+    getFilter : function(filterName) {
+        if (this.filters) return this.filters.get(filterName);
     },
 
     getStore : function() {

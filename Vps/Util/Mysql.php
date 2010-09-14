@@ -46,6 +46,11 @@ class Vps_Util_Mysql
      */
     public static function getFileRight()
     {
+        return self::hasPrivilege('FILE');
+    }
+
+    public static function hasPrivilege($privilege)
+    {
         $data = Vps_Registry::get('db')->query("SHOW GRANTS FOR CURRENT_USER()")->fetchAll();
         if (!count($data)) {
             throw new Vps_Exception("MySQL rights not found");
@@ -56,7 +61,7 @@ class Vps_Util_Mysql
             if (strpos($rightString, 'ON *.*') !== false) {
                 if (preg_match('/^GRANT ALL PRIVILEGES/i', $rightString)) {
                     return true;
-                } else if (preg_match('/^GRANT .*,?\s?FILE,?.* ON /is', $rightString)) {
+                } else if (preg_match('/^GRANT .*,?\s?'.$privilege.',?.* ON /is', $rightString)) {
                     return true;
                 } else {
                     return false;

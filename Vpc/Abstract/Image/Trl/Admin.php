@@ -17,6 +17,7 @@ class Vpc_Abstract_Image_Trl_Admin extends Vpc_Abstract_Composite_Trl_Admin
         if ($hasImageCaption) {
             $c = new Vps_Grid_Column('image_caption', trlVps('Image caption'));
             $c->setData(new Vps_Data_Vpc_Table(Vpc_Abstract::getSetting($this->_class, 'ownModel'), 'image_caption', $this->_class));
+            $c->setEditor(new Vps_Form_Field_TextField());
             $ret['image_caption'] = $c;
         }
         return $ret;
