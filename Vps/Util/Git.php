@@ -224,6 +224,7 @@ class Vps_Util_Git
 
     public function productionBranch($branch, $staging)
     {
+        $activeBranch = $this->getActiveBranch();
         if (!in_array($branch, $this->getBranches())) {
             if (in_array('origin/'.$branch, $this->getBranches('-r'))) {
                 $this->system("checkout -b $branch origin/$branch");
@@ -240,6 +241,8 @@ class Vps_Util_Git
         }
         $this->system("merge --no-ff -m \"merge into production for go-online\" $staging");
         $this->system("push origin $branch:refs/heads/$branch");
+
+        if ($activeBranch) $this->checkout($activeBranch);
     }
 
     public function isEmptyLog($ref)
