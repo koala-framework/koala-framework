@@ -16,7 +16,11 @@ Ext.grid.EditorGridPanel.prototype.onRender = function(ct, position){
 
     if (this.filtersInSeparateTbar) {
         var tb2 = new Ext.Toolbar(this.getTopToolbar().el);
-        this.filters.applyToTbar(tb2);
+        if (typeof this.filtersInSeparateTbar != 'boolean') {
+            this.filters.applyToTbar(tb2, false, this.filtersInSeparateTbar);
+        } else {
+            this.filters.applyToTbar(tb2);
+        }
     }
 
 };
