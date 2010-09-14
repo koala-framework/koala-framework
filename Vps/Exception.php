@@ -54,6 +54,9 @@ class Vps_Exception extends Vps_Exception_NoLog
         $body .= $this->_format('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '(none)');
         $body .= $this->_format('User', $user);
         $body .= $this->_format('Time', date('H:i:s'));
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $body .= $this->_format('_USERAGENT', $_SERVER['HTTP_USER_AGENT']);
+        }
         $body .= $this->_format('_GET', print_r($_GET, true));
         $body .= $this->_format('_POST', print_r($_POST, true));
         $body .= $this->_format('_SERVER', print_r($_SERVER, true));
