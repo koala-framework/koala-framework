@@ -96,9 +96,10 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
 
     public static function getStaticCacheMeta($componentClass)
     {
-        $cls = substr($componentClass, strpos($componentClass, '.')+1);
-        $class = strpos($cls, '.') ? substr($cls, 0, strpos($cls, '.')) : $cls;
-        return call_user_func(array($class, 'getStaticCacheMeta'), $cls);
+        $sourceComponentClass = substr($componentClass, strpos($componentClass, '.')+1);
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vps_Component_Cache_Meta_Static_Chained($sourceComponentClass);
+        return $ret;
     }
 
     public abstract static function getChainedByMaster($masterData, $chainedData, $select = array());
