@@ -74,6 +74,11 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         self::$_instances = array();
     }
 
+    public static function getInstances()
+    {
+        return self::$_instances;
+    }
+
     protected function _init()
     {
         foreach ($this->_siblingModels as $k=>$i) {
