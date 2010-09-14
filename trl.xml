@@ -5994,11 +5994,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1519</id>
 </text>
 <text>
-<en>Copy of</en>
-<de>Kopie von</de>
-<id>1520</id>
-</text>
-<text>
 <en>Web Image Files</en>
 <id>1521</id>
 </text>
@@ -6143,5 +6138,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Produkt: Gutschein</de>
 <id>1393</id>
 </text>
+<text>
+<en>Copy of</en>
+<de>Kopie von</de>
+<id>1553</id>
+</text>
 </trl>
-
