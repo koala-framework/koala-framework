@@ -38,11 +38,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Edit
     {
         $o = $this->_getOrder();
         if (!$o) return array();
-        $ret = $o->toArray();
-        $m = new Vps_View_Helper_Money();
-        $ret['total'] = $m->money($o->getTotal());
-        $ret['orderNumber'] = $o->order_number;
-        return $ret;
+        return $o->getPlaceholders();
     }
 
     public final function getCurrentOrder()

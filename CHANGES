@@ -31,3 +31,5 @@ Stable: 20.05.10
 Bugfixes:
 - RTE einfügen
 
+Änderungen:
+- List_Fade kann Text-Balken ausblenden wenn nix drin is

@@ -2,13 +2,12 @@ Ext.namespace('Vpc.ListSwitch');
 
 Vpc.ListSwitch.View = function(componentWrapper) {
     this.componentWrapper = Ext.get(componentWrapper);
+    this.previewElements = [];
+    this.activePreviewLink = null;
     this.init();
 };
 
 Vpc.ListSwitch.View.prototype = {
-    previewElements: [],
-    activePreviewLink: null,
-
     init: function() {
         if (this.componentWrapper.initDone) return;
 
