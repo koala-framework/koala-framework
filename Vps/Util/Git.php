@@ -219,13 +219,9 @@ class Vps_Util_Git
 
     public function productionBranch($branch, $staging)
     {
-        $this->fetch();
-        if ($this->revParse('refs/remotes/origin/'.$branch)) {
-            //aktuellen production in previous/ kopieren
-            $this->system("push --force origin origin/$branch:refs/heads/previous/$branch");
-        }
-        $this->system("push --force origin $staging:refs/heads/$branch");
-        $this->system("fetch origin");
+        $this->system("checkout $branch");
+        $this->system("merge --no-ff -m \"merge into production for go-online\" $staging");
+        $this->system("push origin $branch:refs/heads/$branch");
     }
 
     public function isEmptyLog($ref)
