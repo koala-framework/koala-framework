@@ -17,9 +17,17 @@ class Vps_Model_RowsSubModel_MirrorCacheSimple extends Vps_Model_RowsSubModel_Pr
         if (is_string($this->_sourceModel)) {
             $this->_sourceModel = Vps_Model_Abstract::getInstance($this->_sourceModel);
         }
+        $this->_sourceModel->addProxyContainerModel($this);
+
         if (!($this->_proxyModel instanceof Vps_Model_RowsSubModel_Interface)) {
             throw  new Vps_Exception("Proxy model doesn't implement Vps_Model_RowsSubModel_Interface");
         }
+    }
+    //kann gesetzt werden von proxy (rekursiv bei proxys)
+    public function addProxyContainerModel($m)
+    {
+        parent::addProxyContainerModel($m);
+        $this->_sourceModel->addProxyContainerModel($m);
     }
 
     public function getSourceModel()
