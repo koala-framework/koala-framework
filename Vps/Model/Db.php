@@ -316,12 +316,35 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
         if ($exprs = $select->getPart(Vps_Model_Select::EXPR)) {
             foreach ($exprs as $field) {
-                if (!$col = $this->_formatFieldExpr($field, $dbSelect)) {
-                    throw new Vps_Exception("Expression '$field' not found");
+                if ($col = $this->_formatFieldExpr($field, $dbSelect)) {
+                    $dbSelect->from(null, array($field=>new Zend_Db_Expr($col)));
                 }
-                $dbSelect->from(null, array($field=>new Zend_Db_Expr($col)));
             }
         }
+    }
+
+    private static function _getInnerDbModel2($model)
+    {
+        if ($model instanceof Vps_Model_Db) return $model;
+        if ($model instanceof Vps_Model_Proxy) {
+            $ret = self::_getInnerDbModel2($model->getProxyModel());
+            if ($ret) return $ret;
+        }
+        if ($model instanceof Vps_Model_MirrorCacheSimple || $model instanceof Vps_Model_RowsSubModel_MirrorCacheSimple) {
+            $ret = self::_getInnerDbModel2($model->getSourceModel());
+            if ($ret) return $ret;
+        }
+        return null;
+    }
+
+    private static function _getInnerDbModel($model)
+    {
+        if (is_string($model)) $model = Vps_Model_Abstract::getInstance($model);
+        $ret = self::_getInnerDbModel2($model);
+        if (!$ret) {
+            throw new Vps_Exception_NotYetImplemented();
+        }
+        return $ret;
     }
 
     private function _createDbSelectExpression($expr, $dbSelect, $depOf = null)
@@ -420,7 +443,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else if ($expr instanceof Vps_Model_Select_Expr_Concat) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {
-                if ($expression instanceof Vps_Model_Select_Expr_Interface) {
+                            if ($expression instanceof Vps_Model_Select_Expr_Interface) {
                     $sqlExpressions[] = $this->_createDbSelectExpression($expression, $dbSelect);
                 } else {
                     $sqlExpressions[] = $this->_formatField($expression, $dbSelect);
@@ -477,23 +500,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
             ";
         } else if ($expr instanceof Vps_Model_Select_Expr_Child) {
             $depM = $depOf->getDependentModel($expr->getChild());
-            $depM = Vps_Model_Abstract::getInstance($depM);
-            $dbDepM = $depM;
-            while ($dbDepM instanceof Vps_Model_Proxy) {
-                $dbDepM = $dbDepM->getProxyModel();
-            }
-            if (!$dbDepM instanceof Vps_Model_Db) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
-            $dbDepOf = $depOf;
-            while ($dbDepOf instanceof Vps_Model_Proxy) {
-                $dbDepOf = $dbDepOf->getProxyModel();
-            }
-            if (!$dbDepOf instanceof Vps_Model_Db) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
+            $dbDepM = self::_getInnerDbModel($depM);
+            $dbDepOf = self::_getInnerDbModel($depOf);
+
             $depTableName = $dbDepM->getTableName();
-            $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
+            $ref = $depM->getReferenceByModelClass(get_class($depOf), null/*todo*/);
             $depSelect = $expr->getSelect();
             if (!$depSelect) {
                 $depSelect = $dbDepM->select();
@@ -538,26 +549,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $depDbSelect->from(null, $col1);
             return $this->_fieldWithTableName($this->getPrimaryKey())." IN ($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
-            $refM = $depOf->getReferencedModel($expr->getParent());
-            $refM = Vps_Model_Abstract::getInstance($refM);
-            $dbRefM = $refM;
-            while ($dbRefM instanceof Vps_Model_Proxy) {
-                $dbRefM = $dbRefM->getProxyModel();
-            }
-            if (!$dbRefM instanceof Vps_Model_Db) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
-            $dbDepOf = $depOf;
-            while ($dbDepOf instanceof Vps_Model_Proxy) {
-                $dbDepOf = $dbDepOf->getProxyModel();
-            }
-            if (!$dbDepOf instanceof Vps_Model_Db) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
+            $dbRefM = self::_getInnerDbModel($depOf->getReferencedModel($expr->getParent()));
+            $dbDepOf = self::_getInnerDbModel($depOf);
             $refTableName = $dbRefM->getTableName();
             $ref = $depOf->getReference($expr->getParent());
             $refSelect = $dbRefM->select();
-
+            if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                $ref = $dbDepOf->getReferenceByModelClass($depOf->getParentModel(), null);
+            }
             $col1 = $dbDepOf->_formatField($ref['column'], null /* select fehlt - welches sollte das sein? */ );
             $col2 = $dbRefM->transformColumnName($dbRefM->getPrimaryKey());
 
