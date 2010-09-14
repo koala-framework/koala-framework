@@ -76,7 +76,9 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
         }
 
         $data['author_name'] = null;
-        if (isset($xml->author->name)) {
+        if (isset($xml->children('http://posterous.com/help/rss/1.0')->author->displayName)) {
+            $data['author_name'] = (string)$xml->children('http://posterous.com/help/rss/1.0')->author->displayName;
+        } else if (isset($xml->author->name)) {
             $data['author_name'] = (string)$xml->author->name;
         } else if (isset($xml->author)) {
             $data['author_name'] = (string)$xml->author;
