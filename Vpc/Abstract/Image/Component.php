@@ -35,6 +35,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             ),
         );
 
+        $ret['imageLabel'] = trlVps('Image');
+        $ret['maxResolution'] = null;
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
