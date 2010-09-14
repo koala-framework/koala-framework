@@ -170,7 +170,7 @@ class Vps_Util_FeedFetcher_Feed
             $row->last_update_error = date('Y-m-d H:i:s');
             $row->consecutive_update_errors++;
             Vps_Benchmark::count('feed-update-error');
-            if ($benchmarkType) Vps_Benchmark::count('feed-update-error-'.$benchmarkType);
+            if ($benchmarkType) Vps_Benchmark::count('feed-error-'.$benchmarkType);
         } else {
             $row->consecutive_update_errors = 0;
             $row->last_successful_update = date('Y-m-d H:i:s');
