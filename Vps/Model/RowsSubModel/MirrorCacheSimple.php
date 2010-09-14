@@ -37,9 +37,9 @@ class Vps_Model_RowsSubModel_MirrorCacheSimple extends Vps_Model_RowsSubModel_Pr
         throw new Vps_Exception('getRows is not possible for Vps_Model_RowsSubModel_MirrorCacheSimple');
     }
 
-    public function cleanRows()
+    public function clearRows()
     {
-        parent::cleanRows();
-        $this->_sourceModel->cleanRows();
+        parent::clearRows();
+        $this->_sourceModel->clearRows();
     }
 }
