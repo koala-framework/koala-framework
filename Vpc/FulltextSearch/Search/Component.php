@@ -24,24 +24,29 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
         } else {
             $queryString = '';
         }
-        $userQuery = Zend_Search_Lucene_Search_QueryParser::parse($queryString);
-        $query = new Zend_Search_Lucene_Search_Query_Boolean();
-        $query->addSubquery($userQuery, true /* required */);
+        if ($queryString) {
+            $userQuery = Zend_Search_Lucene_Search_QueryParser::parse($queryString);
+            $query = new Zend_Search_Lucene_Search_Query_Boolean();
+            $query->addSubquery($userQuery, true /* required */);
 
-        $subRoot = $this->getData();
-        while ($subRoot) {
-            if (Vpc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
-            $subRoot = $subRoot->parent;
-        }
-        if ($subRoot) {
-            $pathTerm  = new Zend_Search_Lucene_Index_Term($subRoot->componentId, 'subroot');
-            $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
-            $query->addSubquery($pathQuery, true /* required */);
+            $subRoot = $this->getData();
+            while ($subRoot) {
+                if (Vpc_Abstract::getFlag($subRoot->componentClass, 'subroot')) break;
+                $subRoot = $subRoot->parent;
+            }
+            if ($subRoot) {
+                $pathTerm  = new Zend_Search_Lucene_Index_Term($subRoot->componentId, 'subroot');
+                $pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
+                $query->addSubquery($pathQuery, true /* required */);
+            }
+            $time = microtime(true);
+            $this->_hits = $index->find($query);
+            $this->_time = microtime(true)-$time;
+        } else {
+            $this->_hits = array();
+            $this->_time = false;
         }
 
-        $time = microtime(true);
-        $this->_hits = $index->find($query);
-        $this->_time = microtime(true)-$time;
         $this->_queryString = $queryString;
     }
 
