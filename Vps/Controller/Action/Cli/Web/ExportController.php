@@ -59,6 +59,5 @@ class Vps_Controller_Action_Cli_Web_ExportController extends Vps_Controller_Acti
                 }
             }
         }
-
-
+    }
 }
