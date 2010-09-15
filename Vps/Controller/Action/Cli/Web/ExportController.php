@@ -30,8 +30,22 @@ class Vps_Controller_Action_Cli_Web_ExportController extends Vps_Controller_Acti
     {
         $config = Vps_Config_Web::getInstance($this->_getParam('server'));
         echo "updating ".$this->_getParam('server')."....\n";
-        $this->_update($config);
+        $this->_helper->viewRenderer->setNoRender(true);
 
+        $options = array(
+            'with-library' => $this->_getParam('with-library'),
+            'skip-update' => $this->_getParam('skip-update'),
+            'debug' => $this->_getParam('debug'),
+        );
+        Vps_Util_Server::export($config, $options);
+
+        if (isset($config->server->subSections) && $config->server->subSections) {
+            foreach ($config->server->subSections as $section) {
+                $config = Vps_Config_Web::getInstance($section);
+                echo "\nupdating $section...\n";
+                Vps_Util_Server::export($config, $options);
+            }
+        }
 
         if (isset($config->server->subWebs) && $config->server->subWebs) {
             foreach ($config->server->subWebs as $web) {
@@ -45,47 +59,5 @@ class Vps_Controller_Action_Cli_Web_ExportController extends Vps_Controller_Acti
                 }
             }
         }
-        if (isset($config->server->subSections) && $config->server->subSections) {
-            foreach ($config->server->subSections as $section) {
-                $config = Vps_Config_Web::getInstance($section);
-                echo "\nupdating $section...\n";
-                $this->_update($config);
-            }
-        }
-        exit;
-    }
-
-    private function _update($config)
-    {
-        $sshHost = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
-        $sshDir = $config->server->dir;
-
-        $params = '';
-        if ($this->_getParam('with-library')) {
-            $params .= ' --with-library';
-        }
-        if ($this->_getParam('skip-update')) {
-            $params .= ' --skip-update';
-        }
-
-        if (!$config->server->useVpsForUpdate) {
-            echo "updating $sshHost:$sshDir\n";
-            $cmd = "svn up{$params}";
-            $cmd = "sshvps $sshHost $sshDir $cmd";
-            $cmd = "sudo -u vps $cmd";
-            if ($this->_getParam('debug')) {
-                echo $cmd."\n";
-            }
-            $this->_systemCheckRet($cmd);
-        } else {
-            $cmd = "svn-up{$params}";
-            $cmd = "sshvps $sshHost $sshDir $cmd";
-            $cmd = "sudo -u vps ".Vps_Util_Git::getAuthorEnvVars()." $cmd";
-            if ($this->_getParam('debug')) {
-                echo $cmd."\n";
-            }
-            $this->_systemCheckRet($cmd);
-        }
-        $this->_helper->viewRenderer->setNoRender(true);
     }
 }
