@@ -1,7 +1,13 @@
 <?php
-class Vpc_NewsletterCategory_Admin extends Vpc_Newsletter_Admin {
+class Vpc_NewsletterCategory_Admin extends Vpc_Newsletter_Admin
+{
     public function addResources(Vps_Acl $acl)
     {
+        if (!$acl->has('vpc_newsletter')) {
+            $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_newsletter',
+                array('text'=>trlVps('Newsletter'), 'icon'=>'email_open_image.png')), 'vps_component_root');
+        }
+
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         $c = $components[0];
