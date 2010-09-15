@@ -15,23 +15,25 @@ Vps.onContentReady(function() {
             if (flashVars.length >= 1) {
                 flashVars = flashVars.substr(1); // erstes zeichen wegschneiden
             }
-
-            var so = new SWFObject(
-                cfg.data.url,
-                "ply"+flashWrapper.id,
-                cfg.data.width, cfg.data.height,
-                "9", "#FFFFFF"
+            
+            params = Ext.apply(
+            	cfg.data.params,
+	            {
+	            	'quality' : 'high',
+	            	'wmode' : 'opaque',
+	            	'allowscriptaccess' : 'always'
+	            }
             );
 
-            so.addParam("quality", "high");
-            so.addParam("wmode", "opaque");
-            so.addParam("allowscriptaccess", "always");
-            for (var i in cfg.data.params) {
-                so.addParam(i, cfg.data.params[i]);
-            }
-
-            so.addParam("flashVars", flashVars);
-            so.write(flashWrapper.id);
+            var so = new swfobject.embedSWF(
+                cfg.data.url, //url
+                flashWrapper.id, //dom
+                cfg.data.width, cfg.data.height,
+                "9", //min version
+                "#FFFFFF",
+                flashVars,
+                params
+            );
         }
     });
 });
