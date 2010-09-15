@@ -259,6 +259,13 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             if (!in_array($v, $values)) {
                 return false;
             }
+        } else if ($expr instanceof Vps_Model_Select_Expr_NotEquals) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            $values = $expr->getValue();
+            if (!is_array($values)) $values = array($values);
+            if (in_array($v, $values)) {
+                return false;
+            }
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
             $v = $this->_rowValue($expr->getField(), $data);
             if (!is_null($v)) {
@@ -302,6 +309,32 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 $v = strtotime($v);
             }
             if (!($v && $v <= $exprValue)) {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_HigherEqualDate) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if ($v) {
+                $fieldTime = strtotime($v);
+                $exprTime = strtotime($expr->getValue());
+                if ($fieldTime >= $exprTime) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_SmallerEqualDate) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            if ($v) {
+                $fieldTime = strtotime($v);
+                $exprTime = strtotime($expr->getValue());
+                if ($fieldTime <= $exprTime) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Contains) {

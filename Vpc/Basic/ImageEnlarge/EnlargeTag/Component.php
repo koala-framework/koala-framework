@@ -80,7 +80,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
     {
         if ($type == 'original') {
             $data = Vps_Component_Data_Root::getInstance()
-                ->getComponentByDbId($id, array('limit'=>1))
+                ->getComponentByDbId($id, array('limit'=>1, 'ignoreVisible' => true))
                 ->getComponent()->getImageData();
             if (!$data || !$data['file']) {
                 return null;

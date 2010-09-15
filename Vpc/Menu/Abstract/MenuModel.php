@@ -24,9 +24,13 @@ class Vpc_Menu_Abstract_MenuModel extends Vps_Model_Abstract
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
         $equals = $where->getParts(Vps_Model_Select::WHERE_EQUALS);
-        $parentId = $equals['whereEquals']['parent_id'];
-        $parentComponent = Vps_Component_Data_Root::getInstance()->getComponentById($parentId);
-        $rowset = array_values($this->_getMenuData($parentComponent));
+        if (isset($equals['whereEquals']['parent_id'])) {
+            $parentId = $equals['whereEquals']['parent_id'];
+            $parentComponent = Vps_Component_Data_Root::getInstance()->getComponentById($parentId);
+            $rowset = array_values($this->_getMenuData($parentComponent));
+        } else {
+            $rowset = array();
+        }
         $ret = new $this->_rowsetClass(array(
             'dataKeys' => $rowset,
             'rowClass' => $this->_rowClass,
@@ -35,8 +39,9 @@ class Vpc_Menu_Abstract_MenuModel extends Vps_Model_Abstract
         return $ret;
     }
 
-    public function getRowByDataKey($component)
+    public function getRowByDataKey($c)
     {
+        $component = $c['data'];
         $key = $component->componentId;
         if (!isset($this->_rows[$key])) {
             $this->_rows[$key] = new $this->_rowClass(array(

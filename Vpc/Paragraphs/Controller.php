@@ -120,7 +120,13 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $targetCls = $classes[$source->row->component];
         }
         if ($source->componentClass != $targetCls) {
-            throw new Vps_Exception_Client(trlVps('Source and target paragraphs are not compatible.'));
+            if (Vpc_Abstract::hasSetting($source->componentClass, 'componentName')) {
+                $name = Vpc_Abstract::getSetting($source->componentClass, 'componentName');
+                $msg = trlVps("Can't paste paragraph type '{0}', as it is not avaliable here.", $name);
+            } else {
+                $msg = trlVps('Source and target paragraphs are not compatible.');
+            }
+            throw new Vps_Exception_Client($msg);
         }
 
         $c = $target;

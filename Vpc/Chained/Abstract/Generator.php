@@ -84,7 +84,9 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
     {
         $select = clone $select;
         if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
-            $select->whereChildOfSamePage($this->_getChainedData($p));
+            $cd = $this->_getChainedData($p);
+            if (!$cd) $cd = $p; // Falls Data ein parent von Komponente mit chainedType ist
+            $select->whereChildOfSamePage($cd);
         }
         if ($cls = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
             foreach ($cls as &$c) {
@@ -115,7 +117,17 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
                 $select->whereId(substr($id, 1));
             }
         }
+
+        $chainedType = $this->getGeneratorFlag('chainedType');
+
         $slaveData = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE);
+        while ($slaveData) {
+            if (Vpc_Abstract::getFlag($slaveData->componentClass, 'chainedType') == $chainedType) {
+                break;
+            }
+            $slaveData = $slaveData->parent;
+        }
+
         $parentDataSelect = new Vps_Component_Select();
         $parentDataSelect->copyParts(array('ignoreVisible'), $select);
 
@@ -124,14 +136,11 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
             foreach ($this->_getChainedChildComponents($parentData, $select) as $component) {
                 $pData = array();
                 if (!$parentData) {
-                    $chainedType = substr(strrchr(str_replace('_Generator', '', get_class($this)), '_'), 1);
                     $class = "Vpc_Chained_{$chainedType}_Component";
                     if (!$slaveData) {
                         $chainedData = $component;
                         while ($chainedData) {
-                            if (Vpc_Abstract::hasSetting($chainedData->componentClass, 'chainedType') &&
-                                Vpc_Abstract::getSetting($chainedData->componentClass, 'chainedType') == $chainedType)
-                            {
+                            if (Vpc_Abstract::getFlag($chainedData->componentClass, 'chainedType') == $chainedType) {
                                 break;
                             }
                             $chainedData = $chainedData->parent;
@@ -139,8 +148,7 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
                         $slaveDataClass = null;
                         foreach (Vpc_Abstract::getChildComponentClasses($chainedData->parent->componentClass) as $chainedClass) {
                             if ($chainedClass != $chainedData->componentClass &&
-                                Vpc_Abstract::hasSetting($chainedClass, 'chainedType') &&
-                                Vpc_Abstract::getSetting($chainedClass, 'chainedType') == $chainedType
+                                Vpc_Abstract::getFlag($chainedClass, 'chainedType') == $chainedType
                             ) {
                                 $slaveDataClass = substr($chainedClass, 0, strpos($chainedClass, '.'));
                             }

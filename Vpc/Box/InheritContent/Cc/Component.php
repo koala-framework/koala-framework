@@ -1,12 +1,6 @@
 <?php
 class Vpc_Box_InheritContent_Cc_Component extends Vpc_Chained_Cc_Component
 {
-    public static function getSettings($masterComponentClass)
-    {
-        $ret = parent::getSettings($masterComponentClass);
-        return $ret;
-    }
-
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

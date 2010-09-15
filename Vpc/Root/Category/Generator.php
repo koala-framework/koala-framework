@@ -249,11 +249,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $data['parent'] = $parentData;
         $data['isHome'] = $page['is_home'];
         $data['visible'] = $page['visible'];
-        if (isset($page['tags']) && $page['tags']) {
-            $data['tags'] = explode(',', $page['tags']);
-        } else {
-            $data['tags'] = array();
-        }
         return $data;
     }
     protected function _getIdFromRow($id)
@@ -291,6 +286,16 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $ret['actions']['delete'] = true;
         $ret['actions']['visible'] = true;
         $ret['actions']['makeHome'] = true;
+
+        // Bei Pages muss nach oben gesucht werden, weil Klasse von Generator
+        // mit Komponentklasse übereinstimmen muss
+        $c = $component;
+        while ($c && $c->componentClass != $this->getClass()) {
+            $c = $c->parent;
+        }
+        if ($c) { //TODO warum tritt das auf?
+            $ret['editControllerComponentId'] = $c->componentId;
+        }
 
         $ret['icon'] = 'page';
         if ($component->isHome) {

@@ -9,7 +9,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
 
     protected function _formatNodes($parentId = null)
     {
-        $parentId = $this->_getParam('node');
+        if (!$parentId) $parentId = $this->_getParam('node');
         if ($parentId) {
             $parentRow = $this->_model->getRow($parentId);
         } else {
@@ -19,12 +19,14 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         $nodes = array();
         foreach ($rows as $row) {
             $data = $this->_formatNode($row);
-            foreach ($data as $k=>$i) {
-                if ($i instanceof Vps_Asset) {
-                    $data[$k] = $i->__toString();
+            if ($data) {
+                foreach ($data as $k=>$i) {
+                    if ($i instanceof Vps_Asset) {
+                        $data[$k] = $i->__toString();
+                    }
                 }
+                $nodes[]= $data;
             }
-            $nodes[]= $data;
         }
         return $nodes;
     }

@@ -10,16 +10,22 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    protected function _getLanguages()
     {
-        $ret = parent::getTemplateVars();
-        $ret['separator'] = $this->_getSetting('separator');
         $languages = Vps_Component_Data_Root::getInstance()
             ->getComponentsByClass('Vpc_Root_LanguageRoot_Language_Component');
         $languages = array_merge($languages, Vps_Component_Data_Root::getInstance()
             ->getComponentsByClass('Vpc_Root_TrlRoot_Master_Component'));
         $languages = array_merge($languages, Vps_Component_Data_Root::getInstance()
             ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component'));
+        return $languages;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['separator'] = $this->_getSetting('separator');
+        $languages = $this->_getLanguages();
         $ret['languages'] = array();
         foreach ($languages as $l) {
             if (!$this->_getSetting('showCurrent')) {

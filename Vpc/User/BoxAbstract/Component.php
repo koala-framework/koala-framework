@@ -30,7 +30,14 @@ class Vpc_User_BoxAbstract_Component extends Vpc_Abstract_Composite_Component
         if (isset($postData['logout'])) {
             Vps_Auth::getInstance()->clearIdentity();
             setcookie('feAutologin', '', time() - 3600);
-            header('Location: '.$_SERVER['REDIRECT_URL']); //damit logout get parameter verschwindet
+
+            //damit 1. logout get parameter verschwindet 2. überprüft wird obs die seite eh noch gibt
+            $url = $_SERVER['REDIRECT_URL'];
+            Vps_Component_Generator_Abstract::clearInstances(); //das ist notwendig da die generator ohne eingeloggten user was anderes zurück geben könnten und das aber im data->getChildComponents gecached ist
+            if (!Vps_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].$url, null)) {
+                $url = '/';
+            }
+            header('Location: '.$url);
             exit;
         }
     }

@@ -54,7 +54,9 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
+        if (in_array($name, $this->_model->getExprColumns())
+            || ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns()))
+        ) {
             return parent::__get($name);
         } else {
             $name = $this->_transformColumnName($name);
@@ -65,7 +67,9 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function __set($name, $value)
     {
-        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
+        if (in_array($name, $this->_model->getExprColumns())
+            || ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns()))
+        ) {
             parent::__set($name, $value);
             return;
         }

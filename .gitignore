@@ -4,3 +4,4 @@ include_path
 .project
 .settings
 *.kdev4
+querylog
