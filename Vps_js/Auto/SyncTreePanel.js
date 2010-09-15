@@ -119,7 +119,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         // Tree
         var baseParams = this.baseParams != undefined ? this.baseParams : {};
         if (this.openedId != undefined) { baseParams.openedId = this.openedId; }
-        this.tree = new Ext.tree.TreePanel({
+        this.tree = new Vps.Auto.Tree.Panel({
             border      : false,
 //            animate     : true,
             loader      : new Ext.tree.TreeLoader({
