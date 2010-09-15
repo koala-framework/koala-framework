@@ -368,15 +368,17 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
         $openedNodes = $this->_saveSessionNodeOpened(null, null);
         $data['uiProvider'] = 'Vps.Tree.Node';
+        $id = $row->$primaryKey;
         if ($openedNodes == 'all' ||
-            isset($openedNodes[$row->$primaryKey]) ||
-            isset($this->_openedNodes[$row->id]) ||
-            $this->_getParam('openedId') == $row->{$this->_primaryKey}
+            (isset($openedNodes[$id]) && $openedNodes[$id]) ||
+            isset($this->_openedNodes[$id]) ||
+            $this->_getParam('openedId') == $id
         ) {
             $data['expanded'] = true;
         } else {
             $data['expanded'] = false;
         }
+        $data['expandRequest'] = true;
         return $data;
     }
 
@@ -387,11 +389,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         if ($this->_getParam('openedId')) $session->$key = array();
         $ids = is_array($session->$key) ? $session->$key : array();
         if ($id) {
-            if (!$activate && isset($ids[$id])) {
-                unset($ids[$id]);
-            } else if ($activate) {
-                $ids[$id] = true;
-            }
+            $ids[$id] = $activate;
             $session->$key = $ids;
         }
         return $ids;

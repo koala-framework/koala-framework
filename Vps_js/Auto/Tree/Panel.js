@@ -25,12 +25,14 @@ Ext.extend(Vps.Auto.Tree.TreeLoadMask, Ext.LoadMask, {
 });
 
 Vps.Auto.Tree.Panel = Ext.extend(Ext.tree.TreePanel, {
-    loadMask: { msg: trlVps('Loading...') },
     initEvents : function(){
         Vps.Auto.Tree.Panel.superclass.initEvents.call(this);
-        if(this.loadMask){
-            this._mask = new Vps.Auto.Tree.TreeLoadMask(this.bwrap,
-                    Ext.apply({loader:this.loader}, this.loadMask));
-        }
+        this.initMask();
+    },
+    initMask : function() {
+        this._mask = new Vps.Auto.Tree.TreeLoadMask(
+        	this.bwrap,
+            Ext.apply({loader:this.loader}, { msg: trlVps('Loading...') })
+        );
     }
 });
