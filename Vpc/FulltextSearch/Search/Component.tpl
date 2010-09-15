@@ -6,7 +6,7 @@
     <? if ($this->hits) { ?>
 
     <?=$this->data->trlVps('<strong>Found Results</strong> (in {0} seconds)', round($this->queryTime, 2))?>
-    <?=$this->data->trl('{0}-{1} of about {2}', array($this->numStart, $this->numEnd, $this->hitCount))?>
+    <?=$this->data->trlVps('{0}-{1} of about {2}', array($this->numStart, $this->numEnd, $this->hitCount))?>
     <?=$this->component($this->paging)?>
 
     <ul>
