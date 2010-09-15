@@ -46,4 +46,20 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Vpc_Abstract_Image
         }
         return $d;
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+
+        //own_image checkbox kann sich aendern
+        $row = $this->_getImageEnlargeComponentData()->getComponent()->getRow();
+        $model = $row->getModel();
+        $primaryKey = $model->getPrimaryKey();
+        $ret[] = array(
+            'model' => $model,
+            'id' => $row->$primaryKey
+        );
+
+        return $ret;
+    }
 }

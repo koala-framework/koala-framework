@@ -36,6 +36,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             $mail = new $essentialsRow->mailerClass($essentialsRow->template);
         }
 
+        $mail->vars = $varsRow;
         foreach ($varsRow->toArray() as $k => $v) {
             $mail->$k = $v;
         }

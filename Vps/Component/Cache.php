@@ -180,6 +180,7 @@ class Vps_Component_Cache
                 Vps_Component_Cache::getInstance()->saveMeta($model, null, $componentClass, Vps_Component_Cache::META_COMPONENT_CLASS);
             }
         }
+        Vps_Component_Cache::getInstance()->getMetaModel()->writeBuffer();
     }
 
     public function clean($mode = self::CLEANING_MODE_META, $value = null)
@@ -237,18 +238,18 @@ class Vps_Component_Cache
 
             if ($this->getMetaModel()->getProxyModel() instanceof Vps_Model_Db) {
                 $sql = "
-                    DELETE cache_component
-                    FROM cache_component, cache_component_meta m
-                    WHERE cache_component.id = m.value
+                    UPDATE cache_component c, cache_component_meta m
+                    SET c.DELETED = 1
+                    WHERE c.id = m.value
                         AND m.model = '$modelname'
                         $sqlInsert
                         AND m.type='cacheId'
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
                 $sql = "
-                    DELETE cache_component
-                    FROM cache_component, cache_component_meta m
-                    WHERE cache_component.component_class = m.value
+                    UPDATE cache_component c, cache_component_meta m
+                    SET DELETED = 1
+                    WHERE c.component_class = m.value
                         AND m.model = '$modelname'
                         $sqlInsert
                         AND m.type='componentClass'
@@ -367,7 +368,7 @@ class Vps_Component_Cache
                 $values[$id] = null;
             }
             if ($values) {
-                $sql = "SELECT id, content, expire FROM cache_component WHERE ".implode(' OR ', $or);
+                $sql = "SELECT id, content, expire FROM cache_component WHERE (".implode(' OR ', $or) . ') AND deleted=0';
                 Vps_Benchmark::count('preload cache', implode(', ', $ids));
                 $rows = $db->query($sql)->fetchAll();
                 foreach ($rows as $row) {

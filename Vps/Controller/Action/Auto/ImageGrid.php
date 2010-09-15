@@ -165,6 +165,18 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     protected function _getSelect()
     {
         $ret = $this->_model->select();
+
+        // Filter
+        foreach ($this->_filters as $filter) {
+            if ($filter->getSkipWhere()) continue;
+            $ret = $filter->formatSelect($ret, $this->_getAllParams());
+        }
+
+        $queryId = $this->getRequest()->getParam('queryId');
+        if ($queryId) {
+            $ret->where(new Vps_Model_Select_Expr_Equals($this->_primaryKey, $queryId));
+        }
+
         return $ret;
     }
 

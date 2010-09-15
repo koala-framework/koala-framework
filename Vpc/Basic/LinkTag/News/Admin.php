@@ -8,8 +8,9 @@ class Vpc_Basic_LinkTag_News_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
     public function componentToString(Vps_Component_Data $data)
     {
         $row = $data->getComponent()->getRow();
+        $field = $this->_prefix . '_id';
         $data = Vps_Component_Data_Root::getInstance()
-            ->getComponentByDbId($this->_prefixPlural . '_'.$row->news_id, array('subroot' => $data));
+            ->getComponentByDbId($this->_prefixPlural . '_'.$row->$field, array('subroot' => $data));
         if (!$data) return '';
         return $data->name;
     }

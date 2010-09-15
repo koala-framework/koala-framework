@@ -250,14 +250,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             throw new Vps_Exception("No postData found '".$this->getFieldName()."'");
         }
         $postData = $postData[$this->getFieldName()];
-
-        $pos = 0;
         foreach ($postData['save'] as $d) {
             foreach ($this->fields as $field) {
                 $field->prepareSave($d['row'], $d['data']);
             }
-            $pos++;
-            if (isset($d['row']->pos)) {
+            if ($d['row']->getModel()->hasColumn('pos')) {
                 $d['row']->pos = $d['pos'];
             }
         }
