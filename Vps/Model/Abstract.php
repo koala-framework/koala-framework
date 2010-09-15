@@ -370,10 +370,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         $ref = $this->getReference($rule);
         if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
             return $this->getParentModel();
-        } if (!is_array($ref) || !isset($ref['refModelClass'])) {
-            throw new Vps_Exception("refModelClass not set for reference '$rule'");
         }
-        return self::getInstance($ref['refModelClass']);
+        if (isset($ref['refModelClass'])) {
+            return self::getInstance($ref['refModelClass']);
+        }
+        if (isset($ref['refModel'])) {
+            return $ref['refModel'];
+        }
+        throw new Vps_Exception("refModelClass not set for reference '$rule'");
     }
 
     public function getDependentRuleByModelClass($modelClassName)
