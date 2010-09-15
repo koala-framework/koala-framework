@@ -97,10 +97,9 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         params.maxResolution = this.maxResolution;
         if (!params.PHPSESSID) return;
 
-        if (navigator.mimeTypes && !navigator.mimeTypes["application/x-shockwave-flash"]) return;
-
         this.useSwf = false;
         this.swfu = new SWFUpload({
+            minimum_flash_version : "9.0.28",
             custom_settings: {field: this},
             upload_url: location.protocol+'/'+'/'+location.host+'/vps/media/upload/json-upload',
             flash_url: '/assets/swfupload/Flash/swfupload.swf',
