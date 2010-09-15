@@ -39,11 +39,12 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         $select = $this->_model->select($this->_getTreeWhere($row));
         $select->whereEquals($this->_parentField, $row->{$this->_primaryKey});
         if ($this->_model->fetchCount($select)) {
+            $id = $row->{$this->_primaryKey};
             $openedNodes = $this->_saveSessionNodeOpened(null, null);
             if ($openedNodes == 'all' ||
-                isset($openedNodes[$row->{$this->_primaryKey}]) ||
-                isset($this->_openedNodes[$row->{$this->_primaryKey}]) ||
-                $this->_getParam('openedId') == $row->{$this->_primaryKey}
+                (isset($openedNodes[$id]) && $openedNodes[$id]) ||
+                isset($this->_openedNodes[$id]) ||
+                $this->_getParam('openedId') == $id
             ) {
                 $data['expanded'] = true;
             } else {

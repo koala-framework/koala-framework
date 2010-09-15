@@ -70,7 +70,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['expanded'] = true;
             $data['loadChildren'] = true;
         } else {
-            $data = array_merge($data, $component->generator->getPagesControllerConfig($component));
+            $config = $component->generator->getPagesControllerConfig($component);
+            $data = array_merge($data, $config);
             if (!$enabled) $data['iconEffects'][] = 'forbidden';
             $icon = $data['icon'];
             if (is_string($icon)) {
@@ -78,7 +79,12 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             }
             $data['bIcon'] = $icon->toString($data['iconEffects']);
             if (isset($data['icon'])) unset($data['icon']);
+            $openedNodes = $this->_saveSessionNodeOpened(null, null);
+            if (!$enabled && !array_key_exists($row->id, $openedNodes)) {
+                $data['expanded'] = true;
+            }
         }
+
 
         $data['actions'] = array_merge(array(
             'properties' => false,
