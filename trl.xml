@@ -6312,7 +6312,19 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>{0}-{1} of about {2}</en>
 <de>{0}-{1} von zirka {2}</de>
-<id>1613</id>
+<id>1614</id>
 </text>
+<text>
+<en>The Form has been submitted successfully. You will receive an E-Mail with the access link to the protected area.</en>
+<de>Das Formular wurde erfolgreich abgeschickt. Sie erhalten in Kürze eine E-Mail mit dem Zugangslink zum geschützten Bereich.</de>
+<id>1615</id>
+</text>
+<text>
+<en>Please enter your E-Mail Address to access this area.</en>
+<de>Bitte geben Sie Ihre E-Mail Adresse ein um Zugang zu diesem Bereich zu erhalten.</de>
+<id>1616</id>
+</text>
+
+
 </trl>
 
