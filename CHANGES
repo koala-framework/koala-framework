@@ -9,6 +9,7 @@ Neue Features:
 - Volltextsuche
 - Model_Mongo
 - Model_MirrorCacheSimple
+- AccessByMail Plugin
 
 möglicherweise nicht kompatible Änderungen:
 - Vps_Date ist komplett inkompatibel (erbt nicht mehr von Zend_Date)
