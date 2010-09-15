@@ -97,6 +97,8 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         params.maxResolution = this.maxResolution;
         if (!params.PHPSESSID) return;
 
+        if (navigator.mimeTypes && !navigator.mimeTypes["application/x-shockwave-flash"]) return;
+
         this.useSwf = false;
         this.swfu = new SWFUpload({
             custom_settings: {field: this},
@@ -223,7 +225,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             swfupload_loaded_handler: function() {
                 //wenn CallFunction nicht vorhanden funktioniert der uploader nicht.
                 //dann einfach durch die html version ersetzen
-                if (!this.getMovieElement().CallFunction) {
+                if (typeof(this.getMovieElement().CallFunction) == "undefined") {
                     this.customSettings.field.createUploadButton(true);
                     return;
                 }

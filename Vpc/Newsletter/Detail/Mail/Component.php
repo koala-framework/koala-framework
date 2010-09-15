@@ -8,7 +8,9 @@ class Vpc_Newsletter_Detail_Mail_Component extends Vpc_Mail_Component
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vpc_Newsletter_Detail_Mail_Paragraphs_Component'
         );
-        $ret['recipientSources'] = array('Users');
+        $ret['recipientSources'] = array(
+            'n' => 'Vpc_Newsletter_Subscribe_Model'
+        );
         return $ret;
     }
 }

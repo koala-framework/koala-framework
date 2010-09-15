@@ -71,6 +71,8 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                         for(var i=0;i<this.vpsFiles.length;i++) {
                             this.cancelUpload(this.getFile(i).id);
                         }
+                        this.vpsFiles = [];
+                        this.running = false;
                     }
                 });
                 this.startUpload(file.id);
@@ -107,6 +109,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                         }
                     }
                     this.running = false;
+                    this.vpsFiles = [];
                     this.progress.hide();
 
                     var params = Ext.apply(this.customSettings.list.getBaseParams(), { uploadIds: this.uploadedIds.join(',')});
@@ -150,6 +153,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                     for(var i=0;i<this.vpsFiles.length;i++) {
                         this.cancelUpload(this.getFile(i).id, false);
                     }
+                    this.vpsFiles = [];
                 }
             },
             upload_error_handler: function(file, errorCode, errorMessage) {
@@ -219,6 +223,10 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
             onAdd: this.onAdd
         });
         this.proxyItem = this.grid;
+
+        this.grid.on('datachange', function() {
+            this.childPanel.reload();
+        }, this);
 
         var westItems = [this.grid];
 
