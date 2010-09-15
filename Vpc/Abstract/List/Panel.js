@@ -29,6 +29,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
         var container = this.body.createChild();
 
         this.swf = new SWFUpload({
+            minimum_flash_version : "9.0.28",
             custom_settings: {list: this.list},
             upload_url: location.protocol+'/'+'/'+location.host+'/vps/media/upload/json-upload',
             flash_url: '/assets/swfupload/Flash/swfupload.swf',
