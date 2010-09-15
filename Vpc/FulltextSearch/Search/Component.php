@@ -7,6 +7,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['cssClass'] = 'webStandard';
         $ret['viewCache'] = false;
         $ret['generators']['child']['component']['paging'] = 'Vpc_FulltextSearch_Search_Paging_Component';
         $ret['flags']['processInput'] = true;
