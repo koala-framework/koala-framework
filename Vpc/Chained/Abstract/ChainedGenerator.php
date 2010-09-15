@@ -1,15 +1,15 @@
 <?php
 class Vpc_Chained_Abstract_ChainedGenerator extends Vps_Component_Generator_PseudoPage_Table
 {
-    protected $_idColumn = 'filename';
+    protected $_idColumn = 'id';
     protected $_hasNumericIds = false;
     protected $_inherits = true;
+    protected $_filenameColumn = 'filename';
 
     public function getPagesControllerConfig($component, $generatorClass = null)
     {
         $ret = parent::getPagesControllerConfig($component, $generatorClass);
-        $ret['icon'] = 'font';
-        $ret['actions']['visible'] = true;
+        $ret['icon'] = 'layout_content';
         if (!$component->visible) {
             $ret['iconEffects'][] = 'invisible';
         }
@@ -20,14 +20,6 @@ class Vpc_Chained_Abstract_ChainedGenerator extends Vps_Component_Generator_Pseu
     protected function _getParentDataByRow($row, $select)
     {
         return Vps_Component_Data_Root::getInstance()->getComponentsByClass($this->_class);
-    }
-
-    protected function _formatSelect($parentData, $select)
-    {
-        $ret = parent::_formatSelect($parentData, $select);
-        if (!$ret) return $ret;
-        $ret->whereEquals('master', false);
-        return $ret;
     }
 
     protected function _formatConfig($parentData, $row)

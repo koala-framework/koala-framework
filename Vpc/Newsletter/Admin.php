@@ -17,11 +17,6 @@ class Vpc_Newsletter_Admin extends Vpc_Directories_Item_Directory_Admin
         $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c), 'vpc_newsletter');
     }
 
-    protected function _getContentClass()
-    {
-        return Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
-    }
-
     public function setup()
     {
         $sql = "

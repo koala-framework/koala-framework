@@ -152,7 +152,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                 $class[] ='current';
                 $r['current'] = true;
             }
-            $cssClass = $this->_getConfig($r, 'cssClass');
+            $cssClass = $this->_getConfig($p, 'cssClass');
             if ($cssClass) $class[] = $cssClass;
             $r['class'] = implode(' ', $class);
             $ret[] = $r;
@@ -210,6 +210,9 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         }
         $ret[] = array(
             'model' => 'Vps_Component_Model'
+        );
+        $ret[] = array(
+            'model' => 'Vpc_Menu_Abstract_Model'
         );
         // Falls Nickname geändert wird, ändert sich Url zum User
         $ret[] = array(

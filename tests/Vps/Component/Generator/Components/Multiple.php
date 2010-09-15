@@ -53,7 +53,7 @@ class Vps_Component_Generator_Components_Multiple extends Vpc_Abstract
         $ret['plugins'] = array(
             'Vps_Component_Generator_Components_Plugin'
         );
-        $ret['editComponents'] = array('pseudoPageTable', 'multiBox', 'editComponent');
+        $ret['editComponents'] = array('pseudoPageTable', 'multiBox', 'pageTable');
         return $ret;
     }
 }

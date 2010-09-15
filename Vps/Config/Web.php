@@ -118,6 +118,7 @@ class Vps_Config_Web extends Vps_Config_Ini
 
         $this->server->dir = str_replace('%id%', $this->application->id, $this->server->dir);
         $this->server->domain = str_replace('%id%', $this->application->id, $this->server->domain);
+        $this->server->mongo->database = str_replace('%id%', $this->application->id, $this->server->mongo->database);
         $this->uploads = str_replace('%id%', $this->application->id, $this->uploads);
     }
 

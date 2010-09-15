@@ -5,7 +5,7 @@ class Vpc_Cc_RootWithTrl_Slave_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret = Vpc_Chained_Abstract_Component::getChainedSettings($ret, $masterComponentClass, 'Cc');
-        $ret['chainedType'] = 'Cc';
+        $ret['flags']['chainedType'] = 'Cc';
         return $ret;
     }
 }

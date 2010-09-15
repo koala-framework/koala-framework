@@ -8,6 +8,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     protected $_modelName = 'Vps_Component_Model';
 
     private $_componentConfigs = array();
+    private $_allowedComponents;
 
     protected function _init()
     {
@@ -26,21 +27,51 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
         $data = parent::_formatNode($row);
         $data['uiProvider'] = 'Vps.Component.PagesNode';
-        $disabled = !Vps_Registry::get('acl')->getComponentAcl()
-            ->isAllowed(Zend_Registry::get('userModel')->getAuthedUser(), $component);
 
+        $acl = Vps_Registry::get('acl')->getComponentAcl();
+        $user = Zend_Registry::get('userModel')->getAuthedUser();
+        $enabled = $acl->isAllowed($user, $component);
+        if (!$enabled) {
+
+            if (is_null($this->_allowedComponents)) {
+                $this->_allowedComponents = $acl->getAllowedRecursiveChildComponents($user, $component);
+            }
+            $allowed = false;
+            foreach ($this->_allowedComponents as $allowedComponent) {
+                $c = $allowedComponent;
+                while ($c) {
+                    if ($c->componentId == $component->componentId) {
+                        $allowed = true;
+                        break 2;
+                    }
+                    $c = $c->parent;
+                }
+            }
+            if (!$allowed) return null;
+        }
+        if (!$enabled) {
+            $editComponents = $acl->getAllowedChildComponents($user, $component);
+            foreach ($editComponents as $key => $ec) {
+                if (is_instance_of($ec->componentClass, 'Vpc_Root_Category_Component') || is_instance_of($ec->componentClass, 'Vpc_Root_Category_Trl_Component')) {
+                    unset($editComponents[$key]);
+                }
+            }
+            if ($editComponents) $enabled = true;
+        } else {
+            $editComponents = array($component);
+        }
         $data['actions'] = array();
         $data['allowDrop'] = false;
-        $data['disabled'] = $disabled;
+        $data['disabled'] = !$enabled;
         $data['editControllerUrl'] = '';
         if ($component->componentId == 'root') { // Root hat keinen Generator
             $data['bIcon'] = new Vps_Asset('world');
             $data['bIcon'] = $data['bIcon']->__toString();
             $data['expanded'] = true;
+            $data['loadChildren'] = true;
         } else {
             $data = array_merge($data, $component->generator->getPagesControllerConfig($component));
-
-            if ($disabled) $data['iconEffects'][] = 'forbidden';
+            if (!$enabled) $data['iconEffects'][] = 'forbidden';
             $icon = $data['icon'];
             if (is_string($icon)) {
                 $icon = new Vps_Asset($icon);
@@ -58,20 +89,25 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             'preview' => false
         ), $data['actions']);
 
+        if ($data['loadChildren'] || $data['expanded'] || !$enabled) {
+            $data['children'] = $this->_formatNodes($component->componentId);
+        }
 
         // EditComponents
         $ec = array();
-        foreach ($this->getEditComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
+        foreach ($editComponents as $editComponent) {
+            foreach ($this->getEditComponents($editComponent) as $c) {
+                $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
+            }
+            foreach ($this->getMenuEditComponents($editComponent) as $c) {
+                $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
+            }
+            foreach ($this->getSharedComponents($editComponent) as $componentClass => $c) {
+                $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED));
+            }
         }
-        foreach ($this->getMenuEditComponents($component) as $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
-        }
-        foreach ($this->getSharedComponents($component) as $componentClass => $c) {
-            $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED));
-        }
-
         $data['editComponents'] = $ec;
+
         return $data;
     }
 
@@ -209,6 +245,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $id = $this->_getParam('id');
         $table = $this->_model->getTable();
         $row = $table->find($id)->current();
+        if (!$this->_hasPermissions($row, 'makeHome')) {
+            throw new Vps_Exception("Making home this row is not allowed.");
+        }
         $root = Vps_Component_Data_Root::getInstance();
         $component = $root->getComponentById($id, array('ignoreVisible' => true));
         while ($component) {
@@ -231,6 +270,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                         if ($component == $homeComponent) {
                             $oldId = $oldRow->id;
                             $oldVisible = $oldRow->visible;
+                            if (!$this->_hasPermissions($row, 'makeHome')) {
+                                throw new Vps_Exception("Making home this row is not allowed.");
+                            }
                             $oldRow->is_home = 0;
                             $oldRow->save();
                         }
@@ -328,4 +370,25 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         }
     }
 
+    protected function _hasPermissions($row, $action)
+    {
+        $user = Zend_Registry::get('userModel')->getAuthedUser();
+        if ($row instanceof Vps_Component_Model_Row) {
+            $component = $row->getData();
+        } else {
+            $component = Vps_Component_Data_Root::getInstance()
+                ->getComponentById($row->id, array('ignoreVisible' => true));
+        }
+
+        // darf man die action?
+        $config = $component->generator->getPagesControllerConfig($component);
+        $actions = $config['actions'];
+        $actions['move'] = $config['allowDrag'];
+        $actions['moveTo'] = $config['allowDrop'];
+        if (in_array($action, array_keys($actions)) && !$config['actions'][$action]) return false;
+
+        // wenn ja, darf man die Komponente bearbeiten?
+        $acl = Vps_Registry::get('acl')->getComponentAcl();
+        return $acl->isAllowed($user, $component);
+    }
 }

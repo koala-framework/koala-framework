@@ -22,6 +22,8 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         }
         if ($showInvisible) $ignoreVisible = true;
 
+        $select = clone $select;
+
         // Nach Filename selbst suchen, da ja andere Sprache
         if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
             $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);

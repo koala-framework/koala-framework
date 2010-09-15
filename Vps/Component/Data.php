@@ -222,12 +222,27 @@ class Vps_Component_Data
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
             $cache->save($generators, $cacheId);
         }
-        $select->whereChildOfSamePage($this);
+        $noSubPages =
+            $childSelect->hasPart('wherePage') && !$childSelect->getPart('wherePage') ||
+            $childSelect->hasPart('wherePseudoPage') && !$childSelect->getPart('wherePseudoPage');
+        if ($noSubPages) {
+            $select->whereChildOfSamePage($this);
+        }
+
         foreach ($generators as $g) {
             if (!$g['static']) {
                 $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
-                foreach ($gen->getChildData(null, $select) as $d) {
-                    if (!in_array($d, $ret, true)) {
+                foreach ($gen->getChildData(null, clone $select) as $d) {
+                    $add = true;
+                    if (!$noSubPages) { // sucht über unterseiten hinweg, wird hier erst im Nachhinein gehandelt, langsam
+                        $add = false;
+                        $c = $d;
+                        while (!$add && $c) {
+                            if ($c->componentId == $this->componentId) $add = true;
+                            $c = $c->parent;
+                        }
+                    }
+                    if ($add && !in_array($d, $ret, true)) {
                         $ret[] = $d;
                     }
                 }
@@ -457,7 +472,7 @@ class Vps_Component_Data
         return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
-    public function getChildPseudoPages($select = array())
+    public function getChildPseudoPages($select = array(), $childSelect = array('page'=>false))
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
@@ -465,7 +480,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->wherePseudoPage(true);
-        return $this->getRecursiveChildComponents($select);
+        return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
     public function getChildBoxes($select = array())
@@ -673,12 +688,19 @@ class Vps_Component_Data
     }
 
     /**
+     * @param string|array
      * @return Vps_Component_Data
      */
     public function getParentByClass($cls)
     {
+        if (!is_array($cls)) $cls = array($cls);
         $d = $this;
-        while ($d && !is_instance_of($d->componentClass, $cls)) {
+        while ($d) {
+            foreach ($cls as $i) {
+                if (is_instance_of($d->componentClass, $i)) {
+                    return $d;
+                }
+            }
             $d = $d->parent;
         }
         return $d;

@@ -7,6 +7,7 @@ class Vpc_Chained_Trl_Generator extends Vpc_Chained_Abstract_Generator
         if (is_instance_of($this->_class, 'Vpc_Root_TrlRoot_Chained_Component')) {
             $ret['trlBase'] = true;
         }
+        $ret['chainedType'] = 'Trl';
         return $ret;
     }
 
