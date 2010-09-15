@@ -37,7 +37,7 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
         //festsetzen der sprachen
         $parser = new Vps_Trl_Parser($modelVps, $modelWeb, $this->_getParam('type'), $this->_getParam('cleanUp'));
         $parser->setDebug($this->_getParam('debug'));
-        set_time_limit(200);
+        set_time_limit(2000);
         $results = $parser->parse();
         echo "\n\n------------------------\n";
         echo $results['files']." files parsed\n";
