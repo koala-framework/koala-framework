@@ -21,6 +21,7 @@ möglicherweise nicht kompatible Änderungen:
   Templates müssen angepasst werden (bzw. schaun obs wirklich überschrieben werden muss)
 - frontControllerClass MUSS in application/config.ini angegeben werden
 - Tags in Seitenbaum gibts nicht mehr (kein Vps_Component_Acl->allowTag())
+- aclClass MUSS in application/config.ini angegeben werden
 
 == 1.10 ==
 Erstellt: 09.06.10
