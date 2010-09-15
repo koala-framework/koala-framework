@@ -5,6 +5,7 @@ class Vps_Component_Plugin_AccessByMail_Form_Component extends Vpc_Form_Componen
     {
         $ret = parent::getSettings();
         $ret['placeholder']['subject'] = trlVpsStatic('Temporary access');
+        $ret['generators']['child']['component']['success'] = 'Vpc_Form_Success_Component';
         return $ret;
     }
 
