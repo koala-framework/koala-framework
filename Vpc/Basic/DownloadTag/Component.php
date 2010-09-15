@@ -65,7 +65,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
             if (Vps_Registry::get('config')->showInvisible) {
                 //preview im frontend
                 $retValid = self::VALID_DONT_CACHE;
-            } else if (Vps_Registry::get('userModel')->getAuthedUser()) {
+            } else if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, Vps_Registry::get('userModel')->getAuthedUser())) {
                 //paragraphs vorschau im backend
                 $retValid = self::VALID_DONT_CACHE;
             }
