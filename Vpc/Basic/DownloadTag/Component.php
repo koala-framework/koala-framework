@@ -58,9 +58,9 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
     public static function isValidMediaOutput($id, $type, $className)
     {
         $retValid = self::VALID;
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id);
+        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id);
         if (!$c) {
-            $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+            $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
             if (!$c) return self::INVALID;
             if (Vps_Registry::get('config')->showInvisible) {
                 //preview im frontend
