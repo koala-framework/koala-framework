@@ -7,7 +7,14 @@ class Vps_Benchmark_Counter_Memcache implements Vps_Benchmark_Counter_Interface
         if (!isset($memcache)) {
             $memcache = new Memcache;
             $memcacheSettings = Vps_Registry::get('config')->server->memcache;
-            $memcache->addServer($memcacheSettings->host, $memcacheSettings->port, true, 1, 1, 1);
+
+            if (version_compare(phpversion('memcache'), '2.1.0') == -1) { // < 2.1.0
+                $memcache->addServer($memcacheSettings->host, $memcacheSettings->port, true, 1, 1, 1);
+            } else if (version_compare(phpversion('memcache'), '3.0.0') == -1) { // < 3.0.0
+                $memcache->addServer($memcacheSettings->host, $memcacheSettings->port, true, 1, 1, 1, true, null, 10000);
+            } else {
+                $memcache->addServer($memcacheSettings->host, $memcacheSettings->port, true, 1, 1, 1);
+            }
         }
         return $memcache;
     }

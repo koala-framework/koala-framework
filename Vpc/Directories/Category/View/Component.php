@@ -26,6 +26,7 @@ class Vpc_Directories_Category_View_Component
     public function getItemCountCacheId($row)
     {
         // Row kann von hier (Model) oder von Admin (DB-Row) kommen
+        $highestSubRoot = false;
         $c = $this->getData();
         while ($c) {
             $isSubroot = Vps_Component_Abstract::getFlag($c->componentClass, 'subroot');

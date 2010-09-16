@@ -35,6 +35,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             ),
         );
 
+        $ret['imageLabel'] = trlVps('Image');
+        $ret['maxResolution'] = null;
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
@@ -239,7 +241,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
         //paragraphs vorschau im backend
         $authData = Vps_Registry::get('userModel')->getAuthedUser();
-        if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, $authData)) {
+        if ($authData) {
             return self::VALID_DONT_CACHE;
         }
 
