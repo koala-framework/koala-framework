@@ -1,6 +1,6 @@
 <?php
 class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
-    implements Vps_Media_Output_Interface
+    implements Vps_Media_Output_IsValidInterface
 {
     const USER_SELECT = 'user';
     public static function getSettings()
@@ -35,6 +35,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             ),
         );
 
+        $ret['imageLabel'] = trlVps('Image');
+        $ret['maxResolution'] = null;
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
@@ -131,7 +133,9 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
         $filename = null;
         if ($fileRow) {
-            $filename = $row->filename;
+            if ($this->_getSetting('editFilename')) {
+                $filename = $row->filename;
+            }
             if (!$filename) {
                 $filename = $fileRow->filename;
             }
@@ -214,12 +218,34 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     {
         $data = $this->_getImageDataOrEmptyImageData();
         $s = $this->_getImageDimensions();
+
         if ($data && $data['file'] && file_exists($data['file'])) {
             $sourceSize = @getimagesize($data['file']);
             if (!$sourceSize) return null;
             return Vps_Media_Image::calculateScaleDimensions($sourceSize, $s);
         }
         return $s;
+    }
+
+    public static function isValidMediaOutput($id, $type, $className)
+    {
+        if (Vps_Component_Data_Root::getInstance()->getComponentById($id)) {
+            return self::VALID;
+        }
+        if (Vps_Registry::get('config')->showInvisible) {
+            //preview im frontend
+            if (Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
+                return self::VALID_DONT_CACHE;
+            }
+        }
+
+        //paragraphs vorschau im backend
+        $authData = Vps_Registry::get('userModel')->getAuthedUser();
+        if ($authData) {
+            return self::VALID_DONT_CACHE;
+        }
+
+        return self::INVALID;
     }
 
     public static function getMediaOutput($id, $type, $className)
@@ -232,7 +258,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             return null;
         }
 
-        $dim = $component->getComponent()->getImageDimensions();
+        $dim = $component->getComponent()->_getImageDimensions();
         if ($dim) {
             $output = Vps_Media_Image::scale($data['file'], $dim);
         } else {

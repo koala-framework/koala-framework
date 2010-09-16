@@ -147,12 +147,18 @@ abstract class Vps_Update
     public static function getUpdatesForDir($file, $from, $to)
     {
         $ret = array();
+        $paths = array();
         foreach (array_reverse(array_unique(explode(PATH_SEPARATOR, get_include_path()))) as $dir) {
             if ($dir == '.') $dir = getcwd();
             if (substr($file, 0, strlen($dir)) == $dir) {
                 $file = substr($file, strlen($dir)+1);
             }
             $path = $dir . '/' . $file;
+            if (substr($path, 0, 1)=='.') {
+                $path = getcwd().substr($path, 1);
+            }
+            if (in_array($path, $paths)) continue;
+            $paths[] = $path;
             if (is_dir($path)) {
                 $path =  $path . '/Update';
                 if (is_dir($path)) {

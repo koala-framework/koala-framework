@@ -9,8 +9,9 @@
                 <?=$this->item->row->title?>
             <?=$this->ifHasNoContent()?>
         </h3>
-        <div class="publishDate"><?=$this->date($this->item->publish_date)?></div>
     </div>
+
+    <div class="publishDate"><?=$this->date($this->item->publish_date)?></div>
 
     <div class="clear"></div>
 

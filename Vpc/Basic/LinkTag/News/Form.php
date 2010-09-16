@@ -1,10 +1,6 @@
 <?php
 class Vpc_Basic_LinkTag_News_Form extends Vpc_Abstract_Form
 {
-    protected function _initFields()
-    {
-        parent::_initFields();
-    }
     public function __construct($name, $class, $id = null)
     {
         parent::__construct($name, $class, $id);

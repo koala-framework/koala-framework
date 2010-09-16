@@ -5,11 +5,13 @@ class Vps_Config_Cache extends Zend_Cache_Frontend_File
 {
     public function __construct()
     {
+        $files = array(
+            'application/config.ini',
+            VPS_PATH . '/config.ini'
+        );
+        if (file_exists('application/vps_branch')) $files[] = 'application/vps_branch';
         parent::__construct(array(
-            'master_files' => array(
-                'application/config.ini',
-                VPS_PATH . '/config.ini'
-            ),
+            'master_files' => $files,
             'automatic_serialization' => true
         ));
         require_once 'Vps/Cache/Backend/File.php';

@@ -19,14 +19,14 @@
 
     <? if ($this->options['routing']) { ?>
         <form action="#" class="fromAddress printHidden">
-            <input type="text" class="textBefore vpsClearOnFocus" value="<?= trlVps('Place of departure: zip code, Town, Street'); ?>" />
-            <input type="submit" value="<?= trlVps('Show Route') ?>" class="submitOn"/>
+            <input type="text" class="textBefore vpsClearOnFocus" value="<?= $this->data->trlVps('Place of departure: zip code, Town, Street'); ?>" />
+            <input type="submit" value="<?= $this->data->trlVps('Show Route') ?>" class="submitOn"/>
             <div class="clear"></div>
         </form>
     <? } ?>
 
     <div class="mapDirSuggestParent">
-        <b><?= trlVps('Suggestions') ?></b>
+        <b><?= $this->data->trlVps('Suggestions') ?></b>
         <ul class="mapDirSuggest"></ul>
     </div>
 

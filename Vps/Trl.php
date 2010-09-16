@@ -81,6 +81,8 @@ class Vps_Trl
     private $_useUserLanguage = true;
     private $_webCodeLanguage;
 
+    private $_overrideTargetLanguage = null;
+
     const SOURCE_VPS = 'vps';
     const SOURCE_WEB = 'web';
     const TRLCP = 'trlcp';
@@ -134,8 +136,18 @@ class Vps_Trl
         $this->_languages = $languages;
     }
 
+    /**
+     * Für Frontend TRL-Hack in 1.9
+     */
+    public function overrideTargetLanguage($lang)
+    {
+        $this->_overrideTargetLanguage = $lang;
+    }
+
     public function getTargetLanguage()
     {
+        if ($this->_overrideTargetLanguage) return $this->_overrideTargetLanguage;
+
         if (php_sapi_name() == 'cli' || !$this->_useUserLanguage) {
             return $this->getWebCodeLanguage();
         }
@@ -167,6 +179,10 @@ class Vps_Trl
         return $this->_webCodeLanguage;
     }
 
+    /**
+     * Diese Funktion existiert für tests. Darf nicht aufgerufen / geändert werden
+     * da sonst Web-Übersetzung nicht mehr funktionieren.
+     */
     public function setWebCodeLanguage($code)
     {
         $this->_webCodeLanguage = $code;

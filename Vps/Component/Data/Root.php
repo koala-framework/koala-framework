@@ -67,6 +67,15 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         Vps_Component_Abstract::resetSettingsCache();
     }
 
+    public function __get($var)
+    {
+        if ($var == 'filename') {
+            //hier ohne rawurlencode, ist bei tetss auf 'vps/vpctest/...' gesetzt
+            return $this->_filename;
+        }
+        return parent::__get($var);
+    }
+
     public function getPageByUrl($url, $acceptLangauge)
     {
         $parsedUrl = parse_url($url);
@@ -217,7 +226,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         $cacheId = $dbId.$select->getHash();
         if (!isset($this->_componentsByDbIdCache[$cacheId])) {
-            $benchmark = Vps_Benchmark::start();
 
             if (is_numeric(substr($dbId, 0, 1)) || substr($dbId, 0, 4)=='root') {
                 $data = $this->getComponentById($dbId, $select);
@@ -279,7 +287,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         $cacheId = $class.$select->getHash();
         if (!isset($this->_componentsByClassCache[$cacheId])) {
-            $benchmark = Vps_Benchmark::start();
 
             $lookingForChildClasses = Vpc_Abstract::getComponentClassesByParentClass($class);
             foreach ($lookingForChildClasses as $c) {
@@ -290,7 +297,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $ret = $this->getComponentsBySameClass($lookingForChildClasses, $select);
             $this->_componentsByClassCache[$cacheId] = $ret;
 
-            if ($benchmark) $benchmark->stop();
         }
         return $this->_componentsByClassCache[$cacheId];
     }

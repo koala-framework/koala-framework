@@ -65,16 +65,20 @@ wurde soeben erstellt.</de>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
 <de>Ort der Abreise: Postleitzahl, Ort, Stra&#xDF;e</de>
+<fr>Place of departure: zip code, Town, Street</fr>
+<es>Place of departure: zip code, Town, Street</es>
 <id>31</id>
 </text>
 <text>
 <en>Entered place could not been found!</en>
 <de>Eingetragener Ort konnte nicht gefunden werden!</de>
+<es>Entered place could not been found!</es>
 <id>32</id>
 </text>
 <text>
 <en>Show Route</en>
 <de>Route zeigen</de>
+<es>Show Route</es>
 <id>33</id>
 </text>
 <text>
@@ -285,16 +289,22 @@ wurde soeben erstellt.</de>
 <text>
 <en>Firstname</en>
 <de>Vorname</de>
+<fr>Pr&#xE9;nom</fr>
+<es>Nombre</es>
 <id>97</id>
 </text>
 <text>
 <en>Lastname</en>
 <de>Nachname</de>
+<fr>Nom</fr>
+<es>Apellidos</es>
 <id>98</id>
 </text>
 <text>
 <en>Email</en>
 <de>E-Mail</de>
+<fr>E-mail</fr>
+<es>E-Mail</es>
 <id>99</id>
 </text>
 <text>
@@ -513,8 +523,8 @@ wurde soeben erstellt.</de>
 <id>229</id>
 </text>
 <text>
-<en>Can't save, please fill all marked fields correctly.</en>
-<de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle markierten Felder aus.</de>
+<en>Can't save, please fill all red underlined fields correctly.</en>
+<de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle rot unterstrichenen Felder korrekt aus.</de>
 <id>230</id>
 </text>
 <text>
@@ -884,7 +894,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>The value in this field is invalid</en>
-<de>Die Variable in diesem Feld ist falsch</de>
+<de>Wert in diesem Feld ist ung&#xFC;ltig</de>
 <id>314</id>
 </text>
 <text>
@@ -1319,7 +1329,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Value</en>
-<de>Variable</de>
+<de>Wert</de>
 <id>402</id>
 </text>
 <text>
@@ -1784,7 +1794,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Values</en>
-<de>Variablen</de>
+<de>Werte</de>
 <id>555</id>
 </text>
 <text>
@@ -2787,7 +2797,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Products</en>
-<de>Shop - Produkte</de>
+<de>Shop.Produkte</de>
 <id>795</id>
 </text>
 <text>
@@ -2828,6 +2838,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Street</en>
 <de>Stra&#xDF;e</de>
+<fr>Rue</fr>
+<es>Calle</es>
 <id>803</id>
 </text>
 <text>
@@ -2843,11 +2855,15 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Country</en>
 <de>Land</de>
+<fr>Pays</fr>
+<es>Pa&#xED;s</es>
 <id>806</id>
 </text>
 <text>
 <en>Phone</en>
 <de>Telefon</de>
+<fr>T&#xE9;l&#xE9;phone</fr>
+<es>Tel&#xE9;fono</es>
 <id>807</id>
 </text>
 <text>
@@ -2927,23 +2943,29 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Cart</en>
-<de>Shop - Warenkorb</de>
+<de>Shop.Warenkorb</de>
 <id>828</id>
 </text>
 <text>
 <en>Mr.</en>
 <de>Herr</de>
+<fr>Monsieur</fr>
+<es>Se&#xF1;or</es>
 <id>829</id>
 </text>
 <text>
 <en>Ms.</en>
 <de>Frau</de>
+<fr>Madame</fr>
+<es>Se&#xF1;ora</es>
 <id>830</id>
 </text>
 <text>
 <context>sex</context>
 <en>Title</en>
 <de>Anrede</de>
+<fr>Civilit&#xE9;</fr>
+<es>Tratamiento</es>
 <id>832</id>
 </text>
 <text>
@@ -3179,6 +3201,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Fax</en>
 <de>Fax</de>
+<fr>Fax</fr>
+<es>Fax</es>
 <id>897</id>
 </text>
 <text>
@@ -3604,6 +3628,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Company</en>
 <de>Firma</de>
+<fr>Entreprise</fr>
+<es>Empresa</es>
 <id>1004</id>
 </text>
 <text>
@@ -4416,6 +4442,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Message</en>
 <de>Mitteilung</de>
+<es>Mensaje</es>
 <id>1207</id>
 </text>
 <text>
@@ -4607,6 +4634,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>ZIP / City</en>
 <de>PLZ / Ort</de>
+<fr>CP / localit&#xE9;</fr>
+<es>C&#xF3;digo postal / Localidad</es>
 <id>1248</id>
 </text>
 <text>
@@ -4617,6 +4646,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Send message</en>
 <de>Nachricht absenden</de>
+<fr>Envoyer le message</fr>
 <id>1250</id>
 </text>
 <text>
@@ -4666,7 +4696,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Newsletter subscription</en>
-<de>Newsletter abonnement</de>
+<de>Newsletter Abonnement</de>
 <id>1260</id>
 </text>
 <text>
@@ -5369,6 +5399,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Read more &#xBB;</en>
 <de>Weiterlesen &#xBB;</de>
+<fr>Davantage &#xBB;</fr>
+<es>M&#xE1;s &#xBB;</es>
 <id>1405</id>
 </text>
 <text>
@@ -5746,6 +5778,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Read more</en>
 <de>Weiterlesen</de>
+<fr>Davantage</fr>
+<es>M&#xE1;s</es>
 <id>1492</id>
 </text>
 <text>
@@ -5772,5 +5806,341 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Die Datei wurde nur teilweise hochgeladen.</de>
 <id>1497</id>
 </text>
+<text>
+<en>Fair</en>
+<de>Messe</de>
+<id>1498</id>
+</text>
+<text>
+<en>Original Filename</en>
+<id>1499</id>
+</text>
+<text>
+<en>Headlines</en>
+<id>1500</id>
+</text>
+<text>
+<en>Headline 1</en>
+<id>1501</id>
+</text>
+<text>
+<en>Headline 2</en>
+<id>1502</id>
+</text>
+<text>
+<en>Original headline 1</en>
+<id>1503</id>
+</text>
+<text>
+<en>Original headline 2</en>
+<id>1504</id>
+</text>
+<text>
+<en>2 Columns</en>
+<de>2 Spalten</de>
+<id>1505</id>
+</text>
+<text>
+<en>Left column</en>
+<id>1506</id>
+</text>
+<text>
+<en>Right column</en>
+<id>1507</id>
+</text>
+<text>
+<en>All Visible</en>
+<de>Alle Sichtbar</de>
+<id>1508</id>
+</text>
+<text>
+<en>Do you really wish to set everything to visible?</en>
+<de>M&#xF6;chten Sie wirklich alles auf Sichtbar setzen?</de>
+<id>1509</id>
+</text>
+<text>
+<en>Setting visible...</en>
+<de>Sichtbar setzen...</de>
+<id>1510</id>
+</text>
+<text>
+<en>Toolbox</en>
+<id>1511</id>
+</text>
+<text>
+<en>Time recording</en>
+<de>Zeiterfassung</de>
+<id>1512</id>
+</text>
+<text>
+<en>Year</en>
+<de>Jahr</de>
+<id>1513</id>
+</text>
+<text>
+<en>Spent time</en>
+<de>Verbrauchte Zeit</de>
+<id>1514</id>
+</text>
+<text>
+<en>Included time</en>
+<de>Inkludierte Zeit</de>
+<id>1515</id>
+</text>
+<text>
+<en>Year {0}</en>
+<de>{0}. Jahr</de>
+<id>1516</id>
+</text>
+<text>
+<en>Timer</en>
+<id>1517</id>
+</text>
+<text>
+<en>Spent time by years</en>
+<de>Verbrauchte Zeite nach Jahren</de>
+<id>1518</id>
+</text>
+<text>
+<en>Original Filename</en>
+<id>1499</id>
+</text>
+<text>
+<en>Headlines</en>
+<id>1500</id>
+</text>
+<text>
+<en>Headline 1</en>
+<id>1501</id>
+</text>
+<text>
+<en>Headline 2</en>
+<id>1502</id>
+</text>
+<text>
+<en>Original headline 1</en>
+<id>1503</id>
+</text>
+<text>
+<en>Original headline 2</en>
+<id>1504</id>
+</text>
+<text>
+<en>2 Columns</en>
+<id>1505</id>
+</text>
+<text>
+<en>Left column</en>
+<id>1506</id>
+</text>
+<text>
+<en>Right column</en>
+<id>1507</id>
+</text>
+<text>
+<en>All Visible</en>
+<id>1508</id>
+</text>
+<text>
+<en>Do you really wish to set everything to visible?</en>
+<id>1509</id>
+</text>
+<text>
+<en>Setting visible...</en>
+<de>Sichtbar setzen...</de>
+<id>1510</id>
+</text>
+<text>
+<en>Toolbox</en>
+<id>1511</id>
+</text>
+<text>
+<en>Time recording</en>
+<de>Zeiterfassung</de>
+<id>1512</id>
+</text>
+<text>
+<en>Year</en>
+<de>Jahr</de>
+<id>1513</id>
+</text>
+<text>
+<en>Spent time</en>
+<de>Verbrauchte Zeit</de>
+<id>1514</id>
+</text>
+<text>
+<en>Included time</en>
+<de>Inkludierte Zeit</de>
+<id>1515</id>
+</text>
+<text>
+<en>Year {0}</en>
+<de>{0}. Jahr</de>
+<id>1516</id>
+</text>
+<text>
+<en>Timer</en>
+<id>1517</id>
+</text>
+<text>
+<en>Spent time by years</en>
+<de>Verbrauchte Zeite nach Jahren</de>
+<id>1518</id>
+</text>
+<text>
+<en>Dear Sir or Madam</en>
+<de>Sehr geehrte Damen und Herren</de>
+<id>1519</id>
+</text>
+<text>
+<en>Web Image Files</en>
+<id>1521</id>
+</text>
+<text>
+<en>All Files</en>
+<id>1522</id>
+</text>
+<text>
+<en>Upload Files</en>
+<id>1523</id>
+</text>
+<text>
+<en>Uploading files</en>
+<id>1524</id>
+</text>
+<text>
+<en>You got a requst</en>
+<id>1525</id>
+</text>
+<text>
+<en>E-Mail Recipient</en>
+<id>1526</id>
+</text>
+<text>
+<en>E-Mail Subject</en>
+<id>1527</id>
+</text>
+<text>
+<en>Form.Fieldset</en>
+<id>1528</id>
+</text>
+<text>
+<en>Required</en>
+<id>1529</id>
+</text>
+<text>
+<en>Form.Checkbox</en>
+<id>1530</id>
+</text>
+<text>
+<en>Box Label</en>
+<id>1531</id>
+</text>
+<text>
+<en>Form.Radio</en>
+<id>1532</id>
+</text>
+<text>
+<en>Output Type</en>
+<id>1533</id>
+</text>
+<text>
+<en>horizontal</en>
+<id>1534</id>
+</text>
+<text>
+<en>vertical</en>
+<id>1535</id>
+</text>
+<text>
+<en>Form.Select</en>
+<id>1536</id>
+</text>
+<text>
+<en>Form.Textarea</en>
+<id>1537</id>
+</text>
+<text>
+<en>Form.Textfield</en>
+<id>1538</id>
+</text>
+<text>
+<en>Alphanumeric</en>
+<id>1539</id>
+</text>
+<text>
+<en>Bezeichnung</en>
+<id>1540</id>
+</text>
+<text>
+<en>This account has already been activated.</en>
+<de>Dieser Account wurde bereits aktiviert.</de>
+<id>1541</id>
+</text>
+<text>
+<en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
+<de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollständig in den Browser kopiert?</de>
+<id>1542</id>
+<en>Voucher</en>
+<de>Gutschein</de>
+<id>1543</id>
+</text>
+<text>
+<en>Vouchers</en>
+<de>Gutscheine</de>
+<id>1544</id>
+</text>
+<text>
+<en>Voucher Code</en>
+<de>Gutscheint Code</de>
+<id>1545</id>
+</text>
+<text>
+<en>Amount</en>
+<context>Amount of Money</context>
+<de>Betrag</de>
+<id>1546</id>
+</text>
+<text>
+<en>Used Amount</en>
+<context>Amount of Money</context>
+<de>Benutzer Betrag</de>
+<id>1547</id>
+</text>
+<text>
+<en>'%value%' code was already used</en>
+<de>'%value%' Code wurde bereits benutzt</de>
+<id>1548</id>
+</text>
+<text>
+<en>'%value%' is not a valid voucher code</en>
+<de>'%value%' ist ein ungültiger Gutschein Code</de>
+<id>1549</id>
+</text>
+<text>
+<en>Redeem Voucher</en>
+<de>Gutschein einlösen</de>
+<id>1550</id>
+</text>
+<text>
+<en>Remaining Amount {0}</en>
+<de>Restbetrag {0}</de>
+<id>1551</id>
+</text>
+<text>
+<en>The Voucher has been successfully registered.</en>
+<de>Der Gutschein wurde erfolgreich eingetragen.</de>
+<id>1552</id>
+</text>
+<text>
+<en>Product: Voucher</en>
+<de>Produkt: Gutschein</de>
+<id>1393</id>
+</text>
+<text>
+<en>Copy of</en>
+<de>Kopie von</de>
+<id>1553</id>
+</text>
 </trl>
-

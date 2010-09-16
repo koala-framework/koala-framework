@@ -20,6 +20,8 @@ class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
                 ->getComponentById($componentId, array('ignoreVisible' => true))
                 ->parent;
         }
+        $parent = $parent->getPseudoPageOrRoot();
+
         $values = array();
         foreach ($parent->getChildPages(array('ignoreVisible' => true)) as $c) {
             if ($c->componentId == $componentId) continue;
@@ -36,7 +38,6 @@ class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
                 $unique = ++$x;
             }
         }
-
         return (string)$unique;
     }
 
