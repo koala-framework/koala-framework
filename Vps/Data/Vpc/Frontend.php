@@ -31,6 +31,11 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
                 $process[] = $data;
             }
             foreach ($process as $i) {
+                if (method_exists($i->getComponent(), 'preProcessInput')) {
+                    $i->getComponent()->preProcessInput(array());
+                }
+            }
+            foreach ($process as $i) {
                 if (method_exists($i->getComponent(), 'processInput')) {
                     $i->getComponent()->processInput(array());
                 }

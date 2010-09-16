@@ -201,7 +201,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
         if ($id == 'vps') {
             //die zwei wurden im svn im nachinhein geaendert
-            $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/SvnUpController.php";
+            $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/Web/SvnUpController.php";
             echo "$cmd\n";
             $this->_systemCheckRet($cmd);
         }
@@ -290,6 +290,14 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             }
         } else {
             echo "vps: ".$g->getActiveBranch()." != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
+        }
+
+        if ($this->_getParam('with-library')) {
+            echo "\nupdating library\n";
+            $git = new Vps_Util_Git(Vps_Registry::get('config')->libraryPath);
+            $git->system("pull --rebase");
+        } else {
+            echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
         }
 
         $projectIds = Vps_Model_Abstract::getInstance('Vps_Util_Model_Projects')

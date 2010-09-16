@@ -524,7 +524,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, "$depTableName.$col1");
-            return $this->getPrimaryKey()." IN ($depDbSelect)";
+            return $this->_fieldWithTableName($this->getPrimaryKey())." IN ($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
             $refM = $depOf->getReferencedModel($expr->getParent());
             $refM = Vps_Model_Abstract::getInstance($refM);
@@ -826,6 +826,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
                 $ret = file_get_contents($filename.'.gz');
                 unlink($filename.'.gz');
+                rmdir($tmpExportFolder);
                 return $ret;
             } else {
                 return '';
@@ -1021,7 +1022,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
     {
         // Performance, bei Pdo wird der Adapter umgangen
         if ($this->_table->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $q = $this->_table->getAdapter()->getProfiler()->queryStart($sql, Zend_Db_Profiler::INSERT);
             $this->_table->getAdapter()->getConnection()->exec($sql);
+            $this->_table->getAdapter()->getProfiler()->queryEnd($q);
         } else {
             $this->_table->getAdapter()->query($sql);
         }
@@ -1038,10 +1041,20 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     // check if csv is possible with current database rights
                     if (!Vps_Util_Mysql::getFileRight()) {
                         unset($ret[$k]);
-                        $ret = array_values($ret);
+                    }
+                } else if ($v === self::FORMAT_SQL) {
+                    // check if mysql is available (mainly because of POI Servers,
+                    // where mysql is on another server)
+                    exec("whereis mysql", $output, $execRet);
+
+                    if ($output && is_array($output) && trim($output[0]) != 'mysql:') {
+                        // hier bleibts drin
+                    } else {
+                        unset($ret[$k]);
                     }
                 }
             }
+            $ret = array_values($ret);
             return $ret;
         }
     }

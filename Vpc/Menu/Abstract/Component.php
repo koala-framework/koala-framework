@@ -197,6 +197,9 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret[] = array(
             'model' => 'Vps_Component_Model'
         );
+        $ret[] = array(
+            'model' => 'Vpc_Menu_Abstract_Model'
+        );
         // Falls Nickname geändert wird, ändert sich Url zum User
         $ret[] = array(
             'model' => Vps_Registry::get('config')->user->model

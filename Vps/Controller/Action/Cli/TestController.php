@@ -67,10 +67,6 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
     {
         Zend_Session::start();
         ini_set('memory_limit', '512M');
-        Zend_Registry::get('config')->debug->benchmark = false;
-        //Zend_Registry::get('config')->debug->querylog = false;
-        Zend_Registry::get('config')->hasIndex = false; //zwischenlösung bis index auf models umgestellt wurde und auch getestet werden muss
-        Zend_Registry::get('config')->debug->error->log = false;
 
         Vps_Component_Data_Root::setComponentClass(false);
         Zend_Registry::set('db', Vps_Test::getTestDb());
@@ -118,7 +114,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('retry-on-error')) {
             $arguments['retryOnError'] = $this->_getParam('retry-on-error');
         }
-        
+
         if ($this->_getParam('coverage')) {
             if (!extension_loaded('tokenizer') || !extension_loaded('xdebug')) {
                 throw new Vps_ClientException('tokenizer and xdebug extensions must be loaded');
@@ -130,11 +126,9 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             }
         }
 
-        if ($this->_getParam('server')) {
-            $cfg = Vps_Config_Web::getInstance($this->_getParam('server'));
-            Vps_Registry::set('testDomain', $cfg->server->domain);
-            Vps_Registry::set('testServerConfig', $cfg);
-        }
+        Vps_Registry::set('testDomain', Vps_Registry::get('config')->server->domain);
+        Vps_Registry::set('testServerConfig', Vps_Registry::get('config'));
+
         if ($this->_getParam('report')) {
             $resultLogger = new Vps_Test_ResultLogger(true/*verbose*/);
             $arguments['listeners'][] = $resultLogger;
@@ -145,6 +139,9 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('disable-debug')) {
             Vps_Debug::disable();
         }
+
+        //nur temporär deaktiviert, damit ich selenium-verbindungs-probleme besser debuggen kann
+        PHPUnit_Util_Filter::setFilter(false);
 
         $runner = new Vps_Test_TestRunner();
         $suite = new Vps_Test_TestSuite();

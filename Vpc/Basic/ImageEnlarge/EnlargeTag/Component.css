@@ -10,6 +10,7 @@
     background: #fff;
     z-index: 100;
 }
+.ext-ie6 .lightbox { width: 800px; }
 
 .lightbox .lightboxHeader { position: relative; z-index: 102; }
 .lightbox .lightboxHeader a.closeButton {
@@ -65,7 +66,7 @@
 .webZoom {
     display: block;
     position: absolute;
-    bottom: 10px;
+    bottom: 5px;
     right: 5px;
     width: 15px;
     height: 15px;

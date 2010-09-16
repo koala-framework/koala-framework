@@ -8,6 +8,7 @@ class Vpc_Directories_Category_Directory_Component extends Vpc_Directories_ItemP
         $ret['generators']['detail']['class'] = 'Vpc_Directories_Category_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Vpc_Directories_Category_Detail_Component';
         $ret['generators']['detail']['showInMenu'] = true;
+        $ret['generators']['detail']['nameColumn'] = 'name';
 
         // zB für Kategorien Box
         $ret['categoryChildId'] = 'categories';

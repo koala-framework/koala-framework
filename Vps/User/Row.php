@@ -297,7 +297,9 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
 
     public function __set($columnName, $value)
     {
-        if (!in_array($columnName, array('webcode', 'created', 'logins', 'last_login', 'last_modified', 'locked'))) {
+        $noLog = $this->getModel()->getNoLogColumns();
+        $noLog = array_merge($noLog, array('webcode', 'created', 'logins', 'last_login', 'last_modified', 'locked'));
+        if (!in_array($columnName, $noLog)) {
             $this->_logChangedUser = true;
         }
         if ($columnName == 'email' && $value != $this->email) {

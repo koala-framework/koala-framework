@@ -37,10 +37,16 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         }
     }
 
+    protected function _getOutputValueFromValues($values)
+    {
+        $name = $this->getFieldName();
+        return isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
-        $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
+        $value = $this->_getOutputValueFromValues($values);
         $ret = parent::getTemplateVars($values);
 
         $value = htmlspecialchars($value);

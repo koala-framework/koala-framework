@@ -41,7 +41,7 @@ class Vpc_Newsletter_Controller extends Vpc_Directories_Item_Directory_Controlle
             $source = Vps_Component_Data_Root::getInstance()
                 ->getComponentById($sourceId);
 
-            $newDetail = $source->generator->duplicateChild($source, $parentTarget);
+            $newDetail = Vps_Util_Component::duplicate($source, $parentTarget);
 
             $newDetailRow = $newDetail->row;
             $newDetailRow->create_date = date('Y-m-d H:i:s');
@@ -49,7 +49,7 @@ class Vpc_Newsletter_Controller extends Vpc_Directories_Item_Directory_Controlle
             $newDetailRow->save();
 
             $mailRow = $newDetail->getChildComponent('-mail')->getComponent()->getRow();
-            $mailRow->subject = trlVps('Copy').': '.$mailRow->subject;
+            $mailRow->subject = trlVps('Copy of').' '.$mailRow->subject;
             $mailRow->save();
         }
     }

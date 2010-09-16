@@ -166,11 +166,18 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $c = $c->parent;
         }
 
-        $newParagraph = $source->generator->duplicateChild($source, $target);
+        $newParagraph = Vps_Util_Component::duplicate($source, $target);
 
         $row = $newParagraph->row;
         $row->pos = $this->_getParam('pos');
         $row->visible = null;
         $row->save();
+    }
+
+    public function jsonMakeAllVisibleAction()
+    {
+        $id = $this->_getParam('componentId');
+        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id);
+        Vpc_Admin::getInstance($c->componentClass)->makeVisible($c);
     }
 }

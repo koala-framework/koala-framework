@@ -3,11 +3,15 @@ Vps.onContentReady(function()
     var fadeComponents = Ext.query('div.vpsFadeElements');
     Ext.each(fadeComponents, function(c) {
         var selector = Ext.query('.fadeSelector', c)[0].value;
-        var config = Ext.query('.fadeConfig', c)[0]; // optional
-        if (config) {
-            config = Ext.decode(config.value);
+        var config = Ext.query('.fadeConfig', c); // optional
+        if (config && config[0]) {
+            config = Ext.decode(config[0].value);
         } else {
             config = { };
+        }
+        var textSelector = Ext.query('.textSelector', c); // optional
+        if (textSelector && textSelector[0]) {
+            config.textSelector = textSelector[0].value;
         }
 
         config.selector = selector;
@@ -67,6 +71,15 @@ Vps.Fade.Elements = function(cfg) {
         i += 1;
     }, this);
 
+    // wenn nur ein fade element existiert und im text element kein inhalt ist: ausblenden
+    if (this.fadeElements.length == 1 && cfg.textSelector) {
+        var dontShowEl = Ext.query(cfg.textSelector, this.selectorRoot);
+        if (dontShowEl && dontShowEl[0]) {
+            if (dontShowEl[0].innerHTML.replace(/\s/g, '') == '') {
+                Ext.get(dontShowEl[0]).setDisplayed('none');
+            }
+        }
+    }
 
     // create the element access link if needed
     if (this.elementAccessLinks && i >= 1) {
@@ -144,32 +157,32 @@ Vps.Fade.Elements.prototype = {
     _createElementAccessLinks: function(activeLinkIndex) {
         var ul = Ext.get(this.selectorRoot).createChild({ tag: 'ul', cls: 'elementAccessLinks' });
 
-        var j = 0;
-        Ext.each(this.fadeElements, function(e) {
-            var a = ul.createChild({ tag: 'li' })
-                .createChild({
-                    tag: 'a',
-                    cls: 'elementAccessLink'+(activeLinkIndex==j ? ' elementAccessLinkActive' : ''),
-                    html: '',
-                    href: '#'
-                });
-            a.on('click', function(ev, el, opt) {
-                ev.stopEvent();
-
-                if (this._timeoutId) {
-                    window.clearTimeout(this._timeoutId);
-                }
-                this.next = opt.activateIdx;
-                this.doFade();
-                this.pause();
-
-            }, this, { activateIdx: j });
-            this._elementAccessLinkEls.push(a);
-            j += 1;
-        }, this);
-
-        // play / pause button if there are at least 2 images
+        // accessLinks and play / pause button if there are at least 2 images
         if (this.fadeElements.length >= 2) {
+            var j = 0;
+            Ext.each(this.fadeElements, function(e) {
+                var a = ul.createChild({ tag: 'li' })
+                    .createChild({
+                        tag: 'a',
+                        cls: 'elementAccessLink'+(activeLinkIndex==j ? ' elementAccessLinkActive' : ''),
+                        html: '',
+                        href: '#'
+                    });
+                a.on('click', function(ev, el, opt) {
+                    ev.stopEvent();
+
+                    if (this._timeoutId) {
+                        window.clearTimeout(this._timeoutId);
+                    }
+                    this.next = opt.activateIdx;
+                    this.doFade();
+                    this.pause();
+
+                }, this, { activateIdx: j });
+                this._elementAccessLinkEls.push(a);
+                j += 1;
+            }, this);
+
             this._playPauseButton = ul.createChild({ tag: 'li' })
                 .createChild({
                     tag: 'a',

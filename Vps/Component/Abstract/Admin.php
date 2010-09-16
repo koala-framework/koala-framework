@@ -154,28 +154,43 @@ class Vps_Component_Abstract_Admin
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
-        $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
-
+        $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
         if (count($components) > 1) {
             if (!$acl->has('vpc_news')) {
-                $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_news',
-                            array('text'=>$name, 'icon'=>$icon)), 'vps_component_root');
+                $acl->add(
+                    new Vps_Acl_Resource_MenuDropdown(
+                        'vpc_news', array('text'=>$name, 'icon'=>$icon)
+                    ), 'vps_component_root'
+                );
             }
             foreach ($components as $c) {
                 $t = $c->getTitle();
                 if (!$t) $t = $c->componentId;
-                $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
-                        array('text'=>$t, 'icon'=>$icon),
-                        Vpc_Admin::getInstance($c->componentClass)->getControllerUrl().'?componentId='.$c->dbId), 'vpc_news');
+                $acl->add(
+                    new Vps_Acl_Resource_Component_MenuUrl(
+                        $c, array('text'=>$t, 'icon'=>$icon)
+                    ), 'vpc_news'
+                );
             }
         } else if (count($components) == 1) {
             $c = $components[0];
-            $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
-                    array('text'=>$name, 'icon'=>$icon),
-                    Vpc_Admin::getInstance($c->componentClass)->getControllerUrl().'?componentId='.$c->dbId), 'vps_component_root');
-
+            $name = $this->_addResourcesBySameClassResourceName($c);
+            $acl->add(
+                new Vps_Acl_Resource_Component_MenuUrl(
+                    $c, array('text'=>$name, 'icon'=>$icon)
+                ), 'vps_component_root'
+            );
         }
+    }
+
+    //TODO nicht recht flexibel... NUR in Vpc_News_Directory_Trl_Admin verwenden
+    //falls es wo anders gebraucht wird bitte flexibler machen
+    protected function _addResourcesBySameClassResourceName($c)
+    {
+        $ret = Vpc_Abstract::getSetting($this->_class, 'componentName');
+        if (strpos($ret, '.') !== false) $ret = substr(strrchr($ret, '.'), 1);
+        return $ret;
     }
 
     protected final function _getSetting($name)

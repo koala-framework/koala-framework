@@ -24,10 +24,12 @@ abstract class Vps_Controller_Plugin_Acl_Abstract extends Zend_Controller_Plugin
 
     protected function _getAuthedUserRole()
     {
+        if (php_sapi_name() == 'cli') return 'cli';
         return Zend_Registry::get('userModel')->getAuthedUserRole();
     }
     protected function _getAuthedUser()
     {
+        if (php_sapi_name() == 'cli') return null;
         return Zend_Registry::get('userModel')->getAuthedUser();
     }
 
