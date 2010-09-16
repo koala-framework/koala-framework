@@ -51,8 +51,11 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
             if (!$this->_user) {
                 $this->_errors[] = trlVps('Data was not sent completely. Please copy the complete address out of the email.');
                 $this->_hideForm = true;
-            } else if ($this->_user->getActivationCode() != $code) {
-                $this->_errors[] = trlVps('Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.');
+            } else if ($this->_user->getActivationCode() != $code && $this->_user->password) {
+                $this->_errors[] = trlVps('This account has already been activated.');
+                $this->_hideForm = true;
+            } else if ($this->_user->getActivationCode() != $code && !$this->_user->password) {
+                $this->_errors[] = trlVps('Activation code is wrong. Maybe the address was copied wrong out of the email?');
                 $this->_hideForm = true;
             }
         }

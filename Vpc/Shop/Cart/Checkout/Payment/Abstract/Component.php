@@ -25,6 +25,8 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
             'component' => 'Vpc_Shop_Cart_Checkout_Payment_Abstract_ShippedMail_Component',
         );
 
+        $ret['orderData'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderData';
+
         return $ret;
     }
 
@@ -50,19 +52,11 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
         return $this->getData()->parent->getComponent()->getSumRows($order);
     }
 
-    //da kann zB eine Nachnahmegebühr zurückgegeben werden
-    //darf nur von Vpc_Shop_Cart_Checkout_Component::getAdditionalSumRows() aufgerufen werden!
-    public function getAdditionalSumRows()
-    {
-        return array();
+    public final function getAdditionalSumRows() {
+        throw new Vps_Exception("removed");
     }
-
-
-    //da kann zB eine Nachnahmegebühr zurückgegeben werden
-    //darf nur von Vpc_Shop_Cart_Checkout_Component::getAdditionalSum() aufgerufen werden!
-    public function getAdditionalSum($order)
-    {
-        return 0;
+    public final function getAdditionalSum($order) {
+        throw new Vps_Exception("removed");
     }
 
     public function sendConfirmMail($order)
@@ -75,13 +69,25 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
         $mail->send($order, $data);
     }
 
+    //diese fkt wird bei paypal nicht verwendet!
+    //wenn also da was hinzugefuegt wird muss das bei paypal auch gemacht werden
     public function confirmOrder($order)
     {
         $order->payment_component_id = $this->getData()->componentId;
         $order->checkout_component_id = $this->getData()->parent->componentId;
+        $order->cart_component_class = $this->getData()->parent->parent->componentClass;
         $order->status = 'ordered';
         $order->date = date('Y-m-d H:i:s');
         $order->save();
+
+        foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
+            $p->orderConfirmed($order);
+        }
+        foreach ($order->getChildRows('Products') as $p) {
+            $addComponent = Vps_Component_Data_Root::getInstance()
+                ->getComponentByDbId($p->add_component_id);
+            $addComponent->getComponent()->orderConfirmed($p);
+        }
 
         $this->sendConfirmMail($order);
     }

@@ -5,20 +5,13 @@ class Vpc_Root_TrlRoot_Chained_Admin extends Vpc_Abstract_Admin
     public static function duplicated(Vps_Component_Data $source, Vps_Component_Data $new)
     {
         $chained = Vps_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component', array('ignoreVisible'=>true)); //bySameClass wenn fkt nicht static
+            ->getComponentsByClass('Vpc_Root_TrlRoot_Chained_Component', array('ignoreVisible'=>true)); //bySameClass wenn fkt nicht mehr static (todo oben erledigt)
         foreach ($chained as $c) {
             $sourceChained = Vpc_Chained_Trl_Component::getChainedByMaster($source, $c, array('ignoreVisible'=>true));
             $newChained = Vpc_Chained_Trl_Component::getChainedByMaster($new, $c, array('ignoreVisible'=>true));
-
-            //kann vorkommen wenn es trl überschrieben und es keine 1:1 übersetzung gibt
-            //zB newsletter
-            if (!$sourceChained && !$newChained) continue;
-
-            if (!$sourceChained) {
-                throw new Vps_Exception("can't find source chained component");
-            }
+            if (!$sourceChained) continue; //wenn sourceChained nicht gefunden handelt es sich zB um ein MasterAsChild - was ignoriert werden muss
             if (!$newChained) {
-                throw new Vps_Exception("can't find new chained component");
+                throw new Vps_Exception("can't find chained components");
             }
             Vpc_Admin::getInstance($newChained->componentClass)->duplicate($sourceChained, $newChained);
         }

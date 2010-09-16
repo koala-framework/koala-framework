@@ -10,9 +10,15 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
         }
 
         // Fileupload
-        $this->add(new Vps_Form_Field_File('Image', trlVps('Image')))
+        $image = new Vps_Form_Field_File('Image', Vpc_Abstract::getSetting($this->getClass(), 'imageLabel'));
+        $image
             ->setAllowBlank(Vpc_Abstract::getSetting($this->getClass(), 'allowBlank'))
             ->setAllowOnlyImages(true);
+        if (Vpc_Abstract::getSetting($this->getClass(), 'maxResolution')) {
+            $image->setMaxResolution(Vpc_Abstract::getSetting($this->getClass(), 'maxResolution'));
+        }
+        $this->add($image);
+
         if (Vpc_Abstract::getSetting($this->getClass(), 'showHelpText')) {
             $dimensions = Vpc_Abstract::getSetting($this->getClass(), 'dimensions');
             $helptext = trlVps('Size of Target Image') . ': ' . $dimensions[0]['width'] . 'x' . $dimensions[0]['height'] . 'px';

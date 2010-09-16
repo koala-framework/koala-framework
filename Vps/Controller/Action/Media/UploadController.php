@@ -21,8 +21,13 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
         }
         $fileRow = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')
             ->createRow();
-        if ($this->_getParam('maxResolution') && substr($file['type'], 0, 6) ==  'image/') {
-            $maxResolution = $this->_getParam('maxResolution');
+
+        $maxResolution = (int)$this->_getParam('maxResolution');
+        if ($this->_getParam('maxResolution')) {
+            $image = getimagesize($file['tmp_name']);
+            if (substr($image['mime'], 0, 6) != 'image/') $maxResolution = 0;
+        }
+        if ($maxResolution > 0) {
             $fileData = Vps_Media_Image::scale($file['tmp_name'], array('width' => $maxResolution, 'height' => $maxResolution, 'scale' => Vps_Media_Image::SCALE_BESTFIT));
             $filename = substr($file['name'], 0, strrpos($file['name'], '.'));
             $extension = substr(strrchr($file['name'], '.'), 1);
