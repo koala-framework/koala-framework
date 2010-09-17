@@ -21,7 +21,15 @@ Vpc.Directories.List.ViewMap.renderMap = function(map) {
 Vps.onContentReady(function() {
     var maps = Ext.DomQuery.select('div.vpcDirectoriesListViewMap');
     Ext.each(maps, function(map) {
-        Vpc.Directories.List.ViewMap.renderMap(map);
+        var up = Ext.get(map).up('div.vpsSwitchDisplay');
+        if (up) {
+            (function(up, map) {
+                Ext.get(up).switchDisplayObject.on('opened', function() {
+                    Vpc.Directories.List.ViewMap.renderMap(map);
+                });
+            }).defer(1, this, [up, map]);
+        } else {
+            Vpc.Directories.List.ViewMap.renderMap(map);
+        }
     });
 });
-
