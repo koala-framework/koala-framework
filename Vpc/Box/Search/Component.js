@@ -7,9 +7,17 @@ Vps.onContentReady(function() {
             searchField  : Ext.get(Ext.DomQuery.select('.searchField', searchBox)[0]),
             searchResult : Ext.get(Ext.DomQuery.select('.searchResult', searchBox)[0]),
             ajaxUrl      : Ext.get(Ext.DomQuery.select('.ajaxUrl', searchBox)[0]),
-            submitParam  : Ext.get(Ext.DomQuery.select('.submitParam', searchBox)[0])
+            submitParam  : Ext.get(Ext.DomQuery.select('.submitParam', searchBox)[0]),
+            searchSettings: Ext.get(Ext.DomQuery.select('.searchSettings', searchBox)[0]),
         };
-        els.searchResult.alignTo(els.searchField, 'tl-bl');
+        if (els.searchSettings) {
+            var searchSettings = Ext.decode(els.searchSettings.getValue());
+        }
+        var aligning = 'tl-bl';
+        if (searchSettings && searchSettings.searchResultBoxAlign) {
+            aligning = searchSettings.searchResultBoxAlign;
+        }
+        els.searchResult.alignTo(els.searchField, aligning);
         els.searchResult.hide();
 
         els.searchField.on('keyup', function() {
@@ -37,15 +45,31 @@ Vps.onContentReady(function() {
         });
 
         els.searchField.on('focus', function() {
-            els.searchResult.show();
+            if (searchSettings && searchSettings.searchResultBoxFade) {
+                els.searchResult.fadeIn({ duration: .35, useDisplay: true });
+            } else {
+                els.searchResult.show();
+            }
             focused = true;
         });
         els.searchField.on('blur', function() {
-            if (!mouseover) els.searchResult.hide();
+            if (!mouseover) {
+                if (searchSettings && searchSettings.searchResultBoxFade) {
+                    els.searchResult.fadeOut({ duration: .35, useDisplay: true });
+                } else {
+                    els.searchResult.hide();
+                }
+            }
             focused = false;
         });
         Ext.get(document.body).on('click', function() {
-            if (!mouseover && !focused) els.searchResult.hide();
+            if (!mouseover && !focused) {
+                if (searchSettings && searchSettings.searchResultBoxFade) {
+                    els.searchResult.fadeOut({ duration: .35, useDisplay: true });
+                } else {
+                    els.searchResult.hide();
+                }
+            }
         });
     });
 });
