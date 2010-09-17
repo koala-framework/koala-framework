@@ -89,12 +89,10 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
 
     public static function getMediaOutput($id, $type, $className)
     {
-        $row = Vpc_Abstract::createModel($className)->getRow($id);
-        if ($row) {
-            $fileRow = $row->getParentRow('File');
-        } else {
-            $fileRow = false;
-        }
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+        if (!$c) return null;
+        $row = $c->getComponent()->getRow();
+        $fileRow = $row->getParentRow('File');
         if (!$fileRow) {
             return null;
         } else {
