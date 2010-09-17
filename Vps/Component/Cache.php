@@ -81,11 +81,11 @@ abstract class Vps_Component_Cache
 
         } else if ($meta instanceof Vps_Component_Cache_Meta_Static_Chained) {
 
-            $sourceComponentClass = $meta->getTargetComponentClass();
+            $sourceComponentClass = $meta->getSourceComponentClass();
             $targetComponentClass = $componentClass;
             if ($sourceComponentClass == $targetComponentClass)
                 throw new Vps_Exception('Source and target component Class must be different, both have ' . $sourceComponentClass);
-            $this->_saveMetaChained($sourceComponentClass, $targetComponentClass, $meta->chainedType);
+            $this->_saveMetaChained($sourceComponentClass, $targetComponentClass);
 
         } else {
 

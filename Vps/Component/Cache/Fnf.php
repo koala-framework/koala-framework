@@ -8,7 +8,8 @@ class Vps_Component_Cache_Fnf extends Vps_Component_Cache_Mysql
             'preload' => new Vps_Component_Cache_Fnf_PreloadModel(),
             'metaModel' => new Vps_Component_Cache_Fnf_MetaModelModel(),
             'metaRow' => new Vps_Component_Cache_Fnf_MetaRowModel(),
-            'metaComponent' => new Vps_Component_Cache_Fnf_MetaComponentModel()
+            'metaComponent' => new Vps_Component_Cache_Fnf_MetaComponentModel(),
+            'metaChained' => new Vps_Component_Cache_Fnf_MetaChainedModel()
         );
     }
 }

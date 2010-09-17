@@ -8,7 +8,7 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
         $this->_sourceComponentClass = $sourceComponentClass;
     }
 
-    public function getSourceComponent()
+    public function getSourceComponentClass()
     {
         return $this->_sourceComponentClass;
     }
