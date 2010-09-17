@@ -212,9 +212,11 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     public function cleanByRow(Vps_Model_Row_Abstract $row)
     {
         $select = $this->getModel('cache')->select();
+        $this->_chained = $this->getModel('metaChained')->getRows();
 
         // Cache
         $componentIds = $this->_getRowComponentIds($row);
+        p($componentIds);
         $componentIds = $this->_addMetaComponentIds($componentIds);
 
         $modelComponentIds = $this->_getModelComponentIds($row);
@@ -228,13 +230,13 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $expr = new Vps_Model_Select_Expr_Or($or);
         $modelComponentIds = $this->_addMetaComponentIds($modelComponentIds, $expr);
         $componentIds = array_unique(array_merge($componentIds, array_values($modelComponentIds)));
-
         $or[] = new Vps_Model_Select_Expr_Equal('component_id', $componentIds);
+
         $expr = new Vps_Model_Select_Expr_Or($or);
-        $select = $this->getModel('cache')->select()->where($expr);
+        //d($this->getModel('cache')->select()->where($expr)->getParts());
         $this->getModel('cache')->updateRows(
             array('deleted' => 1),
-            $select
+            $this->getModel('cache')->select()->where($expr)
         );
 
         // Callback
@@ -317,12 +319,11 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $this->_models['metaComponent']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
-    protected function _saveMetaChained($sourceComponentClass, $targetComponentClass, $chainedType)
+    protected function _saveMetaChained($sourceComponentClass, $targetComponentClass)
     {
         $data = array(
             'source_component_class' => $sourceComponentClass,
-            'target_component_class' => $targetComponentClass,
-            'chained_type' => $chainedType
+            'target_component_class' => $targetComponentClass
         );
         $options = array(
             'buffer' => true,

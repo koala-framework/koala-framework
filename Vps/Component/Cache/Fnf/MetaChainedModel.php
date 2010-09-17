@@ -5,8 +5,8 @@ class Vps_Component_Cache_Fnf_MetaChainedModel extends Vps_Component_Cache_Mysql
     {
         $config['proxyModel'] = new Vps_Model_FnF(array(
             'primaryKey' => 'fakeId',
-            'columns' => array('fakeId', 'source_component_class', 'target_component_class', 'chained_type'),
-            'uniqueColumns' => array('source_component_class', 'target_component_class', 'chained_type')
+            'columns' => array('fakeId', 'source_component_class', 'target_component_class'),
+            'uniqueColumns' => array('source_component_class', 'target_component_class')
         ));
         parent::__construct($config);
     }
