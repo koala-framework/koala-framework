@@ -58,9 +58,9 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
     public static function isValidMediaOutput($id, $type, $className)
     {
         $retValid = self::VALID;
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id);
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id);
         if (!$c) {
-            $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
+            $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
             if (!$c) return self::INVALID;
             if (Vps_Registry::get('config')->showInvisible) {
                 //preview im frontend
@@ -89,12 +89,10 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
 
     public static function getMediaOutput($id, $type, $className)
     {
-        $row = Vpc_Abstract::createModel($className)->getRow($id);
-        if ($row) {
-            $fileRow = $row->getParentRow('File');
-        } else {
-            $fileRow = false;
-        }
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+        if (!$c) return null;
+        $row = $c->getComponent()->getRow();
+        $fileRow = $row->getParentRow('File');
         if (!$fileRow) {
             return null;
         } else {
