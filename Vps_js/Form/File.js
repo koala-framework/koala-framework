@@ -1,4 +1,4 @@
-Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
+Vps.Form.File = Ext.extend(Ext.form.Field, {
     allowOnlyImages: false,
     fileSizeLimit: 0,
     showPreview: true,
@@ -39,11 +39,11 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         }
         this.infoTpl.compile();
 
-        Vps.Form.SwfUploadField.superclass.initComponent.call(this);
+        Vps.Form.File.superclass.initComponent.call(this);
 
     },
     afterRender: function() {
-        Vps.Form.SwfUploadField.superclass.afterRender.call(this);
+        Vps.Form.File.superclass.afterRender.call(this);
 
         if (this.showPreview) {
             this.previewImage = this.el.createChild({
@@ -107,7 +107,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             file_types: fileTypes,
             file_types_description: fileTypesDescription,
             post_params: params,
-            button_image_url: "/assets/vps/Vps_js/Form/SwfUploadField/button.jpg",
+            button_image_url: "/assets/vps/Vps_js/Form/File/button.jpg",
             button_width: "120",
             button_height: "21",
             button_placeholder_id: this.uploadButtonContainerChildId,
@@ -275,7 +275,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
     },
     onDestroy: function()
     {
-        Vps.Form.SwfUploadField.superclass.onDestroy.call(this);
+        Vps.Form.File.superclass.onDestroy.call(this);
         if (this.swfu) this.swfu.destroy();
     },
 
@@ -321,7 +321,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
                 this.infoContainer.update('');
             }
         }
-        Vps.Form.SwfUploadField.superclass.setValue.call(this, value.uploadId);
+        Vps.Form.File.superclass.setValue.call(this, value.uploadId);
     },
 
     validateValue : function(value){
@@ -341,7 +341,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
 
 
 
-Ext.reg('swfuploadfield', Vps.Form.SwfUploadField);
+Ext.reg('vps.file', Vps.Form.File);
 
 
 
