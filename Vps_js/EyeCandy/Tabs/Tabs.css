@@ -1,4 +1,5 @@
-.vpsTabs .vpsTabsContent { display: none; }
+.vpsTabs .vpsTabsContents { position: relative; }
+.vpsTabs .vpsTabsContent { display: none; position: absolute; top: 0px; }
 /* das important muss bleiben weil es das selbe element ist  wie .vpsTabsContent */
 .vpsTabs .vpsTabsContentActive { display: block !important; }
 
