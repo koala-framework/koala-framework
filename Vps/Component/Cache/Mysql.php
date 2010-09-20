@@ -135,7 +135,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         }
         return get_class($model);
     }
-
+/*
     protected function _getRowComponentIds($row, $callback = 0)
     {
         $model = $this->getModel('metaRow');
@@ -249,6 +249,119 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             if ($component) $component->getComponent()->onCacheCallback($row);
         }
     }
+*/
+    protected function _getRowComponentIds($row, $callback = 0)
+    {
+        // Das suchen wir
+        // $searchModel = model column value component_id callback
+        // $searchModel->model = $row->model && $searchModel->value=$row->{$searchModel->column}
+        $searchModel = $this->getModel('metaRow');
+
+        $select = $searchModel->select()
+            ->whereEquals('model', $this->_getModelname($row))
+            ->whereEquals('callback', $callback);
+
+        // Alle Rows mit betreffenden model holen und columns suchen
+        $columns = array();
+        foreach ($searchModel->getRows($select) as $r) $columns[] = $r->column;
+        $columns = array_unique($columns);
+
+        // Für die Columns Values einsetzen
+        $or = array();
+        foreach ($columns as $column) {
+            $or[] = new Vps_Model_Select_Expr_And(array(
+                new Vps_Model_Select_Expr_Equal('column', $column),
+                new Vps_Model_Select_Expr_Equal('value', $row->$column)
+            ));
+        }
+
+        // Rausgesuchte Columns mit Values zu Select hinzufügen
+        $select->where(new Vps_Model_Select_Expr_Or($or));
+        $componentIds = array();
+        foreach ($searchModel->getRows($select) as $r) {
+            $componentIds[] = $r->component_id;
+        }
+
+        return $componentIds;
+    }
+
+    protected function _getModelComponentIds($row, $callback = 0)
+    {
+        $model = $this->getModel('metaModel');
+
+        $select = $model->select()
+            ->whereEquals('model', $this->_getModelname($row))
+            ->whereEquals('callback', $callback);
+
+        $componentIds = array();
+        foreach ($model->getRows($select) as $metaRow) {
+            $componentId = $metaRow->pattern;
+            if (!$componentId) continue;
+            $matches = array();
+            preg_match_all('/\{([a-z0-9_]+)\}/', $componentId, $matches);
+            foreach ($matches[1] as $m) {
+                $componentId = str_replace('{' . $m . '}', $row->$m, $componentId);
+            }
+            $componentIds[$metaRow->component_class][] = $componentId;
+        }
+        return $componentIds;
+    }
+
+    protected function _addMetaComponentIds($componentIds)
+    {
+        // $model: component_id component_class target_component_id target_component_class
+        // So lange $model nach component_id durchsuchen und in ergebnis
+        // $model->target_component_id reingeben bis nichts mehr neues kommt
+        $originalComponentIds = $componentIds;
+        $model = $this->getModel('metaComponent');
+        do {
+            $select = $model->select();
+            $select->whereEquals('component_id', $componentIds);
+            $componentIds2 = array();
+            foreach ($model->getRows($select) as $r) {
+                $componentIds2[] = $r->target_component_id;
+            }
+            $componentIds2 = array_diff($componentIds2, $componentIds);
+            $componentIds = array_unique(array_merge($componentIds, $componentIds2));
+        } while ($componentIds2);
+        return $componentIds;
+    }
+
+    public function cleanByRow(Vps_Model_Row_Abstract $row)
+    {
+        $componentIds = $this->_getRowComponentIds($row);
+        $or = array();
+        foreach ($this->_getModelComponentIds($row) as $cClass => $cIds) {
+            foreach ($cIds as $cId) {
+                if (strpos($cId, '%') !== false) {
+                    $or[] = new Vps_Model_Select_Expr_And(array(
+                        new Vps_Model_Select_Expr_Like('component_id', $cId),
+                        new Vps_Model_Select_Expr_Equal('component_class', $cClass)
+                    ));
+                } else {
+                    $componentIds[] = $cId;
+                }
+            }
+        }
+        $componentIds = $this->_addMetaComponentIds(array_unique($componentIds));
+
+        $select = $this->getModel('cache')->select();
+        $or[] = new Vps_Model_Select_Expr_Equal('component_id', $componentIds);
+        if ($or) $select->where(new Vps_Model_Select_Expr_Or($or));
+        //d($select->getParts());
+        $this->getModel('cache')->updateRows(array('deleted' => 1), $select);
+
+        // Callback
+        $componentIds = $this->_getRowComponentIds($row, 1);
+        foreach ($this->_getModelComponentIds($row, 1) as $cIds)
+            $componentIds = array_merge($componentIds, $cIds);
+        foreach (array_unique($componentIds) as $componentId) {
+            $component = Vps_Component_Data_Root::getInstance()->getComponentById(
+                $componentId, array('ignoreVisible' => true)
+            );
+            if ($component) $component->getComponent()->onCacheCallback($row);
+        }
+    }
 
     public function cleanByModel(Vps_Model_Abstract $model)
     {
@@ -257,11 +370,11 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             ->whereNull('pattern')
             ->whereEquals('callback', 0);
         $componentClasses = array();
-        $componentSelect = $this->getModel('metaComponent')->select();
         foreach ($this->getModel('metaModel')->getRows($select) as $r) {
             $componentClasses[] = $r->component_class;
-            $componentSelect->whereEquals('component_class', $r->component_class);
         }
+        $componentSelect = $this->getModel('metaComponent')->select()
+            ->whereEquals('component_class', $componentClasses);
         foreach ($this->getModel('metaComponent')->getRows($componentSelect) as $r) {
             $componentClasses[] = $r->target_component_class;
         }
