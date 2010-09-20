@@ -10,7 +10,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
             'componentIcon' => new Vps_Asset('folder_link'),
         ));
         $ret['dataClass'] = 'Vpc_Basic_DownloadTag_Data';
-        $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
+        $ret['assetsAdmin']['dep'][] = 'VpsFormFile';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/DownloadTag/Panel.js';
         return $ret;
     }

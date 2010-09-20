@@ -29,7 +29,7 @@ if (!Vps.Debug.displayErrors) {
 
 Vps.handleError = function(error) {
 
-    if (error instanceof String) error = { message: error };
+    if (typeof error == 'string') error = { message: error };
     if (arguments[1]) error.title = arguments[1];
     if (arguments[2]) error.mail = arguments[2];
     if (!error.url) error.url = '';
