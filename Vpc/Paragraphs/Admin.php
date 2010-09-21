@@ -1,6 +1,11 @@
 <?php
 class Vpc_Paragraphs_Admin extends Vpc_Admin
 {
+    public function gridColumns()
+    {
+        return array();
+    }
+
     //gibts nimma
     protected final function _getComponents()
     {
