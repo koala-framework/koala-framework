@@ -2787,7 +2787,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Products</en>
-<de>Shop - Produkte</de>
+<de>Shop.Produkte</de>
 <id>795</id>
 </text>
 <text>
@@ -2927,7 +2927,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Cart</en>
-<de>Shop - Warenkorb</de>
+<de>Shop.Warenkorb</de>
 <id>828</id>
 </text>
 <text>
@@ -5798,6 +5798,63 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Spent time by years</en>
 <de>Verbrauchte Zeite nach Jahren</de>
 <id>1518</id>
+</text>
+<text>
+<en>Voucher</en>
+<de>Gutschein</de>
+<id>1379</id>
+</text>
+<text>
+<en>Vouchers</en>
+<de>Gutscheine</de>
+<id>1380</id>
+</text>
+<text>
+<en>Voucher Code</en>
+<de>Gutschein Code</de>
+<id>1385</id>
+</text>
+<text>
+<en>Amount</en>
+<context>Amount of Money</context>
+<de>Betrag</de>
+<id>1386</id>
+</text>
+<text>
+<en>Used Amount</en>
+<context>Amount of Money</context>
+<de>Benutzer Betrag</de>
+<id>1387</id>
+</text>
+<text>
+<en>'%value%' code was already used</en>
+<de>'%value%' Code wurde bereits benutzt</de>
+<id>1388</id>
+</text>
+<text>
+<en>'%value%' is not a valid voucher code</en>
+<de>'%value%' ist ein ungültiger Gutschein Code</de>
+<id>1389</id>
+</text>
+<text>
+<en>Redeem Voucher</en>
+<de>Gutschein einlösen</de>
+<id>1390</id>
+</text>
+<text>
+<en>Remaining Amount {0}</en>
+<de>Restbetrag {0}</de>
+<id>1391</id>
+</text>
+<text>
+<en>The Voucher has been successfully registered.</en>
+<de>Der Gutschein wurde erfolgreich eingetragen.</de>
+<id>1392</id>
+</text>
+<text>
+<en>Product: Voucher</en>
+<de>Produkt: Gutschein</de>
+<id>1393</id>
 </text>
 </trl>
 

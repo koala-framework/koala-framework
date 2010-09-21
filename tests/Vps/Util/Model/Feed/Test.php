@@ -284,6 +284,8 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         */
     }
 
+    /*
+    deaktiviert weil feed nicht mehr funktioniert
     public function testContentEncoded2()
     {
         $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
@@ -292,6 +294,7 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $this->assertTrue(!!$entries->current()->description);
         $this->assertTrue(!!$entries->current()->content_encoded);
     }
+    */
 
     public function testFlickrImageRss20()
     {
