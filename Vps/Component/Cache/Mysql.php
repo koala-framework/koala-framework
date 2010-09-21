@@ -2,6 +2,7 @@
 class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 {
     protected $_models;
+    const CLEAN_DEFAULT = 'default';
 
     public function __construct()
     {
@@ -250,7 +251,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         }
     }
 */
-    protected function _getRowComponentIds($row, $callback = 0)
+    protected function _addRowComponentIds($componentIds, $row, $callback = 0)
     {
         // Das suchen wir
         // $searchModel = model column value component_id callback
@@ -277,15 +278,13 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
         // Rausgesuchte Columns mit Values zu Select hinzufügen
         $select->where(new Vps_Model_Select_Expr_Or($or));
-        $componentIds = array();
         foreach ($searchModel->getRows($select) as $r) {
-            $componentIds[] = $r->component_id;
+            $componentIds[$r->component_class][$r->component_id] = true;
         }
-
         return $componentIds;
     }
 
-    protected function _getModelComponentIds($row, $callback = 0)
+    protected function _addModelComponentIds($componentIds, $row, $callback = 0)
     {
         $model = $this->getModel('metaModel');
 
@@ -293,7 +292,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             ->whereEquals('model', $this->_getModelname($row))
             ->whereEquals('callback', $callback);
 
-        $componentIds = array();
         foreach ($model->getRows($select) as $metaRow) {
             $componentId = $metaRow->pattern;
             if (!$componentId) continue;
@@ -302,7 +300,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             foreach ($matches[1] as $m) {
                 $componentId = str_replace('{' . $m . '}', $row->$m, $componentId);
             }
-            $componentIds[$metaRow->component_class][] = $componentId;
+            $componentIds[$metaRow->component_class][$componentId] = true;
         }
         return $componentIds;
     }
@@ -312,27 +310,33 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         // $model: component_id component_class target_component_id target_component_class
         // So lange $model nach component_id durchsuchen und in ergebnis
         // $model->target_component_id reingeben bis nichts mehr neues kommt
-        $originalComponentIds = $componentIds;
+        $ids = array();
+        foreach ($componentIds as $k => $c) $ids = array_merge($ids, array_keys($c));
         $model = $this->getModel('metaComponent');
         do {
             $select = $model->select();
-            $select->whereEquals('component_id', $componentIds);
-            $componentIds2 = array();
+            $select->whereEquals('component_id', $ids);
+            $ids2 = array();
             foreach ($model->getRows($select) as $r) {
-                $componentIds2[] = $r->target_component_id;
+                $ids2[] = $r->target_component_id;
+                $componentIds[$r->component_class][$r->target_component_id] = true;
             }
-            $componentIds2 = array_diff($componentIds2, $componentIds);
-            $componentIds = array_unique(array_merge($componentIds, $componentIds2));
-        } while ($componentIds2);
+            $ids2 = array_diff($ids2, $ids);
+            $ids = array_unique(array_merge($ids, $ids2));
+        } while ($ids2);
         return $componentIds;
     }
 
     public function cleanByRow(Vps_Model_Row_Abstract $row)
     {
-        $componentIds = $this->_getRowComponentIds($row);
+        $ids = array();
+        $ids = $this->_addRowComponentIds($ids, $row);
+        $ids = $this->_addModelComponentIds($ids, $row);
+        $ids = $this->_addMetaComponentIds($ids);
         $or = array();
-        foreach ($this->_getModelComponentIds($row) as $cClass => $cIds) {
-            foreach ($cIds as $cId) {
+        $componentIds = array();
+        foreach ($ids as $cClass => $cIds) {
+            foreach (array_keys($cIds) as $cId) {
                 if (strpos($cId, '%') !== false) {
                     $or[] = new Vps_Model_Select_Expr_And(array(
                         new Vps_Model_Select_Expr_Like('component_id', $cId),
@@ -343,7 +347,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 }
             }
         }
-        $componentIds = $this->_addMetaComponentIds(array_unique($componentIds));
 
         $select = $this->getModel('cache')->select();
         $or[] = new Vps_Model_Select_Expr_Equal('component_id', $componentIds);
@@ -351,14 +354,16 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $this->getModel('cache')->updateRows(array('deleted' => 1), $select);
 
         // Callback
-        $componentIds = $this->_getRowComponentIds($row, 1);
-        foreach ($this->_getModelComponentIds($row, 1) as $cIds)
-            $componentIds = array_merge($componentIds, $cIds);
-        foreach (array_unique($componentIds) as $componentId) {
-            $component = Vps_Component_Data_Root::getInstance()->getComponentById(
-                $componentId, array('ignoreVisible' => true)
-            );
-            if ($component) $component->getComponent()->onCacheCallback($row);
+        $ids = array();
+        $ids = $this->_addRowComponentIds($ids, $row, 1);
+        $ids = $this->_addModelComponentIds($ids, $row, 1);
+        foreach ($ids as $componentIds) {
+            foreach (array_unique($componentIds) as $componentId) {
+                $component = Vps_Component_Data_Root::getInstance()->getComponentById(
+                    $componentId, array('ignoreVisible' => true)
+                );
+                if ($component) $component->getComponent()->onCacheCallback($row);
+            }
         }
     }
 
@@ -407,6 +412,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'column' => $column,
             'value' => $value,
             'component_id' => $component->componentId,
+            'component_class' => $component->componentClass,
             'callback' => $isCallback ? 1 : 0
         );
         $options = array(
