@@ -1,6 +1,7 @@
 <?php
 abstract class Vpc_Directories_Item_Directory_ExtConfigAbstract extends Vps_Component_Abstract_ExtConfig_Abstract
 {
+    //TODO kopie von Vpc_Paragraphs_EditComponentsData
     protected final function _getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate, $componentIdSuffix)
     {
         $ret = array(
