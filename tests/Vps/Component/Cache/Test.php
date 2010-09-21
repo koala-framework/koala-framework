@@ -199,7 +199,6 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $cacheModel->countActiveRows());
     }
 
-/*
     public function testDeleteByChained()
     {
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Cache_Chained_Root');
@@ -220,7 +219,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $master->render());
         $this->assertEquals('bar', $slave->render());
     }
-*/
+
     public function testStaticCallback()
     {
         $cache = Vps_Component_Cache::getInstance();
