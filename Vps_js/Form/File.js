@@ -4,6 +4,7 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
     showPreview: true,
     showDeleteButton: true,
     infoPosition: 'south',
+    html5Upload: false,
     defaultAutoCreate : {
         tag: 'div',
         style: 'width: 300px; height: 53px'
@@ -39,6 +40,13 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
         }
         this.infoTpl.compile();
 
+        if (XMLHttpRequest) {
+            var xhr = new XMLHttpRequest();
+            if (xhr.upload) {
+                this.html5Upload = true;
+            }
+        }
+
         Vps.Form.File.superclass.initComponent.call(this);
 
     },
@@ -57,11 +65,10 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
         if (this.infoPosition == 'west') this.createInfoContainer();
 
         this.uploadButtonContainer = this.el.createChild({
-                                         style: 'float:left; margin-right: 5px; '
+                                         style: 'float:left; margin-right: 5px; position: relative; '
                                      });
 
-        this.uploadButtonContainerChildId = 'uploadButton'+Ext.id();
-        this.createUploadButton(false);
+        this.createUploadButton();
         if (this.showDeleteButton) {
             this.deleteButton = new Ext.Button({
                 text: trlVps('Delete File'),
@@ -76,48 +83,50 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
         }
         if (this.infoPosition == 'south') this.createInfoContainer();
 
-        this.swfu = new Vps.Utils.SwfUpload({
-            fileSizeLimit: this.fileSizeLimit,
-            allowOnlyImages: this.allowOnlyImages,
-            buttonPlaceholderId: this.uploadButtonContainerChildId,
-            postParams: {
-                maxResolution: this.maxResolution
-            }
-        });
-        this.swfu.on('fileQueued', function(file) {
-            this.progress = Ext.MessageBox.show({
-                title : trlVps('Upload'),
-                msg : trlVps('Uploading file'),
-                buttons: false,
-                progress:true,
-                closable:false,
-                minWidth: 250,
-                buttons: Ext.MessageBox.CANCEL,
-                scope: this,
-                fn: function(button) {
-                    this.swfu.cancelUpload(file.id);
+        if (!this.html5Upload) {
+            this.swfu = new Vps.Utils.SwfUpload({
+                fileSizeLimit: this.fileSizeLimit,
+                allowOnlyImages: this.allowOnlyImages,
+                buttonPlaceholderId: this.uploadButtonContainer.id,
+                postParams: {
+                    maxResolution: this.maxResolution
                 }
             });
-            this.swfu.startUpload(file.id);
-        }, this);
-        this.swfu.on('uploadProgress', function(file, done, total) {
-            this.progress.updateProgress(done/total);
-        }, this);
-        this.swfu.on('uploadSuccess', function(file, response) {
-            this.progress.hide();
-            this.setValue(response.value);
-            this.fireEvent('uploaded', this, response.value);
-        }, this);
-        this.swfu.on('uploadError', function(file, errorCode, errorMessage) {
-            this.progress.hide();
-        }, this);
-        this.swfu.on('flashLoadError', function() {
-            this.createUploadButton(true);
-        }, this);
+            this.swfu.on('fileQueued', function(file) {
+                this.progress = Ext.MessageBox.show({
+                    title : trlVps('Upload'),
+                    msg : trlVps('Uploading file'),
+                    buttons: false,
+                    progress:true,
+                    closable:false,
+                    minWidth: 250,
+                    buttons: Ext.MessageBox.CANCEL,
+                    scope: this,
+                    fn: function(button) {
+                        this.swfu.cancelUpload(file.id);
+                    }
+                });
+                this.swfu.startUpload(file.id);
+            }, this);
+            this.swfu.on('uploadProgress', function(file, done, total) {
+                this.progress.updateProgress(done/total);
+            }, this);
+            this.swfu.on('uploadSuccess', function(file, response) {
+                this.progress.hide();
+                this.setValue(response.value);
+                this.fireEvent('uploaded', this, response.value);
+            }, this);
+            this.swfu.on('uploadError', function(file, errorCode, errorMessage) {
+                this.progress.hide();
+            }, this);
+            this.swfu.on('flashLoadError', function() {
+                this.createUploadButton();
+            }, this);
+        }
     },
 
     onDestroy: function() {
-        this.swfu.destroy();
+        if (this.swfu) this.swfu.destroy();
     },
 
     createInfoContainer: function() {
@@ -126,17 +135,17 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
         });
     },
 
-    createUploadButton : function (check) {
-        if (check == true) {
-            this.uploadButtonContainer.first().remove();
+    createUploadButton : function () {
+        if (this.swfu) this.swfu.destroy();
+        this.swfu = null;
+        while (this.uploadButtonContainer.last()) {
+            this.uploadButtonContainer.last().remove();
         }
         this.uploadButton = new Ext.Button({
             text: trlVps('Upload File'),
             cls: 'x-btn-text-icon',
             icon: '/assets/silkicons/add.png',
-            renderTo: this.uploadButtonContainer.createChild({
-                id: this.uploadButtonContainerChildId
-            }),
+            renderTo: this.uploadButtonContainer,
             scope: this,
             handler: function() {
                 var win = new Vps.Form.FileUploadWindow({
@@ -149,6 +158,100 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
                 win.show();
             }
         });
+
+        if (!this.html5Upload) return;
+
+        var fileInputContainer = this.uploadButtonContainer.createChild({
+            style: 'width: '+this.uploadButton.el.getWidth()+'px; height: '+this.uploadButton.el.getHeight()+'px; top: 0; position: absolute; overflow: hidden;'
+        });
+
+        var fileInput = fileInputContainer.createChild({
+            tag: 'input',
+            type: 'file',
+            style: 'opacity: 0; cursor: pointer; '
+        });
+        fileInput.on('change', function(ev, dom) {
+            if (dom.files) {
+                if (dom.files.length) {
+                    var self = this;
+
+                    var file = dom.files[0];
+                    dom.value = ''; //leeren, damit gleiche datei nochmal gewählt werden kann
+
+                    var xhr = new XMLHttpRequest();
+
+                    this.progress = Ext.MessageBox.show({
+                        title : trlVps('Upload'),
+                        msg : trlVps('Uploading file'),
+                        buttons: false,
+                        progress:true,
+                        closable:false,
+                        minWidth: 250,
+                        buttons: Ext.MessageBox.CANCEL,
+                        scope: this,
+                        fn: function(button) {
+                            xhr.abort();
+                        }
+                    });
+
+                    xhr.upload.addEventListener("progress", function(e) {
+                        if (e.lengthComputable) {
+                            self.progress.updateProgress(e.loaded / e.total);
+                        }
+                    }, false);
+                    xhr.onreadystatechange = function(e) {
+                        if (xhr.readyState == 4) {
+                            self.progress.hide();
+                            var errorMsg = false;
+                            if (xhr.status != 200) {
+                                 errorMsg = xhr.responseText;
+                            } else if (!xhr.responseText) {
+                                errorMsg = 'response is empty';
+                            } else {
+                                try {
+                                    var r = Ext.decode(xhr.responseText);
+                                } catch(e) {
+                                    errorMsg = e.toString()+': <br />'+xhr.responseText;
+                                }
+                                if (!errorMsg && r.exception) {
+                                    errorMsg = '<pre>'+r.exception+'</pre>';
+                                }
+                            }
+                            if (errorMsg) {
+                                var sendMail = !r || !r.exception;
+                                Vps.handleError({
+                                    url: '/vps/media/upload/json-upload',
+                                    message: errorMsg,
+                                    title: trlVps('Upload Error'),
+                                    mail: sendMail,
+                                    checkRetry: false
+                                });
+                                return;
+                            }
+
+                            if (!r.success) {
+                                if (r.error) {
+                                    Ext.Msg.alert(trlVps('Error'), r.error);
+                                } else {
+                                    Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
+                                }
+                                return;
+                            }
+
+                            self.setValue(r.value);
+                            self.fireEvent('uploaded', this, r.value);
+                        }
+                    };
+                    xhr.open('POST', '/vps/media/upload/json-upload');
+                    xhr.setRequestHeader('X-Upload-Name', file.name);
+                    xhr.setRequestHeader('X-Upload-Size', file.size);
+                    xhr.setRequestHeader('X-Upload-Type', file.type);
+                    xhr.setRequestHeader('X-Upload-MaxResolution', this.maxResolution);
+                    xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+                    xhr.send(file);
+                }
+            }
+        }, this);
     },
 
     // überschrieben weil ext implementation auf this.el.dom.value zugreift was wir nicht haben
