@@ -214,7 +214,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
             if ($dumpname) {
                 $backupSize = filesize($dumpname);
-                $this->_systemCheckRet("bzip2 --fast $dumpname");
+                $this->_systemCheckRet("nice bzip2 --fast $dumpname");
                 echo $dumpname.".bz2\n";
             }
 
@@ -496,7 +496,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             echo "erstelle backup...\n";
             $dumpname = $this->_backupDb(Vps_Util_ClearCache::getInstance()->getDbCacheTables());
             if ($dumpname) {
-                $this->_systemCheckRet("bzip2 --fast $dumpname");
+                $this->_systemCheckRet("nice bzip2 --fast $dumpname");
                 echo $dumpname.".bz2";
                 echo "\n";
             } else {
@@ -545,6 +545,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         } catch (Exception $e) {
             return null;
         }
+        if (!$db) return null;
         $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
         $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";

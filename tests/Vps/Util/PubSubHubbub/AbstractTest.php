@@ -63,7 +63,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         } else {
             $d = "/www/public/library/pshb/";
         }
-        $port = Vps_Util_Tcp::getFreePort(8000);
+        $port = Vps_Util_Tcp::getFreePort(8000, $address);
         $cmd = "python2.5 {$d}google_appengine/dev_appserver.py {$d}pubsubhubbub/hub/ ".
                "--port=$port --address=$address --clear_datastore ".
                "--datastore_path=$this->_storePath/dev_appserver.datastore ".
@@ -85,18 +85,21 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         //echo "\n".date('H:i:s')."tearDown\n";
 
         $start = time();
-        //echo "\nsending SIGTERM to hub\n";
-        proc_terminate($this->_hubApp, SIGTERM);
+        $status = proc_get_status($this->_hubApp);
+        //echo "\nsending SIGINT to hub\n";
+        posix_kill($status['pid'], SIGINT);
+        posix_kill($status['pid']+1, SIGINT); //+1 weil sh prozess python startet
         do {
             //echo "waiting while running\n";
-            if (time() - $start > 15) {
-                echo "\nsending SIGKILL to hub\n";
+            if (time() - $start > 30) {
+                //echo "\nsending SIGKILL to hub\n";
                 proc_terminate($this->_hubApp, SIGKILL);
                 break;
             }
             $status = proc_get_status($this->_hubApp);
             if ($status['running']) sleep(1);
         } while ($status['running']);
+        sleep(5);
 
         //echo "removing datastore\n";
         system("rm -r $this->_storePath");
