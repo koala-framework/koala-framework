@@ -214,6 +214,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
 });
 Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
 {
+    border: false,
     initComponent: function()
     {
         this.childPanel = Ext.ComponentMgr.create(Ext.applyIf(this.childConfig, {
@@ -255,6 +256,7 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
             layout: 'border',
             region: 'west',
             width: 300,
+            border: false,
             items: westItems
         });
 
