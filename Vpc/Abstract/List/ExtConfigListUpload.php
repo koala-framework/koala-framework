@@ -1,4 +1,8 @@
 <?php
+/**
+ * List mit child daneben; list ist immer sichtbar
+ * + multi-file-upload
+ */
 class Vpc_Abstract_List_ExtConfigListUpload extends Vpc_Abstract_List_ExtConfigList
 {
     protected function _getConfig()

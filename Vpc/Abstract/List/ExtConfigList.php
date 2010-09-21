@@ -1,4 +1,7 @@
 <?php
+/**
+ * List mit child daneben; list ist immer sichtbar
+ */
 class Vpc_Abstract_List_ExtConfigList extends Vps_Component_Abstract_ExtConfig_Abstract
 {
     protected function _getConfig()
