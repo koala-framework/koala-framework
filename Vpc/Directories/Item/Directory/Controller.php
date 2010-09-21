@@ -45,7 +45,7 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
                     ->setEditType($ec['type'])
                     ->setEditIdTemplate($ec['idTemplate'])
                     ->setEditComponentIdSuffix($ec['componentIdSuffix'])
-                    ->setButtonIcon((string)$icon)
+                    ->setButtonIcon($icon->toString(array('arrow')))
                     ->setTooltip(trlVps('Edit {0}', $name));
                 $i++;
             }
