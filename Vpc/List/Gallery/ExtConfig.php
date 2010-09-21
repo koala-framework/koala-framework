@@ -1,25 +1,11 @@
 <?php
-class Vpc_List_Gallery_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstract
+class Vpc_List_Gallery_ExtConfig extends Vpc_Abstract_List_ExtConfigListUpload
 {
-    private $_listExtConfig;
-    public function __construct($class)
-    {
-        parent::__construct($class);
-
-        $this->_listExtConfig = new Vpc_Abstract_List_ExtConfigListUpload($this->_class);
-    }
-
     protected function _getConfig()
     {
-        $config = $this->_getStandardConfig('vps.tabpanel', null);
-        $config['activeTab'] = 0;
-        $config['tabs'] = array();
-
-        $config['tabs']['settings'] = $this->_getStandardConfig('vps.autoform', 'Settings', trlVps('Settings'));
-
-        $listConfig = $this->_listExtConfig->_getConfig();
-        $config['tabs']['images'] = $listConfig['list'];
-
-        return array('tabs' => $config);
+        $ret = array(
+            'settings' => $this->_getStandardConfig('vps.autoform', 'Settings', trlVps('Settings'))
+        );
+        return array_merge($ret, parent::_getConfig());
     }
 }
