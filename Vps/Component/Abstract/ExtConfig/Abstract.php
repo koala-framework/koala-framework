@@ -94,4 +94,49 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
         }
         return $ret;
     }
+
+    public static function getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate, $componentIdSuffix)
+    {
+        $ret = array(
+            'componentConfigs' => array(),
+            'contentEditComponents' => array(),
+        );
+        $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig();
+        foreach ($cfg as $k=>$c) {
+            $ret['componentConfigs'][$componentClass.'-'.$k] = $c;
+            $ret['contentEditComponents'][] = array(
+                'componentClass' => $componentClass,
+                'type' => $k,
+                'idTemplate' => $idTemplate,
+                'componentIdSuffix' => $componentIdSuffix
+            );
+        }
+        foreach ($gen->getGeneratorPlugins() as $plugin) {
+            $cls = get_class($plugin);
+            $cfg = Vpc_Admin::getInstance($cls)->getExtConfig();
+            foreach ($cfg as $k=>$c) {
+                $ret['componentConfigs'][$cls.'-'.$k] = $c;
+                $ret['contentEditComponents'][] = array(
+                    'componentClass' => $cls,
+                    'type' => $k,
+                    'idTemplate' => $idTemplate,
+                    'componentIdSuffix' => $componentIdSuffix
+                );
+            }
+        }
+        if (Vpc_Abstract::hasSetting($componentClass, 'editComponents')) {
+            $editComponents = Vpc_Abstract::getSetting($componentClass, 'editComponents');
+            foreach ($editComponents as $c) {
+                $childGen = Vps_Component_Generator_Abstract::getInstances($componentClass, array('componentKey'=>$c));
+                $childGen = $childGen[0];
+                $cls = Vpc_Abstract::getChildComponentClass($componentClass, null, $c);
+                $edit = self::getEditConfigs($cls, $childGen,
+                                               $idTemplate,
+                                               $componentIdSuffix.$childGen->getIdSeparator().$c);
+                $ret['componentConfigs'] = array_merge($ret['componentConfigs'], $edit['componentConfigs']);
+                $ret['contentEditComponents'] = array_merge($ret['contentEditComponents'], $edit['contentEditComponents']);
+            }
+        }
+        return $ret;
+    }
 }
