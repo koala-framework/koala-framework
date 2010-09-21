@@ -53,6 +53,29 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
     afterRender: function() {
         Vps.Form.File.superclass.afterRender.call(this);
 
+        if (this.html5Upload) {
+            this.el.on('dragenter', function(e) {
+                e.browserEvent.stopPropagation();
+                e.browserEvent.preventDefault();
+            }, this);
+            this.el.on('dragover', function(e) {
+                e.browserEvent.stopPropagation();
+                e.browserEvent.preventDefault();
+            }, this);
+            this.el.on('drop', function(e) {
+                e.browserEvent.stopPropagation();
+                e.browserEvent.preventDefault();
+
+                if (e.browserEvent.dataTransfer) {
+                    var dt = e.browserEvent.dataTransfer;
+                    var files = dt.files;
+                    if (files.length) {
+                        this.html5UploadFile(files[0]);
+                    }
+                }
+            }, this);
+        }
+
         if (this.showPreview) {
             this.previewImage = this.el.createChild({
                 style: 'margin-right: 10px; padding: 5px; float: left; border: 1px solid #b5b8c8;'+
@@ -173,85 +196,89 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
         fileInput.on('change', function(ev, dom) {
             if (dom.files) {
                 if (dom.files.length) {
-                    var self = this;
-
                     var file = dom.files[0];
                     dom.value = ''; //leeren, damit gleiche datei nochmal gewählt werden kann
-
-                    var xhr = new XMLHttpRequest();
-
-                    this.progress = Ext.MessageBox.show({
-                        title : trlVps('Upload'),
-                        msg : trlVps('Uploading file'),
-                        buttons: false,
-                        progress:true,
-                        closable:false,
-                        minWidth: 250,
-                        buttons: Ext.MessageBox.CANCEL,
-                        scope: this,
-                        fn: function(button) {
-                            xhr.abort();
-                        }
-                    });
-
-                    xhr.upload.addEventListener("progress", function(e) {
-                        if (e.lengthComputable) {
-                            self.progress.updateProgress(e.loaded / e.total);
-                        }
-                    }, false);
-                    xhr.onreadystatechange = function(e) {
-                        if (xhr.readyState == 4) {
-                            self.progress.hide();
-                            var errorMsg = false;
-                            if (xhr.status != 200) {
-                                 errorMsg = xhr.responseText;
-                            } else if (!xhr.responseText) {
-                                errorMsg = 'response is empty';
-                            } else {
-                                try {
-                                    var r = Ext.decode(xhr.responseText);
-                                } catch(e) {
-                                    errorMsg = e.toString()+': <br />'+xhr.responseText;
-                                }
-                                if (!errorMsg && r.exception) {
-                                    errorMsg = '<pre>'+r.exception+'</pre>';
-                                }
-                            }
-                            if (errorMsg) {
-                                var sendMail = !r || !r.exception;
-                                Vps.handleError({
-                                    url: '/vps/media/upload/json-upload',
-                                    message: errorMsg,
-                                    title: trlVps('Upload Error'),
-                                    mail: sendMail,
-                                    checkRetry: false
-                                });
-                                return;
-                            }
-
-                            if (!r.success) {
-                                if (r.error) {
-                                    Ext.Msg.alert(trlVps('Error'), r.error);
-                                } else {
-                                    Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
-                                }
-                                return;
-                            }
-
-                            self.setValue(r.value);
-                            self.fireEvent('uploaded', this, r.value);
-                        }
-                    };
-                    xhr.open('POST', '/vps/media/upload/json-upload');
-                    xhr.setRequestHeader('X-Upload-Name', file.name);
-                    xhr.setRequestHeader('X-Upload-Size', file.size);
-                    xhr.setRequestHeader('X-Upload-Type', file.type);
-                    xhr.setRequestHeader('X-Upload-MaxResolution', this.maxResolution);
-                    xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
-                    xhr.send(file);
+                    this.html5UploadFile(file);
                 }
             }
         }, this);
+    },
+
+    html5UploadFile: function(file)
+    {
+        var self = this;
+
+        var xhr = new XMLHttpRequest();
+
+        this.progress = Ext.MessageBox.show({
+            title : trlVps('Upload'),
+            msg : trlVps('Uploading file'),
+            buttons: false,
+            progress:true,
+            closable:false,
+            minWidth: 250,
+            buttons: Ext.MessageBox.CANCEL,
+            scope: this,
+            fn: function(button) {
+                xhr.abort();
+            }
+        });
+
+        xhr.upload.addEventListener("progress", function(e) {
+            if (e.lengthComputable) {
+                self.progress.updateProgress(e.loaded / e.total);
+            }
+        }, false);
+        xhr.onreadystatechange = function(e) {
+            if (xhr.readyState == 4) {
+                self.progress.hide();
+                var errorMsg = false;
+                if (xhr.status != 200) {
+                        errorMsg = xhr.responseText;
+                } else if (!xhr.responseText) {
+                    errorMsg = 'response is empty';
+                } else {
+                    try {
+                        var r = Ext.decode(xhr.responseText);
+                    } catch(e) {
+                        errorMsg = e.toString()+': <br />'+xhr.responseText;
+                    }
+                    if (!errorMsg && r.exception) {
+                        errorMsg = '<pre>'+r.exception+'</pre>';
+                    }
+                }
+                if (errorMsg) {
+                    var sendMail = !r || !r.exception;
+                    Vps.handleError({
+                        url: '/vps/media/upload/json-upload',
+                        message: errorMsg,
+                        title: trlVps('Upload Error'),
+                        mail: sendMail,
+                        checkRetry: false
+                    });
+                    return;
+                }
+
+                if (!r.success) {
+                    if (r.error) {
+                        Ext.Msg.alert(trlVps('Error'), r.error);
+                    } else {
+                        Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
+                    }
+                    return;
+                }
+
+                self.setValue(r.value);
+                self.fireEvent('uploaded', this, r.value);
+            }
+        };
+        xhr.open('POST', '/vps/media/upload/json-upload');
+        xhr.setRequestHeader('X-Upload-Name', file.name);
+        xhr.setRequestHeader('X-Upload-Size', file.size);
+        xhr.setRequestHeader('X-Upload-Type', file.type);
+        xhr.setRequestHeader('X-Upload-MaxResolution', this.maxResolution);
+        xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+        xhr.send(file);
     },
 
     // überschrieben weil ext implementation auf this.el.dom.value zugreift was wir nicht haben
