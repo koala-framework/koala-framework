@@ -217,6 +217,7 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
     border: false,
     initComponent: function()
     {
+        if (this.childConfig.title) delete this.childConfig.title;
         this.childPanel = Ext.ComponentMgr.create(Ext.applyIf(this.childConfig, {
             region: 'center'
         }));
