@@ -9,7 +9,7 @@ class Vpc_Columns_Component extends Vpc_Abstract_List_Component
         $ret['componentName'] = trlVps('Columns');
         $ret['componentIcon'] = new Vps_Asset('application_tile_horizontal');
 
-        $ret['extConfig'] = 'Vpc_Abstract_List_ExtConfigEditButton';
+        $ret['extConfig'] = 'Vpc_Columns_ExtConfig';
         return $ret;
     }
 

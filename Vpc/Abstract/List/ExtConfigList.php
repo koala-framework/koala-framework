@@ -15,7 +15,7 @@ class Vpc_Abstract_List_ExtConfigList extends Vps_Component_Abstract_ExtConfig_A
             throw new Vps_Exception("Vpc_Abstract_List must have child with at least one ExtConfig");
         }
 
-        $config = $this->_getStandardConfig('vpc.list');
+        $config = $this->_getStandardConfig('vpc.list.list');
         $config['childConfig'] = $childConfig[0];
         return array(
             'list' => $config
