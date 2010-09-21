@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_List_Form extends Vps_Form_NonTableForm
+class Vpc_Abstract_List_Form extends Vpc_Abstract_Form
 {
     public function __construct($name, $class)
     {
@@ -10,11 +10,7 @@ class Vpc_Abstract_List_Form extends Vps_Form_NonTableForm
     
     protected function _getMultiFields()
     {
-        $multifields = new Vpc_Abstract_Field_MultiFields($this->getClass());
-        $multifields->setReferences(array(
-            'columns' => array('component_id'),
-            'refColumns' => array('id')
-        ));
+        $multifields = new Vps_Form_Field_MultiFields('Children');
         $multifields->setMinEntries(0);
         $multifields->fields->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
         $multifields->setPosition(true);
