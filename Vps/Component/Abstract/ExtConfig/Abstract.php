@@ -56,6 +56,18 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
         return array();
     }
 
+    /**
+     * Welche config direkt nach dem anlegen dieser Komponente geöffnet werden soll.
+     *
+     * Fragt der Paragraphs Controller ab.
+     */
+    public function getEditAfterCreateConfigKey()
+    {
+        $keys = array_keys($this->getConfig(self::TYPE_DEFAULT));
+        if (!$keys) return null;
+        return $keys[0];
+    }
+
     abstract protected function _getConfig();
 
     protected final function _getStandardConfig($xtype, $controllerName = 'Index', $title = null, $icon = null)
