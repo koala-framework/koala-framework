@@ -220,7 +220,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         $row->save();
         Vps_Component_ModelObserver::getInstance()->process();
         $this->assertEquals('bar', $master->render());
-        //$this->assertEquals('bar', $slave->render());
+        $this->assertEquals('bar', $slave->render());
     }
 
     public function testStaticCallback()
