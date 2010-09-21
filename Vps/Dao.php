@@ -63,6 +63,9 @@ class Vps_Dao
             if (Zend_Registry::get('config')->debug->querylog) {
                 $profiler = new Vps_Db_Profiler(true);
                 $this->_db[$db]->setProfiler($profiler);
+            } else if (Zend_Registry::get('config')->debug->queryTimeout) {
+                $profiler = new Vps_Db_Profiler_Timeout(Zend_Registry::get('config')->debug->queryTimeout, true);
+                $this->_db[$db]->setProfiler($profiler);
             } else if (Zend_Registry::get('config')->debug->benchmark || Zend_Registry::get('config')->debug->benchmarkLog) {
                 $profiler = new Vps_Db_Profiler_Count(true);
                 $this->_db[$db]->setProfiler($profiler);
