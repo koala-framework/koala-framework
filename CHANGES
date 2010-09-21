@@ -10,6 +10,7 @@ Neue Features:
 - Model_Mongo
 - Model_MirrorCacheSimple
 - AccessByMail Plugin
+- (Multi)-FileUpload per html5 wenn moeglich, incl drag&drop support
 
 möglicherweise nicht kompatible Änderungen:
 - Vps_Date ist komplett inkompatibel (erbt nicht mehr von Zend_Date)
