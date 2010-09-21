@@ -9,7 +9,7 @@ class Vpc_Paragraphs_EditComponentsData extends Vps_Data_Abstract
         $this->_componentClass = $componentClass;
     }
 
-    //teilw. übernommen von Vpc_Directories_Item_Directory_Admin
+    //teilw. übernommen von Vpc_Directories_Item_Directory_ExtConfigAbstract
     //TODO: code sharen
     private function _getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate, $componentIdSuffix)
     {
