@@ -78,7 +78,9 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
             $this->view->componentConfigs = array();
             $this->view->editComponents = array();
-            $cfg = Vpc_Admin::getInstance($classes[$row->component])->getExtConfig();
+            $extConfig = Vps_Component_Abstract_ExtConfig_Abstract::getInstance($classes[$row->component]);
+            $this->view->openConfigKey = $extConfig->getEditAfterCreateConfigKey();
+            $cfg = $extConfig->getConfig(Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
             foreach ($cfg as $k=>$i) {
                 $this->view->componentConfigs[$classes[$row->component].'-'.$k] = $i;
                 $this->view->editComponents[] = array(
