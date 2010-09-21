@@ -263,7 +263,7 @@ Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
 
         this.layout = 'border';
         this.items = [this.westPanel, this.childPanel];
-        Vpc.Abstract.List.Panel.superclass.initComponent.call(this);
+        Vpc.Abstract.List.List.superclass.initComponent.call(this);
     },
 
     load: function()
