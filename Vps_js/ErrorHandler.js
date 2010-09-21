@@ -26,7 +26,17 @@ if (!Vps.Debug.displayErrors) {
     Ext.ux.ErrorHandler.init();
 }
 
-
+/**
+ * message
+ * title
+ * mail bool
+ * url
+ * errorText nur für tests glaub ich, WTF?
+ * checkRetry bool
+ * mail bool
+ * retry function
+ * abort function
+ */
 Vps.handleError = function(error) {
 
     if (typeof error == 'string') error = { message: error };
