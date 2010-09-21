@@ -212,7 +212,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
         this.swfu.destroy();
     }
 });
-Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
+Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
 {
     border: false,
     initComponent: function()
@@ -299,4 +299,4 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
         });
     }
 });
-Ext.reg('vpc.list', Vpc.Abstract.List.Panel);
+Ext.reg('vpc.list.list', Vpc.Abstract.List.List);
