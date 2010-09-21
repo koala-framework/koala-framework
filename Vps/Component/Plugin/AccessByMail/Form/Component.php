@@ -44,7 +44,7 @@ class Vps_Component_Plugin_AccessByMail_Form_Component extends Vpc_Form_Componen
         $mail = new Vps_Mail_Template($this->getData());
         $mail->addTo($row->email);
         $mail->subject = $this->_getPlaceholder('subject');
-        $mail->link = $link;
+        $mail->link = 'http://'.Vps_Registry::get('config')->server->domain.$link;
         $mail->send();
     }
 }
