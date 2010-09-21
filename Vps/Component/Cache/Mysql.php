@@ -347,8 +347,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
         $select = $this->getModel('cache')->select();
         $or[] = new Vps_Model_Select_Expr_Equal('component_id', $componentIds);
-        if ($or) $select->where(new Vps_Model_Select_Expr_Or($or));
-        //d($select->getParts());
+        $select->where(new Vps_Model_Select_Expr_Or($or));
         $this->getModel('cache')->updateRows(array('deleted' => 1), $select);
 
         // Callback
