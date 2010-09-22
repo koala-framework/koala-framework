@@ -8,7 +8,7 @@ Vps.onContentReady(function() {
             searchResult : Ext.get(Ext.DomQuery.select('.searchResult', searchBox)[0]),
             ajaxUrl      : Ext.get(Ext.DomQuery.select('.ajaxUrl', searchBox)[0]),
             submitParam  : Ext.get(Ext.DomQuery.select('.submitParam', searchBox)[0]),
-            searchSettings: Ext.get(Ext.DomQuery.select('.searchSettings', searchBox)[0]),
+            searchSettings: Ext.get(Ext.DomQuery.select('.searchSettings', searchBox)[0])
         };
         if (els.searchSettings) {
             var searchSettings = Ext.decode(els.searchSettings.getValue());
