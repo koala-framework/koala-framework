@@ -6324,7 +6324,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Bitte geben Sie Ihre E-Mail Adresse ein um Zugang zu diesem Bereich zu erhalten.</de>
 <id>1616</id>
 </text>
-
-
+<text>
+<en>Invalid or expired Link. Please request a new one.</en>
+<de>Ungültiger oder abgelaufener Link. Bitte fordern Sie einen neuen an.</de>
+<id>1617</id>
+</text>
 </trl>
 
