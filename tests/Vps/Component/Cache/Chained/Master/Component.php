@@ -5,6 +5,7 @@ class Vps_Component_Cache_Chained_Master_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Vps_Component_Cache_Chained_Master_Model';
+        $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
 
