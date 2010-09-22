@@ -545,6 +545,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         } catch (Exception $e) {
             return null;
         }
+        if (!$db) return null;
         $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
         $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";
