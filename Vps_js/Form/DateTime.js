@@ -6,8 +6,8 @@
  *
  * DateTime field, combination of DateField and TimeField
  *
- * @author      Ing. Jozef Sakálo?
- * @copyright (c) 2008, Ing. Jozef Sakálo?
+ * @author      Ing. Jozef Sak?lo?
+ * @copyright (c) 2008, Ing. Jozef Sak?lo?
  * @version   2.0
  * @revision  $Id: Vps.Form.DateTime.js 749 2009-09-15 19:18:44Z jozo $
  *
