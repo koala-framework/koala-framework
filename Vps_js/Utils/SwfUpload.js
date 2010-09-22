@@ -9,7 +9,7 @@ Vps.Utils.SwfUpload = function(config) {
     );
     Vps.Utils.SwfUpload.superclass.constructor.call(this);
     this.initSwf();
-},
+};
 Ext.extend(Vps.Utils.SwfUpload, Ext.util.Observable, {
     //buttonPlaceholderId,
     //fileSizeLimit,
