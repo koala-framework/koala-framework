@@ -16,6 +16,7 @@ class Vpc_Shop_Cart_Checkout_OrderProductController extends Vps_Controller_Actio
                 $card->setTitle(Vpc_Abstract::getSetting($c, 'productTypeText'));
 
                 $form = Vpc_Abstract_Form::createComponentForm($c, $c);
+                $form->setModel(Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_OrderProducts'));
                 $form->setIdTemplate('{0}');
                 Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($c)
                     ->alterBackendOrderForm($form);
