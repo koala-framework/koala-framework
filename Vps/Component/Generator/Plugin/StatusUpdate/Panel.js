@@ -5,7 +5,7 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
     initComponent: function() {
         this.proxyItem = new Vps.Auto.GridPanel({
             controllerUrl: this.logControllerUrl,
-            region: 'center',
+            region: 'center'
         });
         this.actions.send = new Ext.Action({
             text    : trlVps('Send'),
