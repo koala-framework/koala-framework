@@ -3,6 +3,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 {
     protected $_models;
     const CLEAN_DEFAULT = 'default';
+    private $_chainedTypes;
 
     public function __construct()
     {
@@ -213,28 +214,58 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return $componentIds;
     }
 
-    protected function _addChainedComponentIds($componentIds)
+    protected function _addChainedComponentIds($ret)
     {
-        $model = $this->getModel('metaChained');
-        $componentClasses = array_keys($componentIds);
-        $select = $model->select()->whereEquals('source_component_class', $componentClasses);
-        $root = Vps_Component_Data_Root::getInstance();
-        foreach ($model->getRows($select) as $row) {
-            $component = $root->getComponentByClass($row->source_component_class, array('ignoreVisible' => true));
-            $chainedComponents = $component->parent->getChildComponents(array(
-                'componentClass' => $row->target_component_class,
-                'ignoreVisible' => true
-            ));
-            foreach ($chainedComponents as $chainedComponent) {
-                foreach ($componentIds[$row->source_component_class] as $componentId => $null) {
-                    $substr = substr($componentId, 0, strlen($component->componentId));
-                    if ($substr != $component->componentId) continue;
-                    $componentId = $chainedComponent->componentId . substr($componentId, strlen($component->componentId));
-                    $componentIds[$chainedComponent->componentClass][$componentId] = true;
-                }
+        // chainedTypes im Format chainedTypes['Trl'] = 'Vpc_Chained_Trl_...' holen
+        if (is_null($this->_chainedTypes)) {
+            foreach (Vps_Component_Abstract::getComponentClasses() as $cc) {
+                if (!Vpc_Abstract::hasSetting($cc, 'masterComponentClass')) continue;
+                $chainedType = Vpc_Abstract::getFlag($cc, 'chainedType');
+                if ($chainedType) $this->_chainedTypes[$chainedType] = $cc;
             }
         }
-        return $componentIds;
+        $chainedTypes = $this->_chainedTypes;
+
+        $model = $this->getModel('metaChained');
+        $select = $model->select()
+            ->whereEquals('source_component_class', array_keys($ret));
+        foreach ($model->getRows($select) as $row) { // Alle infrage kommenden target_component_classes
+
+            if (!isset($ret[$row->source_component_class])) continue;
+
+            foreach ($ret[$row->source_component_class] as $componentId => $null) { // Alle master-componentIds der target_component_class
+
+                // Komponente von Master bei der der Cache gelöscht wird
+                $component = Vps_Component_Data_Root::getInstance()
+                    ->getComponentById($componentId, array('ignoreVisible' => true));
+                if (!$component) continue;
+
+                // Alle zur Mastercomponent gehörigen ChainedComponents finden:
+                // Nach oben schauen, wenn chainedType gefunden, statisch die
+                // dazugehörigen chained-Class holen und anhand dieser die
+                // ChainedComponents finden. Danach einfach die componentId
+                // vom Master mit der der Chained ersetzen
+                $c = $component;
+                while ($c) {
+
+                    $chainedType = Vpc_Abstract::getFlag($c->componentClass, 'chainedType');
+                    $c = $c->parent;
+                    if (!$chainedType || !isset($chainedTypes[$chainedType])) continue;
+
+                    $chainedComponents = $c->getChildComponents(array(
+                        'componentClass' => $chainedTypes[$chainedType],
+                        'ignoreVisible' => true
+                    ));
+                    foreach ($chainedComponents as $chainedComponent) {
+                        $part2 = substr($componentId, strlen($component->componentId));
+                        $componentId = $chainedComponent->componentId . $part2;
+                        $ret[$chainedComponent->componentClass][$componentId] = true;
+                    }
+                }
+            }
+
+        }
+        return $ret;
     }
 
     public function cleanByRow(Vps_Model_Row_Abstract $row)
