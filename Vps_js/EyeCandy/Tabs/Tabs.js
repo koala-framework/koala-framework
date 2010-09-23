@@ -18,12 +18,19 @@ Vps.Tabs = function(el) {
     this.switchEls = Ext.query('.vpsTabsLink', this.el.dom);
     this.contentEls = Ext.query('.vpsTabsContent', this.el.dom);
 
-    var tabsWrapper = this.el.createChild({
-        tag: 'div', cls: 'vpsTabsLinks'
+    this.tabsContents = this.el.createChild({
+        tag: 'div', cls: 'vpsTabsContents'
     }, this.el.first());
+    var tabsLinks = this.el.createChild({
+        tag: 'div', cls: 'vpsTabsLinks'
+    }, this.tabsContents);
+
+    for (var i = 0; i < this.contentEls.length; i++) {
+        this.tabsContents.appendChild(this.contentEls[i]);
+    }
 
     for (var i = 0; i < this.switchEls.length; i++) {
-        tabsWrapper.appendChild(this.switchEls[i]);
+        tabsLinks.appendChild(this.switchEls[i]);
         var swEl = Ext.get(this.switchEls[i]);
 
         if (Ext.get(this.contentEls[i]).hasClass('vpsTabsContentActive')) {
@@ -35,7 +42,9 @@ Vps.Tabs = function(el) {
         }, { tabsObject: this, idx: i } );
     }
 
-    tabsWrapper.createChild({
+    this.tabsContents.setHeight(Ext.get(this.contentEls[this._activeTabIdx]).getHeight());
+
+    tabsLinks.createChild({
         tag: 'div', cls: 'clear'
     });
 };
@@ -47,10 +56,30 @@ Ext.extend(Vps.Tabs, Ext.util.Observable, {
 
         if (this._activeTabIdx !== null) {
             Ext.get(this.switchEls[this._activeTabIdx]).removeClass('vpsTabsLinkActive');
-            Ext.get(this.contentEls[this._activeTabIdx]).removeClass('vpsTabsContentActive');
+            Ext.get(this.contentEls[this._activeTabIdx]).fadeOut({
+                duration: .5,
+                callback: function(el) {
+                    el.removeClass('vpsTabsContentActive');
+                }
+            });
         }
+        var newContentEl = Ext.get(this.contentEls[idx]);
         Ext.get(this.switchEls[idx]).addClass('vpsTabsLinkActive');
-        Ext.get(this.contentEls[idx]).addClass('vpsTabsContentActive');
+        newContentEl.addClass('vpsTabsContentActive');
+
+        if (newContentEl.getHeight() > this.tabsContents.getHeight()) {
+            this.tabsContents.setHeight(newContentEl.getHeight());
+        }
+        newContentEl.fadeIn({
+            duration: .5,
+            callback: function(el) {
+                if (el.getHeight() < this.tabsContents.getHeight()) {
+                    this.tabsContents.setHeight(el.getHeight());
+                }
+            },
+            scope: this
+        });
+
 
         // passed arguments are: tabsObject, newIndex, oldIndex
         this.fireEvent('tabActivate', this, idx, this._activeTabIdx);
