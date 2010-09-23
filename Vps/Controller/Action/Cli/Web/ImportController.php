@@ -176,8 +176,6 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
 
 
-            echo "erstelle datenbank-backup '$dbKey'...\n";
-
             $tables = $db->fetchCol('SHOW TABLES');
 
             $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
@@ -210,12 +208,14 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                     }
                 }
             }
-
-            $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
-            if ($dumpname) {
-                $backupSize = filesize($dumpname);
-                $this->_systemCheckRet("nice bzip2 --fast $dumpname");
-                echo $dumpname.".bz2\n";
+            if (!$this->_getParam('skip-backup')) {
+                echo "erstelle datenbank-backup '$dbKey'...\n";
+                $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
+                if ($dumpname) {
+                    $backupSize = filesize($dumpname);
+                    $this->_systemCheckRet("nice bzip2 --fast $dumpname");
+                    echo $dumpname.".bz2\n";
+                }
             }
 
 
