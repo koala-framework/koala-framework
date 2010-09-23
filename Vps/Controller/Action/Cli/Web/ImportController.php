@@ -269,18 +269,21 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             );
             $procImport = new Vps_Util_Proc($cmd, $descriptorspec);
 
-            $c = new Zend_ProgressBar_Adapter_Console();
-            $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
-            $progress = new Zend_ProgressBar($c, 0, $backupSize);
+            $progress = false;
+            if (isset($backupSize) && $backupSize) {
+                $c = new Zend_ProgressBar_Adapter_Console();
+                $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+                $progress = new Zend_ProgressBar($c, 0, $backupSize);
+            }
             $size = 0;
             while (!feof($procDump->pipe(1))) {
                 $buffer = fgets($procDump->pipe(1), 4096);
                 fputs($procImport->pipe(0), $buffer);
                 $size += strlen($buffer);
-                $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
+                if ($progress) $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
             }
             fclose($procDump->pipe(1));
             fclose($procImport->pipe(0));
