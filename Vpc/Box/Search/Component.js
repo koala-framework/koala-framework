@@ -24,6 +24,7 @@ Vps.onContentReady(function() {
             if (this.searchField.getValue().length < 2) return;
             this.searchField.rel;
             var mgr = this.searchResult.getUpdater();
+            mgr.abort();
             var params = {}
             params[this.submitParam.dom.name] = this.submitParam.getValue();
             params[this.searchField.dom.name] = this.searchField.getValue();
