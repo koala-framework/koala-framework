@@ -6080,7 +6080,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
-<de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollständig in den Browser kopiert?</de>
+<de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollst&#xE4;ndig in den Browser kopiert?</de>
 <id>1542</id>
 <en>Voucher</en>
 <de>Gutschein</de>
@@ -6115,12 +6115,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>'%value%' is not a valid voucher code</en>
-<de>'%value%' ist ein ungültiger Gutschein Code</de>
+<de>'%value%' ist ein ung&#xFC;ltiger Gutschein Code</de>
 <id>1549</id>
 </text>
 <text>
 <en>Redeem Voucher</en>
-<de>Gutschein einlösen</de>
+<de>Gutschein einl&#xF6;sen</de>
 <id>1550</id>
 </text>
 <text>
@@ -6143,4 +6143,45 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Kopie von</de>
 <id>1553</id>
 </text>
+<text>
+<en>Information</en>
+<id>1554</id>
+</text>
+<text>
+<en>Shop.Product: Voucher</en>
+<id>1555</id>
+</text>
+<text>
+<en>Directory</en>
+<id>1556</id>
+</text>
+<text>
+<en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
+<id>1557</id>
+</text>
+<text>
+<en>Fill out the Form</en>
+<id>1558</id>
+</text>
+<text>
+<en>Click the save button above</en>
+<id>1559</id>
+</text>
+<text>
+<en>If no error pops up, the cache has been cleared sucessfully</en>
+<id>1560</id>
+</text>
+<text>
+<en>Affected component / part (e.g.: References)</en>
+<id>1561</id>
+</text>
+<text>
+<en>Why do you need to clear the cache? (steps to reproduce / description)</en>
+<id>1562</id>
+</text>
+<text>
+<en>Clear Cache</en>
+<id>1563</id>
+</text>
 </trl>
+
