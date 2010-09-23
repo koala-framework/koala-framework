@@ -76,7 +76,6 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             text : trlVps('All Visible'),
             icon : '/assets/silkicons/tick.png',
             cls  : 'x-btn-text-icon',
-            enableToggle: true,
             handler: function(b) {
                 Ext.Msg.show({
                     title: trlVps('All Visible'),
