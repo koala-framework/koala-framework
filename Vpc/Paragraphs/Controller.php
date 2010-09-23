@@ -229,7 +229,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     public function jsonMakeAllVisibleAction()
     {
         $id = $this->_getParam('componentId');
-        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id);
+        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
         Vpc_Admin::getInstance($c->componentClass)->makeVisible($c);
     }
 }

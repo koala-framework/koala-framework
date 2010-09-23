@@ -212,6 +212,9 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             if (isset($m['callback']) && $m['callback']) {
                 $type = Vps_Component_Cache::META_CALLBACK;
                 $value = $componentId;
+            } else if (is_null($id)) {
+                $type = Vps_Component_Cache::META_COMPONENT_CLASS;
+                $value = $component->componentClass;
             } else {
                 $type = Vps_Component_Cache::META_CACHE_ID;
                 $value = $cacheId;
