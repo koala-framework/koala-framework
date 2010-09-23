@@ -23,7 +23,7 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
             $g['class'] = 'Vpc_Chained_Trl_Generator';
             if (isset($g['dbIdShortcut'])) unset($g['dbIdShortcut']);
         }
-        foreach (array('componentName', 'componentIcon', 'editComponents') as $i) {
+        foreach (array('componentName', 'componentIcon', 'editComponents', 'viewCache') as $i) {
             if (Vpc_Abstract::hasSetting($masterComponentClass, $i)) {
                 $ret[$i] = Vpc_Abstract::getSetting($masterComponentClass, $i);
             }
