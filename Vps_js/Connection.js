@@ -70,11 +70,13 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             options.params.progressNum = progressNum;
         }
 
-        Vps.Connection.superclass.request.call(this, options);
+        var ret = Vps.Connection.superclass.request.call(this, options);
 
         if (options.progress) {
             this._showProgress(options);
         }
+
+        return ret;
     },
 
     _showProgress: function(options)
