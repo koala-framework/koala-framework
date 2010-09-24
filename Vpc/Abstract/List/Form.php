@@ -12,7 +12,9 @@ class Vpc_Abstract_List_Form extends Vpc_Abstract_Form
     {
         $multifields = new Vps_Form_Field_MultiFields('Children');
         $multifields->setMinEntries(0);
-        $multifields->fields->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
+        if (Vpc_Abstract::getSetting($this->getClass(), 'hasVisible')) {
+            $multifields->fields->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
+        }
         $multifields->setPosition(true);
 
         $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), 'child');
