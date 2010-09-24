@@ -30,6 +30,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
                 $cc->Vpc_Paragraphs_Component->toArray()
             );
         }
+        $ret['showCopyPaste'] = true;
         $ret['previewWidth'] = 600;
         $ret['default'] = array();
         return $ret;
