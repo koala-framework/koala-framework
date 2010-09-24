@@ -184,6 +184,9 @@ class Vps_Component_Data
             $childSelect = new Vps_Component_Select($childSelect);
         }
         $ret = $this->getChildComponents($select);
+        if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+            return $ret;
+        }
 
         $genSelect = new Vps_Component_Select();
         $genSelect->copyParts(array(
@@ -228,6 +231,9 @@ class Vps_Component_Data
                 foreach ($gen->getChildData(null, $select) as $d) {
                     if (!in_array($d, $ret, true)) {
                         $ret[] = $d;
+                        if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+                            return $ret;
+                        }
                     }
                 }
             }
@@ -262,6 +268,9 @@ class Vps_Component_Data
                         foreach ($gen->getChildData($parentDatas, $select) as $d) {
                             if (!in_array($d, $ret, true)) {
                                 $ret[] = $d;
+                                if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+                                    return $ret;
+                                }
                             }
                         }
                     }
