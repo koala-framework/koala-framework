@@ -571,7 +571,9 @@ abstract class Vps_Component_Generator_Abstract
             }
             $config['generator'] = $this; //wird benötigt für duplizieren
             $pageDataClass = $this->_getDataClass($config, $row);
-            $this->_dataCache[$parentData->componentId][$id] = new $pageDataClass($config);
+            $d = new $pageDataClass($config);
+            $this->_dataCache[$parentData->componentId][$id] = $d;
+            Vps_Component_Data_Root::getInstance()->addToDataCache($d);
         }
         return $this->_dataCache[$parentData->componentId][$id];
     }

@@ -9,6 +9,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private $_generatorsForClassesCache = array();
     private $_currentPage;
     private $_pageGenerators;
+    private $_dataCache = array();
 
     public function __construct($config = array())
     {
@@ -104,6 +105,11 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     public function getComponentById($componentId, $select = array())
     {
+        if (isset($this->_dataCache[$componentId])) {
+            if (!$select) {
+                return $this->_dataCache[$componentId];
+            }
+        }
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         } else {
@@ -428,6 +434,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function setFilename($f)
     {
         $this->_filename = $f;
+    }
+
+    /**
+     * @internal siehe Vps_Component_Generator_Abstract
+     */
+    public function addToDataCache(Vps_Component_Data $d)
+    {
+        $this->_dataCache[$d->componentId] = $d;
     }
 }
 ?>
