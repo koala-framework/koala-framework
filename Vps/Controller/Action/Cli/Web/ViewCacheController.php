@@ -28,6 +28,32 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
         }
     }
 
+    public function generateOneAction()
+    {
+        Zend_Session::start(true);
+        $ids = $this->_getParam('componentId');
+        $ids = explode(',', $ids);
+        foreach ($ids as $id) {
+            $page = Vps_Component_Data_Root::getInstance()->getComponentById($id);
+            echo "$page->componentId $page->url...";
+            try {
+                $this->_callProcessInput($page);
+            } catch (Vps_Exception_AccessDenied $e) {
+                echo " Access Denied [skipping]\n";
+                continue;
+            }
+            echo " processedInput";
+            try {
+                Vps_View_Component::renderMasterComponent($page);
+            } catch (Vps_Exception_AccessDenied $e) {
+                echo " Access Denied [skipping]\n";
+                continue;
+            }
+            echo " rendered\n";
+        }
+        exit;
+    }
+
     public function generateAction()
     {
         $queueFile = 'application/temp/viewCacheGenerateQueue';
