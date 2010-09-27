@@ -110,7 +110,6 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['partialParams'] = $this->getPartialParams();
         $ret['directory'] = $this->getData()->parent->getComponent()->getItemDirectory();
         $ret['formSaved'] = null;
         if ($this->_getSearchForm()) {
