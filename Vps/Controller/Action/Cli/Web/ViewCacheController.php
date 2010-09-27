@@ -27,7 +27,7 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
             }
         }
     }
-    
+
     public function generateAction()
     {
         $queueFile = 'application/temp/viewCacheGenerateQueue';
@@ -96,7 +96,7 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
                     }
                     echo " processedInput";
                     try {
-                        $page->render();
+                        Vps_View_Component::renderMasterComponent($page);
                     } catch (Vps_Exception_AccessDenied $e) {
                         echo " Access Denied [skipping]\n";
                         continue;
