@@ -12,6 +12,7 @@ Vps.Tabs = function(el) {
     this._activeTabIdx = null;
     this.switchEls = Ext.query('.vpsTabsLink', this.el.dom);
     this.contentEls = Ext.query('.vpsTabsContent', this.el.dom);
+    this.fxDuration = .5;
 
     this.tabsContents = this.el.createChild({
         tag: 'div', cls: 'vpsTabsContents'
@@ -46,10 +47,12 @@ Vps.Tabs = function(el) {
 
 Ext.extend(Vps.Tabs, Ext.util.Observable, {
     activateTab: function(idx) {
+        if (this._activeTabIdx == idx) return;
+
         if (this._activeTabIdx !== null) {
             Ext.get(this.switchEls[this._activeTabIdx]).removeClass('vpsTabsLinkActive');
             Ext.get(this.contentEls[this._activeTabIdx]).fadeOut({
-                duration: .5,
+                duration: this.fxDuration,
                 callback: function(el) {
                     el.removeClass('vpsTabsContentActive');
                 }
@@ -59,19 +62,11 @@ Ext.extend(Vps.Tabs, Ext.util.Observable, {
         Ext.get(this.switchEls[idx]).addClass('vpsTabsLinkActive');
         newContentEl.addClass('vpsTabsContentActive');
 
-        if (newContentEl.getHeight() > this.tabsContents.getHeight()) {
-            this.tabsContents.setHeight(newContentEl.getHeight());
-        }
-        newContentEl.fadeIn({
-            duration: .5,
-            callback: function(el) {
-                if (el.getHeight() < this.tabsContents.getHeight()) {
-                    this.tabsContents.setHeight(el.getHeight());
-                }
-            },
-            scope: this
-        });
+        this.tabsContents.scale(undefined, newContentEl.getHeight(),
+            { easing: 'easeOut', duration: this.fxDuration }
+        );
 
+        newContentEl.fadeIn({ duration: this.fxDuration });
 
         this._activeTabIdx = idx;
     }
