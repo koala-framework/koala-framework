@@ -29,7 +29,7 @@ abstract class Vps_Component_Generator_Abstract
 
     public function __wakeup()
     {
-        Vps_Benchmark::count('generators wokeup', $this->_class.'-'.$this->_settings['generator']);
+        Vps_Benchmark::count('generators wokeup');
     }
 
     protected function __construct($class, $settings)
@@ -37,7 +37,7 @@ abstract class Vps_Component_Generator_Abstract
         $this->_class = $class;
         $this->_settings = $settings;
         $this->_init();
-        Vps_Benchmark::count('generators', $this->_class.'-'.$settings['generator']);
+        Vps_Benchmark::count('generators');
     }
 
     protected function _init()
@@ -171,16 +171,13 @@ abstract class Vps_Component_Generator_Abstract
                 'automatic_serialization'=>true));
         }
         if (isset(self::$_cachedInstances[$cacheId])) {
-            Vps_Benchmark::countBt('Generator::getInst hit');
             $generators = self::$_cachedInstances[$cacheId];
         } else if (($cachedGeneratorData = $cache->load($cacheId)) !== false) {
-            Vps_Benchmark::count('Generator::getInst semi-hit');
             $generators = array();
             foreach ($cachedGeneratorData as $g) {
                 $generators[] = self::getInstance($g['componentClass'], $g['key'], array(), $g['pluginBaseComponentClass'], $g['inherited']);
             }
         } else {
-            Vps_Benchmark::count('Generator::getInst miss', $cacheId);
 
             $generators = self::_getGeneratorsForComponent($componentClass, false);
             foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
