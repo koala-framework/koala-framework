@@ -4,6 +4,12 @@ class Vps_Component_Abstract
     private static $_settings = null;
     private static $_rebuildingSettings = false;
     private static $_cacheSettings = array();
+    private static $_models = array(
+        'own' => array(),
+        'child' => array(),
+        'form' => array(),
+        'table' => array()
+    );
 
     public function __construct()
     {
@@ -322,7 +328,7 @@ class Vps_Component_Abstract
 
     public static function createTable($class, $tablename = null)
     {
-        static $tables = array();
+        $tables = self::$_models['table'];
         if (!isset($tables[$class.'-'.$tablename])) {
             if (!$tablename) {
                 $tablename = Vpc_Abstract::getSetting($class, 'tablename');
@@ -351,7 +357,7 @@ class Vps_Component_Abstract
 
     public static function createOwnModel($class)
     {
-        static $models = array();
+        $models = self::$_models['own'];
         if (!array_key_exists($class, $models)) {
             if (Vpc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
@@ -373,7 +379,7 @@ class Vps_Component_Abstract
 
     public static function createChildModel($class)
     {
-        static $models = array();
+        $models = self::$_models['child'];
         if (!array_key_exists($class, $models)) {
             if (Vpc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
@@ -395,7 +401,7 @@ class Vps_Component_Abstract
 
     public static function createFormModel($class)
     {
-        static $models = array();
+        $models = self::$_models['form'];
         if (!array_key_exists($class, $models)) {
             if (Vpc_Abstract::hasSetting($class, 'formModel')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'formModel');
@@ -405,6 +411,17 @@ class Vps_Component_Abstract
             }
         }
         return $models[$class];
+    }
+
+    //wenn root geändert wird muss der cache hier gelöscht werden können
+    public static function resetModelsCache()
+    {
+        self::$_models = array(
+            'own' => array(),
+            'child' => array(),
+            'form' => array(),
+            'table' => array()
+        );
     }
 
     /**
