@@ -353,16 +353,13 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         $cacheId = 'genForCls'.$this->getComponentClass().str_replace('.', '_', implode('', $lookingForClasses));
         if (isset($this->_generatorsForClassesCache[$cacheId])) {
-            Vps_Benchmark::count('_getGeneratorsForClasses hit', implode(', ', $lookingForClasses));
         } else if (($generators = $cache->load($cacheId)) !== false) {
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
             }
             $this->_generatorsForClassesCache[$cacheId] = $ret;
-            Vps_Benchmark::count('_getGeneratorsForClasses semi-hit', implode(', ', $lookingForClasses));
         } else {
-            Vps_Benchmark::count('_getGeneratorsForClasses miss', implode(', ', $lookingForClasses));
             $generators = array();
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
                 foreach (Vpc_Abstract::getSetting($c, 'generators') as $key => $generator) {
