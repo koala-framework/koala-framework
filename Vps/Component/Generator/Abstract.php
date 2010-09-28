@@ -46,6 +46,9 @@ abstract class Vps_Component_Generator_Abstract
             $this->_settings['component'] = array($this->_settings['generator']
                                             => $this->_settings['component']);
         }
+        foreach ($this->_settings['component'] as $k=>$i) {
+            if (!$i) unset($this->_settings['component'][$k]);
+        }
     }
 
     protected function _getModel()
@@ -396,26 +399,20 @@ abstract class Vps_Component_Generator_Abstract
 
     public function getChildComponentClasses($select = array())
     {
-        return self::getStaticChildComponentClasses($this->_settings, $select);
-    }
-
-    public static function getStaticChildComponentClasses($data, $select = array())
-    {
-        if ($select === array()) {
-            return $data['component']; //performance
+        if ($select === array() ||
+            ($select instanceof Vps_Model_Select &&
+                !($select->hasPart(Vps_Component_Select::WHERE_FLAGS) ||
+                    $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)
+                 )
+            )
+        ) {
+            return $this->_settings['component']; //performance
         }
+
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-
-        $ret = $data['component'];
-
-        if (!is_array($ret)) $ret = array($ret);
-        foreach ($ret as $key => $r) {
-            if (!$r) {
-                unset($ret[$key]);
-            }
-        }
+        $ret = $this->_settings['component'];
 
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS)) {
             $flags = $select->getPart(Vps_Component_Select::WHERE_FLAGS);
