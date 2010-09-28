@@ -54,19 +54,29 @@ Ext.extend(Vps.Tabs, Ext.util.Observable, {
             Ext.get(this.contentEls[this._activeTabIdx]).fadeOut({
                 duration: this.fxDuration,
                 callback: function(el) {
-                    el.removeClass('vpsTabsContentActive');
+                    this.oldEl.removeClass('vpsTabsContentActive');
+                    this.oldEl.setStyle('z-index', '1');
+
+                    this.newEl.setStyle('z-index', '2');
+                    this.newEl.setVisible(true);
+                    this.newEl.setOpacity(1);
+                },
+                scope: {
+                    oldEl: Ext.get(this.contentEls[this._activeTabIdx]),
+                    newEl: Ext.get(this.contentEls[idx])
                 }
             });
         }
-        var newContentEl = Ext.get(this.contentEls[idx]);
         Ext.get(this.switchEls[idx]).addClass('vpsTabsLinkActive');
+        var newContentEl = Ext.get(this.contentEls[idx]);
+        newContentEl.setStyle('z-index', '1');
+        newContentEl.setOpacity(1);
+        newContentEl.setVisible(true);
         newContentEl.addClass('vpsTabsContentActive');
 
         this.tabsContents.scale(undefined, newContentEl.getHeight(),
             { easing: 'easeOut', duration: this.fxDuration }
         );
-
-        newContentEl.fadeIn({ duration: this.fxDuration });
 
         this._activeTabIdx = idx;
     }
