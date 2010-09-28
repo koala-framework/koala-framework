@@ -76,6 +76,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 componentClass: data.componentClass,
                 type: data.type,
                 baseParams: params,
+                autoHeight: this.autoHeight,
                 listeners: {
                     scope: this,
                     gotComponentConfigs: function(componentConfigs) {
