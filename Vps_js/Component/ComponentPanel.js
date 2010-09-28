@@ -66,7 +66,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
         if (item) {
             item.applyBaseParams(params);
-            item.load();
+            item.load({}, {focusAfterLoad: true});
             if (item.getAction && item.getAction('saveBack')) {
                 if (this.getTopToolbar().items.getCount() > 3) {
                     item.getAction('saveBack').show();
@@ -80,6 +80,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 componentClass: data.componentClass,
                 type: data.type,
                 baseParams: params,
+                focusAfterAutoLoad: true,
                 listeners: {
                     scope: this,
                     gotComponentConfigs: function(componentConfigs) {
