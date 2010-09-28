@@ -5,10 +5,10 @@
     <? foreach ($this->lists as $list) { ?>
         <li class="list">
             <? if ($list['title']) { ?>
-            <h1>
+            <h2>
                 <?= $list['title']; ?>
                 <? if ($list['showAllHref']) { ?>- <a href="<?= $list['showAllHref'] ?>"><?= trlVps('Show All') ?></a><? }?>
-            </h1>
+            </h2>
             <? } ?>
             <div class="clear"></div>
             <?= $this->component($list['component']); ?>

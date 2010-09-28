@@ -12,7 +12,7 @@ class Vpc_Paragraphs_Controller_EditComponentsData extends Vps_Data_Abstract
     public function load($row)
     {
         $generators = Vpc_Abstract::getSetting($this->_componentClass, 'generators');
-        $classes = $generators['paragraphs']['component']; 
+        $classes = $generators['paragraphs']['component'];
         $admin = Vpc_Admin::getInstance($classes[$row->component]);
         $ret = array();
         foreach ($admin->getExtConfig() as $k=>$cfg) {
@@ -98,7 +98,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $generators = Vpc_Abstract::getSetting($this->_getParam('class'), 'generators');
             $classes =$generators['paragraphs']['component'];
             $row->component = array_search($class, $classes);
-            $row->visible = 0;
+            if (is_null($row->visible)) $row->visible = 0;
             $row->pos = $this->_getParam('pos');
             $row->save();
             $id = $row->id;

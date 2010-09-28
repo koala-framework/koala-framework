@@ -13,4 +13,4 @@
     padding: 3px 10px; border: 1px solid #bbb;
     border-bottom: none; margin-right: 10px;
 }
-.vpsTabsLinkActive { background-color: #fff; position: relative; bottom: -1px; }
+.vpsTabsLinkActive { background-color: #fff; position: relative; bottom: -1px; z-index: 3; }
