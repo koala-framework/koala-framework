@@ -174,6 +174,8 @@ class Vps_Component_Abstract
     public static function resetSettingsCache()
     {
         self::$_settings = null;
+        self::$_rebuildingSettings = false;
+        self::$_cacheSettings = array();
     }
 
     private static function &_getSettingsCached()
