@@ -29,9 +29,6 @@ class Vps_Component_Data
             $this->dbId = $this->componentId;
         }
         Vps_Benchmark::count('componentDatas', $this->componentId);
-        if ($this->isPage) {
-            Vps_Benchmark::count('componentData Pages', $this->componentId);
-        }
     }
 
     /**
@@ -179,7 +176,7 @@ class Vps_Component_Data
         } else {
             $select = clone $select;
         }
-        Vps_Benchmark::count('getRecursiveChildComponents', $this->componentId);
+        Vps_Benchmark::count('getRecursiveChildComponents');
         if (is_array($childSelect)) {
             $childSelect = new Vps_Component_Select($childSelect);
         }
@@ -211,13 +208,10 @@ class Vps_Component_Data
         $cacheId = 'recCCGen'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
         $cacheId = str_replace('.', '_', $cacheId);
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
-            Vps_Benchmark::count('getRecCC Gen hit', $this->componentClass);
             $generators = $this->_recursiveGeneratorsCache[$cacheId];
         } else if (($generators = $cache->load($cacheId)) !== false) {
-            Vps_Benchmark::count('getRecCC Gen semi-hit', $this->componentClass);
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
         } else {
-            Vps_Benchmark::count('getRecCC Gen miss', $this->componentClass);
             $generators = $this->_getRecursiveGenerators(
                         Vpc_Abstract::getChildComponentClasses($this, $childSelect),
                         $genSelect, $childSelect, $selectHash);
@@ -283,7 +277,6 @@ class Vps_Component_Data
     private function _getRecursiveGenerators($componentClasses, $select, $childSelect, $selectHash)
     {
         $cacheId = Implode('-', $componentClasses).$selectHash;
-        Vps_Benchmark::count('_getRecursiveGenerators');
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
             return $this->_recursiveGeneratorsCache[$cacheId];
         }
