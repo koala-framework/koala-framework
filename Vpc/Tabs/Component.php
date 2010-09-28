@@ -8,6 +8,7 @@ class Vpc_Tabs_Component extends Vpc_Abstract_List_Component
         $ret['componentName'] = trlVps('Tabs');
         $ret['componentIcon'] = new Vps_Asset('tab.png');
         $ret['assets']['dep'][] = 'VpsTabs';
+        $ret['extConfig'] = 'Vpc_Abstract_List_ExtConfigEditButton';
         return $ret;
     }
 
