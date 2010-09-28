@@ -8,6 +8,7 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
     showDelete: true,
     showPosition: true,
     showCopyPaste: true,
+    border: false,
     initComponent: function()
     {
         this.componentConfigs = {};
