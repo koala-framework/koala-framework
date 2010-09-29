@@ -17,9 +17,11 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         return $ret;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        return $this->getData()->getChildComponent('-view')->getComponent()->getCacheVars();
+        $ret = parent::getStaticCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model(Vpc_Abstract::getSetting($componentClass, 'childModel'));
+        return $ret;
     }
 
     public function getViewCacheLifetime()
