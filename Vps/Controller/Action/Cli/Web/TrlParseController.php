@@ -119,5 +119,33 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
         exit;
     }
 
+    public function checkDoubleEntriesAction()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Trl_Model_Vps');
+        $entries = array();
+        foreach ($m->getRows() as $row) {
+            $key = $row->context.$row->en;
+            if (!isset($entries[$key])) {
+            } else {
+                echo "double entry: $row->en ($row->de)\n";
+            }
+            $entries[$key][] = $row;
+        }
+        foreach ($entries as $rows) {
+            if (count($rows) == 1) continue;
+            $deleted = false;
+            foreach ($rows as $row) {
+                if (!$row->de) {
+                    $deleted = true;
+                    $row->delete();
+                    break;
+                }
+            }
+            if (!$deleted) {
+                $rows[count($rows)-1]->delete();
+            }
+        }
+        exit;
+    }
 }
 

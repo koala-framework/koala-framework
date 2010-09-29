@@ -5814,41 +5814,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1498</id>
 </text>
 <text>
-<en>Original Filename</en>
-<id>1499</id>
-</text>
-<text>
-<en>Headlines</en>
-<id>1500</id>
-</text>
-<text>
-<en>Headline 1</en>
-<id>1501</id>
-</text>
-<text>
-<en>Headline 2</en>
-<id>1502</id>
-</text>
-<text>
-<en>Original headline 1</en>
-<id>1503</id>
-</text>
-<text>
-<en>Original headline 2</en>
-<id>1504</id>
-</text>
-<text>
 <en>2 Columns</en>
 <de>2 Spalten</de>
 <id>1505</id>
-</text>
-<text>
-<en>Left column</en>
-<id>1506</id>
-</text>
-<text>
-<en>Right column</en>
-<id>1507</id>
 </text>
 <text>
 <en>All Visible</en>
@@ -5864,10 +5832,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Setting visible...</en>
 <de>Sichtbar setzen...</de>
 <id>1510</id>
-</text>
-<text>
-<en>Toolbox</en>
-<id>1511</id>
 </text>
 <text>
 <en>Time recording</en>
@@ -5893,10 +5857,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Year {0}</en>
 <de>{0}. Jahr</de>
 <id>1516</id>
-</text>
-<text>
-<en>Timer</en>
-<id>1517</id>
 </text>
 <text>
 <en>Spent time by years</en>
@@ -5928,10 +5888,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1526</id>
 </text>
 <text>
-<en>2 Columns</en>
-<id>1527</id>
-</text>
-<text>
 <en>Left column</en>
 <id>1528</id>
 </text>
@@ -5940,47 +5896,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1529</id>
 </text>
 <text>
-<en>Setting visible...</en>
-<de>Sichtbar setzen...</de>
-<id>1532</id>
-</text>
-<text>
 <en>Toolbox</en>
 <id>1533</id>
 </text>
 <text>
-<en>Time recording</en>
-<de>Zeiterfassung</de>
-<id>1534</id>
-</text>
-<text>
-<en>Year</en>
-<de>Jahr</de>
-<id>1535</id>
-</text>
-<text>
-<en>Spent time</en>
-<de>Verbrauchte Zeit</de>
-<id>1536</id>
-</text>
-<text>
-<en>Included time</en>
-<de>Inkludierte Zeit</de>
-<id>1537</id>
-</text>
-<text>
-<en>Year {0}</en>
-<de>{0}. Jahr</de>
-<id>1538</id>
-</text>
-<text>
 <en>Timer</en>
 <id>1539</id>
-</text>
-<text>
-<en>Spent time by years</en>
-<de>Verbrauchte Zeite nach Jahren</de>
-<id>1540</id>
 </text>
 <text>
 <en>Dear Sir or Madam</en>
@@ -6166,11 +6087,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Product: Voucher</en>
 <de>Produkt: Gutschein</de>
 <id>1580</id>
-</text>
-<text>
-<en>Copy of</en>
-<de>Kopie von</de>
-<id>1583</id>
 </text>
 <text>
 <en>Information</en>
