@@ -97,7 +97,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
                             });
                         }
                     }
-                })
+                });
             },
             scope: this
         });

@@ -220,7 +220,7 @@ Ext.grid.GroupSummary.Calculations = {
         var t = (data[field+'total'] = ((data[field+'total']||0) + (record.data[field]||0)));
         return t === 0 ? 0 : t / c;
     }
-}
+};
 
 Ext.grid.HybridSummary = Ext.extend(Ext.grid.GroupSummary, {
     calculate : function(rs, cs){

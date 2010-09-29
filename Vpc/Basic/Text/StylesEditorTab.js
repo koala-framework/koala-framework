@@ -25,7 +25,7 @@ Vpc.Basic.Text.StylesEditorTab = Ext.extend(Ext.Panel,
     },
     load: function() {
         this.grid.load();
-        this.grid.clearSelections()
+        this.grid.clearSelections();
         this.form.disable();
     }
 });
