@@ -260,7 +260,7 @@ Vpc.Basic.ImageEnlarge.prototype =
             pageWidth = windowWidth;
         }
 
-        arrayPageSize = new Array(pageWidth,pageHeight,windowWidth,windowHeight) 
+        arrayPageSize = new Array(pageWidth,pageHeight,windowWidth,windowHeight);
         return arrayPageSize;
     }
 };

@@ -556,7 +556,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     _insertImage: function(r) {
         var html = '<img src="'+r.imageUrl+'?'+Math.random()+'" ';
         html += 'width="'+r.imageDimension.width+'" ';
-        html += 'height="'+r.imageDimension.height+'" />'
+        html += 'height="'+r.imageDimension.height+'" />';
         this.insertAtCursor(html);
     },
     _modifyImage: function(r) {
@@ -750,7 +750,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 } else {
                     return tag == t;
                 }
-            }
+            };
             while (elm && elm.parentNode &&
                     (!elm.tagName || !isNeededTag(elm.tagName.toLowerCase()))) {
                 elm = elm.parentNode;
@@ -846,7 +846,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             } else {
                 //TODO: IE kompatibel?
                 this.insertAtCursor('<'+tag+' class="'+className+'">&nbsp;</'+tag+'>');
-                this.win.getSelection().getRangeAt(0).selectNode(this.win.getSelection().focusNode)
+                this.win.getSelection().getRangeAt(0).selectNode(this.win.getSelection().focusNode);
             }
         }
         this.deferFocus();
