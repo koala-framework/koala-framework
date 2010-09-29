@@ -3,7 +3,7 @@ class Vps_Component_Cache_Meta_Static_OwnModel extends Vps_Component_Cache_Meta_
 {
     public function __construct($pattern = '{component_id}')
     {
-        $this->_pattern = $pattern;
+        parent::__construct($pattern);
     }
 
     public function getModelname($componentClass)

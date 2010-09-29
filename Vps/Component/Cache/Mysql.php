@@ -40,7 +40,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'type' => $type,
             'value' => $value,
             'expire' => $expire,
-            'deleted' => 0,
+            'deleted' => false,
             'content' => $content
         );
         $options = array(
@@ -56,7 +56,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $select = $this->_models['cache']->select()
             ->whereEquals('component_id', $component->componentId)
             ->whereEquals('type', $type)
-            ->whereEquals('deleted', 0)
+            ->whereEquals('deleted', false)
             ->whereEquals('value', $value);
         $row = $this->_models['cache']->export(Vps_Model_Db::FORMAT_ARRAY, $select);
         if ($row) return $row[0]['content'];
@@ -102,7 +102,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $or[] = new Vps_Model_Select_Expr_IsNull('page_id');
         $select->where(new Vps_Model_Select_Expr_Or($or));
         foreach ($this->_models['cache']->export(Vps_Model_Db::FORMAT_ARRAY, $select) as $row) {
-            if ($row['expire'] == 0 || $row['expire'] > time()) {
+            if (!$row['expire'] || $row['expire'] > time()) {
                 $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
             }
         }
@@ -138,7 +138,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return get_class($model);
     }
 
-    protected function _addRowComponentIds($componentIds, $row, $callback = 0)
+    protected function _addRowComponentIds($componentIds, $row, $callback = false)
     {
         // Das suchen wir
         // $searchModel = model column value component_id callback
@@ -171,7 +171,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return $componentIds;
     }
 
-    protected function _addModelComponentIds($componentIds, $row, $callback = 0)
+    protected function _addModelComponentIds($componentIds, $row, $callback = false)
     {
         $model = $this->getModel('metaModel');
 
@@ -295,14 +295,16 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $select = $this->getModel('cache')->select();
         $or[] = new Vps_Model_Select_Expr_Equal('component_id', $componentIds);
         $select->where(new Vps_Model_Select_Expr_Or($or));
-        $this->getModel('cache')->updateRows(array('deleted' => 1), $select);
+        $this->getModel('cache')->updateRows(array('deleted' => true), $select);
 
         // Callback
         $ids = array();
-        $ids = $this->_addRowComponentIds($ids, $row, 1);
-        $ids = $this->_addModelComponentIds($ids, $row, 1);
+        $ids = $this->_addRowComponentIds($ids, $row, true);
+        $ids = $this->_addModelComponentIds($ids, $row, true);
+        $ids = $this->_addMetaComponentIds($ids);
+        $ids = $this->_addChainedComponentIds($ids);
         foreach ($ids as $componentIds) {
-            foreach (array_unique($componentIds) as $componentId) {
+            foreach (array_unique($componentIds) as $componentId => $null) {
                 $component = Vps_Component_Data_Root::getInstance()->getComponentById(
                     $componentId, array('ignoreVisible' => true)
                 );
@@ -311,12 +313,12 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         }
     }
 
-    public function cleanByModel(Vps_Model_Abstract $model)
+    public function cleanByModel(Vps_Model_Abstract $model, $callback = false)
     {
         $select = $this->getModel('metaModel')->select()
             ->whereEquals('model', get_class($model))
             ->whereNull('pattern')
-            ->whereEquals('callback', 0);
+            ->whereEquals('callback', $callback);
         $componentClasses = array();
         foreach ($this->getModel('metaModel')->getRows($select) as $r) {
             $componentClasses[] = $r->component_class;
