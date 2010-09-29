@@ -1,9 +1,9 @@
 <?php
 class Vps_Component_Cache_Meta_Static_OwnModel extends Vps_Component_Cache_Meta_Static_Abstract
 {
-    public function __construct($pattern = null)
+    public function __construct($pattern = '{component_id}')
     {
-        if ($pattern) $this->_pattern = $pattern;
+        $this->_pattern = $pattern;
     }
 
     public function getModelname($componentClass)

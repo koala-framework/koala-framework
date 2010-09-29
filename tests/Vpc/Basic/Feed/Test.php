@@ -35,11 +35,11 @@ class Vpc_Basic_Feed_Test extends PHPUnit_Framework_TestCase
         // Cache-Eintrag ändern um festzustellen, ob eh Cache verwendet wird
         $row->content = 'foo';
         $row->save();
-        //Vps_Component_Cache::getInstance()->emptyPreload();
         $this->assertEquals($row->content, $feed->getComponent()->getXml());
 
         // Cache löschen
-        Vps_Component_Cache::getInstance()->cleanByRow($row);
+        $feedRow = Vps_Model_Abstract::getInstance('Vpc_Basic_Feed_Model')->getRows()->current();
+        Vps_Component_Cache::getInstance()->cleanByRow($feedRow);
         $xml = $feed->getComponent()->getXml();
         $this->assertEquals('<?xml', substr($xml, 0, 5));
         $this->assertTrue(strpos($xml, '<rss') !== false);
