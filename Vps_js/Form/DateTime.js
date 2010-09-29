@@ -6,8 +6,8 @@
  *
  * DateTime field, combination of DateField and TimeField
  *
- * @author      Ing. Jozef Sak?lo?
- * @copyright (c) 2008, Ing. Jozef Sak?lo?
+ * @author      Ing. Jozef Sak�lo?
+ * @copyright (c) 2008, Ing. Jozef Sak�lo?
  * @version   2.0
  * @revision  $Id: Vps.Form.DateTime.js 749 2009-09-15 19:18:44Z jozo $
  *
@@ -522,7 +522,7 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
           val = new Date(val);
         }
         else if('string' === typeof val && this.hiddenFormat) {
-            val = Date.parseDate(val, this.hiddenFormat)
+            val = Date.parseDate(val, this.hiddenFormat);
         }
         val = val ? val : new Date(1970, 0 ,1, 0, 0, 0);
         var da, time;

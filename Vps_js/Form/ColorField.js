@@ -106,7 +106,7 @@ Vps.Form.ColorField =  Ext.extend(function(config){
             this.setColor(this.defaultColor);
             if(!this.allowBlank) {
                 this.markInvalid(String.format(this.blankText, value));
-                return false
+                return false;
             }
             return true;
         }

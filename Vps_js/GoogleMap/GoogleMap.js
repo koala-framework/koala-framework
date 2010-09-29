@@ -263,10 +263,10 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
         var maxRes = this.config.maximumResolution;
         for (var i=0; i<mapTypes.length; i++) {
             if (minRes) {
-                mapTypes[i].getMinimumResolution = function() {return minRes;}
+                mapTypes[i].getMinimumResolution = function() {return minRes;};
             }
             if (maxRes) {
-                mapTypes[i].getMaximumResolution = function() {return maxRes;}
+                mapTypes[i].getMaximumResolution = function() {return maxRes;};
             }
         }
 

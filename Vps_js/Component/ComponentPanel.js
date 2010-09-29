@@ -174,7 +174,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             toolbar.add('»');
         }
 
-        var data = this.componentsStack[this.componentsStack.length-1]
+        var data = this.componentsStack[this.componentsStack.length-1];
         var cfg = this.componentConfigs[data.componentClass+'-'+data.type];
         toolbar.add({
             cls: 'x-btn-text-icon',

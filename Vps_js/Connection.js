@@ -90,7 +90,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 requestOptions: options
             }),
             breakStatusRequests: false
-        }
+        };
         this._progressData[progressNum].progressBar.updateProgress(0, '0%', '');
 
         this._doProgressStatusRequest.defer(1500, this, [ progressNum ]);
@@ -197,7 +197,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         {
             this.progressBar.updateProgress(num, progressBarText, true);
             this.myEls.msgEl.update(text || '&#160;');
-        }
+        };
 
         dlg.show();
         return dlg;

@@ -229,7 +229,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 this.onSaved(result.data);
             },
             scope: this
-        })
+        });
     },
 
     onSelectionchange: function (selModel, node) {
@@ -264,7 +264,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     onMove : function(dropEvent){
-        var params = this.getBaseParams()
+        var params = this.getBaseParams();
         params.source = dropEvent.dropNode.id;
         params.target = dropEvent.target.id;
         params.point = dropEvent.point;
@@ -312,7 +312,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 node.ui.iconNode.style.backgroundImage = 'url(' + result.icon + ')';
             },
             scope: this
-        })
+        });
     },
 
     getTree : function() {
