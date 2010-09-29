@@ -28,7 +28,7 @@ class Vpc_Advanced_Amazon_Nodes_Test extends Vps_Test_SeleniumTestCase
         $this->assertElementPresent('link='.trlVps('order now at amazon'));
         $href = $this->getAttribute('link='.trlVps('order now at amazon').'@href');
         $this->assertEquals('http://www.amazon.de', substr($href, 0, 20));
-        $this->assertContains('3827327237', $href);
+        $this->assertContains('3836216450', $href);
         $this->assertContains('prosalzburgat-21', $href);
     }
 }
