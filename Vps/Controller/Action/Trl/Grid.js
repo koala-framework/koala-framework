@@ -12,8 +12,7 @@ Vps.Trl.Grid = Ext.extend(Vps.Auto.GridPanel, {
 
                     }
                 }, this);
-            }, this)
-        }, this)
+            }, this);
+        }, this);
     }
-
-})
+});
