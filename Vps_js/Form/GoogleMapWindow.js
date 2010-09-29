@@ -182,7 +182,7 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
         this.marker.closeInfoWindow();
     },
     setMarkerPoint:function(value){
-        var points = value.split(";")
+        var points = value.split(";");
         this.markerpoint_y = points[0];
         this.markerpoint_x = points[1];
         if (this.markerpoint_y && this.markerpoint_x && this.map){
