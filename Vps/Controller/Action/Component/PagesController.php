@@ -391,7 +391,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $actions = $config['actions'];
         $actions['move'] = $config['allowDrag'];
         $actions['moveTo'] = $config['allowDrop'];
-        if (in_array($action, array_keys($actions)) && !$config['actions'][$action]) return false;
+        if (in_array($action, array_keys($actions)) && !$actions[$action]) return false;
 
         // wenn ja, darf man die Komponente bearbeiten?
         $acl = Vps_Registry::get('acl')->getComponentAcl();
