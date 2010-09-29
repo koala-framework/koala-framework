@@ -5815,41 +5815,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1498</id>
 </text>
 <text>
-<en>Original Filename</en>
-<id>1499</id>
-</text>
-<text>
-<en>Headlines</en>
-<id>1500</id>
-</text>
-<text>
-<en>Headline 1</en>
-<id>1501</id>
-</text>
-<text>
-<en>Headline 2</en>
-<id>1502</id>
-</text>
-<text>
-<en>Original headline 1</en>
-<id>1503</id>
-</text>
-<text>
-<en>Original headline 2</en>
-<id>1504</id>
-</text>
-<text>
 <en>2 Columns</en>
 <de>2 Spalten</de>
 <id>1505</id>
-</text>
-<text>
-<en>Left column</en>
-<id>1506</id>
-</text>
-<text>
-<en>Right column</en>
-<id>1507</id>
 </text>
 <text>
 <en>All Visible</en>
@@ -5865,10 +5833,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Setting visible...</en>
 <de>Sichtbar setzen...</de>
 <id>1510</id>
-</text>
-<text>
-<en>Toolbox</en>
-<id>1511</id>
 </text>
 <text>
 <en>Time recording</en>
@@ -5894,10 +5858,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Year {0}</en>
 <de>{0}. Jahr</de>
 <id>1516</id>
-</text>
-<text>
-<en>Timer</en>
-<id>1517</id>
 </text>
 <text>
 <en>Spent time by years</en>
@@ -5929,10 +5889,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1526</id>
 </text>
 <text>
-<en>2 Columns</en>
-<id>1527</id>
-</text>
-<text>
 <en>Left column</en>
 <id>1528</id>
 </text>
@@ -5941,47 +5897,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1529</id>
 </text>
 <text>
-<en>Setting visible...</en>
-<de>Sichtbar setzen...</de>
-<id>1532</id>
-</text>
-<text>
 <en>Toolbox</en>
 <id>1533</id>
 </text>
 <text>
-<en>Time recording</en>
-<de>Zeiterfassung</de>
-<id>1534</id>
-</text>
-<text>
-<en>Year</en>
-<de>Jahr</de>
-<id>1535</id>
-</text>
-<text>
-<en>Spent time</en>
-<de>Verbrauchte Zeit</de>
-<id>1536</id>
-</text>
-<text>
-<en>Included time</en>
-<de>Inkludierte Zeit</de>
-<id>1537</id>
-</text>
-<text>
-<en>Year {0}</en>
-<de>{0}. Jahr</de>
-<id>1538</id>
-</text>
-<text>
 <en>Timer</en>
 <id>1539</id>
-</text>
-<text>
-<en>Spent time by years</en>
-<de>Verbrauchte Zeite nach Jahren</de>
-<id>1540</id>
 </text>
 <text>
 <en>Dear Sir or Madam</en>
@@ -6116,12 +6037,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>'%value%' is not a valid voucher code</en>
 <de>'%value%' ist ein ung&#xFC;ltiger Gutschein Code</de>
-<id>1549</id>
+<id>1581</id>
 </text>
 <text>
 <en>Redeem Voucher</en>
 <de>Gutschein einl&#xF6;sen</de>
-<id>1550</id>
+<id>1582</id>
 </text>
 <text>
 <en>Remaining Amount {0}</en>
@@ -6171,15 +6092,11 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Can't paste paragraph type '{0}', as it is not avaliable here.</en>
 <de>Absatz vom Typ '{0}' kann nicht eingef&#xFC;gt werden, da er hier nicht verf&#xFC;gbar ist.</de>
-<id>1581</id>
+<id>1618</id>
 </text>
 <text>
 <en>Show User Menu</en>
-<id>1582</id>
-</text>
-<text>
-<en>Information</en>
-<id>1583</id>
+<id>1619</id>
 </text>
 <text>
 <en>Filter</en>
@@ -6196,18 +6113,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Flash.Community Video</en>
 <id>1587</id>
-</text>
-<text>
-<en>Shop.Product: Voucher</en>
-<id>1588</id>
-</text>
-<text>
-<en>Directory</en>
-<id>1589</id>
-</text>
-<text>
-<en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
-<id>1590</id>
 </text>
 <text>
 <en>Flash.Code</en>
@@ -6255,26 +6160,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1601</id>
 </text>
 <text>
-<en>Fill out the Form</en>
-<id>1602</id>
-</text>
-<text>
-<en>Click the save button above</en>
-<id>1603</id>
-</text>
-<text>
-<en>If no error pops up, the cache has been cleared sucessfully</en>
-<id>1604</id>
-</text>
-<text>
-<en>Affected component / part (e.g.: References)</en>
-<id>1605</id>
-</text>
-<text>
-<en>Why do you need to clear the cache? (steps to reproduce / description)</en>
-<id>1606</id>
-</text>
-<text>
 <en>Too many rows to export. Try exporting two times with fewer rows.</en>
 <id>1607</id>
 </text>
@@ -6295,10 +6180,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1611</id>
 </text>
 <text>
-<en>Clear Cache</en>
-<id>1612</id>
-</text>
-<text>
 <en>Redirects</en>
 <id>1613</id>
 </text>
@@ -6309,7 +6190,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The Form has been submitted successfully. You will receive an E-Mail with the access link to the protected area.</en>
-<de>Das Formular wurde erfolgreich abgeschickt. Sie erhalten in Kürze eine E-Mail mit dem Zugangslink zum geschützten Bereich.</de>
+<de>Das Formular wurde erfolgreich abgeschickt. Sie erhalten in K&#xFC;rze eine E-Mail mit dem Zugangslink zum gesch&#xFC;tzten Bereich.</de>
 <id>1615</id>
 </text>
 <text>
@@ -6319,48 +6200,48 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Invalid or expired Link. Please request a new one.</en>
-<de>Ungültiger oder abgelaufener Link. Bitte fordern Sie einen neuen an.</de>
+<de>Ung&#xFC;ltiger oder abgelaufener Link. Bitte fordern Sie einen neuen an.</de>
 <id>1617</id>
 </text>
 <text>
 <en>Information</en>
-<id>1554</id>
+<id>1620</id>
 </text>
 <text>
 <en>Shop.Product: Voucher</en>
-<id>1555</id>
+<id>1621</id>
 </text>
 <text>
 <en>Directory</en>
-<id>1556</id>
+<id>1622</id>
 </text>
 <text>
 <en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
-<id>1557</id>
+<id>1623</id>
 </text>
 <text>
 <en>Fill out the Form</en>
-<id>1558</id>
+<id>1624</id>
 </text>
 <text>
 <en>Click the save button above</en>
-<id>1559</id>
+<id>1625</id>
 </text>
 <text>
 <en>If no error pops up, the cache has been cleared sucessfully</en>
-<id>1560</id>
+<id>1626</id>
 </text>
 <text>
 <en>Affected component / part (e.g.: References)</en>
-<id>1561</id>
+<id>1627</id>
 </text>
 <text>
 <en>Why do you need to clear the cache? (steps to reproduce / description)</en>
-<id>1562</id>
+<id>1628</id>
 </text>
 <text>
 <en>Clear Cache</en>
-<id>1563</id>
+<id>1629</id>
 </text>
 </trl>
 
