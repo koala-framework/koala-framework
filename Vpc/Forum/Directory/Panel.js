@@ -43,7 +43,7 @@ Vpc.Forum.Panel = Ext.extend(Vps.Auto.TreePanel,
 
     onModerators: function()
     {
-        this.modDialog.show()
+        this.modDialog.show();
     },
 
     setBaseParams: function(bp) {

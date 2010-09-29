@@ -37,7 +37,7 @@ Vps.Debug.Requests = Ext.extend(Ext.grid.GridPanel, {
             text: 'Load Querycount',
             handler: this.loadQueryCount,
             scope: this
-        })
+        });
         this.actions.clear = new Ext.Action({
             icon: '/assets/silkicons/cross.png',
             cls: 'x-btn-text-icon',
@@ -46,7 +46,7 @@ Vps.Debug.Requests = Ext.extend(Ext.grid.GridPanel, {
                 this.store.removeAll();
             },
             scope: this
-        })
+        });
         this.tbar = [this.actions.reload, this.actions.clear];
 
         Vps.Debug.Requests.superclass.initComponent.call(this);
@@ -74,6 +74,6 @@ Vps.Debug.Requests = Ext.extend(Ext.grid.GridPanel, {
                 this.store.commitChanges();
             },
             scope: this
-        })
+        });
     }
 });
