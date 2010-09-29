@@ -10,7 +10,7 @@ class Vpc_Basic_LinkTag_Intern_TargetData extends Vps_Data_Table
         }
         $ret = array('id' => $row->$name);
         $cmp = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
-            $ret['id']
+            $ret['id'], array('ignoreVisible' => true)
         );
         if ($cmp) {
             $ret['name'] = $cmp->getTitle();
