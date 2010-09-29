@@ -35,6 +35,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             width: this.previewWidth,
             showDelete: this.showDelete,
             showPosition: this.showPosition,
+            showCopyPaste: this.showCopyPaste,
             listeners: {
                 scope: this,
                 'delete': this.onDelete,
@@ -144,7 +145,9 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         if (this.actions.addparagraph) {
             this.tbar.push('-');
             this.tbar.push(this.actions.addparagraph);
-            this.tbar.push(this.actions.copyPaste);
+            if (this.showCopyPaste) {
+                this.tbar.push(this.actions.copyPaste);
+            }
         }
         this.tbar.push('->');
         this.tbar.push(this.actions.makeAllVisible);

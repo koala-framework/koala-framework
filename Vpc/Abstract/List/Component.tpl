@@ -17,4 +17,5 @@
             <?=$this->component($child['data']);?>
         </div>
     <? } ?>
+    <div class="clear"></div>
 </div>

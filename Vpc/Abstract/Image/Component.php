@@ -3,6 +3,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     implements Vps_Media_Output_IsValidInterface
 {
     const USER_SELECT = 'user';
+    private $_imageDataOrEmptyImageData;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -151,11 +153,14 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
     private function _getImageDataOrEmptyImageData()
     {
-        $file = $this->getImageData();
-        if (!$file['file']) {
-            $file = $this->_getEmptyImageData();
+        if (!isset($this->_imageDataOrEmptyImageData)) {
+            $file = $this->getImageData();
+            if (!$file['file']) {
+                $file = $this->_getEmptyImageData();
+            }
+            $this->_imageDataOrEmptyImageData = $file;
         }
-        return $file;
+        return $this->_imageDataOrEmptyImageData;
     }
 
     public function _getCacheRow()

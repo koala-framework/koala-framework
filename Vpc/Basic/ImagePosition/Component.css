@@ -1,3 +1,3 @@
-div.$cssClass div.left { text-align: left; }
-div.$cssClass div.right { text-align: right; }
-div.$cssClass div.center { text-align: center; }
+.cssClass .posleft { text-align: left; }
+.cssClass .posright { text-align: right; }
+.cssClass .poscenter { text-align: center; }
