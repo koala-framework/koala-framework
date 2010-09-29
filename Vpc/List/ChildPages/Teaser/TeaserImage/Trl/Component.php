@@ -20,4 +20,13 @@ class Vpc_List_ChildPages_Teaser_TeaserImage_Trl_Component extends Vpc_Abstract_
         if ($this->getRow()->visible) return true;
         return false;
     }
+
+    public static function getStaticCacheVars($componentClass)
+    {
+        $ret = parent::getStaticCacheVars($componentClass);
+        $ret[] = array(
+            'model' => 'Vpc_Root_Category_Trl_GeneratorModel'
+        );
+        return $ret;
+    }
 }

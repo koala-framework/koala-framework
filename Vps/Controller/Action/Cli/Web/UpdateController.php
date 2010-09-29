@@ -28,6 +28,9 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
 
     public static function update($rev = false, $debug = false, $skipClearCache = false)
     {
+        if (!$skipClearCache) {
+            Vps_Util_ClearCache::getInstance()->clearCache('all', false, false);
+        }
         echo "Update\n";
 
         if (in_array('vps', Vps_Registry::get('config')->server->updateTags->toArray())) {
