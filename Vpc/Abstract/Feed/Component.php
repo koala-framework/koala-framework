@@ -22,7 +22,7 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
             $xml = $this->_getFeedXml();
             $cache->save($this->getData(), $xml);
             if ($model = $this->_getCacheModel()) {
-                $cache->saveMetaModel($component, $model);
+                $cache->saveMeta(new Vps_Component_Cache_Meta_Static_Model($this->_getCacheModel()));
             }
         }
         return $xml;

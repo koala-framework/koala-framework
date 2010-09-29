@@ -270,6 +270,8 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
     public function cleanByRow(Vps_Model_Row_Abstract $row)
     {
+        $this->cleanByModel($row->getModel());
+
         $ids = array();
         $ids = $this->_addRowComponentIds($ids, $row);
         $ids = $this->_addModelComponentIds($ids, $row);
@@ -289,8 +291,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 }
             }
         }
-
-
 
         $select = $this->getModel('cache')->select();
         $or[] = new Vps_Model_Select_Expr_Equal('component_id', $componentIds);
