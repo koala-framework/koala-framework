@@ -8,11 +8,11 @@ Vps.Component.Frontend.Index = function(renderTo, config)
     if (config.fe) {
         var fe = new Vps.Component.FrontendEditing.Index(renderTo, config);
     }
-}
+};
 
 Ext.extend(Vps.Component.Frontend.Index, Ext.util.Observable,
 {
     loadComponent : function(data) {
         document.location.href = '/admin/pages/?url=' + data.url + '&name=' + data.name;
     }
-})
+});
