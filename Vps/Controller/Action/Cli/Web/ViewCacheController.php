@@ -126,6 +126,9 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
                     } catch (Vps_Exception_AccessDenied $e) {
                         echo " Access Denied [skipping]\n";
                         continue;
+                    } catch (Exception $e) {
+                        echo ' '.get_class($e).' '.$e->getMessage()." [skipping]\n";
+                        continue;
                     }
                     echo " rendered\n";
                 }

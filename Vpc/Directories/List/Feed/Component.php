@@ -45,9 +45,7 @@ class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
         } else {
             $generator = $dir->getGenerator('detail');
         }
-        $ret = parent::getCacheVars();
-        $ret[] = array('model' => $generator->getModel());
-        return $ret;
+        return $generator->getCacheVars($dir instanceof Vps_Component_Data ? $dir : null);
     }
 
     protected function _getRssEntryByItem(Vps_Component_Data $item)
