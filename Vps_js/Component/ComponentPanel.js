@@ -68,7 +68,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             item.applyBaseParams(params);
             item.load({}, {focusAfterLoad: true});
             if (item.getAction && item.getAction('saveBack')) {
-                if (this.getTopToolbar().items.getCount() > 3) {
+                if (this.getTopToolbar().items.getCount() > 2) {
                     item.getAction('saveBack').show();
                 } else {
                     item.getAction('saveBack').hide();
@@ -81,6 +81,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 type: data.type,
                 baseParams: params,
                 focusAfterAutoLoad: true,
+                autoHeight: this.autoHeight,
                 listeners: {
                     scope: this,
                     gotComponentConfigs: function(componentConfigs) {
@@ -101,7 +102,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             item.on('loaded', function() {
                 //muss hier auch nochmal gemacht werden
                 if (item.getAction && item.getAction('saveBack')) {
-                    if (this.getTopToolbar().items.getCount() > 3) {
+                    if (this.getTopToolbar().items.getCount() > 2) {
                         item.getAction('saveBack').show();
                     } else {
                         item.getAction('saveBack').hide();

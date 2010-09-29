@@ -80,7 +80,7 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
                 'name' => $row->getRow()->name,
                 'filename' => $row->getRow()->filename,
                 'visible' => $row->isHome, //home ist standardmäßig immer sichtbar, andere seiten nicht
-                'custom_filename' => $row->getRow()->custom_filename
+                'custom_filename' => false
             ));
         }
         $ret['row'] = $dbRow;

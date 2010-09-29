@@ -4001,10 +4001,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1106</id>
 </text>
 <text>
-<en>Text/Image - Alignment</en>
-<id>1107</id>
-</text>
-<text>
 <en>Url include</en>
 <id>1108</id>
 </text>
@@ -5327,22 +5323,27 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The password was changed successfully</en>
+<de>Das Passwort wurde erfolgreich ge&#xE4;ndert</de>
 <id>1389</id>
 </text>
 <text>
 <en>Change Password</en>
+<de>Passwort &#xE4;ndern</de>
 <id>1390</id>
 </text>
 <text>
 <en>Current Password</en>
+<de>Aktuelles Passwort</de>
 <id>1391</id>
 </text>
 <text>
 <en>New Password</en>
+<de>Neues Passwort</de>
 <id>1392</id>
 </text>
 <text>
 <en>Account - Change Password</en>
+<de>Benutzer - Passwort &#xE4;ndern</de>
 <id>1393</id>
 </text>
 <text>
@@ -5938,14 +5939,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Right column</en>
 <id>1529</id>
-</text>
-<text>
-<en>All Visible</en>
-<id>1530</id>
-</text>
-<text>
-<en>Do you really wish to set everything to visible?</en>
-<id>1531</id>
 </text>
 <text>
 <en>Setting visible...</en>

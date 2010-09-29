@@ -1,16 +1,16 @@
-.$cssClass div.text { display: none; }
-.$cssClass .fromAddress { margin-top:6px; }
-.$cssClass .fromAddress input { float: left; }
-.$cssClass .fromAddress input.textBefore { width: 375px; color: $black; }
-.$cssClass .fromAddress input.vpsClearOnFocusBlurred { color: $gray; }
-.$cssClass .fromAddress input.textOn { color: #000000; }
-.$cssClass .fromAddress input.submitOn {
+.cssClass div.text { display: none; }
+.cssClass .fromAddress { margin-top:6px; }
+.cssClass .fromAddress input { float: left; }
+.cssClass .fromAddress input.textBefore { width: 375px; color: var(typo); }
+.cssClass .fromAddress input.vpsClearOnFocusBlurred { color: var(gray); }
+.cssClass .fromAddress input.textOn { color: var(typo); }
+.cssClass .fromAddress input.submitOn {
     float: right;
     margin-top: -3px;
     padding: 0px 5px;
     overflow: visible;
 }
 
-.$cssClass .mapDirSuggestParent { display: none; margin-top: 30px; }
+.cssClass .mapDirSuggestParent { display: none; margin-top: 30px; }
 
-.$cssClass .container { overflow: hidden; border: 1px solid #000; }
+.cssClass .container { overflow: hidden; border: 1px solid #000; }

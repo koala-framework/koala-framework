@@ -50,6 +50,7 @@ class Vps_Assets_Dependencies
 
     public function getAssetUrls($assetsType, $fileType, $section, $rootComponent, $language = null)
     {
+        Vps_Benchmark::count('getAssetUrls');
         if ($this->_config->debug->menu) {
             $session = new Zend_Session_Namespace('debug');
             if (isset($session->enable) && $session->enable) {

@@ -283,7 +283,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             $postData = $postData[$this->getFieldName()];
         }
 
-        $cnt = count($postData);
+        $cnt = count($postData['save']);
         $name = $this->getFieldLabel();
         if (!$name) $name = $this->getName();
         foreach ($this->getValidators() as $v) {
