@@ -120,7 +120,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                             this.customSettings.list.grid.reload();
                         },
                         scope: this
-                    })
+                    });
                 } else {
                     this.progress.hide();
                     if (r.wrongversion) {
