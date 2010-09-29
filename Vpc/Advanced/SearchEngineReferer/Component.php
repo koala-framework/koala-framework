@@ -12,9 +12,19 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         $ret['componentName'] = trlVps('Search engine referer');
         $ret['childModel'] = 'Vpc_Advanced_SearchEngineReferer_Model';
         $ret['saveReferer'] = true;
-        $ret['viewCache'] = false;
+        $ret['viewCache'] = true;
         $ret['flags']['processInput'] = true;
         return $ret;
+    }
+
+    public function getCacheVars()
+    {
+        return $this->getData()->getChildComponent('-view')->getComponent()->getCacheVars();
+    }
+
+    public function getViewCacheLifetime()
+    {
+        return $this->getData()->getChildComponent('-view')->getComponent()->getViewCacheLifetime();
     }
 
     public function processInput()

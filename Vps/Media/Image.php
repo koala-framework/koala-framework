@@ -172,7 +172,7 @@ class Vps_Media_Image
                 $im->setImagePage(0, 0, 0, 0);
     //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
                 $im->setImageColorspace(Imagick::COLORSPACE_RGB);
-                $im->setCompressionQuality(80);
+                $im->setCompressionQuality(90);
                 $ret = $im->getImageBlob();
                 $im->destroy();
             }
@@ -183,7 +183,7 @@ class Vps_Media_Image
                 $im->readImage($source);
                 $im->thumbnailImage($size['width'], $size['height']);
                 $im->setImageColorspace(Imagick::COLORSPACE_RGB);
-                $im->setCompressionQuality(80);
+                $im->setCompressionQuality(90);
                 $ret = $im->getImageBlob();
                 $im->destroy();
             } else {
