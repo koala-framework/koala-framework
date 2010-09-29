@@ -15,14 +15,10 @@ class Vpc_Advanced_SearchEngineReferer_ViewMyLatest_Component
         return $select->whereEquals('component_id', $this->getData()->parent->parent->componentId);
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        $ret[] = array(
-            'model' => $this->_getParentModel(),
-            'id' => $this->getData()->parent->parent->componentId,
-            'field' => 'component_id'
-        );
+        $ret = parent::getStaticCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_GeneratorRow();
         return $ret;
     }
 }
