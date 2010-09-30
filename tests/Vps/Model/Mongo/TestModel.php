@@ -23,6 +23,7 @@ class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
                     2 => STDOUT
                 );
             } else {
+                $cmd .= " 2>&1 >/dev/null";
                 $descriptorspec = array(
                     1 => array('pipe', 'w'),
                     2 => STDOUT //should be empty
