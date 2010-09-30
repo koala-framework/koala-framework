@@ -8,7 +8,8 @@ class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract_Flash_Component
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlVps('Flash.Community Video'),
-            'ownModel'     => 'Vpc_Advanced_CommunityVideo_Model'
+            'ownModel'     => 'Vpc_Advanced_CommunityVideo_Model',
+            'extConfig' => 'Vps_Component_Abstract_ExtConfig_Form'
         ));
         return $ret;
     }
