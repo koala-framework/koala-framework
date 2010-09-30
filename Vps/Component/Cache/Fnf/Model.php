@@ -7,7 +7,7 @@ class Vps_Component_Cache_Fnf_Model extends Vps_Component_Cache_Mysql_Model
             'primaryKey' => 'fakeId',
             'columns' => array('fakeId', 'component_id', 'page_id', 'component_class', 'type', 'value', 'expire', 'deleted', 'content'),
             'uniqueColumns' => array('component_id', 'type', 'value'),
-            'default' => array('deleted' => 0)
+            'default' => array('deleted' => false)
         ));
         parent::__construct($config);
     }
@@ -15,6 +15,6 @@ class Vps_Component_Cache_Fnf_Model extends Vps_Component_Cache_Mysql_Model
     // zum Testen
     public function countActiveRows()
     {
-        return $this->countRows($this->select()->whereEquals('deleted', 0));
+        return $this->countRows($this->select()->whereEquals('deleted', false));
     }
 }

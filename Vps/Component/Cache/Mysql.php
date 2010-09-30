@@ -67,41 +67,36 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     {
         $ret = array();
 
-        $select = $this->_models['cache']->select();
-        $select->whereEquals('deleted', 0);
-        $preloadSelect = $this->_models['preload']->select();
+        $select = $this->getModel()->select();
+        $select->whereEquals('deleted', false);
+        $preloadSelect = $this->getModel('preload')->select();
         $or = array();
         while ($component && !$component->isPage) $component = $component->parent;
         if ($component) {
-            $or[] = new Vps_Model_Select_Expr_Equals('page_id', $component->componentId);
+            $or[] = new Vps_Model_Select_Expr_Equal('page_id', $component->componentId);
             $preloadSelect->whereEquals('page_id', $component->componentId);
         } else {
             $or[] = new Vps_Model_Select_Expr_IsNull('page_id');
             $preloadSelect->whereNull('page_id');
         }
         $preloadIds = array();
-        foreach ($this->_models['preload']->export(Vps_Model_Db::FORMAT_ARRAY, $preloadSelect) as $preload) {
+        foreach ($this->getModel('preload')->export(Vps_Model_Db::FORMAT_ARRAY, $preloadSelect) as $preload) {
             $preloadIds[] = $preload['preload_id'];
         }
         if ($preloadIds) {
-            $or[] = new Vps_Model_Select_Expr_Equals('component_id', $preloadIds);
+            $or[] = new Vps_Model_Select_Expr_Equal('component_id', $preloadIds);
         }
 
         while ($component) {
             $component = $component->parent;
             if ($component && $component->isPage) {
-                $or[] = new Vps_Model_Select_Expr_Equals('page_id', $component->componentId);
-                /*
-                $or[] = new Vps_Model_Select_Expr_And(array(
-                    new Vps_Model_Select_Expr_Equals('page_id', $component->componentId),
-                    new Vps_Model_Select_Expr_Equals('type', 'box')
-                ));
-                */
+                $or[] = new Vps_Model_Select_Expr_Equal('page_id', $component->componentId);
             }
         }
         $or[] = new Vps_Model_Select_Expr_IsNull('page_id');
         $select->where(new Vps_Model_Select_Expr_Or($or));
-        foreach ($this->_models['cache']->export(Vps_Model_Db::FORMAT_ARRAY, $select) as $row) {
+
+        foreach ($this->getModel()->export(Vps_Model_Db::FORMAT_ARRAY, $select) as $row) {
             if (!$row['expire'] || $row['expire'] > time()) {
                 $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
             }
@@ -330,7 +325,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         }
         $componentClasses = array_unique($componentClasses);
         $this->getModel('cache')->updateRows(
-            array('deleted' => 1),
+            array('deleted' => true),
             $this->getModel('cache')->select()->whereEquals('component_class', $componentClasses)
         );
     }
@@ -341,7 +336,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'model' => $modelName,
             'component_class' => $componentClass,
             'pattern' => $pattern,
-            'callback' => $isCallback ? 1 : 0
+            'callback' => $isCallback
         );
         $options = array(
             'buffer' => true,
@@ -359,7 +354,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'value' => $value,
             'component_id' => $component->componentId,
             'component_class' => $component->componentClass,
-            'callback' => $isCallback ? 1 : 0
+            'callback' => $isCallback
         );
         $options = array(
             'buffer' => true,

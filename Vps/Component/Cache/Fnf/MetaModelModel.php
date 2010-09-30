@@ -7,7 +7,7 @@ class Vps_Component_Cache_Fnf_MetaModelModel extends Vps_Component_Cache_Mysql_M
             'primaryKey' => 'fakeId',
             'columns' => array('fakeId', 'model', 'component_class', 'pattern', 'callback'),
             'uniqueColumns' => array('model', 'component_class'),
-            'default' => array('callback' => 0)
+            'default' => array('callback' => false)
         ));
         parent::__construct($config);
     }
