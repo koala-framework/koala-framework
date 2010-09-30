@@ -7,6 +7,16 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         foreach ($ret['actions'] as &$a) $a = false;
         $ret['actions']['properties'] = true;
         $ret['actions']['visible'] = true;
+
+        // Bei Pages muss nach oben gesucht werden, weil Klasse von Generator
+        // mit Komponentklasse übereinstimmen muss
+        $c = $component;
+        while ($c && $c->componentClass != $this->getClass()) {
+            $c = $c->parent;
+        }
+        if ($c) { //TODO warum tritt das auf?
+            $ret['editControllerComponentId'] = $c->componentId;
+        }
         return $ret;
     }
 
