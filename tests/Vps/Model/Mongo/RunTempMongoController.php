@@ -1,8 +1,26 @@
 <?php
 class Vps_Model_Mongo_RunTempMongoController extends Vps_Controller_Action
 {
+    private $_dir;
+    private $_proc;
+
+    public function sig_handler($signo)
+    {
+        if ($signo == SIGTERM) {
+            //wenn wir gekillt werden mongo auch mitkillen
+            echo "Caught SIGTERM...\n";
+            $this->_proc->terminate();
+            $this->_proc->close(false);
+            system("rm -r ".escapeshellarg($this->_dir));
+            exit;
+        }
+    }
+
     public function indexAction()
     {
+        declare(ticks = 1);
+        pcntl_signal(SIGTERM, array($this, "sig_handler"));
+
         $mongoDir = "/home/niko/mongodb-linux-i686-1.6.1"; //TODO, obviously
         $debugOutput = true;
 
@@ -11,11 +29,11 @@ class Vps_Model_Mongo_RunTempMongoController extends Vps_Controller_Action
         if (!file_exists($mongoDir.'/bin/mongod')) {
             throw new PHPUnit_Framework_SkippedTestError('mongo daemon not found');
         }
-        $dir = tempnam('/tmp', 'mongodata');
-        unlink($dir);
-        mkdir($dir);
+        $this->_dir = tempnam('/tmp', 'mongodata');
+        unlink($this->_dir);
+        mkdir($this->_dir);
 
-        $cmd = "$mongoDir/bin/mongod --port=$port --dbpath=$dir";
+        $cmd = "$mongoDir/bin/mongod --port=$port --dbpath=$this->_dir";
         $descriptorspec = array();
         if ($debugOutput) {
             echo $cmd."\n";
@@ -34,7 +52,7 @@ class Vps_Model_Mongo_RunTempMongoController extends Vps_Controller_Action
 
         $this->_proc->terminate();
         $this->_proc->close(false);
-        system("rm -r ".escapeshellarg($dir));
+        system("rm -r ".escapeshellarg($this->_dir));
 
         exit;
     }
