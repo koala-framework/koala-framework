@@ -8,7 +8,7 @@ set_include_path($include_path);
 
 require_once 'Vps/Setup.php';
 Vps_Setup::setUp();
-if ($_SERVER['REQUEST_URI'] == '/') {
+if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == '/') {
     echo Vps_Registry::get('config')->application->vps->name.' '.Vps_Registry::get('config')->application->vps->version;
     exit;
 }
