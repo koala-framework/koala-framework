@@ -121,12 +121,18 @@ abstract class Vps_Util_Rrd_File
         throw new Vps_Exception_NotYetImplemented();
     }
 
-    public function record($date = null)
+    /**
+     * @param int wenn angegeben wird dieses datum verwendet, ansonsten NOW
+     * @param array wenn angegeben werden diese values verwendet, ansonsten wird getRecordValues aufgerufen
+     */
+    public function record($date = null, $values = null)
     {
-        if ($date) {
-            $values = $this->getRecordValuesForDate($date);
-        } else {
-            $values = $this->getRecordValues();
+        if (is_null($values)) {
+            if ($date) {
+                $values = $this->getRecordValuesForDate($date);
+            } else {
+                $values = $this->getRecordValues();
+            }
         }
 
         if (!file_exists($this->_fileName)) {
