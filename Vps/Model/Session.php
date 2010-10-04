@@ -27,6 +27,12 @@ class Vps_Model_Session extends Vps_Model_Data_Abstract
         return $this->_data;
     }
 
+    public function resetData()
+    {
+        $this->_data = $this->_defaultData;
+        $this->_afterDataUpdate();
+    }
+
     public function getUniqueIdentifier()
     {
         return $this->_namespace;
