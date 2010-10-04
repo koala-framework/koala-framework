@@ -12,7 +12,10 @@ class Vps_Util_Rrd_Graph
     private $_lowerLimit = null;
     private $_upperLimit = null;
 
-    public function __construct(Vps_Util_Rrd_File $rrd)
+    /**
+     * @param Vps_Util_Rrd_File wenn leer müssen alle fields als objekte angegeben werden
+     */
+    public function __construct(Vps_Util_Rrd_File $rrd = null)
     {
         $this->_rrd = $rrd;
     }
@@ -129,9 +132,8 @@ class Vps_Util_Rrd_Graph
             $cmd .= "--lower-limit \"$this->_lowerLimit\" ";
         }
 
-        $rrdFile = $this->_rrd->getFileName();
         if ($this->_devideBy) {
-            $cmd .= "DEF:requests=$rrdFile:".$this->_devideBy->getName().":AVERAGE ";
+            $cmd .= "DEF:requests=".$this->_devideBy->getFileNameWithField().":AVERAGE ";
         }
         $i = 0;
         foreach ($this->_fields as $settings) {
@@ -141,16 +143,16 @@ class Vps_Util_Rrd_Graph
                 $method = 'AVERAGE';
             }
             if (isset($settings['field'])) {
-                $field = $settings['field']->getName();
+                $field = $settings['field']->getFileNameWithField();
                 if (isset($settings['addFields'])) {
                     $j = 0;
-                    $cmd .= "DEF:line{$i}x{$j}=$rrdFile:$field:$method ";
+                    $cmd .= "DEF:line{$i}x{$j}=$field:$method ";
                     foreach ($settings['addFields'] as $f) {
                         $j++;
                         $addField = $f['field'];
                         if (is_string($addField)) $addField = $this->_rrd->getField($addField);
-                        $addField = $addField->getName();
-                        $cmd .= "DEF:line{$i}x{$j}=$rrdFile:$addField:$method ";
+                        $addField = $addField->getFileNameWithField();
+                        $cmd .= "DEF:line{$i}x{$j}=$addField:$method ";
                     }
                     $j = 0;
                     $cmd .= "CDEF:line{$i}=";
@@ -170,7 +172,7 @@ class Vps_Util_Rrd_Graph
                     }
                     $cmd .= " ";
                 } else {
-                    $cmd .= "DEF:line{$i}=$rrdFile:$field:$method ";
+                    $cmd .= "DEF:line{$i}=$field:$method ";
                 }
                 if ($this->_devideBy) {
                     $cmd .= "CDEF:perrequest$i=line$i,requests,/ ";
@@ -190,7 +192,7 @@ class Vps_Util_Rrd_Graph
             $i++;
         }
         $cmd .= " 2>&1";
-        if ($this->_rrd->getTimeZone()) {
+        if ($this->_rrd && $this->_rrd->getTimeZone()) {
             $cmd = "TZ=".$this->_rrd->getTimeZone()." ".$cmd;
         }
         exec($cmd, $out, $ret);

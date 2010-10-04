@@ -29,6 +29,7 @@ abstract class Vps_Util_Rrd_File
         if (!($f instanceof Vps_Util_Rrd_Field)) {
             $f = new Vps_Util_Rrd_Field($f);
         }
+        $f->setFile($this);
         $this->_fields[] = $f;
     }
 
@@ -103,7 +104,7 @@ abstract class Vps_Util_Rrd_File
                 $start = time()-1;
             } else {
                 sort($initialValueDates);
-                $start = $initialValueDates[0];
+                $start = $initialValueDates[0]-1;
             }
         }
 
@@ -116,7 +117,7 @@ abstract class Vps_Util_Rrd_File
             } else {
                 $heartbeat = ($this->_interval*2);
             }
-            $cmd .= "DS:".$field->getName().":".$field->getType().":".$heartbeat.":".$field->getMin().":".($field->getMax())." ";
+            $cmd .= "DS:".$field->getEscapedName().":".$field->getType().":".$heartbeat.":".$field->getMin().":".($field->getMax())." ";
         }
         foreach ($this->getRRAs() as $rra) {
             if (!isset($rra['method'])) $rra['method'] = 'AVERAGE';
