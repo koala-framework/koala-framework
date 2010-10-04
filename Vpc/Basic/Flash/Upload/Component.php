@@ -6,6 +6,7 @@ class Vpc_Basic_Flash_Upload_Component extends Vpc_Abstract_Flash_Upload_Compone
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Flash.Upload');
         $ret['ownModel'] = 'Vpc_Basic_Flash_Upload_Model';
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 
