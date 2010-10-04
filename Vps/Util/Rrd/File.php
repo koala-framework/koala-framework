@@ -13,11 +13,14 @@ abstract class Vps_Util_Rrd_File
 
     public function getTitle()
     {
-        return $this->getFileName();
+        return $this->_fileName;
     }
 
     public function getFileName()
     {
+        if (!file_exists($this->_fileName)) {
+            $this->createFile();
+        }
         return $this->_fileName;
     }
 
@@ -79,11 +82,31 @@ abstract class Vps_Util_Rrd_File
         );
     }
 
-    public function createFile($start)
+    /**
+     * erstellt rrd Datei
+     *
+     * wenn kein start-timestamp übergeben wird dieser automatisch ermittelt
+     * und per _getInitialValueDates die datei für die vergangenheit befüllt
+     *
+     * @param int start-timestamp, sollte normalerweise null sein
+     */
+    public function createFile($start = null)
     {
         if (file_exists($this->_fileName)) {
             throw new Vps_Exception("$this->_fileName already exists");
         }
+
+        $initialValueDates = array();
+        if (is_null($start)) {
+            $initialValueDates = $this->_getInitialValueDates();
+            if (!$initialValueDates) {
+                $start = time()-1;
+            } else {
+                sort($initialValueDates);
+                $start = $initialValueDates[0];
+            }
+        }
+
         $cmd = "rrdtool create $this->_fileName ";
         $cmd .= "--start ".$start." ";
         $cmd .= "--step ".($this->_interval)." ";
@@ -102,6 +125,10 @@ abstract class Vps_Util_Rrd_File
         }
         system($cmd, $ret);
         if ($ret != 0) throw new Vps_Exception("Command failed");
+
+        foreach ($initialValueDates as $date) {
+            $this->record($date, $this->getRecordValuesForDate($date));
+        }
     }
 
     protected function _getMemcacheValue($field)
@@ -109,6 +136,17 @@ abstract class Vps_Util_Rrd_File
         $value = Vps_Benchmark_Counter::getInstance()->getValue($field);
         if ($value===false) $value = 'U';
         return $value;
+    }
+
+    /**
+     * Wenn Werte für die Vergangenheit ermittelt werden können, müssen hier die
+     * verfügbaren Datums zurückgeben werden
+     *
+     * @return array(int) timestamps
+     */
+    protected function _getInitialValueDates()
+    {
+        return array();
     }
 
     public function getRecordValues()
@@ -136,7 +174,7 @@ abstract class Vps_Util_Rrd_File
         }
 
         if (!file_exists($this->_fileName)) {
-            $this->createFile(time()-1);
+            $this->createFile();
         }
 
         $cmd = "rrdtool update $this->_fileName ";
