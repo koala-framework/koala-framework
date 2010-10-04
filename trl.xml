@@ -3981,6 +3981,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Do you really wish to remove this paragraph?</en>
+<de>Wollen Sie diesen Absatz wirklich löschen?</de>
 <id>1102</id>
 </text>
 <text>
@@ -6049,9 +6050,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1573</id>
 </text>
 <text>
-<en>The Voucher has been successfully registered.</en>
-<de>Der Gutschein wurde erfolgreich eingetragen.</de>
-<id>1574</id>
+<en>Your Voucher has been successfully redeemed.</en>
+<de>Ihr Gutschein wurde erfolgreich eingelöst.</de>
+<id>1552</id>
 </text>
 <text>
 <en>Set password</en>
@@ -6128,5 +6129,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Clear Cache</en>
 <id>1593</id>
 </text>
+<text>
+<en>Contains video</en>
+<de>Beinhaltet ein Video</de>
+<id>1564</id>
+</text>
 </trl>
-
