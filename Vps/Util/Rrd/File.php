@@ -3,8 +3,9 @@ abstract class Vps_Util_Rrd_File
 {
     private $_fields = array();
     private $_fileName;
-    private $_interval = 60;
     private $_timeZone = null;
+
+    protected $_interval = 60;
 
     public function __construct($fileName)
     {
@@ -124,6 +125,7 @@ abstract class Vps_Util_Rrd_File
             if (!isset($rra['xff'])) $rra['xff'] = '0.6';
             $cmd .= "RRA:$rra[method]:$rra[xff]:$rra[steps]:$rra[rows] ";
         }
+        //echo "$cmd<br>\n";
         system($cmd, $ret);
         if ($ret != 0) throw new Vps_Exception("Command failed");
 
@@ -187,6 +189,7 @@ abstract class Vps_Util_Rrd_File
         $cmd .= implode(':', $values);
 
         $ret = null;
+        //echo "$cmd<br>\n";
         system($cmd, $ret);
         if ($ret != 0) throw new Vps_Exception("Command failed");
     }
