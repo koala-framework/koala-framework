@@ -88,6 +88,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         parent::start();
         $this->open('/vps/test/vps_start');
+        $this->deleteAllVisibleCookies();
         $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/, max_age=60*5');
     }
 
