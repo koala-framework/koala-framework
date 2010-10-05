@@ -30,7 +30,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['parentPage'] = null;
         if ($this->_getSetting('showParentPage')) {
-            $currentPages = array_reverse($this->_getCurrentPages());
+            $currentPages = array_reverse($this->_getCurrentPagesCached());
             if (isset($this->getData()->level)) {
                 $level = $this->getData()->level;
             } else {
@@ -76,7 +76,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret = null;
 
         $ret = array();
-        $currentPages = array_reverse($this->_getCurrentPages());
+        $currentPages = array_reverse($this->_getCurrentPagesCached());
         if ($parentData) {
             $ret = $parentData;
         } else {
@@ -131,7 +131,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
     protected function _getMenuData($parentData = null, $select = array())
     {
         $currentPageIds = array();
-        $currentPages = array_reverse($this->_getCurrentPages());
+        $currentPages = array_reverse($this->_getCurrentPagesCached());
         foreach ($currentPages as $page) {
             if (!$page instanceof Vps_Component_Data_Root) {
                 $currentPageIds[] = $page->getComponentId();
@@ -179,18 +179,24 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    // Array mit IDs von aktueller Seiten und Parent Pages
-    protected function _getCurrentPages()
+    // Array mit aktueller Seiten und Parent Pages
+    protected final function _getCurrentPagesCached()
     {
         if (!isset($this->_currentPages)) {
-            $this->_currentPages = array();
-            $p = $this->getData()->getPage();
-            while ($p) {
-                $this->_currentPages[] = $p;
-                $p = $p->getParentPage();
-            }
+            $this->_currentPages = $this->_getCurrentPages();
         }
         return $this->_currentPages;
+    }
+
+    protected function _getCurrentPages()
+    {
+        $ret = array();
+        $p = $this->getData()->getPage();
+        while ($p) {
+            $ret[] = $p;
+            $p = $p->getParentPage();
+        }
+        return $ret;
     }
 
     public static function getStaticCacheVars()
