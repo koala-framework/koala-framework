@@ -229,6 +229,31 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }, this);
         }
     },
+
+    // private
+    // überschrieben wegen spezieller ENTER behandlung im IE die wir nicht wollen
+    fixKeys : function(){ // load time branching for fastest keydown performance
+        if(Ext.isIE){
+            return function(e){
+                var k = e.getKey(), r;
+                if(k == e.TAB){
+                    e.stopEvent();
+                    r = this.doc.selection.createRange();
+                    if(r){
+                        r.collapse(true);
+                        r.pasteHTML('&nbsp;&nbsp;&nbsp;&nbsp;');
+                        this.deferFocus();
+                    }
+                //}else if(k == e.ENTER){
+                    //entfernt, wir wollen dieses verhalten genau so wie der IE es macht
+                }
+            };
+        }
+
+        //restliche browser: (Opera, WebKit)
+        return Vps.Form.HtmlEditor.superclass.fixKeys.call(this);
+    }(),
+
     onRender: function(ct, position)
     {
         Vps.Form.HtmlEditor.superclass.onRender.call(this, ct, position);

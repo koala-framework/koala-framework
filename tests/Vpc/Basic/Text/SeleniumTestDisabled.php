@@ -5,9 +5,20 @@ class Vpc_Basic_Text_SeleniumTest extends PHPUnit_Framework_TestCase
 /**
 das funktioniert alles nicht; sowas zu testen ist mit selenium _etwas_ schwierig
 
-http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
 
 === MANUELLE TESTS ===
+
+*** Enter erzeugt Absatz ***
+IE + FF!
+- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- hinter foo klicken
+- Enter drücken
+- bar schreiben
+- Shift+Enter drücken
+- baz schreiben
+- in HTML-Code-Ansicht umschalten
+- Erwarteter HTML-Code: <p>foo</p><p>bar<br />baz</p>
 
 *** Cursor beim einfügen ***
 - url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
