@@ -56,6 +56,11 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
         return $this->_referersCache;
     }
 
+    public function emptyReferersCache()
+    {
+        $this->_referersCache = null;
+    }
+
     public function hasContent()
     {
         $refs = $this->_getReferers();

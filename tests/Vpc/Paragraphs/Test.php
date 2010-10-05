@@ -43,7 +43,7 @@ class Vpc_Paragraphs_Test extends Vpc_TestAbstract
 
         $cache = Vps_Component_Cache::getInstance();
         $cacheModel = $cache->getModel();
-        $select = $cacheModel->select()->whereEquals('deleted', 0);
+        $select = $cacheModel->select()->whereEquals('deleted', false);
 
         // Cache wird geschrieben
         $this->assertNull($cache->load($this->_root));

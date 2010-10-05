@@ -78,6 +78,9 @@ class Vps_Component_View_Helper_Image extends Vps_Component_View_Helper_Abstract
                 $this->_getView()->addImage($img);
                 $url = "cid:".$img->id;
             }
+            if ($this->_getView() instanceof Vps_View_MailInterface) {
+                $attr = '';
+            }
             return array(
                 'url' => $url,
                 'width' => $size['width'],

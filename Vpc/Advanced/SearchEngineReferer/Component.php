@@ -19,7 +19,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
 
     public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getStaticCacheMeta();
+        $ret = parent::getStaticCacheMeta($componentClass);
         $ret[] = new Vps_Component_Cache_Meta_Static_Model(Vpc_Abstract::getSetting($componentClass, 'childModel'));
         return $ret;
     }
@@ -68,6 +68,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
                 foreach ($deleteRows as $deleteRow) {
                     $deleteRow->delete();
                 }
+                Vps_Component_ModelObserver::getInstance()->process();
             }
         }
     }

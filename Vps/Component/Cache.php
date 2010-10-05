@@ -64,7 +64,7 @@ abstract class Vps_Component_Cache
             $modelName = $meta->getModelname($componentClass);
             if ($modelName) {
                 $pattern = $meta->getPattern();
-                $this->_saveMetaModel($componentClass, $modelName, $pattern, $meta->isCallback());
+                $this->_saveMetaModel($componentClass, $modelName, $pattern, $meta->isCallback(), get_class($meta));
             }
 
         } else if ($meta instanceof Vps_Component_Cache_Meta_ModelField) {
@@ -94,7 +94,7 @@ abstract class Vps_Component_Cache
         }
     }
 
-    protected abstract function _saveMetaModel($componentClass, $modelName, $pattern, $isCallback);
+    protected abstract function _saveMetaModel($componentClass, $modelName, $pattern, $isCallback, $metaClass);
     protected abstract function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $isCallback);
     protected abstract function _saveMetaComponent(Vps_Component_Data $component, Vps_Component_Data $target);
 }

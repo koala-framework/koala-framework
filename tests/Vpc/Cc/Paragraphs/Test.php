@@ -44,11 +44,7 @@ class Vpc_Cc_Paragraphs_Test extends Vpc_TestAbstract
         $r->visible = 0;
         $r->save();
         $this->_process();
-        /*
-        d($r->toArray());
-d(Vps_Component_Cache::getInstance()->getModel('metaModel')->getRows()->toArray());
-d(Vps_Component_Cache::getInstance()->getModel()->getRows()->toArray());
-*/
+
         $c = $this->_root->getComponentById('root-slave_paragraphs');
         $html = $c->render();
         $this->assertEquals(1, substr_count($html, 'simple'));
@@ -62,7 +58,7 @@ d(Vps_Component_Cache::getInstance()->getModel()->getRows()->toArray());
 
         $model = Vps_Model_Abstract::getInstance('Vpc_Cc_Paragraphs_Master_Paragraphs_TestModel');
         $r = $model->createRow();
-        $r->component_id = 'root-slave_paragraphs';
+        $r->component_id = 'root-master_paragraphs';
         $r->component = 'simple';
         $r->visible = 1;
         $r->save();

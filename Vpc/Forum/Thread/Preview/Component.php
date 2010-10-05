@@ -29,9 +29,9 @@ class Vpc_Forum_Thread_Preview_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheMeta()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getStaticCacheMeta();
+        $ret = parent::getStaticCacheMeta($componentClass);
         $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Posts_Directory_Model');
         return $ret;
     }

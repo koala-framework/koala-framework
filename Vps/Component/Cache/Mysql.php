@@ -101,7 +101,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
             }
         }
-
         return $ret;
     }
 
@@ -136,7 +135,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     protected function _addRowComponentIds($componentIds, $row, $callback = false)
     {
         // Das suchen wir
-        // $searchModel = model column value component_id callback
+        // $searchModel = model, column, value, component_id, callback
         // $searchModel->model = $row->model && $searchModel->value=$row->{$searchModel->column}
         $searchModel = $this->getModel('metaRow');
 
@@ -159,9 +158,11 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         }
 
         // Rausgesuchte Columns mit Values zu Select hinzufügen
-        $select->where(new Vps_Model_Select_Expr_Or($or));
-        foreach ($searchModel->getRows($select) as $r) {
-            $componentIds[$r->component_class][$r->component_id] = true;
+        if ($or) {
+            $select->where(new Vps_Model_Select_Expr_Or($or));
+            foreach ($searchModel->getRows($select) as $r) {
+                $componentIds[$r->component_class][$r->component_id] = true;
+            }
         }
         return $componentIds;
     }
@@ -175,13 +176,10 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             ->whereEquals('callback', $callback);
 
         foreach ($model->getRows($select) as $metaRow) {
-            $componentId = $metaRow->pattern;
-            if (!$componentId) continue;
-            $matches = array();
-            preg_match_all('/\{([a-z0-9_]+)\}/', $componentId, $matches);
-            foreach ($matches[1] as $m) {
-                $componentId = str_replace('{' . $m . '}', $row->$m, $componentId);
-            }
+            $componentId = call_user_func(
+                array($metaRow->meta_class, 'createComponentId'),
+                $metaRow->pattern, $row
+            );
             $componentIds[$metaRow->component_class][$componentId] = true;
         }
         return $componentIds;
@@ -230,6 +228,8 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
             foreach ($ret[$row->source_component_class] as $componentId => $null) { // Alle master-componentIds der target_component_class
 
+                if (strpos($componentId, '%') !== false) continue;
+
                 // Komponente von Master bei der der Cache gelöscht wird
                 $component = Vps_Component_Data_Root::getInstance()
                     ->getComponentById($componentId, array('ignoreVisible' => true));
@@ -244,18 +244,20 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 while ($c) {
 
                     $chainedType = Vpc_Abstract::getFlag($c->componentClass, 'chainedType');
-                    $c = $c->parent;
-                    if (!$chainedType || !isset($chainedTypes[$chainedType])) continue;
+                    if ($chainedType && isset($chainedTypes[$chainedType])) {
 
-                    $chainedComponents = $c->getChildComponents(array(
-                        'componentClass' => $chainedTypes[$chainedType],
-                        'ignoreVisible' => true
-                    ));
-                    foreach ($chainedComponents as $chainedComponent) {
-                        $part2 = substr($componentId, strlen($component->componentId));
-                        $componentId = $chainedComponent->componentId . $part2;
-                        $ret[$chainedComponent->componentClass][$componentId] = true;
+                        $chainedComponents = $c->parent->getChildComponents(array(
+                            'componentClass' => $chainedTypes[$chainedType],
+                            'ignoreVisible' => true
+                        ));
+                        foreach ($chainedComponents as $chainedComponent) {
+                            $part2 = substr($componentId, strlen($c->componentId));
+                            $componentId = $chainedComponent->componentId . $part2;
+                            $ret[$chainedComponent->componentClass][$componentId] = true;
+                        }
                     }
+
+                    $c = $c->parent;
                 }
             }
 
@@ -290,7 +292,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $select = $this->getModel('cache')->select();
         $or[] = new Vps_Model_Select_Expr_Equal('component_id', $componentIds);
         $select->where(new Vps_Model_Select_Expr_Or($or));
-        $this->getModel('cache')->updateRows(array('deleted' => true), $select);
+        $this->getModel()->updateRows(array('deleted' => true), $select);
 
         // Callback
         $ids = array();
@@ -330,13 +332,14 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         );
     }
 
-    protected function _saveMetaModel($componentClass, $modelName, $pattern, $isCallback)
+    protected function _saveMetaModel($componentClass, $modelName, $pattern, $isCallback, $metaClass)
     {
         $data = array(
             'model' => $modelName,
             'component_class' => $componentClass,
             'pattern' => $pattern,
-            'callback' => $isCallback
+            'callback' => $isCallback,
+            'meta_class' => $metaClass,
         );
         $options = array(
             'buffer' => true,

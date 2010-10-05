@@ -38,9 +38,9 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheMeta()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getStaticCacheMeta();
+        $ret = parent::getStaticCacheMeta($componentClass);
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
             foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
                 if (!is_instance_of($generator['class'], 'Vps_Component_Generator_PseudoPage_Table') &&

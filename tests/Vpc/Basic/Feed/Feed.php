@@ -7,9 +7,9 @@ class Vpc_Basic_Feed_Feed extends Vpc_Abstract_Feed_Component
             ->getRows()->toArray();
     }
 
-    public static function getStaticCacheMeta()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getStaticCacheMeta();
+        $ret = parent::getStaticCacheMeta($componentClass);
         $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Basic_Feed_Model');
         return $ret;
     }
