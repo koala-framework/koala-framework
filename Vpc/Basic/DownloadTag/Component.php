@@ -65,7 +65,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
             if (Vps_Registry::get('config')->showInvisible) {
                 //preview im frontend
                 $retValid = self::VALID_DONT_CACHE;
-            } else if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, Vps_Registry::get('userModel')->getAuthedUser())) {
+            } else if (Vps_Registry::get('userModel')->getAuthedUser()) {
                 //paragraphs vorschau im backend
                 $retValid = self::VALID_DONT_CACHE;
             }
@@ -89,12 +89,10 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
 
     public static function getMediaOutput($id, $type, $className)
     {
-        $row = Vpc_Abstract::createModel($className)->getRow($id);
-        if ($row) {
-            $fileRow = $row->getParentRow('File');
-        } else {
-            $fileRow = false;
-        }
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+        if (!$c) return null;
+        $row = $c->getComponent()->getRow();
+        $fileRow = $row->getParentRow('File');
         if (!$fileRow) {
             return null;
         } else {

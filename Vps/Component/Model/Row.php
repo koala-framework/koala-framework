@@ -58,15 +58,20 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function save()
     {
         $this->_beforeSave();
-        $m = $this->_data->row->getModel();
-        $primaryKey = $m->getPrimaryKey();
-        $id = $this->_data->row->$primaryKey;
-        if ($id) {
-            $this->_beforeUpdate();
-            $row = $this->_data->row;
+        if ($this->_data->generator instanceof Vpc_Root_Category_Generator) {
+            $id = $this->_data->dbId;
+            $row = $this->_data->generator->getModel()->getRow($id);
         } else {
-            $this->_beforeInsert();
-            $row = $m->createRow();
+            $m = $this->_data->row->getModel();
+            $primaryKey = $m->getPrimaryKey();
+            $id = $this->_data->row->$primaryKey;
+            if ($id) {
+                $this->_beforeUpdate();
+                $row = $this->_data->row;
+            } else {
+                $this->_beforeInsert();
+                $row = $m->createRow();
+            }
         }
         foreach ($this->_setValues as $key) {
             $row->$key = $this->_data->$key;
