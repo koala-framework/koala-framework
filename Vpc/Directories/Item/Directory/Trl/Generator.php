@@ -38,6 +38,18 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         return $ret;
     }
 
+    public function getChildIds($parentData, $select = array())
+    {
+        if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE) &&
+            $select->getPart(Vps_Component_Select::IGNORE_VISIBLE))
+        {
+            return $this->_getChainedGenerator()->getChildIds($select);
+        } else {
+            $m = Vpc_Abstract::createChildModel($this->_class);
+            return $m->getIds($select);
+        }
+    }
+
     protected function _createData($parentData, $row, $select)
     {
         //visible überprüfung wird _getChainedChildComponents auch schon gemacht
@@ -93,26 +105,6 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
             }
             $ret['filename'] .= Vps_Filter::filterStatic($fn, 'Ascii');
         }
-        return $ret;
-    }
-
-    public function getCacheVars($parentData)
-    {
-        $ret = parent::getCacheVars($parentData);
-        if (Vpc_Abstract::createChildModel($this->_class)) {
-            $ret[] = array(
-                'model' => Vpc_Abstract::createChildModel($this->_class),
-                //TODO: type regExp mit dieser id verwenden: (im moment wird alles gelöscht)
-                //'id' => '^'.$parentData->dbId.'_[0-9]+$',
-                'field' => 'component_id'
-            );
-        } else {
-            //TODO
-        }
-        // Daten hängen ja auch vom MasterModel ab
-        $ret[] = array(
-            'model' => $this->getModel()
-        );
         return $ret;
     }
 }

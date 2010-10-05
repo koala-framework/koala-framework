@@ -199,9 +199,9 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheMeta()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getStaticCacheMeta();
+        $ret = parent::getStaticCacheMeta($componentClass);
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
             foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
                 if (!isset($generator['showInMenu']) || !$generator['showInMenu']) continue;

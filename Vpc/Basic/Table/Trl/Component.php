@@ -37,7 +37,7 @@ class Vpc_Basic_Table_Trl_Component extends Vpc_Chained_Trl_Component
         ));
     }
 
-    public static function getStaticCacheMeta()
+    public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getCacheMeta();
         $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Basic_Table_Trl_DataModel');

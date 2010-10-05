@@ -55,7 +55,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
 
     public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getStaticCacheMeta();
+        $ret = parent::getStaticCacheMeta($componentClass);
         // der typ vom link-tag kann sich ändern und hat die gleiche cache-id,
         // deshalb unterkomponente gleich mitlöschen
         $model = Vpc_Abstract::getSetting($componentClass, 'ownModel');

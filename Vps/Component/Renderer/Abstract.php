@@ -58,7 +58,8 @@ abstract class Vps_Component_Renderer_Abstract
             }
         }
         $view = $this->_getView();
-        return $this->render($view, $view->component($component));
+        $ret = $this->render($view, $view->component($component));
+        return $ret;
     }
 
     protected function _getOutputConfig($type)

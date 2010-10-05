@@ -108,7 +108,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
 
     public static function getStaticCacheMeta($class)
     {
-        $ret = parent::getStaticCacheMeta();
+        $ret = parent::getStaticCacheMeta($componentClass);
         $class = Vpc_Abstract::getChildComponentClass($class, 'groups');
         $class = Vpc_Abstract::getChildComponentClass($class, 'detail');
         $class = Vpc_Abstract::getChildComponentClass($class, 'child', 'posts');

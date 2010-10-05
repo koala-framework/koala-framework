@@ -368,20 +368,25 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     }
 
     // deprecated
-    public final function getCacheVars() {}
-    public final static function getStaticCacheVars() {}
+    public final function getCacheVars() {
+        throw new Vps_Exception('getCacheVars is not supported anymore.');
+    }
+
+    public final static function getStaticCacheVars() {
+        throw new Vps_Exception('getStaticCacheVars is not supported anymore.');
+    }
 
     public function getCacheMeta()
     {
         return array();
     }
 
-    public static function getStaticCacheMeta() {
-        return array(
-            new Vps_Component_Cache_Meta_Static_OwnModel(),
-            // TODO: brauch ma das für den Cache, wenn ja wie gehen dann die tests?
-            //new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel', '{id}'),
-        );
+    public static function getStaticCacheMeta($componentClass) {
+        $ret = array();
+        if (Vpc_Abstract::hasSetting($componentClass, 'ownModel')) {
+            $ret[] = new Vps_Component_Cache_Meta_Static_OwnModel();
+        }
+        return $ret;
     }
 
     public function onCacheCallback($row) {}

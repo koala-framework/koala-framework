@@ -357,6 +357,9 @@ class Vps_Component_Abstract
         return self::createOwnModel($class);
     }
 
+    /**
+     * @return Vps_Model_Abstract
+     */
     public static function createOwnModel($class)
     {
         $models = self::$_models['own'];
@@ -379,6 +382,9 @@ class Vps_Component_Abstract
         return $models[$class];
     }
 
+    /**
+     * @return Vps_Model_Abstract
+     */
     public static function createChildModel($class)
     {
         $models = self::$_models['child'];
@@ -401,6 +407,9 @@ class Vps_Component_Abstract
         return $models[$class];
     }
 
+    /**
+     * @return Vps_Model_Abstract
+     */
     public static function createFormModel($class)
     {
         $models = self::$_models['form'];

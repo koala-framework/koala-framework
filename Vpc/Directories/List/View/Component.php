@@ -205,17 +205,26 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
 
     public function getCacheMeta()
     {
+        $ret = parent::getCacheMeta();
+
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
         $generator = null;
         if ($dir instanceof Vps_Component_Data) {
-            $generator = $dir->getGenerator('detail');
+            $dirClass = $dir->componentClass;
+            $c = $this->getData();
+            while ($c && $c->componentId != $dir->componentId) $c = $c->parent;
         } else if (is_string($dir)) {
+            $dirClass = $dir;
             $generator = Vps_Component_Generator_Abstract::getInstance(
                 Vpc_Abstract::getComponentClassByParentClass($dir), 'detail'
             );
+            $c = null;
         }
-        $ret = parent::getCacheMeta();
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), "{component_id}-view");
+        if ($c && Vpc_Abstract::getFlag($c->componentClass, 'isItemDirectory')) {
+            $ret = array_merge($ret, $dir->getComponent()->getCacheMetaForView());
+        } else {
+            throw new Vps_Exception_NotYetImplemented();
+        }
         return $ret;
     }
 }

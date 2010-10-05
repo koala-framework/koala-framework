@@ -70,9 +70,9 @@ class Vpc_Box_SwitchLanguage_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheMeta()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = Vpc_Menu_Abstract_Component::getStaticCacheMeta();
+        $ret = Vpc_Menu_Abstract_Component::getStaticCacheMeta($componentClass);
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
             foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
                 if (is_instance_of($generator['class'], 'Vpc_Chained_Abstract_ChainedGenerator')) {

@@ -2,40 +2,24 @@
 /**
  * @group Vpc_Advanced_Referer
  */
-class Vpc_Advanced_SearchEngineReferer_Test extends PHPUnit_Framework_TestCase
+class Vpc_Advanced_SearchEngineReferer_Test extends Vpc_TestAbstract
 {
-    private $_root;
-    private $_cache;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Advanced_SearchEngineReferer_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
-
-        Vps_Component_Cache::setBackend(Vps_Component_Cache::CACHE_BACKEND_FNF);
-        Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
-        Vps_Component_ModelObserver::getInstance()->clear();
+        parent::setUp('Vpc_Advanced_SearchEngineReferer_Root');
     }
 
     public function tearDown()
     {
         if (isset($_SERVER['HTTP_REFERER'])) unset($_SERVER['HTTP_REFERER']);
-        Vps_Component_ModelObserver::getInstance()->clearInstance();
-    }
-
-    public function testCache()
-    {
-        $cacheVars = $this->_root
-            ->getChildComponent('-referer2')
-            ->getChildComponent('-view')->getComponent()->getCacheVars();
-        $this->assertEquals(1, count($cacheVars));
-        $this->assertEquals('Vpc_Advanced_SearchEngineReferer_Referer2_Model', get_class($cacheVars[0]['model']));
+        parent::tearDown();
     }
 
     public function testComponentNewEntry()
     {
         $ref2 = $this->_root->getChildComponent('-referer2')->getComponent();
         $model = $ref2->getChildModel();
+
         $oldRow = $model->getRow($model->select()
             ->whereEquals('component_id', 'root')
             ->order('id', 'DESC')
@@ -50,6 +34,7 @@ class Vpc_Advanced_SearchEngineReferer_Test extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals($oldRow->id, $newRow->id);
 
+        $render = $ref2->getData()->render();
         $_SERVER['HTTP_REFERER'] = 'http://www.google.at/search?hl=de&q=fooNew';
         $ref2->processInput();
         $newRow = $model->getRow($model->select()
@@ -65,5 +50,25 @@ class Vpc_Advanced_SearchEngineReferer_Test extends PHPUnit_Framework_TestCase
             ->order('id', 'DESC')
         );
         $this->assertEquals(7, $newRow->id);
+    }
+
+    public function testCache()
+    {
+        $ref2 = $this->_root->getChildComponent('-referer2');
+        $ref2->getChildComponent('-view')->getComponent()->emptyReferersCache();
+        $render = $ref2->render();
+        $this->assertEquals(3, substr_count($render, 'foo1'));
+        $this->assertEquals(3, substr_count($render, 'foo2'));
+        $this->assertEquals(2, substr_count($render, '<li'));
+
+        $_SERVER['HTTP_REFERER'] = 'http://www.google.at/search?hl=de&q=fooNew';
+        $ref2 = $this->_root->getChildComponent('-referer2');
+        $ref2->getComponent()->processInput();
+        $ref2->getChildComponent('-view')->getComponent()->emptyReferersCache();
+        $render = $ref2->render();
+        $this->assertEquals(3, substr_count($render, 'fooNew'));
+        $this->assertEquals(3, substr_count($render, 'foo1'));
+        $this->assertEquals(3, substr_count($render, 'foo2'));
+        $this->assertEquals(3, substr_count($render, '<li'));
     }
 }

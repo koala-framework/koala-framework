@@ -15,9 +15,9 @@ class Vpc_Advanced_SearchEngineReferer_ViewMyLatest_Component
         return $select->whereEquals('component_id', $this->getData()->parent->parent->componentId);
     }
 
-    public static function getStaticCacheMeta()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getStaticCacheMeta();
+        $ret = parent::getStaticCacheMeta($componentClass);
         $ret[] = new Vps_Component_Cache_Meta_Static_GeneratorRow();
         return $ret;
     }
