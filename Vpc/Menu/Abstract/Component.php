@@ -209,9 +209,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                     $componentClass, array('generator' => $key))
                 );
                 if (!$generator->getGeneratorFlag('page') || !$generator->getGeneratorFlag('table')) continue;
-                $ret[] = array(
-                    'model' => $generator->getModel()
-                );
+                $ret = array_merge($ret, $generator->getStaticCacheVarsForMenu());
             }
         }
         $ret[] = array(
