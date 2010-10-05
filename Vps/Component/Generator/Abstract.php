@@ -724,4 +724,9 @@ abstract class Vps_Component_Generator_Abstract
         if (isset($plugins[$key])) return $plugins[$key];
         return null;
     }
+
+    public function getStaticCacheVarsForMenu()
+    {
+        return array();
+    }
 }

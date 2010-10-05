@@ -347,4 +347,13 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         );
         return $ret;
     }
+
+    public function getStaticCacheVarsForMenu()
+    {
+        $ret = array();
+        $ret[] = array(
+            'model' => $this->getModel()
+        );
+        return $ret;
+    }
 }
