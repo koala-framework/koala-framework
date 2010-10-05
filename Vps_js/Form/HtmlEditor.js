@@ -248,10 +248,26 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     //entfernt, wir wollen dieses verhalten genau so wie der IE es macht
                 }
             };
+        }else if(Ext.isOpera){
+            return function(e){
+                var k = e.getKey();
+                if(k == e.TAB){
+                    e.stopEvent();
+                    this.win.focus();
+                    this.execCmd('InsertHTML','&nbsp;&nbsp;&nbsp;&nbsp;');
+                    this.deferFocus();
+                }
+            };
+        }else if(Ext.isWebKit){
+            return function(e){
+                var k = e.getKey();
+                if(k == e.TAB){
+                    e.stopEvent();
+                    this.execCmd('InsertText','\t');
+                    this.deferFocus();
+                }
+             };
         }
-
-        //restliche browser: (Opera, WebKit)
-        return Vps.Form.HtmlEditor.superclass.fixKeys.call(this);
     }(),
 
     onRender: function(ct, position)
