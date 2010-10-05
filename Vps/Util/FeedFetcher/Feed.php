@@ -219,6 +219,7 @@ class Vps_Util_FeedFetcher_Feed
         $row->updated($updateServer, $status);
 
         if (isset($row->log_activated) && $row->log_activated) {
+            //TODO ist auch in Vps_Rssinclude_PubSubHubbub::process
             $log = $row->createChildRow('UpdateLog');
             $log->date = date('Y-m-d H:i:s');
             $log->server = $updateServer;

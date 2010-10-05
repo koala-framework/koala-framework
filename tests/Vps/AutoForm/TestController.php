@@ -7,7 +7,7 @@ class Vps_AutoForm_TestController extends Vps_Controller_Action_Auto_Form
 
     public function indexAction()
     {
-        $this->view->assetsType = 'Vps_Form_ShowField:Test';
+        $this->view->assetsType = 'Vps_AutoForm:Test';
         $this->view->viewport = 'Vps.Test.Viewport';
         parent::indexAction();
     }
@@ -15,21 +15,27 @@ class Vps_AutoForm_TestController extends Vps_Controller_Action_Auto_Form
     protected function _initFields()
     {
         $this->_form->add(new Vps_Form_Field_TextField('foo', 'Foo'));
-        $sessionFormId = new Zend_Session_Namespace('test_avoid_reinsert_id');
-        if (!isset($sessionFormId->count)) {
-            $sessionFormId->count = 0;
-        }
     }
 
     public function jsonSaveAction()
     {
         parent::jsonSaveAction();
-        $sessionFormId = new Zend_Session_Namespace('test_avoid_reinsert_id');
-        if ($sessionFormId->count == 0) {
-            $sessionFormId->count++;
+        $session = new Zend_Session_Namespace('Vps_AutoForm_Test');
+        if ($session->count == 0) {
+            $session->count++;
             $this->view->exception = "error";
             $this->view->success = false;
         }
+    }
+
+    public function resetAction()
+    {
+        $session = new Zend_Session_Namespace('Vps_AutoForm_Test');
+        $session->count = 0;
+
+        $this->_form->getModel()->resetData();
+        echo 'OK';
+        exit;
     }
 
     public function getRowCountAction()
