@@ -176,6 +176,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             ->whereEquals('callback', $callback);
 
         foreach ($model->getRows($select) as $metaRow) {
+            if (!$metaRow->meta_class) $metaRow->meta_class = 'Vps_Component_Cache_Meta_Static_Abstract';
             $componentId = call_user_func(
                 array($metaRow->meta_class, 'createComponentId'),
                 $metaRow->pattern, $row
