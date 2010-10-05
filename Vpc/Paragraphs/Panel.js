@@ -19,6 +19,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
     cls: 'vpc-paragraphs',
     showDelete: true,
     showPosition: true,
+    showCopyPaste: true,
     initComponent : function()
     {
         this.addEvents('editcomponent', 'gotComponentConfigs');
