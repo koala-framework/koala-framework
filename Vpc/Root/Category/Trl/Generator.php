@@ -109,4 +109,13 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
             return parent::_getDataClass($config, $id);
         }
     }
+
+    public function getStaticCacheVarsForMenu()
+    {
+        $ret = parent::getStaticCacheVarsForMenu();
+        $ret[] = array(
+            'model' => $this->_getModel()
+        );
+        return $ret;
+    }
 }

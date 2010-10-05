@@ -267,6 +267,12 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
         return $this->_getChainedGenerator()->getCacheVars($parentData->chained);
     }
 
+    public function getStaticCacheVarsForMenu()
+    {
+        $ret = $this->_getChainedGenerator()->getStaticCacheVarsForMenu();
+        return $ret;
+    }
+
     public function makeChildrenVisible($source)
     {
         if ($source->generator !== $this) {
