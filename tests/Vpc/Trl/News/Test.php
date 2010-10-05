@@ -41,7 +41,7 @@ class Vpc_Trl_News_Test extends Vpc_TestAbstract
 
         $model = Vps_Model_Abstract::getInstance('Vpc_Trl_News_News_Trl_TestModel');
         $r = $model->getRow('root-en_test_1');
-        $r->visible = 0;
+        $r->visible = false;
         $r->save();
 
         $this->_process();

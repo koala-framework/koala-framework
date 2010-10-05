@@ -40,14 +40,24 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
 
     public function getChildIds($parentData, $select = array())
     {
-        if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE) &&
-            $select->getPart(Vps_Component_Select::IGNORE_VISIBLE))
-        {
-            return $this->_getChainedGenerator()->getChildIds($select);
-        } else {
+        $ret = parent::getChildIds($parentData, $select);
+        if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
+            $ids = array();
+            $prefix = $parentData->dbId . $this->getIdSeparator();
+            foreach ($ret as $id) {
+                $ids[] = $prefix . $id;
+            }
             $m = Vpc_Abstract::createChildModel($this->_class);
-            return $m->getIds($select);
+            $select = $m->select()
+                ->whereEquals('visible', true)
+                ->whereEquals('component_id', $ids);
+            $ret = array();
+            $len = strlen($prefix);
+            foreach ($m->getIds($select) as $id) {
+                $ret[] = substr($id, $len);
+            }
         }
+        return $ret;
     }
 
     protected function _createData($parentData, $row, $select)

@@ -34,13 +34,4 @@ class Vpc_List_ChildPages_Teaser_TeaserImage_Component extends Vpc_Abstract_Comp
             $ret[] = new Vps_Component_Cache_Meta_Component($this->getData()->targetPage);
         }
     }
-
-    public static function getStaticCacheVars($componentClass)
-    {
-        $ret = parent::getStaticCacheVars($componentClass);
-        $ret[] = array(
-            'model' => 'Vpc_Root_Category_GeneratorModel'
-        );
-        return $ret;
-    }
 }
