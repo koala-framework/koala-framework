@@ -37,7 +37,7 @@ http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Te
 - Inline: Default auswählen
 - Erwartet: bar wird wida schwarz
 
-*** Fett ***
+*** Fett setzen ***
 - url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
 - 'foo bar baz' in rte schreiben
 - bar markieren
@@ -47,6 +47,24 @@ http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Te
 - Erwartet: <strong>bar</strong>
 - zurückschalten
 - Erwartet: bar ist immer noch fett
+
+*** Fett zurücksetzen ***
+- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- 'foo bar baz' in rte schreiben
+- bar markieren
+- 'B' klicken
+- Erwartet: bar wird fett
+- 'B' klicken
+- Erwartet: bar ist nicht mehr fett
+- 'B' klicken
+- Erwartet: bar wird fett
+- in HTML-Code-Ansicht umschalten
+- Erwartet: <strong>bar</strong>
+- zurückschalten
+- Erwartet: bar ist immer noch fett
+- bar markieren
+- 'B' klicken
+- Erwartet: bar ist nicht mehr fett
 
 *** Cursor beim einfügen ***
 - url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
