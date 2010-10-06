@@ -1,6 +1,9 @@
 <?php
 class Vps_Assets_Loader
 {
+    /**
+     * @var Vps_Assets_Dependencies
+     */
     private $_dep = null;
     private $_config = null;
 
