@@ -52,7 +52,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                 echo "\n$doc->componentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
                 $index->delete($doc->id);
                 $m = Vps_Model_Abstract::getInstance('Vpc_FulltextSearch_MetaModel');
-                $row = $m->getRow($page->componentId);
+                $row = $m->getRow($doc->componentId);
                 if ($row) {
                     $row->delete();
                 }
