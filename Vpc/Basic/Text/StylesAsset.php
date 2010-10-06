@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_Text_StylesAsset implements Vps_Assets_Dynamic_Interface
 {
-    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent)
+    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
     {
     }
 
