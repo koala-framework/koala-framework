@@ -40,7 +40,7 @@ class Vpc_Directories_List_Cc_Component extends Vpc_Abstract_Composite_Cc_Compon
 
     public final function callModifyItemData(Vps_Component_Data $item)
     {
-        foreach (Vpc_Abstract::getChildComponentClasses($this->getData()->componentClass) as $c) {
+        foreach (Vpc_Abstract::getChildComponentClasses($this->getData()->chained->componentClass) as $c) {
             if (Vpc_Abstract::hasSetting($c, 'hasModifyItemData')
                 && Vpc_Abstract::getSetting($c, 'hasModifyItemData')
             ) {
@@ -51,8 +51,7 @@ class Vpc_Directories_List_Cc_Component extends Vpc_Abstract_Composite_Cc_Compon
 
     public static function getViewCacheLifetimeForView()
     {
-        //TODO
-        return null;
+        return $this->getData()->chained->getComponent()->getViewCacheLifetimeForView();
     }
 }
 
