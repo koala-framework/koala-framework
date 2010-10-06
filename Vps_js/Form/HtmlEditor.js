@@ -1008,6 +1008,38 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         if (!this.sourceEditMode) {
             Vps.Form.HtmlEditor.superclass.syncValue.call(this);
         }
+    },
+
+    /**
+     * Protected method that will not generally be called directly. Pushes the value of the textarea
+     * into the iframe editor.
+     */
+    pushValue : function(){
+        if(this.initialized){
+            var v = this.el.dom.value;
+            if(!this.activated && v.length < 1){
+                v = this.defaultValue;
+            }
+            if(this.fireEvent('beforepush', this, v) !== false){
+                //BEGIN ÄNDERUNG
+                if(Ext.isGecko){
+                    //FF kann scheinbar nicht mit strong und em umgehen, mit b und i aber schon
+                    v = v.replace('<strong>', '<b>').replace('</strong>', '</b>');
+                    v = v.replace('<em>', '<i>').replace('</em>', '</i>');
+                }
+                //END ÄNDERUNG
+                this.getEditorBody().innerHTML = v;
+                if(Ext.isGecko){
+                    // Gecko hack, see: https://bugzilla.mozilla.org/show_bug.cgi?id=232791#c8
+                    var d = this.doc,
+                        mode = d.designMode.toLowerCase();
+
+                    d.designMode = mode.toggle('on', 'off');
+                    d.designMode = mode;
+                }
+                this.fireEvent('push', this, v);
+            }
+        }
     }
 });
 Ext.reg('htmleditor', Vps.Form.HtmlEditor);
