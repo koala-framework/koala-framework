@@ -10,3 +10,8 @@ ul.webListNone,
 }
 .webStandard strong { font-weight: bold; }
 .webStandard em { font-style: italic; }
+
+.webStandard ol,
+.webStandard ul { margin-bottom: 10px; margin-left: 20px; }
+.webStandard li { list-style-type: square; margin-bottom: 5px; }
+
