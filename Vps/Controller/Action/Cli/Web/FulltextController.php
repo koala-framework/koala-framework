@@ -63,7 +63,7 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
 
     public function rebuildAction()
     {
-        system("php bootstrap.php check-for-invalid");
+        system("php bootstrap.php fulltext check-for-invalid");
 
         $queueFile = 'application/temp/fulltextRebuildQueue';
 
