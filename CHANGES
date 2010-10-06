@@ -24,6 +24,7 @@ möglicherweise nicht kompatible Änderungen:
 - Tags in Seitenbaum gibts nicht mehr (kein Vps_Component_Acl->allowTag())
 - aclClass MUSS in application/config.ini angegeben werden
 - Columns admin ist jetzt keine Form mehr sondern ein Grid
+- .webStandard strong/em ist jetzt im vps und sollte in webs entfernt werden
 
 == 1.10 ==
 Erstellt: 09.06.10
