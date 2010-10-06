@@ -10,7 +10,6 @@ http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Te
 === MANUELLE TESTS ===
 
 *** Enter erzeugt Absatz ***
-IE + FF!
 - url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
 - hinter foo klicken
 - Enter drücken
@@ -21,13 +20,22 @@ IE + FF!
 - Erwarteter HTML-Code: <p>foo</p><p>bar<br />baz</p>
 
 *** Inline Style setzen ***
-IE + FF!
 - url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
 - 'foo bar baz' in rte schreiben
 - bar markieren
 - Inline: Test3 auswählen
-- Erwartet: foo wird grün und kleiner
+- Erwartet: bar wird grün und kleiner
 - Bonus Markierung bleibt erhalten (im moment nur FF)
+
+*** Inline Style ändern ***
+- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- 'foo bar baz' in rte schreiben
+- bar markieren
+- Inline: Test3 auswählen
+- Erwartet: bar wird grün und kleiner
+- IE: bar markieren / FF: cursor in bar setzen (TODO: bei beiden soll beides gehen)
+- Inline: Default auswählen
+- Erwartet: bar wird wida schwarz
 
 *** Cursor beim einfügen ***
 - url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
