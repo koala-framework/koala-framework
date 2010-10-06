@@ -876,18 +876,22 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         var range = this.getSelectionRange();
         if (range) {
-            var span = this.doc.createElement(tag);
-            span.className = className;
-            //TODO: IE kompatibel?
-            range.surroundContents(span);
+            if (range.surroundContents) {
+                var span = this.doc.createElement(tag);
+                span.className = className;
+                range.surroundContents(span);
+            } else {
+                //IE
+                range.pasteHTML('<'+tag+' class="'+className+'">'+range.htmlText+'</'+tag+'>');
+            }
         } else {
             var elm = this.getFocusElement(tag);
             if (elm) {
                 elm.className = className;
             } else {
-                //TODO: IE kompatibel?
-                this.insertAtCursor('<'+tag+' class="'+className+'">&nbsp;</'+tag+'>');
-                this.win.getSelection().getRangeAt(0).selectNode(this.win.getSelection().focusNode);
+                //auskommentiert weils nicht korrekt funktioniert; einfach gar nichts tun wenn nix markiert
+                //this.insertAtCursor('<'+tag+' class="'+className+'">&nbsp;</'+tag+'>');
+                //this.win.getSelection().getRangeAt(0).selectNode(this.win.getSelection().focusNode);
             }
         }
         this.deferFocus();
