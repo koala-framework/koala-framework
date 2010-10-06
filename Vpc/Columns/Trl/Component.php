@@ -12,7 +12,9 @@ class Vpc_Columns_Trl_Component extends Vpc_Abstract_List_Trl_Component
     {
         $ret = parent::getTemplateVars();
         foreach($ret['listItems'] as $k => $v) {
-            $ret['listItems'][$k]['width'] = $v['data']->chained->row->width;
+            $w = $v['data']->chained->row->width;
+            if (is_numeric($w)) $w .= 'px'; //standard-einheit
+            $ret['listItems'][$k]['width'] = $w;
         }
         return $ret;
     }
