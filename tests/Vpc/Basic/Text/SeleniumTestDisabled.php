@@ -20,6 +20,15 @@ IE + FF!
 - in HTML-Code-Ansicht umschalten
 - Erwarteter HTML-Code: <p>foo</p><p>bar<br />baz</p>
 
+*** Inline Style setzen ***
+IE + FF!
+- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- 'foo bar baz' in rte schreiben
+- bar markieren
+- Inline: Test3 auswählen
+- Erwartet: foo wird grün und kleiner
+- Bonus Markierung bleibt erhalten (im moment nur FF)
+
 *** Cursor beim einfügen ***
 - url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
 - 'Text' in Zwischenablage kopieren
