@@ -8,3 +8,5 @@ ul.webListNone,
     list-style-type: none !important;
     list-style-image: none !important;
 }
+.webStandard strong { font-weight: bold; }
+.webStandard em { font-style: italic; }
