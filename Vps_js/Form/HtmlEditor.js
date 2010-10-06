@@ -874,20 +874,20 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tag = i[0];
             className = i[1];
         }
-        var range = this.getSelectionRange();
-        if (range) {
-            if (range.surroundContents) {
-                var span = this.doc.createElement(tag);
-                span.className = className;
-                range.surroundContents(span);
-            } else {
-                //IE
-                range.pasteHTML('<'+tag+' class="'+className+'">'+range.htmlText+'</'+tag+'>');
-            }
+        var elm = this.getFocusElement(tag);
+        if (elm && elm.tagName && elm.tagName.toLowerCase() == tag) {
+            elm.className = className;
         } else {
-            var elm = this.getFocusElement(tag);
-            if (elm) {
-                elm.className = className;
+            var range = this.getSelectionRange();
+            if (range) {
+                if (range.surroundContents) {
+                    var span = this.doc.createElement(tag);
+                    span.className = className;
+                    range.surroundContents(span);
+                } else {
+                    //IE
+                    range.pasteHTML('<'+tag+' class="'+className+'">'+range.htmlText+'</'+tag+'>');
+                }
             } else {
                 //auskommentiert weils nicht korrekt funktioniert; einfach gar nichts tun wenn nix markiert
                 //this.insertAtCursor('<'+tag+' class="'+className+'">&nbsp;</'+tag+'>');
