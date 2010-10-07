@@ -126,14 +126,20 @@ class Vps_Component_Acl
         // Alle Unterkomponenten mit erlaubten Klassen suchen, dann noch
         // dynamisch prüfen ob Komponente wirklich erlaubt ist
         $allowedComponentClasses = $this->_getAllowedComponentClasses($userRow);
-        $cc = $component->getRecursiveChildComponents(array(
-            'componentClasses' => $allowedComponentClasses,
-            'ignoreVisible' => true
-        ), array());
+//         $cc = $component->getRecursiveChildComponents(array(
+//             'componentClasses' => $allowedComponentClasses,
+//             'ignoreVisible' => true
+//         ), array());
         $ret = array();
-        foreach ($cc as $c) {
-            if ($this->isAllowed($userRow, $c)) $ret[] = $c;
+//         d($allowedComponentClasses);
+        foreach ($allowedComponentClasses as $cls) {
+            foreach (Vps_Component_Data_Root::getInstance()->getComponentsByClass($cls, array('ignoreVisible'=>true)) as $c) {
+                if ($this->isAllowed($userRow, $c)) $ret[] = $c;
+            }
         }
+//         foreach ($cc as $c) {
+//             if ($this->isAllowed($userRow, $c)) $ret[] = $c;
+//         }
         return $ret;
     }
 

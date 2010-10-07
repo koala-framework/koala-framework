@@ -2,12 +2,12 @@
 /**
  * @group PagesController
  */
-class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestAbstract
+class Vps_Component_PagesController_WithCategories_Test extends Vpc_TestAbstract
 {
     private $_acl;
     public function setUp()
     {
-        parent::setUp('Vps_Component_PagesController_PagesGeneratorActions_Root');
+        parent::setUp('Vps_Component_PagesController_WithCategories_Root');
         $acl = new Vps_Acl();
         $this->_acl = $acl->getComponentAcl();
         $acl->addRole(new Zend_Acl_Role('test'));
@@ -19,11 +19,20 @@ class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestA
         $user = 'test';
         $c = Vps_Component_Data_Root::getInstance();
         $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
-        $this->assertTrue($cfg['actions']['add']); //hinzufügen hier möglich weil  PageGenerator darunter
-        $this->assertTrue($cfg['allowDrop']); //drop hier möglich weil PageGenerator darunter
+        $this->assertFalse($cfg['actions']['add']);
+        $this->assertFalse($cfg['allowDrop']);
         $this->assertFalse($cfg['actions']['properties']);
         $this->assertFalse($cfg['actions']['delete']);
         $this->assertFalse($cfg['actions']['makeHome']);
+        $this->assertFalse($cfg['allowDrag']);
+
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('root-main');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertFalse($cfg['actions']['properties']);
+        $this->assertFalse($cfg['actions']['delete']);
+        $this->assertFalse($cfg['actions']['makeHome']);
+        $this->assertTrue($cfg['actions']['add']);
+        $this->assertTrue($cfg['allowDrop']);
         $this->assertFalse($cfg['allowDrag']);
 
         $c = Vps_Component_Data_Root::getInstance()->getComponentById('1');
@@ -44,6 +53,7 @@ class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestA
         $this->assertTrue($cfg['allowDrop']);
         $this->assertTrue($cfg['allowDrag']);
     }
+
 
     //TODO spezielle acl berechtigungen
     //TODO editComponents (boxen usw)
