@@ -831,11 +831,15 @@ class Vps_Component_Data
     }
 
     // Nur zum Testen!
-    public function render($enableCache = true)
+    public function render($enableCache = true, $renderMaster = false)
     {
         $output = new Vps_Component_Renderer();
         $output->setEnableCache($enableCache);
-        return $output->render($this);
+        if ($renderMaster) {
+            return $output->renderMaster($this);
+        } else {
+            return $output->renderComponent($this);
+        }
     }
 }
 ?>
