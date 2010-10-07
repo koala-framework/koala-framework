@@ -114,6 +114,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
                 }
             }
             if (Vps_Util_Git::web()->revParse('origin/production')) {
+                $branches = Vps_Util_Git::web()->getBranchesNotMerged();
                 if (in_array('remotes/origin/production', $branches)
                     || in_array('origin/production', $branches)
                     || !Vps_Util_Git::web()->isEmptyLog("$activeBranch..origin/production")
