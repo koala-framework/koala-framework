@@ -74,12 +74,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         }
         if (!$enabled) {
             $editComponents = $acl->getAllowedChildComponents($user, $component);
-            foreach ($editComponents as $key => $ec) {
-                //TODO warum ist das notwendig?
-                if (is_instance_of($ec->componentClass, 'Vpc_Root_Category_Component') || is_instance_of($ec->componentClass, 'Vpc_Root_Category_Trl_Component')) {
-                    unset($editComponents[$key]);
-                }
-            }
             if ($editComponents) $enabled = true;
         } else {
             $editComponents = array($component);
