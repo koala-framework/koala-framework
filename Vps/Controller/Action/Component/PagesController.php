@@ -102,14 +102,16 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         //wenn *unter* der seite eine page möglich ist (pageGenerator vorhanden) dann
         //hinzufügen + drop erlauben
         //das kann nicht im Generator ermittelt werden, der macht nur sich selbst
-        $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
-            'pageGenerator' => true
-        ));
-        if ($pageGenerator) {
-            $data['addControllerUrl'] = Vpc_Admin::getInstance($pageGenerator[0]->getClass())
-                ->getControllerUrl('Generator');
-            $data['actions']['add'] = true;
-            $data['allowDrop'] = true;
+        if ($acl->isAllowed($user, $component)) {
+            $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
+                'pageGenerator' => true
+            ));
+            if ($pageGenerator) {
+                $data['addControllerUrl'] = Vpc_Admin::getInstance($pageGenerator[0]->getClass())
+                    ->getControllerUrl('Generator');
+                $data['actions']['add'] = true;
+                $data['allowDrop'] = true;
+            }
         }
 
         $data['actions']['preview'] = (bool)$component->isPage;

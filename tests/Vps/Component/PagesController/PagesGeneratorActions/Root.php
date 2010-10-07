@@ -10,6 +10,7 @@ class Vps_Component_PagesController_PagesGeneratorActions_Root extends Vps_Compo
             'inherit' => true,
             'component' => array(
                 'empty' => 'Vpc_Basic_Empty_Component',
+                'special' => 'Vps_Component_PagesController_PagesGeneratorActions_SpecialComponent',
             ),
             'model' => 'Vps_Component_PagesController_PagesGeneratorActions_PagesModel'
         );
