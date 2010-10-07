@@ -226,7 +226,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
     public function testStaticCallback()
     {
         $cache = Vps_Component_Cache::getInstance();
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Cache_Root');
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Cache_TestCallbackRoot');
 
         // Meta-Row einfügen
         $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(

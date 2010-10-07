@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Root extends Vps_Component_NoCategoriesRoot
+class Vps_Component_Cache_TestCallbackRoot extends Vps_Component_NoCategoriesRoot
 {
     private $_callbacks = array();
 
