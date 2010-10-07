@@ -110,6 +110,11 @@ class Vps_Component_Acl
         while ($component) { // irgendeine Komponente auf dem Weg nach oben muss allowed sein
             $allowed = $this->_isAllowedComponentClassNonRek($role, $component->componentClass);
             if ($allowed) return true;
+
+            //TODO: wenn alle unterseiten auch berechtigung haben sollen brauchen wir sowas wie allowComponentRecursive
+            //wenns nur eine Detail gibt kann diese extra dazugeschalten werden
+            if ($component && $component->isPage) break;
+
             $component = $component->parent;
         }
         return false;
