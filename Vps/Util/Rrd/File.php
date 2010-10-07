@@ -19,7 +19,7 @@ abstract class Vps_Util_Rrd_File
 
     public function fileExists()
     {
-        return $this->_fileName;
+        return file_exists($this->_fileName);
     }
 
     public function getFileName()
