@@ -219,19 +219,31 @@ class Vps_Util_Git
 
     public function productionBranch($branch, $staging)
     {
-        $this->fetch();
-        if ($this->revParse('refs/remotes/origin/'.$branch)) {
-            //aktuellen production in previous/ kopieren
-            $this->system("push --force origin origin/$branch:refs/heads/previous/$branch");
+        $activeBranch = $this->getActiveBranch();
+        if (!in_array($branch, $this->getBranches())) {
+            if (in_array('origin/'.$branch, $this->getBranches('-r'))) {
+                $this->system("checkout -b $branch origin/$branch");
+            } else {
+                $this->system("checkout $staging");
+                $this->system("checkout -b $branch");
+                $data = "\n[branch \"$branch\"]\n";
+                $data .= "remote = origin\n";
+                $data .= "merge = refs/heads/$branch\n";
+                file_put_contents($this->_path.'/.git/config', $data, FILE_APPEND);
+            }
+        } else {
+            $this->system("checkout $branch");
         }
-        $this->system("push --force origin $staging:refs/heads/$branch");
-        $this->system("fetch origin");
+        $this->system("merge --no-ff -m \"merge into production for go-online\" $staging");
+        $this->system("push origin $branch:refs/heads/$branch");
+
+        if ($activeBranch) $this->checkout($activeBranch);
     }
 
     public function isEmptyLog($ref)
     {
         $d = getcwd();
-        $cmd = "git log --no-pager $ref";
+        $cmd = "git --no-pager log $ref";
         chdir($this->_path);
         if (self::$_debug) echo $cmd."\n";
         exec($cmd, $ret, $retVal);
