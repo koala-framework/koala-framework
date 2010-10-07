@@ -53,12 +53,11 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data = array();
         $enabled = $acl->isAllowed($user, $component);
         if (!$enabled) {
-
-            static $allowedComponents;
-            if (!isset($allowedComponents)) {
+//             static $allowedComponents;
+//             if (!isset($allowedComponents)) {
                 //TODO kann das wirklich gecached werden?
                 $allowedComponents = $acl->getAllowedRecursiveChildComponents($user, $component);
-            }
+//             }
             $allowed = false;
             foreach ($allowedComponents as $allowedComponent) {
                 $c = $allowedComponent;
@@ -70,9 +69,11 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                     $c = $c->parent;
                 }
             }
+            //wenn gar keine unterkomponente bearbeitet werden kann seite ausblenden
             if (!$allowed) return null;
         }
         if (!$enabled) {
+            //wenn eine unterkomponente (nicht seite!) bearbeitet werden kann seite nicht ausgrauen
             $editComponents = $acl->getAllowedChildComponents($user, $component);
             if ($editComponents) $enabled = true;
         } else {
