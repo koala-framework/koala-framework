@@ -1,0 +1,1 @@
+<?=$this->partials($this->data);?>

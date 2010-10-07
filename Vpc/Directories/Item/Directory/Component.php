@@ -15,9 +15,6 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/Panel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/TabsPanel.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Item/Directory/EditFormPanel.js';
-
-        $ret['flags']['isItemDirectory'] = true; // für Cache löschen
-
         $ret['extConfig'] = 'Vpc_Directories_Item_Directory_ExtConfigEditButtons';
         return $ret;
     }
@@ -27,11 +24,11 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
         return $this->getData();
     }
 
-    public function getCacheMetaForView()
+    public function getCacheMetaForView($pattern)
     {
         $model = $this->getData()->getGenerator('detail')->getModel();
         return array(
-            new Vps_Component_Cache_Meta_Static_Model($model, "{component_id}%-view")
+            new Vps_Component_Cache_Meta_Static_Model($model, $pattern)
         );
     }
 }

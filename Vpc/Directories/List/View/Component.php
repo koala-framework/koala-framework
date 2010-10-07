@@ -208,23 +208,15 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         $ret = parent::getCacheMeta();
 
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
-        $generator = null;
+        $pattern = null;
         if ($dir instanceof Vps_Component_Data) {
             $dirClass = $dir->componentClass;
             $c = $this->getData();
             while ($c && $c->componentId != $dir->componentId) $c = $c->parent;
+            if ($c) $pattern = '{component_id}%-view'; // Falls Directory ein parent ist, kann man mit diesem Pattern löschen, sonst nicht
         } else if (is_string($dir)) {
             $dirClass = $dir;
-            $generator = Vps_Component_Generator_Abstract::getInstance(
-                Vpc_Abstract::getComponentClassByParentClass($dir), 'detail'
-            );
-            $c = null;
         }
-        if ($c && Vpc_Abstract::getFlag($c->componentClass, 'isItemDirectory')) {
-            $ret = array_merge($ret, $dir->getComponent()->getCacheMetaForView());
-        } else {
-            throw new Vps_Exception_NotYetImplemented();
-        }
-        return $ret;
+        return array_merge($ret, $dir->getComponent()->getCacheMetaForView($pattern));
     }
 }

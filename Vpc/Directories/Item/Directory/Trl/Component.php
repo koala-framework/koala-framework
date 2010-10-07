@@ -5,14 +5,11 @@ class Vpc_Directories_Item_Directory_Trl_Component extends Vpc_Directories_List_
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['detail']['class'] = 'Vpc_Directories_Item_Directory_Trl_Generator';
-
-        $ret['flags']['isItemDirectory'] = true; // für Cache löschen
-
         $ret['extConfig'] = 'Vpc_Directories_Item_Directory_Trl_ExtConfigEditButtons';
         return $ret;
     }
 
-    public function getCacheMetaForView()
+    public function getCacheMetaForView($pattern)
     {
         $ret = array();
         if (Vpc_Abstract::hasSetting($this->getData()->componentClass, 'childModel')) {
