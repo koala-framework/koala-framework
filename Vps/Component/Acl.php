@@ -152,8 +152,13 @@ class Vps_Component_Acl
         $allowedComponentClasses = $this->_getAllowedComponentClasses($userRow);
         return $component->getRecursiveChildComponents(array(
             'componentClasses' => $allowedComponentClasses,
-            'ignoreVisible' => true
-        ), array('pseudoPage' => false));
+            'ignoreVisible' => true,
+            'pseudoPage' => false,
+            'flags' => array('showInPageTreeAdmin' => false),
+        ), array(
+            'pseudoPage' => false,
+            'flags' => array('showInPageTreeAdmin' => false),
+        ));
     }
 
     protected function _getAllowedComponentClasses($userRow)
