@@ -61,7 +61,7 @@ class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestA
         $this->assertFalse($cfg['actions']['delete']);
         $this->assertFalse($cfg['actions']['makeHome']);
         $this->assertFalse($cfg['allowDrag']);
-        $this->assertTrue($cfg['disables']);
+        $this->assertTrue($cfg['disabled']);
 
         $c = Vps_Component_Data_Root::getInstance()->getComponentById('1');
         $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
@@ -80,7 +80,7 @@ class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestA
         $this->assertTrue($cfg['actions']['delete']);
         $this->assertTrue($cfg['actions']['makeHome']);
         $this->assertTrue($cfg['allowDrag']);
-        $this->assertFalse($cfg['disables']);
+        $this->assertFalse($cfg['disabled']);
     }
 
 
