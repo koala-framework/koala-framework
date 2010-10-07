@@ -303,7 +303,8 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         } else if (!$component->visible) {
             $ret['iconEffects'][] = 'invisible';
         }
-        $ret['allowDrop'] = true;
+        $ret['allowDrag'] = true;
+        //allowDrop wird in PagesController gesetzt da *darunter* eine page möglich ist
 
         return $ret;
     }

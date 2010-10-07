@@ -26,7 +26,10 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data = parent::_formatNode($row);
         $data['uiProvider'] = 'Vps.Component.PagesNode';
 
-        $nodeConfig = self::getNodeConfig($component, $this->_componentConfigs);
+        $user = Zend_Registry::get('userModel')->getAuthedUser();
+        $acl = Vps_Registry::get('acl')->getComponentAcl();
+
+        $nodeConfig = self::getNodeConfig($component, $user, $acl, $this->_componentConfigs);
         if (is_null($nodeConfig)) return null;
         $data = array_merge($data, $nodeConfig);
 
@@ -45,12 +48,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     }
 
     //public static zum testen
-    public static function getNodeConfig($component, array &$componentConfigs)
+    public static function getNodeConfig($component, $user, $acl, array &$componentConfigs = array())
     {
         $data = array();
-
-        $acl = Vps_Registry::get('acl')->getComponentAcl();
-        $user = Zend_Registry::get('userModel')->getAuthedUser();
         $enabled = $acl->isAllowed($user, $component);
         if (!$enabled) {
 
@@ -105,15 +105,35 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             if (isset($data['icon'])) unset($data['icon']);
         }
 
+        //wenn *unter* der seite eine page möglich ist (pageGenerator vorhanden) dann
+        //hinzufügen + drop erlauben
+        //das kann nicht im Generator ermittelt werden, der macht nur sich selbst
+        $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
+            'pageGenerator' => true
+        ));
+        if ($pageGenerator) {
+            $data['addControllerUrl'] = Vpc_Admin::getInstance($pageGenerator[0]->getClass())
+                ->getControllerUrl('Generator');
+            $data['actions']['add'] = true;
+            $data['allowDrop'] = true;
+        }
 
+        $data['actions']['preview'] = (bool)$component->isPage;
+
+
+        //default werte
         $data['actions'] = array_merge(array(
             'properties' => false,
             'delete' => false,
             'visible' => false,
             'makeHome' => false,
             'add' => false,
-            'preview' => false
         ), $data['actions']);
+        $data = array_merge(array(
+            'allowDrag' => false,
+            'allowDrop' => false
+        ), $data);
+
 
         // EditComponents
         $ec = array();
