@@ -83,6 +83,19 @@ class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestA
         $this->assertFalse($cfg['disabled']);
     }
 
-
+    public function testOnlySpecialInContainer()
+    {
+        $user = 'special';
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('5');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertNotNull($cfg);
+        $this->assertFalse($cfg['actions']['add']);
+        $this->assertFalse($cfg['allowDrop']);
+        $this->assertFalse($cfg['actions']['properties']);
+        $this->assertFalse($cfg['actions']['delete']);
+        $this->assertFalse($cfg['actions']['makeHome']);
+        $this->assertFalse($cfg['allowDrag']);
+        $this->assertFalse($cfg['disabled']);
+    }
     //TODO editComponents (boxen usw)
 }
