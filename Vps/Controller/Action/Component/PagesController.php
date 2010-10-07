@@ -157,7 +157,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         return $parent->componentId;
     }
 
-    private static function _formatEditComponents($componentClass, Vps_Component_Data $component, $configType, $componentConfigs)
+    private static function _formatEditComponents($componentClass, Vps_Component_Data $component, $configType, &$componentConfigs)
     {
         $ret = array();
         $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig($configType);
