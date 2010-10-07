@@ -8,7 +8,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     protected $_modelName = 'Vps_Component_Model';
 
     private $_componentConfigs = array();
-    private $_allowedComponents;
 
     protected function _init()
     {
@@ -24,20 +23,44 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     protected function _formatNode($row)
     {
         $component = $row->getData();
-
         $data = parent::_formatNode($row);
         $data['uiProvider'] = 'Vps.Component.PagesNode';
+
+        $nodeConfig = self::getNodeConfig($component, $this->_componentConfigs);
+        if (is_null($nodeConfig)) return null;
+        $data = array_merge($data, $nodeConfig);
+
+        if (!$data['expanded']) {
+            $openedNodes = $this->_saveSessionNodeOpened(null, null);
+            if ($data['disabled'] && !array_key_exists($row->id, $openedNodes)) {
+                $data['expanded'] = true;
+            }
+        }
+
+        if ($data['loadChildren'] || $data['expanded'] || $data['disabled']) {
+            $data['children'] = $this->_formatNodes($component->componentId);
+        }
+
+        return $data;
+    }
+
+    //public static zum testen
+    public static function getNodeConfig($component, array &$componentConfigs)
+    {
+        $data = array();
 
         $acl = Vps_Registry::get('acl')->getComponentAcl();
         $user = Zend_Registry::get('userModel')->getAuthedUser();
         $enabled = $acl->isAllowed($user, $component);
         if (!$enabled) {
 
-            if (is_null($this->_allowedComponents)) {
-                $this->_allowedComponents = $acl->getAllowedRecursiveChildComponents($user, $component);
+            static $allowedComponents;
+            if (!isset($allowedComponents)) {
+                //TODO kann das wirklich gecached werden?
+                $allowedComponents = $acl->getAllowedRecursiveChildComponents($user, $component);
             }
             $allowed = false;
-            foreach ($this->_allowedComponents as $allowedComponent) {
+            foreach ($allowedComponents as $allowedComponent) {
                 $c = $allowedComponent;
                 while ($c) {
                     if ($c->componentId == $component->componentId) {
@@ -52,6 +75,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         if (!$enabled) {
             $editComponents = $acl->getAllowedChildComponents($user, $component);
             foreach ($editComponents as $key => $ec) {
+                //TODO warum ist das notwendig?
                 if (is_instance_of($ec->componentClass, 'Vpc_Root_Category_Component') || is_instance_of($ec->componentClass, 'Vpc_Root_Category_Trl_Component')) {
                     unset($editComponents[$key]);
                 }
@@ -79,10 +103,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             }
             $data['bIcon'] = $icon->toString($data['iconEffects']);
             if (isset($data['icon'])) unset($data['icon']);
-            $openedNodes = $this->_saveSessionNodeOpened(null, null);
-            if (!$enabled && !array_key_exists($row->id, $openedNodes)) {
-                $data['expanded'] = true;
-            }
         }
 
 
@@ -95,21 +115,17 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             'preview' => false
         ), $data['actions']);
 
-        if ($data['loadChildren'] || $data['expanded'] || !$enabled) {
-            $data['children'] = $this->_formatNodes($component->componentId);
-        }
-
         // EditComponents
         $ec = array();
         foreach ($editComponents as $editComponent) {
-            foreach ($this->getEditComponents($editComponent) as $c) {
-                $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
+            foreach (self::getEditComponents($editComponent) as $c) {
+                $ec = array_merge($ec, self::_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT, $componentConfigs));
             }
-            foreach ($this->getMenuEditComponents($editComponent) as $c) {
-                $ec = array_merge($ec, $this->_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT));
+            foreach (self::getMenuEditComponents($editComponent) as $c) {
+                $ec = array_merge($ec, self::_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT, $componentConfigs));
             }
-            foreach ($this->getSharedComponents($editComponent) as $componentClass => $c) {
-                $ec = array_merge($ec, $this->_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED));
+            foreach (self::getSharedComponents($editComponent) as $componentClass => $c) {
+                $ec = array_merge($ec, self::_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED, $componentConfigs));
             }
         }
         $data['editComponents'] = $ec;
@@ -124,7 +140,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         return $parent->componentId;
     }
 
-    private function _formatEditComponents($componentClass, Vps_Component_Data $component, $configType)
+    private static function _formatEditComponents($componentClass, Vps_Component_Data $component, $configType, $componentConfigs)
     {
         $ret = array();
         $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig($configType);
@@ -133,8 +149,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         }
         foreach ($cfg as $type=>$c) {
             $k = $componentClass.'-'.$type;
-            if (!isset($this->_componentConfigs[$k])) {
-                $this->_componentConfigs[$k] = $c;
+            if (!isset($componentConfigs[$k])) {
+                $componentConfigs[$k] = $c;
             }
             $ret[] = array(
                 'componentClass' => $componentClass,
@@ -147,8 +163,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $cfg = $admin->getExtConfig($configType);
             foreach ($cfg as $type=>$c) {
                 $k = get_class($generatorPlugin).'-'.$type;
-                if (!isset($this->_componentConfigs[$k])) {
-                    $this->_componentConfigs[$k] = $c;
+                if (!isset($componentConfigs[$k])) {
+                    $componentConfigs[$k] = $c;
                 }
                 $ret[] = array(
                     'componentClass' => get_class($generatorPlugin),
