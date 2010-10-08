@@ -29,6 +29,9 @@ class Vpc_Advanced_Team_Member_Data_Component extends Vpc_Abstract
 
         $ret['faxPerPerson'] = false;
 
+        $ret['flags']['searchContent'] = true;
+        $ret['flags']['hasFulltext'] = true;
+
         return $ret;
     }
 
@@ -50,5 +53,28 @@ class Vpc_Advanced_Team_Member_Data_Component extends Vpc_Abstract
             return true;
         }
         return false;
+    }
+
+    public function getSearchContent()
+    {
+        $r = $this->_getRow();
+        $ret = '';
+        $ret .= $r->title;
+        $ret .= ' '.$r->firstname;
+        $ret .= ' '.$r->lastname;
+        $ret .= ' '.$r->workingPosition;
+        return $ret;
+    }
+
+    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    {
+        $fieldName = $this->getData()->componentId;
+
+        $text = strip_tags($this->getSearchContent());
+
+        $doc->getField('content')->value .= ' '.$text;
+
+        $field = Zend_Search_Lucene_Field::UnStored($fieldName, $text, 'utf-8');
+        $doc->addField($field);
     }
 }
