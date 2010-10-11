@@ -76,5 +76,7 @@ class Vpc_Advanced_Team_Member_Data_Component extends Vpc_Abstract
 
         $field = Zend_Search_Lucene_Field::UnStored($fieldName, $text, 'utf-8');
         $doc->addField($field);
+
+        return $doc;
     }
 }
