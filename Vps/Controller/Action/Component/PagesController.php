@@ -83,6 +83,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data['allowDrop'] = false;
         $data['disabled'] = !$enabled;
         $data['editControllerUrl'] = '';
+
         if ($component->componentId == 'root') { // Root hat keinen Generator
             $data['bIcon'] = new Vps_Asset('world');
             $data['bIcon'] = $data['bIcon']->__toString();
@@ -99,6 +100,19 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['bIcon'] = $icon->toString($data['iconEffects']);
             if (isset($data['icon'])) unset($data['icon']);
         }
+
+        if (!$acl->isAllowed($user, $component)) {
+            //wenn komponente *selbst* nicht bearbeitbar ist actions deaktivieren
+            //(in dem fall ist eine unterkomponente der seite bearbeitbar)
+            $data['actions'] = array_merge($data['actions'], array(
+                'properties' => false,
+                'delete' => false,
+                'visible' => false,
+                'makeHome' => false,
+            ));
+            $data['allowDrag'] = false;
+        }
+
 
         //wenn *unter* der seite eine page möglich ist (pageGenerator vorhanden) dann
         //hinzufügen + drop erlauben
@@ -136,12 +150,15 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $ec = array();
         foreach ($editComponents as $editComponent) {
             foreach (self::getEditComponents($editComponent) as $c) {
+                if (!$acl->isAllowed($user, $c)) continue;
                 $ec = array_merge($ec, self::_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT, $componentConfigs));
             }
             foreach (self::getMenuEditComponents($editComponent) as $c) {
+                if (!$acl->isAllowed($user, $c)) continue;
                 $ec = array_merge($ec, self::_formatEditComponents($c->componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT, $componentConfigs));
             }
             foreach (self::getSharedComponents($editComponent) as $componentClass => $c) {
+                if (!$acl->isAllowed($user, $c)) continue;
                 $ec = array_merge($ec, self::_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED, $componentConfigs));
             }
         }
