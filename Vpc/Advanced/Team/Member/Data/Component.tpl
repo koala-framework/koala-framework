@@ -7,7 +7,7 @@
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['nameLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
-                <?= $this->row->title; ?> <?= $this->row->firstname; ?> <?= $this->row->lastname; ?>
+                <strong><?= $this->row->title; ?> <?= $this->row->firstname; ?> <?= $this->row->lastname; ?></strong>
             </li>
         <? } ?>
 
