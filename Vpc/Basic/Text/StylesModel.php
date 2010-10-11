@@ -93,15 +93,11 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
         return $mtime;
     }
 
-    public static function getStylesContents()
+    public function getStylesContents()
     {
-        return Vps_Model_Abstract::getInstance('Vpc_Basic_Text_StylesModel')->getStylesContents2();
-    }
-
-    public function getStylesContents2()
-    {
+        $cacheId = 'RteStyles'.$this->getUniqueIdentifier();
         $cache = self::_getCache();
-        if (!$css = $cache->load('RteStyles')) {
+        if (!$css = $cache->load($cacheId)) {
             $css = '';
             foreach ($this->getRows() as $row) {
                 $css .= '.vpcText ' . $row->tag;
@@ -125,7 +121,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
                 $css .= "} /* $row->name */\n";
             }
             $css = array('contents' => $css);
-            $cache->save($css, 'RteStyles');
+            $cache->save($css, $cacheId);
         }
         return $css['contents'];
     }

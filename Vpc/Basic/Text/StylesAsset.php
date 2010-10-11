@@ -1,13 +1,15 @@
 <?php
 class Vpc_Basic_Text_StylesAsset implements Vps_Assets_Dynamic_Interface
 {
-    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent)
+    private $_stylesModel;
+    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
     {
+        $this->_stylesModel = $arguments[0];
     }
 
     public function getContents()
     {
-        return Vpc_Basic_Text_StylesModel::getStylesContents();
+        return Vps_Model_Abstract::getInstance($this->_stylesModel)->getStylesContents();
     }
 
     public function getMTimeFiles()
