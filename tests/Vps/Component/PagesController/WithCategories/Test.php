@@ -53,8 +53,4 @@ class Vps_Component_PagesController_WithCategories_Test extends Vpc_TestAbstract
         $this->assertTrue($cfg['allowDrop']);
         $this->assertTrue($cfg['allowDrag']);
     }
-
-
-    //TODO spezielle acl berechtigungen
-    //TODO editComponents (boxen usw)
 }
