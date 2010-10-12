@@ -22,13 +22,10 @@ class Vpc_Chained_Abstract_MasterAsChild_Component extends Vpc_Abstract
         return $ret;
     }
 
-    /*
     public function sendContent()
     {
-        d('lala');
         $this->getData()->getChildComponent('-child')->getComponent()->sendContent();
     }
-    */
 
     public function getTemplateVars()
     {
