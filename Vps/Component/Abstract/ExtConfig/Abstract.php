@@ -12,17 +12,19 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
     }
 
     /**
+     * @param string componentClass
+     * @param string welches setting verwendet werden soll, zB extConfigControllerIndex im Vps_Controller_Action_Auto_Vpc_Grid
      * @return $this
      */
-    public static function getInstance($componentClass)
+    public static function getInstance($componentClass, $setting = 'extConfig')
     {
         static $instances = array();
-        if (!isset($instances[$componentClass])) {
-            $c = Vpc_Abstract::getSetting($componentClass, 'extConfig');
+        if (!isset($instances[$componentClass.'-'.$setting])) {
+            $c = Vpc_Abstract::getSetting($componentClass, $setting);
             if (!$c) throw new Vps_Exception("extConfig not set");
-            $instances[$componentClass] = new $c($componentClass);
+            $instances[$componentClass.'-'.$setting] = new $c($componentClass);
         }
-        return $instances[$componentClass];
+        return $instances[$componentClass.'-'.$setting];
     }
 
 

@@ -2,6 +2,7 @@
 class Vps_Component_Acl
 {
     private $_isAllowedComponentClassCache = array();
+    private $_allowedRecursiveChildComponentsCache = array();
     protected $_roleRegistry;
     protected $_rules = array(
         'allComponents' => array(
@@ -121,20 +122,19 @@ class Vps_Component_Acl
     }
 
     // Langsam
-    public function getAllowedRecursiveChildComponents($userRow, $component)
+    public function getAllowedRecursiveChildComponents($userRow)
     {
-        // Alle Unterkomponenten mit erlaubten Klassen suchen, dann noch
-        // dynamisch prüfen ob Komponente wirklich erlaubt ist
-        $allowedComponentClasses = $this->_getAllowedComponentClasses($userRow);
-        $cc = $component->getRecursiveChildComponents(array(
-            'componentClasses' => $allowedComponentClasses,
-            'ignoreVisible' => true
-        ), array());
-        $ret = array();
-        foreach ($cc as $c) {
-            if ($this->isAllowed($userRow, $c)) $ret[] = $c;
+        $cacheId = is_object($userRow) ? $userRow->id : $userRow;
+        if (!isset($this->_allowedRecursiveChildComponentsCache[$cacheId])) {
+            $allowedComponentClasses = $this->_getAllowedComponentClasses($userRow);
+            $ret = array();
+            $cmps = Vps_Component_Data_Root::getInstance()->getComponentsByClass($allowedComponentClasses, array('ignoreVisible'=>true));
+            foreach ($cmps as $c) {
+                if ($this->isAllowed($userRow, $c)) $ret[] = $c;
+            }
+            $this->_allowedRecursiveChildComponentsCache[$cacheId] = $ret;
         }
-        return $ret;
+        return $this->_allowedRecursiveChildComponentsCache[$cacheId];
     }
 
     public function getAllowedChildComponents($userRow, $component)
@@ -142,8 +142,13 @@ class Vps_Component_Acl
         $allowedComponentClasses = $this->_getAllowedComponentClasses($userRow);
         return $component->getRecursiveChildComponents(array(
             'componentClasses' => $allowedComponentClasses,
-            'ignoreVisible' => true
-        ), array('pseudoPage' => false));
+            'ignoreVisible' => true,
+            'pseudoPage' => false,
+            'flags' => array('showInPageTreeAdmin' => false),
+        ), array(
+            'pseudoPage' => false,
+            'flags' => array('showInPageTreeAdmin' => false),
+        ));
     }
 
     protected function _getAllowedComponentClasses($userRow)

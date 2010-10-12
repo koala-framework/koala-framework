@@ -2,10 +2,6 @@
 class Vps_Component_Model extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Component_Model_Row';
-    protected $_constraints = array(
-        'ignoreVisible' => true,
-        'flags' => array('showInPageTreeAdmin' => true)
-    );
     protected $_primaryKey = 'componentId';
     private $_root;
 
