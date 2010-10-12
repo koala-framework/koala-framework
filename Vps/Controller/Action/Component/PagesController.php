@@ -56,21 +56,29 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $allowedComponents = $acl->getAllowedRecursiveChildComponents($user, $component);
             $allowed = false;
             foreach ($allowedComponents as $allowedComponent) {
-                if (!$allowedComponent->isPage) { //wenns eine page ist muss sie immer angezeigt werden fuer seiteneigenschaften
-                    if (!self::_getAllEditComponents(array($allowedComponent), $user, $acl)) {
-                        //wenns bei der komponente nichts zu bearbeiten gibt wirds gar nicht angezeigt, auch ihre parents nicht
-                        continue;
-                    }
-                }
                 $c = $allowedComponent;
                 while ($c) {
                     if ($c->componentId == $component->componentId) {
-                        $allowed = true;
+                        if (!$allowedComponent->isPage) {
+                            if (self::_getAllEditComponents(array($allowedComponent), $user, $acl)) {
+                                //es gibt bearbeiten buttons, seite anzeigen
+                                $allowed = true;
+                                break;
+                            }
+                            if (!$allowed) {
+                                 //nächste allowComponent überprüfen
+                                 continue 2;
+                            }
+                        } else {
+                            //seiten sind immer erlaubt (wegen seiteneigenschaften)
+                            $allowed = true;
+                        }
                         break 2;
                     }
                     $c = $c->parent;
                 }
             }
+
             //wenn gar keine unterkomponente bearbeitet werden kann seite ausblenden
             if (!$allowed) return null;
         }
