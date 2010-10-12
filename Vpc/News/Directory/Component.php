@@ -24,6 +24,13 @@ class Vpc_News_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
         $ret['enableExpireDate'] = false;
         $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';
         $ret['flags']['hasResources'] = true;
+
+        //darf im seitenbaum nicht berbeitet werden
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
+
+        //config fuer admin button oben
+        $ret['extConfigControllerIndex'] = 'Vpc_Directories_Item_Directory_ExtConfigEditButtons';
+
         return $ret;
     }
 
