@@ -456,12 +456,12 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         $ret = array();
         foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            if ((strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c) == $class) {
+            if ($c == $class || (strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c) == $class) {
                 $ret[] = $c;
                 continue;
             }
             foreach (Vpc_Abstract::getParentClasses($c) as $p) {
-                if ((strpos($p, '.') ? substr($p, 0, strpos($p, '.')) : $p) == $class) {
+                if ($p == $class) {
                     $ret[] = $c;
                     break;
                 }
