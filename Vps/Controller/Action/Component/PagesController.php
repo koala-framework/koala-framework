@@ -52,12 +52,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     {
         $data = array();
         $enabled = $acl->isAllowed($user, $component);
-        if (!$enabled) {
-//             static $allowedComponents;
-//             if (!isset($allowedComponents)) {
-                //TODO kann das wirklich gecached werden?
-                $allowedComponents = $acl->getAllowedRecursiveChildComponents($user, $component);
-//             }
+        if (!$enabled && !$component instanceof Vps_Component_Data_Root/*root nicht überprüfen, die wird immar angezeigt*/) {
+            $allowedComponents = $acl->getAllowedRecursiveChildComponents($user, $component);
             $allowed = false;
             foreach ($allowedComponents as $allowedComponent) {
                 if (!$allowedComponent->isPage) { //wenns eine page ist muss sie immer angezeigt werden fuer seiteneigenschaften
