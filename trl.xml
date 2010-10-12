@@ -6249,4 +6249,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Beinhaltet ein Video</de>
 <id>1564</id>
 </text>
+<text>
+<en>Invalid search terms</en>
+<de>Ungültige Suchbegriffe</de>
+<id>1630</id>
+</text>
+<text>
+<en>Search results can be extended using wildcards.&lt;br &gt;Examples: "Hallo Welt" , ? , * , AND , OR</en>
+<de>Die Suchergebnisse können durch die Verwendung von Wildcards erweitert werden.&lt;br /&gt;Beispiele: "Hallo Welt" , ? , * , AND , OR</de>
+<id>1631</id>
+</text>
 </trl>
