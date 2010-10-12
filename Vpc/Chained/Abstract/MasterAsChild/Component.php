@@ -22,11 +22,6 @@ class Vpc_Chained_Abstract_MasterAsChild_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function sendContent()
-    {
-        $this->getData()->getChildComponent('-child')->getComponent()->sendContent();
-    }
-
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
