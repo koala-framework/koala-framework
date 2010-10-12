@@ -60,6 +60,12 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 //             }
             $allowed = false;
             foreach ($allowedComponents as $allowedComponent) {
+                if (!$allowedComponent->isPage) { //wenns eine page ist muss sie immer angezeigt werden fuer seiteneigenschaften
+                    if (!self::_getAllEditComponents(array($allowedComponent), $user, $acl)) {
+                        //wenns bei der komponente nichts zu bearbeiten gibt wirds gar nicht angezeigt, auch ihre parents nicht
+                        continue;
+                    }
+                }
                 $c = $allowedComponent;
                 while ($c) {
                     if ($c->componentId == $component->componentId) {
@@ -146,8 +152,13 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             'allowDrop' => false
         ), $data);
 
+        $data['editComponents'] = self::_getAllEditComponents($editComponents, $user, $acl);
 
-        // EditComponents
+        return $data;
+    }
+
+    private static function _getAllEditComponents($editComponents, $user, $acl)
+    {
         $ec = array();
         foreach ($editComponents as $editComponent) {
             foreach (self::getEditComponents($editComponent) as $c) {
@@ -163,9 +174,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $ec = array_merge($ec, self::_formatEditComponents($componentClass, $c, Vps_Component_Abstract_ExtConfig_Abstract::TYPE_SHARED, $componentConfigs));
             }
         }
-        $data['editComponents'] = $ec;
-
-        return $data;
+        return $ec;
     }
 
     protected function _getParentId($row)
