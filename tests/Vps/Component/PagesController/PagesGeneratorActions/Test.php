@@ -16,6 +16,7 @@ class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestA
 
         $acl->addRole(new Zend_Acl_Role('special'));
         $this->_acl->allowComponent('special', 'Vps_Component_PagesController_PagesGeneratorActions_SpecialComponent');
+        $this->_acl->allowComponent('special', 'Vps_Component_PagesController_PagesGeneratorActions_SpecialWithoutEditComponent');
     }
 
     public function testNodeConfig()
@@ -148,5 +149,19 @@ class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestA
         $c = Vps_Component_Data_Root::getInstance()->getComponentById('5');
         $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(1, count($cfg['editComponents']));
+    }
+
+    //für 7-special ist eine berechtigung da, allerdings keine extConfig. daher soll die seite 7 ganz
+    //ausgeblendet werden - und die 6er daher auch
+    public function testSpecialWithoutEditIsHidden()
+    {
+        $user = 'special';
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('6');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertNull($cfg);
+
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('7');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertNull($cfg);
     }
 }
