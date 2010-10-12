@@ -152,12 +152,12 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             'allowDrop' => false
         ), $data);
 
-        $data['editComponents'] = self::_getAllEditComponents($editComponents, $user, $acl);
+        $data['editComponents'] = self::_getAllEditComponents($editComponents, $user, $acl, $componentConfigs);
 
         return $data;
     }
 
-    private static function _getAllEditComponents($editComponents, $user, $acl)
+    private static function _getAllEditComponents($editComponents, $user, $acl, array &$componentConfigs = array())
     {
         $ec = array();
         foreach ($editComponents as $editComponent) {
