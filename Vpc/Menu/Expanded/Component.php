@@ -20,4 +20,14 @@ class Vpc_Menu_Expanded_Component extends Vpc_Menu_Abstract
 
         return $ret;
     }
+
+    public function hasContent()
+    {
+        $c = count($this->_getMenuData());
+        if ($c > 0) {
+            return true;
+        }
+        return false;
+    }
+
 }
