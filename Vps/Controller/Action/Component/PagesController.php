@@ -79,6 +79,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         } else {
             $editComponents = array($component);
         }
+
         $data['actions'] = array();
         $data['allowDrop'] = false;
         $data['disabled'] = !$enabled;
@@ -192,19 +193,21 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 'componentId' => $component->dbId
             );
         }
-        foreach ($component->generator->getGeneratorPlugins() as $generatorPlugin) {
-            $admin = Vpc_Admin::getInstance(get_class($generatorPlugin));
-            $cfg = $admin->getExtConfig($configType);
-            foreach ($cfg as $type=>$c) {
-                $k = get_class($generatorPlugin).'-'.$type;
-                if (!isset($componentConfigs[$k])) {
-                    $componentConfigs[$k] = $c;
+        if (isset($component->generator)) { //nicht gesetzt bei root
+            foreach ($component->generator->getGeneratorPlugins() as $generatorPlugin) {
+                $admin = Vpc_Admin::getInstance(get_class($generatorPlugin));
+                $cfg = $admin->getExtConfig($configType);
+                foreach ($cfg as $type=>$c) {
+                    $k = get_class($generatorPlugin).'-'.$type;
+                    if (!isset($componentConfigs[$k])) {
+                        $componentConfigs[$k] = $c;
+                    }
+                    $ret[] = array(
+                        'componentClass' => get_class($generatorPlugin),
+                        'type' => $type,
+                        'componentId' => $component->dbId
+                    );
                 }
-                $ret[] = array(
-                    'componentClass' => get_class($generatorPlugin),
-                    'type' => $type,
-                    'componentId' => $component->dbId
-                );
             }
         }
         return $ret;
@@ -214,9 +217,11 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     public static function getEditComponents($component)
     {
         $editComponents = array();
-        if ($component->isPage) {
-            $editComponents[] = $component;
-        }
+
+        //egal ob component eine page ist oder nicht, selbst darf sie immer bearbeitet werden
+        //es ist dann *keine* page wenn der benutzer unter eine unterkomponente bearbeiten darf - nicht aber die page selbst
+        $editComponents[] = $component;
+
         $editComponents = array_merge($editComponents,
             $component->getRecursiveChildComponents(
                 array(
