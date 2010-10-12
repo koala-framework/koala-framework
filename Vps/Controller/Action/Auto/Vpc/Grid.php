@@ -30,7 +30,14 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
     public function indexAction()
     {
         //nicht: parent::indexAction();
-        $config = Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig();
+        if (Vpc_Abstract::hasSetting($this->_getParam('class'), 'extConfigControllerIndex')) {
+            $type = 'extConfigControllerIndex';
+        } else {
+            //für Abwärtskompatibilität
+            $type = 'extConfig';
+        }
+        $config = Vps_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $type)
+                    ->getConfig(Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
         if (!$config) {
             throw new Vps_Exception("Not ExtConfig avaliable for this component");
         }
