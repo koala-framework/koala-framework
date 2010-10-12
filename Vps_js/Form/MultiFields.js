@@ -31,12 +31,12 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
     onRender : function(ct, position){
         Vps.Form.MultiFields.superclass.onRender.call(this, ct, position);
 
-    	if (!this.maxEntries || !this.minEntries || this.maxEntries != this.minEntries) {
-	        this.addGroupButton = new Vps.Form.MultiFieldsAddButton({
-	            multiFieldsPanel: this,
-	            renderTo: this.body
-	        }, position);
-    	}
+        if (!this.maxEntries || !this.minEntries || this.maxEntries != this.minEntries) {
+            this.addGroupButton = new Vps.Form.MultiFieldsAddButton({
+                multiFieldsPanel: this,
+                renderTo: this.body
+            }, position);
+        }
 
         for (var i = 0; i < this.minEntries; i++) {
             this.addGroup();
@@ -46,8 +46,8 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
     // private
     addGroup : function()
     {
-    	var items = [];
-    	if (!this.maxEntries || !this.minEntries || this.maxEntries != this.minEntries) {
+        var items = [];
+        if (!this.maxEntries || !this.minEntries || this.maxEntries != this.minEntries) {
             var deleteButton = new Vps.Form.MultiFieldsDeleteButton({
                 multiFieldsPanel: this
             });
@@ -62,7 +62,7 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
                 });
                 items.push(downButton);
             }
-    	}
+        }
 
         this.multiItems.each(function(i) {
             items.push(i);
@@ -159,17 +159,17 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
             }
             g.item.cascade(function(item) {
                 if (item.replaceTitle) {
-                	var title = item.replaceTitle;
-                	title = title.replace(/\{0\}/, i+1);
-                	if (item.replaceTitleField) {
-                		var exp = /\{\w+\}/;
-                		if (values && values[i]) {
-                			title = title.replace(exp, values[i][item.replaceTitleField]);
-                		} else {
-                			title = item.title;
-                			if (exp.test(title)) title = trlVps('New Entry');
-                		}
-                	}
+                    var title = item.replaceTitle;
+                    title = title.replace(/\{0\}/, i+1);
+                    if (item.replaceTitleField) {
+                        var exp = /\{\w+\}/;
+                        if (values && values[i]) {
+                            title = title.replace(exp, values[i][item.replaceTitleField]);
+                        } else {
+                            title = item.title;
+                            if (exp.test(title)) title = trlVps('New Entry');
+                        }
+                    }
                     item.setTitle(title);
                 }
             }, this);
