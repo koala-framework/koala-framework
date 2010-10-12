@@ -61,10 +61,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         self::reset();
     }
 
-    public static function reset()
+    public static function reset($resetCache = true)
     {
         self::$_instance = null;
-        Vps_Component_Abstract::resetSettingsCache();
+        if ($resetCache) Vps_Component_Abstract::resetSettingsCache();
     }
 
     public function getPageByUrl($url)
