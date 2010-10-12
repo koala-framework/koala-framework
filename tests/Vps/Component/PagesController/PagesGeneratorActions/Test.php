@@ -97,5 +97,56 @@ class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestA
         $this->assertFalse($cfg['allowDrag']);
         $this->assertFalse($cfg['disabled']);
     }
-    //TODO editComponents (boxen usw)
+
+    public function testEditComponents()
+    {
+        $user = 'test';
+        $c = Vps_Component_Data_Root::getInstance();
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertEquals(0, count($cfg['editComponents']));
+
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('1');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertEquals(0, count($cfg['editComponents']));
+
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('3');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertEquals(0, count($cfg['editComponents']));
+
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('4');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertEquals(1, count($cfg['editComponents']));
+
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('5');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertEquals(1, count($cfg['editComponents']));
+    }
+
+    public function testOnlySpecialEditComponents()
+    {
+        $user = 'special';
+        $c = Vps_Component_Data_Root::getInstance();
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertEquals(0, count($cfg['editComponents']));
+
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('1');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertEquals(0, count($cfg['editComponents']));
+
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('3');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertEquals(0, count($cfg['editComponents']));
+
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('4');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertEquals(1, count($cfg['editComponents']));
+    }
+
+    public function testOnlySpecialInContainerEditComponents()
+    {
+        $user = 'special';
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById('5');
+        $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $this->assertEquals(1, count($cfg['editComponents']));
+    }
 }
