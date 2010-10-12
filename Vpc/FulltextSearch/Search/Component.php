@@ -13,8 +13,8 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
         $ret['generators']['child']['component']['paging'] = 'Vpc_FulltextSearch_Search_Paging_Component';
         $ret['flags']['processInput'] = true;
 
-        $ret['placeholder']['helpFooter'] = trlVpsStatic('Search results can be extended using wildcards.&gt;br &lt;Examples: "Hallo Welt" , ? , * , AND , OR');
-        
+        $ret['placeholder']['helpFooter'] = trlVpsStatic('Search results can be extended using wildcards.').'<br />'.
+                                            trlVpsStatic('Examples: "Hallo Welt" , ? , * , AND , OR');
         return $ret;
     }
 
