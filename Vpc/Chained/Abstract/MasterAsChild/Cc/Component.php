@@ -1,5 +1,5 @@
 <?php
-class Vpc_Chained_Trl_MasterAsChild_Cc_Component extends Vpc_Chained_Cc_Component
+class Vpc_Chained_Abstract_MasterAsChild_Cc_Component extends Vpc_Chained_Cc_Component
 {
     public function getTemplateVars()
     {
