@@ -33,4 +33,11 @@ class Vpc_Chained_Abstract_ChainedGenerator extends Vps_Component_Generator_Pseu
                     ->getComponentByClass(Vpc_Abstract::getSetting($data['componentClass'], 'masterComponentClass'));
         return $data;
     }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['showInPageTreeAdmin'] = true;
+        return $ret;
+    }
 }

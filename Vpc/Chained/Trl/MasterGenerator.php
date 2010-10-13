@@ -32,11 +32,4 @@ class Vpc_Chained_Trl_MasterGenerator extends Vpc_Chained_Abstract_MasterGenerat
     {
         return $this->_getLanguageRow()->filename;
     }
-
-    public function getGeneratorFlags()
-    {
-        $ret = parent::getGeneratorFlags();
-        $ret['showInPageTreeAdmin'] = true;
-        return $ret;
-    }
 }

@@ -10,4 +10,11 @@ class Vpc_Chained_Abstract_MasterGenerator extends Vps_Component_Generator_Pseud
         $ret['icon'] = 'layout_content';
         return $ret;
     }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['showInPageTreeAdmin'] = true;
+        return $ret;
+    }
 }
