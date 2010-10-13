@@ -8,6 +8,8 @@ class Vpc_Basic_LinkTag_Intern_Cc_Component extends Vpc_Basic_LinkTag_Abstract_C
         return $ret;
     }
 
+    // TODO: Cache
+    /*
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();
@@ -43,4 +45,5 @@ class Vpc_Basic_LinkTag_Intern_Cc_Component extends Vpc_Basic_LinkTag_Abstract_C
         }
         return $ret;
     }
+    */
 }
