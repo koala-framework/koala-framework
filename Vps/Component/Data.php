@@ -263,7 +263,7 @@ class Vps_Component_Data
         if ($staticGeneratorComponentClasses) {
             $pd = $this->getRecursiveChildComponents(array(
                 'componentClasses' => $staticGeneratorComponentClasses
-            ));
+            ), $childSelect);
             foreach ($generators as $k=>$g) {
                 if ($g['static']) {
                     $parentDatas = array();
