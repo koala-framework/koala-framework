@@ -12,17 +12,17 @@
         <div class="publishDate">
 
             <? if ($this->date($this->item->row->start_date,'H:i') != '00:00') { ?>
-                <?=$this->date($this->item->row->start_date,'d.m.Y H:i');?>
+                <?=$this->dateTime($this->item->row->start_date);?>
             <? } else { ?>
-                <?=$this->date($this->item->row->start_date,'d.m.Y');?>
+                <?=$this->date($this->item->row->start_date);?>
             <? } ?>
 
             <? if ($this->item->row->end_date) { ?>
                 -
                 <? if($this->date($this->item->row->end_date,'H:i') != '00:00') { ?>
-                    <?=$this->date($this->item->row->end_date,'d.m.Y H:i');?>
+                    <?=$this->dateTime($this->item->row->end_date);?>
                 <? } else { ?>
-                    <?=$this->date($this->item->row->end_date,'d.m.Y');?>
+                    <?=$this->date($this->item->row->end_date);?>
                 <? } ?>
             <? } ?>
 
