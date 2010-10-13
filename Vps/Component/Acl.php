@@ -114,7 +114,7 @@ class Vps_Component_Acl
 
             //TODO: wenn alle unterseiten auch berechtigung haben sollen brauchen wir sowas wie allowComponentRecursive
             //wenns nur eine Detail gibt kann diese extra dazugeschalten werden
-            if ($component && $component->isPage) break;
+            if ($component && $component->isPseudoPage) break;
 
             $component = $component->parent;
         }
