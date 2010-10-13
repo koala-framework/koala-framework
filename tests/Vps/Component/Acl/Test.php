@@ -64,15 +64,16 @@ class Vps_Component_Acl_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($this->_acl->getAllowedRecursiveChildComponents('test', $this->_root)));
     }
 
-    public function testDynamicComponent()
+    public function testDynamicComponent1()
     {
         $this->assertFalse($this->_acl->isAllowed('test', $this->_root));
         $this->_acl->allowComponent('test', 'Vps_Component_Acl_Root');
         $this->assertTrue($this->_acl->isAllowed('test', $this->_root));
-        foreach ($this->_root->getChildComponents() as $c) {
-            $this->assertTrue($this->_acl->isAllowed('test', $c));
-        }
-        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('4')));
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('root-title')));
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById('1')));
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById('3')));
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById('4')));
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById('4')));
     }
 
     public function testDynamicComponent2()
@@ -81,6 +82,6 @@ class Vps_Component_Acl_Test extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_acl->isAllowed('test', $this->_root));
         $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById('1')));
         $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('3')));
-        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('4')));
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById('4')));
     }
 }

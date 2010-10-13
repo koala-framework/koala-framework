@@ -4,6 +4,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
     private $_hits;
     private $_time;
     private $_queryString;
+    private $_error = false;
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -11,6 +12,9 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
         $ret['viewCache'] = false;
         $ret['generators']['child']['component']['paging'] = 'Vpc_FulltextSearch_Search_Paging_Component';
         $ret['flags']['processInput'] = true;
+
+        $ret['placeholder']['helpFooter'] = trlVpsStatic('Search results can be extended using wildcards.').'<br />'.
+                                            trlVpsStatic('Examples: "Hallo Welt" , ? , * , AND , OR');
         return $ret;
     }
 
@@ -40,7 +44,12 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
                 $query->addSubquery($pathQuery, true /* required */);
             }
             $time = microtime(true);
-            $this->_hits = $index->find($query);
+            try {
+                $this->_hits = $index->find($query);
+            } catch (Zend_Search_Lucene_Exception $e) {
+                $this->_hits = array();
+                $this->_error = $this->getData()->trlVps('Invalid search terms');
+            }
             $this->_time = microtime(true)-$time;
         } else {
             $this->_hits = array();
@@ -82,6 +91,7 @@ class Vpc_FulltextSearch_Search_Component extends Vpc_Abstract_Composite_Compone
         $ret['hitCount'] = count($this->_hits);
         $ret['numStart'] = $numStart+1;
         $ret['numEnd'] = $numEnd;
+        $ret['error'] = $this->_error;
         return $ret;
     }
 }

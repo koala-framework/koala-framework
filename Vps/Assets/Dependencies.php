@@ -74,7 +74,9 @@ class Vps_Assets_Dependencies
             } else {
                 if (substr($file, 0, 8) == 'dynamic/') {
                     $file = substr($file, 8);
-                    $a = new $file($this->_loader, $assetsType, $rootComponent);
+                    $arguments = explode(':', $file);
+                    $assetClass = array_shift($arguments);
+                    $a = new $assetClass($this->_loader, $assetsType, $rootComponent, $arguments);
                     if (!$allUsed || !$a->getIncludeInAll()) {
                         $v = $this->getMaxFileMTime();
                         $f = "/assets/dynamic/$assetsType/"
@@ -151,8 +153,9 @@ class Vps_Assets_Dependencies
             $files = array();
             foreach ($this->_files[$assetsType] as $file) {
                 if (substr($file, 0, 8) == 'dynamic/') {
-                    $f = substr($file, 8);
-                    $f = new $f($this->_loader, $assetsType, $rootComponent);
+                    $arguments = explode(':', substr($file, 8));
+                    $f = array_shift($arguments);
+                    $f = new $f($this->_loader, $assetsType, $rootComponent, $arguments);
                     if ($f->getType() == $fileType) {
                         $files[] = $file;
                     }

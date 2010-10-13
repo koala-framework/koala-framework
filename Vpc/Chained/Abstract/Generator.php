@@ -110,6 +110,7 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
 
     public function getChildData($parentDatas, $select = array())
     {
+        Vps_Benchmark::count('GenChained::getChildData');
         $ret = array();
         if (is_array($select)) $select = new Vps_Component_Select($select);
         if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {

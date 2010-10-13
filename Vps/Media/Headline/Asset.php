@@ -5,7 +5,7 @@ class Vps_Media_Headline_Asset implements Vps_Assets_Dynamic_Interface
     private $_assetsType;
     private $_rootComponent;
 
-    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent)
+    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
     {
         $this->_loader = $loader;
         $this->_assetsType = $assetsType;

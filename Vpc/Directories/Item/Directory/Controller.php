@@ -14,7 +14,8 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
     public function preDispatch()
     {
         parent::preDispatch();
-        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
+        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')
+            || is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
             $url = Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form');
             $this->_editDialog = array(
                 'width' =>  500,
@@ -27,13 +28,20 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
 
     protected function _initColumns()
     {
+        $extConfigType = false;
         if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
+            $extConfigType = 'extConfig';
+        } else if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
+            $extConfigType = 'extConfigControllerIndex';
+        }
+        if ($extConfigType) {
             //shows editDialog
             $this->_columns->add(new Vps_Grid_Column_Button('properties', ' ', 20))
                 ->setButtonIcon('/assets/silkicons/newspaper.png')
                 ->setTooltip(trlVps('Properties'));
 
-            $extConfig = Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig();
+            $extConfig = Vps_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $extConfigType)
+                        ->getConfig(Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
             $extConfig = $extConfig['items'];
             $i=0;
             foreach ($extConfig['contentEditComponents'] as $ec) {
