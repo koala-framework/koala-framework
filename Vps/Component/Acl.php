@@ -121,14 +121,26 @@ class Vps_Component_Acl
         return false;
     }
 
-    // Langsam
+    /**
+     * Gibt alle Komponenten zurück die im Seitenbaum bearbeitet werden dürfen
+     *
+     * alles was unter einer seite liegt die im seitenbaum angezeigt wird
+     *
+     * Langsam
+     */
     public function getAllowedRecursiveChildComponents($userRow)
     {
         $cacheId = is_object($userRow) ? $userRow->id : $userRow;
         if (!isset($this->_allowedRecursiveChildComponentsCache[$cacheId])) {
             $allowedComponentClasses = $this->_getAllowedComponentClasses($userRow);
             $ret = array();
-            $cmps = Vps_Component_Data_Root::getInstance()->getComponentsByClass($allowedComponentClasses, array('ignoreVisible'=>true));
+            $cmps = Vps_Component_Data_Root::getInstance()->getRecursiveChildComponents(array(
+                'ignoreVisible'=>true,
+                'componentClasses' => $allowedComponentClasses,
+            ), array(
+                'ignoreVisible'=>true,
+                'generatorFlags' => array('showInPageTreeAdmin' => true),
+            ));
             foreach ($cmps as $c) {
                 if ($this->isAllowed($userRow, $c)) $ret[] = $c;
             }
@@ -137,6 +149,11 @@ class Vps_Component_Acl
         return $this->_allowedRecursiveChildComponentsCache[$cacheId];
     }
 
+    /**
+     * Gibt alle Unterkomponenten einer Seite zurück die barbeitet werden dürfen
+     *
+     * d.h. alles *bis* zur pseudoPage oder showInPageTreeAdmin
+     */
     public function getAllowedChildComponents($userRow, $component)
     {
         $allowedComponentClasses = $this->_getAllowedComponentClasses($userRow);
@@ -144,10 +161,11 @@ class Vps_Component_Acl
             'componentClasses' => $allowedComponentClasses,
             'ignoreVisible' => true,
             'pseudoPage' => false,
-            'flags' => array('showInPageTreeAdmin' => false),
+            'generatorFlags' => array('showInPageTreeAdmin' => false),
         ), array(
+            'ignoreVisible' => true,
             'pseudoPage' => false,
-            'flags' => array('showInPageTreeAdmin' => false),
+            'generatorFlags' => array('showInPageTreeAdmin' => false),
         ));
     }
 

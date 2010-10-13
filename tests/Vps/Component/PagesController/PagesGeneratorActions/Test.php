@@ -118,6 +118,7 @@ class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestA
         $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(1, count($cfg['editComponents']));
 
+        //SpecialContainer
         $c = Vps_Component_Data_Root::getInstance()->getComponentById('5');
         $cfg = Vps_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(1, count($cfg['editComponents']));

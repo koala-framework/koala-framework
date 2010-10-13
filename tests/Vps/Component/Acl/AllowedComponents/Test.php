@@ -33,7 +33,8 @@ class Vps_Component_Acl_AllowedComponents_Test extends Vpc_TestAbstract
 
     public function testIt()
     {
-        $this->markTestIncomplete();
-        d($this->_acl->getAllowedRecursiveChildComponents('special'));
+        //darf nur eine sein, weil die zweite nicht im seitenbaum aufscheint
+        $cmps = $this->_acl->getAllowedRecursiveChildComponents('special');
+        $this->assertEquals(1, count($cmps));
     }
 }
