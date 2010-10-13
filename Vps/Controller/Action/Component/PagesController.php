@@ -240,9 +240,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 array(
                     'hasEditComponents' => true,
                     'ignoreVisible' => true,
-                    'flags' => array('showInPageTreeAdmin' => false)
+                    'generatorFlags' => array('showInPageTreeAdmin' => false),
                 ), array(
-                    'flags' => array('showInPageTreeAdmin' => false),
+                    'generatorFlags' => array('showInPageTreeAdmin' => false),
                     'hasEditComponents' => true,
                 )
             )

@@ -27,6 +27,7 @@ möglicherweise nicht kompatible Änderungen:
 - Columns admin ist jetzt keine Form mehr sondern ein Grid
 - .webStandard strong/em/ol/ul/li ist jetzt im vps und sollte in webs entfernt werden
 - newsListView und eventsListView Teaser haben jetzt ein nl2br
+- showInPageTreeAdmin flag gibts nicht mehr, ist jetzt nur noch ein generatorFlag
 
 == 1.10 ==
 Erstellt: 09.06.10

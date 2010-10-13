@@ -14,4 +14,11 @@ class Vpc_Chained_Trl_ChainedGenerator extends Vpc_Chained_Abstract_ChainedGener
         $ret->whereEquals('master', false);
         return $ret;
     }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['showInPageTreeAdmin'] = true;
+        return $ret;
+    }
 }

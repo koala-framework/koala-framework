@@ -5,7 +5,7 @@ class Vpc_Chained_Cc_Component extends Vpc_Chained_Abstract_Component
     {
         $ret = parent::getSettings();
         $copySettings = array('componentName', 'componentIcon', 'editComponents', 'viewCache');
-        $copyFlags = array('showInPageTreeAdmin', 'processInput', 'menuCategory', 'hasHome', 'chainedType', 'subroot');
+        $copyFlags = array('processInput', 'menuCategory', 'hasHome', 'chainedType', 'subroot');
         $ret = Vpc_Chained_Abstract_Component::getChainedSettings($ret, $masterComponentClass, 'Cc', $copySettings, $copyFlags);
         return $ret;
     }

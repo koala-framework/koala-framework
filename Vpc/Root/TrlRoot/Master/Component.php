@@ -21,7 +21,6 @@ class Vpc_Root_TrlRoot_Master_Component extends Vpc_Abstract
             'component' => 'Vpc_Root_Category_Component',
             'model' => 'Vpc_Root_CategoryModel'
         );
-        $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;
         $ret['flags']['chainedType'] = 'Trl';

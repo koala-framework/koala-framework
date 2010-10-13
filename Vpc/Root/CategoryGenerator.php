@@ -34,4 +34,11 @@ class Vpc_Root_CategoryGenerator extends Vps_Component_Generator_Table
         }
         return Vps_Component_Data_Root::getInstance()->getComponentsBySameClass($this->_class);
     }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['showInPageTreeAdmin'] = true;
+        return $ret;
+    }
 }

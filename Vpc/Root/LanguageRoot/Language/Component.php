@@ -11,7 +11,6 @@ class Vpc_Root_LanguageRoot_Language_Component extends Vpc_Abstract
         );
         $ret['componentName'] = trlVps('Language');
         $ret['flags']['subroot'] = 'language';
-        $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;
         return $ret;
