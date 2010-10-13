@@ -93,12 +93,8 @@ class Vps_Component_Model extends Vps_Model_Abstract
             }
             $rowset = $page->getChildComponents(array(
                 'ignoreVisible' => true,
-                'flags' => array('showInPageTreeAdmin' => true)
-            ));
-            $rowset = array_merge($rowset, $page->getChildComponents(array(
-                'ignoreVisible' => true,
                 'generatorFlags' => array('showInPageTreeAdmin' => true)
-            )));
+            ));
             $rowset = array_values($rowset);
         } else if (isset($where['componentId'])) {
             $rowset = array(Vps_Component_Data_Root::getInstance()->getComponentById($where['componentId'], array('ignoreVisible' => true)));
