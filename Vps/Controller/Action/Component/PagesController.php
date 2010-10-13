@@ -53,7 +53,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data = array();
         $enabled = $acl->isAllowed($user, $component);
         if (!$enabled && !$component instanceof Vps_Component_Data_Root/*root nicht überprüfen, die wird immar angezeigt*/) {
-            $allowedComponents = $acl->getAllowedRecursiveChildComponents($user, $component);
+            $allowedComponents = $acl->getAllowedRecursiveChildComponents($user);
             $allowed = false;
             foreach ($allowedComponents as $allowedComponent) {
                 $c = $allowedComponent;
@@ -240,9 +240,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 array(
                     'hasEditComponents' => true,
                     'ignoreVisible' => true,
-                    'flags' => array('showInPageTreeAdmin' => false)
+                    'generatorFlags' => array('showInPageTreeAdmin' => false),
                 ), array(
-                    'flags' => array('showInPageTreeAdmin' => false),
+                    'generatorFlags' => array('showInPageTreeAdmin' => false),
                     'hasEditComponents' => true,
                 )
             )
@@ -282,17 +282,17 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     // static zum Testen
     public static function getSharedComponents($component)
     {
-        static $sharedClasses = null;
-        if (!is_array($sharedClasses)) {
+        static $sharedClasses = array();
+        if (!isset($sharedClasses[Vps_Component_Data_Root::getComponentClass()])) { //pro root klasse cachen weil die sich ja bei den tests ändern kann
             $componentClasses = Vpc_Abstract::getComponentClasses();
-            $sharedClasses = array();
+            $sharedClasses[Vps_Component_Data_Root::getComponentClass()] = array();
             foreach ($componentClasses as $componentClass) {
                 $class = Vpc_Abstract::getFlag($componentClass, 'sharedDataClass');
-                if ($class) $sharedClasses[$componentClass] = $class;
+                if ($class) $sharedClasses[Vps_Component_Data_Root::getComponentClass()][$componentClass] = $class;
             }
         }
         $ret = array();
-        foreach ($sharedClasses as $componentClass => $sharedClass) {
+        foreach ($sharedClasses[Vps_Component_Data_Root::getComponentClass()] as $componentClass => $sharedClass) {
             $targetComponent = null;
             if (is_instance_of($component->componentClass, $sharedClass)) {
                 $targetComponent = $component;

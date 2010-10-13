@@ -324,7 +324,8 @@ abstract class Vps_Component_Generator_Abstract
             if (isset($selectParts[Vps_Component_Select::WHERE_GENERATOR_FLAGS])) {
                 $flags = $g->getGeneratorFlags();
                 foreach ($selectParts[Vps_Component_Select::WHERE_GENERATOR_FLAGS] as $flag=>$value) {
-                    if (!isset($flags[$flag]) || $flags[$flag] != $value) continue 2;
+                    if (!isset($flags[$flag])) $flags[$flag] = null;
+                    if ($flags[$flag] != $value) continue 2;
                 }
             }
 
