@@ -26,6 +26,7 @@ möglicherweise nicht kompatible Änderungen:
 - aclClass MUSS in application/config.ini angegeben werden
 - Columns admin ist jetzt keine Form mehr sondern ein Grid
 - .webStandard strong/em/ol/ul/li ist jetzt im vps und sollte in webs entfernt werden
+- newsListView und eventsListView Teaser haben jetzt ein nl2br
 
 == 1.10 ==
 Erstellt: 09.06.10
