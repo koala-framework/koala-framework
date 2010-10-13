@@ -1,7 +1,7 @@
 <?php
 class Vps_View_Helper_Date
 {
-    private $_view;
+    protected $_view;
     public function setView($view)
     {
         $this->_view = $view;

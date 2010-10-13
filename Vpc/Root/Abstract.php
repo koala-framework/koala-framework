@@ -17,7 +17,6 @@ class Vpc_Root_Abstract extends Vpc_Abstract
             'priority' => 0
         );
         $ret['componentName'] = trlVps('Root');
-        $ret['flags']['showInPageTreeAdmin'] = true;
         return $ret;
     }
 
