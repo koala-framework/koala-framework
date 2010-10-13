@@ -57,7 +57,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 
         $ret['cssClass'] = 'webStandard vpcText';
 
-        $ret['assets']['files'][] = 'dynamic/Vpc_Basic_Text_StylesAsset';
+        $ret['assets']['files']['styles'] = 'dynamic/Vpc_Basic_Text_StylesAsset:Vpc_Basic_Text_StylesModel';
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
         return $ret;

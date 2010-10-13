@@ -31,10 +31,12 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
     onRender : function(ct, position){
         Vps.Form.MultiFields.superclass.onRender.call(this, ct, position);
 
-        this.addGroupButton = new Vps.Form.MultiFieldsAddButton({
-            multiFieldsPanel: this,
-            renderTo: this.body
-        }, position);
+        if (!this.maxEntries || !this.minEntries || this.maxEntries != this.minEntries) {
+            this.addGroupButton = new Vps.Form.MultiFieldsAddButton({
+                multiFieldsPanel: this,
+                renderTo: this.body
+            }, position);
+        }
 
         for (var i = 0; i < this.minEntries; i++) {
             this.addGroup();
@@ -44,19 +46,22 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
     // private
     addGroup : function()
     {
-        var deleteButton = new Vps.Form.MultiFieldsDeleteButton({
-            multiFieldsPanel: this
-        });
-        var items = [deleteButton];
-        if (this.position) {
-            var upButton = new Vps.Form.MultiFieldsUpButton({
+        var items = [];
+        if (!this.maxEntries || !this.minEntries || this.maxEntries != this.minEntries) {
+            var deleteButton = new Vps.Form.MultiFieldsDeleteButton({
                 multiFieldsPanel: this
             });
-            items.push(upButton);
-            var downButton = new Vps.Form.MultiFieldsDownButton({
-                multiFieldsPanel: this
-            });
-            items.push(downButton);
+            items.push(deleteButton);
+            if (this.position) {
+                var upButton = new Vps.Form.MultiFieldsUpButton({
+                    multiFieldsPanel: this
+                });
+                items.push(upButton);
+                var downButton = new Vps.Form.MultiFieldsDownButton({
+                    multiFieldsPanel: this
+                });
+                items.push(downButton);
+            }
         }
 
         this.multiItems.each(function(i) {
@@ -68,14 +73,15 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
             border: false,
             items: items
         });
-        deleteButton.groupItem = item;
+        if (deleteButton) deleteButton.groupItem = item;
         if (upButton) upButton.groupItem = item;
         if (downButton) downButton.groupItem = item;
         this.doLayout();
 
         item.cascade(function(i) {
-            if (i.title && i.title.match(/\{0\}/)) {
+            if (i.title && i.title.match(/\{(\w+)\}/)) {
                 i.replaceTitle = i.title;
+                if (RegExp.$1 != 0) i.replaceTitleField = RegExp.$1;
             }
         }, this);
 
@@ -98,8 +104,8 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
         }
 
         //firefox schiebt den button ned nach unten
-        this.addGroupButton.hide();
-        this.addGroupButton.show.defer(100, this.addGroupButton);
+        if(this.addGroupButton) this.addGroupButton.hide();
+        if(this.addGroupButton) this.addGroupButton.show.defer(100, this.addGroupButton);
 
         if (this.disabled) {
             item.disableRecursive();
@@ -119,7 +125,7 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
         return item;
     },
 
-    updateButtonsState: function() {
+    updateButtonsState: function(values) {
         if (this.addGroupButton) {
             if (this.maxEntries && this.groups.length >= this.maxEntries) {
                 this.addGroupButton.disable();
@@ -146,14 +152,25 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
             } else if (g.downButton) {
                 g.downButton.enable();
             }
-            if (this.minEntries >= this.groups.length) {
+            if (g.deleteButton && this.minEntries >= this.groups.length) {
                 g.deleteButton.disable();
-            } else {
+            } else if (g.deleteButton) {
                 g.deleteButton.enable();
             }
             g.item.cascade(function(item) {
                 if (item.replaceTitle) {
-                    item.setTitle(item.replaceTitle.replace(/\{0\}/, i+1));
+                    var title = item.replaceTitle;
+                    title = title.replace(/\{0\}/, i+1);
+                    if (item.replaceTitleField) {
+                        var exp = /\{\w+\}/;
+                        if (values && values[i]) {
+                            title = title.replace(exp, values[i][item.replaceTitleField]);
+                        } else {
+                            title = item.title;
+                            if (exp.test(title)) title = trlVps('New Entry');
+                        }
+                    }
+                    item.setTitle(title);
                 }
             }, this);
         }
@@ -184,9 +201,9 @@ Vps.Form.MultiFieldsDeleteButton = Ext.extend(Ext.BoxComponent,  {
                 }
             }
             //workaround für Firefox problem wenn eintrag gelöscht wird verschwindet add-Button
-            p.addGroupButton.hide();
-            p.addGroupButton.show.defer(1, p.addGroupButton);
-            p.updateButtonsState();
+            if(p.addGroupButton) p.addGroupButton.hide();
+            if(p.addGroupButton) p.addGroupButton.show.defer(1, p.addGroupButton);
+            if(p.addGroupButton) p.updateButtonsState();
         }, this);
     }
 });
@@ -234,7 +251,7 @@ Vps.Form.MultiFieldsDownButton = Ext.extend(Ext.BoxComponent,  {
             for(var i=0; i < p.groups.length; i++) {
                 var g = p.groups[i];
                 if (g.item == this.groupItem) {
-                    if (!p.groups[i+2]) {
+                    if (!p.groups[i+2] && p.addGroupButton) {
                         g.item.getEl().insertBefore(p.addGroupButton.getEl());
                     } else {
                         g.item.getEl().insertBefore(p.groups[i+2].item.getEl());
@@ -293,7 +310,7 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
         }
     },
     setValue : function(value) {
-        var gp = this.multiFieldsPanel;
+    	var gp = this.multiFieldsPanel;
         if (!value instanceof Array) throw new 'ohje, value ist kein array - wos mochma do?';
         this._initFields(value.length);
         for (var i = 0; i < gp.groups.length; i++) {
@@ -311,10 +328,9 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
                         }
                     }
                 }
-                item.setDefaultValue();
             });
         }
-        gp.updateButtonsState();
+        gp.updateButtonsState(value);
 
         this.value = value;
     },

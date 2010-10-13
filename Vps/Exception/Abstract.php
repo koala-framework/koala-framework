@@ -80,7 +80,7 @@ abstract class Vps_Exception_Abstract extends Exception
             echo $view->render($template);
         } catch (Exception $e) {
             echo '<pre>';
-            echo $exception->getException()->__toString();
+            echo $this->__toString();
             echo "\n\n\nError happened while handling exception:";
             echo $e->__toString();
             echo '</pre>';

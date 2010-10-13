@@ -674,20 +674,6 @@ abstract class Vps_Component_Generator_Abstract
         $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
             ->getControllerUrl('Generator');
 
-        $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
-            'pageGenerator' => true
-        ));
-        if ($pageGenerator) {
-            $data['addControllerUrl'] = Vpc_Admin::getInstance($pageGenerator[0]->_class)
-                ->getControllerUrl('Generator');
-            $data['actions']['add'] = true;
-            $data['allowDrag'] = true;
-            $data['allowDrop'] = true;
-        }
-
-        if ($component->isPage) {
-            $data['actions']['preview'] = true;
-        }
         $data['loadChildren'] = false;
 
         return $data;
