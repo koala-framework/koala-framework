@@ -17,6 +17,8 @@ class Vpc_Basic_LinkTag_Cc_Component extends Vpc_Chained_Cc_Component
         return $ret;
     }
 
+    // TODO Cache
+    /*
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();
@@ -26,4 +28,5 @@ class Vpc_Basic_LinkTag_Cc_Component extends Vpc_Chained_Cc_Component
         }
         return $ret;
     }
+    */
 }
