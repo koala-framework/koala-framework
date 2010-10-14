@@ -1,6 +1,15 @@
 <?php
 abstract class Vps_Component_Cache_Meta_Abstract
 {
+    const TYPE_DEFAULT = 'default';
+    const TYPE_PARTIAL = 'partial';
+    const TYPE_CALLBACK = 'callback';
+
+    public static function getType()
+    {
+        return self::TYPE_DEFAULT;
+    }
+
     /**
      * @return Vps_Model_Abstract
      */
@@ -29,10 +38,5 @@ abstract class Vps_Component_Cache_Meta_Abstract
         $model = $this->_getModel($model);
         if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
         return get_class($model);
-    }
-
-    public function isCallback()
-    {
-        return false;
     }
 }

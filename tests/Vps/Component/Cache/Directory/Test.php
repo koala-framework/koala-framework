@@ -32,7 +32,21 @@ class Vps_Component_Cache_Directory_Test extends Vpc_TestAbstract
         $row->content = 'foo';
         $row->save();
         $this->_process();
-        //p(Vps_Component_Cache::getInstance()->getModel()->getRows()->toArray());
+
+        // Bei Partial_Id darf nur eine Row gelöscht werden
+        $cacheModel = Vps_Component_Cache::getInstance()->getModel();
+        $select = $cacheModel->select()
+            ->whereEquals('component_id', 'root_list-view')
+            ->whereEquals('type', 'partial');
+        $rows = $cacheModel->getRows($select);
+        $this->assertEquals(2, $rows->count());
+        $this->assertEquals(1, $rows->current()->value);
+        $this->assertEquals(true, $rows->current()->deleted);
+        $rows->next();
+        $this->assertEquals(2, $rows->current()->value);
+        $this->markTestIncomplete();
+        $this->assertEquals(false, $rows->current()->deleted);
+
         $this->assertEquals('food2', $dir->render());
         $this->assertEquals('food2', $list->render());
     }

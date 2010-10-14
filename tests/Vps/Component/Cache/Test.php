@@ -24,10 +24,10 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Meta-Row einfügen
         $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo'),
-            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Bar'),
-            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_FooBar', 'pattern' => '{id}'), //darf nicht gelöscht werden, da pattern nur bei row aktiv wird
-            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_FooBar', 'callback' => 1) //darf nicht gelöscht werden
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model'),
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Bar', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model'),
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_FooBar', 'pattern' => '{id}', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model'), //darf nicht gelöscht werden, da pattern nur bei row aktiv wird
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_FooBar', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Callback') //darf nicht gelöscht werden
         ));
 
         $cache->cleanByModel(new Vps_Model_FnF());
@@ -47,7 +47,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Meta-Row einfügen
         $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo')
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model')
         ));
 
         // Component-Meta-Row einfügen
@@ -78,21 +78,24 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
                 'column' => 'id',
                 'value' => 1,
                 'component_id' => 1,
-                'component_class' => 'Vpc_Foo'
+                'component_class' => 'Vpc_Foo',
+                'meta_class' => 'Vps_Component_Cache_Meta_Row'
             ),
             array(
                 'model' => 'Vps_Model_FnF',
                 'column' => 'foo',
                 'value' => 'yyz',
                 'component_id' => 2,
-                'component_class' => 'Vpc_Foo'
+                'component_class' => 'Vpc_Foo',
+                'meta_class' => 'Vps_Component_Cache_Meta_Row'
             ),
             array(
                 'model' => 'Vps_Foo_Model',
                 'column' => 'id',
                 'value' => 1,
                 'component_id' => 3,
-                'component_class' => 'Vpc_Foo'
+                'component_class' => 'Vpc_Foo',
+                'meta_class' => 'Vps_Component_Cache_Meta_Row'
             ),
         ));
 
@@ -131,7 +134,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Meta-Row einfügen
         $cache->getModel('metaRow')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('model' => 'Vps_Model_FnF', 'column' => 'id', 'value' => 1, 'component_id' => 1, 'component_class' => 'Vpc_Foo')
+            array('model' => 'Vps_Model_FnF', 'column' => 'id', 'value' => 1, 'component_id' => 1, 'component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Row')
         ));
 
         // Component-Meta-Row einfügen
@@ -161,7 +164,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Meta-Row einfügen
         $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'pattern' => '{component_id}_{id}')
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'pattern' => '{component_id}_{id}', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model')
         ));
 
         // Datenmodel
@@ -189,7 +192,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Meta-Row einfügen
         $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'pattern' => '%_{id}')
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'pattern' => '%_{id}', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model')
         ));
 
         // Datenmodel
@@ -230,7 +233,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Meta-Row einfügen
         $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'pattern' => '{id}', 'callback' => true)
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'pattern' => '{id}', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Callback')
         ));
 
         // Datenmodel
@@ -257,7 +260,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         ));
 
         $cache->getModel('metaRow')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('model' => 'Vps_Model_FnF', 'column' => 'id', 'value' => 1, 'component_id' => 1, 'component_class' => 'Vpc_Foo')
+            array('model' => 'Vps_Model_FnF', 'column' => 'id', 'value' => 1, 'component_id' => 1, 'component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Row')
         ));
 
         Vps_Component_ModelObserver::clearInstance();
