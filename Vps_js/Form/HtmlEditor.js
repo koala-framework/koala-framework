@@ -241,25 +241,27 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                                         callback: function() {
                                             //cursor zuruecksetzen und span.cursor loeschen
                                             var cursorSpan = Ext.get(this.doc.body).child('span.cursor').dom;
-                                            if (Ext.isIE) {
-                                                var s = this.doc.selection;
-                                                s.createRange();
-                                                s.empty();
+                                            if (cursorSpan) {
+                                                if (Ext.isIE) {
+                                                    var s = this.doc.selection;
+                                                    s.createRange();
+                                                    s.empty();
 
-                                                var r = this.doc.body.createTextRange();
-                                                r.moveToElementText(cursorSpan);
-                                                r.moveStart('character', 0);
-                                                r.collapse(true);
-                                                r.select();
-                                                cursorSpan.parentNode.removeChild(cursorSpan);
-                                            } else {
-                                                var s = this.win.getSelection();
-                                                s.removeAllRanges();
-                                                var r = this.doc.createRange();
-                                                r.setStartBefore(cursorSpan);
-                                                r.setEndAfter(cursorSpan);
-                                                r.deleteContents();
-                                                s.addRange(r);
+                                                    var r = this.doc.body.createTextRange();
+                                                    r.moveToElementText(cursorSpan);
+                                                    r.moveStart('character', 0);
+                                                    r.collapse(true);
+                                                    r.select();
+                                                    cursorSpan.parentNode.removeChild(cursorSpan);
+                                                } else {
+                                                    var s = this.win.getSelection();
+                                                    s.removeAllRanges();
+                                                    var r = this.doc.createRange();
+                                                    r.setStartBefore(cursorSpan);
+                                                    r.setEndAfter(cursorSpan);
+                                                    r.deleteContents();
+                                                    s.addRange(r);
+                                                }
                                             }
                                             this.syncValue();
                                         },
