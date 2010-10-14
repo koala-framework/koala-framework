@@ -222,6 +222,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                             } else {
                                 var s = this.win.getSelection();
                                 var r = s.getRangeAt(0);
+                                r.collapse(true);
                                 r.insertNode(cursorSpan);
                             }
 
