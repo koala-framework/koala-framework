@@ -274,20 +274,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                         }
                     }
                 }
-                /*  auskommentiert, so ist es fehlerhaft
-                if (Ext.isIE) {
-                    if (!e.shiftKey && e.getCharCode() == 13) {
-                        this.relayCmd('insertParagraph', 'specialHackToRemoveBr');
-                        (function() {
-                            var v = this.getValue();
-                            v = v.replace(/<BR>(<\/[^>]+>)\s*<[^>]+ id=specialHackToRemoveBr>\s*<\/[^>]+>/gi, '$1\n<p></p>');
-                            v = v.replace(/<BR>\s*<[^>]+ id=specialHackToRemoveBr>\s*<\/[^>]+>(<\/[^>]+>)/gi, '$1\n<p></p>');
-                            v = v.replace(/<BR>\s*<[^>]+ id=specialHackToRemoveBr>\s*<\/[^>]+>/gi, '\n<p></p>');
-                            this.setValue(v);
-                        }).defer(100, this);
-                    }
-                }
-                */
             }, this);
         }
     },
