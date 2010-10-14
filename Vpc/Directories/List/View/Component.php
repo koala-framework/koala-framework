@@ -217,6 +217,13 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         } else if (is_string($dir)) {
             $dirClass = $dir;
         }
-        return array_merge($ret, $dir->getComponent()->getCacheMetaForView($pattern));
+        if (strpos($dirClass, '.') !== false) {
+            $dirClass = substr($dirClass, strpos($dirClass, '.')+1);
+        }
+        $models = call_user_func(array($dirClass, 'getCacheModelsForView'), $dirClass);
+        foreach ($models as $model) {
+            $ret[] = new Vps_Component_Cache_Meta_Static_Model($model, $pattern);
+        }
+        return $ret;
     }
 }
