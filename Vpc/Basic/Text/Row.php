@@ -181,7 +181,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         }
     }
 
-    public function tidy($html)
+    public function tidy($html, Vpc_Basic_Text_Parser $parser = null)
     {
         $config = array(
                     'indent'         => true,
@@ -226,7 +226,9 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
-            $parser = new Vpc_Basic_Text_Parser($this);
+            if (!$parser) {
+                $parser = new Vpc_Basic_Text_Parser($this);
+            }
             $parser->setEnableColor(Vpc_Abstract::getSetting($this->_componentClass, 'enableColors'));
             $parser->setEnableTagsWhitelist(Vpc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
             $parser->setEnableStyles(Vpc_Abstract::getSetting($this->_componentClass, 'enableStyles'));

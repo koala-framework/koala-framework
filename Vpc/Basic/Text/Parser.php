@@ -12,6 +12,7 @@ class Vpc_Basic_Text_Parser
     protected $_enableColor = false;
     protected $_enableTagsWhitelist = true;
     protected $_enableStyles = true;
+    protected $_enableCursorSpan = false;
     private $_masterStyles = null;
 
 
@@ -78,7 +79,10 @@ class Vpc_Basic_Text_Parser
                         $allowedClasses[] = $i[1];
                     }
                 }
-                if ($this->_enableStyles && isset($attributes['CLASS'])
+                if ($this->_enableCursorSpan && isset($attributes['CLASS']) && $attributes['CLASS']=='cursor') {
+                    array_push($this->_stack, 'span');
+                    $this->_finalHTML .= '<span class="'.$attributes['CLASS'].'">';
+                } else if ($this->_enableStyles && isset($attributes['CLASS'])
                     && (preg_match('#^style[0-9]+$#', $attributes['CLASS'])
                         || in_array($attributes['CLASS'], $allowedClasses))
                 ) {
@@ -184,6 +188,11 @@ class Vpc_Basic_Text_Parser
     public function setEnableStyles($value)
     {
         $this->_enableStyles = $value;
+    }
+
+    public function setEnableCursorSpan($value)
+    {
+        $this->_enableCursorSpan = $value;
     }
 
     public function parse($html)

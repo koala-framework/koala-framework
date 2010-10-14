@@ -200,15 +200,74 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     if(c > 0){
                         c = String.fromCharCode(c).toLowerCase();
                         if (c == 'v') {
+
+                            //an aktueller cursor position einen leeren span einfuegen damit wir
+                            //ihn nach dem tidy aufruf dorthin zurueck setzen koennen
+                            var cursorSpan = document.createElement('span');
+                            cursorSpan.className = 'cursor';
+                            if (Ext.isIE) {
+                                var tmpEl = document.createElement('div');
+                                tmpEl.appendChild(cursorSpan);
+                                var s = this.doc.selection;
+                                var r = s.createRange();
+                                // das x ist nur ein fake buchstabe um den die range gelegt wird
+                                // wird dann durch das eingefuegte ueberschrieben,
+                                // sonst wuerde die range immer nach dem <span> liegen und
+                                // der cursor vor dem eingefuegten bleiben
+                                r.pasteHTML('x'+tmpEl.innerHTML);
+                                r.collapse(true);
+                                r.move('character', -1);
+                                r.moveEnd('character', 1);
+                                r.select();
+                            } else {
+                                var s = this.win.getSelection();
+                                var r = s.getRangeAt(0);
+                                r.insertNode(cursorSpan);
+                            }
+
                             //tidy on paste
                             // defer bei mask wird benötigt, da sonst das eingefügte
                             // am ende angehängt wird, auch wenn text im editor markiert ist,
                             // der eigentlich überschrieben werden sollte
                             this.mask.defer(1, this, [trlVps('Cleaning...')]);
-                            (function() {
-                                this.syncValue();
-                                this.tidyHtml();
-                            }).defer(500, this);
+
+                            if (!this.pasteDelayTask) {
+                                var pasteClean = function() {
+                                    this.syncValue();
+
+                                    this.tidyHtml({
+                                        params: { allowCursorSpan: true },
+                                        callback: function() {
+                                            //cursor zuruecksetzen und span.cursor loeschen
+                                            var cursorSpan = Ext.get(this.doc.body).child('span.cursor').dom;
+                                            if (Ext.isIE) {
+                                                var s = this.doc.selection;
+                                                s.createRange();
+                                                s.empty();
+
+                                                var r = this.doc.body.createTextRange();
+                                                r.moveToElementText(cursorSpan);
+                                                r.moveStart('character', 0);
+                                                r.collapse(true);
+                                                r.select();
+                                                cursorSpan.parentNode.removeChild(cursorSpan);
+                                            } else {
+                                                var s = this.win.getSelection();
+                                                s.removeAllRanges();
+                                                var r = this.doc.createRange();
+                                                r.setStartBefore(cursorSpan);
+                                                r.setEndAfter(cursorSpan);
+                                                r.deleteContents();
+                                                s.addRange(r);
+                                            }
+                                            this.syncValue();
+                                        },
+                                        scope: this
+                                    });
+                                };
+                                this.pasteDelayTask = new Ext.util.DelayedTask(pasteClean, this);
+                            }
+                            this.pasteDelayTask.delay(500);
                         }
                     }
                 }
@@ -727,28 +786,40 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         this.el.up('div').unmask();
     },
 
-    tidyHtml: function()
+    tidyHtml: function(tidyOptions)
     {
         if (!this.enableTidy) return;
 
         this.mask(trlVps('Cleaning...'));
+
+        var params = {
+            componentId: this.componentId,
+            html: this.getValue()
+        };
+        if (tidyOptions && tidyOptions.params) {
+            Ext.applyIf(params, tidyOptions.params);
+        }
         Ext.Ajax.request({
             url: this.controllerUrl+'/json-tidy-html',
-            params: {
-                componentId: this.componentId,
-                html: this.getValue()
+            params: params,
+            failure: function() {
+                this.unmask();
             },
             success: function(response, options, r) {
-                if (this.getValue() != r.html) {
-                    this.setValue(r.html);
-                }
-            },
-            callback: function() {
                 this.unmask();
+
                 // Um den Knochen in Firefox sichtbar zu halten.
                 // Weiteres zum blurNode: Suche nach #JM1 in dieser Datei.
                 this.el.up('div').child('.blurNode', true).focus();
                 this.deferFocus();
+
+                if (this.getValue() != r.html) {
+                    this.setValue(r.html);
+                }
+
+                if (tidyOptions && tidyOptions.callback) {
+                    tidyOptions.callback.call(tidyOptions.scope || this);
+                }
             },
             scope: this
         });
