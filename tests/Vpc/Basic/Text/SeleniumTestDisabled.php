@@ -88,6 +88,41 @@ http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Te
 - alles bestätigen bis kein fenster mehr offen ist
 - Erwartet: foo ist als link hinterlegt
 
+*** Cursor nach einfügen ganz am Anfang ***
+- url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- 'ein text' in die Zwischenablage
+- nach 'f' in 'foo' in den rte klicken und Strg+V drücken
+- Erwartet: cursor ist nach 'ein text' und vor 'oo'
+
+*** [TODO] Fett geht nicht mehr weg ***
+- mehrere zeilen tippen und in liste umwandeln
+- ein paar punkte makieren und fett machen
+- ein wort markieren und fett wegnehmen
+- speichern und zurück
+- absatz wieder bearbeiten: es ist wieder alles fett, auch bei dem weggenommenen
+- wenn man was markiert und fett wegnehmen will ist das nicht mehr möglich
+
+*** [TODO] Fett geht nicht her ***
+- neuer text bild absatz
+- lorem ipsum markieren und auf sauberen text einfügen klicken
+- eine zeile (zwei wörter oder so) einfügen
+- text markieren und auf fett klicken
+- speichern und zurück
+- es ist nicht fett...
+- (hinweis): Wenn man vor dem fett-klick einmal auf html-ansicht und zurück schaltet funktionierts schon
+
+*** [TODO] Features / Bugs von niko
+- inline styles nur nur für "span" sondern auch für "a"
+- zwei <p>s markieren, Überschrift 1 auswählen,
+  Grundeinstellung wird angezeigt, Überschrift 1 sollte aber
+- bold ged ned immer:
+   ul mit 3 einträgen, mittlere von ganz links weg nach ganz
+   rechts markieren, bold machen, tidyn -> bold is weg:
+  <li style="font-weight: bold;">Manuelle Testläufe  </li>
+- IE7+
+- brotkrümel für dom struktur von cursor
+
+
  * @group slow
  * @group Vpc_Basic_Text
 class Vpc_Basic_Text_SeleniumTest extends Vps_Test_SeleniumTestCase

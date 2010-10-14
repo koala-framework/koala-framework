@@ -4,8 +4,16 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     public function jsonTidyHtmlAction()
     {
         $html = $this->_getParam('html');
+        $html = preg_replace('#(<span\s+class\s*=\s*"?cursor"?\s*>)\s*(</span>)#is', '<span class="cursor">cursor</span>', $html);
+
         $row = $this->_form->getRow();
-        $this->view->html = $row->tidy($html);
+        $parser = new Vpc_Basic_Text_Parser();
+        if ($this->_getParam('allowCursorSpan')) {
+            $parser->setEnableCursorSpan(true);
+        }
+        $html = $row->tidy($html, $parser);
+        $html = preg_replace('#(<span\s+class\s*=\s*"?cursor"?\s*>)\s*cursor\s*(</span>)#is', '<span class="cursor"></span>', $html);
+        $this->view->html = $html;
     }
 
     public function jsonAddImageAction()
