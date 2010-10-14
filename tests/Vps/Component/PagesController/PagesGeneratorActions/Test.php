@@ -1,6 +1,7 @@
 <?php
 /**
  * @group PagesController
+ * @group Vps_Component_Acl
  */
 class Vps_Component_PagesController_PagesGeneratorActions_Test extends Vpc_TestAbstract
 {
