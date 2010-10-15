@@ -10,7 +10,13 @@ class Vps_Component_Acl
                 'type' => Vps_Acl::TYPE_DENY
             )
         ),
-        'byComponentId' => array()
+        'allComponentsRecursive' => array(
+            'allRoles' => array(
+                'type' => Vps_Acl::TYPE_DENY
+            )
+        ),
+        'byComponentId' => array(),
+        'byComponentRecursiveId' => array()
     );
 
     public function __construct(Zend_Acl_Role_Registry $roleRegistry)
@@ -70,7 +76,10 @@ class Vps_Component_Acl
     {
         $role = $this->_getRole($userRow);
 
-        $ret = $this->_isAllowedComponentClassNonRek($role, $componentClass);
+        $ret = $this->_isAllowedComponentClassNonRek('Component', $role, $componentClass);
+        if (!is_null($ret)) return $ret;
+
+        $ret = $this->_isAllowedComponentClassNonRek('ComponentRecursive', $role, $componentClass);
         if (!is_null($ret)) return $ret;
 
         //überklassen überprüfen
@@ -94,13 +103,13 @@ class Vps_Component_Acl
         return false;
     }
 
-    private function _isAllowedComponentClassNonRek($role, $componentClass)
+    private function _isAllowedComponentClassNonRek($type, $role, $componentClass)
     {
-        $rules = $this->_getRules('Component', $componentClass, $role);
+        $rules = $this->_getRules($type, $componentClass, $role);
         if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) return true;
         if ($rules && $rules['type'] == Vps_Acl::TYPE_DENY) return false;
 
-        $rules = $this->_getRules('Component', null, $role);
+        $rules = $this->_getRules($type, null, $role);
         if ($rules && $rules['type'] == Vps_Acl::TYPE_ALLOW) return true;
         if ($rules && $rules['type'] == Vps_Acl::TYPE_DENY) return false;
     }
@@ -108,14 +117,18 @@ class Vps_Component_Acl
     protected function _isAllowedComponentData($userRow, Vps_Component_Data $component)
     {
         $role = $this->_getRole($userRow);
+
+        $outsidePage = false;
         while ($component) { // irgendeine Komponente auf dem Weg nach oben muss allowed sein
-            $allowed = $this->_isAllowedComponentClassNonRek($role, $component->componentClass);
+            if (!$outsidePage) {
+                $allowed = $this->_isAllowedComponentClassNonRek('Component', $role, $component->componentClass);
+                if ($allowed) return true;
+            }
+            $allowed = $this->_isAllowedComponentClassNonRek('ComponentRecursive', $role, $component->componentClass);
             if ($allowed) return true;
-
-            //TODO: wenn alle unterseiten auch berechtigung haben sollen brauchen wir sowas wie allowComponentRecursive
-            //wenns nur eine Detail gibt kann diese extra dazugeschalten werden
-            if ($component && $component->isPseudoPage) break;
-
+            if ($component && $component->isPseudoPage) {
+                $outsidePage = true;
+            }
             $component = $component->parent;
         }
         return false;
@@ -169,22 +182,32 @@ class Vps_Component_Acl
         ));
     }
 
+    /**
+     * @return array array mit klassen die erlaubt sind
+     */
     protected function _getAllowedComponentClasses($userRow)
     {
-        $role = $this->_getRole($userRow);
+        $ret = $this->_getAllowedComponentClassesByType($userRow, 'Component');
+        $ret = array_merge($ret, $this->_getAllowedComponentClassesByType($userRow, 'ComponentRecursive'));
+        return $ret;
+    }
+
+    private function _getAllowedComponentClassesByType($userRow, $type)
+    {
+        $role = $this->_getRole($userRow)->getRoleId();
 
         $ret = array();
-        $r = $this->_getRules('Component', null, $this->_getRole($userRow));
+        $r = $this->_getRules($type, null, $this->_getRole($userRow));
         if (isset($r['type']) && $r['type'] == Vps_Acl::TYPE_ALLOW) {
-            $ret = null;
+            throw new Vps_Exception("don't do that, it's slow");
+            //alles erlaubt
+            return null;
         }
 
-        $role = $role->getRoleId();
-        foreach ($this->_rules['byComponentId'] as $componentClass => $rights) {
+        foreach ($this->_rules['by'.$type.'Id'] as $componentClass => $rights) {
             if (isset($rights['byRoleId'][$role])) {
                 $r = $rights['byRoleId'][$role];
                 if ($r['type'] == Vps_Acl::TYPE_ALLOW) {
-                    if (!is_array($ret)) $ret = array();
                     $ret[] = $componentClass;
                 } else if ($r['type'] == Vps_Acl::TYPE_DENY) {
                     throw new Vps_Exception_NotYetImplemented('Klasseneinschränkung wird noch nicht unterstützt.');
@@ -206,9 +229,29 @@ class Vps_Component_Acl
 
     public function denyComponent($role, $componentClass, $privilege = null)
     {
+        throw new Vps_Exception_NotYetImplemented("das gehört mit einem praktischen anwendungsbeispiel durchdacht");
         if ($privilege) throw new Vps_Exception("Not yet implemented");
         if (!is_null($role)) $role = $this->_roleRegistry->get($role);
         $rules =& $this->_getRules('Component', $componentClass, $role, true);
+        $rules['type'] = Vps_Acl::TYPE_DENY;
+        return $this;
+    }
+
+    public function allowComponentRecursive($role, $componentClass, $privilege = null)
+    {
+        if ($privilege) throw new Vps_Exception("Not yet implemented");
+        if (!is_null($role)) $role = $this->_roleRegistry->get($role);
+        $rules =& $this->_getRules('ComponentRecursive', $componentClass, $role, true);
+        $rules['type'] = Vps_Acl::TYPE_ALLOW;
+        return $this;
+    }
+
+    public function denyComponentRecursive($role, $componentClass, $privilege = null)
+    {
+        throw new Vps_Exception_NotYetImplemented("das gehört mit einem praktischen anwendungsbeispiel durchdacht");
+        if ($privilege) throw new Vps_Exception("Not yet implemented");
+        if (!is_null($role)) $role = $this->_roleRegistry->get($role);
+        $rules =& $this->_getRules('ComponentRecursive', $componentClass, $role, true);
         $rules['type'] = Vps_Acl::TYPE_DENY;
         return $this;
     }
