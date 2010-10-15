@@ -872,29 +872,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         this.tidyHtml();
     },
 
-    //returns null if there is no selection
-    getSelectionRange: function()
-    {
-        var sel;
-        if (Ext.isIE) {
-            sel = this.doc.selection;
-        } else {
-            sel = this.win.getSelection();
-        }
-        if (!sel) return null;
-        if (sel.isCollapsed) return null;
-        if (Ext.isIE && sel.createRange().htmlText === '') return null;
-        var range;
-        if (Ext.isIE) {
-            range = sel.createRange();
-        } else {
-            range = sel.getRangeAt(0);
-        }
-        if (!range) return null;
-
-        return range;
-    },
-
     _onSelectBlockStyle: function() {
         var v = this.blockStylesSelect.dom.value;
         var num = 0;
