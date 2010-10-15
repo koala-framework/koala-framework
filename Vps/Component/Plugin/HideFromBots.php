@@ -55,7 +55,7 @@ class Vps_Component_Plugin_HideFromBots extends Vps_Component_Plugin_View_Abstra
         $isBot = false;
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             foreach ($bots as $bot) {
-                if (strpos($bot, $_SERVER['HTTP_USER_AGENT']) !== false) {
+                if (strpos($_SERVER['HTTP_USER_AGENT'], $bot) !== false) {
                     $isBot = true;
                     break;
                 }
