@@ -3,9 +3,16 @@ class Vpc_Directories_Item_Directory_Trl_CacheMeta extends Vps_Component_Cache_M
 {
     public static function createComponentId($pattern, $row)
     {
-        $ret = $row->component_id;
-        $ret = substr($ret, 0, max(strrpos($ret, '-'), strrpos($ret, '_')));
-        $ret .= '%-view';
+        return $ret;
+    }
+
+    public static function getDeleteWhere($pattern, $row)
+    {
+        $ret = parent::getDeleteWhere($pattern, $row);
+        $componentId = $row->component_id;
+        $componentId = substr($ret, 0, max(strrpos($ret, '-'), strrpos($ret, '_')));
+        $componentId .= '%-view';
+        $ret[0]['componentId'] = $componentId;
         return $ret;
     }
 }

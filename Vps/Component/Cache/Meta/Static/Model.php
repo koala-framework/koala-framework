@@ -21,4 +21,9 @@ class Vps_Component_Cache_Meta_Static_Model extends Vps_Component_Cache_Meta_Sta
     {
         return $this->_getModelName($this->_model);
     }
+
+    public function getModel()
+    {
+        return $this->_getModel($this->_model);
+    }
 }

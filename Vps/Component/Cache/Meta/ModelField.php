@@ -30,4 +30,12 @@ class Vps_Component_Cache_Meta_ModelField extends Vps_Component_Cache_Meta_Abstr
     {
         return $this->_getModelname($this->_model);
     }
+
+    public static function getDeleteWhere($componentId)
+    {
+        return array(
+            'type' => array('component', 'box', 'master', 'partials'),
+            'componentId' => $componentId
+        );
+    }
 }

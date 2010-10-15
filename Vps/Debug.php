@@ -50,7 +50,12 @@ function p($src, $Type = 'LOG')
     }
     if (is_array($src)) {
         $isToDebug = true;
-        $src = "<pre>\n"._pArray($src).'</pre>';
+        $src = _pArray($src);
+        if (php_sapi_name() == 'cli') {
+            $src = "\n$src";
+        } else {
+            $src = "<pre>\n$src</pre>";
+        }
     }
     if ($isToDebug) {
         echo $src;

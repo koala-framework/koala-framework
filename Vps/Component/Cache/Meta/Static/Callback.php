@@ -1,9 +1,9 @@
 <?php
 class Vps_Component_Cache_Meta_Static_Callback extends Vps_Component_Cache_Meta_Static_Model
 {
-    public static function getType()
+    public static function getMetaType()
     {
-        return self::TYPE_CALLBACK;
+        return self::META_TYPE_CALLBACK;
     }
 
     public function __construct($model, $pattern = '{component_id}')
