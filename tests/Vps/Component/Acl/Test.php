@@ -100,6 +100,20 @@ class Vps_Component_Acl_Test extends PHPUnit_Framework_TestCase
     {
         $this->_acl->allowComponent('test', 'Vps_Component_Acl_TestComponent');
         $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('3')));
-        $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById('3-pseudopage')));
+        $this->assertFalse($this->_acl->isAllowed('test', $this->_root->getComponentById('3-pseudoPage')));
+    }
+
+    public function testDynamicComponentAllowChildPage()
+    {
+        $this->_acl->allowComponentRecursive('test', 'Vps_Component_Acl_TestComponent');
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('3')));
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('3_blub')));
+    }
+
+    public function testDynamicComponentAllowChildPseudoPage()
+    {
+        $this->_acl->allowComponentRecursive('test', 'Vps_Component_Acl_TestComponent');
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('3')));
+        $this->assertTrue($this->_acl->isAllowed('test', $this->_root->getComponentById('3-pseudoPage')));
     }
 }
