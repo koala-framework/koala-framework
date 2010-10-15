@@ -109,6 +109,10 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         } else {
             //TODO
         }
+        // Daten hängen ja auch vom MasterModel ab
+        $ret[] = array(
+            'model' => $this->getModel()
+        );
         return $ret;
     }
 }

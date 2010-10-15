@@ -18,6 +18,12 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         $this->setLayout('form');
     }
 
+    public function __clone()
+    {
+        parent::__clone();
+        $this->_combobox = clone $this->_combobox;
+    }
+
     public function setNamePrefix($v)
     {
         parent::setNamePrefix($v);

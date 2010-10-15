@@ -73,6 +73,50 @@ class Vps_Component_Cache
         $this->_model = $model;
     }
 
+    public function saveCacheVars($component, $meta, $cacheId = null)
+    {
+        foreach ($meta as $m) {
+            if (is_string($m)) {
+                $m = array(
+                    'model' => $m
+                );
+            }
+            if (is_object($m)) {
+                if ($m instanceof Vps_Model_Row_Abstract) {
+                    $model = $m->getModel();
+                    if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
+                } else if ($m instanceof Zend_Db_Table_Row_Abstract) {
+                    $model = $m->getTable();
+                }
+                $m = array(
+                    'model' => get_class($model),
+                    'id' => $m->id
+                );
+            }
+            if (!isset($m['model'])) {
+                throw new Vps_Exception('getCacheVars for ' . $component->componentClass . ' ('.$component->componentId.') must deliver model');
+            }
+            $model = $m['model'];
+            $id = isset($m['id']) ? $m['id'] : null;
+            if (isset($m['callback']) && $m['callback']) {
+                $type = Vps_Component_Cache::META_CALLBACK;
+                $value = $component->componentId;
+            } else if (is_null($id)) {
+                $type = Vps_Component_Cache::META_COMPONENT_CLASS;
+                $value = $component->componentClass;
+            } else {
+                $type = Vps_Component_Cache::META_CACHE_ID;
+                $value = $cacheId;
+            }
+            if (isset($m['componentId'])) {
+                $value = $this->getCacheId($m['componentId']);
+            }
+            $field = isset($m['field']) ? $m['field'] : '';
+            $this->saveMeta($model, $id, $value, $type, $field);
+        }
+        return $meta;
+    }
+
     public function save($content, $cacheId, $componentClass = '', $lifetime = null)
     {
         $lastModified = time();
@@ -238,18 +282,18 @@ class Vps_Component_Cache
 
             if ($this->getMetaModel()->getProxyModel() instanceof Vps_Model_Db) {
                 $sql = "
-                    DELETE cache_component
-                    FROM cache_component, cache_component_meta m
-                    WHERE cache_component.id = m.value
+                    UPDATE cache_component c, cache_component_meta m
+                    SET c.DELETED = 1
+                    WHERE c.id = m.value
                         AND m.model = '$modelname'
                         $sqlInsert
                         AND m.type='cacheId'
                 ";
                 $this->getModel()->getProxyModel()->executeSql($sql);
                 $sql = "
-                    DELETE cache_component
-                    FROM cache_component, cache_component_meta m
-                    WHERE cache_component.component_class = m.value
+                    UPDATE cache_component c, cache_component_meta m
+                    SET DELETED = 1
+                    WHERE c.component_class = m.value
                         AND m.model = '$modelname'
                         $sqlInsert
                         AND m.type='componentClass'
@@ -264,7 +308,7 @@ class Vps_Component_Cache
                     $this->clean(self::CLEANING_MODE_ID, $metaRow->value);
                 } else if ($metaRow->type == self::META_CALLBACK) {
                     $component = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByDbId($metaRow->value, array('ignoreVisible' => true));
+                        ->getComponentById($metaRow->value, array('ignoreVisible' => true));
                     if ($component) {
                         $component->getComponent()->onCacheCallback($value);
                         Vps_Benchmark::cacheInfo("Cache: Callback for component {$component->componentId} ({$component->componentClass}) called.");
@@ -368,7 +412,7 @@ class Vps_Component_Cache
                 $values[$id] = null;
             }
             if ($values) {
-                $sql = "SELECT id, content, expire FROM cache_component WHERE ".implode(' OR ', $or);
+                $sql = "SELECT id, content, expire FROM cache_component WHERE (".implode(' OR ', $or) . ') AND deleted=0';
                 Vps_Benchmark::count('preload cache', implode(', ', $ids));
                 $rows = $db->query($sql)->fetchAll();
                 foreach ($rows as $row) {

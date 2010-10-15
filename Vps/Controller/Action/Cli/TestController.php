@@ -140,6 +140,9 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             Vps_Debug::disable();
         }
 
+        //nur temporär deaktiviert, damit ich selenium-verbindungs-probleme besser debuggen kann
+        PHPUnit_Util_Filter::setFilter(false);
+
         $runner = new Vps_Test_TestRunner();
         $suite = new Vps_Test_TestSuite();
 
