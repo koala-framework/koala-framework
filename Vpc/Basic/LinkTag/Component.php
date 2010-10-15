@@ -37,7 +37,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
     }
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = array();
         $ret['linkTag'] = $this->getData()->getChildComponent(array(
             'generator' => 'link'
         ));

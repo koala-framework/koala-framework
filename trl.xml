@@ -2797,7 +2797,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Products</en>
-<de>Shop - Produkte</de>
+<de>Shop.Produkte</de>
 <id>795</id>
 </text>
 <text>
@@ -2943,7 +2943,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Cart</en>
-<de>Shop - Warenkorb</de>
+<de>Shop.Warenkorb</de>
 <id>828</id>
 </text>
 <text>
@@ -3981,6 +3981,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Do you really wish to remove this paragraph?</en>
+<de>Wollen Sie diesen Absatz wirklich l&#xF6;schen?</de>
 <id>1102</id>
 </text>
 <text>
@@ -3999,10 +4000,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Imprint.Google-Analytics</en>
 <de>Impressum.Google-Analytics</de>
 <id>1106</id>
-</text>
-<text>
-<en>Text/Image - Alignment</en>
-<id>1107</id>
 </text>
 <text>
 <en>Url include</en>
@@ -5326,22 +5323,27 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The password was changed successfully</en>
+<de>Das Passwort wurde erfolgreich ge&#xE4;ndert</de>
 <id>1389</id>
 </text>
 <text>
 <en>Change Password</en>
+<de>Passwort &#xE4;ndern</de>
 <id>1390</id>
 </text>
 <text>
 <en>Current Password</en>
+<de>Aktuelles Passwort</de>
 <id>1391</id>
 </text>
 <text>
 <en>New Password</en>
+<de>Neues Passwort</de>
 <id>1392</id>
 </text>
 <text>
 <en>Account - Change Password</en>
+<de>Benutzer - Passwort &#xE4;ndern</de>
 <id>1393</id>
 </text>
 <text>
@@ -5938,10 +5940,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1507</id>
 </text>
 <text>
-<en>All Visible</en>
-<id>1508</id>
-</text>
-<text>
 <en>Do you really wish to set everything to visible?</en>
 <id>1509</id>
 </text>
@@ -5992,11 +5990,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Dear Sir or Madam</en>
 <de>Sehr geehrte Damen und Herren</de>
 <id>1519</id>
-</text>
-<text>
-<en>Copy of</en>
-<de>Kopie von</de>
-<id>1520</id>
 </text>
 <text>
 <en>Web Image Files</en>
@@ -6085,8 +6078,122 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
-<de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollständig in den Browser kopiert?</de>
+<de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollst&#xE4;ndig in den Browser kopiert?</de>
 <id>1542</id>
+<en>Voucher</en>
+<de>Gutschein</de>
+<id>1543</id>
+</text>
+<text>
+<en>Vouchers</en>
+<de>Gutscheine</de>
+<id>1544</id>
+</text>
+<text>
+<en>Voucher Code</en>
+<de>Gutscheint Code</de>
+<id>1545</id>
+</text>
+<text>
+<en>Amount</en>
+<context>Amount of Money</context>
+<de>Betrag</de>
+<id>1546</id>
+</text>
+<text>
+<en>Used Amount</en>
+<context>Amount of Money</context>
+<de>Benutzer Betrag</de>
+<id>1547</id>
+</text>
+<text>
+<en>'%value%' code was already used</en>
+<de>'%value%' Code wurde bereits benutzt</de>
+<id>1548</id>
+</text>
+<text>
+<en>'%value%' is not a valid voucher code</en>
+<de>'%value%' ist ein ung&#xFC;ltiger Gutschein Code</de>
+<id>1549</id>
+</text>
+<text>
+<en>Redeem Voucher</en>
+<de>Gutschein einl&#xF6;sen</de>
+<id>1550</id>
+</text>
+<text>
+<en>Remaining Amount {0}</en>
+<de>Restbetrag {0}</de>
+<id>1551</id>
+</text>
+<text>
+<en>Your Voucher has been successfully redeemed.</en>
+<de>Ihr Gutschein wurde erfolgreich eingel&#xF6;st.</de>
+<id>1552</id>
+</text>
+<text>
+<en>Product: Voucher</en>
+<de>Produkt: Gutschein</de>
+<id>1393</id>
+</text>
+<text>
+<en>Copy of</en>
+<de>Kopie von</de>
+<id>1553</id>
+</text>
+<text>
+<en>Information</en>
+<id>1554</id>
+</text>
+<text>
+<en>Shop.Product: Voucher</en>
+<id>1555</id>
+</text>
+<text>
+<en>Directory</en>
+<id>1556</id>
+</text>
+<text>
+<en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
+<id>1557</id>
+</text>
+<text>
+<en>Fill out the Form</en>
+<id>1558</id>
+</text>
+<text>
+<en>Click the save button above</en>
+<id>1559</id>
+</text>
+<text>
+<en>If no error pops up, the cache has been cleared sucessfully</en>
+<id>1560</id>
+</text>
+<text>
+<en>Affected component / part (e.g.: References)</en>
+<id>1561</id>
+</text>
+<text>
+<en>Why do you need to clear the cache? (steps to reproduce / description)</en>
+<id>1562</id>
+</text>
+<text>
+<en>Clear Cache</en>
+<id>1563</id>
+</text>
+<text>
+<en>Contains video</en>
+<de>Beinhaltet ein Video</de>
+<id>1564</id>
+</text>
+<text>
+<en>Text/Image - Alignment</en>
+<id>1565</id>
+</text>
+<text>
+<en>Must not be negative</en>
+<de>Darf nicht negativ sein</de>
+<id>1566</id>
 </text>
 </trl>
 

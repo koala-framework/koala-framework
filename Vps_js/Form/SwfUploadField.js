@@ -99,6 +99,8 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         
         if (navigator.mimeTypes && !navigator.mimeTypes["application/x-shockwave-flash"]) return;
 
+        if (navigator.mimeTypes && !navigator.mimeTypes["application/x-shockwave-flash"]) return;
+
         this.useSwf = false;
         this.swfu = new SWFUpload({
             custom_settings: {field: this},

@@ -38,7 +38,7 @@ Vpc.PostsWritePreview.scrollToBottom = function(el, maxHeight) {
     if (extEl.getHeight() >= maxHeight) {
         extEl.scroll("bottom", 20000);
     }
-}
+};
 
 Vpc.PostsWritePreview.replaceText = function(v)
 {
