@@ -480,70 +480,23 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }
         }
         if (this.blockStylesSelect) {
-            var el = this.getFocusElement('block');
-            var selectedStyle = false;
-            if (el) {
-                //zuerst alle mit einem className
-                for(var i in this.blockStyles) {
-                    var selector = i.split('.');
-                    var tag = selector[0];
-                    var className = selector[1];
-                    if (className
-                        && (!tag || el.tagName.toLowerCase() == tag)
-                        && el.className == className) {
-                        if(i != this.blockStylesSelect.dom.value){
-                            this.blockStylesSelect.dom.value = i;
-                        }
-                        selectedStyle = true;
-                        break;
-                    }
+            this.inlineStylesSelect.dom.value = 'p';
+            var num = 0;
+            for(var i in this.blockStyles) {
+                if (this.formatter.match('block'+num)) {
+                    this.blockStylesSelect.dom.value = i;
                 }
-
-                //falls nichts passend alle nochmal
-                if (!selectedStyle) {
-                    for(var i in this.blockStyles) {
-                        var selector = i.split('.');
-                        var tag = selector[0];
-                        var className = selector[1];
-                        if ((!tag || el.tagName.toLowerCase() == tag)
-                            && (!className || el.className == className)) {
-                            if(i != this.blockStylesSelect.dom.value){
-                                this.blockStylesSelect.dom.value = i;
-                            }
-                            selectedStyle = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (!selectedStyle) {
-                if ('p' != this.blockStylesSelect.dom.value) {
-                    this.blockStylesSelect.dom.value = 'p';
-                }
+                num++;
             }
         }
         if (this.inlineStylesSelect) {
-            var el = this.getFocusElement('span');
-            var selectedStyle = false;
-            if (el) {
-                for(var i in this.inlineStyles) {
-                    var selector = i.split('.');
-                    var tag = selector[0];
-                    var className = selector[1];
-                    if (i != 'span' && (!tag || el.tagName.toLowerCase() == tag)
-                        && (!className || el.className == className)) {
-                        if(i != this.inlineStylesSelect.dom.value){
-                            this.inlineStylesSelect.dom.value = i;
-                        }
-                        selectedStyle = true;
-                        break;
-                    }
+            this.inlineStylesSelect.dom.value = 'span';
+            var num = 0;
+            for(var i in this.inlineStyles) {
+                if (this.formatter.match('inline'+num)) {
+                    this.inlineStylesSelect.dom.value = i;
                 }
-            }
-            if (!selectedStyle) {
-                if ('span' != this.inlineStylesSelect.dom.value) {
-                    this.inlineStylesSelect.dom.value = 'span';
-                }
+                num++;
             }
         }
         var a = this.getFocusElement('a');
