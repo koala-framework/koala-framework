@@ -127,6 +127,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
+
         if (this.linkComponentConfig) {
             this.enableLinks = false;
             var panel = Ext.ComponentMgr.create(Ext.applyIf(this.linkComponentConfig, {
@@ -200,69 +201,15 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     if(c > 0){
                         c = String.fromCharCode(c).toLowerCase();
                         if (c == 'v') {
-
-                            //an aktueller cursor position einen leeren span einfuegen damit wir
-                            //ihn nach dem tidy aufruf dorthin zurueck setzen koennen
-                            var cursorSpan = document.createElement('span');
-                            cursorSpan.className = 'cursor';
-                            if (Ext.isIE) {
-                                var tmpEl = document.createElement('div');
-                                tmpEl.appendChild(cursorSpan);
-                                var s = this.doc.selection;
-                                var r = s.createRange();
-                                // das x ist nur ein fake buchstabe um den die range gelegt wird
-                                // wird dann durch das eingefuegte ueberschrieben,
-                                // sonst wuerde die range immer nach dem <span> liegen und
-                                // der cursor vor dem eingefuegten bleiben
-                                r.pasteHTML('x'+tmpEl.innerHTML);
-                                r.collapse(true);
-                                r.move('character', -1);
-                                r.moveEnd('character', 1);
-                                r.select();
-                            } else {
-                                var s = this.win.getSelection();
-                                var r = s.getRangeAt(0);
-                                r.collapse(true);
-                                r.insertNode(cursorSpan);
-                            }
-
-                            //tidy on paste
-                            // defer bei mask wird benötigt, da sonst das eingefügte
-                            // am ende angehängt wird, auch wenn text im editor markiert ist,
-                            // der eigentlich überschrieben werden sollte
-                            this.mask.defer(1, this, [trlVps('Cleaning...')]);
-
                             if (!this.pasteDelayTask) {
                                 var pasteClean = function() {
                                     this.syncValue();
 
+                                    var bookmark = this.tinymceEditor.selection.getBookmark();
                                     this.tidyHtml({
                                         params: { allowCursorSpan: true },
                                         callback: function() {
-                                            //cursor zuruecksetzen und span.cursor loeschen
-                                            var cursorSpan = Ext.get(this.doc.body).child('span.cursor').dom;
-                                            if (cursorSpan) {
-                                                if (Ext.isIE) {
-                                                    var s = this.doc.selection;
-                                                    s.createRange();
-                                                    s.empty();
-
-                                                    var r = this.doc.body.createTextRange();
-                                                    r.moveToElementText(cursorSpan);
-                                                    r.moveStart('character', 0);
-                                                    r.collapse(true);
-                                                    r.select();
-                                                    cursorSpan.parentNode.removeChild(cursorSpan);
-                                                } else {
-                                                    var s = this.win.getSelection();
-                                                    s.removeAllRanges();
-                                                    var r = this.doc.createRange();
-                                                    r.setStartBefore(cursorSpan);
-                                                    r.setEndAfter(cursorSpan);
-                                                    r.deleteContents();
-                                                    s.addRange(r);
-                                                }
-                                            }
+                                            this.tinymceEditor.selection.moveToBookmark(bookmark);
                                             this.syncValue();
                                         },
                                         scope: this
@@ -270,14 +217,43 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                                 };
                                 this.pasteDelayTask = new Ext.util.DelayedTask(pasteClean, this);
                             }
-                            this.pasteDelayTask.delay(500);
+                            this.pasteDelayTask.delay(1);
                         }
                     }
                 }
             }, this);
         }
-    },
 
+        var dom = new tinymce.dom.DOMUtils(this.doc, {
+            /*
+            keep_values : true,
+            url_converter : t.convertURL,
+            url_converter_scope : t,
+            hex_colors : s.force_hex_style_colors,
+            class_filter : s.class_filter,
+            update_styles : 1,
+            fix_ie_paragraphs : 1,
+            valid_styles : s.valid_styles
+            */
+        });
+        this.tinymceEditor = {
+            settings: {
+                forced_root_block: 'p'
+            },
+            dom: dom,
+            selection: new tinymce.dom.Selection(dom, this.win, null/*t.serializer*/),
+            schema: new tinymce.dom.Schema(),
+            nodeChanged: function(o) {
+                //TODO
+            }
+        };
+        this.formatter = new tinymce.Formatter(this.tinymceEditor);
+    },
+    onFirstFocus : function(){
+        Vps.Form.HtmlEditor.superclass.onFirstFocus.apply(this, arguments);
+        //TODO nicht nur onFirstFocus
+        tinyMCE.activeEditor = this.tinymceEditor;
+    },
     // private
     // überschrieben wegen spezieller ENTER behandlung im IE die wir nicht wollen
     fixKeys : function(){ // load time branching for fastest keydown performance
@@ -354,6 +330,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         if (this.enablePastePlain) {
             tb.insert(tb.items.getCount()-1, this.getAction('insertPlainText'));
         }
+
         if (this.enableInsertChar || this.enablePastePlain) {
             tb.insert(tb.items.getCount()-1, '-');
         }

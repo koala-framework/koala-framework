@@ -79,9 +79,12 @@ class Vpc_Basic_Text_Parser
                         $allowedClasses[] = $i[1];
                     }
                 }
-                if ($this->_enableCursorSpan && isset($attributes['CLASS']) && $attributes['CLASS']=='cursor') {
+                if ($this->_enableCursorSpan && isset($attributes['CLASS']) && $attributes['CLASS']=='_mce_type-bookmark') {
                     array_push($this->_stack, 'span');
-                    $this->_finalHTML .= '<span class="'.$attributes['CLASS'].'">';
+                    $this->_finalHTML .= '<span class="'.$attributes['CLASS'].'"';
+                    if (isset($attributes['STYLE'])) $this->_finalHTML .= ' style="'.$attributes['STYLE'].'"';
+                    if (isset($attributes['ID'])) $this->_finalHTML .= ' id="'.$attributes['ID'].'"';
+                    $this->_finalHTML .= '>';
                 } else if ($this->_enableStyles && isset($attributes['CLASS'])
                     && (preg_match('#^style[0-9]+$#', $attributes['CLASS'])
                         || in_array($attributes['CLASS'], $allowedClasses))

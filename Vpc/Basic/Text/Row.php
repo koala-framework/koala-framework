@@ -222,6 +222,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $html = preg_replace('#<(.[a-z]+) ([^>]*)class=""([^>]*)>#', '<\1 \2 \3>', $html);
 
             $tidy = new tidy;
+            $html = str_replace('_mce_type="bookmark"', 'class="_mce_type-bookmark"', $html);
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
@@ -236,6 +237,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
+            $html = str_replace('class="_mce_type-bookmark"', '_mce_type="bookmark"', $html);
             $html = str_replace('#nbsp#', '&nbsp;', $html);
         }
 
