@@ -260,6 +260,17 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             ++num;
         }
 
+        num = 0;
+        for(var i in this.blockStyles) {
+            var selector = i.split('.');
+            var tag = selector[0];
+            var className = selector[1];
+            this.formatter.register('block'+num, {
+                block: tag,
+                classes: className
+            });
+            ++num;
+        }
     },
     onFirstFocus : function(){
         Vps.Form.HtmlEditor.superclass.onFirstFocus.apply(this, arguments);
@@ -886,31 +897,22 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
     _onSelectBlockStyle: function() {
         var v = this.blockStylesSelect.dom.value;
-        var tag = '';
-        var className = '';
-        if (v.indexOf('.') == -1) {
-            tag = v;
-        } else {
-            var i = v.split('.');
-            tag = i[0];
-            className = i[1];
+        var num = 0;
+        for(var i in this.blockStyles) {
+            this.formatter.remove('block'+num);
+            ++num;
         }
-        if (tag) {
-            v = tag;
-            if (Ext.isIE) {
-                v = '<'+v+'>';
+
+        num = 0;
+        for(var i in this.blockStyles) {
+            if (i == v) {
+                this.formatter.apply('block'+num);
+                break;
             }
-            this.relayCmd('formatblock', v);
+            ++num;
         }
         this.deferFocus();
-        (function() {
-            var elm = this.getFocusElement(tag || 'block');
-            if (elm) {
-                elm.className = className;
-            }
-            this.deferFocus();
-            this.updateToolbar();
-        }).defer(11, this);
+        this.updateToolbar();
     },
     _onSelectInlineStyle: function() {
         var v = this.inlineStylesSelect.dom.value;
@@ -927,37 +929,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 break;
             }
             ++num;
-        }
-        return;
-
-        var tag = '';
-        var className = '';
-        if (v.indexOf('.') == -1) {
-            tag = v;
-        } else {
-            var i = v.split('.');
-            tag = i[0];
-            className = i[1];
-        }
-        var elm = this.getFocusElement(tag);
-        if (elm && elm.tagName && elm.tagName.toLowerCase() == tag) {
-            elm.className = className;
-        } else {
-            var range = this.getSelectionRange();
-            if (range) {
-                if (range.surroundContents) {
-                    var span = this.doc.createElement(tag);
-                    span.className = className;
-                    range.surroundContents(span);
-                } else {
-                    //IE
-                    range.pasteHTML('<'+tag+' class="'+className+'">'+range.htmlText+'</'+tag+'>');
-                }
-            } else {
-                //auskommentiert weils nicht korrekt funktioniert; einfach gar nichts tun wenn nix markiert
-                //this.insertAtCursor('<'+tag+' class="'+className+'">&nbsp;</'+tag+'>');
-                //this.win.getSelection().getRangeAt(0).selectNode(this.win.getSelection().focusNode);
-            }
         }
         this.deferFocus();
         this.updateToolbar();
