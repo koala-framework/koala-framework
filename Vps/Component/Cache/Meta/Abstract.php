@@ -1,13 +1,12 @@
 <?php
 abstract class Vps_Component_Cache_Meta_Abstract
 {
-    const TYPE_DEFAULT = 'default';
-    const TYPE_PARTIAL = 'partial';
-    const TYPE_CALLBACK = 'callback';
+    const META_TYPE_DEFAULT = 'default';
+    const META_TYPE_CALLBACK = 'callback';
 
-    public static function getType()
+    public static function getMetaType()
     {
-        return self::TYPE_DEFAULT;
+        return self::META_TYPE_DEFAULT;
     }
 
     /**

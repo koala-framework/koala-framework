@@ -24,11 +24,13 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
         return $this->getData();
     }
 
-    public static function getCacheModelsForView($componentClass)
+    public static function getCacheMetaForView($componentClass, $pattern)
     {
+        $ret = array();
         $generator = Vps_Component_Generator_Abstract::getInstance(
             Vpc_Abstract::getComponentClassByParentClass($componentClass), 'detail'
         );
-        return array($generator->getModel());
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), $pattern);
+        return $ret;
     }
 }

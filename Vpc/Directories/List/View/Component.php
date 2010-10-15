@@ -220,9 +220,14 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         if (strpos($dirClass, '.') !== false) {
             $dirClass = substr($dirClass, strpos($dirClass, '.')+1);
         }
-        $models = call_user_func(array($dirClass, 'getCacheModelsForView'), $dirClass);
-        foreach ($models as $model) {
-            $ret[] = new Vps_Component_Cache_Meta_Static_Model($model, $pattern);
+        $meta = call_user_func(array($dirClass, 'getCacheMetaForView'), $dirClass, $pattern);
+        foreach ($meta as $m) {
+            $model = $m->getModel();
+            if (is_instance_of($this->_getSetting('partialClass'), 'Vps_Component_Partial_Id')) {
+                $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartialId($model, $pattern);
+            } else {
+                $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartial($model, $pattern);
+            }
         }
         return $ret;
     }
