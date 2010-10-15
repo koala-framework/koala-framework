@@ -248,6 +248,18 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }
         };
         this.formatter = new tinymce.Formatter(this.tinymceEditor);
+        var num = 0;
+        for(var i in this.inlineStyles) {
+            var selector = i.split('.');
+            var tag = selector[0];
+            var className = selector[1];
+            this.formatter.register('inline'+num, {
+                inline: tag,
+                classes: className
+            });
+            ++num;
+        }
+
     },
     onFirstFocus : function(){
         Vps.Form.HtmlEditor.superclass.onFirstFocus.apply(this, arguments);
@@ -902,6 +914,22 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
     _onSelectInlineStyle: function() {
         var v = this.inlineStylesSelect.dom.value;
+        var num = 0;
+        for(var i in this.inlineStyles) {
+            this.formatter.remove('inline'+num);
+            ++num;
+        }
+
+        num = 0;
+        for(var i in this.inlineStyles) {
+            if (i == v) {
+                this.formatter.apply('inline'+num);
+                break;
+            }
+            ++num;
+        }
+        return;
+
         var tag = '';
         var className = '';
         if (v.indexOf('.') == -1) {
@@ -966,6 +994,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 this._renderInlineStylesSelect();
                 this._renderBlockStylesSelect();
                 if (this.activated) this.updateToolbar();
+                //TODO re-register styles to formatter
             },
             scope: this
         });
