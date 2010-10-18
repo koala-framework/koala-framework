@@ -5,13 +5,13 @@ Vps.Form.HtmlEditor.InsertImage = function(config) {
         baseCls: 'x-plain',
         formConfig: {
             tbar: false
-        }
+        },
+        autoLoad: false
     }));
     this.imageDialog = new Vps.Auto.Form.Window({
         autoForm: panel,
         width: 450,
-        height: 400,
-        autoLoad: false
+        height: 400
     });
 
 };

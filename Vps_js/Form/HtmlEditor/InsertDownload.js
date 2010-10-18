@@ -5,13 +5,13 @@ Vps.Form.HtmlEditor.InsertDownload = function(config) {
         baseCls: 'x-plain',
         formConfig: {
             tbar: false
-        }
+        },
+        autoLoad: false
     }));
     this.downloadDialog = new Vps.Auto.Form.Window({
         autoForm: panel,
         width: 450,
-        height: 400,
-        autoLoad: false
+        height: 400
     });
 };
 Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
