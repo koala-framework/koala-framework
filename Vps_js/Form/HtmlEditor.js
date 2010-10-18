@@ -214,7 +214,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
         //re-enable items that are possible for not-yet-active editor
         if (this.stylesEditorToolbarItem) this.stylesEditorToolbarItem.enable();
-        if (this.tidyToolbarItem) this.tidyToolbarItem.enable();
     },
     createToolbar: function(editor)
     {
@@ -493,7 +492,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
         //re-enable items that are possible in sourceedit
         if (this.stylesEditorToolbarItem) this.stylesEditorToolbarItem.enable();
-        if (this.tidyToolbarItem) this.tidyToolbarItem.enable();
 
         this.tidyHtml();
     },
