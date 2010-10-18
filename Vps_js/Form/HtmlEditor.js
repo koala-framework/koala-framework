@@ -20,19 +20,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     {
         if (!this.actions) this.actions = {};
 
-        this.actions.insertImage = new Ext.Action({
-            icon: '/assets/silkicons/picture.png',
-            handler: this.createImage,
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: trlVps('Image'),
-                text: trlVps('Insert new image or edit selected image.')
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
         this.actions.insertDownload = new Ext.Action({
             icon: '/assets/silkicons/folder_link.png',
             handler: this.createDownload,
@@ -62,20 +49,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tabIndex: -1
         });
 
-        if (this.imageComponentConfig) {
-            var panel = Ext.ComponentMgr.create(Ext.applyIf(this.imageComponentConfig, {
-                baseCls: 'x-plain',
-                formConfig: {
-                    tbar: false
-                }
-            }));
-            this.imageDialog = new Vps.Auto.Form.Window({
-                autoForm: panel,
-                width: 450,
-                height: 400,
-                autoLoad: false
-            });
-        }
         if (this.downloadComponentConfig) {
             var panel = Ext.ComponentMgr.create(Ext.applyIf(this.downloadComponentConfig, {
                 baseCls: 'x-plain',
@@ -110,6 +83,12 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 componentConfig: this.linkComponentConfig
             }));
         }
+        if (this.imageComponentConfig) {
+            this.plugins.push(new Vps.Form.HtmlEditor.InsertImage({
+                componentConfig: this.imageComponentConfig
+            }));
+        }
+        
 
 
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
@@ -272,18 +251,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
         this.fireEvent('afterCreateToolbar', tb);
 
-        if (this.downloadDialog) {
-            tb.insert(6,  this.getAction('insertDownload'));
-        }
-        if (this.linkDialog) {
-            tb.insert(6,  this.getAction('insertLink'));
-        }
-        if (this.imageDialog) {
-            tb.insert(6, this.getAction('insertImage'));
-        }
-        if (this.linkDialog || this.imageDialog || this.downloadDialog) {
-            tb.insert(6, '-');
-        }
+//         if (this.downloadDialog) {
+//             tb.insert(6,  this.getAction('insertDownload'));
+//         }
 
         if (this.enableBlock) {
             this.blockSelect = tb.el.createChild({
@@ -479,51 +449,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         if (v && (typeof v.content) != 'undefined') v = v.content;
         Vps.Form.HtmlEditor.superclass.setValue.call(this, v);
-    },
-
-    createImage: function() {
-        var img = this.getFocusElement('img');
-        if (img && img.tagName && img.tagName.toLowerCase() == 'img') {
-            this._currentImage = img;
-            var expr = new RegExp('/media/[^/]+/'+this.componentId+'-i([0-9]+)/');
-            var m = img.src.match(expr);
-            if (m) {
-                var nr = parseInt(m[1]);
-            }
-            if (nr) {
-                this.linkDialog.un('datachange', this._insertImage, this);
-                this.linkDialog.un('datachange', this._modifyImage, this);
-                this.imageDialog.showEdit({
-                    componentId: this.componentId+'-i'+nr
-                });
-                this.imageDialog.on('datachange', this._modifyImage, this);
-                return;
-            }
-        }
-        Ext.Ajax.request({
-            params: {componentId: this.componentId},
-            url: this.controllerUrl+'/json-add-image',
-            success: function(response, options, r) {
-                this.linkDialog.un('datachange', this._insertImage, this);
-                this.linkDialog.un('datachange', this._modifyImage, this);
-                this.imageDialog.showEdit({
-                    componentId: r.componentId
-                });
-                this.imageDialog.on('datachange', this._insertImage, this);
-            },
-            scope: this
-        });
-    },
-    _insertImage: function(r) {
-        var html = '<img src="'+r.imageUrl+'?'+Math.random()+'" ';
-        html += 'width="'+r.imageDimension.width+'" ';
-        html += 'height="'+r.imageDimension.height+'" />';
-        this.insertAtCursor(html);
-    },
-    _modifyImage: function(r) {
-        this._currentImage.src = r.imageUrl+'?'+Math.random();
-        this._currentImage.width = r.imageDimension.width;
-        this._currentImage.height = r.imageDimension.height;
     },
 
     createDownload: function() {
