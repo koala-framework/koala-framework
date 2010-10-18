@@ -1,7 +1,7 @@
 Vps.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
-        this.cmp.on('afterCreateToolbar', this.afterCreateToolbar, this);
+        this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
     },
 
     // private

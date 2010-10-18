@@ -2,7 +2,7 @@ Vps.Form.HtmlEditor.Tidy = Ext.extend(Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.on('initialize', this.onInit, this, {delay:100, single: true});
-        this.cmp.on('afterCreateToolbar', this.afterCreateToolbar, this);
+        this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
         this.cmp.afterMethod('toggleSourceEdit', this.toggleSourceEdit, this);
     },
 

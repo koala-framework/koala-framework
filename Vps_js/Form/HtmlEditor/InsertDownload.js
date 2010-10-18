@@ -17,7 +17,7 @@ Vps.Form.HtmlEditor.InsertDownload = function(config) {
 Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
-        this.cmp.on('afterCreateToolbar', this.afterCreateToolbar, this);
+        this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
         this.cmp.afterMethod('updateToolbar', this.updateToolbar, this);
     },
 
