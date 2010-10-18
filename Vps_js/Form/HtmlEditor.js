@@ -20,19 +20,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     {
         if (!this.actions) this.actions = {};
 
-        this.actions.insertDownload = new Ext.Action({
-            icon: '/assets/silkicons/folder_link.png',
-            handler: this.createDownload,
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: trlVps('Download'),
-                text: trlVps('Create new Download for the selected text or edit selected Download.')
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
         this.actions.editStyles = new Ext.Action({
             icon: '/assets/silkicons/style_edit.png',
             handler: function() {
@@ -49,20 +36,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tabIndex: -1
         });
 
-        if (this.downloadComponentConfig) {
-            var panel = Ext.ComponentMgr.create(Ext.applyIf(this.downloadComponentConfig, {
-                baseCls: 'x-plain',
-                formConfig: {
-                    tbar: false
-                }
-            }));
-            this.downloadDialog = new Vps.Auto.Form.Window({
-                autoForm: panel,
-                width: 450,
-                height: 400,
-                autoLoad: false
-            });
-        }
         if (this.stylesEditorConfig && this.enableStyles) {
             this.stylesEditorDialog = Ext.ComponentMgr.create(this.stylesEditorConfig);
             this.stylesEditorDialog.on('hide', this._reloadStyles, this);
@@ -88,8 +61,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 componentConfig: this.imageComponentConfig
             }));
         }
-        
-
+        if (this.downloadComponentConfig) {
+            this.plugins.push(new Vps.Form.HtmlEditor.InsertDownload({
+                componentConfig: this.downloadComponentConfig
+            }));
+        }
 
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
     },
@@ -250,10 +226,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
 
         this.fireEvent('afterCreateToolbar', tb);
-
-//         if (this.downloadDialog) {
-//             tb.insert(6,  this.getAction('insertDownload'));
-//         }
 
         if (this.enableBlock) {
             this.blockSelect = tb.el.createChild({
@@ -449,41 +421,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         if (v && (typeof v.content) != 'undefined') v = v.content;
         Vps.Form.HtmlEditor.superclass.setValue.call(this, v);
-    },
-
-    createDownload: function() {
-        var a = this.getFocusElement('a');
-        if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
-            var expr = new RegExp(this.componentId+'-d([0-9]+)');
-            var m = a.href.match(expr);
-            if (m) {
-                var nr = parseInt(m[1]);
-            }
-            if (nr) {
-                this.downloadDialog.un('datachange', this._insertDownloadLink, this);
-                this.downloadDialog.showEdit({
-                    componentId: this.componentId+'-d'+nr
-                });
-                return;
-            }
-        }
-        Ext.Ajax.request({
-            params: {componentId: this.componentId},
-            url: this.controllerUrl+'/json-add-download',
-            success: function(response, options, r) {
-                this.downloadDialog.un('datachange', this._insertDownloadLink, this);
-                this.downloadDialog.showEdit({
-                    componentId: r.componentId
-                });
-                this.downloadDialog.on('datachange', this._insertDownloadLink, this, { single: true });
-            },
-            scope: this
-        });
-    },
-
-    _insertDownloadLink : function() {
-        var params = this.downloadDialog.getAutoForm().getBaseParams();
-        this.relayCmd('createlink', params.componentId);
     },
 
     mask: function(txt) {
