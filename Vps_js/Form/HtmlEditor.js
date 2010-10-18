@@ -7,6 +7,10 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     initComponent : function()
     {
         this.plugins = [];
+        if (this.enableFormat) {
+            this.plugins.push(new Vps.Form.HtmlEditor.Formats());
+            this.enableFormat = false; //ext implementation deaktivieren, unsere ist besser
+        }
         if (this.enableUndoRedo) {
             this.plugins.push(new Vps.Form.HtmlEditor.UndoRedo());
         }
@@ -78,9 +82,38 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             schema: new tinymce.dom.Schema(),
             nodeChanged: function(o) {
                 //TODO
+            },
+            extEditor: this,
+            getDoc: function() {
+                return this.extEditor.doc;
             }
         };
+        var lo = {
+            mouseup : 'onMouseUp',
+            mousedown : 'onMouseDown',
+            click : 'onClick',
+            keyup : 'onKeyUp',
+            keydown : 'onKeyDown',
+            keypress : 'onKeyPress',
+            submit : 'onSubmit',
+            dblclick : 'onDblClick'
+        };
+        var t = this.tinymceEditor;
+        function eventHandler(e, o) {
+            // Generic event handler
+            //if (t.onEvent.dispatch(t, e, o) !== false) {
+                // Specific event handler
+                t[lo[e.fakeType || e.type]].dispatch(t, e, o);
+            //}
+        };
+
+        for(var k in lo) {
+            t[lo[k]] = new tinymce.util.Dispatcher(t);
+            dom.bind(t.getDoc(), k, eventHandler);
+        }
         this.formatter = new tinymce.Formatter(this.tinymceEditor);
+
+
         var num = 0;
         for(var i in this.inlineStyles) {
             var selector = i.split('.');
@@ -156,15 +189,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
         //re-enable items that are possible for not-yet-active editor
         if (this.stylesEditorToolbarItem) this.stylesEditorToolbarItem.enable();
-    },
-    createToolbar: function(editor)
-    {
-        Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
-        var tb = this.getToolbar();
-        
-        if (this.tb.items.map.underline) {
-            this.tb.items.map.underline.hide();
-        }
     },
 
     getDocMarkup : function(){
@@ -245,38 +269,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     syncValue : function(){
         if (!this.sourceEditMode) {
             Vps.Form.HtmlEditor.superclass.syncValue.call(this);
-        }
-    },
-
-    /**
-     * Protected method that will not generally be called directly. Pushes the value of the textarea
-     * into the iframe editor.
-     */
-    pushValue : function(){
-        if(this.initialized){
-            var v = this.el.dom.value;
-            if(!this.activated && v.length < 1){
-                v = this.defaultValue;
-            }
-            if(this.fireEvent('beforepush', this, v) !== false){
-                //BEGIN ÄNDERUNG
-                if(Ext.isGecko){
-                    //FF kann scheinbar nicht mit strong und em umgehen, mit b und i aber schon
-                    v = v.replace('<strong>', '<b>').replace('</strong>', '</b>');
-                    v = v.replace('<em>', '<i>').replace('</em>', '</i>');
-                }
-                //END ÄNDERUNG
-                this.getEditorBody().innerHTML = v;
-                if(Ext.isGecko){
-                    // Gecko hack, see: https://bugzilla.mozilla.org/show_bug.cgi?id=232791#c8
-                    var d = this.doc,
-                        mode = d.designMode.toLowerCase();
-
-                    d.designMode = mode.toggle('on', 'off');
-                    d.designMode = mode;
-                }
-                this.fireEvent('push', this, v);
-            }
         }
     }
 });
