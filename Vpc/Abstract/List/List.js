@@ -209,7 +209,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
         });
     },
     onDestroy: function() {
-        this.swfu.destroy();
+        if (this.swfu) this.swfu.destroy();
     }
 });
 Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
