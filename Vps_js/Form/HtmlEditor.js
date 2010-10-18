@@ -62,6 +62,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
 
         //wann text mit maus markiert wird muss die toolbar upgedated werden (link einfügen enabled)
+        //dazu auch auf mouseup schauen
         Ext.EventManager.on(this.doc, {
             'mouseup': this.onEditorEvent,
             buffer:100,
