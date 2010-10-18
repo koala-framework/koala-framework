@@ -42,7 +42,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
 
     onInsertDownload: function() {
         var a = this.cmp.getFocusElement('a');
-        if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
+        if (a) {
             var expr = new RegExp(this.componentId+'-d([0-9]+)');
             var m = a.href.match(expr);
             if (m) {
@@ -77,7 +77,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
     // private
     updateToolbar: function() {
         var a = this.cmp.getFocusElement('a');
-        if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
+        if (a) {
             var expr = new RegExp(this.componentId+'-d[0-9]+');
             var m = a.href.match(expr);
             if (m) {
@@ -86,12 +86,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
                 this.action.disable();
             }
         } else {
-            if (Ext.isIE) {
-                var selection = this.cmp.doc.selection;
-            } else {
-                var selection = this.cmp.win.getSelection();
-            }
-            if (selection == '') {
+            if (this.cmp.tinymceEditor.selection.isCollapsed()) {
                 this.action.disable();
             } else {
                 this.action.enable();

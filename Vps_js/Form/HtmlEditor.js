@@ -61,6 +61,13 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }, this);
         }
 
+        //wann text mit maus markiert wird muss die toolbar upgedated werden (link einfügen enabled)
+        Ext.EventManager.on(this.doc, {
+            'mouseup': this.onEditorEvent,
+            buffer:100,
+            scope: this
+        });
+
         var dom = new tinymce.dom.DOMUtils(this.doc, {
             /*
             keep_values : true,
@@ -178,48 +185,41 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     //private
 	getFocusElement : function(tag)
 	{
-        if (Ext.isIE) {
-            var rng = this.doc.selection.createRange();
-            var elm = rng.item ? rng.item(0) : rng.parentElement();
-        } else {
-            this.win.focus(); //Von mir
-            var sel = this.win.getSelection();
-            if (!sel) return null;
-            if (sel.rangeCount < 0) return null;
-
-            var rng = sel.getRangeAt(0);
-            if (!rng) return null;
-
-            var elm = rng.commonAncestorContainer;
-
-            // Handle selection a image or other control like element such as anchors
-            if (!rng.collapsed) {
-                // Is selection small
-                if (rng.startContainer == rng.endContainer) {
-                    if (rng.startOffset - rng.endOffset < 2) {
-                        if (rng.startContainer.hasChildNodes())
-                            elm = rng.startContainer.childNodes[rng.startOffset];
-                    }
-                }
+        if (tag == 'block') tag = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                                    'pre', 'code', 'address'];
+        var isNeededTag = function(t) {
+            t = t.tagName.toLowerCase();
+            if (tag.indexOf) {
+                return tag.indexOf(t) != -1;
+            } else {
+                return tag == t;
             }
-        }
-        if (tag && elm) {
-            if (tag == 'block') tag = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                                       'pre', 'code', 'address'];
-            var isNeededTag = function(t) {
-                if (tag.indexOf) {
-                    return tag.indexOf(t) != -1;
-                } else {
-                    return tag == t;
-                }
-            };
-            while (elm && elm.parentNode &&
-                    (!elm.tagName || !isNeededTag(elm.tagName.toLowerCase()))) {
-                elm = elm.parentNode;
+        };
+        var ret = null;
+        this.getParents().each(function(el) {
+            console.log('el', el);
+            if (isNeededTag(el)) {
+                ret = el;
+                return false;
             }
-            if (!elm || !elm.tagName || !isNeededTag(elm.tagName.toLowerCase())) return null;
-        }
-        return elm;
+        }, this);
+        console.log('ret', ret);
+        return ret;
+    },
+
+    //basiert auf Editor::nodeChanged
+    getParents: function() {
+        var s = this.tinymceEditor.selection;
+        var n = (Ext.isIE ? s.getNode() : s.getStart()) || this.tinymceEditor.getBody();
+        n = Ext.isIE && n.ownerDocument != t.getDoc() ? t.getBody() : n; // Fix for IE initial state
+        var parents = [];
+        this.tinymceEditor.dom.getParent(n, function(node) {
+            if (node.nodeName == 'BODY')
+                return true;
+
+            parents.push(node);
+        });
+        return parents;
     },
 
     //syncValue schreibt den inhalt vom iframe in die textarea

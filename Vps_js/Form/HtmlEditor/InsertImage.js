@@ -41,7 +41,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
 
     onInsertImage: function() {
         var img = this.cmp.getFocusElement('img');
-        if (img && img.tagName && img.tagName.toLowerCase() == 'img') {
+        if (img) {
             this._currentImage = img;
             var expr = new RegExp('/media/[^/]+/'+this.componentId+'-i([0-9]+)/');
             var m = img.src.match(expr);
