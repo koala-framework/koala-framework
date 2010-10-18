@@ -18,7 +18,7 @@ Vps.Form.HtmlEditor.InsertImage = function(config) {
 Ext.extend(Vps.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
-        this.cmp.on('afterCreateToolbar', this.afterCreateToolbar, this);
+        this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
     },
 
     // private

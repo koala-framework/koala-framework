@@ -27,7 +27,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     stylesIdPattern: null,
     init: function(cmp){
         this.cmp = cmp;
-        this.cmp.on('afterCreateToolbar', this.afterCreateToolbar, this);
+        this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
         this.cmp.afterMethod('updateToolbar', this.updateToolbar, this);
         this.cmp.afterMethod('setValue', this.setValue, this);
     },

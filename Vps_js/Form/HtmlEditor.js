@@ -165,8 +165,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         if (this.tb.items.map.underline) {
             this.tb.items.map.underline.hide();
         }
-
-        this.fireEvent('afterCreateToolbar', tb);
     },
 
     getDocMarkup : function(){
