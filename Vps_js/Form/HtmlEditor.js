@@ -198,13 +198,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         };
         var ret = null;
         this.getParents().each(function(el) {
-            console.log('el', el);
             if (isNeededTag(el)) {
                 ret = el;
                 return false;
             }
         }, this);
-        console.log('ret', ret);
         return ret;
     },
 
