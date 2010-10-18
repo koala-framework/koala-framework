@@ -7,7 +7,7 @@ Vps.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
     // private
     afterCreateToolbar: function() {
         var tb = this.cmp.getToolbar();
-        tb.insert(8, {
+        tb.insert(10, {
             icon: '/assets/vps/images/pastePlain.gif',
             handler: this.onPastePlain,
             scope: this,
@@ -21,7 +21,7 @@ Vps.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
             tabIndex: -1
 
         });
-        tb.insert(9, '-');
+        tb.insert(11, '-');
     },
 
     onPastePlain: function() {
