@@ -1,7 +1,7 @@
 <?php
 class Vps_View_Helper_Date
 {
-    protected $_view;
+    protected $_view = null;
     public function setView($view)
     {
         $this->_view = $view;
@@ -10,9 +10,9 @@ class Vps_View_Helper_Date
     public function date($date, $format = null)
     {
         if (!$format) {
-            if ($this->_view->item && $this->_view->item instanceof Vps_Component_Data) {
+            if ($this->_view && $this->_view->item && $this->_view->item instanceof Vps_Component_Data) {
                 $format = $this->_view->item->trlVps('Y-m-d');
-            } else if ($this->_view->data && $this->_view->data instanceof Vps_Component_Data) {
+            } else if ($this->_view && $this->_view->data && $this->_view->data instanceof Vps_Component_Data) {
                 $format = $this->_view->data->trlVps('Y-m-d');
             } else {
                 $format = trlVps('Y-m-d');
