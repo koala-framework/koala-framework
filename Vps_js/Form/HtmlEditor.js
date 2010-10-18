@@ -112,31 +112,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             dom.bind(t.getDoc(), k, eventHandler);
         }
         this.formatter = new tinymce.Formatter(this.tinymceEditor);
-
-
-        var num = 0;
-        for(var i in this.inlineStyles) {
-            var selector = i.split('.');
-            var tag = selector[0];
-            var className = selector[1];
-            this.formatter.register('inline'+num, {
-                inline: tag,
-                classes: className
-            });
-            ++num;
-        }
-
-        num = 0;
-        for(var i in this.blockStyles) {
-            var selector = i.split('.');
-            var tag = selector[0];
-            var className = selector[1];
-            this.formatter.register('block'+num, {
-                block: tag,
-                classes: className
-            });
-            ++num;
-        }
     },
     onFirstFocus : function(){
         Vps.Form.HtmlEditor.superclass.onFirstFocus.apply(this, arguments);

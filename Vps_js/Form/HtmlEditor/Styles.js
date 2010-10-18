@@ -27,11 +27,37 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     stylesIdPattern: null,
     init: function(cmp){
         this.cmp = cmp;
+        this.cmp.on('initialize', this.onInit, this, {delay: 1, single: true});
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
         this.cmp.afterMethod('updateToolbar', this.updateToolbar, this);
         this.cmp.afterMethod('setValue', this.setValue, this);
     },
 
+    onInit: function() {
+        var num = 0;
+        for(var i in this.inlineStyles) {
+            var selector = i.split('.');
+            var tag = selector[0];
+            var className = selector[1];
+            this.cmp.formatter.register('inline'+num, {
+                inline: tag,
+                classes: className
+            });
+            ++num;
+        }
+
+        num = 0;
+        for(var i in this.blockStyles) {
+            var selector = i.split('.');
+            var tag = selector[0];
+            var className = selector[1];
+            this.cmp.formatter.register('block'+num, {
+                block: tag,
+                classes: className
+            });
+            ++num;
+        }
+    },
     setValue: function(v) {
         if (v && v.componentId) {
             this.componentId = v.componentId;
