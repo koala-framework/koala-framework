@@ -58,36 +58,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
-        this.actions.undo = new Ext.Action({
-            handler: function() {
-                this.relayCmd('undo');
-            },
-            scope: this,
-            icon: '/assets/silkicons/arrow_undo.png',
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: trlVps('Undo (Ctrl+Z)'),
-                text: trlVps('Undo the last action.')
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
-        this.actions.redo = new Ext.Action({
-            handler: function() {
-                this.relayCmd('redo');
-            },
-            scope: this,
-            icon: '/assets/silkicons/arrow_redo.png',
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: trlVps('Redo'),
-                text: trlVps('Redo the last action.')
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
         this.actions.editStyles = new Ext.Action({
             icon: '/assets/silkicons/style_edit.png',
             handler: function() {
@@ -153,6 +123,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
 
         this.plugins = [];
+        if (this.enableUndoRedo) {
+            this.plugins.push(new Vps.Form.HtmlEditor.UndoRedo());
+        }
         if (this.enableInsertChar) {
             this.plugins.push(new Vps.Form.HtmlEditor.InsertChar());
         }
@@ -332,14 +305,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         if (this.linkDialog || this.imageDialog || this.downloadDialog) {
             tb.insert(6, '-');
-        }
-
-        if (this.enableUndoRedo) {
-            var offs = 0;
-            if (this.enableFont) offs += 2;
-            tb.insert(offs, this.getAction('undo'));
-            tb.insert(offs+1, this.getAction('redo'));
-            tb.insert(offs+2, '-');
         }
 
         if (this.enableBlock) {
