@@ -11,6 +11,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         'pre': 'Formatted'
     },
     enableUndoRedo: true,
+    enableInsertChar: true,
     stylesIdPattern: null,
     enableStyles: false,
 
@@ -101,19 +102,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
-        this.actions.insertChar = new Ext.Action({
-            icon: '/assets/silkicons/text_letter_omega.png',
-            handler: this.insertChar,
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: trlVps('Character'),
-                text: trlVps('Insert a custom character.')
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
         this.actions.insertPlainText = new Ext.Action({
             icon: '/assets/vps/images/pastePlain.gif',
             handler: this.insertPlainText,
@@ -174,6 +162,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         if (this.stylesEditorConfig && this.enableStyles) {
             this.stylesEditorDialog = Ext.ComponentMgr.create(this.stylesEditorConfig);
             this.stylesEditorDialog.on('hide', this._reloadStyles, this);
+        }
+
+        this.plugins = [];
+        if (this.enableInsertChar) {
+            this.plugins.push(new Vps.Form.HtmlEditor.InsertChar());
         }
 
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
@@ -334,6 +327,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             this.tb.items.map.underline.hide();
         }
 
+        this.fireEvent('afterCreateToolbar', tb);
+
         if (this.downloadDialog) {
             tb.insert(6,  this.getAction('insertDownload'));
         }
@@ -347,9 +342,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tb.insert(6, '-');
         }
 
-        if (this.enableInsertChar) {
-            tb.insert(tb.items.getCount()-1, this.getAction('insertChar'));
-        }
         if (this.enablePastePlain) {
             tb.insert(tb.items.getCount()-1, this.getAction('insertPlainText'));
         }
@@ -677,27 +669,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     _insertDownloadLink : function() {
         var params = this.downloadDialog.getAutoForm().getBaseParams();
         this.relayCmd('createlink', params.componentId);
-    },
-
-    insertChar: function()
-    {
-        var win = Vps.Form.HtmlEditor.insertCharWindow; //statische var, nur ein window erstellen
-        if (!win) {
-            win = new Vps.Form.InsertCharWindow({
-                modal: true,
-                title: trlVps('Insert Custom Character'),
-                width: 500,
-                closeAction: 'hide',
-                autoScroll: true
-            });
-            Vps.Form.HtmlEditor.insertCharWindow = win;
-        }
-        win.purgeListeners();
-        win.on('insertchar', function(win, ch) {
-            this.insertAtCursor(ch);
-            win.hide();
-        }, this);
-        win.show();
     },
 
     insertPlainText: function()
