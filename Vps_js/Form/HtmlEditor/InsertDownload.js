@@ -22,7 +22,8 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
     },
 
     // private
-    afterCreateToolbar: function(tb) {
+    afterCreateToolbar: function() {
+        var tb = this.cmp.getToolbar();
         this.action = new Ext.Action({
             icon: '/assets/silkicons/folder_link.png',
             handler: this.onInsertDownload,

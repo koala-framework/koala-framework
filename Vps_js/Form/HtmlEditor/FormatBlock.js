@@ -23,8 +23,8 @@ Vps.Form.HtmlEditor.FormatBlock = Ext.extend(Ext.util.Observable, {
         this.cmp.afterMethod('updateToolbar', this.updateToolbar, this);
     },
     // private
-    afterCreateToolbar: function(tb) {
-
+    afterCreateToolbar: function() {
+        var tb = this.cmp.getToolbar();
         this.blockSelect = tb.el.createChild({
             tag:'select',
             cls:'x-font-select',
