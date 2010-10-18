@@ -66,6 +66,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 componentConfig: this.downloadComponentConfig
             }));
         }
+        if (this.controllerUrl && this.enableTidy) {
+            this.plugins.push(new Vps.Form.HtmlEditor.Tidy());
+        }
 
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
     },
@@ -82,36 +85,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 s.setAttribute('href', f);
                 s.setAttribute('rel', 'stylesheet');
                 this.doc.getElementsByTagName("head")[0].appendChild(s);
-            }, this);
-        }
-
-        if (this.controllerUrl && this.enableTidy) {
-            Ext.EventManager.on(this.doc, 'keydown', function(e) {
-                if(e.ctrlKey){
-                    var c = e.getCharCode();
-                    if(c > 0){
-                        c = String.fromCharCode(c).toLowerCase();
-                        if (c == 'v') {
-                            if (!this.pasteDelayTask) {
-                                var pasteClean = function() {
-                                    this.syncValue();
-
-                                    var bookmark = this.tinymceEditor.selection.getBookmark();
-                                    this.tidyHtml({
-                                        params: { allowCursorSpan: true },
-                                        callback: function() {
-                                            this.tinymceEditor.selection.moveToBookmark(bookmark);
-                                            this.syncValue();
-                                        },
-                                        scope: this
-                                    });
-                                };
-                                this.pasteDelayTask = new Ext.util.DelayedTask(pasteClean, this);
-                            }
-                            this.pasteDelayTask.delay(1);
-                        }
-                    }
-                }
             }, this);
         }
 
@@ -259,15 +232,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             this._renderBlockStylesSelect();
             tb.tr = tb.originalTr;
         }
-
-        // Jumpmark: #JM1
-        // nach einfügen mit Strg+V in Firefox ist der knochen nicht sichtbar
-        // dieses element wird nur dazu missbraucht, nach dem einfügen mit
-        // Strg+V den focus aus dem editor zu nehmen um ihn dann wieder
-        // reinplatzieren zu können
-        tb.el.createChild({
-            tag: 'a', cls: 'blurNode', href: '#', style: 'position: absolute; left: -5000px;' 
-        });
     },
 
     createInlineStylesOptions : function(){
@@ -400,45 +364,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         this.el.up('div').unmask();
     },
 
-    tidyHtml: function(tidyOptions)
-    {
-        if (!this.enableTidy) return;
-
-        this.mask(trlVps('Cleaning...'));
-
-        var params = {
-            componentId: this.componentId,
-            html: this.getValue()
-        };
-        if (tidyOptions && tidyOptions.params) {
-            Ext.applyIf(params, tidyOptions.params);
-        }
-        Ext.Ajax.request({
-            url: this.controllerUrl+'/json-tidy-html',
-            params: params,
-            failure: function() {
-                this.unmask();
-            },
-            success: function(response, options, r) {
-                this.unmask();
-
-                // Um den Knochen in Firefox sichtbar zu halten.
-                // Weiteres zum blurNode: Suche nach #JM1 in dieser Datei.
-                this.el.up('div').child('.blurNode', true).focus();
-                this.deferFocus();
-
-                if (this.getValue() != r.html) {
-                    this.setValue(r.html);
-                }
-
-                if (tidyOptions && tidyOptions.callback) {
-                    tidyOptions.callback.call(tidyOptions.scope || this);
-                }
-            },
-            scope: this
-        });
-    },
-
     //private
 	getFocusElement : function(tag)
 	{
@@ -492,8 +417,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
         //re-enable items that are possible in sourceedit
         if (this.stylesEditorToolbarItem) this.stylesEditorToolbarItem.enable();
-
-        this.tidyHtml();
     },
 
     _onSelectBlockStyle: function() {
