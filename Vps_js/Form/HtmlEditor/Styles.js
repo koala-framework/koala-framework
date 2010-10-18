@@ -31,6 +31,24 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
         this.cmp.afterMethod('updateToolbar', this.updateToolbar, this);
         this.cmp.afterMethod('setValue', this.setValue, this);
+        this.cmp.afterMethod('onRender', this.onRender, this);
+        this.cmp.afterMethod('toggleSourceEdit', this.toggleSourceEdit, this);
+    },
+
+
+    toggleSourceEdit : function(sourceEditMode) {
+        Vps.Form.HtmlEditor.superclass.toggleSourceEdit.call(this, sourceEditMode);
+
+        //re-enable items that are possible in sourceedit
+        if (this.stylesEditorToolbarItem) this.stylesEditorToolbarItem.enable();
+    },
+
+    onRender: function(ct, position)
+    {
+        Vps.Form.HtmlEditor.superclass.onRender.call(this, ct, position);
+
+        //re-enable items that are possible for not-yet-active editor
+        if (this.stylesEditorToolbarItem) this.stylesEditorToolbarItem.enable();
     },
 
     onInit: function() {
