@@ -158,14 +158,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
     }(),
 
-    onRender: function(ct, position)
-    {
-        Vps.Form.HtmlEditor.superclass.onRender.call(this, ct, position);
-
-        //re-enable items that are possible for not-yet-active editor
-        if (this.stylesEditorToolbarItem) this.stylesEditorToolbarItem.enable();
-    },
-
     getDocMarkup : function(){
         var ret = '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style>\n';
         ret += '</head><body class="webStandard vpcText"></body></html>';
@@ -228,14 +220,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             if (!elm || !elm.tagName || !isNeededTag(elm.tagName.toLowerCase())) return null;
         }
         return elm;
-    },
-
-    //protected
-    toggleSourceEdit : function(sourceEditMode) {
-        Vps.Form.HtmlEditor.superclass.toggleSourceEdit.call(this, sourceEditMode);
-
-        //re-enable items that are possible in sourceedit
-        if (this.stylesEditorToolbarItem) this.stylesEditorToolbarItem.enable();
     },
 
     //syncValue schreibt den inhalt vom iframe in die textarea
