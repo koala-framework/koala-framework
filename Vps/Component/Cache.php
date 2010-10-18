@@ -229,6 +229,10 @@ class Vps_Component_Cache
 
     public function clean($mode = self::CLEANING_MODE_META, $value = null)
     {
+        // ignore_user_abort, damit beim clientseitigen Unterbrechen vom Cache löschen (zB. weil
+        // es zu lange dauert) es trotzdem fertig ausgeführt wird, damit eventuelle Fehler oder
+        // slow queries in das fehlerlog kommen
+        ignore_user_abort(true);
         if ($mode == Vps_Component_Cache::CLEANING_MODE_META) {
             $id = 'null';
             if ($value instanceof Vps_Model_Interface) {
