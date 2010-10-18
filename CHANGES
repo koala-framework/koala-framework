@@ -29,7 +29,7 @@ möglicherweise nicht kompatible Änderungen:
 - newsListView und eventsListView Teaser haben jetzt ein nl2br
 - showInPageTreeAdmin flag gibts nicht mehr, ist jetzt nur noch ein generatorFlag
 - HtmlEditor: enableBlocks setting gibts nicht mehr, wurde in FormatBlock plugin ausgelagert und
-  müsste manuell zu plugins hinzugefügt werden
+  müsste manuell zu plugins hinzugefügt werden (bevorzugt wird Text-Komponente!)
 
 == 1.10 ==
 Erstellt: 09.06.10
