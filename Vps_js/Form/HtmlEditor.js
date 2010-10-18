@@ -46,18 +46,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
-        this.actions.insertLink = new Ext.Action({
-            handler: this.createLink,
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: trlVps('Hyperlink'),
-                text: trlVps('Create new Link for the selected text or edit selected Link.')
-            },
-            cls: 'x-btn-icon x-edit-createlink',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
         this.actions.editStyles = new Ext.Action({
             icon: '/assets/silkicons/style_edit.png',
             handler: function() {
@@ -74,21 +62,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tabIndex: -1
         });
 
-        if (this.linkComponentConfig) {
-            this.enableLinks = false;
-            var panel = Ext.ComponentMgr.create(Ext.applyIf(this.linkComponentConfig, {
-                baseCls: 'x-plain',
-                formConfig: {
-                    tbar: false
-                },
-                autoLoad: false
-            }));
-            this.linkDialog = new Vps.Auto.Form.Window({
-                autoForm: panel,
-                width: 665,
-                height: 400
-            });
-        }
         if (this.imageComponentConfig) {
             var panel = Ext.ComponentMgr.create(Ext.applyIf(this.imageComponentConfig, {
                 baseCls: 'x-plain',
@@ -132,7 +105,12 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         if (this.enablePastePlain) {
             this.plugins.push(new Vps.Form.HtmlEditor.PastePlain());
         }
-        
+        if (this.linkComponentConfig) {
+            this.plugins.push(new Vps.Form.HtmlEditor.InsertLink({
+                componentConfig: this.linkComponentConfig
+            }));
+        }
+
 
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
     },
@@ -546,43 +524,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         this._currentImage.src = r.imageUrl+'?'+Math.random();
         this._currentImage.width = r.imageDimension.width;
         this._currentImage.height = r.imageDimension.height;
-    },
-    createLink: function() {
-        if (!this.linkDialog) {
-            return Vps.Form.HtmlEditor.superclass.createLink.call(this);
-        }
-        var a = this.getFocusElement('a');
-        if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
-            var expr = new RegExp(this.componentId+'-l([0-9]+)');
-            var m = a.href.match(expr);
-            if (m) {
-                var nr = parseInt(m[1]);
-            }
-            if (nr) {
-                this.linkDialog.un('datachange', this._insertLink, this);
-                this.linkDialog.showEdit({
-                    componentId: this.componentId+'-l'+nr
-                });
-                return;
-            }
-        }
-        Ext.Ajax.request({
-            params: {componentId: this.componentId},
-            url: this.controllerUrl+'/json-add-link',
-            success: function(response, options, r) {
-                this.linkDialog.un('datachange', this._insertLink, this);
-                this.linkDialog.showEdit({
-                    componentId: r.componentId
-                });
-                this.linkDialog.on('datachange', this._insertLink, this, { single: true });
-            },
-            scope: this
-        });
-    },
-
-    _insertLink : function() {
-        var params = this.linkDialog.getAutoForm().getBaseParams();
-        this.relayCmd('createlink', params.componentId);
     },
 
     createDownload: function() {

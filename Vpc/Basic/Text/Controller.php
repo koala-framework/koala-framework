@@ -31,10 +31,10 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     private function _addChildComponent($type)
     {
         $row = $this->_form->getRow();
-        Zend_Registry::get('db')->beginTransaction();
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
         $childCompnentRow = $row->addChildComponentRow($type);
         $this->view->componentId = $row->component_id.'-'.substr($type, 0, 1).$childCompnentRow->nr;
-        Zend_Registry::get('db')->commit();
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
     }
 
     public function jsonStylesAction()
