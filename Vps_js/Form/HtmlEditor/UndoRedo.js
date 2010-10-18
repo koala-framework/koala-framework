@@ -9,7 +9,8 @@ Vps.Form.HtmlEditor.UndoRedo = Ext.extend(Ext.util.Observable, {
     },
 
     // private
-    afterCreateToolbar: function(tb) {
+    afterCreateToolbar: function() {
+        var tb = this.cmp.getToolbar();
         tb.insert(0, {
             handler: function() {
                 this.cmp.relayCmd('undo');

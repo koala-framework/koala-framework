@@ -7,7 +7,8 @@ Vps.Form.HtmlEditor.Tidy = Ext.extend(Ext.util.Observable, {
     },
 
     // private
-    afterCreateToolbar: function(tb) {
+    afterCreateToolbar: function() {
+        var tb = this.cmp.getToolbar();
         // Jumpmark: #JM1
         // nach einfügen mit Strg+V in Firefox ist der knochen nicht sichtbar
         // dieses element wird nur dazu missbraucht, nach dem einfügen mit

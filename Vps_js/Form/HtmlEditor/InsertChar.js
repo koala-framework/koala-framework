@@ -9,7 +9,8 @@ Vps.Form.HtmlEditor.InsertChar = Ext.extend(Ext.util.Observable, {
     },
 
     // private
-    afterCreateToolbar: function(tb) {
+    afterCreateToolbar: function() {
+        var tb = this.cmp.getToolbar();
         tb.insert(7, {
             icon: '/assets/silkicons/text_letter_omega.png',
             handler: this.onInsertChar,

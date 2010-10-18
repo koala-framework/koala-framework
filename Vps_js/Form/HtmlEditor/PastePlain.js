@@ -5,7 +5,8 @@ Vps.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
     },
 
     // private
-    afterCreateToolbar: function(tb) {
+    afterCreateToolbar: function() {
+        var tb = this.cmp.getToolbar();
         tb.insert(8, {
             icon: '/assets/vps/images/pastePlain.gif',
             handler: this.onPastePlain,

@@ -58,8 +58,9 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     },
 
     // private
-    afterCreateToolbar: function(tb)
+    afterCreateToolbar: function()
     {
+        var tb = this.cmp.getToolbar();
         var table = document.createElement('table');
         table.cellspacing = '0';
         tb.stylesTr = table.appendChild(document.createElement('tbody'))
