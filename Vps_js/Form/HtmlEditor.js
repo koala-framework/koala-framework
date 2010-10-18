@@ -360,36 +360,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 num++;
             }
         }
-        var a = this.getFocusElement('a');
-        if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
-            var expr = new RegExp(this.componentId+'-(l|d)([0-9]+)');
-            var m = a.href.match(expr);
-            if (m) {
-                if (m[1] == 'l') {
-                    this.getAction('insertLink').enable();
-                    this.getAction('insertDownload').disable();
-                } else if (m[1] == 'd') {
-                    this.getAction('insertLink').disable();
-                    this.getAction('insertDownload').enable();
-                }
-            } else {
-                this.getAction('insertLink').disable();
-                this.getAction('insertDownload').disable();
-            }
-        } else {
-            if (Ext.isIE) {
-                var selection = this.doc.selection;
-            } else {
-                var selection = this.win.getSelection();
-            }
-            if (selection == '') {
-                this.getAction('insertLink').disable();
-                this.getAction('insertDownload').disable();
-            } else {
-                this.getAction('insertLink').enable();
-                this.getAction('insertDownload').enable();
-            }
-        }
+        this.fireEvent('updateToolbar');
     },
     getDocMarkup : function(){
         var ret = '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style>\n';

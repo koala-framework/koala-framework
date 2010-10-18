@@ -18,12 +18,13 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.on('afterCreateToolbar', this.afterCreateToolbar, this);
+        this.cmp.on('updateToolbar', this.updateToolbar, this);
     },
 
     // private
     afterCreateToolbar: function(tb) {
         tb.insert(5, '-');
-        tb.insert(6, {
+        this.action = new Ext.Action({
             handler: this.onInsertLink,
             scope: this,
             tooltip: {
@@ -35,6 +36,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
+        tb.insert(6, this.action);
     },
 
     onInsertLink: function() {
@@ -69,5 +71,31 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
     _insertLink : function() {
         var params = this.linkDialog.getAutoForm().getBaseParams();
         this.cmp.relayCmd('createlink', params.componentId);
+    },
+
+    // private
+    updateToolbar: function() {
+        var a = this.cmp.getFocusElement('a');
+        if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
+            var expr = new RegExp(this.componentId+'-l[0-9]+');
+            var m = a.href.match(expr);
+            if (m) {
+                this.action.enable();
+            } else {
+                this.action.disable();
+            }
+        } else {
+            if (Ext.isIE) {
+                var selection = this.cmp.doc.selection;
+            } else {
+                var selection = this.cmp.win.getSelection();
+            }
+            if (selection == '') {
+                this.action.disable();
+            } else {
+                this.action.enable();
+            }
+        }
     }
+
 });
