@@ -1,15 +1,4 @@
 Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
-    formatBlocks : {
-        'h1': 'Heading 1',
-        'h2': 'Heading 2',
-        'h3': 'Heading 3',
-        'h4': 'Heading 4',
-        'h5': 'Heading 5',
-        'h6': 'Heading 6',
-        'p': 'Normal',
-        'address': 'Address',
-        'pre': 'Formatted'
-    },
     enableUndoRedo: true,
     enableInsertChar: true,
     enablePastePlain: true,
@@ -199,23 +188,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
         this.fireEvent('afterCreateToolbar', tb);
 
-        if (this.enableBlock) {
-            this.blockSelect = tb.el.createChild({
-                tag:'select',
-                cls:'x-font-select',
-                html: this.createBlockOptions()
-            });
-            this.blockSelect.on('change', function(){
-                var v = this.blockSelect.dom.value;
-                if (Ext.isIE) {
-                    v = '<'+v+'>';
-                }
-                this.relayCmd('formatblock', v);
-                this.deferFocus();
-            }, this);
-            tb.insert(0, this.blockSelect.dom);
-            tb.insert(1, '-');
-        }
         if (this.enableStyles) {
             var table = document.createElement('table');
             table.cellspacing = '0';
@@ -260,49 +232,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         return buf.join('');
     },
 
-    createBlockOptions : function(){
-        var buf = [];
-        for (var i in this.formatBlocks) {
-            buf.push(
-                '<option value="',i,'"',
-                    (i == 'p' ? ' selected="true">' : '>'),
-                    this.formatBlocks[i],
-                '</option>'
-            );
-        }
-        return buf.join('');
-    },
     updateToolbar: function(){
         Vps.Form.HtmlEditor.superclass.updateToolbar.call(this);
-        if (this.blockSelect) {
-            if (Ext.isIE) {
-                var selectedBlock = false;
-                var el = this.getFocusElement();
-                while (el) {
-                    for(var i in this.formatBlocks) {
-                        if (el.tagName && i == el.tagName.toLowerCase()) {
-                            if(i != this.blockSelect.dom.value){
-                                this.blockSelect.dom.value = i;
-                            }
-                            selectedBlock = true;
-                            break;
-                        }
-                    }
-                    if (selectedBlock) break;
-                    el = el.parentNode;
-                }
-                if (!selectedBlock) {
-                    if('p' != this.blockSelect.dom.value){
-                        this.blockSelect.dom.value = 'p';
-                    }
-                }
-            } else {
-                var name = (this.doc.queryCommandValue('FormatBlock')||'p').toLowerCase();
-                if(name != this.blockSelect.dom.value){
-                    this.blockSelect.dom.value = name;
-                }
-            }
-        }
         if (this.blockStylesSelect) {
             this.inlineStylesSelect.dom.value = 'p';
             var num = 0;
