@@ -12,6 +12,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
     enableUndoRedo: true,
     enableInsertChar: true,
+    enablePastePlain: true,
     stylesIdPattern: null,
     enableStyles: false,
 
@@ -102,19 +103,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
-        this.actions.insertPlainText = new Ext.Action({
-            icon: '/assets/vps/images/pastePlain.gif',
-            handler: this.insertPlainText,
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: trlVps('Insert Plain Text'),
-                text: trlVps('Insert text without formating.')
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
 
         if (this.linkComponentConfig) {
             this.enableLinks = false;
@@ -168,6 +156,10 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         if (this.enableInsertChar) {
             this.plugins.push(new Vps.Form.HtmlEditor.InsertChar());
         }
+        if (this.enablePastePlain) {
+            this.plugins.push(new Vps.Form.HtmlEditor.PastePlain());
+        }
+        
 
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
     },
@@ -340,14 +332,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         if (this.linkDialog || this.imageDialog || this.downloadDialog) {
             tb.insert(6, '-');
-        }
-
-        if (this.enablePastePlain) {
-            tb.insert(tb.items.getCount()-1, this.getAction('insertPlainText'));
-        }
-
-        if (this.enableInsertChar || this.enablePastePlain) {
-            tb.insert(tb.items.getCount()-1, '-');
         }
 
         if (this.enableUndoRedo) {
@@ -669,27 +653,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     _insertDownloadLink : function() {
         var params = this.downloadDialog.getAutoForm().getBaseParams();
         this.relayCmd('createlink', params.componentId);
-    },
-
-    insertPlainText: function()
-    {
-        Ext.Msg.show({
-            title : trlVps('Insert Plain Text'),
-            msg : '',
-            buttons: Ext.Msg.OKCANCEL,
-            fn: function(btn, text) {
-                if (btn == 'ok') {
-                    text = text.replace(/\r/g, '');
-                    text = text.replace(/\n/g, '</p>\n<p>');
-                    text = String.format('<p>{0}</p>', text);
-                    this.insertAtCursor(text);
-                }
-            },
-            scope : this,
-            minWidth: 500,
-            prompt: true,
-            multiline: 300
-        });
     },
 
     mask: function(txt) {
