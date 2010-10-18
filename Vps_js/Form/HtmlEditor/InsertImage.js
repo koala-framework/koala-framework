@@ -23,7 +23,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
 
     // private
     afterCreateToolbar: function(tb) {
-        tb.insert(7, {
+        tb.insert(8, {
             icon: '/assets/silkicons/picture.png',
             handler: this.onInsertImage,
             scope: this,
