@@ -36,7 +36,8 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
                 'icon' => $this->_getSetting('componentIcon')->__toString(),
                 'components' => $componentList,
                 'componentIcons' => $componentIcons,
-                'previewWidth' => $this->_getSetting('previewWidth')
+                'previewWidth' => $this->_getSetting('previewWidth'),
+                'showCopyPaste' => $this->_getSetting('showCopyPaste'),
             )
         );
     }

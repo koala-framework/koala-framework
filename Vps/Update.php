@@ -126,7 +126,7 @@ abstract class Vps_Update
     {
         $ret = array();
         $processed = array();
-        foreach (Vps_Component_Abstract::getComponentClasses(false) as $class) {
+        foreach (Vps_Component_Abstract::getComponentClasses() as $class) {
             while ($class != '') {
                 $class = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
                 if (!in_array($class, $processed)) {

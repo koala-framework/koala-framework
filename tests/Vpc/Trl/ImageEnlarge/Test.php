@@ -9,6 +9,10 @@
 ansicht frontend:
 http://fnprofile.markus.vivid/vps/vpctest/Vpc_Trl_ImageEnlarge_Root/de/test1 (...2,3,4,5,6)
 http://fnprofile.markus.vivid/vps/vpctest/Vpc_Trl_ImageEnlarge_Root/en/test1 (...2,3,4,5,6)
+
+backend
+http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Trl_ImageEnlarge_Root/Vpc_Trl_ImageEnlarge_ImageEnlarge_Component/Index?componentId=root-master_test1
+http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Trl_ImageEnlarge_Root/Vpc_Trl_ImageEnlarge_ImageEnlarge_Trl_Component.Vpc_Trl_ImageEnlarge_ImageEnlarge_Component/Index?componentId=root-en_test1
  */
 class Vpc_Trl_ImageEnlarge_Test extends Vpc_TestAbstract
 {

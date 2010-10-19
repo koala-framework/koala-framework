@@ -289,7 +289,7 @@ wurde soeben erstellt.</de>
 <text>
 <en>Firstname</en>
 <de>Vorname</de>
-<fr>Prénom</fr>
+<fr>Pr&#xE9;nom</fr>
 <es>Nombre</es>
 <id>97</id>
 </text>
@@ -524,7 +524,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>Can't save, please fill all red underlined fields correctly.</en>
-<de>Speichern ist nicht möglich, bitte füllen Sie alle rot unterstrichenen Felder korrekt aus.</de>
+<de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle rot unterstrichenen Felder korrekt aus.</de>
 <id>230</id>
 </text>
 <text>
@@ -894,7 +894,7 @@ wurde soeben erstellt.</de>
 </text>
 <text>
 <en>The value in this field is invalid</en>
-<de>Wert in diesem Feld ist ungültig</de>
+<de>Wert in diesem Feld ist ung&#xFC;ltig</de>
 <id>314</id>
 </text>
 <text>
@@ -2797,7 +2797,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Products</en>
-<de>Shop - Produkte</de>
+<de>Shop.Produkte</de>
 <id>795</id>
 </text>
 <text>
@@ -2856,14 +2856,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Country</en>
 <de>Land</de>
 <fr>Pays</fr>
-<es>País</es>
+<es>Pa&#xED;s</es>
 <id>806</id>
 </text>
 <text>
 <en>Phone</en>
 <de>Telefon</de>
-<fr>Téléphone</fr>
-<es>Teléfono</es>
+<fr>T&#xE9;l&#xE9;phone</fr>
+<es>Tel&#xE9;fono</es>
 <id>807</id>
 </text>
 <text>
@@ -2943,28 +2943,28 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Cart</en>
-<de>Shop - Warenkorb</de>
+<de>Shop.Warenkorb</de>
 <id>828</id>
 </text>
 <text>
 <en>Mr.</en>
 <de>Herr</de>
 <fr>Monsieur</fr>
-<es>Señor</es>
+<es>Se&#xF1;or</es>
 <id>829</id>
 </text>
 <text>
 <en>Ms.</en>
 <de>Frau</de>
 <fr>Madame</fr>
-<es>Señora</es>
+<es>Se&#xF1;ora</es>
 <id>830</id>
 </text>
 <text>
 <context>sex</context>
 <en>Title</en>
 <de>Anrede</de>
-<fr>Civilité</fr>
+<fr>Civilit&#xE9;</fr>
 <es>Tratamiento</es>
 <id>832</id>
 </text>
@@ -3981,6 +3981,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Do you really wish to remove this paragraph?</en>
+<de>Wollen Sie diesen Absatz wirklich l&#xF6;schen?</de>
 <id>1102</id>
 </text>
 <text>
@@ -3999,10 +4000,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Imprint.Google-Analytics</en>
 <de>Impressum.Google-Analytics</de>
 <id>1106</id>
-</text>
-<text>
-<en>Text/Image - Alignment</en>
-<id>1107</id>
 </text>
 <text>
 <en>Url include</en>
@@ -4634,8 +4631,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>ZIP / City</en>
 <de>PLZ / Ort</de>
-<fr>CP / localité</fr>
-<es>Código postal / Localidad</es>
+<fr>CP / localit&#xE9;</fr>
+<es>C&#xF3;digo postal / Localidad</es>
 <id>1248</id>
 </text>
 <text>
@@ -4696,7 +4693,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Newsletter subscription</en>
-<de>Newsletter abonnement</de>
+<de>Newsletter Abonnement</de>
 <id>1260</id>
 </text>
 <text>
@@ -5326,22 +5323,27 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The password was changed successfully</en>
+<de>Das Passwort wurde erfolgreich ge&#xE4;ndert</de>
 <id>1389</id>
 </text>
 <text>
 <en>Change Password</en>
+<de>Passwort &#xE4;ndern</de>
 <id>1390</id>
 </text>
 <text>
 <en>Current Password</en>
+<de>Aktuelles Passwort</de>
 <id>1391</id>
 </text>
 <text>
 <en>New Password</en>
+<de>Neues Passwort</de>
 <id>1392</id>
 </text>
 <text>
 <en>Account - Change Password</en>
+<de>Benutzer - Passwort &#xE4;ndern</de>
 <id>1393</id>
 </text>
 <text>
@@ -5400,7 +5402,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Read more &#xBB;</en>
 <de>Weiterlesen &#xBB;</de>
 <fr>Davantage &#xBB;</fr>
-<es>Más &#xBB;</es>
+<es>M&#xE1;s &#xBB;</es>
 <id>1405</id>
 </text>
 <text>
@@ -5779,7 +5781,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Read more</en>
 <de>Weiterlesen</de>
 <fr>Davantage</fr>
-<es>Más</es>
+<es>M&#xE1;s</es>
 <id>1492</id>
 </text>
 <text>
@@ -5837,6 +5839,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>2 Columns</en>
+<de>2 Spalten</de>
 <id>1505</id>
 </text>
 <text>
@@ -5849,10 +5852,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>All Visible</en>
+<de>Alle Sichtbar</de>
 <id>1508</id>
 </text>
 <text>
 <en>Do you really wish to set everything to visible?</en>
+<de>M&#xF6;chten Sie wirklich alles auf Sichtbar setzen?</de>
 <id>1509</id>
 </text>
 <text>
@@ -5935,10 +5940,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1507</id>
 </text>
 <text>
-<en>All Visible</en>
-<id>1508</id>
-</text>
-<text>
 <en>Do you really wish to set everything to visible?</en>
 <id>1509</id>
 </text>
@@ -5984,6 +5985,215 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Spent time by years</en>
 <de>Verbrauchte Zeite nach Jahren</de>
 <id>1518</id>
+</text>
+<text>
+<en>Dear Sir or Madam</en>
+<de>Sehr geehrte Damen und Herren</de>
+<id>1519</id>
+</text>
+<text>
+<en>Web Image Files</en>
+<id>1521</id>
+</text>
+<text>
+<en>All Files</en>
+<id>1522</id>
+</text>
+<text>
+<en>Upload Files</en>
+<id>1523</id>
+</text>
+<text>
+<en>Uploading files</en>
+<id>1524</id>
+</text>
+<text>
+<en>You got a requst</en>
+<id>1525</id>
+</text>
+<text>
+<en>E-Mail Recipient</en>
+<id>1526</id>
+</text>
+<text>
+<en>E-Mail Subject</en>
+<id>1527</id>
+</text>
+<text>
+<en>Form.Fieldset</en>
+<id>1528</id>
+</text>
+<text>
+<en>Required</en>
+<id>1529</id>
+</text>
+<text>
+<en>Form.Checkbox</en>
+<id>1530</id>
+</text>
+<text>
+<en>Box Label</en>
+<id>1531</id>
+</text>
+<text>
+<en>Form.Radio</en>
+<id>1532</id>
+</text>
+<text>
+<en>Output Type</en>
+<id>1533</id>
+</text>
+<text>
+<en>horizontal</en>
+<id>1534</id>
+</text>
+<text>
+<en>vertical</en>
+<id>1535</id>
+</text>
+<text>
+<en>Form.Select</en>
+<id>1536</id>
+</text>
+<text>
+<en>Form.Textarea</en>
+<id>1537</id>
+</text>
+<text>
+<en>Form.Textfield</en>
+<id>1538</id>
+</text>
+<text>
+<en>Alphanumeric</en>
+<id>1539</id>
+</text>
+<text>
+<en>Bezeichnung</en>
+<id>1540</id>
+</text>
+<text>
+<en>This account has already been activated.</en>
+<de>Dieser Account wurde bereits aktiviert.</de>
+<id>1541</id>
+</text>
+<text>
+<en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
+<de>Der Aktivierungscode ist falsch. Vielleicht wurde die Adresse unvollst&#xE4;ndig in den Browser kopiert?</de>
+<id>1542</id>
+<en>Voucher</en>
+<de>Gutschein</de>
+<id>1543</id>
+</text>
+<text>
+<en>Vouchers</en>
+<de>Gutscheine</de>
+<id>1544</id>
+</text>
+<text>
+<en>Voucher Code</en>
+<de>Gutscheint Code</de>
+<id>1545</id>
+</text>
+<text>
+<en>Amount</en>
+<context>Amount of Money</context>
+<de>Betrag</de>
+<id>1546</id>
+</text>
+<text>
+<en>Used Amount</en>
+<context>Amount of Money</context>
+<de>Benutzer Betrag</de>
+<id>1547</id>
+</text>
+<text>
+<en>'%value%' code was already used</en>
+<de>'%value%' Code wurde bereits benutzt</de>
+<id>1548</id>
+</text>
+<text>
+<en>'%value%' is not a valid voucher code</en>
+<de>'%value%' ist ein ung&#xFC;ltiger Gutschein Code</de>
+<id>1549</id>
+</text>
+<text>
+<en>Redeem Voucher</en>
+<de>Gutschein einl&#xF6;sen</de>
+<id>1550</id>
+</text>
+<text>
+<en>Remaining Amount {0}</en>
+<de>Restbetrag {0}</de>
+<id>1551</id>
+</text>
+<text>
+<en>Your Voucher has been successfully redeemed.</en>
+<de>Ihr Gutschein wurde erfolgreich eingel&#xF6;st.</de>
+<id>1552</id>
+</text>
+<text>
+<en>Product: Voucher</en>
+<de>Produkt: Gutschein</de>
+<id>1393</id>
+</text>
+<text>
+<en>Copy of</en>
+<de>Kopie von</de>
+<id>1553</id>
+</text>
+<text>
+<en>Information</en>
+<id>1554</id>
+</text>
+<text>
+<en>Shop.Product: Voucher</en>
+<id>1555</id>
+</text>
+<text>
+<en>Directory</en>
+<id>1556</id>
+</text>
+<text>
+<en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
+<id>1557</id>
+</text>
+<text>
+<en>Fill out the Form</en>
+<id>1558</id>
+</text>
+<text>
+<en>Click the save button above</en>
+<id>1559</id>
+</text>
+<text>
+<en>If no error pops up, the cache has been cleared sucessfully</en>
+<id>1560</id>
+</text>
+<text>
+<en>Affected component / part (e.g.: References)</en>
+<id>1561</id>
+</text>
+<text>
+<en>Why do you need to clear the cache? (steps to reproduce / description)</en>
+<id>1562</id>
+</text>
+<text>
+<en>Clear Cache</en>
+<id>1563</id>
+</text>
+<text>
+<en>Contains video</en>
+<de>Beinhaltet ein Video</de>
+<id>1564</id>
+</text>
+<text>
+<en>Text/Image - Alignment</en>
+<id>1565</id>
+</text>
+<text>
+<en>Must not be negative</en>
+<de>Darf nicht negativ sein</de>
+<id>1566</id>
 </text>
 </trl>
 
