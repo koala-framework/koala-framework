@@ -30,6 +30,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['flags']['processInput'] = true;
 
         $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
+
+        $ret['buttonClass'] = 'vpsButtonFlat'; //um standard styles aus dem Vps zu umgehen
         return $ret;
     }
 
@@ -187,6 +189,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         }
 
         $ret['formName'] = $this->getData()->componentId;
+        $ret['buttonClass'] = $this->_getSetting('buttonClass');
 
         $ret['action'] = $this->getData()->url;
         $ret['method'] = $this->_getSetting('method');
