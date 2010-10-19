@@ -168,7 +168,7 @@ abstract class Vps_Component_Renderer_Abstract
 
     protected function _getView()
     {
-        $ret = new Vps_View();
+        $ret = new Vps_Component_View();
         $ret->setRenderComponent($this->_renderComponent);
         return $ret;
     }
