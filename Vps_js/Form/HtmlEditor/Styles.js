@@ -308,6 +308,6 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                 this.blockStylesSeparator.hide();
             }
         }
-    },
+    }
 
 });
