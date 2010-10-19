@@ -43,7 +43,8 @@ class Vpc_Basic_ImageEnlarge_Trl_Image_Component
         }
         $row = $d->getComponent()->getRow();
         Vps_Component_Cache::getInstance()->saveMeta(
-            get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+            $d,
+            new Vps_Component_Cache_Meta_Static_Callback($row->getModel())
         );
 
         return parent::getMediaOutput($id, $type, $className);
