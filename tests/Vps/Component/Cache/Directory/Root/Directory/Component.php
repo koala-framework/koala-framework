@@ -7,6 +7,7 @@ class Vps_Component_Cache_Directory_Root_Directory_Component extends Vpc_Directo
         $ret['childModel'] = 'Vps_Component_Cache_Directory_Root_Directory_Model';
         //$ret['generators']['detail']['component'] = 'Vps_Component_Cache_Directory_Root_Directory_Detail_Component';
         $ret['generators']['child']['component']['view'] = 'Vps_Component_Cache_Directory_Root_Directory_View_Component';
+        $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
 }

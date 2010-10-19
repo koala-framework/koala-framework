@@ -114,7 +114,6 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
             }
             $chainedData = $chainedData->parent;
         }
-
         $c = $masterData;
         $ids = array();
         $subrootReached = false;
