@@ -14,6 +14,7 @@ class Vps_Component_ModelObserver
     private $_skipFnF = true;
     private $_processed = array();
     private $_enabled = true; // wird zB. beim Import in Proxy ausgeschaltet
+    private $_enableProcess = true; // für Unit Tests
 
     public static function getInstance()
     {
@@ -42,6 +43,11 @@ class Vps_Component_ModelObserver
     public function disable()
     {
         $this->_enabled = false;
+    }
+
+    public function setEnableProcess($enableProcess)
+    {
+        $this->_enableProcess = $enableProcess;
     }
 
     public function clear()
@@ -110,10 +116,12 @@ class Vps_Component_ModelObserver
         if (!isset($this->_processed[$modelname]) || !in_array($id, $this->_processed[$modelname])) {
             if (!isset($this->_processed[$modelname])) $this->_processed[$modelname] = array();
             $this->_processed[$modelname][] = $id;
-            if ($row) {
-                Vps_Component_Cache::getInstance()->cleanByRow($row);
-            } else {
-                Vps_Component_Cache::getInstance()->cleanByModel($model);
+            if ($this->_enableProcess) {
+                if ($row) {
+                    Vps_Component_Cache::getInstance()->cleanByRow($row);
+                } else {
+                    Vps_Component_Cache::getInstance()->cleanByModel($model);
+                }
             }
             return array($modelname => $id);
         }
