@@ -89,7 +89,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             selection: new tinymce.dom.Selection(dom, this.win, null/*t.serializer*/),
             schema: new tinymce.dom.Schema(),
             nodeChanged: function(o) {
-                //TODO
+                //TODO this.onEditorEvent ?
             },
             extEditor: this,
             getDoc: function() {
