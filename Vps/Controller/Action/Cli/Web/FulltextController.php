@@ -104,8 +104,12 @@ class Vps_Controller_Action_Cli_Web_FulltextController extends Vps_Controller_Ac
                     $componentId = array_shift($queue);
                     file_put_contents($queueFile, implode("\n", $queue));
 
-                    //echo "==> ".$componentId.' ';
+                    //echo "==> ".$componentId."\n";
                     $page = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
+                    if (!$page) {
+                        echo "$componentId not found!\n";
+                        continue;
+                    }
                     //echo "$page->url\n";
                     foreach ($page->getChildPseudoPages(array(), array('pseudoPage'=>false)) as $c) {
                         //echo "queued $c->componentId\n";
