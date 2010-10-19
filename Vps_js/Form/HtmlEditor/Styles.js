@@ -46,30 +46,9 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     },
 
     onInit: function() {
-        var num = 0;
-        for(var i in this.inlineStyles) {
-            var selector = i.split('.');
-            var tag = selector[0];
-            var className = selector[1];
-            this.cmp.formatter.register('inline'+num, {
-                inline: tag,
-                classes: className
-            });
-            ++num;
-        }
-
-        num = 0;
-        for(var i in this.blockStyles) {
-            var selector = i.split('.');
-            var tag = selector[0];
-            var className = selector[1];
-            this.cmp.formatter.register('block'+num, {
-                block: tag,
-                classes: className
-            });
-            ++num;
-        }
+        this.registerStyles();
     },
+
     setValue: function(v) {
         if (v && v.componentId) {
             this.componentId = v.componentId;
@@ -119,92 +98,70 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     updateToolbar: function()
     {
         if (this.blockStylesSelect) {
-            this.inlineStylesSelect.dom.value = 'p';
-            var num = 0;
-            for(var i in this.blockStyles) {
-                if (this.cmp.formatter.match('block'+num)) {
-                    this.blockStylesSelect.dom.value = i;
+            this.blockStylesSelect.dom.value = 'blockdefault';
+            this.styles.forEach(function(style) {
+                if (style.type == 'block' && this.cmp.formatter.match(style.id)) {
+                    this.blockStylesSelect.dom.value = style.id;
                 }
-                num++;
-            }
+            }, this);
         }
         if (this.inlineStylesSelect) {
-            this.inlineStylesSelect.dom.value = 'span';
-            var num = 0;
-            for(var i in this.inlineStyles) {
-                if (this.cmp.formatter.match('inline'+num)) {
-                    this.inlineStylesSelect.dom.value = i;
+            this.inlineStylesSelect.dom.value = 'inlinedefault';
+            this.styles.forEach(function(style) {
+                if (style.type == 'inline' && this.cmp.formatter.match(style.id)) {
+                    this.inlineStylesSelect.dom.value = style.id;
                 }
-                num++;
+            }, this);
+        }
+    },
+
+    createStylesOptions : function(type){
+        var buf = [];
+        this.styles.forEach(function(style) {
+            if (style.type == type) {
+                buf.push(
+                    '<option value="',style.id,'">',
+                        style.name,
+                    '</option>'
+                );
             }
-        }
-    },
-
-    createInlineStylesOptions : function(){
-        var buf = [];
-        for (var i in this.inlineStyles) {
-            buf.push(
-                '<option value="',i,'"',
-                    (i == 'span' ? ' selected="true">' : '>'),
-                    this.inlineStyles[i],
-                '</option>'
-            );
-        }
+        }, this);
         return buf.join('');
     },
-
-    createBlockStylesOptions : function(){
-        var buf = [];
-        for (var i in this.blockStyles) {
-            buf.push(
-                '<option value="',i,'"',
-                    (i == 'p' ? ' selected="true">' : '>'),
-                    this.blockStyles[i],
-                '</option>'
-            );
-        }
-        return buf.join('');
-    },
-
 
     _onSelectBlockStyle: function() {
         var v = this.blockStylesSelect.dom.value;
-        var num = 0;
-        for(var i in this.blockStyles) {
-            this.cmp.formatter.remove('block'+num);
-            ++num;
-        }
-
-        num = 0;
-        for(var i in this.blockStyles) {
-            if (i == v) {
-                this.cmp.formatter.apply('block'+num);
-                break;
+        this.styles.forEach(function(style) {
+            if (style.type == 'block') {
+                this.cmp.formatter.remove(style.id);
             }
-            ++num;
-        }
+        }, this);
+        this.cmp.formatter.apply(v);
         this.cmp.deferFocus();
         this.cmp.updateToolbar();
     },
+
     _onSelectInlineStyle: function() {
         var v = this.inlineStylesSelect.dom.value;
-        var num = 0;
-        for(var i in this.inlineStyles) {
-            this.cmp.formatter.remove('inline'+num);
-            ++num;
-        }
-
-        num = 0;
-        for(var i in this.inlineStyles) {
-            if (i == v) {
-                this.cmp.formatter.apply('inline'+num);
-                break;
+        this.styles.forEach(function(style) {
+            if (style.type == 'inline') {
+                this.cmp.formatter.remove(style.id);
             }
-            ++num;
-        }
+        }, this);
+        this.cmp.formatter.apply(v);
         this.cmp.deferFocus();
         this.cmp.updateToolbar();
     },
+
+    registerStyles: function() {
+        this.styles.forEach(function(style) {
+            var s = {};
+            s[style.type] = style.tagName;
+            if (style.className) s.classes = style.className;
+            this.cmp.formatter.register(style.id, s);
+        }, this);
+    },
+
     _reloadStyles: function() {
         var reloadCss = function(doc) {
             var href = doc.location.protocol+'/' + '/'+
@@ -232,12 +189,11 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
             },
             url: this.cmp.controllerUrl+'/json-styles',
             success: function(response, options, result) {
-                this.inlineStyles = result.inlineStyles;
-                this.blockStyles = result.blockStyles;
+                this.styles = result.styles;
+                this.registerStyles();
                 this._renderInlineStylesSelect();
                 this._renderBlockStylesSelect();
                 if (this.cmp.activated) this.cmp.updateToolbar();
-                //TODO re-register styles to formatter
             },
             scope: this
         });
@@ -245,13 +201,13 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
 
     _renderInlineStylesSelect: function() {
         var stylesLength = 0;
-        for (var i in this.inlineStyles) stylesLength++;
-        if (this.inlineStyles && stylesLength > 1) {
+        this.styles.forEach(function(style) { if (style.type=='inline') stylesLength++; }, this);
+        if (stylesLength > 1) {
             if (!this.inlineStylesSelect) {
                 this.inlineStylesSelect = this.cmp.getToolbar().el.createChild({
                     tag:'select',
                     cls:'x-font-select',
-                    html: this.createInlineStylesOptions()
+                    html: this.createStylesOptions('inline')
                 });
                 this.inlineStylesSelect.on('change', this._onSelectInlineStyle, this);
                 var offs = 0;
@@ -268,7 +224,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                 this.inlineStylesToolbarText.show();
                 this.inlineStylesToolbarItem.show();
                 this.inlineStylesSeparator.show();
-                this.inlineStylesSelect.update(this.createInlineStylesOptions());
+                this.inlineStylesSelect.update(this.createStylesOptions('inline'));
             }
         } else {
             if (this.inlineStylesSelect) {
@@ -280,13 +236,13 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     },
     _renderBlockStylesSelect: function() {
         var stylesLength = 0;
-        for (var i in this.blockStyles) stylesLength++;
-        if (this.blockStyles && stylesLength > 1) {
+        this.styles.forEach(function(style) { if (style.type=='block') stylesLength++; }, this);
+        if (stylesLength > 1) {
             if (!this.blockStylesSelect) {
                 this.blockStylesSelect = this.cmp.getToolbar().el.createChild({
                     tag:'select',
                     cls:'x-font-select',
-                    html: this.createBlockStylesOptions()
+                    html: this.createStylesOptions('block')
                 });
                 this.blockStylesSelect.on('change', this._onSelectBlockStyle, this);
                 var tb = this.cmp.getToolbar();
@@ -299,7 +255,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                 this.blockStylesToolbarText.show();
                 this.blockStylesToolbarItem.show();
                 this.blockStylesSeparator.show();
-                this.blockStylesSelect.update(this.createBlockStylesOptions());
+                this.blockStylesSelect.update(this.createStylesOptions('block'));
             }
         } else {
             if (this.blockStylesSelect) {

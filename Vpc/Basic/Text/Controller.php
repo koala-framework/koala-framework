@@ -49,8 +49,6 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         }
 
         $m = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($this->_getParam('class'), 'stylesModel'));
-        $styles = $m->getStyles($ownStyles);
-        $this->view->inlineStyles = $styles['inline'];
-        $this->view->blockStyles = $styles['block'];
+        $this->view->styles = $m->getStyles($ownStyles);
     }
 }

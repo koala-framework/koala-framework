@@ -19,18 +19,18 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
 
     public static function getMasterStyles()
     {
-        $styles = array('inline' => array(), 'block' => array());
+        $styles = array();
         if (file_exists('css/master.css')) {
             $masterContent = file_get_contents('css/master.css');
-            preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?[^ ]*) *{[^}]*} */\\* +(.*?) +\\*/#m', $masterContent, $m);
+            preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{[^}]*} */\\* +(.*?) +\\*/#m', $masterContent, $m);
             foreach (array_keys($m[1]) as $i) {
-                $selector = $m[1][$i];
-                $name = $m[3][$i];
-                if (substr($selector, 0, 4)=='span') {
-                    $styles['inline'][$selector] = $name;
-                } else {
-                    $styles['block'][$selector] = $name;
-                }
+                $tagName = $m[2][$i];
+                $styles[] = array(
+                    'id' => 'master'.$i,
+                    'name' => $m[4][$i],
+                    'tagName' => $tagName,
+                    'className' => $m[3][$i],
+                );
             }
         }
         return $styles;
@@ -45,12 +45,21 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
     public function getStyles($ownStyles = false)
     {
         $styles = array();
-        $styles['block'] = array('p' => trlVps('Default'));
-        $styles['inline'] = array('span' => trlVps('Normal'));
+        $styles[] = array(
+            'id' => 'blockdefault',
+            'name' => trlVps('Default'),
+            'tagName' => 'p',
+            'className' => false,
+        );
+        $styles[] = array(
+            'id' => 'inlinedefault',
+            'name' => trlVps('Normal'),
+            'tagName' => 'span',
+            'className' => false,
+        );
 
         $masterStyles = $this->_getMasterStyles();
-        $styles['block'] = array_merge($styles['block'], $masterStyles['block']);
-        $styles['inline'] = array_merge($styles['inline'], $masterStyles['inline']);
+        $styles = array_merge($styles, $masterStyles);
 
         $select = $this->select();
         if ($ownStyles) {
@@ -60,17 +69,22 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
         }
         $select->order(new Zend_Db_Expr("ownStyles!=''"));
         $select->order('pos');
-        $blockTags = array('p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6');
         foreach ($this->getRows($select) as $row) {
             $selector = $row->tag.'.style'.$row->id;
-            if ($selector) {
-                $name = $row->name;
-                if ($row->ownStyles) $name = '* '.$name;
-                if ($row->tag == 'span') {
-                    $styles['inline'][$selector] = $name;
-                } else if (in_array($row->tag, $blockTags)) {
-                    $styles['block'][$selector] = $name;
-                }
+            $name = $row->name;
+            if ($row->ownStyles) $name = '* '.$name;
+            $styles[] = array(
+                'id' => 'style'.$row->id,
+                'name' => $name,
+                'tagName' => $row->tag,
+                'className' => 'style'.$row->id,
+            );
+        }
+        foreach ($styles as $k=>$i) {
+            if ($i['tagName'] == 'span') {
+                $styles[$k]['type'] = 'inline';
+            } else {
+                $styles[$k]['type'] = 'block';
             }
         }
         return $styles;

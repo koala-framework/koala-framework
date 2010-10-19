@@ -40,8 +40,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         if (this.enableStyles) {
             this.plugins.push(new Vps.Form.HtmlEditor.Styles({
-                inlineStyles: this.inlineStyles,
-                blockStyles: this.blockStyles,
+                styles: this.styles,
                 stylesEditorConfig: this.stylesEditorConfig,
                 stylesIdPattern: this.stylesIdPattern
             }));
