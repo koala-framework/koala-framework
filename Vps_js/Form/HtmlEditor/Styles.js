@@ -1,28 +1,28 @@
 Vps.Form.HtmlEditor.Styles = function(config) {
     Ext.apply(this, config);
-        this.editStyles = new Ext.Action({
-            icon: '/assets/silkicons/style_edit.png',
-            handler: function() {
-                this.stylesEditorDialog.show();
-            },
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: trlVps('Edit Styles'),
-                text: trlVps('Modify and Create Styles.')
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
 
-        if (this.stylesEditorConfig) {
-            this.stylesEditorDialog = Ext.ComponentMgr.create(this.stylesEditorConfig);
-            this.stylesEditorDialog.on('hide', this._reloadStyles, this);
-        }
+    this.editStyles = new Ext.Action({
+        icon: '/assets/silkicons/style_edit.png',
+        handler: function() {
+            this.stylesEditorDialog.show();
+        },
+        scope: this,
+        tooltip: {
+            cls: 'x-html-editor-tip',
+            title: trlVps('Edit Styles'),
+            text: trlVps('Modify and Create Styles.')
+        },
+        cls: 'x-btn-icon',
+        clickEvent: 'mousedown',
+        tabIndex: -1
+    });
 
-
+    if (this.stylesEditorConfig) {
+        this.stylesEditorDialog = Ext.ComponentMgr.create(this.stylesEditorConfig);
+        this.stylesEditorDialog.on('hide', this._reloadStyles, this);
+    }
 };
+
 Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     stylesIdPattern: null,
     init: function(cmp){
