@@ -55,7 +55,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Vpc_Abstract_Image
         $row = $this->_getImageEnlargeComponentData()->getComponent()->getRow();
         $model = $row->getModel();
         $primaryKey = $model->getPrimaryKey();
-        $ret[] = new Vps_Component_Cache_Meta_Model($model);
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($model);
         return $ret;
     }
 }
