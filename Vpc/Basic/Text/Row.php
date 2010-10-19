@@ -122,9 +122,9 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         $select->order('nr', 'DESC');
         $select->limit(1);
         $select->whereEquals('component', $type);
-        $row = $this->getChildRows('ChildComponents', $select)->current();
-        if (!$row) return 0;
-        return $row->nr;
+        $rows = $this->getChildRows('ChildComponents', $select);
+        if (!count($rows)) return 0;
+        return $rows->current()->nr;
     }
 
     protected function _beforeDelete()
