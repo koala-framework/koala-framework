@@ -17,29 +17,30 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
         $this->_filters = array('pos' => $filter);
     }
 
-    public static function getMasterStyles()
+    //public fuer test
+    public static function parseMasterStyles($file)
     {
         $styles = array();
-        if (file_exists('css/master.css')) {
-            $masterContent = file_get_contents('css/master.css');
-            preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{[^}]*} */\\* +(.*?) +\\*/#m', $masterContent, $m);
-            foreach (array_keys($m[1]) as $i) {
-                $tagName = $m[2][$i];
-                $styles[] = array(
-                    'id' => 'master'.$i,
-                    'name' => $m[4][$i],
-                    'tagName' => $tagName,
-                    'className' => $m[3][$i],
-                );
-            }
+        $masterContent = file_get_contents($file);
+        preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{[^}]*} */\\* +(.*?) +\\*/#m', $masterContent, $m);
+        foreach (array_keys($m[1]) as $i) {
+            $tagName = $m[2][$i];
+            $styles[] = array(
+                'id' => 'master'.$i,
+                'name' => $m[4][$i],
+                'tagName' => $tagName,
+                'className' => $m[3][$i],
+            );
         }
         return $styles;
     }
 
-    //um es im test einfacher überschreiben zu können
-    protected function _getMasterStyles()
+    public function getMasterStyles()
     {
-        return self::getMasterStyles();
+        if (file_exists('css/master.css')) {
+            return parseMasterStyles('css/master.css');
+        }
+        return array();
     }
 
     public function getStyles($ownStyles = false)
@@ -58,7 +59,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
             'className' => false,
         );
 
-        $masterStyles = $this->_getMasterStyles();
+        $masterStyles = $this->getMasterStyles();
         $styles = array_merge($styles, $masterStyles);
 
         $select = $this->select();
@@ -95,14 +96,14 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
         return new Vps_Assets_Cache();
     }
 
-    public static function removeCache()
+    public function removeCache()
     {
-        return self::_getCache()->remove('RteStyles');
+        return self::_getCache()->remove('RteStyles'.$this->getUniqueIdentifier());
     }
 
-    public static function getMTime()
+    public function getMTime()
     {
-        $mtime = self::_getCache()->test('RteStyles');
+        $mtime = self::_getCache()->test('RteStyles'.$this->getUniqueIdentifier());
         if (!$mtime) $mtime = time();
         return $mtime;
     }

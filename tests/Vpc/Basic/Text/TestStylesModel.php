@@ -14,7 +14,7 @@ class Vpc_Basic_Text_TestStylesModel extends Vpc_Basic_Text_StylesModel
             ));
         parent::__construct($config);
     }
-    protected function _getMasterStyles()
+    public function getMasterStyles()
     {
         return array();
     }

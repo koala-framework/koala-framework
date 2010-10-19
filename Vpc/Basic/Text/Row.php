@@ -229,6 +229,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $html = $tidy->value;
             if (!$parser) {
                 $parser = new Vpc_Basic_Text_Parser($this);
+                $parser->setMasterStyles(Vpc_Basic_Text_StylesModel::getMasterStyles());
             }
             $parser->setEnableColor(Vpc_Abstract::getSetting($this->_componentClass, 'enableColors'));
             $parser->setEnableTagsWhitelist(Vpc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
