@@ -23,7 +23,8 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
 
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = Vpc_Abstract::getTemplateVars();
+        $ret['linkTemplate'] = self::getTemplateFile($this->getData()->chained->componentClass);
         $ret['child'] = $this->_getContentChild();
         return $ret;
     }

@@ -3,7 +3,8 @@ class Vpc_Box_InheritContent_Cc_Component extends Vpc_Chained_Cc_Component
 {
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = Vpc_Abstract::getTemplateVars();
+        $ret['linkTemplate'] = self::getTemplateFile($this->getData()->chained->componentClass);
         $ret['child'] = $this->_getContentChild();
         return $ret;
     }
