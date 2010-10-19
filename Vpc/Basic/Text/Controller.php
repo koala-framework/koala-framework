@@ -8,6 +8,8 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
 
         $row = $this->_form->getRow();
         $parser = new Vpc_Basic_Text_Parser();
+        $m = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($this->_getParam('class'), 'stylesModel'));
+        $parser->setMasterStyles($m->getMasterStyles());
         if ($this->_getParam('allowCursorSpan')) {
             $parser->setEnableCursorSpan(true);
         }

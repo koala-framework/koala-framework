@@ -13,7 +13,7 @@ class Vpc_Basic_Text_Parser
     protected $_enableTagsWhitelist = true;
     protected $_enableStyles = true;
     protected $_enableCursorSpan = false;
-    private $_masterStyles = null;
+    private $_masterStyles;
 
 
     public function __construct(Vpc_Basic_Text_Row $row = null)
@@ -28,8 +28,8 @@ class Vpc_Basic_Text_Parser
 
     protected function _getMasterStyles()
     {
-        if (is_null($this->_masterStyles)) {
-            $this->_masterStyles = Vpc_Basic_Text_StylesModel::getMasterStyles();
+        if (!isset($this->_masterStyles)) {
+            throw new Vps_Exception("you must call setMasterStyles");
         }
         return $this->_masterStyles;
     }
