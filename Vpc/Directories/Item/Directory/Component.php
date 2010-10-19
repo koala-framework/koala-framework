@@ -24,11 +24,25 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
         return $this->getData();
     }
 
-    public static function getCacheMetaForView($componentClass, $pattern)
+    public static function getCacheMetaForView($view)
     {
+        $dir = $view->parent->getComponent()->getItemDirectory();
+        $dirClass = $dir;
+        $pattern = null;
+        if ($dir instanceof Vps_Component_Data) {
+            $dirClass = $dir->componentClass;
+            $c = $view->parent;
+            if ($c && $c->componentId == $dir->componentId) {
+                $pattern = '{component_id}-view';
+            } else {
+                while ($c && $c->componentId != $dir->componentId) $c = $c->parent;
+                if ($c) $pattern = '{component_id}%-view'; // Falls Directory ein parent ist, kann man mit diesem Pattern löschen, sonst nicht
+            }
+        }
+
         $ret = array();
         $generator = Vps_Component_Generator_Abstract::getInstance(
-            Vpc_Abstract::getComponentClassByParentClass($componentClass), 'detail'
+            Vpc_Abstract::getComponentClassByParentClass($dirClass), 'detail'
         );
         $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), $pattern);
         return $ret;

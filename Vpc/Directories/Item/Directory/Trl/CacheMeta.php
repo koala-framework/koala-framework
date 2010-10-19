@@ -10,9 +10,9 @@ class Vpc_Directories_Item_Directory_Trl_CacheMeta extends Vps_Component_Cache_M
     {
         $ret = parent::getDeleteWhere($pattern, $row);
         $componentId = $row->component_id;
-        $componentId = substr($ret, 0, max(strrpos($ret, '-'), strrpos($ret, '_')));
+        $componentId = substr($componentId, 0, max(strrpos($componentId, '-'), strrpos($componentId, '_')));
         $componentId .= '%-view';
-        $ret[0]['componentId'] = $componentId;
+        $ret['componentId'] = $componentId;
         return $ret;
     }
 }

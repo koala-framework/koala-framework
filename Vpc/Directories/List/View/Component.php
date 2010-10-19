@@ -208,26 +208,25 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         $ret = parent::getCacheMeta();
 
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
-        $pattern = null;
-        if ($dir instanceof Vps_Component_Data) {
-            $dirClass = $dir->componentClass;
-            $c = $this->getData();
-            while ($c && $c->componentId != $dir->componentId) $c = $c->parent;
-            if ($c) $pattern = '{component_id}%-view'; // Falls Directory ein parent ist, kann man mit diesem Pattern löschen, sonst nicht
-        } else if (is_string($dir)) {
-            $dirClass = $dir;
-        }
+        $dirClass = $dir;
+        if ($dir instanceof Vps_Component_Data) $dirClass = $dir->componentClass;
+        $callClass = $dirClass;
         if (strpos($dirClass, '.') !== false) {
-            $dirClass = substr($dirClass, strpos($dirClass, '.')+1);
+            $callClass = substr($dirClass, 0, strpos($dirClass, '.'));
         }
-        $meta = call_user_func(array($dirClass, 'getCacheMetaForView'), $dirClass, $pattern);
-        foreach ($meta as $m) {
-            $model = $m->getModel();
-            if (is_instance_of($this->_getSetting('partialClass'), 'Vps_Component_Partial_Id')) {
-                $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartialId($model, $pattern);
-            } else {
-                $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartial($model, $pattern);
-            }
+
+        // Das Directory fragen, weil nur das weiß, welches Meta/Pattern benötigt wird
+        $ret = call_user_func(array($callClass, 'getCacheMetaForView'), $this->getData());
+
+        // View ist bei Trl auch die Gleiche, deshalb hier Partial-Meta dazugeben
+        // mit dem Generator-Model, weil das ist das Model mit den Daten für die View
+        $generator = Vps_Component_Generator_Abstract::getInstance(
+            Vpc_Abstract::getComponentClassByParentClass($callClass), 'detail'
+        );
+        if (is_instance_of($this->_getSetting('partialClass'), 'Vps_Component_Partial_Id')) {
+            $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartialId($generator->getModel());
+        } else {
+            $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartial($generator->getModel());
         }
         return $ret;
     }

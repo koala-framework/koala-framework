@@ -9,19 +9,20 @@ class Vpc_Directories_Item_Directory_Trl_Component extends Vpc_Directories_List_
         return $ret;
     }
 
-    public static function getCacheMetaForView($componentClass, $pattern)
+    public static function getCacheMetaForView($view)
     {
-        // TODO Cache Test gibts keinen dafür
+        // Das Generator-Child-Model von der View muss nicht mit rein, weil
+        // die View ja 1:1 übernommen wird und dadurch vom master-CacheMeta
+        // abgedeckt wird
+
+        $dir = $view->parent->getComponent()->getItemDirectory();
+        $dirClass = $dir;
+        if ($dir instanceof Vps_Component_Data) $dirClass = $dir->componentClass;
+
         $ret = array();
-
-        $generator = Vps_Component_Generator_Abstract::getInstance(
-            Vpc_Abstract::getComponentClassByParentClass($componentClass), 'detail'
-        );
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), $pattern);
-
-        if (Vpc_Abstract::hasSetting($componentClass, 'childModel')) {
+        if (Vpc_Abstract::hasSetting($dirClass, 'childModel')) {
             $model = Vps_Model_Abstract::getInstance(
-                Vpc_Abstract::getSetting($componentClass, 'childModel')
+                Vpc_Abstract::getSetting($dirClass, 'childModel')
             );
             $ret[] = new Vpc_Directories_Item_Directory_Trl_CacheMeta($model);
         }
