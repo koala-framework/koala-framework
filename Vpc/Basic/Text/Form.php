@@ -43,9 +43,7 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
         }
 
         $t = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($class, 'stylesModel'));
-        $styles = $t->getStyles();
-        $field->setInlineStyles($styles['inline']);
-        $field->setBlockStyles($styles['block']);
+        $field->setStyles($t->getStyles());
         $field->setComponentClass($class);
 
         $field->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl());

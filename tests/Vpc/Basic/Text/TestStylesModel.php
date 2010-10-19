@@ -16,6 +16,6 @@ class Vpc_Basic_Text_TestStylesModel extends Vpc_Basic_Text_StylesModel
     }
     protected function _getMasterStyles()
     {
-        return array('block'=>array(), 'inline'=>array());
+        return array();
     }
 }

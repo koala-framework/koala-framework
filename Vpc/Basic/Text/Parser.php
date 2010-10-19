@@ -29,8 +29,7 @@ class Vpc_Basic_Text_Parser
     protected function _getMasterStyles()
     {
         if (is_null($this->_masterStyles)) {
-            $s = Vpc_Basic_Text_StylesModel::getMasterStyles();
-            $this->_masterStyles = array_merge($s['inline'], $s['block']);
+            $this->_masterStyles = Vpc_Basic_Text_StylesModel::getMasterStyles();
         }
         return $this->_masterStyles;
     }
@@ -71,12 +70,10 @@ class Vpc_Basic_Text_Parser
                  array_push($this->_stack, 'span');
                  $this->_finalHTML .= '<span style="'.$style.'">';
             } else {
-                $masterStyles = $this->_getMasterStyles();
                 $allowedClasses = array();
-                foreach (array_keys($masterStyles) as $s) {
-                    $i = explode('.', $s);
-                    if (isset($i[1])) {
-                        $allowedClasses[] = $i[1];
+                foreach ($this->_getMasterStyles() as $s) {
+                    if ($s['tagName'] == strtolower($element)) {
+                        $allowedClasses[] = $s['className'];
                     }
                 }
                 if ($this->_enableCursorSpan && isset($attributes['CLASS']) && $attributes['CLASS']=='_mce_type-bookmark') {
@@ -142,12 +139,9 @@ class Vpc_Basic_Text_Parser
                 $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
                     if (in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
-                        $masterStyles = $this->_getMasterStyles();
-                        $allowedClasses = array();
-                        foreach (array_keys($masterStyles) as $s) {
-                            $i = explode('.', $s);
-                            if ($i[0]==strtolower($element) && isset($i[1])) {
-                                $allowedClasses[] = $i[1];
+                        foreach ($this->_getMasterStyles() as $s) {
+                            if ($s['tagName'] == strtolower($element)) {
+                                $allowedClasses[] = $s['className'];
                             }
                         }
                         if ($key != 'CLASS' || (preg_match('#^style[0-9]+$#', $value) || in_array($value, $allowedClasses))) {
