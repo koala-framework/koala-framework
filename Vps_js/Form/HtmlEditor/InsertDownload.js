@@ -43,7 +43,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
     onInsertDownload: function() {
         var a = this.cmp.getFocusElement('a');
         if (a) {
-            var expr = new RegExp(this.componentId+'-d([0-9]+)');
+            var expr = new RegExp(this.cmp.componentId+'-d([0-9]+)');
             var m = a.href.match(expr);
             if (m) {
                 var nr = parseInt(m[1]);
@@ -51,13 +51,13 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
             if (nr) {
                 this.downloadDialog.un('datachange', this._insertDownloadLink, this);
                 this.downloadDialog.showEdit({
-                    componentId: this.componentId+'-d'+nr
+                    componentId: this.cmp.componentId+'-d'+nr
                 });
                 return;
             }
         }
         Ext.Ajax.request({
-            params: {componentId: this.componentId},
+            params: {componentId: this.cmp.componentId},
             url: this.cmp.controllerUrl+'/json-add-download',
             success: function(response, options, r) {
                 this.downloadDialog.un('datachange', this._insertDownloadLink, this);
@@ -78,7 +78,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
     updateToolbar: function() {
         var a = this.cmp.getFocusElement('a');
         if (a) {
-            var expr = new RegExp(this.componentId+'-d[0-9]+');
+            var expr = new RegExp(this.cmp.componentId+'-d[0-9]+');
             var m = a.href.match(expr);
             if (m) {
                 this.action.enable();

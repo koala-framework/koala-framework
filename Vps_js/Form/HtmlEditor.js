@@ -171,6 +171,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         return ret;
     },
     setValue : function(v) {
+        if (v && v.componentId) {
+            this.componentId = v.componentId;
+        }
         if (v && (typeof v.content) != 'undefined') v = v.content;
         Vps.Form.HtmlEditor.superclass.setValue.call(this, v);
     },

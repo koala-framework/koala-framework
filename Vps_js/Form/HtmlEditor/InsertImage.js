@@ -43,7 +43,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
         var img = this.cmp.getFocusElement('img');
         if (img) {
             this._currentImage = img;
-            var expr = new RegExp('/media/[^/]+/'+this.componentId+'-i([0-9]+)/');
+            var expr = new RegExp('/media/[^/]+/'+this.cmp.componentId+'-i([0-9]+)/');
             var m = img.src.match(expr);
             if (m) {
                 var nr = parseInt(m[1]);
@@ -52,14 +52,14 @@ Ext.extend(Vps.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
                 this.imageDialog.un('datachange', this._insertImage, this);
                 this.imageDialog.un('datachange', this._modifyImage, this);
                 this.imageDialog.showEdit({
-                    componentId: this.componentId+'-i'+nr
+                    componentId: this.cmp.componentId+'-i'+nr
                 });
                 this.imageDialog.on('datachange', this._modifyImage, this);
                 return;
             }
         }
         Ext.Ajax.request({
-            params: {componentId: this.componentId},
+            params: {componentId: this.cmp.componentId},
             url: this.cmp.controllerUrl+'/json-add-image',
             success: function(response, options, r) {
                 this.imageDialog.un('datachange', this._insertImage, this);

@@ -43,7 +43,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
     onInsertLink: function() {
         var a = this.cmp.getFocusElement('a');
         if (a) {
-            var expr = new RegExp(this.componentId+'-l([0-9]+)');
+            var expr = new RegExp(this.cmp.componentId+'-l([0-9]+)');
             var m = a.href.match(expr);
             if (m) {
                 var nr = parseInt(m[1]);
@@ -51,13 +51,13 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
             if (nr) {
                 this.linkDialog.un('datachange', this._insertLink, this);
                 this.linkDialog.showEdit({
-                    componentId: this.componentId+'-l'+nr
+                    componentId: this.cmp.componentId+'-l'+nr
                 });
                 return;
             }
         }
         Ext.Ajax.request({
-            params: {componentId: this.componentId},
+            params: {componentId: this.cmp.componentId},
             url: this.cmp.controllerUrl+'/json-add-link',
             success: function(response, options, r) {
                 this.linkDialog.un('datachange', this._insertLink, this);
@@ -78,7 +78,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
     updateToolbar: function() {
         var a = this.cmp.getFocusElement('a');
         if (a) {
-            var expr = new RegExp(this.componentId+'-l[0-9]+');
+            var expr = new RegExp(this.cmp.componentId+'-l[0-9]+');
             var m = a.href.match(expr);
             if (m) {
                 this.action.enable();

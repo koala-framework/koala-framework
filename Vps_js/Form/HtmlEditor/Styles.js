@@ -51,9 +51,8 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
 
     setValue: function(v) {
         if (v && v.componentId) {
-            this.componentId = v.componentId;
             if (this.stylesIdPattern) {
-                var m = this.componentId.match(this.stylesIdPattern);
+                var m = v.componentId.match(this.stylesIdPattern);
                 m = m ? m[0] : null;
                 if (this.ownStylesParam != m) {
                     this.ownStylesParam = m;
@@ -68,7 +67,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                 this.stylesEditorDialog.master.show();
             }
             this.stylesEditorDialog.applyBaseParams({
-                componentId: this.componentId,
+                componentId: this.cmp.componentId,
                 componentClass: this.cmp.componentClass
             });
         }
@@ -185,7 +184,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
         if (this.cmp.doc) reloadCss.call(this, this.cmp.doc);
         Ext.Ajax.request({
             params: {
-                componentId: this.componentId
+                componentId: this.cmp.componentId
             },
             url: this.cmp.controllerUrl+'/json-styles',
             success: function(response, options, result) {
