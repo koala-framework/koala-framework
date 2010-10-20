@@ -45,7 +45,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 stylesIdPattern: this.stylesIdPattern
             }));
         }
-        if (!Ext.isIE) this.plugins.push(new Vps.Form.HtmlEditor.BreadCrumbs());
+        this.plugins.push(new Vps.Form.HtmlEditor.BreadCrumbs());
 
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
     },
