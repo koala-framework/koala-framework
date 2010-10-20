@@ -1,0 +1,21 @@
+*** Link einfügen ***
+- url aufrufen: http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_TextSessionModel_Root/Vpc_Basic_TextSessionModel_TestComponent/Index?componentId=root-text
+- foo markieren
+- auf link einfügen in toolbar klicken
+- externer link auswählen
+- http://orf.at eintragen
+- alles bestätigen bis kein fenster mehr offen ist
+- Erwartet: foo ist als link hinterlegt
+- im RTE cursor innerhalb des Links setzen
+- Erwartet: Link Button ist enabled
+- Link Button klicken
+- Erwartet: vorher eingetragenen Daten werden angezeigt
+
+*** Interner-Link einfügen nicht möglich ***
+- url aufrufen: http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_TextSessionModel_Root/Vpc_Basic_TextSessionModel_TestComponent/Index?componentId=root-text
+- foo markieren
+- auf link einfügen in toolbar klicken
+- einen internen link in seitenbaum auswählen
+- alles bestätigen bis kein fenster mehr offen ist
+- Erwartet: foo ist als link hinterlegt
+
