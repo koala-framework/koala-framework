@@ -1,6 +1,22 @@
+== TODO ==
+1.11
+- RTE mit tinymce unterstützung                                    3
+- Component Cache Meta-Daten, löschen neu, Component Output neu
+                                      erste einsatzfähige Version  7
+
+- ACL mit Resourcen, sprerren von hinzufügen & löschen             8
+- Formulargenerator der auch Mails verschickt                      2
+- MenuConfig, flexibleres erstellen von Menüpunkten in Komponenten 2
+- Zurück Button
+- Volltextsuche bei änderung neu indizieren                        4
+- mögliche wildcards im RTE anzeigen                               1
+- Bearbeitbare Mails für neue Benutzer usw                         4
+- Component Cache fertigstellen                                    x
+- Model Typ-Strikt und Mongo                                       x
+
 == 1.11 ==
 Erstellt: 17.08.10
-Stable:
+Stable: wenn neuer component cache fertig
 Neue Features:
 - Vps_Date, Vps_DateTime
 - CopyContent
