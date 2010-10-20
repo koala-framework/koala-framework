@@ -124,11 +124,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             dom.bind(t.getDoc(), k, eventHandler);
         }
         this.formatter = new tinymce.Formatter(this.tinymceEditor);
-    },
-    onFirstFocus : function(){
-        Vps.Form.HtmlEditor.superclass.onFirstFocus.apply(this, arguments);
-        //TODO nicht nur onFirstFocus
-        tinyMCE.activeEditor = this.tinymceEditor;
+
+        Ext.fly(this.getDoc()).on('focus', function() {
+            //unschön, aber tinyMCE braucht das
+            tinyMCE.activeEditor = this.tinymceEditor;
+        }, this);
     },
     // private
     // überschrieben wegen spezieller ENTER behandlung im IE die wir nicht wollen
