@@ -26,6 +26,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
         var tb = this.cmp.getToolbar();
         tb.insert(5, '-');
         this.action = new Ext.Action({
+            testId: 'createlink',
             handler: this.onInsertLink,
             scope: this,
             tooltip: {
