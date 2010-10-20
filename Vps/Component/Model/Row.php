@@ -28,7 +28,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
             in_array($name, $fields) &&
             is_numeric($this->componentId)
         ) {
-            $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+            $m = $this->_data->generator->getModel();
             if (isset($this->_data->row) && $row = $m->getRow($this->_data->row->id)) {
                 foreach ($fields as $field) {
                     $this->_data->$field = $row->$field;
@@ -94,7 +94,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function delete()
     {
         $this->_beforeDelete();
-        $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+        $m = $this->_data->generator->getModel();
         $m->getRow($this->_data->row->id)->delete();
         $this->_afterDelete();
     }
