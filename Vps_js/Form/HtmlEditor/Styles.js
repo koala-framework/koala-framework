@@ -62,11 +62,6 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
             }
         }
         if (this.stylesEditorDialog) {
-            if (this.ownStylesParam) {
-                this.stylesEditorDialog.master.hide();
-            } else {
-                this.stylesEditorDialog.master.show();
-            }
             this.stylesEditorDialog.applyBaseParams({
                 componentId: this.cmp.componentId,
                 componentClass: this.cmp.componentClass
