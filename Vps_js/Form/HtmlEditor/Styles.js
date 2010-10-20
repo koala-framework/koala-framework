@@ -205,7 +205,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
             if (!this.inlineStylesSelect) {
                 this.inlineStylesSelect = this.cmp.getToolbar().el.createChild({
                     tag:'select',
-                    cls:'x-font-select',
+                    cls:'x-inline-style-select',
                     html: this.createStylesOptions('inline')
                 });
                 this.inlineStylesSelect.on('change', this._onSelectInlineStyle, this);
@@ -240,7 +240,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
             if (!this.blockStylesSelect) {
                 this.blockStylesSelect = this.cmp.getToolbar().el.createChild({
                     tag:'select',
-                    cls:'x-font-select',
+                    cls:'x-block-style-select',
                     html: this.createStylesOptions('block')
                 });
                 this.blockStylesSelect.on('change', this._onSelectBlockStyle, this);

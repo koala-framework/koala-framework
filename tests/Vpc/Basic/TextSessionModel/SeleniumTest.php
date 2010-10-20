@@ -95,4 +95,38 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
         
         sleep(5);
     }
+
+    public function testInlineStyle()
+    {
+        $this->openVpcEdit('Vpc_Basic_TextSessionModel_TestComponent', 'root_text');
+        $this->waitForConnections();
+
+        //insert some text
+        $this->typeKeys("document.getElementsByTagName('iframe')[0].contentDocument.body", 'bar baz');
+
+        //select some text
+        $this->runScript('var editor = null;
+            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Vps.Form.HtmlEditor) { editor = c; return false; } });
+            var rng = editor.tinymceEditor.selection.getRng();
+            rng.setStart(rng.startContainer, 4);
+            editor.tinymceEditor.selection.setRng(rng);
+            editor.onEditorEvent();
+        ');
+
+        $this->select('css=select.x-inline-style-select', 'label=Test3');
+
+        //assert inserted a tag
+        $this->selectFrame('//iframe');
+        $this->assertAttribute('//p/span/@class', 'style3');
+        $this->selectFrame('relative=top');
+
+        $this->select('css=select.x-inline-style-select', 'label=Normal');
+
+
+        //assert inserted a tag
+        $this->selectFrame('//iframe');
+        $this->assertElementNotPresent('//p/span/@class');
+        $this->selectFrame('relative=top');
+    }
+
 }
