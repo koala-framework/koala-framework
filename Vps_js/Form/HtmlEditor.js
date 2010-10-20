@@ -125,7 +125,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         this.formatter = new tinymce.Formatter(this.tinymceEditor);
 
-        Ext.fly(this.getDoc()).on('focus', function() {
+        Ext.fly(this.getWin()).on('focus', function() {
             //unschön, aber tinyMCE braucht das
             tinyMCE.activeEditor = this.tinymceEditor;
         }, this);
