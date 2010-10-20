@@ -58,4 +58,13 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Vpc_Abstract_Image
         $ret[] = new Vps_Component_Cache_Meta_Static_Model($model);
         return $ret;
     }
+/*
+    public function onCacheCallback($row)
+    {
+        $cacheId = Vps_Media::createCacheId(
+            $this->getData()->componentClass, $this->getData()->componentId, 'default'
+        );
+        Vps_Media::getOutputCache()->remove($cacheId);
+    }
+    */
 }
