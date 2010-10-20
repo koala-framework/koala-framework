@@ -7,7 +7,7 @@
     line-height: 20px;
     clear: both;
 }
-.cssClass form button {
+.cssClass .vpsButtonFlat button {
     font-weight: bold;
     border: 1px solid #000;
     background-color: #fff;
