@@ -16,6 +16,8 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
                 Vps_Component_Data_Root::setComponentClass($request->getParam('root'));
 
+                Vps_Registry::get('acl')->getComponentAcl()->allowComponent('guest', null);
+
                 //hick hack, für Vps_Component_Abstract_Admin::getControllerUrl
                 Zend_Registry::set('testRootComponentClass', $request->getParam('root'));
             }
