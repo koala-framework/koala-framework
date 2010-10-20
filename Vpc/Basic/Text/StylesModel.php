@@ -18,10 +18,9 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
     }
 
     //public fuer test
-    public static function parseMasterStyles($file)
+    public static function parseMasterStyles($masterContent)
     {
         $styles = array();
-        $masterContent = file_get_contents($file);
         preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{[^}]*} */\\* +(.*?) +\\*/#m', $masterContent, $m);
         foreach (array_keys($m[1]) as $i) {
             $tagName = $m[2][$i];
@@ -38,7 +37,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
     public function getMasterStyles()
     {
         if (file_exists('css/master.css')) {
-            return parseMasterStyles('css/master.css');
+            return parseMasterStyles(file_get_contents('css/master.css'));
         }
         return array();
     }
