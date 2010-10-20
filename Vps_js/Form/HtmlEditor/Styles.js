@@ -125,6 +125,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     },
 
     _onSelectBlockStyle: function() {
+        this.cmp.focus();
         var v = this.blockStylesSelect.dom.value;
         this.styles.forEach(function(style) {
             if (style.type == 'block') {
@@ -137,6 +138,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     },
 
     _onSelectInlineStyle: function() {
+        this.cmp.focus();
         var v = this.inlineStylesSelect.dom.value;
         this.styles.forEach(function(style) {
             if (style.type == 'inline') {
