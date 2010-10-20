@@ -76,8 +76,6 @@
 
 *** [TODO] Features / Bugs von niko
 - inline styles nur nur für "span" sondern auch für "a"
-- zwei <p>s markieren, Überschrift 1 auswählen,
-  Grundeinstellung wird angezeigt, Überschrift 1 sollte aber
 - bold ged ned immer:
    ul mit 3 einträgen, mittlere von ganz links weg nach ganz
    rechts markieren, bold machen, tidyn -> bold is weg:
