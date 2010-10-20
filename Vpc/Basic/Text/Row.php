@@ -334,27 +334,43 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     } catch (Vpc_Exception $e) {
                         $srcRow = false;
                     }
-                    $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
-                    if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
-                        $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
-                        $srcLinkRow = $linkModel->getRow($part['componentId'].'-link');
-                        if ($srcLinkRow) {
-                            $destRow->component = $srcRow->component;
-                            $destRow->save();
-                            $destLinkRow = $linkModel->getRow($destRow->component_id.'-link');
-                            if (!$destLinkRow) {
-                                $destLinkRow = $linkModel->createRow();
-                                $destLinkRow->component_id = $destRow->component_id.'-link';
+                    if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Component')) {
+                        $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
+                        if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
+                            $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
+                            $srcLinkRow = $linkModel->getRow($part['componentId'].'-link');
+                            if ($srcLinkRow) {
+                                $destRow->component = $srcRow->component;
+                                $destRow->save();
+                                $destLinkRow = $linkModel->getRow($destRow->component_id.'-link');
+                                if (!$destLinkRow) {
+                                    $destLinkRow = $linkModel->createRow();
+                                    $destLinkRow->component_id = $destRow->component_id.'-link';
+                                }
+                                foreach ($srcLinkRow->toArray() as $k=>$i) {
+                                    if ($k != 'component_id') {
+                                        $destLinkRow->$k = $i;
+                                    }
+                                }
+                                $destLinkRow->save();
+                                $newContent .= "<a href=\"{$destRow->component_id}\">";
+                                continue;
                             }
-                            foreach ($srcLinkRow->toArray() as $k=>$i) {
+                        }
+                    } else if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Abstract_Component')) {
+                        if ($srcRow) {
+                            foreach ($srcRow->toArray() as $k=>$i) {
                                 if ($k != 'component_id') {
-                                    $destLinkRow->$k = $i;
+                                    $destRow->$k = $i;
                                 }
                             }
-                            $destLinkRow->save();
+                            $destRow->save();
                             $newContent .= "<a href=\"{$destRow->component_id}\">";
                             continue;
                         }
+                    } else {
+                        //Kein link möglich
+                        continue;
                     }
                 }
                 if (!$destRow) {
