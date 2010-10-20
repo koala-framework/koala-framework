@@ -163,13 +163,6 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         return $this->_imageDataOrEmptyImageData;
     }
 
-    public function _getCacheRow()
-    {
-        $data = $this->getImageData();
-        if (isset($data['row'])) return $data['row'];
-        return null;
-    }
-
     protected function _getEmptyImageData()
     {
         return null;
@@ -296,14 +289,17 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         } else {
             $ret['mtime'] = filemtime($data['file']);
         }
-        if (isset($data['row'])) {
-            Vps_Component_Cache::getInstance()->saveMeta(
-                $component,
-                new Vps_Component_Cache_Meta_Static_Callback($data['row']->getModel())
-            );
-        }
         return $ret;
     }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $model = Vpc_Abstract::getSetting($componentClass, 'ownModel');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Callback($model);
+        return $ret;
+    }
+
 
     public function onCacheCallback($row)
     {

@@ -100,15 +100,6 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
         return nl2br($content);
     }
 
-    public function getCacheMeta()
-    {
-        $row = $this->getData()->row;
-        $user = Vps_Registry::get('config')->user->model->getRow($row->user_id);
-        $ret = parent::getCacheMeta();
-        $ret[] = new Vps_Component_Cache_Meta_Row($user);
-        return $ret;
-    }
-
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
