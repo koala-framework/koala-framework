@@ -2,6 +2,7 @@ Vps.Form.HtmlEditor.Styles = function(config) {
     Ext.apply(this, config);
 
     this.editStyles = new Ext.Action({
+        testId: 'editStyles',
         icon: '/assets/silkicons/style_edit.png',
         handler: function() {
             this.stylesEditorDialog.show();

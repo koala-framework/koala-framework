@@ -186,5 +186,4 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
 
         $this->assertSelectedLabel('css=select.x-block-style-select', 'Test1');
     }
-
 }
