@@ -10,7 +10,7 @@ class Vpc_Basic_TextSessionModel_TestModel extends Vpc_Basic_Text_Model
                 'columns' => array('component_id', 'content', 'data'),
                 'primaryKey' => 'component_id',
                 'defaultData'=> array(
-                    array('component_id'=>'root-text', 'content'=>'<p>foo</p>')
+                    array('component_id'=>'root_text', 'content'=>'<p>foo</p>')
                 )
             ));
         parent::__construct($config);
