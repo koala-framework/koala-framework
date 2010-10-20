@@ -93,8 +93,12 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             },
             extEditor: this,
             getDoc: function() {
-                return this.extEditor.doc;
+                return this.extEditor.getDoc();
+            },
+            getBody: function() {
+                return this.extEditor.getEditorBody();
             }
+
         };
         var lo = {
             mouseup : 'onMouseUp',
@@ -213,7 +217,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     getParents: function() {
         var s = this.tinymceEditor.selection;
         var n = (Ext.isIE ? s.getNode() : s.getStart()) || this.tinymceEditor.getBody();
-        n = Ext.isIE && n.ownerDocument != t.getDoc() ? t.getBody() : n; // Fix for IE initial state
+        n = Ext.isIE && n.ownerDocument != this.tinymceEditor.getDoc() ? this.tinymceEditor.getBody() : n; // Fix for IE initial state
         var parents = [];
         this.tinymceEditor.dom.getParent(n, function(node) {
             if (node.nodeName == 'BODY')

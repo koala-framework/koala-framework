@@ -7,7 +7,7 @@ Vps.Form.HtmlEditor.BreadCrumbs = Ext.extend(Ext.util.Observable, {
 
     afterRender: function() {
         this.el = this.cmp.wrap.createChild({
-            class: 'x-toolbar vps-htmleditor-breadcrumbs'
+            'class': 'x-toolbar vps-htmleditor-breadcrumbs'
         });
         this.el.on('click', function(e, target) {
             e.stopEvent();
@@ -38,5 +38,5 @@ Vps.Form.HtmlEditor.BreadCrumbs = Ext.extend(Ext.util.Observable, {
             html.push(' <a href="#">' + i + '</a> ');
         });
         this.el.update(html.join(' » '));
-    },
+    }
 });
