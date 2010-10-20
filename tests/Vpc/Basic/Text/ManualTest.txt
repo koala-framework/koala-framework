@@ -69,14 +69,6 @@
 - Strg+V drücken
 - Erwarteter Text in RTE: 'Ich mag Hunde!'
 
-*** Interner-Link einfügen nicht möglich ***
-- url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
-- foo markieren
-- auf link einfügen in toolbar klicken
-- einen internen link in seitenbaum auswählen
-- alles bestätigen bis kein fenster mehr offen ist
-- Erwartet: foo ist als link hinterlegt
-
 *** Cursor nach einfügen ganz am Anfang ***
 - url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
 - 'ein text' in die Zwischenablage
