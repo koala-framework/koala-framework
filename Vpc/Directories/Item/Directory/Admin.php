@@ -29,12 +29,14 @@ class Vpc_Directories_Item_Directory_Admin extends Vpc_Admin
         foreach ($this->_getPluginAdmins() as $a) {
             $componentPlugins[] = $a->getPluginExtConfig();
         }
+        $name = $this->_getSetting('componentName');
+        if (strpos($name, '.') !== false) $name = substr(strrchr($name, '.'), 1);
 
         return array(
             'items' => array(
                 'xtype'=>'vpc.directories.item.directory',
                 'controllerUrl' => $this->getControllerUrl(),
-                'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
+                'title' => trlVps('Edit {0}', $name),
                 'icon' => $this->_getSetting('componentIcon')->__toString(),
                 'contentClass' => $contentClass,
                 'contentType' => $cfgKeys ? $cfgKeys[0] : null,

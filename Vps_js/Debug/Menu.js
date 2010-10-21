@@ -146,7 +146,7 @@ Vps.Debug.Menu = function(config) {
                 success: function() {
                     location.href = location.href;
                 }
-            })
+            });
         }
     });
 };

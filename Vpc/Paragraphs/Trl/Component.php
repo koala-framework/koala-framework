@@ -20,6 +20,15 @@ class Vpc_Paragraphs_Trl_Component extends Vpc_Chained_Trl_Component
         return $ret;
     }
 
+    public function hasContent()
+    {
+        $childComponents = $this->getData()->getChildComponents(array('generator' => 'paragraphs'));
+        foreach ($childComponents as $c) {
+            if ($c->hasContent()) return true;
+        }
+        return false;
+    }
+
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();

@@ -679,4 +679,10 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         }
         return $ret;
     }
+
+    public function toDebug()
+    {
+        $ret = '<pre> Model '.get_class($this).'</pre>';
+        return $ret;
+    }
 }

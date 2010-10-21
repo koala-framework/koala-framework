@@ -33,4 +33,19 @@ class Vps_Util_Component
         }
         return $msg;
     }
+
+    public static function duplicate(Vps_Component_Data $source, Vps_Component_Data $parentTarget)
+    {
+        $new = $source->generator->duplicateChild($source, $parentTarget);
+
+        Vps_Component_Generator_Abstract::clearInstances();
+        Vps_Component_Data_Root::reset();
+
+        //TODO: schöner wär ein flag bei den komponenten ob es diese fkt im admin
+        //gibt und dann für alle admins aufrufen
+        //ändern sobald es für mehrere benötigt wird
+        Vpc_Root_TrlRoot_Chained_Admin::duplicated($source, $new);
+
+        return $new;
+    }
 }

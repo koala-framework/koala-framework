@@ -44,7 +44,7 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
                         ret = false;
                         return false; //break each
                     }
-                }, this)
+                }, this);
                 return ret;
             }, this);
         }

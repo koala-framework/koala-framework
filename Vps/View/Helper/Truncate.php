@@ -20,13 +20,13 @@ class Vps_View_Helper_Truncate
      *             array('string' => ' - String text 3', 'tag' => 'strong', 'cssClass' => 'thirdPart')
      *         )
      * @param integer $length The maximum string length that should be returned. Default: 80
-     * @param string $etc The extension of the string if (and only if!) it has been cut. Default: '...'
+     * @param string $etc The extension of the string if (and only if!) it has been cut. Default: '…' (&hellip;)
      * @param boolean $break_words Wether to break within words or not. Default: false
      * @param boolean $middle Truncates the string in the middle, not at the end.
      *                        Not possible if the first argument is an array. Default: false
      * @return string $string The truncated string, or the original string if it's shorter than $length.
      */
-    public function truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false)
+    public function truncate($string, $length = 80, $etc = '…', $break_words = false, $middle = false)
     {
         if ($length === false) return $string;
         if ($length == 0) return '';
@@ -53,7 +53,7 @@ class Vps_View_Helper_Truncate
         }
     }
 
-    private function _truncateArray($parts, $length = 80, $etc = '...', $break_words = false)
+    private function _truncateArray($parts, $length = 80, $etc = '…', $break_words = false)
     {
         $retItems = array();
         $lengthLeft = $length;

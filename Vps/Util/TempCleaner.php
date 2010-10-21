@@ -11,7 +11,7 @@ class Vps_Util_TempCleaner
         }
 
         foreach (new DirectoryIterator('application/temp') as $f) {
-            if ($f->isFile() && $f->getMTime() < time() - $cleanOlderThan) {
+            if ($f->isFile() && $f->getFilename() != '.gitignore' && $f->getMTime() < time() - $cleanOlderThan) {
                 unlink($f->getPathname());
             }
         }

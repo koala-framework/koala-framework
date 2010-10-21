@@ -4,10 +4,17 @@ class Vpc_Basic_LinkTag_Extern_Trl_Form_OriginalData extends Vps_Data_Abstract
     public function load($row)
     {
         $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible'=>true));
-        return $c->chained
-            ->getComponent()
-            ->getRow()
-            ->target;
+        // das ist nötig weil bei der übersetzung bei den link-cards
+        // natürlich gleich alle geladen werden und im chained dann zB ein
+        // download-tag drin ist und kein externer / etc.
+        if (is_instance_of($c->chained->componentClass, 'Vpc_Basic_LinkTag_Extern_Component')) {
+            return $c->chained
+                ->getComponent()
+                ->getRow()
+                ->target;
+        } else {
+            return '';
+        }
     }
 }
 

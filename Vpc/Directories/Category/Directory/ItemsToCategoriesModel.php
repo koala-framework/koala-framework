@@ -5,7 +5,7 @@ abstract class Vpc_Directories_Category_Directory_ItemsToCategoriesModel
     protected $_referenceMap = array(
         'Category' => array(
             'column'        => 'category_id',
-            'refModelClass' => 'Vps_Util_Model_Pool'
+            'refModelClass' => 'Vpc_Directories_Category_Directory_CategoriesModel'
         ),
         'Item' => array()
     );

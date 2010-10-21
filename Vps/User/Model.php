@@ -16,6 +16,8 @@ class Vps_User_Model extends Vps_Model_Proxy
 
     private $_lock = null;
 
+    protected $_noLogColumns = array();
+
     public function __construct(array $config = array())
     {
         if (!isset($config['proxyModel'])) {
@@ -96,7 +98,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             if ($row) {
                 if (!$row->deleted) {
                     $this->unlockCreateUser();
-                    throw new Vps_ClientException(
+                    throw new Vps_Exception_Client(
                         trlVps('An account with this email address already exists')
                     );
                 }
@@ -122,7 +124,7 @@ class Vps_User_Model extends Vps_Model_Proxy
                     $relRow->deleted = 0;
                     $relRow->save();
 
-                    $allRow->save(); // damit last_modified geschrieben wird
+                    $allRow->forceSave(); // damit last_modified geschrieben wird
 
                     $this->getProxyModel()->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
 
@@ -315,6 +317,8 @@ class Vps_User_Model extends Vps_Model_Proxy
 
     public function getAuthedUser()
     {
+        if (!Vps_Registry::get('db')) return null;
+
         if (php_sapi_name() == 'cli') return null;
 
         if (!$this->_authedUser) {
@@ -335,6 +339,7 @@ class Vps_User_Model extends Vps_Model_Proxy
     public function getAuthedUserRole()
     {
         if (php_sapi_name() == 'cli') return 'cli';
+        if (!Vps_Registry::get('db')) return 'guest';
 
         $loginData = Vps_Auth::getInstance()->getStorage()->read();
         if (isset($loginData['userRole'])) {
@@ -378,6 +383,11 @@ class Vps_User_Model extends Vps_Model_Proxy
     public function getPasswordColumn()
     {
         return $this->_passwordColumn;
+    }
+
+    public function getNoLogColumns()
+    {
+        return $this->_noLogColumns;
     }
 
 }
