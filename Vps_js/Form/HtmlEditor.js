@@ -25,14 +25,17 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 componentConfig: this.linkComponentConfig
             }));
         }
-        if (this.imageComponentConfig) {
-            this.plugins.push(new Vps.Form.HtmlEditor.InsertImage({
-                componentConfig: this.imageComponentConfig
-            }));
-        }
         if (this.downloadComponentConfig) {
             this.plugins.push(new Vps.Form.HtmlEditor.InsertDownload({
                 componentConfig: this.downloadComponentConfig
+            }));
+        }
+        if (this.linkComponentConfig || this.downloadComponentConfig) {
+            this.plugins.push(new Vps.Form.HtmlEditor.RemoveLink());
+        }
+        if (this.imageComponentConfig) {
+            this.plugins.push(new Vps.Form.HtmlEditor.InsertImage({
+                componentConfig: this.imageComponentConfig
             }));
         }
         if (this.controllerUrl && this.enableTidy) {

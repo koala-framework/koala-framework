@@ -73,6 +73,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
     _insertLink : function() {
         var params = this.linkDialog.getAutoForm().getBaseParams();
         this.cmp.relayCmd('createlink', params.componentId);
+        this.cmp.updateToolbar();
     },
 
     // private
