@@ -34,6 +34,8 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
         this.cmp.afterMethod('setValue', this.setValue, this);
         this.cmp.afterMethod('onRender', this.onRender, this);
         this.cmp.afterMethod('toggleSourceEdit', this.toggleSourceEdit, this);
+
+        this.select = {};
     },
 
     toggleSourceEdit : function(sourceEditMode) {
@@ -84,31 +86,31 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
         if (this.stylesEditorDialog) {
             this.stylesEditorToolbarItem = tb.insert(0, this.editStyles);
         }
-        this._renderInlineStylesSelect();
-        this._renderBlockStylesSelect();
+        this._renderStylesSelect('block');
+        this._renderStylesSelect('inline');
         tb.tr = tb.originalTr;
     },
 
     // private
     updateToolbar: function()
     {
-        if (this.blockStylesSelect) {
+        if (this.select.block.select) {
             var v = 'blockdefault';
             this.styles.forEach(function(style) {
                 if (style.type == 'block' && this.cmp.formatter.match(style.id)) {
                     v = style.id;
                 }
             }, this);
-            this.blockStylesSelect.setValue(v);
+            this.select.block.select.setValue(v);
         }
-        if (this.inlineStylesSelect) {
+        if (this.select.inline.select) {
             var v = 'inlinedefault';
             this.styles.forEach(function(style) {
                 if (style.type == 'inline' && this.cmp.formatter.match(style.id)) {
                     v = style.id;
                 }
             }, this);
-            this.inlineStylesSelect.setValue(v);
+            this.select.inline.select.setValue(v);
         }
     },
 
@@ -150,75 +152,14 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
             success: function(response, options, result) {
                 this.styles = result.styles;
                 this.registerStyles();
-                this._renderInlineStylesSelect();
-                this._renderBlockStylesSelect();
+                this._renderStylesSelect('block');
+                this._renderStylesSelect('inline');
                 if (this.cmp.activated) this.cmp.updateToolbar();
             },
             scope: this
         });
     },
 
-    _renderInlineStylesSelect: function() {
-        var stylesLength = 0;
-        this.styles.forEach(function(style) { if (style.type=='inline') stylesLength++; }, this);
-        if (stylesLength > 1) {
-            if (!this.inlineStylesSelect) {
-                this.inlineStylesSelect = new Vps.Form.ComboBox({
-                    editable: false,
-                    triggerAction: 'all',
-                    forceSelection: true,
-                    tpl: '<tpl for="."><div class="x-combo-list-item webStandard vpcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
-                    mode: 'local',
-                    width: 65,
-                    store: new Ext.data.JsonStore({
-                        autoDestroy: true,
-                        fields: ['id', 'name', 'tagName', 'className'],
-                        data: this.filterStylesByType('inline')
-                    })
-                });
-                this.inlineStylesSelect.on('select', function() {
-                    this.inlineStylesSelect.blur();
-                    this.inlineStylesSelect.triggerBlur();
-                    this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
-                    this.beforeFocusBookmark = null;
-                    this.cmp.focus();
-                    var v = this.inlineStylesSelect.getValue();
-                    this.styles.forEach(function(style) {
-                        if (style.type == 'inline') {
-                            this.cmp.formatter.remove(style.id);
-                        }
-                    }, this);
-                    this.cmp.formatter.apply(v);
-                    this.cmp.deferFocus();
-                    this.cmp.updateToolbar();
-                }, this, {delay: 1});
-                this.inlineStylesSelect.on('focus', function() {
-                    this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
-                }, this);
-                var offs = 0;
-                if (this.blockStylesToolbarItem && !this.blockStylesToolbarItem.hidden) {
-                    offs = 3;
-                }
-                var tb = this.cmp.getToolbar();
-                tb.tr = tb.stylesTr;
-                this.inlineStylesToolbarText = tb.insert(offs, trlVps('Inline')+':');
-                this.inlineStylesToolbarItem = tb.insert(offs+1, this.inlineStylesSelect);
-                this.inlineStylesSeparator = tb.insert(offs+2, '-');
-                tb.tr = tb.originalTr;
-            } else {
-                this.inlineStylesToolbarText.show();
-                this.inlineStylesToolbarItem.show();
-                this.inlineStylesSeparator.show();
-                this.inlineStylesSelect.store.loadData(this.filterStylesByType('inline'));
-            }
-        } else {
-            if (this.inlineStylesSelect) {
-                this.inlineStylesToolbarText.hide();
-                this.inlineStylesToolbarItem.hide();
-                this.inlineStylesSeparator.hide();
-            }
-        }
-    },
     filterStylesByType: function(type)
     {
         var ret = [];
@@ -227,61 +168,64 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
         }, this);
         return ret;
     },
-    _renderBlockStylesSelect: function() {
-        var stylesLength = 0;
-        this.styles.forEach(function(style) { if (style.type=='block') stylesLength++; }, this);
-        if (stylesLength > 1) {
-            if (!this.blockStylesSelect) {
-                this.blockStylesSelect = new Vps.Form.ComboBox({
-                    editable: false,
-                    triggerAction: 'all',
-                    forceSelection: true,
-                    tpl: '<tpl for="."><div class="x-combo-list-item webStandard vpcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
-                    mode: 'local',
-                    width: 65,
-                    store: new Ext.data.JsonStore({
-                        autoDestroy: true,
-                        fields: ['id', 'name', 'tagName', 'className'],
-                        data: this.filterStylesByType('block')
-                    })
-                });
-                this.blockStylesSelect.on('select', function() {
-                    this.blockStylesSelect.blur();
-                    this.blockStylesSelect.triggerBlur();
-                    this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
-                    this.beforeFocusBookmark = null;
-                    this.cmp.focus();
-                    var v = this.blockStylesSelect.getValue();
-                    this.styles.forEach(function(style) {
-                        if (style.type == 'block') {
-                            this.cmp.formatter.remove(style.id);
-                        }
-                    }, this);
-                    this.cmp.formatter.apply(v);
-                    this.cmp.deferFocus();
-                    this.cmp.updateToolbar();
-                }, this, {delay: 1});
-                this.blockStylesSelect.on('focus', function() {
-                    this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
+    _renderStylesSelect: function(type)
+    {
+        if (!this.select[type]) {
+            this.select[type] = {};
+        }
+        var select = this.select[type];
+        if (!select.select) {
+            select.select = new Vps.Form.ComboBox({
+                editable: false,
+                triggerAction: 'all',
+                forceSelection: true,
+                tpl: '<tpl for="."><div class="x-combo-list-item webStandard vpcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
+                mode: 'local',
+                width: 65,
+                store: new Ext.data.JsonStore({
+                    autoDestroy: true,
+                    fields: ['id', 'name', 'tagName', 'className'],
+                    data: this.filterStylesByType(type)
+                })
+            });
+            select.select.on('select', function(combo, record) {
+                combo.blur();
+                combo.triggerBlur();
+                this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
+                this.beforeFocusBookmark = null;
+                this.cmp.focus();
+                this.styles.forEach(function(style) {
+                    if (style.type == type) {
+                        this.cmp.formatter.remove(style.id);
+                    }
                 }, this);
-                var tb = this.cmp.getToolbar();
-                tb.tr = tb.stylesTr;
-                this.blockStylesToolbarText = tb.insert(0, trlVps('Block')+':');
-                this.blockStylesToolbarItem = tb.insert(1, this.blockStylesSelect);
-                this.blockStylesSeparator = tb.insert(2, '-');
-                tb.tr = tb.originalTr;
-            } else {
-                this.blockStylesToolbarText.show();
-                this.blockStylesToolbarItem.show();
-                this.blockStylesSeparator.show();
-                this.inlineStylesSelect.store.loadData(this.filterStylesByType('block'));
-            }
+                this.cmp.formatter.apply(record.get('id'));
+                this.cmp.deferFocus();
+                this.cmp.updateToolbar();
+            }, this, {delay: 1});
+            select.select.on('focus', function() {
+                this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
+            }, this);
+            var tb = this.cmp.getToolbar();
+            tb.tr = tb.stylesTr;
+            var text = (type == 'block' ? trlVps('Block') : trlVps('Inline'));
+            var offset = (type == 'block' ? 0 : 3);
+            select.toolbarText = tb.insert(offset+0, text+':');
+            select.toolbarItem = tb.insert(offset+1, select.select);
+            select.separator = tb.insert(offset+2, '-');
+            tb.tr = tb.originalTr;
         } else {
-            if (this.blockStylesSelect) {
-                this.blockStylesToolbarText.hide();
-                this.blockStylesToolbarItem.hide();
-                this.blockStylesSeparator.hide();
-            }
+            select.select.store.loadData(this.filterStylesByType(type));
+        }
+
+        if (this.filterStylesByType(type).length > 1) {
+            select.toolbarText.show();
+            select.toolbarItem.show();
+            select.separator.show();
+        } else {
+            select.toolbarText.hide();
+            select.toolbarItem.hide();
+            select.separator.hide();
         }
     }
 
