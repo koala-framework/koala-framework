@@ -112,40 +112,6 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
         }
     },
 
-    _onSelectBlockStyle: function() {
-        this.blockStylesSelect.blur();
-        this.blockStylesSelect.triggerBlur();
-        this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
-        this.beforeFocusBookmark = null;
-        this.cmp.focus();
-        var v = this.blockStylesSelect.getValue();
-        this.styles.forEach(function(style) {
-            if (style.type == 'block') {
-                this.cmp.formatter.remove(style.id);
-            }
-        }, this);
-        this.cmp.formatter.apply(v);
-        this.cmp.deferFocus();
-        this.cmp.updateToolbar();
-    },
-
-    _onSelectInlineStyle: function() {
-        this.inlineStylesSelect.blur();
-        this.inlineStylesSelect.triggerBlur();
-        this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
-        this.beforeFocusBookmark = null;
-        this.cmp.focus();
-        var v = this.inlineStylesSelect.getValue();
-        this.styles.forEach(function(style) {
-            if (style.type == 'inline') {
-                this.cmp.formatter.remove(style.id);
-            }
-        }, this);
-        this.cmp.formatter.apply(v);
-        this.cmp.deferFocus();
-        this.cmp.updateToolbar();
-    },
-
     registerStyles: function() {
         this.styles.forEach(function(style) {
             var s = {};
@@ -210,7 +176,22 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                         data: this.filterStylesByType('inline')
                     })
                 });
-                this.inlineStylesSelect.on('select', this._onSelectInlineStyle, this, {delay: 1});
+                this.inlineStylesSelect.on('select', function() {
+                    this.inlineStylesSelect.blur();
+                    this.inlineStylesSelect.triggerBlur();
+                    this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
+                    this.beforeFocusBookmark = null;
+                    this.cmp.focus();
+                    var v = this.inlineStylesSelect.getValue();
+                    this.styles.forEach(function(style) {
+                        if (style.type == 'inline') {
+                            this.cmp.formatter.remove(style.id);
+                        }
+                    }, this);
+                    this.cmp.formatter.apply(v);
+                    this.cmp.deferFocus();
+                    this.cmp.updateToolbar();
+                }, this, {delay: 1});
                 this.inlineStylesSelect.on('focus', function() {
                     this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
                 }, this);
@@ -264,7 +245,22 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                         data: this.filterStylesByType('block')
                     })
                 });
-                this.blockStylesSelect.on('select', this._onSelectBlockStyle, this, {delay: 1});
+                this.blockStylesSelect.on('select', function() {
+                    this.blockStylesSelect.blur();
+                    this.blockStylesSelect.triggerBlur();
+                    this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
+                    this.beforeFocusBookmark = null;
+                    this.cmp.focus();
+                    var v = this.blockStylesSelect.getValue();
+                    this.styles.forEach(function(style) {
+                        if (style.type == 'block') {
+                            this.cmp.formatter.remove(style.id);
+                        }
+                    }, this);
+                    this.cmp.formatter.apply(v);
+                    this.cmp.deferFocus();
+                    this.cmp.updateToolbar();
+                }, this, {delay: 1});
                 this.blockStylesSelect.on('focus', function() {
                     this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
                 }, this);
