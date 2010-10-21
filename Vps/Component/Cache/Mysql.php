@@ -197,9 +197,11 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             $ids = array_unique(array_merge($ids, $ids2));
         } while ($ids2);
         foreach ($ret as $componentClass => $componentIds) {
-            $wheres[$componentClass][] = array(
-                'componentId' => array_values(array_unique($componentIds))
-            );
+            foreach (array_unique($componentIds) as $componentId) {
+                $wheres[$componentClass][] = array(
+                    'componentId' => $componentId
+                );
+            }
         }
         return $wheres;
     }
@@ -252,11 +254,13 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 $or[] = new Vps_Model_Select_Expr_And($and);
             }
         }
-        $select->where(new Vps_Model_Select_Expr_Or($or));
-        //p($select->getParts());
-        $this->getModel()->updateRows(array('deleted' => true), $select);
-        //d($this->getModel('metaModel')->getRows()->toArray());
-        //d($this->getModel()->getRows()->toArray());
+        if ($or) {
+            $select->where(new Vps_Model_Select_Expr_Or($or));
+            //p($select->getParts());
+            $this->getModel()->updateRows(array('deleted' => true), $select);
+            //d($this->getModel('metaModel')->getRows()->toArray());
+            //d($this->getModel()->getRows()->toArray());
+        }
     }
 
     public function cleanByModel(Vps_Model_Abstract $model)
