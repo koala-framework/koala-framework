@@ -29,11 +29,6 @@ abstract class Vps_Component_Renderer_Abstract
         return $ret;
     }
 
-    protected function _formatOutputConfig($outputConfig, $component)
-    {
-        return $outputConfig;
-    }
-
     public function renderComponent($component)
     {
         $this->_plugins = array();
@@ -113,17 +108,6 @@ abstract class Vps_Component_Renderer_Abstract
                 }
                 $content = $helper->render($component, $config, $view);
                 $stats['rendered'][] = $statId;
-                foreach ($plugins as $pluginClass) {
-                    $plugin = new $pluginClass($componentId);
-                    if (!$plugin instanceof Vps_Component_Plugin_Abstract)
-                        throw Vps_Exception('Plugin must be Instanceof Vps_Component_Plugin_Abstract');
-                    if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
-                        $content = $plugin->processOutput($content);
-                    } else if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_AFTER) {
-                        $pluginNr++;
-                        $content = "{plugin $pluginNr $pluginClass $componentId}$content{/plugin $pluginNr}";
-                    }
-                }
 
                 if ($this->_enableCache) {
                     if ($useCache) {
@@ -144,6 +128,18 @@ abstract class Vps_Component_Renderer_Abstract
                 }
 
                 $statType = $useCache ? 'nocache' : 'noviewcache';
+            }
+
+            foreach ($plugins as $pluginClass) {
+                $plugin = new $pluginClass($componentId);
+                if (!$plugin instanceof Vps_Component_Plugin_Abstract)
+                    throw Vps_Exception('Plugin must be Instanceof Vps_Component_Plugin_Abstract');
+                if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_BEFORE) {
+                    $content = $plugin->processOutput($content);
+                } else if ($plugin->getExecutionPoint() == Vps_Component_Plugin_Interface_View::EXECUTE_AFTER) {
+                    $pluginNr++;
+                    $content = "{plugin $pluginNr $pluginClass $componentId}$content{/plugin $pluginNr}";
+                }
             }
 
             Vps_Benchmark::count("rendered $statType", $statId);
