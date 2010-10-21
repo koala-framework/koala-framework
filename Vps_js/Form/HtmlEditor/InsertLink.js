@@ -57,6 +57,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
                 return;
             }
         }
+        this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
         Ext.Ajax.request({
             params: {componentId: this.cmp.componentId},
             url: this.cmp.controllerUrl+'/json-add-link',
@@ -72,6 +73,11 @@ Ext.extend(Vps.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
     },
     _insertLink : function() {
         var params = this.linkDialog.getAutoForm().getBaseParams();
+
+        this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
+        this.beforeFocusBookmark = null;
+        this.cmp.focus();
+
         this.cmp.relayCmd('createlink', params.componentId);
         this.cmp.updateToolbar();
     },
