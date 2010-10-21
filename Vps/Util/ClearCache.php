@@ -104,7 +104,7 @@ class Vps_Util_ClearCache
             ) {
                 if ($output) echo "Refresh static cache...";
                 try {
-                    Vps_Component_Cache::refreshStaticCache();
+                    Vps_Component_Cache::saveStaticMeta();
                     if ($output) echo " [\033[00;32mOK\033[00m]\n";
                 } catch (Exception $e) {
                     if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";

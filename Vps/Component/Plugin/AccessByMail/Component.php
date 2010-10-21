@@ -31,7 +31,7 @@ class Vps_Component_Plugin_AccessByMail_Component extends Vps_Component_Plugin_V
         $templateVars['form'] = $form;
 
         $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
-        $view = new Vps_View_Component();
+        $view = new Vps_Component_View();
         $view->assign($templateVars);
         return $view->render($template);
     }
