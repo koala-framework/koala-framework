@@ -112,20 +112,6 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
         }
     },
 
-    createStylesOptions : function(type){
-        var buf = [];
-        this.styles.forEach(function(style) {
-            if (style.type == type) {
-                buf.push(
-                    '<option value="',style.id,'">',
-                        style.name,
-                    '</option>'
-                );
-            }
-        }, this);
-        return buf.join('');
-    },
-
     _onSelectBlockStyle: function() {
         this.blockStylesSelect.blur();
         this.blockStylesSelect.triggerBlur();
@@ -242,7 +228,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                 this.inlineStylesToolbarText.show();
                 this.inlineStylesToolbarItem.show();
                 this.inlineStylesSeparator.show();
-                this.inlineStylesSelect.update(this.createStylesOptions('inline'));
+                this.inlineStylesSelect.store.loadData(this.filterStylesByType('inline'));
             }
         } else {
             if (this.inlineStylesSelect) {
@@ -292,7 +278,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                 this.blockStylesToolbarText.show();
                 this.blockStylesToolbarItem.show();
                 this.blockStylesSeparator.show();
-                this.blockStylesSelect.update(this.createStylesOptions('block'));
+                this.inlineStylesSelect.store.loadData(this.filterStylesByType('block'));
             }
         } else {
             if (this.blockStylesSelect) {
