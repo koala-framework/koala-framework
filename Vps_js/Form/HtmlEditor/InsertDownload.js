@@ -72,6 +72,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
     _insertDownloadLink : function() {
         var params = this.downloadDialog.getAutoForm().getBaseParams();
         this.relayCmd('createlink', params.componentId);
+        this.cmp.updateToolbar();
     },
 
     // private
