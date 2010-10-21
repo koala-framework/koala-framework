@@ -56,6 +56,7 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
                 return;
             }
         }
+        this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
         Ext.Ajax.request({
             params: {componentId: this.cmp.componentId},
             url: this.cmp.controllerUrl+'/json-add-download',
@@ -71,6 +72,11 @@ Ext.extend(Vps.Form.HtmlEditor.InsertDownload, Ext.util.Observable, {
     },
     _insertDownloadLink : function() {
         var params = this.downloadDialog.getAutoForm().getBaseParams();
+
+        this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
+        this.beforeFocusBookmark = null;
+        this.cmp.focus();
+
         this.relayCmd('createlink', params.componentId);
         this.cmp.updateToolbar();
     },
