@@ -93,20 +93,22 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     updateToolbar: function()
     {
         if (this.blockStylesSelect) {
-            this.blockStylesSelect.dom.value = 'blockdefault';
+            var v = 'blockdefault';
             this.styles.forEach(function(style) {
                 if (style.type == 'block' && this.cmp.formatter.match(style.id)) {
-                    this.blockStylesSelect.dom.value = style.id;
+                    v = style.id;
                 }
             }, this);
+            this.blockStylesSelect.setValue(v);
         }
         if (this.inlineStylesSelect) {
-            this.inlineStylesSelect.dom.value = 'inlinedefault';
+            var v = 'inlinedefault';
             this.styles.forEach(function(style) {
                 if (style.type == 'inline' && this.cmp.formatter.match(style.id)) {
-                    this.inlineStylesSelect.dom.value = style.id;
+                    v = style.id;
                 }
             }, this);
+            this.inlineStylesSelect.setValue(v);
         }
     },
 
@@ -125,8 +127,12 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     },
 
     _onSelectBlockStyle: function() {
+        this.blockStylesSelect.blur();
+        this.blockStylesSelect.triggerBlur();
+        this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
+        this.beforeFocusBookmark = null;
         this.cmp.focus();
-        var v = this.blockStylesSelect.dom.value;
+        var v = this.blockStylesSelect.getValue();
         this.styles.forEach(function(style) {
             if (style.type == 'block') {
                 this.cmp.formatter.remove(style.id);
@@ -138,8 +144,12 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
     },
 
     _onSelectInlineStyle: function() {
+        this.inlineStylesSelect.blur();
+        this.inlineStylesSelect.triggerBlur();
+        this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
+        this.beforeFocusBookmark = null;
         this.cmp.focus();
-        var v = this.inlineStylesSelect.dom.value;
+        var v = this.inlineStylesSelect.getValue();
         this.styles.forEach(function(style) {
             if (style.type == 'inline') {
                 this.cmp.formatter.remove(style.id);
@@ -201,12 +211,23 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
         this.styles.forEach(function(style) { if (style.type=='inline') stylesLength++; }, this);
         if (stylesLength > 1) {
             if (!this.inlineStylesSelect) {
-                this.inlineStylesSelect = this.cmp.getToolbar().el.createChild({
-                    tag:'select',
-                    cls:'x-inline-style-select',
-                    html: this.createStylesOptions('inline')
+                this.inlineStylesSelect = new Vps.Form.ComboBox({
+                    editable: false,
+                    triggerAction: 'all',
+                    forceSelection: true,
+                    tpl: '<tpl for="."><div class="x-combo-list-item webStandard vpcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
+                    mode: 'local',
+                    width: 65,
+                    store: new Ext.data.JsonStore({
+                        autoDestroy: true,
+                        fields: ['id', 'name', 'tagName', 'className'],
+                        data: this.filterStylesByType('inline')
+                    })
                 });
-                this.inlineStylesSelect.on('change', this._onSelectInlineStyle, this);
+                this.inlineStylesSelect.on('select', this._onSelectInlineStyle, this, {delay: 1});
+                this.inlineStylesSelect.on('focus', function() {
+                    this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
+                }, this);
                 var offs = 0;
                 if (this.blockStylesToolbarItem && !this.blockStylesToolbarItem.hidden) {
                     offs = 3;
@@ -214,7 +235,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                 var tb = this.cmp.getToolbar();
                 tb.tr = tb.stylesTr;
                 this.inlineStylesToolbarText = tb.insert(offs, trlVps('Inline')+':');
-                this.inlineStylesToolbarItem = tb.insert(offs+1, this.inlineStylesSelect.dom);
+                this.inlineStylesToolbarItem = tb.insert(offs+1, this.inlineStylesSelect);
                 this.inlineStylesSeparator = tb.insert(offs+2, '-');
                 tb.tr = tb.originalTr;
             } else {
@@ -231,21 +252,40 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
             }
         }
     },
+    filterStylesByType: function(type)
+    {
+        var ret = [];
+        this.styles.forEach(function(s) {
+            if (s.type == type) ret.push(s);
+        }, this);
+        return ret;
+    },
     _renderBlockStylesSelect: function() {
         var stylesLength = 0;
         this.styles.forEach(function(style) { if (style.type=='block') stylesLength++; }, this);
         if (stylesLength > 1) {
             if (!this.blockStylesSelect) {
-                this.blockStylesSelect = this.cmp.getToolbar().el.createChild({
-                    tag:'select',
-                    cls:'x-block-style-select',
-                    html: this.createStylesOptions('block')
+                this.blockStylesSelect = new Vps.Form.ComboBox({
+                    editable: false,
+                    triggerAction: 'all',
+                    forceSelection: true,
+                    tpl: '<tpl for="."><div class="x-combo-list-item webStandard vpcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
+                    mode: 'local',
+                    width: 65,
+                    store: new Ext.data.JsonStore({
+                        autoDestroy: true,
+                        fields: ['id', 'name', 'tagName', 'className'],
+                        data: this.filterStylesByType('block')
+                    })
                 });
-                this.blockStylesSelect.on('change', this._onSelectBlockStyle, this);
+                this.blockStylesSelect.on('select', this._onSelectBlockStyle, this, {delay: 1});
+                this.blockStylesSelect.on('focus', function() {
+                    this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
+                }, this);
                 var tb = this.cmp.getToolbar();
                 tb.tr = tb.stylesTr;
                 this.blockStylesToolbarText = tb.insert(0, trlVps('Block')+':');
-                this.blockStylesToolbarItem = tb.insert(1, this.blockStylesSelect.dom);
+                this.blockStylesToolbarItem = tb.insert(1, this.blockStylesSelect);
                 this.blockStylesSeparator = tb.insert(2, '-');
                 tb.tr = tb.originalTr;
             } else {
