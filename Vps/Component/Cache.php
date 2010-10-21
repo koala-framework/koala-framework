@@ -97,4 +97,56 @@ abstract class Vps_Component_Cache
     protected abstract function _saveMetaModel($componentClass, $modelName, $pattern, $metaClass);
     protected abstract function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $metaClass);
     protected abstract function _saveMetaComponent(Vps_Component_Data $component, Vps_Component_Data $target);
+
+    protected function _getModelname($row)
+    {
+        if ($row instanceof Vps_Model_Row_Abstract) {
+            $model = $row->getModel();
+            if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
+        } else if ($row instanceof Zend_Db_Table_Row_Abstract) {
+            $model = $row->getTable();
+        } else {
+            throw new Vps_Exception('row must be instance of Vps_Model_Row_Abstract or Zend_Db_Table_Row_Abstract');
+        }
+        return get_class($model);
+    }
+
+    protected function _getComponentIdsFromWheres($wheres)
+    {
+        $ret = array();
+        foreach ($wheres as $where) {
+            foreach ($where as $w) {
+                if (isset($w['componentId'])) {
+                    $c = $w['componentId'];
+                    $ret[] = $w['componentId'];
+                }
+            }
+        }
+        return array_unique($ret);
+    }
+
+    public function cleanByRow(Vps_Model_Row_Abstract $row)
+    {
+        //p($this->_getModelname($row));
+        $wheres = array();
+        $wheres = $this->_addRowWhere($wheres, $row);
+        $wheres = $this->_addModelWhere($wheres, $row);
+        $wheres = $this->_addComponentWhere($wheres);
+        $wheres = $this->_addChainedWhere($wheres);
+        $this->_cleanByWheres($wheres);
+
+        // Callback
+        $wheres = array();
+        $wheres = $this->_addRowWhere($wheres, $row, Vps_Component_Cache_Meta_Abstract::META_TYPE_CALLBACK);
+        $wheres = $this->_addModelWhere($wheres, $row, Vps_Component_Cache_Meta_Abstract::META_TYPE_CALLBACK);
+        $wheres = $this->_addComponentWhere($wheres);
+        $wheres = $this->_addChainedWhere($wheres);
+        foreach ($this->_getComponentIdsFromWheres($wheres) as $componentId) {
+            $component = Vps_Component_Data_Root::getInstance()->getComponentById(
+                $componentId, array('ignoreVisible' => true)
+            );
+            if ($component) $component->getComponent()->onCacheCallback($row);
+        }
+    }
+
 }

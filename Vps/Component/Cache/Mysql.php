@@ -2,8 +2,6 @@
 class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 {
     protected $_models;
-    const CLEAN_DEFAULT = 'default';
-    private $_chainedTypes;
 
     public function __construct()
     {
@@ -119,19 +117,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $this->_models['preload']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
-    protected function _getModelname($row)
-    {
-        if ($row instanceof Vps_Model_Row_Abstract) {
-            $model = $row->getModel();
-            if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
-        } else if ($row instanceof Zend_Db_Table_Row_Abstract) {
-            $model = $row->getTable();
-        } else {
-            throw new Vps_Exception('row must be instance of Vps_Model_Row_Abstract or Zend_Db_Table_Row_Abstract');
-        }
-        return get_class($model);
-    }
-
     protected function _addRowWhere($wheres, $row, $metaType = Vps_Component_Cache_Meta_Abstract::META_TYPE_DEFAULT)
     {
         // Das suchen wir
@@ -221,94 +206,29 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
     protected function _addChainedWhere($wheres)
     {
-        // chainedTypes im Format chainedTypes['Trl'] = 'Vpc_Chained_Trl_...' holen
-        if (is_null($this->_chainedTypes)) {
-            foreach (Vps_Component_Abstract::getComponentClasses() as $cc) {
-                if (!Vpc_Abstract::hasSetting($cc, 'masterComponentClass')) continue;
-                $chainedType = Vpc_Abstract::getFlag($cc, 'chainedType');
-                if ($chainedType) $this->_chainedTypes[$chainedType] = $cc;
-            }
-        }
-        $chainedTypes = $this->_chainedTypes;
-
         $model = $this->getModel('metaChained');
         $select = $model->select()
             ->whereEquals('source_component_class', array_keys($wheres));
         foreach ($model->getRows($select) as $row) { // Alle infrage kommenden target_component_classes
-
             // Alle master-componentIds der target_component_class
-            if (!isset($wheres[$row->source_component_class])) continue;
-            $componentIds = $this->_getComponentIdsFromWheres(array($wheres[$row->source_component_class]));
-            foreach ($componentIds as $componentId) {
-
-                if (strpos($componentId, '%') !== false) continue;
-
-                // Komponente von Master bei der der Cache gelöscht wird
-                $component = Vps_Component_Data_Root::getInstance()
-                    ->getComponentById($componentId, array('ignoreVisible' => true));
-                if (!$component) continue;
-
-                // Alle zur Mastercomponent gehörigen ChainedComponents finden:
-                // Nach oben schauen, wenn chainedType gefunden, statisch die
-                // dazugehörigen chained-Class holen und anhand dieser die
-                // ChainedComponents finden. Danach einfach die componentId
-                // vom Master mit der der Chained ersetzen
-                $chainedFound = false;
-                $c = $component;
-                while ($c) {
-
-                    $chainedType = Vpc_Abstract::getFlag($c->componentClass, 'chainedType');
-                    if ($chainedType && isset($chainedTypes[$chainedType])) {
-                        $chainedFound = true;
-                        $chainedComponents = $c->parent->getChildComponents(array(
-                            'componentClass' => $chainedTypes[$chainedType],
-                            'ignoreVisible' => true
-                        ));
-                        foreach ($chainedComponents as $chainedComponent) {
-                            $part2 = substr($componentId, strlen($c->componentId));
-                            $componentId = $chainedComponent->componentId . $part2;
-                            $wheres[$row->target_component_class][] = array(
-                                'componentId' => $componentId
-                            );
-                        }
-                    }
-
-                    $c = $c->parent;
-                }
-                if (!$chainedFound) throw new Vps_Exception("No Flag chainedType set for {$component->componentClass} or parent");
-
-            }
-
+            $scc = $row->source_component_class;
+            $tcc = $row->target_component_class;
+            if (!isset($wheres[$scc])) continue;
+            $componentIds = $this->_getComponentIdsFromWheres(array($wheres[$scc]));
+            if (!isset($wheres[$tcc])) $wheres[$tcc] = array();
+            $wheres[$tcc] = array_merge(
+                $wheres[$tcc],
+                Vps_Component_Cache_Meta_Static_Chained::getDeleteWheres($componentIds)
+            );
         }
         return $wheres;
     }
 
-    private function _getComponentIdsFromWheres($wheres)
+    protected function _cleanByWheres($wheres)
     {
-        $ret = array();
-        foreach ($wheres as $where) {
-            foreach ($where as $w) {
-                if (isset($w['componentId'])) {
-                    $c = $w['componentId'];
-                    $ret[] = $w['componentId'];
-                }
-            }
-        }
-        return array_unique($ret);
-    }
-
-    public function cleanByRow(Vps_Model_Row_Abstract $row)
-    {
-        //p($this->_getModelname($row));
-        $wheres = array();
-        $wheres = $this->_addRowWhere($wheres, $row);
-        $wheres = $this->_addModelWhere($wheres, $row);
-        $wheres = $this->_addComponentWhere($wheres);
-        $wheres = $this->_addChainedWhere($wheres);
         $select = $this->getModel('cache')->select();
         $or = array();
         //p($wheres);
-        $componentIds = array();
         foreach ($wheres as $cClass => $where) {
             foreach ($where as $w) {
                 $and = array();
@@ -337,19 +257,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $this->getModel()->updateRows(array('deleted' => true), $select);
         //d($this->getModel('metaModel')->getRows()->toArray());
         //d($this->getModel()->getRows()->toArray());
-
-        // Callback
-        $wheres = array();
-        $wheres = $this->_addRowWhere($wheres, $row, Vps_Component_Cache_Meta_Abstract::META_TYPE_CALLBACK);
-        $wheres = $this->_addModelWhere($wheres, $row, Vps_Component_Cache_Meta_Abstract::META_TYPE_CALLBACK);
-        $wheres = $this->_addComponentWhere($wheres);
-        $wheres = $this->_addChainedWhere($wheres);
-        foreach ($this->_getComponentIdsFromWheres($wheres) as $componentId) {
-            $component = Vps_Component_Data_Root::getInstance()->getComponentById(
-                $componentId, array('ignoreVisible' => true)
-            );
-            if ($component) $component->getComponent()->onCacheCallback($row);
-        }
     }
 
     public function cleanByModel(Vps_Model_Abstract $model)
