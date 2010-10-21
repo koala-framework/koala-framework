@@ -190,7 +190,11 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
             });
             select.select.on('select', function(combo, record) {
                 combo.blur();
-                combo.triggerBlur();
+                combo.triggerBlur(); //hack für ext hack: da wir den focus in einen anderen frame setzen bekommt die combobox das nicht mit
+                                     //mit diesem aufruf wird ihr gesagt dass sie keinen focus mehr hat
+                                     //(ansonsten triggert das focus event beim nächsten mal nicht)
+
+                //bookmark der im on focus gesetzt wurde wiederherstellen
                 this.cmp.tinymceEditor.selection.moveToBookmark(this.beforeFocusBookmark);
                 this.beforeFocusBookmark = null;
                 this.cmp.focus();
@@ -202,8 +206,10 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                 this.cmp.formatter.apply(record.get('id'));
                 this.cmp.deferFocus();
                 this.cmp.updateToolbar();
-            }, this, {delay: 1});
+            }, this, {delay: 1}); //delay ist notwendig da sonst der focus erneut beim select landet wenn ein item angeklickt wird
             select.select.on('focus', function() {
+                //bookmark der aktuellen selection merken bevor der focus genommen wird. im IE wird sonst der cursor
+                //immer ganz nach vorne gesetzt wenn die selection colapsed ist
                 this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
             }, this);
             var tb = this.cmp.getToolbar();
