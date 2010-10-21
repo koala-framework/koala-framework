@@ -46,7 +46,7 @@ protected function _createSeparateTestDb($bootstrapFile)
 
         $this->_unitTestCookie = md5(uniqid('testId', true));
 
-        $this->captureScreenshotOnFailure = true;
+        $this->captureScreenshotOnFailure = Vps_Setup::getConfigSection()=='vivid-test-server';
         $this->screenshotPath = '/mnt/screenshots';
         $this->screenshotUrl = 'http://screenshots.vivid';
         parent::setUp();
@@ -95,6 +95,7 @@ protected function _createSeparateTestDb($bootstrapFile)
     {
         parent::start();
         $this->open('/vps/test/vps_start');
+        $this->deleteAllVisibleCookies();
         $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/, max_age=60*5');
     }
 
@@ -131,7 +132,7 @@ protected function _createSeparateTestDb($bootstrapFile)
     {
         $url = '/vps/componentedittest/'.
                 Vps_Component_Data_Root::getComponentClass().'/'.
-                $componentClass.
+                $componentClass.'/Index'.
                 '?componentId='.$componentId;
         return $this->open($url);
     }

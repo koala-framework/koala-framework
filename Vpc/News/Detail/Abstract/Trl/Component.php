@@ -8,6 +8,19 @@ class Vpc_News_Detail_Abstract_Trl_Component extends Vpc_Directories_Item_Detail
         return $ret;
     }
 
+    public function hasContent()
+    {
+        return $this->getData()->getChildComponent('-content')->hasContent();
+    }
+
+    //TODO: passt das so?
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $ret = array_merge($ret, $this->getData()->getChildComponent('-content')->getComponent()->getCacheVars());
+        return $ret;
+    }
+
     public static function modifyItemData(Vps_Component_Data $new)
     {
         parent::modifyItemData($new);

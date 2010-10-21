@@ -12,6 +12,11 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         $this->setBaseCls(null);
     }
 
+    protected function _getTrlProperties()
+    {
+        return array('title');
+    }
+
     /**
      * Zusammen mit setCheckboxToggle(true)
      */

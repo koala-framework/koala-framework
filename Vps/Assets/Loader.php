@@ -62,7 +62,7 @@ class Vps_Assets_Loader
             $assetsType = $m[1];
             $rootComponent = $m[3];
             $assetClass = $m[4];
-            if (!is_instance_of($assetClass, 'Vps_Assets_Dynamic_Interface')) {
+            if (!class_exists($assetClass) || !is_instance_of($assetClass, 'Vps_Assets_Dynamic_Interface')) {
                 throw new Vps_Exception_NotFound();
             }
             $file = new $assetClass($this, $assetsType, $rootComponent);

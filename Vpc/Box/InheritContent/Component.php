@@ -31,14 +31,25 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
     public function getContentChild()
     {
         $page = $this->getData();
+        $ids = array();
+        while ($page && !$page->inherits) {
+            $ids[] = $page->id;
+            $page = $page->parent;
+            if ($page instanceof Vps_Component_Data_Root) break;
+        }
+        $ids = array_reverse($ids);
+        $page = $this->getData();
         do {
             while ($page && !$page->inherits) {
                 $page = $page->parent;
                 if ($page instanceof Vps_Component_Data_Root) break;
             }
-            $ic = $page->getChildComponent('-'.$this->getData()->id);
-            if (!$ic) {
-                return null;
+            $ic = $page;
+            foreach ($ids as $id) {
+                $ic = $ic->getChildComponent('-'.$id);
+                if (!$ic) {
+                    return null;
+                }
             }
             $c = $ic->getChildComponent(array('generator' => 'child'));
             if ($page instanceof Vps_Component_Data_Root) break;

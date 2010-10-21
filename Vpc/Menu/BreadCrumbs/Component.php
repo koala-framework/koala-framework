@@ -6,6 +6,7 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
         $ret = parent::getSettings();
         $ret['separator'] = '»';
         $ret['showHome'] = false;
+        $ret['showCurrentPage'] = true;
         return $ret;
     }
 
@@ -31,6 +32,9 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
             }
         }
         $ret['links'] = array_reverse($ret['links']);
+        if (count($ret['links']) && !$this->_getSetting('showCurrentPage')) {
+            array_pop($ret['links']);
+        }
         return $ret;
     }
 

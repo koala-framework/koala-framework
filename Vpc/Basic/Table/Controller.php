@@ -7,14 +7,12 @@ class Vpc_Basic_Table_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     protected function _initColumns()
     {
-        $row = Vpc_Abstract::createOwnModel($this->_getClass())
-            ->getRow($this->_getComponentId());
-        if (!$row || !$row->columns) {
-            throw new Vps_ClientException("Please set first the amount of columns in the settings section.");
-        }
+        $columnCount = Vps_Component_Data_Root::getInstance()
+            ->getComponentById($this->_getParam('componentId'), array('ignoreVisible'=>true))
+            ->getComponent()->getColumnCount();
 
         $sel = new Vps_Form_Field_Select();
-        $rowStyles = Vpc_Abstract::getSetting($this->_getClass(), 'rowStyles');
+        $rowStyles = Vpc_Abstract::getSetting($this->_getParam('class'), 'rowStyles');
         $rowStylesSelect = array();
         foreach ($rowStyles as $k => $rowStyle) {
             $rowStylesSelect[$k] = $rowStyle['name'];
@@ -23,20 +21,10 @@ class Vpc_Basic_Table_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         $sel->setShowNoSelection(true);
         $this->_columns->add(new Vps_Grid_Column('css_style', trlVps('Style'), 100))
             ->setEditor($sel);
-
-        for ($i = 1; $i <= $row->columns; $i++) {
+        for ($i = 1; $i <= $columnCount; $i++) {
             $this->_columns->add(new Vps_Grid_Column("column$i", trlVps('Column {0}', $i), 150))
                 ->setEditor(new Vps_Form_Field_TextField());
         }
-    }
-
-    protected function _getClass()
-    {
-        return $this->_getParam('class');
-    }
-
-    protected function _getComponentId()
-    {
-        return $this->_getParam('componentId');
+        $this->_columns->add(new Vps_Grid_Column_Visible());
     }
 }

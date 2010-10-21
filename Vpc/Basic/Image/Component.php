@@ -7,7 +7,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract_Image_Component
         $ret['componentName'] = trlVps('Image');
         $ret['componentIcon'] = new Vps_Asset('picture');
         $ret['imgCssClass'] = '';
-        $ret['emptyImage'] = false;
+        $ret['emptyImage'] = false; // eg. 'Empty.jpg' in same folder
         $ret['useParentImage'] = false;
         return $ret;
     }

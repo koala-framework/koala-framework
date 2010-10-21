@@ -1,14 +1,46 @@
 <?php
 class Vpc_Basic_Table_Trl_Component extends Vpc_Chained_Trl_Component
 {
+    public static function getSettings($masterComponentClass)
+    {
+        $ret = parent::getSettings($masterComponentClass);
+        $ret['childModel'] = 'Vpc_Basic_Table_Trl_DataModel';
+        return $ret;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $model = $this->getData()->chained->getComponent()->getChildModel();
-        $dataSelect = new Vps_Model_Select();
-        $dataSelect->order('pos', 'ASC');
-        $dataSelect->whereEquals('component_id', $this->getData()->componentId);
-        $ret['dataRows'] = $model->getRows($dataSelect);
+        $model = $this->getChildModel();
+        $rows = $model->getRows($model->select()
+            ->whereEquals('component_id', $this->getData()->componentId)
+            ->whereEquals('visible', 1)
+            ->order('pos')
+        );
+        $ret['dataRows'] = array();
+        foreach ($rows as $row) {
+            if ($row->visible) $ret['dataRows'][] = $row;
+        }
         return $ret;
+    }
+
+    public function getChildModel()
+    {
+        $chained = $this->getData()->chained;
+        $tableModelClass = Vpc_Abstract::getSetting($chained->componentClass, 'childModel');
+        return new Vpc_Basic_Table_Trl_AdminModel(array(
+            'proxyModel' => new $tableModelClass(),
+            'trlModel' => new Vpc_Basic_Table_Trl_DataModel(array(
+                'columnCount' => $chained->getComponent()->getColumnCount())
+            )
+        ));
+    }
+
+    public function getCacheVars()
+    {
+        return array(array(
+            'model' => 'Vpc_Basic_Table_Trl_DataModel',
+            'component_id' => $this->getData()->componentId
+        ));
     }
 }

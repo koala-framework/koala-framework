@@ -11,6 +11,10 @@ abstract class Vpc_List_Fade_Component extends Vpc_Abstract_List_Component
 
         $ret['selector'] = '> div';
 
+        // optional: wird ausgeblendet wenn nur ein fade-element existiert
+        // und das hier angegebene element keinen inhalt hat
+        $ret['textSelector'] = '';
+
         $ret['fadeConfig'] = array(
             'elementAccessLinks' => false,
             'fadeDuration'       => 1.5,
@@ -27,6 +31,7 @@ abstract class Vpc_List_Fade_Component extends Vpc_Abstract_List_Component
     {
         $ret = parent::getTemplateVars();
         $ret['selector'] = $this->_getSetting('selector');
+        $ret['textSelector'] = $this->_getSetting('textSelector');
         $ret['fadeConfig'] = $this->_getSetting('fadeConfig');
         return $ret;
     }

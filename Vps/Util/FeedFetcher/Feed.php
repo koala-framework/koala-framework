@@ -78,7 +78,7 @@ class Vps_Util_FeedFetcher_Feed
                     }
                 }
                 foreach ($feed['entries'] as $e) {
-                    if (in_array($e->id, $oldIds)) {
+                    if (!in_array($e->id, $oldIds)) {
                         $status = self::UPDATE_SUCCESS_NEW_ENTRIES;
                         break;
                     }
@@ -155,11 +155,22 @@ class Vps_Util_FeedFetcher_Feed
         } else {
             $row->avg_update = ($row->avg_update*($row->updates) + $duration) / ($row->updates + 1);
         }
+        $benchmarkType = false;
+        $feedHost = parse_url($row->url, PHP_URL_HOST);
+        if (substr($feedHost, -11) == 'twitter.com') {
+            $benchmarkType = 'twitter';
+        } else if (substr($feedHost, -10) == 'google.com') {
+            $benchmarkType = 'google';
+        } else if (substr($feedHost, -9, -2) == 'google.') {
+            $benchmarkType = 'google';
+        }
+        if ($benchmarkType) Vps_Benchmark::count('feed-update-'.$benchmarkType);
         if ($status == self::UPDATE_ERROR) {
             $row->update_errors++;
             $row->last_update_error = date('Y-m-d H:i:s');
             $row->consecutive_update_errors++;
             Vps_Benchmark::count('feed-update-error');
+            if ($benchmarkType) Vps_Benchmark::count('feed-error-'.$benchmarkType);
         } else {
             $row->consecutive_update_errors = 0;
             $row->last_successful_update = date('Y-m-d H:i:s');
@@ -206,6 +217,30 @@ class Vps_Util_FeedFetcher_Feed
             }
         }
         $row->updated($updateServer, $status);
+
+        if (isset($row->log_activated) && $row->log_activated) {
+            //TODO ist auch in Vps_Rssinclude_PubSubHubbub::process
+            $log = $row->createChildRow('UpdateLog');
+            $log->date = date('Y-m-d H:i:s');
+            $log->server = $updateServer;
+            $log->duration = $duration;
+            $log->status = $status;
+
+            $cache = Vps_Util_FeedFetcher_Feed_Cache::getInstance();
+            $cacheId = self::getCacheId($row->id);
+            if ($data = $cache->load($cacheId)) {
+                $log->entries = count($data['entries']);
+                $titles = array();
+                foreach ($data['entries'] as $e) {
+                    $t = $e->title;
+                    if (!$t) $t = $e->url;
+                    if (strlen($t) > 50) $t = substr($t, 0, 50);
+                    $titles[] = $e->id.' '.$t;
+                }
+                $log->titles = implode('; ', $titles);;
+            }
+            $log->save();
+        }
 
         $row->save();
     }

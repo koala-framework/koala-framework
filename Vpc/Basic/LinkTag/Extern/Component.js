@@ -11,6 +11,7 @@ Vps.Basic.LinkTag.Extern.processLinks = function(root) {
         Ext.each(rels, function(rel) {
             if (rel.match(/^popup/)) {
                 var relProperties = rel.split('_');
+                lnk.addClass('webLinkPopup');
                 lnk.on('click', function(e) {
                     e.stopEvent();
                     if (relProperties[1] == 'blank') {

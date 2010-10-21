@@ -25,4 +25,12 @@ class Vpc_Abstract_Image_Trl_Component extends Vpc_Abstract_Composite_Trl_Compon
         }
         return $ret;
     }
+
+    public function hasContent()
+    {
+        if ($this->getRow()->own_image) {
+            return $this->getData()->getChildComponent('-image')->hasContent();
+        }
+        return $this->getData()->chained->hasContent();
+    }
 }

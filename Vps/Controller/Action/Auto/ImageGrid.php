@@ -4,13 +4,14 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     // the rule to the image. defaults to the first rule with model Vps_Uploads_Model
     protected $_imageRule = null;
     protected $_labelField; // default is __toString()
+    protected $_filters = null;
 
     protected $_model;
 
     protected $_primaryKey;
     protected $_paging = 0;
 
-    protected $_maxLabelLength = 18;
+    protected $_maxLabelLength = 16;
 
     protected $_textField = 'name';
     protected $_buttons = array(
@@ -27,6 +28,12 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     {
         $this->view->controllerUrl = $this->getRequest()->getPathInfo();
         $this->view->xtype = 'vps.imagegrid';
+    }
+
+    public function init()
+    {
+        parent::init();
+        $this->_filters = new Vps_Controller_Action_Auto_FilterCollection();
     }
 
     public function preDispatch()
@@ -103,7 +110,7 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
                 }
 
                 if (!empty($r['label']) && $this->_maxLabelLength) {
-                    $r['label'] = $truncateHelper->truncate($r['label'], $this->_maxLabelLength, '...', true, false);
+                    $r['label'] = $truncateHelper->truncate($r['label'], $this->_maxLabelLength, '…', true, false);
                 }
 
                 $imageRef = $this->_getImageReference();
@@ -142,6 +149,12 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
         $this->view->metaData['permissions'] = (object)$this->_permissions;
         $this->view->metaData['paging'] = $this->_paging;
         $this->view->metaData['editDialog'] = $this->_editDialog;
+
+        $filters = array();
+        foreach ($this->_filters as $filter) {
+            $filters[] = $filter->getExtConfig();
+        }
+        $this->view->metaData['filters'] = $filters;
     }
 
     protected function _hasPermissions($row, $action)
@@ -152,6 +165,18 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     protected function _getSelect()
     {
         $ret = $this->_model->select();
+
+        // Filter
+        foreach ($this->_filters as $filter) {
+            if ($filter->getSkipWhere()) continue;
+            $ret = $filter->formatSelect($ret, $this->_getAllParams());
+        }
+
+        $queryId = $this->getRequest()->getParam('queryId');
+        if ($queryId) {
+            $ret->where(new Vps_Model_Select_Expr_Equals($this->_primaryKey, $queryId));
+        }
+
         return $ret;
     }
 

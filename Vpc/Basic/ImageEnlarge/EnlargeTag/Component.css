@@ -1,120 +1,73 @@
 .vpsEnlargeTagData { display: none; }
 
 .lightbox {
-    position: absolute;
-    width: 680px;
-    height: 590px;
     display: none;
-    background-color: #fff;
+    position: absolute;
+    min-width: 200px;
+    max-width: 800px;
+    min-height: 200px;
+    padding: 10px;
+    background: #fff;
     z-index: 100;
 }
+.ext-ie6 .lightbox { width: 800px; }
 
-.lightbox .lightboxHeader {
-    height: 20px;
-    margin: 0px 10px 5px 10px;
-    padding: 7px 10px 0px 10px;
-    font-weight:bold;
-    color: #555;
-    border-bottom: 1px solid #aaa;
-}
-.lightbox .lightboxHeader span { float: left; }
-
-.lightbox .fullSizeLink {
-    float: left;
-    width: 16px;
-    height: 16px;
-    display: block;
-    padding-right: 10px;
-    background: url(/assets/silkicons/picture_save.png) left top no-repeat;
-}
-.lightbox .lightboxBody {
-    position: relative;
-    height: 540px;
-    text-align: center;
-}
-.lightbox .lightboxBody .switchBig { display: none; }
-.lightbox .lightboxFooter {
-    margin:  -10px 10px 0px 10px;
-    padding: 3px 10px 5px 10px;
-    color: #999; border-top:1px solid #aaa;
-}
-
-.lightbox .closeButton {
-    float: right;
-}
-
-.lightbox .lightboxFooter .prevBtn {
-    width: auto;
-    float: left;
-    margin-top: 1px;
-}
-.lightbox .lightboxFooter div.title {
-    float: left;
+.lightbox .lightboxHeader { position: relative; z-index: 102; }
+.lightbox .lightboxHeader a.closeButton {
     position: absolute;
-    left: 85px;
-    width: 515px;
-    height: 30px;
-    font-size: 11px;
-    font-weight: bold;
-    text-align: center;
-    overflow: hidden;
-}
-.lightbox .lightboxFooter .nextBtn {
-    float: right;
-    margin-top: 1px;
+    right: -25px;
+    top: -25px;
 }
 
-.lightbox .switchButton { font-weight: bold; }
-
-.lightbox .switchBig {
+.lightbox .lightboxBody { position: relative; height: 100%; z-index: 101; }
+.lightbox .lightboxBody .nextBtn,
+.lightbox .lightboxBody .nextBtn a {
     position: absolute;
     top: 0px;
-    z-index: 105;
-    width: 22%;
-    text-align: center;
-    opacity: 0.0; -moz-opacity: 0.0;
-    filter: alpha(opacity=0);
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.lightbox .previousSwitchBig {
-    width: 185px;
-    left: 0px;
-    text-align: left;
-}
-.lightbox .previousSwitchBig p {
-    margin-left: 20px;
-}
-.lightbox .nextSwitchBig {
-    width: 185px;
     right: 0px;
-    text-align: right;
+    width: 40%;
+    height: 100%;
+    background: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/transparentPixel.gif) repeat top left; /* WORKAROUND: IE kann keinen link ohne inhalt darstellen, deswegen transparentPixel bgImage*/
 }
-.lightbox .nextSwitchBig p {
-    margin-right: 20px;
+.lightbox .lightboxBody .nextBtn a { width: 100%; }
+.lightbox .lightboxBody .nextBtn a:hover {
+    background: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/next.png) no-repeat right 100px;
 }
+.lightbox .lightboxBody .nextBtn img.nextImgBtn { position: absolute; top: 100px; right: 0px; }
+.lightbox .lightboxBody .centerImage { margin-bottom: -3px; }
+.lightbox .lightboxBody .prevBtn,
+.lightbox .lightboxBody .prevBtn a {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 40%;
+    height: 100%;
+    background: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/transparentPixel.gif) repeat top left; /* WORKAROUND: IE kann keinen link ohne inhalt darstellen, deswegen transparentPixel bgImage*/
+}
+.lightbox .lightboxBody .prevBtn a { width: 100%; }
+.lightbox .lightboxBody .prevBtn a:hover {
+    background: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/previous.png) no-repeat left 100px;
+}
+.lightbox .lightboxBody .prevBtn img.previousImgBtn { position: absolute; top: 100px; left: 0px; }
 
-.lightbox .bigOver { opacity: 0.82; -moz-opacity: 0.82; filter: alpha(opacity=82); }
+.lightbox .lightboxFooter p { text-align: left; margin-bottom: 0px; }
+.lightbox .lightboxFooter p.imageCaption { margin-top: 10px; }
+.lightbox .lightboxFooter p.imageCaptionTitle { margin: 10px 0px -10px 0px; }
+.lightbox .lightboxFooter p.title { margin-top: 10px; }
+.lightbox .lightboxFooter p.fullSizeLink { margin-top: 10px; }
 
-.lightbox .switchBig .lightboxContent {
-    background-color: #ddd;
-    margin-top: 45px;
-    padding: 8px 0px;
-}
-.lightbox .switchBig .lightboxContent p {
-    color: #000;
-}
-
-div.lightboxMask {
-    background-color: #000; z-index: 50;
-    opacity: 0.8; -moz-opacity: 0.8; filter: alpha(opacity=80);
+.lightboxMask {
+    background: #000;
+    opacity: 0.8;
+    -moz-opacity: 0.8;
+    filter: alpha(opacity=80);
+    z-index: 50;
 }
 .webZoom {
     display: block;
     position: absolute;
-    bottom: 10px;
-    right: 5px;
+    bottom: 8px;
+    right: 8px;
     width: 15px;
     height: 15px;
     background-image: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/zoom.png);

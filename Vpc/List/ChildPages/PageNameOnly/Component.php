@@ -17,7 +17,7 @@ class Vpc_List_ChildPages_PageNameOnly_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheVars()
+    public function getCacheVars()
     {
         $ret = array();
         $ret[] = array(
@@ -25,6 +25,9 @@ class Vpc_List_ChildPages_PageNameOnly_Component extends Vpc_Abstract
         );
         $ret[] = array(
             'model' => 'Vpc_Root_Category_GeneratorModel'
+        );
+        $ret[] = array(
+            'model' => 'Vpc_Root_Category_Trl_GeneratorModel'
         );
         return $ret;
     }

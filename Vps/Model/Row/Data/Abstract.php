@@ -14,7 +14,16 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
     //internal
     public function setData($data)
     {
-        $this->_data = $data;
+        foreach (array_keys($this->_cleanData) as $k) {
+            if (!isset($this->_data[$k]) || $this->_cleanData[$k] === $this->_data[$k]) {
+                //nicht geändert
+                if (isset($data[$k])) {
+                    $this->_data[$k] = $data[$k];
+                } else {
+                    unset($this->_data[$k]);
+                }
+            }
+        }
         $this->_cleanData = $data;
     }
 
@@ -62,7 +71,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         }
         $n = $this->_transformColumnName($name);
         if ($this->$name !== $value) {
-            $this->_dirty = true;
+            $this->_setDirty();
         }
         $this->_data[$n] = $value;
         $this->_postSet($name, $value);
@@ -93,15 +102,16 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         }
 
         if ($update) {
-            if ($this->_dirty) {
+            if ($this->_isDirty()) {
                 $ret = $this->_model->update($this, $this->_data);
-                $this->_dirty = false;
+                $this->_setDirty(false);
             } else {
                 $ret = $this->{$this->_getPrimaryKey()};
             }
         } else {
             $ret = $this->_model->insert($this, $this->_data);
             $this->_data[$this->_getPrimaryKey()] = $ret;
+            $this->_setDirty(false);
         }
         $this->_cleanData = $this->_data;
 

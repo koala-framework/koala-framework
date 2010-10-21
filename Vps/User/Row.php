@@ -254,7 +254,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         return $this->_sendMail('UserDeleted', $subject);
     }
 
-    private function _sendMail($tpl, $subject, $tplParams = null)
+    protected function _sendMail($tpl, $subject, $tplParams = null)
     {
         if (!$this->email || !$this->_sendMails) {
             return false;
@@ -270,8 +270,12 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
 
         $activateComponent = Vps_Component_Data_Root::getInstance();
         if ($activateComponent) {
+            // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
+            // für den Benutzer auswählen
+            // oder man leitet auf eine redirect seite um und schaut auf die
+            // browser accept language
             $activateComponent = $activateComponent
-                ->getComponentByClass('Vpc_User_Activate_Component');
+                ->getComponentByClass('Vpc_User_Activate_Component', array('limit' => 1));
         }
         if ($activateComponent) {
             $url = $activateComponent->url;
@@ -293,7 +297,9 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
 
     public function __set($columnName, $value)
     {
-        if (!in_array($columnName, array('webcode', 'created', 'logins', 'last_login', 'last_modified', 'locked'))) {
+        $noLog = $this->getModel()->getNoLogColumns();
+        $noLog = array_merge($noLog, array('webcode', 'created', 'logins', 'last_login', 'last_modified', 'locked'));
+        if (!in_array($columnName, $noLog)) {
             $this->_logChangedUser = true;
         }
         if ($columnName == 'email' && $value != $this->email) {

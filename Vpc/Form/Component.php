@@ -109,6 +109,14 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         if (Vps_Registry::get('db')) Vps_Registry::get('db')->commit();
     }
 
+    public function getPostData()
+    {
+        if (!$this->_processed) {
+            throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
+        }
+        return $this->_postData;
+    }
+
     public function getErrors()
     {
         if (!$this->_processed) {

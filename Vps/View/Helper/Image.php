@@ -7,7 +7,7 @@ class Vps_View_Helper_Image
     {
         $this->_view = $view;
     }
-    
+
     // wird auch von ImageUrl helper verwendet
     protected function _getImageParams($image, $type = 'default', $alt = '', $cssClass = null)
     {

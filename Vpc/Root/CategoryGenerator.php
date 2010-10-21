@@ -33,6 +33,6 @@ class Vpc_Root_CategoryGenerator extends Vps_Component_Generator_Table
             }
             return null;
         }
-        throw new Vps_Exception('Not subroot given, cannot find current parentData.');
+        return Vps_Component_Data_Root::getInstance()->getComponentsBySameClass($this->_class);
     }
 }
