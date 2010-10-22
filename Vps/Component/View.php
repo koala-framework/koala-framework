@@ -1,7 +1,10 @@
 <?php
+/**
+ * View, die zum Komponenten-Rendern verwendet wird
+ */
 class Vps_Component_View extends Vps_View
 {
-    private $_masterComponents = null;
+    private $_masterComponents;
     private $_componentMasterTemplates = array();
     private $_plugins = array();
     private $_isRenderMaster = false;
@@ -13,16 +16,16 @@ class Vps_Component_View extends Vps_View
         $this->addHelperPath(VPS_PATH . '/Vps/Component/View/Helper', 'Vps_Component_View_Helper');
     }
 
-    public function getPlugins($component)
+    /**
+     * Gibt die Plugins für die Komponente genau einmal zurück
+     *
+     * Der Helper fragt einmal beim Master (falls es einen gibt) und einmal
+     * bei der Komponente
+     */
+    public function getPlugins(Vps_Component_Data $component)
     {
         $ret = array();
         $componentId = $component->componentId;
-
-        // Keine Plugins bei Startkomponente außer es ist die root
-        if ($this->_renderComponent &&
-            $this->_renderComponent->componentId == $componentId &&
-            $componentId != Vps_Component_Data_Root::getInstance()->componentId
-        ) return $ret;
 
         if (!isset($this->_plugins[$componentId])) {
             $this->_plugins[$componentId] = $component->getPlugins();
@@ -35,10 +38,23 @@ class Vps_Component_View extends Vps_View
         return $ret;
     }
 
-    public function getMasterComponent($component)
+    /**
+     * Gibt Parent-Komponenten, die ein Master-Template haben, zurück
+     *
+     * Im Template kann ein $this->component(...)-Aufruf einmal ein Master rendern
+     * und beim nächsten Mal die Komponente selbst. Hier werden alle Master der parents
+     * geholt und jedes Mal wenn beim einem $this->component() diese Methode von
+     * Vps_Component_View_Helper_Component aufgerufen wird, wird die nächste
+     * Master-Komponente zurückgegeben.
+     *
+     * @param Vps_Component_Data|null Komponente, die ein Master-Template hat
+     */
+    public function getNextParentMasterComponent($component)
     {
+        if (!$this->_isRenderMaster) return null;
         if (is_null($this->_masterComponents)) {
             $this->_masterComponents = array();
+            // beim parent anfangen
             if ($component->componentId != Vps_Component_Data_Root::getInstance()->componentId) {
                 $component = $component->parent;
             }
@@ -57,7 +73,16 @@ class Vps_Component_View extends Vps_View
         return $ret;
     }
 
-    public function getComponentMasterTemplate($component, $renderMaster = true)
+    /**
+     * Gibt das Master-Template für die übergebene Komponente zurück
+     *
+     * Auch hier wird beim ersten Aufruf das Master-Template zurückgegeben und
+     * beim nächsten Aufruf nichts mehr, da der Helper nicht weiß, ob er
+     * zum ersten oder zweiten Mal aufgerufen wurde.
+     *
+     * @param string|null
+     */
+    public function getCurrentComponentMasterTemplate($component)
     {
         $componentId = $component->componentId;
         if ($componentId == Vps_Component_Data_Root::getInstance()->componentId)
@@ -81,18 +106,13 @@ class Vps_Component_View extends Vps_View
         $this->_isRenderMaster = $isRenderMaster;
     }
 
-    public function getIsRenderMaster()
+    public function getRenderComponent()
     {
-        return $this->_isRenderMaster;
+        return $this->_renderComponent;
     }
 
     public function setRenderComponent($renderComponent)
     {
         $this->_renderComponent = $renderComponent;
-    }
-
-    public function getRenderComponent()
-    {
-        return $this->_renderComponent;
     }
 }

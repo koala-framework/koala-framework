@@ -7,35 +7,40 @@ class Vps_Component_View_Helper_Partials extends Vps_Component_View_Renderer
             !method_exists($component->getComponent(), 'getPartialVars')
         ) throw new Vps_Exception('Component has to implement Vps_Component_Partial_Interface');
         $partialClass = Vpc_Abstract::getSetting($component->componentClass, 'partialClass');
-        $componentId = $component->componentId;
-        $componentClass = $component->componentClass;
         if (method_exists($component->getComponent(), 'getPartialParams')) {
             $params = array_merge($component->getComponent()->getPartialParams(), $params);
         }
-        $serializedParams = base64_encode(serialize($params));
-        return "{!partials: $componentId $partialClass $serializedParams}";
+        $config = array(
+            'class' => $partialClass,
+            'params' => $params
+        );
+        return $this->_getRenderPlaceholder($component->componentId, $config);
     }
 
-    public function render($component, $config, $view)
+    public function render($componentId, $config, $view)
     {
-        if ($component instanceof Vps_Component_Data) {
-            $componentId = $component->componentId;
-        } else {
-            $componentId = $component;
-        }
-        $partialsClass = $config[0];
-        $config = $config[1];
-        $partial = new $partialsClass(unserialize(base64_decode(($config))));
+        $partialClass = $config['class'];
+        $params = $config['params'];
+        $partial = new $partialClass($params);
         $ids = $partial->getIds();
-        $ret = '';
         $number = 0; $count = count($ids);
+        $ret = '';
         foreach ($ids as $id) {
-            $info = base64_encode(serialize(array(
-                'total' => $count,
-                'number' => $number++
-            )));
-            $ret .= "{partial: $componentId($id) $partialsClass $config $id $info}";
+            $config = array(
+                'id' => $id,
+                'class' => $partialClass,
+                'params' => $params,
+                'info' => array(
+                    'total' => $count,
+                    'number' => $number++,
+                )
+            );
+            $ret .= $this->_getRenderPlaceholder($componentId, $config, $id, 'partial');
         }
         return $ret;
+    }
+
+    public function saveCache($componentId, $config, $content) {
+        return false;
     }
 }
