@@ -41,7 +41,6 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
                 }
             }
             $view = new Vps_Component_Renderer();
-            $view->setIgnoreVisible(true);
             return $view->renderComponent($data);
         } else if (isset($row->settings)) {
             $settingsModel = new Vps_Model_Field(array(

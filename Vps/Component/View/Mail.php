@@ -3,6 +3,8 @@ class Vps_Component_View_Mail extends Vps_Component_View implements Vps_View_Mai
 {
     private $_images = array();
     protected $_attachImages = true;
+    private $_renderFormat = null;
+    private $_recipient = null;
 
     public function getImages()
     {
@@ -29,5 +31,25 @@ class Vps_Component_View_Mail extends Vps_Component_View implements Vps_View_Mai
         if ($data) {
             $data->getComponent()->addImage($image);
         }
+    }
+
+    public function getRenderFormat()
+    {
+        return $this->_renderFormat;
+    }
+
+    public function setRenderFormat($renderFormat)
+    {
+        $this->_renderFormat = $renderFormat;
+    }
+
+    public function setRecipient($recipient)
+    {
+        $this->_recipient = $recipient;
+    }
+
+    public function getRecipient()
+    {
+        return $this->_recipient;
     }
 }

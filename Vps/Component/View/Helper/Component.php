@@ -12,40 +12,38 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
         $value = null;
         $plugins = array();
 
-        // Box
-        if (isset($component->box) && $component->box) {
-            $type = 'box';
-        }
-        // Master
-        if ($view && $type == 'component' && $view->getIsRenderMaster()) {
-            $masterComponent = $view->getMasterComponent($component);
+        if ($view && $view instanceof Vps_Component_View_Mail) {
+            $type = 'mail';
+            $config = array(
+                'type' => $view->getRenderFormat(),
+                'recipient' => $view->getRecipient()
+            );
+        } else if ($view && !(isset($component->box) && $component->box)) {
+            // Parent-Masters
+            $masterComponent = $view->getNextParentMasterComponent($component);
             if ($masterComponent) {
-                $config = array($masterComponent->masterTemplate, $masterComponent->componentId);
+                $config = array('template' => $masterComponent->masterTemplate);
                 $type = 'master';
                 $value = $masterComponent->componentId;
             }
-        }
-        // Component
-        if ($view && $type == 'component') {
-            // Plugins
-            $plugins = $view->getPlugins($component);
-            // ComponentMaster
-            $componentMasterTemplate = $view->getComponentMasterTemplate($component, $view->getIsRenderMaster());
-            if ($componentMasterTemplate) {
-                $config = array($componentMasterTemplate);
-                $type = 'master';
+            // Component
+            if ($type == 'component') {
+                // Plugins
+                $plugins = $view->getPlugins($component);
+                // ComponentMaster
+                $componentMasterTemplate = $view->getCurrentComponentMasterTemplate($component);
+                if ($componentMasterTemplate) {
+                    $config = array('template' => $componentMasterTemplate);
+                    $type = 'master';
+                }
             }
         }
-
-        $config = implode(' ', $config);
-        $componentId = $component->componentId;
-        if ($value) $componentId .= "($value)";
-        if ($plugins) $componentId .= '[' . implode(' ', $plugins) . ']';
-        return '{' . "$type: $componentId $config" . '}';
+        return $this->_getRenderPlaceholder($component->componentId, $config, $value, $type, $plugins);
     }
 
-    public function render($component, $config, $view)
+    public function render($componentId, $config, $view)
     {
+        $component = $this->getComponent($componentId);
         $template = Vpc_Abstract::getTemplateFile($component->componentClass);
         if (!$template) throw new Vps_Exception("No Component-Template found for '{$component->componentClass}'");
 
@@ -54,10 +52,5 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
 
         $view->assign($vars);
         return $view->render($template);
-    }
-
-    protected function _saveMeta($component)
-    {
-        return $component->getComponent()->saveCache();
     }
 }

@@ -1,17 +1,9 @@
 <?php
 class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
 {
-    private $_templateComponentId = '';
-
-    public function render($component, $config, $view)
+    public function render($componentId, $config, $view)
     {
-        if (isset($config[0]) && $config[0] != '') {
-            $template = $config[0];
-        } else {
-            $template = Vpc_Abstract::getTemplateFile($component->componentClass, 'Master');
-            if (!$template) throw new Vps_Exception("No Component-Template found for '{$component->componentClass}'");
-        }
-        if (isset($config[1])) $this->_templateComponentId = $config[1];
+        $component = $this->getComponent($componentId);
 
         $vars = array();
         $vars['component'] = $component;
@@ -23,11 +15,6 @@ class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
         }
 
         $view->assign($vars);
-        return $view->render($template);
-    }
-
-    protected function _getCacheValue()
-    {
-        return $this->_templateComponentId;
+        return $view->render($config['template']);
     }
 }

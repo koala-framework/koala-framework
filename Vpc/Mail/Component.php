@@ -111,11 +111,11 @@ class Vpc_Mail_Component extends Vpc_Abstract
      */
     public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
     {
-        $view = new Vps_Component_Renderer_Mail();
-        $view->setType(Vps_Component_Renderer_Mail::TYPE_HTML);
-        $view->setRecipient($recipient);
-        $view->setAttachImages($attachImages);
-        $ret = $view->renderComponent($this->getData());
+        $renderer = new Vps_Component_Renderer_Mail();
+        $renderer->setRenderFormat(Vps_Component_Renderer_Mail::RENDER_HTML);
+        $renderer->setRecipient($recipient);
+        $renderer->setAttachImages($attachImages);
+        $ret = $renderer->renderComponent($this->getData());
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
         if ($this->_getSetting('mailHtmlStyles')) {
@@ -132,10 +132,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
      */
     public function getText(Vpc_Mail_Recipient_Interface $recipient = null)
     {
-        $view = new Vps_Component_Renderer_Mail();
-        $view->setType(Vps_Component_Renderer_Mail::TYPE_TXT);
-        $view->setRecipient($recipient);
-        $ret = $view->renderComponent($this->getData());
+        $renderer = new Vps_Component_Renderer_Mail();
+        $renderer->setRenderFormat(Vps_Component_Renderer_Mail::RENDER_TXT);
+        $renderer->setRecipient($recipient);
+        $ret = $renderer->renderComponent($this->getData());
         $ret = str_replace('&nbsp;', ' ', $ret);
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
