@@ -10,6 +10,7 @@ class Vpc_Advanced_GoogleMapView_Test extends PHPUnit_Framework_TestCase
     {
         Vps_Component_Data_Root::setComponentClass('Vpc_Advanced_GoogleMapView_Root');
         $this->_root = Vps_Component_Data_Root::getInstance();
+        $this->markTestIncomplete();
     }
 
     public function testNoCoordinatesOptionException()
@@ -17,7 +18,7 @@ class Vpc_Advanced_GoogleMapView_Test extends PHPUnit_Framework_TestCase
         $this->setExpectedException("Vps_Exception");
         $this->_root->getComponentById(2000)->getComponent()->getTemplateVars();
     }
-/*
+
     public function testEmptyCoordinates()
     {
         $c = $this->_root->getComponentById(2001)->getComponent();
@@ -50,8 +51,7 @@ class Vpc_Advanced_GoogleMapView_Test extends PHPUnit_Framework_TestCase
 
     public function testHtml()
     {
-        $output = new Vps_Component_Renderer();
-        $html = $output->render($this->_root->getComponentById(2002));
+        $html = $this->_root->getComponentById(2002)->render();
         $this->assertContains('<div class="webStandard vpcAdvancedGoogleMapView vpcAdvancedGoogleMapViewTestComponent">', $html);
 
         $this->assertEquals(1, preg_match('#value="([^"]+)"#', $html, $m));
@@ -60,5 +60,4 @@ class Vpc_Advanced_GoogleMapView_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(13, $options['longitude']);
         $this->assertEquals(1, $options['routing']);
     }
-    */
 }

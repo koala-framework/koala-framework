@@ -32,12 +32,10 @@ class Vpc_Basic_LinkTag_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById(1100);
         $c2 = $c->getChildComponent('-link');
 
-        $output = new Vps_Component_Renderer();
-        $html = $output->render($c2);
+        $html = $c2->render();
         $this->assertEquals('<a href="http://example.com" rel="foo">', $html);
 
-        $output = new Vps_Component_Renderer();
-        $html = $output->render($c);
+        $html = $c->render();
         $this->assertEquals('<a href="http://example.com" rel="foo">', $html);
     }
 
