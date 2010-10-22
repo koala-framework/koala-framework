@@ -25,8 +25,7 @@ class Vpc_Basic_LinkTagFirstChildPage_Test extends PHPUnit_Framework_TestCase
     }
     public function testHtml()
     {
-        $output = new Vps_Component_Renderer();
-        $html = $output->render($this->_root->getComponentById(1500));
+        $html = $this->_root->getComponentById(1500)->render();
         $this->assertEquals('<a href="/foo1/bar1">', $html);
     }
 

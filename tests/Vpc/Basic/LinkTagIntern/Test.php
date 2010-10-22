@@ -34,8 +34,7 @@ class Vpc_Basic_LinkTagIntern_Test extends PHPUnit_Framework_TestCase
     }
     public function testHtml()
     {
-        $output = new Vps_Component_Renderer();
-        $html = $output->render($this->_root->getComponentById(1300));
+        $html = $this->_root->getComponentById(1300)->render();
         $this->assertEquals('<a href="/bar">', $html);
     }
 
