@@ -14,7 +14,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
 
         $this->_renderer = new Vps_Component_Renderer();
         $this->_renderer->setEnableCache(true);
-        Vps_Component_Cache::setBackend(Vps_Component_Cache::CACHE_BACKEND_FNF);
+        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
     }
 
     public function testC3()

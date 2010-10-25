@@ -104,9 +104,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $this->getComponent()->getPageByUrl($path, $acceptLangauge);
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getComponentById($componentId, $select = array())
     {
         if (isset($this->_dataCache[$componentId])) {
+            //TODO: ignoreVisible korrekte berücksichtigen
+            //      dazu müssten zwei caches erstellt werden, der generator kann vom $select (im _createData) abhängig entscheiden in welchen es geschrieben wird
             if (!$select) {
                 return $this->_dataCache[$componentId];
             }

@@ -120,6 +120,7 @@ class Vps_Component_ModelObserver
                 if ($row) {
                     Vps_Component_Cache::getInstance()->cleanByRow($row);
                 } else {
+                    // Bei Import kommt ein Model daher
                     Vps_Component_Cache::getInstance()->cleanByModel($model);
                 }
             }

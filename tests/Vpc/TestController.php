@@ -12,7 +12,7 @@ class Vpc_TestController extends Vps_Controller_Action
         Zend_Registry::set('db', false);
 
         //FnF models setzen damit tests nicht in echte tabellen schreiben
-        Vps_Component_Cache::setBackend(Vps_Component_Cache::CACHE_BACKEND_FNF);
+        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
 
         Vps_Component_Data_Root::setComponentClass($this->_getParam('root'));
         $root = Vps_Component_Data_Root::getInstance();

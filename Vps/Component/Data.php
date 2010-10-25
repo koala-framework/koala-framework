@@ -830,7 +830,6 @@ class Vps_Component_Data
         return $this->componentId . ' (' . $this->componentClass . ')';
     }
 
-    // Nur zum Testen!
     public function render($enableCache = true, $renderMaster = false)
     {
         $output = new Vps_Component_Renderer();
