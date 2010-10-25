@@ -49,6 +49,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return true;
     }
 
+    // TODO Cache: wo das verwendent wir
     public function load(Vps_Component_Data $component, $type = 'component', $value = '')
     {
         $select = $this->_models['cache']->select()
@@ -61,6 +62,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return null;
     }
 
+    //TODO Cache überarbeiten
     public function preload(Vps_Component_Data $component)
     {
         $ret = array();

@@ -14,7 +14,7 @@ class Vpc_Basic_Feed_Test extends PHPUnit_Framework_TestCase
 
     public function testFeed()
     {
-        Vps_Component_Cache::setBackend(Vps_Component_Cache::CACHE_BACKEND_FNF);
+        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
         $feed = Vps_Component_Data_Root::getInstance()->getChildComponent('_feed');
         $xml = $feed->getComponent()->getXml();
         $rows = Vps_Component_Cache::getInstance()->getModel()->getRows();

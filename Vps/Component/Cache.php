@@ -19,7 +19,7 @@ abstract class Vps_Component_Cache
         return self::$_instance;
     }
 
-    public static function setBackend($backend)
+    public static function setInstance($backend)
     {
         self::clearInstance();
         self::$_backend = $backend;
