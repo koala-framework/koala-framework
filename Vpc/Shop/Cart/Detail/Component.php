@@ -22,12 +22,10 @@ class Vpc_Shop_Cart_Detail_Component extends Vpc_Abstract_Composite_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $addCmp = Vps_Component_Data_Root::getInstance()
-            ->getComponentByDbId($this->getData()->row->add_component_id);
-        $ret['product'] = $addCmp->parent;
+        $ret['product'] = Vps_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->getData()->row->add_component_id)
+            ->parent;
         $ret['row'] = $this->getData()->row;
-        $ret['price'] = $addCmp->getComponent()->getPrice($ret['row']);
-        $ret['text'] = $addCmp->getComponent()->getProductText($ret['row']);
         return $ret;
     }
 }

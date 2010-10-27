@@ -44,7 +44,7 @@ class Vps_Controller_Action_Cli_ScpController extends Vps_Controller_Action_Cli_
             throw new Vps_ClientException("No host configured for $section server");
         }
 
-        $host = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
+        $host = $config->server->user.'@'.$config->server->host;
         $dir = $config->server->dir;
 
         $cmd = "sudo -u vps sshvps $host $dir scp";

@@ -38,7 +38,7 @@ class Vps_Controller_Action_Cli_CopyToTestController extends Vps_Controller_Acti
     {
         $config = Vps_Config_Web::getInstance($this->_getParam('server'));
 
-        $this->_sshHost = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
+        $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
 
         $this->_systemSshVps("import");

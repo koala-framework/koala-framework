@@ -12,7 +12,6 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Vpc_A
     {
         $ret = parent::getTemplateVars();
         $ret['order'] = $this->_getOrder();
-        $ret['items'] = $ret['order']->getProductsData();
 
         $items = $ret['order']->getChildRows('Products');
         $ret['items'] = array();
@@ -32,9 +31,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Vpc_A
             $ret['items'][] = (object)array(
                 'product' => $addComponent->parent,
                 'row' => $i,
-                'additionalOrderData' => $additionalOrderData,
-                'price' => $addComponent->getComponent()->getPrice($i),
-                'text' => $addComponent->getComponent()->getProductText($i),
+                'additionalOrderData' => $additionalOrderData
             );
         }
 

@@ -9,7 +9,7 @@ Vpc.Columns.Panel = Ext.extend(Vps.Auto.FormPanel, {
     onSubmitSuccess: function(response, options, result) {
         Vpc.Columns.Panel.superclass.onSubmitSuccess.apply(this, arguments);
         this.reload();
-    }
+    },
 
 });
 

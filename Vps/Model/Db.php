@@ -8,9 +8,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private $_tableName;
     private $_columns;
 
-    // CSV deaktiviert, weil character set bei LOAD DATA INFILE an der online
-    // mysql version nicht möglich ist
-    protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
+    protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_ARRAY);
 
     private $_proxyContainerModels = array();
 
@@ -717,19 +715,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $wherePart = '';
             if ($select) {
                 if (!is_object($select)) {
-                    if (is_string($select)) $select = array($select);
+                    if (is_string($select)) $where = array($select);
                     $select = $this->select($select);
                 }
-                $dbSelect = $this->createDbSelect($select);
-                $whereParts = $dbSelect->getPart(Zend_Db_Select::WHERE);
+                $whereParts = $this->createDbSelect($select)->getPart(Zend_Db_Select::WHERE);
                 $wherePart = implode(' ', $whereParts);
-
-                // check if a row is exported and quit, if none
-                $dbSelect->limit(1);
-                $hasRows = $dbSelect->query()->fetchAll();
-                if (!count($hasRows)) {
-                    return '';
-                }
             }
             if ($wherePart) {
                 $wherePart = '--where="'.$wherePart.'" ';
@@ -747,42 +737,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $ret = file_get_contents($filename);
             unlink($filename);
             return $ret;
-        } else if ($format == self::FORMAT_CSV) {
-            if (!is_object($select)) {
-                if (is_string($select)) $select = array($select);
-                $select = $this->select($select);
-            }
-
-            $filename = realpath('application/temp').'/modelcsvexport'.uniqid();
-
-            $dbSelect = $this->createDbSelect($select);
-            $sqlString = $dbSelect->assembleIntoOutfile($filename);
-
-            $dbSelect->limit(1);
-            $fieldResult = $dbSelect->query()->fetchAll();
-            $columnsCsv = '';
-            if (count($fieldResult)) {
-                $columns = array_keys($fieldResult[0]);
-                $columnsCsv = '"'.implode('","', $columns).'"';
-                $this->executeSql($sqlString);
-                $cmd = "{ echo '$columnsCsv'; cat $filename; } | gzip -c > $filename.gz";
-                exec($cmd, $output, $ret);
-                if ($ret != 0) throw new Vps_Exception("CSV-SQL export failed");
-
-                if (!file_exists($filename.'.gz')) {
-                    throw new Vps_Exception("Error exporting csv from model - target file has not been created");
-                }
-                unlink($filename);
-
-                $ret = file_get_contents($filename.'.gz');
-                unlink($filename.'.gz');
-                return $ret;
-            } else {
-                return '';
-            }
         } else if ($format == self::FORMAT_ARRAY) {
             if (!is_object($select)) {
-                if (is_string($select)) $select = array($select);
+                if (is_string($select)) $where = array($select);
                 $select = $this->select($select);
             }
             $dbSelect = $this->createDbSelect($select);
@@ -796,9 +753,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
     public function import($format, $data, $options = array())
     {
         if ($format == self::FORMAT_SQL) {
-            // if no data is recieved, quit
-            if (!$data) return;
-
             $filename = tempnam('/tmp', 'modelimport');
             file_put_contents($filename, $data);
 
@@ -815,37 +769,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $cmd .= "| {$systemData['mysqlDir']}mysql $systemData[mysqlOptions] 2>&1";
             exec($cmd, $output, $ret);
             if ($ret != 0) throw new Vps_Exception("SQL import failed: ".implode("\n", $output));
-            unlink($filename);
-        } else if ($format == self::FORMAT_CSV) {
-            // if no data is recieved, quit
-            if (!$data) return;
-
-            $filename = realpath('application/temp').'/modelcsvimport'.uniqid();
-            file_put_contents($filename.'.gz', $data);
-
-            $cmd = "gunzip -c $filename.gz > $filename"
-                ." && head --lines=1 $filename | sed -e 's|\"|`|g'";
-            exec($cmd, $output, $ret);
-            if ($ret != 0) throw new Vps_Exception("CSV-SQL export failed");
-
-            $fieldNames = trim($output[0]);
-            if ($fieldNames) {
-                // set the character_set_database MySQL system variable to utf8
-                $this->executeSql("SET character_set_database = 'utf8'");
-
-                $sqlString = "LOAD DATA INFILE '$filename'";
-                if (isset($options['replace']) && $options['replace']) {
-                    $sqlString .= " REPLACE";
-                }
-                $sqlString .= " INTO TABLE `".($this->getTableName())."`";
-                $sqlString .= " FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\\\\' LINES TERMINATED BY '\\n'";
-                $sqlString .= " IGNORE 1 LINES";
-                $sqlString .= " ($fieldNames)";
-
-                $this->executeSql($sqlString);
-            }
-
-            unlink($filename.'.gz');
             unlink($filename);
         } else if ($format == self::FORMAT_ARRAY) {
             if (isset($options['buffer']) && $options['buffer']) {

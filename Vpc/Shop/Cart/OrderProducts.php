@@ -24,16 +24,7 @@ class Vpc_Shop_Cart_OrderProducts extends Vps_Model_Db
     protected function _init()
     {
         parent::_init();
-        $this->_siblingModels[] = new Vps_Model_Field(array(
-            'fieldName' => 'data'
-        ));
-    }
-
-    
-    public function hasColumn($col)
-    {
-        if ($col == 'visible') return false;
-        if ($col == 'component_id') return false;
-        return parent::hasColumn($col);
+        $this->_exprs['price'] =
+            new Vps_Model_Select_Expr_Parent('ProductPrice', 'price');
     }
 }

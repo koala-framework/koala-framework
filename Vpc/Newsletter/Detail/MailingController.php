@@ -6,7 +6,6 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
     protected $_paging = 20;
     protected $_modelName = 'Vpc_Newsletter_QueueModel';
     protected $_queryFields = array('searchtext');
-    protected $_sortable = false;
 
     public function preDispatch()
     {
@@ -107,6 +106,11 @@ class Vpc_Newsletter_Detail_MailingController extends Vps_Controller_Action_Auto
 
     public function jsonStatusAction()
     {
-        $this->view->info = $this->_getNewsletterRow()->getInfo();
+        $row = $this->_getNewsletterRow();
+        $stat = $row->getInfo();
+        $this->view->info = array(
+            'statusText' => $stat['text'],
+            'state' => $row->status
+        );
     }
 }

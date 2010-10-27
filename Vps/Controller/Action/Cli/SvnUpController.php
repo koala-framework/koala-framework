@@ -20,52 +20,62 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
         );
     }
 
-    public function preDispatch()
-    {
-        if ($this->_getParam('debug')) Vps_Util_Git::setDebugOutput(true);
-        parent::preDispatch();
-    }
-
-    private function _update($path)
-    {
-        passthru('svn up '.$path, $ret);
-        if ($ret) throw new Vps_Exception("SVN Update failed");
-    }
-
     public function indexAction()
     {
-        if (file_exists('.svn')) {
-            echo "updating web\n";
-            $this->_update('.');
+        echo "updating web\n";
+        passthru('svn up', $ret);
+        if ($ret) throw new Vps_Exception("SVN Update failed");
 
-            echo "\nupdating vps\n";
-            $this->_update(VPS_PATH);
+        echo "\nupdating vps\n";
+        passthru('svn up '.VPS_PATH, $ret);
+        if ($ret) throw new Vps_Exception("SVN Update failed");
 
-            if ($this->_getParam('with-library')) {
-                echo "\nupdating library\n";
-                $this->_update(Vps_Registry::get('config')->libraryPath);
-            } else {
-                echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
-            }
+        if ($this->_getParam('with-library')) {
+            echo "\nupdating library\n";
+            passthru('svn up '.Vps_Registry::get('config')->libraryPath, $ret);
+            if ($ret) throw new Vps_Exception("SVN Update failed");
+        } else {
+            echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
+        }
 
-            echo "\n";
-            if ($this->_getParam('skip-update')) {
-                echo "\n\033[01;33mupdate skipped\033[00m\n";
-            } else {
-                if ($doUpdate) {
-                    system("php bootstrap.php update", $ret);
-                    exit($ret);
-                } else {
-                    echo "Updates wurden NICHT ausgefuehrt.\n";
+        $projectIds = array();
+        if (Vps_Registry::get('config')->todo->projectIds) {
+            $projectIds = Vps_Registry::get('config')->todo->projectIds->toArray();
+        }
+        if ($projectIds && Vps_Registry::get('config')->todo->markAsOnTestOnUpdate) {
+            $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Todo');
+            $s = $m->select()
+                    ->whereEquals('project_id', $projectIds)
+                    ->whereEquals('status', 'committed');
+            $doneTodos = $m->getRows($s);
+            foreach ($doneTodos as $todo) {
+                if (!$todo->done_revision) continue;
+                if ($this->_hasRevisionInHistory('.', $todo->done_revision)
+                    || $this->_hasRevisionInHistory(VPS_PATH, $todo->done_revision)
+                ) {
+                    $todo->status = 'test';
+                    $todo->test_date = date('Y-m-d');
+                    $todo->save();
+                    echo "\ntodo #{$todo->id} ({$todo->title}) als auf test markiert";
                 }
             }
-            exit;
-
-        } else {
-            $this->_forward('update', 'git', 'vps_controller_action_cli');
         }
-    }
 
+        echo "\n";
+        if ($this->_getParam('skip-update')) {
+            echo "\n\033[01;33mupdate skipped\033[00m\n";
+        } else {
+            $this->_forward('index', 'update');
+        }
+
+        $this->_helper->viewRenderer->setNoRender(true);
+    }
+    private function _hasRevisionInHistory($path, $revision)
+    {
+        $log = `svn log --xml --revision $revision $path`;
+        $log = new SimpleXMLElement($log);
+        if (count($log->logentry)) return true;
+    }
     public function checkForModifiedFilesAction()
     {
         self::checkForModifiedFiles(false);
@@ -74,19 +84,10 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
 
     public static function checkForModifiedFiles($checkRemote)
     {
-        if (file_exists('.svn')) {
-            self::_check('.', $checkRemote);
-            echo "Web OK\n";
-            self::_check(VPS_PATH, $checkRemote);
-            echo "Vps OK\n";
-        } else {
-            Vps_Util_Git::web()->fetch();
-            Vps_Util_Git::web()->checkClean("origin/master");
-            echo "Web OK\n";
-            Vps_Util_Git::vps()->fetch();
-            Vps_Util_Git::vps()->checkClean("origin/".trim(file_get_contents('application/vps_branch')));
-            echo "Vps OK\n";
-        }
+        self::_check('.', $checkRemote);
+        echo "Web OK\n";
+        self::_check(VPS_PATH, $checkRemote);
+        echo "Vps OK\n";
     }
 
     private static function _check($path, $checkRemote)

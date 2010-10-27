@@ -5,7 +5,6 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
 
     public static function getHelp()
     {
-        if (!file_exists('.svn')) return null;
         if (Vps_Registry::get('config')->server->host != 'vivid') return null;
         return "create new vps-tag";
     }
@@ -160,41 +159,32 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         file_put_contents($dir.'/config.ini', $c);
         passthru("svn ci $dir/config.ini -m \"version++\" >/dev/null");
         passthru("rm -rf $dir >/dev/null");
-        self::_svnCreateTag($branch, $version, $project);
-        system("svn up application/config.ini > /dev/null");
+        self::_createTag($branch, $version, $project);
     }
 
     public static function getProjectName()
     {
-        if (!file_exists('.svn')) return false;
-
         if (preg_match("#trunk/vps-projekte/(.*)\n#", `svn info`, $m)) {
             return $m[1];
-        } else if (preg_match("#branches/([^/]*)#", `svn info`, $m)) {
+        } else if (preg_match("#branches/(.*)\n#", `svn info`, $m)) {
             return $m[1];
         } else if (preg_match("#trunk/vw-projekte/(.*)\n#", `svn info`, $m)) {
-            return $m[1];
-        } else if (preg_match("#trunk/(.*)\n#", `svn info`, $m)) {
             return $m[1];
         }
         return false;
     }
     public static function createVpsTag($version)
     {
-        if (file_exists('.svn')) {
-            if (in_array($version, self::_getSvnDirs("tags/vps"))) {
-                echo "Vps Version $version exists already\n";
-                return;
-            }
-
-            $branch = self::_getCurrentBranchDir(VPS_PATH);
-            self::_svnCreateTag($branch, $version, 'vps');
-        } else {
-            
+        if (in_array($version, self::_getSvnDirs("tags/vps"))) {
+            echo "Vps Version $version exists already\n";
+            return;
         }
+
+        $branch = self::_getCurrentBranchDir(VPS_PATH);
+        self::_createTag($branch, $version, 'vps');
     }
 
-    private static function _svnCreateTag($branch, $version, $project)
+    private static function _createTag($branch, $version, $project)
     {
         $b = self::$_svnBase;
 
@@ -204,8 +194,7 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
             throw new Vps_ClientException("Invalid version number: '$version'");
         }
 
-        
-        passthru("svn mkdir $b/tags/$project -m \"created tags directory\"  > /dev/null 2>&1");
+        passthru("svn mkdir $b/tags/$project -m \"created tags directory\"  2>&1 > /dev/null");
 
         $versions = self::_getSvnDirs("tags/$project");
         if (in_array($version, $versions)) {

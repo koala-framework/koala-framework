@@ -24,18 +24,4 @@ class Vps_Controller_Action_User_SelfController extends Vps_Controller_Action_Au
         $fs->add(new Vps_Form_Field_Password('password1', trlVps('Change password')));
         $fs->add(new Vps_Form_Field_Password('password2', trlVps('Repeat password')));
     }
-
-    protected function _hasPermissions($row, $action)
-    {
-        $userId = $this->_getParam('id');
-        if (!$userId) {
-            return false;
-        }
-
-        $authedUser = Vps_Registry::get('userModel')->getAuthedUser();
-        if ($authedUser->id != $userId || $authedUser->id != $row->id) {
-            return false;
-        }
-        return true;
-    }
 }

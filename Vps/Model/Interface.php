@@ -3,7 +3,6 @@ interface Vps_Model_Interface
 {
     const FORMAT_SQL = 'sql';
     const FORMAT_ARRAY = 'array';
-    const FORMAT_CSV = 'csv';
 
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_INTEGER = 'int';

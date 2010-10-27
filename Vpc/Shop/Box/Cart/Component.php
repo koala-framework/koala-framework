@@ -14,29 +14,24 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $ret['cart'] = $this->_getCart();
+        $ret['checkout'] = $ret['cart']->getChildComponent('_checkout');
 
         $ret['order'] = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
                             ->getCartOrder();
-        $ret['items'] = $ret['order']->getProductsDataWithProduct();
-        $ret['sumRows'] = $this->_getCart()->getChildComponent('_checkout')
-                                ->getComponent()->getSumRows($ret['order']);
+        $items = $ret['order']->getChildRows('Products');
+        $ret['items'] = array();
+        foreach ($items as $i) {
+            $addComponent = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByDbId($i->add_component_id);
+            $ret['items'][] = (object)array(
+                'product' => $addComponent->parent,
+                'row' => $i,
+                'additionalOrderData' => $addComponent->getComponent()->getAdditionalOrderData($i)
+            );
+        }
+        $ret['sumRows'] = $ret['checkout']->getComponent()->getSumRows($ret['order']);
 
-        $ret['links'] = $this->_getLinks();
-
-        return $ret;
-    }
-
-    protected function _getLinks()
-    {
-        $ret = array();
-        $ret['cart'] = array(
-            'component' => $this->_getCart(),
-            'text' => $this->_getPlaceholder('toCart')
-        );
-        $ret['checkout'] = array(
-            'component' => $this->_getCart()->getChildComponent('_checkout'),
-            'text' => $this->_getPlaceholder('toCheckout')
-        );
         return $ret;
     }
 

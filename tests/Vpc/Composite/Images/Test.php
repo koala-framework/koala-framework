@@ -14,7 +14,6 @@ class Vpc_Composite_Images_Test extends PHPUnit_Framework_TestCase
 
     public function testHtml()
     {
-        $this->markTestIncomplete("Test funktioniert im 1.8er branch korrekt, hier aus irgendeinem grun dnicht");
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($this->_root->getComponentById(2100));
         $doc = new DOMDocument();

@@ -12,11 +12,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Component extends Vpc_
     {
         $ret = parent::getTemplateVars();
         $ret['order'] = $this->_getOrder();
-        $ret['paymentTypeText'] = null;
-        $c = $this->getData()->parent->componentClass;
-        if (!is_instance_of($c, 'Vpc_Shop_Cart_Checkout_Payment_None_Component')) {
-            $ret['paymentTypeText'] = Vpc_Abstract::getSetting($c, 'componentName');
-        }
+        $ret['paymentTypeText'] = Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName');
         return $ret;
     }
 

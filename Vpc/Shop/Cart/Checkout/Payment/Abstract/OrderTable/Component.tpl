@@ -1,19 +1,29 @@
 <div class="<?=$this->cssClass?>">
     <table class="tblCheckout" cellspacing="0" cellpadding="0">
+        <tr class="firstRow">
+            <th class="product"><?=trlVps('Product')?></th>
+            <th class="unitPrice"><?=trlVps('Unit Price')?></th>
+            <th class="amount"><?=trlVps('Amount')?></th>
+            <? foreach($this->additionalOrderDataHeaders as $h) { ?>
+            <th class="<?=$h['class']?>"><?=$h['text']?></th>
+            <? } ?>
+            <th class="price"><?=trlVps('Price')?></th>
+        </tr>
+        <tr class="empty first">
+            <td colspan="<?=(4+count($this->additionalOrderDataHeaders))?>">&nbsp;</td>
+        </tr>
         <?
-        $maxAddOrderData = 0;
-        foreach ($this->items as $item) {
-            $maxAddOrderData = max($maxAddOrderData, count($item->additionalOrderData));
-        }
         $c = count($this->items);
         $i = 1;
         foreach ($this->items as $item) { ?>
             <tr class="products<?=($i%2==1 ? ' row1' : ' row2');?>">
-                <td class="product"><?=$item->text?></td>
+                <td class="product"><?=$item->product->name?></td>
+                <td class="unitPrice"><?=$this->money($item->row->price,'')?></td>
+                <td class="amount"><?=$item->row->amount?></td>
                 <? foreach($item->additionalOrderData as $d) { ?>
-                    <td class="<?=$d['class']?>"><?=$d['name']?>: <?=$d['value']?></td>
+                    <td class="<?=$d['class']?>"><?=$d['value']?></td>
                 <? } ?>
-                <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>"><?=$this->money($item->price)?></td>
+                <td class="price"><?=$this->money($item->row->price * $item->row->amount,'')?></td>
             </tr>
             <tr class="<?=($c==$i ? 'lastline' : 'line');?>">
                 <td colspan="<?=(4+count($this->additionalOrderDataHeaders))?>">

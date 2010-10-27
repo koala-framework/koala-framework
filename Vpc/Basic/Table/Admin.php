@@ -4,13 +4,13 @@ class Vpc_Basic_Table_Admin extends Vpc_Admin
     public function setup()
     {
         $fields['columns'] = 'smallint(6) NOT NULL';
-        $fields['data'] = 'text NOT NULL';
         $this->createFormTable('vpc_basic_table', $fields);
 
-        $fields['pos'] = 'int NOT NULL';
-        $fields['data'] = 'text NOT NULL';
-        $this->createFormTable('vpc_basic_table_data', $fields);
+        $fields['columns'] = 'smallint(6) NOT NULL';
+        $fields['rows'] = 'text NOT NULL';
+        $this->createFormTable('vpc_basic_table', $fields);
     }
+
     public function getExtConfig()
     {
         $ret = array();

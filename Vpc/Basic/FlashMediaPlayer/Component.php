@@ -7,6 +7,10 @@ class Vpc_Basic_FlashMediaPlayer_Component extends Vpc_Abstract implements Vps_M
         $ret['componentName'] = trlVps('Flash Media Player');
         $ret['componentIcon'] = new Vps_Asset('film');
         $ret['ownModel'] = 'Vpc_Basic_FlashMediaPlayer_Model';
+        $ret['default'] = array(
+            'width' => 400,
+            'height' => 300
+        );
         $ret['assets']['dep'][] = 'SwfObject';
         $ret['playerPath'] = '/assets/vps/Vpc/Basic/FlashMediaPlayer/player.swf';
         $ret['cssClass'] = 'webStandard';
@@ -21,8 +25,6 @@ class Vpc_Basic_FlashMediaPlayer_Component extends Vpc_Abstract implements Vps_M
         $ret['url'] = $this->_getFlashUrl();
         $ret['playerPath'] = $this->_getSetting('playerPath');
         $ret['row'] = $row;
-        $ret['width'] = $row->width;
-        $ret['height'] = $row->height;
 
         return $ret;
     }

@@ -37,7 +37,6 @@ class Vps_Component_Abstract_Admin
             if ($item->getFilename() != '.' &&
                 $item->getFilename() != '..' &&
                 $item->getFilename() != '.svn' &&
-                $item->getFilename() != '.git' &&
                 $item->isDir()) {
 
                 $pathNew = "$path/$item";

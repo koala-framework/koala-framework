@@ -11,7 +11,7 @@ class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase
         $queueModel = $model->getDependentModel('Queue');
 
         // Vom Newsletter mit der ID 2 sollten zwei Einträge gesendet werden
-        $model->send(0);
+        $model->send(6);
         $this->assertEquals(1, $logModel->countRows());
         $this->assertEquals(2, $logModel->getRow(1)->count);
         $this->assertEquals(0, $logModel->getRow(1)->countErrors);
@@ -27,7 +27,7 @@ class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase
         ));
 
         // Vom Newsletter mit der ID 1 sollte ein Eintrag gesendet werden
-        $model->send(0);
+        $model->send(6);
         $this->assertEquals(2, $logModel->countRows());
         $this->assertEquals(1, $logModel->getRow(2)->count);
         $this->assertEquals(1, $logModel->getRow(2)->newsletter_id);
@@ -40,7 +40,7 @@ class Vpc_Newsletter_Test extends PHPUnit_Framework_TestCase
         ));
 
         // Nichts mehr zu senden
-        $model->send(0);
+        $model->send(6);
         $this->assertEquals(2, $logModel->countRows());
     }
 }

@@ -18,11 +18,15 @@ class Vps_Controller_Action_Cli_CommitAndMergeController extends Vps_Controller_
         );
     }
 
+    private function _svnStat($dir)
+    {
+        exec("svn info $dir", $out, $ret);
+        if ($ret) return false;
+        return true;
+    }
+
     public function indexAction()
     {
-        if (!file_exists('.svn')) {
-            throw new Vps_ClientException("This script is not yet ported to git");
-        }
         $message = $this->_getParam('message');
         if (!$message) throw new Vps_ClientException("--message is required");
 
@@ -35,7 +39,13 @@ class Vps_Controller_Action_Cli_CommitAndMergeController extends Vps_Controller_
             throw new Vps_ClientException("Can't use this script while on trunk");
         }
 
-        $trunkUrl = Vps_Controller_Action_Cli_TagCheckoutController::getWebSvnPathForVersion('trunk');
+        if ($this->_svnStat('http://svn/trunk/vps-projekte/'.$m[3])) {
+            $trunkUrl = $m[1].'trunk/vps-projekte/'.$m[3];
+        } else if ($this->_svnStat('http://svn/trunk/vw-projekte/'.$m[3])) {
+            $trunkUrl = $m[1].'trunk/vw-projekte/'.$m[3];
+        } else {
+            throw new Vps_Exception("Can't figure out trunk url");
+        }
 
         $cmd = "svn ci -m ".escapeshellarg($message);
         if ($this->_getParam('debug')) echo $cmd."\n";

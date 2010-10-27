@@ -62,16 +62,13 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
 
     public function initAction()
     {
-        if (!$this->_getParam('filename')) throw new Vps_ClientException("filename not specified");
-        $filename = $this->_getParam('filename');
-
         if (!$this->_getParam('start')) {
             throw new Vps_ClientException("start not specified");
         }
         $webs = $this->_getWebs();
 
         $start = strtotime($this->_getParam('start'))-1;
-        $cmd = "rrdtool create $filename ";
+        $cmd = "rrdtool create svnstats.rrd ";
         $cmd .= "--start $start ";
         $cmd .= "--step ".(60*60*24*$this->_interval)." ";
         foreach ($webs as $web) {
@@ -89,9 +86,6 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
 
     private function _count($path, $webs, $skipWebs, $date)
     {
-        if (!$this->_getParam('filename')) throw new Vps_ClientException("filename not specified");
-        $filename = $this->_getParam('filename');
-
         foreach ($webs as $web) {
             if (in_array($web, $skipWebs)) {
                 for($i=0;$i<7;$i++) {
@@ -104,9 +98,7 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
             if (file_exists("$path/$web/tests")) {
                 $locTests = $this->_loc("$path/$web/tests");
                 foreach ($locTests as $k=>$i) {
-                    if (isset($loc[$k])) {
-                        $loc[$k] -= $i;
-                    }
+                    $loc[$k] -= $i;
                 }
             }
             foreach ($loc as $k=>$i) {
@@ -132,7 +124,7 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
             $fields[] = $todo;
             echo "todo:$todo\n";
         }
-        $cmd = "rrdtool update $filename ";
+        $cmd = "rrdtool update svnstats.rrd ";
         $cmd .= "$date:".implode(':', $fields);
 
         $this->_systemCheckRet($cmd);
@@ -140,19 +132,13 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
 
     private function _getWebs()
     {
-        if (!$this->_getParam('webs')) {
-            throw new Vps_ClientException("webs not specified");
+        exec('svn ls http://svn/trunk/vps-projekte', $out);
+        foreach ($out as &$i) {
+            $i = trim(trim($i), '/');
         }
-        if ($this->_getParam('webs')=='all') {
-            exec('svn ls http://svn/trunk/vps-projekte', $out);
-            foreach ($out as &$i) {
-                $i = trim(trim($i), '/');
-            }
-            array_unshift($out, 'vps');
-            return $out;
-        } else {
-            return explode(',', $this->_getParam('webs'));
-        }
+        array_unshift($out, 'vps');
+        return array('vps');
+        return $out;
     }
 
     public function recordAction()
@@ -230,31 +216,10 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
             $paths .= " $path/$p";
         }
         $cmd = "/home/niko/ohcount-1.0.2/bin/ohcount $paths";
-
-
-        $descriptorspec = array(
-            1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
-        );
-
-        $timeLimit = 20;
-        $output = '';
-
-        $start = time();
-        $process = proc_open($cmd, $descriptorspec, $pipes);
-        stream_set_blocking($pipes[1], 0);
-        while(!feof($pipes[1])) {
-            if (!feof($pipes[1])) {
-                $output .= fgets($pipes[1]);
-            }
-            if (time()-$start > $timeLimit) {
-                proc_terminate($process);
-                echo "Process '$cmd' killed because timelimit exceeded";
-                return array();
-            }
-        }
         //echo $cmd."\n";
+        exec($cmd, $output);
                         //lang   files     code
-        preg_match_all('#^([^ ]+) +([0-9]+) +([0-9]+)#m', $output, $m);
+        preg_match_all('#^([^ ]+) +([0-9]+) +([0-9]+)#m', implode("\n", $output), $m);
         $locs = array();
         foreach($m[1] as $i=>$l) {
             $l = strtolower($l);
@@ -267,8 +232,6 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
 
     public function graphAction()
     {
-        if (!$this->_getParam('filename')) throw new Vps_ClientException("filename not specified");
-        $filename = $this->_getParam('filename');
         if (!$this->_getParam('start')) throw new Vps_ClientException("start not specified");
         if (!$this->_getParam('end')) {
             $end = time();
@@ -316,7 +279,7 @@ class Vps_Controller_Action_Cli_SvnStatsController extends Vps_Controller_Action
             }
             $color = strtoupper($color);
             $name = $this->_escape($l['web'], $l['type']);
-            $cmd .= "DEF:$name=$filename:$name:AVERAGE ";
+            $cmd .= "DEF:$name=svnstats.rrd:$name:AVERAGE ";
             $cmd .= "LINE2:$name#$color:\"$l[web] $l[type]\" ";
         }
         $this->_systemCheckRet($cmd);

@@ -11,8 +11,4 @@ class Vpc_Basic_Flash_Model extends Vps_Model_Db_Proxy
     protected $_dependentModels = array(
         'FlashVars' => 'Vpc_Basic_Flash_FlashVarsModel'
     );
-    protected $_default = array(
-        'width' => 400,
-        'height' => 300
-    );
 }
