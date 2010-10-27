@@ -17,9 +17,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
             'name' => 'r'
         );
 
+        $sender = Vps_Mail::getSenderFromConfig();
         $ret['default'] = array(
-            'from_email' => 'el@vivid-planet.com', //TODO: dieser standardwert macht selten sinn
-            'from_name' => 'Erich Lechenauer',
+            'from_email' => $sender['address'],
+            'from_name' => $sender['name']
         );
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/PreviewWindow.js';
