@@ -39,7 +39,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                     scope: this,
                     fn: function(button) {
                         for(var i=0;i<this.files.length;i++) {
-                            if (this.swfu.getFile(i)) this.swfu.cancelUpload(this.swfu.getFile(i).id);
+                            this.swfu.cancelUpload(this.files[i]);
                         }
                         this.files = [];
                         this.running = false;
@@ -51,11 +51,12 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                 var total = 0;
                 var sumDone = 0;
                 for(var i=0;i<this.files.length;i++) {
-                    total += this.swfu.getFile(i).size;
-                    if (this.swfu.getFile(i).id == file.id) {
+                    var f = this.swfu.getFile(this.files[i])
+                    total += f.size;
+                    if (f.id == file.id) {
                         sumDone += done;
-                    } else if (this.swfu.getFile(i).filestatus != SWFUpload.FILE_STATUS.QUEUED) {
-                        sumDone += this.swfu.getFile(i).size;
+                    } else if (f.filestatus != SWFUpload.FILE_STATUS.QUEUED) {
+                        sumDone += f.size;
                     }
                 }
                 this.progress.updateProgress(sumDone/total);
@@ -64,9 +65,9 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                 this.uploadedIds.push(r.value.uploadId);
 
                 for(var i=0;i<this.files.length;i++) {
-                    if (this.swfu.getFile(i).filestatus == SWFUpload.FILE_STATUS.QUEUED) {
+                    if (this.swfu.getFile(this.files[i]).filestatus == SWFUpload.FILE_STATUS.QUEUED) {
                         //neeext
-                        this.swfu.startUpload(this.swfu.getFile(i).id);
+                        this.swfu.startUpload(this.files[i]);
                         return;
                     }
                 }
