@@ -968,7 +968,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!this.getStore()) {
             Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
             Ext.Ajax.request({
-                mask: true,
+                mask: this.el,
                 url: this.controllerUrl+'/json-data',
                 params: params,
                 success: function(response, options, r) {
