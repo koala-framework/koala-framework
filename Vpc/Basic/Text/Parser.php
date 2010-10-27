@@ -139,6 +139,7 @@ class Vpc_Basic_Text_Parser
                 $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
                     if (in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
+                        $allowedClasses = array();
                         foreach ($this->_getMasterStyles() as $s) {
                             if ($s['tagName'] == strtolower($element)) {
                                 $allowedClasses[] = $s['className'];
