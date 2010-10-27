@@ -53,8 +53,8 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     {
         $ret = 0;
         foreach ($this->getChildRows('Products') as $op) {
-            $data = Vpc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($op->add_component_class);
-            $ret += $data->getPrice($op);
+            $p = $op->getParentRow('ProductPrice');
+            $ret += $p->price * $op->amount;
         }
         return $ret;
     }
@@ -63,8 +63,7 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     {
         $ret = 0;
         foreach ($this->getChildRows('Products') as $op) {
-            $data = Vpc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($op->add_component_class);
-            $ret += $data->getAmount($op);
+            $ret += $op->amount;
         }
         return $ret;
     }
@@ -87,60 +86,5 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
         }
         $ret .= ' '.trim($this->title.' '.$this->lastname);
         return $ret;
-    }
-
-    /**
-     * Nur verwenden wenn Bestellung noch nicht abgeschlossen
-     */
-    public function getProductsDataWithProduct()
-    {
-        return $this->_getProductsData(true);
-    }
-    /**
-     * Kann immer verwendet werden, auch wenn es add_compoment_id gar nicht mehr gibt
-     */
-    public function getProductsData()
-    {
-        return $this->_getProductsData(false);
-    }
-
-    private function _getProductsData($includeProduct)
-    {
-        $ret = array();
-
-        $items = $this->getChildRows('Products');
-        $ret = array();
-        foreach ($items as $i) {
-            $data = Vpc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($i->add_component_class);
-            $r = array(
-                'additionalOrderData' => $data->getAdditionalOrderData($i),
-                'price' => $data->getPrice($i),
-                'amount' => $data->getAmount($i),
-                'text' => $data->getProductText($i),
-            );
-            if ($includeProduct) {
-                $addComponent = Vps_Component_Data_Root::getInstance()
-                                ->getComponentByDbId($i->add_component_id);
-                $r['product'] = $addComponent->parent;
-            }
-            $ret[] = (object)$r;
-        }
-        return $ret;
-    }
-
-    public function getPlaceholders()
-    {
-        $ret = array();
-        $m = new Vps_View_Helper_Money();
-        $ret['total'] = $m->money($this->getTotal());
-        $ret['orderNumber'] = $this->order_number;
-
-        $plugins = Vpc_Shop_Cart_OrderData::getInstance($this->cart_component_class)
-                    ->getShopCartPlugins();
-        foreach ($plugins as $plugin) {
-            $ret = array_merge($ret, $plugin->getPlaceholders($this));
-        }
-        return $ret;
-
     }
 }

@@ -13,8 +13,8 @@ class Vps_Controller_Action_Cli_CreateViewCacheController extends Vps_Controller
             throw new Vps_ClientException("Macht wenig sinn mit deaktiviertem view-cache - oder?");
         }
 //         $this->_doIt(Vps_Component_Data_Root::getInstance());
-        $this->_doIt(Vps_Component_Data_Root::getInstance()->getPageByUrl('/forum', null));
-//         $this->_doIt(Vps_Component_Data_Root::getInstance()->getPageByUrl('/forum/16_stell_dich_vor/39_bin_auch_neu_hier/82/bearbeiten', null));
+        $this->_doIt(Vps_Component_Data_Root::getInstance()->getPageByUrl('/forum'));
+//         $this->_doIt(Vps_Component_Data_Root::getInstance()->getPageByUrl('/forum/16_stell_dich_vor/39_bin_auch_neu_hier/82/bearbeiten'));
         echo "====>done\n";
         $this->_helper->viewRenderer->setNoRender(true);
     }

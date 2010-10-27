@@ -4,11 +4,10 @@ class Vps_Acl_Resource_ComponentClass_MenuUrl extends Vps_Acl_Resource_MenuUrl
 {
     protected $_componentClass;
 
-    public function __construct($resourceId, $menuConfig = null, $menuUrl = null, $componentClass = null)
+    public function __construct($componentClass, $menuConfig = null, $menuUrl = null)
     {
-        if (!$componentClass) $componentClass = $resourceId;
         $this->_componentClass = $componentClass;
-        parent::__construct('vpc_'.$resourceId, $menuConfig, $menuUrl);
+        parent::__construct('vpc_'.$componentClass, $menuConfig, $menuUrl);
     }
 
     public function getComponentClass()

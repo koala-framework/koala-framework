@@ -30,30 +30,4 @@ class Vps_Controller_Action_User_CommentsController extends Vps_Controller_Actio
         $row->user_id = $this->_getParam('user_id');
         $row->create_type = 'manual';
     }
-
-    protected function _hasPermissions($row, $action)
-    {
-        $userId = $this->_getParam('user_id');
-        if (!$userId) {
-            return false;
-        }
-
-        $acl = Vps_Registry::get('acl');
-        $userRole = Vps_Registry::get('userModel')->getAuthedUserRole();
-
-        $roles = array();
-        foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
-            $roles[$role->getRoleId()] = $role->getRoleName();
-        }
-        if (!$roles) return false;
-
-        $userModel = Vps_Registry::get('userModel');
-        $userRow = $userModel->getRow($userId);
-
-        if (!$userRow || !array_key_exists($userRow->role, $roles)) {
-            return false;
-        }
-
-        return true;
-    }
 }

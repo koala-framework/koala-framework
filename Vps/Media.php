@@ -16,12 +16,12 @@ class Vps_Media
                 $prefix = '/'.$r->filename;
             }
         }
-        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.urlencode($filename);
+        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$filename;
     }
 
     public static function getChecksum($class, $id, $type, $filename)
     {
-        return md5(self::PASSWORD . $class . $id . $type . urldecode($filename));
+        return md5(self::PASSWORD . $class . $id . $type . $filename);
     }
 
     /**

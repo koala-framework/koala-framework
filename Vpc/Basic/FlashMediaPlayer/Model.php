@@ -8,8 +8,4 @@ class Vpc_Basic_FlashMediaPlayer_Model extends Vps_Model_Db
             'refModelClass'     => 'Vps_Uploads_Model'
         )
     );
-    protected $_default = array(
-        'width' => 400,
-        'height' => 300
-    );
 }

@@ -19,11 +19,6 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
                 $commands[$cmd] = $class;
             }
         }
-        foreach ($this->_processModule('vps_e2_controller_cli') as $cmd=>$class) {
-            if (!isset($commands[$cmd])) {
-                $commands[$cmd] = $class;
-            }
-        }
         $maxLen = 0;
         foreach ($commands as $cmd=>$class) {
             if (strlen($cmd) > $maxLen) $maxLen = strlen($cmd);

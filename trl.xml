@@ -2787,7 +2787,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Products</en>
-<de>Shop.Produkte</de>
+<de>Shop - Produkte</de>
 <id>795</id>
 </text>
 <text>
@@ -2927,7 +2927,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Shop.Cart</en>
-<de>Shop.Warenkorb</de>
+<de>Shop - Warenkorb</de>
 <id>828</id>
 </text>
 <text>
@@ -5142,22 +5142,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Account deleted e-mail sent.</en>
-<de>Account gel&#xF6;scht E-Mail gesendet.</de>
+<de>Account gelöscht E-Mail gesendet.</de>
 <id>1357</id>
 </text>
 <text>
 <en>Account deleted e-mail sent by {0}.</en>
-<de>Account gel&#xF6;scht E-Mail gesendet von {0}.</de>
+<de>Account gelöscht E-Mail gesendet von {0}.</de>
 <id>1358</id>
 </text>
 <text>
 <en>Changed mail address e-mail sent.</en>
-<de>Ge&#xE4;nderte E-Mail-Adresse E-Mail gesendet.</de>
+<de>Geänderte E-Mail-Adresse E-Mail gesendet.</de>
 <id>1359</id>
 </text>
 <text>
 <en>Changed mail address e-mail sent by {0}.</en>
-<de>Ge&#xE4;nderte E-Mail-Adresse E-Mail gesendet von {0}.</de>
+<de>Geänderte E-Mail-Adresse E-Mail gesendet von {0}.</de>
 <id>1360</id>
 </text>
 <text>
@@ -5212,12 +5212,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>User deleted.</en>
-<de>Benutzer gel&#xF6;scht.</de>
+<de>Benutzer gelöscht.</de>
 <id>1371</id>
 </text>
 <text>
 <en>User deleted by {0}.</en>
-<de>Benutzer gel&#xF6;scht von {0}.</de>
+<de>Benutzer gelöscht von {0}.</de>
 <id>1372</id>
 </text>
 <text>
@@ -5244,68 +5244,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Company A-Z</en>
 <de>Firmen A-Z</de>
 <id>1377</id>
-</text>
-<text>
-<en>Fair</en>
-<de>Messe</de>
-<id>1378</id>
-</text>
-<text>
-<en>Voucher</en>
-<de>Gutschein</de>
-<id>1379</id>
-</text>
-<text>
-<en>Vouchers</en>
-<de>Gutscheine</de>
-<id>1380</id>
-</text>
-<text>
-<en>Voucher Code</en>
-<de>Gutschein Code</de>
-<id>1385</id>
-</text>
-<text>
-<en>Amount</en>
-<context>Amount of Money</context>
-<de>Betrag</de>
-<id>1386</id>
-</text>
-<text>
-<en>Used Amount</en>
-<context>Amount of Money</context>
-<de>Benutzer Betrag</de>
-<id>1387</id>
-</text>
-<text>
-<en>'%value%' code was already used</en>
-<de>'%value%' Code wurde bereits benutzt</de>
-<id>1388</id>
-</text>
-<text>
-<en>'%value%' is not a valid voucher code</en>
-<de>'%value%' ist ein ungültiger Gutschein Code</de>
-<id>1389</id>
-</text>
-<text>
-<en>Redeem Voucher</en>
-<de>Gutschein einlösen</de>
-<id>1390</id>
-</text>
-<text>
-<en>Remaining Amount {0}</en>
-<de>Restbetrag {0}</de>
-<id>1391</id>
-</text>
-<text>
-<en>Your Voucher has been successfully redeemed.</en>
-<de>Ihr Gutschein wurde erfolgreich eingelöst.</de>
-<id>1392</id>
-</text>
-<text>
-<en>Product: Voucher</en>
-<de>Produkt: Gutschein</de>
-<id>1393</id>
 </text>
 </trl>
 

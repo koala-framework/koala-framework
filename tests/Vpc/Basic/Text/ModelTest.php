@@ -134,8 +134,6 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCreatesImageComponentx()
     {
-        $this->markTestIncomplete();
-
         $c = $this->_root->getComponentById(1008)->getComponent();
         $row = $c->getRow();
         $html = '<p><img src="http://www.vivid-planet.com/files/vividplanet_internet_agentur_salzburg.gif" /></p>';
@@ -170,8 +168,6 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCreatesImageComponentHtml()
     {
-        $this->markTestIncomplete();
-
         $c = $this->_root->getComponentById(1009)->getComponent();
         $row = $c->getRow();
         $html = '<p><img src="http://www.vivid-planet.com/files/vividplanet_internet_agentur_salzburg.gif" /></p>';

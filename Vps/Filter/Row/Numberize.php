@@ -118,10 +118,10 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
             $count = $row->getTable()->fetchAll($where)->count() + 1;
         }
 
+
+
         // Wenn value null ist, Datensatz am Ende einfügen
-        // is_numeric: Wenn in grid direkt bearbeitet wird kann sein, dass es                                
-        // ein leerer string ist
-        if (is_null($value) || !is_numeric($value)) {
+        if (is_null($value)) {
             $value = $count;
         }
         if ($value < 1) $value = 1;

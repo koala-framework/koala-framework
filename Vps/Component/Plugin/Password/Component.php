@@ -17,46 +17,23 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
         return $this->_getSetting('password');
     }
 
-    protected function _getLoginPassword()
-    {
-        return isset($_POST['login_password']) ? $_POST['login_password'] : null;
-    }
-
-    protected function _saveCookie()
-    {
-        setcookie(get_class($this), sha1($this->_getLoginPassword()), time()+60*60*24*365);
-    }
-
     public function isLoggedId()
     {
         $pw = $this->_getPassword();
         if (!is_array($pw)) $pw = array($pw);
-
-        if (isset($_COOKIE[get_class($this)])) {
-            foreach ($pw as $p) {
-                if (sha1($p) == $_COOKIE[get_class($this)]) {
-                    $this->_saveCookie();
-                    return true;
-                }
-            }
-        }
-
         $msg = '';
         $session = new Zend_Session_Namespace('login_password');
-        if (in_array($this->_getLoginPassword(), $pw)) {
-            $session->login = true;
+        if (isset($_POST['login_password'])) {
+            if (in_array($_POST['login_password'], $pw)) {
+                $session->login = true;
+            }
         }
         return $session->login;
     }
 
     public function processOutput($output)
     {
-        if ($this->isLoggedId()) {
-            if (isset($_POST['save_cookie']) && $_POST['save_cookie']) {
-                $this->_saveCookie();
-            }
-            return $output;
-        }
+        if ($this->isLoggedId()) return $output;
 
         $templateVars = array();
         $templateVars['loginForm'] = Vps_Component_Data_Root::getInstance()

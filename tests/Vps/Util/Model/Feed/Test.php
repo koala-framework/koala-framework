@@ -101,6 +101,7 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
 
     /**
      * @group slow
+     */
     public function testRandomFeeds()
     {
         $urls = array();
@@ -125,7 +126,6 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
             }
         }
     }
-    */
 
     /**
      * @group slow
@@ -134,11 +134,16 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
     {
         Vps_Model_Abstract::clearInstances();
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds');
-
-        $feeds = $m->findFeeds('http://www.prosalzburg.at');
+        $feeds = $m->findFeeds('http://www.vivid-planet.com');
         $this->assertEquals(1, count($feeds));
         $feeds = array_keys($feeds);
-        $this->assertEquals('http://www.prosalzburg.at/news/feed', $feeds[0]);
+        $this->assertEquals('http://www.vivid-planet.com/news/aktuelle_news/rss/', $feeds[0]);
+
+        $feeds = $m->findFeeds('http://www.prosalzburg.at');
+        $this->assertEquals(2, count($feeds));
+        $feeds = array_keys($feeds);
+        $this->assertEquals('http://www.prosalzburg.at/news/feed', $feeds[1]);
+        $this->assertEquals('http://www.prosalzburg.at/forum/feed', $feeds[0]);
 
         $feeds = $m->findFeeds('http://www.orf.at');
         $this->assertEquals(1, count($feeds));

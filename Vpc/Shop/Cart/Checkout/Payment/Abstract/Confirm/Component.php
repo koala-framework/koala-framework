@@ -26,19 +26,20 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Vpc_Edit
     public function processInput($data)
     {
         $o = $this->_getOrder();
-        if (!$o) {
-            //bestellung wurde bereits bestaetigt
-            header("Location: ".$this->getData()->parent->parent->parent->parent->url);
-            exit;
+        if ($o) {
+            $this->getData()->parent->getComponent()->confirmOrder($o);
         }
-        $this->getData()->parent->getComponent()->confirmOrder($o);
     }
 
     public function getPlaceholders()
     {
         $o = $this->_getOrder();
         if (!$o) return array();
-        return $o->getPlaceholders();
+        $ret = $o->toArray();
+        $m = new Vps_View_Helper_Money();
+        $ret['total'] = $m->money($o->getTotal());
+        $ret['orderNumber'] = $o->order_number;
+        return $ret;
     }
 
     public final function getCurrentOrder()

@@ -17,7 +17,6 @@ Vps.Form.StaticField = Ext.extend(Ext.BoxComponent, {
     clearInvalid: function() {},
     reset: function() {},
     setValue: function() {},
-    isDirty: function() { return false; },
     resetDirty: function() {},
     clearValue: function() {},
     validate: function() { return true; },

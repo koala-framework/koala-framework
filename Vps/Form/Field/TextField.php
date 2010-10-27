@@ -37,16 +37,10 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         }
     }
 
-    protected function _getOutputValueFromValues($values)
-    {
-        $name = $this->getFieldName();
-        return isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
-    }
-
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
-        $value = $this->_getOutputValueFromValues($values);
+        $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
         $ret = parent::getTemplateVars($values);
 
         $value = htmlspecialchars($value);
@@ -56,13 +50,9 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
             $cls = trim($cls.' vpsClearOnFocus');
         }
-        $style = '';
-        if ($this->getWidth()) {
-            $style = "style=\"width: ".$this->getWidth()."px\" ";
-        }
         $ret['html'] = "<input type=\"".$this->getInputType()."\" id=\"$ret[id]\" ".
                         "name=\"$name$fieldNamePostfix\" value=\"$value\" ".
-                        $style.
+                        "style=\"width: {$this->getWidth()}px\" ".
                         ($cls ? "class=\"$cls\"" : '').
                         "maxlength=\"{$this->getMaxLength()}\" />";
         return $ret;

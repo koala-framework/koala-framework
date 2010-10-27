@@ -22,21 +22,10 @@ class Vpc_Shop_Cart_Checkout_Form_Component extends Vpc_Form_Component
 
     protected function _getFrontendPayments()
     {
-        $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
-                            ->getCartOrder();
-        $totalAmount = $this->getData()->parent->getComponent()->getTotal($order);
         $cc = Vpc_Abstract::getChildComponentClasses($this->getData()->parent->componentClass, 'payment');
         $ret = array();
         foreach ($cc as $k=>$c) {
-            if ($totalAmount <= 0) {
-                if (is_instance_of($c, 'Vpc_Shop_Cart_Checkout_Payment_None_Component')) {
-                    $ret[$k] = Vpc_Abstract::getSetting($c, 'componentName');
-                }
-            } else {
-                if (!is_instance_of($c, 'Vpc_Shop_Cart_Checkout_Payment_None_Component')) {
-                    $ret[$k] = Vpc_Abstract::getSetting($c, 'componentName');
-                }
-            }
+            $ret[$k] = Vpc_Abstract::getSetting($c, 'componentName');
         }
         return $ret;
     }

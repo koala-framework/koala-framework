@@ -9,12 +9,21 @@ class Vpc_Shop_Cart_Checkout_Payment_CashOnDelivery_Component extends Vpc_Shop_C
         $ret['generators']['confirm']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_CashOnDelivery_Confirm_Component';
         $ret['generators']['shippedMail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_CashOnDelivery_ShippedMail_Component';
         $ret['cashOnDeliveryCharge'] = 6.5;
-        $ret['orderData'] = 'Vpc_Shop_Cart_Checkout_Payment_CashOnDelivery_OrderData';
         return $ret;
     }
 
-    protected final function _getCashOnDeliveryCharge($order)
+    protected function _getCashOnDeliveryCharge($order)
     {
-        throw new Vps_Exception('gibts nimma');
+        return $this->_getSetting('cashOnDeliveryCharge');
+    }
+
+    public function getAdditionalSumRows($order)
+    {
+        $ret = parent::getAdditionalSumRows($order);
+        $ret[] = array(
+            'text' => trlVps('Cash on Delivery Charge').':',
+            'amount' => $this->_getCashOnDeliveryCharge($order)
+        );
+        return $ret;
     }
 }

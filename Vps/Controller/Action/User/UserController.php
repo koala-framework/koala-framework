@@ -125,26 +125,4 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         }
         return $ret;
     }
-
-    protected function _hasPermissions($row, $action)
-    {
-        if (!$row) {
-            return true;
-        }
-
-        $acl = Vps_Registry::get('acl');
-        $userRole = Vps_Registry::get('userModel')->getAuthedUserRole();
-
-        $roles = array();
-        foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
-            $roles[$role->getRoleId()] = $role->getRoleName();
-        }
-        if (!$roles) return false;
-
-        if (!$row || !array_key_exists($row->role, $roles)) {
-            return false;
-        }
-
-        return true;
-    }
 }
