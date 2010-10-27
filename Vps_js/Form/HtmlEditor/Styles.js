@@ -176,6 +176,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
         var select = this.select[type];
         if (!select.select) {
             select.select = new Vps.Form.ComboBox({
+                testId: type+'StyleSelect',
                 editable: false,
                 triggerAction: 'all',
                 forceSelection: true,
@@ -188,7 +189,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                     data: this.filterStylesByType(type)
                 })
             });
-            select.select.on('select', function(combo, record) {
+            select.select.on('select', function(combo) {
                 combo.blur();
                 combo.triggerBlur(); //hack für ext hack: da wir den focus in einen anderen frame setzen bekommt die combobox das nicht mit
                                      //mit diesem aufruf wird ihr gesagt dass sie keinen focus mehr hat
@@ -203,7 +204,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                         this.cmp.formatter.remove(style.id);
                     }
                 }, this);
-                this.cmp.formatter.apply(record.get('id'));
+                this.cmp.formatter.apply(combo.getValue());
                 this.cmp.deferFocus();
                 this.cmp.updateToolbar();
             }, this, {delay: 1}); //delay ist notwendig da sonst der focus erneut beim select landet wenn ein item angeklickt wird
