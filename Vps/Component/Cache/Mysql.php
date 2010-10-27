@@ -29,7 +29,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
         $page = $component;
         while ($page && !$page->isPage) $page = $page->parent;
-        $expire = is_null($settings['lifetime']) ? 0 : time() + $settings['lifetime'];
+        $expire = is_null($settings['lifetime']) ? null : time() + $settings['lifetime'];
 
         $data = array(
             'component_id' => $component->componentId,
@@ -64,52 +64,61 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
     public function preload(Vps_Component_Data $component)
     {
-        $ret = array();
-
-        $select = $this->getModel()->select();
-        $select->whereEquals('deleted', false);
-        $preloadSelect = $this->getModel('preload')->select();
+        $page = $component;
+        while ($page && !$page->isPage) $page = $page->parent;
         $or = array();
-        while ($component && !$component->isPage) $component = $component->parent;
-        if ($component) {
-            $or[] = new Vps_Model_Select_Expr_Equal('page_id', $component->componentId);
-            $preloadSelect->whereEquals('page_id', $component->componentId);
+
+        // Alles von eigener Page
+        if ($page) {
+            $or[] = new Vps_Model_Select_Expr_Equal('page_id', $page->componentId);
         } else {
             $or[] = new Vps_Model_Select_Expr_IsNull('page_id');
+        }
+
+        // PreloadIds der Page
+        $preloadSelect = $this->getModel('preload')->select();
+        if ($page) {
+            $preloadSelect->whereEquals('page_id', $page->componentId);
+        } else {
             $preloadSelect->whereNull('page_id');
         }
         $preloadIds = array();
         foreach ($this->getModel('preload')->export(Vps_Model_Db::FORMAT_ARRAY, $preloadSelect) as $preload) {
-            $preloadIds[] = $preload['preload_id'];
+            $preloadIds[$preload['preload_type']][] = $preload['preload_component_id'];
         }
         if ($preloadIds) {
-            $or[] = new Vps_Model_Select_Expr_Equal('component_id', $preloadIds);
-        }
-
-        while ($component) {
-            $component = $component->parent;
-            if ($component && $component->isPage) {
-                $or[] = new Vps_Model_Select_Expr_Equal('page_id', $component->componentId);
+            foreach ($preloadIds as $type => $ids) {
+                $or[] = new Vps_Model_Select_Expr_And(array(
+                    new Vps_Model_Select_Expr_Equal('type', $type),
+                    new Vps_Model_Select_Expr_Equal('component_id', $ids)
+                ));
             }
         }
-        $or[] = new Vps_Model_Select_Expr_IsNull('page_id');
-        $select->where(new Vps_Model_Select_Expr_Or($or));
 
+        $select = $this->getModel()->select()->where(
+            new Vps_Model_Select_Expr_And(array(
+                new Vps_Model_Select_Expr_Equal('deleted', 0),
+                new Vps_Model_Select_Expr_Or(array(
+                    new Vps_Model_Select_Expr_IsNull('expire'),
+                    new Vps_Model_Select_Expr_LowerEqual('expire', time())
+                )),
+                new Vps_Model_Select_Expr_Or($or)
+            ))
+        );
+
+        $ret = array();
         foreach ($this->getModel()->export(Vps_Model_Db::FORMAT_ARRAY, $select) as $row) {
-            if (!$row['expire'] || $row['expire'] > time()) {
-                $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
-            }
+            $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
         }
         return $ret;
     }
 
-    public function savePreload(Vps_Component_Data $source, Vps_Component_Data $target)
+    public function savePreload($pageId, $preloadComponentId, $preloadType)
     {
-        if ($source->componentId == $target->componentId)
-            throw new Vps_Exception('Source and target component must be different, both have ' . $source->componentId);
         $data = array(
-            'page_id' => $source->getPage()->componentId,
-            'preload_id' => $target->componentId
+            'page_id' => $pageId,
+            'preload_component_id' => $preloadComponentId,
+            'preload_type' => $preloadType
         );
         $options = array(
             'buffer' => true,

@@ -41,7 +41,7 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
         return $this->_getRenderPlaceholder($component->componentId, $config, $value, $type, $plugins);
     }
 
-    public function render($componentId, $config, $view)
+    public function render($componentId, $config)
     {
         $component = $this->getComponent($componentId);
         $template = Vpc_Abstract::getTemplateFile($component->componentClass);
@@ -50,6 +50,7 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
         $vars = $component->getComponent()->getTemplateVars();
         if (is_null($vars)) throw new Vps_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
 
+        $view = $this->_getView();
         $view->assign($vars);
         return $view->render($template);
     }

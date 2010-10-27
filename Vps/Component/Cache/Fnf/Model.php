@@ -17,4 +17,13 @@ class Vps_Component_Cache_Fnf_Model extends Vps_Component_Cache_Mysql_Model
     {
         return $this->countRows($this->select()->whereEquals('deleted', false));
     }
+
+    // zum Testen
+    public function getContent($select = array())
+    {
+        foreach ($this->getRows($select) as $row) {
+            $ret[] = $row->component_id . '(' . $row->type . ' - ' . $row->value . ') ' . $row->component_class . ': ' . $row->deleted;
+        }
+        return $ret;
+    }
 }

@@ -38,28 +38,29 @@ abstract class Vps_Component_View_Renderer
         return strtolower(substr(strrchr(get_class($this), '_'), 1));
     }
 
-    public abstract function render($componentId, $config, $view);
+    public abstract function render($componentId, $config);
 
     public function saveCache($componentId, $config, $value, $content) {
         $component = $this->getComponent($componentId);
         $cacheSettings = $component->getComponent()->getViewCacheSettings();
         if (!$cacheSettings['enabled']) return false;
+        $type = $this->_getType();
 
         Vps_Component_Cache::getInstance()->save(
             $component,
             $content,
-            $this->_getType(),
+            $type,
             $value
         );
         foreach ($component->getComponent()->getCacheMeta() as $m) {
             Vps_Component_Cache::getInstance()->saveMeta($component, $m);
         }
-        if ($this->_getView()) {
-            $page = $component->getPage();
-            $cPage = $this->_getView()->getRenderComponent()->getPage();
-            if ($page && $cPage && $page->componentId != $cPage->componentId) {
-                Vps_Component_Cache::getInstance()->savePreload($this->_renderComponent, $component);
-            }
+
+        $renderComponent = $this->_getView()->getRenderComponent();
+        $renderPageId = $renderComponent->getPage() ? $renderComponent->getPage()->componentId : null;
+        $pageId = $component->getPage() ? $component->getPage()->componentId : null;
+        if ($renderPageId != $pageId) {
+            Vps_Component_Cache::getInstance()->savePreload($renderPageId, $componentId, $type);
         }
 
         return true;

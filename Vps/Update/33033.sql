@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `cache_component` (
   `page_id` varchar(255) collate latin1_general_ci default NULL,
   `db_id` varchar(255) collate latin1_general_ci default NULL,
   `component_class` varchar(255) collate latin1_general_ci NOT NULL,
-  `type` enum('component','master','partials','partial','mail') collate latin1_general_ci NOT NULL,
+  `type` enum('component','master','partials','partial','mail','componentLink') collate latin1_general_ci NOT NULL,
   `value` varchar(20) collate latin1_general_ci NOT NULL default '' COMMENT 'Bei Partial partialId oder bei master component_id zu der das master gehört',
   `expire` int(11) default NULL,
   `deleted` smallint(1) NOT NULL default '0',
@@ -26,8 +26,9 @@ CREATE TABLE IF NOT EXISTS `cache_component` (
 
 CREATE TABLE IF NOT EXISTS `cache_componentpreload` (
   `page_id` varchar(255) collate latin1_general_ci NOT NULL,
-  `preload_id` varchar(255) collate latin1_general_ci NOT NULL,
-  PRIMARY KEY  (`page_id`,`preload_id`),
+  `preload_component_id` varchar(255) collate latin1_general_ci NOT NULL,
+  `preload_type` varchar(20) collate latin1_general_ci NOT NULL,
+  PRIMARY KEY  (`page_id`,`preload_component_id`,`preload_type`),
   KEY `page_id` (`page_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 

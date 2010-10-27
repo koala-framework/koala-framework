@@ -1,7 +1,7 @@
 <?php
 class Vps_Component_View_Helper_Partial extends Vps_Component_View_Renderer
 {
-    public function render($componentId, $config, $view)
+    public function render($componentId, $config)
     {
         $component = $this->getComponent($componentId);
         $partialsClass = $config['class'];
@@ -19,6 +19,7 @@ class Vps_Component_View_Helper_Partial extends Vps_Component_View_Renderer
         }
         $vars['info'] = $config['info'];
         $vars['data'] = $component;
+        $view = $this->_getView();
         $view->assign($vars);
         return $view->render($template);
     }

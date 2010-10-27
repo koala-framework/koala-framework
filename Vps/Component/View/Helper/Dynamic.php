@@ -17,7 +17,7 @@ class Vps_Component_View_Helper_Dynamic extends Vps_Component_View_Renderer
         return $this->_getRenderPlaceholder($component->componentId, $config);
     }
 
-    public function render($componentId, $config, $view)
+    public function render($componentId, $config)
     {
         $class = $config['class'];
         $dynamic = new $class();
