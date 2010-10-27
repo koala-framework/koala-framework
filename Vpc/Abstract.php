@@ -368,11 +368,11 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     }
 
     // deprecated
-    public final function getCacheVars() {
+    public function getCacheVars() {
         throw new Vps_Exception('getCacheVars is not supported anymore.');
     }
 
-    public final static function getStaticCacheVars() {
+    public static function getStaticCacheVars() {
         throw new Vps_Exception('getStaticCacheVars is not supported anymore.');
     }
 
