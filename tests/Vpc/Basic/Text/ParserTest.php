@@ -9,8 +9,16 @@ class Vpc_Basic_Text_ParserTest extends PHPUnit_Framework_TestCase
     {
         $this->_parser = new Vpc_Basic_Text_Parser(null);
         $this->_parser->setMasterStyles(array(
-            'h1.fooTest' => 'Foo Style',
-            'span.fooTest2' => 'Bar Style'
+            array(
+                'tagName' => 'h1',
+                'className' => 'fooTest',
+                'name' => 'Foo Style'
+            ),
+            array(
+                'tagName' => 'span',
+                'className' => 'fooTest2',
+                'name' => 'Bar Style'
+            ),
         ));
         $this->_parser->setEnableTagsWhitelist(true);
         $this->_parser->setEnableStyles(true);
