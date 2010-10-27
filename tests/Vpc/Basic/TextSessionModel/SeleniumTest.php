@@ -113,15 +113,32 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
             editor.onEditorEvent();
         ');
 
-        $this->select('css=select.x-inline-style-select', 'label=Test3');
+        //choose style
+        $this->runScript('
+            Ext.ComponentMgr.all.each(function(c) {
+                if (c.testId=="inlineStyleSelect") {
+                    c.setValue("style3");
+                    c.fireEvent("select", c);
+                    return false;
+                }
+            });
+        ');
 
         //assert inserted a tag
         $this->selectFrame('//iframe');
         $this->assertAttribute('//p/span/@class', 'style3');
         $this->selectFrame('relative=top');
 
-        $this->select('css=select.x-inline-style-select', 'label=Normal');
-
+        //choose style
+        $this->runScript('
+            Ext.ComponentMgr.all.each(function(c) {
+                if (c.testId=="inlineStyleSelect") {
+                    c.setValue("inlinedefault");
+                    c.fireEvent("select", c);
+                    return false;
+                }
+            });
+        ');
 
         //assert inserted a tag
         $this->selectFrame('//iframe');
@@ -137,14 +154,33 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
         //insert some text
         $this->typeKeys("document.getElementsByTagName('iframe')[0].contentDocument.body", 'bar baz');
         usleep(100*1000);
-        $this->select('css=select.x-block-style-select', 'label=Test1');
+
+        //choose style
+        $this->runScript('
+            Ext.ComponentMgr.all.each(function(c) {
+                if (c.testId=="blockStyleSelect") {
+                    c.setValue("style1");
+                    c.fireEvent("select", c);
+                    return false;
+                }
+            });
+        ');
 
         //assert inserted tag
         $this->selectFrame('//iframe');
         $this->assertAttribute('//h1/@class', 'style1');
         $this->selectFrame('relative=top');
 
-        $this->select('css=select.x-block-style-select', 'label=Default');
+        //choose style
+        $this->runScript('
+            Ext.ComponentMgr.all.each(function(c) {
+                if (c.testId=="blockStyleSelect") {
+                    c.setValue("blockdefault");
+                    c.fireEvent("select", c);
+                    return false;
+                }
+            });
+        ');
 
         //assert inserted tag
         $this->selectFrame('//iframe');
@@ -177,13 +213,28 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
             editor.onEditorEvent();
         ');
 
-        $this->select('css=select.x-block-style-select', 'label=Test1');
+        //choose style
+        $this->runScript('
+            window.blockStyleSelect = null;
+            Ext.ComponentMgr.all.each(function(c) {
+                if (c.testId=="blockStyleSelect") {
+                    window.blockStyleSelect = c;
+                    c.setValue("style1");
+                    c.fireEvent("select", c);
+                    return false;
+                }
+            });
+        ');
 
         $this->selectFrame('//iframe');
         $this->assertXpathCount('//body/p', 0);
         $this->assertXpathCount('//body/h1', 2);
         $this->selectFrame('relative=top');
 
-        $this->assertSelectedLabel('css=select.x-block-style-select', 'Test1');
+        $this->runScript('editor.onEditorEvent();');
+
+        //assert selected style
+        $this->assertEquals('style1', $this->getEval('window.blockStyleSelect.getValue()'));
+
     }
 }
