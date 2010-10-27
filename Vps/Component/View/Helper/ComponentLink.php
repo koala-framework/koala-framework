@@ -1,47 +1,54 @@
 <?php
-class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
+class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Renderer
 {
-    public function componentLink($m, $text = null, $cssClass = null, $get = array(), $anchor = null)
+    public function componentLink($target, $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
-        if ($m instanceof Vps_Component_Data) {
-            $component = $m;
-            $m = $m->getPage();
-            if (is_instance_of($m->componentClass, 'Vpc_Basic_LinkTag_Abstract_Component')) {
-                if (!$m->getComponent()->hasContent()) {
-                    return '';
-                }
-            }
-            $m = array(
-                'url' => $m->url,
-                'rel' => $m->rel,
-                'name' => $m->name
+        if ($target instanceof Vps_Component_Data) {
+            $component = $this->_getView()->data;
+            $config = array(
+                'targetComponentId' => $target->componentId,
+                'text' => $text,
+                'cssClass' => $cssClass,
+                'get' => $get,
+                'anchor' => $anchor,
             );
-            $target = $this->_getView()->data;
-            $sourcePageId = $component->getPage() ? $component->getPage()->componentId : null;
-            $targetPageId = $target->getPage() ? $target->getPage()->componentId : null;
-            if ($sourcePageId != $targetPageId) {
-                Vps_Component_Cache::getInstance()->saveMeta(
-                    $component,
-                    new Vps_Component_Cache_Meta_Component($target)
-                );
+            return $this->_getRenderPlaceholder($component->componentId, $config, $target->componentId);
+        } else {
+            if (is_array($target)) {
+                $url = $target['url'];
+                $rel = isset($target['rel']) ? $target['rel'] : '';
+            } else {
+                $url = $target;
+                $rel = '';
+            }
+            return $this->_getLink($url, $rel, $text, $cssClass, $get, $anchor);
+        }
+    }
+
+    private function _getLink($url, $rel, $text, $cssClass, $get, $anchor)
+    {
+        if (!empty($get)) {
+            $url .= '?';
+            foreach ($get as $key => $val) $url .= "&$key=$val";
+        }
+        if ($anchor) $url .= "#$anchor";
+        $cssClass = $cssClass ? " class=\"$cssClass\"" : '';
+        return "<a href=\"$url\" rel=\"$rel\"$cssClass>$text</a>";
+    }
+
+    public function render($componentId, $config, $view)
+    {
+        $targetComponent = $this->getComponent($config['targetComponentId']);
+        $targetPage = $targetComponent->getPage();
+        if (is_instance_of($targetPage->componentClass, 'Vpc_Basic_LinkTag_Abstract_Component')) {
+            if (!$targetPage->getComponent()->hasContent()) {
+                return '';
             }
         }
-        if (!$get) $get = array();
-        if (!empty($get)) {
-            $m['url'] .= '?';
-        }
-        foreach ($get as $key => $val) {
-            $m['url'] .= "&$key=$val";
-        }
-        if ($anchor) {
-            $m['url'] .= "#$anchor";
-        }
-        if (!$text) $text = $m['name'];
-        if ($cssClass) {
-            $cssClass = " class=\"$cssClass\"";
-        } else {
-            $cssClass = '';
-        }
-        return "<a href=\"{$m['url']}\" rel=\"{$m['rel']}\"$cssClass>$text</a>";
+        $text = $config['text'] ? $config['text'] : $targetPage->name;
+        return $this->_getLink(
+            $targetPage->url, $targetPage->rel, $text,
+            $config['cssClass'], $config['get'], $config['anchor']
+        );
     }
 }
