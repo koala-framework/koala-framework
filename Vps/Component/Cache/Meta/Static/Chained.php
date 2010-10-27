@@ -50,9 +50,9 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
                     ));
                     foreach ($chainedComponents as $chainedComponent) {
                         $part2 = substr($componentId, strlen($c->componentId));
-                        $componentId = $chainedComponent->componentId . $part2;
+                        $dbId = $chainedComponent->dbId . $part2;
                         $ret[] = array(
-                            'componentId' => $componentId
+                            'db_id' => $dbId
                         );
                     }
                 }

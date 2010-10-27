@@ -34,6 +34,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $data = array(
             'component_id' => $component->componentId,
             'page_id' => $page ? $page->componentId : null,
+            'db_id' => $component->dbId,
             'component_class' => $component->componentClass,
             'type' => $type,
             'value' => $value,
@@ -199,7 +200,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         foreach ($ret as $componentClass => $componentIds) {
             foreach (array_unique($componentIds) as $componentId) {
                 $wheres[$componentClass][] = array(
-                    'componentId' => $componentId
+                    'db_id' => $componentId
                 );
             }
         }
@@ -235,18 +236,18 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             foreach ($where as $w) {
                 $and = array();
                 foreach ($w as $key => $val) {
-                    if ($key != 'componentId') {
+                    if ($key != 'db_id') {
                         $and[] = new Vps_Model_Select_Expr_Equal($key, $val);
                     }
                 }
-                if (isset($w['componentId'])) {
-                    $val = $w['componentId'];
+                if (isset($w['db_id'])) {
+                    $val = $w['db_id'];
                     if (!is_array($val) && strpos($val, '%') !== false) {
-                        $and[] = new Vps_Model_Select_Expr_Like('component_id', $val);
+                        $and[] = new Vps_Model_Select_Expr_Like('db_id', $val);
                         $and[] = new Vps_Model_Select_Expr_Equal('component_class', $cClass);
                     } else {
                         // Hier keine componentClass-where, damit man im Pattern andere Komponente angeben kann
-                        $and[] = new Vps_Model_Select_Expr_Equal('component_id', $val);
+                        $and[] = new Vps_Model_Select_Expr_Equal('db_id', $val);
                     }
                 } else {
                     $and[] = new Vps_Model_Select_Expr_Equal('component_class', $cClass);

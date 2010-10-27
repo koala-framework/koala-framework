@@ -116,9 +116,8 @@ abstract class Vps_Component_Cache
         $ret = array();
         foreach ($wheres as $where) {
             foreach ($where as $w) {
-                if (isset($w['componentId'])) {
-                    $c = $w['componentId'];
-                    $ret[] = $w['componentId'];
+                if (isset($w['db_id'])) {
+                    $ret[] = $w['db_id'];
                 }
             }
         }
