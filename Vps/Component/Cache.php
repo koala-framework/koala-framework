@@ -33,14 +33,28 @@ abstract class Vps_Component_Cache
 
     public static function saveStaticMeta()
     {
-        foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
-            $class = $componentClass;
+        // getStaticCacheMeta
+        foreach (Vpc_Abstract::getComponentClasses() as $class) {
+            $class = $class;
             if (($pos = strpos($class, '.')) !== false)
-                $class = substr($componentClass, 0, $pos);
+                $class = substr($class, 0, $pos);
             if (!is_instance_of($class, 'Vpc_Abstract')) continue;
-            $metas = call_user_func(array($class, 'getStaticCacheMeta'), $componentClass);
+            $metas = call_user_func(array($class, 'getStaticCacheMeta'), $class);
             foreach ($metas as $meta) {
-                self::getInstance()->saveMeta($componentClass, $meta);
+                self::getInstance()->saveMeta($class, $meta);
+            }
+        }
+        // für componentLink: alle Komponenten, die als Page erstellt werden können
+        foreach (Vpc_Abstract::getComponentClasses() as $class) {
+            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+                $generator = current(Vps_Component_Generator_Abstract::getInstances(
+                    $class, array('generator' => $key))
+                );
+                if (!$generator || !$generator->getGeneratorFlag('page')) continue;
+                $meta = new Vps_Component_Cache_Meta_Static_ComponentLink($generator->getModel());
+                foreach ($generator->getChildComponentClasses() as $c) {
+                    self::getInstance()->saveMeta($c, $meta);
+                }
             }
         }
     }

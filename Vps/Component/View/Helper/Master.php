@@ -1,7 +1,7 @@
 <?php
 class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
 {
-    public function render($componentId, $config, $view)
+    public function render($componentId, $config)
     {
         $component = $this->getComponent($componentId);
 
@@ -14,6 +14,7 @@ class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
             $vars['boxes'][$box->box] = $box;
         }
 
+        $view = $this->_getView();
         $view->assign($vars);
         return $view->render($config['template']);
     }

@@ -4,7 +4,6 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
     public function componentLink($target, $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
         if ($target instanceof Vps_Component_Data) {
-            $component = $this->_getView()->data;
             $config = array(
                 'targetComponentId' => $target->componentId,
                 'text' => $text,
@@ -12,7 +11,7 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
                 'get' => $get,
                 'anchor' => $anchor,
             );
-            return $this->_getRenderPlaceholder($component->componentId, $config, $target->componentId);
+            return $this->_getRenderPlaceholder($target->componentId, $config);
         } else {
             if (is_array($target)) {
                 $url = $target['url'];
@@ -36,7 +35,7 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
         return "<a href=\"$url\" rel=\"$rel\"$cssClass>$text</a>";
     }
 
-    public function render($componentId, $config, $view)
+    public function render($componentId, $config)
     {
         $targetComponent = $this->getComponent($config['targetComponentId']);
         $targetPage = $targetComponent->getPage();

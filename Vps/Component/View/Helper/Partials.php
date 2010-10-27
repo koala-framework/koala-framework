@@ -17,7 +17,7 @@ class Vps_Component_View_Helper_Partials extends Vps_Component_View_Renderer
         return $this->_getRenderPlaceholder($component->componentId, $config);
     }
 
-    public function render($componentId, $config, $view)
+    public function render($componentId, $config)
     {
         $partialClass = $config['class'];
         $params = $config['params'];

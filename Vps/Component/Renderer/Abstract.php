@@ -85,7 +85,8 @@ abstract class Vps_Component_Renderer_Abstract
                 $view->clearVars();
                 $class = 'Vps_Component_View_Helper_' . ucfirst($type);
                 $helper = new $class();
-                $content = $helper->render($componentId, $config, $view);
+                $helper->setView($view);
+                $content = $helper->render($componentId, $config);
                 $stats['rendered'][] = $statId;
 
                 if ($this->_enableCache && $helper->saveCache($componentId, $config, $value, $content)) {
