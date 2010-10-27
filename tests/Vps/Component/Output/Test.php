@@ -91,6 +91,14 @@ class Vps_Component_Output_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('dynamic |bar0-1|bar1-2|bar2-1', $value);
     }
 
+    public function testComponentLink()
+    {
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_Link_Component');
+        $output = new Vps_Component_Renderer();
+        $html = $output->render(Vps_Component_Data_Root::getInstance());
+        $this->assertEquals('<a href="/c1" rel="">C1</a> <a href="/foo?&f1=1#a2" rel="bar" class="Bar">Foo</a>', $html);
+    }
+
     public function testHasContent()
     {
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_HasContent_Component');
