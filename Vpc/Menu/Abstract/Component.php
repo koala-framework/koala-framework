@@ -203,16 +203,6 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
     {
         $ret = parent::getStaticCacheMeta($componentClass);
 
-        // Falls Menü in Boxes auf der Home liegt, pattern Suffix nicht mit % annehmen
-        $patternSuffix = '%';
-        $rootClass = Vps_Component_Data_Root::getComponentClass();
-        $generators = Vpc_Abstract::getSetting($rootClass, 'generators');
-        if (isset($generators['box']) && is_array($generators['box']['component'])) {
-            foreach ($generators['box']['component'] as $key => $class) {
-                if ($class == $componentClass) $patternSuffix = '-' . $key;
-            }
-        }
-
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
             foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
                 if (!isset($generator['showInMenu']) || !$generator['showInMenu']) continue;
@@ -220,13 +210,11 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                     $class, array('generator' => $key))
                 );
                 if (!$generator->getGeneratorFlag('page') || !$generator->getGeneratorFlag('table')) continue;
-                $pattern = '{' . $generator->getModel()->getPrimaryKey() . '}' . $patternSuffix;
-                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), $pattern);
+                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel());
             }
         }
         $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');
         $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Menu_Abstract_Model');
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model(Vps_Registry::get('config')->user->model);
         return $ret;
     }
 }

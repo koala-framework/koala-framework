@@ -8,6 +8,7 @@ class Vps_Component_Data
     protected $_filename;
     protected $_inheritClasses;
     protected $_uniqueParentDatas;
+    protected $_uniqueContentLevels = array();
 
     private $_constraintsCache = array();
     private $_recursiveGeneratorsCache = array();
@@ -90,6 +91,7 @@ class Vps_Component_Data
         } else if ($var == 'inheritClasses') {
             if (!isset($this->_inheritClasses)) {
                 $this->_uniqueParentDatas = array();
+                $this->_uniqueContentLevels = array();
                 $this->_inheritClasses = array();
                 if ($this->inherits) {
                     $page = $this;
@@ -102,12 +104,16 @@ class Vps_Component_Data
                                 if (isset($g['unique']) && $g['unique']) {
                                     $this->_uniqueParentDatas[$page->componentClass.$gKey] = $page;
                                 }
+                                if (isset($g['uniqueContentLevel']) && $g['uniqueContentLevel']) {
+                                    $this->_uniqueContentLevels[$page->componentClass.$gKey] = $g['uniqueContentLevel'];
+                                }
                             }
                         }
                         if ($page->inherits) {
                             //wenn page selbst erbt einfach von da übernehmen (rekursiver aufruf)
                             $this->_inheritClasses = array_merge($this->_inheritClasses, $page->inheritClasses);
                             $this->_uniqueParentDatas = array_merge($this->_uniqueParentDatas, $page->_uniqueParentDatas);
+                            $this->_uniqueContentLevels = array_merge($this->_uniqueContentLevels, $page->_uniqueContentLevels);
                             break; //aufhören, rest kommt durch rekursion daher
                         }
                     }
@@ -440,10 +446,22 @@ class Vps_Component_Data
                     $generatorSelect->limit($limitCount - count($ret));
                 }
                 $genId = $generator->getClass().$generator->getGeneratorKey();
+                $parentData = $this;
                 if (isset($this->_uniqueParentDatas[$genId])) {
                     $parentData = $this->_uniqueParentDatas[$genId];
-                } else {
-                    $parentData = $this;
+                }
+                if (isset($this->_uniqueContentLevels[$genId])) {
+                    $component = $this;
+                    $level = 0;
+                    while ($component) {
+                        $level++;
+                        $component = $component->parent;
+                    }
+                    $steps = $level - $this->_uniqueContentLevels[$genId];
+                    if ($steps < 0) $steps = 0;
+                    for ($x=0; $x<$steps; $x++) {
+                        $parentData = $parentData->parent;
+                    }
                 }
                 foreach ($generator->getChildData($parentData, $generatorSelect) as $data) {
                     if (isset($ret[$data->componentId])) {
