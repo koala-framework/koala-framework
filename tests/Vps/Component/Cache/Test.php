@@ -66,9 +66,9 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Cache-Row einfügen
         $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('component_id' => '1', 'type' => 'component', 'component_class' => 'Vpc_Foo'),
-            array('component_id' => '2', 'type' => 'component', 'component_class' => 'Vpc_Foo'),
-            array('component_id' => '3', 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => '1', 'db_id' => '1', 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => '2', 'db_id' => '2', 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => '3', 'db_id' => '3', 'type' => 'component', 'component_class' => 'Vpc_Foo'),
         ));
 
         // Meta-Row einfügen
@@ -127,9 +127,9 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Cache-Row einfügen
         $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('component_id' => 1, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
-            array('component_id' => 2, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
-            array('component_id' => 3, 'type' => 'component', 'component_class' => 'Vpc_Foo')
+            array('component_id' => 1, 'db_id' => 1, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => 2, 'db_id' => 2, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => 3, 'db_id' => 3, 'type' => 'component', 'component_class' => 'Vpc_Foo')
         ));
 
         // Meta-Row einfügen
@@ -158,8 +158,8 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Cache-Row einfügen
         $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('component_id' => 'a_1', 'component_class' => 'Vpc_Foo', 'type' => 'component'),
-            array('component_id' => 'a_2', 'component_class' => 'Vpc_Foo', 'type' => 'component')
+            array('component_id' => 'a_1', 'db_id' => 'a_1', 'component_class' => 'Vpc_Foo', 'type' => 'component'),
+            array('component_id' => 'a_2', 'db_id' => 'a_2', 'component_class' => 'Vpc_Foo', 'type' => 'component')
         ));
 
         // Meta-Row einfügen
@@ -184,10 +184,10 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Cache-Row einfügen
         $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('component_id' => 'a_1', 'component_class' => 'Vpc_Foo', 'type' => 'component'),
-            array('component_id' => 'b_1', 'component_class' => 'Vpc_Foo', 'type' => 'component'),
-            array('component_id' => 'c_1', 'component_class' => 'Vpc_Bar', 'type' => 'component'),
-            array('component_id' => 'a_2', 'component_class' => 'Vpc_Foo', 'type' => 'component')
+            array('component_id' => 'a_1', 'db_id' => 'a_1', 'component_class' => 'Vpc_Foo', 'type' => 'component'),
+            array('component_id' => 'b_1', 'db_id' => 'b_1', 'component_class' => 'Vpc_Foo', 'type' => 'component'),
+            array('component_id' => 'c_1', 'db_id' => 'c_1', 'component_class' => 'Vpc_Bar', 'type' => 'component'),
+            array('component_id' => 'a_2', 'db_id' => 'a_2', 'component_class' => 'Vpc_Foo', 'type' => 'component')
         ));
 
         // Meta-Row einfügen
@@ -255,8 +255,8 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         $cacheModel = $cache->getModel('cache');
         $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('component_id' => 1, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
-            array('component_id' => 2, 'type' => 'component', 'component_class' => 'Vpc_Foo')
+            array('component_id' => 1, 'db_id' => 1, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => 2, 'db_id' => 2, 'type' => 'component', 'component_class' => 'Vpc_Foo')
         ));
 
         $cache->getModel('metaRow')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
