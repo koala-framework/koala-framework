@@ -33,8 +33,7 @@ abstract class Vps_Component_Renderer_Abstract
             }
         }
         $view = new Vps_Component_View($this);
-        $ret = $this->render($view, $view->component($component));
-        return $ret;
+        return $this->render($view->component($component));
     }
 
     protected function _formatRenderInfo($type, $config) {}
@@ -49,11 +48,8 @@ abstract class Vps_Component_Renderer_Abstract
      * @param $view
      * @param $ret
      */
-    public function render($view, $ret = null)
+    public function render($ret = null)
     {
-        if ($view instanceof Vps_Component_Data) return $this->renderComponent($view);
-        if (!$view instanceof Vps_Component_View) throw new Vps_Exception('Need view for rendering');
-
         $pluginNr = 0;
         $stats = $this->_stats;
 

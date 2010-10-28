@@ -45,8 +45,7 @@ class Vpc_Basic_TextConvertLinkOnlyExtern_Test extends Vpc_TestAbstract
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
+        $html = $c->getData()->render();
 
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextConvertLinkOnlyExternTestComponent\">\n".
                     "<p>\n  <a href=\"http://www.vivid-planet.com/\">foo</a>\n</p>".
@@ -86,8 +85,7 @@ class Vpc_Basic_TextConvertLinkOnlyExtern_Test extends Vpc_TestAbstract
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
+        $html = $c->getData()->render();
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextConvertLinkOnlyExternTestComponent\">\n".
                     "<p>\n  <a href=\"http://vivid.com\">foo</a>\n</p>".
                     "</div>", $html);

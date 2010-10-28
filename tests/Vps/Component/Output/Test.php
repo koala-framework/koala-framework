@@ -95,7 +95,7 @@ class Vps_Component_Output_Test extends PHPUnit_Framework_TestCase
     {
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_Link_Component');
         $output = new Vps_Component_Renderer();
-        $html = $output->render(Vps_Component_Data_Root::getInstance());
+        $html = $output->renderComponent(Vps_Component_Data_Root::getInstance());
         $this->assertEquals('<a href="/c1" rel="">C1</a> <a href="/foo?&f1=1#a2" rel="bar" class="Bar">Foo</a>', $html);
     }
 
