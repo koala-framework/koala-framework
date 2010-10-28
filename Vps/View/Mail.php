@@ -5,18 +5,6 @@ class Vps_View_Mail extends Vps_View implements Vps_View_MailInterface
     protected $_attachImages = true;
     protected $_masterTemplate = null;
 
-    /*
-    public function render($name)
-    {
-        if (!is_null($this->_masterTemplate)) {
-            //TODO: partial von Zend_View verwenden
-            $this->renderedTemplate = parent::render($name);
-            $name = $this->getMasterTemplate();
-        }
-        return parent::render($name);
-    }
-    */
-
     public function setMasterTemplate($tpl)
     {
         $this->_masterTemplate = $tpl;

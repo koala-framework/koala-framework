@@ -174,7 +174,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
 
         $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'.
                     '\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
-                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1009-i1/default/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" class="" />'
+                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1009-i1/default/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" />'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
 
@@ -191,7 +191,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $html = $c->getData()->render();
         $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
-                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1010-i1/default/9ab09415a09caef30d520e9080262b7f/[0-9]+/foo.png" width="100" height="100" alt="" class="" />'
+                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1010-i1/default/9ab09415a09caef30d520e9080262b7f/[0-9]+/foo.png" width="100" height="100" alt="" />'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
     }
@@ -223,7 +223,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $html = $c->getData()->render();
         $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
-                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/default/987577de8b2c5b4b75b8343ed85db0bf/[0-9]+/foo.png" width="100" height="100" alt="" class="" />'
+                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/default/987577de8b2c5b4b75b8343ed85db0bf/[0-9]+/foo.png" width="100" height="100" alt="" />'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
     }

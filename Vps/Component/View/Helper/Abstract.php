@@ -2,6 +2,7 @@
 abstract class Vps_Component_View_Helper_Abstract
 {
     protected $_view;
+    protected $_renderer;
 
     public function setView(Vps_View $view)
     {
@@ -15,4 +16,18 @@ abstract class Vps_Component_View_Helper_Abstract
     {
         return $this->_view;
     }
+
+    public function setRenderer(Vps_Component_Renderer_Abstract $renderer)
+    {
+        $this->_renderer = $renderer;
+    }
+
+    /**
+     * @return Vps_Component_Renderer_Abstract
+     */
+    protected function _getRenderer()
+    {
+        return $this->_renderer;
+    }
+
 }

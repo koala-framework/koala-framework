@@ -5,22 +5,21 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
     {
         if (!$component) return '';
 
-        $view = $this->_getView();
-
+        $renderer = $this->_getRenderer();
         $config = array();
         $type = 'component';
         $value = null;
         $plugins = array();
 
-        if ($view && $view instanceof Vps_Component_View_Mail) {
+        if ($renderer instanceof Vps_Component_Renderer_Mail) {
             $type = 'mail';
             $config = array(
-                'type' => $view->getRenderFormat(),
-                'recipient' => $view->getRecipient()
+                'type' => $renderer->getRenderFormat(),
+                'recipient' => $renderer->getRecipient()
             );
-        } else if ($view && !(isset($component->box) && $component->box)) {
+        } else if ($renderer && !(isset($component->box) && $component->box)) {
             // Parent-Masters
-            $masterComponent = $view->getNextParentMasterComponent($component);
+            $masterComponent = $renderer->getNextParentMasterComponent($component);
             if ($masterComponent) {
                 $config = array('template' => $masterComponent->masterTemplate);
                 $type = 'master';
@@ -29,9 +28,9 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
             // Component
             if ($type == 'component') {
                 // Plugins
-                $plugins = $view->getPlugins($component);
+                $plugins = $renderer->getPlugins($component);
                 // ComponentMaster
-                $componentMasterTemplate = $view->getCurrentComponentMasterTemplate($component);
+                $componentMasterTemplate = $renderer->getCurrentComponentMasterTemplate($component);
                 if ($componentMasterTemplate) {
                     $config = array('template' => $componentMasterTemplate);
                     $type = 'master';
@@ -50,7 +49,7 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
         $vars = $component->getComponent()->getTemplateVars();
         if (is_null($vars)) throw new Vps_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
 
-        $view = $this->_getView();
+        $view = new Vps_Component_View($this->_getRenderer());
         $view->assign($vars);
         return $view->render($template);
     }
