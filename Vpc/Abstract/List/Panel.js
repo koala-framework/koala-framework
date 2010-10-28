@@ -49,8 +49,8 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
             button_action : SWFUpload.BUTTON_ACTION.SELECT_FILES,
 
             file_queued_handler: function(file) {
-                if (!this.vpsFiles) this.vpsFiles = [];
-                this.vpsFiles.push(file.id);
+                if (!this.numFiles) this.numFiles = 0;
+                this.numFiles++;
 
                 if (this.running) {
                     return;
@@ -58,6 +58,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
 
                 this.uploadedIds = [];
                 this.running = true;
+                this.startFileIndex = this.numFiles-1;
                 this.progress = Ext.MessageBox.show({
                     title : trlVps('Upload'),
                     msg : trlVps('Uploading files'),
@@ -68,10 +69,9 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                     buttons: Ext.MessageBox.CANCEL,
                     scope: this,
                     fn: function(button) {
-                        for(var i=0;i<this.vpsFiles.length;i++) {
-                            this.cancelUpload(this.vpsFiles[i]);
+                        for(var i=this.startFileIndex;i<this.numFiles;i++) {
+                            this.cancelUpload(this.getFile(i).id);
                         }
-                        this.vpsFiles = [];
                         this.running = false;
                     }
                 });
@@ -80,10 +80,10 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
             upload_progress_handler: function(file, done, total) {
                 var total = 0;
                 var sumDone = 0;
-                for(var i=0;i<this.vpsFiles.length;i++) {
-                    var f = this.getFile(this.vpsFiles[i]);
+                for(var i=this.startFileIndex;i<this.numFiles;i++) {
+                    var f = this.getFile(i);
                     total += f.size;
-                    if (this.vpsFiles[i] == file.id) {
+                    if (f.id == file.id) {
                         sumDone += done;
                     } else if (f.filestatus != SWFUpload.FILE_STATUS.QUEUED) {
                         sumDone += f.size;
@@ -101,17 +101,15 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                 if (r.success) {
 
                     this.uploadedIds.push(r.value.uploadId);
-
-                    for(var i=0;i<this.vpsFiles.length;i++) {
-                        var f = this.getFile(this.vpsFiles[i]);
-                        if (f && f.filestatus == SWFUpload.FILE_STATUS.QUEUED) {
+                    for(var i=this.startFileIndex;i<this.numFiles;i++) {
+                        var f = this.getFile(i);
+                        if (f.filestatus == SWFUpload.FILE_STATUS.QUEUED) {
                             //neeext
                             this.startUpload(f.id);
                             return;
                         }
                     }
                     this.running = false;
-                    this.vpsFiles = [];
                     this.progress.hide();
 
                     var params = Ext.apply(this.customSettings.list.getBaseParams(), { uploadIds: this.uploadedIds.join(',')});
@@ -152,10 +150,9 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                         Vps.handleError(r.exception, 'Error', !r.exception);
                     }
                     this.running = false;
-                    for(var i=0;i<this.vpsFiles.length;i++) {
-                        this.cancelUpload(this.vpsFiles[i], false);
+                    for(var i=0;i<this.numFiles;i++) {
+                        this.cancelUpload(this.getFile(i), false);
                     }
-                    this.vpsFiles = [];
                 }
             },
             upload_error_handler: function(file, errorCode, errorMessage) {
