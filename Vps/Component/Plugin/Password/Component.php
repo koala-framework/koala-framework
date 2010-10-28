@@ -76,6 +76,6 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
         $renderer = new Vps_Component_Renderer();
         $view = new Vps_Component_View($renderer);
         $view->assign($templateVars);
-        return $renderer->render($view, $view->render($template));
+        return $renderer->render($view->render($template));
     }
 }
