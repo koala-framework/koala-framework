@@ -1,21 +1,6 @@
 <?php
-abstract class Vps_Component_View_Renderer
+abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abstract
 {
-    protected $_view;
-
-    public function setView(Vps_View $view)
-    {
-        $this->_view = $view;
-    }
-
-    /**
-     * @return Vps_Component_View
-     */
-    protected function _getView()
-    {
-        return $this->_view;
-    }
-
     protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $type = null, $plugins = array())
     {
         if (!$type) $type = $this->_getType();
@@ -56,7 +41,7 @@ abstract class Vps_Component_View_Renderer
             Vps_Component_Cache::getInstance()->saveMeta($component, $m);
         }
 
-        $renderComponent = $this->_getView()->getRenderComponent();
+        $renderComponent = $this->_getRenderer()->getRenderComponent();
         $renderPageId = $renderComponent->getPage() ? $renderComponent->getPage()->componentId : null;
         $pageId = $component->getPage() ? $component->getPage()->componentId : null;
         if ($renderPageId != $pageId) {

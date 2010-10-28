@@ -1,21 +1,17 @@
 <?php
-class Vps_Component_Renderer_Mail extends Vps_Component_Renderer_Abstract
+class Vps_Component_Renderer_Mail extends Vps_Component_Renderer_Abstract implements Vps_View_MailInterface
 {
     const RENDER_HTML = 'html';
     const RENDER_TXT = 'txt';
 
-    private $_type = self::RENDER_HTML;
-    private $_recipient;
+    private $_renderFormat = self::RENDER_HTML;
     private $_attachImages = false;
+    private $_recipient;
+    private $_images = array();
 
-    public function setRenderFormat($renderFormat)
+    public function getAttachImages()
     {
-        $this->_renderFormat = $renderFormat;
-    }
-
-    public function setRecipient(Vpc_Mail_Recipient_Interface $recipient = null)
-    {
-        $this->_recipient = $recipient;
+        return $this->_attachImages;
     }
 
     public function setAttachImages($attachImages)
@@ -23,24 +19,28 @@ class Vps_Component_Renderer_Mail extends Vps_Component_Renderer_Abstract
         $this->_attachImages = $attachImages;
     }
 
-    // $this->component() im Template rendert bei Mail mail.tpl
-    protected function _formatRenderInfo($type, $config)
+    public function addImage(Zend_Mime_Part $image)
     {
-        if ($type == 'component') {
-            $type = 'mail';
-            $config = array(
-                'type' => $this->_type,
-                'recipient' => $this->_recipient
-            );
-        }
+        $this->getRenderComponent()->getComponent()->addImage($image);
     }
 
-    protected function _getView()
+    public function getRenderFormat()
     {
-        $ret = new Vps_Component_View_Mail();
-        $ret->setAttachImages($this->_attachImages);
-        $ret->setRecipient($this->_recipient);
-        $ret->setRenderFormat($this->_renderFormat);
-        return $ret;
+        return $this->_renderFormat;
+    }
+
+    public function setRenderFormat($renderFormat)
+    {
+        $this->_renderFormat = $renderFormat;
+    }
+
+    public function getRecipient()
+    {
+        return $this->_recipient;
+    }
+
+    public function setRecipient(Vpc_Mail_Recipient_Interface $recipient = null)
+    {
+        $this->_recipient = $recipient;
     }
 }

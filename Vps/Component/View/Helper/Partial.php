@@ -19,7 +19,7 @@ class Vps_Component_View_Helper_Partial extends Vps_Component_View_Renderer
         }
         $vars['info'] = $config['info'];
         $vars['data'] = $component;
-        $view = $this->_getView();
+        $view = new Vps_Component_View($this->_getRenderer());
         $view->assign($vars);
         return $view->render($template);
     }

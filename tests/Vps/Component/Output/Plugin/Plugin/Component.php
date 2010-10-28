@@ -19,13 +19,12 @@ class Vps_Component_Output_Plugin_Plugin_Component extends Vps_Component_Plugin_
             return 'not ok from plugin. output was: ' . $output;
         } else {
             $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
-            $view = new Vps_Component_View();
+            $renderer = new Vps_Component_Renderer();
+            $view = new Vps_Component_View($renderer);
             $view->child = Vps_Component_Data_Root::getInstance()
                 ->getComponentById($this->_componentId)
                 ->getChildComponent('-pluginChild');
-            $ret = $view->render($template);
-            $renderer = new Vps_Component_Renderer();
-            return $renderer->render($view, $ret);
+            return $renderer->render($view, $view->render($template));
         }
     }
 

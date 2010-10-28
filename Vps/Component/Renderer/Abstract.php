@@ -3,7 +3,7 @@ abstract class Vps_Component_Renderer_Abstract
 {
     private $_enableCache = false;
     private $_stats = array();
-    protected $_renderComponent;
+    private $_renderComponent;
 
     public function setEnableCache($enableCache)
     {
@@ -12,7 +12,6 @@ abstract class Vps_Component_Renderer_Abstract
 
     public function renderComponent($component)
     {
-        $this->_plugins = array();
         $this->_renderComponent = $component;
         $this->_stats = array(
             'rendered' => array(),
@@ -33,7 +32,7 @@ abstract class Vps_Component_Renderer_Abstract
                 }
             }
         }
-        $view = $this->_getView();
+        $view = new Vps_Component_View($this);
         $ret = $this->render($view, $view->component($component));
         return $ret;
     }
@@ -53,7 +52,7 @@ abstract class Vps_Component_Renderer_Abstract
     public function render($view, $ret = null)
     {
         if ($view instanceof Vps_Component_Data) return $this->renderComponent($view);
-        if (!$view instanceof Vps_View) throw new Vps_Exception('Need view for rendering');
+        if (!$view instanceof Vps_Component_View) throw new Vps_Exception('Need view for rendering');
 
         $pluginNr = 0;
         $stats = $this->_stats;
@@ -82,10 +81,9 @@ abstract class Vps_Component_Renderer_Abstract
 
             } else {
 
-                $view->clearVars();
                 $class = 'Vps_Component_View_Helper_' . ucfirst($type);
                 $helper = new $class();
-                $helper->setView($view);
+                $helper->setRenderer($this);
                 $content = $helper->render($componentId, $config);
                 $stats['rendered'][] = $statId;
 
@@ -129,10 +127,8 @@ abstract class Vps_Component_Renderer_Abstract
         return $this->_stats;
     }
 
-    protected function _getView()
+    public function getRenderComponent()
     {
-        $view = new Vps_Component_View();
-        $view->setRenderComponent($this->_renderComponent);
-        return $view;
+        return $this->_renderComponent;
     }
 }

@@ -14,7 +14,7 @@ class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
             $vars['boxes'][$box->box] = $box;
         }
 
-        $view = $this->_getView();
+        $view = new Vps_Component_View($this->_getRenderer());
         $view->assign($vars);
         return $view->render($config['template']);
     }
