@@ -6,6 +6,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        Vps_Component_Data_Root::setComponentClass(null);
         Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
     }
 
