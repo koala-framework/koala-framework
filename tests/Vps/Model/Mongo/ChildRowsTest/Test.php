@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Mongo
  * @group Mongo_ChildRows
  * @group slow

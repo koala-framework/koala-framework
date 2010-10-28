@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Mongo
  * @group Mongo_ChildExpr
  * @group slow
@@ -57,16 +58,6 @@ class Vps_Model_Mongo_ChildExprTest_Test extends PHPUnit_Framework_TestCase
     }
 
     public function testNewRow()
-    {
-        $this->markTestIncomplete();
-    }
-
-    public function testWithProxies()
-    {
-        $this->markTestIncomplete();
-    }
-
-    public function testWithMultipleRelations()
     {
         $this->markTestIncomplete();
     }

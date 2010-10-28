@@ -35,20 +35,24 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
         parent::dependentModelRowUpdated($row, $action);
-        foreach ($this->_exprs as $column=>$expr) {
-            if ($expr instanceof Vps_Model_Select_Expr_Parent) {
-                if ($this->getReferencedModel($expr->getParent()) === $row->getModel()) {
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+        foreach ($models as $model) {
+            foreach ($model->_exprs as $column=>$expr) {
+                if ($expr instanceof Vps_Model_Select_Expr_Parent) {
+                    if ($model->getReferencedModel($expr->getParent()) === $row->getModel()) {
 
-                    //blöd dass diese schleife hier notwendig ist
-                    //TODO: getDependentModels sollte was anderes zurückgeben
-                    //gleiches problem wie bei getChildRows
-                    foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
-                        if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
-                        if ($m === $this) {
-                            $rows = $row->getChildRows($depName); //TODO effizienter machen, nicht über rows
-                            foreach ($rows as $r) {
-                                $r->$column = $row->{$expr->getField()};
-                                $r->save();
+                        //blöd dass diese schleife hier notwendig ist
+                        //TODO: getDependentModels sollte was anderes zurückgeben
+                        //gleiches problem wie bei getChildRows
+                        foreach ($row->getModel()->getDependentModels() as $depName=>$m) {
+                            if (!$m instanceof Vps_Model_Abstract) $m = Vps_Model_Abstract::getInstance($m);
+                            if ($m === $model) {
+                                $rows = $row->getChildRows($depName); //TODO effizienter machen, nicht über rows
+                                foreach ($rows as $r) {
+                                    $r->$column = $row->{$expr->getField()};
+                                    $r->save();
+                                }
                             }
                         }
                     }
@@ -60,13 +64,17 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
     public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
         parent::childModelRowUpdated($row, $action);
-        foreach ($this->_exprs as $column=>$expr) {
-            if ($expr instanceof Vps_Model_Select_Expr_Child) {
-                if ($this->getDependentModel($expr->getChild()) === $row->getModel()) {
-                    $rule = $row->getModel()->getReferenceRuleByModelClass(get_class($this));
-                    $parentRow = $row->getParentRow($rule);
-                    $parentRow->$column = $this->getExprValue($parentRow, $expr);
-                    $parentRow->save();
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+        foreach ($models as $model) {
+            foreach ($model->_exprs as $column=>$expr) {
+                if ($expr instanceof Vps_Model_Select_Expr_Child) {
+                    if ($model->getDependentModel($expr->getChild()) === $row->getModel()) {
+                        $rule = $row->getModel()->getReferenceRuleByModelClass(get_class($model));
+                        $parentRow = $row->getParentRow($rule);
+                        $parentRow->$column = $model->getExprValue($parentRow, $expr);
+                        $parentRow->save();
+                    }
                 }
             }
         }
@@ -279,7 +287,37 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
 
     public function deleteRows($where)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        if (!is_object($where)) {
+            if (is_string($where)) $where = array($where);
+            $select = $this->select($where);
+        } else {
+            $select = $where;
+        }
+        $profiler = Vps_Registry::get('db')->getProfiler();
+        $p = $profiler->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
+        $ret = $this->_collection->remove(
+            $this->_getQuery($select),
+            array('safe'=>true, 'multiple'=>false)
+        );
+        $p = $profiler->queryEnd($p);
+        if (!$ret || !$ret['ok']) {
+            throw new Vps_Exception("delete failed");
+        }
+    }
+
+    public function import($format, $data, $options = array())
+    {
+        if ($format == self::FORMAT_ARRAY) {
+            if (isset($options['replace']) && $options['replace']) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
+            $ret = $this->getCollection()->batchInsert($data, array('safe'=>true));
+            if (!$ret || !$ret['ok']) {
+                throw new Vps_Exception("import failed");
+            }
+        } else {
+            parent::import($format, $data, $options);
+        }
     }
 }
 

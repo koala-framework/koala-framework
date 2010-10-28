@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Model
  * @group Mongo
  */
 class Vps_Model_Mongo_WriteTest_Test extends PHPUnit_Framework_TestCase
