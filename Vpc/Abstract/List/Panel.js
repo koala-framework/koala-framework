@@ -89,7 +89,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                         sumDone += f.size;
                     }
                 }
-                this.progress.updateProgress(sumDone/total);
+                this.progress.updateProgress(sumDone/total - 0.1);
             },
             upload_success_handler: function(file, response) {
                 try {
@@ -110,14 +110,18 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                         }
                     }
                     this.running = false;
-                    this.progress.hide();
 
+                    this.progress.updateProgress(0.9);
                     var params = Ext.apply(this.customSettings.list.getBaseParams(), { uploadIds: this.uploadedIds.join(',')});
                     Ext.Ajax.request({
                         url: location.protocol+'/'+'/'+location.host+this.customSettings.list.controllerUrl+'/json-multi-upload',
                         params: params,
                         success: function() {
+                            this.progress.hide();
                             this.customSettings.list.grid.reload();
+                        },
+                        failure: function() {
+                            this.progress.hide();
                         },
                         scope: this
                     });
