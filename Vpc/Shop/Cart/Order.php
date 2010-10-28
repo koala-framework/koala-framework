@@ -53,8 +53,8 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     {
         $ret = 0;
         foreach ($this->getChildRows('Products') as $op) {
-            $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($op->add_component_id);
-            $ret += $c->getComponent()->getPrice($op);
+            $data = Vpc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($op->add_component_class);
+            $ret += $data->getPrice($op);
         }
         return $ret;
     }
@@ -62,10 +62,9 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     public function getTotalAmount()
     {
         $ret = 0;
-
         foreach ($this->getChildRows('Products') as $op) {
-            $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($op->add_component_id);
-            $ret += $c->getComponent()->getAmount($op);
+            $data = Vpc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($op->add_component_class);
+            $ret += $data->getAmount($op);
         }
         return $ret;
     }

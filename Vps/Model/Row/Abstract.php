@@ -201,10 +201,6 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     public function getChildRows($rule, $select = array())
     {
-        // TODO: getDependetModel soll array zurückgeben können, wo zusätzlich
-        // die referenz vom Relationsmodel steht (ist nötig wenn zwei relationen
-        // zur selben Tabelle gehen (getDependetModel ist dann vllt. die falsche
-        // bezeichnung)
         if ($rule instanceof Vps_Model_Abstract) {
             $m = $rule;
             $dependentOf = $this->_model;
@@ -222,10 +218,9 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             } else {
                 $select = clone $select; //nicht select objekt ändern
             }
-            $ref = $m->getReferenceByModelClass(get_class($dependentOf), null);
+            $ref = $m->getReferenceByModelClass(get_class($dependentOf), isset($dependent['rule']) ? $dependent['rule'] : null);
             if (!$this->{$this->_getPrimaryKey()}) {
                 return array();
-                //throw new Vps_Exception("row does not yet have a primary id");
             }
             $select->whereEquals($ref['column'], $this->{$this->_getPrimaryKey()});
             $ret = $m->getRows($select);
@@ -259,6 +254,12 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     public function getParentRow($rule)
     {
         $ref = $this->_model->getReference($rule);
+        if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+            if (!($this instanceof  Vps_Model_RowsSubModel_Row_Interface)) {
+                throw new Vps_Exception("row '".get_class($this)."' must implement Vps_Model_RowsSubModel_Row_Interface");
+            }
+            return $this->getSubModelParentRow();
+        }
         if (!isset($ref['column'])) {
             throw new Vps_Exception("column for reference '$rule' not set");
         }
@@ -360,6 +361,9 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
         $called = array();
         foreach ($this->getModel()->getReferences() as $refName) {
+            if ($this->getModel()->getReference($refName) === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                continue;
+            }
             $m = $this->getModel()->getReferencedModel($refName);
             if (!in_array($m, $called, true)) {
                 $m->childModelRowUpdated($this, $action);

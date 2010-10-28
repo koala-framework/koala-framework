@@ -1,5 +1,7 @@
 <?php
 /**
+ * @group Model
+ * @group Mongo
  * @group Mongo_ParentExpr
  * @group slow
  */
@@ -91,11 +93,6 @@ class Vps_Model_Mongo_ParentExprTest_Test extends PHPUnit_Framework_TestCase
     }
 
     public function testSetParentThatWasNotSet()
-    {
-        $this->markTestIncomplete();
-    }
-
-    public function testWithProxies()
     {
         $this->markTestIncomplete();
     }

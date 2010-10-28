@@ -16,7 +16,9 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
 
     public function __isset($name)
     {
-        if ($this->_row->hasColumn($name)) {
+        if (in_array($name, $this->_model->getExprColumns())) {
+            return parent::__isset($name);
+        } else if ($this->_row->hasColumn($name)) {
             return true;
         } else {
             return parent::__isset($name);
@@ -34,7 +36,9 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        if ($this->_row->hasColumn($name)) {
+        if (in_array($name, $this->_model->getExprColumns())) {
+            return parent::__get($name);
+        } else if ($this->_row->hasColumn($name)) {
             return $this->_row->$name;
         } else {
             return parent::__get($name);
