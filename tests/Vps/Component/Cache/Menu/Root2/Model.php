@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Menu_Root_Model extends Vpc_Root_Category_GeneratorModel
+class Vps_Component_Cache_Menu_Root2_Model extends Vpc_Root_Category_GeneratorModel
 {
     public function __construct()
     {

@@ -34,14 +34,14 @@ abstract class Vps_Component_Cache
     public static function saveStaticMeta()
     {
         // getStaticCacheMeta
-        foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            $class = $class;
+        foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+            $class = $componentClass;
             if (($pos = strpos($class, '.')) !== false)
-                $class = substr($class, 0, $pos);
+                $class = substr($componentClass, 0, $pos);
             if (!is_instance_of($class, 'Vpc_Abstract')) continue;
-            $metas = call_user_func(array($class, 'getStaticCacheMeta'), $class);
+            $metas = call_user_func(array($class, 'getStaticCacheMeta'), $componentClass);
             foreach ($metas as $meta) {
-                self::getInstance()->saveMeta($class, $meta);
+                self::getInstance()->saveMeta($componentClass, $meta);
             }
         }
         // für componentLink: alle Komponenten, die als Page erstellt werden können
@@ -50,10 +50,14 @@ abstract class Vps_Component_Cache
                 $generator = current(Vps_Component_Generator_Abstract::getInstances(
                     $class, array('generator' => $key))
                 );
-                if (!$generator || !$generator->getGeneratorFlag('page')) continue;
-                $meta = new Vps_Component_Cache_Meta_Static_ComponentLink($generator->getModel());
-                foreach ($generator->getChildComponentClasses() as $c) {
-                    self::getInstance()->saveMeta($c, $meta);
+                if ($generator &&
+                    $generator->getGeneratorFlag('page') &&
+                    $generator->getGeneratorFlag('table')
+                ) {
+                    $meta = new Vps_Component_Cache_Meta_Static_ComponentLink($generator->getModel());
+                    foreach ($generator->getChildComponentClasses() as $c) {
+                        self::getInstance()->saveMeta($c, $meta);
+                    }
                 }
             }
         }
