@@ -11,26 +11,36 @@ class Vps_Component_Cache_Menu_Test extends Vpc_TestAbstract
 
     public function testMenu()
     {
-        $root = $this->_root;
+        $page = $this->_root->getComponentById(1);
 
-        $this->assertEquals('1-menu f1,f4', $root->getComponentById(1)->render(true, true));
-        $this->assertEquals('1-menu f1,f4', $root->getComponentById(2)->render(true, true));
-        $this->assertEquals('1-menu f1,f4', $root->getComponentById(3)->render(true, true));
+        $html = $page->render(true, true);
+        //d($html);
+        $this->assertEquals(2, substr_count($html, '<li'));
+        $this->assertEquals(2, substr_count($html, 'f1'));
+        $this->assertEquals(2, substr_count($html, 'f4'));
 
-        $row = $root->getGenerator('page')->getModel()->getRow(1);
+        $row = $this->_root->getGenerator('page')->getModel()->getRow(1);
         $row->name = 'g1';
+        $row->filename = 'g1';
         $row->save();
         $this->_process();
-        $this->assertEquals('1-menu g1,f4', $root->getComponentById(1)->render(true, true));
-        $this->assertEquals('1-menu g1,f4', $root->getComponentById(2)->render(true, true));
-        $this->assertEquals('1-menu g1,f4', $root->getComponentById(3)->render(true, true));
+        //d($html);
+        $html = $page->render(true, true);
+        $this->assertEquals(2, substr_count($html, '<li'));
+        $this->assertEquals(2, substr_count($html, 'g1'));
+        $this->assertEquals(2, substr_count($html, 'f4'));
 
-        $row = $root->getGenerator('page')->getModel()->getRow(4);
-        $row->name = 'g4';
+        $row = $this->_root->getGenerator('page')->getModel()->createRow(array(
+            'id'=>5, 'pos'=>3, 'visible'=>true, 'name'=>'f5', 'filename' => 'f5',
+                  'parent_id'=>'root', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'custom_filename' => null
+        ));
         $row->save();
         $this->_process();
-        $this->assertEquals('1-menu g1,g4', $root->getComponentById(1)->render(true, true));
-        $this->assertEquals('1-menu g1,g4', $root->getComponentById(2)->render(true, true));
-        $this->assertEquals('1-menu g1,g4', $root->getComponentById(3)->render(true, true));
+        $html = $page->render(true, true);
+        //d($html);
+        $this->assertEquals(3, substr_count($html, '<li'));
+        $this->assertEquals(2, substr_count($html, 'g1'));
+        $this->assertEquals(2, substr_count($html, 'f4'));
+        $this->assertEquals(2, substr_count($html, 'f5'));
     }
 }
