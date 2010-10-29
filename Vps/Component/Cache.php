@@ -136,7 +136,11 @@ abstract class Vps_Component_Cache
         foreach ($wheres as $where) {
             foreach ($where as $w) {
                 if (isset($w['db_id'])) {
-                    $ret[] = $w['db_id'];
+                    if (is_array($w['db_id'])) {
+                        $ret = array_merge($ret, $w['db_id']);
+                    } else {
+                        $ret[] = $w['db_id'];
+                    }
                 }
             }
         }
