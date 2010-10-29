@@ -258,7 +258,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         } else if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Paging')) {
             $r = $this->_getCacheData();
         }
-        if ($r) $ret[] = $r;
+        if (isset($r)) $ret[] = $r;
         return $ret;
     }
 }
