@@ -25,9 +25,16 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         return $ret;
     }
 
+    /**
+     * wird für ungecachte komponenten aufgerufen
+     */
     public abstract function render($componentId, $config);
 
-    public function saveCache($componentId, $config, $value, $content) {
+    /**
+     * schreibt den cache, kann überschrieben werden um den cache zu deaktivieren
+     */
+    public function saveCache($componentId, $config, $value, $content)
+    {
         $component = $this->getComponent($componentId);
         $cacheSettings = $component->getComponent()->getViewCacheSettings();
         if (!$cacheSettings['enabled']) return false;
@@ -53,6 +60,12 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         return true;
     }
 
+    /**
+     * Kann die render ausgabe (die aus cache oder direkt aus render kommen kann)
+     * anpassen.
+     *
+     * wird immer aufgerufen, auch wenn sie gecached ist
+     */
     public function renderCached($cachedContent, $componentId, $config)
     {
         return $cachedContent;
