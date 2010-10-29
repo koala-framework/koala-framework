@@ -33,7 +33,9 @@ abstract class Vps_Component_Renderer_Abstract
             }
         }
         $view = new Vps_Component_View($this);
-        return $this->render($view->component($component));
+        $ret = $this->render($view->component($component));
+        $this->_cache->writeBuffer();
+        return $ret;
     }
 
     protected function _formatRenderInfo($type, $config) {}
