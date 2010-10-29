@@ -61,6 +61,7 @@ abstract class Vps_Component_Cache
                 }
             }
         }
+        self::getInstance()->writeBuffer();
     }
 
     public function saveMeta($componentClass, Vps_Component_Cache_Meta_Abstract $meta)
