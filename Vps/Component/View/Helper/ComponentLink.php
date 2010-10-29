@@ -44,10 +44,20 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
                 return '';
             }
         }
-        $text = $config['text'] ? $config['text'] : $targetPage->name;
+        return $targetPage->url.';'.$targetPage->rel.';'.$targetPage->name;
+    }
+
+    public function renderCached($cachedContent, $componentId, $config)
+    {
+        if (!$cachedContent) return '';
+
+        $targetPage = explode(';', $cachedContent);
+
+        $text = $config['text'] ? $config['text'] : $targetPage[2];
         return $this->_getLink(
-            $targetPage->url, $targetPage->rel, $text,
+            $targetPage[0], $targetPage[1], $text,
             $config['cssClass'], $config['get'], $config['anchor']
         );
     }
+
 }
