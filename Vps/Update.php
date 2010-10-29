@@ -202,7 +202,9 @@ abstract class Vps_Update
                         }
                     }
                 }
-                break;
+                //auskommentiert weil sonst update script im benchmark web nicht gefunden werden
+                // weil es einen Vps/Benchmark ordner auch im vps gibt und das zuerst durchsucht wird
+                //break;
             }
         }
         $ret = self::_sortByRevision($ret);
