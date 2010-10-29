@@ -10,7 +10,7 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         return '{' . "$type: $componentId $config" . '}';
     }
 
-    public function getComponent($componentId)
+    protected function _getComponentById($componentId)
     {
         $ret = Vps_Component_Data_Root::getInstance()
             ->getComponentById($componentId, array('ignoreVisible' => true));
@@ -27,15 +27,19 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
 
     /**
      * wird für ungecachte komponenten aufgerufen
+     *
+     * wird nur aufgerufen wenn ungecached
      */
     public abstract function render($componentId, $config);
 
     /**
      * schreibt den cache, kann überschrieben werden um den cache zu deaktivieren
+     *
+     * wird nur aufgerufen wenn ungecached (logisch)
      */
     public function saveCache($componentId, $config, $value, $content)
     {
-        $component = $this->getComponent($componentId);
+        $component = $this->_getComponentById($componentId);
         $cacheSettings = $component->getComponent()->getViewCacheSettings();
         if (!$cacheSettings['enabled']) return false;
         $type = $this->_getType();

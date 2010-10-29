@@ -37,7 +37,7 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
 
     public function render($componentId, $config)
     {
-        $targetComponent = $this->getComponent($config['targetComponentId']);
+        $targetComponent = $this->_getComponentById($config['targetComponentId']);
         $targetPage = $targetComponent->getPage();
         if (is_instance_of($targetPage->componentClass, 'Vpc_Basic_LinkTag_Abstract_Component')) {
             if (!$targetPage->getComponent()->hasContent()) {

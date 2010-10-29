@@ -42,7 +42,7 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
 
     public function render($componentId, $config)
     {
-        $component = $this->getComponent($componentId);
+        $component = $this->_getComponentById($componentId);
         $template = Vpc_Abstract::getTemplateFile($component->componentClass);
         if (!$template) throw new Vps_Exception("No Component-Template found for '{$component->componentClass}'");
 

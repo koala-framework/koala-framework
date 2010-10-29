@@ -3,7 +3,7 @@ class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
 {
     public function render($componentId, $config)
     {
-        $component = $this->getComponent($componentId);
+        $component = $this->_getComponentById($componentId);
 
         $vars = array();
         $vars['component'] = $component;
