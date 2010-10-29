@@ -3,7 +3,7 @@ class Vps_Component_View_Helper_Mail extends Vps_Component_View_Renderer
 {
     public function render($componentId, $config)
     {
-        $component = $this->getComponent($componentId);
+        $component = $this->_getComponentById($componentId);
         $template = Vpc_Admin::getComponentFile($component->componentClass, "Mail.{$config['type']}", 'tpl');
         if (!$template) {
             $template = Vpc_Admin::getComponentFile($component->componentClass, 'Component', 'tpl');
