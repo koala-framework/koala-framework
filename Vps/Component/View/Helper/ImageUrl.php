@@ -3,6 +3,6 @@ class Vps_Component_View_Helper_ImageUrl extends Vps_Component_View_Helper_Image
 {
     public function imageUrl($image, $type = 'default')
     {
-        return $this->imageParam($image, 'url', $type);
+        return $this->_getImageUrl($image, $type);
     }
 }
