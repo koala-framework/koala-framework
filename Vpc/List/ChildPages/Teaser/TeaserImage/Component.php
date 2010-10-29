@@ -33,5 +33,6 @@ class Vpc_List_ChildPages_Teaser_TeaserImage_Component extends Vpc_Abstract_Comp
         if (isset($this->getData()->targetPage->row)) {
             $ret[] = new Vps_Component_Cache_Meta_Component($this->getData()->targetPage);
         }
+        return $ret;
     }
 }
