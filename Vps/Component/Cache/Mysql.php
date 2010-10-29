@@ -100,7 +100,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 new Vps_Model_Select_Expr_Equal('deleted', 0),
                 new Vps_Model_Select_Expr_Or(array(
                     new Vps_Model_Select_Expr_IsNull('expire'),
-                    new Vps_Model_Select_Expr_LowerEqual('expire', time())
+                    new Vps_Model_Select_Expr_HigherEqual('expire', time())
                 )),
                 new Vps_Model_Select_Expr_Or($or)
             ))

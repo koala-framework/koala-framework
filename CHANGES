@@ -46,7 +46,6 @@ möglicherweise nicht kompatible Änderungen:
 - showInPageTreeAdmin flag gibts nicht mehr, ist jetzt nur noch ein generatorFlag
 Neuer Component-Cache:
 - Helper: Statt $this->ifHasContent($component) muss man if ($this->hasContent($component)) schreiben
-- getPartialClass gibt es nicht mehr und im Helper kann man die Klasse auch nicht mehr übergeben, es muss ein Setting "partialClass" sein
 - partials view Helper: 2. Parameter (partialClass) wurde entfernt
 
 == 1.10 ==
