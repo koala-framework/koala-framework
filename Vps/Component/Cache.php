@@ -166,4 +166,7 @@ abstract class Vps_Component_Cache
         }
     }
 
+    public function writeBuffer()
+    {
+    }
 }

@@ -356,4 +356,11 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         );
         $this->_models['metaChained']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
+
+    public function writeBuffer()
+    {
+        foreach ($this->_models as $m) {
+            $m->writeBuffer();
+        }
+    }
 }
