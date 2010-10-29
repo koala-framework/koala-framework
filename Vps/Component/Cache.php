@@ -90,13 +90,20 @@ abstract class Vps_Component_Cache
 
             $this->_saveMetaRow($component, $meta->getModelname(), $meta->getColumn(), $meta->getValue($component), get_class($meta));
 
+        } else if ($meta instanceof Vps_Component_Cache_Meta_Static_Component) {
+
+            $sourceComponentClass = $meta->getComponentClass();
+            if ($sourceComponentClass == $componentClass)
+                throw new Vps_Exception('Source and target component must be different, both have ' . $componentClass);
+            $this->_saveMetaComponent('', $sourceComponentClass, '', $componentClass, get_class($meta));
+
         } else if ($meta instanceof Vps_Component_Cache_Meta_Component) {
 
             $source = $meta->getSourceComponent();
             $target = $component;
-            if ($source->componentId == $target->componentId)
-                throw new Vps_Exception('Source and target component must be different, both have ' . $component->componentId);
-            $this->_saveMetaComponent($source, $target);
+            if ($source->dbId == $target->dbId)
+                throw new Vps_Exception('Source and target component must be different, both have ' . $component->dbId);
+            $this->_saveMetaComponent($source->dbId, $source->componentClass, $target->dbId, $target->componentClass, get_class($meta));
 
         } else if ($meta instanceof Vps_Component_Cache_Meta_Static_Chained) {
 
@@ -115,7 +122,7 @@ abstract class Vps_Component_Cache
 
     protected abstract function _saveMetaModel($componentClass, $modelName, $pattern, $metaClass);
     protected abstract function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $metaClass);
-    protected abstract function _saveMetaComponent(Vps_Component_Data $component, Vps_Component_Data $target);
+    protected abstract function _saveMetaComponent($componentId, $componentClass, $targetComponentId, $targetComponentClass, $metaClass);
 
     protected function _getModelname($row)
     {

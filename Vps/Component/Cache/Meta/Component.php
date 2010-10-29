@@ -16,4 +16,11 @@ class Vps_Component_Cache_Meta_Component extends Vps_Component_Cache_Meta_Abstra
     {
         return $this->_sourceComponent;
     }
+
+    public static function getDeleteWhere($row)
+    {
+        return array(
+            'db_id' => $row->target_db_id
+        );
+    }
 }

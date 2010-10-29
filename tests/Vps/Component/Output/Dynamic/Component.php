@@ -5,8 +5,12 @@ class Vps_Component_Output_Dynamic_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['partialClass'] = 'Vps_Component_Partial_Paging';
         return $ret;
+    }
+
+    public function getPartialClass()
+    {
+        return 'Vps_Component_Partial_Paging';
     }
 
     public function getPartialVars($partial, $nr, $info)

@@ -188,31 +188,65 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
     protected function _addComponentWhere($wheres)
     {
-        // $model: component_id component_class target_component_id target_component_class
-        // So lange $model nach component_id durchsuchen und in ergebnis
-        // $model->target_component_id reingeben bis nichts mehr neues kommt
-        $ids = $this->_getComponentIdsFromWheres($wheres);
-
         $model = $this->getModel('metaComponent');
-        $ret = array();
-        do {
-            $select = $model->select();
-            $select->whereEquals('component_id', $ids);
-            $ids2 = array();
-            foreach ($model->getRows($select) as $r) {
-                $ids2[] = $r->target_component_id;
-                $ret[$r->target_component_class][] = $r->target_component_id;
-            }
-            $ids2 = array_diff($ids2, $ids);
-            $ids = array_unique(array_merge($ids, $ids2));
-        } while ($ids2);
-        foreach ($ret as $componentClass => $componentIds) {
-            foreach (array_unique($componentIds) as $componentId) {
-                $wheres[$componentClass][] = array(
-                    'db_id' => $componentId
-                );
+
+        // Die cache_component-Tabelle so lange in einer Schleife durchlaufe
+        // bis zu den bisherigen Einträgen keine neuen mehr dazukommen
+        // allIds, newIds, searchIds haben alle das gleiche Format und werden
+        // verwendet, um rauszufinden, welche Ids schon bearbeitet wurden
+
+        // Alle bisherigen wheres durchgehen und nur die nehmen, wo eine db_id gelöscht wird
+        $allIds = array();
+        foreach ($wheres as $class => $where) {
+            foreach ($where as $w) {
+                if (isset($w['db_id'])) {
+                    $allIds[$class][] = $w['db_id'];
+                }
             }
         }
+        $searchIds = $allIds;
+        do {
+            // Tabelle durchsuchen und Ergebnisse in newIds speichern
+            $newIds = array();
+            foreach ($searchIds as $class => $dbIds) {
+                // Einträge ohne db_id
+                $select = $model->select();
+                $select->whereEquals('component_class', $class);
+                $select->whereEquals('db_id', '');
+                foreach ($model->getRows($select) as $r) {
+                    foreach ($dbIds as $dbId) {
+                        $id = call_user_func(
+                            array($r->meta_class, 'getDeleteDbId'), $r, $dbId
+                        );
+                        $newIds[$r->target_component_class][] = $id;
+                    }
+                }
+                // Einträge mit db_id
+                $select = $model->select();
+                $select->whereEquals('db_id', $dbIds);
+                foreach ($model->getRows($select) as $r) {
+                    $newIds[$r->target_component_class][] = $r->target_db_id;
+                }
+            }
+            // searchIds neu berechnen und wheres hinzufügen
+            $searchIds = array();
+            foreach ($newIds as $class => $ids) {
+                $ids = array_unique($ids);
+
+                // where schreiben
+                $where = array();
+                if (count($ids) > 0 && $ids[0]) $where = array('db_id' => $ids);
+                $wheres[$class][] = $where;
+
+                // alles was schon in allIds vorkommt nicht mehr zu searchIds hinzufügen
+                if (!isset($allIds[$class])) $allIds[$class] = array();
+                $diff = array_diff($ids, $allIds[$class]);
+                if ($diff) {
+                    $searchIds[$class] = $diff;
+                    $allIds[$class] = array_unique(array_merge($allIds[$class], $searchIds[$class]));
+                }
+            }
+        } while ($searchIds);
         return $wheres;
     }
 
@@ -329,13 +363,14 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $this->_models['metaRow']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
-    protected function _saveMetaComponent(Vps_Component_Data $component, Vps_Component_Data $target)
+    protected function _saveMetaComponent($dbId, $componentClass, $targetDbId, $targetComponentClass, $metaClass)
     {
         $data = array(
-            'component_id' => $component->componentId,
-            'component_class' => $component->componentClass,
-            'target_component_id' => $target->componentId,
-            'target_component_class' => $target->componentClass
+            'db_id' => $dbId,
+            'component_class' => $componentClass,
+            'target_db_id' => $targetDbId,
+            'target_component_class' => $targetComponentClass,
+            'meta_class' => $metaClass,
         );
         $options = array(
             'buffer' => true,
