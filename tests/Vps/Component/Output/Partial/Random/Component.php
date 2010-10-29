@@ -2,11 +2,9 @@
 class Vps_Component_Output_Partial_Random_Component extends Vpc_Abstract
     implements Vps_Component_Partial_Interface
 {
-    public static function getSettings()
+    public function getPartialClass()
     {
-        $ret = parent::getSettings();
-        $ret['partialClass'] = 'Vps_Component_Partial_Random';
-        return $ret;
+        return 'Vps_Component_Partial_Random';
     }
 
     public function getPartialVars($partial, $nr, $info)

@@ -49,4 +49,14 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
         }
         return $ret;
     }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
+        foreach ($generators['child']['component'] as $class) {
+            $ret[] = new Vpc_Abstract_Composite_MetaHasContent($class);
+        }
+        return $ret;
+    }
 }

@@ -53,7 +53,7 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Component-Meta-Row einfügen
         $cache->getModel('metaComponent')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('component_class' => 'Vpc_Foo', 'target_component_class' => 'Vpc_Bar')
+            array('component_class' => 'Vpc_Foo', 'target_component_class' => 'Vpc_Bar', 'meta_class' => 'Vps_Component_Cache_Meta_Component')
         ));
 
         $cache->cleanByModel(new Vps_Model_FnF());
@@ -140,9 +140,37 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
 
         // Component-Meta-Row einfügen
         $cache->getModel('metaComponent')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
-            array('component_id' => 1, 'target_component_id' => 2, 'target_component_class' => 'Vpc_Foo'), // wenn 1 gelöscht wird, wird auch 2 gelöscht
-            array('component_id' => 2, 'target_component_id' => 3, 'target_component_class' => 'Vpc_Foo'),
-            array('component_id' => 3, 'target_component_id' => 1, 'target_component_class' => 'Vpc_Foo') // wegen Rekursion
+            array('db_id' => 1, 'target_db_id' => 2, 'target_component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Component'), // wenn 1 gelöscht wird, wird auch 2 gelöscht
+            array('db_id' => 2, 'target_db_id' => 3, 'target_component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Component'),
+            array('db_id' => 3, 'target_db_id' => 1, 'target_component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Component') // wegen Rekursion
+        ));
+
+        // Datenmodel
+        $model = new Vps_Model_FnF(array('data' => array(array('id' => 1))));
+
+        $cache->cleanByRow($model->getRow(1));
+        $this->assertEquals(0, $cacheModel->countActiveRows());
+    }
+
+    public function testDeleteByRowWithStaticComponent()
+    {
+        $cache = Vps_Component_Cache::getInstance();
+        $cacheModel = $cache->getModel('cache');
+
+        // Cache-Row einfügen
+        $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_id' => 1, 'db_id' => 1, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => 2, 'db_id' => 2, 'type' => 'component', 'component_class' => 'Vpc_Bar')
+        ));
+
+        // Meta-Row einfügen
+        $cache->getModel('metaRow')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('model' => 'Vps_Model_FnF', 'column' => 'id', 'value' => 1, 'component_id' => 1, 'component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Row')
+        ));
+
+        // Component-Meta-Row einfügen
+        $cache->getModel('metaComponent')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_class' => 'Vpc_Foo', 'db_id' => '', 'target_component_class' => 'Vpc_Bar', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Component'),
         ));
 
         // Datenmodel
