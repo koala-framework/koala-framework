@@ -18,8 +18,12 @@ class Vpc_Paging_Component extends Vpc_Abstract
             'prefix'   => trlVpsStatic('Page').':'
         );
         $ret['cssClass'] = 'webPaging webStandard';
-        $ret['partialClass'] = 'Vps_Component_Partial_Pager';
         return $ret;
+    }
+
+    public function getPartialClass()
+    {
+        return 'Vps_Component_Partial_Pager';
     }
 
     public function getViewCacheSettings()
@@ -27,7 +31,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret = parent::getViewCacheSettings();
         $c = $this->getData()->parent;
         if ($c->getComponent() instanceof Vpc_Directories_List_View_Component &&
-            Vpc_Abstract::getSetting($c->componentClass, 'partialClass') == 'Vps_Component_Partial_Id')
+            $c->getComponent()->getPartialClass() == 'Vps_Component_Partial_Id')
         {
             $ret['enabled'] = false;
         }

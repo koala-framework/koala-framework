@@ -12,8 +12,19 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         $ret['groupById'] = true;
         $ret['cssClass'] = 'webStandard';
         $ret['searchQueryFields'] = '*';
-        $ret['partialClass'] = 'Vps_Component_Partial_Id'; // Eigentlich nur nötig wenn es Suche gibt, ansonsten reicht Vps_Component_Partial_Paging
         return $ret;
+    }
+
+    public function getPartialClass()
+    {
+        if ($this->_hasSetting('partialClass')) {
+            return $this->_getSetting('partialClass');
+        }
+        if ($this->_getSearchForm()) {
+            return 'Vps_Component_Partial_Id';
+        } else {
+            return 'Vps_Component_Partial_Paging';
+        }
     }
 
     public function processInput(array $postData)
@@ -223,7 +234,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
         $generator = Vps_Component_Generator_Abstract::getInstance(
             Vpc_Abstract::getComponentClassByParentClass($callClass), 'detail'
         );
-        if (is_instance_of($this->_getSetting('partialClass'), 'Vps_Component_Partial_Id')) {
+        if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Id')) {
             $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartialId($generator->getModel());
         } else {
             $ret[] = new Vps_Component_Cache_Meta_Static_ModelPartial($generator->getModel());

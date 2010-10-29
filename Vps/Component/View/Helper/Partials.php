@@ -6,7 +6,7 @@ class Vps_Component_View_Helper_Partials extends Vps_Component_View_Renderer
         if (!$component instanceof Vps_Component_Data ||
             !method_exists($component->getComponent(), 'getPartialVars')
         ) throw new Vps_Exception('Component has to implement Vps_Component_Partial_Interface');
-        $partialClass = Vpc_Abstract::getSetting($component->componentClass, 'partialClass');
+        $partialClass = $component->getComponent()->getPartialClass();
         if (method_exists($component->getComponent(), 'getPartialParams')) {
             $params = array_merge($component->getComponent()->getPartialParams(), $params);
         }
