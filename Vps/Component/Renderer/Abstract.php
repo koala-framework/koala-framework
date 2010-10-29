@@ -57,6 +57,8 @@ abstract class Vps_Component_Renderer_Abstract
         $pluginNr = 0;
         $stats = $this->_stats;
 
+        $helpers = array();
+
         // {type: componentId(value)[plugins] config}
         while (preg_match('/{([^ }]+): ([^ \[}\(]+)(\([^ }]+\))?(\[[^}]+\])?( [^}]*)}/', $ret, $matches)) {
             $type = $matches[1];
@@ -73,17 +75,23 @@ abstract class Vps_Component_Renderer_Abstract
             if ($value) $statId .= " ($value)";
             if ($type != 'component') $statId .= ': ' . $type;
 
+            if (!isset($helpers[$type])) {
+                $class = 'Vps_Component_View_Helper_' . ucfirst($type);
+                $helper = new $class();
+                $helper->setRenderer($this);
+                $helpers[$type] = $helper;
+            } else {
+                $helper = $helpers[$type];
+            }
             if ($this->_enableCache && isset($this->_cache[$type][$componentId][$value])) {
 
                 $content = $this->_cache[$type][$componentId][$value];
+                $content = $helper->renderCached($content, $componentId, $config);
                 $stats['cacheRendered'][] = $statId;
                 $statType = 'cache';
 
             } else {
 
-                $class = 'Vps_Component_View_Helper_' . ucfirst($type);
-                $helper = new $class();
-                $helper->setRenderer($this);
                 $content = $helper->render($componentId, $config);
                 $stats['rendered'][] = $statId;
 
@@ -93,6 +101,7 @@ abstract class Vps_Component_Renderer_Abstract
                 } else {
                     $statType = 'noviewcache';
                 }
+                $content = $helper->renderCached($content, $componentId, $config);
             }
 
             foreach ($plugins as $pluginClass) {
