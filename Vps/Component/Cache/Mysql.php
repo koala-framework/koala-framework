@@ -6,12 +6,12 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     public function __construct()
     {
         $this->_models = array (
-            'cache' => new Vps_Component_Cache_Mysql_Model(),
-            'preload' => new Vps_Component_Cache_Mysql_PreloadModel(),
-            'metaModel' => new Vps_Component_Cache_Mysql_MetaModelModel(),
-            'metaRow' => new Vps_Component_Cache_Mysql_MetaRowModel(),
-            'metaComponent' => new Vps_Component_Cache_Mysql_MetaComponentModel(),
-            'metaChained' => new Vps_Component_Cache_Mysql_MetaChainedModel()
+            'cache' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_Model'),
+            'preload' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_PreloadModel'),
+            'metaModel' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaModelModel'),
+            'metaRow' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaRowModel'),
+            'metaComponent' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaComponentModel'),
+            'metaChained' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaChainedModel'),
         );
     }
 
