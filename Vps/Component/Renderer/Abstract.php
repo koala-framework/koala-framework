@@ -34,7 +34,9 @@ abstract class Vps_Component_Renderer_Abstract
         }
         $view = new Vps_Component_View($this);
         $ret = $this->render($view->component($component));
-        $this->_cache->writeBuffer();
+        if ($this->_enableCache) {
+            Vps_Component_Cache::getInstance()->writeBuffer();
+        }
         return $ret;
     }
 
