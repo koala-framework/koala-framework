@@ -20,7 +20,9 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
 
     private function _getType()
     {
-        return strtolower(substr(strrchr(get_class($this), '_'), 1));
+        $ret = substr(strrchr(get_class($this), '_'), 1);
+        $ret = strtolower(substr($ret, 0, 1)).substr($ret, 1); //anfangsbuchstaben klein
+        return $ret;
     }
 
     public abstract function render($componentId, $config);
