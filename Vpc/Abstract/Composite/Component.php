@@ -54,8 +54,12 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
     {
         $ret = parent::getStaticCacheMeta($componentClass);
         $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
-        foreach ($generators['child']['component'] as $class) {
-            $ret[] = new Vpc_Abstract_Composite_MetaHasContent($class);
+        if (isset($generators['child'])) {
+            $components = $generators['child']['component'];
+            if (!is_array($components)) $components = array($components);
+            foreach ($components as $class) {
+                $ret[] = new Vpc_Abstract_Composite_MetaHasContent($class);
+            }
         }
         return $ret;
     }
