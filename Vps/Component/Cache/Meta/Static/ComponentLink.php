@@ -9,7 +9,7 @@ class Vps_Component_Cache_Meta_Static_ComponentLink extends Vps_Component_Cache_
     public static function getDeleteWhere($pattern, $row)
     {
         $ret = parent::getDeleteWhere($pattern, $row);
-        $ret['type'] = array('componentlink');
+        $ret['type'] = array('componentLink');
         if ($row->getModel() instanceof Vpc_Root_Category_GeneratorModel) {
             $ret['db_id'] = array_merge(
                 array($ret['db_id']),
