@@ -4,7 +4,7 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
     protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $type = null, $plugins = array())
     {
         if (!$type) $type = $this->_getType();
-        if ($value) $componentId .= '(' . $value . ')';
+        if (!is_null($value)) $componentId .= '(' . $value . ')';
         if ($plugins) $componentId .= '[' . implode(' ', $plugins) . ']';
         $config = base64_encode(serialize($config));
         return '{' . "$type: $componentId $config" . '}';
