@@ -41,10 +41,11 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
         }
 
         $ret = array();
-        $generator = Vps_Component_Generator_Abstract::getInstance(
-            Vpc_Abstract::getComponentClassByParentClass($dirClass), 'detail'
-        );
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), $pattern);
+
+        $generators = Vps_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
+        if (count($generators) != 1) throw new Vps_Exception("can't get detail generator");
+
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($generators[0]->getModel(), $pattern);
         return $ret;
     }
 }
