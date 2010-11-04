@@ -37,7 +37,7 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
         $cmd = "echo ".escapeshellarg($sql)." | mysql";
         $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("$cmd");
         $ret = null;
-        if ($this->_getParam('debug')) echo "$cmd\n";
+        /*if ($this->_getParam('debug'))*/ echo "$cmd\n";
         system($cmd, $ret);
         return !$ret;
     }
@@ -125,7 +125,7 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
                         } else if ($input == 'p') {
                             $stdin = fopen('php://stdin', 'r');
                             echo "enter password: ";
-                            $dbPassword = trim(strtolower(fgets($stdin, 128)));
+                            $dbPassword = trim(fgets($stdin, 128));
                             fclose($stdin);
                         } else {
                             throw new Vps_ClientException("unbekannte option");
