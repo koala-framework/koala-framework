@@ -206,16 +206,7 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
     public function testSaveDisabled1()
     {
         $this->_field->setSave(false);
-        $this->_testSaveDisabled();
-    }
-    public function testSaveDisabled2()
-    {
-        $this->_field->setInternalSave(false);
-        $this->_testSaveDisabled();
-    }
 
-    private function _testSaveDisabled()
-    {
         $post = array(
             'File_upload_id' => '1',
             'File_del' => 1,
