@@ -19,7 +19,7 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vpc_Abstract_Form
             $data = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
                 $parentRow->component_id, array('limit' => 1)
             );
-            if ($this->fields['target']->getInternalSave() && isset($postData[$this->fields['target']->getFieldName()]) &&
+            if (isset($postData[$this->fields['target']->getFieldName()]) &&
                     $data && $data->getPage() && $data->getPage()->dbId == $postData[$this->fields['target']->getFieldName()]) {
                 throw new Vps_ClientException(trlVps('Link cannot link to itself'));
             }

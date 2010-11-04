@@ -105,24 +105,36 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return $ret;
     }
 
-    public function setInternalSave($v)
-    {
-        $this->_combobox->setInternalSave($v);
-        return parent::setInternalSave($v);
-    }
-
-    public function validate($row, $postData)
+    private function _isHidden($childField, $postData)
     {
         $value = isset($postData[$this->_combobox->getFieldName()]) ? $postData[$this->_combobox->getFieldName()] : $this->_combobox->getDefaultValue();
-        foreach ($this->fields as $card) {
-            if ($card != $this->_combobox
-                && $card->getName() != $value) {
-                $card->setInternalSave(false);
-            } else {
-                $card->setInternalSave(true);
+        return $childField->getName() != $value;
+    }
+
+    protected function _processChildren($method, $childField, $row, $postData)
+    {
+        if ($field === $this->_combobox) return true;
+        return $this->_isHidden($childField, $postData);
+    }
+
+    public function load($row, $postData = array())
+    {
+        $ret = array();
+        if ($this->_checkboxHiddenField) {
+            $ret = array_merge($ret, $this->_combobox->load($row, $postData));
+        }
+        if ($this->hasChildren()) {
+            foreach ($this->getChildren() as $field) {
+                if ($field !== $this->_combobox)
+                    $r = $row;
+                    if ($this->_isHidden($field, $postData)) {
+                        $r = null;
+                    }
+                    $ret = array_merge($ret, $field->load($r, $postData));
+                }
             }
         }
-        return parent::validate($row, $postData);
+        return $ret;
     }
 
     public function getTemplateVars($values)
