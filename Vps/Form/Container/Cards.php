@@ -111,27 +111,28 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return $childField->getName() != $value;
     }
 
+    //verhindert aufrufen von validate/prepareSave/save etc fuer kinder wenn card nicht ausgewählt
     protected function _processChildren($method, $childField, $row, $postData)
     {
         if ($field === $this->_combobox) return true;
-        return $this->_isHidden($childField, $postData);
+
+        //wenn card nicht gewählt, nicht aufrufen
+        return (bool)$this->_isHidden($childField, $postData);
     }
 
     public function load($row, $postData = array())
     {
+        //komplett überschrieben damit wir die row bei deaktivieren cards nicht uebergeben
+
         $ret = array();
-        if ($this->_checkboxHiddenField) {
-            $ret = array_merge($ret, $this->_combobox->load($row, $postData));
-        }
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                if ($field !== $this->_combobox)
-                    $r = $row;
-                    if ($this->_isHidden($field, $postData)) {
-                        $r = null;
-                    }
-                    $ret = array_merge($ret, $field->load($r, $postData));
+                $r = $row;
+                if ($field !== $this->_comboBox && $this->_isHidden($field, $postData)) {
+                    //wenn card nicht gewählt, keine row übergeben
+                    $r = null;
                 }
+                $ret = array_merge($ret, $field->load($r, $postData));
             }
         }
         return $ret;
