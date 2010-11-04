@@ -7,7 +7,7 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
         if (array_key_exists($this->getFieldName(), $postData)) {
             $ret[$this->getFieldName()] = $postData[$this->getFieldName()];
         } else {
-            if ($this->getSave() !== false && $this->getInternalSave() !== false) {
+            if ($this->getSave() !== false && $row) {
                 $ret[$this->getFieldName()] = $this->getData()->load($row);
             }
         }
@@ -43,38 +43,36 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
     {
         $ret = parent::validate($row, $postData);
 
-        if ($this->getInternalSave() !== false) {
+        $data = $this->_getValueFromPostData($postData);
 
-            $data = $this->_getValueFromPostData($postData);
+        $name = $this->getFieldLabel();
+        if (!$name) $name = $this->getName();
+        foreach ($this->getValidators() as $v) {
+            // folgende if ist, weils es zB bei einem Date Validator keinen
+            // sinn macht zu validieren wenn kein wert da ist. da macht dann
+            // nur mehr der NotEmpty sinn
+            if (!$data && !($v instanceof Zend_Validate_NotEmpty)) {
+                continue;
+            }
 
-            $name = $this->getFieldLabel();
-            if (!$name) $name = $this->getName();
-            foreach ($this->getValidators() as $v) {
-                // folgende if ist, weils es zB bei einem Date Validator keinen
-                // sinn macht zu validieren wenn kein wert da ist. da macht dann
-                // nur mehr der NotEmpty sinn
-                if (!$data && !($v instanceof Zend_Validate_NotEmpty)) {
-                    continue;
-                }
-
-                if ($v instanceof Vps_Validate_Row_Abstract) {
-                    $v->setField($this->getName());
-                    $isValid = $v->isValidRow($data, $row);
-                } else {
-                    $isValid = $v->isValid($data);
-                }
-                if (!$isValid) {
-                    $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
-                }
+            if ($v instanceof Vps_Validate_Row_Abstract) {
+                $v->setField($this->getName());
+                $isValid = $v->isValidRow($data, $row);
+            } else {
+                $isValid = $v->isValid($data);
+            }
+            if (!$isValid) {
+                $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
             }
         }
+
         return $ret;
     }
 
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
         parent::prepareSave($row, $postData);
-        if ($this->getSave() !== false && $this->getInternalSave() !== false) {
+        if ($this->getSave() !== false) {
             $save = false;
             if (array_key_exists($this->getFieldName(), $postData)) {
                 //wenn postData gesetzt, speichern

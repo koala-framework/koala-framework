@@ -47,8 +47,7 @@ class Vps_Form extends Vps_Form_NonTableForm
 
     public function save($parentRow, $postData)
     {
-        //wenn form zB in einem CardLayout liegt und deaktivert wurde nicht speichern
-        if ($this->getSave() === false || $this->getInternalSave() === false ) return array();
+        if ($this->getSave() === false) return array();
 
         $row = $this->_getRowByParentRow($parentRow);
         if (!$row) {

@@ -31,14 +31,6 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         $this->setMinEntries(1);
     }
 
-    public function setInternalSave($v)
-    {
-        $this->setProperty('internalSave', $v);
-        foreach ($this->getChildren() as $f) {
-            $f->setInternalSave($v);
-        }
-    }
-
     protected function _addValidators()
     {
         parent::_addValidators();
