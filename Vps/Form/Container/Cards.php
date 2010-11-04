@@ -128,7 +128,7 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
                 $r = $row;
-                if ($field !== $this->_comboBox && $this->_isHidden($field, $postData)) {
+                if ($field !== $this->_combobox && $this->_isHidden($field, $postData)) {
                     //wenn card nicht gewählt, keine row übergeben
                     $r = null;
                 }
