@@ -27,19 +27,40 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         return $this;
     }
 
-    public function validate($row, $postData)
+    private function _isHidden($postData)
     {
         if ($this->_checkboxHiddenField) {
             $n = $this->_checkboxHiddenField->getFieldName();
-            if (!isset($postData[$n]) || !$postData[$n]) {
-                foreach ($this->fields as $f) {
-                    if ($f != $this->_checkboxHiddenField) {
-                        $f->setInternalSave(false);
-                    }
+            if (isset($postData[$n]) && $postData[$n]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected function _processChildren($method, $childField, $row, $postData)
+    {
+        if ($childField === $this->_checkboxHiddenField) return true;
+        return $this->_isHidden($postData);
+    }
+
+    public function load($row, $postData = array())
+    {
+        $ret = array();
+        if ($this->_checkboxHiddenField) {
+            $ret = array_merge($ret, $this->_checkboxHiddenField->load($row, $postData));
+        }
+        if ($this->_isHidden($postData)) {
+            $row = null;
+        }
+        if ($this->hasChildren()) {
+            foreach ($this->getChildren() as $field) {
+                if ($field !== $this->_checkboxHiddenField) {
+                    $ret = array_merge($ret, $field->load($row, $postData));
                 }
             }
         }
-        return parent::validate($row, $postData);
+        return $ret;
     }
 
     public function getMetaData($model)
