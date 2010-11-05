@@ -11,7 +11,7 @@ Vpc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
         var orderProducts = new Vps.Auto.GridPanel({
             xtype: 'vps.autogrid',
             region: 'south',
-            height: 150,
+            height: 180,
             split: true,
             controllerUrl: this.orderProductsControllerUrl,
             baseParams: Vps.clone(this.baseParams)

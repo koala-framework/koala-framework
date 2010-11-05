@@ -14,7 +14,9 @@ class Vpc_Basic_Text_Model extends Vps_Model_Db_Proxy
         if (!isset($config['componentClass'])) {
             throw new Vps_Exception("componentClass is required for text-model");
         }
-        $config['default']['content'] = '<p>'.Vpc_Abstract::LOREM_IPSUM.'</p>';
+        if (!isset($this->_default['content'])) {
+            $config['default']['content'] = '<p>'.Vpc_Abstract::LOREM_IPSUM.'</p>';
+        }
         $this->_componentClass = $config['componentClass'];
         parent::__construct($config);
     }
