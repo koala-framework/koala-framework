@@ -117,7 +117,7 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         if ($childField === $this->_combobox) return true;
 
         //wenn card nicht gewählt, nicht aufrufen
-        return (bool)$this->_isHidden($childField, $postData);
+        return !$this->_isHidden($childField, $postData);
     }
 
     public function load($row, $postData = array())
