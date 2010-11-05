@@ -160,6 +160,11 @@ class Vps_Form extends Vps_Form_NonTableForm
 
     public function getRow($parentRow = null)
     {
+        if (!$parentRow && $this->getIdTemplate()) {
+            //tritt auf in Cards bei einer nicht aktiven card (da ist parentRow null)
+            return null;
+        }
+
         $key = 'none';
         if ($parentRow) {
             $key = $parentRow->getInternalId();
