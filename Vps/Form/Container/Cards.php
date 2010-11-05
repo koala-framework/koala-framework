@@ -114,7 +114,7 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
     //verhindert aufrufen von validate/prepareSave/save etc fuer kinder wenn card nicht ausgewählt
     protected function _processChildren($method, $childField, $row, $postData)
     {
-        if ($field === $this->_combobox) return true;
+        if ($childField === $this->_combobox) return true;
 
         //wenn card nicht gewählt, nicht aufrufen
         return (bool)$this->_isHidden($childField, $postData);
