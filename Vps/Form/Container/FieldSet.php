@@ -43,7 +43,7 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
     protected function _processChildren($method, $childField, $row, $postData)
     {
         if ($childField === $this->_checkboxHiddenField) return true;
-        return (bool)$this->_isHidden($postData);
+        return !$this->_isHidden($postData);
     }
 
     public function load($row, $postData = array())
