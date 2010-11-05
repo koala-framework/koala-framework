@@ -28,10 +28,12 @@ class Vps_Form extends Vps_Form_NonTableForm
     protected function _getRowByParentRow($parentRow)
     {
         if ($parentRow && $this->_model instanceof Vps_Model_Field) {
-            return $this->_model->getRowByParentRow($parentRow);
+            $ret = $this->_model->getRowByParentRow($parentRow);
         } else {
-            return $this->getRow($parentRow);
+            $ret = $this->getRow($parentRow);
         }
+        if (is_null($ret)) return $ret;
+        return (object)$ret;
     }
 
     public function prepareSave($parentRow, $postData)
