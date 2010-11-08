@@ -198,9 +198,11 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         // Alle bisherigen wheres durchgehen und nur die nehmen, wo eine db_id gelöscht wird
         $allIds = array();
         foreach ($wheres as $class => $where) {
+            $allIds[$class] = array();
             foreach ($where as $w) {
                 if (isset($w['db_id'])) {
-                    $allIds[$class][] = $w['db_id'];
+                    $ids = is_array($w['db_id']) ? $w['db_id'] : array($w['db_id']);
+                    $allIds[$class] = array_merge($allIds[$class], $ids);
                 }
             }
         }
