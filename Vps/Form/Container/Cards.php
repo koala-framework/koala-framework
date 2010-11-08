@@ -105,30 +105,28 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return $ret;
     }
 
-    private function _isHidden($childField, $postData)
-    {
-        $value = isset($postData[$this->_combobox->getFieldName()]) ? $postData[$this->_combobox->getFieldName()] : $this->_combobox->getDefaultValue();
-        return $childField->getName() != $value;
-    }
-
     //verhindert aufrufen von validate/prepareSave/save etc fuer kinder wenn card nicht ausgewählt
     protected function _processChildren($method, $childField, $row, $postData)
     {
+        if ($method == 'load') return true;
         if ($childField === $this->_combobox) return true;
 
         //wenn card nicht gewählt, nicht aufrufen
-        return !$this->_isHidden($childField, $postData);
+        $value = isset($postData[$this->_combobox->getFieldName()]) ? $postData[$this->_combobox->getFieldName()] : $this->_combobox->getDefaultValue();
+        return $childField->getName() == $value;
     }
 
     public function load($row, $postData = array())
     {
         //komplett überschrieben damit wir die row bei deaktivieren cards nicht uebergeben
 
-        $ret = array();
+        $ret = $this->_combobox->load($row, $postData); //combobox immer laden, wert brauchen wir auch für auswahl
+
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
+                if ($field === $this->_combobox) continue; //schon oben aufgerufen
                 $r = $row;
-                if ($field !== $this->_combobox && $this->_isHidden($field, $postData)) {
+                if ($field->getName() != $ret[$this->_combobox->getFieldName()]) {
                     //wenn card nicht gewählt, keine row übergeben
                     $r = null;
                 }
