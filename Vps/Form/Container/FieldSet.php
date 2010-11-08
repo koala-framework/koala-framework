@@ -27,23 +27,17 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         return $this;
     }
 
-    //ob checkbox nicht gesetzt ist und dadurch kind-felder nicht gespeichert/validiert etc werden dürfen
-    private function _isHidden($postData)
-    {
-        if ($this->_checkboxHiddenField) {
-            $n = $this->_checkboxHiddenField->getFieldName();
-            if (isset($postData[$n]) && $postData[$n]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     //verhindert aufrufen von validate/prepareSave/save etc fuer kinder wenn checkbox nicht gesetzt
     protected function _processChildren($method, $childField, $row, $postData)
     {
-        if ($childField === $this->_checkboxHiddenField) return true;
-        return !$this->_isHidden($postData);
+        if ($method == 'load') return true;
+        if ($this->_checkboxHiddenField && $childField !== $this->_checkboxHiddenField) {
+            $n = $this->_checkboxHiddenField->getFieldName();
+            if (isset($postData[$n]) && $postData[$n]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public function load($row, $postData = array())
@@ -54,11 +48,11 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         if ($this->_checkboxHiddenField) {
             //_checkboxHiddenField immer row übergeben
             $ret = array_merge($ret, $this->_checkboxHiddenField->load($row, $postData));
-        }
 
-        if ($this->_isHidden($postData)) {
-            //wenn checkbox nicht gesetzt, keine row übergeben
-            $row = null;
+            if (!$ret[$this->_checkboxHiddenField->getFieldName()]) {
+                //wenn checkbox nicht gesetzt, keine row übergeben
+                $row = null;
+            }
         }
 
         if ($this->hasChildren()) {
