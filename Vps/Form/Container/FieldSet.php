@@ -40,31 +40,6 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         return true;
     }
 
-    public function load($row, $postData = array())
-    {
-        //komplett überschrieben damit wir die row bei deaktivieren feldern nicht uebergeben
-
-        $ret = array();
-        if ($this->_checkboxHiddenField) {
-            //_checkboxHiddenField immer row übergeben
-            $ret = array_merge($ret, $this->_checkboxHiddenField->load($row, $postData));
-
-            if (!$ret[$this->_checkboxHiddenField->getFieldName()]) {
-                //wenn checkbox nicht gesetzt, keine row übergeben
-                $row = null;
-            }
-        }
-
-        if ($this->hasChildren()) {
-            foreach ($this->getChildren() as $field) {
-                if ($field !== $this->_checkboxHiddenField) { //_checkboxHiddenField wurde bereits oben aufgerufen
-                    $ret = array_merge($ret, $field->load($row, $postData));
-                }
-            }
-        }
-        return $ret;
-    }
-
     public function getMetaData($model)
     {
         $ret = parent::getMetaData($model);

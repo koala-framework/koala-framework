@@ -116,26 +116,6 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return $childField->getName() == $value;
     }
 
-    public function load($row, $postData = array())
-    {
-        //komplett überschrieben damit wir die row bei deaktivieren cards nicht uebergeben
-
-        $ret = $this->_combobox->load($row, $postData); //combobox immer laden, wert brauchen wir auch für auswahl
-
-        if ($this->hasChildren()) {
-            foreach ($this->getChildren() as $field) {
-                if ($field === $this->_combobox) continue; //schon oben aufgerufen
-                $r = $row;
-                if ($field->getName() != $ret[$this->_combobox->getFieldName()]) {
-                    //wenn card nicht gewählt, keine row übergeben
-                    $r = null;
-                }
-                $ret = array_merge($ret, $field->load($r, $postData));
-            }
-        }
-        return $ret;
-    }
-
     public function getTemplateVars($values)
     {
         $ret = array();
