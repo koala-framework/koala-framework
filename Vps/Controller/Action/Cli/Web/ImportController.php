@@ -419,10 +419,6 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             return;
         }
         if (!$db) return;
-
-        // for service import
-        ini_set('memory_limit', '128M');
-
         $tables = $db->fetchCol('SHOW TABLES');
         if (!in_array('vps_users', $tables)) return;
         if (!in_array('cache_users', $tables)) return;
