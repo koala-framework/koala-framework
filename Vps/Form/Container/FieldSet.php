@@ -34,6 +34,8 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         if ($this->_checkboxHiddenField && $childField !== $this->_checkboxHiddenField) {
             $n = $this->_checkboxHiddenField->getFieldName();
             if (isset($postData[$n]) && $postData[$n]) {
+                return true;
+            } else {
                 return false;
             }
         }
