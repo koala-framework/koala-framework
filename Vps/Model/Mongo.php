@@ -260,6 +260,7 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         }
         if ($profiler instanceof Vps_Db_Profiler) $profiler->getLogger()->debug('(rows) count result '.count($keys));
         $p = $profiler->queryEnd($p);
+        //if ($profiler instanceof Vps_Db_Profiler) $profiler->getLogger()->debug(print_r($cursor->explain(), true));
 
         $ret =  new $this->_rowsetClass(array(
             'dataKeys' => $keys,
