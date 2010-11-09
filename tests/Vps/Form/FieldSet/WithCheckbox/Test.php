@@ -24,7 +24,7 @@ class Vps_Form_FieldSet_WithCheckbox_Test extends PHPUnit_Framework_TestCase
         $form = $this->_form;
 
         $post = array(
-            'fs' => true,
+            'fs' => false,
             'text' => '',
         );
         $post = $form->processInput($form->getRow(), $post);
@@ -34,7 +34,7 @@ class Vps_Form_FieldSet_WithCheckbox_Test extends PHPUnit_Framework_TestCase
         $form->afterSave(null, $post);
 
         $row = $form->getModel()->getRow(array());
-        $this->assertEquals(true, $row->fs);
+        $this->assertEquals(false, $row->fs);
         $this->assertEquals(null, $row->text);
     }
 
@@ -43,7 +43,7 @@ class Vps_Form_FieldSet_WithCheckbox_Test extends PHPUnit_Framework_TestCase
         $form = $this->_form;
 
         $post = array(
-            'fs' => false,
+            'fs' => true,
             'text' => '',
         );
         $post = $form->processInput($form->getRow(), $post);
@@ -67,5 +67,24 @@ class Vps_Form_FieldSet_WithCheckbox_Test extends PHPUnit_Framework_TestCase
         $row = $form->getModel()->getRow(array());
         $this->assertEquals(true, $row->fs);
         $this->assertEquals('foo', $row->text);
+    }
+
+    public function testCheckboxNotSetTextGetsNotSaved()
+    {
+        $form = $this->_form;
+
+        $post = array(
+            'fs' => false,
+            'text' => 'foo',
+        );
+        $post = $form->processInput($form->getRow(), $post);
+        $this->assertEquals(array(), $form->validate($form->getRow(), $post));
+        $form->prepareSave(null, $post);
+        $form->save(null, $post);
+        $form->afterSave(null, $post);
+
+        $row = $form->getModel()->getRow(array());
+        $this->assertEquals(false, $row->fs);
+        $this->assertEquals(null, $row->text);
     }
 }
