@@ -61,7 +61,10 @@ class Vps_Util_FeedFetcher_Feed
             $status = self::UPDATE_NOT_MODIFIED;
         } else {
             $error = false;
-            $feed = self::getFeedDataFromResponse($row->id, $row->url, $response, $error);
+            $options = array(
+                'fetch_entries' => isset($row->fetch_entries) ? $row->fetch_entries : null,
+            );
+            $feed = self::getFeedDataFromResponse($row->id, $row->url, $options, $response, $error);
             if ($error) {
                 $status = self::UPDATE_ERROR;
                 if ($oldFeed = $cache->load($cacheId)) {
@@ -92,7 +95,7 @@ class Vps_Util_FeedFetcher_Feed
 
         return $feed;
     }
-    public static function getFeedDataFromResponse($feedId, $url, Vps_Http_Requestor_Response_Interface $response, &$error)
+    public static function getFeedDataFromResponse($feedId, $url, array $options, Vps_Http_Requestor_Response_Interface $response, &$error)
     {
         $error = false;
 
@@ -102,7 +105,12 @@ class Vps_Util_FeedFetcher_Feed
         $feed = array();
         $feed['url'] = $url;
         $feed['update'] = time();
-        $entriesSelect = $m->select()->limit(100);
+        $entriesSelect = $m->select();
+        if (isset($options['fetch_entries']) && $options['fetch_entries']) {
+            $entriesSelect->limit($options['fetch_entries']);
+        } else {
+            $entriesSelect->limit(100);
+        }
         try {
             if ($feedId > 40000) {
                 $m->setDefaultEncoding('utf-8');
