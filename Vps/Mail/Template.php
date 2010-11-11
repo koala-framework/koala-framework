@@ -232,6 +232,7 @@ class Vps_Mail_Template implements Vps_Mail_Interface
         $vars = array();
         if ($this->_mailVarsClassName) {
             try {
+                // TODO: Kann wohl weg, das war proHaustier dynamische Mails
                 $class = $this->_mailVarsClassName;
                 $mails = new $class();
                 if ($mails) {
