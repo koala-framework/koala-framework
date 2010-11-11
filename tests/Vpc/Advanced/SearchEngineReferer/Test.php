@@ -50,6 +50,12 @@ class Vpc_Advanced_SearchEngineReferer_Test extends Vpc_TestAbstract
             ->order('id', 'DESC')
         );
         $this->assertEquals(7, $newRow->id);
+
+        // Wenn &url= in Url vorkommt, nicht tracken (Adi fragen warum)
+        $count = count($model->getRows());
+        $_SERVER['HTTP_REFERER'] = 'http://www.google.at/search?hl=de&q=foo3&url=foo';
+        $ref2->processInput();
+        $this->assertEquals($count, count($model->getRows()));
     }
 
     public function testCache()

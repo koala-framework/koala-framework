@@ -27,19 +27,19 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         return $this;
     }
 
-    public function validate($row, $postData)
+    //verhindert aufrufen von validate/prepareSave/save etc fuer kinder wenn checkbox nicht gesetzt
+    protected function _processChildren($method, $childField, $row, $postData)
     {
-        if ($this->_checkboxHiddenField) {
+        if ($method == 'load') return true;
+        if ($this->_checkboxHiddenField && $childField !== $this->_checkboxHiddenField) {
             $n = $this->_checkboxHiddenField->getFieldName();
-            if (!isset($postData[$n]) || !$postData[$n]) {
-                foreach ($this->fields as $f) {
-                    if ($f != $this->_checkboxHiddenField) {
-                        $f->setInternalSave(false);
-                    }
-                }
+            if (isset($postData[$n]) && $postData[$n]) {
+                return true;
+            } else {
+                return false;
             }
         }
-        return parent::validate($row, $postData);
+        return true;
     }
 
     public function getMetaData($model)
