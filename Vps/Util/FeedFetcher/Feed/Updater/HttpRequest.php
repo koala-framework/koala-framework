@@ -6,7 +6,10 @@ class Vps_Util_FeedFetcher_Feed_Updater_HttpRequest extends HttpRequest
 
     public function __construct(Vps_Util_FeedFetcher_FeedRow $feed)
     {
-        $options = Vps_Util_FeedFetcher_Feed::getRequestOptions($feed->id);
+        $feedData = Vps_Util_FeedFetcher_Feed_Cache::getInstance()
+            ->load(Vps_Util_FeedFetcher_Feed::getCacheId($feed->id));
+
+        $options = Vps_Util_FeedFetcher_Feed::getRequestOptions($feedData);
         parent::__construct($feed->url, HTTP_METH_GET, $options);
         $this->_feed = $feed;
 
