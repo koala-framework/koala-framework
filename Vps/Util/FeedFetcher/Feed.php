@@ -8,29 +8,27 @@ class Vps_Util_FeedFetcher_Feed
 
     public static function createRequest($feedId, $url = null)
     {
+        $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load(self::getCacheId($feedId));
         if (!$url) {
-            $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load(self::getCacheId($feedId));
             if (!$feed || !isset($feed['url']) ) { //!isset url ist f端r legacy caches
-                if (!$url) {
-                    $row = Vps_Model_Abstract::getInstance('feeds')->getRow($feedId);
-                    $url = $row->url;
-                }
-                $feed = array(
-                    'url' => $url
-                );
+                $row = Vps_Model_Abstract::getInstance('feeds')->getRow($feedId);
+                $url = $row->url;
+            } else {
+                $url = $feed['url'];
             }
-            $url = $feed['url'];
         }
         if (!$url) {
             throw new Vps_Exception("Unknown url");
         }
-        return new HttpRequest($url, HTTP_METH_GET, self::getRequestOptions($feedId));
+        return new HttpRequest($url, HTTP_METH_GET, self::getRequestOptions($feed));
     }
 
-    public static function getRequestOptions($feedId)
+    /**
+     * @param array mit etag und lastmodified, kann false sein
+     */
+    public static function getRequestOptions($feed)
     {
         $options = Vps_Http_Requestor::getInstance()->getRequestOptions();
-        $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load(self::getCacheId($feedId));
         if (isset($feed['etag'])) $options['etag'] = $feed['etag'];
         if (isset($feed['lastmodified'])) $options['lastmodified'] = $feed['lastmodified'];
         return $options;
