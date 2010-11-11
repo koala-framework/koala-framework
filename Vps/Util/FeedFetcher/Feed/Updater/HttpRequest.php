@@ -10,7 +10,9 @@ class Vps_Util_FeedFetcher_Feed_Updater_HttpRequest extends HttpRequest
             ->load(Vps_Util_FeedFetcher_Feed::getCacheId($feed->id));
 
         $options = Vps_Util_FeedFetcher_Feed::getRequestOptions($feedData);
-        parent::__construct($feed->url, HTTP_METH_GET, $options);
+
+        $url = Vps_Util_FeedFetcher_Feed::getRequestUrl($feedId, $feed->url);
+        parent::__construct($url, HTTP_METH_GET, $options);
         $this->_feed = $feed;
 
         $this->_start = microtime(true);

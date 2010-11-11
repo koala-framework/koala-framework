@@ -6,21 +6,72 @@ class Vps_Util_FeedFetcher_Feed
     const UPDATE_ERROR = 'error';
     const UPDATE_NOT_MODIFIED = 'notModified';
 
+    private static $_fetchProxyScripts;
+
     public static function createRequest($feedId, $url = null)
     {
         $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load(self::getCacheId($feedId));
         if (!$url) {
-            if (!$feed || !isset($feed['url']) ) { //!isset url ist f端r legacy caches
-                $row = Vps_Model_Abstract::getInstance('feeds')->getRow($feedId);
-                $url = $row->url;
-            } else {
+            if ($feed && isset($feed['url']) ) { //isset url ist f端r legacy caches
                 $url = $feed['url'];
             }
+        }
+        $url = self::getRequestUrl($feedId, $url);
+        return new HttpRequest($url, HTTP_METH_GET, self::getRequestOptions($feed));
+    }
+
+    /**
+     * @param array mit url, kann false sein
+     */
+    public static function getRequestUrl($feedId, $url = null)
+    {
+        if (!$url) {
+            $row = Vps_Model_Abstract::getInstance('feeds')->getRow($feedId);
+            $url = $row->url;
         }
         if (!$url) {
             throw new Vps_Exception("Unknown url");
         }
-        return new HttpRequest($url, HTTP_METH_GET, self::getRequestOptions($feed));
+        $proxies = self::getFetchProxyScripts();
+        if ($proxies) {
+            $proxyDomains = array(
+                'google.com',
+                'twitter.com'
+            );
+            $useProxy = false;
+            $domain = parse_url($url, PHP_URL_HOST);
+            foreach ($proxyDomains as $d) {
+                if (substr($domain, -strlen($d)) == $d) {
+                    $useProxy = true;
+                }
+            }
+            shuffle($proxies);
+            $url = $proxies[0]['url'].'?url='.rawurlencode($url).'&hash='.md5($url.'w3rklslfsdlj');
+        }
+        return $url;
+    }
+
+    public static function getFetchProxyScripts()
+    {
+        if (!isset(self::$_fetchProxyScripts)) {
+            self::$_fetchProxyScripts = array();
+            $m = Vps_Model_Abstract::getInstance('fetchProxyScripts');
+            if ($m) {
+                foreach (Vps_Model_Abstract::getInstance($m)->export(Vps_Model_Interface::FORMAT_ARRAY, $s) as $r) {
+                    self::$_fetchProxyScripts[] = array(
+                        'id' => $r['id'],
+                        'url' => $r['url'],
+                        'version' => $r['version'],
+                    );
+                }
+            }
+        }
+        return self::$_fetchProxyScripts;
+    }
+
+    public static function setFetchProxyScripts(array $fetchProxyScripts)
+    {
+        self::$_fetchProxyScripts = $fetchProxyScripts;
     }
 
     /**
