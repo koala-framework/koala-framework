@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Mail
+ * @group Mail_Template
  */
 class Vps_Mail_Template_Test extends PHPUnit_Framework_TestCase
 {
