@@ -1,0 +1,57 @@
+== E-MAILS ==
+
+- Vpc_Mail_Component (Vpc_Mail_Editable_Component)
+    o Bearbeitbar, Redirects, Komponenten als Link einbinden
+- Vps_Mail_Template
+    o einfaches verwenden von Vps_Mail_Template_View und Vps_Mail
+- Vps_Model_Mail, Inhalt wird gesetzt
+    o Enquiries-Log, resenden
+- Vps_Mail_Template_View
+    o Template suchen
+- Vps_Model_Mail mit Template
+    o Enquiries-Log, resenden
+
+
+- Statisches Kontaktformular
+    Verwendet: Vps_Model_Mail, Vps_Mail_Template_View, Vps_Mail
+    Ablauf: FrontendForm mit Vps_Model_Mail das Tpl übergeben bekommt,
+            Model merkt sich Daten,
+            Model baut Mail (txt+html+attachments) und merkt sichs in Row,  [...]
+
+    Ablauf Spam: [...] Nichts
+    Ablauf Ham: [...] Row verschickt das Mail (mit save())
+    Ablauf Spamverdacht mit nachsenden: [...] Row verschickt das Mail (mit resendMail())
+
+    TODO: Vps_Mail_Template_View erbt von Vps_Mail_View, beinhaltet code von Vps_Mail_Template
+          Vps_Mail_Template schleift *nur* mehr durch
+          Vps_Model_Mail hat keine mailerClass mehr sondern Vps_Mail_Template_View fix
+          Vps_Model_Mail hat vielleicht doch eine mailerClass fürs schicken aber nur (Vps_Mail)
+
+- Dynamisches Kontaktformular
+    Verwendet: Vps_Model_Mail, Vps_Mail
+    Ablauf: FrontendForm mit Vps_Model_Mail,
+            Model merkt sich Daten,
+            Row bekommt text, html, attachments übergeben (setBodyText) und merkt sichs in Row, [...]
+
+    Ablauf Spam: [...] Nichts
+    Ablauf Ham: [...] Row verschickt das Mail (mit save())
+    Ablauf Spamverdacht mit nachsenden: [...] Row verschickt das Mail (mit resendMail())
+
+- User-Mails
+    Verwendet: Vps_Mail_Template, Vps_Mail
+    Ablauf: User_Row schickt Mails bei save() mit Vps_Mail_Template
+
+- Posts / Gästebuch zum Post freischalten an Admin
+    Verwendet: Vpc_Mail_Component, Vps_Mail
+    Ablauf: Write_Form_Component _afterInsert() schickt mail mit Vpc_Mail_Component
+            TODO UNBEDINGT GANZ WICHTIG: Content unsetten (unterkomponente)
+
+- Posts / Forum Observe
+    Verwendet: Vps_Mail_Template, Vps_Mail
+    Ablauf: Posts_Write_Form_Component schickt Mail mit Vps_Mail_Template (tpl bei Komponente)
+
+- Newsletter (Vpc_Mail_Component) / Shop (Vpc_Mail_Editable_Component)
+    Verwendet: Vpc_Mail_Component, Vps_Mail
+    Ablauf: -
+
+
