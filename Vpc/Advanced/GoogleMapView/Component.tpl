@@ -2,11 +2,11 @@
 <? if($this->data->hasContent()) { ?>
 
     <? if ($this->text && ($this->text instanceof Vps_Component_Data)) { ?>
-        <?= $this->ifHasContent($this->text); ?>
+        <?if ($this->hasContent($this->text)) {?>
             <div class="text">
                 <?= $this->component($this->text); ?>
             </div>
-        <?= $this->ifHasContent(); ?>
+        <? } ?>
     <? } else if ($this->text) { ?>
         <div class="text">
             <?= $this->text; ?>
