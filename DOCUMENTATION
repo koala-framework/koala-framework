@@ -22,7 +22,7 @@
     Ablauf Ham: [...] Row verschickt das Mail (mit save())
     Ablauf Spamverdacht mit nachsenden: [...] Row verschickt das Mail (mit resendMail())
 
-    TODO: Vps_Mail_Template_View erbt von Vps_Mail_View, beinhaltet code von Vps_Mail_Template
+    TODO: Vps_Mail_Template_View erbt von Vps_View_Mail, beinhaltet code von Vps_Mail_Template
           Vps_Mail_Template schleift *nur* mehr durch
           Vps_Model_Mail hat keine mailerClass mehr sondern Vps_Mail_Template_View fix
           Vps_Model_Mail hat vielleicht doch eine mailerClass fürs schicken aber nur (Vps_Mail)
