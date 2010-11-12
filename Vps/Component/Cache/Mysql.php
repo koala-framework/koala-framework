@@ -337,7 +337,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $data = array(
             'model' => $modelName,
             'component_class' => $componentClass,
-            'pattern' => $pattern,
+            'pattern' => $pattern ? $pattern : '',
             'meta_class' => $metaClass,
         );
         $options = array(
