@@ -216,8 +216,6 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
 
     public function getCacheMeta()
     {
-        $ret = parent::getCacheMeta();
-
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
         $dirClass = $dir;
         if ($dir instanceof Vps_Component_Data) $dirClass = $dir->componentClass;
