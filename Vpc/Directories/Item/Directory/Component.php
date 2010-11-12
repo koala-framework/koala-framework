@@ -38,9 +38,11 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
                 while ($c && $c->componentId != $dir->componentId) $c = $c->parent;
                 if ($c) $pattern = '{component_id}%-view'; // Falls Directory ein parent ist, kann man mit diesem Pattern löschen, sonst nicht
             }
-            $generators = Vpc_Abstract::getSetting($c->componentClass, 'generators');
-            if (isset($generators['detail']['dbIdShortcut'])) {
-                $pattern = str_replace('{component_id}', '%', $pattern);
+            if ($pattern) { // dbId
+                $generators = Vpc_Abstract::getSetting($c->componentClass, 'generators');
+                if (isset($generators['detail']['dbIdShortcut'])) {
+                    $pattern = str_replace('{component_id}', '%', $pattern);
+                }
             }
         }
 
