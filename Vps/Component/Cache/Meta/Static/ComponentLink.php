@@ -1,11 +1,6 @@
 <?php
 class Vps_Component_Cache_Meta_Static_ComponentLink extends Vps_Component_Cache_Meta_Static_Model
 {
-    public function __construct($model, $pattern = '{id}')
-    {
-        parent::__construct($model, $pattern);
-    }
-
     public static function getDeleteWhere($pattern, $row)
     {
         $ret = parent::getDeleteWhere($pattern, $row);
