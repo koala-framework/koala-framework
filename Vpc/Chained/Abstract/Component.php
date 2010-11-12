@@ -102,7 +102,10 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public abstract static function getChainedByMaster($masterData, $chainedData, $select = array());
+    public static function getChainedByMaster($masterData, $chainedData, $chainedType, $select = array())
+    {
+        return self::_getChainedByMaster($masterData, $chainedData, $chainedType, $select);
+    }
 
     protected static final function _getChainedByMaster($masterData, $chainedData, $chainedType, $select = array())
     {

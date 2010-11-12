@@ -29,7 +29,7 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
 
             // Komponente von Master bei der der Cache gelöscht wird
             $component = Vps_Component_Data_Root::getInstance()
-                ->getComponentById($componentId, array('ignoreVisible' => true));
+                ->getComponentByDbId($componentId, array('ignoreVisible' => true));
             if (!$component) continue;
 
             // Alle zur Mastercomponent gehörigen ChainedComponents finden:
@@ -39,8 +39,8 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
             // vom Master mit der der Chained ersetzen
             $chainedFound = false;
             $c = $component;
+            $idPart = '';
             while ($c) {
-
                 $chainedType = Vpc_Abstract::getFlag($c->componentClass, 'chainedType');
                 if ($chainedType && isset($chainedTypes[$chainedType])) {
                     $chainedFound = true;
@@ -49,14 +49,14 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
                         'ignoreVisible' => true
                     ));
                     foreach ($chainedComponents as $chainedComponent) {
-                        $part2 = substr($componentId, strlen($c->componentId));
-                        $dbId = $chainedComponent->dbId . $part2;
+                        $cc = Vpc_Chained_Abstract_Component::getChainedByMaster(
+                            $component, $chainedComponent, $chainedType, array('ignoreVisible' => true)
+                        );
                         $ret[] = array(
-                            'db_id' => $dbId
+                            'db_id' => $cc->dbId
                         );
                     }
                 }
-
                 $c = $c->parent;
             }
             if (!$chainedFound) throw new Vps_Exception("No Flag chainedType set for {$component->componentClass} or parent");

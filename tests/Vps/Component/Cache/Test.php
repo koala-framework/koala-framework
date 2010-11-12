@@ -234,27 +234,6 @@ class Vps_Component_Cache_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $cacheModel->countActiveRows());
     }
 
-    public function testDeleteByChained()
-    {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Cache_Chained_Root');
-        $cache = Vps_Component_Cache::getInstance();
-        Vps_Component_Cache::saveStaticMeta();
-        $root = Vps_Component_Data_Root::getInstance();
-        $master = $root->getChildComponent('-master');
-        $slave = $root->getChildComponent('-slave');
-        Vps_Component_ModelObserver::getInstance()->setSkipFnf(false);
-
-        $this->assertEquals('foo', $master->render());
-        $this->assertEquals('foo', $slave->render());
-        $row = Vps_Model_Abstract::getInstance('Vps_Component_Cache_Chained_Master_Model')
-            ->getRow('root-master');
-        $row->value = 'bar';
-        $row->save();
-        Vps_Component_ModelObserver::getInstance()->process();
-        $this->assertEquals('bar', $master->render());
-        $this->assertEquals('bar', $slave->render());
-    }
-
     public function testStaticCallback()
     {
         $cache = Vps_Component_Cache::getInstance();
