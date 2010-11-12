@@ -46,7 +46,7 @@ abstract class Vps_Component_Cache
         }
         // für componentLink: alle Komponenten, die als Page erstellt werden können
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $setting) {
                 $generator = current(Vps_Component_Generator_Abstract::getInstances(
                     $class, array('generator' => $key))
                 );
@@ -54,7 +54,11 @@ abstract class Vps_Component_Cache
                     $generator->getGeneratorFlag('page') &&
                     $generator->getGeneratorFlag('table')
                 ) {
-                    $meta = new Vps_Component_Cache_Meta_Static_ComponentLink($generator->getModel());
+                    $pattern = '{id}';
+                    if (isset($setting['dbIdShortcut'])) {
+                        $pattern = $setting['dbIdShortcut'] . $pattern;
+                    }
+                    $meta = new Vps_Component_Cache_Meta_Static_ComponentLink($generator->getModel(), $pattern);
                     foreach ($generator->getChildComponentClasses() as $c) {
                         self::getInstance()->saveMeta($c, $meta);
                     }
