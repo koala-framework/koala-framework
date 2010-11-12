@@ -35,18 +35,20 @@ class Vps_Util_FeedFetcher_Feed
         $proxies = self::getFetchProxyScripts();
         if ($proxies) {
             $proxyDomains = array(
-                'google.com',
-                'twitter.com'
+                '#google\.[a-z]+$#',
+                '#twitter\.com$#'
             );
             $useProxy = false;
             $domain = parse_url($url, PHP_URL_HOST);
             foreach ($proxyDomains as $d) {
-                if (substr($domain, -strlen($d)) == $d) {
+                if (preg_match($d, $domain)) {
                     $useProxy = true;
                 }
             }
-            shuffle($proxies);
-            $url = $proxies[0]['url'].'?url='.rawurlencode($url).'&hash='.md5($url.'w3rklslfsdlj');
+            if ($useProxy) {
+                shuffle($proxies);
+                $url = $proxies[0]['url'].'?url='.rawurlencode($url).'&hash='.md5($url.'w3rklslfsdlj');
+            }
         }
         return $url;
     }
@@ -57,6 +59,10 @@ class Vps_Util_FeedFetcher_Feed
             self::$_fetchProxyScripts = array();
             $m = Vps_Model_Abstract::getInstance('fetchProxyScripts');
             if ($m) {
+                $s = new Vps_Model_Select();
+                $s->whereEquals('active', true);
+                $s->limit(5);
+                $s->order(Vps_Model_Select::ORDER_RAND);
                 foreach (Vps_Model_Abstract::getInstance($m)->export(Vps_Model_Interface::FORMAT_ARRAY, $s) as $r) {
                     self::$_fetchProxyScripts[] = array(
                         'id' => $r['id'],
