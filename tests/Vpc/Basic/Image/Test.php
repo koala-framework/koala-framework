@@ -132,6 +132,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
 
     public function testClearOutputCache()
     {
+        Vps_Registry::get('config')->debug->mediaCache = true;
         Vps_Media::getOutputCache()->clean();
 
         Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled = 0;
