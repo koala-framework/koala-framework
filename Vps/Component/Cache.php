@@ -158,7 +158,7 @@ abstract class Vps_Component_Cache
         return array_unique($ret);
     }
 
-    public function cleanByRow(Vps_Model_Row_Abstract $row)
+    public function cleanByRow($row)
     {
         //p($this->_getModelname($row));
         $wheres = array();
