@@ -76,7 +76,10 @@ class Vps_Srpc_Server
             $result = serialize($result);
         } catch (Exception $e) {
             try {
-                $result = @serialize($e);
+                // das @ hier kann weg, wenns ein fatal error wird dann kommt
+                // der eh im srpc client wieder auf. Alle anderen werden hier
+                // eh ge-catch't und $result wird false
+                $result = serialize($e);
             } catch(Exception $e2) {
                 $result = false;
             }
