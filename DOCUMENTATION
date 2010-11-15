@@ -44,7 +44,8 @@
 - Posts / Gästebuch zum Post freischalten an Admin
     Verwendet: Vpc_Mail_Component, Vps_Mail
     Ablauf: Write_Form_Component _afterInsert() schickt mail mit Vpc_Mail_Component
-            TODO UNBEDINGT GANZ WICHTIG: Content unsetten (unterkomponente)
+
+    TODO UNBEDINGT GANZ WICHTIG: Content unsetten (unterkomponente)
 
 - Posts / Forum Observe
     Verwendet: Vps_Mail_Template, Vps_Mail

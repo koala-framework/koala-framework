@@ -15,7 +15,7 @@ interface Vps_Mail_Interface
     public function setBodyText($text);
     public function setBodyHtml($html);
 
-    public function getMailContent($type = Vps_Model_Mail_Row::GET_MAIL_CONTENT_AUTO);
+    public function getMailContent($type = Vps_Model_Mail_Row::MAIL_CONTENT_AUTO);
     public function getFrom();
     public function getHeaders();
     public function getRecipients();
