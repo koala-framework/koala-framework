@@ -11,6 +11,7 @@ class Vps_Mail_Template implements Vps_Mail_Interface
     public function __construct($template, $masterTemplate = 'Master')
     {
         $this->_view = new Vps_Mail_Template_View($template, $masterTemplate);
+        $this->_mail = new Vps_Mail();
     }
 
     public function __set($key, $val)
@@ -153,15 +154,15 @@ class Vps_Mail_Template implements Vps_Mail_Interface
     }
 
     // constants for type defined in Vps_Model_Mail_Row
-    public function getMailContent($type = Vps_Model_Mail_Row::GET_MAIL_CONTENT_AUTO)
+    public function getMailContent($type = Vps_Model_Mail_Row::MAIL_CONTENT_AUTO)
     {
-        if ($type == Vps_Model_Mail_Row::GET_MAIL_CONTENT_AUTO) {
+        if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_AUTO) {
             $ret = $this->_getHtmlMailContent();
             if (is_null($ret)) $ret = $this->_getTextMailContent();
             return $ret;
-        } else if ($type == Vps_Model_Mail_Row::GET_MAIL_CONTENT_HTML) {
+        } else if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_HTML) {
             return $this->_getHtmlMailContent();
-        } else if ($type == Vps_Model_Mail_Row::GET_MAIL_CONTENT_TEXT) {
+        } else if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_TEXT) {
             return $this->_getTextMailContent();
         }
 

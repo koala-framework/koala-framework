@@ -59,11 +59,6 @@ class Vps_Mail_Template_View extends Vps_View_Mail
         $this->applicationName = Vps_Registry::get('config')->application->name;
     }
 
-    public function assign($spec, $value = null)
-    {
-        return $this->assign($spec, $value);
-    }
-
     public function getTxtTemplate()
     {
         return $this->_txtTemplate;
