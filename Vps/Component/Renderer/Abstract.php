@@ -46,8 +46,6 @@ abstract class Vps_Component_Renderer_Abstract
         return $ret;
     }
 
-    protected function _formatRenderInfo($type, $config) {}
-
     /**
      * Eigentliche Render-Schleife
      *
