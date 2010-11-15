@@ -38,9 +38,11 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
 
         $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Customer')));
 
+
         $formComponent = Vpc_Abstract::getChildComponentClass($this->_getParam('class'), 'child', 'form');
-        $customerForm = $fs->add(Vpc_Abstract_Form::createComponentForm($formComponent, 'form'));
-        $customerForm->setIdTemplate('{0}');
+        $formClass = Vpc_Admin::getComponentClass($formComponent, 'FrontendForm');
+        $customerForm = new $formClass('form', $formComponent);
+        $fs->add($customerForm);
         unset($customerForm->fields['payment']);
         foreach ($customerForm->fields as $f) {
             if ($f->getHideFieldInBackend()) {
