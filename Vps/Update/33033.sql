@@ -1,3 +1,4 @@
+#tags: vpc
 DROP TABLE IF EXISTS 
 `cache_component` ,
 `cache_component_fields` ,
