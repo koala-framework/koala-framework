@@ -106,14 +106,16 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheMeta($class)
+    public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $class = Vpc_Abstract::getChildComponentClass($class, 'groups');
+        /* TODO Cache
+        $class = Vpc_Abstract::getChildComponentClass($componentClass, 'groups');
         $class = Vpc_Abstract::getChildComponentClass($class, 'detail');
         $class = Vpc_Abstract::getChildComponentClass($class, 'child', 'posts');
         $ret[] = new Vps_Component_Cache_Meta_Static_Model(Vpc_Abstract::getSetting($class, 'ownModel'));
         $ret[] = new Vps_Component_Cache_Meta_Static_Model(Vps_Registry::get('config')->user->model);
+        */
         return $ret;
     }
 }

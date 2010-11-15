@@ -49,7 +49,7 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
                 $generator = current(Vps_Component_Generator_Abstract::getInstances(
                     $componentClass, array('generator' => $key))
                 );
-                $ret[] = Vps_Component_Cache_Meta_Static_Model($generator->getModel());
+                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel());
             }
         }
         $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model', '{componentId}');
