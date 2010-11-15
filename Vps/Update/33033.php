@@ -1,4 +1,5 @@
 <?php
+#tags: vpc
 class Vps_Update_33033 extends Vps_Update
 {
     public function update()

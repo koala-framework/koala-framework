@@ -1,4 +1,5 @@
 #tags: vps
+DROP TABLE IF EXISTS `vps_redirects`;
 CREATE TABLE  `vps_redirects` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `type` ENUM(  'path','domain', 'domainPath' ) NOT NULL ,
