@@ -6,7 +6,6 @@ class Vpc_Abstract_ListRandom_Component extends Vpc_Abstract_List_Component
     {
         $ret = parent::getSettings();
         $ret['limit'] = 1;
-        $ret['partialClass'] = 'Vps_Component_Partial_Random';
         return $ret;
     }
 
@@ -15,6 +14,7 @@ class Vpc_Abstract_ListRandom_Component extends Vpc_Abstract_List_Component
         $ret = Vpc_Abstract::getTemplateVars();
         return $ret;
     }
+
     public function getPartialVars($partial, $nr, $info)
     {
         if (!$partial instanceof Vps_Component_Partial_Random)
@@ -26,6 +26,7 @@ class Vpc_Abstract_ListRandom_Component extends Vpc_Abstract_List_Component
             $this->getData()->getChildComponent($select)
         );
     }
+
     public function getPartialParams()
     {
         $ret = array();
@@ -34,8 +35,8 @@ class Vpc_Abstract_ListRandom_Component extends Vpc_Abstract_List_Component
         return $ret;
     }
 
-    public function getPartialCacheVars($nr)
+    public function getPartialClass()
     {
-        return array($this->_getCacheVars());
+        return 'Vps_Component_Partial_Random';
     }
 }
