@@ -8,7 +8,6 @@ class Vpc_Root_CategoryGenerator extends Vps_Component_Generator_Table
     {
         $ret = parent::getPagesControllerConfig($component, $generatorClass);
         $ret['icon'] = 'folder';
-        $ret['expanded'] = true;
         return $ret;
     }
 
@@ -34,5 +33,12 @@ class Vpc_Root_CategoryGenerator extends Vps_Component_Generator_Table
             return null;
         }
         return Vps_Component_Data_Root::getInstance()->getComponentsBySameClass($this->_class);
+    }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['showInPageTreeAdmin'] = true;
+        return $ret;
     }
 }

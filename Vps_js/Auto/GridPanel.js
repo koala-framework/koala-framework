@@ -2,6 +2,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     layout: 'fit',
 
+    // true, false, integer. If integer: after x filters another new tbar is generated
+    filtersInSeparateTbar: false,
+
     initComponent : function()
     {
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
@@ -460,10 +463,20 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.filters = new Vps.Auto.FilterCollection(meta.filters, this);
         this.filters.each(function(filter) {
             filter.on('filter', function(f, params) {
-                this.load(params);
+                this.applyBaseParams(params);
+                this.load();
             }, this);
         }, this);
-        this.filters.applyToTbar(gridConfig.tbar);
+
+        if (this.filtersInSeparateTbar === false || (
+            typeof this.filtersInSeparateTbar != 'boolean' && this.filtersInSeparateTbar >= 1
+        )) {
+            if (this.filtersInSeparateTbar) {
+                this.filters.applyToTbar(gridConfig.tbar, this.filtersInSeparateTbar);
+            } else {
+                this.filters.applyToTbar(gridConfig.tbar);
+            }
+        }
 
         if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv || meta.buttons.reload) {
             gridConfig.tbar.add('->');
@@ -504,6 +517,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
         if (gridConfig.tbar.length == 0 && !alwaysKeepTbar) {
             delete gridConfig.tbar;
+        }
+
+        gridConfig.filtersInSeparateTbar = this.filtersInSeparateTbar;
+        if (this.filtersInSeparateTbar) {
+            gridConfig.filters = this.filters;
         }
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
@@ -667,19 +685,19 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.reload();
                 this.fireEvent('datachange', r);
                 if (cb.success) {
-                    cb.success.apply(cb.scope, arguments)
+                    cb.success.apply(cb.scope, arguments);
                 }
             },
             failure: function() {
                 this.getAction('save').enable();
                 if (cb.failure) {
-                    cb.failure.apply(cb.scope, arguments)
+                    cb.failure.apply(cb.scope, arguments);
                 }
             },
             callback: function() {
                 this.el.unmask();
                 if (cb.callback) {
-                    cb.callback.apply(cb.scope, arguments)
+                    cb.callback.apply(cb.scope, arguments);
                 }
             },
             scope  : this
@@ -969,7 +987,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!this.getStore()) {
             Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
             Ext.Ajax.request({
-                mask: true,
+                mask: this.el,
                 url: this.controllerUrl+'/json-data',
                 params: params,
                 success: function(response, options, r) {

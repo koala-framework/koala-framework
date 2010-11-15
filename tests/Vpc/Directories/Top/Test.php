@@ -21,8 +21,8 @@ class Vpc_Directories_Top_Test extends Vpc_TestAbstract
     {
         $dir = $this->_root->getComponentById('root_top');
         $this->assertNotNull($dir);
-        $vars = $dir->getChildComponent('-view')->getComponent()->getTemplateVars();
-        $this->assertEquals($vars['partialParams']['count'], 5);
+        $partialParams = $dir->getChildComponent('-view')->getComponent()->getPartialParams();
+        $this->assertEquals($partialParams['count'], 5);
         $paging = $dir->getChildComponent('-view')->getChildComponent('-paging');
         $this->assertEquals($paging->getComponent()->getCount(), 5);
     }

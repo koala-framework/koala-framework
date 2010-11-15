@@ -9,6 +9,7 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         sleep(1);
+        Vps_Model_Abstract::clearInstances();
     }
     public function testNodes()
     {

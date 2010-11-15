@@ -73,6 +73,50 @@ class Vps_Component_Cache
         $this->_model = $model;
     }
 
+    public function saveCacheVars($component, $meta, $cacheId = null)
+    {
+        foreach ($meta as $m) {
+            if (is_string($m)) {
+                $m = array(
+                    'model' => $m
+                );
+            }
+            if (is_object($m)) {
+                if ($m instanceof Vps_Model_Row_Abstract) {
+                    $model = $m->getModel();
+                    if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
+                } else if ($m instanceof Zend_Db_Table_Row_Abstract) {
+                    $model = $m->getTable();
+                }
+                $m = array(
+                    'model' => get_class($model),
+                    'id' => $m->id
+                );
+            }
+            if (!isset($m['model'])) {
+                throw new Vps_Exception('getCacheVars for ' . $component->componentClass . ' ('.$component->componentId.') must deliver model');
+            }
+            $model = $m['model'];
+            $id = isset($m['id']) ? $m['id'] : null;
+            if (isset($m['callback']) && $m['callback']) {
+                $type = Vps_Component_Cache::META_CALLBACK;
+                $value = $component->componentId;
+            } else if (is_null($id)) {
+                $type = Vps_Component_Cache::META_COMPONENT_CLASS;
+                $value = $component->componentClass;
+            } else {
+                $type = Vps_Component_Cache::META_CACHE_ID;
+                $value = $cacheId;
+            }
+            if (isset($m['componentId'])) {
+                $value = $this->getCacheId($m['componentId']);
+            }
+            $field = isset($m['field']) ? $m['field'] : '';
+            $this->saveMeta($model, $id, $value, $type, $field);
+        }
+        return $meta;
+    }
+
     public function save($content, $cacheId, $componentClass = '', $lifetime = null)
     {
         $lastModified = time();
@@ -190,6 +234,10 @@ class Vps_Component_Cache
 
     public function clean($mode = self::CLEANING_MODE_META, $value = null)
     {
+        // ignore_user_abort, damit beim clientseitigen Unterbrechen vom Cache löschen (zB. weil
+        // es zu lange dauert) es trotzdem fertig ausgeführt wird, damit eventuelle Fehler oder
+        // slow queries in das fehlerlog kommen
+        ignore_user_abort(true);
         if ($mode == Vps_Component_Cache::CLEANING_MODE_META) {
             $id = 'null';
             if ($value instanceof Vps_Model_Interface) {
@@ -199,7 +247,7 @@ class Vps_Component_Cache
                 }
                 $modelname = get_class($model);
                 $select = $this->getMetaModel()->select()->where(
-                    new Vps_Model_Select_Expr_Equals('model', $modelname)
+                    new Vps_Model_Select_Expr_Equal('model', $modelname)
                 );
                 $sqlInsert = '';
             } else {
@@ -218,7 +266,7 @@ class Vps_Component_Cache
                 $modelname = get_class($model);
                 $fields = $this->_getFields($modelname);
                 if (!$fields) $fields = array('');
-                $or = array(new Vps_Model_Select_Expr_Equals('id', ''));
+                $or = array(new Vps_Model_Select_Expr_Equal('id', ''));
                 $sqlOr = '';
                 foreach ($fields as $field) {
                     if ($field != '') {
@@ -228,14 +276,14 @@ class Vps_Component_Cache
                     }
                     $sqlOr .= "OR (m.id='$id' AND m.field='$field')";
                     $or[] = new Vps_Model_Select_Expr_And(array(
-                        new Vps_Model_Select_Expr_Equals('id', $id),
-                        new Vps_Model_Select_Expr_Equals('field', $field)
+                        new Vps_Model_Select_Expr_Equal('id', $id),
+                        new Vps_Model_Select_Expr_Equal('field', $field)
                     ));
                 }
                 $sqlInsert = "AND (m.id = '' $sqlOr)";
                 $select = $this->getMetaModel()->select()->where(
                     new Vps_Model_Select_Expr_And(array(
-                        new Vps_Model_Select_Expr_Equals('model', $modelname),
+                        new Vps_Model_Select_Expr_Equal('model', $modelname),
                         new Vps_Model_Select_Expr_Or($or)
                     ))
                 );
@@ -269,7 +317,7 @@ class Vps_Component_Cache
                     $this->clean(self::CLEANING_MODE_ID, $metaRow->value);
                 } else if ($metaRow->type == self::META_CALLBACK) {
                     $component = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByDbId($metaRow->value, array('ignoreVisible' => true));
+                        ->getComponentById($metaRow->value, array('ignoreVisible' => true));
                     if ($component) {
                         $component->getComponent()->onCacheCallback($value);
                         Vps_Benchmark::cacheInfo("Cache: Callback for component {$component->componentId} ({$component->componentClass}) called.");
@@ -390,7 +438,7 @@ class Vps_Component_Cache
                 $pageId = $this->_getPageIdFromComponentId($id);
                 $or[] = new Vps_Model_Select_Expr_And(array(
                     new Vps_Model_Select_Expr_Like('id', $id . '%'),
-                    new Vps_Model_Select_Expr_Equals('page_id', $pageId)
+                    new Vps_Model_Select_Expr_Equal('page_id', $pageId)
                 ));
                 $values[$id] = null;
             }

@@ -99,17 +99,9 @@ class Vps_Mail extends Zend_Mail implements Vps_Mail_Interface
             parent::addBcc($mailSendAllBcc);
         }
 
-        if (isset($_SERVER['HTTP_HOST'])) {
-            $host = $_SERVER['HTTP_HOST'];
-        } else {
-            $host = Vps_Registry::get('config')->server->domain;
-        }
-        $hostNonWww = preg_replace('#^www\\.#', '', $host);
-
         if ($this->getFrom() == null) {
-            $fromName = str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->name);
-            $fromAddress = str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->address);
-            $this->setFrom($fromAddress, $fromName);
+            $sender = $this->getSenderFromConfig();
+            $this->setFrom($sender['address'], $sender['name']);
         }
 
         // in service mitloggen wenn url vorhanden
@@ -135,5 +127,19 @@ class Vps_Mail extends Zend_Mail implements Vps_Mail_Interface
         }
 
         return parent::send($transport);
+    }
+
+    public static function getSenderFromConfig()
+    {
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = Vps_Registry::get('config')->server->domain;
+        }
+        $hostNonWww = preg_replace('#^www\\.#', '', $host);
+        return array(
+            'address' => str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->address),
+            'name' => str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->name)
+        );
     }
 }

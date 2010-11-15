@@ -252,7 +252,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         $queryId = $this->getRequest()->getParam('queryId');
         if ($queryId) {
-            $ret->where(new Vps_Model_Select_Expr_Equals($this->_primaryKey, $queryId));
+            $ret->where(new Vps_Model_Select_Expr_Equal($this->_primaryKey, $queryId));
         }
 
         $where = $this->_getWhere();
@@ -704,31 +704,36 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->_helper->viewRenderer->setNoRender();
     }
 
-    private function _getExportData($onlyShowIn, $maxRows = null)
+    private function _getExportData($onlyShowIn, $calcEstimatedMemUsageType, $memoryLimitMb = 0)
     {
         if (!isset($this->_model)) {
             $rowSet = $this->_fetchData(null, null, null);
+            $countRows = count($rowSet);
         } else {
             $sel = $this->_getSelect();
             if (is_null($sel)) return array();
-            if (!is_null($maxRows) && $this->_model->countRows($sel) > $maxRows) {
-                throw new Vps_ClientException(trlVps("This export is limited to {0} rows.", $maxRows));
-            }
+            $countRows = $this->_model->countRows($sel);
             $rowSet = $this->_model->getRows($sel);
         }
 
-        if ($rowSet && count($rowSet)) {
+        if ($rowSet && $countRows) {
             $this->_progressBar = new Zend_ProgressBar(
                 new Vps_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
-                0, (count($rowSet) * 1.05) * 3
+                0, ($countRows * 1.05) * 3
             );
 
             // Index 0 reserved for column headers
             $exportData = array(0 => array());
 
+            $estimatedMemoryUsage = memory_get_usage();
+            $memForRows = array();
+            $rowLenghtes = array();
+
             $columns = $columnsHeader = array();
             foreach ($rowSet as $row) {
-                if (is_array($row)) {
+                $rowBeginMemUsage = memory_get_usage();
+
+                if (is_array($row)) { // wenn _fetchData() überschrieben wurde
                     $row = (object)$row;
                 }
                 if (!$this->_hasPermissions($row, 'load')) {
@@ -766,6 +771,33 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 }
                 $exportData[] = $columns;
 
+                // zum berechnen des geschätzten speicherverbrauchs
+                if ($memoryLimitMb) {
+                    if (count($rowLenghtes) == 40) {
+                        // text length
+                        $estimatedMemoryUsage += (array_sum($rowLenghtes) / count($rowLenghtes)) * $countRows;
+
+                        // daten sammeln in dieser schleife hier
+                        $estimatedMemoryUsage += (array_sum($memForRows) / count($memForRows)) * $countRows;
+
+                        // xls export
+                        if ($calcEstimatedMemUsageType == 'xls') {
+                            $estimatedMemoryUsage += 1400 * $countRows * count($columns);
+                        }
+                        /**
+                         * TODO: Calculating for csv
+                         */
+
+                        if (($estimatedMemoryUsage / 1024) / 1024 > $memoryLimitMb) {
+                            throw new Vps_Exception_Client(trlVps("Too many rows to export. Try exporting two times with fewer rows."));
+                        }
+                    }
+                    if (count($rowLenghtes) < 41) {
+                        $memForRows[] = (memory_get_usage() - $rowBeginMemUsage);
+                        $rowLenghtes[] = strlen(implode('', $columns));
+                    }
+                }
+
                 $this->_progressBar->next(2, trlVps('Collecting data'));
             }
             $exportData[0] = $columnsHeader;
@@ -788,7 +820,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         ini_set('memory_limit', "384M");
         set_time_limit(600); // 10 minuten
 
-        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_CSV);
+        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_CSV, 'csv', 0);
 
         if (!is_null($data)) {
             $csvRows = array();
@@ -850,7 +882,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             throw new Vps_Exception("XLS is not allowed.");
         }
 
-        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_XLS, 5000);
+        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_XLS, 'xls', 640);
 
         $xls = new PHPExcel();
         $xls->getProperties()->setCreator("Vivid Planet Software GmbH");
@@ -909,13 +941,11 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 } else if (strlen($text) == 19 && preg_match('/^[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2} [0-9]{2,2}:[0-9]{2,2}:[0-9]{2,2}$/', $text)) {
                     $text = $helperDateTime->dateTime($text);
                 }
-
                 $sheet->setCellValueExplicit($cell, $text, $cellType);
             }
 
-            $this->_progressBar->next(1, trlVps('Writing data'));
+            $this->_progressBar->next(1, trlVps('Writing data. Please be patient.'));
         }
-
         // write the file
         $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
         $downloadkey = uniqid();

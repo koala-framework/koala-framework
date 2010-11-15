@@ -13,11 +13,21 @@ class Vpc_Menu_Expanded_Component extends Vpc_Menu_Abstract
         $ret = parent::getTemplateVars();
 
         $ret['menu'] = $this->_getMenuData();
-        foreach ($ret['menu'] as $m) {
-            $m->submenu = $this->_getMenuData($m);
+        foreach ($ret['menu'] as $k=>$m) {
+            $ret['menu'][$k]['submenu'] = $this->_getMenuData($m['data']);
         }
         $ret['level'] = $this->_getSetting('level');
 
         return $ret;
     }
+
+    public function hasContent()
+    {
+        $c = count($this->_getMenuData());
+        if ($c > 0) {
+            return true;
+        }
+        return false;
+    }
+
 }

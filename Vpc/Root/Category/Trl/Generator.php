@@ -4,17 +4,24 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
     public function getPagesControllerConfig($component)
     {
         $ret = parent::getPagesControllerConfig($component);
-
         foreach ($ret['actions'] as &$a) $a = false;
         $ret['actions']['properties'] = true;
         $ret['actions']['visible'] = true;
 
+        // Bei Pages muss nach oben gesucht werden, weil Klasse von Generator
+        // mit Komponentklasse übereinstimmen muss
+        $c = $component;
+        while ($c && $c->componentClass != $this->getClass()) {
+            $c = $c->parent;
+        }
+        if ($c) { //TODO warum tritt das auf?
+            $ret['editControllerComponentId'] = $c->componentId;
+        }
         return $ret;
     }
 
     public function getChildData($parentData, $select = array())
     {
-
         $filename = null;
         $limit = null;
         $ignoreVisible = $select->hasPart(Vps_Component_Select::IGNORE_VISIBLE) ?
@@ -24,6 +31,8 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
             $showInvisible = Vps_Registry::get('config')->showInvisible;
         }
         if ($showInvisible) $ignoreVisible = true;
+
+        $select = clone $select;
 
         // Nach Filename selbst suchen, da ja andere Sprache
         if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
@@ -75,14 +84,13 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         $ret['parent'] = $parentData;
 
         $dbRow = $this->_getModel()->getRow($ret['componentId']);
-
         if (!$dbRow) {
             $dbRow = $this->_getModel()->createRow(array(
                 'component_id' => $ret['componentId'],
                 'name' => $row->getRow()->name,
                 'filename' => $row->getRow()->filename,
                 'visible' => $row->isHome, //home ist standardmäßig immer sichtbar, andere seiten nicht
-                'custom_filename' => $row->getRow()->custom_filename
+                'custom_filename' => false
             ));
         }
         $ret['row'] = $dbRow;
@@ -100,5 +108,14 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         } else {
             return parent::_getDataClass($config, $id);
         }
+    }
+
+    public function getStaticCacheVarsForMenu()
+    {
+        $ret = parent::getStaticCacheVarsForMenu();
+        $ret[] = array(
+            'model' => $this->_getModel()
+        );
+        return $ret;
     }
 }

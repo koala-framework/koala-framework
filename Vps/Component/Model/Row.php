@@ -23,7 +23,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        $fields = array('parent_id', 'pos', 'visible', 'name', 'is_home');
+        $fields = array('parent_id', 'pos', 'visible', 'is_home');
         if (!$this->_tableLoaded &&
             in_array($name, $fields) &&
             is_numeric($this->componentId)
@@ -38,9 +38,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
         }
         if ($name == 'id') $name = 'componentId';
         if (isset($this->_data->$name)) {
-            $ret = $this->_data->$name;
-            if ($name == 'tags') $ret = implode(',', $ret);
-            return $ret;
+            return $this->_data->$name;;
         } else if ($name == 'parent_id' && $this->_data->parent) {
             return $this->_data->parent->componentId;
         } else {
@@ -58,15 +56,20 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function save()
     {
         $this->_beforeSave();
-        $m = $this->_data->row->getModel();
-        $primaryKey = $m->getPrimaryKey();
-        $id = $this->_data->row->$primaryKey;
-        if ($id) {
-            $this->_beforeUpdate();
-            $row = $this->_data->row;
+        if ($this->_data->generator instanceof Vpc_Root_Category_Generator) {
+            $id = $this->_data->dbId;
+            $row = $this->_data->generator->getModel()->getRow($id);
         } else {
-            $this->_beforeInsert();
-            $row = $m->createRow();
+            $m = $this->_data->row->getModel();
+            $primaryKey = $m->getPrimaryKey();
+            $id = $this->_data->row->$primaryKey;
+            if ($id) {
+                $this->_beforeUpdate();
+                $row = $this->_data->row;
+            } else {
+                $this->_beforeInsert();
+                $row = $m->createRow();
+            }
         }
         foreach ($this->_setValues as $key) {
             $row->$key = $this->_data->$key;

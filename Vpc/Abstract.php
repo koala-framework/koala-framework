@@ -340,9 +340,12 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $ret;
     }
 
-    protected function _getPlaceholder()
+    protected function _getPlaceholder($k = null)
     {
         $ret = $this->_getSetting('placeholder');
+        if ($k) {
+            return $this->getData()->trlStaticExecute($ret[$k]);
+        }
         foreach ($ret as $k => $v) {
             $ret[$k] = $this->getData()->trlStaticExecute($v);
         }
@@ -451,14 +454,15 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     public static function getComponentClassesByParentClass($class)
     {
+        if (!is_array($class)) $class = array($class);
         $ret = array();
         foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            if ((strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c) == $class) {
+            if (in_array($c, $class) || in_array((strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c), $class)) {
                 $ret[] = $c;
                 continue;
             }
             foreach (Vpc_Abstract::getParentClasses($c) as $p) {
-                if ((strpos($p, '.') ? substr($p, 0, strpos($p, '.')) : $p) == $class) {
+                if (in_array($p, $class)) {
                     $ret[] = $c;
                     break;
                 }

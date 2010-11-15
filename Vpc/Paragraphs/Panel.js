@@ -19,6 +19,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
     cls: 'vpc-paragraphs',
     showDelete: true,
     showPosition: true,
+    showCopyPaste: true,
     initComponent : function()
     {
         this.addEvents('editcomponent', 'gotComponentConfigs');
@@ -35,6 +36,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             width: this.previewWidth,
             showDelete: this.showDelete,
             showPosition: this.showPosition,
+            showCopyPaste: this.showCopyPaste,
             listeners: {
                 scope: this,
                 'delete': this.onDelete,
@@ -76,7 +78,6 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             text : trlVps('All Visible'),
             icon : '/assets/silkicons/tick.png',
             cls  : 'x-btn-text-icon',
-            enableToggle: true,
             handler: function(b) {
                 Ext.Msg.show({
                     title: trlVps('All Visible'),
@@ -97,7 +98,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
                             });
                         }
                     }
-                })
+                });
             },
             scope: this
         });
@@ -145,7 +146,9 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         if (this.actions.addparagraph) {
             this.tbar.push('-');
             this.tbar.push(this.actions.addparagraph);
-            this.tbar.push(this.actions.copyPaste);
+            if (this.showCopyPaste) {
+                this.tbar.push(this.actions.copyPaste);
+            }
         }
         this.tbar.push('->');
         this.tbar.push(this.actions.makeAllVisible);
@@ -350,12 +353,18 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             params: params,
             success: function(response, options, result) {
                 this.fireEvent('gotComponentConfigs', result.componentConfigs);
-                if (result.editComponents.length) {
-                    var data = Vps.clone(result.editComponents[0]);
-                    data.componentId = this.getBaseParams().componentId + '-' + result.id;
-                    data.editComponents = result.editComponents;
-                    this.fireEvent('editcomponent', data);
-                } else {
+                var opened = false;
+                result.editComponents.forEach(function(ec) {
+                    if (result.openConfigKey == ec.type) {
+                        var data = Vps.clone(ec);
+                        data.componentId = this.getBaseParams().componentId + '-' + result.id;
+                        data.editComponents = result.editComponents;
+                        this.fireEvent('editcomponent', data);
+                        opened = true;
+                        return false;
+                    }
+                }, this);
+                if (!opened) {
                     this.reload();
                 }
             },

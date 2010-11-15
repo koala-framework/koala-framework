@@ -9,7 +9,7 @@ class Vpc_Columns_Component extends Vpc_Abstract_List_Component
         $ret['componentName'] = trlVps('Columns');
         $ret['componentIcon'] = new Vps_Asset('application_tile_horizontal');
 
-        $ret['extConfig'] = 'Vpc_Abstract_List_ExtConfigEditButton';
+        $ret['extConfig'] = 'Vpc_Columns_ExtConfig';
         return $ret;
     }
 
@@ -17,7 +17,9 @@ class Vpc_Columns_Component extends Vpc_Abstract_List_Component
     {
         $ret = parent::getTemplateVars();
         foreach($ret['listItems'] as $k => $v) {
-            $ret['listItems'][$k]['width'] = $v['data']->row->width;
+            $w = $v['data']->row->width;
+            if (is_numeric($w)) $w .= 'px'; //standard-einheit
+            $ret['listItems'][$k]['width'] = $w;
         }
         return $ret;
     }

@@ -28,10 +28,12 @@ class Vps_Form extends Vps_Form_NonTableForm
     protected function _getRowByParentRow($parentRow)
     {
         if ($parentRow && $this->_model instanceof Vps_Model_Field) {
-            return $this->_model->getRowByParentRow($parentRow);
+            $ret = $this->_model->getRowByParentRow($parentRow);
         } else {
-            return $this->getRow($parentRow);
+            $ret = $this->getRow($parentRow);
         }
+        if (is_null($ret)) return $ret;
+        return (object)$ret;
     }
 
     public function prepareSave($parentRow, $postData)
@@ -47,8 +49,7 @@ class Vps_Form extends Vps_Form_NonTableForm
 
     public function save($parentRow, $postData)
     {
-        //wenn form zB in einem CardLayout liegt und deaktivert wurde nicht speichern
-        if ($this->getSave() === false || $this->getInternalSave() === false ) return array();
+        if ($this->getSave() === false) return array();
 
         $row = $this->_getRowByParentRow($parentRow);
         if (!$row) {
@@ -159,6 +160,11 @@ class Vps_Form extends Vps_Form_NonTableForm
 
     public function getRow($parentRow = null)
     {
+        if (!$parentRow && $this->getIdTemplate()) {
+            //tritt auf in Cards bei einer nicht aktiven card (da ist parentRow null)
+            return null;
+        }
+
         $key = 'none';
         if ($parentRow) {
             $key = $parentRow->getInternalId();

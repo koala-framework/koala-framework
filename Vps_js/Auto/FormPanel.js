@@ -73,7 +73,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         //wir in einem Binding sind
         if (!this.autoLoad) return;
 
-        this.load();
+        this.load({}, {focusAfterLoad: this.focusAfterAutoLoad});
     },
 
     onMetaChange : function(meta)
@@ -191,6 +191,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     this.getForm().resetDirty();
                 }
                 var lo = options.loadOptions;
+                if (lo && lo.focusAfterLoad) {
+                    this.focusFirstField()
+                }
                 if (lo && lo.success) {
                     lo.success.call(lo.scope || this, this, result);
                 }
@@ -360,6 +363,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.applyBaseParams({id: 0});
             this.getForm().setDefaultValues();
             this.getForm().clearInvalid();
+            this.focusFirstField();
             this.fireEvent('addaction', this);
 
 			if (this.ownerCt instanceof Ext.TabPanel) {
@@ -419,6 +423,17 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
     getBaseParams : function() {
         return this.baseParams;
+    },
+
+    focusFirstField : function() {
+        var form = this.getForm();
+        if (!form) return;
+        form.items.each(function(i) {
+            if (i.isFormField && !i.disabled) {
+                i.focus();
+                return false;
+            }
+        }, this);
     }
 });
 

@@ -9,6 +9,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private $_generatorsForClassesCache = array();
     private $_currentPage;
     private $_pageGenerators;
+    private $_dataCache = array();
 
     public function __construct($config = array())
     {
@@ -61,10 +62,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         self::reset();
     }
 
-    public static function reset()
+    public static function reset($resetCache = true)
     {
         self::$_instance = null;
-        Vps_Component_Abstract::resetSettingsCache();
+        if ($resetCache) Vps_Component_Abstract::resetSettingsCache();
     }
 
     public function __get($var)
@@ -104,6 +105,11 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     public function getComponentById($componentId, $select = array())
     {
+        if (isset($this->_dataCache[$componentId])) {
+            if (!$select) {
+                return $this->_dataCache[$componentId];
+            }
+        }
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         } else {
@@ -285,7 +291,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-        $cacheId = $class.$select->getHash();
+        $cacheId = (is_array($class) ? implode(',', $class) : $class).$select->getHash();
         if (!isset($this->_componentsByClassCache[$cacheId])) {
 
             $lookingForChildClasses = Vpc_Abstract::getComponentClassesByParentClass($class);
@@ -347,16 +353,13 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         $cacheId = 'genForCls'.$this->getComponentClass().str_replace('.', '_', implode('', $lookingForClasses));
         if (isset($this->_generatorsForClassesCache[$cacheId])) {
-            Vps_Benchmark::count('_getGeneratorsForClasses hit', implode(', ', $lookingForClasses));
         } else if (($generators = $cache->load($cacheId)) !== false) {
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
             }
             $this->_generatorsForClassesCache[$cacheId] = $ret;
-            Vps_Benchmark::count('_getGeneratorsForClasses semi-hit', implode(', ', $lookingForClasses));
         } else {
-            Vps_Benchmark::count('_getGeneratorsForClasses miss', implode(', ', $lookingForClasses));
             $generators = array();
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
                 foreach (Vpc_Abstract::getSetting($c, 'generators') as $key => $generator) {
@@ -428,6 +431,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function setFilename($f)
     {
         $this->_filename = $f;
+    }
+
+    /**
+     * @internal siehe Vps_Component_Generator_Abstract
+     */
+    public function addToDataCache(Vps_Component_Data $d)
+    {
+        $this->_dataCache[$d->componentId] = $d;
     }
 }
 ?>

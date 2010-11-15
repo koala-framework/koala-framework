@@ -229,6 +229,47 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }, this);
         }
     },
+
+    // private
+    // überschrieben wegen spezieller ENTER behandlung im IE die wir nicht wollen
+    fixKeys : function(){ // load time branching for fastest keydown performance
+        if(Ext.isIE){
+            return function(e){
+                var k = e.getKey(), r;
+                if(k == e.TAB){
+                    e.stopEvent();
+                    r = this.doc.selection.createRange();
+                    if(r){
+                        r.collapse(true);
+                        r.pasteHTML('&nbsp;&nbsp;&nbsp;&nbsp;');
+                        this.deferFocus();
+                    }
+                //}else if(k == e.ENTER){
+                    //entfernt, wir wollen dieses verhalten genau so wie der IE es macht
+                }
+            };
+        }else if(Ext.isOpera){
+            return function(e){
+                var k = e.getKey();
+                if(k == e.TAB){
+                    e.stopEvent();
+                    this.win.focus();
+                    this.execCmd('InsertHTML','&nbsp;&nbsp;&nbsp;&nbsp;');
+                    this.deferFocus();
+                }
+            };
+        }else if(Ext.isWebKit){
+            return function(e){
+                var k = e.getKey();
+                if(k == e.TAB){
+                    e.stopEvent();
+                    this.execCmd('InsertText','\t');
+                    this.deferFocus();
+                }
+             };
+        }
+    }(),
+
     onRender: function(ct, position)
     {
         Vps.Form.HtmlEditor.superclass.onRender.call(this, ct, position);
@@ -556,7 +597,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     _insertImage: function(r) {
         var html = '<img src="'+r.imageUrl+'?'+Math.random()+'" ';
         html += 'width="'+r.imageDimension.width+'" ';
-        html += 'height="'+r.imageDimension.height+'" />'
+        html += 'height="'+r.imageDimension.height+'" />';
         this.insertAtCursor(html);
     },
     _modifyImage: function(r) {
@@ -750,7 +791,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 } else {
                     return tag == t;
                 }
-            }
+            };
             while (elm && elm.parentNode &&
                     (!elm.tagName || !isNeededTag(elm.tagName.toLowerCase()))) {
                 elm = elm.parentNode;
@@ -833,20 +874,24 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tag = i[0];
             className = i[1];
         }
-        var range = this.getSelectionRange();
-        if (range) {
-            var span = this.doc.createElement(tag);
-            span.className = className;
-            //TODO: IE kompatibel?
-            range.surroundContents(span);
+        var elm = this.getFocusElement(tag);
+        if (elm && elm.tagName && elm.tagName.toLowerCase() == tag) {
+            elm.className = className;
         } else {
-            var elm = this.getFocusElement(tag);
-            if (elm) {
-                elm.className = className;
+            var range = this.getSelectionRange();
+            if (range) {
+                if (range.surroundContents) {
+                    var span = this.doc.createElement(tag);
+                    span.className = className;
+                    range.surroundContents(span);
+                } else {
+                    //IE
+                    range.pasteHTML('<'+tag+' class="'+className+'">'+range.htmlText+'</'+tag+'>');
+                }
             } else {
-                //TODO: IE kompatibel?
-                this.insertAtCursor('<'+tag+' class="'+className+'">&nbsp;</'+tag+'>');
-                this.win.getSelection().getRangeAt(0).selectNode(this.win.getSelection().focusNode)
+                //auskommentiert weils nicht korrekt funktioniert; einfach gar nichts tun wenn nix markiert
+                //this.insertAtCursor('<'+tag+' class="'+className+'">&nbsp;</'+tag+'>');
+                //this.win.getSelection().getRangeAt(0).selectNode(this.win.getSelection().focusNode);
             }
         }
         this.deferFocus();
@@ -962,6 +1007,38 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     syncValue : function(){
         if (!this.sourceEditMode) {
             Vps.Form.HtmlEditor.superclass.syncValue.call(this);
+        }
+    },
+
+    /**
+     * Protected method that will not generally be called directly. Pushes the value of the textarea
+     * into the iframe editor.
+     */
+    pushValue : function(){
+        if(this.initialized){
+            var v = this.el.dom.value;
+            if(!this.activated && v.length < 1){
+                v = this.defaultValue;
+            }
+            if(this.fireEvent('beforepush', this, v) !== false){
+                //BEGIN ÄNDERUNG
+                if(Ext.isGecko){
+                    //FF kann scheinbar nicht mit strong und em umgehen, mit b und i aber schon
+                    v = v.replace('<strong>', '<b>').replace('</strong>', '</b>');
+                    v = v.replace('<em>', '<i>').replace('</em>', '</i>');
+                }
+                //END ÄNDERUNG
+                this.getEditorBody().innerHTML = v;
+                if(Ext.isGecko){
+                    // Gecko hack, see: https://bugzilla.mozilla.org/show_bug.cgi?id=232791#c8
+                    var d = this.doc,
+                        mode = d.designMode.toLowerCase();
+
+                    d.designMode = mode.toggle('on', 'off');
+                    d.designMode = mode;
+                }
+                this.fireEvent('push', this, v);
+            }
         }
     }
 });

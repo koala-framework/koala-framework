@@ -77,8 +77,8 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
         this.progress.onResize =  function(w, h) {
             var inner = Ext.get(this.el.child('.x-progress-inner')),
                 bar = inner.child('.x-progress-bar'),
-                pt = inner.child('.x-progress-text');
-                ptb = inner.child('.x-progress-text-back'),
+                pt = inner.child('.x-progress-text'),
+                ptb = inner.child('.x-progress-text-back');
             Ext.ProgressBar.superclass.onResize.apply(this, arguments);
             inner.setHeight(h);
             bar.setHeight(h);
@@ -86,22 +86,22 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
             pt.setHeight('auto');
             ptb.setHeight('auto');
             this.syncProgressBar();
-        }
+        };
         this.progress.setSize(200, 16);
         
         this.startTimer = function() {
             var self = this;
             function updateTimer() {
-                self.hTimer = window.setTimeout(updateTimer, 5000)
-                self.tick()
+                self.hTimer = window.setTimeout(updateTimer, 5000);
+                self.tick();
             }
-            this.hTimer = window.setTimeout(updateTimer, 5000)
-        }
+            this.hTimer = window.setTimeout(updateTimer, 5000);
+        };
         
         this.stopTimer = function() {
-            if (this.hTimer != null) window.clearTimeout(this.hTimer)
+            if (this.hTimer != null) window.clearTimeout(this.hTimer);
             this.hTimer = null;
-        }
+        };
         
         this.tick = function() {
             if (this.timerBusy) return;
@@ -119,16 +119,16 @@ Vpc.Newsletter.Detail.MailingPanel = Ext.extend(Vps.Auto.GridPanel, {
                 },
                 scope: this
             });
-        }
+        };
         
         this.setProgress = function(info)
         {
             var progress = 0;
-            if (info.total > 0) progress = info.sent / info.total
+            if (info.total > 0) progress = info.sent / info.total;
             this.progress.updateProgress(progress, Math.round(progress * 100) + '%');
             this.status.el.innerHTML = info.text;
             return (info.state == 'start' || info.state == 'sending');
-        }
+        };
         
         this.status = new Ext.Toolbar.TextItem({'text' : ' ' });
 

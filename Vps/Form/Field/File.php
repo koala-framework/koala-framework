@@ -15,7 +15,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->setAllowOnlyImages(false);
         $this->setMaxResolution(false);
-        $this->setXtype('swfuploadfield');
+        $this->setXtype('vps.file');
         $maxSize = ini_get('upload_max_filesize');
         if (strtolower(substr($maxSize, -1))=='k') {
             $maxSize = substr($maxSize, 0, -1)*1024;
@@ -36,7 +36,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
     public function load($row, $postData = array())
     {
-        if ($this->getSave() === false || $this->getInternalSave() === false) {
+        if ($this->getSave() === false || !$row) {
             return array();
         }
 
@@ -71,7 +71,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     {
         $ret = parent::validate($row, $postData);
 
-        if ($this->getSave() !== false && $this->getInternalSave() !== false) {
+        if ($this->getSave() !== false) {
             $data = $this->_getValueFromPostData($postData);
             if ($data) {
                 $fileModel = $row->getModel()->getReferencedModel($this->getName());
@@ -91,7 +91,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     {
         $postData = parent::processInput($row, $postData);
 
-        if ($this->getSave() === false || $this->getInternalSave() === false) return $postData;
+        if ($this->getSave() === false) return $postData;
 
         if (isset($postData[$this->getFieldName().'_upload_id'])
             && (!isset($postData[$this->getFieldName()])
@@ -138,7 +138,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
-        if ($this->getSave() === false || $this->getInternalSave() === false) return;
+        if ($this->getSave() === false) return;
 
         $ref = $row->getModel()->getReference($this->getName());
         $row->{$ref['column']} = $postData[$this->getFieldName()];

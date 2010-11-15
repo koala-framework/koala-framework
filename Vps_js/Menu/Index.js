@@ -181,7 +181,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 
         this.userToolbar = new Ext.Toolbar({
             renderTo: this.el,
-            style: 'position:absolute;right:0',
+            style: 'position:absolute;right:0'
         });
 
         if (result.fullname && result.userSelfControllerUrl) {

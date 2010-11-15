@@ -40,7 +40,17 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
             ->setListWidth(250);
 
         foreach ($classes as $name => $class) {
-            $forms = Vpc_Admin::getInstance($class)->getLinkTagForms();
+            $forms = array();
+            $admin = Vpc_Admin::getInstance($class);
+            if ($admin instanceof Vpc_Basic_LinkTag_Abstract_Admin) {
+                $forms = $admin->getLinkTagForms();
+            }
+            if (!$forms) {
+                //wenns gar keine forms gibt
+                $card = $cards->add();
+                $card->setTitle(Vpc_Abstract::getSetting($class, 'componentName'));
+                $card->setName($name);
+            }
             foreach ($forms as $k=>$i) {
                 $form = $i['form'];
                 if ($form) {

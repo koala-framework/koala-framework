@@ -187,9 +187,19 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                     'select' => null
                 );
             } else {
-                $select = $sourceModel->select()->where(
-                    new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
-                );
+                if ($sourceModel instanceof Vps_Model_Service) {
+                    $select = $sourceModel->select()->where(
+                        new Vps_Model_Select_Expr_Higher($this->_syncTimeField, $cacheTimestamp)
+                    );
+                } else {
+                    /**
+                     * TODO: Sobald Service Vps_DateTime versteht (>= VPS 1.11)
+                     * oder höher ist, if-abfrage weg und nur das hier verwenden
+                     */
+                    $select = $sourceModel->select()->where(
+                        new Vps_Model_Select_Expr_Higher($this->_syncTimeField, new Vps_DateTime($cacheTimestamp))
+                    );
+                }
                 $ret = array(
                     'type' => self::SYNC_SELECT_TYPE_SELECT,
                     'select' => $select
@@ -217,10 +227,18 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         $this->_afterSync();
     }
 
+    /**
+     * Wird aufgerufen bevor ein sync stattfindet, nicht wenn kein sync notwendig ist
+     */
+    protected function _beforeSynchronize()
+    {
+    }
+
     private function _synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
     {
         $select = $this->_getSynchronizeVars($overrideMaxSyncDelay);
         if ($select['type'] !== self::SYNC_SELECT_TYPE_NOSYNC) {
+            $this->_beforeSynchronize();
             // it's possible to use $this->getProxyModel()->copyDataFromModel()
             // but if < 20 rows are copied, array is faster than sql or csv
             $format = null;

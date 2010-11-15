@@ -195,7 +195,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                 $p = $p->getPageOrRoot();
                 $select->where(new Vps_Model_Select_Expr_Or(array(
                     new Vps_Model_Select_Expr_StartsWith('component_id', $p->dbId.'-'),
-                    new Vps_Model_Select_Expr_Equals('component_id', $p->dbId),
+                    new Vps_Model_Select_Expr_Equal('component_id', $p->dbId),
                 )));
             }
         }
@@ -344,6 +344,15 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                 'field' => $field,
                 'id' => $id
             )
+        );
+        return $ret;
+    }
+
+    public function getStaticCacheVarsForMenu()
+    {
+        $ret = array();
+        $ret[] = array(
+            'model' => $this->getModel()
         );
         return $ret;
     }

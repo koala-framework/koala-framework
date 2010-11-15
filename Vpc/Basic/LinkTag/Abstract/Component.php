@@ -9,6 +9,14 @@ abstract class Vpc_Basic_LinkTag_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function getTemplateVars()
+    {
+        $ret = array(
+            'data' => $this->getData()
+        );
+        return $ret;
+    }
+
     public function hasContent()
     {
         if ($this->getData()->url) {

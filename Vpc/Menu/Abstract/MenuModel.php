@@ -39,8 +39,9 @@ class Vpc_Menu_Abstract_MenuModel extends Vps_Model_Abstract
         return $ret;
     }
 
-    public function getRowByDataKey($component)
+    public function getRowByDataKey($c)
     {
+        $component = $c['data'];
         $key = $component->componentId;
         if (!isset($this->_rows[$key])) {
             $this->_rows[$key] = new $this->_rowClass(array(

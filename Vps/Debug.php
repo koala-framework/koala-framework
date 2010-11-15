@@ -161,7 +161,7 @@ function _btArgString($arg)
     } else if (is_null($arg)) {
         $ret[] = 'null';
     } else if (is_string($arg)) {
-        if (strlen($arg) > 50) $arg = substr($arg, 0, 47)."...";
+        if (strlen($arg) > 200) $arg = substr($arg, 0, 197)."...";
         $ret[] = '"'.$arg.'"';
     } else if (is_bool($arg)) {
         $ret[] = $arg ? 'true' : 'false';
@@ -210,7 +210,7 @@ function bt($file = false)
 
 class Vps_Debug
 {
-    static $_enabled = true;
+    static $_enabled = 1;
     static $_view;
 
     public static function handleError($errno, $errstr, $errfile, $errline)
@@ -240,17 +240,20 @@ class Vps_Debug
 
     public static function enable()
     {
-        self::$_enabled = true;
+        self::$_enabled++;
     }
 
-    public static function disable()
+    /**
+     * @param int wie oft enable() aufgerufen werden muss um wirklich enabled zu sein
+     */
+    public static function disable($count = 1)
     {
         p('debug output disabled');
-        self::$_enabled = false;
+        self::$_enabled -= $count;
     }
 
     public static function isEnabled()
     {
-        return self::$_enabled;
+        return self::$_enabled > 0;
     }
 }

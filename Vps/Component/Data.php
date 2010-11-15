@@ -29,9 +29,6 @@ class Vps_Component_Data
             $this->dbId = $this->componentId;
         }
         Vps_Benchmark::count('componentDatas', $this->componentId);
-        if ($this->isPage) {
-            Vps_Benchmark::count('componentData Pages', $this->componentId);
-        }
     }
 
     /**
@@ -180,11 +177,14 @@ class Vps_Component_Data
         } else {
             $select = clone $select;
         }
-        Vps_Benchmark::count('getRecursiveChildComponents', $this->componentId);
+        Vps_Benchmark::count('getRecursiveChildComponents');
         if (is_array($childSelect)) {
             $childSelect = new Vps_Component_Select($childSelect);
         }
         $ret = $this->getChildComponents($select);
+        if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+            return $ret;
+        }
 
         $genSelect = new Vps_Component_Select();
         $genSelect->copyParts(array(
@@ -209,26 +209,41 @@ class Vps_Component_Data
         $cacheId = 'recCCGen'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
         $cacheId = str_replace('.', '_', $cacheId);
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
-            Vps_Benchmark::count('getRecCC Gen hit', $this->componentClass);
             $generators = $this->_recursiveGeneratorsCache[$cacheId];
         } else if (($generators = $cache->load($cacheId)) !== false) {
-            Vps_Benchmark::count('getRecCC Gen semi-hit', $this->componentClass);
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
         } else {
-            Vps_Benchmark::count('getRecCC Gen miss', $this->componentClass);
             $generators = $this->_getRecursiveGenerators(
                         Vpc_Abstract::getChildComponentClasses($this, $childSelect),
                         $genSelect, $childSelect, $selectHash);
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
             $cache->save($generators, $cacheId);
         }
-        $select->whereChildOfSamePage($this);
+        $noSubPages =
+            $childSelect->hasPart('wherePage') && !$childSelect->getPart('wherePage') ||
+            $childSelect->hasPart('wherePseudoPage') && !$childSelect->getPart('wherePseudoPage');
+        if ($noSubPages) {
+            $select->whereChildOfSamePage($this);
+        }
+
         foreach ($generators as $g) {
             if (!$g['static']) {
                 $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
-                foreach ($gen->getChildData(null, $select) as $d) {
-                    if (!in_array($d, $ret, true)) {
+                foreach ($gen->getChildData(null, clone $select) as $d) {
+                    $add = true;
+                    if (!$noSubPages) { // sucht über unterseiten hinweg, wird hier erst im Nachhinein gehandelt, langsam
+                        $add = false;
+                        $c = $d;
+                        while (!$add && $c) {
+                            if ($c->componentId == $this->componentId) $add = true;
+                            $c = $c->parent;
+                        }
+                    }
+                    if ($add && !in_array($d, $ret, true)) {
                         $ret[] = $d;
+                        if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+                            return $ret;
+                        }
                     }
                 }
             }
@@ -248,7 +263,7 @@ class Vps_Component_Data
         if ($staticGeneratorComponentClasses) {
             $pd = $this->getRecursiveChildComponents(array(
                 'componentClasses' => $staticGeneratorComponentClasses
-            ));
+            ), $childSelect);
             foreach ($generators as $k=>$g) {
                 if ($g['static']) {
                     $parentDatas = array();
@@ -263,6 +278,9 @@ class Vps_Component_Data
                         foreach ($gen->getChildData($parentDatas, $select) as $d) {
                             if (!in_array($d, $ret, true)) {
                                 $ret[] = $d;
+                                if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+                                    return $ret;
+                                }
                             }
                         }
                     }
@@ -275,7 +293,6 @@ class Vps_Component_Data
     private function _getRecursiveGenerators($componentClasses, $select, $childSelect, $selectHash)
     {
         $cacheId = Implode('-', $componentClasses).$selectHash;
-        Vps_Benchmark::count('_getRecursiveGenerators');
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
             return $this->_recursiveGeneratorsCache[$cacheId];
         }
@@ -340,6 +357,7 @@ class Vps_Component_Data
             );
         }
         // Nur bei hasEditComponents, Root soll keine Domain-Komponenten anzeigen
+        // Hack-Alarm :D
         if ($select->hasPart(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS) &&
             $this instanceof Vps_Component_Data_Root
         ) {
@@ -456,7 +474,7 @@ class Vps_Component_Data
         return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
-    public function getChildPseudoPages($select = array())
+    public function getChildPseudoPages($select = array(), $childSelect = array('page'=>false))
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
@@ -464,7 +482,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->wherePseudoPage(true);
-        return $this->getRecursiveChildComponents($select);
+        return $this->getRecursiveChildComponents($select, $childSelect);
     }
 
     public function getChildBoxes($select = array())
@@ -672,12 +690,19 @@ class Vps_Component_Data
     }
 
     /**
+     * @param string|array
      * @return Vps_Component_Data
      */
     public function getParentByClass($cls)
     {
+        if (!is_array($cls)) $cls = array($cls);
         $d = $this;
-        while ($d && !is_instance_of($d->componentClass, $cls)) {
+        while ($d) {
+            foreach ($cls as $i) {
+                if (is_instance_of($d->componentClass, $i)) {
+                    return $d;
+                }
+            }
             $d = $d->parent;
         }
         return $d;
