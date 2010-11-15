@@ -11,7 +11,7 @@ Vps.Auto.Filter.ButtonGroup = function(config)
 	        pressed: cfg.pressed,
 	        tooltip: cfg.tooltip,
 	        enableToggle: true
-		})
+		});
 	    this.toggleButtons[i].on('toggle', function(button, pressed) {
 			if (pressed) {
 	            for (var g in this.toggleButtons) {
@@ -20,16 +20,16 @@ Vps.Auto.Filter.ButtonGroup = function(config)
 	                };
 	            }
                 this.fireEvent('filter', this, this.getParams());
-			}
-	    }, this);
+            }
+        }, this);
         this.toolbarItems.add(this.toggleButtons[i]);
-	}
+    }
 };
 
 Ext.extend(Vps.Auto.Filter.ButtonGroup, Vps.Auto.Filter.Abstract, {
     getParams: function() {
         var params = {};
-		var value = '';
+        var value = '';
         for (var g in this.toggleButtons) {
             if (this.toggleButtons[g].pressed) {
                  value = g;

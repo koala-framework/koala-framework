@@ -66,7 +66,7 @@ Vpc.Directories.Item.Directory.TabsPanel = Ext.extend(Vps.Binding.ProxyPanel,
     setBaseParams : function(baseParams) {
         this.detailsForm.setBaseParams(baseParams);
         return Vpc.Directories.Item.Directory.TabsPanel.superclass.setBaseParams.apply(this, arguments);
-    },
+    }
 
 });
 

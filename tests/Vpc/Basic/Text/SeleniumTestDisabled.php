@@ -5,9 +5,66 @@ class Vpc_Basic_Text_SeleniumTest extends PHPUnit_Framework_TestCase
 /**
 das funktioniert alles nicht; sowas zu testen ist mit selenium _etwas_ schwierig
 
-http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
 
 === MANUELLE TESTS ===
+
+*** Enter erzeugt Absatz ***
+- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- hinter foo klicken
+- Enter drücken
+- bar schreiben
+- Shift+Enter drücken
+- baz schreiben
+- in HTML-Code-Ansicht umschalten
+- Erwarteter HTML-Code: <p>foo</p><p>bar<br />baz</p>
+
+*** Inline Style setzen ***
+- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- 'foo bar baz' in rte schreiben
+- bar markieren
+- Inline: Test3 auswählen
+- Erwartet: bar wird grün und kleiner
+- Bonus Markierung bleibt erhalten (im moment nur FF)
+
+*** Inline Style ändern ***
+- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- 'foo bar baz' in rte schreiben
+- bar markieren
+- Inline: Test3 auswählen
+- Erwartet: bar wird grün und kleiner
+- IE: bar markieren / FF: cursor in bar setzen (TODO: bei beiden soll beides gehen)
+- Inline: Default auswählen
+- Erwartet: bar wird wida schwarz
+
+*** Fett setzen ***
+- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- 'foo bar baz' in rte schreiben
+- bar markieren
+- 'B' klicken
+- Erwartet: bar wird fett
+- in HTML-Code-Ansicht umschalten
+- Erwartet: <strong>bar</strong>
+- zurückschalten
+- Erwartet: bar ist immer noch fett
+
+*** Fett zurücksetzen ***
+- url aufrufen http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+- 'foo bar baz' in rte schreiben
+- bar markieren
+- 'B' klicken
+- Erwartet: bar wird fett
+- 'B' klicken
+- Erwartet: bar ist nicht mehr fett
+- 'B' klicken
+- Erwartet: bar wird fett
+- in HTML-Code-Ansicht umschalten
+- Erwartet: <strong>bar</strong>
+- zurückschalten
+- Erwartet: bar ist immer noch fett
+- bar markieren
+- 'B' klicken
+- Erwartet: bar ist nicht mehr fett
 
 *** Cursor beim einfügen ***
 - url aufrufen: http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000

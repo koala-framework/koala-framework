@@ -22,7 +22,8 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1003-l1', current($cc)->componentId);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_TestChildComponentsModel');
+        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+            ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1003'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -73,7 +74,8 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1014-l1', current($cc)->componentId);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_TestChildComponentsModel');
+        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+            ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1014'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -141,7 +143,8 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1008-i1', current($cc)->componentId);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_TestChildComponentsModel');
+        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+            ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1008'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();

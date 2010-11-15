@@ -195,8 +195,6 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             $mysqlLocalOptions .= "--user=$dbConfig[username] --password=$dbConfig[password] ";
 
 
-            echo "erstelle datenbank-backup '$dbKey'...\n";
-
             $tables = $db->fetchCol('SHOW TABLES');
 
             $cacheTables = Vps_Util_ClearCache::getInstance()->getDbCacheTables();
@@ -229,12 +227,14 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                     }
                 }
             }
-
-            $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
-            if ($dumpname) {
-                $backupSize = filesize($dumpname);
-                $this->_systemCheckRet("nice bzip2 --fast $dumpname");
-                echo $dumpname.".bz2\n";
+            if (!$this->_getParam('skip-backup')) {
+                echo "erstelle datenbank-backup '$dbKey'...\n";
+                $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
+                if ($dumpname) {
+                    $backupSize = filesize($dumpname);
+                    $this->_systemCheckRet("nice bzip2 --fast $dumpname");
+                    echo $dumpname.".bz2\n";
+                }
             }
 
             echo "loesche lokale tabellen in datenbank '$dbKey'...\n";
@@ -298,18 +298,21 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             );
             $procImport = new Vps_Util_Proc($cmd, $descriptorspec);
 
-            $c = new Zend_ProgressBar_Adapter_Console();
-            $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
-            $progress = new Zend_ProgressBar($c, 0, $backupSize);
+            $progress = false;
+            if (isset($backupSize) && $backupSize) {
+                $c = new Zend_ProgressBar_Adapter_Console();
+                $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+                $progress = new Zend_ProgressBar($c, 0, $backupSize);
+            }
             $size = 0;
             while (!feof($procDump->pipe(1))) {
                 $buffer = fgets($procDump->pipe(1), 4096);
                 fputs($procImport->pipe(0), $buffer);
                 $size += strlen($buffer);
-                $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
+                if ($progress) $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
             }
             fclose($procDump->pipe(1));
             fclose($procImport->pipe(0));
@@ -573,6 +576,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         } catch (Exception $e) {
             return null;
         }
+        if (!$db) return null;
         $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
         $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";
@@ -617,8 +621,8 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         $out = array();
         foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
             $rrd = new $n;
-            $file = $rrd->getFileName();
-            if (file_exists($file)) {
+            if ($rrd->fileExists()) {
+                $file = $rrd->getFileName();
                 $out[$file] = `LC_ALL=C rrdtool dump $file | gzip`;
             }
         }

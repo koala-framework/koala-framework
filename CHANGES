@@ -1,3 +1,50 @@
+== TODO ==
+1.11
+- RTE mit tinymce unterstützung                                    3
+- Component Cache Meta-Daten, löschen neu, Component Output neu
+                                      erste einsatzfähige Version  7
+
+- ACL mit Resourcen, sprerren von hinzufügen & löschen             8
+- Formulargenerator der auch Mails verschickt                      2
+- MenuConfig, flexibleres erstellen von Menüpunkten in Komponenten 2
+- Zurück Button
+- Volltextsuche bei änderung neu indizieren                        4
+- mögliche wildcards im RTE anzeigen                               1
+- Bearbeitbare Mails für neue Benutzer usw                         4
+- Component Cache fertigstellen                                    x
+- Model Typ-Strikt und Mongo                                       x
+
+== 1.11 ==
+Erstellt: 17.08.10
+Stable: wenn neuer component cache fertig
+Neue Features:
+- Vps_Date, Vps_DateTime
+- CopyContent
+- editComponents geht jetzt auch mit Table Generator
+- MultiCheckbox: Alle / keine Links (standardmäßig aktiv)
+- Volltextsuche
+- Model_Mongo
+- Model_MirrorCacheSimple
+- AccessByMail Plugin
+- (Multi)-FileUpload per html5 wenn moeglich, incl drag&drop support
+- Doppeltes bearbeiten von zB Directories ist mittels extConfigControllerIndex deaktivierbar
+
+möglicherweise nicht kompatible Änderungen:
+- Vps_Date ist komplett inkompatibel (erbt nicht mehr von Zend_Date)
+- Expr_Smaller -> Expr_Lower
+- Expr_SmallerDate, Expr_HigherDate -> entfernt; Expr_Smaller kann dafür auch mit
+  Vps_Date und Vps_DateTime umgehen
+- Expr_Equal (Equals ist deprected)
+- Menü-Komponenten: TemplateVars wurden geändert, ist jetzt ein array. Alle überschriebenen
+  Templates müssen angepasst werden (bzw. schaun obs wirklich überschrieben werden muss)
+- frontControllerClass MUSS in application/config.ini angegeben werden
+- Tags in Seitenbaum gibts nicht mehr (kein Vps_Component_Acl->allowTag())
+- aclClass MUSS in application/config.ini angegeben werden
+- Columns admin ist jetzt keine Form mehr sondern ein Grid
+- .webStandard strong/em/ol/ul/li ist jetzt im vps und sollte in webs entfernt werden
+- newsListView und eventsListView Teaser haben jetzt ein nl2br
+- showInPageTreeAdmin flag gibts nicht mehr, ist jetzt nur noch ein generatorFlag
+
 == 1.10 ==
 Erstellt: 09.06.10
 Stable: 16.08.10

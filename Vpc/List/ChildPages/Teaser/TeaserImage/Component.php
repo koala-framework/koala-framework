@@ -33,6 +33,14 @@ class Vpc_List_ChildPages_Teaser_TeaserImage_Component extends Vpc_Abstract_Comp
         if (isset($this->getData()->targetPage->row)) {
             $ret[] = $this->getData()->targetPage->row;
         }
+    }
+
+    public static function getStaticCacheVars($componentClass)
+    {
+        $ret = parent::getStaticCacheVars($componentClass);
+        $ret[] = array(
+            'model' => 'Vpc_Root_Category_GeneratorModel'
+        );
         return $ret;
     }
 }

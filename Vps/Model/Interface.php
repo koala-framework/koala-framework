@@ -11,6 +11,9 @@ interface Vps_Model_Interface
     const TYPE_FLOAT = 'float';
     const TYPE_DATE = 'date';
 
+    /**
+     * @return Vps_Model_Row_Interface
+     */
     public function createRow(array $data=array());
     public function getPrimaryKey();
     public function isEqual(Vps_Model_Interface $other);
@@ -29,6 +32,9 @@ interface Vps_Model_Interface
     public function getUniqueIdentifier();
     public function getExprValue($row, $name);
 
+    /**
+     * @return Vps_Model_Row_Interface
+     */
     public function getRow($id);
     public function getRows($where=null, $order=null, $limit=null, $start=null);
     public function getIds($where=null, $order=null, $limit=null, $start=null);

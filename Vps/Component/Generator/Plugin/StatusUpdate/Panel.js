@@ -5,7 +5,7 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
     initComponent: function() {
         this.proxyItem = new Vps.Auto.GridPanel({
             controllerUrl: this.logControllerUrl,
-            region: 'center',
+            region: 'center'
         });
         this.actions.send = new Ext.Action({
             text    : trlVps('Send'),
@@ -41,7 +41,7 @@ Vps.Component.Generator.Plugin.StatusUpdate.Panel = Ext.extend(Vps.Binding.Proxy
             bodyStyle: 'padding:10px',
             region: 'north',
             height: 200,
-            items: items,
+            items: items
         });
         this.items = [this.proxyItem, this.form];
         Vps.Component.Generator.Plugin.StatusUpdate.Panel.superclass.initComponent.call(this);

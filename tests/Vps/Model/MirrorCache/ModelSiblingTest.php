@@ -5,52 +5,9 @@
  */
 class Vps_Model_MirrorCache_ModelSiblingTest extends PHPUnit_Framework_TestCase
 {
-    private $_sourceModel;
-    private $_mirrorModel;
-    private $_proxyModel;
-
     public function setUp()
     {
-        $this->_sourceModel = new Vps_Model_FnF(array(
-            'uniqueIdentifier' => 'unique',
-            'columns' => array('id', 'firstname', 'timefield'),
-            'uniqueColumns' => array('id'),
-            'data' => array(
-                array('id' => 1, 'firstname' => 'Max', 'timefield' => '2008-06-09 00:00:00'),
-                array('id' => 2, 'firstname' => 'Susi', 'timefield' => '2008-07-09 10:00:00'),
-                array('id' => 3, 'firstname' => 'Kurt', 'timefield' => '2008-07-15 20:00:00')
-            )
-        ));
-        $this->_mirrorModel = new Vps_Model_FnF(array(
-            'uniqueIdentifier' => 'unique',
-            'columns' => array('id', 'firstname', 'timefield'),
-            'uniqueColumns' => array('id'),
-            'data' => array(
-                array('id' => 1, 'firstname' => 'Max', 'timefield' => '2008-06-09 00:00:00'),
-                array('id' => 2, 'firstname' => 'Susi', 'timefield' => '2008-07-09 10:00:00')
-            )
-        ));
-        $this->_siblingModel = new Vps_Model_MirrorCache_SiblingModel(array(
-            'uniqueIdentifier' => 'unique',
-            'columns' => array('id', 'siblingcol'),
-            'uniqueColumns' => array('id'),
-            'data' => array(
-                array('id' => 1, 'siblingcol' => 'sib1'),
-                array('id' => 2, 'siblingcol' => 'sib2')
-            )
-        ));
-        $this->_proxyModel = $this->_getNewModel();
-    }
-
-    private function _getNewModel()
-    {
-        return new Vps_Model_MirrorCache_MirrorCacheModel(array(
-            'proxyModel' => $this->_mirrorModel,
-            'sourceModel' => $this->_sourceModel,
-            'siblingModels' => array($this->_siblingModel),
-            'syncTimeField' => 'timefield',
-            'maxSyncDelay' => 2
-        ));
+        $this->_proxyModel = Vps_Model_Abstract::getInstance('Vps_Model_MirrorCache_MirrorCacheModel');
     }
 
     public function testNoSyncWhenOnlySavedToSibling()
@@ -59,7 +16,9 @@ class Vps_Model_MirrorCache_ModelSiblingTest extends PHPUnit_Framework_TestCase
         Vps_Benchmark::enable();
         Vps_Benchmark::reset();
 
-        $this->_getNewModel()->synchronize();
+        $newModel = new Vps_Model_MirrorCache_MirrorCacheModel();
+        $newModel->synchronize();
+
         $r = $this->_proxyModel->getRow(1);
         $r->siblingcol = 'sib val 1';
         $r->save();
@@ -72,7 +31,7 @@ class Vps_Model_MirrorCache_ModelSiblingTest extends PHPUnit_Framework_TestCase
         Vps_Benchmark::reset();
         Vps_Benchmark::disable();
 
-        $this->assertEquals('sib val 1', $this->_siblingModel->getRow(1)->siblingcol);
+        $this->assertEquals('sib val 1', $this->_proxyModel->siblingModel->getRow(1)->siblingcol);
     }
 }
 

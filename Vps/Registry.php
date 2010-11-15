@@ -14,6 +14,9 @@ class Vps_Registry extends Zend_Registry
             return $v;
         } else if ($index == 'acl' && !parent::offsetExists($index)) {
             $class = Vps_Registry::get('config')->aclClass;
+            if (!$class) {
+                throw new Vps_Exception("'aclClass' has to exist in web-config and the web must have an own acl-class for media output rights check (NOT CREATED IN BOOTSTRAP!)");
+            }
             $v = new $class();
             $this->offsetSet('acl', $v);
             return $v;

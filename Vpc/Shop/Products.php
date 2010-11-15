@@ -15,7 +15,7 @@ class Vpc_Shop_Products extends Vps_Model_Db
         $s = $this->select();
         $s->limit(1);
         $s->order('valid_from', 'DESC');
-        $s->where(new Vps_Model_Select_Expr_SmallerDate('valid_from', date('Y-m-d H:i:s')));
+        $s->where(new Vps_Model_Select_Expr_Lower('valid_from', new Vps_DateTime(time())));
         $this->_exprs['current_price'] =
             new Vps_Model_Select_Expr_Child(
                 'Prices',
