@@ -58,7 +58,9 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
             $components = $generators['child']['component'];
             if (!is_array($components)) $components = array($components);
             foreach ($components as $class) {
-                $ret[] = new Vpc_Abstract_Composite_MetaHasContent($class);
+                if ($class) {
+                    $ret[] = new Vpc_Abstract_Composite_MetaHasContent($class);
+                }
             }
         }
         return $ret;
