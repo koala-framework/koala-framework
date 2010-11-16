@@ -128,7 +128,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
 
         if ($view->getImages()) {
             $addedImages = array();
-            foreach ($view()->getImages() as $image) {
+            foreach ($view->getImages() as $image) {
                 if (in_array($image, $addedImages)) continue;
                 $this->_saveAttachmentData($image);
                 $addedImages[] = $image;
