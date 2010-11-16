@@ -1,5 +1,5 @@
 <?php
-class Vps_Mail extends Zend_Mail implements Vps_Mail_Interface
+class Vps_Mail extends Zend_Mail
 {
     // die folgenden 5 sind für maillog
     protected $_ownFrom = '';
