@@ -1,9 +1,11 @@
 <?php
+// Vpc_Mail_Component nötig, weil sich komponenten-links in der mail befinden
 class Vpc_Guestbook_Mail_Component extends Vpc_Mail_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        unset($ret['generators']['content']);
         $ret['recipientSources'] = array(
             'u' => get_class(Vps_Registry::get('userModel'))
         );

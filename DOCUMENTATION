@@ -22,11 +22,6 @@
     Ablauf Ham: [...] Row verschickt das Mail (mit save())
     Ablauf Spamverdacht mit nachsenden: [...] Row verschickt das Mail (mit resendMail())
 
-    TODO: Vps_Mail_Template_View erbt von Vps_View_Mail, beinhaltet code von Vps_Mail_Template
-          Vps_Mail_Template schleift *nur* mehr durch
-          Vps_Model_Mail hat keine mailerClass mehr sondern Vps_Mail_Template_View fix
-          Vps_Model_Mail hat vielleicht doch eine mailerClass fürs schicken aber nur (Vps_Mail)
-
 - Dynamisches Kontaktformular
     Verwendet: Vps_Model_Mail, Vps_Mail
     Ablauf: FrontendForm mit Vps_Model_Mail,
@@ -44,8 +39,6 @@
 - Posts / Gästebuch zum Post freischalten an Admin
     Verwendet: Vpc_Mail_Component, Vps_Mail
     Ablauf: Write_Form_Component _afterInsert() schickt mail mit Vpc_Mail_Component
-
-    TODO UNBEDINGT GANZ WICHTIG: Content unsetten (unterkomponente)
 
 - Posts / Forum Observe
     Verwendet: Vps_Mail_Template, Vps_Mail
