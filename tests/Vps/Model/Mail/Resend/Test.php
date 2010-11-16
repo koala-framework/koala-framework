@@ -32,12 +32,11 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
 
     public function testText()
     {
-        $this->markTestIncomplete();
-
         $uploads = Vps_Model_Abstract::getInstance('Vps_Uploads_TestModel');
 
         $model = new Vps_Model_Mail(array(
             'tpl' => 'tests/Vps/Model/Mail/Resend/Mail',
+            'spamFields' => array()
         ));
         $model->setAttachmentSaveFolder($uploads->getUploadDir().'/mailattachments');
         if (!file_exists($uploads->getUploadDir().'/mailattachments') || !is_dir($uploads->getUploadDir().'/mailattachments')) {
@@ -71,7 +70,6 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
         $mailFirst = $this->_getLatestMail();
 
         $row->resendMail();
-
         $mailSecond = $this->_getLatestMail();
 
         $this->assertNotEquals($mailFirst->id, $mailSecond->id);

@@ -27,7 +27,7 @@ class Vpc_FormDynamic_Basic_Test extends Vpc_TestAbstract
         $this->assertEquals($c->getErrors(), array());
         $row = $c->getFormRow();
 
-        $text = $row->body_text;
+        $text = $row->sent_mail_content_text;
         $this->assertContains('Required: asdfasdf', $text);
         $this->assertContains('Check: off', $text);
         $this->assertContains('CheckDefault: on', $text);
