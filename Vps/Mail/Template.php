@@ -1,5 +1,5 @@
 <?php
-class Vps_Mail_Template implements Vps_Mail_Interface
+class Vps_Mail_Template
 {
     protected $_mail;
     protected $_view;
