@@ -30,6 +30,7 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         Vps_Component_Cache::clearInstance();
         Vps_Component_Data_Root::reset();
         Vps_Component_Generator_Abstract::clearInstances();
+        Vps_Test_SeparateDb::restoreTestDb(); // macht das nur wenns eine gibt
         parent::tearDown();
     }
 
