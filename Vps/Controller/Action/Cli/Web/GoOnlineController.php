@@ -269,7 +269,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             $dir = getcwd();
             chdir(VPS_PATH);
             $config = Vps_Registry::get('config');
-            $trl = Vps_Registry::get('trl');
+            $trl = Vps_Trl::getInstance();
             Vps_Registry::set('trl', new Vps_Trl());
             $cfg = new Vps_Config_Web(Vps_Setup::getConfigSection());
             Vps_Registry::set('config', $cfg);
