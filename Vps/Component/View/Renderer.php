@@ -7,7 +7,7 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         if (!is_null($value)) $componentId .= '(' . $value . ')';
         if ($plugins) $componentId .= '[' . implode(' ', $plugins) . ']';
         $config = base64_encode(serialize($config));
-        return '{' . "$type: $componentId $config" . '}';
+        return '{cc ' . "$type: $componentId $config" . '}';
     }
 
     protected function _getComponentById($componentId)
