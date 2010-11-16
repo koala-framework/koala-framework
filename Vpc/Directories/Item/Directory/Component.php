@@ -26,11 +26,16 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
 
     public static function getCacheMetaForView($view)
     {
+        $ret = array();
+
         $dir = $view->parent->getComponent()->getItemDirectory();
-        $dirClass = $dir;
-        $pattern = null;
-        if ($dir instanceof Vps_Component_Data) {
-            $dirClass = $dir->componentClass;
+        if (is_string($dir)) {
+            $dirs = Vps_Component_Data_Root::getInstance()->getComponentsByClass($dir);
+        } else {
+            $dirs = array($dir);
+        }
+        foreach ($dirs as $dir) {
+            $pattern = null;
             $c = $view->parent;
             if ($c && $c->componentId == $dir->componentId) {
                 $pattern = '{component_id}-view';
@@ -44,14 +49,12 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
                     $pattern = str_replace('{component_id}', '%', $pattern);
                 }
             }
+            $generators = Vps_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
+            if (isset($generators[0])) {
+                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generators[0]->getModel(), $pattern);
+            }
         }
-
-        $ret = array();
-
-        $generators = Vps_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
-        if (count($generators) != 1) throw new Vps_Exception("can't get detail generator");
-
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model($generators[0]->getModel(), $pattern);
         return $ret;
     }
+
 }
