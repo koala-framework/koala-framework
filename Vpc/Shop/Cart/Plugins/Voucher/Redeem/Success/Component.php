@@ -4,7 +4,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_Redeem_Success_Component extends Vpc_Form_Su
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['success'] = trlVps('The Voucher has been successfully registered.');
+        $ret['placeholder']['success'] = trlVps('Your Voucher has been successfully redeemed.');
         return $ret;
     }
 }

@@ -32,7 +32,7 @@ class Vps_Assets_DynamicNotInAll_Test extends PHPUnit_Framework_TestCase
         $type = 'Vps_Assets_DynamicNotInAll:Test';
         $files = $dep->getAssetUrls($type, 'css', 'web', false);
         $this->assertEquals(2, count($files));
-        $f = 'all/web/'.Vps_Registry::get('trl')->getTargetLanguage().'/Vps_Assets_DynamicNotInAll:Test.css';
+        $f = 'all/web/'.Vps_Trl::getInstance()->getTargetLanguage().'/Vps_Assets_DynamicNotInAll:Test.css';
         $this->assertContains('/assets/'.$f, $files[0]);
         $this->assertContains('/assets/dynamic/Vps_Assets_DynamicNotInAll:Test/Vps_Assets_DynamicNotInAll_Asset', $files[1]);
 

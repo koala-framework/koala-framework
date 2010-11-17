@@ -95,6 +95,7 @@ protected function _createSeparateTestDb($bootstrapFile)
     {
         parent::start();
         $this->open('/vps/test/vps_start');
+        $this->deleteAllVisibleCookies();
         $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/, max_age=60*5');
     }
 
