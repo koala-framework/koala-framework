@@ -59,36 +59,31 @@ class Vps_Component_ModelObserver
     }
 
 
-    public function insert($source)
+    public function add($function, $source)
     {
-        if ($this->_enabled) $this->_process['insert'][] = $source;
-    }
-
-    public function update($source)
-    {
-        if ($this->_enabled) $this->_process['update'][] = $source;
-    }
-
-    public function save($source)
-    {
-        if ($this->_enabled) $this->_process['save'][] = $source;
-    }
-
-    public function delete($source)
-    {
-        // Wird hier direkt aufgerufen, weil wenn später aufgerufen, ist row schon gelöscht
-        if (!Vps_Component_Data_Root::getComponentClass()) return;
-        if ($this->_enabled) $this->_processCache($source);
+        if ($this->_enabled) {
+            $source = array('source' => $source);
+            if ($function == 'delete') {
+                // Wird hier direkt aufgerufen, weil wenn später aufgerufen, ist row schon gelöscht
+                if (!Vps_Component_Data_Root::getComponentClass()) return;
+                if ($this->_enabled) $this->_processCache($source);
+            } else {
+                if ($function != 'insert' && $source['source'] instanceof Vps_Model_Row_Abstract) {
+                    $source['dirtyColumns'] = $source['source']->getDirtyColumns();
+                }
+                $this->_process[$function][] = $source;
+            }
+        }
     }
 
     protected function _processCache($source)
     {
-        if ($source instanceof Vps_Model_Interface) {
-            $model = $source;
+        if ($source['source'] instanceof Vps_Model_Interface) {
+            $model = $source['source'];
             $id = null;
             $row = null;
         } else {
-            $row = $source;
+            $row = $source['source'];
             if ($row instanceof Zend_Db_Table_Row_Abstract) {
                 $model = $row->getTable();
                 $primary = current($model->info('primary'));
@@ -118,7 +113,8 @@ class Vps_Component_ModelObserver
             $this->_processed[$modelname][] = $id;
             if ($this->_enableProcess) {
                 if ($row) {
-                    Vps_Component_Cache::getInstance()->cleanByRow($row);
+                    $dirtyColumns = isset($source['dirtyColumns']) ? $source['dirtyColumns'] : array();
+                    Vps_Component_Cache::getInstance()->cleanByRow($row, $dirtyColumns);
                 } else {
                     // Bei Import kommt ein Model daher
                     Vps_Component_Cache::getInstance()->cleanByModel($model);

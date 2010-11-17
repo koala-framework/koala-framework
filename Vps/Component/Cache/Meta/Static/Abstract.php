@@ -2,6 +2,7 @@
 abstract class Vps_Component_Cache_Meta_Static_Abstract extends Vps_Component_Cache_Meta_Abstract
 {
     protected $_pattern;
+    protected $_params;
 
     public function __construct($pattern)
     {
@@ -18,10 +19,26 @@ abstract class Vps_Component_Cache_Meta_Static_Abstract extends Vps_Component_Ca
         return $this->_pattern;
     }
 
-    public static function getDeleteWhere($pattern, $row)
+    public function setDirtyColumns($columns)
     {
-        $dbId = $pattern;
+        $this->_params['dirtyColumns'] = $columns;
+    }
+
+    public function getParams()
+    {
+        return $this->_params;
+    }
+
+    public static function getDeleteWhere($pattern, $row, $dirtyColumns, $params)
+    {
+        if (isset($params['dirtyColumns'])) {
+            if (!array_intersect($dirtyColumns, $params['dirtyColumns'])) {
+                return null;
+            }
+        }
+
         $ret = array();
+        $dbId = $pattern;
         $ret['type'] = array('component', 'master', 'mail');
         if (!$dbId) return $ret;
         $matches = array();

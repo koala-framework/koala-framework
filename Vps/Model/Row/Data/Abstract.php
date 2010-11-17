@@ -108,14 +108,12 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         if ($update) {
             if ($this->_isDirty()) {
                 $ret = $this->_model->update($this, $this->_data);
-                $this->_resetDirty();
             } else {
                 $ret = $this->{$this->_getPrimaryKey()};
             }
         } else {
             $ret = $this->_model->insert($this, $this->_data);
             $this->_data[$this->_getPrimaryKey()] = $ret;
-            $this->_resetDirty();
         }
         $this->_cleanData = $this->_data;
 
@@ -126,6 +124,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         }
         $this->_afterSave();
         parent::save(); //siblings nach uns speichern; damit auto-inc id vorhanden
+        $this->_resetDirty();
 
         return $ret;
     }
