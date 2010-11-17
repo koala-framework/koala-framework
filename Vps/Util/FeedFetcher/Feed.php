@@ -271,6 +271,7 @@ class Vps_Util_FeedFetcher_Feed
                 $s = new Vps_Util_PubSubHubbub_Subscriber($hubUrl);
                 $s->setCallbackUrl($cbUrl.'?feedId='.$row->id);
                 $s->setVerifyToken($row->id);
+                $row->save(); //hier erstmal speichern damit schon hub_subscribed gesetzt ist und damit der callback das auch schon sieht
                 try {
                     $s->unsubscribe($row->url);
                 } catch (Exception $e) {
