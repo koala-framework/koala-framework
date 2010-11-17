@@ -433,4 +433,20 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $row->value = 'bloe';
         $row->save();
     }
+
+    public function testDirtyColumns()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 'foo'),
+            array('id' => 2, 'value' => 'bar'),
+        ));
+
+        $row = $model->getRow(1);
+        $this->assertEquals($row->getDirtyColumns(), array());
+        $this->assertEquals($row->isDirty(), false);
+        $row->value = 'blubb';
+        $this->assertEquals($row->getDirtyColumns(), array('value'));
+        $this->assertEquals($row->isDirty(), true);
+    }
 }
