@@ -9,7 +9,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     private $_internalId;
     protected $_siblingRows;
     protected $_exprValues = array();
-    private $_dirty = false;
+    private $_dirtyColumns = array();
     static private $_internalIdCounter = 0;
 
     //damit im save() die childRows autom. mitgespeichert werden können
@@ -172,23 +172,52 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
      */
     final public function forceSave()
     {
-        $this->_setDirty();
+        $this->_setDirty($this->_getPrimaryKey());
         return $this->save();
     }
 
-    protected function _setDirty($var = true)
+    protected function _setDirty($column)
     {
-        $this->_dirty = $var;
+        if (!in_array($column, $this->_dirtyColumns)) {
+            $this->_dirtyColumns[] = $column;
+        }
     }
 
+    protected function _resetDirty()
+    {
+        $this->_dirtyColumns = array();
+    }
+
+    /**
+     * Ob die Row seblst dirty ist
+     */
     protected function _isDirty()
     {
-        return $this->_dirty;
+        return !empty($this->_dirtyColumns);
     }
 
+    /**
+     * Ob die Row oder eine sibling row dirty ist
+     */
     public final function isDirty()
     {
-        return $this->_isDirty();
+        if ($this->_isDirty()) return true;
+        foreach ($this->_getSiblingRows() as $r) {
+            if ($r->_isDirty()) return true;
+        }
+        return false;
+    }
+
+    /**
+     * dirty columns der row und der sibling rows
+     */
+    public function getDirtyColumns()
+    {
+        $ret = $this->_dirtyColumns;
+        foreach ($this->_getSiblingRows() as $r) {
+            $ret = array_merge($ret, $r->getDirtyColumns());
+        }
+        return $ret;
     }
 
     public function save()

@@ -54,14 +54,30 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
         }
     }
 
-    protected function _setDirty($var = true)
+
+    //für forceSave
+    protected function _setDirty($column)
     {
-        $this->_row->_setDirty($var);
+        $this->_row->_setDirty($column);
+    }
+
+    protected function _resetDirty()
+    {
+        throw new Vps_Exception("should not be needed");
     }
 
     protected function _isDirty()
     {
-        return $this->_row->_isDirty();
+        return $this->_row->isDirty();
+    }
+
+    public function getDirtyColumns()
+    {
+        $ret = $this->_row->getDirtyColumns();
+        foreach ($this->_getSiblingRows() as $r) {
+            $ret = array_merge($ret, $r->getDirtyColumns());
+        }
+        return $ret;
     }
 
     public function save()
