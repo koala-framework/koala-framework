@@ -167,7 +167,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return $wheres;
     }
 
-    protected function _addModelWhere($wheres, $row, $metaType = Vps_Component_Cache_Meta_Abstract::META_TYPE_DEFAULT)
+    protected function _addModelWhere($wheres, $row, $dirtyColumns, $metaType = Vps_Component_Cache_Meta_Abstract::META_TYPE_DEFAULT)
     {
         $model = $this->getModel('metaModel');
 
@@ -179,9 +179,9 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             if ($type != $metaType) continue;
             $where = call_user_func(
                 array($metaRow->meta_class, 'getDeleteWhere'),
-                $metaRow->pattern, $row
+                $metaRow->pattern, $row, $dirtyColumns, unserialize($metaRow->params)
             );
-            $wheres[$metaRow->component_class][] = $where;
+            if ($where) $wheres[$metaRow->component_class][] = $where;
         }
         return $wheres;
     }
@@ -332,13 +332,14 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         );
     }
 
-    protected function _saveMetaModel($componentClass, $modelName, $pattern, $metaClass)
+    protected function _saveMetaModel($componentClass, $modelName, $pattern, $metaClass, $params)
     {
         $data = array(
             'model' => $modelName,
             'component_class' => $componentClass,
             'pattern' => $pattern ? $pattern : '',
             'meta_class' => $metaClass,
+            'params' => serialize($params)
         );
         $options = array(
             'buffer' => true,

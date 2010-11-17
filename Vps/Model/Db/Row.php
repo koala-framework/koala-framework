@@ -79,7 +79,6 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         $this->_beforeSave();
         if ($insert || $this->_isDirty()) {
             $ret = $this->_row->save();
-            $this->_resetDirty();
         } else {
             $ret = $this->{$this->_getPrimaryKey()};
         }
@@ -92,6 +91,9 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         $this->_afterSave();
 
         parent::save(); //siblings nach uns speichern; damit auto-inc id vorhanden
+
+        $this->_resetDirty();
+
         return $ret;
     }
 

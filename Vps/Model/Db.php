@@ -870,10 +870,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if (Vps_Component_Data_Root::getComponentClass()) {
             if ($this->_proxyContainerModels) {
                 foreach ($this->_proxyContainerModels as $m) {
-                    Vps_Component_ModelObserver::getInstance()->update($m);
+                    Vps_Component_ModelObserver::getInstance()->add('update', $m);
                 }
             } else {
-                Vps_Component_ModelObserver::getInstance()->update($this);
+                Vps_Component_ModelObserver::getInstance()->add('update', $this);
             }
         }
     }

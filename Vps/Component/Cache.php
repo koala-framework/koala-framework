@@ -87,7 +87,7 @@ abstract class Vps_Component_Cache
             $modelName = $meta->getModelname($componentClass);
             if ($modelName) {
                 $pattern = $meta->getPattern();
-                $this->_saveMetaModel($componentClass, $modelName, $pattern, get_class($meta));
+                $this->_saveMetaModel($componentClass, $modelName, $pattern, get_class($meta), $meta->getParams());
             }
 
         } else if ($meta instanceof Vps_Component_Cache_Meta_ModelField) {
@@ -124,7 +124,7 @@ abstract class Vps_Component_Cache
         }
     }
 
-    protected abstract function _saveMetaModel($componentClass, $modelName, $pattern, $metaClass);
+    protected abstract function _saveMetaModel($componentClass, $modelName, $pattern, $metaClass, $pattern);
     protected abstract function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $metaClass);
     protected abstract function _saveMetaComponent($componentId, $componentClass, $targetComponentId, $targetComponentClass, $metaClass);
 
@@ -158,12 +158,12 @@ abstract class Vps_Component_Cache
         return array_unique($ret);
     }
 
-    public function cleanByRow($row)
+    public function cleanByRow($row, $dirtyColumns = array())
     {
         //p($this->_getModelname($row));
         $wheres = array();
         $wheres = $this->_addRowWhere($wheres, $row);
-        $wheres = $this->_addModelWhere($wheres, $row);
+        $wheres = $this->_addModelWhere($wheres, $row, $dirtyColumns);
         $wheres = $this->_addComponentWhere($wheres);
         $wheres = $this->_addChainedWhere($wheres);
         $this->_cleanByWheres($wheres);
@@ -171,7 +171,7 @@ abstract class Vps_Component_Cache
         // Callback
         $wheres = array();
         $wheres = $this->_addRowWhere($wheres, $row, Vps_Component_Cache_Meta_Abstract::META_TYPE_CALLBACK);
-        $wheres = $this->_addModelWhere($wheres, $row, Vps_Component_Cache_Meta_Abstract::META_TYPE_CALLBACK);
+        $wheres = $this->_addModelWhere($wheres, $row, $dirtyColumns, Vps_Component_Cache_Meta_Abstract::META_TYPE_CALLBACK);
         $wheres = $this->_addComponentWhere($wheres);
         $wheres = $this->_addChainedWhere($wheres);
         foreach ($this->_getComponentIdsFromWheres($wheres) as $componentId) {

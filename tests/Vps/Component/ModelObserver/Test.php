@@ -57,7 +57,7 @@ class Vps_Component_ModelObserver_Test extends PHPUnit_Framework_TestCase
     public function testModel()
     {
         $this->assertEquals(array(), $this->_observer->process());
-        Vps_Component_ModelObserver::getInstance()->update($this->_model);
+        Vps_Component_ModelObserver::getInstance()->add('update', $this->_model);
         $this->assertEquals(array('Vps_Model_FnF' => array(null)), $this->_observer->process());
     }
 }
