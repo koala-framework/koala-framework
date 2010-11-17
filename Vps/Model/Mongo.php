@@ -233,9 +233,14 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         $row = $this->_collection->findOne($this->_getQuery($select));
         $p = $profiler->queryEnd($p);
         if (!$row) return null;
-        $this->_data[$row['_id']->__toString()] = $row;
+
+        $id = $row['_id'];
+        if ($id instanceof MongoId) $id = $id->__toString();
+        if (!isset($this->_data[$id])) {
+            $this->_data[$id] = $row;
+        }
         $ret =  new $this->_rowClass(array(
-            'data' => $row,
+            'data' => $this->_data[$id],
             'model' => $this
         ));
         return $ret;
