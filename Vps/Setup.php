@@ -326,7 +326,7 @@ class Vps_Setup
 
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
-            Vps_Registry::get('trl')->setUseUserLanguage(false);
+            Vps_Trl::getInstance()->setUseUserLanguage(false);
             self::_setLocale();
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
@@ -340,6 +340,8 @@ class Vps_Setup
                 header('Location: '.$data->url);
                 exit;
             }
+            // hickedy-hack: Für Formular Validierung. Im 1.10 ist das bereits schön gelöst
+            Vps_Trl::getInstance()->overrideTargetLanguage($data->getLanguage());
             $page = $data->getComponent();
             $page->sendContent();
 

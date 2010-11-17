@@ -5296,22 +5296,27 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>The password was changed successfully</en>
+<de>Das Passwort wurde erfolgreich ge&#xE4;ndert</de>
 <id>1389</id>
 </text>
 <text>
 <en>Change Password</en>
+<de>Passwort &#xE4;ndern</de>
 <id>1390</id>
 </text>
 <text>
 <en>Current Password</en>
+<de>Aktuelles Passwort</de>
 <id>1391</id>
 </text>
 <text>
 <en>New Password</en>
+<de>Neues Passwort</de>
 <id>1392</id>
 </text>
 <text>
 <en>Account - Change Password</en>
+<de>Benutzer - Passwort &#xE4;ndern</de>
 <id>1393</id>
 </text>
 <text>
@@ -5847,8 +5852,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1391</id>
 </text>
 <text>
-<en>The Voucher has been successfully registered.</en>
-<de>Der Gutschein wurde erfolgreich eingetragen.</de>
+<en>Your Voucher has been successfully redeemed.</en>
+<de>Ihr Gutschein wurde erfolgreich eingelöst.</de>
 <id>1392</id>
 </text>
 <text>
