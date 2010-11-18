@@ -220,7 +220,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                         $id = call_user_func(
                             array($r->meta_class, 'getDeleteDbId'), $r, $dbId
                         );
-                        $newIds[$r->target_component_class][] = $id;
+                        if ($id) $newIds[$r->target_component_class][] = $id;
                     }
                 }
                 // Einträge mit db_id
@@ -287,6 +287,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 }
                 if (isset($w['db_id'])) {
                     $val = $w['db_id'];
+                    if (is_array($val) && count($val) == 1) $val = $val[0];
                     if (!is_array($val) && strpos($val, '%') !== false) {
                         $and[] = new Vps_Model_Select_Expr_Like('db_id', $val);
                         $and[] = new Vps_Model_Select_Expr_Equal('component_class', $cClass);
