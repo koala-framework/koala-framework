@@ -192,10 +192,16 @@ class Vpc_Paging_Component extends Vpc_Abstract
         );
     }
 
-    public function getCacheMeta()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getCacheMeta();
-        $ret[] = new Vps_Component_Cache_Meta_Component($this->getData()->parent);
+        $ret = parent::getStaticCacheMeta($componentClass);
+        foreach (Vpc_Abstract::getComponentClasses() as $class) {
+            foreach (Vpc_Abstract::getChildComponentClasses($class) as $childClass) {
+                if ($childClass == $componentClass) {
+                    $ret[] = new Vpc_Paging_CacheMeta($class);
+                }
+            }
+        }
         return $ret;
     }
 
