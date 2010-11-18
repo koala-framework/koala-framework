@@ -28,12 +28,7 @@ class Vpc_Shop_Cart_Checkout_OrdersController_SumPrice extends Vps_Data_Abstract
 {
     public function load($row)
     {
-        $ret = 0;
-        foreach ($row->getChildRows('Products') as $p) {
-            $data = Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($p->add_component_class);
-            $ret += $data->getPrice($p);
-        }
-        return $ret;
+        return $row->getTotal();
     }
 }
 class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto_Grid
