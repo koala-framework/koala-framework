@@ -19,9 +19,9 @@ abstract class Vps_Component_Cache_Meta_Static_Abstract extends Vps_Component_Ca
         return $this->_pattern;
     }
 
-    public function setDirtyColumns($columns)
+    public function setColumns($columns)
     {
-        $this->_params['dirtyColumns'] = $columns;
+        $this->_params['columns'] = $columns;
     }
 
     public function getParams()
@@ -31,8 +31,9 @@ abstract class Vps_Component_Cache_Meta_Static_Abstract extends Vps_Component_Ca
 
     public static function getDeleteWhere($pattern, $row, $dirtyColumns, $params)
     {
-        if (isset($params['dirtyColumns'])) {
-            if (!array_intersect($dirtyColumns, $params['dirtyColumns'])) {
+        // $dirtyColumns kann null sein, dann wurde row gelöscht und der cache muss auch gelöscht werden
+        if (is_array($dirtyColumns) && isset($params['columns'])) {
+            if (!array_intersect($dirtyColumns, $params['columns'])) {
                 return null;
             }
         }
