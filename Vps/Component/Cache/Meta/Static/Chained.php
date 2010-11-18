@@ -52,9 +52,9 @@ class Vps_Component_Cache_Meta_Static_Chained extends Vps_Component_Cache_Meta_A
                         $cc = Vpc_Chained_Abstract_Component::getChainedByMaster(
                             $component, $chainedComponent, $chainedType, array('ignoreVisible' => true)
                         );
-                        $ret[] = array(
-                            'db_id' => $cc->dbId
-                        );
+                        if ($cc) {
+                            $ret[] = array('db_id' => $cc->dbId);
+                        }
                     }
                 }
                 $c = $c->parent;
