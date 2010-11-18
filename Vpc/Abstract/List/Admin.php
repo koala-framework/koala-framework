@@ -8,6 +8,19 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
         if (count($childConfig) > 1) {
             //wenn das mal benötigt wird möglicherwesie mit tabs
             throw new Vps_Exception("Vpc_Abstract_List can only have childs with one Controller '$class'");
+        } else if (!count($childConfig)) {
+            throw new Vps_Exception("Vpc_Abstract_List must have child with at least one ExtConfig");
+        }
+
+        $multiFileUpload = false;
+        $form = Vpc_Abstract_Form::createChildComponentForm($this->_class, 'child');
+        if ($field = $this->_getFileUploadField($form)) {
+            $multiFileUpload = array(
+                'allowOnlyImages' => $field->getAllowOnlyImages(),
+                'maxResolution' => $field->getMaxResolution(),
+                'maxResolution' => $field->getMaxResolution(),
+                'fileSizeLimit' => $field->getFileSizeLimit(),
+            );
         }
 
         return array(
@@ -16,26 +29,23 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
                 'controllerUrl' => $this->getControllerUrl(),
                 'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
                 'icon' => $this->_getSetting('componentIcon')->__toString(),
-                'childConfig'=>$childConfig[0]
+                'childConfig'=>$childConfig[0],
+                'multiFileUpload' => $multiFileUpload
             )
         );
     }
-    public function setup()
+
+    private function _getFileUploadField($form)
     {
-        $class = Vpc_Abstract::getChildComponentClass($this->_class, 'child');
-        Vpc_Admin::getInstance($class)->setup();
-
-        if (!$this->_tableExists('vpc_composite_list')) {
-            $sql = 'CREATE TABLE IF NOT EXISTS `vpc_composite_list` (
-              `id` int(10) unsigned NOT NULL auto_increment,
-              `component_id` varchar(255) NOT NULL,
-              `component_class` varchar(255) NOT NULL,
-              `pos` tinyint(4) NOT NULL,
-              `visible` tinyint(4) NOT NULL,
-              PRIMARY KEY  (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;';
-            Vps_Registry::get('db')->query($sql);
+        foreach ($form as $i) {
+            if ($i instanceof Vps_Form_Field_File) {
+                return $i;
+            }
+            if (!($i instanceof Vps_Form_Container_Cards)) { //in cards nicht reinschaun, bei Links wollen wir keinen multi upload
+                $ret = $this->_getFileUploadField($i);
+                if ($ret) return $ret;
+            }
         }
+        return null;
     }
-
 }

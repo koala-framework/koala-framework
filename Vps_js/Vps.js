@@ -55,7 +55,7 @@ Ext.applyIf(Function.prototype, {
             return newRetval;
         };
         if (this.prototype){
-            Ext.apply(interception.prototype, this.prototype)
+            Ext.apply(interception.prototype, this.prototype);
             if (this.superclass){ interception.superclass=this.superclass; }
             if (this.override){ interception.override=this.override; }
         }
@@ -104,7 +104,7 @@ Ext.onReady(function()
     }
 });
 
-Vps.application = { version: '{$application.version}' };
+Vps.application = { maxAssetsMTime: '{$application.maxAssetsMTime}' };
 
 //log das auch ohne irgendwelche abh�nigkeiten funktioniert (zB im Selenium)
 Vps.log = function(msg) {
@@ -119,29 +119,6 @@ Vps.log = function(msg) {
         Vps.debugDiv.style.fontSize = '10px';
     }
     Vps.debugDiv.innerHTML += msg+'<br />';
-};
-
-Vps.callWithErrorHandler = function(fn, scope) {
-    if (Vps.Debug.displayErrors) {
-        //call without error handler
-        return fn.call(scope || window);
-    }
-    try {
-        return fn.call(scope || window);
-    } catch(e) {
-        if (e.toString) e = e.toString();
-        if (e.message) e = e.message;
-        if(Ext.get('loading')) {
-            Ext.get('loading').fadeOut({remove: true});
-        }
-        if (Ext.Msg) {
-            Ext.Msg.alert(trlVps('Error'), trlVps("An error has occured"));
-        }
-        Ext.Ajax.request({
-            url: '/vps/error/error/json-mail',
-            params: {msg: e}
-        });
-    }
 };
 
 //wird gesetzt in Vps.Connection
@@ -163,7 +140,7 @@ Vps.activateKeepAlive = function() {
     if (Vps.keepAliveActivated) return;
     Vps.keepAliveActivated = true;
     Vps.keepAlive.defer(1000 * 60 * 5);
-}
+};
 
 if (Vps.isApp) {
     Vps.activateKeepAlive();
@@ -181,85 +158,6 @@ Vps.onContentReady = function(fn, scope) {
     } else {
         //normales Frontend
         Ext.onReady(fn, scope);
-    }
-};
-
-Vps.handleError = function(error) {
-
-    if (error instanceof String) error = { message: error };
-    if (arguments[1]) error.title = arguments[1];
-    if (arguments[2]) error.mail = arguments[2];
-
-
-    if ((error.checkRetry || Vps.Debug.displayErrors) && error.retry) {
-        if (Vps.Debug.displayErrors) {
-            title = error.title;
-            msg = error.message;
-        } else if (error.errorText) {
-            title = error.errorText;
-            msg = error.errorText;
-        } else {
-            title = (trlVps('Error'));
-            msg = trlVps("A Server failure occured.");
-            if (error.mail || (typeof error.mail == 'undefined')) {
-            Ext.Ajax.request({
-                url: '/vps/error/error/json-mail',
-                params: {msg: error.message},
-                ignoreErrors: true
-            });
-        }
-        }
-
-            var win = new Ext.Window({
-                    autoCreate : true,
-                    title:title,
-                    resizable:true,
-                    constrain:true,
-                    constrainHeader:true,
-                    minimizable : false,
-                    maximizable : false,
-                    stateful: false,
-                    modal: false,
-                    shim:true,
-                    buttonAlign:"center",
-                    width:400,
-                    minHeight: 300,
-                    plain:true,
-                    footer:true,
-                    closable:false,
-                    html: msg,
-                    buttons: [{
-                        text     : trlVps('Retry'),
-                        handler  : function(){
-                            error.retry.call(error.scope || window);
-                            win.close();
-                        }
-                    },{
-                        text     : trlVps('Abort'),
-                        handler  : function(){
-                            error.abort.call(error.scope || window);
-                            win.close();
-                        }
-                }]
-
-                });
-                win.show();
-    } else if (Vps.Debug.displayErrors) {
-        Ext.Msg.show({
-            title: error.title,
-            msg: error.message,
-            buttons: Ext.Msg.OK,
-            modal: true,
-            width: 800
-        });
-    } else {
-        Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
-        if (error.mail || (typeof error.mail == 'undefined')) {
-            Ext.Ajax.request({
-                url: '/vps/error/error/json-mail',
-                params: {msg: error.message}
-            });
-        }
     }
 };
 

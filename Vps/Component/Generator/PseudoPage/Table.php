@@ -1,6 +1,5 @@
 <?php
 class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_Table
-    implements Vps_Component_Generator_PseudoPage_Interface
 {
     protected $_filenameColumn;
     protected $_uniqueFilename;
@@ -44,7 +43,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
                     $pattern = '#^([^_]+)_#';
                 }
                 if (!preg_match($pattern, $filename, $m)) return null;
-                $select->whereId($this->_idSeparator . $m[1]);
+                $select->whereEquals($this->_idColumn, $m[1]);
             }
         }
         return $select;
@@ -54,11 +53,8 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     {
         if ($this->_settings['nameColumn']) {
             return $row->{$this->_settings['nameColumn']};
-        } else if ((get_class($row) == 'Vps_Model_Db_Row' && method_exists($row->getRow(), '__toString'))
-                    || (get_class($row) != 'Vps_Model_Db_Row')) {
-            return $row->__toString();
         } else {
-            return null;
+            return $row->__toString();
         }
     }
 
@@ -77,17 +73,27 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     {
         $data = parent::_formatConfig($parentData, $row);
 
-        $data['filename'] = '';
         if (!$this->_settings['uniqueFilename']) {
-            $data['filename'] .= $this->_getIdFromRow($row).'_';
+            $data['filename'] = $this->_getIdFromRow($row).'_';
+            $data['filename'] .= Vps_Filter::filterStatic($this->_getFilenameFromRow($row), 'Ascii');
+            if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
+                $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
+            }
+        } else {
+            //wenn uniqueFilename muss er exakt so belassen werden wie er ist
+            //(weil danach ja die andere richtung gesucht wird)
+            $data['filename'] = $this->_getFilenameFromRow($row);
         }
-        $data['filename'] .= Vps_Filter::filterStatic($this->_getFilenameFromRow($row), 'Ascii');
-        if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
-            $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
-        }
-
+        $data['name'] = $this->_getNameFromRow($row);
         $data['rel'] = '';
         $data['isPseudoPage'] = true;
         return $data;
+    }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['pseudoPage'] = true;
+        return $ret;
     }
 }

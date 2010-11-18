@@ -2,14 +2,11 @@
 /**
  * @group Basic_DownloadTag
  */
-class Vpc_Basic_DownloadTag_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_DownloadTag_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_DownloadTag_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Basic_DownloadTag_Root');
     }
 
     public function testUrl()
@@ -19,10 +16,10 @@ class Vpc_Basic_DownloadTag_Test extends PHPUnit_Framework_TestCase
 
         $url = $c->getComponent()->getDownloadUrl();
         $url = explode('/', trim($url, '/'));
-        $this->assertEquals('Vpc_Basic_DownloadTag_TestComponent', $url[1]);
-        $this->assertEquals('1700', $url[2]);
-        $this->assertEquals('default', $url[3]);
-        $this->assertEquals('foo.png', $url[5]);
+        $this->assertEquals('Vpc_Basic_DownloadTag_TestComponent', $url[1+3]);
+        $this->assertEquals('1700', $url[2+3]);
+        $this->assertEquals('default', $url[3+3]);
+        $this->assertEquals('foo.png', $url[6+3]);
     }
 
     public function testUrlWithOwnFilename()
@@ -30,7 +27,7 @@ class Vpc_Basic_DownloadTag_Test extends PHPUnit_Framework_TestCase
         $c = $this->_root->getComponentById('1701');
         $url = $c->getComponent()->getDownloadUrl();
         $url = explode('/', trim($url, '/'));
-        $this->assertEquals('myname.png', $url[5]);
+        $this->assertEquals('myname.png', $url[6+3]);
     }
 
     public function testGetMediaOutput()
@@ -44,7 +41,7 @@ class Vpc_Basic_DownloadTag_Test extends PHPUnit_Framework_TestCase
     {
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($this->_root->getComponentById(1700));
-        $this->assertEquals('<a href="/media/Vpc_Basic_DownloadTag_TestComponent/1700/default/26ef864633eb161c415779746271adc8/foo.png">', $html);
+        $this->assertRegExp('#^<a href="/vps/vpctest/Vpc_Basic_DownloadTag_Root/media/Vpc_Basic_DownloadTag_TestComponent/1700/default/26ef864633eb161c415779746271adc8/[0-9]+/foo.png" rel="popup_blank">$#ms', $html);
     }
 
     public function testEmpty()

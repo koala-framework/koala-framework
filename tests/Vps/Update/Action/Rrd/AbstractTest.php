@@ -1,6 +1,11 @@
 <?php
 abstract class Vps_Update_Action_Rrd_AbstractTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        Vps_Component_Data_Root::setComponentClass(false);
+    }
+
     public function tearDown()
     {
     }

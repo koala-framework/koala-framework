@@ -18,6 +18,9 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         Vps_Benchmark::count('components', $data->componentClass.' '.$data->componentId);
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getData()
     {
         return $this->_data;
@@ -167,7 +170,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $constraints = array(
             'generator' => $generator,
         );
-        if ($componentKey) $constrains['componeontKey'] = $componentKey;
+        if ($componentKey) $constraints['componentKey'] = $componentKey;
         $classes = array_values(self::getChildComponentClasses($class, $constraints));
         if (!isset($classes[0])) {
             throw new Vps_Exception("childComponentClass '$componentKey' for generator '$generator' not set for '$class'");
@@ -196,10 +199,22 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             $model = $this->getModel();
             if (!$model) return null;
             if ($model instanceof Vps_Model_Interface) {
-                $this->_row = $model->getRow($this->getDbId());
+
+                $dbId = $this->getDbId();
+                $sharedDataClass = self::getFlag($this->getData()->componentClass, 'sharedDataClass');
+                if ($sharedDataClass) {
+                    $component = $this->getData();
+                    while ($component) {
+                        if (is_instance_of($component->componentClass, $sharedDataClass))
+                            $dbId = $component->dbId;
+                        $component = $component->parent;
+                    }
+                }
+
+                $this->_row = $model->getRow($dbId);
                 if (!$this->_row) {
                     $this->_row = $model->createRow();
-                    $this->_row->component_id = $this->getDbId();
+                    $this->_row->component_id = $dbId;
                 }
             } else {
                 $this->_row = $model->find($this->getDbId())->current();
@@ -230,6 +245,25 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $this->_pdfWriter;
     }
 
+    private function _getRequestWithFiles()
+    {
+        $ret = $_REQUEST;
+        //in _REQUEST sind _FILES nicht mit drinnen
+        foreach ($_FILES as $k=>$file) {
+            if (is_array($file['tmp_name'])) {
+                //wenn name[0] dann kommts in komischer form daher -> umwandeln
+                foreach (array_keys($file['tmp_name']) as $i) {
+                    foreach (array_keys($file) as $prop) {
+                        $ret[$k][$i][$prop] = $file[$prop][$i];
+                    }
+                }
+            } else {
+                $ret[$k] = $file;
+            }
+        }
+        return $ret;
+    }
+
     protected function _callProcessInput()
     {
         $process = $this->getData()
@@ -237,7 +271,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                     'page' => false,
                     'flags' => array('processInput' => true)
                 ));
-        if (Vps_Component_Abstract::getFlag(get_class($this), 'processInput')) {
+        if (Vps_Component_Abstract::getFlag($this->getData()->componentClass, 'processInput')) {
             $process[] = $this->getData();
         }
         // TODO: Äußerst suboptimal
@@ -252,20 +286,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             }
         }
 
-        $postData = $_REQUEST;
-        //in _REQUEST sind _FILES nicht mit drinnen
-        foreach ($_FILES as $k=>$file) {
-            if (is_array($file['tmp_name'])) {
-                //wenn name[0] dann kommts in komischer form daher -> umwandeln
-                foreach (array_keys($file['tmp_name']) as $i) {
-                    foreach (array_keys($file) as $prop) {
-                        $postData[$k][$i][$prop] = $file[$prop][$i];
-                    }
-                }
-            } else {
-                $postData[$k] = $file;
-            }
-        }
+        $postData = $this->_getRequestWithFiles();
         foreach ($process as $i) {
             Vps_Benchmark::count('processInput', $i->componentId);
             if (method_exists($i->getComponent(), 'preProcessInput')) {
@@ -277,21 +298,22 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 $i->getComponent()->processInput($postData);
             }
         }
-        if (class_exists('Vps_Component_RowObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Vps_Component_RowObserver::getInstance()->process(false);
+        if (class_exists('Vps_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Vps_Component_ModelObserver::getInstance()->process(false);
         }
         return $process;
     }
 
     protected function _callPostProcessInput($process)
     {
+        $postData = $this->_getRequestWithFiles();
         foreach ($process as $i) {
             if (method_exists($i->getComponent(), 'postProcessInput')) {
                 $i->getComponent()->postProcessInput($postData);
             }
         }
-        if (class_exists('Vps_Component_RowObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Vps_Component_RowObserver::getInstance()->process();
+        if (class_exists('Vps_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Vps_Component_ModelObserver::getInstance()->process();
         }
     }
 
@@ -311,11 +333,31 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     public function getTemplateVars()
     {
         $ret = array();
-        $ret['placeholder'] = $this->_getSetting('placeholder');
+        $ret['placeholder'] = $this->_getPlaceholder();
         $ret['cssClass'] = self::getCssClass($this);
         $ret['data'] = $this->getData();
         $ret['row'] = $this->_getRow();
         return $ret;
+    }
+
+    protected function _getPlaceholder($placeholder = null)
+    {
+        $ret = $this->_getSetting('placeholder');
+        if ($placeholder) {
+            return $this->getData()->trlStaticExecute($ret[$placeholder]);
+        }
+        foreach ($ret as $k => $v) {
+            $ret[$k] = $this->getData()->trlStaticExecute($v);
+        }
+        return $ret;
+    }
+
+    /**
+     * Data i.e. for json or xml output
+     */
+    public function getExportData()
+    {
+        throw new Vps_Exception_NotYetImplemented("getExportData is not yet implemented for component '".get_class($this)."'");
     }
 
     public function getMailVars($user = null)
@@ -338,11 +380,16 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         // Seite im Seitanbaum wird gelöscht, wenn Eigenschaften im Admin geändert werden
         if ($this->getData()->isPage && is_numeric($this->getData()->componentId)) {
             $ret[] = array(
-                'model' => 'Vps_Dao_Pages',
+                'model' => 'Vpc_Root_Category_GeneratorModel',
                 'id' => $this->getData()->componentId
             );
         }
         return $ret;
+    }
+
+    public static function getStaticCacheVars($componentClass)
+    {
+        return array();
     }
 
     protected function _getCacheRow()
@@ -362,7 +409,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     static public function getCssClass($component)
     {
-        if (!is_string($component)) $component = get_class($component);
+        if (!is_string($component)) $component = $component->getData()->componentClass;
         return self::getSetting($component, 'processedCssClass');
     }
 
@@ -412,12 +459,12 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         $ret = array();
         foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            if ($c == $class) {
+            if ((strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c) == $class) {
                 $ret[] = $c;
                 continue;
             }
             foreach (Vpc_Abstract::getParentClasses($c) as $p) {
-                if ($p == $class) {
+                if ((strpos($p, '.') ? substr($p, 0, strpos($p, '.')) : $p) == $class) {
                     $ret[] = $c;
                     break;
                 }

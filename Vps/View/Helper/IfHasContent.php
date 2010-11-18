@@ -1,9 +1,7 @@
 <?php
 class Vps_View_Helper_IfHasContent
 {
-    protected $_tag = 'content';
-
-    public function ifHasContent(Vps_Component_Data $component = null)
+    public function ifHasContent(Vps_Component_Data $component = null, $tag = 'content')
     {
         static $componentId;
         static $counter;
@@ -17,12 +15,12 @@ class Vps_View_Helper_IfHasContent
             $componentClass = $component->componentClass;
             if (!isset($counter[$componentClass])) $counter[$componentClass] = 0;
             $counter[$componentClass]++;
-            $ret = "{{$this->_tag}: {$componentClass} {$component->componentId} {$counter[$componentClass]}}";
+            $ret = "{{$tag}: {$componentClass} {$component->componentId} {$counter[$componentClass]}}";
             $componentId = $component->componentId;
         } else if ($componentId) {
-            $ret = "{{$this->_tag}}";
+            $ret = "{{$tag}}";
             $componentId = null;
         }
-        echo $ret;
+        return $ret;
     }
 }

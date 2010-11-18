@@ -1,6 +1,7 @@
 <?php
 class Vpc_Basic_LinkTag_FirstChildPage_Data extends Vps_Component_Data
 {
+    private $_pageCache = false;
     public function __get($var)
     {
         if ($var == 'url') {
@@ -16,16 +17,18 @@ class Vpc_Basic_LinkTag_FirstChildPage_Data extends Vps_Component_Data
 
     public function _getFirstChildPage()
     {
-        // zuerst prüfen ob es eine händisch angelegte child page gibt
-        $page = $this->getChildPage(array('pageGenerator' => true));
-        if (!$page) {
-            $page = $this->getChildPage(array('inherit'=>false),
-                                    array(
-                                        'inherit'=>false,
-                                        'page'=>false
-                                    ));
+        if ($this->_pageCache === false) {
+            // zuerst prüfen ob es eine händisch angelegte child page gibt
+            $page = $this->getChildPage(array('pageGenerator' => true));
+            if (!$page) {
+                $page = $this->getChildPage(array('inherit'=>false),
+                                        array(
+                                            'inherit'=>false,
+                                            'page'=>false
+                                        ));
+            }
+            $this->_pageCache = $page;
         }
-        if (!$page) return null;
-        return $page;
+        return $this->_pageCache;
     }
 }

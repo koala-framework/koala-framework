@@ -3,14 +3,11 @@
  * @group Vpc_Basic_Text
  * @group Vpc_Basic_Text_Model
  **/
-class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
+class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_Text_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Basic_Text_Root');
     }
 
     public function testCreatesLinkComponent()
@@ -98,7 +95,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"/foo1\">foo</a>\n</p>".
+                    "<p>\n  <a href=\"/vps/vpctest/Vpc_Basic_Text_Root/foo1\">foo</a>\n</p>".
                     "</div>", $html);
     }
 
@@ -140,7 +137,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $row = $c->getRow();
         $html = '<p><img src="http://www.vivid-planet.com/files/vividplanet_internet_agentur_salzburg.gif" /></p>';
         $html = $row->tidy($html);
-        $this->assertEquals("<p>\n  <img src=\"/media/Vpc_Basic_Text_Image_TestComponent/1008-i1/default/34df9defa3f1aba945f116672a671f76/vividplanetinternetagentursalzburg.gif\" width=\"100\" height=\"100\" />\n</p>", $html);
+        $this->assertRegExp("#^<p>\n  <img src=\"/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1008-i1/default/34df9defa3f1aba945f116672a671f76/[0-9]+/vividplanetinternetagentursalzburg.gif\" width=\"100\" height=\"100\" />\n</p>$#ms", $html);
 
         $cc = array_values($c->getData()->getChildComponents());
         $this->assertEquals(1, count($cc));
@@ -181,9 +178,11 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
 
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <div class=\"vpcBasicTextImageTestComponent\"><img src=\"/media/Vpc_Basic_Text_Image_TestComponent/1009-i1/default/12a259547cf4ad9a4687e39969cc0033/vividplanetinternetagentursalzburg.gif\" width=\"100\" height=\"100\" alt=\"\" class=\"\" /></div>\n</p>".
-                    "</div>", $html);
+        $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'.
+                    '\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
+                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1009-i1/default/12a259547cf4ad9a4687e39969cc0033/[0-9]+/vividplanetinternetagentursalzburg.gif" width="100" height="100" alt="" class="" />'
+                    .'\s*</div>\s*</p>'
+                    .'\s*</div>\s*$#ms', $html);
 
     }
 
@@ -197,9 +196,11 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <div class=\"vpcBasicTextImageTestComponent\"><img src=\"/media/Vpc_Basic_Text_Image_TestComponent/1010-i1/default/9ab09415a09caef30d520e9080262b7f/foo.png\" width=\"100\" height=\"100\" alt=\"\" class=\"\" /></div>\n</p>".
-                    "</div>", $html);
+        $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'
+                    .'\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
+                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1010-i1/default/9ab09415a09caef30d520e9080262b7f/[0-9]+/foo.png" width="100" height="100" alt="" class="" />'
+                    .'\s*</div>\s*</p>'
+                    .'\s*</div>\s*$#ms', $html);
     }
 
     public function testCreatesDownloadFromOtherComponentId()
@@ -212,9 +213,9 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/a1b024ef219bcfe6b3f5ac9916d8f722/foo.png\">foo</a>\n</p>".
-                    "</div>", $html);
+        $this->assertRegExp("#^<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
+                    "<p>\n  <a href=\"/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/a1b024ef219bcfe6b3f5ac9916d8f722/[0-9]+/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
+                    "</div>$#ms", $html);
     }
 
     public function testOldMediaUrlImage()
@@ -229,8 +230,10 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <div class=\"vpcBasicTextImageTestComponent\"><img src=\"/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/default/987577de8b2c5b4b75b8343ed85db0bf/foo.png\" width=\"100\" height=\"100\" alt=\"\" class=\"\" /></div>\n</p>".
-                    "</div>", $html);
+        $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'
+                    .'\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
+                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/default/987577de8b2c5b4b75b8343ed85db0bf/[0-9]+/foo.png" width="100" height="100" alt="" class="" />'
+                    .'\s*</div>\s*</p>'
+                    .'\s*</div>\s*$#ms', $html);
     }
 }

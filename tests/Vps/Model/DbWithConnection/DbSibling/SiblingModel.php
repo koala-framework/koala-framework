@@ -23,9 +23,9 @@ class Vps_Model_DbWithConnection_DbSibling_SiblingModel extends Vps_Model_Db
         parent::__construct($config);
     }
 
-    public function __destruct()
+    public function dropTable()
     {
-        Vps_Registry::get('db')->query("DROP TABLE {$this->_tableName}");
+        Vps_Registry::get('db')->query("DROP TABLE IF EXISTS {$this->_tableName}");
     }
 
     public function clearRows()

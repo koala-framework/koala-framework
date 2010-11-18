@@ -37,9 +37,11 @@ class Vps_Media_Image
         if ($scale != self::SCALE_ORIGINAL) {
             if ($width == 0) {
                 $width = round($height * ($size[0]/$size[1]));
+                if ($width <= 0) $width = 1;
             }
             if ($height == 0) {
                 $height = round($width * ($size[1]/$size[0]));
+                if ($height <= 0) $height = 1;
             }
         }
 
@@ -76,7 +78,6 @@ class Vps_Media_Image
                 $y = 0;
                 $height = $cropFromHeight;
             }
-
 
             return array('width'        => round($width),
                          'height'       => round($height),
@@ -118,20 +119,24 @@ class Vps_Media_Image
                 $width = $size[0] / $heightRatio;
                 $height = $size[1] / $heightRatio;
             }
-            return array('width'=>round($width), 'height'=>round($height), 'scale'=>$scale);
 
         } elseif ($scale == self::SCALE_DEFORM) {
 
-            return array('width'=>$width, 'height'=>$height, 'scale'=>$scale);
+            //width und height sind schon korrekt gesetzt
 
         } elseif ($scale == self::SCALE_ORIGINAL) {
 
-            return array('width'=>$size[0], 'height'=>$size[1], 'scale'=>$scale);
+            $width = $size[0];
+            $height = $size[1];
 
         } else {
             return false;
-
         }
+        $width = round($width);
+        $height = round($height);
+        if ($width <= 0) $width = 1;
+        if ($height <= 0) $height = 1;
+        return array('width'=>$width, 'height'=>$height, 'scale'=>$scale);
     }
 
     public static function scale($source, $size)
@@ -167,6 +172,7 @@ class Vps_Media_Image
                 $im->setImagePage(0, 0, 0, 0);
     //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
                 $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+                $im->setCompressionQuality(90);
                 $ret = $im->getImageBlob();
                 $im->destroy();
             }
@@ -177,6 +183,7 @@ class Vps_Media_Image
                 $im->readImage($source);
                 $im->thumbnailImage($size['width'], $size['height']);
                 $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+                $im->setCompressionQuality(90);
                 $ret = $im->getImageBlob();
                 $im->destroy();
             } else {

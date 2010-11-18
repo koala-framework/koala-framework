@@ -8,7 +8,7 @@ class Vps_Model_DbWithConnection_ImportExport_Model extends Vps_Model_Db
             `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
             `foo` VARCHAR( 200 ) NOT NULL ,
             `bar` VARCHAR( 200 ) NOT NULL
-        ) ENGINE = INNODB");
+        ) ENGINE = INNODB DEFAULT CHARSET=utf8");
         parent::__construct($config);
     }
 
@@ -29,5 +29,7 @@ class Vps_Model_DbWithConnection_ImportExport_Model extends Vps_Model_Db
                         (id, foo, bar) VALUES ('1', 'aaabbbccc', 'abcd')");
         Vps_Registry::get('db')->query("INSERT INTO {$this->_tableName}
                         (id, foo, bar) VALUES ('2', 'bam', 'bum')");
+        Vps_Registry::get('db')->query("INSERT INTO {$this->_tableName}
+                        (id, foo, bar) VALUES ('3', 'bäm', 'büm')");
     }
 }

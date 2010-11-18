@@ -5,6 +5,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     private $_processed = false;
     private $_isSaved = false;
     private $_initialized = false;
+    private $_posted;
     private $_postData;
     protected $_errors = array();
 
@@ -13,14 +14,14 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Vpc_Form_Success_Component';
         $ret['componentName'] = trlVps('Form');
-        $ret['placeholder']['submitButton'] = trlVps('Submit');
-        $ret['placeholder']['error'] = trlVps('An error has occurred');
+        $ret['placeholder']['submitButton'] = trlVpsStatic('Submit');
+        $ret['placeholder']['error'] = trlVpsStatic('An error has occurred');
         $ret['decorator'] = 'Vpc_Form_Decorator_Label';
         $ret['viewCache'] = false;
         $ret['method'] = 'post';
 
         //todo: wenn mehrere verbessern
-        $ret['assets']['dep'][] = 'VpsCore';
+        $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
         $ret['assets']['files'][] = 'vps/Vpc/Form/Component.js';
         $ret['assets']['files'][] = 'vps/Vps_js/Form/FieldSet/Component.js';
@@ -29,12 +30,29 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         return $ret;
     }
 
+    public static function validateSettings($settings, $componentClass)
+    {
+        parent::validateSettings($settings, $componentClass);
+
+        // wenn es eine Form.php gibt aber keine FrontendForm.php
+        // sollte man aus irgendeinem grund doch eine Form benutzen ohne FrontendForm
+        // dann einfach validateSettings überschreiben und parent nicht aufrufen
+        $frontendFormClass = Vpc_Admin::getComponentClass($componentClass, 'FrontendForm');
+        $formClass = Vpc_Admin::getComponentClass($componentClass, 'Form');
+        if ($formClass != 'Vpc_Abstract_Composite_Form' && !$frontendFormClass) {
+            throw new Vps_Exception("Form.php files for frontend have been renamed to FrontendForm.php");
+        }
+
+        if ($frontendFormClass && is_instance_of($frontendFormClass, 'Vpc_Abstract_Form')) {
+            throw new Vps_Exception("A frontend form may never be an instance of Vpc_Abstract_Form");
+        }
+    }
+
     protected function _initForm()
     {
         if (!isset($this->_form)) {
-            $this->_form = Vpc_Abstract_Form::createComponentForm(get_class($this), 'form');
-            $this->_form->setClass(get_class($this));
-            if ($this->getFormModel()) $this->_form->setModel($this->getFormModel());
+            $formClass = Vpc_Admin::getComponentClass($this, 'FrontendForm');
+            $this->_form = new $formClass('form', get_class($this));
         }
     }
 
@@ -50,7 +68,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     protected function _processInput($postData)
     {
         if ($this->_processed) {
-            throw new Vps_Exception("ProcessInput has been called already for {$this->getData()->componentId}");
+            return;
         }
         $this->_processed = true;
 
@@ -62,6 +80,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         if (!isset($postData[$this->getData()->componentId.'-post']) && !isset($postData[$this->getData()->componentId])) {
             $postData = array();
+            $this->_posted = false;
+        } else {
+            $this->_posted = true;
         }
         $postData = $this->_form->processInput(null, $postData);
         $this->_postData = $postData;
@@ -88,6 +109,14 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         if (Vps_Registry::get('db')) Vps_Registry::get('db')->commit();
     }
 
+    public function getPostData()
+    {
+        if (!$this->_processed) {
+            throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
+        }
+        return $this->_postData;
+    }
+
     public function getErrors()
     {
         if (!$this->_processed) {
@@ -109,6 +138,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         if (!$this->_initialized) {
             $this->_initialized = true;
             $this->_initForm();
+            if ($this->_form) $this->_form->trlStaticExecute($this->getData()->getLanguage());
         }
         return $this->_form;
     }
@@ -125,6 +155,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         if (self::hasChildComponentClass(get_class($this), 'child', 'success')) {
             $class = self::getChildComponentClass(get_class($this), 'child', 'success');
         }
+
+        $ret['isPosted'] = $this->_posted;
         $ret['showSuccess'] = false;
         $ret['errors'] = $this->getErrors();
         if ($this->isSaved()) {

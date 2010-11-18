@@ -28,7 +28,8 @@ class Vps_View_Ext extends Vps_View
         }
 
         // View einrichten
-        $dep = new Vps_Assets_Dependencies();
+        $loader = new Vps_Assets_Loader();
+        $dep = $loader->getDependencies();
         $ext['class'] = $class;
         if (!isset($config->id)) $config->id = 'mainPanel';
         if (!isset($config->region)) $config->region = 'center';

@@ -4,7 +4,7 @@ class Vps_View_Helper_Partials
     public function partials($component, $partialClass = null, $params = array())
     {
         if (!$component instanceof Vps_Component_Data ||
-            !$component->getComponent() instanceof Vps_Component_Partial_Interface
+            !method_exists($component->getComponent(), 'getPartialVars')
         )
             throw new Vps_Exception('Component has to implement Vps_Component_Partial_Interface');
         if (!$partialClass) {

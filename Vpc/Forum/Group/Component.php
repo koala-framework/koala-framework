@@ -2,21 +2,21 @@
 class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Component
 {
     private $_mayModerate;
-    
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['detail']['component'] = 'Vpc_Forum_Thread_Component';
         $ret['generators']['detail']['maxFilenameLength'] = 50;
         $ret['generators']['detail']['maxNameLength'] = 30;
-        $ret['generators']['detail']['table'] = 'Vpc_Forum_Group_Model';
+        $ret['generators']['detail']['model'] = 'Vpc_Forum_Group_Model';
         $ret['generators']['child']['component']['view'] = 'Vpc_Forum_Group_View_Component';
         $ret['generators']['newThread'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Forum_Group_NewThread_Component',
             'name' => trlVps('new thread')
         );
-        $ret['tablename'] = 'Vpc_Forum_Group_Model';
+        $ret['childModel'] = 'Vpc_Forum_Group_Model';
         return $ret;
     }
 
@@ -29,18 +29,18 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
                 if ($authedUser->role == 'admin') {
                     $this->_mayModerate = true;
                 } else {
-                    $table = new Vpc_Forum_Group_ModeratorsModel();
-                    $row = $table->fetchRow(array(
-                        'user_id = ?' => $authedUser->id,
-                        'group_id = ?' => $this->getData()->row->id
-                    ));
+                    $model = Vps_Model_Abstract::getInstance('Vpc_Forum_Group_ModeratorsModel');
+                    $row = $model->getRow($model->select()
+                        ->whereEquals('user_id', $authedUser->id)
+                        ->whereEquals('group_id', $this->getData()->row->id)
+                    );
                     if ($row) $this->_mayModerate = true;
                 }
             }
         }
         return $this->_mayModerate;
     }
-    
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -49,13 +49,13 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
         $ret['forum'] = $this->getData()->getParentPage();
         return $ret;
     }
-    
+
     public function getSelect()
     {
         $ret = parent::getSelect();
         $ret->order(new Zend_Db_Expr('(SELECT MAX(create_time) 
                 FROM vpc_posts 
                 WHERE vpc_posts.component_id=cache_child_component_id) DESC'));
-        return $ret;        
+        return $ret;
     }
 }

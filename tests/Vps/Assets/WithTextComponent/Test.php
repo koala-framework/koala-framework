@@ -2,6 +2,8 @@
 /**
  * @group Assets
  * @group Assets_Component
+ * @group slow
+ * slow weil sie den assets cache löschen
  */
  class Vps_Assets_WithTextComponent_Test extends PHPUnit_Framework_TestCase
 {
@@ -15,7 +17,8 @@
         $config->debug->assets->js = true;
         $config->debug->assets->css = true;
         $config->debug->assets->printcss = true;
-        $dep = new Vps_Assets_Dependencies($config);
+        $loader = new Vps_Assets_Loader($config);
+        $dep = $loader->getDependencies();
 
         $type = 'Vps_Assets_WithTextComponent:Test';
         $files = $dep->getAssetUrls($type, 'js', 'web', $rootComponent);

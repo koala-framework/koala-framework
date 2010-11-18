@@ -1,6 +1,5 @@
 <?php
 abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
-    implements Vps_Model_Interface_Id
 {
     protected $_rowClass = 'Vps_Model_Row_Data_Abstract';
 
@@ -71,6 +70,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             if ($row === $i) {
                 $this->_data[$k] = $rowData;
                 $this->_afterDataUpdate();
+                $this->_dataModified();
                 return $rowData[$this->getPrimaryKey()];
             }
         }
@@ -102,6 +102,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         $this->_afterDataUpdate();
         $key = end(array_keys($this->_data));
         $this->_rows[$key] = $row;
+        $this->_dataModified();
         return $rowData[$this->getPrimaryKey()];
     }
 
@@ -113,6 +114,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 unset($this->_data[$k]);
                 $this->_afterDataUpdate();
                 unset($this->_rows[$k]);
+                $this->_dataModified();
                 return;
             }
         }
@@ -149,11 +151,11 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             foreach ($dataKeys as $key) {
                 if ($order['field'] instanceof Zend_Db_Expr) {
                     //can't be done in FnF
-                    $orderData[$inData[$key]['id']] = 0;
+                    $orderData[$inData[$key][$this->_primaryKey]] = 0;
                 } else if ($order['field'] == Vps_Model_Select::ORDER_RAND) {
-                    $orderData[$inData[$key]['id']] = rand();
+                    $orderData[$inData[$key][$this->_primaryKey]] = rand();
                 } else {
-                   $orderData[$inData[$key]['id']] = strtolower($this->_rowValue($order['field'], $inData[$key]));
+                   $orderData[$inData[$key][$this->_primaryKey]] = strtolower($this->_rowValue($order['field'], $inData[$key]));
                 }
             }
             if ($order['direction'] == 'ASC') {
@@ -166,7 +168,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             $sortedDataKeys = array();
             foreach (array_keys($orderData) as $id) {
                 foreach ($dataKeys as $key) {
-                    if ($inData[$key]['id'] == $id) {
+                    if ($inData[$key][$this->_primaryKey] == $id) {
                         $sortedDataKeys[] = $key;
                     }
                 }
@@ -188,7 +190,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
     private function _matchSelect($data, $select)
     {
         foreach ($data as &$d) {
-            if (!is_null($d)) $d = (string)$d;
+            if (!is_object($d) && !is_null($d)) $d = (string)$d;
         }
         if ($id = $select->getPart(Vps_Model_Select::WHERE_ID)) {
             if ($data[$this->getPrimaryKey()] != (string)$id) return false;
@@ -236,6 +238,14 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             $ret = $this->getExprValue($rowData, $field);
         } else if (isset($rowData[$field])) {
             $ret = $rowData[$field];
+        } else {
+            foreach ($this->_siblingModels as $m) {
+                if ($m->hasColumn($field)) {
+                    $row = $m->getRow($rowData[$this->getPrimaryKey()]);
+                    if ($row) $ret = $row->$field;
+                    break;
+                }
+            }
         }
         return $ret;
     }
@@ -334,6 +344,20 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 }
             }
             return true;
+        } else if ($expr instanceof Vps_Model_Select_Expr_Add) {
+            $ret = 0;
+            foreach ($expr->getExpressions() as $andExpr) {
+                $ret += $this->_checkExpressions($andExpr, $data);
+            }
+            return $ret;
+        } else if ($expr instanceof Vps_Model_Select_Expr_Subtract) {
+            $ret = 0;
+            foreach ($expr->getExpressions() as $andExpr) {
+                $ret -= $this->_checkExpressions($andExpr, $data);
+            }
+            return $ret;
+        } else {
+            return (bool)$this->getExprValue($data, $expr);
         }
         return true;
     }
@@ -399,4 +423,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         }
     }
 
+    protected function _dataModified()
+    {
+    }
 }

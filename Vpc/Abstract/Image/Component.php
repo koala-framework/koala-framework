@@ -1,8 +1,10 @@
 <?php
 class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
-    implements Vps_Media_Output_Interface
+    implements Vps_Media_Output_IsValidInterface
 {
     const USER_SELECT = 'user';
+    private $_imageDataOrEmptyImageData;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -35,9 +37,12 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             ),
         );
 
+        $ret['imageLabel'] = trlVps('Image');
+        $ret['maxResolution'] = null;
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
+        $ret['imageCaption'] = false;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
         $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
@@ -67,21 +72,48 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             if (!array_key_exists('scale', $d)) {
                 throw new Vps_Exception('Dimension setting must contain scale');
             }
+            $validScales = array(Vps_Media_Image::SCALE_BESTFIT, Vps_Media_Image::SCALE_CROP, Vps_Media_Image::SCALE_ORIGINAL, Vps_Media_Image::SCALE_DEFORM);
+            if (!in_array($d['scale'], $validScales)) {
+                throw new Vps_Exception("Invalid Scale '$d[scale]'");
+            }
         }
+
+        //wenn erste dimension (=standard wert!) bestfit oder crop ist, müssen
+        //width oder height gesetzt sein
+        reset($settings['dimensions']);
+        $firstDimension = current($settings['dimensions']);
+        if (($firstDimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
+            $firstDimension['scale'] == Vps_Media_Image::SCALE_CROP) &&
+            empty($firstDimension['width']) &&
+            empty($firstDimension['height'])
+        ) {
+            throw new Vps_Exception('The first dimension must contain width or height if bestfit or crop is used');
+        }
+    }
+
+    public function getExportData()
+    {
+        $ret = parent::getExportData();
+        $ret['imageUrl'] = $this->getImageUrl();
+        return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['row'] = $this->_getRow();
-        $ret['imageRow'] = $this->getImageRow();
+        $ret['image'] = $this->getData();
+        $imageCaptionSetting = $this->_getSetting('imageCaption');
+        if ($imageCaptionSetting) {
+            $ret['image_caption'] = $this->_getRow()->image_caption;
+            $ret['showImageCaption'] = $imageCaptionSetting;
+        }
         return $ret;
     }
 
     public function hasContent()
     {
-        $imageRow = $this->getImageRow();
-        if ($imageRow && $imageRow->imageExists()) {
+        $data = $this->_getImageDataOrEmptyImageData();
+        if ($data && $data['file'] && file_exists($data['file'])) {
             return true;
         }
         return false;
@@ -89,49 +121,75 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
     public function getImageUrl()
     {
-        $row = $this->getImageRow();
-        $fRow = false;
-        if ($row) $fRow = $row->getParentRow('Image');
-        if ($fRow) {
-            $filename = $row->filename;
-            if (!$filename) {
-                $filename = $fRow->filename;
-            }
-            $filename .= '.'.$fRow->extension;
+        $data = $this->_getImageDataOrEmptyImageData();
+        if ($data && $data['filename']) {
             $id = $this->getData()->componentId;
-            return Vps_Media::getUrl(get_class($this), $id, 'default', $filename);
+            return Vps_Media::getUrl($this->getData()->componentClass, $id, 'default', $data['filename']);
         }
         return null;
     }
 
-    public function getImageDimensions()
+    public function getImageData()
     {
-        $ret = self::_getDimensions($this->getImageRow(), get_class($this));
-        return $ret;
+        $row = $this->_getRow();
+        $fileRow = false;
+        if ($row) $fileRow = $row->getParentRow('Image');
+
+        $filename = null;
+        if ($fileRow) {
+            if ($this->_getSetting('editFilename')) {
+                $filename = $row->filename;
+            }
+            if (!$filename) {
+                $filename = $fileRow->filename;
+            }
+            $filename .= '.'.$fileRow->extension;
+        }
+        return array(
+            'filename' => $filename,
+            'file' => $fileRow ? $fileRow->getFileSource() : null,
+            'mimeType' => $fileRow ? $fileRow->mime_type : null,
+            'row' => $row
+        );
     }
 
-    public function getImageRow()
+    private function _getImageDataOrEmptyImageData()
     {
-        return $this->_getRow();
+        if (!isset($this->_imageDataOrEmptyImageData)) {
+            $file = $this->getImageData();
+            if (!$file['file']) {
+                $file = $this->_getEmptyImageData();
+            }
+            $this->_imageDataOrEmptyImageData = $file;
+        }
+        return $this->_imageDataOrEmptyImageData;
     }
 
     public function _getCacheRow()
     {
-        return $this->getImageRow();
+        $data = $this->getImageData();
+        if (isset($data['row'])) return $data['row'];
+        return null;
     }
 
-    protected static function _getEmptyImage($className)
+    protected function _getEmptyImageData()
     {
-        return false;
+        return null;
     }
 
-    private static function _getDimensions($row, $className)
+    protected function _getImageDimensions()
     {
-        $dimension = Vpc_Abstract::getSetting($className, 'dimensions');
+        $row = $this->getRow();
+        $dimension = $this->_getSetting('dimensions');
 
         $s = array();
-        if (sizeof($dimension) > 1 && isset($dimension[$row->dimension])) {
-            $d = $dimension[$row->dimension];
+        if (sizeof($dimension) > 1) {
+            if ($row && isset($dimension[$row->dimension])) {
+                $d = $dimension[$row->dimension];
+            } else {
+                reset($dimension);
+                $d = current($dimension);
+            }
         } else {
             reset($dimension);
             $d = current($dimension);
@@ -140,35 +198,61 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         if (!isset($d['width'])) {
             $s['width'] = 0;
         } else if ($d['width'] == self::USER_SELECT) {
-            $s['width'] = $row->width;
+            if (!is_object($row)) {
+                $s['width'] = 0;
+            } else {
+                $s['width'] = $row->width;
+            }
         } else {
             $s['width'] = $d['width'];
         }
         if (!isset($d['height'])) {
             $s['height'] = 0;
         } else if ($d['height'] == self::USER_SELECT) {
-            $s['height'] = $row->height;
+            if (!is_object($row)) {
+                $s['height'] = 0;
+            } else {
+                $s['height'] = $row->height;
+            }
         } else {
             $s['height'] = $d['height'];
         }
-        if (!isset($d['scale'])) {
-        } else if ($d['scale'] == self::USER_SELECT) {
-            $s['scale'] = $row->scale;
-        } else {
-            $s['scale'] = $d['scale'];
-        }
+        $s['scale'] = $d['scale'];
+        return $s;
+    }
 
-        if (!$row || !$fileRow = $row->getParentRow('Image')) {
-            $file = call_user_func(array($className, '_getEmptyImage'), $className);
-        } else {
-            $file = $fileRow->getFileSource();
-        }
-        if ($file && file_exists($file)) {
-            $sourceSize = @getimagesize($file);
+    public function getImageDimensions()
+    {
+        $data = $this->_getImageDataOrEmptyImageData();
+        $s = $this->_getImageDimensions();
+
+        if ($data && $data['file'] && file_exists($data['file'])) {
+            $sourceSize = @getimagesize($data['file']);
             if (!$sourceSize) return null;
             return Vps_Media_Image::calculateScaleDimensions($sourceSize, $s);
         }
         return $s;
+    }
+
+    public static function isValidMediaOutput($id, $type, $className)
+    {
+        if (Vps_Component_Data_Root::getInstance()->getComponentById($id)) {
+            return self::VALID;
+        }
+        if (Vps_Registry::get('config')->showInvisible) {
+            //preview im frontend
+            if (Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
+                return self::VALID_DONT_CACHE;
+            }
+        }
+
+        //paragraphs vorschau im backend
+        $authData = Vps_Registry::get('userModel')->getAuthedUser();
+        if ($authData) {
+            return self::VALID_DONT_CACHE;
+        }
+
+        return self::INVALID;
     }
 
     public static function getMediaOutput($id, $type, $className)
@@ -176,37 +260,24 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $component = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
         if (!$component) return null;
 
-        $row = $component->getComponent()->getImageRow();
-        if ($row) {
-            $fileRow = $row->getParentRow('Image');
-        } else {
-            $fileRow = false;
-        }
-        if (!$fileRow) {
-            $file = call_user_func(array($className, '_getEmptyImage'), $className);
-            $s = getimagesize($file);
-            $mimeType = $s['mime'];
-        } else {
-            $file = $fileRow->getFileSource();
-            $mimeType = $fileRow->mime_type;
-        }
-        if (!$file || !file_exists($file)) {
+        $data = $component->getComponent()->_getImageDataOrEmptyImageData();
+        if (!$data || !$data['file'] || !file_exists($data['file'])) {
             return null;
         }
 
-        $dim = self::_getDimensions($row, $className);
+        $dim = $component->getComponent()->_getImageDimensions();
         if ($dim) {
-            $output = Vps_Media_Image::scale($file, $dim);
+            $output = Vps_Media_Image::scale($data['file'], $dim);
         } else {
-            $output = file_get_contents($file);
+            $output = file_get_contents($data['file']);
         }
         $ret = array(
             'contents' => $output,
-            'mimeType' => $mimeType,
+            'mimeType' => $data['mimeType'],
         );
         if (Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
             $mtimeFiles = array();
-            $mtimeFiles[] = $file;
+            $mtimeFiles[] = $data['file'];
             $classes = Vpc_Abstract::getParentClasses($className);
             $classes[] = $className;
             $incPaths = explode(PATH_SEPARATOR, get_include_path());
@@ -225,11 +296,11 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $ret['mtime'] = $mtime;
             $ret['mtimeFiles'] = $mtimeFiles;
         } else {
-            $ret['mtime'] = filemtime($file);
+            $ret['mtime'] = filemtime($data['file']);
         }
-        if ($row) {
+        if (isset($data['row'])) {
             Vps_Component_Cache::getInstance()->saveMeta(
-                get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+                get_class($data['row']->getModel()), $data['row']->component_id, $id, Vps_Component_Cache::META_CALLBACK
             );
         }
         return $ret;

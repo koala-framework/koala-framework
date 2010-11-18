@@ -45,8 +45,8 @@ class Vps_Component_Generator_Model_Row extends Vps_Model_Row_Abstract
 
     public function delete()
     {
-        $table = new Vps_Dao_Pages;
-        $row = $table->find($this->componentId)->current();
+        $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+        $row = $m->getRow($this->componentId)->current();
         $row->delete();
     }
     

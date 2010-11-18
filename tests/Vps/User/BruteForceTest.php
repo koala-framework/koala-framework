@@ -9,6 +9,19 @@
  */
 class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        Vps_Test_SeparateDb::createSeparateTestDb(dirname(__FILE__).'/bootstrap.sql');
+    }
+
+    public function tearDown()
+    {
+        $this->assertFalse(Vps_User_Model::isLockedCreateUser());
+        Vps_Test_SeparateDb::restoreTestDb();
+        parent::tearDown();
+    }
+
     /**
      * Wenn ein User erstellt wird kann passieren dass ein anderer php prozess
      * als der der ihn eigentlich erstellt hat diesen neuen user synct und so
@@ -21,7 +34,7 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
         $debugOutput = false;
         $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 läuft der server heiß
 
-        $cmd = "php bootstrap.php test forward --controller=vps_user_brute-force-insert";
+        $cmd = "php bootstrap.php test forward --controller=vps_user_brute-force-insert --testDb=".Vps_Test_SeparateDb::getDbName();
         $descriptorspec = array(
             1 => array("pipe", "w"),
         );
@@ -60,7 +73,7 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
             if ($debugOutput) echo $out."\n\n";
         }
         if ($failed) {
-            $this->fail("alt least one process failed");
+            $this->fail("alt least one process failed; output was: ".implode("\n", $allOut));
         }
     }
 
@@ -70,7 +83,7 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
         $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 läuft der server heiß
 
         $prefix = uniqid('usr');
-        $cmd = "php bootstrap.php test forward --controller=vps_user_brute-force-insert --action=create-one-user  --prefix=$prefix";
+        $cmd = "php bootstrap.php test forward --controller=vps_user_brute-force-insert --action=create-one-user --prefix=$prefix --testDb=".Vps_Test_SeparateDb::getDbName();
         $descriptorspec = array(
             1 => array("pipe", "w"),
         );
@@ -109,7 +122,7 @@ class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
             if ($debugOutput) echo $out."\n\n";
         }
         if ($failed) {
-            $this->fail("alt least one process failed");
+            $this->fail("alt least one process failed; output was: ".implode("\n", $allOut));
         }
 
         $createdId = false;

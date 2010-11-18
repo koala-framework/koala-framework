@@ -1,20 +1,18 @@
 <?php
 /**
  * @group Composite_Images
+ *
+ * http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Composite_Images_Root/Vpc_Composite_Images_TestComponent/Index?componentId=2100
  */
-class Vpc_Composite_Images_Test extends PHPUnit_Framework_TestCase
+class Vpc_Composite_Images_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Composite_Images_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Composite_Images_Root');
     }
 
     public function testHtml()
     {
-        $this->markTestIncomplete("Test funktioniert im 1.8er branch korrekt, hier aus irgendeinem grun dnicht");
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($this->_root->getComponentById(2100));
         $doc = new DOMDocument();
@@ -28,7 +26,7 @@ class Vpc_Composite_Images_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(100, (string)$img[0]['height']);
         $src = (string)$img[0]['src'];
 
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();

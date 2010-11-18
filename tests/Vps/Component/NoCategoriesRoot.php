@@ -5,7 +5,7 @@ class Vps_Component_NoCategoriesRoot extends Vpc_Root_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['page'] = array(
-            'class' => 'Vps_Component_Generator_Page',
+            'class' => 'Vpc_Root_Category_Generator',
             'showInMenu' => true,
             'inherit' => true,
             'component' => array(
@@ -13,7 +13,7 @@ class Vps_Component_NoCategoriesRoot extends Vpc_Root_Component
                 'link' => 'Vpc_Basic_LinkTag_Component',
                 'firstChildPage' => 'Vpc_Basic_LinkTag_FirstChildPage_Component'
             ),
-            'table' => 'Vps_Dao_Pages'
+            'model' => 'Vpc_Root_Category_GeneratorModel'
         );
         unset($ret['generators']['category']);
         return $ret;

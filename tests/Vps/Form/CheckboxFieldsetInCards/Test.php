@@ -24,17 +24,17 @@ class Vps_Form_CheckboxFieldsetInCards_Test extends Vps_Test_SeleniumTestCase
         $this->click("//div[@class='x-column-inner']/div[2]//img[@class='x-form-radio']");
         $this->click("//button[text()='".trlVps('Save')."']");
         $this->waitForConnections();
-        $this->assertTextNotPresent(trlVps("Can't save, please fill all marked fields correctly."));
+        $this->assertTextNotPresent(trlVps("Can't save, please fill all red underlined fields correctly."));
 
         $this->open('/vps/test/vps_form_checkbox-fieldset-in-cards_test');
         $this->waitForConnections();
         $this->click("//div[@class='x-column-inner']/div[3]//img[@class='x-form-radio']");
-        $this->assertElementNotPresent('//label[text()="SubCards:"]/following::div[@class="x-form-element"]/div/input[@disabled]');
+        $this->assertElementNotPresent('.vps-test-subcards[disabled]');
 
         $this->open('/vps/test/vps_form_checkbox-fieldset-in-cards_test');
         $this->waitForConnections();
         $this->click("//div[@class='x-column-inner']/div[4]//img[@class='x-form-radio']");
-        $this->assertElementNotPresent('//input[@name="text4" and @disabled]');
+        $this->assertElementNotPresent('.vps-test-text4[disabled]');
     }
 
 }

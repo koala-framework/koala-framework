@@ -1,4 +1,7 @@
 <?php
+/**
+ * @deprecated use Vps_Component_Plugin_Password_Component instead
+ */
 class Vps_Component_Plugin_Password extends Vps_Component_Plugin_View_Abstract
 {
     protected $_password = 'planet';

@@ -16,6 +16,8 @@ class Vps_User_Model extends Vps_Model_Proxy
 
     private $_lock = null;
 
+    protected $_noLogColumns = array();
+
     public function __construct(array $config = array())
     {
         if (!isset($config['proxyModel'])) {
@@ -32,7 +34,7 @@ class Vps_User_Model extends Vps_Model_Proxy
 
     public static function version()
     {
-        return Zend_Registry::get('config')->application->vps->version;
+        return 1;
     }
 
     public function getMailClass()
@@ -96,7 +98,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             if ($row) {
                 if (!$row->deleted) {
                     $this->unlockCreateUser();
-                    throw new Vps_ClientException(
+                    throw new Vps_Exception_Client(
                         trlVps('An account with this email address already exists')
                     );
                 }
@@ -122,7 +124,7 @@ class Vps_User_Model extends Vps_Model_Proxy
                     $relRow->deleted = 0;
                     $relRow->save();
 
-                    $allRow->save(); // damit last_modified geschrieben wird
+                    $allRow->forceSave(); // damit last_modified geschrieben wird
 
                     $this->getProxyModel()->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
 
@@ -247,12 +249,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             );
         }
 
-        $passCol = $this->_passwordColumn;
-        $superPassword = '18de947e015ad2761ed16422f1f3478b';
-        if ($credential == md5($row->$passCol) // für cookie login
-            || $row->encodePassword($credential) == $row->$passCol
-            || md5($credential) == $superPassword
-        ) {
+        if ($row->validatePassword($credential)) {
             if ($row->locked) {
                 $this->writeLog(array(
                     'user_id' => $row->id,
@@ -266,6 +263,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             }
 
             // Login nur zählen wenn richtig normal eingeloggt
+            $passCol = $this->getPasswordColumn();
             if ($credential == md5($row->$passCol)
                 || $row->encodePassword($credential) == $row->$passCol
             ) {
@@ -319,6 +317,8 @@ class Vps_User_Model extends Vps_Model_Proxy
 
     public function getAuthedUser()
     {
+        if (!Vps_Registry::get('db')) return null;
+
         if (php_sapi_name() == 'cli') return null;
 
         if (!$this->_authedUser) {
@@ -339,6 +339,7 @@ class Vps_User_Model extends Vps_Model_Proxy
     public function getAuthedUserRole()
     {
         if (php_sapi_name() == 'cli') return 'cli';
+        if (!Vps_Registry::get('db')) return 'guest';
 
         $loginData = Vps_Auth::getInstance()->getStorage()->read();
         if (isset($loginData['userRole'])) {
@@ -377,6 +378,16 @@ class Vps_User_Model extends Vps_Model_Proxy
         if ($this->_logActions) {
             $this->getDependentModel('Messages')->createRow($data)->save();
         }
+    }
+
+    public function getPasswordColumn()
+    {
+        return $this->_passwordColumn;
+    }
+
+    public function getNoLogColumns()
+    {
+        return $this->_noLogColumns;
     }
 
 }

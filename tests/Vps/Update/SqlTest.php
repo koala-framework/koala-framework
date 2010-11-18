@@ -6,7 +6,6 @@ class Vps_Update_SqlTest extends PHPUnit_Framework_TestCase
 {
     public function testSql()
     {
-        $this->markTestIncomplete();
         $update = new Vps_Update_Sql(123, 'abc');
         $tableName = uniqid("updatesql");
         $update->sql = "CREATE TABLE $tableName (

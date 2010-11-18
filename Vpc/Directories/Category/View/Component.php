@@ -26,6 +26,7 @@ class Vpc_Directories_Category_View_Component
     public function getItemCountCacheId($row)
     {
         // Row kann von hier (Model) oder von Admin (DB-Row) kommen
+        $highestSubRoot = false;
         $c = $this->getData();
         while ($c) {
             $isSubroot = Vps_Component_Abstract::getFlag($c->componentClass, 'subroot');
@@ -48,7 +49,7 @@ class Vpc_Directories_Category_View_Component
 
     public static function getItemCountCache()
     {
-        $frontendOptions = array('lifetime' => 3600);
+        $frontendOptions = array('lifetime' => 3600, 'automatic_serialization' => true);
         $backendOptions = array('cache_dir' => 'application/cache/component/');
         return Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
     }

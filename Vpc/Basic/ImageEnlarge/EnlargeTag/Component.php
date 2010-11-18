@@ -7,11 +7,12 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['componentName'] = trlVps('Enlarge Image');
         $ret['alternativePreviewImage'] = true;
         $ret['fullSizeDownloadable'] = false;
+        $ret['showInactiveSwitchLinks'] = false;
         $ret['imageTitle'] = true;
-        $ret['dimensions'] = array(array('width'=>640, 'height'=>480, 'scale'=>Vps_Media_Image::SCALE_BESTFIT));
+        $ret['dimensions'] = array(array('width'=>800, 'height'=>600, 'scale'=>Vps_Media_Image::SCALE_BESTFIT));
 
         $ret['assets']['files'][] = 'vps/Vpc/Basic/ImageEnlarge/EnlargeTag/Component.js';
-        $ret['assets']['dep'][] = 'ExtCore';
+        $ret['assets']['dep'][] = 'ExtElement';
         $ret['assets']['dep'][] = 'ExtXTemplate';
         $ret['assets']['dep'][] = 'ExtUtilJson';
 
@@ -36,51 +37,57 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
     protected function _getOptions()
     {
         $ret = array();
+        $ret['showInactiveSwitchLinks'] = $this->_getSetting('showInactiveSwitchLinks');
+
         if ($this->_getSetting('imageTitle')) {
             $ret['title'] = $this->getRow()->title;
         }
         if ($this->_getSetting('fullSizeDownloadable')) {
-            $row = $this->getImageRow();
-            $filename = $row->filename;
-            $fRow = $row->getParentRow('Image');
-            if (!$fRow) return $ret;
-            if (!$filename && $fRow) {
-                $filename = $fRow->filename;
+            $data = $this->getImageData();
+            if ($data && $data['filename']) {
+                $ret['fullSizeUrl'] = Vps_Media::getUrl($this->getData()->componentClass,
+                    $this->getData()->componentId, 'original', $data['filename']);
             }
-            $filename .= '.'.$fRow->extension;
-            $ret['fullSizeUrl'] = Vps_Media::getUrl($this->getData()->componentClass,
-                $this->getData()->componentId, 'original', $filename);
+        }
+
+        if (Vpc_Abstract::getSetting($this->_getImageEnlargeComponentData()->componentClass, 'imageCaption')) {
+            $ret['imageCaption'] = $this->_getImageEnlargeComponentData()->getComponent()->getRow()->image_caption;
         }
         return $ret;
     }
 
-    public function getImageRow()
+    private function _getImageEnlargeComponentData()
     {
         $d = $this->getData();
         while (!is_instance_of($d->componentClass, 'Vpc_Basic_ImageEnlarge_Component')) {
             $d = $d->parent;
         }
-        return $d->getComponent()->getOwnImageRow();
+        return $d;
     }
 
-    public function getAlternativePreviewImageRow()
+    public function getImageData()
     {
-        return parent::getImageRow();
+        $d = $this->_getImageEnlargeComponentData();
+        return $d->getComponent()->getOwnImageData();
+    }
+
+    public function getAlternativePreviewImageData()
+    {
+        return parent::getImageData();
     }
 
     public static function getMediaOutput($id, $type, $className)
     {
         if ($type == 'original') {
-            $row = Vps_Component_Data_Root::getInstance()
-                ->getComponentByDbId($id, array('limit'=>1))
-                ->getComponent()->getImageRow();
-            if (!$row->imageExists()) {
+            $data = Vps_Component_Data_Root::getInstance()
+                ->getComponentByDbId($id, array('limit'=>1, 'ignoreVisible' => true))
+                ->getComponent()->getImageData();
+            if (!$data || !$data['file']) {
                 return null;
             }
-            $fileRow = $row->getParentRow('Image');
             return array(
-                'file' => $fileRow->getFileSource(),
-                'mimeType' => $fileRow->mime_type
+                'file' => $data['file'],
+                'mimeType' => $data['mimeType']
             );
         } else {
             return parent::getMediaOutput($id, $type, $className);

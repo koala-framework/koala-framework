@@ -4,6 +4,11 @@
  */
 class Vps_Update_Action_Db_AddFieldTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        Vps_Component_Data_Root::setComponentClass(false);
+    }
+
     public function testAddField()
     {
         $model = new Vps_Update_Action_Db_TestModel();

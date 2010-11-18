@@ -16,7 +16,7 @@ class Vpc_Posts_Directory_Component extends Vpc_Directories_Item_Directory_Compo
         $ret['generators']['write'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Posts_Write_Component',
-            'name' => trlVps('Write'),
+            'name' => trlVpsStatic('Write'),
         );
         $ret['generators']['child']['component']['view'] = 'Vpc_Posts_Directory_View_Component';
         $ret['placeholder']['writeText'] = null;

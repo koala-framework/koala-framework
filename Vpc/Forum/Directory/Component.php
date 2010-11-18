@@ -21,7 +21,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
             'component' => 'Vpc_Forum_FeedList_Component'
         );
 
-        $ret['tablename'] = 'Vpc_Forum_Directory_Model';
+        $ret['childModel'] = 'Vpc_Forum_Directory_Model';
         $ret['componentName'] = trlVps('Forum.Forum');
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Forum/Directory/Panel.js';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoTree';
@@ -104,7 +104,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getStaticCacheVars($calledClass)
+    public static function getStaticCacheVars($calledClass)
     {
         $ret = array();
         $class = Vpc_Abstract::getChildComponentClass($calledClass, 'groups');

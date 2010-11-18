@@ -7,11 +7,10 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract_Image_Component
         $ret['componentName'] = trlVps('Image');
         $ret['componentIcon'] = new Vps_Asset('picture');
         $ret['imgCssClass'] = '';
-        $ret['emptyImage'] = false;
+        $ret['emptyImage'] = false; // eg. 'Empty.jpg' in same folder
         $ret['useParentImage'] = false;
         return $ret;
     }
-
 
     public function getTemplateVars()
     {
@@ -20,42 +19,27 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract_Image_Component
         return $ret;
     }
 
-    public function hasContent()
+    public function getImageData()
     {
         if ($this->_getSetting('useParentImage')) {
-            return $this->getData()->parent->hasContent();
-        }
-        if ($this->_getSetting('emptyImage')) return true;
-        return parent::hasContent();
-    }
-
-
-    public function getImageUrl()
-    {
-        $ret = parent::getImageUrl();
-        if (!$ret && $file = self::_getEmptyImage(get_class($this))) {
-            $filename = $this->_getSetting('emptyImage');
-            $id = $this->getData()->componentId;
-            $ret = Vps_Media::getUrl(get_class($this), $id, 'default', $filename);
-        }
-        return $ret;
-    }
-
-    public function getImageRow()
-    {
-        if ($this->_getSetting('useParentImage')) {
-            return $this->getModel()->getRow($this->getData()->parent->dbId);
+            return $this->getData()->parent->getComponent()->getImageData();
         } else {
-            return parent::getImageRow();
+            return parent::getImageData();
         }
     }
 
-    protected static function _getEmptyImage($className)
+    protected function _getEmptyImageData()
     {
-        $emptyImage = Vpc_Abstract::getSetting($className, 'emptyImage');
+        $emptyImage = $this->_getSetting('emptyImage');
         if (!$emptyImage) return null;
         $ext = substr($emptyImage, strrpos($emptyImage, '.') + 1);
         $filename = substr($emptyImage, 0, strrpos($emptyImage, '.'));
-        return Vpc_Admin::getComponentFile($className, $filename, $ext);
+        $file = Vpc_Admin::getComponentFile($this, $filename, $ext);
+        $s = getimagesize($file);
+        return array(
+            'filename' => $emptyImage,
+            'file' => $file,
+            'mimeType' => $s['mime']
+        );
     }
 }

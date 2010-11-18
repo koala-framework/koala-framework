@@ -2,17 +2,17 @@
     <? if($this->position=='left') { ?>
         <tr>
             <? if ($this->image) { ?>
-                <td><?=$this->component($this->image)?></td>
-                <td width="5">&nbsp;</td>
+                <td valign="top"><?=$this->component($this->image);?></td>
+                <td width="10">&nbsp;</td>
             <? } ?>
-            <td valign="top"><?=$this->component($this->text)?></td>
+            <td valign="top"><?=$this->component($this->text);?></td>
         </tr>
     <? } else { ?>
         <tr>
-            <td valign="top"><?=$this->component($this->text)?></td>
+            <td valign="top"><?=$this->component($this->text);?></td>
             <? if ($this->image) { ?>
-                <td width="5">&nbsp;</td>
-                <td align="right"><?=$this->component($this->image)?></td>
+                <td width="10">&nbsp;</td>
+                <td valign="top" align="right"><?=$this->component($this->image);?></td>
             <? } ?>
         </tr>
     <? } ?>

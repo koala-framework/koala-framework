@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_DownloadTag_Admin extends Vpc_Basic_Image_Admin
+class Vpc_Basic_DownloadTag_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
 {
     public function setup()
     {

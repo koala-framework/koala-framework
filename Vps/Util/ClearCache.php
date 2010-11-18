@@ -1,6 +1,9 @@
 <?php
 class Vps_Util_ClearCache
 {
+    const MODE_CLEAR = 'clear';
+    const MODE_IMPORT = 'import';
+
     public function getInstance()
     {
         static $i;
@@ -12,16 +15,17 @@ class Vps_Util_ClearCache
         return $i;
     }
 
-    public final function getCacheDirs()
+    public final function getCacheDirs($mode = self::MODE_CLEAR)
     {
-        return $this->_getCacheDirs();
+        return $this->_getCacheDirs($mode);
     }
 
-    protected function _getCacheDirs()
+    protected function _getCacheDirs($mode = self::MODE_CLEAR)
     {
         $ret = array();
         foreach (new DirectoryIterator('application/cache') as $d) {
             if ($d->isDir() && substr($d->getFilename(), 0, 1) != '.') {
+                if ($d->getFilename() == 'searchindex') continue;
                 $ret[] = $d->getFilename();
             }
         }
@@ -63,7 +67,7 @@ class Vps_Util_ClearCache
 
         $types = array('all');
         if (class_exists('Memcache')) $types[] = 'memcache';
-        $types = array_merge($types, $this->_getCacheDirs());
+        $types = array_merge($types, $this->getCacheDirs());
         $types = array_merge($types, $this->getDbCacheTables());
         return $types;
     }
@@ -89,7 +93,7 @@ class Vps_Util_ClearCache
                     Vps_Component_Cache::refreshStaticCache();
                     if ($output) echo " [\033[00;32mOK\033[00m]\n";
                 } catch (Exception $e) {
-                    if ($output) echo " [\033[01;31mERROR\033[00m]\n";
+                    if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
                 }
             }
             try {
@@ -105,7 +109,7 @@ class Vps_Util_ClearCache
                         Vps_Registry::get('userModel')->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
                         if ($output) echo " [\033[00;32mOK\033[00m]\n";
                     } catch (Exception $e) {
-                        if ($output) echo " [\033[01;31mERROR\033[00m]\n";
+                        if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
                     }
 
                     // alle zeilen löschen die zuviel sind in vps_users
@@ -165,7 +169,7 @@ class Vps_Util_ClearCache
                 }
             }
         }
-        foreach ($this->_getCacheDirs() as $d) {
+        foreach ($this->getCacheDirs() as $d) {
             if (in_array($d, $types)) {
                 if (is_dir("application/cache/$d")) {
                     $this->_removeDirContents("application/cache/$d", $server);

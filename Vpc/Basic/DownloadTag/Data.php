@@ -14,9 +14,9 @@ class Vpc_Basic_DownloadTag_Data extends Vps_Component_Data
                 $filename = $fRow->filename;
             }
             $filename .= '.'.$fRow->extension;
-            return Vps_Media::getUrl($this->componentClass, $this->dbId, 'default', $filename);
+            return Vps_Media::getUrl($this->componentClass, $this->componentId, 'default', $filename);
         } else if ($var == 'rel') {
-            $ret = '';
+            $ret = 'popup_blank';
             return $ret;
         } else {
             return parent::__get($var);

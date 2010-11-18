@@ -2,14 +2,27 @@
 class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller_Action
 {
     private $_rrds;
-    public function preDispatch()
+    protected function _getRrds()
     {
-        parent::preDispatch();
-        $this->_rrds = array();
-        foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
-            $this->_rrds[$k] = new $n;
+        if (!isset($this->_rrds)) {
+            $this->_rrds = array();
+            foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
+                $this->_rrds[$k] = new $n;
+            }
+            $this->_rrds = array_reverse($this->_rrds);
         }
-        $this->_rrds = array_reverse($this->_rrds);
+        return $this->_rrds;
+    }
+
+    protected function _getGraphs()
+    {
+        $ret = array();
+        foreach ($this->_getRrds() as $name=>$rrd) {
+            foreach ($rrd->getGraphs() as $gName=>$graph) {
+                $ret[$name.'_'.$gName] = $graph;
+            }
+        }
+        return $ret;
     }
 
     private function _printReloadJs()
@@ -36,27 +49,22 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         }
         $this->_printReloadJs();
         echo "<form action=\"\" method=\"post\" style=\"position: absolute; right:0; top:0; text-align:right; margin-right:10px;\">";
-        echo "<a href=\"/admin/component/benchmark/values\">current values</a><br />";
-        foreach ($this->_rrds as $name=>$rrd) {
-            $title = $rrd->getTitle();
-            if (!$title) $title = $name;
-            echo "<strong>$title:</strong><br />";
-            foreach ($rrd->getGraphs() as $gName=>$g) {
-                $title = $g->getTitle();
-                if (!$title) $title = $gName;
-                $n = "{$name}_{$gName}";
-                echo "<label for=\"$n\">$title</label>";
-                echo "<input id=\"$n\" name=\"$n\" type=\"checkbox\" ";
-                if (isset($_REQUEST[$n])) {
-                    if (!in_array($n, $active)) {
-                        $active[] = $n;
-                    }
+        $url = Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action'=>'values'));
+        echo "<a href=\"$url\">current values</a><br />";
+        foreach ($this->_getGraphs() as $n=>$g) {
+            $title = $g->getTitle();
+            if (!$title) $title = $n;
+            echo "<label for=\"$n\">$title</label>";
+            echo "<input id=\"$n\" name=\"$n\" type=\"checkbox\" ";
+            if (isset($_REQUEST[$n])) {
+                if (!in_array($n, $active)) {
+                    $active[] = $n;
                 }
-                if (in_array($n, $active)) {
-                    echo "checked=\"checked\" ";
-                }
-                echo "/><br />";
             }
+            if (in_array($n, $active)) {
+                echo "checked=\"checked\" ";
+            }
+            echo "/><br />";
         }
         setcookie('benchmark-active', implode('**', $active), time()+60*60*24*14);
         echo "<input type=\"submit\" name=\"submit\">\n";
@@ -74,23 +82,24 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
         );
         $start = $this->_getParam('start');
         if (!$start && isset($_COOKIE['start'])) $start = $_COOKIE['start'];
-        if (!$start) $start = '-1 week';
+        if (!$start || !strtotime($start)) $start = '-1 week';
         setcookie('benchmark-start', $start, time()+60*60*24*14);
 
+        $url = Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action'=>'index'));
         foreach ($startDates as $k=>$i) {
-            echo "<a href=\"/admin/component/benchmark?start=$i\"";
+            echo "<a href=\"$url?start=$i\"";
             if ($i == $start) echo " style=\"font-weight: bold\"";
             echo ">$k</a> ";
         }
         echo "<br /><br />";
-        foreach ($this->_rrds as $name=>$rrd) {
-            foreach (array_keys($rrd->getGraphs()) as $gName) {
-                $n = "{$name}_{$gName}";
-                if (in_array($n, $active)) {
-                    echo "<a href=\"/admin/component/benchmark/detail?rrd=$name&name=$gName\">";
-                    echo "<img style=\"border:none\" src=\"/admin/component/benchmark/graph?rrd=$name&name=$gName&start=".urlencode($start)."\" />";
-                    echo "</a>";
-                }
+        foreach ($this->_getGraphs() as $n=>$graph) {
+            if (in_array($n, $active)) {
+                $url = Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action'=>'detail'));
+                echo "<a href=\"$url?name=$n\">";
+
+                $url = Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action'=>'graph'));
+                echo "<img style=\"border:none\" src=\"$url?name=$n&start=".urlencode($start)."\" />";
+                echo "</a>";
             }
         }
         $this->_helper->viewRenderer->setNoRender(true);
@@ -100,9 +109,9 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
     public function detailAction()
     {
         $this->_printReloadJs();
-        $rrd = $this->_getParam('rrd');
         $name = $this->_getParam('name');
-        echo "<a href=\"/admin/component/benchmark\">overview</a><br /><br />";
+        $url = Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action'=>'index'));
+        echo "<a href=\"$url\">overview</a><br /><br />";
         $startDates = array(
             'last 3 hours' => '-3 hours',
             'last 6 hours' => '-6 hours',
@@ -115,8 +124,9 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
             'last year' => '-1 year'
 
         );
+        $url = Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action'=>'graph'));
         foreach ($startDates as $d) {
-            echo "<img src=\"/admin/component/benchmark/graph?rrd=$rrd&name=$name&start=".urlencode($d)."\" />";
+            echo "<img src=\"$url?name=$name&start=".urlencode($d)."\" />";
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
@@ -131,14 +141,16 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
             'cache_dir' => 'application/cache/benchmark/'
         );
         $cache = Vps_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-        $cacheId = md5('graph_'.$this->_getParam('rrd').'_'.$this->_getParam('name')
-                    .'_'.$this->_getParam('start'));
+        $cacheId = md5('graph_'.$this->_getParam('name').'_'.$this->_getParam('start'));
         if (!$output = $cache->load($cacheId)) {
-            $rrd = $this->_rrds[$this->_getParam('rrd')];
-            $graphs = $rrd->getGraphs();
+            $graphs = $this->_getGraphs();
             $g = $graphs[$this->_getParam('name')];
             $output = array();
-            $output['contents'] = $g->getContents(strtotime($this->_getParam('start')));
+            $start = strtotime($this->_getParam('start'));
+            if (!$start) {
+                throw new Vps_ClientException("invalid start");
+            }
+            $output['contents'] = $g->getContents($start);
             $output['mimeType'] = 'image/png';
             $cache->save($output, $cacheId);
         }
@@ -147,8 +159,9 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
 
     public function valuesAction()
     {
-        echo "<a href=\"/admin/component/benchmark\">graphs</a><br /><br />";
-        foreach ($this->_rrds as $rrd) {
+        $url = Zend_Controller_Front::getInstance()->getRouter()->assemble(array('action'=>'index'));
+        echo "<a href=\"$url\">graphs</a><br /><br />";
+        foreach ($this->_getRrds() as $rrd) {
             $values = array_values($rrd->getRecordValues());
             $cnt = 0;
             foreach (array_values($rrd->getFields()) as $k=>$i) {

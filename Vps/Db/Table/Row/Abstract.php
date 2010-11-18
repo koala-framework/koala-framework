@@ -300,7 +300,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         parent::_postUpdate();
         if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_RowObserver::getInstance()->update($this);
+            Vps_Component_ModelObserver::getInstance()->update($this);
         }
     }
 
@@ -308,7 +308,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         parent::_postInsert();
         if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_RowObserver::getInstance()->insert($this);
+            Vps_Component_ModelObserver::getInstance()->insert($this);
         }
     }
 
@@ -316,7 +316,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         parent::_postDelete();
         if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_RowObserver::getInstance()->delete($this);
+            Vps_Component_ModelObserver::getInstance()->delete($this);
         }
     }
 

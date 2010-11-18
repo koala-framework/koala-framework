@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Basic_ImageEnlarge
+ * @group Image
  */
 class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
 {
@@ -123,7 +124,8 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
         $dim = $c->getComponent()->getImageDimensions();
         $this->assertEquals(10, $dim['width']);
         $this->assertEquals(10, $dim['height']);
-        $this->assertEquals('1802-linkTag', $c->getComponent()->getImageRow()->component_id);
+        $data = $c->getComponent()->getImageData();
+        $this->assertEquals('1802-linkTag', $data['row']->component_id);
 
         $url = explode('/', trim($c->getComponent()->getImageUrl(), '/'));
         $this->assertEquals('Vpc_Basic_ImageEnlarge_TestComponent', $url[1]);
@@ -134,7 +136,8 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
         $dim = $c->getComponent()->getImageDimensions();
         $this->assertEquals(210, $dim['width']);
         $this->assertEquals(70, $dim['height']);
-        $this->assertEquals('1802', $c->getComponent()->getImageRow()->component_id);
+        $data = $c->getComponent()->getImageData();
+        $this->assertEquals('1802', $data['row']->component_id);
     }
 
     public function testWithSmallImageUploadedHtml()

@@ -1,6 +1,5 @@
 <?php
 class Vps_Model_Db extends Vps_Model_Abstract
-    implements Vps_Model_Interface_Id
 {
     protected $_rowClass = 'Vps_Model_Db_Row';
     protected $_rowsetClass = 'Vps_Model_Db_Rowset';
@@ -8,11 +7,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private $_tableName;
     private $_columns;
 
-    // CSV deaktiviert, weil character set bei LOAD DATA INFILE an der online
-    // mysql version nicht möglich ist
     protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
-
-    private $_proxyContainerModels = array();
 
     private $_importBuffer;
     private $_importBufferOptions;
@@ -28,17 +23,16 @@ class Vps_Model_Db extends Vps_Model_Abstract
         parent::__construct($config);
     }
 
+    public function __sleep()
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
     public function __destruct()
     {
         if (isset($this->_importBuffer)) {
             $this->writeBuffer();
         }
-    }
-
-    //kann gesetzt werden von proxy
-    public function addProxyContainerModel($m)
-    {
-        $this->_proxyContainerModels[] = $m;
     }
 
     protected function _init()
@@ -157,7 +151,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         $ret = $this->_formatFieldInternal($field, $select);
         if (!$ret) {
-            throw new Vps_Exception("Can't find field '$field'");
+            throw new Vps_Exception("Can't find field '$field' in model '".get_class($this)."' (Table '".$this->getTableName()."')");
         }
 
         return $ret;
@@ -236,8 +230,6 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private function _fixStupidQuoteBug($v)
     {
         if ((strpos($v, '?') !== false || strpos($v, ':') !== false) && strpos($v, '\'') !== false) {
-            $e = new Vps_Exception("(? or :) and a single quote are used together in an sql query value. This is a problem because of an Php bug. The single quote is ignored.");
-            $e->notify();
             $v = str_replace('\'', '', $v);
         }
         return $v;
@@ -262,12 +254,16 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
             foreach ($whereEquals as $field=>$value) {
                 if (is_array($value)) {
-                    foreach ($value as &$v) {
-                        $v = $this->_fixStupidQuoteBug($v);
-                        $v = $this->getAdapter()->quote($v);
+                    if ($value) {
+                        foreach ($value as &$v) {
+                            $v = $this->_fixStupidQuoteBug($v);
+                            $v = $this->getAdapter()->quote($v);
+                        }
+                        $value = implode(', ', $value);
+                        $dbSelect->where($this->_formatField($field, $dbSelect)." IN ($value)");
+                    } else {
+                        $dbSelect->where('0');
                     }
-                    $value = implode(', ', $value);
-                    $dbSelect->where($this->_formatField($field, $dbSelect)." IN ($value)");
                 } else {
                     $value = $this->_fixStupidQuoteBug($value);
                     $dbSelect->where($this->_formatField($field, $dbSelect)." = ?", $value);
@@ -323,7 +319,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (!$col = $this->_formatFieldExpr($field, $dbSelect)) {
                     throw new Vps_Exception("Expression '$field' not found");
                 }
-                $dbSelect->from(null, array($field=>$col));
+                $dbSelect->from(null, array($field=>new Zend_Db_Expr($col)));
             }
         }
     }
@@ -396,6 +392,18 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
             }
             return implode(" AND ", $sqlExpressions);
+        } else if ($expr instanceof Vps_Model_Select_Expr_Add) {
+            $sqlExpressions = array();
+            foreach ($expr->getExpressions() as $expression) {
+                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
+            }
+            return implode(" + ", $sqlExpressions);
+        } else if ($expr instanceof Vps_Model_Select_Expr_Subtract) {
+            $sqlExpressions = array();
+            foreach ($expr->getExpressions() as $expression) {
+                $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
+            }
+            return implode(" - ", $sqlExpressions);
         } else if ($expr instanceof Vps_Model_Select_Expr_Concat) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {
@@ -435,6 +443,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else if ($expr instanceof Vps_Model_Select_Expr_Sum) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
             return "SUM($field)";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Max) {
+            $field = $this->_formatField($expr->getField(), $dbSelect);
+            return "MAX($field)";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Min) {
+            $field = $this->_formatField($expr->getField(), $dbSelect);
+            return "MIN($field)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Area) {
             $lat1 = $this->_formatField('latitude', $dbSelect);
             $lat2 = $expr->getLatitude();
@@ -482,6 +496,35 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, $exprStr);
             return "($depDbSelect)";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Child_Contains) {
+            $i = $depOf->getDependentModelWithDependentOf($expr->getChild());
+            $depM = $i['model'];
+            $depOf = $i['dependentOf'];
+            $depM = Vps_Model_Abstract::getInstance($depM);
+            $dbDepM = $depM;
+            while ($dbDepM instanceof Vps_Model_Proxy) {
+                $dbDepM = $dbDepM->getProxyModel();
+            }
+            if (!$dbDepM instanceof Vps_Model_Db) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
+            $dbDepOf = $depOf;
+            while ($dbDepOf instanceof Vps_Model_Proxy) {
+                $dbDepOf = $dbDepOf->getProxyModel();
+            }
+            if (!$dbDepOf instanceof Vps_Model_Db) {
+                throw new Vps_Exception_NotYetImplemented();
+            }
+            $depTableName = $dbDepM->getTableName();
+            $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
+            $depSelect = $expr->getSelect();
+            if (!$depSelect) $depSelect = $dbDepM->select();
+            $col1 = $dbDepM->transformColumnName($ref['column']);
+            $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
+            $depDbSelect = $dbDepM->_getDbSelect($depSelect);
+            $depDbSelect->reset(Zend_Db_Select::COLUMNS);
+            $depDbSelect->from(null, "$depTableName.$col1");
+            return $this->_fieldWithTableName($this->getPrimaryKey())." IN ($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
             $refM = $depOf->getReferencedModel($expr->getParent());
             $refM = Vps_Model_Abstract::getInstance($refM);
@@ -515,6 +558,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
             return $field;
+        } else if ($expr instanceof Vps_Model_Select_Expr_PrimaryKey) {
+            $field = $this->_formatField($this->getPrimaryKey(), $dbSelect);
+            return $field;
         } else if ($expr instanceof Vps_Model_Select_Expr_SumFields) {
             $sqlExpressions = array();
             foreach ($expr->getFields() as $expression) {
@@ -529,6 +575,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 }
             }
             return '('.implode('+ ', $sqlExpressions).')';
+        } else if ($expr instanceof Vps_Model_Select_Expr_Sql) {
+            return '('.$expr->getSql().')';
         } else {
             throw new Vps_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
         }
@@ -753,7 +801,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $select = $this->select($select);
             }
 
-            $filename = realpath('application/temp').'/modelcsvexport'.uniqid();
+            $tmpExportFolder = realpath('application/temp').'/modelcsvex'.uniqid();
+            $filename = $tmpExportFolder.'/csvexport';
 
             $dbSelect = $this->createDbSelect($select);
             $sqlString = $dbSelect->assembleIntoOutfile($filename);
@@ -762,6 +811,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $fieldResult = $dbSelect->query()->fetchAll();
             $columnsCsv = '';
             if (count($fieldResult)) {
+                mkdir($tmpExportFolder, 0777);
                 $columns = array_keys($fieldResult[0]);
                 $columnsCsv = '"'.implode('","', $columns).'"';
                 $this->executeSql($sqlString);
@@ -776,6 +826,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
                 $ret = file_get_contents($filename.'.gz');
                 unlink($filename.'.gz');
+                rmdir($tmpExportFolder);
                 return $ret;
             } else {
                 return '';
@@ -790,6 +841,19 @@ class Vps_Model_Db extends Vps_Model_Abstract
             return $dbSelect->query()->fetchAll();
         } else {
             return parent::export($format, $select);
+        }
+    }
+
+    private function _updateModelObserver()
+    {
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            if ($this->_proxyContainerModels) {
+                foreach ($this->_proxyContainerModels as $m) {
+                    Vps_Component_ModelObserver::getInstance()->update($m);
+                }
+            } else {
+                Vps_Component_ModelObserver::getInstance()->update($this);
+            }
         }
     }
 
@@ -814,13 +878,16 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
             $cmd .= "| {$systemData['mysqlDir']}mysql $systemData[mysqlOptions] 2>&1";
             exec($cmd, $output, $ret);
-            if ($ret != 0) throw new Vps_Exception("SQL import failed: ".implode("\n", $output));
             unlink($filename);
+            $this->_updateModelObserver();
+            if ($ret != 0) throw new Vps_Exception("SQL import failed: ".implode("\n", $output));
         } else if ($format == self::FORMAT_CSV) {
             // if no data is recieved, quit
             if (!$data) return;
 
-            $filename = realpath('application/temp').'/modelcsvimport'.uniqid();
+            $tmpImportFolder = realpath('application/temp').'/modelcsvim'.uniqid();
+            mkdir($tmpImportFolder, 0777);
+            $filename = $tmpImportFolder.'/csvimport';
             file_put_contents($filename.'.gz', $data);
 
             $cmd = "gunzip -c $filename.gz > $filename"
@@ -847,6 +914,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
             unlink($filename.'.gz');
             unlink($filename);
+            rmdir($tmpImportFolder);
+            $this->_updateModelObserver();
         } else if ($format == self::FORMAT_ARRAY) {
             if (isset($options['buffer']) && $options['buffer']) {
                 if (isset($this->_importBuffer)) {
@@ -854,11 +923,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
                         throw new Vps_Exception_NotYetImplemented("You can't buffer imports with different options (not yet implemented)");
                     }
                     $this->_importBuffer = array_merge($this->_importBuffer, $data);
-                    if (isset($options['bufferSize']) &&
-                        count($this->_importBuffer) > $options['bufferSize'])
-                    {
-                        $this->writeBuffer();
-                    }
+                    // handling for not sending too much data to mysql in one query
+                    // is in _importArray() function
                 } else {
                     $this->_importBufferOptions = $options;
                     $this->_importBuffer = $data;
@@ -866,6 +932,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             } else {
                 $this->_importArray($data, $options);
             }
+            $this->_updateModelObserver();
         } else {
             parent::import($format, $data);
         }
@@ -901,45 +968,94 @@ class Vps_Model_Db extends Vps_Model_Abstract
     private function _importArray($data, $options)
     {
         if (empty($data)) return;
+        if ($this->getSiblingModels()) {
+            if ($options) {
+                throw new Vps_Exception_NotYetImplemented("import options together with siblingModels are not yet implemented");
+            }
+            foreach ($data as $r) {
+                $this->createRow($r)->save();
+            }
+            return;
+        }
         $fields = array_keys($data[0]);
         if (isset($options['replace']) && $options['replace']) {
-            $sql = 'REPLACE';
+            $sqlTableAndColumns = 'REPLACE';
         } else {
-            $sql = 'INSERT';
+            $sqlTableAndColumns = 'INSERT';
         }
         foreach ($fields as &$f) {
             $f = $this->transformColumnName($f);
         }
         if (isset($options['ignore']) && $options['ignore'])
-            $sql .= ' IGNORE';
-        $sql .= ' INTO '.$this->getTableName().' ('.implode(', ', $fields).') VALUES ';
+            $sqlTableAndColumns .= ' IGNORE';
+        $sqlTableAndColumns .= ' INTO '.$this->getTableName().' ('.implode(', ', $fields).') VALUES ';
+        $sqlValues = '';
         foreach ($data as $d) {
             if (array_keys($d) != array_keys($data[0])) {
                 throw new Vps_Exception_NotYetImplemented("You must have always the same keys when importing");
             }
-            $sql .= '(';
+            $sqlValues .= '(';
             foreach ($d as $i) {
                 if (is_null($i)) {
-                    $sql .= 'NULL';
+                    $sqlValues .= 'NULL';
                 } else {
-                    $sql .= $this->_table->getAdapter()->quote($i);
+                    $sqlValues .= $this->_table->getAdapter()->quote($i);
                 }
-                $sql .= ',';
+                $sqlValues .= ',';
             }
-            $sql = substr($sql, 0, -1);
-            $sql .= '),';
+            $sqlValues = substr($sqlValues, 0, -1);
+            $sqlValues .= '),';
+
+            // write buffer when mysql string will get over 700K
+            // normally mysql supports string up to 1M
+            if (strlen($sqlValues) > 700000) {
+                $this->executeSql($sqlTableAndColumns.substr($sqlValues, 0, -1));
+                $sqlValues = '';
+            }
         }
-        $sql = substr($sql, 0, -1);
-        $this->executeSql($sql);
+        if ($sqlValues) {
+            $this->executeSql($sqlTableAndColumns.substr($sqlValues, 0, -1));
+        }
     }
 
     public function executeSql($sql)
     {
         // Performance, bei Pdo wird der Adapter umgangen
         if ($this->_table->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $q = $this->_table->getAdapter()->getProfiler()->queryStart($sql, Zend_Db_Profiler::INSERT);
             $this->_table->getAdapter()->getConnection()->exec($sql);
+            $this->_table->getAdapter()->getProfiler()->queryEnd($q);
         } else {
             $this->_table->getAdapter()->query($sql);
+        }
+    }
+
+    public function getSupportedImportExportFormats()
+    {
+        if ($this->getSiblingModels()) {
+            return array(self::FORMAT_ARRAY);
+        } else {
+            $ret = $this->_supportedImportExportFormats;
+            foreach ($ret as $k => $v) {
+                if ($v === self::FORMAT_CSV) {
+                    // check if csv is possible with current database rights
+                    if (!Vps_Util_Mysql::getFileRight()) {
+                        unset($ret[$k]);
+                    }
+                } else if ($v === self::FORMAT_SQL) {
+                    // check if mysql is available (mainly because of POI Servers,
+                    // where mysql is on another server)
+                    exec("whereis mysql", $output, $execRet);
+
+                    if ($output && is_array($output) && trim($output[0]) != 'mysql:') {
+                        // hier bleibts drin
+                    } else {
+                        unset($ret[$k]);
+                    }
+                }
+            }
+            $ret = array_values($ret);
+            return $ret;
         }
     }
 }

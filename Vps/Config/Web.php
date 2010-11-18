@@ -1,7 +1,7 @@
 <?php
-require_once 'Zend/Config/Ini.php';
+require_once 'Vps/Config/Ini.php';
 
-class Vps_Config_Web extends Zend_Config_Ini
+class Vps_Config_Web extends Vps_Config_Ini
 {
     public static function getInstance($section)
     {
@@ -43,39 +43,48 @@ class Vps_Config_Web extends Zend_Config_Ini
         }
 
         $vpsSection = false;
-        $webConfig = new Zend_Config_Ini($webPath.'/application/config.ini', 
-                        $this->_getWebSection($webPath.'/application/config.ini', $section));
+
+        $webSection = $this->_getWebSection($webPath.'/application/config.ini', $section);
+        $webConfig = new Vps_Config_Ini($webPath.'/application/config.ini', $webSection);
         if (!empty($webConfig->vpsConfigSection)) {
             $vpsSection = $webConfig->vpsConfigSection;
         } else {
-            $vpsConfigFull = new Zend_Config_Ini($vpsPath.'/config.ini', null);
+            $vpsConfigFull = new Vps_Config_Ini($vpsPath.'/config.ini', null);
             if (isset($vpsConfigFull->$section)) {
                 $vpsSection = $section;
             }
         }
         if (!$vpsSection) {
+            require_once 'Vps/Exception.php';
             throw new Vps_Exception("Add either '$section' to vps/config.ini or set vpsConfigSection in web config.ini");
         }
 
         parent::__construct($vpsPath.'/config.ini', $vpsSection,
                         array('allowModifications'=>true));
 
-
+        $fixes = array();
+        if ($webSection != $section && ($this->server->host == 'vivid' || $this->server->host == 'vivid-test-server')) {
+            $fixes = array(
+                'libraryPath' => $this->libraryPath,
+                'uploads' => $this->uploads,
+                'serverUser' => $this->server->user,
+                'serverHost' => $this->server->host,
+                'serverDir' => $this->server->dir,
+                'serverDomain' => $this->server->domain
+            );
+        }
 
         $this->_mergeWebConfig($webPath.'/application/config.ini', $section);
 
-        $v = $this->application->vps->version;
-        if (preg_match('#tags/vps/([^/]+)/config\\.ini#', $v, $m)) {
-            $v = $m[1];
-        } else if (preg_match('#branches/vps/([^/]+)/config\\.ini#', $v, $m)) {
-            $v = 'Branch '.$m[1];
-        } else if (preg_match('#trunk/vps/config\\.ini#', $v, $m)) {
-            $v = 'Trunk';
+        if ($fixes) {
+            $this->libraryPath = $fixes['libraryPath'];
+            $this->uploads = $fixes['uploads'];
+            $this->server->user = $fixes['serverUser'];
+            $this->server->host = $fixes['serverHost'];
+            $this->server->dir = $fixes['serverDir'];
+            $this->server->domain = $fixes['serverDomain'];
         }
-        $this->application->vps->version = $v;
-        if (preg_match('/Revision: ([0-9]+)/', $this->application->vps->revision, $m)) {
-            $this->application->vps->revision = (int)$m[1];
-        }
+
         foreach ($this->path as $k=>$i) {
             $this->path->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
                                             array($this->libraryPath, $vpsPath),
@@ -86,11 +95,15 @@ class Vps_Config_Web extends Zend_Config_Ini
                                             array($this->libraryPath, $vpsPath),
                                             $i);
         }
+
+        $this->server->dir = str_replace('%id%', $this->application->id, $this->server->dir);
+        $this->server->domain = str_replace('%id%', $this->application->id, $this->server->domain);
+        $this->uploads = str_replace('%id%', $this->application->id, $this->uploads);
     }
-    
+
     private function _getWebSection($file, $section)
     {
-        $webConfigFull = new Zend_Config_Ini($file, null);
+        $webConfigFull = new Vps_Config_Ini($file, null);
         if (isset($webConfigFull->$section)) {
             $webSection = $section;
         } else if (isset($webConfigFull->vivid)) {
@@ -108,6 +121,59 @@ class Vps_Config_Web extends Zend_Config_Ini
 
     protected final function _mergeFile($file, $section)
     {
-        return $this->merge(new Zend_Config_Ini($file, $this->_getWebSection($file, $section)));
+        return self::mergeConfigs($this, new Vps_Config_Ini($file, $this->_getWebSection($file, $section)));
+    }
+
+    /**
+     * Diesen Merge sollte eigentlich das Zend machen, aber das merged nicht so
+     * wie wir das erwarten. Beispiel:
+     *
+     * Main Config:
+     * bla.blubb[] = x
+     * bla.blubb[] = y
+     * bla.blubb[] = z
+     *
+     * Merge Config:
+     * bla.blubb[] = a
+     * bla.blubb[] = b
+     *
+     * Nach den Config-Section regeln würde man erwarten, dass nach dem mergen nur mehr
+     * a und b drin steht. Tatsächlich merget Zend aber so, dass a, b, z überbleibt.
+     * Zend überschreibt die Werte, was wir nicht wollen, deshalb dieses
+     * händische mergen hier.
+     */
+    public static function mergeConfigs(Zend_Config $main, Zend_Config $merge)
+    {
+        // check if all keys are of type 'integer' and if so, only use merge config
+        $everyKeyIsInteger = true;
+        foreach($merge as $key => $item) {
+            if (!is_int($key)) {
+                $everyKeyIsInteger = false;
+                break;
+            }
+        }
+        if ($everyKeyIsInteger) {
+            return $merge;
+        }
+
+        foreach($merge as $key => $item) {
+            if(isset($main->$key)) {
+                if($item instanceof Zend_Config && $main->$key instanceof Zend_Config) {
+                    $main->$key = Vps_Config_Web::mergeConfigs(
+                        $main->$key,
+                        new Zend_Config($item->toArray(), !$main->readOnly())
+                    );
+                } else {
+                    $main->$key = $item;
+                }
+            } else {
+                if($item instanceof Zend_Config) {
+                    $main->$key = new Zend_Config($item->toArray(), !$main->readOnly());
+                } else {
+                    $main->$key = $item;
+                }
+            }
+        }
+        return $main;
     }
 }

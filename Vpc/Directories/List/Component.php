@@ -61,7 +61,7 @@ abstract class Vpc_Directories_List_Component extends Vpc_Abstract_Composite_Com
                     ->select($this->getItemDirectory());
             }
         }
-        if (Vpc_Abstract::hasSetting(get_class($this), 'order')) {
+        if (Vpc_Abstract::hasSetting($this->getData()->componentClass, 'order')) {
             throw new Vps_Exception("Setting 'order' (".get_class($this).") doesn't exist anymore - overwrite getSelect for a custom order");
         }
         return $ret;
@@ -69,10 +69,10 @@ abstract class Vpc_Directories_List_Component extends Vpc_Abstract_Composite_Com
 
     public final function callModifyItemData(Vps_Component_Data $item)
     {
-        foreach (Vpc_Abstract::getChildComponentClasses(get_class($this)) as $c) {
+        foreach (Vpc_Abstract::getChildComponentClasses($this->getData()->componentClass) as $c) {
             if (Vpc_Abstract::hasSetting($c, 'hasModifyItemData')
                 && Vpc_Abstract::getSetting($c, 'hasModifyItemData')) {
-                call_user_func(array($c, 'modifyItemData'), $item, $c);
+                call_user_func(array(strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c, 'modifyItemData'), $item, $c);
             }
         }
     }

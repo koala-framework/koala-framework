@@ -146,7 +146,7 @@ class Vps_Benchmark
             } else {
                 echo "Memory: ".round(memory_get_usage()/1024)." kb<br />\n";
             }
-            if (Zend_Registry::get('dao')->hasDb() && Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
+            if (Zend_Registry::get('dao') && Zend_Registry::get('dao')->hasDb() && Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
                 echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
             }
         }
@@ -275,28 +275,7 @@ class Vps_Benchmark
 
     private function _memcacheCount($name, $value)
     {
-        static $prefix;
-        if (!isset($prefix)) {
-            $prefix = Zend_Registry::get('config')->application->id.'-'.
-                                Vps_Setup::getConfigSection().'-bench-';
-        }
-
-        static $memcache;
-        if (!isset($memcache)) {
-            if (!class_exists('Memcache')) {
-                $memcache = false;
-            } else {
-                $memcache = new Memcache;
-                $memcacheSettings = Vps_Registry::get('config')->server->memcache;
-                $memcache->addServer($memcacheSettings->host, $memcacheSettings->port);
-            }
-        }
-
-        if ($memcache) {
-            if (!$memcache->increment($prefix.$name, $value)) {
-                $memcache->set($prefix.$name, $value, 0, 0);
-            }
-        }
+        Vps_Benchmark_Counter::getInstance()->increment($name, $value);
     }
 
     public static function memcacheCount($name, $value = 1)

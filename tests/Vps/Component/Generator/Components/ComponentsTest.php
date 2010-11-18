@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Vpc_UrlResolve
+ */
 class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framework_TestCase
 {
     private $_root;
@@ -8,29 +11,11 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
-    public function testIsInstanceOf()
-    {
-        $this->assertTrue(is_instance_of('Vps_Component_Generator_PseudoPage_Table',
-                                    'Vps_Component_Generator_PseudoPage_Interface'));
-        $this->assertFalse(is_instance_of('Vps_Component_Generator_PseudoPage_Table',
-                                    'Vps_Component_Generator_Page_Interface'));
-        $this->assertTrue(is_instance_of('Vps_Component_Generator_Page_Table',
-                                    'Vps_Component_Generator_Page_Interface'));
-        $this->assertTrue(is_instance_of('Vps_Component_Generator_Page_Table',
-                                    'Vps_Component_Generator_PseudoPage_Interface'));
-        $this->assertFalse(is_instance_of('Vps_Component_Generator_Table',
-                                    'Vps_Component_Generator_PseudoPage_Interface'));
-        $this->assertFalse(is_instance_of('Vps_Component_Generator_Table',
-                                    'Vps_Component_Generator_Page_Interface'));
-        $this->assertFalse(is_instance_of('Vps_Component_Generator_Table',
-                                    'Vps_Component_Generator_Box_Interface'));
-    }
-
     public function testRoot()
     {
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root');
         $this->assertEquals(count($generators), 3);
-        $this->assertTrue($generators[1] instanceof Vps_Component_Generator_Page);
+        $this->assertTrue($generators[1] instanceof Vpc_Root_Category_Generator);
         $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Box_Static);
     }
 
@@ -44,7 +29,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
         $constraints = array('page' => true);
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
         $this->assertEquals(count($generators), 1);
-        $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Page);
+        $this->assertTrue($generators[0] instanceof Vpc_Root_Category_Generator);
 
         $constraints = array('page' => false);
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
@@ -174,7 +159,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
 
     public function testHome()
     {
-        $p = $this->_root->getPageByUrl('http://'.Zend_Registry::get('config')->server->domain.'/');
+        $p = $this->_root->getPageByUrl('http://'.Zend_Registry::get('config')->server->domain.'/', null);
         $this->assertEquals($p->componentId, '1');
     }
 

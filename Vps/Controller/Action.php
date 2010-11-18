@@ -9,10 +9,10 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
     public function preDispatch()
     {
         if (!$this instanceof Vps_Controller_Action_Error_ErrorController
-                && $this->_getParam('application_version')
+                && $this->_getParam('application_max_assets_mtime')
                 && $this->getHelper('ViewRenderer')->isJson()) {
-            $version = Zend_Registry::get('config')->application->version;
-            if ($version != $this->_getParam('application_version')) {
+            $l = new Vps_Assets_Loader();
+            if ($l->getDependencies()->getMaxFileMTime()!= $this->_getParam('application_max_assets_mtime')) {
                 $this->_forward('json-wrong-version', 'error',
                                     'vps_controller_action_error');
                 return;
@@ -29,7 +29,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
         } else if ($this->_getUserRole() == 'cli') {
             $allowed = $acl->isAllowed('cli', $resource, 'view');
         } else if ($resource == 'vps_component') {
-            $allowed = $this->_isAllowedComponent();
+            $allowed = $this->_isAllowedComponent(); // Bei Test ist niemand eingeloggt und deshalb keine Prüfung
         } else {
             if (!$acl->has($resource)) {
                 throw new Vps_Exception_NotFound();
@@ -72,81 +72,23 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     protected function _isAllowedComponent()
     {
-        $allowed = true;
         $actionName = $this->getRequest()->getActionName();
         if ($actionName != 'json-index' && $actionName != 'index') {
-            if (!$this->_getParam('componentId')) {
-                $allowed = false;
-                $class = $this->_getParam('class');
-                foreach (Vps_Registry::get('acl')->getAllResources() as $r) {
-                    if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {
-                        if ($class == $r->getComponentClass()) {
-                            $allowed = Vps_Registry::get('acl')->getComponentAcl()
-                                ->isAllowed($this->_getAuthData(), $this->_getParam('class'));
-                            break;
-                        }
-                    }
-                }
+            $authData = $this->_getAuthData();
+            $class = $this->_getParam('class');
+            $componentId = $this->_getParam('componentId');
+            if (!$componentId) {
+                return Vps_Registry::get('acl')->isAllowedComponent($class, $authData);
             } else {
-
-                $allowed = $this->_isAllowedComponentById($this->_getParam('componentId'));
-
+                return Vps_Registry::get('acl')->isAllowedComponentById($componentId, $class, $authData);
             }
         }
-        return $allowed;
-    }
-
-    protected function _isAllowedComponentById($componentId, $class = null)
-    {
-        $allowed = false;
-
-        if (!$class) $class = $this->_getParam('class');
-
-        $components = Vps_Component_Data_Root::getInstance()
-            ->getComponentsByDbId($componentId, array('ignoreVisible'=>true));
-        if (!$components) {
-            throw new Vps_Exception("Can't find component to check permissions");
-        }
-
-        // sobald man eine bearbeiten darf, darf man alle bearbeiten
-        // zB wenn man bei proSalzburg und proPona gleichzeitig drin ist
-        foreach ($components as $component) {
-            // Checken, ob übergebene componentClass auf der aktuellen Page vorkommen kann
-            $allowCheck = false;
-
-            if ($component->componentClass == $class) $allowCheck = true;
-            $c = $component->parent;
-
-            $stopComponent = $component->getPage();
-            if (!is_null($stopComponent)) $stopComponent = $stopComponent->parent;
-
-            while (!$allowCheck &&
-                $c &&
-                (!$stopComponent || $c->componentId != $stopComponent->componentId)
-            ) {
-                $allowedComponentClasses = Vpc_Abstract::getChildComponentClasses(
-                    $c->componentClass, array('page' => false)
-                );
-                if (in_array($class, $allowedComponentClasses))
-                    $allowCheck = true;
-                $c = $c->parent;
-            }
-
-            if ($allowCheck &&
-                Vps_Registry::get('acl')->getComponentAcl()
-                    ->isAllowed($this->_getAuthData(), $component)
-            ) {
-                $allowed = true;
-            }
-
-            if ($allowed) return $allowed;
-        }
-        return $allowed;
+        return true;
     }
 
     public function postDispatch()
     {
-        Vps_Component_RowObserver::getInstance()->process();
+        Vps_Component_ModelObserver::getInstance()->process();
     }
 
     protected function _getUserRole()

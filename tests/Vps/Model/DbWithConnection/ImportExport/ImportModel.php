@@ -13,11 +13,6 @@ class Vps_Model_DbWithConnection_DbSibling_ImportModel extends Vps_Model_Db
         parent::__construct($config);
     }
 
-    public function __destruct()
-    {
-        Vps_Registry::get('db')->query("DROP TABLE {$this->_tableName}");
-    }
-
     public function clearRows()
     {
         $this->_rows = array();

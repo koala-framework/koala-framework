@@ -3,8 +3,8 @@ Vpc.Forum.Panel = Ext.extend(Vps.Auto.TreePanel,
 {
     initComponent: function() {
         this.modAssignGrid = new Vps.Auto.AssignGridPanel({
-            gridAssignedControllerUrl : this.controllerUrl + '!ModeratorsToGroup',
-            gridDataControllerUrl     : this.controllerUrl + '!Moderators',
+            gridAssignedControllerUrl : this.moderatorsToGroupControllerUrl,
+            gridDataControllerUrl     : this.moderatorsControllerUrl,
             gridDataHeight            : 300
         });
 
@@ -22,9 +22,10 @@ Vpc.Forum.Panel = Ext.extend(Vps.Auto.TreePanel,
         });
 
         this.actions.moderators = new Ext.Action({
-            text    : 'Moderators',
+            text    : trlVps('Moderators'),
             handler : this.onModerators,
             cls     : 'x-btn-text-icon',
+            icon    : '/assets/silkicons/group.png',
             disabled: true,
             scope   : this
         });
@@ -42,7 +43,7 @@ Vpc.Forum.Panel = Ext.extend(Vps.Auto.TreePanel,
 
     onModerators: function()
     {
-        this.modDialog.show()
+        this.modDialog.show();
     },
 
     setBaseParams: function(bp) {

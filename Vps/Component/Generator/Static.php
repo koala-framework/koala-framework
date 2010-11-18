@@ -16,7 +16,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
 
         $ret = array();
         if (!$parentData) {
-            if ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE)) {
+            if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
                 throw new Vps_Exception("this must not happen");
                 $p = $p->getPageOrRoot();
                 $parentData = $p->getRecursiveChildComponents(array(
@@ -26,7 +26,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
                 $parentSelect = new Vps_Component_Select();
                 $parentSelect->copyParts(array(
                     Vps_Component_Select::WHERE_SUBROOT,
-                    Vps_Component_Select::WHERE_ON_SAME_PAGE),
+                    Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE),
                     $select
                 );
                 $parentData = Vps_Component_Data_Root::getInstance()
@@ -133,5 +133,20 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         $target = $parentTarget->getChildComponent($id);
         Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
         return $target;
+    }
+
+    public function makeChildrenVisible($source)
+    {
+        if ($source->generator !== $this) {
+            throw new Vps_Exception("you must call this only with the correct source");
+        }
+        Vpc_Admin::getInstance($source->componentClass)->makeVisible($source);
+    }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['static'] = true;
+        return $ret;
     }
 }

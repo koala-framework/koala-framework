@@ -1,6 +1,5 @@
 <?php
 class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoPage_Table
-    implements Vps_Component_Generator_Page_Interface, Vps_Component_Generator_PseudoPage_Interface
 {
     protected $_idSeparator = '_';
     protected $_inherits = true;
@@ -19,13 +18,17 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoP
     {
         $data = parent::_formatConfig($parentData, $row);
         $data['isPage'] = true;
-
-        $data['name'] = $this->_getNameFromRow($row);
-
         if (isset($data['name']) && mb_strlen($data['name']) > $this->_settings['maxNameLength']) {
             $data['name'] = mb_substr($data['name'], 0, $this->_settings['maxNameLength']-3).'...';
         }
-
         return $data;
     }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['page'] = true;
+        return $ret;
+    }
+
 }

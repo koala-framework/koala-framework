@@ -16,6 +16,7 @@ class Vpc_Basic_LinkTag_News_NewsController extends Vps_Controller_Action_Auto_G
     {
         $ret = parent::_getSelect();
         $ret->whereEquals('visible', 1);
+        $ret->whereEquals('component_id', $this->_getParam('newsComponentId'));
         return $ret;
     }
 }

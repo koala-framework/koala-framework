@@ -13,6 +13,10 @@ class Vps_Component_Generator_RecursiveTable_Root extends Vps_Component_NoCatego
                 array('id'=>1, 'component_id'=>'root', 'filename' => 'table'),
             )))
         );
+        $ret['generators']['static'] = array(
+            'class' => 'Vps_Component_Generator_Static',
+            'component' => 'Vps_Component_Generator_RecursiveTable_Static',
+        );
         return $ret;
     }
 }

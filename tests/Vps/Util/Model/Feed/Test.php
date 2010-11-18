@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Feed
+ * @group slow
  */
 class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
 {
@@ -221,4 +222,124 @@ class Vps_Util_Model_Feed_Test extends PHPUnit_Framework_TestCase
         $entries = $feed->getChildRows('Entries', $s);
         $this->assertEquals(50, count($entries));
     }
-}
+
+    public function testHub()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://aseigo.blogspot.com/feeds/posts/default');
+        $this->assertNotEquals('', $feed->hub);
+    }
+
+    public function testRss20Hub()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('file://'.dirname(__FILE__).'/rss2.0-with-hub.xml');
+        $this->assertEquals('http://pubsubhubbub.appspot.com', $feed->hub);
+    }
+
+    public function testRss20WithoutLinkButGuid()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('file://'.dirname(__FILE__).'/rss20-without-link-but-guid.xml');
+        $this->assertEquals('http://click.linksynergy.com/fs-bin/click?id=u3By/Cu91nQ$offerid=57302.10000557$type=3&subid=0', $feed->link);
+
+        $entries = $feed->getChildRows('Entries');
+        $this->assertEquals(3, count($entries));
+        $this->assertEquals('http://click.linksynergy.com/fs-bin/click?id=u3By/Cu91nQ&offerid=57302.10000220&type=3&subid=0', $entries->current()->link);
+    }
+
+    public function testAuthorBloggerRss()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://nikosams.blogspot.com/feeds/posts/default?alt=rss');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->author_name);
+    }
+    public function testAuthorBloggerAtom()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://nikosams.blogspot.com/feeds/posts/default');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertEquals('Niko Sams', $entries->current()->author_name);
+    }
+    public function testAuthorTwitterSearch()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://search.twitter.com/search.atom?q=vivid');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->author_name);
+    }
+
+    public function testContentEncoded()
+    {
+        /* deaktiviert weil feed nicht mehr funktioniert
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://www.swgemu.com/forums/external.php?type=RSS2&forumids=107');
+        $entries = $feed->getChildRows('Entries');
+        if (!count($entries)) {
+            $this->markTestSkipped("Feed is empty.");
+        }
+        $this->assertTrue(!!$entries->current()->description);
+        $this->assertTrue(!!$entries->current()->content_encoded);
+        */
+    }
+
+    /*
+    deaktiviert weil feed nicht mehr funktioniert
+    public function testContentEncoded2()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://www.jmg-galleries.com/blog/feed/');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->description);
+        $this->assertTrue(!!$entries->current()->content_encoded);
+    }
+    */
+
+    public function testFlickrImageRss20()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://api.flickr.com/services/feeds/photos_public.gne?id=72526577@N00&tags=ghana&lang=de-de&format=rss_200');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->media_image);
+        $this->assertTrue(!!$entries->current()->media_image_width);
+        $this->assertTrue(!!$entries->current()->media_image_height);
+        $this->assertTrue(!!$entries->current()->media_thumbnail);
+        $this->assertTrue(!!$entries->current()->media_thumbnail_width);
+        $this->assertTrue(!!$entries->current()->media_thumbnail_height);
+    }
+
+    public function testFlickrImageAtom()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://api.flickr.com/services/feeds/photos_public.gne?id=72526577@N00&tags=ghana&lang=de-de&format=atom');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->media_image);
+    }
+    /*
+    test deaktiviert weil der feed kaputt ist
+    public function testImageAtomEnclosure()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://www.lsusports.net/rss.dbml?db_oem_id=5200&RSS_SPORT_ID=2164&media=news');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->media_image);
+    }
+    */
+
+    public function testAtomXhmlContent()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('http://perpetuitygroup.typepad.com/perpetuity_research/atom.xml');
+        $entries = $feed->getChildRows('Entries');
+        $this->assertTrue(!!$entries->current()->description);
+    }
+
+    public function testBug4()
+    {
+        $feed = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds')
+            ->getRow('file://'.dirname(__FILE__).'/bug4.xml');
+
+        $entries = $feed->getChildRows('Entries');
+        $this->assertEquals(25, count($entries));
+    }}

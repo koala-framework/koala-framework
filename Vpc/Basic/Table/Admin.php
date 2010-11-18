@@ -1,16 +1,6 @@
 <?php
 class Vpc_Basic_Table_Admin extends Vpc_Admin
 {
-    public function setup()
-    {
-        $fields['columns'] = 'smallint(6) NOT NULL';
-        $fields['data'] = 'text NOT NULL';
-        $this->createFormTable('vpc_basic_table', $fields);
-
-        $fields['pos'] = 'int NOT NULL';
-        $fields['data'] = 'text NOT NULL';
-        $this->createFormTable('vpc_basic_table_data', $fields);
-    }
     public function getExtConfig()
     {
         $ret = array();
@@ -34,5 +24,22 @@ class Vpc_Basic_Table_Admin extends Vpc_Admin
         );
 
         return $ret;
+    }
+
+    public function duplicate($source, $target)
+    {
+        parent::duplicate($source, $target);
+        if ($model = $source->getComponent()->getChildModel()) {
+            $rows = $model->getRows($model->select()
+                ->whereEquals('component_id', $source->dbId)
+            );
+            if ($rows) {
+                foreach ($rows as $row) {
+                    $newRow = $row->duplicate(array(
+                        'component_id' => $target->dbId
+                    ));
+                }
+            }
+        }
     }
 }

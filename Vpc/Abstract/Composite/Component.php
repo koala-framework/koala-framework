@@ -9,6 +9,11 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Static',
             'component' => array()
         );
+        $cc = Vps_Registry::get('config')->vpc->childComponents;
+        if (isset($cc->Vpc_Abstract_Composite_Component)) {
+            $ret['generators']['child']['component'] =
+                $cc->Vpc_Abstract_Composite_Component->toArray();
+        }
         return $ret;
     }
 
@@ -27,6 +32,17 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
         foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
             $ret[$c->id] = $c;
             $ret['keys'][] = $c->id;
+        }
+        return $ret;
+    }
+
+    public function getExportData()
+    {
+        $children = $this->getData()->getChildComponents(array('generator' => 'child'));
+        if (!count($children)) return array();
+        $ret = array('composite' => array());
+        foreach ($children as $child) {
+            $ret['composite'][$child->id] = $child->getComponent()->getExportData();
         }
         return $ret;
     }

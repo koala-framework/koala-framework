@@ -44,12 +44,22 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
         return $ret;
     }
 
+    protected function _validateNotAllowBlank($data, $name)
+    {
+        $ret = array();
+        $v = new Vps_Validate_NotEmpty();
+        if (!$v->isValid($data)) {
+            $ret[] = $name.": ".trlVps("Please choose an option");
+        }
+        return $ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
         $name = $this->getFieldName();
-        $value = $values[$name];
+        $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
 
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $store = $this->_getStoreData();

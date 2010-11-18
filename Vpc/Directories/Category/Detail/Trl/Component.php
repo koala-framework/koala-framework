@@ -1,0 +1,4 @@
+<?php
+class Vpc_Directories_Category_Detail_Trl_Component extends Vpc_Directories_Item_Detail_Trl_Component
+{
+}

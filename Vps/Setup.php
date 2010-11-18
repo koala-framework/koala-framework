@@ -1,213 +1,10 @@
 <?php
-function p($src, $Type = 'LOG')
-{
-    if (!Vps_Debug::isEnabled()) return;
-    $isToDebug = false;
-    if ($Type != 'ECHO' && Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance()) {
-        if (is_object($src) && method_exists($src, 'toArray')) {
-            $src = $src->toArray();
-        } else if (is_object($src)) {
-            $src = (array)$src;
-        }
-        //wenn FirePHP nicht aktiv im browser gibts false zurück
-        if (FirePHP::getInstance()->fb($src, $Type)) return;
-    }
-    if (is_object($src) && method_exists($src, 'toDebug')) {
-        $isToDebug = true;
-        $src = $src->toDebug();
-    }
-    if (is_object($src) && method_exists($src, '__toString')) {
-        $src = $src->__toString();
-    }
-    if ($isToDebug) {
-        echo $src;
-    } else if (function_exists('xdebug_var_dump')
-        && !($src instanceof Zend_Db_Select ||
-                $src instanceof Exception)) {
-        xdebug_var_dump($src);
-    } else {
-        if (php_sapi_name() != 'cli') echo "<pre>";
-        var_dump($src);
-        if (php_sapi_name() != 'cli') echo "</pre>";
-    }
-    if (function_exists('debug_backtrace')) {
-        $bt = debug_backtrace();
-        $i = 0;
-        if (isset($bt[1]) && isset($bt[1]['function']) && $bt[1]['function'] == 'd') $i = 1;
-        echo $bt[$i]['file'].':'.$bt[$i]['line'];
-        if (php_sapi_name() != 'cli') echo "<br />";
-        echo "\n";
-    }
-}
-
-function d($src)
-{
-    if (!Vps_Debug::isEnabled()) return;
-    p($src, 'ECHO');
-    exit;
-}
-
-function pHex($s)
-{
-    $terminalSize = explode(' ', `stty size`);
-    $breakAt = 1000;
-    if (isset($terminalSize[1])) {
-        $breakAt = (int)($terminalSize[1]/3);
-    }
-    while (strlen($s) > $breakAt) {
-        dmp(substr($s, 0, $breakAt));
-        $s = substr($s, $breakAt);
-    }
-    for($i=0;$i<strlen($s);$i++) {
-        echo $s[$i].'  ';
-        if ($s[$i] == "\0") echo " ";
-    }
-    echo "\n";
-    for($i=0;$i<strlen($s);$i++) {
-        $h = dechex(ord($s[$i]));
-        if (strlen($h)==1) $h = "0$h";
-        echo $h.' ';
-    }
-    echo "\n";
-}
-
-function _btString($bt)
-{
-    $ret = '';
-    if (isset($bt['class'])) {
-        $ret .= $bt['class'].'::';
-    }
-    if (isset($bt['function'])) {
-        $ret .= $bt['function'].'('._btArgsString($bt['args']).')';
-    }
-    return $ret;
-}
-function _btArgsString($args)
-{
-    $ret = array();
-    foreach ($args as $arg) {
-        $ret[] = _btArgString($arg);
-    }
-    return implode(', ', $ret);
-}
-function _btArgString($arg)
-{
-    $ret = array();
-    if ($arg instanceof Vps_Model_Select) {
-        $r = array();
-        foreach ($arg->getParts() as $key =>$val) {
-            $val = _btArgString($val);
-            $r[] = "$key => $val";
-        }
-        $ret[] = 'select(' . implode(', ', $r) . ')';
-    } else if (is_object($arg)) {
-        $ret[] = get_class($arg);
-    } else if (is_array($arg)) {
-        $arrayString = array();
-        foreach ($arg as $k=>$i) {
-            $i = _btArgString($i);
-            if (!is_int($k)) {
-                $arrayString[] = "$k => $i";
-            } else {
-                $arrayString[] = $i;
-            }
-        }
-        $ret[] = 'array('.implode(', ', $arrayString).')';
-    } else if (is_null($arg)) {
-        $ret[] = 'null';
-    } else if (is_string($arg)) {
-        if (strlen($arg) > 50) $arg = substr($arg, 0, 47)."...";
-        $ret[] = '"'.$arg.'"';
-    } else if (is_bool($arg)) {
-        $ret[] = $arg ? 'true' : 'false';
-    } else {
-        $ret[] = $arg;
-    }
-    return current($ret);
-}
-function bt($file = false)
-{
-    require_once 'Vps/Debug.php';
-    if (!Vps_Debug::isEnabled()) return;
-    $bt = debug_backtrace();
-    unset($bt[0]);
-    if (php_sapi_name() == 'cli' || $file) {
-        $ret = '';
-        foreach ($bt as $i) {
-            if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') continue;
-            if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') continue;
-            $ret .=
-                (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
-                (isset($i['line']) ? $i['line'] : '?') . ' - ' .
-                ((isset($i['object']) && $i['object'] instanceof Vps_Component_Data) ? $i['object']->componentId . '->' : '') .
-                (isset($i['function']) ? $i['function'] : '') . '(' .
-                _btArgsString($i['args']) . ')' . "\n";
-        }
-        $ret .= "\n";
-        if ($file) {
-            $ret = "=============================================\n\n".$ret;
-            file_put_contents('backtrace', $ret, FILE_APPEND);
-        } else {
-            echo $ret;
-        }
-    } else {
-        $out = array(array('File', 'Line', 'Function', 'Args'));
-        foreach ($bt as $i) {
-            $out[] = array(
-                isset($i['file']) ? $i['file'] : '', isset($i['line']) ? $i['line'] : '',
-                isset($i['function']) ? $i['function'] : null,
-                _btArgsString($i['args']),
-            );
-        }
-        p(array('Backtrace for '._btString($bt[1]), $out), 'TABLE');
-    }
-}
-
-function hlp($string){
-    return Zend_Registry::get('hlp')->hlp($string);
-}
-
-function hlpVps($string){
-    return Zend_Registry::get('hlp')->hlpVps($string);
-}
-
-function trl($string, $text = array())
-{
-    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB);
-}
-
-function trlc($context, $string, $text = array()) {
-    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB);
-}
-
-function trlp($single, $plural, $text =  array()) {
-    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB);
-}
-
-function trlcp($context, $single, $plural = null, $text = array()){
-    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB);
-}
-
-function trlVps($string, $text = array()){
-    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_VPS);
-}
-
-function trlcVps($context, $string, $text = array()){
-    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS);
-}
-
-function trlpVps($single, $plural, $text =  array()){
-    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS);
-}
-
-function trlcpVps($context, $single, $plural, $text = array()){
-    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
-}
 
 //instanceof operator geht für strings ned korrekt, von php.net gfladad
 function is_instance_of($sub, $super)
 {
     $sub = is_object($sub) ? get_class($sub) : (string)$sub;
+    $sub = strpos($sub, '.') ? substr($sub, 0, strpos($sub, '.')) : $sub;
     $super = is_object($super) ? get_class($super) : (string)$super;
     Zend_Loader::loadClass($sub);
     Zend_Loader::loadClass($super);
@@ -227,7 +24,7 @@ class Vps_Setup
 {
     public static $configClass;
 
-    public static function setUp($configClass = 'Vps_Config_Web')
+    public static function setUpZend()
     {
         if (file_exists(VPS_PATH.'/include_path')) {
             $zendPath = trim(file_get_contents(VPS_PATH.'/include_path'));
@@ -244,6 +41,12 @@ class Vps_Setup
 
         require_once 'Vps/Loader.php';
         require_once 'Zend/Loader/Autoloader.php';
+    }
+
+    public static function setUp($configClass = 'Vps_Config_Web')
+    {
+        self::setUpZend();
+
         if (isset($_SERVER['REQUEST_URI']) &&
             substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/json-progress-status' &&
             !empty($_REQUEST['progressNum'])
@@ -258,15 +61,35 @@ class Vps_Setup
             echo Zend_Json::encode($pbarStatus);
             exit;
         }
+        if (isset($_SERVER['REQUEST_URI']) &&
+            substr($_SERVER['REQUEST_URI'], 0, 17) == '/vps/check-config'
+        ) {
+            Vps_Loader::registerAutoload();
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                header('WWW-Authenticate: Basic realm="Check Config"');
+                throw new Vps_Exception_AccessDenied();
+            }
+            Vps_Util_Check_Config::check();
+        }
+        if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
+            Vps_Loader::registerAutoload();
+            Vps_Util_Check_Config::check();
+        }
+
+        self::setUpVps($configClass);
+    }
+
+    public static function setUpVps($configClass = 'Vps_Config_Web')
+    {
         require_once 'Vps/Registry.php';
 
         Zend_Registry::setClassName('Vps_Registry');
 
         self::$configClass = $configClass;
         require_once 'Vps/Config/Web.php';
-        Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(self::getConfigSection()));
         $config = Vps_Config_Web::getInstance(self::getConfigSection());
         Vps_Registry::set('config', $config);
+        Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(self::getConfigSection()));
 
 
         if ($config->debug->benchmark) {
@@ -282,11 +105,15 @@ class Vps_Setup
 
         Vps_Loader::registerAutoload();
 
+        require_once 'Vps/Debug.php';
+        require_once 'Vps/Trl.php';
+
 
         ini_set('memory_limit', '128M');
         error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
         mb_internal_encoding('UTF-8');
+        iconv_set_encoding('internal_encoding', 'utf-8');
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
@@ -294,7 +121,7 @@ class Vps_Setup
         $ip = get_include_path();
         foreach ($config->includepath as $t=>$p) {
             if ($t == 'phpunit') {
-                //vorne anh�ngen damit er vorrang vor /usr/share/php hat
+                //vorne anh�ngen damit er vorrang vor /usr/share/php hat
                 $ip = $p . PATH_SEPARATOR . $ip;
             } else {
                 $ip .= PATH_SEPARATOR . $p;
@@ -317,6 +144,12 @@ class Vps_Setup
                 && php_sapi_name() != 'cli')
         {
             ob_start();
+        }
+
+        if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != $config->application->vps->version) {
+            $required = trim(file_get_contents('application/vps_branch'));
+            $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
+            throw new Vps_Exception("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
         }
 
         if (isset($_POST['PHPSESSID'])) {
@@ -374,36 +207,31 @@ class Vps_Setup
             exit;
         }
 
-        if (php_sapi_name() != 'cli' && $config->preLogin && !isset($_COOKIE['unitTest'])
+        if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
-             && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/vps/test/'
-             && substr($_SERVER['REDIRECT_URL'], 0, 13) != '/vps/webtest/'
-             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' /*hack für rssinclude-test*/
-             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
-             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
+            && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
+            && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
+            && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
+            && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
+            && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
+            && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
         ) {
-            $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
-            if (empty($sessionPhpAuthed->success)) {
-                if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
-                    $loginResponse = Zend_Registry::get('userModel')
-                        ->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    if ($loginResponse['zendAuthResultCode'] == Zend_Auth_Result::SUCCESS) {
-                        $sessionPhpAuthed->success = 1;
-                    } else {
-                        unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    }
-                }
-
-                // separate if abfrage, damit login wieder kommt, falls gerade falsch eingeloggt wurde
-                if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
-                    header('WWW-Authenticate: Basic realm="Testserver"');
-                    throw new Vps_Exception_AccessDenied();
-                }
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                header('WWW-Authenticate: Basic realm="Testserver"');
+                throw new Vps_Exception_AccessDenied();
             }
         }
 
         if ($tl = $config->debug->timeLimit) {
-            set_time_limit($tl);
+            set_time_limit((int)$tl);
+        }
+
+        if (!isset($_SERVER['REDIRECT_URL']) ||
+            (substr($_SERVER['REDIRECT_URL'], 0, 7) != '/media/'
+             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/assets/'
+             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output') //rssinclude
+        ) {
+            self::_setLocale();
         }
     }
 
@@ -424,6 +252,9 @@ class Vps_Setup
 
     public static function createDao()
     {
+        if (!file_exists('application/config.db.ini')) {
+            return null;
+        }
         return new Vps_Dao();
     }
 
@@ -442,7 +273,7 @@ class Vps_Setup
         }
         if (file_exists('application/config_section')) {
             return trim(file_get_contents('application/config_section'));
-        } if (file_exists('/var/www/vivid-test-server')) {
+        } else if (file_exists('/var/www/vivid-test-server')) {
             return 'vivid-test-server';
         } else if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
             if ($m[2]=='vps-projekte') return 'vivid';
@@ -457,12 +288,6 @@ class Vps_Setup
                    substr($path, 0, 25) == '/var/www/html/vpcms/test.' ||
                    substr($path, 0, 20) == '/var/www/vpcms/test.') {
             return 'test';
-        } else if (substr($host, 0, 5)=='demo.' ||
-                   substr($path, 0, 17) == '/docs/vpcms/demo.' ||
-                   substr($path, 0, 21) == '/docs/vpcms/www.demo.' ||
-                   substr($path, 0, 25) == '/var/www/html/vpcms/demo.' ||
-                   substr($path, 0, 20) == '/var/www/vpcms/demo.') {
-            return 'demo';
         } else if (substr($host, 0, 8)=='preview.') {
             return 'preview';
         } else {
@@ -482,31 +307,39 @@ class Vps_Setup
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))
             && (!$urlPrefix || substr($_SERVER['REDIRECT_URL'], 0, strlen($urlPrefix)) == $urlPrefix)
         ) {
+            if (!isset($_SERVER['HTTP_HOST'])) {
+                throw new Vps_Exception_NotFound();
+            }
 
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
             Vps_Registry::get('trl')->setUseUserLanguage(false);
+            self::_setLocale();
 
+            $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Vps_Component_Data_Root::getInstance();
-            $data = $root->getPageByUrl($requestUrl);
+            $data = $root->getPageByUrl($requestUrl, $acceptLanguage);
             if (!$data) {
                throw new Vps_Exception_NotFound();
             }
             $root->setCurrentPage($data);
-            if ($data->url != $_SERVER['REDIRECT_URL']) {
+            if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
                 header('Location: '.$data->url);
                 exit;
             }
+            // hickedy-hack: Für Formular Validierung. Im 1.10 ist das bereits schön gelöst
+            Vps_Registry::get('trl')->overrideTargetLanguage($data->getLanguage());
             $page = $data->getComponent();
             $page->sendContent();
 
             Vps_Benchmark::shutDown();
 
-            if ($page instanceof Vpc_Abstract_Feed_Component) {
+            //TODO: ein flag oder sowas ähnliches stattdessen verwenden
+            if ($page instanceof Vpc_Abstract_Feed_Component || $page instanceof Vpc_Export_Xml_Component || $page instanceof Vpc_Export_Xml_Trl_Component) {
                 echo "<!--";
             }
             Vps_Benchmark::output();
-            if ($page instanceof Vpc_Abstract_Feed_Component) {
+            if ($page instanceof Vpc_Abstract_Feed_Component || $page instanceof Vpc_Export_Xml_Component || $page instanceof Vpc_Export_Xml_Trl_Component) {
                 echo "-->";
             }
             exit;
@@ -521,16 +354,17 @@ class Vps_Setup
         if (is_array($urlParts) && count($urlParts) == 2 && $urlParts[0] == 'media'
             && $urlParts[1] == 'headline'
         ) {
-            Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text']);
+            Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text'], $_GET['assetsType']);
         } else if (is_array($urlParts) && $urlParts[0] == 'media') {
-            if (sizeof($urlParts) != 6) {
+            if (sizeof($urlParts) != 7) {
                 throw new Vps_Exception_NotFound();
             }
             $class = $urlParts[1];
             $id = $urlParts[2];
             $type = $urlParts[3];
             $checksum = $urlParts[4];
-            $filename = $urlParts[5];
+            // time() wäre der 5er, wird aber nur wegen browsercache benötigt
+            $filename = $urlParts[6];
 
             if ($checksum != Vps_Media::getChecksum($class, $id, $type, $filename)) {
                 throw new Vps_Exception_AccessDenied('Access to file not allowed.');
@@ -548,5 +382,31 @@ class Vps_Setup
         }
         if ($includeProtocol) $host = 'http://' . $host;
         return $host;
+    }
+
+    private static function _setLocale()
+    {
+        /*
+            Das LC_NUMERIC wird absichtlich ausgenommen weil:
+            Wenn locale auf DE gesetzt ist und man aus der DB Kommazahlen
+            ausliest, dann kommen die als string mit Beistrich (,) an und mit
+            dem lässt sich nicht weiter rechnen.
+            PDO oder Zend machen da wohl den Fehler und ändern irgendwo die
+            PHP-Float repräsentation in einen String um und so steht er dann mit
+            Beistrich drin.
+            Beispiel:
+                setlocale(LC_ALL, 'de_DE');
+                $a = 2.3;
+                echo $a; // gibt 2,3 aus
+                echo $a * 2; // gibt 4,6 aus
+            Problem ist es dann, wenn die kommazahl in string gecastet wird:
+                setlocale(LC_ALL, 'de_DE');
+                $a = 2.3;
+                $b = "$a";
+                echo $b; // gibt 2,3 aus
+                echo $b * 2; // gibt 4 aus -> der teil hinterm , wird einfach ignoriert
+        */
+        setlocale(LC_ALL, explode(', ', trlcVps('locale', 'C')));
+        setlocale(LC_NUMERIC, 'C');
     }
 }

@@ -3,33 +3,60 @@ class Vps_Assets_Dependencies
 {
     private $_files = array();
     private $_config;
+    private $_loader;
     private $_dependenciesConfig;
     private $_processedDependencies = array();
     private $_processedComponents = array();
+    private $_cacheMaxFileMTime;
     /**
      * @param Zend_Config für tests
      **/
-    public function __construct($config = null)
+    public function __construct(Vps_Assets_Loader $loader)
     {
-        if (!$config) {
-            $config = Vps_Registry::get('config');
-        }
-        $this->_config = $config;
+        $this->_loader = $loader;
+        $this->_config = $loader->getConfig();
     }
 
-    public function getAssetUrls($assetsType, $fileType, $section, $rootComponent)
+    public function getMaxFileMTime()
     {
-        $b = Vps_Benchmark::start();
+        if (isset($this->_cacheMaxFileMTime)) {
+            return $this->_cacheMaxFileMTime;
+        }
+        $cache = Vps_Assets_Cache::getInstance();
+        if (($ret = $cache->load('maxFileMTime')) === false) {
+            $ret = 0;
+            foreach ($this->_config->assets->toArray() as $assetType=>$v) {
+                $files = $this->getAssetFiles($assetType, null, 'web', Vps_Component_Data_Root::getComponentClass());
+                unset($files['mtime']);
+                foreach ($files as $file) {
+                    if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
+                    } else if (substr($file, 0, 8) == 'dynamic/') {
+                    } else {
+                        $ret = max($ret, filemtime($this->getAssetPath($file)));
+                    }
+                }
+            }
+            $ret = array($ret);
+            $cache->save($ret, 'maxFileMTime');
+        }
+        $this->_cacheMaxFileMTime = $ret[0];
+        return $ret[0];
+    }
+
+    public function getAssetUrls($assetsType, $fileType, $section, $rootComponent, $language = null)
+    {
+        Vps_Benchmark::count('getAssetUrls');
         if ($this->_config->debug->menu) {
             $session = new Zend_Session_Namespace('debug');
             if (isset($session->enable) && $session->enable) {
                 $assetsType .= 'Debug';
             }
         }
+        $allUsed = false;
         $ret = array();
         if (!$this->_config->debug->assets->$fileType || (isset($session->$fileType) && !$session->$fileType)) {
-            $v = $this->_config->application->version;
-            $language = Zend_Registry::get('trl')->getTargetLanguage();
+            $v = $this->getMaxFileMTime();
+            if (!$language) $language = Zend_Registry::get('trl')->getTargetLanguage();
             $ret[] = "/assets/all/$section/"
                             .($rootComponent?$rootComponent.'/':'')
                             ."$language/$assetsType.$fileType?v=$v";
@@ -37,13 +64,27 @@ class Vps_Assets_Dependencies
         }
 
         foreach ($this->getAssetFiles($assetsType, $fileType, $section, $rootComponent) as $file) {
-            if ($file instanceof Vps_Assets_Dynamic) {
-                $file = $file->getFile();
-            }
             if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
                 $ret[] = $file;
-            } else if (empty($allUsed)) {
-                $ret[] = "/assets/$file";
+            } else {
+                if (substr($file, 0, 8) == 'dynamic/') {
+                    $file = substr($file, 8);
+                    $a = new $file($this->_loader, $assetsType, $rootComponent);
+                    if (!$allUsed || !$a->getIncludeInAll()) {
+                        $v = $this->getMaxFileMTime();
+                        $f = "/assets/dynamic/$assetsType/"
+                            .($rootComponent?$rootComponent.'/':'')
+                            ."$file?v=$v";
+                        if ($a->getMTime()) {
+                            $f .= "&t=".$a->getMTime();
+                        }
+                        $ret[] = $f;
+                    }
+                } else {
+                    if (!$allUsed) {
+                        $ret[] = "/assets/$file";
+                    }
+                }
             }
         }
         return $ret;
@@ -88,9 +129,11 @@ class Vps_Assets_Dependencies
                         $this->_processDependency($assetsType, $d, $rootComponent);
                     }
                 }
+
+                //zur sicherheit überprüfen ob eh keine dynamischen assets cached werden
                 foreach ($this->_files[$assetsType] as $f) {
-                    if (is_string($f)) {
-                        $this->getAssetPath($f); //wirft exception wenn datei nicht gefunden
+                    if (!is_string($f)) {
+                        throw new Vps_Exception("Invalid asset file");
                     }
                 }
                 $cache->save($this->_files[$assetsType], $cacheId);
@@ -102,14 +145,21 @@ class Vps_Assets_Dependencies
         } else {
             $files = array();
             foreach ($this->_files[$assetsType] as $file) {
-                if ((is_string($file) && substr($file, -strlen($fileType)-1) == '.'.$fileType)
-                    || ($file instanceof Vps_Assets_Dynamic && $file->getType() == $fileType)) {
-                    if (is_string($file) && substr($file, -strlen($fileType)-1) == " $fileType") {
-                        //wenn asset hinten mit " js" aufhört das js abschneiden
-                        //wird benötigt für googlemaps wo die js-dateien kein js am ende haben
-                        $file = substr($file, 0, -strlen($fileType)-1);
+                if (substr($file, 0, 8) == 'dynamic/') {
+                    $f = substr($file, 8);
+                    $f = new $f($this->_loader, $assetsType, $rootComponent);
+                    if ($f->getType() == $fileType) {
+                        $files[] = $file;
                     }
-                    $files[] = $file;
+                } else {
+                    if ((is_string($file) && substr($file, -strlen($fileType)-1) == '.'.$fileType)) {
+                        if (is_string($file) && substr($file, -strlen($fileType)-1) == " $fileType") {
+                            //wenn asset hinten mit " js" aufhört das js abschneiden
+                            //wird benötigt für googlemaps wo die js-dateien kein js am ende haben
+                            $file = substr($file, 0, -strlen($fileType)-1);
+                        }
+                        $files[] = $file;
+                    }
                 }
             }
         }
@@ -119,7 +169,9 @@ class Vps_Assets_Dependencies
         }
 
         foreach ($files as &$f) {
-            if (is_string($f)) $f = $section . '-' . $f;
+            if (substr($f, 0, 8) != 'dynamic/') {
+                $f = $section . '-' . $f;
+            }
         }
         return $files;
     }
@@ -149,7 +201,9 @@ class Vps_Assets_Dependencies
         if (in_array($assetsType.$dependency, $this->_processedDependencies)) return;
         $this->_processedDependencies[] = $assetsType.$dependency;
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
-            $this->_processComponentDependency($assetsType, $rootComponent, $rootComponent, $dependency == 'ComponentsAdmin');
+            if ($rootComponent) {
+                $this->_processComponentDependency($assetsType, $rootComponent, $rootComponent, $dependency == 'ComponentsAdmin');
+            }
             return;
         }
         if (!isset($this->_getDependenciesConfig($assetsType)->$dependency)) {
@@ -289,10 +343,14 @@ class Vps_Assets_Dependencies
         $paths = $this->_config->path;
 
         $type = substr($url, 0, strpos($url, '/'));
+        $url = substr($url, strpos($url, '/')+1);
+        if (substr($type, 0, 3) == 'fx_') {
+            $type = substr($url, 0, strpos($url, '/'));
+            $url = substr($url, strpos($url, '/')+1);
+        }
         if (strpos($type, '-')!==false) {
             $type = substr($type, strpos($type, '-')+1); //section abschneiden
         }
-        $url = substr($url, strpos($url, '/')+1);
         if (!isset($paths->$type)) {
             throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' for url '$url' not found in config.");
         }

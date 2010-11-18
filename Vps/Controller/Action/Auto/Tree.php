@@ -7,12 +7,9 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         $this->view->xtype = 'vps.autotree';
     }
 
-    public function jsonDataAction()
+    protected function _formatNodes($parentId = null)
     {
         $parentId = $this->_getParam('node');
-        $this->_saveSessionNodeOpened($parentId, true);
-        $this->_saveNodeOpened();
-
         if ($parentId) {
             $parentRow = $this->_model->getRow($parentId);
         } else {
@@ -29,12 +26,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
             }
             $nodes[]= $data;
         }
-        $this->view->nodes = $nodes;
-    }
-
-    protected function _formatNodes($parentId = null)
-    {
-        return array();
+        return $nodes;
     }
 
     protected function _formatNode($row)
@@ -48,7 +40,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
             $openedNodes = $this->_saveSessionNodeOpened(null, null);
             if ($openedNodes == 'all' ||
                 isset($openedNodes[$row->{$this->_primaryKey}]) ||
-                isset($this->_openedNodes[$row->{$this->_primaryKey}])
+                isset($this->_openedNodes[$row->{$this->_primaryKey}]) ||
+                $this->_getParam('openedId') == $row->{$this->_primaryKey}
             ) {
                 $data['expanded'] = true;
             } else {

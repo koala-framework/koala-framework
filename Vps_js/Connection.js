@@ -5,6 +5,8 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
      * Options:
      * - mask (true für body, sonst element)
      * - maskText (default Loading...)
+     * - progress
+     * - progressTitle (default Progress)
      */
     request: function(options)
     {
@@ -51,7 +53,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             options.scope = this;
         }
         if (!options.params) options.params = {};
-        options.params.application_version = Vps.application.version;
+        options.params.application_max_assets_mtime = Vps.application.maxAssetsMTime;
         if (!options.url.match(':\/\/')) {
             //absolute url incl. http:// erstellen
             //wird benötigt wenn fkt über mozrepl aufgerufen wird
@@ -68,11 +70,13 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             options.params.progressNum = progressNum;
         }
 
-        Vps.Connection.superclass.request.call(this, options);
+        var ret = Vps.Connection.superclass.request.call(this, options);
 
         if (options.progress) {
             this._showProgress(options);
         }
+
+        return ret;
     },
 
     _showProgress: function(options)
@@ -86,7 +90,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 requestOptions: options
             }),
             breakStatusRequests: false
-        }
+        };
         this._progressData[progressNum].progressBar.updateProgress(0, '0%', '');
 
         this._doProgressStatusRequest.defer(1500, this, [ progressNum ]);
@@ -193,7 +197,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         {
             this.progressBar.updateProgress(num, progressBarText, true);
             this.myEls.msgEl.update(text || '&#160;');
-        }
+        };
 
         dlg.show();
         return dlg;
@@ -259,6 +263,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                     errorText = null;
                 }
                 Vps.handleError({
+                    url: options.url,
                     message: errorMsg,
                     title: errorMsgTitle,
                     mail: sendMail,
@@ -308,24 +313,24 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 return;
             }
             options.vpsIsSuccess = true;
-            Vps.callWithErrorHandler(function() {
-                Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options, r]);
-            });
+            if (options.vpsCallback.success) {
+                options.vpsCallback.success.call(options.vpsCallback.scope, response, options, r);
+            }
         };
     },
     vpsNoJsonSuccess: function(response, options)
     {
         options.vpsIsSuccess = true;
-        Vps.callWithErrorHandler(function() {
-            Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options]);
-        });
+        if (options.vpsCallback.success) {
+            options.vpsCallback.success.call(options.vpsCallback.scope, response, options);
+        }
     },
     vpsNoJsonFailure: function(response, options)
     {
         options.vpsIsSuccess = false;
-        Vps.callWithErrorHandler(function() {
-            Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
-        });
+        if (options.vpsCallback.failure) {
+            options.vpsCallback.failure.call(options.vpsCallback.scope, response, options);
+        }
     },
     vpsJsonFailure: function(response, options)
     {
@@ -342,6 +347,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             }
             if (!options.ignoreErrors) {
                 Vps.handleError({
+                    url: options.url,
                     message: errorMsg,
                     title: errorMsgTitle,
                     errorText: errorText,

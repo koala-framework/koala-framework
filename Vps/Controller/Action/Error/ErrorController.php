@@ -4,12 +4,6 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
     public function errorAction()
     {
         $errors = $this->getRequest()->getParam('error_handler');
-        if ($errors->exception && !($errors->exception instanceof Vps_Exception_Client)
-             && class_exists('FirePHP') && FirePHP::getInstance()) {
-            //throw $errors->exception;
-            FirePHP::getInstance()->fb($errors->exception);
-        }
-
         if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER ||
             $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION)
         {
@@ -50,7 +44,20 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
 
     public function jsonMailAction()
     {
-        throw new Vps_Exception_JavaScript($this->_getParam('msg'));
+        if ($this->_getParam('message')) {
+            $e = new Vps_Exception_JavaScript($this->_getParam('message'));
+            $e->setUrl($this->_getParam('url'));
+            $e->setLineNumber($this->_getParam('lineNumber'));
+            $e->setLocation($this->_getParam('location'));
+            $e->setReferrer($this->_getParam('referrer'));
+
+            try {
+                $stack = Zend_Json::decode($this->_getParam('stack'));
+                $e->setStack($stack);
+            } catch (Exception $e) {
+            }
+            $e->log();
+        }
     }
 
     public function jsonTimeoutAction()

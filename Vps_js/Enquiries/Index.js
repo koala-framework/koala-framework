@@ -7,14 +7,14 @@ Vps.Enquiries.Index = Ext.extend(Vps.Auto.GridPanel,
         // Edit form
         var panel = new Vps.Enquiries.ViewPanel({
             controllerUrl: this.controllerUrl,
-            title: trl('Enquiry'),
+            title: trlVps('Enquiry'),
             region: 'center'
         });
 
         // main grid
         this.grid = new Vps.Auto.GridPanel({
             controllerUrl: this.controllerUrl,
-            title: trl('Enquiries'),
+            title: trlVps('Enquiries'),
             region: 'west',
             width: 550,
             split: true,

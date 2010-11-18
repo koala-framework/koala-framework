@@ -12,7 +12,7 @@ class Vpc_Paragraphs_Controller_EditComponentsData extends Vps_Data_Abstract
     public function load($row)
     {
         $generators = Vpc_Abstract::getSetting($this->_componentClass, 'generators');
-        $classes = $generators['paragraphs']['component']; 
+        $classes = $generators['paragraphs']['component'];
         $admin = Vpc_Admin::getInstance($classes[$row->component]);
         $ret = array();
         foreach ($admin->getExtConfig() as $k=>$cfg) {
@@ -36,18 +36,14 @@ class Vpc_Paragraphs_Controller_EditComponentsData extends Vps_Data_Abstract
 
 class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
-    protected $_buttons = array(
+    protected $_permissions = array(
         'save',
         'delete',
-        'reload',
-        'addparagraph'
-        );
-    protected $_paging = 0;
+    );
     protected $_position = 'pos';
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('pos'));
         $this->_columns->add(new Vps_Grid_Column('component_class'))
             ->setData(new Vps_Data_Vpc_ComponentClass($this->_getParam('class')));
         $this->_columns->add(new Vps_Grid_Column('component_name'))
@@ -102,7 +98,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $generators = Vpc_Abstract::getSetting($this->_getParam('class'), 'generators');
             $classes =$generators['paragraphs']['component'];
             $row->component = array_search($class, $classes);
-            $row->visible = 0;
+            if (is_null($row->visible)) $row->visible = 0;
             $row->pos = $this->_getParam('pos');
             $row->save();
             $id = $row->id;
@@ -132,5 +128,56 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     protected function _preforeAddParagraph($row)
     {
         $row->component_id = $this->_getParam('componentId');
+    }
+
+    public function jsonCopyAction()
+    {
+        $id = $this->_getParam('componentId').'-'.$this->_getParam('id');
+        if (!Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
+            throw new Vps_Exception("Component with id '$id' not found");
+        }
+        $session = new Zend_Session_Namespace('Vpc_Paragraphs:copy');
+        $session->id = $id;
+    }
+
+    public function jsonPasteAction()
+    {
+        $session = new Zend_Session_Namespace('Vpc_Paragraphs:copy');
+        $id = $session->id;
+        if (!$id || !Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
+            throw new Vps_Exception_Client(trlVps('Clipboard is empty'));
+        }
+        $source = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
+        $target = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
+        $classes = Vpc_Abstract::getChildComponentClasses($target->componentClass, 'paragraphs');
+        $targetCls = false;
+        if (isset($classes[$source->row->component])) {
+            $targetCls = $classes[$source->row->component];
+        }
+        if ($source->componentClass != $targetCls) {
+            throw new Vps_Exception_Client(trlVps('Source and target paragraphs are not compatible.'));
+        }
+
+        $c = $target;
+        while ($c->parent) {
+            if ($c->dbId == $source->dbId) {
+                throw new Vps_Exception_Client(trlVps("You can't paste a paragraph into itself."));
+            }
+            $c = $c->parent;
+        }
+
+        $newParagraph = Vps_Util_Component::duplicate($source, $target);
+
+        $row = $newParagraph->row;
+        $row->pos = $this->_getParam('pos');
+        $row->visible = null;
+        $row->save();
+    }
+
+    public function jsonMakeAllVisibleAction()
+    {
+        $id = $this->_getParam('componentId');
+        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
+        Vpc_Admin::getInstance($c->componentClass)->makeVisible($c);
     }
 }

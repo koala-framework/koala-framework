@@ -86,7 +86,14 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
         return self::_getCache()->remove('RteStyles');
     }
 
-    public function getStylesContents()
+    public static function getMTime()
+    {
+        $mtime = self::_getCache()->test('RteStyles');
+        if (!$mtime) $mtime = time();
+        return $mtime;
+    }
+
+    public static function getStylesContents()
     {
         return Vps_Model_Abstract::getInstance('Vpc_Basic_Text_StylesModel')->getStylesContents2();
     }
@@ -94,7 +101,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
     public function getStylesContents2()
     {
         $cache = self::_getCache();
-        if (!$ret = $cache->load('RteStyles')) {
+        if (!$css = $cache->load('RteStyles')) {
             $css = '';
             foreach ($this->getRows() as $row) {
                 $css .= '.vpcText ' . $row->tag;
@@ -117,20 +124,9 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
                 }
                 $css .= "} /* $row->name */\n";
             }
-            $ret = array(
-                'contents' => $css,
-                'mtime' => time(),
-                'mimeType' => 'text/css',
-                'etag' => md5($css)
-            );
-            $cache->save($ret, 'RteStyles');
+            $css = array('contents' => $css);
+            $cache->save($css, 'RteStyles');
         }
-        return $ret;
-    }
-    public static function getStylesUrl()
-    {
-        $mtime = self::_getCache()->test('RteStyles');
-        if (!$mtime) $mtime = time();
-        return '/assets/AllRteStyles.css?v='.$mtime;
+        return $css['contents'];
     }
 }

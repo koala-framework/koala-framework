@@ -1,8 +1,6 @@
 <?php
 class Vpc_Forum_Thread_Moderate_Close_Component extends Vpc_Abstract
 {
-    private $_isClosed;
-
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -19,7 +17,6 @@ class Vpc_Forum_Thread_Moderate_Close_Component extends Vpc_Abstract
                 $row->save();
             }
         }
-        $this->_isClosed = $row->closed == '1';
     }
 
     public function getTemplateVars()
@@ -32,13 +29,13 @@ class Vpc_Forum_Thread_Moderate_Close_Component extends Vpc_Abstract
             $ret['linkText'] = trlVps('Close Thread');
             $ret['url'] = $this->getData()->url . '?close=1';
         }
-        $ret['closed'] = $this->isClosed();
         return $ret;
     }
 
+    // wird zB in Vpc_Forum_Thread_Component aufgerufen
     public function isClosed()
     {
-        return $this->_isClosed;
+        return $this->getData()->parent->parent->row->closed;
     }
 
     public function getCacheVars()
@@ -46,7 +43,7 @@ class Vpc_Forum_Thread_Moderate_Close_Component extends Vpc_Abstract
         $ret = parent::getCacheVars();
         $row = $this->getData()->parent->parent->row;
         $ret[] = array(
-            'model' => get_class($row->getModel()->getTable()),
+            'model' => get_class($row->getModel()),
             'id' => $row->id
         );
         return $ret;

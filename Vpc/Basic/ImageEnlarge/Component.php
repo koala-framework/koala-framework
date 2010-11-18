@@ -16,7 +16,7 @@ class Vpc_Basic_ImageEnlarge_Component extends Vpc_Abstract_Image_Component
         return $ret;
     }
 
-    public function getImageRow()
+    public function getImageData()
     {
         $c = $this->getData()->getChildComponent('-linkTag');
         if (is_instance_of($c->componentClass, 'Vpc_Basic_LinkTag_Component')) {
@@ -26,17 +26,17 @@ class Vpc_Basic_ImageEnlarge_Component extends Vpc_Abstract_Image_Component
             if (Vpc_Abstract::getSetting($c->componentClass, 'alternativePreviewImage')
                 && $c->getComponent()->getRow()->preview_image
             ) {
-                $r = $c->getComponent()->getAlternativePreviewImageRow();
-                if ($r->imageExists()) {
+                $r = $c->getComponent()->getAlternativePreviewImageData();
+                if ($r) {
                     return $r;
                 }
             }
         }
-        return parent::getImageRow();
+        return parent::getImageData();
     }
 
-    public function getOwnImageRow()
+    public function getOwnImageData()
     {
-        return parent::getImageRow();
+        return parent::getImageData();
     }
 }

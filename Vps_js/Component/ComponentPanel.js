@@ -38,7 +38,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     loadComponent: function(data) {
         var componentConfig = this.componentConfigs[data.componentClass+'-'+data.type];
-        if (!componentConfig) throw "couldn't find componentConfig "+data.componentClass+'-'+data.type;
+        if (!componentConfig) throw new Error("couldn't find componentConfig "+data.componentClass+'-'+data.type);
         var params;
         if (data.componentId) {
             params = { componentId: data.componentId };
@@ -47,6 +47,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             }
         } else {
             params = this.getBaseParams();
+            data.componentId = params.componentId;
         }
         var item;
         this.items.each(function(i) {
@@ -56,12 +57,17 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             }
         }, this);
 
+        this.componentsStack.push(data);
+        this.updateToolbar();
+
         if (item) {
             item.applyBaseParams(params);
             item.load();
             if (item.getAction && item.getAction('saveBack')) {
-                if (this.getTopToolbar().items.getCount() > 0) {
+                if (this.getTopToolbar().items.getCount() > 2) {
                     item.getAction('saveBack').show();
+                } else {
+                    item.getAction('saveBack').hide();
                 }
             }
         } else {
@@ -70,6 +76,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 componentClass: data.componentClass,
                 type: data.type,
                 baseParams: params,
+                autoHeight: this.autoHeight,
                 listeners: {
                     scope: this,
                     gotComponentConfigs: function(componentConfigs) {
@@ -90,16 +97,16 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             item.on('loaded', function() {
                 //muss hier auch nochmal gemacht werden
                 if (item.getAction && item.getAction('saveBack')) {
-                    if (this.getTopToolbar().items.getCount() > 0) {
+                    if (this.getTopToolbar().items.getCount() > 2) {
                         item.getAction('saveBack').show();
+                    } else {
+                        item.getAction('saveBack').hide();
                     }
                 }
             }, this);
             this.add(item);
             this.doLayout();
         }
-        this.componentsStack.push(data);
-        this.updateToolbar();
         this.getLayout().setActiveItem(item);
     },
 
@@ -160,7 +167,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             toolbar.add('»');
         }
 
-        var data = this.componentsStack[this.componentsStack.length-1]
+        var data = this.componentsStack[this.componentsStack.length-1];
         var cfg = this.componentConfigs[data.componentClass+'-'+data.type];
         toolbar.add({
             cls: 'x-btn-text-icon',

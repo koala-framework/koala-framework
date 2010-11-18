@@ -1,77 +1,55 @@
 <?php
+require_once 'Zend/Config/Ini.php';
+
 class Vps_Config_Ini extends Zend_Config_Ini
 {
-    private $_filename;
-
-    /**
-    * Liest die Datei aus und schreibt den Inhalt in einen Array
-    *
-    * @param string $filename
-    */
-    public function __construct($filename)
+    private function _fixValues(&$data)
     {
-        $this->_filename = $filename;
-        $data = parse_ini_file($filename, true);
-        Zend_Config::__construct($data, true);
-    }
-
-    /**
-    * Setzt den Wert für ein Element in einer Section
-    * es wird überprüft ob Section oder Element leer sind, falls ja
-    * wird nichts angelegt
-    *
-    * @param string $section
-    * @param string $element
-    * @param string $value
-    */
-    public function setValue($section, $element, $value)
-    {
-        if (!is_string($value)) {
-            throw new Vps_Exception('Value must be a string, ' . gettype($value) . ' given');
-        }
-
-        if ($section != '' && $element != '') {
-            if (!$this->$section) {
-                $this->$section = array($element => $value);
+        foreach ($data as $k=>$i) {
+            if (is_array($i)) {
+                $this->_fixValues($data[$k]);
             } else {
-                $this->$section->$element = $value;
+                if ($i === 'false') $data[$k] = false;
+                if ($i === 'true') $data[$k] = true;
             }
         }
     }
 
-    /**
-    * Der ini File wird neu geschrieben.
-    *
-    */
-    function write()
+    //kopie von zend um INI_SCANNER_RAW einzuf?gen; f?r Php 5.3
+    //im neuen zend gibts _parseIniFile - nur das sollte ?berschrieben werden
+    protected function _loadIniFile($filename)
     {
-        $content = "";
-        foreach ($this->_data as $section => $elements) {
-            $content .= "[$section] \n";
-            foreach ($elements as $key => $element) {
-                $content .= "$key = $element\n";
-            }
-            $content .= "\n";
-        }
-            
-        $handle = fopen($this->_filename, 'w');
-        fwrite($handle, $content);
-        fclose($handle);
-    }
-
-    /**
-    * überprüft ob der Wert und section vorhanden sind
-    *
-    * @param string $section
-    * @param string $element
-    * @return true wenn der key bereits existiert
-    */
-    public function checkKeyExists ($section, $element)
-    {
-        if ($this->$section->$element == '') {
-            return false;
+        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+            $loaded = parse_ini_file($filename, true, INI_SCANNER_RAW); // Warnings and errors are suppressed
+            $this->_fixValues($loaded);
         } else {
-            return true;
+            $loaded = parse_ini_file($filename, true); // Warnings and errors are suppressed
         }
+
+        $iniArray = array();
+        foreach ($loaded as $key => $data)
+        {
+            $pieces = explode($this->_sectionSeparator, $key);
+            $thisSection = trim($pieces[0]);
+            switch (count($pieces)) {
+                case 1:
+                    $iniArray[$thisSection] = $data;
+                    break;
+
+                case 2:
+                    $extendedSection = trim($pieces[1]);
+                    $iniArray[$thisSection] = array_merge(array(';extends'=>$extendedSection), $data);
+                    break;
+
+                default:
+                    /**
+                     * @see Zend_Config_Exception
+                     */
+                    require_once 'Zend/Config/Exception.php';
+                    throw new Zend_Config_Exception("Section '$thisSection' may not extend multiple sections in $filename");
+            }
+        }
+
+        return $iniArray;
     }
 }

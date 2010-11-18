@@ -5,18 +5,19 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
     protected $_dependentModels = array(
         'Entries' => 'Vps_Util_Model_Feed_Entries'
     );
+    protected $_defaultEncoding = 'utf-8';
 
     /**
      * @return Vps_Http_Requestor
      */
     public function getHttpRequestor()
     {
-        return new Vps_Http_Requestor;
+        return Vps_Http_Requestor::getInstance();
     }
 
     protected function _getOwnColumns()
     {
-        return array('url', 'title', 'link', 'description', 'format', 'encoding');
+        return array('url', 'title', 'link', 'description', 'format', 'encoding', 'hub');
     }
 
     public function getPrimaryKey()
@@ -83,6 +84,7 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
                 if (!mb_check_encoding($link, 'UTF-8')) {
                     $link = mb_convert_encoding($link, 'UTF-8');
                 }
+                $link = html_entity_decode($link, ENT_QUOTES, "utf-8");
                 $xml = @simplexml_load_string(rtrim($link, ' /') . ' />');
                 if ($xml === false) {
                     continue;
@@ -138,8 +140,17 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
                 $feeds[(string)$uri] = $title;
             }
         }
-
         // Return the fetched feeds
         return $feeds;
+    }
+
+    public function getDefaultEncoding()
+    {
+        return $this->_defaultEncoding;
+    }
+
+    public function setDefaultEncoding($enc)
+    {
+        $this->_defaultEncoding = $enc;
     }
 }

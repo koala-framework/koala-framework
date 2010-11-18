@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_LinkTag_Event_Data extends Vpc_Basic_LinkTag_Intern_Data
+class Vpc_Basic_LinkTag_Event_Data extends Vpc_Basic_LinkTag_News_Data
 {
     protected function _getData()
     {

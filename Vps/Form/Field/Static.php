@@ -10,6 +10,13 @@ class Vps_Form_Field_Static extends Vps_Form_Field_Abstract
         $this->setText($text);
     }
 
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'text';
+        return $ret;
+    }
+
     public function setFieldLabel($v)
     {
         $this->setLabelSeparator($v ? ':' : '');

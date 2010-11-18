@@ -2,14 +2,11 @@
 /**
  * @group Vpc_Basic_LinkTag
  **/
-class Vpc_Basic_LinkTag_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_LinkTag_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_LinkTag_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Basic_LinkTag_Root');
     }
 
     public function testTemplateVars()
@@ -42,5 +39,24 @@ class Vpc_Basic_LinkTag_Test extends PHPUnit_Framework_TestCase
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c);
         $this->assertEquals('<a href="http://example.com" rel="foo">', $html);
+    }
+
+    public function testCacheChangeType()
+    {
+        $c = $this->_root->getComponentById('1101');
+
+        $this->assertEquals('<a href="http://example2.com" rel="foo">', $c->render());
+
+        $row = $c->getComponent()->getRow();
+        $row->component = 'test';
+        $row->save();
+        $this->_process();
+
+        $c = $this->_root->getComponentById('1101');
+        $c = $c->getChildComponent('-link');
+        $this->assertEquals('<a href="http://example.com" rel="foo">', $c->render());
+
+        $c = $this->_root->getComponentById('1101');
+        $this->assertEquals('<a href="http://example.com" rel="foo">', $c->render());
     }
 }

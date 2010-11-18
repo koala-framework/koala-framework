@@ -5,6 +5,16 @@
  */
 class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        Vps_Component_Data_Root::setComponentClass(false);
+    }
+
+    public function tearDown()
+    {
+        Vps_Component_Data_Root::setComponentClass(null);
+    }
+
     public function testXmlBasic()
     {
         $model = new Vps_Model_Xml(array(

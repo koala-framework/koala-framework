@@ -27,6 +27,15 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
 
     public function preProcessInput($postData)
     {
+        // TODO: Kopie von Vpc_User_BoxAbstract_Component wie anderes auf dieser Seite
+        if (isset($postData['feAutologin'])
+            && !Vps_Registry::get('userModel')->getAuthedUser()
+        ) {
+            list($cookieId, $cookieMd5) = explode('.', $postData['feAutologin']);
+            if (!empty($cookieId) && !empty($cookieMd5)) {
+                $this->_getAuthenticateResult($cookieId, $cookieMd5);
+            }
+        }
         $this->_processInput($postData);
         parent::preProcessInput($postData);
     }

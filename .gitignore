@@ -1,2 +1,6 @@
 include_path
+.kdev4
+.buildpath
+.project
+.settings
 *.kdev4

@@ -16,6 +16,8 @@ Vps.Switch.Display = function(el) {
         'opened': true,
         'closed': true
     });
+    this._lockAnimation = false;
+
     this.el = el;
     this.switchLink = Ext.get(Ext.query('a.switchLink', this.el.dom)[0]);
     this.switchContent = Ext.get(Ext.query('div.switchContent', this.el.dom)[0]);
@@ -27,6 +29,16 @@ Vps.Switch.Display = function(el) {
     this.switchContent.setHeight(0);
     // und schnell wieder auf 'none' bevors wer merkt :)
     this.switchContent.setStyle('display', 'none');
+
+    // if it is important, show on startup
+    if (this.switchContent.child('.vpsImportant')) {
+        this.switchContent.setStyle('display', 'block');
+        this.switchContent.setStyle('height', 'auto');
+        this.switchLink.addClass('switchLinkOpened');
+        if (Ext.isIE6) {
+            this.switchContent.setWidth(this.switchContent.getWidth());
+        }
+    }
 
     if (this.switchLink && this.switchContent) {
         Ext.EventManager.addListener(this.switchLink, 'click', function(e) {
@@ -41,12 +53,16 @@ Vps.Switch.Display = function(el) {
 
 Ext.extend(Vps.Switch.Display, Ext.util.Observable, {
     doClose: function() {
+        if (this._lockAnimation) return;
+        this._lockAnimation = true;
+
         this.fireEvent('beforeClose', this);
         this.switchContent.scaleHeight = this.switchContent.getHeight();
         this.switchContent.scale(undefined, 0,
             { easing: 'easeOut', duration: .5, afterStyle: "display:none;",
                 callback: function() {
                     this.fireEvent('closed', this);
+                    this._lockAnimation = false;
                 },
                 scope: this
             }
@@ -55,15 +71,19 @@ Ext.extend(Vps.Switch.Display, Ext.util.Observable, {
     },
 
     doOpen: function() {
+        if (this._lockAnimation) return;
+        this._lockAnimation = true;
+
         this.fireEvent('beforeOpen', this);
         this.switchContent.setStyle('display', 'block');
         this.switchContent.scale(undefined, this.switchContent.scaleHeight,
-            { easing: 'easeOut', duration: .5, afterStyle: "height:auto;",
+            { easing: 'easeOut', duration: .5, afterStyle: "display:block;height:auto;",
                 callback: function() {
                     this.fireEvent('opened', this);
                     if (Ext.isIE6) {
                         this.switchContent.setWidth(this.switchContent.getWidth());
                     }
+                    this._lockAnimation = false;
                 },
                 scope: this
             }
