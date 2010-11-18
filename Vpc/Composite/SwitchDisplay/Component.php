@@ -10,6 +10,7 @@ class Vpc_Composite_SwitchDisplay_Component extends Vpc_Abstract_Composite_Compo
         $ret['generators']['child']['component']['content'] =
             'Vpc_Paragraphs_Component';
         $ret['cssClass'] = 'webStandard';
+        $ret['assets']['dep'][] = 'VpsSwitchDisplay';
         return $ret;
     }
 }

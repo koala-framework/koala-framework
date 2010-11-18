@@ -110,7 +110,6 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['partialParams'] = $this->getPartialParams();
         $ret['directory'] = $this->getData()->parent->getComponent()->getItemDirectory();
         $ret['formSaved'] = null;
         if ($this->_getSearchForm()) {
@@ -214,38 +213,32 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();
-        $r = $this->_getCacheData();
-        if ($r) $ret[] = $r;
+        $ret = array_merge($ret, $this->_getCacheData());
         return $ret;
     }
 
     private function _getCacheData($nr = null)
     {
-        $generator = null;
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
-        $field = null;
-        $id = null;
+        $generator = null;
         if ($dir instanceof Vps_Component_Data) {
             $generator = $dir->getGenerator('detail');
-            if ($generator->getModel()->hasColumn('component_id')) {
-                $field = 'component_id';
-                $id = $dir->dbId;
-            }
         } else if (is_string($dir)) {
             $generator = Vps_Component_Generator_Abstract::getInstance(
                 Vpc_Abstract::getComponentClassByParentClass($dir), 'detail'
             );
         }
-        if ($nr) {
-            $id = $nr;
-        }
 
         if ($generator) {
-            return array(
-                'model' => $generator->getModel(),
-                'id' => $id,
-                'field' => $field
-            );
+            $ret = $generator->getCacheVars($dir instanceof Vps_Component_Data ? $dir : null);
+            if ($nr) {
+                foreach ($ret as $k=>$i) {
+                    if (!$i['field']) {
+                        $ret[$k]['id'] = $nr;
+                    }
+                }
+            }
+            return $ret;
         }
         return array();
     }
@@ -254,11 +247,12 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
     {
         $ret = array();
         if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Id')) {
-            $r = $this->_getCacheData($nr);
+            $ret = array_merge($ret, $this->_getCacheData($nr));
         } else if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Paging')) {
-            $r = $this->_getCacheData();
+            $ret = array_merge($ret, $this->_getCacheData());
+        } else if (is_instance_of($this->getPartialClass(), 'Vps_Component_Partial_Random')) {
+            $ret = array_merge($ret, $this->_getCacheData());
         }
-        if ($r) $ret[] = $r;
         return $ret;
     }
 }

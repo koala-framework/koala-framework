@@ -21,6 +21,16 @@ class Vpc_Basic_Text_Model extends Vps_Model_Db_Proxy
         parent::__construct($config);
     }
 
+    protected function _init()
+    {
+        $this->_siblingModels = array(
+            new Vps_Model_Field(array(
+                'fieldName' => 'data'
+            ))
+        );
+        parent::_init();
+    }
+
     public function getComponentClass()
     {
         return $this->_componentClass;

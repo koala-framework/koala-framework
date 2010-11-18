@@ -3,9 +3,18 @@
 // /vps/test/vps_form_multi-checkbox_test
 class Vps_Form_MultiCheckbox_TestController extends Vps_Controller_Action_Auto_Form
 {
-    protected $_modelName = 'Vps_Form_MultiCheckbox_DataModel';
     protected $_permissions = array('save', 'add');
     protected $_buttons = array('save');
+
+    public function preDispatch()
+    {
+        $model = Vps_Model_Abstract::getInstance('Vps_Form_MultiCheckbox_DataModel');
+        $model->setData(
+            array(array('id' => 1))
+        );
+        $this->_model = $model;
+        parent::preDispatch();
+    }
 
     protected function _initFields()
     {

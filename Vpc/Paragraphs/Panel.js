@@ -1,8 +1,24 @@
 Ext.namespace('Vpc.Paragraphs');
+
+
+Vpc.Paragraphs.PanelJsonReader = Ext.extend(Ext.data.JsonReader,
+{
+    readRecords: function(o) {
+        var ret = Vpc.Paragraphs.PanelJsonReader.superclass.readRecords.apply(this, arguments);
+        if (o.componentConfigs) {
+            this.paragraphsPanel.fireEvent('gotComponentConfigs', o.componentConfigs);
+            Ext.applyIf(this.paragraphsPanel.dataView.componentConfigs, o.componentConfigs);
+        }
+        return ret;
+    }
+});
+
 Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     layout:'fit',
     cls: 'vpc-paragraphs',
+    showDelete: true,
+    showPosition: true,
     initComponent : function()
     {
         this.addEvents('editcomponent', 'gotComponentConfigs');
@@ -17,6 +33,9 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             components: this.components,
             componentIcons: this.componentIcons,
             width: this.previewWidth,
+            showDelete: this.showDelete,
+            showPosition: this.showPosition,
+            showCopyPaste: this.showCopyPaste,
             listeners: {
                 scope: this,
                 'delete': this.onDelete,
@@ -24,7 +43,10 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
                 changeVisible: this.onChangeVisible,
                 changePos: this.onChangePos,
                 addParagraphMenuShow: this.onAddParagraphMenuShow,
-                addParagraph: this.onParagraphAdd
+                addParagraph: this.onParagraphAdd,
+                copyParagraph: this.onCopyParagraph,
+                pasteParagraph: this.onPasteParagraph,
+                copyPasteMenuShow: this.onCopyPasteMenuShow
             }
         });
 
@@ -51,26 +73,84 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             scope: this
         });
 
-        this.actions.addparagraph = new Vpc.Paragraphs.AddParagraphButton({
-            components: this.components,
-            componentIcons: this.componentIcons,
-            listeners: {
-                scope: this,
-                menushow: function() {
-                    if (this.store.getCount() == 0) {
-                        this.addParagraphPos = 1;
-                    } else {
-                        this.addParagraphPos = this.store.getAt(this.store.getCount()-1).get('pos')+1;
+        this.actions.makeAllVisible = new Ext.Action({
+            text : trlVps('All Visible'),
+            icon : '/assets/silkicons/tick.png',
+            cls  : 'x-btn-text-icon',
+            handler: function(b) {
+                Ext.Msg.show({
+                    title: trlVps('All Visible'),
+                    msg: trlVps('Do you really wish to set everything to visible?'),
+                    buttons: Ext.Msg.YESNO,
+                    scope: this,
+                    fn: function(button) {
+                        if (button == 'yes') {
+                            Ext.Ajax.request({
+                                mask: this.el,
+                                maskText: trlVps('Setting visible...'),
+                                url: this.controllerUrl+'/json-make-all-visible',
+                                params: this.getBaseParams(),
+                                success: function() {
+                                    this.reload();
+                                },
+                                scope: this
+                            });
+                        }
                     }
-                },
-                addParagraph: function(component) {
-                    this.onParagraphAdd(component);
-                }
-            }
+                });
+            },
+            scope: this
         });
 
-        this.tbar = [ this.actions.showPreview, '-', this.actions.addparagraph ];
+        if (this.components) {
+            this.actions.addparagraph = new Vpc.Paragraphs.AddParagraphButton({
+                components: this.components,
+                componentIcons: this.componentIcons,
+                listeners: {
+                    scope: this,
+                    menushow: function() {
+                        this.addParagraphPos = 1;
+                    },
+                    addParagraph: function(component) {
+                        this.onParagraphAdd(component);
+                    }
+                }
+            });
+            this.actions.copyPaste = {
+                text: trlVps('copy/paste'),
+                menu: [{
+                    text: trlVps('Copy Paragraph'),
+                    icon: '/assets/silkicons/page_white_copy.png',
+                    disabled: true
+                },{
+                    text: trlVps('Paste Paragraph'),
+                    icon: '/assets/silkicons/page_white_copy.png',
+                    scope: this,
+                    handler: function() {
+                        this.onPasteParagraph();
+                    }
+                }],
+                icon: '/assets/silkicons/page_white_copy.png',
+                cls  : 'x-btn-text-icon',
+                listeners: {
+                    scope: this,
+                    menushow: function(btn) {
+                        this.copyPasteParagraphPos = 1;
+                    }
+                }
+            };
+        }
 
+        this.tbar = [ this.actions.showPreview ];
+        if (this.actions.addparagraph) {
+            this.tbar.push('-');
+            this.tbar.push(this.actions.addparagraph);
+            if (this.showCopyPaste) {
+                this.tbar.push(this.actions.copyPaste);
+            }
+        }
+        this.tbar.push('->');
+        this.tbar.push(this.actions.makeAllVisible);
 
         Vpc.Paragraphs.Panel.superclass.initComponent.call(this);
     },
@@ -109,21 +189,23 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 
     onMetaLoad : function(result)
     {
-        this.fireEvent('gotComponentConfigs', result.componentConfigs);
-        Ext.applyIf(this.dataView.componentConfigs, result.componentConfigs);
+        //this.fireEvent('gotComponentConfigs', result.componentConfigs);
+        //Ext.applyIf(this.dataView.componentConfigs, result.componentConfigs);
 
         var meta = result.metaData;
         this.metaData = meta;
 
+        var reader = new Vpc.Paragraphs.PanelJsonReader({
+            totalProperty: meta.totalProperty,
+            root: meta.root,
+            id: meta.id,
+            sucessProperty: meta.successProperty,
+            fields: meta.fields
+        });
+        reader.paragraphsPanel = this;
         var storeConfig = {
             proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
-            reader: new Ext.data.JsonReader({
-                totalProperty: meta.totalProperty,
-                root: meta.root,
-                id: meta.id,
-                sucessProperty: meta.successProperty,
-                fields: meta.fields
-            }),
+            reader: reader,
             sortInfo: meta.sortInfo,
             remoteSort: true
         };
@@ -281,6 +363,35 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             },
             scope: this
         });
+    },
+
+    onCopyParagraph: function(record) {
+        var params = Vps.clone(this.getBaseParams());
+        params.id = record.get('id');
+        Ext.Ajax.request({
+            url: this.controllerUrl+'/json-copy',
+            params: params,
+            mask: this.el
+        });
+    },
+
+    onPasteParagraph: function() {
+        var params = Vps.clone(this.getBaseParams());
+        params.pos = this.copyPasteParagraphPos;
+        Ext.Ajax.request({
+            url: this.controllerUrl+'/json-paste',
+            params: params,
+            mask: this.el,
+            scope: this,
+            success: function() {
+                this.reload();
+                this.fireEvent('datachange');
+            }
+        });
+    },
+
+    onCopyPasteMenuShow: function(record) {
+        this.copyPasteParagraphPos = parseInt(record.get('pos'))+1;
     }
 
 });

@@ -1,0 +1,4 @@
+.$cssClass { margin-bottom: 10px; }
+.$cssClass table { width: 100%; }
+.$cssClass table tr th { font-weight: bold; color: $mainColor; }
+.$cssClass table tr td { padding: 2px 0px; }

@@ -68,28 +68,27 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 } else {
                     var proxy = new Ext.data.HttpProxy(store);
                 }
+                var storeConfig = {
+                    proxy: proxy,
+                    reader: reader
+                };
+                Ext.apply(storeConfig, this.storeConfig);
                 if (store.type && Ext.data[store.type]) {
-                    this.store = new Ext.data[store.type]({
-                        proxy: proxy,
-                        reader: reader
-                    });
+                    this.store = new Ext.data[store.type](storeConfig);
                 } else if (store.type) {
                     try {
-                        var storeType = eval(store.type)
+                        var storeType = eval(store.type);
                     } catch(e) {
                         throw "invalid storeType: "+store.type;
                     }
-                    this.store = new storeType({
-                        proxy: proxy,
-                        reader: reader
-                    });
+                    this.store = new storeType(storeConfig);
                 } else {
-                    this.store = new Ext.data.Store({
-                        proxy: proxy,
-                        reader: reader
-                    });
+                    this.store = new Ext.data.Store(storeConfig);
                 }
             }
+        }
+        if (this.baseParams) {
+            this.store.baseParams = this.baseParams;
         }
 
         if (this.addDialog) {
@@ -153,7 +152,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 
     setValue : function(v)
     {
-        if (v == '') v = null;
+        if (v === '') v = null;
         if (v == this.emptyText) v = null;
         if (v && this.store.proxy && this.valueField && this.mode == 'remote') {
             //wenn proxy vorhanden können daten nachgeladen werden
@@ -168,7 +167,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 && this.mode == 'remote'
                 && this.store.proxy //proxy vorhanden (dh. daten können nachgeladen werden)
                 ) {
-            this.store.baseParams[this.queryParam] = v;
+            this.store.baseParams[this.queryParam] = this.valueField+':'+v;
             this.store.load({
                 params: this.getParams(v),
                 callback: function(r, options, success) {
@@ -198,7 +197,26 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         }
     },
     setFormBaseParams: function(params) {
-    	this.store.baseParams = params;
+    	Ext.apply(this.store.baseParams, params);
+    },
+
+
+    /*
+    Workaround für folgendes Problem:
+    - ComboBox onBeforeLoad ersetzt den DataView html code durch einen eigenen Loading
+    - this.view.all (da werden die gerenderten dom knoten gemerkt) wird aber nicht geleert
+    - dadurch sind da elemente drinnen die in der luft hängen
+    - wenn nun im onLoad this.select() aufgerufen wird, wird ein scrollChildIntoView für das Element
+      das in der luft hängt aufgerufen
+    - und das gibt einen JS-Error im IE
+     */
+    onBeforeLoad: function()
+    {
+        Vps.Form.ComboBox.superclass.onBeforeLoad.call(this);
+        if(!this.hasFocus){
+            return;
+        }
+        this.view.all.clear();
     }
 
 

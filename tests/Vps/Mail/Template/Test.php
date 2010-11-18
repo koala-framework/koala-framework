@@ -56,7 +56,7 @@ class Vps_Mail_Template_Test extends PHPUnit_Framework_TestCase
 
         $c = $this->_root->getChildComponent('-both');
         $m = new Vps_Mail_Template($c);
-        $m->getView()->addScriptPath(dirname(__FILE__).'/views');
+        $m->getView()->addScriptPath('.');
         $m->setMailVarsClassName(null);
         $m->setMail($mockMail);
         $m->subject = 'a special subject';

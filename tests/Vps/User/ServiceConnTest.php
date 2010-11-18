@@ -54,7 +54,7 @@ class Vps_User_ServiceConnTest extends PHPUnit_Framework_TestCase
             if ($debugOutput) echo $out."\n\n";
         }
         if ($failed) {
-            $this->fail("alt least one process failed");
+            $this->fail("alt least one process failed:".print_r($allOut, true));
         }
     }
 }

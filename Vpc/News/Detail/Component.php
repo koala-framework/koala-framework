@@ -8,9 +8,9 @@ class Vpc_News_Detail_Component extends Vpc_News_Detail_Abstract_Component
         return $ret;
     }
 
-
     public static function modifyItemData(Vps_Component_Data $new)
     {
+        parent::modifyItemData($new);
         $new->previewImage = $new->getChildComponent('-image');
     }
 }

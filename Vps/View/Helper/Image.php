@@ -7,7 +7,7 @@ class Vps_View_Helper_Image
     {
         $this->_view = $view;
     }
-    
+
     // wird auch von ImageUrl helper verwendet
     protected function _getImageParams($image, $type = 'default', $alt = '', $cssClass = null)
     {
@@ -34,7 +34,8 @@ class Vps_View_Helper_Image
             $image = str_replace(getcwd(), '/assets', $image);
             $url = $image;
             if (!$this->_dep) {
-                $this->_dep = new Vps_Assets_Dependencies();
+                $loader = new Vps_Assets_Loader();
+                $this->_dep = $loader->getDependencies();
             }
             if (stripos($url, "/assets/") === 0) {
                 $depUrl = substr($url, 8);

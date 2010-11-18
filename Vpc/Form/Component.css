@@ -1,13 +1,13 @@
-.$cssClass .form_housenumber,
-.$cssClass .form_city {
+.cssClass .form_housenumber,
+.cssClass .form_city {
     clear: none;
 }
-.$cssClass form .vpsField label,
-.$cssClass form .vpsField span.fieldContent {
+.cssClass form .vpsField label,
+.cssClass form .vpsField span.fieldContent {
     line-height: 20px;
     clear: both;
 }
-.$cssClass form button {
+.cssClass form button {
     font-weight: bold;
     border: 1px solid #000;
     background-color: #fff;
@@ -16,94 +16,94 @@
     height: 25px;
     overflow: visible;
 }
-.$cssClass .submitWrapper {
+.cssClass .submitWrapper {
     text-align: center;
 }
-.$cssClass .submitWrapper .beforeButton,
-.$cssClass .submitWrapper .button,
-.$cssClass .submitWrapper .afterButton {
+.cssClass .submitWrapper .beforeButton,
+.cssClass .submitWrapper .button,
+.cssClass .submitWrapper .afterButton {
     float: left;
 }
-.$cssClass input,
-.$cssClass textarea,
-.$cssClass select {
+.cssClass input,
+.cssClass textarea,
+.cssClass select {
     padding: 2px;
     margin-bottom: 4px;
 }
-.$cssClass input.radio {
+.cssClass input.radio {
     margin-left: 10px;
     border: none;
     background: none;
 }
-.$cssClass form .vpsFormFieldCheckbox input {
+.cssClass form .vpsFormFieldCheckbox input {
     width: auto;
     border: none;
     background: none;
     margin-left: 5px;
     margin-top: 3px;
 }
-.ext-ie6 .$cssClass form .vpsFormFieldCheckbox label {
+.ext-ie6 .cssClass form .vpsFormFieldCheckbox label {
     margin-right: 0px;
 }
-.$cssClass form .vpsFormFieldCheckbox label {
+.cssClass form .vpsFormFieldCheckbox label {
     margin-right: 15px;
 }
-.$cssClass label {
+.cssClass label {
     float: left;
     width: 120px;
     margin-right: 20px;
     text-align: right;
 }
-.$cssClass .vpsFieldRequired label { font-weight: bold; }
-.$cssClass .vpsFieldRequired span label { font-weight: normal; }
-.$cssClass .vpsFieldLabelAlignTop label {
+.cssClass .vpsFieldRequired label { font-weight: bold; }
+.cssClass .vpsFieldRequired span label { font-weight: normal; }
+.cssClass .vpsFieldLabelAlignTop label {
     width: auto;
     margin: 0px;
     text-align: left;
 }
-.$cssClass .vpsFieldLabelAlignLeft label {
+.cssClass .vpsFieldLabelAlignLeft label {
     text-align: left;
 }
-.$cssClass .showField {
+.cssClass .showField {
     font-weight: bold;
     margin-bottom: 9px;
 }
-.$cssClass fieldset {
+.cssClass fieldset {
     margin-bottom: 20px;
     padding: 10px;
 }
-.$cssClass fieldset legend {
+.cssClass fieldset legend {
     font-weight: bold;
     margin-left: 20px;
     padding: 5px;
 }
-.$cssClass .vpsFormFieldRadio {
+.cssClass .vpsFormFieldRadio {
     margin-left: -10px;
 }
-.$cssClass form .vpsFormFieldRadio label{
+.cssClass form .vpsFormFieldRadio label{
     margin-left: 10px;
     margin-right: 20px;
     clear: none;
 }
-.$cssClass form .vpsFormFieldRadioHorizontal label { float: none; width: auto; }
-.ext-ie .$cssClass .form_title {
+.cssClass form .vpsFormFieldRadioHorizontal label { float: none; width: auto; }
+.ext-ie .cssClass .form_title {
     margin-top: -5px;
     padding-bottom: 5px;
 }
-.ext-ie .$cssClass .form_title label {
+.ext-ie .cssClass .form_title label {
     margin-top: 5px;
 }
-.ext-ie .$cssClass .form_title input {
+.ext-ie .cssClass .form_title input {
     margin-bottom: 0px;
 }
-.$cssClass .vpcFormError {
+.cssClass .vpcFormError {
     border: 1px dashed $mainColor;
     margin-bottom: 20px;
     padding: 10px 10px 0px 10px !important;
 }
-.$cssClass .vpcFormError h1 {
+.cssClass .vpcFormError p.error {
     font-weight: bold;
-    font-size: 12px;
-    margin-bottom: 10px;
+    color: $mainColor;
 }
-.$cssClass span.comment { margin-left: 10px; color: #999; }
+.cssClass span.comment { margin-left: 10px; color: #999; }
+.cssClass .vpsField { clear: both; }

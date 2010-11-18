@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->cssClass?><?if($this->isPosted){?> vpsImportant<?}?>">
 <?php
 if ($this->showSuccess) {
     echo $this->component($this->success);
@@ -9,7 +9,7 @@ if ($this->showSuccess) {
 } else {
     if ($this->errors) {
         echo '<div class="webStandard vpcFormError webFormError">';
-        echo '<h1>'.$this->placeholder['error'].':</h1>';
+        echo '<p class="error">'.$this->placeholder['error'].':</p>';
         echo '<ul>';
         foreach ($this->errors as $error) {
             echo "<li>$error</li>";

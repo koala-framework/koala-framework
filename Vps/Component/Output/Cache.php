@@ -116,6 +116,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
                 'info' => $info
             );
         }
+        $ret = $this->_parseDynamic($ret, $componentClass, array('partial' => $info));
         return $ret;
     }
 
@@ -185,40 +186,6 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
         } else {
             $meta = $component->getComponent()->getPartialCacheVars($partial);
         }
-        foreach ($meta as $m) {
-            if (is_string($m)) {
-                $m = array(
-                    'model' => $m
-                );
-            }
-            if (is_object($m)) {
-                if ($m instanceof Vps_Model_Row_Abstract) {
-                    $model = $m->getModel();
-                    if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
-                } else if ($m instanceof Zend_Db_Table_Row_Abstract) {
-                    $model = $m->getTable();
-                }
-                $m = array(
-                    'model' => get_class($model),
-                    'id' => $m->id
-                );
-            }
-            if (!isset($m['model'])) throw new Vps_Exception('getCacheVars for ' . $component->componentClass . ' must deliver model');
-            $model = $m['model'];
-            $id = isset($m['id']) ? $m['id'] : null;
-            if (isset($m['callback']) && $m['callback']) {
-                $type = Vps_Component_Cache::META_CALLBACK;
-                $value = $componentId;
-            } else {
-                $type = Vps_Component_Cache::META_CACHE_ID;
-                $value = $cacheId;
-            }
-            if (isset($m['componentId'])) {
-                $value = $this->getCache()->getCacheId($m['componentId']);
-            }
-            $field = isset($m['field']) ? $m['field'] : '';
-            $this->getCache()->saveMeta($model, $id, $value, $type, $field);
-        }
-        return $meta;
+        $this->getCache()->saveCacheVars($component, $meta, $cacheId);
     }
 }

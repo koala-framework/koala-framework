@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" media="screen" href="/~d/styles/rss2full.xsl"?>
+<?xml-stylesheet type="text/css" media="screen" href="http://feeds.feedburner.com/~d/styles/itemcontent.css"?>
+<rss version="2.0">
+    <channel>
+        <title>Internet Agentur Salzburg - Vivid Planet Software News</title>
+        <link>http://www.vivid-planet.com/news/aktuelle_news/</link>
+        <description>Die aktuellen News der Vivid Planet Software GmbH</description>
+        <language>de</language>
+        <generator>Vivid Planet e2</generator>
+        <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" href="http://feeds.feedburner.com/InternetAgenturSalzburg-VividPlanetSoftwareNews" type="application/rss+xml" />
+        <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com" />
+        <item>
+            <title>Vorsicht Trend: iPhone Apps von Vivid Planet</title>
+            <link>http://www.vivid-planet.com/news/aktuelle_news/2009/09/vorsicht_trend_iphone_apps_von_vivid_planet/</link>
+            <description>"Vorsicht, ein Trend geht um", appelliert die Elektro-Punk Musikband Mediengruppe Telekommander in einem ihrer Songs. Nicht nur den Musikern geht es so: für uns ist der momentan wohl größte Trend im Apple iPhone zu finden, das völlig neue Anwendungsgebiete für Software entstehen lässt.</description>
+            <pubDate>Mon, 21 Sep 2009 00:00:00 +0200</pubDate>
+            <guid isPermaLink="false">http://www.vivid-planet.com/news/aktuelle_news/49</guid>
+        </item>
+        <item>
+            <title>Babytuch.com - Eine Erfolgsstory</title>
+            <link>http://www.vivid-planet.com/news/aktuelle_news/2009/07/babytuch_com_eine_erfolgsstory/</link>
+            <description>Die Genetikerin und vierfache Mutter Andrea Unger hat ein neugartiges Tragetuch für Kleinkinder entwickelt - das Babytuch. Die innovativen Tücher werden unter anderem über das Internet vertrieben. Die Vivid Planet Software GmbH ist stolzer Nebenakteur in der Erfolgsgeschichte des Jungunternehmens.</description>
+            <pubDate>Fri, 24 Jul 2009 00:00:00 +0200</pubDate>
+            <guid isPermaLink="false">http://www.vivid-planet.com/news/aktuelle_news/48</guid>
+        </item>
+        <item>
+            <title>Relaunch der Website von Škoda Österreich</title>
+            <link>http://www.vivid-planet.com/news/aktuelle_news/2009/06/relaunch_der_website_von_skoda_oesterreich/</link>
+            <description>Seit Kurzem heißt es nun „alles neu“ auf der Website von Škoda Österreich, die wir in den letzten Wochen und Monaten völlig neu erschaffen durften. Layout und Design wurden runderneuert und an die neuen kurvigen CI-Vorgaben der Marke angepasst. Im technischen Inneren der Website schlägt ein starkes und junges Herz, die aktuellste Version unseres e²-Content Management Systems.</description>
+            <pubDate>Mon, 29 Jun 2009 00:00:00 +0200</pubDate>
+            <guid isPermaLink="false">http://www.vivid-planet.com/news/aktuelle_news/47</guid>
+        </item>
+        <item>
+            <title>Ebay-Artikel auf der eigenen Website - so funktioniert's!</title>
+            <link>http://www.vivid-planet.com/news/aktuelle_news/2009/06/ebay_artikel_auf_der_eigenen_website_so_funktionie/</link>
+            <description>Die Auktionswebsite Ebay stellt eine Schnittstelle zur Verfügung, mit der Artikel ganz gezielt auf die eigene Website übernommen werden können. Wir haben die hauseigene isiWEB-Technologie nun angepasst, um unseren Kunden eine zusätzliche Funktionalität zu bieten.</description>
+            <pubDate>Mon, 15 Jun 2009 00:00:00 +0200</pubDate>
+            <guid isPermaLink="false">http://www.vivid-planet.com/news/aktuelle_news/44</guid>
+        </item>
+        <item>
+            <title>Technologie von Vivid Planet aktualisiert weltweit tausende Websites</title>
+            <link>http://www.vivid-planet.com/news/aktuelle_news/2009/06/technologie_von_vivid_planet_aktualisiert_weltweit/</link>
+            <description>Der Internetdienst RSSinclude.com sorgt für frischen Inhalt auf Websites. Mehr als 2.000 Webmaster nutzen den Dienst bereits, um den eigenen Besuchern permanent aktuelle Informationen liefern zu können, ohne dabei den Inhalt selbst betreuen zu müssen. Hinter dem englischsprachigen Dienst steht kein Start-up aus dem Silicon Valley, sondern die Vivid Planet Software GmbH aus Neumarkt am Wallersee. Der Internetspezialist hat in der Entwicklung von Online-Diensten ein zweites Standbein neben seinen Agenturleistungen gefunden.</description>
+            <pubDate>Mon, 08 Jun 2009 00:00:00 +0200</pubDate>
+            <guid isPermaLink="false">http://www.vivid-planet.com/news/aktuelle_news/43</guid>
+        </item>
+    </channel>
+</rss>

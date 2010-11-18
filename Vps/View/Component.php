@@ -12,7 +12,7 @@ class Vps_View_Component extends Vps_View
         if (!$masterTemplate) $masterTemplate = 'application/views/master/default.tpl';
         return self::renderComponent($component, $ignoreVisible, $masterTemplate);
     }
-    
+
     public static function renderComponent($component, $ignoreVisible = false, $masterTemplate = false, array $plugins = array())
     {
         if (Zend_Registry::get('config')->debug->componentCache->disable) {

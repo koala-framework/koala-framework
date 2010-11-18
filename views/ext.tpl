@@ -7,6 +7,7 @@
         z-index:20001;
         height:auto;
         border:1px solid #ccc;
+        min-width: 100px;
     }
     #loading .loading-indicator{
         background:#f6f6f6;
@@ -35,8 +36,8 @@
         var Vps = {isApp: true};
     </script>
 
-    <?= $this->assets($this->ext['assetsType']) ?>
     <?= $this->debugData() ?>
+    <?= $this->assets($this->ext['assetsType']) ?>
 
     <script type="text/javascript">
         Vps.userRole = '<?= $this->ext['userRole'] ?>';
@@ -54,6 +55,6 @@
             }
         };
         Ext.onReady(function() {
-            Vps.callWithErrorHandler(Vps.main);
+            Vps.main();
         });
     </script>

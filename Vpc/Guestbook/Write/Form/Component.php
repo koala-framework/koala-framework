@@ -1,16 +1,9 @@
 <?php
 class Vpc_Guestbook_Write_Form_Component extends Vpc_Posts_Write_Form_Component
 {
-    private $_settingsRow = null;
-
     protected function _getSettingsRow()
     {
-        if (!$this->_settingsRow) {
-            $guestbookComponent = $this->getData()->parent->parent;
-            $this->_settingsRow = Vps_Model_Abstract::getInstance('Vps_Component_FieldModel')
-                ->getRow($guestbookComponent->componentId);
-        }
-        return $this->_settingsRow;
+        return $this->_getPostsComponent()->getComponent()->getRow();
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
@@ -33,7 +26,7 @@ class Vpc_Guestbook_Write_Form_Component extends Vpc_Posts_Write_Form_Component
         if ($settingsRow->new_post_mail) {
             $userRow = Vps_Registry::get('userModel')->getRow($settingsRow->new_post_mail);
             if ($userRow) {
-                $guestbookComponent = $this->getData()->parent->parent;
+                $guestbookComponent = $this->_getPostsComponent();
                 $mailComponent = $guestbookComponent->getChildComponent('-mail');
 
                 if ($settingsRow->post_activation_type == Vpc_Guestbook_Component::INACTIVE_ON_SAVE) {

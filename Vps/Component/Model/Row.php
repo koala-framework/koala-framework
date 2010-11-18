@@ -28,18 +28,21 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
             in_array($name, $fields) &&
             is_numeric($this->componentId)
         ) {
-            $m = new Vps_Dao_Pages();
-            if (isset($this->_data->row) && $row = $m->find($this->_data->row->id)->current()) {
+            $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+            if (isset($this->_data->row) && $row = $m->getRow($this->_data->row->id)) {
                 foreach ($fields as $field) {
                     $this->_data->$field = $row->$field;
                 }
             }
             $this->_tableLoaded = true;
         }
+        if ($name == 'id') $name = 'componentId';
         if (isset($this->_data->$name)) {
             $ret = $this->_data->$name;
             if ($name == 'tags') $ret = implode(',', $ret);
             return $ret;
+        } else if ($name == 'parent_id' && $this->_data->parent) {
+            return $this->_data->parent->componentId;
         } else {
             return null;
         }
@@ -55,17 +58,20 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function save()
     {
         $this->_beforeSave();
-        $id = $this->_data->row->id;
-        $m = new Vps_Dao_Pages();
-        if ($id) {
-            if (!is_numeric($id)) {
-                throw new Vps_Exception("Can only save pages");
-            }
-            $this->_beforeUpdate();
-            $row = $m->find($id)->current();
+        if ($this->_data->generator instanceof Vpc_Root_Category_Generator) {
+            $id = $this->_data->dbId;
+            $row = $this->_data->generator->getModel()->getRow($id);
         } else {
-            $this->_beforeInsert();
-            $row = $m->createRow();
+            $m = $this->_data->row->getModel();
+            $primaryKey = $m->getPrimaryKey();
+            $id = $this->_data->row->$primaryKey;
+            if ($id) {
+                $this->_beforeUpdate();
+                $row = $this->_data->row;
+            } else {
+                $this->_beforeInsert();
+                $row = $m->createRow();
+            }
         }
         foreach ($this->_setValues as $key) {
             $row->$key = $this->_data->$key;
@@ -90,8 +96,8 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function delete()
     {
         $this->_beforeDelete();
-        $m = new Vps_Dao_Pages();
-        $m->find($this->_data->row->id)->current()->delete();
+        $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+        $m->getRow($this->_data->row->id)->delete();
         $this->_afterDelete();
     }
 

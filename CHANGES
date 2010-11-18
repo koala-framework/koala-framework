@@ -1,0 +1,35 @@
+== 1.9 ==
+Erstellt: 07.05.10
+Stable: 09.06.10
+Neue Features:
+- AutoFilter
+- Vpc_Tabs
+- Vpc_List: Multi File Upload
+
+möglicherweise nicht kompatible Änderungen:
+- LightBox restyling
+- News und Events View Html verbessert Vps
+- NewsCategories Detail im Vps das die Kategorien ausgibt
+- Vpc_Columns erben von Abstract_List
+    o TemplateVars: columns umbenannt in listItems
+    o generator columns umbenannt in child
+- Directories Kategorien sind jetzt pro Komponente
+    o eigene Tabelle, kein Pool mehr
+    o Updatescript gibts für News und Events
+- Vps_Component_Plugin_Password_Component::isLoggedId in isLoggedIn umbenannt
+- config->vpc->childComponents wird direkt in getSetting verwendet und 
+  nicht mehr druebergespielt, ist flexibler (commit cf4a0a2)
+- Newsletter: 
+    o Strukturänderungen
+    o Standardmodel von Users auf Subscribers umgestellt
+    o auf jeden Fall alles durchtesten beim Umstellen
+
+== 1.8 ==
+Erstellt: 15.01.10
+Stable: 20.05.10
+
+Bugfixes:
+- RTE einfügen
+
+Änderungen:
+- List_Fade kann Text-Balken ausblenden wenn nix drin is

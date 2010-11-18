@@ -37,7 +37,7 @@ class Vpc_Advanced_SocialBookmarks_AvaliableModel extends Vps_Model_FnF
                 'name' => 'StudiVZ'
             ),
             array(
-                'id' => 'windowslive',
+                'id' => 'windowsLive',
                 'url' => 'https://skydrive.live.com/sharefavorite.aspx%2f.SharedFavorites??marklet=1&mkt=en-us&url={0}',
                 'name' => 'Windows Live'
             ),
@@ -57,7 +57,7 @@ class Vpc_Advanced_SocialBookmarks_AvaliableModel extends Vps_Model_FnF
                 'name' => 'LinkARENA'
             ),
             array(
-                'id' => 'misterwong',
+                'id' => 'misterWong',
                 'url' => 'http://www.mister-wong.de/index.php?action=addurl&bm_url={0}',
                 'name' => 'Mister Wong'
             ),

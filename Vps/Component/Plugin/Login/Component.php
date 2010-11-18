@@ -5,11 +5,18 @@ class Vps_Component_Plugin_Login_Component extends Vps_Component_Plugin_Password
     {
         $ret = parent::getSettings();
         $ret['generators']['loginForm']['component'] = 'Vpc_User_Login_Component';
+        $ret['validUserRoles'] = null;
         return $ret;
     }
 
-    public function isLoggedId()
+    public function isLoggedIn()
     {
-        return !is_null(Zend_Registry::get('userModel')->getAuthedUser());
+        $user = Zend_Registry::get('userModel')->getAuthedUser();
+        if (is_null($user)) return false;
+        if (!$this->_getSetting('validUserRoles')) return true;
+        if (in_array($user->role, $this->_getSetting('validUserRoles'))) {
+            return true;
+        }
+        return false;
     }
 }

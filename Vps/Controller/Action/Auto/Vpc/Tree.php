@@ -4,9 +4,12 @@ abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action
     public function preDispatch()
     {
         if (!isset($this->_table) && !isset($this->_tableName)) {
-            $tablename = Vpc_Abstract::getSetting($this->_getParam('class'), 'tablename');
-            if ($tablename) {
+            if (Vpc_Abstract::hasSetting($this->_getParam('class'), 'tablename')) {
+                $tablename = Vpc_Abstract::getSetting($this->_getParam('class'), 'tablename');
                 $this->_table = new $tablename(array('componentClass'=>$this->_getParam('class')));
+            } else if (Vpc_Abstract::hasSetting($this->_getParam('class'), 'childModel')) {
+                $childModelName = Vpc_Abstract::getSetting($this->_getParam('class'), 'childModel');
+                $this->_model = new $childModelName(array('componentClass'=>$this->_getParam('class')));
             } else {
                 throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
             }
@@ -14,11 +17,11 @@ abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action
         parent::preDispatch();
     }
 
-    protected function _getWhere()
+    protected function _getSelect()
     {
-        $where = parent::_getWhere();
-        $where['component_id = ?'] = $this->_getParam('componentId');
-        return $where;
+        $ret = parent::_getSelect();
+        $ret->whereEquals('component_id', $this->_getParam('componentId'));
+        return $ret;
     }
 
     protected function _beforeSave($row)

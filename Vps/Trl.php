@@ -1,10 +1,87 @@
 <?php
+function hlp($string) {
+    return Zend_Registry::get('hlp')->hlp($string);
+}
+
+function hlpVps($string) {
+    return Zend_Registry::get('hlp')->hlpVps($string);
+}
+
+function trl($string, $text = array()) {
+    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB);
+}
+
+function trlc($context, $string, $text = array()) {
+    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB);
+}
+
+function trlp($single, $plural, $text =  array()) {
+    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB);
+}
+
+function trlcp($context, $single, $plural, $text = array()) {
+    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB);
+}
+
+function trlVps($string, $text = array()) {
+    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_VPS);
+}
+
+function trlcVps($context, $string, $text = array()) {
+    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS);
+}
+
+function trlpVps($single, $plural, $text =  array()) {
+    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS);
+}
+
+function trlcpVps($context, $single, $plural, $text = array()) {
+    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
+}
+
+// trl functions for e.g. placeholders
+function trlStatic($string, $text = array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trl', 'args' => array($string, $text))).'-trlserialized*';
+}
+
+function trlcStatic($context, $string, $text = array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlc', 'args' => array($context, $string, $text))).'-trlserialized*';
+}
+
+function trlpStatic($single, $plural, $text =  array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlp', 'args' => array($single, $plural, $text))).'-trlserialized*';
+}
+
+function trlcpStatic($context, $single, $plural, $text = array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlcp', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
+}
+
+function trlVpsStatic($string, $text = array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlVps', 'args' => array($string, $text))).'-trlserialized*';
+}
+
+function trlcVpsStatic($context, $string, $text = array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlcVps', 'args' => array($context, $string, $text))).'-trlserialized*';
+}
+
+function trlpVpsStatic($single, $plural, $text =  array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlpVps', 'args' => array($single, $plural, $text))).'-trlserialized*';
+}
+
+function trlcpVpsStatic($context, $single, $plural, $text = array()) {
+    return '*trlserialized-'.serialize(array('type' => 'trlcpVps', 'args' => array($context, $single, $plural, $text))).'-trlserialized*';
+}
+
+
 class Vps_Trl
 {
     private $_modelWeb;
     private $_modelVps;
     private $_languages; //cache
     private $_useUserLanguage = true;
+    private $_webCodeLanguage;
+
+    private $_overrideTargetLanguage = null;
 
     const SOURCE_VPS = 'vps';
     const SOURCE_WEB = 'web';
@@ -47,11 +124,8 @@ class Vps_Trl
             $config = Zend_Registry::get('config');
             if ($config->languages) {
                 $this->_languages = array_values($config->languages->toArray());
-            } else if ($config->webCodeLanguage) {
-                $this->_languages = array($config->webCodeLanguage);
-            }
-            if (empty($this->_languages)) {
-                throw new Vps_Exception('Neither config languages nor config webCodeLanguage set.');
+            } else {
+                $this->_languages = array($this->getWebCodeLanguage());
             }
         }
         return $this->_languages;
@@ -62,12 +136,28 @@ class Vps_Trl
         $this->_languages = $languages;
     }
 
+    /**
+     * Für Frontend TRL-Hack in 1.9
+     */
+    public function overrideTargetLanguage($lang)
+    {
+        $this->_overrideTargetLanguage = $lang;
+    }
+
     public function getTargetLanguage()
     {
+        if ($this->_overrideTargetLanguage) return $this->_overrideTargetLanguage;
+
         if (php_sapi_name() == 'cli' || !$this->_useUserLanguage) {
             return $this->getWebCodeLanguage();
         }
 
+        //abkürzung
+        if (count($this->getLanguages()) == 1) {
+            return $this->getWebCodeLanguage();
+        }
+
+        //TODO: das benötigt IMMER eine datenbankverbindung, sollte in session gespeichert werden
         $userModel = Vps_Registry::get('userModel');
         if (!$userModel || !$userModel->getAuthedUser() ||
             !isset($userModel->getAuthedUser()->language) ||
@@ -82,24 +172,59 @@ class Vps_Trl
 
     public function getWebCodeLanguage()
     {
-        $config = Zend_Registry::get('config');
-        if (isset($this->_webCodeLanguage) && $this->_webCodeLanguage) {
-            return $this->_webCodeLanguage;
+        if (!$this->_webCodeLanguage) {
+            $config = Zend_Registry::get('config');
+            $this->_webCodeLanguage = $config->webCodeLanguage;
         }
-        if ($config->webCodeLanguage) {
-            return $config->webCodeLanguage;
-        }
+        return $this->_webCodeLanguage;
+    }
+
+    /**
+     * Diese Funktion existiert für tests. Darf nicht aufgerufen / geändert werden
+     * da sonst Web-Übersetzung nicht mehr funktionieren.
+     */
+    public function setWebCodeLanguage($code)
+    {
+        $this->_webCodeLanguage = $code;
     }
 
     private function _getModel($type)
     {
         if ($type == self::SOURCE_WEB) {
-            if (!isset($this->_modelWeb)) $this->_modelWeb = new Vps_Trl_Model_Web();
+            if (!$this->_modelWeb) $this->_modelWeb = new Vps_Trl_Model_Web();
             return $this->_modelWeb;
         } else {
-            if (!isset($this->_modelVps)) $this->_modelVps = new Vps_Trl_Model_Vps();
+            if (!$this->_modelVps) $this->_modelVps = new Vps_Trl_Model_Vps();
             return $this->_modelVps;
         }
+    }
+
+    public function trlStaticExecute($trlStaticData, $language = null)
+    {
+        $ret = $trlStaticData;
+
+        if (preg_match_all('/\*trlserialized-(.+?)-trlserialized\*/m', $trlStaticData, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $k => $match) {
+                $trlStaticData = unserialize($match[1]);
+                if (strtolower(substr($trlStaticData['type'], -3)) == 'vps') {
+                    $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
+                    $source = Vps_Trl::SOURCE_VPS;
+                } else {
+                    $source = Vps_Trl::SOURCE_WEB;
+                }
+
+                $args = $trlStaticData['args'];
+                $args[] = $source;
+                $args[] = $language;
+
+                $replaceString = call_user_func_array(
+                    array($this, $trlStaticData['type']), $args
+                );
+                $ret = str_replace($match[0], $replaceString, $ret);
+            }
+        }
+
+        return $ret;
     }
 
     public function trl($string, $params, $source, $language = null)
@@ -243,7 +368,7 @@ class Vps_Trl
         $linenumber = 0;
         $parts = array();
         while (true) {
-            $pattern = "#(.*?)((trl|trlVps|trlc|trlcVps|trlp|trlpVps|trlcp|trlcpVps) *\(['|\"].*)#s";
+            $pattern = "#(.*?)((trlc?p?(Vps)?(Static)?) *\(['|\"].*)#s";
             preg_match($pattern, $content, $m);
             if (!$m) break;
             $text = $m[2];

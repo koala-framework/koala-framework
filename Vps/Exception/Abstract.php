@@ -22,13 +22,9 @@ abstract class Vps_Exception_Abstract extends Exception
         return $this;
     }
 
-    protected function _writeLog($path, $filename, $content)
+    protected function _writeLog($path, $filename, $content, $force = false)
     {
-        $requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-        if (self::isDebug()
-            || substr($requestUri, -12) == '/favicon.ico'
-            || substr($requestUri, -10) == '/robots.txt')
-        {
+        if (self::isDebug() && !$force) {
             return false;
         }
         $this->_logFilename = $filename;

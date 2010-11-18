@@ -1,19 +1,21 @@
 <? if (count($this->menu)) { ?>
-
-<? if ($this->parentPage) { ?>
-<h2><?=$this->parentPage->name?></h2>
-<? } ?>
-
-<ul class="<?=$this->cssClass?>">
-    <?php foreach ($this->menu as $i=>$m) { ?>
-    <li class="<?= $m->class ?>">
-        <?=$this->componentLink($m, $this->linkPrefix.$m->name)?>
-        <? if($i < count($this->menu)-1) { ?><?=$this->separator?><? } ?>
-        <? if (isset($this->subMenu) && isset($m->current) && $m->current) { ?>
-        <?=$this->component($this->subMenu)?>
+    <div class="<?=$this->cssClass;?>">
+        <? if ($this->parentPage) { ?>
+            <h2 class="parentPageName"><?=$this->parentPage->name;?></h2>
         <? } ?>
-    </li>
-    <?php } ?>
-    <div class="clear"></div>
-</ul>
+        <ul class="menu">
+            <? $i = 0;
+            foreach ($this->menu as $m) { ?>
+                <li class="<?=$m->class;?>">
+                    <?=$this->componentLink($m, $this->linkPrefix.$m->name);?>
+                    <? if ($i < count($this->menu)-1) { ?><?=$this->separator;?><? } ?>
+                    <? if (isset($this->subMenu) && isset($m->current) && $m->current) { ?>
+                        <?=$this->component($this->subMenu);?>
+                    <? } ?>
+                </li>
+            <? $i++;
+            } ?>
+        </ul>
+        <div class="clear"></div>
+    </div>
 <? } ?>

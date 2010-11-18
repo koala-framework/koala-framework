@@ -4,8 +4,8 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'tablename' => 'Vpc_Basic_Link_Model',
-            'componentName' => 'Link',
+            'ownModel' => 'Vpc_Basic_Link_Model',
+            'componentName' => trlVps('Link'),
             'componentIcon' => new Vps_Asset('page_white_link'),
             'default' => array(),
         ));
@@ -26,5 +26,11 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
     public function getSearchContent()
     {
         return $this->_getRow()->text;
+    }
+    
+    public function hasContent()
+    {
+        if (!$this->_getRow()->text) return false;
+        return parent::hasContent();
     }
 }

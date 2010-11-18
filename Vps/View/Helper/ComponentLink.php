@@ -5,6 +5,11 @@ class Vps_View_Helper_ComponentLink
     {
         if ($m instanceof Vps_Component_Data) {
             $m = $m->getPage();
+            if (is_instance_of($m->componentClass, 'Vpc_Basic_LinkTag_Abstract_Component')) {
+                if (!$m->getComponent()->hasContent()) {
+                    return '';
+                }
+            }
             $m = array(
                 'url' => $m->url,
                 'rel' => $m->rel,

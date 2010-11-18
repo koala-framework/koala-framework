@@ -10,12 +10,6 @@ class Vps_Model_MirrorCache_DelayWithHttpAndCliTest extends PHPUnit_Framework_Te
 {
     public function testSyncWithCli()
     {
-        $d = Zend_Registry::get('testDomain');
-        if (substr($d, -6) != '.vivid' && substr($d, -18) != '.vivid-test-server') {
-            //online gibts keine test-datenbank
-            $this->markTestSkipped();
-        }
-
         Vps_Benchmark::enable();
         Vps_Benchmark::reset();
 

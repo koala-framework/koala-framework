@@ -12,6 +12,18 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         $this->setTriggerAction('all');
     }
 
+
+    protected function _validateNotAllowBlank($data, $name)
+    {
+        $ret = array();
+        $v = new Vps_Validate_NotEmpty();
+        $v->setMessage(Vps_Validate_NotEmpty::IS_EMPTY, trlVps('Please select a value'));
+        if (!$v->isValid($data)) {
+            $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
+        }
+        return $ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
@@ -35,8 +47,7 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         //      => sollte sich gleich verhalten.
         $store = $this->_getStoreData();
         if ($this->getShowNoSelection()) {
-            $emptyText = $this->getEmptyText();
-            if (!$emptyText) $emptyText = '('.trlVps('no selection').')';
+            $emptyText = '('.$this->getEmptyText().')';
             array_unshift($store['data'], array('', $emptyText));
         }
         foreach ($store['data'] as $i) {
@@ -49,7 +60,7 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
             $ret['html'] .= '<input type="submit" value="»" />';
         return $ret;
     }
-    
+
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(

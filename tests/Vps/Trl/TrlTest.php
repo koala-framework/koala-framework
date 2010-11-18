@@ -10,6 +10,54 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
         $this->_trlObject = new Vps_Trl();
     }
 
+    public function testTrlParsePhpStatic()
+    {
+        $values = $this->_trlObject->parse("trlStatic('testWord')");
+        $this->assertEquals('web', $values[0]['source']);
+        $this->assertEquals('testWord', $values[0]['text']);
+
+        $values = $this->_trlObject->parse("trlcStatic(\"testContext\", \"testWord\")");
+        $this->assertEquals('web', $values[0]['source']);
+        $this->assertEquals('testWord', $values[0]['text']);
+        $this->assertEquals('testContext', $values[0]['context']);
+
+        $values = $this->_trlObject->parse("trlpStatic('testWord', 'testWords', 3)");
+        $this->assertEquals('web', $values[0]['source']);
+        $this->assertEquals('testWord', $values[0]['text']);
+        $this->assertEquals('testWords', $values[0]['plural']);
+
+        $values = $this->_trlObject->parse("trlcpStatic('testContext', 'testWord', 'testWords', 3)");
+        $this->assertEquals('web', $values[0]['source']);
+        $this->assertEquals('testWord', $values[0]['text']);
+        $this->assertEquals('testWords', $values[0]['plural']);
+        $this->assertEquals('testContext', $values[0]['context']);
+        $this->assertEquals('trlcp', $values[0]['type']);
+        $this->assertEquals("trlcpStatic('testContext', 'testWord', 'testWords', 3)", $values[0]['before']);
+
+        $values = $this->_trlObject->parse("trlVpsStatic('testWord')");
+        $this->assertEquals('vps', $values[0]['source']);
+        $this->assertEquals('testWord', $values[0]['text']);
+
+        $values = $this->_trlObject->parse("trlcVpsStatic(\"testContext\", \"testWord\")");
+        $this->assertEquals('vps', $values[0]['source']);
+        $this->assertEquals('testWord', $values[0]['text']);
+        $this->assertEquals('testContext', $values[0]['context']);
+
+        $values = $this->_trlObject->parse("trlpVpsStatic('testWord', 'testWords', 3)");
+        $this->assertEquals('vps', $values[0]['source']);
+        $this->assertEquals('testWord', $values[0]['text']);
+        $this->assertEquals('testWords', $values[0]['plural']);
+
+        $values = $this->_trlObject->parse("trlcpVpsStatic('testContext', 'testWord', 'testWords', 3)");
+        $this->assertEquals('vps', $values[0]['source']);
+        $this->assertEquals('testWord', $values[0]['text']);
+        $this->assertEquals('testWords', $values[0]['plural']);
+        $this->assertEquals('testContext', $values[0]['context']);
+        $this->assertEquals('trlcp', $values[0]['type']);
+        $this->assertEquals("trlcpVpsStatic('testContext', 'testWord', 'testWords', 3)", $values[0]['before']);
+
+    }
+
     public function testTrlParsePhp()
     {
         $values = $this->_trlObject->parse('trl("\n")');
@@ -172,9 +220,6 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
 
     public function testTrlParseJsLargeString()
     {
-        //$this->markTestIncomplete();
-        //wenn behoben in JsLoader Zeile 77 Hack entfernen
-
         $input = str_repeat(' ', 10015)." trlVps('Info')";
         $result = $this->_trlObject->parse($input, 'js');
         $this->assertEquals(1, count($result));

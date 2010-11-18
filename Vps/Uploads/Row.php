@@ -24,7 +24,7 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
         $this->_deleteFile();
         $this->filename = $filename;
         $this->extension = $extension;
-        $mimeType = $this->_detectMimeType($mimeType, $contents);
+        $mimeType = self::detectMimeType($mimeType, $contents);
         $this->mime_type = $mimeType;
         $this->save();
         file_put_contents($this->getFileSource(), $contents);
@@ -69,13 +69,21 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
         }
     }
 
-    private function _detectMimeType($mimeType, $contents)
+    public static function detectMimeType($mimeType, $contents)
     {
         $ret = $mimeType;
         if (!$mimeType || $mimeType == 'application/octet-stream') {
             if (function_exists('finfo_open')) {
                 //für andere server muss dieser pfad vielleicht einstellbar gemacht werden
-                $finfo = new finfo(FILEINFO_MIME, '/usr/share/file/magic');
+                $path = false;
+                if (file_exists('/usr/share/file/magic')) {
+                    $path = '/usr/share/file/magic';
+                } else if (file_exists('/usr/share/misc/magic')) {
+                    $path = '/usr/share/misc/magic';
+                } else {
+                    throw new Vps_Exception("Can't find magic database");
+                }
+                $finfo = new finfo(FILEINFO_MIME, $path);
                 $ret = $finfo->buffer($contents);
             } else {
                 throw new Vps_Exception("Can't autodetect mimetype, install FileInfo extension");

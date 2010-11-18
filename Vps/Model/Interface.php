@@ -14,6 +14,9 @@ interface Vps_Model_Interface
     public function createRow(array $data=array());
     public function getPrimaryKey();
     public function isEqual(Vps_Model_Interface $other);
+    /**
+     * @return Vps_Model_Select
+     */
     public function select($where = array());
     public function getColumnType($col);
     public function getColumns();
@@ -28,6 +31,7 @@ interface Vps_Model_Interface
 
     public function getRow($id);
     public function getRows($where=null, $order=null, $limit=null, $start=null);
+    public function getIds($where=null, $order=null, $limit=null, $start=null);
     public function countRows($where = array());
 
     public function getSupportedImportExportFormats();

@@ -20,7 +20,6 @@ class Vpc_Basic_Image_TestModel extends Vpc_Abstract_Image_Model
                     array('component_id'=>1610, 'vps_upload_id'=>1, 'dimension' => 'userWidth', 'width'=>50),
                     array('component_id'=>1611, 'vps_upload_id'=>1, 'dimension' => 'userHeight', 'height'=>50),
                     array('component_id'=>1612, 'vps_upload_id'=>1, 'dimension' => 'userSize', 'width'=>50, 'height'=>50),
-                    array('component_id'=>1613, 'vps_upload_id'=>1, 'dimension' => 'userSizeScale', 'width'=>15, 'height'=>10, 'scale'=>'bestfit'),
                     array('component_id'=>1614, 'vps_upload_id'=>1, 'dimension' => 'userWidth', 'width'=>null),
                     array('component_id'=>1615, 'vps_upload_id'=>1, 'dimension' => 'userSizeScale', 'width'=>null, 'height'=>null, 'scale'=>null),
                     array('component_id'=>1616, 'vps_upload_id'=>1, 'dimension' => null),

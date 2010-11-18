@@ -3,7 +3,7 @@
 class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
 {
     protected $_fields;
-    private $_relations = array();
+    private $_relationToValuesRule;
     private $_dataModel;
     private $_relModel;
     private $_valuesModel;
@@ -33,15 +33,12 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         }
         $this->setRelModel($dependetModelRule);
         $this->setValuesModel($relationToValuesRule);
-        $this->_relations['relationToValue'] = $relationToValuesRule;
-        if (is_string($dependetModelRule)) {
-            $this->_relations['dataToRelation'] = $dependetModelRule;
-        }
+        $this->_relationToValuesRule = $relationToValuesRule;
 
         $fieldKey = $relationToValuesRule;
         $i = 2;
         while (in_array($fieldKey, self::$_multiCheckboxes)) {
-            $fieldKey = $relationToValuesRule.$i;
+            $fieldKey = $relationToValuesRule.$i++;
         }
         self::$_multiCheckboxes[] = $fieldKey;
 
@@ -55,23 +52,6 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $this->setXtype('fieldset');
     }
 
-    private function _getRelationRule($index)
-    {
-        if (!isset($this->_relations[$index])) {
-            if ($index == 'dataToRelation') {
-                return null;
-            } else if ($index == 'relationToData') {
-                // wenn hier mehr zurückkommen (exception), eine set methode machen
-                // für $this->_relations['relationToData']
-                $this->_relations[$index] = $this->getRelModel()
-                    ->getReferenceRuleByModelClass(get_class($this->getDataModel()));
-            } else {
-                throw new Vps_Exception("relation for index '$index' is not set");
-            }
-        }
-        return $this->_relations[$index];
-    }
-    
     public function setRelationToData($rel)
     {
         $this->_relations['relationToData'] = $rel;
@@ -174,6 +154,9 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                 throw new Vps_Exception("setPool with MultiCheckbox only works if relationToValues references to an instance of Vps_Util_Model_Pool");
             }
         }
+        if ($this->getValuesModel()->hasColumn('pos') && !$this->_valuesSelect->getPart(Vps_Model_Select::ORDER)) {
+            $this->_valuesSelect->order('pos', 'ASC');
+        }
         return $this->_valuesSelect;
     }
 
@@ -207,23 +190,6 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         return $this->_fields;
     }
 
-    protected function _getRowsByRow(Vps_Model_Row_Interface $row)
-    {
-        $dataToRel = $this->_getRelationRule('dataToRelation');
-        if (is_null($dataToRel)) {
-            $relModel = $this->getRelModel();
-            $relToData = $relModel->getReference($this->_getRelationRule('relationToData'));
-            $pk = $row->getModel()->getPrimaryKey();
-            if (!$row->$pk) {
-                return array();
-            } else {
-                return $relModel->getRows($relModel->select()->whereEquals($relToData['column'], $row->$pk));
-            }
-        } else {
-            return $row->getChildRows($dataToRel);
-        }
-    }
-
     public function setPool($pool)
     {
         $this->_pool = $pool;
@@ -242,12 +208,12 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $dataModel = $row->getModel();
         if ($dataModel) $this->setDataModel($dataModel);
 
-        $ref = $this->getRelModel()->getReference($this->_getRelationRule('relationToValue'));
+        $ref = $this->getRelModel()->getReference($this->_relationToValuesRule);
         $key = $ref['column'];
 
         $selectedIds = array();
         if ($this->getSave() !== false && $this->getInternalSave() !== false) {
-            foreach ($this->_getRowsByRow($row) as $i) {
+            foreach ($row->getChildRows($this->getRelModel()) as $i) {
                 $selectedIds[] = $i->$key;
             }
         }
@@ -263,29 +229,33 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         return $ret;
     }
 
-    public function save(Vps_Model_Row_Interface $row, $postData)
+    protected function _getIdsFromPostData($postData)
     {
-        $dataModel = $row->getModel();
-        if ($dataModel) $this->setDataModel($dataModel);
-
         $new = array();
         foreach ($this->_getFields() as $f) {
             if (isset($postData[$f->getFieldName()]) && $postData[$f->getFieldName()]) {
                 $new[] = substr($f->getFieldName(), strlen($this->getFieldName())+1);
             }
         }
+        return $new;
+    }
+
+    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    {
+        $dataModel = $row->getModel();
+        if ($dataModel) $this->setDataModel($dataModel);
+
+        $new = $this->_getIdsFromPostData($postData);
 
         $avaliableKeys = array();
         foreach ($this->_getFields() as $field) {
             $avaliableKeys[] = $field->getKey();
         }
 
-        $ref = $this->getRelModel()->getReference($this->_getRelationRule('relationToValue'));
+        $ref = $this->getRelModel()->getReference($this->_relationToValuesRule);
         $valueKey = $ref['column'];
-        $ref = $this->getRelModel()->getReference($this->_getRelationRule('relationToData'));
-        $dataKey = $ref['column'];
 
-        foreach ($this->_getRowsByRow($row) as $savedRow) {
+        foreach ($row->getChildRows($this->getRelModel()) as $savedRow) {
             $id = $savedRow->$valueKey;
             if (in_array($id, $avaliableKeys)) {
                 if (!in_array($id, $new)) {
@@ -300,10 +270,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $dataPrimaryKey = $this->getDataModel()->getPrimaryKey();
         foreach ($new as $id) {
             if (in_array($id, $avaliableKeys)) {
-                $i = $this->getRelModel()->createRow();
-                $i->$dataKey = $row->$dataPrimaryKey;
+                $i = $row->createChildRow($this->getRelModel());
                 $i->$valueKey = $id;
-                $i->save();
             }
         }
     }

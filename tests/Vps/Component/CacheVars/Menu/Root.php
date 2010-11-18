@@ -6,6 +6,7 @@ class Vps_Component_CacheVars_Menu_Root extends Vps_Component_NoCategoriesRoot
         $ret = parent::getSettings();
 
         $ret['generators']['page']['model'] = 'Vps_Component_CacheVars_Menu_PageModel';
+        $ret['generators']['page']['component'] = array('empty' => 'Vpc_Basic_Empty_Component');
 
         $ret['generators']['children'] = array(
             'component' => 'Vps_Component_CacheVars_Menu_Component',

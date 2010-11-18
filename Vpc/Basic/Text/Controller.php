@@ -1,8 +1,6 @@
 <?php
 class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
 {
-    protected $_formName = 'Vpc_Basic_Text_Form';
-
     public function jsonTidyHtmlAction()
     {
         $html = $this->_getParam('html');
@@ -42,8 +40,8 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
             }
         }
 
-        $t = new Vpc_Basic_Text_StylesModel();
-        $styles = $t->getStyles($ownStyles);
+        $m = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($this->_getParam('class'), 'stylesModel'));
+        $styles = $m->getStyles($ownStyles);
         $this->view->inlineStyles = $styles['inline'];
         $this->view->blockStyles = $styles['block'];
     }

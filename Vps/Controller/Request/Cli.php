@@ -5,17 +5,23 @@ class Vps_Controller_Request_Cli extends Zend_Controller_Request_Abstract
     {
         $argv = $_SERVER['argv'];
         unset($argv[0]);
-        if (isset($argv[1])) {
-            $this->setControllerName($argv[1]);
-            unset($argv[1]);
+        foreach ($argv as $k=>$i) {
+            if (substr($i, 0, 2) == '--') {
+                unset($argv[$k]);
+            }
         }
-        if (isset($argv[2]) && substr($argv[2], 0, 2) != '--') {
-            $this->setActionName($argv[2]);
-            unset($argv[2]);
+        $argv = array_values($argv);
+        if (isset($argv[0])) {
+            $this->setControllerName($argv[0]);
+        }
+        if (isset($argv[1])) {
+            $this->setActionName($argv[1]);
         } else {
             $this->setActionName('index');
         }
 
+        $argv = $_SERVER['argv'];
+        unset($argv[0]);
         //todo: reuse any cli-args-parser (der mehr kann)
         //parst im moment nur parameter wie --debug=foo (=foo ist optional)
         $params = array();
@@ -23,8 +29,13 @@ class Vps_Controller_Request_Cli extends Zend_Controller_Request_Abstract
             if (substr($arg, 0, 2) == '--') {
                 $arg = substr($arg, 2);
                 $arg = explode('=', $arg);
-                if (!isset($arg[1])) $arg[1] = true;
-                $params[$arg[0]] = $arg[1];
+                $p = $arg[0];
+                if (!isset($arg[1])) {
+                    $params[$p] = true;
+                } else {
+                    unset($arg[0]);
+                    $params[$p] = implode('=', $arg);
+                }
             }
         }
         $this->setParams($params);

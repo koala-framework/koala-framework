@@ -21,16 +21,18 @@ class Vpc_TestController extends Vps_Controller_Action
         $root->setFilename('vps/vpctest/'.$this->_getParam('root'));
 
         $url = $this->_getParam('url');
+
         $urlParts = explode('/', $url);
         if (is_array($urlParts) && $urlParts[0] == 'media') {
-            if (sizeof($urlParts) != 6) {
+            if (sizeof($urlParts) != 7) {
                 throw new Vps_Exception_NotFound();
             }
             $class = $urlParts[1];
             $id = $urlParts[2];
             $type = $urlParts[3];
             $checksum = $urlParts[4];
-            $filename = $urlParts[5];
+            // time() wäre der 5er, wird aber nur wegen browsercache benötigt
+            $filename = $urlParts[6];
 
             if ($checksum != Vps_Media::getChecksum($class, $id, $type, $filename)) {
                 throw new Vps_Exception_AccessDenied('Access to file not allowed.');
@@ -39,7 +41,7 @@ class Vpc_TestController extends Vps_Controller_Action
         }
 
         $domain = 'http://'.Zend_Registry::get('config')->server->domain;
-        $data = $root->getPageByUrl($domain.'/'.$url);
+        $data = $root->getPageByUrl($domain.'/'.$url, null);
         if (!$data) {
             throw new Vps_Exception_NotFound();
         }

@@ -30,10 +30,10 @@ class Vps_Form_FieldSet_Frontend_Test extends Vps_Test_SeleniumTestCase
         $this->type("css=#foo1", 'blah');
         $this->click("css=fieldset legend input");
         $this->clickAndWait("css=button.submit");
-        $this->assertTextPresent(trlVps('Ein Fehler ist aufgetreten'));
+        $this->assertTextPresent(trlVps('An error has occurred'));
         $this->assertTrue($this->isChecked("css=fieldset legend input"));
         $this->click("css=fieldset legend input");
         $this->clickAndWait("css=button.submit");
-        $this->assertTextNotPresent(trlVps('Ein Fehler ist aufgetreten'));
+        $this->assertTextNotPresent(trlVps('An error has occurred'));
     }
 }

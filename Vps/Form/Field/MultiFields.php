@@ -28,6 +28,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         $this->setBorder(false);
         $this->setBaseCls('x-plain');
         $this->setXtype('multifields');
+        $this->setMinEntries(1);
     }
 
     protected function _addValidators()
@@ -62,7 +63,12 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         $ret = parent::getMetaData($model);
         $ret['multiItems'] = $this->fields->getMetaData($model);
         if (!isset($ret['position'])) {
-            $ret['position'] = in_array('pos', $model->getColumns());
+            if (isset($this->_referenceName)) {
+                $m = $model->getDependentModel($this->_referenceName);
+            } else {
+                $m = $model;
+            }
+            $ret['position'] = $m->hasColumn('pos');
         }
         return $ret;
     }
@@ -84,7 +90,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             return array();
         }
         if (isset($this->_referenceName)) {
-            $rows = $row->getChildRows($this->_referenceName);
+            $select = new Vps_Model_Select();
+            if ($row->getModel()->getDependentModel($this->_referenceName)->hasColumn('pos')) {
+                $select->order('pos');
+            }
+            $rows = $row->getChildRows($this->_referenceName, $select);
         } else {
             $ref = $this->_getReferences($row);
             $where = array();
@@ -127,6 +137,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                         $r = $this->_model->createRow();
                     }
                 }
+                $retRow['id'] = $r->id;
                 $rPostData = $postData[$i];
                 foreach ($this->fields as $field) {
                     $retRow = array_merge($retRow, $field->load($r, $rPostData));
@@ -141,6 +152,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             $pos = array();
             foreach ($rows as $i=>$r) {
                 $retRow = array();
+                $retRow['id'] = $r->id;
                 foreach ($this->fields as $field) {
                     $retRow = array_merge($retRow, $field->load($r));
                 }
@@ -187,7 +199,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             }
         }
 
-        $fieldPostData = $postData[$this->getFieldName()];
+        $fieldPostData = array();
+        if (isset($postData[$this->getFieldName()])) {
+            $fieldPostData = $postData[$this->getFieldName()];
+        }
+
 
         $postData[$this->getFieldName()] = array(
             'save' => array(),
@@ -195,24 +211,28 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         );
 
         $rows = $this->_getRowsByRow($row);
-
         foreach ($rows as $k=>$r) {
-            if (isset($fieldPostData[$k])) {
-                $rowPostData = $fieldPostData[$k];
-                $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>false);
-                unset($fieldPostData[$k]);
-            } else {
+            $found = false;
+            foreach ($fieldPostData as $postDataKey=>$rowPostData) {
+                if (isset($rowPostData['id']) && $rowPostData['id'] == $r->id) {
+                    $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>false, 'pos'=>$postDataKey+1);
+                    unset($fieldPostData[$postDataKey]);
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
                 $postData[$this->getFieldName()]['delete'][] = $r;
             }
         }
 
-        foreach ($fieldPostData as $rowPostData) {
+        foreach ($fieldPostData as $postDataKey=>$rowPostData) {
             if (isset($this->_referenceName)) {
                 $r = $row->createChildRow($this->_referenceName);
             } else {
                 $r = $this->_model->createRow();
             }
-            $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>true);
+            $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>true, 'pos'=>$postDataKey+1);
         }
 
         foreach ($postData[$this->getFieldName()]['save'] as &$d) {
@@ -230,15 +250,12 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             throw new Vps_Exception("No postData found '".$this->getFieldName()."'");
         }
         $postData = $postData[$this->getFieldName()];
-
-        $pos = 0;
         foreach ($postData['save'] as $d) {
             foreach ($this->fields as $field) {
                 $field->prepareSave($d['row'], $d['data']);
             }
-            $pos++;
-            if (isset($d['row']->pos)) {
-                $d['row']->pos = $pos;
+            if ($d['row']->getModel()->hasColumn('pos')) {
+                $d['row']->pos = $d['pos'];
             }
         }
     }
@@ -254,7 +271,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             $postData = $postData[$this->getFieldName()];
         }
 
-        $cnt = count($postData);
+        $cnt = count($postData['save']);
         $name = $this->getFieldLabel();
         if (!$name) $name = $this->getName();
         foreach ($this->getValidators() as $v) {
@@ -305,7 +322,10 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                     }
                 }
             }
-            $r->save();
+            if (!isset($this->_referenceName)) {
+                //models speichern childRows selbst wenn sie per getChildRows od. createChildRow erstellt wurden
+                $r->save();
+            }
             foreach ($this->fields as $field) {
                 $field->save($r, $rowPostData);
             }

@@ -1,9 +1,5 @@
-Vps.Form.TreeSelect = Ext.extend(Ext.form.TriggerField,
+Vps.Form.TreeSelect = Ext.extend(Vps.Form.AbstractSelect,
 {
-    triggerClass : 'x-form-search-trigger',
-    readOnly: true,
-    width: 200,
-
     // mandatory parameters
     // controllerUrl (for the tree)
 
@@ -11,75 +7,38 @@ Vps.Form.TreeSelect = Ext.extend(Ext.form.TriggerField,
     // windowWidth, windowHeight
     // displayField
 
-    onTriggerClick : function() {
-        if (!this.selectWin) {
-            this.selectWin = new Ext.Window({
-                width: this.windowWidth || 535,
-                height: this.windowHeight || 500,
-                modal: true,
-                closeAction: 'hide',
-                title: trlVps('Please choose'),
-                layout: 'fit',
-                buttons: [{
-                    text: trlVps('OK'),
-                    handler: function() {
-                        this.setValue(this.selectWin.value);
-                        this.selectWin.hide();
-                    },
-                    scope: this
-                }, {
-                    text: trlVps('Cancel'),
-                    handler: function() {
-                        this.selectWin.hide();
-                    },
-                    scope: this
-                }],
-                items: new Vps.Auto.TreePanel({
-                    controllerUrl: this.controllerUrl,
-                    listeners: {
-                        click: function(node) {
-                            if (!this.displayField && node) {
-                                var nodeTexts = [];
-                                nodeTexts.push(node.text);
-                                var nd = node.parentNode;
-                                while (nd) {
-                                    nodeTexts.push(nd.text);
-                                    nd = nd.parentNode;
-                                }
-                                var nodeText = '';
-                                for (var i = 0; i < nodeTexts.length - (typeof this.cutNodes != 'undefined' ? this.cutNodes : 1); i++) {
-                                    nodeText = nodeTexts[i] + ' » ' + nodeText;
-                                }
-                                if (nodeText) nodeText = nodeText.substr(0, nodeText.length-3);
+    _getWindowItem: function()
+    {
+        if (!this._windowItem) {
+            this._windowItem = new Vps.Auto.TreePanel({
+                controllerUrl: this.controllerUrl,
+                listeners: {
+                    click: function(node) {
+                        if (!this.displayField && node) {
+                            var nodeTexts = [];
+                            nodeTexts.push(node.text);
+                            var nd = node.parentNode;
+                            while (nd) {
+                                nodeTexts.push(nd.text);
+                                nd = nd.parentNode;
                             }
+                            var nodeText = '';
+                            for (var i = 0; i < nodeTexts.length - (typeof this.cutNodes != 'undefined' ? this.cutNodes : 1); i++) {
+                                nodeText = nodeTexts[i] + ' » ' + nodeText;
+                            }
+                            if (nodeText) nodeText = nodeText.substr(0, nodeText.length-3);
+                        }
 
-                            this.selectWin.value = {
-                                id: node.id,
-                                name: this.displayField ? node.attributes.data[this.displayField] : nodeText
-                            };
-                        },
-                        scope: this
-                    }
-                })
+                        this._selectWin.value = {
+                            id: node.id,
+                            name: this.displayField ? node.attributes.data[this.displayField] : nodeText
+                        };
+                    },
+                    scope: this
+                }
             });
         }
-        this.selectWin.show();
-        this.selectWin.items.get(0).selectId(this.value);
-    },
-
-    getValue: function() {
-        return this.value;
-    },
-
-    setValue: function(value) {
-        if (value && typeof value.name != 'undefined') {
-            Vps.Form.TreeSelect.superclass.setValue.call(this, value.name);
-            this.value = value.id;
-        } else {
-            Vps.Form.TreeSelect.superclass.setValue.call(this, value);
-            this.value = value;
-        }
+        return this._windowItem;
     }
-
 });
 Ext.reg('treeselect', Vps.Form.TreeSelect);

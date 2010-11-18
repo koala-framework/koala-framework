@@ -10,11 +10,14 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
         $processed[] = $class;
         foreach (Vpc_Abstract::getSetting($class, 'generators') as $generator) {
             $shape = 'ellipse';
+            /*
+            NOT PORTED to flags
             if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page_Interface')) {
                 $shape = 'box';
             } else if (is_instance_of($generator['class'], 'Vps_Component_Generator_Box_Interface')) {
                 $shape = 'hexagon';
             }
+            */
             $fontColor = 'blue';
             if (file_exists(VPS_PATH.'/'.str_replace('_', '/', $class).'.php')) {
                 $fontColor = 'red';

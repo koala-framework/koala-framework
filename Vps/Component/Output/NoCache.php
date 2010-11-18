@@ -59,18 +59,6 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
 
     protected function _parseTemplate($ret)
     {
-        // hasContent-Tags ersetzen
-        preg_match_all("/{content(No)?: ([^ }]+) ([^ }]+) ([^ }]+)}(.*){content(No)?}/imsU", $ret, $matches);
-        foreach ($matches[0] as $key => $search) {
-            $inverse = $matches[1][$key] == 'No';
-            $componentId = $matches[3][$key];
-            $componentClass = $matches[2][$key];
-            $counter = $matches[4][$key];
-            $content = $matches[5][$key];
-            $replace = $this->_renderHasContent($componentId, $componentClass, $content, $counter, $inverse);
-            $ret = str_replace($search, $replace, $ret);
-        }
-
         // partials-Tags ersetzen
         preg_match_all('/{partials: ([^ }]+) ([^ }]+) ([^ }]+) ([^ ]+) }/', $ret, $matches);
         foreach ($matches[0] as $key => $search) {
@@ -85,11 +73,23 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
             foreach ($ids as $id) {
                 $info = array(
                     'total' => $count,
-                    'number' => ++$number
+                    'number' => $number++
                 );
                 $content .= $this->_renderPartial($componentId, $componentClass, $partial, $id, $info);
             }
             $ret = str_replace($search, $content, $ret);
+        }
+
+        // hasContent-Tags ersetzen
+        preg_match_all("/{content(No)?: ([^ }]+) ([^ }]+) ([^ }]+)}(.*){content(No)?}/imsU", $ret, $matches);
+        foreach ($matches[0] as $key => $search) {
+            $inverse = $matches[1][$key] == 'No';
+            $componentId = $matches[3][$key];
+            $componentClass = $matches[2][$key];
+            $counter = $matches[4][$key];
+            $content = $matches[5][$key];
+            $replace = $this->_renderHasContent($componentId, $componentClass, $content, $counter, $inverse);
+            $ret = str_replace($search, $replace, $ret);
         }
 
         // nocache-Tags ersetzen
@@ -113,8 +113,7 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
             $args = unserialize($matches[2][$key]);
             $info['componentClass'] = $componentClass;
 
-            $dynamicClass = Vps_Component_Abstract_Admin::getComponentClass($componentClass, $class);
-            if (!class_exists($dynamicClass)) $dynamicClass = 'Vps_Component_Dynamic_' . $class;
+            $dynamicClass = 'Vps_Component_Dynamic_' . $class;
             $dynamic = new $dynamicClass();
             $dynamic->setInfo($info);
             call_user_func_array(array($dynamic, 'setArguments'), $args);
@@ -129,7 +128,11 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         Vps_Benchmark::count('rendered partial ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
         $output = new Vps_Component_Output_ComponentPartial();
         $output->setIgnoreVisible($this->ignoreVisible());
-        return $output->render($this->_getComponent($componentId), $partial, $id, $info);
+        $ret = $output->render($this->_getComponent($componentId), $partial, $id, $info);
+        if (!$useCache) { //hack
+            $ret = $this->_parseDynamic($ret, $componentClass, array('partial' => $info));
+        }
+        return $ret;
     }
 
     protected function _renderHasContent($componentId, $componentClass, $content, $counter, $inverse, $useCache = false)

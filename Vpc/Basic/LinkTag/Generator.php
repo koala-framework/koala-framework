@@ -58,12 +58,14 @@ class Vpc_Basic_LinkTag_Generator extends Vps_Component_Generator_Static
         $dbId .= $componentKey;
         $row = $this->_getModel()->getRow($parentData->dbId);
         if (!$row) $row = $this->_getModel()->createRow();
+        if (!$row->component) $row->component = 'intern'; //sollte eigentlich nicht vorkommen
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,
             'componentClass' => $this->_settings['component'][$row->component],
             'parent' => $parentData,
-            'isPage' => false
+            'isPage' => false,
+            'isPseudoPage' => false
         );
     }
 }

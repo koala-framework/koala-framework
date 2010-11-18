@@ -2,6 +2,10 @@
 class Vps_Acl extends Zend_Acl
 {
     protected $_componentAclClass = 'Vps_Component_Acl';
+
+    /**
+     * @var Vps_Component_Acl
+     */
     protected $_componentAcl;
     protected $_vpcResourcesLoaded = false;
 
@@ -24,6 +28,8 @@ class Vps_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('vps_debug_assets'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_debug_activate'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_debug_session-restart'), 'vps_debug');
+        $this->add(new Zend_Acl_Resource('vps_debug_php-info'), 'vps_debug');
+        $this->add(new Zend_Acl_Resource('vps_debug_assets-dependencies'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_media_upload'));
         $this->add(new Zend_Acl_Resource('vps_test'));
         $this->add(new Zend_Acl_Resource('edit_role'));
@@ -334,5 +340,89 @@ class Vps_Acl extends Zend_Acl
             throw new Vps_Exception("Can't modify componentAclClass when getComponentAcl was called already");
         }
         $this->_componentAclClass = $class;
+    }
+
+    public function isAllowedComponent($class, $authData)
+    {
+        $allowed = false;
+        foreach ($this->getAllResources() as $r) {
+            if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {
+                if ($class == $r->getComponentClass()) {
+                    $allowed = $this->getComponentAcl()->isAllowed($authData, $class);
+                    break;
+                }
+            }
+        }
+        return $allowed;
+    }
+
+    public function isAllowedComponentById($componentId, $class, $authData)
+    {
+        $components = Vps_Component_Data_Root::getInstance()
+            ->getComponentsByDbId($componentId, array('ignoreVisible'=>true));
+        if (!$components) {
+            throw new Vps_Exception("Can't find component to check permissions");
+        }
+
+        foreach ($components as $component) {
+            // Basisprüfung
+            $allowCheck = ($component->componentClass == $class);
+
+            // Checken, ob übergebene componentClass auf der aktuellen Page vorkommen kann
+            if (!$allowCheck) {
+                $c = $component->parent;
+                $stopComponent = $component->getPage();
+                if (!is_null($stopComponent)) $stopComponent = $stopComponent->parent;
+                while (!$allowCheck && $c &&
+                    (!$stopComponent || $c->componentId != $stopComponent->componentId)
+                ) {
+                    $allowedComponentClasses = Vpc_Abstract::getChildComponentClasses(
+                        $c->componentClass, array('page' => false)
+                    );
+                    $allowCheck = in_array($class, $allowedComponentClasses);
+                    $c = $c->parent;
+                }
+            }
+
+            // SharedDataClass braucht Sonderbehandlung, weil class die Komponente ist
+            // und componentId aber auf die Shared-Komponente zeigt
+            if (!$allowCheck) {
+                $sharedDataClass = Vpc_Abstract::getFlag($class, 'sharedDataClass');
+                $allowCheck = ($component->componentClass == $sharedDataClass);
+            }
+
+            // Nötig für news-link in link-komponente die einen eigenen controller hat
+            // wo dann die componentId für die link-komponente aber die componentClass der News-Link Komponente daher kommt
+            // das ganze muss statisch gemacht werden, da die link-komponente möglicherweise noch nicht gespeichert wurde
+            if (!$allowCheck) {
+                $allowCheck = $this->_canHaveChildComponentOnSamePage($component->componentClass, $class);
+            }
+
+            // sobald man eine bearbeiten darf, darf man alle bearbeiten
+            // zB wenn man bei proSalzburg und proPona gleichzeitig drin ist
+            if ($allowCheck && $this->getComponentAcl()->isAllowed($authData, $component))
+                return true;
+        }
+        return false;
+    }
+
+    private function _canHaveChildComponentOnSamePage($componentClass, $lookForClass)
+    {
+        static $cache = array();
+        if (isset($cache[$componentClass.'-'.$lookForClass])) {
+            return $cache[$componentClass.'-'.$lookForClass];
+        }
+        $cache[$componentClass.'-'.$lookForClass] = false;
+        $childComponentClasses = Vpc_Abstract::getChildComponentClasses(
+            $componentClass, array('page' => false)
+        );
+        if (in_array($lookForClass, $childComponentClasses)) {
+            $cache[$componentClass.'-'.$lookForClass] = true;
+            return true;
+        }
+        foreach ($childComponentClasses as $c) {
+            if ($this->_canHaveChildComponentOnSamePage($c, $lookForClass)) return true;
+        }
+        return false;
     }
 }

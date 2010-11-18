@@ -69,4 +69,15 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         $this->_threadVars = $ret;
         return $ret;
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $row = $this->getData()->row;
+        $ret[] = array(
+            'model' => get_class($row->getModel()),
+            'id' => $row->id
+        );
+        return $ret;
+    }
 }

@@ -1,26 +1,31 @@
 <?php
-class Vpc_Forum_Group_Model extends Vps_Db_Table_Abstract
+class Vpc_Forum_Group_Model extends Vps_Model_Db
 {
-    protected $_name = 'vpc_forum_threads';
+    protected $_table = 'vpc_forum_threads';
     protected $_rowClass = 'Vpc_Forum_Group_Row';
+
+    protected $_referenceMap = array(
+        'User' => array(
+            'column' => 'user_id',
+            'refModelClass' => null
+        )
+    );
+
+    protected function _init()
+    {
+        $userModelClass = get_class(Vps_Registry::get('userModel'));
+        $this->_referenceMap['User']['refModelClass'] = $userModelClass;
+
+        parent::_init();
+    }
 
     protected function _setupFilters()
     {
         $filter = new Vps_Filter_Row_AutoFill('{component_id}_{id}-posts');
         $this->_filters = array('cache_child_component_id' => $filter);
     }
-    
-    protected function _setup()
-    {
-        $this->_referenceMap['User'] = array(
-            'columns'           => array('user_id'),
-            'refTableClass'     => get_class(Vps_Registry::get('userModel')),
-            'refColumns'        => array('id')
-        );
-        parent::_setup();
-    }
-    
-    public function fetchAll($where, $order = null, $limit = null, $start = null)
+
+    public function fetchAll($where = null, $order = null, $limit = null, $start = null)
     {
         if ($order == null) {
             $order = "(SELECT vpc_posts.id FROM vpc_posts
@@ -30,14 +35,12 @@ class Vpc_Forum_Group_Model extends Vps_Db_Table_Abstract
         }
         return parent::fetchAll($where, $order, $limit, $start);
     }
-    
+
     public function getNumThreads($dbId)
     {
-        $info = $this->info();
-        $select = new Zend_Db_Select($this->getAdapter());
-        $select->from($info['name'], 'COUNT(*)');
-        $select->where('component_id = ?', $dbId);
-        return $select->query()->fetchColumn();
+        return $this->countRows($this->select()
+            ->whereEquals('component_id', $dbId)
+        );
     }
     public function getNumPosts($dbId)
     {

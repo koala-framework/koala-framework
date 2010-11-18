@@ -1,6 +1,5 @@
 <?php
 class Vps_Model_Proxy extends Vps_Model_Abstract
-    implements Vps_Model_Interface_Id
 {
     protected $_proxyModel;
     protected $_rowClass = 'Vps_Model_Proxy_Row';
@@ -18,21 +17,14 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         if (is_string($this->_proxyModel)) {
             $this->_proxyModel = Vps_Model_Abstract::getInstance($this->_proxyModel);
         }
-        if ($this->_proxyModel instanceof Vps_Model_Db
-            || $this->_proxyModel instanceof Vps_Model_Proxy
-        ) {
-            $this->_proxyModel->addProxyContainerModel($this);
-        }
+        $this->_proxyModel->addProxyContainerModel($this);
     }
 
     //kann gesetzt werden von proxy (rekursiv bei proxys)
     public function addProxyContainerModel($m)
     {
-        if ($this->_proxyModel instanceof Vps_Model_Db
-            || $this->_proxyModel instanceof Vps_Model_Proxy
-        ) {
-            $this->_proxyModel->addProxyContainerModel($m);
-        }
+        parent::addProxyContainerModel($m);
+        $this->_proxyModel->addProxyContainerModel($m);
     }
 
     public function getProxyModel()
@@ -59,28 +51,33 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     {
         $id = $proxiedRow->getInternalId();
         if (!isset($this->_rows[$id])) {
-            $exprValues = array();
-            if ($this->_exprs) {
-                $r = $proxiedRow;
-                while ($r instanceof Vps_Model_Proxy_Row) {
-                    $r = $r->getProxiedRow();
-                }
-                if ($r instanceof Vps_Model_Db_Row) {
-                    $r = $r->getRow();
-                    foreach (array_keys($this->_exprs) as $k) {
-                        if (isset($r->$k)) {
-                            $exprValues[$k] = $r->$k;
-                        }
-                    }
-                }
-            }
             $this->_rows[$id] = new $this->_rowClass(array(
                 'row' => $proxiedRow,
                 'model' => $this,
-                'exprValues' => $exprValues
+                'exprValues' => $this->_getExprValues($proxiedRow)
             ));
         }
         return $this->_rows[$id];
+    }
+
+    protected function _getExprValues($proxiedRow)
+    {
+        $exprValues = array();
+        if ($this->_exprs) {
+            $r = $proxiedRow;
+            while ($r instanceof Vps_Model_Proxy_Row) {
+                $r = $r->getProxiedRow();
+            }
+            if ($r instanceof Vps_Model_Db_Row) {
+                $r = $r->getRow();
+                foreach (array_keys($this->_exprs) as $k) {
+                    if (isset($r->$k)) {
+                        $exprValues[$k] = $r->$k;
+                    }
+                }
+            }
+        }
+        return $exprValues;
     }
 
     public function getPrimaryKey()
@@ -90,10 +87,9 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function isEqual(Vps_Model_Interface $other)
     {
-        if (get_class($other) == get_class($this)
-            && $this->_proxyModel->isEqual($other->_proxyModel)
-        ) {
-            return true;
+        if ($this->_proxyModel->isEqual($other)) return true;
+        if ($other instanceof Vps_Model_Proxy) {
+            return $this->_proxyModel->isEqual($other->_proxyModel);
         }
         return false;
     }
@@ -119,6 +115,13 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
             if ($m->hasColumn($col)) return true;
         }
         return false;
+    }
+
+    public function getExprColumns()
+    {
+        $ret = parent::getExprColumns();
+        $ret = array_merge($this->_proxyModel->getExprColumns(), $ret);
+        return $ret;
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)

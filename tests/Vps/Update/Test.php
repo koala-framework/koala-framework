@@ -6,7 +6,6 @@ class Vps_Update_Test extends PHPUnit_Framework_TestCase
 {
     public function testUpdate()
     {
-        $this->markTestIncomplete();
         $actions = array();
         $actions[0] = $this->getMock('Vps_Update_Action_Abstract', array('preUpdate', 'postUpdate', 'update'));
         $actions[0]->expects($this->once())
@@ -28,7 +27,6 @@ class Vps_Update_Test extends PHPUnit_Framework_TestCase
 
     public function testGetUpdatesForDir()
     {
-        $this->markTestIncomplete();
         $updates = Vps_Update::getUpdatesForDir('Vps/Update/UpdateDir', 50, 110);
         $this->assertEquals(1, count($updates));
         $this->assertTrue($updates[0] instanceof Vps_Update_UpdateDir_Update_100);
@@ -51,7 +49,6 @@ class Vps_Update_Test extends PHPUnit_Framework_TestCase
 
     public function testGetUpdatesForMultipleDir()
     {
-        $this->markTestIncomplete();
         $updates = Vps_Update::getUpdatesForDir('Vps/Update/UpdateMultiple', 1, 1100);
         $this->assertEquals(3, count($updates));
         $this->assertEquals(20, $updates[0]->getRevision());
@@ -61,7 +58,6 @@ class Vps_Update_Test extends PHPUnit_Framework_TestCase
 
     public function testGetUpdatesSql()
     {
-        $this->markTestIncomplete();
         $updates = Vps_Update::getUpdatesForDir('Vps/Update/UpdateSql', 1, 1100);
         $this->assertEquals(1, count($updates));
         $this->assertEquals(100, $updates[0]->getRevision());

@@ -14,6 +14,6 @@ class Vps_Component_Output_ComponentPartial extends Vps_Component_Output_NoCache
             throw new Vps_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
         }
         $ret = $this->_renderView($template, $templateVars);
-        return $this->_parseDynamic($ret, $componentClass, array('partial' => $info));
+        return $ret;
     }
 }

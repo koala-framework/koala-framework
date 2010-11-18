@@ -9,6 +9,14 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['pagesize'] = 10;
         $ret['maxPagingLinks'] = 13;
         $ret['bigPagingSteps'] = array(10, 50);
+        $ret['nextPrevOnly'] = false;
+        $ret['placeholder'] = array(
+            'first'    => '&lt;&lt;',
+            'previous' => '&lt;',
+            'next'     => '&gt;',
+            'last'     => '&gt;&gt;',
+            'prefix'   => trlVpsStatic('Page').':'
+        );
         $ret['cssClass'] = 'webPaging webStandard';
         return $ret;
     }
@@ -194,54 +202,60 @@ class Vpc_Paging_Component extends Vpc_Abstract
 
     protected function _getPageLinks($pages, $currentPage)
     {
+        $buttonTexts = $this->_getPlaceholder();
+
         $pageLinks = array();
-        if ($currentPage >= 3) {
-            $pageLinks[] = $this->_getLinkData(1, '&lt;&lt;');
+        if ($currentPage >= 3 && !$this->_getSetting('nextPrevOnly')) {
+            $pageLinks[] = $this->_getLinkData(1, $buttonTexts['first']);
         }
         if ($currentPage >= 2) {
-            $pageLinks[] = $this->_getLinkData($currentPage-1, '&lt;');
+            $pageLinks[] = $this->_getLinkData($currentPage-1, $buttonTexts['previous']);
         }
 
         $appendPagelinks = array();
-        $bigSteps = $this->_getSetting('bigPagingSteps');
-        rsort($bigSteps);
-        foreach ($bigSteps as $stepOffset) {
-            if ($this->_getSetting('maxPagingLinks') < $stepOffset * 2) {
-                if ($currentPage >= $stepOffset + 1) {
-                    $pageLinks[] = $this->_getLinkData($currentPage - $stepOffset);
-                }
+        if (!$this->_getSetting('nextPrevOnly')) {
+            $bigSteps = $this->_getSetting('bigPagingSteps');
+            rsort($bigSteps);
+            foreach ($bigSteps as $stepOffset) {
+                if ($this->_getSetting('maxPagingLinks') < $stepOffset * 2) {
+                    if ($currentPage >= $stepOffset + 1) {
+                        $pageLinks[] = $this->_getLinkData($currentPage - $stepOffset);
+                    }
 
-                if ($currentPage <= $pages - $stepOffset) {
-                    array_unshift($appendPagelinks, $this->_getLinkData($currentPage + $stepOffset));
+                    if ($currentPage <= $pages - $stepOffset) {
+                        array_unshift($appendPagelinks, $this->_getLinkData($currentPage + $stepOffset));
+                    }
                 }
             }
         }
 
         if ($currentPage < $pages) {
-            $appendPagelinks[] = $this->_getLinkData($currentPage+1, '&gt;');
+            $appendPagelinks[] = $this->_getLinkData($currentPage+1, $buttonTexts['next']);
         }
-        if ($currentPage < $pages - 1) {
-            $appendPagelinks[] = $this->_getLinkData($pages, '&gt;&gt;');
+        if ($currentPage < $pages - 1 && !$this->_getSetting('nextPrevOnly')) {
+            $appendPagelinks[] = $this->_getLinkData($pages, $buttonTexts['last']);
         }
 
-        $linksPerDirection = floor(
-            ($this->_getSetting('maxPagingLinks') - (count($pageLinks) + count($appendPagelinks) + 1)) / 2
-        );
-        if ($linksPerDirection < 0) $linksPerDirection = 0;
+        if (!$this->_getSetting('nextPrevOnly')) {
+            $linksPerDirection = floor(
+                ($this->_getSetting('maxPagingLinks') - (count($pageLinks) + count($appendPagelinks) + 1)) / 2
+            );
+            if ($linksPerDirection < 0) $linksPerDirection = 0;
 
-        $fromPage = $currentPage - $linksPerDirection;
-        $toPage = $currentPage + $linksPerDirection;
-        if ($fromPage < 1) {
-            $toPage += abs($fromPage - 1);
-        }
-        if ($toPage > $pages) {
-            $fromPage -= ($toPage - $pages);
-        }
-        if ($fromPage < 1) $fromPage = 1;
-        if ($toPage > $pages) $toPage = $pages;
+            $fromPage = $currentPage - $linksPerDirection;
+            $toPage = $currentPage + $linksPerDirection;
+            if ($fromPage < 1) {
+                $toPage += abs($fromPage - 1);
+            }
+            if ($toPage > $pages) {
+                $fromPage -= ($toPage - $pages);
+            }
+            if ($fromPage < 1) $fromPage = 1;
+            if ($toPage > $pages) $toPage = $pages;
 
-        for ($i = $fromPage; $i <= $toPage; $i++) {
-            $pageLinks[] = $this->_getLinkData($i);
+            for ($i = $fromPage; $i <= $toPage; $i++) {
+                $pageLinks[] = $this->_getLinkData($i);
+            }
         }
 
         foreach ($appendPagelinks as $linkData) {

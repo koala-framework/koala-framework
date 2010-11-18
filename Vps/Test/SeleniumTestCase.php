@@ -5,6 +5,13 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     protected $_unitTestCookie;
     protected $_domain = null;
 
+
+protected function _createSeparateTestDb($bootstrapFile)
+{
+    Vps_Test_OwnDbTestCase::createSeparateTestDb($bootstrapFile);
+    $this->_dbName = Vps_Test_OwnDbTestCase::getSeparateTestDbName();
+}
+
     public static function suite($className)
     {
         self::$browsers = array();
@@ -39,8 +46,8 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
         $this->_unitTestCookie = md5(uniqid('testId', true));
 
-        $this->captureScreenshotOnFailure = false;
-        $this->screenshotPath = 's:';
+        $this->captureScreenshotOnFailure = Vps_Setup::getConfigSection()=='vivid-test-server';
+        $this->screenshotPath = '/mnt/screenshots';
         $this->screenshotUrl = 'http://screenshots.vivid';
         parent::setUp();
 
@@ -56,12 +63,12 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function onNotSuccessfulTest(Exception $e)
     {
+        parent::onNotSuccessfulTest($e);
         if (Zend_Registry::get('config')->server->autoStopTest) {
             try {
                 $this->stop();
             }catch (RuntimeException $x) { }
         }
-        parent::onNotSuccessfulTest($e);
     }
 
     public function clickAndWait($link)
@@ -125,7 +132,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         $url = '/vps/componentedittest/'.
                 Vps_Component_Data_Root::getComponentClass().'/'.
-                $componentClass.
+                $componentClass.'/Index'.
                 '?componentId='.$componentId;
         return $this->open($url);
     }

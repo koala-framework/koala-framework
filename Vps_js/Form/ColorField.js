@@ -83,6 +83,13 @@ Vps.Form.ColorField =  Ext.extend(function(config){
 
     width: 50,
 
+    alignHelpAndComment: function() {
+        Vps.Form.ColorField.superclass.alignHelpAndComment.apply(this, arguments);
+        if (this.colorPreview) {
+            this.colorPreview.alignTo(this.getEl(), 'tr', [25, 0]);
+        }
+    },
+
     onRender: function(ct, position) {
         Vps.Form.ColorField.superclass.onRender.apply(this, arguments);
         this.colorPreview = this.wrap.createChild({
@@ -99,7 +106,7 @@ Vps.Form.ColorField =  Ext.extend(function(config){
             this.setColor(this.defaultColor);
             if(!this.allowBlank) {
                 this.markInvalid(String.format(this.blankText, value));
-                return false
+                return false;
             }
             return true;
         }

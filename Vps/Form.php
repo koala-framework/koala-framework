@@ -163,7 +163,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         if (isset($this->_rows[$key])) return $this->_rows[$key];
 
         if (!isset($this->_model)) {
-            throw new Vps_Exception('_model has to be set');
+            throw new Vps_Exception("_model has to be set for form '".get_class($this)."'");
         }
         $rowset = null;
 

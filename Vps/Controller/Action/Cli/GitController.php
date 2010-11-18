@@ -65,7 +65,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         Vps_Util_Git::vps()->system("checkout ".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'));
         $appId = Vps_Registry::get('config')->application->id;
         if (!Vps_Util_Git::vps()->revParse("production/$appId")) {
-            Vps_Util_Git::vps()->branch("production/$appId", '', "origin/production/$appId");
+            Vps_Util_Git::vps()->checkoutBranch("production/$appId", "origin/production/$appId", '--track');
         }
         if (Vps_Util_Git::vps()->getActiveBranch() != "production/$appId") {
             Vps_Util_Git::vps()->checkout("production/$appId");
@@ -73,7 +73,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         Vps_Util_Git::vps()->system("rebase origin/production/$appId");
 
         if (!Vps_Util_Git::web()->revParse("production")) {
-            Vps_Util_Git::web()->branch("production", '', "origin/production");
+            Vps_Util_Git::web()->checkoutBranch("production", "origin/production", '--track');
         }
         if (Vps_Util_Git::web()->getActiveBranch() != "production") {
             Vps_Util_Git::web()->checkout("production");
@@ -103,7 +103,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             $this->_convertWcToGit('vps', $branch);
         } else {
             if (!file_exists('vps-lib')) {
-                if (`hostname` == 'vivid') {
+                if (trim(`hostname`) == 'vivid') {
                     $gitUrl = "ssh://git.vivid-planet.com/git/vps";
                 } else {
                     $gitUrl = "ssh://vivid@git.vivid-planet.com/git/vps";
@@ -154,7 +154,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         }
         if ($branch == 'trunk') $branch = 'master';
 
-        if (`hostname` == 'vivid') {
+        if (trim(`hostname`) == 'vivid') {
             $gitUrl = "ssh://git.vivid-planet.com/git/$id";
         } else {
             $gitUrl = "ssh://vivid@git.vivid-planet.com/git/$id";
@@ -201,7 +201,7 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
 
         if ($id == 'vps') {
             //die zwei wurden im svn im nachinhein geaendert
-            $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/SvnUpController.php";
+            $cmd = "git checkout Vps/Controller/Action/Cli/GitController.php Vps/Controller/Action/Cli/Web/SvnUpController.php";
             echo "$cmd\n";
             $this->_systemCheckRet($cmd);
         }
@@ -291,9 +291,13 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
         } else {
             echo "vps: ".$g->getActiveBranch()." != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
         }
-        if (!$g->getActiveBranchContains('origin/'.$vpsBranch)) {
-            echo "vps: ".$g->getActiveBranch()." branch beinhaltet nicht origin/$vpsBranch.\n";
-            $doUpdate = false;
+
+        if ($this->_getParam('with-library')) {
+            echo "\nupdating library\n";
+            $git = new Vps_Util_Git(Vps_Registry::get('config')->libraryPath);
+            $git->system("pull --rebase");
+        } else {
+            echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
         }
 
         $projectIds = Vps_Model_Abstract::getInstance('Vps_Util_Model_Projects')

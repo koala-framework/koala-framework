@@ -1,14 +1,17 @@
 <?php
 class Vpc_Basic_LinkTag_Admin extends Vpc_Admin
 {
-    public function setup()
+    public function componentToString(Vps_Component_Data $data)
     {
-        $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'link');
-        foreach ($classes as $class) {
-            Vpc_Admin::getInstance($class)->setup();
-        }
+        $data = $data->getChildComponent('-link');
+        if (!$data) return '';
+        return Vpc_Admin::getInstance($data->componentClass)->componentToString($data);
+    }
 
-        $fields['component'] = "VARCHAR(255) NOT NULL";
-        $this->createFormTable('vpc_basic_linktag', $fields);
+    public function gridColumns()
+    {
+        $ret = parent::gridColumns();
+        $ret['string']->setHeader(trlVps('Link target'));
+        return $ret;
     }
 }

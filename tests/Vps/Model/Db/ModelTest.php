@@ -11,7 +11,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_table = $this->getMock('Vps_Model_Db_Table',
-            array('select', '_setupMetadata', '_setupPrimaryKey', 'fetchAll', 'delete'),
+            array('select', '_setupMetadata', '_setupPrimaryKey', 'fetchAll', 'delete', 'save'),
             array('db' => new Vps_Model_Db_TestAdapter()), '', true);
 
         $this->_dbSelect = $this->getMock('Vps_Db_Table_Select', array(), array($this->_table));

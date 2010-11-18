@@ -6,15 +6,16 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'List',
             'childModel'     => 'Vpc_Abstract_List_Model',
-            'showVisible' => true,
-            'showPosition' => true
+            'ownModel'     => 'Vpc_Abstract_List_OwnModel',
         ));
         $ret['generators']['child'] = array(
             'class' => 'Vps_Component_Generator_Table',
             'component' => null
         );
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
+        $ret['assetsAdmin']['dep'][] = 'VpsListWithEditButtons';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/Panel.js';
+        $ret['hasVisible'] = true;
         return $ret;
     }
 
@@ -28,7 +29,30 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['children'] = $this->getData()->getChildComponents(array('generator' => 'child'));
+        $children = $this->getData()->getChildComponents(array('generator' => 'child'));
+
+        // children ist die alte methode, bleibt drin wegen kompatibilität
+        $ret['children'] = $children;
+
+        // das hier ist die neue variante und ist besser, weil man leichter mehr daten
+        // zurückgeben kann, bzw. in der übersetzung überschreiben kann
+        // zB: Breite bei übersetzung von Columns
+        $ret['listItems'] = array();
+        foreach ($children as $child) {
+            $ret['listItems'][] = array(
+                'data' => $child
+            );
+        }
+        return $ret;
+    }
+
+    public function getExportData()
+    {
+        $ret = array('list' => array());
+        $children = $this->getData()->getChildComponents(array('generator' => 'child'));
+        foreach ($children as $child) {
+            $ret['list'][] = $child->getComponent()->getExportData();
+        }
         return $ret;
     }
 

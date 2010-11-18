@@ -4,3 +4,19 @@
 .comboboxtext .x-form-field-wrap .x-form-trigger {
    background-image:url(/assets/vps/images/gray/form/combo-box-text.gif);
 }
+
+/* Damit das Flash nicht neustartet wenn eine Mask darÃ¼ber liegt */
+.x-masked object, .x-masked embed {
+    visibility: visible !important;
+}
+.x-masked {
+    overflow: visible !important;
+}
+
+/*
+möglicherweise für frontend wenn es da stört dass das flash neu startet
+body.x-masked-relative {
+    position: static !important;
+}
+*/
+

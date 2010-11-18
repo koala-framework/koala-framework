@@ -7,10 +7,6 @@ class Vpc_Newsletter_Component extends Vpc_Directories_ItemPage_Directory_Compon
         $ret['generators']['detail']['class'] = 'Vpc_Newsletter_GeneratorDetail';
         $ret['generators']['detail']['component'] = 'Vpc_Newsletter_Detail_Component';
 
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/RecipientsPanel.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/RecipientsAction.js';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Newsletter/Recipients.css';
-
         // wird von der Mail_Redirect gerendered
         $ret['generators']['unsubscribe'] = array(
             'class' => 'Vps_Component_Generator_Static',
@@ -27,6 +23,7 @@ class Vpc_Newsletter_Component extends Vpc_Directories_ItemPage_Directory_Compon
         $ret['childModel'] = 'Vpc_Newsletter_Model';
         $ret['flags']['hasResources'] = true;
         $ret['componentName'] = trlVps('Newsletter');
+        $ret['componentIcon'] = new Vps_Asset('email');
         return $ret;
     }
 }

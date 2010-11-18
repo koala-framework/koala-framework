@@ -113,9 +113,10 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
 
     public function validate($row, $postData)
     {
+        $value = isset($postData[$this->_combobox->getFieldName()]) ? $postData[$this->_combobox->getFieldName()] : $this->_combobox->getDefaultValue();
         foreach ($this->fields as $card) {
             if ($card != $this->_combobox
-                && $card->getName() != $postData[$this->_combobox->getFieldName()]) {
+                && $card->getName() != $value) {
                 $card->setInternalSave(false);
             } else {
                 $card->setInternalSave(true);
@@ -124,27 +125,6 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return parent::validate($row, $postData);
     }
 
-    public function load($parentRow, $postData = array())
-    {
-        $row = (object)$this->_getRowByParentRow($parentRow);
-        $ret = array();
-        if ($this->hasChildren()) {
-            foreach ($this->getChildren() as $field) {
-                if ($field instanceof Vps_Form_Container_Card) {
-                    $name = $this->_combobox->getName();
-                    if ($field->getName() == $row->$name ||
-                        (isset($postData[$name]) && $field->getName() == $postData[$name])
-                    ) {
-                        $ret = array_merge($ret, $field->load($row, $postData));
-                    }
-                } else {
-                    $ret = array_merge($ret, $field->load($row, $postData));
-                }
-            }
-        }
-        return $ret;
-    }
-    
     public function getTemplateVars($values)
     {
         $ret = array();

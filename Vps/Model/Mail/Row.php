@@ -36,6 +36,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             $mail = new $essentialsRow->mailerClass($essentialsRow->template);
         }
 
+        $mail->vars = $varsRow;
         foreach ($varsRow->toArray() as $k => $v) {
             $mail->$k = $v;
         }
@@ -69,7 +70,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             $mail->setReturnPath($returnPath);
         }
         $from = $this->getFrom();
-        if ($from) {
+        if ($from && $from['email']) {
             $mail->setFrom($from['email'], $from['name']);
         }
 

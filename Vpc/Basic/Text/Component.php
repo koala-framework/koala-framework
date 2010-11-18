@@ -26,13 +26,18 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'enableStyles'      => true,
             'enableStylesEditor'=> true,
             'enableTagsWhitelist'=> true,
+
+            //veraltert NICHT VERWENDEN!! (in der Vpc_Mail komponente ist ein besserer ersatz)
             'emailStyles'       => array()
         ));
+
+        $ret['stylesModel'] = 'Vpc_Basic_Text_StylesModel';
+
         $ret['generators']['child'] = array(
             'class' => 'Vpc_Basic_Text_Generator',
             'component' => array(
                 //auf false setzen um buttons zu deaktivieren
-                'image'         => 'Vpc_Basic_Text_Image_Component',
+                'image'         => false,
                 'link'          => 'Vpc_Basic_LinkTag_Component',
                 'download'      => 'Vpc_Basic_DownloadTag_Component'
             ),
@@ -52,8 +57,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 
         $ret['cssClass'] = 'webStandard vpcText';
 
-        $ret['assets']['files'][] = new Vps_Assets_Dynamic('css',
-                            array('Vpc_Basic_Text_StylesModel', 'getStylesUrl'));
+        $ret['assets']['files'][] = 'dynamic/Vpc_Basic_Text_StylesAsset';
         $ret['flags']['searchContent'] = true;
         return $ret;
     }

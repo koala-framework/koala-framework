@@ -29,9 +29,29 @@ class Vps_Component_Data
             $this->dbId = $this->componentId;
         }
         Vps_Benchmark::count('componentDatas', $this->componentId);
-        if ($this->isPage) {
-            Vps_Benchmark::count('componentData Pages', $this->componentId);
+    }
+
+    /**
+     * So wie ->url aber funktioniert auch fuer pseudoPages
+     */
+    protected function _getPseudoPageUrl()
+    {
+        $page = $this;
+        if (!$page->isPseudoPage) {
+            $page = $page->getParentPseudoPageOrRoot();
         }
+        if (!$page) return '';
+        $filenames = array();
+        do {
+            if (!empty($filenames) && Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
+                $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
+                break;
+            } else {
+                if ($page->filename) $filenames[] = $page->filename;
+            }
+        } while ($page = $page->getParentPseudoPageOrRoot());
+        $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+        return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse($filenames));
     }
 
     public function __get($var)
@@ -40,32 +60,25 @@ class Vps_Component_Data
             $filenames = array();
             if (!$this->isPage) {
                 $page = $this->getPage();
+                if (!$page) return '';
                 return $page->url;
             }
-            $page = $this;
-            do {
-                if (!empty($filenames) && Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
-                    $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
-                    break;
-                } else {
-                    if ($page->filename) $filenames[] = $page->filename;
-                }
-            } while ($page = $page->getParentPseudoPageOrRoot());
-            $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
-            return ($urlPrefix ? $urlPrefix : '').'/'.implode('/', array_reverse($filenames));
+            return $this->_getPseudoPageUrl();
         } else if ($var == 'rel') {
             /*
             $childs = $this->getPage()->getRecursiveChildComponents(array(
                 'flags' => array('noIndex' => true),
                 'page' => false
             ));*/
-            $rel = $this->getPage()->_rel;
+            $page = $this->getPage();
+            if (!$page) return '';
+            $rel = $page->_rel;
             if (/*$childs || */Vps_Component_Abstract::getFlag($this->getPage()->componentClass, 'noIndex')) {
                 $rel .= ' nofollow';
             }
             return trim($rel);
         } else if ($var == 'filename') {
-            return $this->getPseudoPageOrRoot()->_filename;
+            return rawurlencode($this->getPseudoPageOrRoot()->_filename);
         } else if ($var == 'inherits') {
             return false;
         } else if ($var == 'visible') {
@@ -163,11 +176,14 @@ class Vps_Component_Data
         } else {
             $select = clone $select;
         }
-        Vps_Benchmark::count('getRecursiveChildComponents', $this->componentId.' '.$select->toDebug());
+        Vps_Benchmark::count('getRecursiveChildComponents');
         if (is_array($childSelect)) {
             $childSelect = new Vps_Component_Select($childSelect);
         }
         $ret = $this->getChildComponents($select);
+        if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+            return $ret;
+        }
 
         $genSelect = new Vps_Component_Select();
         $genSelect->copyParts(array(
@@ -190,27 +206,28 @@ class Vps_Component_Data
 
         $selectHash = md5($genSelect->getHash().$childSelect->getHash());
         $cacheId = 'recCCGen'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
+        $cacheId = str_replace('.', '_', $cacheId);
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
-            Vps_Benchmark::count('getRecCC Gen hit', $this->componentClass.' '.$genSelect->toDebug());
             $generators = $this->_recursiveGeneratorsCache[$cacheId];
         } else if (($generators = $cache->load($cacheId)) !== false) {
-            Vps_Benchmark::count('getRecCC Gen semi-hit', $this->componentClass.' '.$genSelect->toDebug());
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
         } else {
-            Vps_Benchmark::count('getRecCC Gen miss', $this->componentClass.' '.$genSelect->toDebug());
             $generators = $this->_getRecursiveGenerators(
                         Vpc_Abstract::getChildComponentClasses($this, $childSelect),
                         $genSelect, $childSelect, $selectHash);
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
             $cache->save($generators, $cacheId);
         }
-        $select->whereOnSamePage($this);
+        $select->whereChildOfSamePage($this);
         foreach ($generators as $g) {
             if (!$g['static']) {
                 $gen = Vps_Component_Generator_Abstract::getInstance($g['class'], $g['key']);
                 foreach ($gen->getChildData(null, $select) as $d) {
                     if (!in_array($d, $ret, true)) {
                         $ret[] = $d;
+                        if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+                            return $ret;
+                        }
                     }
                 }
             }
@@ -245,6 +262,9 @@ class Vps_Component_Data
                         foreach ($gen->getChildData($parentDatas, $select) as $d) {
                             if (!in_array($d, $ret, true)) {
                                 $ret[] = $d;
+                                if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+                                    return $ret;
+                                }
                             }
                         }
                     }
@@ -257,7 +277,6 @@ class Vps_Component_Data
     private function _getRecursiveGenerators($componentClasses, $select, $childSelect, $selectHash)
     {
         $cacheId = Implode('-', $componentClasses).$selectHash;
-        Vps_Benchmark::count('_getRecursiveGenerators');
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
             return $this->_recursiveGeneratorsCache[$cacheId];
         }
@@ -269,7 +288,7 @@ class Vps_Component_Data
             foreach (Vps_Component_Generator_Abstract::getInstances($componentClass, $select) as $generator) {
                 if ($generator->getChildComponentClasses($select)) {
                     $ret[] = array(
-                        'static' => $generator instanceof Vps_Component_Generator_Static,
+                        'static' => !!$generator->getGeneratorFlag('static'),
                         'class' => $generator->getClass(),
                         'pluginBaseComponentClass' => $generator->getPluginBaseComponentClass(),
                         'key' => $generator->getGeneratorKey()
@@ -375,7 +394,7 @@ class Vps_Component_Data
         $select = $this->_formatSelect($select);
         $sc = $select->getHash();
         if (isset($this->_constraintsCache[$sc])) {
-            Vps_Benchmark::count('getChildComponents cached', $select->toDebug());
+            Vps_Benchmark::count('getChildComponents cached');
         } else {
             Vps_Benchmark::count('getChildComponents uncached');
         }
@@ -515,6 +534,9 @@ class Vps_Component_Data
         return $ret;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getChildComponent($select = array())
     {
         $select = $this->_formatSelect($select);
@@ -524,15 +546,23 @@ class Vps_Component_Data
         return current($cc);
     }
 
+    /**
+     * @return Vpc_Abstract
+     */
     public function getComponent()
     {
         if (!isset($this->_component)) {
-            $component = new $this->componentClass($this);
+            $class = $this->componentClass;
+            $class = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            $component = new $class($this);
             $this->_component = $component;
         }
         return $this->_component;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getPage()
     {
         $page = $this;
@@ -542,6 +572,9 @@ class Vps_Component_Data
         return $page;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getPageOrRoot()
     {
         $page = $this;
@@ -552,6 +585,9 @@ class Vps_Component_Data
         return $page;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getPseudoPageOrRoot()
     {
         $page = $this;
@@ -562,6 +598,9 @@ class Vps_Component_Data
         return $page;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getPseudoPage()
     {
         $page = $this;
@@ -571,6 +610,9 @@ class Vps_Component_Data
         return $page;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getParentPage()
     {
         $page = $this->getPage();
@@ -580,6 +622,9 @@ class Vps_Component_Data
         return null;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getParentPageOrRoot()
     {
         $page = $this->getPageOrRoot();
@@ -589,6 +634,9 @@ class Vps_Component_Data
         return null;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getParentPseudoPage()
     {
         $page = $this->getPseudoPage();
@@ -599,6 +647,9 @@ class Vps_Component_Data
     }
 
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getParentPseudoPageOrRoot()
     {
         $page = $this->getPseudoPage();
@@ -608,6 +659,9 @@ class Vps_Component_Data
         return null;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getParentByClass($cls)
     {
         $d = $this;
@@ -621,6 +675,9 @@ class Vps_Component_Data
     {
         $title = array();
         $row = $this->getPage();
+        if (!$row) {
+            return null;
+        }
         do {
             if ($row->name != '' && $row->name != 'Home') {
                 $title[] = $row->name;
@@ -641,6 +698,9 @@ class Vps_Component_Data
         return $ret;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getChildPageByPath($path)
     {
         $page = $this;
@@ -654,6 +714,78 @@ class Vps_Component_Data
             if (!$page) break;
         }
         return $page;
+    }
+
+    /**
+     * @return Vps_Component_Data
+     */
+    public function getLanguageData()
+    {
+        // search parents for flag hasLanguage
+        $c = $this;
+        do {
+            if (Vpc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
+                break;
+            }
+        } while (($c = $c->parent));
+
+        if (!$c) return null;
+        return $c;
+    }
+
+    public function getLanguage()
+    {
+        $langData = $this->getLanguageData();
+        if (!$langData) {
+            return Vps_Registry::get('trl')->getWebCodeLanguage();
+        } else {
+            return $langData->getComponent()->getLanguage();
+        }
+    }
+
+    public function trlStaticExecute($trlStaticData)
+    {
+        return Zend_Registry::get('trl')->trlStaticExecute($trlStaticData, $this->getLanguage());
+    }
+
+    public function trl($string, $text = array())
+    {
+        return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+    }
+
+    public function trlc($context, $string, $text = array())
+    {
+        return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+    }
+
+    public function trlp($single, $plural, $text =  array())
+    {
+        return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+    }
+
+    public function trlcp($context, $single, $plural, $text = array())
+    {
+        return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+    }
+
+    public function trlVps($string, $text = array())
+    {
+        return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+    }
+
+    public function trlcVps($context, $string, $text = array())
+    {
+        return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+    }
+
+    public function trlpVps($single, $plural, $text =  array())
+    {
+        return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+    }
+
+    public function trlcpVps($context, $single, $plural, $text = array())
+    {
+        return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
     }
 
     public function toDebug()

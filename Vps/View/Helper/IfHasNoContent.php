@@ -1,9 +1,10 @@
 <?php
-class Vps_View_Helper_IfHasNoContent extends Vps_View_Helper_IfHasContent
+class Vps_View_Helper_IfHasNoContent
 {
-    protected $_tag = 'contentNo';
     public function ifHasNoContent(Vps_Component_Data $component = null)
     {
-        return $this->ifHasContent($component);
+        // nicht über Vererbung, da sonst bei IfHasContent das Static nicht richtig gezählt wird
+        $content = new Vps_View_Helper_IfHasContent();
+        return $content->ifHasContent($component, 'contentNo');
     }
 }

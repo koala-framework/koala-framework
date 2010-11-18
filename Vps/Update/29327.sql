@@ -1,3 +1,4 @@
+#tags: vpc
 DROP TABLE IF EXISTS `cache_component`;
 CREATE TABLE IF NOT EXISTS `cache_component` (
   `id` varchar(200) character set latin1 collate latin1_general_ci NOT NULL,

@@ -6,7 +6,7 @@ class Vpc_Abstract_Form extends Vps_Form
         $this->setClass($class);
         if ($class) {
             if (!$this->getModel()) {
-                $model = Vpc_Abstract::createModel($class);
+                $model = Vpc_Abstract::createOwnModel($class);
                 if ($model) $this->setModel($model);
             }
             $this->setCreateMissingRow(true);
@@ -37,6 +37,13 @@ class Vpc_Abstract_Form extends Vps_Form
 
         if (!$componentClass) {
             throw new Vpc_Exception("No component for dbIdShortcut '$dbIdShortcut' found.");
+        }
+        if (is_array($componentClass)) {
+            if (sizeof($componentClass) > 1) {
+                throw new Vpc_Exception("Can't have multiple component classes");
+            }
+            reset($componentClass);
+            $componentClass = current($componentClass);
         }
 
         if ($id) { // id hatte form 'dbId_{0}-key', also für Key Unterkomponente suchen
@@ -75,6 +82,7 @@ class Vpc_Abstract_Form extends Vps_Form
         if (substr($id, 0, 1)=='-' || substr($id, 0, 1)=='_') {
             $id = substr($id, 1);
         }
+        if (!$name) $name = $id;
         $idTemplate = '{0}';
         $childComponentClass = null;
 

@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Vpc_UrlResolve
+ */
 class Vps_Component_Generator_Page_Test extends PHPUnit_Framework_TestCase
 {
     private $_root;
@@ -58,7 +61,7 @@ class Vps_Component_Generator_Page_Test extends PHPUnit_Framework_TestCase
     public function testHome()
     {
         $domain = 'http://'.Zend_Registry::get('config')->server->domain;
-        $home = $this->_root->getPageByUrl($domain.'/');
+        $home = $this->_root->getPageByUrl($domain.'/', null);
         $this->assertNotNull($home);
         $this->assertEquals($home->url, '/');
         $child = $home->getChildComponent('-foo');

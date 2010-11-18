@@ -6,6 +6,7 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_BOX = 'whereBox';
     const WHERE_MULTI_BOX = 'whereMultiBox';
     const WHERE_FLAGS = 'whereFlags';
+    const WHERE_GENERATOR_FLAGS = 'whereGeneratorFlags';
     const WHERE_INHERIT = 'whereInherit';
     const WHERE_UNIQUE = 'whereUnique';
     const WHERE_HAS_EDIT_COMPONENTS = 'whereHasEditComponents';
@@ -18,7 +19,7 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_HOME = 'whereHome';
     const WHERE_PAGE_GENERATOR = 'wherePageGenerator';
     const WHERE_SUBROOT = 'whereSubroot';
-    const WHERE_ON_SAME_PAGE = 'whereOnSamePage';
+    const WHERE_CHILD_OF_SAME_PAGE = 'whereChildOfSamePage';
     const IGNORE_VISIBLE = 'ignoreVisible';
 
     public function __construct($where = array())
@@ -88,6 +89,18 @@ class Vps_Component_Select extends Vps_Model_Select
     public function whereFlag($flag, $value = true)
     {
         $this->_parts[self::WHERE_FLAGS][$flag] = $value;
+        return $this;
+    }
+
+    public function whereGeneratorFlags(array $value)
+    {
+        $this->_parts[self::WHERE_GENERATOR_FLAGS] = $value;
+        return $this;
+    }
+
+    public function whereGeneratorFlag($flag, $value = true)
+    {
+        $this->_parts[self::WHERE_GENERATOR_FLAGS][$flag] = $value;
         return $this;
     }
 
@@ -179,9 +192,12 @@ class Vps_Component_Select extends Vps_Model_Select
         return $this;
     }
 
-    public function whereOnSamePage(Vps_Component_Data $page)
+    /**
+     * Intern fuer effizientes getRecursiveChildComponents ohne parentData
+     **/
+    public function whereChildOfSamePage(Vps_Component_Data $page)
     {
-        $this->_parts[self::WHERE_ON_SAME_PAGE] = $page;
+        $this->_parts[self::WHERE_CHILD_OF_SAME_PAGE] = $page;
         return $this;
     }
 
@@ -198,7 +214,7 @@ class Vps_Component_Select extends Vps_Model_Select
             if ($key == self::WHERE_SUBROOT && !empty($part)) {
                 $part = $part[0]->componentId;
             }
-            if ($key == self::WHERE_ON_SAME_PAGE && !empty($part)) {
+            if ($key == self::WHERE_CHILD_OF_SAME_PAGE && !empty($part)) {
                 $part = $part->componentId;
             }
             $parts[$key] = $part;

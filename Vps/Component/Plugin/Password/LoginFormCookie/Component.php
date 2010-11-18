@@ -5,6 +5,6 @@ class Vps_Component_Plugin_Password_LoginFormCookie_Component extends Vps_Compon
     {
         parent::_initForm();
         $this->_form->add(new Vps_Form_Field_Checkbox('save_cookie'))
-            ->setBoxLabel(trl('Passwort auf diesem Computer speichern'));
+            ->setBoxLabel(trlVps('Remember password on this computer'));
     }
 }

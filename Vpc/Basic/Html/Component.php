@@ -16,23 +16,40 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
         return $ret;
     }
 
+    private function _getContent()
+    {
+        $childComponents = array();
+        foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
+            $childComponents[$c->id] = $c;
+        }
+
+        $c = $this->_getRow()->content;
+        preg_match_all('#{([a-z0-9]+)}#', $c, $m);
+        if ($m[0]) {
+            $helper = new Vps_View_Helper_Component;
+            foreach ($m[1] as $i) {
+                if (isset($childComponents[$i]) && $childComponents[$i] instanceof Vps_Component_Data) {
+                    $c = str_replace('{'.$i.'}', $helper->component($childComponents[$i]), $c);
+                }
+            }
+        }
+        return $c;
+    }
+
+    public function getExportData()
+    {
+        $ret = parent::getExportData();
+        $ret['content'] = $this->_getContent();
+        return $ret;
+    }
+
     public function getTemplateVars()
     {
         if (Vpc_Abstract::hasSetting(get_class($this), 'default')) {
             throw new Vps_Exception("Setting 'default' doesn't exist anymore for ".get_class($this).", you need to overwrite the Model.");
         }
         $ret = parent::getTemplateVars();
-        $c = $this->_getRow()->content;
-        preg_match_all('#{([a-z0-9]+)}#', $c, $m);
-        if ($m[0]) {
-            $helper = new Vps_View_Helper_Component;
-            foreach ($m[1] as $i) {
-                if (isset($ret[$i]) && $ret[$i] instanceof Vps_Component_Data) {
-                    $c = str_replace('{'.$i.'}', $helper->component($ret[$i]), $c);
-                }
-            }
-        }
-        $ret['content'] = $c;
+        $ret['content'] = $this->_getContent();
         return $ret;
     }
 

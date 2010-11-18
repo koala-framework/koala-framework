@@ -9,6 +9,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private $_generatorsForClassesCache = array();
     private $_currentPage;
     private $_pageGenerators;
+    private $_dataCache = array();
 
     public function __construct($config = array())
     {
@@ -61,13 +62,22 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         self::reset();
     }
 
-    public static function reset()
+    public static function reset($resetCache = true)
     {
         self::$_instance = null;
-        Vps_Component_Abstract::resetSettingsCache();
+        if ($resetCache) Vps_Component_Abstract::resetSettingsCache();
     }
 
-    public function getPageByUrl($url)
+    public function __get($var)
+    {
+        if ($var == 'filename') {
+            //hier ohne rawurlencode, ist bei tetss auf 'vps/vpctest/...' gesetzt
+            return $this->_filename;
+        }
+        return parent::__get($var);
+    }
+
+    public function getPageByUrl($url, $acceptLangauge)
     {
         $parsedUrl = parse_url($url);
         if (!isset($parsedUrl['path'])) return null;
@@ -90,25 +100,16 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             }
         }
         $path = trim($path, '/');
-        if ($path == '') {
-            $ret = $this->getChildPage(array('home' => true));
-        } else {
-            foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                if (Vpc_Abstract::getFlag($c, 'shortcutUrl')) {
-                    $ret = call_user_func(array($c, 'getDataByShortcutUrl'), $c, $path);
-                    if ($ret) return $ret;
-                }
-            }
-            $ret = $this->getChildPageByPath($path);
-            if ($parsedUrl['path'] == '' || $parsedUrl['path'] == '/') {
-                $ret = $ret->getChildPage(array('home' => true));
-            }
-        }
-        return $ret;
+        return $this->getComponent()->getPageByUrl($path, $acceptLangauge);
     }
 
     public function getComponentById($componentId, $select = array())
     {
+        if (isset($this->_dataCache[$componentId])) {
+            if (!$select) {
+                return $this->_dataCache[$componentId];
+            }
+        }
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         } else {
@@ -175,7 +176,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     if (!isset($generator['class'])) {
                         throw new Vps_Exception("no generator class set for generator '$key' in component '$class'");
                     }
-                    if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) {
+                    if (is_instance_of($generator['class'], 'Vpc_Root_Category_Generator')) {
                         $generators[] = array('class' => $class, 'key' => $key, 'generator' => $generator);
                     }
                 }
@@ -210,6 +211,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getComponentByDbId($dbId, $select = array())
     {
         $components = $this->getComponentsByDbId($dbId, $select);
@@ -228,7 +232,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         $cacheId = $dbId.$select->getHash();
         if (!isset($this->_componentsByDbIdCache[$cacheId])) {
-            $benchmark = Vps_Benchmark::start();
 
             if (is_numeric(substr($dbId, 0, 1)) || substr($dbId, 0, 4)=='root') {
                 $data = $this->getComponentById($dbId, $select);
@@ -290,18 +293,16 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         $cacheId = $class.$select->getHash();
         if (!isset($this->_componentsByClassCache[$cacheId])) {
-            $benchmark = Vps_Benchmark::start();
 
             $lookingForChildClasses = Vpc_Abstract::getComponentClassesByParentClass($class);
             foreach ($lookingForChildClasses as $c) {
-                if (is_instance_of($c, 'Vpc_Root_Component')) {
+                if (is_instance_of($c, 'Vpc_Root_Abstract')) {
                     return array($this);
                 }
             }
             $ret = $this->getComponentsBySameClass($lookingForChildClasses, $select);
             $this->_componentsByClassCache[$cacheId] = $ret;
 
-            if ($benchmark) $benchmark->stop();
         }
         return $this->_componentsByClassCache[$cacheId];
     }
@@ -350,18 +351,15 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 'automatic_serialization'=>true));
         }
 
-        $cacheId = 'genForCls'.$this->getComponentClass().implode('', $lookingForClasses);
+        $cacheId = 'genForCls'.$this->getComponentClass().str_replace('.', '_', implode('', $lookingForClasses));
         if (isset($this->_generatorsForClassesCache[$cacheId])) {
-            Vps_Benchmark::count('_getGeneratorsForClasses hit', implode(', ', $lookingForClasses));
         } else if (($generators = $cache->load($cacheId)) !== false) {
             $ret = array();
             foreach ($generators as $g) {
                 $ret[] = Vps_Component_Generator_Abstract::getInstance($g[0], $g[1]);
             }
             $this->_generatorsForClassesCache[$cacheId] = $ret;
-            Vps_Benchmark::count('_getGeneratorsForClasses semi-hit', implode(', ', $lookingForClasses));
         } else {
-            Vps_Benchmark::count('_getGeneratorsForClasses miss', implode(', ', $lookingForClasses));
             $generators = array();
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
                 foreach (Vpc_Abstract::getSetting($c, 'generators') as $key => $generator) {
@@ -433,6 +431,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function setFilename($f)
     {
         $this->_filename = $f;
+    }
+
+    /**
+     * @internal siehe Vps_Component_Generator_Abstract
+     */
+    public function addToDataCache(Vps_Component_Data $d)
+    {
+        $this->_dataCache[$d->componentId] = $d;
     }
 }
 ?>

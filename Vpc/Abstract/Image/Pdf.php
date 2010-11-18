@@ -5,11 +5,10 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
 
     public function writeContent($setCoordinates = true)
     {
-        $image = $this->_component->getImageRow();
-        $file = $image->getParentRow('Image');
+        $data = $this->_component->getImageData();
 
-        if ($file && is_file($file->getFileSource())) {
-            $source = $file->getFileSource();
+        if ($data && $data['file'] && is_file($data['file'])) {
+            $source = $data['file'];
             $size = $this->getSize();
 
             $imageSize = array(
@@ -19,10 +18,8 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
             );
             $content = Vps_Media_Image::scale($source, $imageSize);
             $filter = new Vps_Filter_Ascii();
-            $tempFilename = 'temp_'.$filter->filter($file->filename);
-            $handle = fopen($tempFilename, 'wb');
-            fwrite($handle, $content);
-            fclose($handle);
+            $tempFilename = tempnam('application/temp', 'pdfimage');
+            file_put_contents($tempFilename, $content);
             $data = getimagesize($tempFilename);
             if ($data[2] == 2) { // nur jpgs ausgeben
                 if ($setCoordinates && $this->addPageIfNecessary()) {
@@ -30,9 +27,10 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
                     $this->SetY($this->getTopMargin());
                     $this->SetX($x);
                 }
+                $type = str_replace('image/', '', 'image/jpeg');
                 $this->_pdf->Image(
                     $tempFilename, $this->getX(), $this->getY(),
-                    $this->_calculatePx($data[0]), $this->_calculatePx($data[1]), $file->extension
+                    $this->_calculatePx($data[0]), $this->_calculatePx($data[1]), $type
                 );
                 if ($setCoordinates) {
                     $this->SetY($this->getY() + $size['height'] + 2);
@@ -62,17 +60,8 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
     public function getSize()
     {
         if (!$this->_size) {
-            $file = $this->_component->getImageRow()->getParentRow('Image');
-            if (!$file || !is_file($file->getFileSource())) {
-                return null;
-            }
-
             $dimension = $this->_component->getImageDimensions();
-            if (!$dimension){
-                $dimensions = getimagesize($file->getFileSource());
-                $dimension["width"] = $dimensions[0];
-                $dimension["height"] = $dimensions[1];
-            }
+            if (!$dimension) return null;
 
             $maxWidth = Vpc_Abstract::getSetting(get_class($this->_component), 'pdfMaxWidth');
             $area = $this->getMaxTextWidth();

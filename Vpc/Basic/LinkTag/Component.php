@@ -23,14 +23,21 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
                 'extern'   => 'Vpc_Basic_LinkTag_Extern_Component',
                 'mail'     => 'Vpc_Basic_LinkTag_Mail_Component',
                 'download' => 'Vpc_Basic_DownloadTag_Component'
-            )
+            ),
         );
+        $cc = Vps_Registry::get('config')->vpc->childComponents;
+        if (isset($cc->Vpc_Basic_LinkTag_Component)) {
+            $ret['generators']['link']['component'] = array_merge(
+                $ret['generators']['link']['component'],
+                $cc->Vpc_Basic_LinkTag_Component->toArray()
+            );
+        }
         $ret['assetsAdmin']['dep'][] = 'VpsFormCards';
         return $ret;
     }
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = array();
         $ret['linkTag'] = $this->getData()->getChildComponent(array(
             'generator' => 'link'
         ));
@@ -57,7 +64,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
         // deshalb unterkomponente gleich mitlöschen
         $link = $this->getData()->getChildComponent('-link');
         if ($link) {
-            $ret[] = array(
+            $ret['linkTagLink'] = array(
                 'model' => $row->getModel(),
                 'id' => $row->component_id,
                 'componentId' => $link->componentId

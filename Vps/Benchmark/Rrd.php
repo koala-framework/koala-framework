@@ -27,6 +27,51 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         foreach ($this->_getFieldNames() as $field) {
             $this->addField($field);
         }
+        $this->addField(array(
+            'name'=>'mysql-processes',
+            'type'=>'GAUGE',
+            'max'=>1000,
+        ));
+        $this->addField(array(
+            'name'=>'mysql-processes-select',
+            'type'=>'GAUGE',
+            'max'=>1000,
+        ));
+        $this->addField(array(
+            'name'=>'mysql-processes-modify',
+            'type'=>'GAUGE',
+            'max'=>1000,
+        ));
+        $this->addField(array(
+            'name'=>'mysql-processes-others',
+            'type'=>'GAUGE',
+            'max'=>1000,
+        ));
+        $this->addField(array(
+            'name'=>'mysql-processes-locked',
+            'type'=>'GAUGE',
+            'max'=>1000,
+        ));
+        $this->addField(array(
+            'name'=>'memcache-bytes',
+            'type'=>'GAUGE',
+            'max'=>pow(2, 64),
+        ));
+        $this->addField(array(
+            'name'=>'memcache-curr-items',
+            'type'=>'GAUGE',
+            'max'=>pow(2, 64),
+        ));
+        $this->addField(array(
+            'name'=>'memcache-curr-connections',
+            'type'=>'GAUGE',
+            'max'=>pow(2, 64),
+        ));
+        $this->addField(array(
+            'name'=>'memcache-limit-maxbytes',
+            'type'=>'GAUGE',
+            'max'=>pow(2, 64),
+        ));
     }
 
     private function _getFieldNames()
@@ -61,14 +106,55 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $load = explode(' ', $load);
         $values[] = $load[0];
 
-        $stats = $this->_getMemcache()->getStats();
-        $values[] = $stats['bytes_read'];
-        $values[] = $stats['bytes_written'];
-        $values[] = $stats['get_hits'];
-        $values[] = $stats['get_misses'];
+        $counter = new Vps_Benchmark_Counter_Memcache();
+        $memcache = $counter->getMemcache();
+        $memcacheStats = $memcache->getStats();
+        $values[] = $memcacheStats['bytes_read'];
+        $values[] = $memcacheStats['bytes_written'];
+        $values[] = $memcacheStats['get_hits'];
+        $values[] = $memcacheStats['get_misses'];
         foreach ($this->_getFieldNames() as $field) {
             $values[] = $this->_getMemcacheValue($field);
         }
+
+        $cnt = array(
+            'processes' => 0,
+            'select' => 0,
+            'modify' => 0,
+            'others' => 0,
+            'locked' => 0
+        );
+        if (Vps_Registry::get('dao')) {
+            $dbConfig = Vps_Registry::get('dao')->getDbConfig();
+            $dbName = $dbConfig['dbname'];
+            foreach (Vps_Registry::get('db')->query('SHOW PROCESSLIST')->fetchAll() as $row) {
+                if ($row['db'] != $dbName) continue;
+                if ($row['Command'] == 'Sleep') continue;
+                $sql = strtolower(trim($row['Info']));
+                if ($sql == 'show processlist') continue;
+                $cnt['processes']++;
+                if ($row['Command'] == 'Locked') {
+                    $cnt['locked']++;
+                }
+                if (substr($sql, 0, 6) == 'select') {
+                    $cnt['select']++;
+                } else if (substr($sql, 0, 6) == 'update'
+                    || substr($sql, 0, 6) == 'insert'
+                    || substr($sql, 0, 7) == 'replace'
+                    || substr($sql, 0, 6) == 'delete'
+                ) {
+                    $cnt['modify']++;
+                } else {
+                    $cnt['others']++;
+                }
+            }
+        }
+        $values = array_merge($values, array_values($cnt));
+
+        $values[] = $memcacheStats['bytes'];
+        $values[] = $memcacheStats['curr_items'];
+        $values[] = $memcacheStats['curr_connections'];
+        $values[] = $memcacheStats['limit_maxbytes'];
         return $values;
     }
 
@@ -135,15 +221,54 @@ class Vps_Benchmark_Rrd extends Vps_Util_Rrd_File
         $ret['generators'] = $g;
 
         $g = new Vps_Util_Rrd_Graph($this);
+        $g->setTitle('Memcache');
         $g->setVerticalLabel('accesses');
         $g->addField('getHits', '#00FF00');
         $g->addField('getMisses', '#FF0000');
         $ret['memcacheHits'] = $g;
 
         $g = new Vps_Util_Rrd_Graph($this);
+        $g->setTitle('Memcache');
+        $g->setVerticalLabel('bytes');
+        $g->addField('bytesRead');
+        $g->addField('bytesWritten');
+        $ret['memcacheBytes'] = $g;
+
+        $g = new Vps_Util_Rrd_Graph($this);
+        $g->setTitle('Memcache');
+        $g->setVerticalLabel('bytes');
+        $g->addField('memcache-bytes');
+        $g->addField('memcache-limit-maxbytes');
+        $ret['memcacheBytesAbs'] = $g;
+
+        $g = new Vps_Util_Rrd_Graph($this);
+        $g->setTitle('Memcache');
+        $g->setVerticalLabel('items');
+        $g->addField('memcache-curr-items');
+        $ret['memcacheItems'] = $g;
+
+
+        $g = new Vps_Util_Rrd_Graph($this);
+        $g->setTitle('Memcache');
+        $g->setVerticalLabel('connections');
+        $g->addField('memcache-curr-connections');
+        $ret['memcacheConnections'] = $g;
+
+        $g = new Vps_Util_Rrd_Graph($this);
         $g->setVerticalLabel('[load]');
+        $g->setLowerLimit(0);
         $g->addField('load', '#000000');
         $ret['load'] = $g;
+
+        $g = new Vps_Util_Rrd_Graph($this);
+        $g->setVerticalLabel('[processes]');
+        $g->setLowerLimit(0);
+        $g->addField('mysql-processes');
+        $g->addField('mysql-processes-select');
+        $g->addField('mysql-processes-modify');
+        $g->addField('mysql-processes-others');
+        $g->addField('mysql-processes-locked');
+        $ret['mysql'] = $g;
 
         return $ret;
     }

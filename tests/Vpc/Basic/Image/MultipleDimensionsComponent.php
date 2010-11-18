@@ -41,11 +41,6 @@ class Vpc_Basic_Image_MultipleDimensionsComponent extends Vpc_Basic_Image_Compon
                 'height' => Vpc_Abstract_Image_Component::USER_SELECT,
                 'scale' => Vps_Media_Image::SCALE_DEFORM
             ),
-            'userSizeScale' => array(
-                'width' => Vpc_Abstract_Image_Component::USER_SELECT,
-                'height' => Vpc_Abstract_Image_Component::USER_SELECT,
-                'scale' => Vpc_Abstract_Image_Component::USER_SELECT
-            ),
         );
         return $ret;
     }

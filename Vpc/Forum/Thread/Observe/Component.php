@@ -4,7 +4,7 @@ class Vpc_Forum_Thread_Observe_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['tablename'] = 'Vpc_Forum_Thread_Observe_Model';
+        $ret['childModel'] = 'Vpc_Forum_Thread_Observe_Model';
         $ret['flags']['processInput'] = true;
         $ret['viewCache'] = false;
         return $ret;
@@ -16,7 +16,7 @@ class Vpc_Forum_Thread_Observe_Component extends Vpc_Abstract
         if ($user && isset($postData['observe'])) {
             $observeRow = $this->_getObserveRow();
             if (!$observeRow && $postData['observe']) {
-                $observeRow = $this->getTable()->createRow();
+                $observeRow = $this->getChildModel()->createRow();
                 $observeRow->thread_id = $this->getData()->getPage()->row->id;
                 $observeRow->user_id = $user->id;
                 $observeRow->save();
@@ -26,19 +26,18 @@ class Vpc_Forum_Thread_Observe_Component extends Vpc_Abstract
             }
         }
     }
-    
+
     protected function _getObserveRow()
     {
         if ($user = $this->_getUser()) {
-            $where = array(
-                'thread_id = ?' => $this->getData()->getPage()->row->id,
-                'user_id = ?' => $user->id
+            return $this->getChildModel()->getRow($this->getChildModel()->select()
+                ->whereEquals('thread_id', $this->getData()->getPage()->row->id)
+                ->whereEquals('user_id', $user->id)
             );
-            return $this->getTable()->fetchRow($where);
         }
-        return null; 
+        return null;
     }
-    
+
     protected function _getUser()
     {
         return Zend_Registry::get('userModel')->getAuthedUser();

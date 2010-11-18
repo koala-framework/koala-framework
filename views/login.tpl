@@ -1,6 +1,7 @@
 <?= $this->doctype() ?>
 <html>
     <head>
+        <?= $this->debugData(); ?>
         <?= $this->assets('Admin') ?>
     </head>
     <body>

@@ -42,6 +42,11 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         } else {
             $this->view->image = false;
         }
+        if (Vps_Util_Git::web()->getActiveBranch() != 'production'
+            || Vps_Util_Git::vps()->getActiveBranch() != 'production/'.Vps_Registry::get('config')->application->id
+        ) {
+            $this->view->untagged = true;
+        }
         $this->view->application = Zend_Registry::get('config')->application->toArray();
         $this->_helper->viewRenderer->setRender('loginheader');
     }

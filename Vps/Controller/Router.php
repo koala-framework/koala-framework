@@ -54,6 +54,10 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/vps/enquiries/:controller/:action',
                     array('module'     => 'vps_controller_action_enquiries',
                           'action'     =>'index')));
+        $this->AddRoute('vps_project-timer', new Zend_Controller_Router_Route(
+                    '/vps/project-timer/:controller/:action',
+                    array('module'     => 'vps_controller_action_project-timer',
+                          'action'     =>'index')));
 
         //für selenium-tests von sachen die im vps liegen
         $this->AddRoute('vps_test', new Zend_Controller_Router_Route(
@@ -68,7 +72,7 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                           'url'        => ''),
                     array('root'=>1, 'url'=>2)));
         $this->AddRoute('vps_test_componentedit', new Zend_Controller_Router_Route(
-                    '/vps/componentedittest/:root/:class/:action',
+                    '/vps/componentedittest/:root/:class/:componentController/:action',
                     array('module' => 'component_test',
                           'controller' => 'component_test',
                           'action' => 'index')));

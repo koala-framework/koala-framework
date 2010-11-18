@@ -35,7 +35,7 @@ foreach ($out as $o) {
     }
 }
 
-function execGetOutput($cmd, &$out)
+function execGetOutput($cmd, &$out, $timeLimit)
 {
     $descriptorspec = array(
         0 => array("pipe", "r"),
@@ -47,6 +47,7 @@ function execGetOutput($cmd, &$out)
     fclose($pipes[0]);
     stream_set_blocking($pipes[1], 0);
     stream_set_blocking($pipes[2], 0);
+    $start = time();
     while(!feof($pipes[1]) && !feof($pipes[2])) {
         if (!feof($pipes[1])) {
             $o = fgets($pipes[1]);
@@ -61,6 +62,13 @@ function execGetOutput($cmd, &$out)
                 echo $o;
                 $out .= $o;
             }
+        }
+        if (time()-$start > $timeLimit) {
+             $msg = "\nProcess '$cmd' killed because timelimit exceeded";
+             $out .= $msg;
+             echo $msg;
+             proc_terminate($process);
+             return 1;
         }
         usleep(500);
     }
@@ -99,7 +107,7 @@ foreach (new DirectoryIterator($websDir) as $p) {
     echo $p."\n";
     chdir($p->getPathname());
     $out = '';
-    $ret = execGetOutput("php bootstrap.php svn-up", $out);
+    $ret = execGetOutput("php bootstrap.php svn-up", $out, 60*10);
     $postData = array(
         'tests' => 0,
         'failures' => 1,
@@ -112,7 +120,7 @@ foreach (new DirectoryIterator($websDir) as $p) {
     if ($ret) {
         $postData['log'] = "UPDATE FAILED\n\n\n".$out;
     } else {
-        $ret = execGetOutput("php bootstrap.php test --no-progress --report --exclude-group=$excludeGroup", $out);
+        $ret = execGetOutput("php bootstrap.php test --no-progress --report --exclude-group=$excludeGroup", $out, 60*60);
         if (preg_match("#===REPORT===(.*?)===/REPORT===#m", $out, $m)) {
             $postData = @unserialize($m[1]);
             if (!$postData) {

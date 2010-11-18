@@ -1,5 +1,6 @@
 <?php
 /**
+ * @group Helper
  * @group Helper_Truncate
  */
 class Vps_View_TruncateTest extends PHPUnit_Framework_TestCase

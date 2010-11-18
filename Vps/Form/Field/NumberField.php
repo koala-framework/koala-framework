@@ -19,12 +19,16 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
             $this->addValidator(new Zend_Validate_GreaterThan($this->getMinValue()-0.000001));
         }
         if ($this->getAllowNegative() === false) {
-            $this->addValidator(new Zend_Validate_GreaterThan(-1));
+            $this->addValidator(new Vps_Validate_NotNegative());
         }
         if ($this->getAllowDecimals() === false) {
             $this->addValidator(new Vps_Validate_Digits(true));
         } else {
-            $this->addValidator(new Zend_Validate_Float());
+            $l = null;
+            if (trlcVps('locale', 'C') != 'C') {
+                $l = Zend_Locale::findLocale(trlcVps('locale', 'C'));
+            }
+            $this->addValidator(new Zend_Validate_Float($l));
         }
     }
 

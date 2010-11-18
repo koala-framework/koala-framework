@@ -8,6 +8,7 @@ class Vpc_TextImage_Component extends Vpc_Abstract_Composite_Component
         $ret['ownModel'] = 'Vpc_TextImage_Model';
         $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
         $ret['generators']['child']['component']['image'] = 'Vpc_TextImage_ImageEnlarge_Component';
+        $ret['mailImageVAlign'] = 'center'; // valign von Image
         return $ret;
     }
 
@@ -35,6 +36,7 @@ class Vpc_TextImage_Component extends Vpc_Abstract_Composite_Component
             } else {
                 $ret['propCssClass'] .= ' noFlow';
             }
+            $ret['mailImageVAlign'] = $this->_getSetting('mailImageVAlign');
         }
         return $ret;
     }

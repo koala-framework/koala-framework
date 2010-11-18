@@ -20,6 +20,22 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
             } else {
                 this.saveBox.disable();
             }
+/////////koopiert von expand
+            if (typeof this.saveBox.store.proxy == 'undefined') {
+                this.saveBox.store.filterBy(function(r, id) {
+                    if (!r.data[this.saveBox.filterField] ||
+                        (r.data[this.saveBox.filterField] && r.data[this.saveBox.filterField] == this.filterBox.getValue())
+                    ) {
+                        return true;
+                    }
+                    return false;
+                }, this);
+            } else {
+                if (this.filterBox.getValue()) {
+                    this.saveBox.store.reload();
+                }
+            }
+/////////koopiert von expand
         }, this);
 
         this.saveBox.on('changevalue', function(contactId) {
@@ -40,7 +56,8 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
         }, this);
 
         this.saveBox.store.on('beforeload', function() {
-            this.saveBox.store.baseParams.customer_id = this.filterBox.getValue();
+            this.saveBox.store.baseParams[this.saveBox.queryParam] = null;
+            this.saveBox.store.baseParams[this.saveBox.filterField] = this.filterBox.getValue();
         }, this);
 
         this.saveBox.on('expand', function(box, r, idx) {
@@ -54,7 +71,7 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
                     return false;
                 }, this);
             } else {
-                if (this.filterBox.getValue() && this.saveBox.store.data.items.length >= 1) {
+                if (this.filterBox.getValue()) {
                     this.saveBox.store.reload();
                 }
             }

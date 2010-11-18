@@ -6,14 +6,13 @@ class Vpc_Advanced_SocialBookmarks_Inherit_Component extends Vpc_Abstract
         $ret = array();
         $ret['linkTemplate'] = false;
         if ($c = $this->_getBookmarksComponent()) {
-            $ret = $c->getComponent()->getTemplateVars();
+            $ret = $c->getComponent()->getTemplateVarsWithNetworks($this->getData()->parent);
             $ret['linkTemplate'] = self::getTemplateFile($c->componentClass);
-            $ret['networks'] = $c->getComponent()->getNetworks($this->getData()->parent);
         }
         return $ret;
     }
 
-    private function _getBookmarksComponent()
+    protected function _getBookmarksComponent()
     {
         $d = $this->getData()->getParentPseudoPageOrRoot();
         while ($d) {

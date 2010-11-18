@@ -7,7 +7,12 @@ class Vps_Util_Model_Feed_Entries extends Vps_Model_Abstract
 
     protected function _getOwnColumns()
     {
-        return array('title', 'link', 'description', 'date');
+        return array(
+            'id', 'title', 'link', 'description', 'date', 'author_name',
+            'content_encoded',
+            'media_image', 'media_image_width', 'media_image_height',
+            'media_thumbnail', 'media_thumbnail_width', 'media_thumbnail_height',
+        );
     }
 
     public function getPrimaryKey()

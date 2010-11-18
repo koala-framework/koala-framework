@@ -7,16 +7,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     protected $_idColumn = 'id';
     protected $_hasNumericIds = true;
 
-    /**
-     * wennn man das select anpassen will _formatSelect überschreiben
-     */
-    final public function select($parentData, array $select = array())
-    {
-        $select = new Vps_Component_Select($select);
-        $select->whereGenerator($this->_settings['generator']);
-        return $select;
-    }
-
     final public function getFormattedSelect($parentData)
     {
         $ret = $this->select($parentData);
@@ -60,12 +50,14 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $select;
     }
 
-    public function getChildIds($parentData, $select = array())
+    public final function getChildIds($parentData, $select = array())
     {
-        if (!$this->_getModel() instanceof Vps_Model_Interface_Id) {
-            throw new Vps_Exception('Model for getChildIds must implement Vps_Model_Interface_Id');
-        }
         $select = $this->_formatSelect($parentData, $select);
+        return $this->_fetchIds($parentData, $select);
+    }
+
+    protected function _fetchIds($parentData, $select)
+    {
         return $this->_getModel()->getIds($select);
     }
 
@@ -74,12 +66,21 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $this->_getModel()->getRows($select);
     }
 
+    protected function _fetchCountChildData($parentData, $select)
+    {
+        if ($select) {
+            return $this->_getModel()->countRows($select);
+        } else {
+            return 0;
+        }
+    }
+
     public function getChildData($parentData, $select = array())
     {
         Vps_Benchmark::count('GenTable::getChildData');
         if (is_array($select)) $select = new Vps_Component_Select($select);
         $ret = array();
-        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE))
+        if (!$parentData && ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE))
                 && !$this->_getModel()->hasColumn('component_id')) {
             $parentDatas = $p->getRecursiveChildComponents(array(
                 'componentClass' => $this->_class
@@ -89,15 +90,16 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
 
         foreach ($parentDatas as $parentData) {
-            $select = $this->_formatSelect($parentData, $select);
+            $s = $this->_formatSelect($parentData, clone $select);
             $rows = array();
-            if ($select) {
-                $rows = $this->_fetchRows($parentData, $select);
+            if ($s) {
+                $rows = $this->_fetchRows($parentData, $s);
             }
+
             foreach ($rows as $row) {
                 $currentPd = $parentData;
                 if (!$currentPd) {
-                    $currentPd = $this->_getParentDataByRow($row, $select);
+                    $currentPd = $this->_getParentDataByRow($row, $s);
                 }
                 if (!is_array($currentPd)) {
                     if ($currentPd) {
@@ -112,7 +114,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                     if ($currentPd->componentClass != $this->_class) {
                         throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$currentPd->componentClass}' instead of '$this->_class'");
                     }
-                    $data = $this->_createData($currentPd, $row, $select);
+                    $data = $this->_createData($currentPd, $row, $s);
                     if ($data) {
                         $ret[] = $data;
                     }
@@ -122,14 +124,10 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    public function countChildData($parentData, $select = array())
+    public final function countChildData($parentData, $select = array())
     {
         $select = $this->_formatSelect($parentData, $select);
-        if ($select) {
-            return $this->_getModel()->fetchCount($select);
-        } else {
-            return 0;
-        }
+        return $this->_fetchCountChildData($parentData, $select);
     }
 
     protected function _getParentDataByRow($row, $select)
@@ -144,6 +142,24 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             }
             $ret = Vps_Component_Data_Root::getInstance()
                 ->getComponentsByDbId($row->component_id, $constraints);
+
+            //streng genommen nicht on same page sondern children of und auf same page
+            //siehe Vps_Component_Generator_RecursiveTable2_RecursiveTest
+            if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
+                foreach ($ret as $k=>$i) {
+                    $found = false;
+                    while ($i) {
+                        if ($p->componentId == $i->componentId) {
+                            $found = true;
+                        }
+                        if ($i->isPage) break; //bei page aufhoeren
+                        $i = $i->parent;
+                    }
+                    if (!$found) {
+                        unset($ret[$k]); //kein gemeinsamer parent vorhanden
+                    }
+                }
+            }
         } else {
             throw new Vps_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
         }
@@ -160,7 +176,8 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                 if ($separator != $this->_idSeparator || ($this->_hasNumericIds && !is_numeric($id))) {
                     return null;
                 }
-                $select->whereId($id);
+                $select->whereEquals($this->_idColumn, $id);
+                $select->unsetPart(Vps_Model_Select::WHERE_ID);
             }
         }
         return $select;
@@ -171,10 +188,10 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $select = parent::_formatSelect($parentData, $select);
         if (is_null($select)) return null;
 
-        if ($this->_getModel()->hasColumn('component_id')) {
+        if ($this->_getModel()->hasColumn('component_id') && $this->_getModel()->getPrimaryKey() != 'component_id') {
             if ($parentData) {
                 $select->whereEquals('component_id', $parentData->dbId);
-            } else if ($p = $select->getPart(Vps_Component_Select::WHERE_ON_SAME_PAGE)) {
+            } else if ($p = $select->getPart(Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE)) {
                 $p = $p->getPageOrRoot();
                 $select->where(new Vps_Model_Select_Expr_Or(array(
                     new Vps_Model_Select_Expr_StartsWith('component_id', $p->dbId.'-'),
@@ -285,8 +302,49 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $newRow = $source->row->duplicate($data);
 
         $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
-        $target = $parentTarget->getChildComponent($id);
+        $target = $parentTarget->getChildComponent(array('id'=>$id, 'ignoreVisible'=>true));
         Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
         return $target;
+    }
+
+    public function makeChildrenVisible($source)
+    {
+        if ($source->generator !== $this) {
+            throw new Vps_Exception("you must call this only with the correct source");
+        }
+
+        $data = array();
+        if ($this->_getModel()->hasColumn('visible')) {
+            if (!$source->row->visible) {
+                $source->row->visible = 1;
+                $source->row->save();
+            }
+        }
+        Vpc_Admin::getInstance($source->componentClass)->makeVisible($source);
+    }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['table'] = true;
+        return $ret;
+    }
+
+    public function getCacheVars($parentData)
+    {
+        $field = null;
+        $id = null;
+        if ($parentData && $this->_getModel()->hasColumn('component_id') && $this->_getModel()->getPrimaryKey() != 'component_id') {
+            $field = 'component_id';
+            $id = $parentData->dbId;
+        }
+        $ret = array(
+            array(
+                'model' => $this->getModel(),
+                'field' => $field,
+                'id' => $id
+            )
+        );
+        return $ret;
     }
 }
