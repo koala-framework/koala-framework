@@ -35,24 +35,26 @@ abstract class Vpc_Directories_Item_Directory_Component extends Vpc_Directories_
             $dirs = array($dir);
         }
         foreach ($dirs as $dir) {
-            $pattern = null;
-            $c = $view->parent;
-            if ($c && $c->componentId == $dir->componentId) {
-                $pattern = '{component_id}-view';
-            } else {
-                while ($c && $c->componentId != $dir->componentId) $c = $c->parent;
-                if ($c) $pattern = '{component_id}%-view'; // Falls Directory ein parent ist, kann man mit diesem Pattern löschen, sonst nicht
+            $generators = Vps_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
+            if (!isset($generators[0])) {
+                throw new Vps_Exception("can't find detail generator"); //oder darf das auftreten?
+                continue;
             }
-            if ($pattern) { // dbId
-                $generators = Vpc_Abstract::getSetting($c->componentClass, 'generators');
-                if (isset($generators['detail']['dbIdShortcut'])) {
-                    $pattern = str_replace('{component_id}', '%', $pattern);
+            $generator = $generators[0];
+            $pattern = null;
+            if ($generator->getModel()->hasColumn('component_id')) {
+                //wenns eine component_id gibt und die view unter dem directory liegt können wir genauer löschen
+                $c = $view->parent;
+                if ($c && $c->componentId == $dir->componentId) {
+                    $pattern = '{component_id}-view';
+                } else {
+                    while ($c && $c->componentId != $dir->componentId) $c = $c->parent;
+                    if ($c) {
+                        $pattern = '{component_id}%-view'; // Falls Directory ein parent ist, kann man mit diesem Pattern löschen, sonst nicht
+                    }
                 }
             }
-            $generators = Vps_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
-            if (isset($generators[0])) {
-                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generators[0]->getModel(), $pattern);
-            }
+            $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), $pattern);
         }
         return $ret;
     }
