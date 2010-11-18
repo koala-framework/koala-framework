@@ -12,7 +12,7 @@ abstract class Vps_Component_Cache_Meta_Abstract
     /**
      * @return Vps_Model_Abstract
      */
-    protected function _getModel($model)
+    protected static function _getModel($model)
     {
         if (!is_object($model)) {
             if (is_instance_of($model, 'Vps_Model_Abstract')) {
@@ -32,9 +32,9 @@ abstract class Vps_Component_Cache_Meta_Abstract
         return $model;
     }
 
-    protected function _getModelname($model)
+    protected static function _getModelname($model)
     {
-        $model = $this->_getModel($model);
+        $model = self::_getModel($model);
         if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
         return get_class($model);
     }
