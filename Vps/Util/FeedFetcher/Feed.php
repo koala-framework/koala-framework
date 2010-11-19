@@ -6,31 +6,86 @@ class Vps_Util_FeedFetcher_Feed
     const UPDATE_ERROR = 'error';
     const UPDATE_NOT_MODIFIED = 'notModified';
 
+    private static $_fetchProxyScripts;
+
     public static function createRequest($feedId, $url = null)
     {
+        $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load(self::getCacheId($feedId));
         if (!$url) {
-            $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load(self::getCacheId($feedId));
-            if (!$feed || !isset($feed['url']) ) { //!isset url ist f端r legacy caches
-                if (!$url) {
-                    $row = Vps_Model_Abstract::getInstance('feeds')->getRow($feedId);
-                    $url = $row->url;
-                }
-                $feed = array(
-                    'url' => $url
-                );
+            if ($feed && isset($feed['url']) ) { //isset url ist f端r legacy caches
+                $url = $feed['url'];
             }
-            $url = $feed['url'];
+        }
+        $url = self::getRequestUrl($feedId, $url);
+        return new HttpRequest($url, HTTP_METH_GET, self::getRequestOptions($feed));
+    }
+
+    /**
+     * @param array mit url, kann false sein
+     */
+    public static function getRequestUrl($feedId, $url = null)
+    {
+        if (!$url) {
+            $row = Vps_Model_Abstract::getInstance('feeds')->getRow($feedId);
+            $url = $row->url;
         }
         if (!$url) {
             throw new Vps_Exception("Unknown url");
         }
-        return new HttpRequest($url, HTTP_METH_GET, self::getRequestOptions($feedId));
+        $proxies = self::getFetchProxyScripts();
+        if ($proxies) {
+            $proxyDomains = array(
+                '#google\.[a-z]+$#',
+                '#twitter\.com$#'
+            );
+            $useProxy = false;
+            $domain = parse_url($url, PHP_URL_HOST);
+            foreach ($proxyDomains as $d) {
+                if (preg_match($d, $domain)) {
+                    $useProxy = true;
+                }
+            }
+            if ($useProxy) {
+                shuffle($proxies);
+                $url = $proxies[0]['url'].'?url='.rawurlencode($url).'&hash='.md5($url.'w3rklslfsdlj');
+            }
+        }
+        return $url;
     }
 
-    public static function getRequestOptions($feedId)
+    public static function getFetchProxyScripts()
+    {
+        if (!isset(self::$_fetchProxyScripts)) {
+            self::$_fetchProxyScripts = array();
+            $m = Vps_Model_Abstract::getInstance('fetchProxyScripts');
+            if ($m) {
+                $s = new Vps_Model_Select();
+                $s->whereEquals('active', true);
+                $s->limit(5);
+                $s->order(Vps_Model_Select::ORDER_RAND);
+                foreach (Vps_Model_Abstract::getInstance($m)->export(Vps_Model_Interface::FORMAT_ARRAY, $s) as $r) {
+                    self::$_fetchProxyScripts[] = array(
+                        'id' => $r['id'],
+                        'url' => $r['url'],
+                        'version' => $r['version'],
+                    );
+                }
+            }
+        }
+        return self::$_fetchProxyScripts;
+    }
+
+    public static function setFetchProxyScripts(array $fetchProxyScripts)
+    {
+        self::$_fetchProxyScripts = $fetchProxyScripts;
+    }
+
+    /**
+     * @param array mit etag und lastmodified, kann false sein
+     */
+    public static function getRequestOptions($feed)
     {
         $options = Vps_Http_Requestor::getInstance()->getRequestOptions();
-        $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load(self::getCacheId($feedId));
         if (isset($feed['etag'])) $options['etag'] = $feed['etag'];
         if (isset($feed['lastmodified'])) $options['lastmodified'] = $feed['lastmodified'];
         return $options;
@@ -61,7 +116,10 @@ class Vps_Util_FeedFetcher_Feed
             $status = self::UPDATE_NOT_MODIFIED;
         } else {
             $error = false;
-            $feed = self::getFeedDataFromResponse($row->id, $row->url, $response, $error);
+            $options = array(
+                'fetch_entries' => isset($row->fetch_entries) ? $row->fetch_entries : null,
+            );
+            $feed = self::getFeedDataFromResponse($row->id, $row->url, $options, $response, $error);
             if ($error) {
                 $status = self::UPDATE_ERROR;
                 if ($oldFeed = $cache->load($cacheId)) {
@@ -92,7 +150,7 @@ class Vps_Util_FeedFetcher_Feed
 
         return $feed;
     }
-    public static function getFeedDataFromResponse($feedId, $url, Vps_Http_Requestor_Response_Interface $response, &$error)
+    public static function getFeedDataFromResponse($feedId, $url, array $options, Vps_Http_Requestor_Response_Interface $response, &$error)
     {
         $error = false;
 
@@ -102,7 +160,12 @@ class Vps_Util_FeedFetcher_Feed
         $feed = array();
         $feed['url'] = $url;
         $feed['update'] = time();
-        $entriesSelect = $m->select()->limit(100);
+        $entriesSelect = $m->select();
+        if (isset($options['fetch_entries']) && $options['fetch_entries']) {
+            $entriesSelect->limit($options['fetch_entries']);
+        } else {
+            $entriesSelect->limit(100);
+        }
         try {
             if ($feedId > 40000) {
                 $m->setDefaultEncoding('utf-8');
@@ -208,6 +271,7 @@ class Vps_Util_FeedFetcher_Feed
                 $s = new Vps_Util_PubSubHubbub_Subscriber($hubUrl);
                 $s->setCallbackUrl($cbUrl.'?feedId='.$row->id);
                 $s->setVerifyToken($row->id);
+                $row->save(); //hier erstmal speichern damit schon hub_subscribed gesetzt ist und damit der callback das auch schon sieht
                 try {
                     $s->unsubscribe($row->url);
                 } catch (Exception $e) {
