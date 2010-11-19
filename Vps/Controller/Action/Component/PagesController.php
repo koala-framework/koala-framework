@@ -458,7 +458,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $config = $component->generator->getPagesControllerConfig($component);
         $actions = $config['actions'];
         $actions['move'] = $config['allowDrag'];
-        $actions['moveTo'] = $config['allowDrop'];
+        $data['moveTo'] = !!Vps_Component_Generator_Abstract::getInstances($component, array(
+            'pageGenerator' => true
+        ));
         if (in_array($action, array_keys($actions)) && !$actions[$action]) return false;
 
         // wenn ja, darf man die Komponente bearbeiten?

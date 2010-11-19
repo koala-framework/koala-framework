@@ -44,6 +44,7 @@ möglicherweise nicht kompatible Änderungen:
 - .webStandard strong/em/ol/ul/li ist jetzt im vps und sollte in webs entfernt werden
 - newsListView und eventsListView Teaser haben jetzt ein nl2br
 - showInPageTreeAdmin flag gibts nicht mehr, ist jetzt nur noch ein generatorFlag
+- Image Dimensionen: wenn width oder height 0 ist muss 'deform' verwendet werden
 Neuer Component-Cache:
 - Helper: Statt $this->ifHasContent($component) muss man if ($this->hasContent($component)) schreiben
 - partials view Helper: 2. Parameter (partialClass) wurde entfernt
