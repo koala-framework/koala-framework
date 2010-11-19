@@ -12,12 +12,6 @@ abstract class Vps_Component_Renderer_Abstract
 
     public function renderComponent($component)
     {
-        // Vorlaeufige Lösung zum Problem chained wird gerendert, aber master,
-        // die getCacheVars() hat wurde noch nicht gerendert
-        if(is_instance_of($component->componentClass, 'Vpc_Chained_Abstract_Component')) {
-            $component->chained->render();
-        }
-
         $this->_renderComponent = $component;
         $this->_stats = array(
             'rendered' => array(),
