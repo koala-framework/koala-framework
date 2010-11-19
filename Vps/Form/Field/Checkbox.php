@@ -5,12 +5,14 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('checkbox');
+        $this->setErrorText(trlVpsStatic("Please mark the checkbox"));
     }
 
     protected function _getTrlProperties()
     {
         $ret = parent::_getTrlProperties();
         $ret[] = 'boxLabel';
+        $ret[] = 'errorText';
         return $ret;
     }
 
@@ -18,7 +20,7 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
     {
         parent::_addValidators();
         if (isset($this->_validators['notEmpty'])) {
-            $this->_validators['notEmpty'] = new Vps_Validate_NotEmptyCheckbox();
+            $this->_validators['notEmpty']->setMessage($this->getErrorText());
         }
     }
 
