@@ -24,6 +24,13 @@ class Vpc_Shop_Cart_Checkout_OrdersController_SumAmount extends Vps_Data_Abstrac
         return $ret;
     }
 }
+class Vpc_Shop_Cart_Checkout_OrdersController_SumPrice extends Vps_Data_Abstract
+{
+    public function load($row)
+    {
+        return $row->getTotal();
+    }
+}
 class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('add');
@@ -86,6 +93,10 @@ class Vpc_Shop_Cart_Checkout_OrdersController extends Vps_Controller_Action_Auto
         $this->_columns->add(new Vps_Grid_Column('sum_amount', trlVps('Amt'), 30))
             ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_SumAmount())
             ->setSortable(false);
+        $this->_columns->add(new Vps_Grid_Column('sum_price', trlVps('Sum'), 50))
+            ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_SumPrice())
+            ->setSortable(false)
+            ->setRenderer('euroMoney');
         $this->_columns->add(new Vps_Grid_Column('payment', trlVps('Payment'), 100))
             ->setData(new Vpc_Shop_Cart_Checkout_OrdersController_Payment($payments))
             ->setSortable(false);

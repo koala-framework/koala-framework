@@ -340,9 +340,12 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $ret;
     }
 
-    protected function _getPlaceholder()
+    protected function _getPlaceholder($placeholder = null)
     {
         $ret = $this->_getSetting('placeholder');
+        if ($placeholder) {
+            return $this->getData()->trlStaticExecute($ret[$placeholder]);
+        }
         foreach ($ret as $k => $v) {
             $ret[$k] = $this->getData()->trlStaticExecute($v);
         }

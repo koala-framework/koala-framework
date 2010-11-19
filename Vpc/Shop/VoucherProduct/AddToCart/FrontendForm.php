@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_VoucherProduct_AddToCart_Form extends Vpc_Shop_AddToCartAbstract_Form
+class Vpc_Shop_VoucherProduct_AddToCart_FrontendForm extends Vpc_Shop_AddToCartAbstract_FrontendForm
 {
     protected function _initFields()
     {
