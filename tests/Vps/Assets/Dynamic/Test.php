@@ -55,7 +55,7 @@ class Vps_Assets_Dynamic_Test extends PHPUnit_Framework_TestCase
         $type = 'Vps_Assets_Dynamic:Test';
         $files = $dep->getAssetUrls($type, 'css', 'web', false);
         $this->assertEquals(1, count($files));
-        $f = 'all/web/'.Vps_Registry::get('trl')->getTargetLanguage().'/Vps_Assets_Dynamic:Test.css';
+        $f = 'all/web/'.Vps_Trl::getInstance()->getTargetLanguage().'/Vps_Assets_Dynamic:Test.css';
         $this->assertContains('/assets/'.$f, $files[0]);
 
         //erstes mal laden
