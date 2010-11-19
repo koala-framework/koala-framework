@@ -23,6 +23,13 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
         return $value;
     }
 
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'emptyMessage';
+        return $ret;
+    }
+
     protected function _addValidators()
     {
         parent::_addValidators();
