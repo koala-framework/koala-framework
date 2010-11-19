@@ -2,6 +2,7 @@
 class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 {
     protected $_models;
+    private $_testCache;
 
     public function __construct()
     {
@@ -60,6 +61,27 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $row = $this->_models['cache']->export(Vps_Model_Db::FORMAT_ARRAY, $select);
         if ($row) return $row[0]['content'];
         return null;
+    }
+
+    // wird nur von Vps_Component_View_Renderer->saveCache() verwendet
+    public function test(Vps_Component_Data $component)
+    {
+        if (is_null($this->_testCache)) {
+            $select = $this->getModel()->select();
+            $select->whereEquals('type', 'component');
+            $page = $component;
+            while ($page && !$page->isPage) $page = $page->parent;
+            if ($page) {
+                $select->whereEquals('page_id', $page->componentId);
+            } else {
+                $select->whereNull('page_id');
+            }
+            $this->_testCache = array();
+            foreach ($this->getModel()->getRows($select) as $row) {
+                $this->_testCache[] = $row->component_id;
+            }
+        }
+        return in_array($component->componentId, $this->_testCache);
     }
 
     public function preload(Vps_Component_Data $component)

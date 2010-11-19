@@ -44,21 +44,41 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         if (!$cacheSettings['enabled']) return false;
         $type = $this->_getType();
 
-        Vps_Component_Cache::getInstance()->save(
+        $cache = Vps_Component_Cache::getInstance();
+
+        // Chained-Komponenten brauchen zum Cache löschen den Cache der Master-
+        // Komponenten, deshalb hier schreiben
+        if ($type == 'component' &&
+            ($component->getComponent() instanceof Vpc_Chained_Abstract_Component) &&
+            !Vps_Component_Cache::getInstance()->test($component->chained)
+        ) {
+            // neuer Helper, damit _getRenderer() leer ist savePreload nicht ausgeführt wird
+            $helper = new Vps_Component_View_Helper_Component();
+            $chainedContent = $helper->render($component->chained->componentId, array());
+            $helper->saveCache($component->chained->componentId, array(), null, $chainedContent);
+        }
+
+        // Content-Cache
+        $cache->save(
             $component,
             $content,
             $type,
             $value
         );
-        foreach ($component->getComponent()->getCacheMeta() as $m) {
-            Vps_Component_Cache::getInstance()->saveMeta($component, $m);
+
+        // Preload-Cache
+        if ($this->_getRenderer()) {
+            $renderComponent = $this->_getRenderer()->getRenderComponent();
+            $renderPageId = $renderComponent->getPage() ? $renderComponent->getPage()->componentId : null;
+            $pageId = $component->getPage() ? $component->getPage()->componentId : null;
+            if ($renderPageId != $pageId) {
+                $cache->savePreload($renderPageId, $componentId, $type);
+            }
         }
 
-        $renderComponent = $this->_getRenderer()->getRenderComponent();
-        $renderPageId = $renderComponent->getPage() ? $renderComponent->getPage()->componentId : null;
-        $pageId = $component->getPage() ? $component->getPage()->componentId : null;
-        if ($renderPageId != $pageId) {
-            Vps_Component_Cache::getInstance()->savePreload($renderPageId, $componentId, $type);
+        // Meta-Cache
+        foreach ($component->getComponent()->getCacheMeta() as $m) {
+            $cache->saveMeta($component, $m);
         }
 
         return true;

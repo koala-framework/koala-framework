@@ -21,7 +21,7 @@ class Vps_Component_View extends Vps_View
     public function getHelper($name)
     {
         $ret = parent::getHelper($name);
-        if ($ret instanceof Vps_Component_View_Helper_Abstract) {
+        if ($ret instanceof Vps_Component_View_Helper_Abstract && $this->_renderer) {
             $ret->setRenderer($this->_renderer);
         }
         return $ret;
