@@ -61,7 +61,7 @@ class Vps_Assets_Dependencies
         $ret = array();
         if (!$this->_config->debug->assets->$fileType || (isset($session->$fileType) && !$session->$fileType)) {
             $v = $this->getMaxFileMTime();
-            if (!$language) $language = Zend_Registry::get('trl')->getTargetLanguage();
+            if (!$language) $language = Vps_Trl::getInstance()->getTargetLanguage();
             $ret[] = "/assets/all/$section/"
                             .($rootComponent?$rootComponent.'/':'')
                             ."$language/$assetsType.$fileType?v=$v";
