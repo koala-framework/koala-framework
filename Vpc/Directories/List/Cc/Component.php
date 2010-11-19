@@ -11,11 +11,15 @@ class Vpc_Directories_List_Cc_Component extends Vpc_Abstract_Composite_Cc_Compon
         return $ret;
     }
 
+    protected function _getChainedComponent()
+    {
+        return $this->getData()->chained;
+    }
 
     public function getItemDirectory()
     {
         return self::getChainedByMaster(
-            $this->getData()->chained->getComponent()->getItemDirectory(),
+            $this->_getChainedComponent()->getComponent()->getItemDirectory(),
             $this->getData(),
             array('ignoreVisible' => true)
         );
@@ -28,7 +32,7 @@ class Vpc_Directories_List_Cc_Component extends Vpc_Abstract_Composite_Cc_Compon
         if (is_string($itemDirectory)) {
             throw new Vps_Exception_NotYetImplemented();
         } else {
-            if (Vpc_Abstract::getSetting($this->getData()->chained->componentClass, 'useDirectorySelect')) {
+            if (Vpc_Abstract::getSetting($this->_getChainedComponent()->componentClass, 'useDirectorySelect')) {
                 $ret = $itemDirectory->getComponent()->getSelect();
             } else {
                 $ret = $itemDirectory->getGenerator('detail')
