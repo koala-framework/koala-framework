@@ -16,7 +16,7 @@ class Vps_Hlp {
     }
     
     function hlp($key) {
-        $language = Zend_Registry::get('trl')->getTargetLanguage();
+        $language = Vps_Trl::getInstance()->getTargetLanguage();
         if ($this->_xml) {
             $element = $this->_xml->xpath("/hlp/text[@key='$key']/$language");
             if ($element) {
@@ -27,7 +27,7 @@ class Vps_Hlp {
     }
 
     function hlpVps($key) {
-        $language = Zend_Registry::get('trl')->getTargetLanguage();
+        $language = Vps_Trl::getInstance()->getTargetLanguage();
         if ($this->_xml) {
             $element = $this->_xmlVps->xpath("/hlp/text[@key='$key']/$language");
             if ($element) {
