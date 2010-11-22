@@ -327,7 +327,7 @@ class Vps_Setup
 
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
-            Vps_Registry::get('trl')->setUseUserLanguage(false);
+            Vps_Trl::getInstance()->setUseUserLanguage(false);
             self::_setLocale();
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
@@ -341,6 +341,7 @@ class Vps_Setup
                 header('Location: '.$data->url);
                 exit;
             }
+
             $page = $data->getComponent();
             $page->sendContent();
 

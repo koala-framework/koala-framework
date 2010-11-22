@@ -175,7 +175,7 @@ class Vps_Component_Abstract
         self::$_cacheSettings = array();
         if (!self::$_settings) {
             $cache = new Vps_Assets_Cache(array('checkComponentSettings' => false));
-            $cacheId = 'componentSettings'.Vps_Registry::get('trl')->getTargetLanguage()
+            $cacheId = 'componentSettings'.Vps_Trl::getInstance()->getTargetLanguage()
                                 .'_'.Vps_Component_Data_Root::getComponentClass();
             self::$_settings = $cache->load($cacheId);
             if (!self::$_settings) {
