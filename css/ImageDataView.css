@@ -22,6 +22,10 @@ div.imageGrid .thumb-wrap div.label {
     font:11px tahoma,verdana,helvetica;
 }
 
+.big-wrap div.label {
+    font-weight: bold; margin-bottom: 5px; font-size: 13px; color: #15428B;
+}
+
 div.imageGrid .x-view-over {
     border:1px solid #dddddd;
     background: #efefef url(/assets/ext/resources/images/default/grid/row-over.gif) repeat-x left top;
