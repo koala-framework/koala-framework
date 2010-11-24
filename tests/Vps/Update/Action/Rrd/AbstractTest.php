@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Update_Action_Rrd_AbstractTest extends PHPUnit_Framework_TestCase
+abstract class Vps_Update_Action_Rrd_AbstractTest extends Vps_Test_TestCase
 {
     public function tearDown()
     {

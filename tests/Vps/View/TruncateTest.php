@@ -2,7 +2,7 @@
 /**
  * @group Helper_Truncate
  */
-class Vps_View_TruncateTest extends PHPUnit_Framework_TestCase
+class Vps_View_TruncateTest extends Vps_Test_TestCase
 {
     public function testUtf8()
     {

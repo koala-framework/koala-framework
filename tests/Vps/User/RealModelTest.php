@@ -5,20 +5,21 @@
  * @group Model_User
  * @group Real_Model_User
  */
-class Vps_User_RealModelTest extends PHPUnit_Framework_TestCase
+class Vps_User_RealModelTest extends Vps_Test_TestCase
 {
     private static $_lastMailNumber = 0;
 
     public function setUp()
     {
+        parent::setUp();
         Vps_Registry::set('db', Vps_Registry::get('dao')->getDb());
-        Vps_Model_Abstract::clearInstances();
     }
 
     public function tearDown()
     {
         $this->assertFalse(Vps_User_Model::isLockedCreateUser());
         Vps_Registry::set('db', Vps_Test::getTestDb());
+        parent::tearDown();
     }
 
     private function _getNewMailAddress()

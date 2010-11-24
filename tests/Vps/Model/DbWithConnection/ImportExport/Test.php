@@ -5,13 +5,14 @@
  * @group Model_DbWithConnection
  * @group Model_Db_Import_Export
  */
-class Vps_Model_DbWithConnection_ImportExport_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_DbWithConnection_ImportExport_Test extends Vps_Test_TestCase
 {
     private $_model;
     private $_tableName;
 
     public function setUp()
     {
+        parent::setUp();
         $this->_tableName = 'dbexport'.uniqid();
 
         $this->_model = new Vps_Model_DbWithConnection_ImportExport_Model(array(

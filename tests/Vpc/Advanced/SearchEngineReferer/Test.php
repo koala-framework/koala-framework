@@ -2,22 +2,11 @@
 /**
  * @group Vpc_Advanced_Referer
  */
-class Vpc_Advanced_SearchEngineReferer_Test extends PHPUnit_Framework_TestCase
+class Vpc_Advanced_SearchEngineReferer_Test extends Vpc_TestAbstract
 {
-    private $_root;
-    private $_cache;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Advanced_SearchEngineReferer_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
-
-        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
-        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
-        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
-        Vps_Component_Cache::getInstance()->emptyPreload();
-        Vps_Component_RowObserver::getInstance()->setSkipFnF(false);
-        Vps_Component_RowObserver::getInstance()->clear();
+        parent::setUp('Vpc_Advanced_SearchEngineReferer_Root');
     }
 
     public function tearDown()

@@ -2,7 +2,7 @@
 /**
  * @group Update_Action
  */
-class Vps_Update_Action_Db_AddFieldTest extends PHPUnit_Framework_TestCase
+class Vps_Update_Action_Db_AddFieldTest extends Vps_Test_TestCase
 {
     public function testAddField()
     {
