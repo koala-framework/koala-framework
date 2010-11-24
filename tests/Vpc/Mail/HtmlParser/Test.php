@@ -2,7 +2,7 @@
 /**
  * @group MailHtmlParser
  */
-class Vpc_Mail_HtmlParser_Test extends PHPUnit_Framework_TestCase
+class Vpc_Mail_HtmlParser_Test extends Vps_Test_TestCase
 {
     public function testIt()
     {

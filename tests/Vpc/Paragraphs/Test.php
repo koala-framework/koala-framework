@@ -48,19 +48,19 @@ class Vpc_Paragraphs_Test extends Vpc_TestAbstract
         $this->assertEquals(0, $cacheModel->getRows()->count());
         $p->render();
         $this->assertNotNull($cacheModel->getRow('root'));
-        $this->assertEquals(3, $cacheModel->getRows()->count());
+        $this->assertEquals(2, $cacheModel->getRows()->count());
 
         // Row, die nicht zum aktuellen Paragraphs gehört, speichern, Cache darf nicht gelöscht werden
         $p->getComponent()->getChildModel()->getRow(11)->save();
         $this->_process();
         $this->assertNotNull($cacheModel->getRow('root'));
-        $this->assertEquals(3, $cacheModel->getRows()->count());
+        $this->assertEquals(2, $cacheModel->getRows()->count());
 
         // Eigene Row speichern, Cache muss gelöscht werden
         $p->getComponent()->getChildModel()->getRow(2)->save();
         $this->_process();
         $this->assertNull($cacheModel->getRow('root'));
-        $this->assertEquals(2, $cacheModel->getRows()->count());
+        $this->assertEquals(1, $cacheModel->getRows()->count());
     }
 
     public function testCacheVars()

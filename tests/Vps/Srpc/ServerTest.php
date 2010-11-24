@@ -3,12 +3,13 @@
  * @group Service
  * @group Srpc_Server
  */
-class Vps_Srpc_ServerTest extends PHPUnit_Framework_TestCase
+class Vps_Srpc_ServerTest extends Vps_Test_TestCase
 {
     private $_client;
 
     public function setUp()
     {
+        parent::setUp();
         $this->_client = $this->getMock('Vps_Srpc_Client', array('_performRequest'));
     }
 
