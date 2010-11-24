@@ -10,7 +10,11 @@ class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
     public function getExtConfig()
     {
         $ret = parent::getExtConfig();
-        $ret['items']['idTemplate'] = 'news_{0}-content';
+        $generators = Vpc_Abstract::getSetting($this->_class, 'generators');
+        if (isset($generators['detail']['dbIdShortcut'])) {
+            $ret['items']['idTemplate'] = $generators['detail']['dbIdShortcut'] . '{0}-content';
+        }
+
         return $ret;
     }
 

@@ -53,7 +53,7 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
     public function setName($name)
     {
         $this->fields->setFormName($name); //damit prefixName der Felder nachträglich angepasst wird
-        $this->setProperty('name', $name);
+        parent::setName($name);
     }
 
     public function getId()

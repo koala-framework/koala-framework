@@ -2,7 +2,7 @@ Ext.namespace('Vps.Component.FrontendEditing');
 Vps.Component.FrontendEditing.Index = function(renderTo, config)
 {
     this.init();    
-}
+};
 
 Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
 {
@@ -23,7 +23,7 @@ Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
                     handler: this.showEditing,
                     params: { container: el, obj: obj },
                     scope: this
-                })
+                });
             }
         }
     },
@@ -38,7 +38,7 @@ Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
         config = {
             controllerUrl: '/admin/component/edit/' + cls + '/' + id,
             caller : this
-        }
+        };
         component = new r.params.obj(el, config);
     },
     
@@ -59,4 +59,4 @@ Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
         });
     }
     
-})
+});

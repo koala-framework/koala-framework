@@ -11,7 +11,7 @@ Vps.Auto.Filter.ButtonGroup = function(config)
 	        pressed: cfg.pressed,
 	        tooltip: cfg.tooltip,
 	        enableToggle: true
-		})
+		});
 	    this.toggleButtons[i].on('toggle', function(button, pressed) {
 			if (pressed) {
 	            for (var g in this.toggleButtons) {

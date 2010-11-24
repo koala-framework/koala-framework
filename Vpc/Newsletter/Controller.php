@@ -49,7 +49,7 @@ class Vpc_Newsletter_Controller extends Vpc_Directories_Item_Directory_Controlle
             $newDetailRow->save();
 
             $mailRow = $newDetail->getChildComponent('-mail')->getComponent()->getRow();
-            $mailRow->subject = trlVps('Copy').': '.$mailRow->subject;
+            $mailRow->subject = trlVps('Copy of').' '.$mailRow->subject;
             $mailRow->save();
         }
     }

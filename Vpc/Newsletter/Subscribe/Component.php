@@ -12,7 +12,7 @@ class Vpc_Newsletter_Subscribe_Component extends Vpc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Newsletter subscribing');
-        $ret['placeholder']['submitButton'] = trlVps('Subscribe the newsletter');
+        $ret['placeholder']['submitButton'] = trlVpsStatic('Subscribe the newsletter');
         $ret['subscribeType'] = self::CONFIRM_MAIL_ONLY;
         $ret['flags']['hasResources'] = true;
 

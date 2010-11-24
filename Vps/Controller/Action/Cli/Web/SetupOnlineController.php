@@ -37,7 +37,7 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
         $cmd = "echo ".escapeshellarg($sql)." | mysql";
         $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("$cmd");
         $ret = null;
-        if ($this->_getParam('debug')) echo "$cmd\n";
+        /*if ($this->_getParam('debug'))*/ echo "$cmd\n";
         system($cmd, $ret);
         return !$ret;
     }
@@ -95,7 +95,7 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
         foreach ($servers as $server) {
             $config = Vps_Config_Web::getInstance($server);
 
-            if ($server != 'vivid-test-server') {
+            if ($server != 'vivid-test-server' && in_array('web', $config->server->databases->toArray())) {
                 if (!isset($dbPassword)) {
                     $filter = new Vps_Filter_Random(16);
                     $dbPassword = $filter->filter('');
@@ -120,35 +120,27 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
                             $this->_execSql($config, "DROP USER '$dbUser'@'localhost'");
                             $createSql = "CREATE USER '$dbUser'@'localhost' IDENTIFIED BY '$dbPassword'";
                             if (!$this->_execSql($config, $createSql)) {
-                                throw new Vps_ClientException("Kann Benutzer nicht anlegen");
+                                throw new Vps_Exception_Client("Kann Benutzer nicht anlegen");
                             }
                         } else if ($input == 'p') {
                             $stdin = fopen('php://stdin', 'r');
                             echo "enter password: ";
-                            $dbPassword = trim(strtolower(fgets($stdin, 128)));
+                            $dbPassword = trim(fgets($stdin, 128));
                             fclose($stdin);
                         } else {
-                            throw new Vps_ClientException("unbekannte option");
+                            throw new Vps_Exception_Client("unbekannte option");
                         }
                     }
 
                     $sql = "GRANT FILE ON *.* TO '$dbUser'@'localhost'";
-                    $cmd = "echo ".escapeshellarg($sql)." | mysql";
-                    $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("$cmd");
-                    if ($this->_getParam('debug')) echo "$cmd\n";
-                    system($cmd, $ret);
-                    if ($ret) {
-                        throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
+                    if (!$this->_execSql($config, $sql)) {
+                        throw new Vps_Exception_Client("Konnte berechtigungen nicht setzen");
                     }
 
                     $dbName = Vps_Registry::get('config')->application->id;
                     $sql = "GRANT ALL PRIVILEGES ON `$dbName%` . * TO '$dbUser'@'localhost'";
-                    $cmd = "echo ".escapeshellarg($sql)." | mysql";
-                    $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("$cmd");
-                    if ($this->_getParam('debug')) echo "$cmd\n";
-                    system($cmd, $ret);
-                    if ($ret) {
-                        throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
+                    if (!$this->_execSql($config, $sql)) {
+                        throw new Vps_Exception_Client("Konnte berechtigungen nicht setzen");
                     }
                 }
             }
@@ -181,33 +173,39 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
                 } catch (Exception $e) {}
             }
 
-            echo "\n$server: [5/8] create config.db.ini\n";
-            $dbConfig = array();
-            $dbConfig[] = "web.host = localhost";
-            if ($server == 'vivid-test-server') {
-                $dbConfig[] = "web.username = root";
-                $dbConfig[] = "web.password = ";
+            if (!in_array('web', $config->server->databases->toArray())) {
+                echo "(uebersprungen) kein server.databases[] = web eintrag in config\n";
             } else {
-                $dbConfig[] = "web.username = $dbUser";
-                $dbConfig[] = "web.password = $dbPassword";
+                echo "\n$server: [5/8] create config.db.ini\n";
+                $dbConfig = array();
+                $dbConfig[] = "web.host = localhost";
+                if ($server == 'vivid-test-server') {
+                    $dbConfig[] = "web.username = root";
+                    $dbConfig[] = "web.password = ";
+                } else {
+                    $dbConfig[] = "web.username = $dbUser";
+                    $dbConfig[] = "web.password = $dbPassword";
+                }
+                $dbName = Vps_Registry::get('config')->application->id;
+                if ($server != 'production' && $server != 'vivid-test-server') {
+                    $dbName .= "_$server";
+                }
+                $dbConfig[] = "web.dbname = $dbName";
+                $cmd = "echo \"[database]\" > application/config.db.ini";
+                foreach ($dbConfig as $line) {
+                    $cmd .= " && echo \"$line\" >> application/config.db.ini";
+                }
+                $this->_systemSshVps($config, $cmd);
             }
-            $dbName = Vps_Registry::get('config')->application->id;
-            if ($server != 'production' && $server != 'vivid-test-server') {
-                $dbName .= "_$server";
-            }
-            $dbConfig[] = "web.dbname = $dbName";
-            $cmd = "echo \"[database]\" > application/config.db.ini";
-            foreach ($dbConfig as $line) {
-                $cmd .= " && echo \"$line\" >> application/config.db.ini";
-            }
-            $this->_systemSshVps($config, $cmd);
 
             echo "\n$server: [6/8] set permissions\n";
             $this->_systemSshVps($config, "chmod a+w application/cache/*");
             $this->_systemSshVps($config, "chmod a+w application/temp");
             $this->_systemSshVps($config, "chmod a+w application/log");
             $this->_systemSshVps($config, "chmod a+w application/log/*");
-            $this->_systemSshVps($config, "chmod a+w $config->uploads");
+            if ($config->uploads) {
+                $this->_systemSshVps($config, "chmod a+w $config->uploads");
+            }
 
             echo "\n$server: [7/8] import\n";
             $cmd = "php bootstrap.php import --server=".Vps_Setup::getConfigSection();
@@ -215,9 +213,13 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
             $this->_systemSshVps($config, $cmd);
 
             echo "\n$server: [8/8] create-users\n";
-            $cmd = "php bootstrap.php create-users";
-            if (!$this->_getParam('debug')) $cmd .= " --debug";
-            $this->_systemSshVps($config, $cmd);
+            if (!in_array('vps', $config->server->updateTags->toArray())) {
+                echo "(uebersprungen) kein vps updateTag in config\n";
+            } else {
+                $cmd = "php bootstrap.php create-users";
+                if (!$this->_getParam('debug')) $cmd .= " --debug";
+                $this->_systemSshVps($config, $cmd);
+            }
         }
 
         exit(0);

@@ -11,8 +11,6 @@ class Vpc_NewsletterCategory_Component extends Vpc_Newsletter_Component
         $ret['generators']['editSubscriber']['component'] =
             'Vpc_NewsletterCategory_EditSubscriber_Component';
 
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/NewsletterCategory/Plugin.js';
-
         return $ret;
     }
 }

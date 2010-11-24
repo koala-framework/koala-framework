@@ -113,6 +113,7 @@ class Vps_Setup
         error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
         mb_internal_encoding('UTF-8');
+        iconv_set_encoding('internal_encoding', 'utf-8');
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
@@ -210,6 +211,7 @@ class Vps_Setup
             && isset($_SERVER['REDIRECT_URL'])
             && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
+            && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
@@ -311,7 +313,7 @@ class Vps_Setup
 
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
-            Vps_Registry::get('trl')->setUseUserLanguage(false);
+            Vps_Trl::getInstance()->setUseUserLanguage(false);
             self::_setLocale();
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
@@ -321,12 +323,12 @@ class Vps_Setup
                throw new Vps_Exception_NotFound();
             }
             $root->setCurrentPage($data);
-            if ($data->url != $_SERVER['REDIRECT_URL']) {
+            if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
                 header('Location: '.$data->url);
                 exit;
             }
             // hickedy-hack: Für Formular Validierung. Im 1.10 ist das bereits schön gelöst
-            Vps_Registry::get('trl')->overrideTargetLanguage($data->getLanguage());
+            Vps_Trl::getInstance()->overrideTargetLanguage($data->getLanguage());
             $page = $data->getComponent();
             $page->sendContent();
 

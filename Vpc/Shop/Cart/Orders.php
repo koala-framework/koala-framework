@@ -10,7 +10,6 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
     protected function _init()
     {
         parent::_init();
-        $this->_exprs['sum_amount'] = new Vps_Model_Select_Expr_Child_Sum('Products', 'amount');
         $this->_exprs['order_number'] = new Vps_Model_Select_Expr_SumFields(
             array('number', 11000)
         );
@@ -55,6 +54,13 @@ class Vpc_Shop_Cart_Orders extends Vps_Model_Db
         }
         $session = new Zend_Session_Namespace('vpcShopCart');
         return $session->orderId;
+    }
+
+    public static function setCartOrderId($cartOrderId)
+    {
+        self::$_cartOrderId = $cartOrderId;
+        $session = new Zend_Session_Namespace('vpcShopCart');
+        $session->orderId = $cartOrderId;
     }
 
     public static function setOverriddenCartOrderId($id)
