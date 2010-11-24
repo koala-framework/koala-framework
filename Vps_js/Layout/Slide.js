@@ -24,6 +24,6 @@ Vps.Layout.Slide = Ext.extend(Ext.layout.CardLayout, {
             this.activeItem = item;
             this.layout();
         }
-    },
+    }
 });
 Ext.Container.LAYOUTS['slide'] = Vps.Layout.Slide;

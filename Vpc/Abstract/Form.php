@@ -82,6 +82,7 @@ class Vpc_Abstract_Form extends Vps_Form
         if (substr($id, 0, 1)=='-' || substr($id, 0, 1)=='_') {
             $id = substr($id, 1);
         }
+        if (!$name) $name = $id;
         $idTemplate = '{0}';
         $childComponentClass = null;
 

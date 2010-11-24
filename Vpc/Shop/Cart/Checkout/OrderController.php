@@ -7,8 +7,7 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
 
     protected function _initFields()
     {
-        $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Order')));
-        $fs->add(new Vps_Form_Field_Select('origin', trlVps('Origin')))
+        $this->_form->add(new Vps_Form_Field_Select('origin', trlVps('Origin')))
             ->setValues(array(
                 //TODO: im web einstellbar machen, pool oder so
                 'internet' => trlVps('Internet'),
@@ -23,24 +22,33 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
         foreach ($cc as $k=>$c) {
             $payments[$k] = Vpc_Abstract::getSetting($c, 'componentName');
         }
-        $fs->add(new Vps_Form_Field_Select('payment', trlVps('Payment')))
+        $this->_form->add(new Vps_Form_Field_Select('payment', trlVps('Payment')))
             ->setValues($payments)
             ->setAllowBlank(false);
 
-        $fs->add(new Vps_Form_Field_ShowField('order_number', trlVps('Order Nr')));
-        $fs->add(new Vps_Form_Field_ShowField('invoice_number', trlVps('Invoice Nr')));
-        $fs->add(new Vps_Form_Field_ShowField('customer_number', trlVps('Customer Nr')));
-        $fs->add(new Vps_Form_Field_DateField('invoice_date', trlVps('Invoice Date')));
-        $fs->add(new Vps_Form_Field_DateField('payed', trlVps('Payed')));
-        $fs->add(new Vps_Form_Field_ShowField('shipped', trlVps('Shipped')))
+        $cols = $this->_form->add(new Vps_Form_Container_Columns());
+        $col = $cols->add();
+        $col->add(new Vps_Form_Field_ShowField('order_number', trlVps('Order Nr')));
+
+        $col = $cols->add();
+        $col->add(new Vps_Form_Field_ShowField('customer_number', trlVps('Customer Nr')));
+
+        $this->_form->add(new Vps_Form_Field_ShowField('invoice_number', trlVps('Invoice Nr')));
+
+        $this->_form->add(new Vps_Form_Field_DateField('invoice_date', trlVps('Invoice Date')));
+        $this->_form->add(new Vps_Form_Field_DateField('payed', trlVps('Payed')));
+        $this->_form->add(new Vps_Form_Field_ShowField('shipped', trlVps('Shipped')))
             ->setTpl('{value:localizedDate}');
-        $fs->add(new Vps_Form_Field_Checkbox('canceled', trlVps('Canceled')));
+        $this->_form->add(new Vps_Form_Field_Checkbox('canceled', trlVps('Canceled')));
 
         $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Customer')));
 
+
         $formComponent = Vpc_Abstract::getChildComponentClass($this->_getParam('class'), 'child', 'form');
-        $customerForm = $fs->add(Vpc_Abstract_Form::createComponentForm($formComponent, 'form'));
+        $formClass = Vpc_Admin::getComponentClass($formComponent, 'FrontendForm');
+        $customerForm = new $formClass('form', $formComponent);
         $customerForm->setIdTemplate('{0}');
+        $fs->add($customerForm);
         unset($customerForm->fields['payment']);
         foreach ($customerForm->fields as $f) {
             if ($f->getHideFieldInBackend()) {
@@ -48,6 +56,18 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
             }
         }
         $customerForm->fields['email']->setAllowBlank(true);
+
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            $g = Vpc_Abstract::getSetting($c, 'generators');
+            if (isset($g['checkout']) && $g['checkout']['component'] == $this->_getParam('class')) {
+                foreach (Vpc_Abstract::getSetting($c, 'plugins') as $p) {
+                    if (is_instance_of($p, 'Vpc_Shop_Cart_Plugins_Interface')) {
+                        $p = new $p();
+                        $p->alterBackendOrderForm($this->_form);
+                    }
+                }
+            }
+        }
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
@@ -55,5 +75,8 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
         parent::_beforeInsert($row);
         $row->status = 'ordered';
         $row->checkout_component_id = $this->_getParam('componentId');
+        $row->cart_component_class = Vps_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'))
+            ->parent->componentClass;
     }
 }

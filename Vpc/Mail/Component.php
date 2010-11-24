@@ -17,9 +17,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
             'name' => 'r'
         );
 
+        $sender = Vps_Mail::getSenderFromConfig();
         $ret['default'] = array(
-            'from_email' => 'el@vivid-planet.com', //TODO: dieser standardwert macht selten sinn
-            'from_name' => 'Erich Lechenauer',
+            'from_email' => $sender['address'],
+            'from_name' => $sender['name']
         );
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/PreviewWindow.js';
@@ -172,14 +173,14 @@ class Vpc_Mail_Component extends Vpc_Abstract
                 );
                 $politeM = $this->getData()->trlVps('Dear Mr. {0} {1}', $replace);
                 $politeF = $this->getData()->trlVps('Dear Mrs. {0} {1}', $replace);
-                if ($recipient->getMailGender() == 'male') {
+                if ($recipient->getMailGender() == 'male' && $recipient->getMailLastname()) {
                     $t = $this->getData()->trlVps('Dear Mr. {0} {1}', $replace);
-                } else if ($recipient->getMailGender() == 'female') {
+                } else if ($recipient->getMailGender() == 'female' && $recipient->getMailLastname()) {
                     $t = $this->getData()->trlVps('Dear Mrs. {0} {1}', $replace);
                 } else {
-                    $t = $this->getData()->trlVps('Dear {0} {1}', $replace);
+                    $t = $this->getData()->trlVps('Dear Sir or Madam');
                 }
-                $ret['salutation_polite'] = str_replace('  ', ' ', $t);
+                $ret['salutation_polite'] = trim(str_replace('  ', ' ', $t));
 
                 if ($recipient->getMailGender() == 'male') {
                     $t = $this->getData()->trlVps('Mr. {0}', $recipient->getMailTitle());
@@ -188,7 +189,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
                 } else {
                     $t = $recipient->getMailTitle();
                 }
-                $ret['salutation_title'] = str_replace('  ', ' ', $t);
+                $ret['salutation_title'] = trim(str_replace('  ', ' ', $t));
 
                 $ret['title'] = $recipient->getMailTitle();
             }
@@ -207,8 +208,12 @@ class Vpc_Mail_Component extends Vpc_Abstract
                         $recipient->getMailFirstname(),
                         $recipient->getMailLastname()
                     );
-                    $ret['salutation_polite_notitle'] = $this->getData()->trlVps('Dear {0} {1}', $replace);
-                    $ret['salutation_hello'] = $this->getData()->trlVps('Hello {0} {1}', $replace);
+                    if ($recipient->getMailFirstname() && $recipient->getMailLastname()) {
+                        $ret['salutation_polite_notitle'] = trim($this->getData()->trlVps('Dear {0} {1}', $replace));
+                    } else {
+                        $ret['salutation_polite_notitle'] = $this->getData()->trlVps('Dear Sir or Madam');
+                    }
+                    $ret['salutation_hello'] = trim($this->getData()->trlVps('Hello {0} {1}', $replace));
                 }
             }
         }

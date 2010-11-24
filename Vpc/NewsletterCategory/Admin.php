@@ -1,9 +1,13 @@
 <?php
 class Vpc_NewsletterCategory_Admin extends Vpc_Newsletter_Admin
-    implements Vpc_Directories_Item_Directory_PluginAdminInterface
 {
     public function addResources(Vps_Acl $acl)
     {
+        if (!$acl->has('vpc_newsletter')) {
+            $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_newsletter',
+                array('text'=>trlVps('Newsletter'), 'icon'=>'email_open_image.png')), 'vps_component_root');
+        }
+
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         $c = $components[0];
@@ -18,18 +22,5 @@ class Vpc_NewsletterCategory_Admin extends Vpc_Newsletter_Admin
             'vpc_newsletter'
         );
         parent::addResources($acl);
-    }
-
-    public function getPluginExtConfig()
-    {
-        $ret = array();
-        $ret['pluginClass'] = 'Vpc.NewsletterCategory.Plugin';
-        $ret['controllerUrl'] = $this->getControllerUrl('SubscribeCategories');
-        return $ret;
-    }
-
-    protected function _getPluginAdmins()
-    {
-        return array($this);
     }
 }

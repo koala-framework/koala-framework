@@ -36,7 +36,7 @@ class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
         return $ret;
     }
 
-    protected function _getCacheModel()
+    public function getCacheVars()
     {
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
         if (is_string($dir)) {
@@ -45,7 +45,7 @@ class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
         } else {
             $generator = $dir->getGenerator('detail');
         }
-        return $generator->getModel();
+        return $generator->getCacheVars($dir instanceof Vps_Component_Data ? $dir : null);
     }
 
     protected function _getRssEntryByItem(Vps_Component_Data $item)

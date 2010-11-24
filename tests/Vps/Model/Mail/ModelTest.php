@@ -88,10 +88,7 @@ class Vps_Model_Mail_ModelTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('bar', $row->foo);
         $this->assertEquals('Test subject', $row->subject);
-        $this->assertEquals(array(
-            'subject' => 'Test subject',
-            'foo' => 'bar'
-        ), Vps_Model_Mail_MockMail::$data);
+        $this->assertEquals('Test subject', Vps_Model_Mail_MockMail::$data['subject']);
 
         $this->assertEquals(2, count(Vps_Model_Mail_MockMail::$addToCalled));
         $this->assertEquals(array(
