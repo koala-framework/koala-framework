@@ -3,12 +3,11 @@
  * @group Vpc_Basic_Text
  * @group StylesModel
  */
-class Vpc_Basic_Text_StylesTest extends PHPUnit_Framework_TestCase
+class Vpc_Basic_Text_StylesTest extends Vpc_TestAbstract
 {
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_Text_Root');
-        Vpc_Basic_Text_StylesModel::removeCache();
+        parent::setUp('Vpc_Basic_Text_Root');
     }
 
     public function tearDown()

@@ -1,5 +1,5 @@
 <?php
-class Vps_Filter_Row_NumberizeTest extends PHPUnit_Framework_TestCase
+class Vps_Filter_Row_NumberizeTest extends Vps_Test_TestCase
 {
     public function testNumberize()
     {

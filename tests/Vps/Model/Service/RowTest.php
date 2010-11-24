@@ -3,13 +3,14 @@
  * @group Service
  * @group Model_Service
  */
-class Vps_Model_Service_RowTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Service_RowTest extends Vps_Test_TestCase
 {
     private $_client;
     private $_multisaveRow;
 
     public function setUp()
     {
+        parent::setUp();
         $this->_client = $this->getMock('Vps_Srpc_Client',
             array('rowSave', 'rowDelete', 'getPrimaryKey', 'getColumns'),
             array(array('serverUrl' => 'invalid'.uniqid())), '', true

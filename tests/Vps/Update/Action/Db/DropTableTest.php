@@ -2,7 +2,7 @@
 /**
  * @group Update_Action
  */
-class Vps_Update_Action_Db_DropTableTest extends PHPUnit_Framework_TestCase
+class Vps_Update_Action_Db_DropTableTest extends Vps_Test_TestCase
 {
     public function testDropTable()
     {

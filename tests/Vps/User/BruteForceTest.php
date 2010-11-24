@@ -7,7 +7,7 @@
  * @group UserBruteForce
  * @group reallySlow
  */
-class Vps_User_BruteForceTest extends PHPUnit_Framework_TestCase
+class Vps_User_BruteForceTest extends Vps_Test_TestCase
 {
     /**
      * Wenn ein User erstellt wird kann passieren dass ein anderer php prozess

@@ -2,7 +2,7 @@
 /**
  * @group ChildRows
  */
-class Vps_Model_ChildRows_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_ChildRows_Test extends Vps_Test_TestCase
 {
     public function testChildRows()
     {
