@@ -2,7 +2,7 @@
 /**
  * @group Component_Output_NoCache
  */
-class Vps_Component_Output_NoCacheTest extends PHPUnit_Framework_TestCase
+class Vps_Component_Output_NoCacheTest extends Vps_Test_TestCase
 {
     public function testMaster()
     {

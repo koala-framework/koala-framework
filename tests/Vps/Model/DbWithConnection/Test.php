@@ -6,6 +6,7 @@
  */
 class Vps_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
 {
+    protected $backupStaticAttributes = false;
     private $_tableName;
     public function setUp()
     {
