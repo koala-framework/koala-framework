@@ -74,8 +74,11 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
         $ret = $mimeType;
         if (!$mimeType || $mimeType == 'application/octet-stream') {
             if (function_exists('finfo_open')) {
-                //für andere server muss dieser pfad vielleicht einstellbar gemacht werden
-                $finfo = new finfo(FILEINFO_MIME, '/usr/share/file/magic');
+                if (is_file('/usr/share/file/magic')) {
+                    $finfo = new finfo(FILEINFO_MIME, '/usr/share/file/magic');
+                } else {
+                    $finfo = new finfo(FILEINFO_MIME);
+                }
                 $ret = $finfo->buffer($contents);
             } else {
                 throw new Vps_Exception("Can't autodetect mimetype, install FileInfo extension");
