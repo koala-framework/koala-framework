@@ -51,10 +51,9 @@ class Vpc_FormDynamic_Basic_SeleniumTest extends Vps_Test_SeleniumTestCase
     {
         //required
         $this->openVpc('/form2');
-        $this->markTestIncomplete('file ist noch nicht fertig implementiert');
         $this->clickAndWait('css=button');
         $this->assertTextPresent('Required: Please fill out');
-        $this->assertElementPresent('css=.vpsFieldError #form_root_form-paragraphs-8');
+        $this->assertElementPresent('css=.vpsFieldError #form_root_form2-paragraphs-8');
     }
 
     public function testAdmin()
