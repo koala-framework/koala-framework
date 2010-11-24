@@ -21,7 +21,8 @@ class Vps_Model_Mongo_RunTempMongoController extends Vps_Controller_Action
         declare(ticks = 1);
         pcntl_signal(SIGTERM, array($this, "sig_handler"));
 
-        $mongoDir = "/home/niko/mongodb-linux-i686-1.6.1"; //TODO, obviously
+        $mongoDir = "/usr";
+
         $debugOutput = true;
 
         $port = $this->_getParam('port');
