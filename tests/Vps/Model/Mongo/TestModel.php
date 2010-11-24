@@ -8,7 +8,7 @@ class Vps_Model_Mongo_TestModel extends Vps_Model_Mongo
     {
         $debugOutput = false;
 
-        $mongoDir = "/home/niko/mongodb-linux-i686-1.6.1"; //TODO, obviously
+        $mongoDir = "/usr";
         if (!file_exists($mongoDir.'/bin/mongod')) {
             throw new PHPUnit_Framework_SkippedTestError('mongo daemon not found');
         }
