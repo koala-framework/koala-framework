@@ -5,6 +5,7 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
     private $_count = 0;
     private $_lastQuery;
     private $_longestQuery = null;
+    private $_sumTime = 0;
     protected $_logger = null;
 
     public function __construct($enable)
@@ -102,6 +103,8 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
                     $this->_logger->debug(print_r($this->_lastQuery->getQueryParams(), true));
                 }
                 $this->_logger->debug($this->_lastQuery->getElapsedSecs());
+                $this->_sumTime += $this->_lastQuery->getElapsedSecs();
+                $this->_logger->debug('Sum: '.$this->_sumTime);
             }
 
             $d = array();
