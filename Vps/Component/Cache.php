@@ -31,6 +31,11 @@ class Vps_Component_Cache
         return self::$_instance;
     }
 
+    public static function clearInstance()
+    {
+        self::$_instance = null;
+    }
+
     public function getMetaModel()
     {
         if (!$this->_metaModel) {
@@ -109,7 +114,7 @@ class Vps_Component_Cache
 
     public function saveMeta($model, $id, $value, $type = self::META_CACHE_ID, $field = '')
     {
-        if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
+        if (is_object($model) && get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
         if ($model instanceof Vps_Model_Abstract) $model = $model;
         if (!$type) $type = self::META_CACHE_ID;
         if (!is_string($model)) $model = get_class($model);

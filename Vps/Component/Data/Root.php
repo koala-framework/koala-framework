@@ -64,6 +64,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public static function reset($resetCache = true)
     {
         self::$_instance = null;
+        Vps_Component_Generator_Abstract::clearInstances();
+        Vps_Component_Abstract::clearModelInstances();
         if ($resetCache) Vps_Component_Abstract::resetSettingsCache();
     }
 
