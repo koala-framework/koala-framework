@@ -28,7 +28,7 @@ class Vpc_Shop_AddToCart_OrderProductData extends Vpc_Shop_AddToCartAbstract_Ord
         return $ret;
     }
 
-    public function alterBackendOrderForm(Vpc_Shop_AddToCartAbstract_Form $form)
+    public function alterBackendOrderForm(Vps_Form $form)
     {
         $m = Vps_Model_Abstract::getInstance('Vpc_Shop_Products');
         $s = $m->select();
