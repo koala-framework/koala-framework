@@ -17,6 +17,12 @@ Vps.Form.RadioGroup = Ext.extend(Ext.form.RadioGroup, {
             }, this);
         }, this);
     },
+    isDirty: function() {
+        if(this.disabled || !this.rendered) {
+            return false;
+        }
+        return String(this.getValue()) !== String(this.originalValue);
+    },
     getValue: function() {
         if (!this.rendered) {
             return this.value;
