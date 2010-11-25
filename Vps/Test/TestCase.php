@@ -1,6 +1,29 @@
 <?php
 class Vps_Test_TestCase extends PHPUnit_Framework_TestCase
 {
+    protected $backupStaticAttributes = false;
+
+    public function setUp()
+    {
+        Vps_Component_Data_Root::setComponentClass(false);
+        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
+        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
+        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
+        Vps_Component_ModelObserver::getInstance()->clear();
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
+        Vps_Component_ModelObserver::getInstance()->setDisableCache(false);
+        Vps_Media::getOutputCache()->clean();
+    }
+
+    public function tearDown()
+    {
+        Vps_Component_ModelObserver::getInstance()->clear();
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
+        Vps_Component_Data_Root::reset();
+        Vps_Component_Cache::clearInstance();
+        Vps_Model_Abstract::clearInstances();
+    }
+
     public static function assertValidHtml($uri)
     {
         if (!preg_match('#^[a-z]+://#', $uri)) {
