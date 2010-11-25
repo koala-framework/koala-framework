@@ -24,14 +24,6 @@ class Vps_Component_ModelObserver_Test extends Vpc_TestAbstract
         ));
     }
 
-    public function tearDown()
-    {
-        Vps_Component_ModelObserver::getInstance()->clear();
-        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
-        $this->_observer->setDisableCache(false);
-        parent::tearDown();
-    }
-
     public function testAddRow()
     {
         $this->assertEquals(array(), $this->_observer->process());
