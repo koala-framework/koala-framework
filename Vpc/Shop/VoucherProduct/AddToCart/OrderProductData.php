@@ -38,13 +38,4 @@ class Vpc_Shop_VoucherProduct_AddToCart_OrderProductData extends Vpc_Shop_AddToC
     {
         return trlVps('Voucher');
     }
-
-    public function alterBackendOrderForm(Vps_Form $form)
-    {
-        $form->prepend(new Vps_Form_Field_NumberField('amount', trlcVps('Amount of Money', 'Amount')))
-            ->setAllowNegative(false)
-            ->setWidth(50)
-            ->setAllowBlank(false)
-            ->setComment('EUR');
-    }
 }

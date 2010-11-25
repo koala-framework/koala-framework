@@ -35,7 +35,7 @@ abstract class Vpc_Shop_AddToCartAbstract_OrderProductData
     {
     }
 
-    public function alterBackendOrderForm(Vps_Form $form)
+    public function alterBackendOrderForm(Vpc_Shop_AddToCartAbstract_Form $form)
     {
     }
 }
