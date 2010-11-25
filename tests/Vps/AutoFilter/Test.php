@@ -2,9 +2,8 @@
 /**
  * @group AutoFilter
  */
-class Vps_AutoFilter_Test extends PHPUnit_Framework_TestCase
+class Vps_AutoFilter_Test extends Vps_Test_TestCase
 {
-
     public function testTextFilter()
     {
         $model = new Vps_Model_FnF(array(

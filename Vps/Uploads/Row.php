@@ -76,12 +76,12 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
             if (function_exists('finfo_open')) {
                 //für andere server muss dieser pfad vielleicht einstellbar gemacht werden
                 $path = false;
-                if (file_exists('/usr/share/file/magic')) {
+                if (is_file('/usr/share/file/magic')) {
                     $path = '/usr/share/file/magic';
-                } else if (file_exists('/usr/share/misc/magic')) {
+                } else if (is_file('/usr/share/misc/magic')) {
                     $path = '/usr/share/misc/magic';
                 } else {
-                    throw new Vps_Exception("Can't find magic database");
+                    $path = null;
                 }
                 $finfo = new finfo(FILEINFO_MIME, $path);
                 $ret = $finfo->buffer($contents);

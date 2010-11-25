@@ -4,18 +4,8 @@
  * @group slow
  * slow weil sie den assets cache löschen
  */
-class Vps_Assets_OwnConfig_Test extends PHPUnit_Framework_TestCase
+class Vps_Assets_OwnConfig_Test extends Vps_Test_TestCase
 {
-    protected function setUp()
-    {
-        Vps_Component_Data_Root::setComponentClass(false);
-    }
-
-    protected function tearDown()
-    {
-        Vps_Component_Data_Root::setComponentClass(null);
-    }
-
     public function testDebug()
     {
         $config = clone Zend_Registry::get('config');
