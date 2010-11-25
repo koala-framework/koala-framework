@@ -6,7 +6,7 @@
  * @group Mail
  * @group slow
  */
-class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Mail_Resend_Test extends Vps_Test_TestCase
 {
     public function setUp()
     {
