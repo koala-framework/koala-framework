@@ -120,7 +120,7 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
                             $this->_execSql($config, "DROP USER '$dbUser'@'localhost'");
                             $createSql = "CREATE USER '$dbUser'@'localhost' IDENTIFIED BY '$dbPassword'";
                             if (!$this->_execSql($config, $createSql)) {
-                                throw new Vps_ClientException("Kann Benutzer nicht anlegen");
+                                throw new Vps_Exception_Client("Kann Benutzer nicht anlegen");
                             }
                         } else if ($input == 'p') {
                             $stdin = fopen('php://stdin', 'r');
@@ -128,27 +128,19 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
                             $dbPassword = trim(fgets($stdin, 128));
                             fclose($stdin);
                         } else {
-                            throw new Vps_ClientException("unbekannte option");
+                            throw new Vps_Exception_Client("unbekannte option");
                         }
                     }
 
                     $sql = "GRANT FILE ON *.* TO '$dbUser'@'localhost'";
-                    $cmd = "echo ".escapeshellarg($sql)." | mysql";
-                    $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("$cmd");
-                    if ($this->_getParam('debug')) echo "$cmd\n";
-                    system($cmd, $ret);
-                    if ($ret) {
-                        throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
+                    if (!$this->_execSql($config, $sql)) {
+                        throw new Vps_Exception_Client("Konnte berechtigungen nicht setzen");
                     }
 
                     $dbName = Vps_Registry::get('config')->application->id;
                     $sql = "GRANT ALL PRIVILEGES ON `$dbName%` . * TO '$dbUser'@'localhost'";
-                    $cmd = "echo ".escapeshellarg($sql)." | mysql";
-                    $cmd = "ssh -p {$config->server->port} $sshHost ".escapeshellarg("$cmd");
-                    if ($this->_getParam('debug')) echo "$cmd\n";
-                    system($cmd, $ret);
-                    if ($ret) {
-                        throw new Vps_ClientException("Konnte berechtigungen nicht setzen");
+                    if (!$this->_execSql($config, $sql)) {
+                        throw new Vps_Exception_Client("Konnte berechtigungen nicht setzen");
                     }
                 }
             }

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Shop_Cart_Plugins_Voucher_Redeem_Form extends Vpc_Abstract_Form
+class Vpc_Shop_Cart_Plugins_Voucher_Redeem_FrontendForm extends Vps_Form
 {
     protected $_modelName = 'Vpc_Shop_Cart_Orders';
 
