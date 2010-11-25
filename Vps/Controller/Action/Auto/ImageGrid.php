@@ -109,14 +109,23 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
                     throw new Vps_Exception("You have to set _labelField in the ImageGrid Controller");
                 }
 
-                if (!empty($r['label']) && $this->_maxLabelLength) {
-                    $r['label'] = $truncateHelper->truncate($r['label'], $this->_maxLabelLength, '…', true, false);
+                if (!empty($r['label'])) $r['label_short'] = $r['label'];
+
+                if (!empty($r['label_short']) && $this->_maxLabelLength) {
+                    $r['label_short'] = $truncateHelper->truncate($r['label_short'], $this->_maxLabelLength, '…', true, false);
                 }
 
                 $imageRef = $this->_getImageReference();
                 $hashKey = md5($row->{$imageRef['column']}.Vps_Uploads_Row::HASH_KEY);
                 $r['src'] = '/vps/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
                     '&hashKey='.$hashKey.'&size=imageGrid';
+                $r['src_large'] = '/vps/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
+                    '&hashKey='.$hashKey.'&size=imageGridLarge';
+                if ($uploadRow = $row->getParentRow($this->_imageRule)) {
+                    $dim = Vps_Media_Image::calculateScaleDimensions($uploadRow->getFileSource(), array(400, 400, Vps_Media_Image::SCALE_BESTFIT));
+                    $r['src_large_width'] = $dim['width'];
+                    $r['src_large_height'] = $dim['height'];
+                }
                 $rows[] = $r;
             }
 
@@ -142,7 +151,7 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
 
         $this->view->metaData['root'] = 'rows';
         $this->view->metaData['id'] = $this->_primaryKey;
-        $this->view->metaData['fields'] = array('id', 'label', 'src');
+        $this->view->metaData['fields'] = array('id', 'label', 'label_short', 'src', 'src_large', 'src_large_width', 'src_large_height');
         $this->view->metaData['totalProperty'] = 'total';
         $this->view->metaData['successProperty'] = 'success';
         $this->view->metaData['buttons'] = (object)$this->_buttons;

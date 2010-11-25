@@ -5,11 +5,12 @@
  * @group Model_DbWithConnection
  * @group Model_Db_Dirty
  */
-class Vps_Model_DbWithConnection_Dirty_Test extends PHPUnit_Extensions_OutputTestCase
+class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
 {
     private $_tableName;
     public function setUp()
     {
+        parent::setUp();
         $this->_tableName = 'test'.uniqid();
         $sql = "CREATE TABLE $this->_tableName (
             `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -31,6 +32,7 @@ class Vps_Model_DbWithConnection_Dirty_Test extends PHPUnit_Extensions_OutputTes
     public function tearDown()
     {
         Vps_Registry::get('db')->query("DROP TABLE {$this->_tableName}");
+        parent::tearDown();
     }
 
     public function testDontSaveNotDirtyRow()
