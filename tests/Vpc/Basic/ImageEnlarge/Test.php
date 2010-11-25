@@ -3,15 +3,12 @@
  * @group Basic_ImageEnlarge
  * @group Image
  */
-class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_ImageEnlarge_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
-        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
+        parent::setUp('Vpc_Basic_ImageEnlarge_Root');
+        $this->_root->setFilename(null);
     }
 
     public function testWithoutSmallImageComponent()

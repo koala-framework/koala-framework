@@ -2,7 +2,7 @@
 /**
  * @group Component_Output
  */
-class Vps_Component_Output_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_Output_Test extends Vps_Test_TestCase
 {
     public function testMaster()
     {

@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Vpc_Trl
+ * @group Vpc_Trl_Menu
 
 ansicht frontend:
 http://vps.vps.niko.vivid/vps/vpctest/Vpc_Trl_MenuCache_Root/de
@@ -14,6 +15,7 @@ class Vpc_Trl_MenuCache_Test extends Vpc_TestAbstract
     {
         parent::setUp('Vpc_Trl_MenuCache_Root');
     }
+
     public function testMenuDe()
     {
         $c = $this->_root->getComponentById('1-mainMenu');

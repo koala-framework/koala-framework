@@ -2,7 +2,7 @@
 /**
  * @group Expr
  */
-class Vps_Model_Expr_LegacyDateTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Expr_LegacyDateTest extends Vps_Test_TestCase
 {
     public function testLegacyHigherDate()
     {

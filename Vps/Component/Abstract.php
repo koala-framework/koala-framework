@@ -4,7 +4,7 @@ class Vps_Component_Abstract
     private static $_settings = null;
     private static $_rebuildingSettings = false;
     private static $_cacheSettings = array();
-    private static $_models = array(
+    private static $_modelsCache = array(
         'own' => array(),
         'child' => array(),
         'form' => array(),
@@ -330,7 +330,7 @@ class Vps_Component_Abstract
 
     public static function createTable($class, $tablename = null)
     {
-        $tables = self::$_models['table'];
+        $tables = self::$_modelsCache['table'];
         if (!isset($tables[$class.'-'.$tablename])) {
             if (!$tablename) {
                 $tablename = Vpc_Abstract::getSetting($class, 'tablename');
@@ -362,24 +362,24 @@ class Vps_Component_Abstract
      */
     public static function createOwnModel($class)
     {
-        $models = self::$_models['own'];
-        if (!array_key_exists($class, $models)) {
+        if (!array_key_exists($class, self::$_modelsCache['own'])) {
             if (Vpc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
                 if (!$t instanceof Zend_Db_Table_Abstract) {
                     throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
                 }
-                $models[$class] = new Vps_Model_Db(array(
+                $model = new Vps_Model_Db(array(
                     'table' => $t
                 ));
             } else if (Vpc_Abstract::hasSetting($class, 'ownModel')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'ownModel');
-                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+                $model = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                $models[$class] = null;
+                $model = null;
             }
+            self::$_modelsCache['own'][$class] = $model;
         }
-        return $models[$class];
+        return self::$_modelsCache['own'][$class];
     }
 
     /**
@@ -387,24 +387,24 @@ class Vps_Component_Abstract
      */
     public static function createChildModel($class)
     {
-        $models = self::$_models['child'];
-        if (!array_key_exists($class, $models)) {
+        if (!array_key_exists($class, self::$_modelsCache['child'])) {
             if (Vpc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
                 if (!$t instanceof Zend_Db_Table_Abstract) {
                     throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
                 }
-                $models[$class] = new Vps_Model_Db(array(
+                $model = new Vps_Model_Db(array(
                     'table' => $t
                 ));
             } else if (Vpc_Abstract::hasSetting($class, 'childModel')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'childModel');
-                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+                $model = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                $models[$class] = null;
+                $model = null;
             }
+            self::$_modelsCache['child'][$class] = $model;
         }
-        return $models[$class];
+        return self::$_modelsCache['child'][$class];
     }
 
     /**
@@ -412,26 +412,23 @@ class Vps_Component_Abstract
      */
     public static function createFormModel($class)
     {
-        $models = self::$_models['form'];
-        if (!array_key_exists($class, $models)) {
+        if (!array_key_exists($class, self::$_modelsCache['form'])) {
             if (Vpc_Abstract::hasSetting($class, 'formModel')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'formModel');
-                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+                self::$_modelsCache['form'][$class] = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                $models[$class] = null;
+                self::$_modelsCache['form'][$class] = null;
             }
         }
-        return $models[$class];
+        return self::$_modelsCache['form'][$class];
     }
 
-    //wenn root geändert wird muss der cache hier gelöscht werden können
-    public static function resetModelsCache()
+    public static function clearModelInstances()
     {
-        self::$_models = array(
+        self::$_modelsCache = array(
             'own' => array(),
             'child' => array(),
-            'form' => array(),
-            'table' => array()
+            'form' => array()
         );
     }
 
@@ -477,6 +474,8 @@ class Vps_Component_Abstract
 
     public static function getComponentClasses()
     {
+        $root = Vps_Component_Data_Root::getComponentClass();
+        if (!$root) return array();
         if (!self::$_rebuildingSettings) {
             $s =& self::_getSettingsCached();
             $ret = array_keys($s);
@@ -484,8 +483,6 @@ class Vps_Component_Abstract
             unset($ret[array_search('mtimeFiles', $ret)]);
             return array_values($ret);
         }
-        $root = Vps_Component_Data_Root::getComponentClass();
-        if (!$root) return array();
         $componentClasses = array($root);
         self::_getChildComponentClasses($componentClasses, $root);
         return $componentClasses;

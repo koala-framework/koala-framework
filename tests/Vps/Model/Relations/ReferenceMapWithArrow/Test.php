@@ -2,7 +2,7 @@
 /**
  * @group Model_Relations_ReferenceMapWithArrow
  */
-class Vps_Model_Relations_ReferenceMapWithArrow_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Relations_ReferenceMapWithArrow_Test extends Vps_Test_TestCase
 {
     public function testIt()
     {

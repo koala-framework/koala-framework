@@ -2,13 +2,14 @@
 /**
  * @group Component_ModelObserver
  */
-class Vps_Component_ModelObserver_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_ModelObserver_Test extends Vps_Test_TestCase
 {
     private $_observer;
     private $_model;
 
     public function setUp()
     {
+        parent::setUp();
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Data_Root');
         $this->_observer = Vps_Component_ModelObserver::getInstance();
         $this->_observer->setEnableProcess(false);

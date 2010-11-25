@@ -2,7 +2,7 @@
 /**
  * @group Update_Action
  */
-class Vps_Update_Action_Db_ChangeFieldTest extends PHPUnit_Framework_TestCase
+class Vps_Update_Action_Db_ChangeFieldTest extends Vps_Test_TestCase
 {
     public function setUp()
     {

@@ -47,6 +47,7 @@ abstract class Vps_Component_Cache
         // für componentLink: alle Komponenten, die als Page erstellt werden können
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
             foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $setting) {
+                if (!isset($setting['class'])) continue;
                 $generator = current(Vps_Component_Generator_Abstract::getInstances(
                     $class, array('generator' => $key))
                 );

@@ -11,17 +11,34 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             delete this.autoLoad;
         }
 
-        this.tpl = new Ext.XTemplate(
-            '<tpl for=".">',
-                '<div class="thumb-wrap">',
-                    '<table class="thumb" cellpadding="0" cellspacing="3" border="0"><tr><td>',
-                        '<tpl if="src"><img src="{src}" title="{label}" /></tpl>',
-                    '</td></tr></table>',
+        if (!this.tpl) {
+            this.tpl = new Ext.XTemplate(
+                '<tpl for=".">',
+                    '<div class="thumb-wrap">',
+                        '<table class="thumb" cellpadding="0" cellspacing="3" border="0"><tr><td>',
+                            '<tpl if="src"><img src="{src}" alt="{label}" /></tpl>',
+                        '</td></tr></table>',
+                        '<div class="label">{label_short}</div>',
+                    '</div>',
+                '</tpl>',
+                '<div class="x-clear"></div>'
+            );
+        }
+
+        if (!this.bigPreviewTpl) {
+            this.bigPreviewTpl = new Ext.XTemplate(
+                '<div class="big-wrap">',
                     '<div class="label">{label}</div>',
-                '</div>',
-            '</tpl>',
-            '<div class="x-clear"></div>'
-        );
+                    '<div class="imageBig"><img src="{src_large}" alt="{label}" width="{src_large_width}" height="{src_large_height}" /></div>',
+                '</div>'
+            );
+        }
+
+        if (!this.prepareViewData) {
+            this.prepareViewData = function(data) {
+                return data;
+            };
+        }
 
         this.actions.reload = new Ext.Action({
             icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
@@ -132,9 +149,7 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             itemSelector: 'div.thumb-wrap',
             emptyText: trlVps('No items to display'),
             plugins: [],
-            prepareData: function(data) {
-                return data;
-            },
+            prepareData: this.prepareViewData,
             singleSelect: true,
             border: false,
             listeners: { scope: this }
@@ -269,8 +284,17 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.store.on('beforeload', function() {
             this.el.mask(trlVps('Loading...'));
         }, this);
-        this.store.on('load', function() {
+        this.store.on('load', function(store, records, opts) {
             this.el.unmask();
+
+            var compiledTpl = this.bigPreviewTpl.compile();
+            for (var i = 0; i < records.length; i++) {
+                Ext.QuickTips.register({
+                    target: Ext.get(this.view.getNode(i)).child('img'),
+                    text: compiledTpl.apply(records[i].data),
+                    dismissDelay: 20000
+                });
+            }
         }, this);
 
         this.view.on('selectionchange', function() {
