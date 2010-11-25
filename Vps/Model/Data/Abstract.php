@@ -361,8 +361,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                     $reg = str_replace($part, '\\' . $part, $reg);
                 }
                 $reg = str_replace('%', '(.*)', $reg);
-                $reg = "^$reg$";
-                return eregi($reg, $v);
+                $reg = "/^$reg$/i";
+                return preg_match($reg, $v);
             }
             return false;
         } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {

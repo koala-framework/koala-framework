@@ -5,17 +5,18 @@
  * @group Model_Db
  * @group Model_DbWithConnection
  */
-class Vps_Model_DbWithConnection_DbSiblingProxy_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_DbWithConnection_DbSiblingProxy_Test extends Vps_Test_TestCase
 {
     public function setUp()
     {
+        parent::setUp();
         $this->_model = new Vps_Model_DbWithConnection_DbSiblingProxy_ProxyModel();
     }
 
     public function tearDown()
     {
         $this->_model->dropTable();
-        Vps_Model_Abstract::clearInstances();
+        parent::tearDown();
     }
 
     public function testIt()

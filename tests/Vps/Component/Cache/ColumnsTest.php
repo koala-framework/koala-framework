@@ -3,16 +3,14 @@
  * @group Component_Cache
  * @group Component_CacheColumns
  */
-class Vps_Component_Cache_ColumnsTest extends PHPUnit_Framework_TestCase
+class Vps_Component_Cache_ColumnsTest extends Vpc_TestAbstract
 {
     private $_dataModel;
     private $_cacheModel;
 
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Root_Component');
-        Vps_Component_ModelObserver::getInstance()->setSkipFnf(false);
-        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
+        parent::setUp('Vpc_Root_Component');
 
         $cache = Vps_Component_Cache::getInstance();
         $cacheModel = $cache->getModel('cache');

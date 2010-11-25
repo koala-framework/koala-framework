@@ -2,7 +2,7 @@
 /**
  * @group Component_Output_Cache
  */
-class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
+class Vps_Component_Output_CacheTest extends Vps_Test_TestCase
 {
     private $_root;
     private $_renderer;

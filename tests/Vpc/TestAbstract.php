@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
+abstract class Vpc_TestAbstract extends Vps_Test_TestCase
 {
     /**
      * @var Vps_Component_Data_Root
@@ -12,21 +12,7 @@ abstract class Vpc_TestAbstract extends PHPUnit_Framework_TestCase
         Vps_Component_Data_Root::setComponentClass($componentClass);
         $this->_root = Vps_Component_Data_Root::getInstance();
         $this->_root->setFilename('vps/vpctest/'.$componentClass);
-        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
-        Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
-        Vps_Media::getOutputCache()->clean();
         Vps_Component_Cache::saveStaticMeta();
-    }
-
-    public function tearDown()
-    {
-        Vps_Component_ModelObserver::getInstance()->clearInstance();
-        Vps_Component_Data_Root::reset();
-        Vps_Component_Cache::clearInstance();
-        Vps_Component_Data_Root::reset();
-        Vps_Component_Generator_Abstract::clearInstances();
-        Vps_Model_Abstract::clearInstances();
-        parent::tearDown();
     }
 
     protected final function _process()

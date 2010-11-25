@@ -2,11 +2,12 @@
 /**
  * @group Vps_Form_FieldSet
  */
-class Vps_Form_FieldSet_WithCheckbox_Test extends PHPUnit_Framework_TestCase
+class Vps_Form_FieldSet_WithCheckbox_Test extends Vps_Test_TestCase
 {
     private $_form;
     public function setUp()
     {
+        parent::setUp();
         $m1 = new Vps_Model_FnF();
         $form = new Vps_Form();
         $form->setModel($m1);
