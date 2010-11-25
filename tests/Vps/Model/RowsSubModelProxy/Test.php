@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_RowsSubModelProxy
  */
-class Vps_Model_RowsSubModelProxy_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_RowsSubModelProxy_Test extends Vps_Test_TestCase
 {
     public function testIt()
     {
