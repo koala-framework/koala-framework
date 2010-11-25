@@ -34,7 +34,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
         $returnedData = $this->getModel()->synchronizeAndInsertRow($data);
         foreach ($returnedData as $k=>$v) {
             //parent aufrufen da die primaryKey exception ignoriert werden soll
-            //und doSynOnUpdate nicht ben�tigt wird
+            //und doSynOnUpdate nicht benötigt wird
             parent::__set($k, $v);
         }
     }
@@ -51,7 +51,7 @@ class Vps_Model_MirrorCache_Row extends Vps_Model_Proxy_Row
             $returnedData = $this->getModel()->synchronizeAndUpdateRow($data);
             foreach ($returnedData as $k=>$v) {
                 //parent aufrufen da die primaryKey exception ignoriert werden soll
-                //und doSynOnUpdate nicht ben�tigt wird
+                //und doSynOnUpdate nicht benötigt wird
                 parent::__set($k, $v);
             }
 
