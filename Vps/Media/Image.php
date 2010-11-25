@@ -171,8 +171,7 @@ class Vps_Media_Image
                 $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
                 $im->setImagePage(0, 0, 0, 0);
     //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
-                $im->setImageColorspace(Imagick::COLORSPACE_RGB);
-                $im->setCompressionQuality(90);
+                $im = self::_processCommonImagickSettings($im);
                 $ret = $im->getImageBlob();
                 $im->destroy();
             }
@@ -182,8 +181,7 @@ class Vps_Media_Image
                 $im = new Imagick();
                 $im->readImage($source);
                 $im->thumbnailImage($size['width'], $size['height']);
-                $im->setImageColorspace(Imagick::COLORSPACE_RGB);
-                $im->setCompressionQuality(90);
+                $im = self::_processCommonImagickSettings($im);
                 $ret = $im->getImageBlob();
                 $im->destroy();
             } else {
@@ -221,5 +219,17 @@ class Vps_Media_Image
 
         }
         return $ret;
+    }
+
+    private function _processCommonImagickSettings($im)
+    {
+        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        $im->setCompressionQuality(90);
+        $version = $im->getVersion();
+        if (isset($version['versionNumber'])) {
+            $im->setImageProperty('date:create', null);
+            $im->setImageProperty('date:modify', null);
+        }
+        return $im;
     }
 }
