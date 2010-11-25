@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_TestCase
+abstract class Vps_Util_PubSubHubbub_AbstractTest extends Vps_Test_TestCase
 {
     protected $_hubApp;
     protected $_hubUrl;
@@ -10,6 +10,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
 
     public function setUp()
     {
+        parent::setUp();
         $debugOutput = false;
         //echo "setUp\n";
 
@@ -108,6 +109,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         unlink('/tmp/feed'.$this->_testId);
         unlink('/tmp/lastCallback'.$this->_testId);
         unlink('/tmp/feedRequested'.$this->_testId);
+        parent::tearDown();
     }
 
     protected function assertFeedRequested($num)

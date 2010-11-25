@@ -62,11 +62,6 @@ class Vps_Media
         return null;
     }
 
-    public static function setOutputCache(Zend_Cache_Core $cache)
-    {
-        self::$_ouputCache = $cache;
-    }
-
     public static function getOutputCache()
     {
         if (!isset(self::$_ouputCache)) {

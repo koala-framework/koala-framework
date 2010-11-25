@@ -3,7 +3,7 @@
  * @group Model
  * @group xmlModel
  */
-class Vps_Model_Xml_ModelCacheTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Xml_ModelCacheTest extends Vps_Test_TestCase
 {
     public function testXmlBasic()
     {
