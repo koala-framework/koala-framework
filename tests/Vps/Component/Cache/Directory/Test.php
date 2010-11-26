@@ -7,6 +7,15 @@ class Vps_Component_Cache_Directory_Test extends Vpc_TestAbstract
     public function setUp()
     {
         parent::setUp('Vps_Component_Cache_Directory_Root_Component');
+        /*
+        root
+         _dir (kein itemPage, keine Einträge, ist trlRoot)
+           -view (gibt "{count} {$item[0]->content} {$item[1]->content} ..." aus)
+         _list (hat dir als directory)
+           -view (erbt von _dir-view)
+         _trldir (basiert auf _dir, ist trlRoot, hat eigenes Model)
+           -view (ist wie immer bei trldir gleiche Komponente wie _dir-view)
+        */
     }
 
     public function testDirectory()
@@ -54,24 +63,26 @@ class Vps_Component_Cache_Directory_Test extends Vpc_TestAbstract
         $root = $this->_root;
         $dir = $root->getChildComponent('_dir');
         $trldir = $root->getChildComponent('_trldir');
+        $dirModel = $dir->getComponent()->getChildModel();
+        $trlModel = $trldir->getComponent()->getChildModel();
 
         $this->assertEquals('0 ', $trldir->render());
 
-        $dir->getComponent()->getChildModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+        $dirModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
             array('id' => 1, 'component_id' => 'root_dir', 'content' => 'd1'),
             array('id' => 2, 'component_id' => 'root_dir', 'content' => 'd2')
         ));
-        $trldir->getComponent()->getChildModel()->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+        $trlModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
             array('component_id' => 'root_trldir-1', 'visible' => false),
-            array('component_id' => 'root_trldir-2', 'content' => 'd2', 'visible' => true)
+            array('component_id' => 'root_trldir-2', 'content' => 'foo', 'visible' => true)
         ));
         $this->_process();
-        $this->assertEquals('1 d2', $trldir->render());
+        $this->assertEquals('1 foo', $trldir->render());
 
-        $row = $trldir->getComponent()->getChildModel()->getRow('root_trldir-2');
-        $row->content = 'foo';
+        $row = $trlModel->getRow('root_trldir-2');
+        $row->content = 'bar';
         $row->save();
         $this->_process();
-        $this->assertEquals('1 d2', $trldir->render());
+        $this->assertEquals('1 bar', $trldir->render());
     }
 }
