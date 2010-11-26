@@ -242,7 +242,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                         $id = call_user_func(
                             array($r->meta_class, 'getDeleteDbId'), $r, $dbId
                         );
-                        if ($id) $newIds[$r->target_component_class][] = $id;
+                        if (!is_null($id)) $newIds[$r->target_component_class][] = $id;
                     }
                 }
                 // Einträge mit db_id
