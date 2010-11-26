@@ -15,6 +15,6 @@ class Vps_Component_Cache_Meta_Static_Component extends Vps_Component_Cache_Meta
 
     public static function getDeleteDbId($row, $dbId)
     {
-        return null;
+        return '';
     }
 }
