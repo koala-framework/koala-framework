@@ -6,7 +6,7 @@ div.imageGrid .thumb {
     background: #dddddd;
 }
 div.imageGrid .thumb td {
-    width: 100px; height: 100px;
+    width: 140px; height: 140px;
     text-align: center; vertical-align: middle;
     line-height: 0px;
 }
