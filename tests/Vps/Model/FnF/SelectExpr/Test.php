@@ -4,7 +4,7 @@
  * @group Model_FnF
  * @group Model_FnF_SelectExpr
  */
-class Vps_Model_FnF_SelectExpr_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_FnF_SelectExpr_Test extends Vps_Test_TestCase
 {
     public function testExprs()
     {

@@ -4,7 +4,7 @@ class Vps_Util_Https
     public static function ensureHttps()
     {
         if (php_sapi_name() != 'cli' && Vps_Registry::get('config')->server->https) {
-            if (!isset($_SERVER['HTTPS']) && self::_supportsHttps()) {
+            if (!isset($_SERVER['HTTPS'])) {
                 $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 header('Location: '.$redirect, true, 302);
                 Vps_Benchmark::shutDown();
@@ -15,7 +15,6 @@ class Vps_Util_Https
 
     /**
      * IE unter <=XP kann kein SNI
-     */
     private static function _supportsHttps()
     {
         if (!isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -28,4 +27,5 @@ class Vps_Util_Https
 
         return true;
     }
+    */
 }
