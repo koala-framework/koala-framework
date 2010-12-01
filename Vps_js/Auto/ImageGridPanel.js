@@ -287,12 +287,17 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.store.on('load', function(store, records, opts) {
             this.el.unmask();
 
+            Ext.apply(Ext.QuickTips.getQuickTip(), {
+                maxWidth: 420,
+                minWidth: 100
+            });
+
             var compiledTpl = this.bigPreviewTpl.compile();
             for (var i = 0; i < records.length; i++) {
                 Ext.QuickTips.register({
                     target: Ext.get(this.view.getNode(i)).child('img'),
                     text: compiledTpl.apply(records[i].data),
-                    dismissDelay: 20000
+                    dismissDelay: 40000
                 });
             }
         }, this);
