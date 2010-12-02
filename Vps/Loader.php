@@ -1,6 +1,5 @@
 <?php
-require_once 'Zend/Loader.php';
-class Vps_Loader extends Zend_Loader
+class Vps_Loader
 {
     public function classExists($class)
     {
@@ -25,9 +24,7 @@ class Vps_Loader extends Zend_Loader
             //für performance
             $class = 'Vps_Loader';
         }
-        $autoloader = Zend_Loader_Autoloader::getInstance();
-        $autoloader->setDefaultAutoloader(array($class, 'loadClass'));
-        $autoloader->setFallbackAutoloader(true);
+        spl_autoload_register(array($class, 'loadClass'));
     }
 
     public static function loadClass($class)
