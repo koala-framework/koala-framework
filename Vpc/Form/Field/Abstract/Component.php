@@ -9,6 +9,7 @@ class Vpc_Form_Field_Abstract_Component extends Vpc_Abstract
         $ret['ownModel'] = 'Vps_Component_FieldModel';
         $ret['flags']['formField'] = true;
         $ret['viewCache'] = false;
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 
