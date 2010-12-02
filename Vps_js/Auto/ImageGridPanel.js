@@ -297,7 +297,7 @@ Vps.Auto.ImageGridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 Ext.QuickTips.register({
                     target: Ext.get(this.view.getNode(i)).child('img'),
                     text: compiledTpl.apply(records[i].data),
-                    dismissDelay: 20000
+                    dismissDelay: 40000
                 });
             }
         }, this);
