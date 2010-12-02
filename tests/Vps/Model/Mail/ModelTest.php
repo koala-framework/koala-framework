@@ -4,7 +4,7 @@
  * @group Model_Mail
  * @group Mail
  */
-class Vps_Model_Mail_ModelTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
 {
     public function setUp()
     {
@@ -17,7 +17,6 @@ class Vps_Model_Mail_ModelTest extends PHPUnit_Framework_TestCase
         Vps_Test_SeparateDb::restoreTestDb();
         parent::tearDown();
     }
-
 
     public function testRow()
     {

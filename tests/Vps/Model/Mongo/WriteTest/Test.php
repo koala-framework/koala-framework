@@ -3,7 +3,7 @@
  * @group Model
  * @group Mongo
  */
-class Vps_Model_Mongo_WriteTest_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Mongo_WriteTest_Test extends Vps_Test_TestCase
 {
     /**
      * @var Vps_Model_Mongo
@@ -11,15 +11,14 @@ class Vps_Model_Mongo_WriteTest_Test extends PHPUnit_Framework_TestCase
     private $_model;
     public function setUp()
     {
-        Vps_Model_Abstract::clearInstances();
-
+        parent::setUp();
         $this->_model = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_WriteTest_MongoModel');
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         if ($this->_model) $this->_model->cleanUp();
-        Vps_Model_Abstract::clearInstances();
+        parent::tearDown();
     }
 
     public function testInsert()

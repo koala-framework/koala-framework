@@ -2,14 +2,14 @@
 /**
  * @group Component_ModelObserver
  */
-class Vps_Component_ModelObserver_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_ModelObserver_Test extends Vpc_TestAbstract
 {
     private $_observer;
     private $_model;
 
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Data_Root');
+        parent::setUp('Vps_Component_Data_Root');
         $this->_observer = Vps_Component_ModelObserver::getInstance();
         $this->_observer->clear();
         $this->_observer->setDisableCache(true);
@@ -22,13 +22,6 @@ class Vps_Component_ModelObserver_Test extends PHPUnit_Framework_TestCase
                 array('component_id' => '2')
             )
         ));
-    }
-
-    public function tearDown()
-    {
-        Vps_Component_ModelObserver::getInstance()->clear();
-        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
-        $this->_observer->setDisableCache(false);
     }
 
     public function testAddRow()

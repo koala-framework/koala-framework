@@ -2,7 +2,7 @@
 /**
  * @group Db_TablesModel
  */
-class Vps_Db_TablesModel_Test extends PHPUnit_Framework_TestCase
+class Vps_Db_TablesModel_Test extends Vps_Test_TestCase
 {
     public function setUp()
     {
@@ -15,6 +15,7 @@ class Vps_Db_TablesModel_Test extends PHPUnit_Framework_TestCase
         $this->_model = new Vps_Db_TablesModel(array(
             'db' => $this->_db
         ));
+        parent::setUp();
     }
 
     public function testGetAll()

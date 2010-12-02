@@ -5,12 +5,12 @@
  * @group Mongo_ChildExprWithProxy
  * @group slow
  */
-class Vps_Model_Mongo_ChildExprWithProxyTest_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Mongo_ChildExprWithProxyTest_Test extends Vps_Test_TestCase
 {
     private $_model;
     public function setUp()
     {
-        Vps_Model_Abstract::clearInstances();
+        parent::setUp();
 
         $this->_model = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildExprWithProxyTest_MongoModel');
         $this->_model->getProxyModel()->getCollection()->insert(
@@ -18,10 +18,10 @@ class Vps_Model_Mongo_ChildExprWithProxyTest_Test extends PHPUnit_Framework_Test
         , array('safe'=>true));
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         if (isset($this->_model)) $this->_model->getProxyModel()->cleanUp();
-        Vps_Model_Abstract::clearInstances();
+        parent::tearDown();
     }
 
     public function testAddedChild()

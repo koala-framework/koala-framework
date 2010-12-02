@@ -48,7 +48,7 @@ class Vps_Component_Abstract_Admin
                 $class = str_replace('/', '_', $item->getPath());
                 $class = strrchr($class, 'Vpc_');
                 $class .= '_' . str_replace('.php', '', $item->getFilename());
-                if (Vps_Loader::classExists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
+                if (class_exists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
                     $return[] = $class;
                 }
 

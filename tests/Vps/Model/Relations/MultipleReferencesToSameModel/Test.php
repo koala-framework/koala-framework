@@ -2,7 +2,7 @@
 /**
  * @group Model_Relations_MultipleReferencesToSameModel
  */
-class Vps_Model_Relations_MultipleReferencesToSameModel_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Relations_MultipleReferencesToSameModel_Test extends Vps_Test_TestCase
 {
     public function testGetParentRow()
     {
