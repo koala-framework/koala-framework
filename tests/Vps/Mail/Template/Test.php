@@ -3,13 +3,11 @@
  * @group Mail
  * @group Mail_Template
  */
-class Vps_Mail_Template_Test extends PHPUnit_Framework_TestCase
+class Vps_Mail_Template_Test extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Mail_Template_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Mail_Template_Root');
     }
 
     public function testMailComponent()

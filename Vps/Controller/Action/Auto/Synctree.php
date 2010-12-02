@@ -281,7 +281,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
         $fieldname = $node['sort'][0]['field'];
         if ($node && isset($node['data'][$fieldname])) {
-            usort(&$ret, array("Vps_Controller_Action_Auto_Synctree", "_sortFilteredNodes"));
+            usort($ret, array("Vps_Controller_Action_Auto_Synctree", "_sortFilteredNodes"));
         }
         foreach ($ret as &$r) unset($r['sort']);
         return $ret;

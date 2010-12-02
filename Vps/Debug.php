@@ -170,24 +170,31 @@ function _btArgString($arg)
     }
     return current($ret);
 }
+
+function btString()
+{
+    $bt = debug_backtrace();
+    $ret = '';
+    foreach ($bt as $i) {
+        if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') break;
+        if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') break;
+        if (isset($i['file']) && substr($i['file'], 0, 16) == '/www/public/niko/phpunit') break;
+        $ret .=
+            (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
+            (isset($i['line']) ? $i['line'] : '?') . ' - ' .
+            ((isset($i['object']) && $i['object'] instanceof Vps_Component_Data) ? $i['object']->componentId . '->' : '') .
+            (isset($i['function']) ? $i['function'] : '') . '(' .
+            _btArgsString($i['args']) . ')' . "\n";
+    }
+    $ret .= "\n";
+    return $ret;
+}
+
 function bt($file = false)
 {
     if (!Vps_Debug::isEnabled()) return;
-    $bt = debug_backtrace();
     if (php_sapi_name() == 'cli' || $file) {
-        $ret = '';
-        foreach ($bt as $i) {
-            if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') break;
-            if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') break;
-            if (isset($i['file']) && substr($i['file'], 0, 16) == '/www/public/niko/phpunit') break;
-            $ret .=
-                (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
-                (isset($i['line']) ? $i['line'] : '?') . ' - ' .
-                ((isset($i['object']) && $i['object'] instanceof Vps_Component_Data) ? $i['object']->componentId . '->' : '') .
-                (isset($i['function']) ? $i['function'] : '') . '(' .
-                _btArgsString($i['args']) . ')' . "\n";
-        }
-        $ret .= "\n";
+        $ret = btString($bt);
         if ($file) {
             $ret = "=============================================\n\n".$ret;
             file_put_contents('backtrace', $ret, FILE_APPEND);
@@ -195,6 +202,7 @@ function bt($file = false)
             echo $ret;
         }
     } else {
+        $bt = debug_backtrace();
         unset($bt[0]);
         $out = array(array('File', 'Line', 'Function', 'Args'));
         foreach ($bt as $i) {
