@@ -23,7 +23,7 @@ div.imageGrid .thumb-wrap div.label {
 }
 
 .big-wrap div.label {
-    font-weight: bold; margin-bottom: 5px; font-size: 13px; color: #15428B;
+    font-weight: bold; padding-bottom: 4px; padding-top: 2px; font-size: 14px; color: #15428B;
 }
 
 div.imageGrid .x-view-over {
