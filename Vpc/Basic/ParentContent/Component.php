@@ -1,0 +1,35 @@
+<?php
+/**
+ * @package Vpc
+ * @subpackage Basic
+ */
+class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
+{
+    public function getTemplateVars()
+    {
+        $ret = array();
+        $data = $this->getData();
+        $ids = array();
+        while ($data && !$data->isPseudoPage) {
+            $ids[] = strrchr($data->componentId, '-');
+            $data = $data->parent;
+        }
+        while ($data) {
+            if ($data->isPseudoPage) {
+                $d = $data;
+                foreach (array_reverse($ids) as $id) {
+                    $d = $d->getChildComponent($id);
+                }
+                if ($d->componentClass != get_class($this)) {
+                    $ret['parentComponent'] = $d;
+                }
+            }
+            $data = $data->parent;
+        }
+        return $ret;
+    }
+
+    public function hasContent()
+    {
+    }
+}
