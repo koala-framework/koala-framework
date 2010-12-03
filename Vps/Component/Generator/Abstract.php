@@ -489,13 +489,28 @@ abstract class Vps_Component_Generator_Abstract
     }
 
 
-    protected function _getChildComponentClass($key)
+    protected function _getChildComponentClass($key, $parentData)
     {
         $c = $this->_settings['component'];
-        if (!isset($c[$key])) {
-            throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found; set are ".implode(', ', array_keys($c)));
+        if ($key) {
+            if (!isset($c[$key])) {
+                throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found; set are ".implode(', ', array_keys($c)));
+            }
+            $componentClass = $this->_settings['component'][$key];
+        } else {
+            if (count($c) > 1) {
+                throw new Vps_Exception("For multiple components you have to submit a key in generator " . get_class($this) . " ($this->_class).");
+            }
+            reset($this->_settings['component']);
+            $componentClass = current($this->_settings['component']);
         }
-        return $c[$key];
+
+        $alternativeComponent = Vpc_Abstract::getFlag($componentClass, "alternativeComponent");
+        if ($alternativeComponent && call_user_func(array($componentClass, 'useAlternativeComponent'), $parentData)) {
+            $componentClass = $alternativeComponent;
+        }
+
+        return $componentClass;
     }
 
     protected function _formatSelectFilename(Vps_Component_Select $select)

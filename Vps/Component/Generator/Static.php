@@ -111,7 +111,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,
-            'componentClass' => $this->_settings['component'][$componentKey],
+            'componentClass' => $this->_getChildComponentClass($componentKey, $parentData),
             'parent' => $parentData,
             'isPage' => false,
             'isPseudoPage' => false,
