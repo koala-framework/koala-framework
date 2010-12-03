@@ -501,6 +501,10 @@ class Vps_Component_Abstract
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
         }
+        $alternativeComponent = Vpc_Abstract::getFlag($class, 'alternativeComponent');
+        if ($alternativeComponent) {
+            $classes[] = $alternativeComponent;
+        }
         if (Vpc_Abstract::hasSetting($class, 'inheritComponentClass')) {
             $classes[] = Vpc_Abstract::getSetting($class, 'inheritComponentClass');
         }

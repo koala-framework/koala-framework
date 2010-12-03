@@ -244,7 +244,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $data['isPage'] = true;
         $data['isPseudoPage'] = true;
         $data['componentId'] = $page['id'];
-        $data['componentClass'] = $this->_getChildComponentClass($page['component']);
+        $data['componentClass'] = $this->_getChildComponentClass($page['component'], $parentData);
         $data['row'] = (object)$page;
         $data['parent'] = $parentData;
         $data['isHome'] = $page['is_home'];
