@@ -16,6 +16,20 @@ class Vps_Mail extends Zend_Mail
         parent::__construct('utf-8');
     }
 
+    public function getMailContent($type = Vps_Model_Mail_Row::MAIL_CONTENT_AUTO)
+    {
+        if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_AUTO) {
+            $ret = $this->getBodyHtml(true);
+            if (!$ret) $ret = $this->getBodyText(true);
+            return $ret;
+        } else if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_HTML) {
+            return $this->getBodyHtml(true);
+        } else if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_TEXT) {
+            return $this->getBodyText(true);
+        }
+        return null;
+    }
+
     public function addCc($email, $name='')
     {
         $this->_ownCc[] = trim("$name <$email>");

@@ -66,7 +66,7 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
         if ($this->_logger) {
             $this->_logger->info($this->_count.' ----------------------');
             $this->_logger->debug($queryText);
-            //$this->_logger->debug(implode("", $this->_lastQuery->getBacktrace()));
+            //$this->_logger->debug(btString());
         }
 
         return $this->_count;

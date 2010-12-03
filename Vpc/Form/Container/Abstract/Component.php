@@ -8,6 +8,7 @@ abstract class Vpc_Form_Container_Abstract_Component extends Vpc_Form_Field_Abst
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vpc_Form_Dynamic_Paragraphs_Component'
         );
+        $ret['editComponents'] = array('paragraphs');
         return $ret;
     }
 

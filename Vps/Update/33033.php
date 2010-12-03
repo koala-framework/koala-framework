@@ -1,7 +1,11 @@
 <?php
-#tags: vpc
 class Vps_Update_33033 extends Vps_Update
 {
+    public function getTags()
+    {
+        return array('vpc');
+    }
+
     public function update()
     {
         $info = $this->_updateDir('Vpc');

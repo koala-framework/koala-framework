@@ -77,9 +77,10 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
                 $fileModel = $row->getModel()->getReferencedModel($this->getName());
                 $row = $fileModel->getRow($data);
                 if ($this->getAllowOnlyImages() && substr($row->mime_type, 0, 6) !=  'image/') {
-                    $name = $this->getFieldLabel();
-                    if (!$name) $name = $this->getName();
-                    $ret[] = $name.': '.trlVps('This is not an image.');
+                    $ret[] = array(
+                        'message' => trlVps('This is not an image.'),
+                        'field' => $this
+                    );
                 }
             }
         }
@@ -146,7 +147,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     public function getTemplateVars($values, $namePostfix = '')
     {
         $name = $this->getFieldName();
-        $value = $values[$name];
+        $value = isset($values[$name]) ? $values[$name] : null;
         $ret = parent::getTemplateVars($values);
 
         $name = htmlspecialchars($name);

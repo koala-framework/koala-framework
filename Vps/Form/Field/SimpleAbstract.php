@@ -52,8 +52,6 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
 
         $data = $this->_getValueFromPostData($postData);
 
-        $name = $this->getFieldLabel();
-        if (!$name) $name = $this->getName();
         foreach ($this->getValidators() as $v) {
             // folgende if ist, weils es zB bei einem Date Validator keinen
             // sinn macht zu validieren wenn kein wert da ist. da macht dann
@@ -69,7 +67,10 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
                 $isValid = $v->isValid($data);
             }
             if (!$isValid) {
-                $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
+                $ret[] = array(
+                    'messages' => $v->getMessages(),
+                    'field' => $this
+                );
             }
         }
 

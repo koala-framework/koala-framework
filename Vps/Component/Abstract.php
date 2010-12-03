@@ -32,9 +32,7 @@ class Vps_Component_Abstract
 
     public static function hasSetting($class, $setting)
     {
-        static $settingsCache;
-        if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
-        if (self::$_rebuildingSettings || !$settingsCache) {
+        if (self::$_rebuildingSettings) {
             //um endlosschleife in settingsCache zu verhindern
             $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             if (!class_exists($c)) {
@@ -59,9 +57,7 @@ class Vps_Component_Abstract
 
     public static function getSetting($class, $setting)
     {
-        static $settingsCache;
-        if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
-        if (self::$_rebuildingSettings || !$settingsCache) {
+        if (self::$_rebuildingSettings) {
             //um endlosschleife in settingsCache zu verhindern
 
             if (!class_exists(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class)) {

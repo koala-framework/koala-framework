@@ -61,9 +61,10 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
             || $this->getAllowBlank() === 0
             || $this->getAllowBlank() === '0') {
             if (!isset($dimensions[$data['dimension']])) {
-                $name = $this->getFieldLabel();
-                if (!$name) $name = $this->getName();
-                $ret[] = $name.': '.trlVps("Please fill out the field");
+                $ret[] = array(
+                    'message' => trlVps("Please fill out the field"),
+                    'field' => $this
+                );
             }
         }
 
@@ -78,13 +79,19 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
                 (empty($data['width']) && empty($dimension['width'])) &&
                 (empty($data['height']) && empty($dimension['height']))
             ) {
-                $ret[] = trlVps('Dimension: At least width or height must be set higher than 0 when using crop or bestfit.');
+                $ret[] = array(
+                    'message' => trlVps('Dimension: At least width or height must be set higher than 0 when using crop or bestfit.'),
+                    'field' => $this
+                );
             }
             if ($dimension['scale'] == Vps_Media_Image::SCALE_DEFORM &&
                 ((empty($data['width']) && empty($dimension['width'])) ||
                 (empty($data['height']) && empty($dimension['height'])))
             ) {
-                $ret[] = trlVps('Dimension: At width and height must be set higher than 0 when using deform.');
+                $ret[] = array(
+                    'message' => trlVps('Dimension: At width and height must be set higher than 0 when using deform.'),
+                    'field' => $this
+                );
             }
 
         }

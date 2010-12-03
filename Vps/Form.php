@@ -235,4 +235,22 @@ class Vps_Form extends Vps_Form_NonTableForm
     {
     }
 
+    public static function formatValidationErrors($errors)
+    {
+        $msg = array();
+        foreach ($errors as $i) {
+            $name = '';
+            if (isset($i['field'])) {
+                $name = $i['field']->getFieldLabel();
+                if (!$name) $name = $i['field']->getName();
+            }
+            if (isset($i['message'])) {
+                $i['messages'] = array($i['message']);
+            }
+            foreach ($i['messages'] as $m) {
+                $msg[] = ($name ? ($name.': ') : '').$m;
+            }
+        }
+        return $msg;
+    }
 }

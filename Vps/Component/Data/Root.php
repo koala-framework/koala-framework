@@ -9,7 +9,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private $_generatorsForClassesCache = array();
     private $_currentPage;
     private $_pageGenerators;
+
+    //caches fuer getComponentById
     private $_dataCache = array();
+    private $_dataCacheIgnoreVisible = array();
 
     public function __construct($config = array())
     {
@@ -110,11 +113,26 @@ class Vps_Component_Data_Root extends Vps_Component_Data
      */
     public function getComponentById($componentId, $select = array())
     {
-        if (isset($this->_dataCache[$componentId])) {
-            //TODO: ignoreVisible korrekte berücksichtigen
-            //      dazu müssten zwei caches erstellt werden, der generator kann vom $select (im _createData) abhängig entscheiden in welchen es geschrieben wird
-            if (!$select) {
+        if (is_array($select)) {
+            $partTypes = array_keys($select);
+        } else {
+            $partTypes = $select->getPartTypes();
+        }
+        if (!$partTypes || $partTypes == array(Vps_Component_Select::IGNORE_VISIBLE)) {
+            if (isset($this->_dataCache[$componentId])) {
                 return $this->_dataCache[$componentId];
+            }
+            if (is_array($select)) {
+                if (isset($select[Vps_Component_Select::IGNORE_VISIBLE])) {
+                    $ignoreVisible = $select[Vps_Component_Select::IGNORE_VISIBLE];
+                } else {
+                    $ignoreVisible = false;
+                }
+            } else {
+                $ignoreVisible = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+            }
+            if ($ignoreVisible && isset($this->_dataCacheIgnoreVisible[$componentId])) {
+                return $this->_dataCacheIgnoreVisible[$componentId];
             }
         }
         if (is_array($select)) {
@@ -442,10 +460,16 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     /**
      * @internal siehe Vps_Component_Generator_Abstract
+     *
+     * für getComponentById
      */
-    public function addToDataCache(Vps_Component_Data $d)
+    public function addToDataCache(Vps_Component_Data $d, Vps_Component_Select $select)
     {
-        $this->_dataCache[$d->componentId] = $d;
+        if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+            $this->_dataCacheIgnoreVisible[$d->componentId] = $d;
+        } else {
+            $this->_dataCache[$d->componentId] = $d;
+        }
     }
 }
 ?>
