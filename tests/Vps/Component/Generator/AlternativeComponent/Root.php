@@ -12,7 +12,7 @@ class Vps_Component_Generator_AlternativeComponent_Root extends Vps_Component_No
                   'parent_id'=>1, 'component'=>'default', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
         )));
         $ret['generators']['page']['component'] = array(
-            'default' => 'Vps_Component_Generator_AlternativeComponent_DefaultComponent',
+            'default' => 'Vps_Component_Generator_AlternativeComponent_Component',
         );
         return $ret;
     }
