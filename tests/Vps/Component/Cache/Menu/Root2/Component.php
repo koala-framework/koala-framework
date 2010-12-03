@@ -14,7 +14,6 @@ class Vps_Component_Cache_Menu_Root2_Component extends Vps_Component_NoCategorie
                 'menu' => 'Vps_Component_Cache_Menu_Root2_Menu_Component'
             ),
             'inherit' => true,
-            'uniqueContentLevel' => 2,
             'priority' => 0
         );
         $ret['flags']['menuCategory'] = 'root';
