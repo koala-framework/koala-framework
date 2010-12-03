@@ -10,6 +10,7 @@ class Vpc_TestController extends Vps_Controller_Action
     {
         Zend_Registry::get('config')->debug->componentCache->disable = true;
         Zend_Registry::set('db', false);
+        Vps_Test_SeparateDb::setDbFromCookie(); // setzt es nur wenn es das cookie wirklich gibt
 
         //FnF models setzen damit tests nicht in echte tabellen schreiben
         Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);

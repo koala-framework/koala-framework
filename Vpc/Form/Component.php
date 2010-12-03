@@ -172,7 +172,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         $ret['isPosted'] = $this->_posted;
         $ret['showSuccess'] = false;
-        $ret['errors'] = $this->getErrors();
+        $ret['errors'] = Vps_Form::formatValidationErrors($this->getErrors());
         if ($this->isSaved()) {
             if (!$ret['errors'] && $class) {
                 $ret['showSuccess'] = true;
@@ -185,7 +185,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $dec = $this->_getSetting('decorator');
         if ($dec && is_string($dec)) {
             $dec = new $dec();
-            $ret['form'] = $dec->processItem($ret['form']);
+            $ret['form'] = $dec->processItem($ret['form'], $this->getErrors());
         }
 
         $ret['formName'] = $this->getData()->componentId;

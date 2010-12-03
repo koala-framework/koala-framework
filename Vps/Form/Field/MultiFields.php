@@ -280,7 +280,10 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         if (!$name) $name = $this->getName();
         foreach ($this->getValidators() as $v) {
             if (!$v->isValid($cnt)) {
-                $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
+                $ret[] = array(
+                    'messages' => $v->getMessages(),
+                    'field' => $this
+                );
             }
         }
 
