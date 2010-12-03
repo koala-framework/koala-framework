@@ -588,7 +588,7 @@ abstract class Vps_Component_Generator_Abstract
             $pageDataClass = $this->_getDataClass($config, $row);
             $d = new $pageDataClass($config);
             $this->_dataCache[$parentData->componentId][$id] = $d;
-            Vps_Component_Data_Root::getInstance()->addToDataCache($d);
+            Vps_Component_Data_Root::getInstance()->addToDataCache($d, $select);
         }
         return $this->_dataCache[$parentData->componentId][$id];
     }

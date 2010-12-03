@@ -200,6 +200,11 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
         return $this->_parts;
     }
 
+    public function getPartTypes()
+    {
+        return array_keys($this->_parts);
+    }
+
     public function getPart($part)
     {
         if (!isset($this->_parts[$part])) return null;
