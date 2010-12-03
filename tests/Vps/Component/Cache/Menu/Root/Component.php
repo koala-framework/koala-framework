@@ -15,7 +15,6 @@ class Vps_Component_Cache_Menu_Root_Component extends Vps_Component_NoCategories
                 'menu' => 'Vps_Component_Cache_Menu_Root_Menu_Component'
             ),
             'inherit' => true,
-            'uniqueContentLevel' => 2,
             'priority' => 0
         );
         unset($ret['generators']['title']);
