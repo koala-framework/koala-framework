@@ -251,7 +251,11 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $dbId = $parentData->dbId . $this->_idSeparator . $dbId;
         }
 
-        $componentKey = isset($row->component) ? $row->component : null;
+        if (count($this->_settings['component']) > 1 && isset($row->component)) {
+            $componentKey = $row->component;
+        } else {
+            $componentKey = null;
+        }
         $componentClass = $this->_getChildComponentClass($componentKey, $parentData);
 
         $data = array(

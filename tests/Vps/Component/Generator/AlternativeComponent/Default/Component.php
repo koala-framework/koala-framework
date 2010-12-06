@@ -8,7 +8,7 @@ class Vps_Component_Generator_AlternativeComponent_Default_Component extends Vpc
         return $ret;
     }
 
-    public static function useAlternativeComponent($parentData)
+    public static function useAlternativeComponent($componentClass, $parentData)
     {
         $data = $parentData;
         $level = 1;

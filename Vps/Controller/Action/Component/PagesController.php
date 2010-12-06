@@ -272,6 +272,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 'componentClasses' => array($class)
             ));
             foreach ($menuComponents as $menuComponent) {
+                if (!is_instance_of($menuComponent->componentClass, 'Vpc_Menu_Abstract_Component')) continue; // Falls alternativeComponent
                 $c = $menuComponent->getComponent()->getMenuComponent();
                 if ($c) $editComponents[] = $c;
             }
