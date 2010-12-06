@@ -20,9 +20,28 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret['level'] = 'main';
         $ret['dataModel'] = 'Vpc_Menu_Abstract_Model';
         $ret['menuModel'] = 'Vpc_Menu_Abstract_MenuModel';
+        $ret['flags']['alternativeComponent'] = 'Vpc_Basic_ParentContent_Component';
 
         $ret['extConfig'] = 'Vpc_Menu_Abstract_ExtConfig';
         return $ret;
+    }
+
+    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    {
+        $level = self::_getMenuLevel($componentClass, $parentData, $generator);
+        $maxLevel = (int)Vpc_Abstract::getSetting($componentClass, 'level');
+        return $level > $maxLevel;
+    }
+
+    protected static function _getMenuLevel($componentClass, $parentData, Vps_Component_Generator_Abstract $generator)
+    {
+        $data = $parentData;
+        $level = $generator->getGeneratorFlag('page') ? 1 : 0; // falls zu erstellendes Data eigene Page ist (tritt eigentlich nur bei Tests auf)
+        while ($data && !Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
+            if ($data->isPage) $level++;
+            $data = $data->parent;
+        }
+        return $level;
     }
 
     public function getTemplateVars()

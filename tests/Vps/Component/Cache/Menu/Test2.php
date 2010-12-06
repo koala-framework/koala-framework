@@ -7,6 +7,18 @@ class Vps_Component_Cache_Menu_Test2 extends Vpc_TestAbstract
     public function setUp()
     {
         parent::setUp('Vps_Component_Cache_Menu_Root2_Component');
+        /*
+        root
+          -menu
+          _1
+            -menu
+            _2
+              -menu
+              _3
+                -parent-menu
+          _4
+            -menu-menu
+        */
     }
 
     public function testMenu2Page1()
@@ -65,4 +77,14 @@ class Vps_Component_Cache_Menu_Test2 extends Vpc_TestAbstract
         $this->assertEquals(1, substr_count($html, 'f1/f2'));
         $this->assertEquals(2, substr_count($html, 'f2'));
     }
+/*
+    public function testParentMenu()
+    {
+        $menu = $this->_root->getComponentById(2)->getChildComponent('-menu');
+        $this->assertEquals('Vps_Component_Cache_Menu_Root2_Menu_Component', $menu->componentClass);
+
+        $menu = $this->_root->getComponentById(3)->getChildComponent('-menu');
+        $this->assertEquals('Vpc_Basic_ParentContent_Component', $menu->componentClass);
+    }
+    */
 }

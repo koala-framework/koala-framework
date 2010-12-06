@@ -21,6 +21,15 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
         return $ret;
     }
 
+    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    {
+        $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
+        $maxLevel = Vpc_Abstract::getSetting($componentClass, 'maxLevel');
+        $level = Vpc_Abstract::getSetting($componentClass, 'level');
+        if ($level > $maxLevel) $maxLevel = $level;
+        return $menuLevel > $maxLevel;
+    }
+
     public function getMenuComponent()
     {
         $menuComponent = $this->getData();

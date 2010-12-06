@@ -1,5 +1,5 @@
 <?php
-class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
+class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract_Component
 {
     public static function getSettings()
     {
@@ -8,6 +8,11 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
         $ret['showHome'] = false;
         $ret['showCurrentPage'] = true;
         return $ret;
+    }
+
+    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    {
+        return false;
     }
 
     public function getTemplateVars()

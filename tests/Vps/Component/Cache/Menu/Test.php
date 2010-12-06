@@ -7,14 +7,25 @@ class Vps_Component_Cache_Menu_Test extends Vpc_TestAbstract
     public function setUp()
     {
         parent::setUp('Vps_Component_Cache_Menu_Root_Component');
+        /*
+        root
+          -menu
+          _1
+            -menu
+            _2
+              -menu
+              _3
+                -menu
+          _4
+            -menu
+         */
     }
 
-    public function testMenu()
+    public function testMenuf()
     {
         $page = $this->_root->getComponentById(1);
 
         $html = $page->render(true, true);
-        //d($html);
         $this->assertEquals(2, substr_count($html, '<li'));
         $this->assertEquals(2, substr_count($html, 'f1'));
         $this->assertEquals(2, substr_count($html, 'f4'));

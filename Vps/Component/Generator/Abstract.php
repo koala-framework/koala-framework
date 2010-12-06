@@ -506,7 +506,7 @@ abstract class Vps_Component_Generator_Abstract
         }
 
         $alternativeComponent = Vpc_Abstract::getFlag($componentClass, "alternativeComponent");
-        if ($alternativeComponent && call_user_func(array($componentClass, 'useAlternativeComponent'), $parentData)) {
+        if ($alternativeComponent && call_user_func(array($componentClass, 'useAlternativeComponent'), $componentClass, $parentData, $this)) {
             $componentClass = $alternativeComponent;
         }
 
