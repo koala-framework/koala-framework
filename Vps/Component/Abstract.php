@@ -505,9 +505,6 @@ class Vps_Component_Abstract
         if ($alternativeComponent) {
             $classes[] = $alternativeComponent;
         }
-        if (Vpc_Abstract::hasSetting($class, 'inheritComponentClass')) {
-            $classes[] = Vpc_Abstract::getSetting($class, 'inheritComponentClass');
-        }
         foreach ($classes as $c) {
             if ($c&& !in_array($c, $componentClasses)) {
                 if (!class_exists(strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c)) {
