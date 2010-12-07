@@ -84,7 +84,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return in_array($component->componentId, $this->_testCache);
     }
 
-    public function preload(Vps_Component_Data $component)
+    public function preload(Vps_Component_Data $component = null)
     {
         $page = $component;
         while ($page && !$page->isPage) $page = $page->parent;
@@ -96,7 +96,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return $ret;
     }
 
-    private function _preloadSql(Vps_Component_Data $page)
+    private function _preloadSql(Vps_Component_Data $page = null)
     {
         $db = Vps_Registry::get('db');
 
@@ -129,7 +129,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return $ret;
     }
 
-    private function _preloadExpr(Vps_Component_Data $page)
+    private function _preloadExpr(Vps_Component_Data $page = null)
     {
         $or = array();
 
