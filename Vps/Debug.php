@@ -3,13 +3,12 @@ function _pArray($src, $indent = '')
 {
     $ret = '';
     if (is_array($src)) {
+        $ret .= "{$indent}array ".count($src)." entries (\n";
         foreach ($src as $k=>$i) {
             $ret .= $indent."$k =>\n";
             $ret .= _pArray($i, $indent . '  ');
         }
-        if (!$src) {
-            $ret .= $indent."(empty array)\n";
-        }
+        $ret .= "{$indent})\n";
     } else {
         if (is_object($src) && method_exists($src, 'toDebug')) {
             $src = $src->toDebug();
@@ -229,6 +228,10 @@ class Vps_Debug
     public static function handleError($errno, $errstr, $errfile, $errline)
     {
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
+        if (defined('E_DEPRECATED') && $errno == E_DEPRECATED
+            && (strpos($errfile, '/usr/share/php/') !== false)) {
+            return;
+        }
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
