@@ -88,40 +88,33 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     {
         $page = $component;
         while ($page && !$page->isPage) $page = $page->parent;
-        if ($this->getModel() instanceof Vps_Model_Db) {
-            return $this->_preloadSql($page);
+        if ($this->getModel()->getProxyModel() instanceof Vps_Model_Db) {
+            $ret = $this->_preloadSql($page);
         } else {
-            return $this->_preloadExpr($page);
+            $ret = $this->_preloadExpr($page);
         }
+        return $ret;
     }
 
     private function _preloadSql(Vps_Component_Data $page)
     {
         $db = Vps_Registry::get('db');
-        $or = array();
 
         // Alles von eigener Page
         if ($page) {
             $wherePage = "page_id = '$page->componentId'";
         } else {
-            $wherePage = "ISNULL(page_id)";
-        }
-        $or[] = $wherePage;
-
-        // PreloadIds der Page
-        $sql = "SELECT preload_type, preload_component_id FROM cache_componentpreload WHERE $wherePage";
-        $preloadIds = array();
-        foreach ($db->query($sql)->fetchAll() as $preload) {
-            $preloadIds[$preload['preload_type']][] = $preload['preload_component_id'];
-        }
-        foreach ($preloadIds as $type => $ids) {
-            $or[] = "(type = '$type' AND component_id IN ('".implode("','", $ids)."'))";
+            $wherePage = "page_id IS NULL";
         }
 
         $sql = "SELECT type, component_id, value, content FROM cache_component
+            LEFT JOIN cache_componentpreload
+                ON cache_component.type=cache_componentpreload.preload_type
+                AND cache_component.component_id=cache_componentpreload.preload_component_id
+                AND cache_componentpreload.$wherePage
             WHERE deleted=0
             AND (ISNULL(expire) OR expire >= '".time()."')
-            AND (".implode(' OR ', $or).")";
+            AND (cache_component.$wherePage OR cache_componentpreload.$wherePage)";
         $ret = array();
         foreach ($db->query($sql)->fetchAll() as $row) {
             $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
