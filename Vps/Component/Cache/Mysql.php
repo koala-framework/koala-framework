@@ -7,12 +7,12 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     public function __construct()
     {
         $this->_models = array (
-            'cache' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_Model'),
-            'preload' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_PreloadModel'),
-            'metaModel' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaModelModel'),
-            'metaRow' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaRowModel'),
-            'metaComponent' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaComponentModel'),
-            'metaChained' => Vps_Model_Abstract::getInstance('Vps_Component_Cache_Mysql_MetaChainedModel'),
+            'cache' => 'Vps_Component_Cache_Mysql_Model',
+            'preload' => 'Vps_Component_Cache_Mysql_PreloadModel',
+            'metaModel' => 'Vps_Component_Cache_Mysql_MetaModelModel',
+            'metaRow' => 'Vps_Component_Cache_Mysql_MetaRowModel',
+            'metaComponent' => 'Vps_Component_Cache_Mysql_MetaComponentModel',
+            'metaChained' => 'Vps_Component_Cache_Mysql_MetaChainedModel',
         );
     }
 
@@ -21,7 +21,11 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
      */
     public function getModel($type = 'cache')
     {
-        return isset($this->_models[$type]) ? $this->_models[$type] : null;
+        if (!isset($this->_models[$type])) return null;
+        if (is_string($this->_models[$type])) {
+            $this->_models[$type] = Vps_Model_Abstract::getInstance($this->_models[$type]);
+        }
+        return $this->_models[$type];
     }
 
     public function save(Vps_Component_Data $component, $content, $type = 'component', $value = '')
@@ -47,18 +51,18 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'buffer' => true,
             'replace' => true
         );
-        $this->_models['cache']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+        $this->getModel('cache')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
         return true;
     }
 
     public function load(Vps_Component_Data $component, $type = 'component', $value = '')
     {
-        $select = $this->_models['cache']->select()
+        $select = $this->getModel('cache')->select()
             ->whereEquals('component_id', $component->componentId)
             ->whereEquals('type', $type)
             ->whereEquals('deleted', false)
             ->whereEquals('value', $value);
-        $row = $this->_models['cache']->export(Vps_Model_Db::FORMAT_ARRAY, $select);
+        $row = $this->getModel('cache')->export(Vps_Model_Db::FORMAT_ARRAY, $select);
         if ($row) return $row[0]['content'];
         return null;
     }
@@ -88,7 +92,9 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     {
         $page = $component;
         while ($page && !$page->isPage) $page = $page->parent;
-        if ($this->getModel()->getProxyModel() instanceof Vps_Model_Db) {
+        if ($this->_models['cache'] === 'Vps_Component_Cache_Mysql_Model'
+            || $this->getModel('cache')->getProxyModel() instanceof Vps_Model_Db
+        ) {
             $ret = $this->_preloadSql($page);
         } else {
             $ret = $this->_preloadExpr($page);
@@ -191,7 +197,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'buffer' => true,
             'replace' => true
         );
-        $this->_models['preload']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+        $this->getModel('preload')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
     protected function _addRowWhere($wheres, $row, $metaType = Vps_Component_Cache_Meta_Abstract::META_TYPE_DEFAULT)
@@ -413,7 +419,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'buffer' => true,
             'replace' => true
         );
-        $this->_models['metaModel']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+        $this->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
     protected function _saveMetaRow(Vps_Component_Data $component, $modelName, $column, $value, $metaClass)
@@ -431,7 +437,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'buffer' => true,
             'replace' => true
         );
-        $this->_models['metaRow']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+        $this->getModel('metaRow')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
     protected function _saveMetaComponent($dbId, $componentClass, $targetDbId, $targetComponentClass, $metaClass)
@@ -447,7 +453,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'buffer' => true,
             'replace' => true
         );
-        $this->_models['metaComponent']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+        $this->getModel('metaComponent')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
     protected function _saveMetaChained($sourceComponentClass, $targetComponentClass)
@@ -460,13 +466,13 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'buffer' => true,
             'replace' => true
         );
-        $this->_models['metaChained']->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+        $this->getModel('metaChained')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
     }
 
     public function writeBuffer()
     {
         foreach ($this->_models as $m) {
-            $m->writeBuffer();
+            if (is_object($m)) $m->writeBuffer();
         }
     }
 }
