@@ -88,6 +88,49 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     {
         $page = $component;
         while ($page && !$page->isPage) $page = $page->parent;
+        if ($this->getModel() instanceof Vps_Model_Db) {
+            return $this->_preloadSql($page);
+        } else {
+            return $this->_preloadExpr($page);
+        }
+    }
+
+    private function _preloadSql(Vps_Component_Data $page)
+    {
+        $db = Vps_Registry::get('db');
+        $or = array();
+
+        // Alles von eigener Page
+        if ($page) {
+            $wherePage = "page_id = '$page->componentId'";
+        } else {
+            $wherePage = "ISNULL(page_id)";
+        }
+        $or[] = $wherePage;
+
+        // PreloadIds der Page
+        $sql = "SELECT preload_type, preload_component_id FROM cache_componentpreload WHERE $wherePage";
+        $preloadIds = array();
+        foreach ($db->query($sql)->fetchAll() as $preload) {
+            $preloadIds[$preload['preload_type']][] = $preload['preload_component_id'];
+        }
+        foreach ($preloadIds as $type => $ids) {
+            $or[] = "(type = '$type' AND component_id IN ('".implode("','", $ids)."'))";
+        }
+
+        $sql = "SELECT type, component_id, value, content FROM cache_component
+            WHERE deleted=0
+            AND (ISNULL(expire) OR expire >= '".time()."')
+            AND (".implode(' OR ', $or).")";
+        $ret = array();
+        foreach ($db->query($sql)->fetchAll() as $row) {
+            $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
+        }
+        return $ret;
+    }
+
+    private function _preloadExpr(Vps_Component_Data $page)
+    {
         $or = array();
 
         // Alles von eigener Page
