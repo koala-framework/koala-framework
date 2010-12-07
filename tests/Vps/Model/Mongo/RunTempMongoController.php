@@ -3,7 +3,7 @@ class Vps_Model_Mongo_RunTempMongoController extends Vps_Controller_Action
 {
     public function indexAction()
     {
-        $mongoDir = "/home/niko/mongodb-linux-i686-1.6.1"; //TODO, obviously
+        $mongoDir = "/usr";
         $debugOutput = true;
 
         $port = $this->_getParam('port');
