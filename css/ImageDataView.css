@@ -6,7 +6,7 @@ div.imageGrid .thumb {
     background: #dddddd;
 }
 div.imageGrid .thumb td {
-    width: 100px; height: 100px;
+    width: 140px; height: 140px;
     text-align: center; vertical-align: middle;
     line-height: 0px;
 }
@@ -23,7 +23,7 @@ div.imageGrid .thumb-wrap div.label {
 }
 
 .big-wrap div.label {
-    font-weight: bold; margin-bottom: 5px; font-size: 13px; color: #15428B;
+    font-weight: bold; padding-bottom: 4px; padding-top: 2px; font-size: 14px; color: #15428B;
 }
 
 div.imageGrid .x-view-over {
