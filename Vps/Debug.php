@@ -3,13 +3,12 @@ function _pArray($src, $indent = '')
 {
     $ret = '';
     if (is_array($src)) {
+        $ret .= "{$indent}array ".count($src)." entries (\n";
         foreach ($src as $k=>$i) {
             $ret .= $indent."$k =>\n";
             $ret .= _pArray($i, $indent . '  ');
         }
-        if (!$src) {
-            $ret .= $indent."(empty array)\n";
-        }
+        $ret .= "{$indent})\n";
     } else {
         if (is_object($src) && method_exists($src, 'toDebug')) {
             $src = $src->toDebug();
