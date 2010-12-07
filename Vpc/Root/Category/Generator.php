@@ -27,7 +27,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
              return;
         }
         $select = $this->_getModel()->select()->order('pos');
-        $rows = $this->_getModel()->fetchAll($select)->toArray();
+        $rows = $this->_getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select);
         foreach ($rows as $row) {
             $this->_pageData[$row['id']] = $row;
             $parentId = $row['parent_id'];
