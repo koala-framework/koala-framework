@@ -6,7 +6,7 @@
  * @group Model_MirrorCache_Delay
  * @group slow
  */
-class Vps_Model_MirrorCache_DelayWithHttpAndCliTest extends PHPUnit_Framework_TestCase
+class Vps_Model_MirrorCache_DelayWithHttpAndCliTest extends Vps_Test_TestCase
 {
     public function testSyncWithCli()
     {
