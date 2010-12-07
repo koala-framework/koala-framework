@@ -19,13 +19,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     {
         if ($this->_pageDataLoaded) return;
         $this->_pageDataLoaded = true;
-
-
-        if ($select->hasPart(Vps_Component_Select::WHERE_ID) &&
-            isset($this->_pageData[$select->getPart(Vps_Component_Select::WHERE_ID)])
-        ) {
-             return;
-        }
         $select = $this->_getModel()->select()->order('pos');
         $rows = $this->_getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select);
         foreach ($rows as $row) {
