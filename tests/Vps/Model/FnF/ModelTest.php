@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_FnF
  */
-class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
+class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 {
     public function testRowUnset()
     {

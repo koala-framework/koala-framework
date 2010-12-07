@@ -2,12 +2,16 @@
 /**
  * @group Component_SharedData
  */
-class Vps_Component_SharedData_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_SharedData_Test extends Vpc_TestAbstract
 {
+    public function setUp()
+    {
+        parent::setUp('Vps_Component_SharedData_Component');
+    }
+
     public function testIt()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_SharedData_Component');
-        $root = Vps_Component_Data_Root::getInstance();
+        $root = $this->_root;
         $component = $root->getComponentById('root_2-shared');
 
         $sharedComponents = Vps_Controller_Action_Component_PagesController::getSharedComponents($root);

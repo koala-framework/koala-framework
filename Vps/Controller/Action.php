@@ -8,6 +8,8 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     public function preDispatch()
     {
+        Vps_Util_Https::ensureHttps();
+
         if (!$this instanceof Vps_Controller_Action_Error_ErrorController
                 && $this->_getParam('application_max_assets_mtime')
                 && $this->getHelper('ViewRenderer')->isJson()) {
