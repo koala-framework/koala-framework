@@ -108,20 +108,22 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         }
 
         $sql = "
-            (SELECT type, component_id, value, content
+            (SELECT type, component_id, value, content, deleted
                 FROM cache_component
                         WHERE cache_component.$wherePage
                         AND deleted=0
                         AND (ISNULL(expire) OR expire >= '".time()."')
-            ) UNION (SELECT type, component_id, value, content
+            ) UNION (SELECT type, component_id, value, content, deleted
                 FROM cache_component
                         RIGHT JOIN cache_componentpreload
                             ON cache_component.type=cache_componentpreload.preload_type
                             AND cache_component.component_id=cache_componentpreload.preload_component_id
                         WHERE cache_componentpreload.$wherePage
-                        AND deleted=0
-                        AND (ISNULL(expire) OR expire >= '".time()."')
+                        AND (ISNULL(expire) OR expire >= '".time()."
+                        HAVING deleted=0')
             )";
+                        //HAVING deleted=0 weil sonst gar kein index verwendet wird. (mysql ist scheiße)
+                        //(auf deleted haben wir sowiso keinen, damit löschen möglichst schnell ist)
         $ret = array();
         foreach ($db->query($sql)->fetchAll() as $row) {
             $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
