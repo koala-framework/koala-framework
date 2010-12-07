@@ -10,12 +10,12 @@ class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
         $ret = array();
         $data = $this->getData();
         $ids = array();
-        while ($data && !$data->isPseudoPage) {
+        while ($data && !$data->inherits) {
             $ids[] = strrchr($data->componentId, '-');
             $data = $data->parent;
         }
         while ($data) {
-            if ($data->isPseudoPage) {
+            if ($data->inherits) {
                 $d = $data;
                 foreach (array_reverse($ids) as $id) {
                     $d = $d->getChildComponent($id);
