@@ -107,14 +107,21 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             $wherePage = "page_id IS NULL";
         }
 
-        $sql = "SELECT type, component_id, value, content FROM cache_component
-            LEFT JOIN cache_componentpreload
-                ON cache_component.type=cache_componentpreload.preload_type
-                AND cache_component.component_id=cache_componentpreload.preload_component_id
-                AND cache_componentpreload.$wherePage
-            WHERE deleted=0
-            AND (ISNULL(expire) OR expire >= '".time()."')
-            AND (cache_component.$wherePage OR cache_componentpreload.$wherePage)";
+        $sql = "
+            (SELECT type, component_id, value, content
+                FROM cache_component
+                        WHERE cache_component.$wherePage
+                        AND deleted=0
+                        AND (ISNULL(expire) OR expire >= '".time()."')
+            ) UNION (SELECT type, component_id, value, content
+                FROM cache_component
+                        RIGHT JOIN cache_componentpreload
+                            ON cache_component.type=cache_componentpreload.preload_type
+                            AND cache_component.component_id=cache_componentpreload.preload_component_id
+                        WHERE cache_componentpreload.$wherePage
+                        AND deleted=0
+                        AND (ISNULL(expire) OR expire >= '".time()."')
+            )";
         $ret = array();
         foreach ($db->query($sql)->fetchAll() as $row) {
             $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
