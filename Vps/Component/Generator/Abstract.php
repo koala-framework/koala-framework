@@ -19,6 +19,7 @@ abstract class Vps_Component_Generator_Abstract
 
     public function __sleep()
     {
+        throw new Vps_Exception("serializing generators is not possible because you could have multiple instances of the same generators");
         $ret = array();
         foreach (array_keys(get_object_vars($this)) as $i) {
             if ($i != '_model' && $i != '_plugins') {
@@ -30,7 +31,7 @@ abstract class Vps_Component_Generator_Abstract
 
     public function __wakeup()
     {
-        Vps_Benchmark::count('generators wokeup');
+        throw new Vps_Exception("unserializing generators is not possible");
     }
 
     protected function __construct($class, $settings)
