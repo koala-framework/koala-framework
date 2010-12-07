@@ -31,5 +31,7 @@ class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
 
     public function hasContent()
     {
+        //TODO, ist mit cache loeschen womoeglich ein problem
+        return true;
     }
 }
