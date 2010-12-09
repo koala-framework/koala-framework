@@ -23,6 +23,7 @@ class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
                 if (!$d) break;
                 if ($d->componentClass != $this->getData()->componentClass) {
                     $ret['parentComponent'] = $d;
+                    break;
                 }
             }
             $data = $data->parent;
