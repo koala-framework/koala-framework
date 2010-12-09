@@ -113,6 +113,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             $wherePage = "page_id IS NULL";
         }
 
+        /*
         $sql = "
             (SELECT type, component_id, value, content, deleted
                 FROM cache_component
@@ -130,6 +131,15 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             )";
                         //HAVING deleted=0 weil sonst gar kein index verwendet wird. (mysql ist scheiße)
                         //(auf deleted haben wir sowiso keinen, damit löschen möglichst schnell ist)
+        */
+        $sql = "
+            SELECT type, component_id, value, content, deleted
+                FROM cache_component
+                        WHERE cache_component.$wherePage
+                        AND deleted=0
+                        AND (ISNULL(expire) OR expire >= '".time()."')
+            ";
+
         $ret = array();
         foreach ($db->query($sql)->fetchAll() as $row) {
             $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
@@ -148,6 +158,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             $or[] = new Vps_Model_Select_Expr_IsNull('page_id');
         }
 
+        /*
         // PreloadIds der Page
         $preloadSelect = $this->getModel('preload')->select();
         if ($page) {
@@ -167,6 +178,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 ));
             }
         }
+        */
 
         $select = $this->getModel()->select()->where(
             new Vps_Model_Select_Expr_And(array(
