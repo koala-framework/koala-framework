@@ -42,7 +42,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'db_id' => $component->dbId,
             'component_class' => $component->componentClass,
             'type' => $type,
-            'value' => $value,
+            'value' => (string)$value,
             'nocache' => $enableCache ? 0 : 1,
             'expire' => $expire,
             'deleted' => false,
