@@ -67,6 +67,7 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         );
 
         // Preload-Cache
+        /*
         if ($this->_getRenderer()) {
             $renderComponent = $this->_getRenderer()->getRenderComponent();
             $renderPageId = $renderComponent->getPage() ? $renderComponent->getPage()->componentId : null;
@@ -75,6 +76,7 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
                 $cache->savePreload($renderPageId, $componentId, $type);
             }
         }
+        */
 
         // Meta-Cache
         foreach ($component->getComponent()->getCacheMeta() as $m) {
