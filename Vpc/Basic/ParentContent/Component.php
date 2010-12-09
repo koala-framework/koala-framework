@@ -20,6 +20,7 @@ class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
                 foreach (array_reverse($ids) as $id) {
                     $d = $d->getChildComponent($id);
                 }
+                if (!$d) break;
                 if ($d->componentClass != $this->getData()->componentClass) {
                     $ret['parentComponent'] = $d;
                 }
