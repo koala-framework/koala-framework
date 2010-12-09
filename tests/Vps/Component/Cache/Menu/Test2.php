@@ -68,7 +68,7 @@ class Vps_Component_Cache_Menu_Test2 extends Vpc_TestAbstract
 
     public function testMenu2Page3()
     {
-        $page = $this->_root->getComponentById(3);
+        $page = $this->_root->getComponentById(3); //ebene 3
 
         $html = $page->render(true, true);
         $this->assertEquals(3, substr_count($html, '<li'));
