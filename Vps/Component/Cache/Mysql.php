@@ -28,7 +28,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return $this->_models[$type];
     }
 
-    public function save(Vps_Component_Data $component, $content, $type = 'component', $value = '')
+    public function save(Vps_Component_Data $component, $content, $type = 'component', $value = '', $enableCache = true)
     {
         $settings = $component->getComponent()->getViewCacheSettings();
 
@@ -43,6 +43,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'component_class' => $component->componentClass,
             'type' => $type,
             'value' => $value,
+            'nocache' => $enableCache ? 0 : 1,
             'expire' => $expire,
             'deleted' => false,
             'content' => $content
@@ -88,29 +89,43 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return in_array($component->componentId, $this->_testCache);
     }
 
-    public function preload(Vps_Component_Data $component = null)
+    public function preload($where)
     {
-        $page = $component;
-        while ($page && !$page->isPage) $page = $page->parent;
         if ($this->_models['cache'] === 'Vps_Component_Cache_Mysql_Model'
             || $this->getModel('cache')->getProxyModel() instanceof Vps_Model_Db
         ) {
-            $ret = $this->_preloadSql($page);
+            $rows = $this->_preloadSql($where);
         } else {
-            $ret = $this->_preloadExpr($page);
+            $rows = $this->_preloadExpr($where);
         }
+        $ret = array();
+        foreach ($rows as $row) {
+            if ($row['deleted'] == 1 || $row['nocache'] == 1 || ($row['expire'] && $row['expire'] < time())) {
+                $content = null;
+            } else {
+                $content = $row['content'];
+            }
+            $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $content;
+        }
+
         return $ret;
     }
 
-    private function _preloadSql(Vps_Component_Data $page = null)
+    private function _preloadSql($where)
     {
         $db = Vps_Registry::get('db');
 
         // Alles von eigener Page
-        if ($page) {
-            $wherePage = "page_id = '$page->componentId'";
-        } else {
-            $wherePage = "page_id IS NULL";
+        $wheres = array();
+        foreach ($where as $k => $v) {
+            if (is_array($v)) {
+                $v = implode("', '", $v);
+                $wheres[] = "cache_component.$k IN ('$v')";
+            } else if ($v) {
+                $wheres[] = "cache_component.$k = '$v'";
+            } else {
+                $wheres[] = "cache_component.$k IS NULL";
+            }
         }
 
         /*
@@ -133,30 +148,28 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                         //(auf deleted haben wir sowiso keinen, damit löschen möglichst schnell ist)
         */
         $sql = "
-            SELECT type, component_id, value, content, deleted
-                FROM cache_component
-                        WHERE cache_component.$wherePage
-                        AND deleted=0
-                        AND (ISNULL(expire) OR expire >= '".time()."')
-            ";
+            SELECT type, component_id, value, content, deleted, expire, nocache
+            FROM cache_component
+            WHERE " . implode(' AND ', $wheres) . "
+        ";
 
-        $ret = array();
-        foreach ($db->query($sql)->fetchAll() as $row) {
-            $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
-        }
-        return $ret;
+        return $db->query($sql)->fetchAll();
     }
 
-    private function _preloadExpr(Vps_Component_Data $page = null)
+    private function _preloadExpr($where)
     {
         $or = array();
 
         // Alles von eigener Page
-        if ($page) {
-            $or[] = new Vps_Model_Select_Expr_Equal('page_id', $page->componentId);
-        } else {
-            $or[] = new Vps_Model_Select_Expr_IsNull('page_id');
+        $and = array();
+        foreach ($where as $k => $v) {
+            if ($v) {
+                $and[] = new Vps_Model_Select_Expr_Equal($k, $v);
+            } else {
+                $and[] = new Vps_Model_Select_Expr_IsNull($k);
+            }
         }
+        $or[] = new Vps_Model_Select_Expr_And($and);
 
         /*
         // PreloadIds der Page
@@ -181,21 +194,10 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         */
 
         $select = $this->getModel()->select()->where(
-            new Vps_Model_Select_Expr_And(array(
-                new Vps_Model_Select_Expr_Equal('deleted', 0),
-                new Vps_Model_Select_Expr_Or(array(
-                    new Vps_Model_Select_Expr_IsNull('expire'),
-                    new Vps_Model_Select_Expr_HigherEqual('expire', time())
-                )),
-                new Vps_Model_Select_Expr_Or($or)
-            ))
+            new Vps_Model_Select_Expr_Or($or)
         );
 
-        $ret = array();
-        foreach ($this->getModel()->export(Vps_Model_Db::FORMAT_ARRAY, $select) as $row) {
-            $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
-        }
-        return $ret;
+        return $this->getModel()->export(Vps_Model_Db::FORMAT_ARRAY, $select);
     }
 
     public function savePreload($pageId, $preloadComponentId, $preloadType)

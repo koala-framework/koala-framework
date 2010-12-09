@@ -68,10 +68,10 @@ class Vps_Component_Output_CacheTest extends Vps_Test_TestCase
         $model = Vps_Component_Cache::getInstance()->getModel('cache');
         $value = $this->_renderer->renderMaster($this->_root);
         $this->assertEquals('c2_root c2_childmaster c2_child c2_childNoCache ', $value);
-        $this->assertEquals(3, $model->countRows());
+        $this->assertEquals(4, $model->countRows());
         $stats = $this->_renderer->getStats();
         $this->assertEquals(4, count($stats['rendered']));
-        $this->assertEquals(3, count($stats['cacheSaved']));
+        $this->assertEquals(4, count($stats['cacheSaved']));
     }
 
     public function testC4()

@@ -40,9 +40,11 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
     public function saveCache($componentId, $config, $value, $content)
     {
         $component = $this->_getComponentById($componentId);
-        $cacheSettings = $component->getComponent()->getViewCacheSettings();
-        if (!$cacheSettings['enabled']) return false;
+
         $type = $this->_getType();
+
+        $cacheSettings = $component->getComponent()->getViewCacheSettings();
+        $enableCache = $cacheSettings['enabled'];
 
         $cache = Vps_Component_Cache::getInstance();
 
@@ -63,24 +65,27 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
             $component,
             $content,
             $type,
-            $value
+            $value,
+            $enableCache
         );
 
-        // Preload-Cache
-        /*
-        if ($this->_getRenderer()) {
-            $renderComponent = $this->_getRenderer()->getRenderComponent();
-            $renderPageId = $renderComponent->getPage() ? $renderComponent->getPage()->componentId : null;
-            $pageId = $component->getPage() ? $component->getPage()->componentId : null;
-            if ($renderPageId != $pageId) {
-                $cache->savePreload($renderPageId, $componentId, $type);
+        if ($type != 'nocache') {
+            // Preload-Cache
+            /*
+            if ($this->_getRenderer()) {
+                $renderComponent = $this->_getRenderer()->getRenderComponent();
+                $renderPageId = $renderComponent->getPage() ? $renderComponent->getPage()->componentId : null;
+                $pageId = $component->getPage() ? $component->getPage()->componentId : null;
+                if ($renderPageId != $pageId) {
+                    $cache->savePreload($renderPageId, $componentId, $type);
+                }
             }
-        }
-        */
+            */
 
-        // Meta-Cache
-        foreach ($component->getComponent()->getCacheMeta() as $m) {
-            $cache->saveMeta($component, $m);
+            // Meta-Cache
+            foreach ($component->getComponent()->getCacheMeta() as $m) {
+                $cache->saveMeta($component, $m);
+            }
         }
 
         return true;
