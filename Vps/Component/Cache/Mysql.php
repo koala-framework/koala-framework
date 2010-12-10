@@ -28,7 +28,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return $this->_models[$type];
     }
 
-    public function save(Vps_Component_Data $component, $content, $type = 'component', $value = '', $enableCache = true)
+    public function save(Vps_Component_Data $component, $content, $type = 'component', $value = '')
     {
         $settings = $component->getComponent()->getViewCacheSettings();
 
@@ -43,7 +43,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'component_class' => $component->componentClass,
             'type' => $type,
             'value' => (string)$value,
-            'nocache' => $enableCache ? 0 : 1,
             'expire' => $expire,
             'deleted' => false,
             'content' => $content
@@ -89,116 +88,43 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         return in_array($component->componentId, $this->_testCache);
     }
 
-    public function preload($where)
+    public final function preload($where)
     {
-        if ($this->_models['cache'] === 'Vps_Component_Cache_Mysql_Model'
-            || $this->getModel('cache')->getProxyModel() instanceof Vps_Model_Db
-        ) {
-            $rows = $this->_preloadSql($where);
-        } else {
-            $rows = $this->_preloadExpr($where);
-        }
         $ret = array();
-        foreach ($rows as $row) {
-            if ($row['deleted'] == 1 || $row['nocache'] == 1 || ($row['expire'] && $row['expire'] < time())) {
-                $content = null;
-            } else {
-                $content = $row['content'];
-            }
-            $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $content;
+        foreach ($this->_preload($where) as $row) {
+            $ret[$row['type']][(string)$row['component_id']][(string)$row['value']] = $row['content'];
         }
-
         return $ret;
     }
 
-    private function _preloadSql($where)
+    protected function _preload($where)
     {
-        $db = Vps_Registry::get('db');
-
         // Alles von eigener Page
-        $wheres = array();
-        foreach ($where as $k => $v) {
-            if (is_array($v)) {
-                $v = implode("', '", $v);
-                $wheres[] = "cache_component.$k IN ('$v')";
-            } else if ($v) {
-                $wheres[] = "cache_component.$k = '$v'";
+        $or = array();
+        foreach ($where as $pageId => $componentIds) {
+            if (is_null($componentIds)) {
+                $or[] = "page_id IS NULL";
             } else {
-                $wheres[] = "cache_component.$k IS NULL";
+                foreach ($componentIds as $componentId) {
+                    if (strpos($componentId, '%') !== false) {
+                        $or[] = "(page_id = '$pageId' AND component_id LIKE ('$componentId'))";
+                    } else {
+                        $or[] = "component_id = '$componentId'";
+                    }
+                }
             }
         }
 
-        /*
         $sql = "
-            (SELECT type, component_id, value, content, deleted
-                FROM cache_component
-                        WHERE cache_component.$wherePage
-                        AND deleted=0
-                        AND (ISNULL(expire) OR expire >= '".time()."')
-            ) UNION (SELECT type, component_id, value, content, deleted
-                FROM cache_component
-                        RIGHT JOIN cache_componentpreload
-                            ON cache_component.type=cache_componentpreload.preload_type
-                            AND cache_component.component_id=cache_componentpreload.preload_component_id
-                        WHERE cache_componentpreload.$wherePage
-                        AND (ISNULL(expire) OR expire >= '".time()."
-                        HAVING deleted=0')
-            )";
-                        //HAVING deleted=0 weil sonst gar kein index verwendet wird. (mysql ist scheiße)
-                        //(auf deleted haben wir sowiso keinen, damit löschen möglichst schnell ist)
-        */
-        $sql = "
-            SELECT type, component_id, value, content, deleted, expire, nocache
+            SELECT type, component_id, value, content, deleted, expire
             FROM cache_component
-            WHERE " . implode(' AND ', $wheres) . "
+            WHERE (" . implode(' OR ', $or) . ")
+                AND deleted=0
+                AND (ISNULL(expire) OR expire >= '".time()."')
         ";
         Vps_Benchmark::count('component cache preload', implode(' AND ', $wheres));
 
-        return $db->query($sql)->fetchAll();
-    }
-
-    private function _preloadExpr($where)
-    {
-        $or = array();
-
-        // Alles von eigener Page
-        $and = array();
-        foreach ($where as $k => $v) {
-            if ($v) {
-                $and[] = new Vps_Model_Select_Expr_Equal($k, $v);
-            } else {
-                $and[] = new Vps_Model_Select_Expr_IsNull($k);
-            }
-        }
-        $or[] = new Vps_Model_Select_Expr_And($and);
-
-        /*
-        // PreloadIds der Page
-        $preloadSelect = $this->getModel('preload')->select();
-        if ($page) {
-            $preloadSelect->whereEquals('page_id', $page->componentId);
-        } else {
-            $preloadSelect->whereNull('page_id');
-        }
-        $preloadIds = array();
-        foreach ($this->getModel('preload')->export(Vps_Model_Db::FORMAT_ARRAY, $preloadSelect) as $preload) {
-            $preloadIds[$preload['preload_type']][] = $preload['preload_component_id'];
-        }
-        if ($preloadIds) {
-            foreach ($preloadIds as $type => $ids) {
-                $or[] = new Vps_Model_Select_Expr_And(array(
-                    new Vps_Model_Select_Expr_Equal('type', $type),
-                    new Vps_Model_Select_Expr_Equal('component_id', $ids)
-                ));
-            }
-        }
-        */
-
-        $select = $this->getModel()->select()->where(
-            new Vps_Model_Select_Expr_Or($or)
-        );
-
-        return $this->getModel()->export(Vps_Model_Db::FORMAT_ARRAY, $select);
+        return Vps_Registry::get('db')->query($sql)->fetchAll();
     }
 
     public function savePreload($pageId, $preloadComponentId, $preloadType)

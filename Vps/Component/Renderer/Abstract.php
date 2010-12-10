@@ -2,13 +2,13 @@
 abstract class Vps_Component_Renderer_Abstract
 {
     private $_enableCache = false;
-    private $_stats = array();
     private $_renderComponent;
     private $_cache = array();
+    private $_preloaded = array();
 
     public function setEnableCache($enableCache)
     {
-        $this->_enableCache = $enableCache;
+        $this->_enableCache = true;
     }
 
     public function renderComponent($component)
@@ -20,16 +20,11 @@ abstract class Vps_Component_Renderer_Abstract
             'cachePreloaded' => array(),
             'cacheRendered' => array()
         );
-        $this->_cache = array();
         if ($this->_enableCache) {
             $page = $component;
             while ($page && !$page->isPage) $page = $page->parent;
-            if ($page) {
-                $where = array('page_id' => $page->componentId);
-            } else {
-                $where = array('page_id' => null); //nur bei tests wenn root ein template hat
-            }
-            $this->_preload($where);
+            $pageId = $page ? $page->componentId . '%' : null; // null nur bei tests wenn root ein template hat
+            $this->_preload(array($pageId));
         }
         $view = new Vps_Component_View($this);
         $ret = $this->render($view->component($component));
@@ -39,8 +34,22 @@ abstract class Vps_Component_Renderer_Abstract
         return $ret;
     }
 
-    private function _preload($where)
+    private function _preload($componentIds)
     {
+        Vps_Benchmark::count("cache preload", implode(', ', $componentIds));
+
+        $where = array();
+        foreach ($componentIds as $componentId) {
+            $pageId = $this->_getPageIdFromComponentId($componentId);
+
+            if (!isset($where[$pageId])) $where[$pageId] = array();
+            $where[$pageId][] = $componentId;
+
+            if (!isset($this->_preloaded[$pageId])) $this->_preloaded[$pageId] = array();
+            $this->_preloaded[$pageId][] = $componentId;
+            $this->_preloaded[$pageId] = array_unique($this->_preloaded[$pageId]);
+        }
+
         $c = Vps_Component_Cache::getInstance()->preload($where);
         foreach ($c as $type => $componentIds) {
             foreach ($componentIds as $componentId => $values) {
@@ -49,52 +58,70 @@ abstract class Vps_Component_Renderer_Abstract
                 }
             }
         }
+    }
 
-        $this->_stats['cachePreloaded'] = array();
-        foreach ($this->_cache as $type => $componentIds) {
-            foreach ($componentIds as $componentId => $values) {
-                foreach ($values as $value => $null) {
-                    $statId = $componentId;
-                    if ($value) $statId .= ' (' . $value .')';
-                    if ($type != 'component') $statId .= ': ' . $type;
-                    $this->_stats['cachePreloaded'][] = $statId;
+    private function _getPageIdFromComponentId($componentId)
+    {
+        $pageId = $componentId;
+        $pos = strpos($pageId, '%');
+        if ($pos !== false) {
+            $pageId = substr($pageId, 0, $pos);
+        }
+        $pos = strpos($pageId, '_');
+        if ($pos !== false) {
+            $pageId = substr($pageId, 0, $pos);
+        }
+        return $pageId;
+    }
+
+    private function _isPreloaded($componentId)
+    {
+        $pageId = $this->_getPageIdFromComponentId($componentId);
+        foreach ($this->_preloaded as $preloadedPageId => $preloadedComponentIds) {
+            foreach ($preloadedComponentIds as $preloadedComponentId) {
+                if ($preloadedPageId == $pageId) {
+                    $pattern = '/^' . str_replace('%', '[0-9\-_]*', $preloadedComponentId) . '/';
+                    preg_match($pattern, $componentId, $matches);
+                    if ($matches) {
+                        return true;
+                    }
                 }
             }
         }
+        return false;
     }
 
-    /**
-     * Eigentliche Render-Schleife
-     *
-     * Parst in einer Schleife $ret und rendert die gleiche View immer wieder.
-     * In der View können Daten über mehrere Render- und Helper-Aufrufe hinweg gespeichert
-     * werden, deshalb immer die gleiche View.
-     *
-     * @param $view
-     * @param $ret
-     */
     public function render($ret = null)
     {
         $pluginNr = 0;
-        $preloaded = array();
-        $stats = $this->_stats;
+        $render = true;
+        $pregType = 'cc';
+        $toPreload = array();
 
         $helpers = array();
 
-        // {type: componentId(value)[plugins] config}
-        $x=0;
-        while ($x<100 && preg_match_all('/{cc ([a-z]+): ([^ \[}\(]+)(\([^ }]+\))?(\[[^}]+\])?( [^}]*)}/i', $ret, $matches)) {
-            $x++;
-            $toPreload = array();
-            for ($key = 0; $key < count($matches[0]); $key++) {
-                $type = $matches[1][$key];
-                $componentId = trim($matches[2][$key]);
-                $value = (string)trim($matches[3][$key]); // Bei Partial partialId oder bei master component_id zu der das master gehört
+        /*
+        So lange rendern bis nichts mehr zu rendern ist (rendered==0)
+        Falls nicht in Cache regulären Ausdruck ersetzen ({cc ...} -> {pc ...})
+        und so lange cc weiterrendern bis nichts mehr neues kommt
+        Danach alle pc laden und pc rendern
+        Danach wieder auf cc umschalten usw.
+        */
+        while ($render) {
+
+            $rendered = 0;
+
+            // {cc type: componentId(value)[plugins] config}
+            while (preg_match('/{' . $pregType . ' ([a-z]+): ([^ \[}\(]+)(\([^ }]+\))?(\[[^}]+\])?( [^}]*)}/i', $ret, $matches)) {
+                $rendered++;
+                $type = $matches[1];
+                $componentId = trim($matches[2]);
+                $value = (string)trim($matches[3]); // Bei Partial partialId oder bei master component_id zu der das master gehört
                 if ($value) $value = substr($value, 1, -1);
-                $plugins = trim($matches[4][$key]);
+                $plugins = trim($matches[4]);
                 if ($plugins) $plugins = explode(' ', substr($plugins, 1, -1));
                 if (!$plugins) $plugins = array();
-                $config = trim($matches[5][$key]);
+                $config = trim($matches[5]);
                 $config = $config != '' ? unserialize(base64_decode($config)) : array();
 
                 $statId = $componentId;
@@ -109,41 +136,36 @@ abstract class Vps_Component_Renderer_Abstract
                 } else {
                     $helper = $helpers[$type];
                 }
+                $statType = null;
 
-                if ($this->_enableCache) {
-                    $cacheSet =
-                        array_key_exists($type, $this->_cache) &&
-                        array_key_exists($componentId, $this->_cache[$type]) &&
-                        array_key_exists($value, $this->_cache[$type][$componentId]);
-                    $content = $cacheSet ? $this->_cache[$type][$componentId][$value] : null;
-                }
+                if ($this->_enableCache && isset($this->_cache[$type][$componentId][$value])) {
 
-                if ($this->_enableCache && $cacheSet && !is_null($content)) {
-
+                    $content = $this->_cache[$type][$componentId][$value];
                     $content = $helper->renderCached($content, $componentId, $config);
-                    $stats['cacheRendered'][] = $statId;
                     $statType = 'cache';
+                    $processPlugins = true;
 
-                } else if ($this->_enableCache && !$cacheSet && !in_array($componentId, $preloaded)) {
+                } else if ($this->_enableCache && !$this->_isPreloaded($componentId)) {
 
-                    $toPreload[] = $componentId;
+                    $toPreload[] = $componentId . '%';
+                    $content = str_replace('{cc ', '{pc ', $matches[0]);
+                    $processPlugins = false;
 
                 } else {
 
                     $content = $helper->render($componentId, $config);
-                    $stats['rendered'][] = $statId;
 
                     if ($this->_enableCache && $helper->saveCache($componentId, $config, $value, $content)) {
-                        $stats['cacheSaved'][] = $statId;
                         $statType = 'nocache';
                     } else {
                         $statType = 'noviewcache';
                     }
                     $content = $helper->renderCached($content, $componentId, $config);
+                    $processPlugins = true;
 
                 }
 
-                if (!is_null($content)) {
+                if ($processPlugins) {
                     foreach ($plugins as $pluginClass) {
                         $plugin = new $pluginClass($componentId);
                         if (!$plugin instanceof Vps_Component_Plugin_Abstract)
@@ -155,16 +177,20 @@ abstract class Vps_Component_Renderer_Abstract
                             $content = "{plugin $pluginNr $pluginClass $componentId}$content{/plugin $pluginNr}";
                         }
                     }
-
-                    Vps_Benchmark::count("rendered $statType", $statId);
-                    $ret = str_replace($matches[0][$key], $content, $ret);
                 }
+
+                if ($statType) Vps_Benchmark::count("rendered $statType", $statId);
+                $ret = str_replace($matches[0], $content, $ret);
             }
 
-            if ($toPreload) {
-                //p($toPreload);
-                $this->_preload(array('component_id' => $toPreload));
-                $preloaded = array_merge($preloaded, $toPreload);
+            if ($rendered == 0 && count($toPreload) > 0) {
+                $this->_preload($toPreload);
+                $toPreload = array();
+                $pregType = 'pc';
+            } else if ($pregType == 'pc') {
+                $pregType = 'cc';
+            } else if ($rendered == 0) {
+                $render = false;
             }
 
         }
@@ -175,14 +201,8 @@ abstract class Vps_Component_Renderer_Abstract
             $content = $plugin->processOutput($matches[4]);
             $ret = str_replace($matches[0], $content, $ret);
         }
-        $this->_stats = $stats;
-        //p($this->_stats);
-        return $ret;
-    }
 
-    public function getStats()
-    {
-        return $this->_stats;
+        return $ret;
     }
 
     public function getRenderComponent()
