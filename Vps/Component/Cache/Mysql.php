@@ -491,4 +491,13 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             if (is_object($m)) $m->writeBuffer();
         }
     }
+
+    protected function _cleanUrl(Vps_Component_Data $component)
+    {
+        $urlCacheModel = $this->getModel('url');
+        $s = new Vps_Model_Select();
+        $s->whereEquals('page_id', $component->componentId);
+        $urlCacheModel->deleteRows($s);
+        //TODO: parent_ids berücksichtigen, mit eigenem model wo die drinnen stehen
+    }
 }

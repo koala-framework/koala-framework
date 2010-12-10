@@ -22,6 +22,10 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
 
     public function getChildData($parentData, $select = array())
     {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+
         $filename = null;
         $limit = null;
         $ignoreVisible = $select->hasPart(Vps_Component_Select::IGNORE_VISIBLE) ?
