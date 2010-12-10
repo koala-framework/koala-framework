@@ -332,7 +332,8 @@ class Vps_Setup
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Vps_Component_Data_Root::getInstance();
-            $urlCacheModel = Vps_Model_Abstract::getInstance('Vps_Component_UrlCache_Model');
+
+            $urlCacheModel = Vps_Component_Cache::getInstance()->getModel('url');
             $s = new Vps_Model_Select();
             $s->whereEquals('url', $_SERVER['REDIRECT_URL']); //TODO: $requestUrl verwenden
             if ($row = $urlCacheModel->getRow($s)) {
