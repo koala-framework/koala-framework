@@ -122,7 +122,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 AND deleted=0
                 AND (ISNULL(expire) OR expire >= '".time()."')
         ";
-        Vps_Benchmark::count('component cache preload', implode(' AND ', $wheres));
 
         return Vps_Registry::get('db')->query($sql)->fetchAll();
     }
