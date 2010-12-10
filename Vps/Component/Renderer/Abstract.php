@@ -27,7 +27,7 @@ abstract class Vps_Component_Renderer_Abstract
             if ($page) {
                 $where = array('page_id' => $page->componentId);
             } else {
-                $where = array('page_id' => null);
+                $where = array('page_id' => null); //nur bei tests wenn root ein template hat
             }
             $this->_preload($where);
         }
