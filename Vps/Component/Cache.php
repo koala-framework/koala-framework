@@ -198,7 +198,7 @@ abstract class Vps_Component_Cache
                     $componentId, array('ignoreVisible' => true)
                 ) as $component
             ) {
-                $urlCacheModel = Vps_Model_Abstract::getInstance('Vps_Component_UrlCache_Model');
+                $urlCacheModel = $this->getModel('url');
                 $s = new Vps_Model_Select();
                 $s->whereEquals('page_id', $component->componentId);
                 $urlCacheModel->deleteRows($s);
