@@ -3,6 +3,7 @@ abstract class Vps_Component_Cache_Meta_Abstract
 {
     const META_TYPE_DEFAULT = 'default';
     const META_TYPE_CALLBACK = 'callback';
+    const META_TYPE_CLEANURLCACHE = 'cleanUrlCache';
 
     public static function getMetaType()
     {
