@@ -332,15 +332,28 @@ class Vps_Setup
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Vps_Component_Data_Root::getInstance();
-            $data = $root->getPageByUrl($requestUrl, $acceptLanguage);
-            if (!$data) {
-               throw new Vps_Exception_NotFound();
+            $urlCacheModel = Vps_Model_Abstract::getInstance('Vps_Component_UrlCache_Model');
+            $s = new Vps_Model_Select();
+            $s->whereEquals('url', $_SERVER['REDIRECT_URL']); //TODO: $requestUrl verwenden
+            if ($row = $urlCacheModel->getRow($s)) {
+                //TODO: acceptLanguage
+                //TODO: Domains
+                $data = $root->getComponentById($row->page_id);
+            } else {
+                $data = $root->getPageByUrl($requestUrl, $acceptLanguage);
+                if (!$data) {
+                    throw new Vps_Exception_NotFound();
+                }
+                if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
+                    header('Location: '.$data->url);
+                    exit;
+                }
+                $row = $urlCacheModel->createRow();
+                $row->url = $data->url;
+                $row->page_id = $data->componentId;
+                $row->save();
             }
             $root->setCurrentPage($data);
-            if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
-                header('Location: '.$data->url);
-                exit;
-            }
 
             $page = $data->getComponent();
             $page->sendContent();
