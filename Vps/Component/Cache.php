@@ -198,14 +198,12 @@ abstract class Vps_Component_Cache
                     $componentId, array('ignoreVisible' => true)
                 ) as $component
             ) {
-                $urlCacheModel = $this->getModel('url');
-                $s = new Vps_Model_Select();
-                $s->whereEquals('page_id', $component->componentId);
-                $urlCacheModel->deleteRows($s);
-                //TODO: parent_ids berücksichtigen, mit eigenem model wo die drinnen stehen
+                $this->_cleanUrl($component);
             }
         }
     }
+
+    abstract protected function _cleanUrl(Vps_Component_Data $component);
 
     public function writeBuffer()
     {
