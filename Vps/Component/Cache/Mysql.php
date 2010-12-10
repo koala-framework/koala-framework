@@ -152,6 +152,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             FROM cache_component
             WHERE " . implode(' AND ', $wheres) . "
         ";
+        Vps_Benchmark::count('component cache preload', implode(' AND ', $wheres));
 
         return $db->query($sql)->fetchAll();
     }
