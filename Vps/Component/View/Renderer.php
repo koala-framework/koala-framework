@@ -41,12 +41,10 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
     {
         $component = $this->_getComponentById($componentId);
 
-        $type = $this->_getType();
-
         $cacheSettings = $component->getComponent()->getViewCacheSettings();
-        $enableCache = $cacheSettings['enabled'];
+        if (!$cacheSettings['enabled']) return;
 
-        $cache = Vps_Component_Cache::getInstance();
+        $type = $this->_getType();
 
         // Chained-Komponenten brauchen zum Cache löschen den Cache der Master-
         // Komponenten, deshalb hier schreiben
@@ -61,12 +59,11 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         }
 
         // Content-Cache
-        $cache->save(
+        Vps_Component_Cache::getInstance()->save(
             $component,
             $content,
             $type,
-            $value,
-            $enableCache
+            $value
         );
 
         if ($type != 'nocache') {
@@ -84,7 +81,7 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
 
             // Meta-Cache
             foreach ($component->getComponent()->getCacheMeta() as $m) {
-                $cache->saveMeta($component, $m);
+                Vps_Component_Cache::getInstance()->saveMeta($component, $m);
             }
         }
 
