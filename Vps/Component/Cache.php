@@ -44,7 +44,7 @@ abstract class Vps_Component_Cache
                 self::getInstance()->saveMeta($componentClass, $meta);
             }
         }
-        // für componentLink: alle Komponenten, die als Page erstellt werden können
+        // für componentLink+UrlCache: alle Komponenten, die als Page erstellt werden können
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
             foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $setting) {
                 if (!isset($setting['class'])) continue;
@@ -55,6 +55,7 @@ abstract class Vps_Component_Cache
                     $generator->getGeneratorFlag('page') &&
                     $generator->getGeneratorFlag('table')
                 ) {
+                    //ComponentLink
                     $pattern = '{id}';
                     if (isset($setting['dbIdShortcut'])) {
                         $pattern = $setting['dbIdShortcut'] . $pattern;
@@ -63,6 +64,10 @@ abstract class Vps_Component_Cache
                     foreach ($generator->getChildComponentClasses() as $c) {
                         self::getInstance()->saveMeta($c, $meta);
                     }
+
+                    //UrlCache
+                    $meta = new Vps_Component_Cache_Meta_Static_UrlCache($generator);
+                    self::getInstance()->saveMeta('', $meta);
                 }
             }
         }
@@ -180,6 +185,25 @@ abstract class Vps_Component_Cache
                 $componentId, array('ignoreVisible' => true)
             );
             if ($component) $component->getComponent()->onCacheCallback($row);
+        }
+
+        // Url Cache
+        $wheres = array();
+        $wheres = $this->_addRowWhere($wheres, $row, Vps_Component_Cache_Meta_Abstract::META_TYPE_CLEANURLCACHE);
+        $wheres = $this->_addModelWhere($wheres, $row, $dirtyColumns, Vps_Component_Cache_Meta_Abstract::META_TYPE_CLEANURLCACHE);
+        $wheres = $this->_addComponentWhere($wheres);
+        $wheres = $this->_addChainedWhere($wheres);
+        foreach ($this->_getComponentIdsFromWheres($wheres) as $componentId) {
+            foreach (Vps_Component_Data_Root::getInstance()->getComponentsByDbId(
+                    $componentId, array('ignoreVisible' => true)
+                ) as $component
+            ) {
+                $urlCacheModel = Vps_Model_Abstract::getInstance('Vps_Component_UrlCache_Model');
+                $s = new Vps_Model_Select();
+                $s->whereEquals('page_id', $component->componentId);
+                $urlCacheModel->deleteRows($s);
+                //TODO: parent_ids berücksichtigen, mit eigenem model wo die drinnen stehen
+            }
         }
     }
 
