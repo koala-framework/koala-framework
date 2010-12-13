@@ -5,7 +5,7 @@ class Vps_Component_Cache_Fnf_UrlModel extends Vps_Component_Cache_Mysql_UrlMode
     {
         $config['proxyModel'] = new Vps_Model_FnF(array(
             'primaryKey' => 'url',
-            'columns' => array('url', 'page_id'),
+            'columns' => array('url', 'page_id', 'page'),
             'uniqueColumns' => array('url')
         ));
         parent::__construct($config);
