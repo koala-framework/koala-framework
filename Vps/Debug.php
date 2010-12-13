@@ -198,7 +198,7 @@ function bt($file = false)
 {
     if (!Vps_Debug::isEnabled()) return;
     if (php_sapi_name() == 'cli' || $file) {
-        $ret = btString($bt);
+        $ret = btString();
         if ($file) {
             $ret = "=============================================\n\n".$ret;
             file_put_contents('backtrace', $ret, FILE_APPEND);
