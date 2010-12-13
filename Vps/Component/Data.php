@@ -114,6 +114,19 @@ class Vps_Component_Data
                 }
             }
             return $this->_inheritClasses;
+        } else if ($var == 'parent' && isset($this->_lazyParent)) {
+            //TODO: was ist mit ignoreVisible?
+            $ret = Vps_Component_Data_Root::getInstance()->getComponentById($this->_lazyParent);
+            $this->parent = $ret;
+            return $ret;
+        } else if ($var == 'generator' && isset($this->_lazyGenerator)) {
+            $ret = Vps_Component_Generator_Abstract::getInstance($this->_lazyGenerator[0], $this->_lazyGenerator[1]);
+            $this->generator = $ret;
+            return $ret;
+        } else if ($var == 'row' && isset($this->_lazyRow)) {
+            $ret = $this->getModel()->getRow($this->_lazyRow);
+            $this->row = $ret;
+            return $ret;
         } else {
             throw new Vps_Exception("Variable '$var' is not set for ".get_class($this) . " with componentId '{$this->componentId}'");
         }
@@ -839,5 +852,42 @@ class Vps_Component_Data
             return $output->renderComponent($this);
         }
     }
+
+    public function vpsSerialize()
+    {
+        $ret = array();
+        $ret['class'] = get_class($this);
+        foreach (get_object_vars($this) as $k=>$v) {
+            if ($k == '_component') continue;
+            if ($k == '_inheritClasses') continue;
+            if ($k == '_uniqueParentDatas') continue;
+            if ($k == '_constraintsCache') continue;
+            if ($k == '_recursiveGeneratorsCache') continue;
+            if ($k == 'generator') {
+                $v = array($v->getClass(), $v->getGeneratorKey());
+                $k = '_lazyGenerator';
+            } else if ($k == 'row') {
+                $v = $v->{$this->generator->getModel()->getPrimaryKey()};
+                $k = '_lazyRow';
+            } else if ($k == 'parent') {
+                $v = $v->componentId;
+                $k = '_lazyParent';
+            }
+            $ret[$k] = $v;
+        }
+        return $ret;
+    }
+
+    public static function vpsUnserialize($vars)
+    {
+        if ($ret = Vps_Component_Data_Root::getInstance()->getFromDataCache($vars['componentId'])) {
+            return $ret;
+        }
+        $cls = $vars['class'];
+        unset($vars['class']);
+        $ret = new $cls($vars);
+        Vps_Component_Data_Root::getInstance()->addToDataCache($ret, new Vps_Component_Select());
+        //TODO: generator data-cache?
+        return $ret;
+    }
 }
-?>

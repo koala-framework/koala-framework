@@ -4,3 +4,4 @@ CREATE TABLE IF NOT EXISTS `cache_component_processinput` (
   `process_component_ids` text NOT NULL,
   PRIMARY KEY (`page_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+ALTER TABLE `cache_component_url` ADD `page` TEXT NOT NULL ;

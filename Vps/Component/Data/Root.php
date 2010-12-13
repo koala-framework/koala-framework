@@ -471,5 +471,18 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $this->_dataCache[$d->componentId] = $d;
         }
     }
+
+    /**
+     * @internal siehe Vps_Component_Generator_Abstract
+     *
+     * für Component_Data::vpsUnserialize
+     */
+    public function getFromDataCache($id)
+    {
+        if (isset($this->_dataCache[$id])) {
+            return $this->_dataCache[$id];
+        }
+        return null;
+    }
 }
 ?>
