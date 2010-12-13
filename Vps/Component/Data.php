@@ -22,6 +22,7 @@ class Vps_Component_Data
                 $this->_rel = $i;
             } else if ($k == 'filename') {
                 $this->_filename = $i;
+            } else if ($k == 'unserialized') {
             } else {
                 $this->$k = $i;
             }
@@ -29,7 +30,12 @@ class Vps_Component_Data
         if (!isset($this->dbId) && isset($this->componentId)) {
             $this->dbId = $this->componentId;
         }
-        Vps_Benchmark::count('componentDatas', $this->componentId);
+        
+        if (isset($config['unserialized']) && $config['unserialized']) {
+            Vps_Benchmark::count('unserialized componentDatas', $this->componentId);
+        } else {
+            Vps_Benchmark::count('componentDatas', $this->componentId);
+        }
     }
 
     /**
@@ -892,11 +898,13 @@ class Vps_Component_Data
 
     public static function vpsUnserialize($vars)
     {
+        Vps_Benchmark::count('');
         if ($ret = Vps_Component_Data_Root::getInstance()->getFromDataCache($vars['componentId'])) {
             return $ret;
         }
         $cls = $vars['class'];
         unset($vars['class']);
+        $vars['unserialized'] = true;
         $ret = new $cls($vars);
         Vps_Component_Data_Root::getInstance()->addToDataCache($ret, new Vps_Component_Select());
         //TODO: generator data-cache?
