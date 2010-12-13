@@ -116,8 +116,7 @@ class Vps_Component_Data
             }
             return $this->_inheritClasses;
         } else if ($var == 'parent' && isset($this->_lazyParent)) {
-            //TODO: was ist mit ignoreVisible?
-            $ret = Vps_Component_Data_Root::getInstance()->getComponentById($this->_lazyParent);
+            $ret = Vps_Component_Data_Root::getInstance()->getComponentById($this->_lazyParent, array('ignoreVisible'=>true));
             $this->parent = $ret;
             return $ret;
         } else if ($var == 'generator' && isset($this->_lazyGenerator)) {
@@ -127,6 +126,10 @@ class Vps_Component_Data
         } else if ($var == 'row' && isset($this->_lazyRow)) {
             $ret = $this->getModel()->getRow($this->_lazyRow);
             $this->row = $ret;
+            return $ret;
+        } else if ($var == 'chained' && isset($this->_lazyChained)) {
+            $ret = Vps_Component_Data_Root::getInstance()->getComponentById($this->_lazyChained, array('ignoreVisible'=>true));
+            $this->chained = $ret;
             return $ret;
         } else {
             throw new Vps_Exception("Variable '$var' is not set for ".get_class($this) . " with componentId '{$this->componentId}'");
@@ -878,6 +881,9 @@ class Vps_Component_Data
             } else if ($k == 'parent') {
                 $v = $v->componentId;
                 $k = '_lazyParent';
+            } else if ($k == 'chained') {
+                $v = $v->componentId;
+                $k = '_lazyChained';
             }
             $ret[$k] = $v;
         }
