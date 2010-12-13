@@ -17,7 +17,14 @@ class Vps_Component_Cache_Meta_Static_UrlCache extends Vps_Component_Cache_Meta_
     {
         $ret = array();
         $generator = Vps_Component_Generator_Abstract::getInstance($params['generator']['class'], $params['generator']['key']);
-        foreach ($generator->getChildData(null, array('id'=>$row->{$row->getModel()->getPrimaryKey()})) as $c) {
+        $s = new Vps_Component_Select();
+        $pk = $row->getModel()->getPrimaryKey();
+        if ($generator instanceof Vpc_Root_Category_Generator) {
+            $s->whereId($row->$pk);
+        } else {
+            $s->whereId($generator->getIdSeparator().$row->$pk);
+        }
+        foreach ($generator->getChildData(null, $s) as $c) {
             //TODO mehere sollten möglich sein
             $ret['db_id'] = $c->dbId;
         }
