@@ -14,6 +14,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'metaComponent' => 'Vps_Component_Cache_Mysql_MetaComponentModel',
             'metaChained' => 'Vps_Component_Cache_Mysql_MetaChainedModel',
             'url' => 'Vps_Component_Cache_Mysql_UrlModel',
+            'processInput' => 'Vps_Component_Cache_Mysql_ProcessInputModel'
         );
     }
 
