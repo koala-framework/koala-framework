@@ -94,13 +94,11 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
             $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
         }
-        $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];
+        $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];            //TODO: acceptLanguage berücksichtigen?
         $urlCacheModel = Vps_Component_Cache::getInstance()->getModel('url');
         $s = new Vps_Model_Select();
         $s->whereEquals('url', $cacheUrl);
         if ($row = $urlCacheModel->getRow($s)) {
-            //TODO: acceptLanguage
-            //TODO: Domains
             $ret = Vps_Component_Data::vpsUnserialize(unserialize($row->page));
         } else {
             $path = $this->getComponent()->formatPath($parsedUrl);
