@@ -94,18 +94,37 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
             $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
         }
-        $path = $this->getComponent()->formatPath($parsedUrl);
-        if (is_null($path)) return null;
-        $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
-        if ($urlPrefix) {
-            if (substr($path, 0, strlen($urlPrefix)) != $urlPrefix) {
-                return null;
-            } else {
-                $path = substr($path, strlen($urlPrefix));
+        $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];
+        $urlCacheModel = Vps_Component_Cache::getInstance()->getModel('url');
+        $s = new Vps_Model_Select();
+        $s->whereEquals('url', $cacheUrl);
+        if ($row = $urlCacheModel->getRow($s)) {
+            //TODO: acceptLanguage
+            //TODO: Domains
+            $ret = Vps_Component_Data::vpsUnserialize(unserialize($row->page));
+        } else {
+            $path = $this->getComponent()->formatPath($parsedUrl);
+            if (is_null($path)) return null;
+            $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+            if ($urlPrefix) {
+                if (substr($path, 0, strlen($urlPrefix)) != $urlPrefix) {
+                    return null;
+                } else {
+                    $path = substr($path, strlen($urlPrefix));
+                }
+            }
+            $path = trim($path, '/');
+            $ret = $this->getComponent()->getPageByUrl($path, $acceptLangauge);
+
+            if (rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
+                $row = $urlCacheModel->createRow();
+                $row->url = $cacheUrl;
+                $row->page_id = $ret->componentId;
+                $row->page = serialize($ret->vpsSerialize());
+                $row->save();
             }
         }
-        $path = trim($path, '/');
-        return $this->getComponent()->getPageByUrl($path, $acceptLangauge);
+        return $ret;
     }
 
     /**
