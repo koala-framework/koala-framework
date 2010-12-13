@@ -74,8 +74,6 @@ class Vps_Component_Cache_UrlClearCache_Test extends Vpc_TestAbstract
         $c = $this->_root->getPageByUrl("http://$d/fxx/bar", null); //uncached
         $this->assertEquals('2', $c->componentId);
         
-        $this->markTestIncomplete();
-
         $c = $this->_root->getPageByUrl("http://$d/foo/bar", null); //uncached
         $this->assertFalse($c);
     }

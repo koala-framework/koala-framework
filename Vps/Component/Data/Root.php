@@ -119,6 +119,17 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 $row->page_id = $ret->componentId;
                 $row->page = serialize($ret->vpsSerialize());
                 $row->save();
+
+                $m = Vps_Component_Cache::getInstance()->getModel('urlParents');
+                $c = $ret;
+                while($c = $c->parent) {
+                    if ($c->isPseudoPage) {
+                        $row = $m->createRow();
+                        $row->page_id = $ret->componentId;
+                        $row->parent_page_id = $c->componentId;
+                        $row->save();
+                    }
+                }
             }
         }
         return $ret;
