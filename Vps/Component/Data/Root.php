@@ -113,7 +113,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             }
             $path = trim($path, '/');
             $ret = $this->getComponent()->getPageByUrl($path, $acceptLangauge);
-            if (rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
+            if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
                 $row = $urlCacheModel->createRow();
                 $row->url = $cacheUrl;
                 $row->page_id = $ret->componentId;
