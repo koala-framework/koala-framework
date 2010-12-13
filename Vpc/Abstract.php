@@ -289,20 +289,19 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                     $process[] = $this->getData();
                 }
             }
-            $ids = array();
+            $datas = array();
             foreach ($process as $p) {
-                $ids[] = $p->componentId;
+                $datas[] = $p->vpsSerialize();
             }
-            $row = $model->createRow();
+            if (!$row) $row = $model->createRow();
             $row->page_id = $this->getData()->componentId;
-            $row->process_component_ids = implode(';', $ids);
+            $row->process_component_ids = serialize($datas);
             $row->save();
         } else {
             $process = array();
-            if ($row->process_component_ids) {
-                foreach (explode(';', $row->process_component_ids) as $id) {
-                    $process[] = Vps_Component_Data_Root::getInstance()->getComponentById($id);
-                }
+            $datas = unserialize($row->process_component_ids);
+            foreach ($datas as $d) {
+                $process[] = Vps_Component_Data::vpsUnserialize($d);
             }
         }
 

@@ -339,7 +339,7 @@ class Vps_Setup
             if ($row = $urlCacheModel->getRow($s)) {
                 //TODO: acceptLanguage
                 //TODO: Domains
-                $data = $root->getComponentById($row->page_id);
+                $data = Vps_Component_Data::vpsUnserialize($row->page);
             } else {
                 $data = $root->getPageByUrl($requestUrl, $acceptLanguage);
                 if (!$data) {
@@ -352,6 +352,7 @@ class Vps_Setup
                 $row = $urlCacheModel->createRow();
                 $row->url = $data->url;
                 $row->page_id = $data->componentId;
+                $row->page = $data->vpsSerialize();
                 $row->save();
             }
             $root->setCurrentPage($data);
