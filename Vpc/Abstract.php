@@ -266,23 +266,43 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     protected function _callProcessInput()
     {
-        $process = $this->getData()
-            ->getRecursiveChildComponents(array(
-                    'page' => false,
-                    'flags' => array('processInput' => true)
-                ));
-        if (Vps_Component_Abstract::getFlag($this->getData()->componentClass, 'processInput')) {
-            $process[] = $this->getData();
-        }
-        // TODO: Äußerst suboptimal
-        if ($this instanceof Vpc_Show_Component) {
-            $process += $this->getShowComponent()
+        $model = Vps_Component_Cache::getInstance()->getModel('processInput');
+        $row = $model->getRow($this->getData()->componentId);
+        if (!$row) {
+            $process = $this->getData()
                 ->getRecursiveChildComponents(array(
-                    'page' => false,
-                    'flags' => array('processInput' => true)
-                ));
-            if (Vps_Component_Abstract::getFlag(get_class($this->getShowComponent()->getComponent()), 'processInput')) {
+                        'page' => false,
+                        'flags' => array('processInput' => true)
+                    ));
+            if (Vps_Component_Abstract::getFlag($this->getData()->componentClass, 'processInput')) {
                 $process[] = $this->getData();
+            }
+
+            // TODO: Äußerst suboptimal
+            if ($this instanceof Vpc_Show_Component) {
+                $process += $this->getShowComponent()
+                    ->getRecursiveChildComponents(array(
+                        'page' => false,
+                        'flags' => array('processInput' => true)
+                    ));
+                if (Vps_Component_Abstract::getFlag(get_class($this->getShowComponent()->getComponent()), 'processInput')) {
+                    $process[] = $this->getData();
+                }
+            }
+            $ids = array();
+            foreach ($process as $p) {
+                $ids[] = $p->componentId;
+            }
+            $row = $model->createRow();
+            $row->page_id = $this->getData()->componentId;
+            $row->process_component_ids = implode(';', $ids);
+            $row->save();
+        } else {
+            $process = array();
+            if ($row->process_component_ids) {
+                foreach (explode(';', $row->process_component_ids) as $id) {
+                    $process[] = Vps_Component_Data_Root::getInstance()->getComponentById($id);
+                }
             }
         }
 
