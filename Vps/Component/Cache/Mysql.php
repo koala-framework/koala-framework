@@ -14,6 +14,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'metaComponent' => 'Vps_Component_Cache_Mysql_MetaComponentModel',
             'metaChained' => 'Vps_Component_Cache_Mysql_MetaChainedModel',
             'url' => 'Vps_Component_Cache_Mysql_UrlModel',
+            'urlParents' => 'Vps_Component_Cache_Mysql_UrlParentsModel',
             'processInput' => 'Vps_Component_Cache_Mysql_ProcessInputModel'
         );
     }
@@ -495,10 +496,16 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
     protected function _cleanUrl(Vps_Component_Data $component)
     {
-        $urlCacheModel = $this->getModel('url');
+        $ids[] = $component->componentId;
+
         $s = new Vps_Model_Select();
-        $s->whereEquals('page_id', $component->componentId);
-        $urlCacheModel->deleteRows($s);
-        //TODO: parent_ids berücksichtigen, mit eigenem model wo die drinnen stehen
+        $s->whereEquals('parent_page_id', $component->componentId);
+        foreach ($this->getModel('urlParents')->export(Vps_Model_Abstract::FORMAT_ARRAY, $s) as $r) {
+            $ids[] = $r['page_id'];
+        }
+        
+        $s = new Vps_Model_Select();
+        $s->whereEquals('page_id', $ids);
+        $this->getModel('url')->deleteRows($s);
     }
 }
