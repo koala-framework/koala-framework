@@ -11,6 +11,7 @@ class Vps_Component_Data
 
     private $_constraintsCache = array();
     private $_recursiveGeneratorsCache = array();
+    private $_languageCache;
 
     public function __construct($config)
     {
@@ -784,12 +785,15 @@ class Vps_Component_Data
 
     public function getLanguage()
     {
-        $langData = $this->getLanguageData();
-        if (!$langData) {
-            return Vps_Trl::getInstance()->getWebCodeLanguage();
-        } else {
-            return $langData->getComponent()->getLanguage();
+        if (!isset($this->_languageCache)) { //cache ist vorallem für bei vpsUnserialize nützlich
+            $langData = $this->getLanguageData();
+            if (!$langData) {
+                $this->_languageCache = Vps_Trl::getInstance()->getWebCodeLanguage();
+            } else {
+                $this->_languageCache = $langData->getComponent()->getLanguage();
+            }
         }
+        return $this->_languageCache;
     }
 
     public function trlStaticExecute($trlStaticData)
@@ -855,6 +859,8 @@ class Vps_Component_Data
 
     public function vpsSerialize()
     {
+        $this->getLanguage(); //um _languageCache zu befüllen
+
         $ret = array();
         $ret['class'] = get_class($this);
         foreach (get_object_vars($this) as $k=>$v) {
