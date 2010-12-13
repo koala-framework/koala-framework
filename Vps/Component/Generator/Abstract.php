@@ -38,7 +38,6 @@ abstract class Vps_Component_Generator_Abstract
         $this->_class = $class;
         $this->_settings = $settings;
         $this->_init();
-        bt();
         Vps_Benchmark::count('generators');
     }
 
