@@ -901,7 +901,6 @@ class Vps_Component_Data
 
     public static function vpsUnserialize($vars)
     {
-        Vps_Benchmark::count('');
         if ($ret = Vps_Component_Data_Root::getInstance()->getFromDataCache($vars['componentId'])) {
             return $ret;
         }
