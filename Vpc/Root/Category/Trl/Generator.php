@@ -105,6 +105,11 @@ class Vpc_Root_Category_Trl_Generator extends Vpc_Chained_Trl_Generator
         return $ret;
     }
 
+    public function getModel()
+    {
+        return $this->_getModel();
+    }
+
     protected function _getDataClass($config, $id)
     {
         if (isset($config['isHome']) && $config['isHome']) {
