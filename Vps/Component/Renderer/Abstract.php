@@ -32,7 +32,16 @@ abstract class Vps_Component_Renderer_Abstract
             $this->_preload($where);
         }
         $view = new Vps_Component_View($this);
-        $ret = $this->render($view->component($component));
+        if ($this->_enableCache && isset($this->_cache['page'][$component->componentId][''])) {
+            $content = $this->_cache['page'][$component->componentId][''];
+        } else {
+            $content = $view->component($component);
+            if ($this->_enableCache) {
+                $cache = Vps_Component_Cache::getInstance();
+                $cache->save($component, $content, 'page', '', true);
+            }
+        }
+        $ret = $this->render($content);
         if ($this->_enableCache) {
             Vps_Component_Cache::getInstance()->writeBuffer();
         }
