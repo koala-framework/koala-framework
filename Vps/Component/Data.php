@@ -882,6 +882,9 @@ class Vps_Component_Data
                 $v = array($v->getClass(), $v->getGeneratorKey());
                 $k = '_lazyGenerator';
             } else if ($k == 'row') {
+                if ($v instanceof Vps_Model_Row_Interface && $this->generator->getModel() !== $v->getModel()) {
+                    throw new Vps_Exception('data row has invalid model');
+                }
                 $v = $v->{$this->generator->getModel()->getPrimaryKey()};
                 $k = '_lazyRow';
             } else if ($k == 'parent') {
