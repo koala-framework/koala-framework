@@ -40,6 +40,9 @@ class Vps_Assets_Dynamic_Test extends Vps_Test_TestCase
 
     public function testMTimeFiles()
     {
+        if (!Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
+            $this->markTestSkipped();
+        }
         Vps_Assets_Cache::getInstance()->clean();
         $loader = new Vps_Assets_Loader();
         $loader->getDependencies()->getMaxFileMTime();
