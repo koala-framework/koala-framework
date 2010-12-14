@@ -332,11 +332,15 @@ class Vps_Setup
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Vps_Component_Data_Root::getInstance();
-            $data = $root->getPageByUrl($requestUrl, $acceptLanguage);
+            $exactMatch = true;
+            $data = $root->getPageByUrl($requestUrl, $acceptLanguage, $exactMatch);
             if (!$data) {
                 throw new Vps_Exception_NotFound();
             }
-            if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
+            if (!$exactMatch) {
+                if (rawurldecode($data->url) == $_SERVER['REDIRECT_URL']) {
+                    throw new Vps_Exception("getPageByUrl reposrted this isn't an exact match, but the urls are equal. wtf.");
+                }
                 header('Location: '.$data->url);
                 exit;
             }
