@@ -75,7 +75,7 @@ abstract class Vps_Component_Generator_Abstract
                 } else if ($this->_loadTableFromComponent) {
                     $this->_model = Vpc_Abstract::createChildModel($this->_class);
                 } else {
-                    throw new Vps_Exception("Can't create model");
+                    throw new Vps_Exception("Can't create model for generator '{$this->getGeneratorKey()}' in '$this->_class'");
                 }
             }
         }
@@ -147,29 +147,32 @@ abstract class Vps_Component_Generator_Abstract
             $componentClass = $component;
             $component = null;
         }
-        $cacheId = 'genInst'.$componentClass;
+
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $componentClass;
         if ($component) {
             $ic = $component->inheritClasses;
             foreach ($ic as $inheritComponent) {
                 $cacheId .= '__' . $inheritComponent;
             }
         }
-        $cacheId = str_replace('.', '_', $cacheId);
-        static $cache = null;
-        if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Memcached', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
-        }
+
+        $generators = null;
         if (isset(self::$_cachedInstances[$cacheId])) {
             $generators = self::$_cachedInstances[$cacheId];
-        } else if (($cachedGeneratorData = $cache->load($cacheId)) !== false) {
-            $generators = array();
-            foreach ($cachedGeneratorData as $g) {
-                $generators[] = self::getInstance($g['componentClass'], $g['key'], array(), $g['pluginBaseComponentClass']);
+        }
+        if (is_null($generators)) {
+            $cachedGeneratorData = apc_fetch($prefix.'genInst-'.$cacheId, $success);
+            if ($success) {
+                $generators = array();
+                foreach ($cachedGeneratorData as $g) {
+                    $generators[] = self::getInstance($g['componentClass'], $g['key'], array(), $g['pluginBaseComponentClass']);
+                }
             }
-        } else {
+        }
+
+        if (is_null($generators)) {
 
             $generators = self::_getGeneratorsForComponent($componentClass, false);
             foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
@@ -243,7 +246,7 @@ abstract class Vps_Component_Generator_Abstract
                                                'key' => $g->_settings['generator'],
                                                'pluginBaseComponentClass' => $g->_pluginBaseComponentClass);
             }
-            $cache->save($cachedGeneratorData, $cacheId);
+            apc_add($prefix.'genInst-'.$cacheId, $cachedGeneratorData);
         }
         self::$_cachedInstances[$cacheId] = $generators;
 

@@ -131,38 +131,39 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         static $ccc = array();
 
-        static $cache = null;
-        if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Memcached', array('lifetime'=>null, 'automatic_serialization'=>true));
-        }
-        $currentCacheId = 'iccc'.md5($class.$cacheId);
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $currentCacheId = $prefix.'iccc-'.md5($class.$cacheId);
 
         if (isset($ccc[$class.$cacheId])) {
             Vps_Benchmark::count('iccc cache hit');
             return $ccc[$class.$cacheId];
-        } else if (($ret = $cache->load($currentCacheId)) !== false) {
+        }
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
             $ccc[$class.$cacheId] = $ret;
             Vps_Benchmark::count('iccc cache semi-hit');
             return $ret;
-        } else {
-            Vps_Benchmark::count('iccc cache miss', $class.' '.print_r($select->getParts(), true));
-            $childConstraints = array('page' => false);
-            $ccc[$class.$cacheId] = array();
-            foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
-                if (Vpc_Abstract::getChildComponentClasses($childClass, $select, $cacheId)) {
-                    $ccc[$class.$cacheId][] = $childClass;
-                    continue;
-                }
-                $classes = Vpc_Abstract::_getIndirectChildComponentClasses($childClass, $select, $cacheId);
-                if ($classes) {
-                    $ccc[$class.$cacheId][] = $childClass;
-                }
-            }
-            $ccc[$class.$cacheId] = array_unique(array_values($ccc[$class.$cacheId]));
-
-            $cache->save($ccc[$class.$cacheId], $currentCacheId);
-            return $ccc[$class.$cacheId];
         }
+
+        Vps_Benchmark::count('iccc cache miss', $class.' '.print_r($select->getParts(), true));
+        $childConstraints = array('page' => false);
+        $ccc[$class.$cacheId] = array();
+        foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
+            if (Vpc_Abstract::getChildComponentClasses($childClass, $select, $cacheId)) {
+                $ccc[$class.$cacheId][] = $childClass;
+                continue;
+            }
+            $classes = Vpc_Abstract::_getIndirectChildComponentClasses($childClass, $select, $cacheId);
+            if ($classes) {
+                $ccc[$class.$cacheId][] = $childClass;
+            }
+        }
+        $ccc[$class.$cacheId] = array_unique(array_values($ccc[$class.$cacheId]));
+
+        apc_add($currentCacheId, $ccc[$class.$cacheId]);
+        return $ccc[$class.$cacheId];
+
     }
 
     public static function getChildComponentClass($class, $generator, $componentKey = null)

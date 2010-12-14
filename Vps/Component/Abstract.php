@@ -25,9 +25,20 @@ class Vps_Component_Abstract
 
     public static function hasSettings($class)
     {
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+
+        $cacheId = $prefix.'-hasSettings-'.$class;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         //& für performance
         $s =& self::_getSettingsCached();
-        return isset($s[$class]);
+        $ret = isset($s[$class]);
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     public static function hasSetting($class, $setting)
@@ -47,12 +58,23 @@ class Vps_Component_Abstract
             }
             return isset($settings[$setting]);
         }
+
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'-has-'.$class.'-'.$setting;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         //& für performance
         $s =& self::_getSettingsCached();
         if (!isset($s[$class])) {
             throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses. Requested setting: $setting");
         }
-        return array_key_exists($setting, $s[$class]);
+        $ret = array_key_exists($setting, $s[$class]);
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     public static function getSetting($class, $setting)
@@ -140,9 +162,17 @@ class Vps_Component_Abstract
             return $ret;
         }
 
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'-'.$class.'-'.$setting;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         if (!self::$_settings) self::_getSettingsCached();
         try {
-            return self::$_settings[$class][$setting];
+            $ret = self::$_settings[$class][$setting];
         } catch (ErrorException $e) {
             //diese checks im nachhinein machen damit sie nicht immer gemacht werden (diese fkt wird am meisten von allen aufgerufen)
             //und hier dann versuchen eine bessere exception msg zu erstellen
@@ -157,13 +187,26 @@ class Vps_Component_Abstract
                 throw $e;
             }
         }
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     public static function getSettingMtime()
     {
         if (!Vps_Registry::get('config')->vpc->rootComponent) return 0;
+
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'-settingsMtime';
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         $s =& self::_getSettingsCached();
-        return $s['mtime'];
+        $ret = $s['mtime'];
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     //wenn root geändert wird muss der cache hier gelöscht werden können
@@ -463,9 +506,22 @@ class Vps_Component_Abstract
 
     static public function getFlag($class, $flag)
     {
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'-flag-'.$class.'-'.$flag;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         $flags = self::getSetting($class, 'flags');
-        if (!isset($flags[$flag])) return false;
-        return $flags[$flag];
+        if (!isset($flags[$flag])) {
+            $ret = false;
+        } else {
+            $ret = $flags[$flag];
+        }
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     public static function getComponentClasses()
@@ -473,11 +529,20 @@ class Vps_Component_Abstract
         $root = Vps_Component_Data_Root::getComponentClass();
         if (!$root) return array();
         if (!self::$_rebuildingSettings) {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+            $cacheId = $prefix.'-componentClasses-'.Vps_Component_Data_Root::getComponentClass();
+            $ret = apc_fetch($cacheId, $success);
+            if ($success) {
+                return $ret;
+            }
             $s =& self::_getSettingsCached();
             $ret = array_keys($s);
             unset($ret[array_search('mtime', $ret)]);
             unset($ret[array_search('mtimeFiles', $ret)]);
-            return array_values($ret);
+            $ret = array_values($ret);
+            apc_add($cacheId, $ret);
+            return $ret;
         }
         $componentClasses = array($root);
         self::_getChildComponentClasses($componentClasses, $root);
