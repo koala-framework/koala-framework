@@ -266,7 +266,7 @@ class Vps_Component_Abstract_Admin
     {
         $ret = array();
 
-        $cache = Vps_Cache::factory('Core', 'Memcached', array('automatic_serialization'=>true, 'lifetime'=>null));
+        $cache = Vps_Cache::factory('Core', 'Apc', array('automatic_serialization'=>true, 'lifetime'=>null));
         if (!$componentsWithDependsOnRow = $cache->load('componentsWithDependsOnRow')) {
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
                 $a = Vpc_Admin::getInstance($c);

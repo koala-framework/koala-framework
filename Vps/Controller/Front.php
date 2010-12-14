@@ -42,6 +42,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                         'vps_controller_action_enquiries');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Redirects',
                                         'vps_controller_action_redirects');
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Util',
+                                'vps_controller_action_util');
         $this->addControllerDirectory(VPS_PATH . '/tests', 'vps_test');
         $this->addControllerDirectory('tests', 'web_test');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Trl',

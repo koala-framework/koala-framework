@@ -187,14 +187,6 @@ class Vps_Component_Data
 
     public function getRecursiveChildComponents($select = array(), $childSelect = array('page'=>false))
     {
-        static $cache = null;
-        if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Memcached', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
-        }
-
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         } else {
@@ -228,20 +220,18 @@ class Vps_Component_Data
             Vps_Component_Select::WHERE_COMPONENT_KEY,
         ), $select);
 
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
         $selectHash = md5($genSelect->getHash().$childSelect->getHash());
-        $cacheId = 'recCCGen'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
-        $cacheId = str_replace('.', '_', $cacheId);
-        if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
-            $generators = $this->_recursiveGeneratorsCache[$cacheId];
-        } else if (($generators = $cache->load($cacheId)) !== false) {
-            $this->_recursiveGeneratorsCache[$cacheId] = $generators;
-        } else {
+        $cacheId = $prefix.'-recCCGen-'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
+        $generators = apc_fetch($cacheId, $success);
+        if (!$success) {
             $generators = $this->_getRecursiveGenerators(
                         Vpc_Abstract::getChildComponentClasses($this, $childSelect),
                         $genSelect, $childSelect, $selectHash);
-            $this->_recursiveGeneratorsCache[$cacheId] = $generators;
-            $cache->save($generators, $cacheId);
+            apc_add($cacheId, $generators);
         }
+
         $noSubPages =
             $childSelect->hasPart('wherePage') && !$childSelect->getPart('wherePage') ||
             $childSelect->hasPart('wherePseudoPage') && !$childSelect->getPart('wherePseudoPage');

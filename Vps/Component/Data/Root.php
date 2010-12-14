@@ -220,7 +220,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         static $cache = null;
         if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Memcached', array(
+            $cache = Vps_Cache::factory('Core', 'Apc', array(
                 'lifetime'=>null,
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));
@@ -404,7 +404,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         static $cache = null;
         if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Memcached', array(
+            $cache = Vps_Cache::factory('Core', 'Apc', array(
                 'lifetime'=>null,
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));

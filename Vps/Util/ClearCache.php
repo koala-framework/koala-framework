@@ -68,6 +68,7 @@ class Vps_Util_ClearCache
 
         $types = array('all');
         if (class_exists('Memcache')) $types[] = 'memcache';
+        if (extension_loaded('apc')) $types[] = 'apc';
         $types = array_merge($types, $this->getCacheDirs());
         $types = array_merge($types, $this->getDbCacheTables());
         return $types;
@@ -169,6 +170,19 @@ class Vps_Util_ClearCache
                     'automatic_serialization'=>true));
                 $cache->clean();
                 if ($output) echo "cleared:     memcache\n";
+            }
+        }
+        if (in_array('apc', $types)) {
+            if ($server) {
+                if ($output) echo "ignored:     apc\n";
+            } else {
+                $d = Vps_Registry::get('config')->server->domain;
+                $url = "http://$d/vps/util/apc/clear-cache";
+                if (file_get_contents($url) == 'OK') {
+                    if ($output) echo "cleared:     apc\n";
+                } else {
+                    if ($output) echo "error:     apc\n";
+                }
             }
         }
         foreach ($this->getDbCacheTables() as $t) {

@@ -277,10 +277,13 @@ class Vps_Trl
         }
 
         if ($plural) $target = $target.'_plural';
-        $cache = Vps_Cache::factory('Core', 'Memcached',
+        $cache = Vps_Cache::factory('Core', 'File',
             array(
                 'automatic_serialization'=>true,
                 'caching' => !isset($this->_modelVps) && !isset($this->_modelWeb)
+            ),
+            array(
+                'cache_dir' => 'application/cache/model'
             )
         );
         $cacheId = 'trl_'.$source.$target.$plural;
@@ -313,29 +316,50 @@ class Vps_Trl
         if ($language) $target = $language;
         else $target = $this->getTargetLanguage();
 
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'trl-'.$source.'-'.$target.'-'.$needle.'-'.$context;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         if (!isset($this->_cache[$source][$target])) {
             $this->_loadCache($source, $target, false);
         }
         if (isset($this->_cache[$source][$target][$needle.'-'.$context])) {
-            return $this->_cache[$source][$target][$needle.'-'.$context];
+            $ret = $this->_cache[$source][$target][$needle.'-'.$context];
         } else {
-            return $needle;
+            $ret = $needle;
         }
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
+    //TODO: wofuer wird der $needle parameter verwendet?!
     protected function _findElementPlural($needle, $plural, $source, $context = '', $language = null)
     {
         if ($language) $target = $language;
         else $target = $this->getTargetLanguage();
 
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'trlp-'.$source.'-'.$target.'-'.$plural.'-'.$context;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         if (!isset($this->_cache[$source][$target.'_plural'])) {
             $this->_loadCache($source, $target, true);
         }
         if (isset($this->_cache[$source][$target.'_plural'][$plural.'-'.$context])) {
-            return $this->_cache[$source][$target.'_plural'][$plural.'-'.$context];
+            $ret = $this->_cache[$source][$target.'_plural'][$plural.'-'.$context];
         } else {
-            return $plural;
+            $ret = $plural;
         }
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     function getTrlpValues($context, $single, $plural, $source, $language = null)
