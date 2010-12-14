@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Cache_Meta_Static_UrlCache extends Vps_Component_Cache_Meta_Static_Model
+class Vps_Component_Cache_Meta_Static_ProcessInputCache extends Vps_Component_Cache_Meta_Static_Model
 {
     public function __construct($generator)
     {
@@ -10,9 +10,10 @@ class Vps_Component_Cache_Meta_Static_UrlCache extends Vps_Component_Cache_Meta_
 
     public static function getMetaType()
     {
-        return self::META_TYPE_CLEANURLCACHE;
+        return self::META_TYPE_PROCESSINPUTCACHE;
     }
 
+    //TODO praktisch eine kopie von Vps_Component_Cache_Meta_Static_UrlCache
     public static function getDeleteWhere($pattern, $row, $dirtyColumns, $params)
     {
         $ret = array();

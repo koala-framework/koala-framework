@@ -503,9 +503,16 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         foreach ($this->getModel('urlParents')->export(Vps_Model_Abstract::FORMAT_ARRAY, $s) as $r) {
             $ids[] = $r['page_id'];
         }
-        
+
         $s = new Vps_Model_Select();
         $s->whereEquals('page_id', $ids);
         $this->getModel('url')->deleteRows($s);
+    }
+
+    protected function _cleanProcessInput(Vps_Component_Data $component)
+    {
+        $s = new Vps_Model_Select();
+        $s->whereEquals('page_id', $component->getPage()->componentId);
+        $this->getModel('processInput')->deleteRows($s);
     }
 }

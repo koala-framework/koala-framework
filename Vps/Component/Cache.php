@@ -67,7 +67,14 @@ abstract class Vps_Component_Cache
 
                     //UrlCache
                     $meta = new Vps_Component_Cache_Meta_Static_UrlCache($generator);
-                    self::getInstance()->saveMeta('', $meta);
+                    self::getInstance()->saveMeta($class, $meta); //$class wird nicht verwendet, ist aber im primaryKey wird nur darum gesetzt
+                }
+                if ($generator &&
+                    $generator->getGeneratorFlag('table')
+                ) {
+                    //ProcessInputCache
+                    $meta = new Vps_Component_Cache_Meta_Static_ProcessInputCache($generator);
+                    self::getInstance()->saveMeta($class, $meta); //$class wird nicht verwendet, ist aber im primaryKey wird nur darum gesetzt
                 }
             }
         }
@@ -164,6 +171,7 @@ abstract class Vps_Component_Cache
         return array_unique($ret);
     }
 
+    //TODO: hier nicht 4x so gut wie das gleiche machen
     public function cleanByRow($row, $dirtyColumns = array())
     {
         //p($this->_getModelname($row));
@@ -201,9 +209,27 @@ abstract class Vps_Component_Cache
                 $this->_cleanUrl($component);
             }
         }
+
+        // ProcessInput Cache
+        $wheres = array();
+        $wheres = $this->_addRowWhere($wheres, $row, Vps_Component_Cache_Meta_Abstract::META_TYPE_PROCESSINPUTCACHE);
+        $wheres = $this->_addModelWhere($wheres, $row, $dirtyColumns, Vps_Component_Cache_Meta_Abstract::META_TYPE_PROCESSINPUTCACHE);
+        $wheres = $this->_addComponentWhere($wheres);
+        $wheres = $this->_addChainedWhere($wheres);
+        foreach ($this->_getComponentIdsFromWheres($wheres) as $componentId) {
+            foreach (Vps_Component_Data_Root::getInstance()->getComponentsByDbId(
+                    $componentId, array('ignoreVisible' => true)
+                ) as $component
+            ) {
+                $this->_cleanProcessInput($component);
+            }
+        }
+
+        
     }
 
     abstract protected function _cleanUrl(Vps_Component_Data $component);
+    abstract protected function _cleanProcessInput(Vps_Component_Data $component);
 
     public function writeBuffer()
     {
