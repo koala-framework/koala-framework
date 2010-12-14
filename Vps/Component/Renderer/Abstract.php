@@ -4,6 +4,7 @@ abstract class Vps_Component_Renderer_Abstract
     private $_enableCache = false;
     private $_renderComponent;
     private $_cache = array();
+    private $_cacheUsed = array();
     private $_preloaded = array();
 
     public function setEnableCache($enableCache)
@@ -140,6 +141,9 @@ abstract class Vps_Component_Renderer_Abstract
 
                 if ($this->_enableCache && isset($this->_cache[$type][$componentId][$value])) {
 
+                    if (Vps_Benchmark::isEnabled()) {
+                        $this->_cacheUsed[] = array($type, $componentId, $value);
+                    }
                     $content = $this->_cache[$type][$componentId][$value];
                     $content = $helper->renderCached($content, $componentId, $config);
                     $statType = 'cache';
@@ -200,6 +204,18 @@ abstract class Vps_Component_Renderer_Abstract
             $plugin = new $pluginClass($matches[3]);
             $content = $plugin->processOutput($matches[4]);
             $ret = str_replace($matches[0], $content, $ret);
+        }
+
+        if (Vps_Benchmark::isEnabled()) {
+            foreach ($this->_cache as $type=>$i1) {
+                foreach ($i1 as $componentId => $i2) {
+                    foreach ($i2 as $value => $content) {
+                        if (!in_array(array($type, $componentId, $value), $this->_cacheUsed)) {
+                            Vps_Benchmark::count('preloaded but unused', $type.' '.$componentId.' '.$value);
+                        }
+                    }
+                }
+            }
         }
 
         return $ret;
