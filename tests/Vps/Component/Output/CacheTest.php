@@ -23,7 +23,9 @@ class Vps_Component_Output_CacheTest extends Vps_Test_TestCase
         $model = Vps_Component_Cache::getInstance()->getModel('cache');
         $value = $this->_renderer->renderMaster($this->_root);
         $this->assertEquals('c3_rootmaster c1_box c3_root', $value);
-        $this->assertEquals(3, $model->countRows());
+
+        //page, master und 2 component
+        $this->assertEquals(4, $model->countRows());
 
         $value = $this->_renderer->renderMaster($this->_root);
         $this->assertEquals('c3_rootmaster c1_box c3_root', $value);
