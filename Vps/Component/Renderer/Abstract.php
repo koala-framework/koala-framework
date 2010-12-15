@@ -27,14 +27,15 @@ abstract class Vps_Component_Renderer_Abstract
             $pageId = $page ? $page->componentId . '%' : null; // null nur bei tests wenn root ein template hat
             $this->_preload(array($pageId));
         }
-        $view = new Vps_Component_View($this);
         if ($this->_enableCache && isset($this->_cache['page'][$component->componentId][''])) {
             $content = $this->_cache['page'][$component->componentId][''];
         } else {
-            $content = $view->component($component);
+            $masterHelper = new Vps_Component_View_Helper_Master();
+            $masterHelper->setRenderer($this);
+            $content = $masterHelper->master($component);
             if ($this->_enableCache) {
-                $cache = Vps_Component_Cache::getInstance();
-                $cache->save($component, $content, 'page', '', true);
+                Vps_Component_Cache::getInstance()
+                    ->save($component, $content, 'page', '', true);
             }
         }
         $ret = $this->render($content);
