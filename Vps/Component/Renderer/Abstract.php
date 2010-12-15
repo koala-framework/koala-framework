@@ -1,9 +1,9 @@
 <?php
 abstract class Vps_Component_Renderer_Abstract
 {
-    private $_enableCache = false;
+    protected $_enableCache = false;
     private $_renderComponent;
-    private $_cache = array();
+    protected $_cache = array();
     private $_cacheUsed = array();
     private $_preloaded = array();
 
@@ -37,18 +37,9 @@ abstract class Vps_Component_Renderer_Abstract
 
     protected function _renderComponentContent($component)
     {
-        if ($this->_enableCache && isset($this->_cache['page'][$component->componentId][''])) {
-            $content = $this->_cache['page'][$component->componentId][''];
-        } else {
-            $masterHelper = new Vps_Component_View_Helper_Master();
-            $masterHelper->setRenderer($this);
-            $content = $masterHelper->master($component);
-            if ($this->_enableCache) {
-                Vps_Component_Cache::getInstance()
-                    ->save($component, $content, 'page', '', true);
-            }
-        }
-        return $content;
+        $masterHelper = new Vps_Component_View_Helper_Component();
+        $masterHelper->setRenderer($this);
+        return $masterHelper->component($component);
     }
 
     private function _preload($componentIds)

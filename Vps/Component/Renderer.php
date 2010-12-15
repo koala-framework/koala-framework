@@ -1,22 +1,36 @@
 <?php
 class Vps_Component_Renderer extends Vps_Component_Renderer_Abstract
 {
-    private $_isRenderMaster = false;
-    private $_masterComponents;
-    private $_componentMasterTemplates = array();
-    private $_plugins = array();
-
+    private $_renderMaster;
     public function renderMaster($component)
     {
-        return $this->renderComponent($component, true);
+        $this->_renderMaster = true;
+        return parent::renderComponent($component);
     }
 
-    public function renderComponent($component, $renderMaster = false)
+    public function renderComponent($component)
     {
-        $this->_plugins = array();
-        $this->_componentMasterTemplates = array();
-        $this->_masterComponents = null;
-        $this->_isRenderMaster = $renderMaster;
+        $this->_renderMaster = false;
         return parent::renderComponent($component);
+    }
+
+    protected function _renderComponentContent($component)
+    {
+        if ($this->_renderMaster) {
+            if ($this->_enableCache && isset($this->_cache['page'][$component->componentId][''])) {
+                $content = $this->_cache['page'][$component->componentId][''];
+            } else {
+                $masterHelper = new Vps_Component_View_Helper_Master();
+                $masterHelper->setRenderer($this);
+                $content = $masterHelper->master($component);
+                if ($this->_enableCache) {
+                    Vps_Component_Cache::getInstance()
+                        ->save($component, $content, 'page', '', true);
+                }
+            }
+            return $content;
+        } else {
+            return parent::_renderComponentContent($component);
+        }
     }
 }
