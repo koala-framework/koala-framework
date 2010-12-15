@@ -1,1 +1,1 @@
-c3_rootmaster <?= $this->component($this->component->getChildComponent('-box')) ?> <?= $this->component($this->component) ?>
+c3_rootmaster <?= $this->component($this->component->getChildComponent('-box')) ?> <?=$this->componentWithMaster($this->componentWithMaster)?>
