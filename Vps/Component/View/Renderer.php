@@ -52,7 +52,7 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
             ($component->getComponent() instanceof Vpc_Chained_Abstract_Component) &&
             !Vps_Component_Cache::getInstance()->test($component->chained)
         ) {
-            // neuer Helper, damit _getRenderer() leer ist savePreload nicht ausgeführt wird
+            // neuer Helper, damit _getRenderer() leer ist
             $helper = new Vps_Component_View_Helper_Component();
             $chainedContent = $helper->render($component->chained->componentId, array());
             $helper->saveCache($component->chained->componentId, array(), null, $chainedContent);
@@ -66,23 +66,9 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
             $value
         );
 
-        if ($type != 'nocache') {
-            // Preload-Cache
-            /*
-            if ($this->_getRenderer()) {
-                $renderComponent = $this->_getRenderer()->getRenderComponent();
-                $renderPageId = $renderComponent->getPage() ? $renderComponent->getPage()->componentId : null;
-                $pageId = $component->getPage() ? $component->getPage()->componentId : null;
-                if ($renderPageId != $pageId) {
-                    $cache->savePreload($renderPageId, $componentId, $type);
-                }
-            }
-            */
-
-            // Meta-Cache
-            foreach ($component->getComponent()->getCacheMeta() as $m) {
-                Vps_Component_Cache::getInstance()->saveMeta($component, $m);
-            }
+        // Meta-Cache
+        foreach ($component->getComponent()->getCacheMeta() as $m) {
+            Vps_Component_Cache::getInstance()->saveMeta($component, $m);
         }
 
         return true;
