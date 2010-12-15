@@ -8,7 +8,6 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
         $renderer = $this->_getRenderer();
         $config = array();
         $type = 'component';
-        $value = null;
 
         if ($renderer instanceof Vps_Component_Renderer_Mail) {
             $type = 'mail';
@@ -17,7 +16,12 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
                 'recipient' => $renderer->getRecipient()
             );
         }
-        return $this->_getRenderPlaceholder($component->componentId, $config, $value, $type, array());
+        $plugins = $component->getPlugins();
+        return $this->_getRenderPlaceholder($component->componentId,
+                                            $config,
+                                            null,
+                                            $type,
+                                            $plugins);
     }
 
     public function render($componentId, $config)
