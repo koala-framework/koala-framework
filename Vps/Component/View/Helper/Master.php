@@ -1,21 +1,48 @@
 <?php
 class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
 {
+    public function master(Vps_Component_Data $component)
+    {
+        $renderer = $this->_getRenderer();
+        $config = array();
+        $type = null;
+        $value = null;
+        $plugins = array();
+
+        if ($renderer instanceof Vps_Component_Renderer_Mail) {
+            //TODO passt das so?
+            $type = 'mail';
+            $config = array(
+                'type' => $renderer->getRenderFormat(),
+                'recipient' => $renderer->getRecipient()
+            );
+        } else {
+            $type = 'master';
+        }
+        return $this->_getRenderPlaceholder($component->componentId, $config, $value, $type, $plugins);
+    }
+
     public function render($componentId, $config)
     {
         $component = $this->_getComponentById($componentId);
 
-        $vars = array();
-        $vars['component'] = $component;
-        $vars['data'] = $component;
-        $vars['cssClass'] = Vpc_Abstract::getCssClass($component->componentClass);
-        $vars['boxes'] = array();
-        foreach ($component->getChildBoxes() as $box) {
-            $vars['boxes'][$box->box] = $box;
+        $componentsWithMaster = array();
+        $componentsWithMaster[] = array(
+            'type' => 'component',
+            'data' => $component
+        );
+        $c = $component;
+        while ($c) {
+            if (Vpc_Abstract::getTemplateFile($c->componentClass, 'Master')) {
+                $componentsWithMaster[] = array(
+                    'type' => 'master',
+                    'data' => $c
+                );
+            }
+            $c = $c->parent;
         }
-
-        $view = new Vps_Component_View($this->_getRenderer());
-        $view->assign($vars);
-        return $view->render($config['template']);
+        $helper = new Vps_Component_View_Helper_ComponentWithMaster();
+        $helper->setRenderer($this->_getRenderer());
+        return $helper->componentWithMaster($componentsWithMaster);
     }
 }
