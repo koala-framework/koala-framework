@@ -1,1 +1,0 @@
-c1_childmaster <?=$this->componentWithMaster($this->componentWithMaster)?>

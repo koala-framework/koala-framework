@@ -15,7 +15,7 @@ class Vps_Component_Output_Plugin_Plugin_Component extends Vps_Component_Plugin_
     {
         // Da das Plugin nach dem Rendern ausgeführt wird, muss schon der
         // fertige Content hier reinkommen
-        if ($output != 'root plugin(plugin(c1_childmaster c1_child c1_childchild))') {
+        if ($output != 'root plugin(plugin(c1_child c1_childchild))') {
             return 'not ok from plugin. output was: ' . $output;
         } else {
             $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
