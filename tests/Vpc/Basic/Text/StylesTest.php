@@ -12,7 +12,7 @@ class Vpc_Basic_Text_StylesTest extends Vpc_TestAbstract
 
     public function tearDown()
     {
-        Vpc_Basic_Text_StylesModel::removeCache();
+        Vps_Model_Abstract::getInstance('Vpc_Basic_Text_TestStylesModel')->removeCache();
         parent::tearDown();
     }
 

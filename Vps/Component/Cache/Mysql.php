@@ -437,7 +437,9 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     protected function _cleanProcessInput(Vps_Component_Data $component)
     {
         $s = new Vps_Model_Select();
-        $s->whereEquals('page_id', $component->getPage()->componentId);
+        $page = $component->getPage();
+        $pageId = $page ? $page->componentId : '';
+        $s->whereEquals('page_id', $pageId);
         $this->getModel('processInput')->deleteRows($s);
     }
 }
