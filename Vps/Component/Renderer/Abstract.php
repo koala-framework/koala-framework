@@ -27,6 +27,16 @@ abstract class Vps_Component_Renderer_Abstract
             $pageId = $page ? $page->componentId . '%' : null; // null nur bei tests wenn root ein template hat
             $this->_preload(array($pageId));
         }
+        $content = $this->_renderComponentContent($component);
+        $ret = $this->render($content);
+        if ($this->_enableCache) {
+            Vps_Component_Cache::getInstance()->writeBuffer();
+        }
+        return $ret;
+    }
+
+    protected function _renderComponentContent($component)
+    {
         if ($this->_enableCache && isset($this->_cache['page'][$component->componentId][''])) {
             $content = $this->_cache['page'][$component->componentId][''];
         } else {
@@ -38,11 +48,7 @@ abstract class Vps_Component_Renderer_Abstract
                     ->save($component, $content, 'page', '', true);
             }
         }
-        $ret = $this->render($content);
-        if ($this->_enableCache) {
-            Vps_Component_Cache::getInstance()->writeBuffer();
-        }
-        return $ret;
+        return $content;
     }
 
     private function _preload($componentIds)

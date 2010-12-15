@@ -43,4 +43,11 @@ class Vps_Component_Renderer_Mail extends Vps_Component_Renderer_Abstract implem
     {
         $this->_recipient = $recipient;
     }
+
+    protected function _renderComponentContent($component)
+    {
+        $masterHelper = new Vps_Component_View_Helper_Component();
+        $masterHelper->setRenderer($this);
+        return $masterHelper->component($component);
+    }
 }
