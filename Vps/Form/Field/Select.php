@@ -47,8 +47,7 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         //      => sollte sich gleich verhalten.
         $store = $this->_getStoreData();
         if ($this->getShowNoSelection()) {
-            $emptyText = $this->getEmptyText();
-            if (!$emptyText) $emptyText = '('.trlVps('no selection').')';
+            $emptyText = '('.$this->getEmptyText().')';
             array_unshift($store['data'], array('', $emptyText));
         }
         foreach ($store['data'] as $i) {
@@ -60,30 +59,6 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         if ($this->getSubmitOnChange())
             $ret['html'] .= '<input type="submit" value="»" />';
         return $ret;
-    }
-
-    protected function _getTrlProperties()
-    {
-        $ret = parent::_getTrlProperties();
-        $ret[] = 'emptyText';
-        return $ret;
-    }
-
-    public function trlStaticExecute($language = null)
-    {
-        parent::trlStaticExecute($language);
-
-        $values = $this->getProperty('values');
-        if (is_array($values)) {
-            foreach ($values as $k => $v) {
-                $newKey = Zend_Registry::get('trl')->trlStaticExecute($k, $language);
-                $newValue = Zend_Registry::get('trl')->trlStaticExecute($v, $language);
-
-                unset($values[$k]);
-                $values[$newKey] = $newValue;
-            }
-            $this->setProperty('values', $values);
-        }
     }
 
     public static function getSettings()

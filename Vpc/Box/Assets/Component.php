@@ -11,6 +11,7 @@ class Vpc_Box_Assets_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['section'] = $this->_getSection();
+        $ret['language'] = $this->getData()->getLanguage();
         return $ret;
     }
 

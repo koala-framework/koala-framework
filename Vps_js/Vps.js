@@ -55,7 +55,7 @@ Ext.applyIf(Function.prototype, {
             return newRetval;
         };
         if (this.prototype){
-            Ext.apply(interception.prototype, this.prototype)
+            Ext.apply(interception.prototype, this.prototype);
             if (this.superclass){ interception.superclass=this.superclass; }
             if (this.override){ interception.override=this.override; }
         }
@@ -104,7 +104,7 @@ Ext.onReady(function()
     }
 });
 
-Vps.application = { version: '{$application.version}' };
+Vps.application = { maxAssetsMTime: '{$application.maxAssetsMTime}' };
 
 //log das auch ohne irgendwelche abh�nigkeiten funktioniert (zB im Selenium)
 Vps.log = function(msg) {
@@ -140,7 +140,7 @@ Vps.activateKeepAlive = function() {
     if (Vps.keepAliveActivated) return;
     Vps.keepAliveActivated = true;
     Vps.keepAlive.defer(1000 * 60 * 5);
-}
+};
 
 if (Vps.isApp) {
     Vps.activateKeepAlive();

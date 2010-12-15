@@ -1,1 +1,2 @@
-.$cssClass { position: relative; }
+.cssClass,
+.cssClass a { position: relative; }

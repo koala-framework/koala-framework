@@ -3,6 +3,7 @@ class Vpc_Guestbook_CommentsController extends Vps_Controller_Action_Auto_Grid
 {
     protected $_defaultOrder = array('field' => 'id', 'direction' => 'DESC');
     protected $_filters = array('text' => true);
+    protected $_paging = 25;
     protected $_editDialog = array(
         'width' =>  500,
         'height' =>  400

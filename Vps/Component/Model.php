@@ -50,7 +50,45 @@ class Vps_Component_Model extends Vps_Model_Abstract
         $where = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
         $parts = $select->getPart(Vps_Model_Select::WHERE_NULL);
 
-        if ($parts && in_array('parent_id', $parts)) {
+        if ($select->hasPart(Vps_Model_Select::WHERE_EXPRESSION)) { // Suchfeld
+            $model = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+            $rowset = array();
+            $languages = null;
+            $searchSelect = array('ignoreVisible' => true);
+            foreach ($model->getRows($select) as $row) {
+                $component = $root->getComponentById($row->id, $searchSelect);
+                if (!$component) continue;
+                if (is_null($languages)) {
+                    $c = $component;
+                    while ($c && !Vpc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
+                        $c = $c->parent;
+                    }
+                    if ($c) {
+                        $languagesModel = $c->parent->getComponent()->getChildModel();
+                        foreach ($languagesModel->getRows() as $language) {
+                            $data = $root->getComponentById($language->component_id, $searchSelect);
+                            if ($data) {
+                                $languages[] = $data;
+                            }
+                        }
+                    } else {
+                        $languages = array();
+                    }
+                }
+                $rowset[] = $component;
+                foreach ($languages as $language) {
+                    $rowset[] = Vpc_Chained_Trl_Component::getChainedByMaster($component, $language, $searchSelect);
+                }
+            }
+            if ($languages) {
+                $model = Vps_Model_Abstract::getInstance('Vpc_Root_Category_Trl_GeneratorModel');
+                $s = clone $select;
+                $s->unsetPart('order');
+                foreach ($model->getRows($s) as $row) {
+                    $rowset[] = $root->getComponentById($row->component_id, $searchSelect);
+                }
+            }
+        } else if ($parts && in_array('parent_id', $parts)) {
             $rowset = array($root);
         } else if (isset($where['parent_id'])) {
             $page = $root->getComponentById($where['parent_id'], array('ignoreVisible' => true));

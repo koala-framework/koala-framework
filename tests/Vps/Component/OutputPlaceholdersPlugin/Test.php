@@ -2,7 +2,7 @@
 /**
  * @group Component_Output
  */
-class Vps_Component_OutputPlaceholdersPlugin_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_OutputPlaceholdersPlugin_Test extends Vps_Test_TestCase
 {
     protected $_output;
     protected static $_templates = array();

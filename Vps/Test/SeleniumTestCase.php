@@ -1,9 +1,17 @@
 <?php
 class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
+    protected $backupStaticAttributes = false;
     protected $autoStop = false;
     protected $_unitTestCookie;
     protected $_domain = null;
+
+
+protected function _createSeparateTestDb($bootstrapFile)
+{
+    Vps_Test_OwnDbTestCase::createSeparateTestDb($bootstrapFile);
+    $this->_dbName = Vps_Test_OwnDbTestCase::getSeparateTestDbName();
+}
 
     public static function suite($className)
     {
@@ -39,7 +47,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
         $this->_unitTestCookie = md5(uniqid('testId', true));
 
-        $this->captureScreenshotOnFailure = false;
+        $this->captureScreenshotOnFailure = Vps_Setup::getConfigSection()=='vivid-test-server';
         $this->screenshotPath = '/mnt/screenshots';
         $this->screenshotUrl = 'http://screenshots.vivid';
         parent::setUp();
@@ -88,6 +96,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         parent::start();
         $this->open('/vps/test/vps_start');
+        $this->deleteAllVisibleCookies();
         $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/, max_age=60*5');
     }
 
@@ -124,7 +133,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         $url = '/vps/componentedittest/'.
                 Vps_Component_Data_Root::getComponentClass().'/'.
-                $componentClass.
+                $componentClass.'/Index'.
                 '?componentId='.$componentId;
         return $this->open($url);
     }

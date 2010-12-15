@@ -9,6 +9,12 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     private $_componentConfigs = array();
 
+    protected function _init()
+    {
+        $this->_filters->add(new Vps_Controller_Action_Auto_Filter_Text())
+            ->setQueryFields(array('name'));
+    }
+
     public function indexAction()
     {
         $this->view->xtype = 'vps.component.pages';
@@ -69,6 +75,13 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         return $data;
     }
 
+    protected function _getParentId($row)
+    {
+        $parent = $row->parent;
+        if (!$parent) return null;
+        return $parent->componentId;
+    }
+
     private function _formatEditComponents($componentClass, $dbId, $configType)
     {
         $ret = array();
@@ -93,18 +106,21 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     // static zum Testen
     public static function getEditComponents($component)
     {
-        $editComponents = $component->getRecursiveChildComponents(
-            array(
-                'hasEditComponents' => true,
-                'ignoreVisible' => true,
-                'flags' => array('showInPageTreeAdmin' => false)
-            ), array(
-                'flags' => array('showInPageTreeAdmin' => false)
-            )
-        );
+        $editComponents = array();
         if ($component->isPage) {
             $editComponents[] = $component;
         }
+        $editComponents = array_merge($editComponents,
+            $component->getRecursiveChildComponents(
+                array(
+                    'hasEditComponents' => true,
+                    'ignoreVisible' => true,
+                    'flags' => array('showInPageTreeAdmin' => false)
+                ), array(
+                    'flags' => array('showInPageTreeAdmin' => false)
+                )
+            )
+        );
         return $editComponents;
     }
 

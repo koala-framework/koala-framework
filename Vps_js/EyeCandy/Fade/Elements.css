@@ -1,2 +1,21 @@
-.vpsFadeElements { display: none; }
+.vpsFadeElements { position: relative; }
 .vpsFadeElement { position: absolute; top: 0px; left: 0px; }
+
+.elementAccessLinks { position: relative; z-index: 2; }
+.elementAccessLinks li { float: left; }
+.elementAccessLinks .elementAccessLink {
+    display: block; width: 20px; height: 20px;
+    background-color: #bbb; margin: 0px 5px;
+}
+.elementAccessLinks a.elementAccessLinkActive {
+    background-color: #fff;
+}
+.elementAccessLinks .elementAccessPlayPauseButton {
+    background-repeat: no-repeat;
+}
+.elementAccessLinks .elementAccessPause {
+    background-image: url(/assets/vps/images/pause.png);
+}
+.elementAccessLinks .elementAccessPlay {
+    background-image: url(/assets/vps/images/play.png);
+}

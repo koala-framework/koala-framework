@@ -113,8 +113,7 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
             $args = unserialize($matches[2][$key]);
             $info['componentClass'] = $componentClass;
 
-            $dynamicClass = Vps_Component_Abstract_Admin::getComponentClass($componentClass, $class);
-            if (!class_exists($dynamicClass)) $dynamicClass = 'Vps_Component_Dynamic_' . $class;
+            $dynamicClass = 'Vps_Component_Dynamic_' . $class;
             $dynamic = new $dynamicClass();
             $dynamic->setInfo($info);
             call_user_func_array(array($dynamic, 'setArguments'), $args);
@@ -129,7 +128,11 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
         Vps_Benchmark::count('rendered partial ' . $useCache ? 'noviewcache' : 'nocache', $componentId);
         $output = new Vps_Component_Output_ComponentPartial();
         $output->setIgnoreVisible($this->ignoreVisible());
-        return $output->render($this->_getComponent($componentId), $partial, $id, $info);
+        $ret = $output->render($this->_getComponent($componentId), $partial, $id, $info);
+        if (!$useCache) { //hack
+            $ret = $this->_parseDynamic($ret, $componentClass, array('partial' => $info));
+        }
+        return $ret;
     }
 
     protected function _renderHasContent($componentId, $componentClass, $content, $counter, $inverse, $useCache = false)

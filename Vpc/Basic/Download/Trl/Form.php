@@ -10,5 +10,8 @@ class Vpc_Basic_Download_Trl_Form extends Vpc_Abstract_Form
         $this->add(new Vps_Form_Field_TextField('infotext', trlVps('Descriptiontext')))
             ->setWidth(300)
             ->setHelpText(hlpVps('vpc_download_linktext'));
+
+        $this->add(new Vps_Form_Field_ShowField('original_infotext', trlVps('Original')))
+            ->setData(new Vps_Data_Trl_OriginalComponent('infotext'));
     }
 }

@@ -1,8 +1,10 @@
 <?php
 /**
  * @group Assets
+ * @group slow
+ * slow weil sie den assets cache löschen
  */
-class Vps_Assets_OwnConfig_Test extends PHPUnit_Framework_TestCase
+class Vps_Assets_OwnConfig_Test extends Vps_Test_TestCase
 {
     public function testDebug()
     {
@@ -30,6 +32,8 @@ class Vps_Assets_OwnConfig_Test extends PHPUnit_Framework_TestCase
     public function testNoDebug()
     {
         Vps_Assets_Cache::getInstance()->clean();
+        $loader = new Vps_Assets_Loader();
+        $loader->getDependencies()->getMaxFileMTime();
         Vps_Benchmark::enable();
         Vps_Benchmark::reset();
         $this->_testNoDebug();
@@ -46,25 +50,25 @@ class Vps_Assets_OwnConfig_Test extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('none', Vps_Media_Output::getEncoding());
         $config = clone Zend_Registry::get('config');
-        $config->application->version = '1.0';
         $config->debug->menu = false;
         $config->debug->assets->js = false;
         $config->debug->assets->css = false;
         $config->debug->assets->printcss = false;
         $loader = new Vps_Assets_Loader($config);
         $dep = $loader->getDependencies();
+        $v = $dep->getMaxFileMTime();
 
         $type = 'Vps_Assets_OwnConfig:Test';
         $files = $dep->getAssetUrls($type, 'js', 'web', false);
         $expected = array(
-            '/assets/all/web/'.Zend_Registry::get('trl')->getTargetLanguage().'/Vps_Assets_OwnConfig:Test.js?v=1.0',
+            '/assets/all/web/'.Vps_Trl::getInstance()->getTargetLanguage().'/Vps_Assets_OwnConfig:Test.js?v='.$v,
         );
         $this->assertEquals($expected, $files);
 
-        $c = $loader->getFileContents('all/web/'.Zend_Registry::get('trl')->getTargetLanguage().'/Vps_Assets_OwnConfig:Test.js?v=1.0');
+        $c = $loader->getFileContents('all/web/'.Vps_Trl::getInstance()->getTargetLanguage().'/Vps_Assets_OwnConfig:Test.js?v='.$v);
         $this->assertContains("file2\nfile1\n", $c['contents']);
 
-        $c = $loader->getFileContents('all/web/'.Zend_Registry::get('trl')->getTargetLanguage().'/Vps_Assets_OwnConfig:Test.js?v=1.0');
+        $c = $loader->getFileContents('all/web/'.Vps_Trl::getInstance()->getTargetLanguage().'/Vps_Assets_OwnConfig:Test.js?v='.$v);
         $this->assertContains("file2\nfile1\n", $c['contents']);
     }
 }

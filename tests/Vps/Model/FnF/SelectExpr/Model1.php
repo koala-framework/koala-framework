@@ -10,6 +10,8 @@ class Vps_Model_FnF_SelectExpr_Model1 extends Vps_Model_FnF
             'id' => 1, 'foo'=>'xxy', 'bar'=>'abc',
         ),array(
             'id' => 2, 'foo'=>'xxz', 'bar'=>'abcde',
+        ),array(
+            'id' => 3, 'foo'=>'xxa', 'bar'=>'abcdef',
         ));
         $config['exprs'] = array();
 
@@ -45,6 +47,8 @@ class Vps_Model_FnF_SelectExpr_Model1 extends Vps_Model_FnF
                     new Vps_Model_Select_Expr_Sum('foo2'),
                     $select);
 
+        $config['exprs']['contains_model2']
+            = new Vps_Model_Select_Expr_Child_Contains('Model2');
 
         parent::__construct($config);
     }

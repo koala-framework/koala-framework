@@ -7,21 +7,22 @@ class Vpc_Trl_StaticTexts_Test extends Vpc_TestAbstract
 {
     public function setUp()
     {
-        Vps_Registry::get('trl')->setWebCodeLanguage('de');
-        Vps_Registry::get('trl')->setModel(new Vpc_Trl_StaticTexts_TrlModelWeb(), Vps_Trl::SOURCE_WEB);
+        Vps_Registry::get('config')->languages = array('de', 'en');
+        Vps_Trl::getInstance()->setWebCodeLanguage('de');
+        Vps_Trl::getInstance()->setModel(new Vpc_Trl_StaticTexts_TrlModelWeb(), Vps_Trl::SOURCE_WEB);
         parent::setUp('Vpc_Trl_StaticTexts_Root');
     }
 
     public function tearDown()
     {
-        Vps_Registry::get('trl')->setWebCodeLanguage(null);
-        Vps_Registry::get('trl')->setModel(null, Vps_Trl::SOURCE_WEB);
+        Vps_Trl::getInstance()->setWebCodeLanguage(null);
+        Vps_Trl::getInstance()->setModel(null, Vps_Trl::SOURCE_WEB);
         parent::tearDown();
     }
 
     public function testDe()
     {
-        
+
         $c = $this->_root->getPageByUrl('http://'.Vps_Registry::get('config')->server->domain.'/de/test', 'de');
         $this->assertEquals('de', $c->getLanguage());
         $render = $c->render();

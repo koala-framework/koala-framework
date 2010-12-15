@@ -2,21 +2,21 @@
 
     <ul>
 
-        <? if (!empty($this->row->firstname) || !empty($this->row->lastname)) { ?>
+        <? if (!empty($this->row->title) || !empty($this->row->firstname) || !empty($this->row->lastname)) { ?>
             <li>
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['nameLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
-                <?= $this->row->firstname; ?> <?= $this->row->lastname; ?>
+                <?= $this->row->title; ?> <?= $this->row->firstname; ?> <?= $this->row->lastname; ?>
             </li>
         <? } ?>
 
-        <? if (!empty($this->row->working_position)) { ?>
+        <? if (!empty($this->workingPosition)) { ?>
             <li>
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['positionLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
-                <?= $this->row->working_position; ?>
+                <?= $this->workingPosition; ?>
             </li>
         <? } ?>
 
@@ -38,6 +38,15 @@
             </li>
         <? } ?>
 
+        <? if (!empty($this->row->fax)) { ?>
+            <li>
+                <? if ($this->showLabels) { ?>
+                    <label><?= $this->placeholder['faxLabel'].$this->labelSeparator; ?></label>
+                <? } ?>
+                <?= $this->row->fax; ?>
+            </li>
+        <? } ?>
+
         <? if (!empty($this->row->email)) { ?>
             <li>
                 <? if ($this->showLabels) { ?>
@@ -52,7 +61,7 @@
                 <? if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['vcardLabel'].$this->labelSeparator; ?></label>
                 <? } ?>
-                <?= $this->componentLink($this->vcard, '<img src="/assets/web/images/vcard.png" height="11" width="16" /> vCard Download'); ?>
+                <?= $this->componentLink($this->vcard, '<img src="/assets/vps/images/fileicons/vcard.png" height="11" width="16" /> vCard Download'); ?>
             </li>
         <? } ?>
 

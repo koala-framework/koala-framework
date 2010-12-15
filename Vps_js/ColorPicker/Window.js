@@ -7,7 +7,7 @@ Vps.ColorPickerWindow = Ext.extend(Ext.Window,
             autoScroll: true,
             bodyStyle: 'padding: 10px;',
             region: 'center'
-        })
+        });
 
         this.picker = new Vps.ColorPicker.Panel({
             title: "Color Picker",

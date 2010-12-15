@@ -146,7 +146,7 @@ class Vps_Benchmark
             } else {
                 echo "Memory: ".round(memory_get_usage()/1024)." kb<br />\n";
             }
-            if (Zend_Registry::get('dao')->hasDb() && Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
+            if (Zend_Registry::get('dao') && Zend_Registry::get('dao')->hasDb() && Zend_Registry::get('db') && Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
                 echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
             }
         }
@@ -227,6 +227,19 @@ class Vps_Benchmark
 
     final public static function shutDown()
     {
+        if (function_exists('xhprof_disable') && file_exists('/www/public/niko/xhprof')) {
+            //TODO irgendwie intelligenter aktivieren/deaktivieren
+            $xhprof_data = xhprof_disable();
+            if ($xhprof_data) {
+                $XHPROF_ROOT = '/www/public/niko/xhprof';
+                include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
+                include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
+                $xhprof_runs = new XHProfRuns_Default();
+                $run_id = $xhprof_runs->save_run($xhprof_data, "xhprof_benchmark");
+                echo "http://xhprof.niko.vivid/xhprof_html/index.php?run=$run_id&source=xhprof_benchmark";
+            }
+        }
+
         if (!self::$_logEnabled) return;
 
         static $wasCalled = false;

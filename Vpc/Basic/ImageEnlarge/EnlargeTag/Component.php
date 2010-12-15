@@ -9,7 +9,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['fullSizeDownloadable'] = false;
         $ret['showInactiveSwitchLinks'] = false;
         $ret['imageTitle'] = true;
-        $ret['dimensions'] = array(array('width'=>640, 'height'=>480, 'scale'=>Vps_Media_Image::SCALE_BESTFIT));
+        $ret['dimensions'] = array(array('width'=>800, 'height'=>600, 'scale'=>Vps_Media_Image::SCALE_BESTFIT));
 
         $ret['assets']['files'][] = 'vps/Vpc/Basic/ImageEnlarge/EnlargeTag/Component.js';
         $ret['assets']['dep'][] = 'ExtElement';
@@ -49,15 +49,25 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
                     $this->getData()->componentId, 'original', $data['filename']);
             }
         }
+
+        if (Vpc_Abstract::getSetting($this->_getImageEnlargeComponentData()->componentClass, 'imageCaption')) {
+            $ret['imageCaption'] = $this->_getImageEnlargeComponentData()->getComponent()->getRow()->image_caption;
+        }
         return $ret;
     }
 
-    public function getImageData()
+    private function _getImageEnlargeComponentData()
     {
         $d = $this->getData();
         while (!is_instance_of($d->componentClass, 'Vpc_Basic_ImageEnlarge_Component')) {
             $d = $d->parent;
         }
+        return $d;
+    }
+
+    public function getImageData()
+    {
+        $d = $this->_getImageEnlargeComponentData();
         return $d->getComponent()->getOwnImageData();
     }
 
@@ -70,7 +80,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
     {
         if ($type == 'original') {
             $data = Vps_Component_Data_Root::getInstance()
-                ->getComponentByDbId($id, array('limit'=>1))
+                ->getComponentByDbId($id, array('limit'=>1, 'ignoreVisible' => true))
                 ->getComponent()->getImageData();
             if (!$data || !$data['file']) {
                 return null;

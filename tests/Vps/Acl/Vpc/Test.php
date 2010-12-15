@@ -2,13 +2,11 @@
 /**
  * @group Vps_Acl
  */
-class Vps_Acl_Vpc_Test extends PHPUnit_Framework_TestCase
+class Vps_Acl_Vpc_Test extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Acl_Vpc_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Acl_Vpc_Root');
     }
 
     public function testVpcAcl()

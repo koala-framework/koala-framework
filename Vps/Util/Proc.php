@@ -20,11 +20,20 @@ class Vps_Util_Proc
         return $this->_pipes[$nr];
     }
 
-    public function close()
+    public function terminate($signal = 15)
+    {
+        $ret = proc_terminate($this->_process, $signal);
+        if (!$ret) {
+            throw new Vps_Exception("terminate failed");
+        }
+    }
+
+    public function close($checkExitValue = true)
     {
         $ret = proc_close($this->_process);
-        if ($ret) {
+        if ($checkExitValue && $ret) {
             throw new Vps_Exception("Command failed");
         }
+        return $ret;
     }
 }

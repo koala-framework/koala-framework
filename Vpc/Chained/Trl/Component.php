@@ -11,24 +11,23 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
         $ret['generators'] = Vpc_Abstract::getSetting($masterComponentClass, 'generators');
         foreach ($ret['generators'] as $k=>&$g) {
             if (!is_array($g['component'])) $g['component'] = array($k=>$g['component']);
-            foreach ($g['component'] as &$c) {
+            foreach ($g['component'] as $key=>&$c) {
                 if (!$c) continue;
                 $masterC = $c;
                 $c = Vpc_Admin::getComponentClass($c, 'Trl_Component');
                 if (!$c) $c = 'Vpc_Chained_Trl_Component';
                 $c .= '.'.$masterC;
-                $g['masterComponentsMap'][$masterC] = $c;
+                $g['masterComponentsMap'][$masterC] = $key;
             }
             $g['chainedGenerator'] = $g['class'];
             $g['class'] = 'Vpc_Chained_Trl_Generator';
             if (isset($g['dbIdShortcut'])) unset($g['dbIdShortcut']);
         }
-        try {
-            $ret['componentName'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentName');
-        } catch (Exception $e) {}
-        try {
-            $ret['componentIcon'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentIcon');
-        } catch (Exception $e) {}
+        foreach (array('componentName', 'componentIcon', 'editComponents', 'viewCache') as $i) {
+            if (Vpc_Abstract::hasSetting($masterComponentClass, $i)) {
+                $ret[$i] = Vpc_Abstract::getSetting($masterComponentClass, $i);
+            }
+        }
 
         foreach (array('showInPageTreeAdmin', 'processInput', 'menuCategory') as $f) {
             $flags = Vpc_Abstract::getSetting($masterComponentClass, 'flags', false);
@@ -108,12 +107,12 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
     }
 
 
-    public static function getChainedByMaster($masterData, $chainedData)
+    public static function getChainedByMaster($masterData, $chainedData, $select = array())
     {
         if (!$masterData) return null;
 
         while ($chainedData) {
-            if (is_instance_of($chainedData->componentClass, 'Vpc_Root_TrlRoot_Chained_Component')) { //wen nötig stattdessen ein neues flag erstellen
+            if (Vpc_Abstract::getFlag($chainedData->componentClass, 'hasLanguage')) {
                 break;
             }
             $chainedData = $chainedData->parent;
@@ -121,22 +120,42 @@ class Vpc_Chained_Trl_Component extends Vpc_Abstract
 
         $c = $masterData;
         $ids = array();
+        $hasLanguageReached = false;
         while ($c) {
             $pos = max(
                 strrpos($c->componentId, '-'),
                 strrpos($c->componentId, '_')
             );
             $id = substr($c->componentId, $pos);
-            if (is_instance_of($c->componentClass, 'Vpc_Root_TrlRoot_Master_Component')) { //wen nötig stattdessen ein neues erstellen
+            if (Vpc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
+                $hasLanguageReached = true;
                 break;
             }
-            if ((int)$id > 0) $id = '_' . $id;
+            $skipParents = false;
+            if ((int)$id > 0) { // nicht mit is_numeric wegen Bindestrich, das als minus interpretiert wird
+                $id = '_' . $id;
+                $skipParents = true;
+            }
             $c = $c->parent;
-            if ($c) $ids[] = $id;
+            if ($c) {
+                $ids[] = $id;
+                //bei pages die parent ids auslassen
+                if ($skipParents) {
+                    while (is_numeric($c->componentId)) {
+                        $c = $c->parent;
+                    }
+                }
+            }
         }
+        if (!$hasLanguageReached) return $masterData;
         $ret = $chainedData;
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
         foreach (array_reverse($ids) as $id) {
-            $ret = $ret->getChildComponent($id);
+            $select->whereId($id);
+            $ret = $ret->getChildComponent($select);
+            if (!$ret) return null;
         }
         return $ret;
     }

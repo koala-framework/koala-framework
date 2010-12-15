@@ -47,6 +47,7 @@ class Vps_Model_DbWithConnection_SelectExpr_Test extends Vps_Model_DbWithConnect
         $m1 = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SelectExpr_Model1');
 
         $s = $m1->select();
+        $s->where('id!=3');
         $s->order('count_model2');
         $row = $m1->getRow($s);
         $this->assertEquals(2, $row->id);
@@ -58,6 +59,7 @@ class Vps_Model_DbWithConnection_SelectExpr_Test extends Vps_Model_DbWithConnect
         $m1 = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SelectExpr_Model1');
 
         $s = $m1->select();
+        $s->where('id!=3');
         $s->expr('count_model2');
         $s->order('count_model2');
         $row = $m1->getRow($s);
@@ -161,5 +163,17 @@ class Vps_Model_DbWithConnection_SelectExpr_Test extends Vps_Model_DbWithConnect
         $this->assertEquals('abc', $row->strpad_3_left);
         $this->assertEquals('abcd', $row->strpad_4_left);
         $this->assertEquals('00abcd', $row->strpad_6_left);
+    }
+
+    public function testExprContains()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SelectExpr_Model1');
+        $s = $m->select();
+        $s->where(new Vps_Model_Select_Expr_Child_Contains('Model2'));
+        $this->assertEquals(2, $m->countRows($s));
+
+        $s = $m->select();
+        $s->where(new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_Child_Contains('Model2')));
+        $this->assertEquals(1, $m->countRows($s));
     }
 }

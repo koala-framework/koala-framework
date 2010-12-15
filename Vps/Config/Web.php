@@ -43,8 +43,9 @@ class Vps_Config_Web extends Vps_Config_Ini
         }
 
         $vpsSection = false;
-        $webConfig = new Vps_Config_Ini($webPath.'/application/config.ini',
-                        $this->_getWebSection($webPath.'/application/config.ini', $section));
+
+        $webSection = $this->_getWebSection($webPath.'/application/config.ini', $section);
+        $webConfig = new Vps_Config_Ini($webPath.'/application/config.ini', $webSection);
         if (!empty($webConfig->vpsConfigSection)) {
             $vpsSection = $webConfig->vpsConfigSection;
         } else {
@@ -61,22 +62,29 @@ class Vps_Config_Web extends Vps_Config_Ini
         parent::__construct($vpsPath.'/config.ini', $vpsSection,
                         array('allowModifications'=>true));
 
-
+        $fixes = array();
+        if ($webSection != $section && ($this->server->host == 'vivid' || $this->server->host == 'vivid-test-server')) {
+            $fixes = array(
+                'libraryPath' => $this->libraryPath,
+                'uploads' => $this->uploads,
+                'serverUser' => $this->server->user,
+                'serverHost' => $this->server->host,
+                'serverDir' => $this->server->dir,
+                'serverDomain' => $this->server->domain
+            );
+        }
 
         $this->_mergeWebConfig($webPath.'/application/config.ini', $section);
 
-        $v = $this->application->vps->version;
-        if (preg_match('#tags/vps/([^/]+)/config\\.ini#', $v, $m)) {
-            $v = $m[1];
-        } else if (preg_match('#branches/vps/([^/]+)/config\\.ini#', $v, $m)) {
-            $v = 'Branch '.$m[1];
-        } else if (preg_match('#trunk/vps/config\\.ini#', $v, $m)) {
-            $v = 'Trunk';
+        if ($fixes) {
+            $this->libraryPath = $fixes['libraryPath'];
+            $this->uploads = $fixes['uploads'];
+            $this->server->user = $fixes['serverUser'];
+            $this->server->host = $fixes['serverHost'];
+            $this->server->dir = $fixes['serverDir'];
+            $this->server->domain = $fixes['serverDomain'];
         }
-        $this->application->vps->version = $v;
-        if (preg_match('/Revision: ([0-9]+)/', $this->application->vps->revision, $m)) {
-            $this->application->vps->revision = (int)$m[1];
-        }
+
         foreach ($this->path as $k=>$i) {
             $this->path->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
                                             array($this->libraryPath, $vpsPath),
@@ -87,8 +95,12 @@ class Vps_Config_Web extends Vps_Config_Ini
                                             array($this->libraryPath, $vpsPath),
                                             $i);
         }
+
+        $this->server->dir = str_replace('%id%', $this->application->id, $this->server->dir);
+        $this->server->domain = str_replace('%id%', $this->application->id, $this->server->domain);
+        $this->uploads = str_replace('%id%', $this->application->id, $this->uploads);
     }
-    
+
     private function _getWebSection($file, $section)
     {
         $webConfigFull = new Vps_Config_Ini($file, null);

@@ -181,6 +181,20 @@ class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
         $this->_parts[self::EXPR][] = $field;
         return $this;
     }
+
+    public function merge(Vps_Model_Select $other)
+    {
+        $mergeArrayParts = array(self::WHERE, self::WHERE_EXPRESSION, self::WHERE_NULL,
+            self::WHERE_EQUALS, self::WHERE_NOT_EQUALS, self::OTHER);
+        foreach ($other->_parts as $part=>$value) {
+            if (in_array($part, $mergeArrayParts) && isset($this->_parts[$part])) {
+                $this->_parts[$part] = array_merge($this->_parts[$part], $value);
+            } else {
+                $this->_parts[$part] = $value;
+            }
+        }
+    }
+
     public function getParts()
     {
         return $this->_parts;

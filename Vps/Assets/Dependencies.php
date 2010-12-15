@@ -7,6 +7,7 @@ class Vps_Assets_Dependencies
     private $_dependenciesConfig;
     private $_processedDependencies = array();
     private $_processedComponents = array();
+    private $_cacheMaxFileMTime;
     /**
      * @param Zend_Config für tests
      **/
@@ -16,9 +17,35 @@ class Vps_Assets_Dependencies
         $this->_config = $loader->getConfig();
     }
 
-    public function getAssetUrls($assetsType, $fileType, $section, $rootComponent)
+    public function getMaxFileMTime()
     {
-        $b = Vps_Benchmark::start();
+        if (isset($this->_cacheMaxFileMTime)) {
+            return $this->_cacheMaxFileMTime;
+        }
+        $cache = Vps_Assets_Cache::getInstance();
+        if (($ret = $cache->load('maxFileMTime')) === false) {
+            $ret = 0;
+            foreach ($this->_config->assets->toArray() as $assetType=>$v) {
+                $files = $this->getAssetFiles($assetType, null, 'web', Vps_Component_Data_Root::getComponentClass());
+                unset($files['mtime']);
+                foreach ($files as $file) {
+                    if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
+                    } else if (substr($file, 0, 8) == 'dynamic/') {
+                    } else {
+                        $ret = max($ret, filemtime($this->getAssetPath($file)));
+                    }
+                }
+            }
+            $ret = array($ret);
+            $cache->save($ret, 'maxFileMTime');
+        }
+        $this->_cacheMaxFileMTime = $ret[0];
+        return $ret[0];
+    }
+
+    public function getAssetUrls($assetsType, $fileType, $section, $rootComponent, $language = null)
+    {
+        Vps_Benchmark::count('getAssetUrls');
         if ($this->_config->debug->menu) {
             $session = new Zend_Session_Namespace('debug');
             if (isset($session->enable) && $session->enable) {
@@ -28,8 +55,8 @@ class Vps_Assets_Dependencies
         $allUsed = false;
         $ret = array();
         if (!$this->_config->debug->assets->$fileType || (isset($session->$fileType) && !$session->$fileType)) {
-            $v = $this->_config->application->version;
-            $language = Zend_Registry::get('trl')->getTargetLanguage();
+            $v = $this->getMaxFileMTime();
+            if (!$language) $language = Vps_Trl::getInstance()->getTargetLanguage();
             $ret[] = "/assets/all/$section/"
                             .($rootComponent?$rootComponent.'/':'')
                             ."$language/$assetsType.$fileType?v=$v";
@@ -44,7 +71,7 @@ class Vps_Assets_Dependencies
                     $file = substr($file, 8);
                     $a = new $file($this->_loader, $assetsType, $rootComponent);
                     if (!$allUsed || !$a->getIncludeInAll()) {
-                        $v = $this->_config->application->version;
+                        $v = $this->getMaxFileMTime();
                         $f = "/assets/dynamic/$assetsType/"
                             .($rootComponent?$rootComponent.'/':'')
                             ."$file?v=$v";
@@ -174,7 +201,9 @@ class Vps_Assets_Dependencies
         if (in_array($assetsType.$dependency, $this->_processedDependencies)) return;
         $this->_processedDependencies[] = $assetsType.$dependency;
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
-            $this->_processComponentDependency($assetsType, $rootComponent, $rootComponent, $dependency == 'ComponentsAdmin');
+            if ($rootComponent) {
+                $this->_processComponentDependency($assetsType, $rootComponent, $rootComponent, $dependency == 'ComponentsAdmin');
+            }
             return;
         }
         if (!isset($this->_getDependenciesConfig($assetsType)->$dependency)) {

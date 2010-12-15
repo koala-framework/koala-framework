@@ -1,6 +1,9 @@
 <?php
 class Vps_Component_ModelObserver
 {
+    /**
+     * @var Vps_Component_ModelObserver
+     */
     static private $_instance;
     private $_process = array(
         'insert' => array(),
@@ -77,15 +80,15 @@ class Vps_Component_ModelObserver
                 $model = $row->getModel();
                 $primary = $model->getPrimaryKey();
                 if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
-                if ($model instanceof Vps_Component_Cache_MetaModel ||
-                    $model instanceof Vps_Component_Cache_Model ||
-                    ($model instanceof  Vps_Model_Field && !$primary)
-                ) {
-                    return array();
-                }
             }
-            $id = $row->$primary;
+            $id = is_array($primary) ? null : $row->$primary;
             $componentId = isset($row->component_id) ? $row->component_id : null;
+        }
+        if ($model instanceof Vps_Component_Cache_MetaModel ||
+            $model instanceof Vps_Component_Cache_Model ||
+            ($model instanceof  Vps_Model_Field && !$primary)
+        ) {
+            return array();
         }
         if (get_class($model) == 'Vps_Db_Table') return array();
         if ($this->_skipFnF) {

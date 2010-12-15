@@ -3,7 +3,9 @@
     <div class="account">
         <h2><?=trlVps('My account')?>:</h2>
         <ul>
+            <? if ($this->myProfile) { ?>
             <li><?=$this->componentLink($this->myProfile, trlVps('My Profile'))?></li>
+            <? } ?>
             <? foreach ($this->links as $l) { ?>
                 <li><?=$this->componentLink($l)?></li>
             <? } ?>
@@ -11,7 +13,9 @@
         </ul>
     </div>
 <? } else { ?>
-    <h2><?=trlVps('Login')?>:</h2>
+    <? if ($this->placeholder['loginHeadline']) { ?>
+        <h2><?=$this->placeholder['loginHeadline']?></h2>
+    <? } ?>
     <?=$this->component($this->login)?>
     <ul>
         <li><?=$this->componentLink($this->register, trlVps('Register'))?><?=$this->linkPostfix?></li>

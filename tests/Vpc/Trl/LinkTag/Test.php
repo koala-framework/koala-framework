@@ -39,4 +39,48 @@ class Vpc_Trl_LinkTag_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('root-en_test2');
         $this->assertEquals('<a href="http://www.vivid-planet.com/en">', $c->render());
     }
+
+    public function testCacheEn()
+    {
+        $c = $this->_root->getComponentById('root-master_test3');
+        $this->assertEquals('', $c->render());
+        $c = $this->_root->getComponentById('root-en_test3');
+        $this->assertEquals('', $c->render());
+
+        $model = Vps_Model_Abstract::getInstance('Vpc_Trl_LinkTag_LinkTag_TestModel');
+        $r = $model->getRow('root-master_test3');
+        $r->component = 'extern';
+        $r->save();
+
+        $this->_process();
+        $c = $this->_root->getComponentById('root-master_test3');
+        $this->assertEquals('', $c->render());
+        $c = $this->_root->getComponentById('root-en_test3');
+        $this->assertEquals('', $c->render());
+
+        $model = Vps_Model_Abstract::getInstance('Vpc_Trl_LinkTag_LinkTag_Extern_TestModel');
+        $model->createRow(array(
+            'component_id'=>'root-master_test3-link',
+            'target'=>'http://www.test.de/',
+            'open_type'=>'self'
+        ))->save();
+
+        $this->_process();
+        $c = $this->_root->getComponentById('root-master_test3');
+        $this->assertEquals('<a href="http://www.test.de/">', $c->render());
+        $c = $this->_root->getComponentById('root-en_test3');
+        $this->assertEquals('', $c->render());
+
+        $model = Vps_Model_Abstract::getInstance('Vpc_Trl_LinkTag_LinkTag_Extern_Trl_TestModel');
+        $model->createRow(array(
+            'component_id'=>'root-en_test3-link',
+            'target'=>'http://www.test.de/en'
+        ))->save();
+
+        $this->_process();
+        $c = $this->_root->getComponentById('root-master_test3');
+        $this->assertEquals('<a href="http://www.test.de/">', $c->render());
+        $c = $this->_root->getComponentById('root-en_test3');
+        $this->assertEquals('<a href="http://www.test.de/en">', $c->render());
+    }
 }

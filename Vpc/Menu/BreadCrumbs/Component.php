@@ -6,6 +6,7 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
         $ret = parent::getSettings();
         $ret['separator'] = '»';
         $ret['showHome'] = false;
+        $ret['showCurrentPage'] = true;
         return $ret;
     }
 
@@ -19,8 +20,8 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
             $ret['links'][] = $page;
         } while ($page = $page->getParentPage());
         $page = $this->getData()->getPage();
-        if ($this->_getParam('showHome') && $page) {
-            if (!$page->isHome) {
+        if ($this->_getSetting('showHome') && $page) {
+            if (!isset($page->isHome) || !$page->isHome) {
                 $home = Vps_Component_Data_Root::getInstance()->getRecursiveChildComponents(array(
                     'home' => true,
                     'subRoot' => $this->getData()
@@ -31,6 +32,9 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
             }
         }
         $ret['links'] = array_reverse($ret['links']);
+        if (count($ret['links']) && !$this->_getSetting('showCurrentPage')) {
+            array_pop($ret['links']);
+        }
         return $ret;
     }
 

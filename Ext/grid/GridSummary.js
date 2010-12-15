@@ -153,7 +153,7 @@ Ext.extend(Ext.grid.GridSummary, Ext.util.Observable, {
   },
 
   getSummaryNode : function() {
-    return this.view.summary
+    return this.view.summary;
   }
 });
 
@@ -183,4 +183,4 @@ Ext.grid.GridSummary.Calculations = {
     var t = (data[field+'total'] = ((data[field+'total']||0) + (record.data[field]||0)));
     return t === 0 ? 0 : t / c;
   }
-}
+};

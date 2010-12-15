@@ -8,10 +8,11 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         $ret['ownModel'] = 'Vpc_Advanced_SocialBookmarks_Model';
         $ret['inheritComponentClass'] = 'Vpc_Advanced_SocialBookmarks_Inherit_Component';
         $ret['cssClass'] = 'webStandard';
+        $ret['iconSet'] = 'Default';
         return $ret;
     }
 
-    public function getNetworks($currentPage)
+    private function _getNetworks($currentPage)
     {
         //TODO: funktioniert mit mehreren domains nicht korrekt
         $pageUrl = 'http://'.Vps_Registry::get('config')->server->domain.$currentPage->url;
@@ -25,9 +26,11 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         $ret = array();
         foreach ($this->getRow()->getChildRows('Networks', $s) as $net) {
             if (isset($networks[$net->network_id])) {
-                $icon = '/Vpc/Advanced/SocialBookmarks/Icons/';
+                $icon = '/Vpc/Advanced/SocialBookmarks/Icons/'.$this->_getSetting('iconSet').'/';
                 if (file_exists(VPS_PATH.$icon.$net->network_id.'.jpg')) {
                     $icon .= $net->network_id.'.jpg';
+                } else if (file_exists(VPS_PATH.$icon.$net->network_id.'.png')) {
+                    $icon .= $net->network_id.'.png';
                 } else {
                     $icon = false;
                 }
@@ -43,10 +46,15 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVarsWithNetworks($currentPage)
     {
         $ret = parent::getTemplateVars();
-        $ret['networks'] = $this->getNetworks($this->getData()->parent);
+        $ret['networks'] = $this->_getNetworks($this->getData()->parent);
         return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        return $this->getTemplateVarsWithNetworks($this->getData()->parent);
     }
 }

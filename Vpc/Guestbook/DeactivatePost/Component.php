@@ -6,7 +6,7 @@ class Vpc_Guestbook_DeactivatePost_Component extends Vpc_Guestbook_ActivatePost_
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['success'] = trlVps('The entry in your guestbook has been deacitvated.');
+        $ret['placeholder']['success'] = trlVpsStatic('The entry in your guestbook has been deacitvated.');
         return $ret;
     }
 }

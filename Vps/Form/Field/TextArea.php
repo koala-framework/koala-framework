@@ -11,7 +11,7 @@ class Vps_Form_Field_TextArea extends Vps_Form_Field_TextField
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
-        $value = $values[$name];
+        $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
         $ret = Vps_Form_Field_SimpleAbstract::getTemplateVars($values);
         //todo: escapen
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);

@@ -2,16 +2,6 @@
 class Vpc_Basic_LinkTag_Intern_Trl_Data extends Vps_Component_Data
 {
     private $_data;
-    private $_linkRow;
-
-    private function _getLinkRow()
-    {
-        if (!isset($this->_linkRow)) {
-            $m = Vpc_Abstract::createModel($this->componentClass);
-            $this->_linkRow = $m->getRow($this->dbId);
-        }
-        return $this->_linkRow;
-    }
 
     public final function getLinkedData()
     {
@@ -22,7 +12,7 @@ class Vpc_Basic_LinkTag_Intern_Trl_Data extends Vps_Component_Data
             if ($masterLinkData) {
                 $linkComponent = Vpc_Chained_Trl_Component::getChainedByMaster($masterLinkData, $this);
                 if (!$linkComponent) {
-                    $this->_data = false;
+                    $this->_data = false; //kann offline sein
                 } else {
                     $this->_data = $linkComponent;
                 }

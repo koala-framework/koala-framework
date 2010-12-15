@@ -10,8 +10,12 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
 
     protected $_editDialog = array(
         'width' =>  500,
-        'height' =>  400
+        'height' =>  400,
+        'autoForm' => 'Vpc.Directories.Item.Directory.EditFormPanel'
     );
+
+    protected $_filters = array('text'=>true);
+    protected $_paging = 25;
 
     public function preDispatch()
     {
@@ -39,7 +43,7 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
         $c = Vps_Component_Data_Root::getInstance()
             ->getComponentByDbId($this->_getParam('componentId'));
         // wenn zB Newsletter statisch in root erstellt wurde, gibts kein visible
-        if (isset($c->getPage()->visible) && !$c->getPage()->visible) {
+        if (!$c) {
             //wenn seite offline ist ignorieren
             //  ist nicht natürlich nicht korrekt, wir *müssten* die überprüfung
             //  nachholen, sobald die seite online gestellt wird

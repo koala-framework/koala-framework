@@ -3,19 +3,12 @@
  * @group Basic_Image
  * @group Image
  */
-class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_Image_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_Image_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
-        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
-        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
-        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
-        Vps_Component_Cache::getInstance()->emptyPreload();
-        Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
+        parent::setUp('Vpc_Basic_Image_Root');
+        $this->_root->setFilename(null);
     }
 
     public function tearDown()
@@ -32,7 +25,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('Vpc_Basic_Image_FixDimensionComponent', $url[1]);
         $this->assertEquals('1600', $url[2]);
         $this->assertEquals('default', $url[3]);
-        $this->assertEquals('foo.png', $url[5]);
+        $this->assertEquals('foo.png', $url[6]);
     }
 
     public function testUrlWithOwnFilename()
@@ -40,7 +33,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $c = $this->_root->getComponentById('1601');
         $url = $c->getComponent()->getImageUrl();
         $url = explode('/', trim($url, '/'));
-        $this->assertEquals('myname.png', $url[5]);
+        $this->assertEquals('myname.png', $url[6]);
     }
 
     public function testFixDimension()
@@ -64,7 +57,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(100, $im->getImageHeight());
         $this->assertContains(Vps_Model_Abstract::getInstance('Vpc_Basic_Image_UploadsModel')->getUploadDir().'/1', $o['mtimeFiles']);
         $this->assertContains(VPS_PATH.'/Vpc/Basic/Image/Component.php', $o['mtimeFiles']);
-        $this->assertContains(VPS_PATH.'/tests/Vpc/Basic/Image/FixDimensionComponent.php', $o['mtimeFiles']);
+        $this->assertContains('./tests/Vpc/Basic/Image/FixDimensionComponent.php', $o['mtimeFiles']);
         Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
     }
 
@@ -72,9 +65,10 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
     {
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($this->_root->getComponentById(1600));
-        $this->assertEquals('<div class="vpcBasicImageFixDimensionComponent">'.
-            '<img src="/media/Vpc_Basic_Image_FixDimensionComponent/1600/default/74d187822e02d6b7e96b53938519c028/foo.png" width="100" height="100" alt="" class="" />'.
-            '</div>', $html);
+
+        $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">'.
+            '\s*<img src="/media/Vpc_Basic_Image_FixDimensionComponent/1600/default/74d187822e02d6b7e96b53938519c028/[0-9]+/foo.png" width="100" height="100" alt="" class="" />'.
+            '\s*</div>\s*$#ms', $html);
     }
 
     public function testEmpty()
@@ -84,8 +78,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c);
-        $this->assertEquals('<div class="vpcBasicImageFixDimensionComponent">'.
-            '</div>', $html);
+        $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">\s*</div>\s*$#ms', $html);
     }
 
     public function testDimensionSetByRow()

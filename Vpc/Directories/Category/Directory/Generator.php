@@ -1,1 +1,10 @@
-<?phpclass Vpc_Directories_Category_Directory_Generator extends Vps_Component_Generator_Page_Table{    protected $_nameColumn = 'value';    protected function _formatSelect($parentData, $select)    {        $select = parent::_formatSelect($parentData, $select);        if (!$select) return null;        if (is_instance_of(Vpc_Abstract::getSetting($this->_class, 'childModel'), 'Vps_Util_Model_Pool')) {            if (!($pool = Vpc_Abstract::getSetting($this->_class, 'pool'))) {                throw new Vps_Exception("No pool set for '{$this->_class}'");            }            $select->whereEquals('pool', $pool);        }        return $select;    }}
+<?php
+class Vpc_Directories_Category_Directory_Generator extends Vps_Component_Generator_Page_Table
+{
+    protected function _formatSelect($parentData, $select)
+    {
+        $select = parent::_formatSelect($parentData, $select);
+        if (!$select) return null;
+        return $select;
+    }
+}

@@ -16,7 +16,8 @@ class Vpc_Directories_List_Trl_Component extends Vpc_Abstract_Composite_Trl_Comp
     {
         return self::getChainedByMaster(
             $this->getData()->chained->getComponent()->getItemDirectory(),
-            $this->getData()
+            $this->getData(),
+            array('ignoreVisible' => true)
         );
     }
 

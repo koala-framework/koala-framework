@@ -87,7 +87,7 @@ class Vpc_Advanced_SocialBookmarks_AvaliableModel extends Vps_Model_FnF
                 'name' => 'reddit'
             ),
             array(
-                'id' => 'stumbleUpon',
+                'id' => 'stumbleupon',
                 'url' => 'http://www.stumbleupon.com/submit?url={0}',
                 'name' => 'StumbleUpon'
             ),

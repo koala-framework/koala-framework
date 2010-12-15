@@ -1,6 +1,13 @@
 <?php
 class Vpc_Box_Title_Component extends Vpc_Abstract
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['componentName'] = trlVps('Title');
+        return $ret;
+    }
+
     protected function _getTitle()
     {
         $ret = $this->getData()->getTitle();
