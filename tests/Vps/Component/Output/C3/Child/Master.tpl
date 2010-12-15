@@ -1,1 +1,1 @@
-c3_childmaster <?= $this->component($this->component) ?>
+c3_childmaster <?=$this->componentWithMaster($this->componentWithMaster)?>

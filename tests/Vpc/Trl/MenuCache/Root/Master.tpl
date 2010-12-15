@@ -9,7 +9,7 @@
         foreach($this->boxes as $box) {
             echo $this->component($box);
         }
-        echo $this->component($this->component);
+        echo $this->componentWithMaster($this->componentWithMaster);
         ?>
     </body>
 </html>
