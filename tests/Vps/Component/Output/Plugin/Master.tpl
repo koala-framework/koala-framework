@@ -1,1 +1,1 @@
-rootmaster <?= $this->component($this->component) ?> rootmasterend
+rootmaster <?=$this->componentWithMaster($this->componentWithMaster)?> rootmasterend

@@ -3,38 +3,22 @@ class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
 {
     public function master(Vps_Component_Data $component)
     {
-        $renderer = $this->_getRenderer();
-        $config = array();
-        $type = null;
-        $value = null;
-        $plugins = array();
-
-        if ($renderer instanceof Vps_Component_Renderer_Mail) {
-            //TODO passt das so?
-            $type = 'mail';
-            $config = array(
-                'type' => $renderer->getRenderFormat(),
-                'recipient' => $renderer->getRecipient()
-            );
-        } else {
-            $type = 'master';
-        }
-        return $this->_getRenderPlaceholder($component->componentId, $config, $value, $type, $plugins);
+        return $this->_getRenderPlaceholder($component->componentId, array(), null, 'master', array());
     }
 
     public function render($componentId, $config)
     {
         $component = $this->_getComponentById($componentId);
 
-        $componentsWithMaster = array();
-        $componentsWithMaster[] = array(
+        $componentWithMaster = array();
+        $componentWithMaster[] = array(
             'type' => 'component',
             'data' => $component
         );
         $c = $component;
         while ($c) {
             if (Vpc_Abstract::getTemplateFile($c->componentClass, 'Master')) {
-                $componentsWithMaster[] = array(
+                $componentWithMaster[] = array(
                     'type' => 'master',
                     'data' => $c
                 );
@@ -43,6 +27,6 @@ class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
         }
         $helper = new Vps_Component_View_Helper_ComponentWithMaster();
         $helper->setRenderer($this->_getRenderer());
-        return $helper->componentWithMaster($componentsWithMaster);
+        return $helper->componentWithMaster($componentWithMaster);
     }
 }
