@@ -122,9 +122,9 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         $select->order('nr', 'DESC');
         $select->limit(1);
         $select->whereEquals('component', $type);
-        $row = $this->getChildRows('ChildComponents', $select)->current();
-        if (!$row) return 0;
-        return $row->nr;
+        $rows = $this->getChildRows('ChildComponents', $select);
+        if (!count($rows)) return 0;
+        return $rows->current()->nr;
     }
 
     protected function _beforeDelete()
@@ -181,7 +181,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         }
     }
 
-    public function tidy($html)
+    public function tidy($html, Vpc_Basic_Text_Parser $parser = null)
     {
         $config = array(
                     'indent'         => true,
@@ -222,11 +222,15 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $html = preg_replace('#<(.[a-z]+) ([^>]*)class=""([^>]*)>#', '<\1 \2 \3>', $html);
 
             $tidy = new tidy;
+            $html = str_replace('_mce_type="bookmark"', 'class="_mce_type-bookmark"', $html);
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
-            $parser = new Vpc_Basic_Text_Parser($this);
+            if (!$parser) {
+                $parser = new Vpc_Basic_Text_Parser($this);
+                $parser->setMasterStyles(Vpc_Basic_Text_StylesModel::getMasterStyles());
+            }
             $parser->setEnableColor(Vpc_Abstract::getSetting($this->_componentClass, 'enableColors'));
             $parser->setEnableTagsWhitelist(Vpc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
             $parser->setEnableStyles(Vpc_Abstract::getSetting($this->_componentClass, 'enableStyles'));
@@ -234,6 +238,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
+            $html = str_replace('class="_mce_type-bookmark"', '_mce_type="bookmark"', $html);
             $html = str_replace('#nbsp#', '&nbsp;', $html);
         }
 

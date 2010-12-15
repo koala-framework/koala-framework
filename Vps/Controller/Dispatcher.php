@@ -8,8 +8,15 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             || ($module == 'component_test' && $request->getControllerName() == 'component_test')
         ) {
             if ($module == 'component_test') {
-                Zend_Registry::get('config')->debug->componentCache->disable = true;
+
+                //FnF models setzen damit tests nicht in echte tabellen schreiben
+                Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
+                Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
+                Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
+
                 Vps_Component_Data_Root::setComponentClass($request->getParam('root'));
+
+                Vps_Registry::get('acl')->getComponentAcl()->allowComponent('guest', null);
 
                 //hick hack, für Vps_Component_Abstract_Admin::getControllerUrl
                 Zend_Registry::set('testRootComponentClass', $request->getParam('root'));

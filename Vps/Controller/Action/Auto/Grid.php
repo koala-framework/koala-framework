@@ -509,7 +509,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (!$data) $data = array();
         $addedIds = array();
         ignore_user_abort(true);
-        Zend_Registry::get('db')->beginTransaction();
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
         foreach ($data as $submitRow) {
             $id = $submitRow[$this->_primaryKey];
             $row = $this->_getRowById($id);
@@ -543,7 +543,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $addedIds[] = $row->id;
             }
         }
-        Zend_Registry::get('db')->commit();
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
         $success = true;
 
         if ($addedIds) {
@@ -561,7 +561,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $ids = explode(';', $ids);
 
         ignore_user_abort(true);
-        Zend_Registry::get('db')->beginTransaction();
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
         foreach ($ids as $id) {
             $row = $this->_model->find($id)->current();
             if (!$row) {
@@ -574,7 +574,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $row->delete();
             $this->_afterDelete();
         }
-        Zend_Registry::get('db')->commit();
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
     }
     public function jsonDuplicateAction()
     {
@@ -586,7 +586,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         $this->view->data = array('duplicatedIds' => array());
         ignore_user_abort(true);
-        Zend_Registry::get('db')->beginTransaction();
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
         foreach ($ids as $id) {
             $row = $this->_model->getRow($id);
             if (!$row) {
@@ -598,7 +598,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $new = $row->duplicate();
             $this->view->data['duplicatedIds'][] = $new->{$this->_primaryKey};
         }
-        Zend_Registry::get('db')->commit();
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
     }
 
     public function pdfAction()
