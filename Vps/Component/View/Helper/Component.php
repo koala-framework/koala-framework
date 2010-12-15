@@ -18,24 +18,9 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
                 'recipient' => $renderer->getRecipient()
             );
         } else if ($renderer && !(isset($component->box) && $component->box)) {
-            // Parent-Masters
-            $masterComponent = $renderer->getNextParentMasterComponent($component);
-            if ($masterComponent) {
-                $config = array('template' => $masterComponent->masterTemplate);
-                $type = 'master';
-                $value = $masterComponent->componentId;
-            }
-            // Component
-            if ($type == 'component') {
-                // Plugins
-                $plugins = $renderer->getPlugins($component);
-                // ComponentMaster
-                $componentMasterTemplate = $renderer->getCurrentComponentMasterTemplate($component);
-                if ($componentMasterTemplate) {
-                    $config = array('template' => $componentMasterTemplate);
-                    $type = 'master';
-                }
-            }
+            //TODO warum plugins nicht bei mail?
+            // Plugins
+            $plugins = $renderer->getPlugins($component);
         }
         return $this->_getRenderPlaceholder($component->componentId, $config, $value, $type, $plugins);
     }
