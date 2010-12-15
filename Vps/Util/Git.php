@@ -13,7 +13,7 @@ class Vps_Util_Git
     public static function web()
     {
         static $i;
-        if (!isset($i)) $i = new self('');
+        if (!isset($i)) $i = new self('.');
         return $i;
     }
 
