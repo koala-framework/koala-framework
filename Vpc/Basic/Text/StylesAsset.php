@@ -19,7 +19,7 @@ class Vpc_Basic_Text_StylesAsset implements Vps_Assets_Dynamic_Interface
 
     public function getMTime()
     {
-        return Vpc_Basic_Text_StylesModel::getMTime();
+        return Vps_Model_Abstract::getInstance($this->_stylesModel)->getMTime();
     }
 
     public function getType()

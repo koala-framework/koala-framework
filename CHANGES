@@ -6,12 +6,14 @@
 - Volltextsuche bei änderung neu indizieren                        4
 - mögliche wildcards im RTE anzeigen                               1
 - Bearbeitbare Mails für neue Benutzer usw                         4
-
+- Inherit Content Cache
 
 == 2.0 ==
 Neue Features
 - RTE mit tinymce unterstützung
 - Component Cache Neu, Url Cache, ProcessInput Cache
+- HtmlEditor: enableBlocks setting gibts nicht mehr, wurde in FormatBlock plugin ausgelagert und
+  müsste manuell zu plugins hinzugefügt werden (bevorzugt wird Text-Komponente!)
 
 möglicherweise nicht kompatible Änderungen:
 - Helper: Statt $this->ifHasContent($component) muss man if ($this->hasContent($component)) schreiben
