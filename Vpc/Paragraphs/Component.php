@@ -17,13 +17,20 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/AddParagraphButton.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.css';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
-        $ret['configChildComponentsGenerator'] = 'paragraphs';
         $ret['generators']['paragraphs'] = array(
             'class' => 'Vps_Component_Generator_Table',
             'component' => array(
                 'textImage' => 'Vpc_TextImage_Component',
             )
         );
+        $cc = Vps_Registry::get('config')->vpc->childComponents;
+        if (isset($cc->Vpc_Paragraphs_Component)) {
+            $ret['generators']['paragraphs']['component'] = array_merge(
+                $ret['generators']['paragraphs']['component'],
+                $cc->Vpc_Paragraphs_Component->toArray()
+            );
+        }
+        $ret['showCopyPaste'] = true;
         $ret['previewWidth'] = 600;
         $ret['default'] = array();
         return $ret;
@@ -36,7 +43,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
             ->getChildComponents(array('generator'=>'paragraphs'));
         return $ret;
     }
-    
+
     public function hasContent()
     {
         $childComponents = $this->getData()->getChildComponents(array('generator' => 'paragraphs'));

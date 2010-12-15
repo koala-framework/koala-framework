@@ -10,7 +10,7 @@ class Vpc_Basic_LinkTag_Intern_TargetData extends Vps_Data_Table
         }
         $ret = array('id' => $row->$name);
         $cmp = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
-            $ret['id']
+            $ret['id'], array('ignoreVisible' => true)
         );
         if ($cmp) {
             $ret['name'] = $cmp->getTitle();
@@ -30,7 +30,8 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vpc_Abstract_Form
 
         $this->add(new Vpc_Basic_LinkTag_Intern_Field('target', trlVps('Target')))
             ->setData(new Vpc_Basic_LinkTag_Intern_TargetData())
-            ->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl('Pages'));
+            ->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl('Pages'))
+            ->setWidth(233);
     }
 
     public function prepareSave($parentRow, $postData)
@@ -41,7 +42,7 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vpc_Abstract_Form
             $data = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
                 $parentRow->component_id, array('limit' => 1)
             );
-            if ($this->fields['target']->getInternalSave() &&
+            if ($this->fields['target']->getInternalSave() && isset($postData[$this->fields['target']->getFieldName()]) &&
                     $data && $data->getPage() && $data->getPage()->dbId == $postData[$this->fields['target']->getFieldName()]) {
                 throw new Vps_ClientException(trlVps('Link cannot link to itself'));
             }

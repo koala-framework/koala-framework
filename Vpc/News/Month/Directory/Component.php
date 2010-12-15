@@ -1,20 +1,17 @@
 <?php
-class Vpc_News_Month_Directory_Component extends Vpc_Directories_ItemPage_Directory_Component
+class Vpc_News_Month_Directory_Component extends Vpc_Directories_Month_Directory_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
 
-        $ret['generators']['detail'] = array(
-            'class' => 'Vpc_News_Month_Directory_Generator',
-            'component' => 'Vpc_News_Month_Detail_Component',
-            'model' => 'Vpc_News_Directory_Model',
-            'showInMenu' => true
-        );
+        $ret['generators']['detail']['model'] = 'Vpc_News_Directory_Model';
 
         //für News-Kategorien Box
         $ret['categoryChildId'] = 'month';
         $ret['categoryName'] = trlVps('Months');
+
+        $ret['dateColumn'] = 'publish_date';
 
         return $ret;
     }

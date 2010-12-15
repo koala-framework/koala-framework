@@ -1,5 +1,6 @@
 <?php
-class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Component implements Vps_Media_Output_Interface
+class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Component
+    implements Vps_Media_Output_IsValidInterface
 {
     public static function getSettings()
     {
@@ -54,14 +55,44 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
         return $this->_getRow();
     }
 
+    public static function isValidMediaOutput($id, $type, $className)
+    {
+        $retValid = self::VALID;
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id);
+        if (!$c) {
+            $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+            if (!$c) return self::INVALID;
+            if (Vps_Registry::get('config')->showInvisible) {
+                //preview im frontend
+                $retValid = self::VALID_DONT_CACHE;
+            } else if (Vps_Registry::get('userModel')->getAuthedUser()) {
+                //paragraphs vorschau im backend
+                $retValid = self::VALID_DONT_CACHE;
+            }
+        }
+        while ($c) {
+            foreach (Vpc_Abstract::getSetting($c->componentClass, 'plugins') as $plugin) {
+                if (is_instance_of($plugin, 'Vps_Component_Plugin_Interface_Login')) {
+                    $plugin = new $plugin($id);
+                    if ($plugin->isLoggedIn()) {
+                        return self::VALID_DONT_CACHE;
+                    } else {
+                        return self::ACCESS_DENIED;
+                    }
+                }
+            }
+            if ($c->isPage) break;
+            $c = $c->parent;
+        }
+        return $retValid;
+    }
+
     public static function getMediaOutput($id, $type, $className)
     {
-        $row = Vpc_Abstract::createModel($className)->getRow($id);
-        if ($row) {
-            $fileRow = $row->getParentRow('File');
-        } else {
-            $fileRow = false;
-        }
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+        if (!$c) return null;
+        $row = $c->getComponent()->getRow();
+        $fileRow = $row->getParentRow('File');
         if (!$fileRow) {
             return null;
         } else {

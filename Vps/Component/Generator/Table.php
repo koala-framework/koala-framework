@@ -90,16 +90,16 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
 
         foreach ($parentDatas as $parentData) {
-            $select = $this->_formatSelect($parentData, $select);
+            $s = $this->_formatSelect($parentData, clone $select);
             $rows = array();
-            if ($select) {
-                $rows = $this->_fetchRows($parentData, $select);
+            if ($s) {
+                $rows = $this->_fetchRows($parentData, $s);
             }
 
             foreach ($rows as $row) {
                 $currentPd = $parentData;
                 if (!$currentPd) {
-                    $currentPd = $this->_getParentDataByRow($row, $select);
+                    $currentPd = $this->_getParentDataByRow($row, $s);
                 }
                 if (!is_array($currentPd)) {
                     if ($currentPd) {
@@ -114,7 +114,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                     if ($currentPd->componentClass != $this->_class) {
                         throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$currentPd->componentClass}' instead of '$this->_class'");
                     }
-                    $data = $this->_createData($currentPd, $row, $select);
+                    $data = $this->_createData($currentPd, $row, $s);
                     if ($data) {
                         $ret[] = $data;
                     }
@@ -302,14 +302,49 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $newRow = $source->row->duplicate($data);
 
         $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
-        $target = $parentTarget->getChildComponent($id);
+        $target = $parentTarget->getChildComponent(array('id'=>$id, 'ignoreVisible'=>true));
         Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
         return $target;
     }
+
+    public function makeChildrenVisible($source)
+    {
+        if ($source->generator !== $this) {
+            throw new Vps_Exception("you must call this only with the correct source");
+        }
+
+        $data = array();
+        if ($this->_getModel()->hasColumn('visible')) {
+            if (!$source->row->visible) {
+                $source->row->visible = 1;
+                $source->row->save();
+            }
+        }
+        Vpc_Admin::getInstance($source->componentClass)->makeVisible($source);
+    }
+
     public function getGeneratorFlags()
     {
         $ret = parent::getGeneratorFlags();
         $ret['table'] = true;
+        return $ret;
+    }
+
+    public function getCacheVars($parentData)
+    {
+        $field = null;
+        $id = null;
+        if ($parentData && $this->_getModel()->hasColumn('component_id') && $this->_getModel()->getPrimaryKey() != 'component_id') {
+            $field = 'component_id';
+            $id = $parentData->dbId;
+        }
+        $ret = array(
+            array(
+                'model' => $this->getModel(),
+                'field' => $field,
+                'id' => $id
+            )
+        );
         return $ret;
     }
 }

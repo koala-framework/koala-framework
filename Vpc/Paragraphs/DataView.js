@@ -7,11 +7,15 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
     showToolbars: true,
     showDelete: true,
     showPosition: true,
+    showCopyPaste: true,
+    border: false,
     initComponent: function()
     {
         this.componentConfigs = {};
 
-        this.addEvents('delete', 'edit', 'changeVisible', 'changePos', 'addParagraphMenuShow', 'addParagraph');
+        this.addEvents('delete', 'edit', 'changeVisible', 'changePos',
+            'addParagraphMenuShow', 'addParagraph', 'copyParagraph',
+            'pasteParagraph', 'copyPasteMenuShow');
         this.tpl = new Ext.XTemplate(
             '<tpl for=".">',
                 '<div class="paragraph-wrap<tpl if="!visible"> vpc-paragraph-invisible</tpl>" id="vpc-paragraphs-{id}" style="width:'+this.width+'px">',
@@ -102,6 +106,8 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                 });
                 posCombo.setValue(record.get('pos'));
                 tb.add(posCombo);
+            } else {
+                tb.add(record.get('pos'));
             }
             if (this.showDelete) {
                 tb.add({
@@ -166,6 +172,36 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                         }
                     }
                 }));
+                if (this.showCopyPaste) {
+                    tb.add({
+                        text: trlVps('copy/paste'),
+                        menu: [{
+                            text: trlVps('Copy Paragraph'),
+                            icon: '/assets/silkicons/page_white_copy.png',
+                            scope: this,
+                            record: record,
+                            handler: function(btn) {
+                                this.fireEvent('copyParagraph', btn.record);
+                            }
+                        },{
+                            text: trlVps('Paste Paragraph'),
+                            icon: '/assets/silkicons/page_white_copy.png',
+                            scope: this,
+                            handler: function() {
+                                this.fireEvent('pasteParagraph');
+                            }
+                        }],
+                        icon: '/assets/silkicons/page_white_copy.png',
+                        cls  : 'x-btn-text-icon',
+                        record: record,
+                        listeners: {
+                            scope: this,
+                            menushow: function(btn) {
+                                this.fireEvent('copyPasteMenuShow', btn.record);
+                            }
+                        }
+                    });
+                }
             }
             tb.add('->');
             tb.add(record.get('component_name'));

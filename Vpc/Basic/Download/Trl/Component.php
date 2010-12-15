@@ -21,10 +21,10 @@ class Vpc_Basic_Download_Trl_Component extends Vpc_Abstract_Composite_Trl_Compon
         }
         */
         $return['infotext'] = $this->_getRow()->infotext;
+        /*
         if ($return['infotext'] == '' && $parentRow)
             $return['infotext'] = $parentRow->filename;
 
-        /*
         if ($this->_getSetting('showIcon')) {
             $return['icon'] = $this->getIcon();
         } else {

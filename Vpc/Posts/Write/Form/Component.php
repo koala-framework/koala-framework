@@ -8,6 +8,12 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
         return $ret;
     }
 
+    protected function _initForm()
+    {
+        parent::_initForm();
+        $this->_form->setModel($this->_getPostsComponent()->getComponent()->getChildModel());
+    }
+
     protected function _getPostsComponent()
     {
         return $this->getData()->parent->parent;
@@ -17,14 +23,14 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
     {
         $row->component_id = $this->_getPostsComponent()->dbId;
         if (get_class($this) == 'Vpc_Posts_Write_Form_Component') {
-            if ($this->getData()->parent->parent->getComponent() instanceof 
+            if ($this->getData()->parent->parent->getComponent() instanceof
                 Vpc_User_Detail_Guestbook_Component)
             {
                 $guestbook = $this->getData()->parent->parent;
                 $userRow = $this->getData()->parent->parent->parent->row;
 
                 $mail = new Vps_Mail_Template($guestbook);
-                $mail->subject = trlVps('New entry in your guestbook');
+                $mail->subject = $this->getData()->trlVps('New entry in your guestbook');
                 $mail->addTo($userRow->email, $userRow->__toString());
                 $mail->name = $userRow->nickname;
                 $mail->url = 'http://' . $_SERVER['HTTP_HOST'] . $guestbook->getUrl();
@@ -56,7 +62,7 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
     private function _sendObserveMail($userRow, $thread, $observe)
     {
         $mail = new Vps_Mail_Template($observe);
-        $mail->subject = trlVps('New post in observed thread');
+        $mail->subject = $this->getData()->trlVps('New post in observed thread');
         $mail->addTo($userRow->email, $userRow->__toString());
         $mail->threadUrl = 'http://' . $_SERVER['HTTP_HOST'] . $thread->getUrl();
         $mail->threadName = $thread->row->subject;

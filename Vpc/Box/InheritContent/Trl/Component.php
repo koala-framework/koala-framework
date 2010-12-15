@@ -10,6 +10,7 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
         $childConfig = Vpc_Admin::getInstance($ret['generators']['child']['component']['child'])->getExtConfig();
         if (array_keys($childConfig) == array('form')) {
             $ret['hasVisible'] = true;
+            $ret['editComponents'] = array();
         } else {
             $ret['hasVisible'] = false;
             $ret['editComponents'] = array('child');
@@ -21,6 +22,12 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $ret['child'] = $this->_getContentChild();
+        return $ret;
+    }
+
+    private function _getContentChild()
+    {
         $model = $this->getOwnModel();
         $masterChild = $this->getData()->chained->getComponent()->getContentChild();
         $c = Vpc_Chained_Trl_Component::getChainedByMaster($masterChild, $this->getData());
@@ -40,8 +47,7 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
             if ($page instanceof Vps_Component_Data_Root) break;
             $page = $page->parent;
         }
-        $ret['child'] = $c;
-        return $ret;
+        return $c;
     }
 
     public static function getNextContentChild($page, $inheritContentChildId)
@@ -52,5 +58,10 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
         }
         return $page->getChildComponent('-'.$inheritContentChildId)
                 ->getChildComponent(array('generator' => 'child'));
+    }
+
+    public function getExportData()
+    {
+        return $this->_getContentChild()->getComponent()->getExportData();
     }
 }

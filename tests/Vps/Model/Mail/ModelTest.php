@@ -4,12 +4,13 @@
  * @group Model_Mail
  * @group Mail
  */
-class Vps_Model_Mail_ModelTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
 {
     private $_fnf;
 
     public function setUp()
     {
+        parent::setUp();
         $this->_fnf = new Vps_Model_FnF(array(
             'data' => array(
                 array('id' => 4, 'save_date' => '2008-10-29 08:15:00', 'is_spam' => 0, serialize(array()), serialize(array()))
@@ -88,10 +89,7 @@ class Vps_Model_Mail_ModelTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('bar', $row->foo);
         $this->assertEquals('Test subject', $row->subject);
-        $this->assertEquals(array(
-            'subject' => 'Test subject',
-            'foo' => 'bar'
-        ), Vps_Model_Mail_MockMail::$data);
+        $this->assertEquals('Test subject', Vps_Model_Mail_MockMail::$data['subject']);
 
         $this->assertEquals(2, count(Vps_Model_Mail_MockMail::$addToCalled));
         $this->assertEquals(array(

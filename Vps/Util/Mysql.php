@@ -11,6 +11,7 @@ class Vps_Util_Mysql
     public static function grantFileRight($mysqlUser)
     {
         $sql = "SELECT `Host`, `User`, `File_priv` FROM `user` WHERE `User` = '".$mysqlUser."'";
+        // ja, das ist korrekt dass da 2x mysql steht
         $cmd = "mysql mysql -e ".escapeshellarg($sql);
         exec($cmd, $output, $ret);
         if ($ret) {
@@ -36,6 +37,16 @@ class Vps_Util_Mysql
                 throw new Vps_Exception("FILE Berechtigungen in MySQL für $userWithHost konnten nicht gesetzt werden. CSV Import wird nicht funktionieren.");
             }
         }
+    }
+
+    /**
+     * Gibt zurück, ob der aktuelle db user file rechte hat
+     *
+     * @return bool $file_right TRUE if File_priv is set for $mysqlUser, otherwise FALSE
+     */
+    public static function getFileRight()
+    {
+        return self::hasPrivilege('FILE');
     }
 
     public static function hasPrivilege($privilege)

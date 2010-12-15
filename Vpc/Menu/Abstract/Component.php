@@ -46,12 +46,27 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
 
     public function getMenuComponent()
     {
-        return $this->_getMenuData() ? $this->getData() : null;
+        $component = $this->getData()->parent;
+        $level = 1;
+        while ($component) {
+            $menuCategory = Vpc_Abstract::getFlag($component->componentClass, 'menuCategory');
+            if ($menuCategory) {
+                $component = null;
+                if ($level == 1) $level = $menuCategory;
+            } else {
+                $component = $component->parent;
+                $level++;
+            }
+        }
+        if ($level == $this->_getSetting('level') && $this->_getMenuData()) {
+            return $this->getData();
+        }
+        return null;
     }
 
-    public function getMenuData($parentData = null)
+    public function getMenuData($parentData = null, $select = array())
     {
-        return $this->_getMenuData($parentData);
+        return $this->_getMenuData($parentData, $select);
     }
 
     public function getPageComponent($parentData = null)
@@ -101,12 +116,13 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    protected function _getMenuData($parentData = null)
+    protected function _getMenuData($parentData = null, $select = array())
     {
-        $constraints = array('showInMenu' => true);
+        if (is_array($select)) $select = new Vps_Component_Select($select);
+        $select->whereShowInMenu(true);
         $ret = array();
         $pageComponent = $this->getPageComponent($parentData);
-        if ($pageComponent) $ret = $pageComponent->getChildPages($constraints);
+        if ($pageComponent) $ret = $pageComponent->getChildPages($select);
         $currentPageIds = array();
         $currentPages = array_reverse($this->_getCurrentPages());
         foreach ($currentPages as $page) {
@@ -180,6 +196,9 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         }
         $ret[] = array(
             'model' => 'Vps_Component_Model'
+        );
+        $ret[] = array(
+            'model' => 'Vpc_Menu_Abstract_Model'
         );
         // Falls Nickname geändert wird, ändert sich Url zum User
         $ret[] = array(

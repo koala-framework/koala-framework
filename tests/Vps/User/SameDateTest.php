@@ -6,20 +6,21 @@
  * @group Model_User
  * @group Real_Model_User
  */
-class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
+class Vps_User_SameDateTest extends Vps_Test_TestCase
 {
     private static $_lastMailNumber = 0;
 
     public function setUp()
     {
-        Vps_Registry::set('db', Vps_Registry::get('dao')->getDb());
-        Vps_Model_Abstract::clearInstances();
+        parent::setUp();
+        Vps_Test_SeparateDb::createSeparateTestDb(dirname(__FILE__).'/bootstrap.sql');
     }
 
     public function tearDown()
     {
         $this->assertFalse(Vps_User_Model::isLockedCreateUser());
-        Vps_Registry::set('db', Vps_Test::getTestDb());
+        Vps_Test_SeparateDb::restoreTestDb();
+        parent::tearDown();
     }
 
     private function _getNewMailAddress()
@@ -78,9 +79,6 @@ class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
     {
         $webId = Vps_Registry::get('config')->application->id;
         $webcode = Vps_Registry::get('config')->service->users->webcode;
-        if (!$webcode) {
-            $this->markTestSkipped();
-        }
 
         $m = new Vps_User_Model();
 

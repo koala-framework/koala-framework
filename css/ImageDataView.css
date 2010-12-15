@@ -1,0 +1,51 @@
+div.imageGrid .x-panel-body {
+    background: white;
+    font: 11px Arial, Helvetica, sans-serif;
+}
+div.imageGrid .thumb {
+    background: #dddddd;
+}
+div.imageGrid .thumb td {
+    width: 140px; height: 140px;
+    text-align: center; vertical-align: middle;
+    line-height: 0px;
+}
+div.imageGrid .thumb-wrap {
+    float: left;
+    margin: 4px;
+    margin-right: 0;
+    padding: 5px;
+}
+div.imageGrid .thumb-wrap div.label {
+    overflow: hidden;
+    text-align: center;
+    font:11px tahoma,verdana,helvetica;
+}
+
+.big-wrap div.label {
+    font-weight: bold; padding-bottom: 4px; padding-top: 2px; font-size: 14px; color: #15428B;
+}
+
+div.imageGrid .x-view-over {
+    border:1px solid #dddddd;
+    background: #efefef url(/assets/ext/resources/images/default/grid/row-over.gif) repeat-x left top;
+    padding: 4px;
+}
+
+div.imageGrid .x-view-selected {
+    background-color: #eff5fb;
+    border:1px solid #99bbe8;
+    padding: 4px;
+}
+div.imageGrid .x-view-selected .thumb {
+    background:transparent;
+}
+
+div.imageGrid .loading-indicator {
+    font-size:11px;
+    background-image:url(/assets/ext/resources/images/default/grid/loading.gif);
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left:20px;
+    margin:10px;
+}

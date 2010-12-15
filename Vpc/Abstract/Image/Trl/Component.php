@@ -19,6 +19,18 @@ class Vpc_Abstract_Image_Trl_Component extends Vpc_Abstract_Composite_Trl_Compon
         if ($this->getRow()->own_image) {
             $ret['image'] = $this->getData()->getChildComponent('-image');
         }
+        $imageCaptionSetting = Vpc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'imageCaption');
+        if ($imageCaptionSetting) {
+            $ret['image_caption'] = $this->getRow()->image_caption;
+        }
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        if ($this->getRow()->own_image) {
+            return $this->getData()->getChildComponent('-image')->hasContent();
+        }
+        return $this->getData()->chained->hasContent();
     }
 }

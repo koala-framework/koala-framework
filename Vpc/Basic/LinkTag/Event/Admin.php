@@ -1,41 +1,23 @@
 <?php
-class Vpc_Basic_LinkTag_Event_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
-    implements Vps_Component_Abstract_Admin_Interface_DependsOnRow
+class Vpc_Basic_LinkTag_Event_Admin extends Vpc_Basic_LinkTag_News_Admin
 {
-    public function componentToString(Vps_Component_Data $data)
-    {
-        $row = $data->getComponent()->getRow();
-        $data = Vps_Component_Data_Root::getInstance()
-            ->getComponentByDbId('events_'.$row->event_id, array('subroot' => $data));
-        if (!$data) return '';
-        return $data->name;
-    }
+    protected $_prefix = 'event';
+    protected $_prefixPlural = 'events';
 
-    public function getComponentsDependingOnRow(Vps_Model_Row_Interface $row)
+    public function getLinkTagForms()
     {
-        // nur bei eventmodel
-        if ($row->getModel() instanceof Vpc_Events_Directory_Model) {
-            $linkModel = Vps_Model_Abstract::getInstance(
-                Vpc_Abstract::getSetting($this->_class, 'ownModel')
+        $ret = array();
+        $news = Vps_Component_Data_Root::getInstance()
+            ->getComponentsByClass('Vpc_Events_Directory_Component');
+        foreach ($news as $new) {
+            $form = Vpc_Abstract_Form::createComponentForm($this->_class, 'link');
+            $form->fields['event_id']->setBaseParams(array('eventsComponentId'=>$new->dbId));
+            $form->fields['event_id']->setFieldLabel($new->getPage()->name);
+            $ret[$new->dbId] = array(
+                'form' => $form,
+                'title' => $new->getTitle()
             );
-            $linkingRows = $linkModel->getRows($linkModel->select()
-                ->whereEquals('event_id', $row->{$row->getModel()->getPrimaryKey()})
-            );
-            if (count($linkingRows)) {
-                $ret = array();
-                foreach ($linkingRows as $linkingRow) {
-                    $ret[] = Vps_Component_Data_Root::getInstance()
-                        ->getComponentById($linkingRow->component_id);
-                }
-                return $ret;
-            }
         }
-        return array();
-    }
-
-    public function setup()
-    {
-        $fields['news_id']   = "varchar(255) NOT NULL";
-        $this->createFormTable('vpc_basic_link_event', $fields);
+        return $ret;
     }
 }

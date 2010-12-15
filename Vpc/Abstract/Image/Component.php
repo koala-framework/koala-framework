@@ -1,8 +1,10 @@
 <?php
 class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
-    implements Vps_Media_Output_Interface
+    implements Vps_Media_Output_IsValidInterface
 {
     const USER_SELECT = 'user';
+    private $_imageDataOrEmptyImageData;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -35,9 +37,12 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             ),
         );
 
+        $ret['imageLabel'] = trlVps('Image');
+        $ret['maxResolution'] = null;
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
         $ret['editFilename'] = false;
+        $ret['imageCaption'] = false;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
         $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
@@ -73,6 +78,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             }
         }
 
+        //wenn erste dimension (=standard wert!) bestfit oder crop ist, müssen
+        //width oder height gesetzt sein
         reset($settings['dimensions']);
         $firstDimension = current($settings['dimensions']);
         if (($firstDimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
@@ -95,6 +102,11 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $ret['image'] = $this->getData();
+        $imageCaptionSetting = $this->_getSetting('imageCaption');
+        if ($imageCaptionSetting) {
+            $ret['image_caption'] = $this->_getRow()->image_caption;
+            $ret['showImageCaption'] = $imageCaptionSetting;
+        }
         return $ret;
     }
 
@@ -125,7 +137,9 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
         $filename = null;
         if ($fileRow) {
-            $filename = $row->filename;
+            if ($this->_getSetting('editFilename')) {
+                $filename = $row->filename;
+            }
             if (!$filename) {
                 $filename = $fileRow->filename;
             }
@@ -141,11 +155,14 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
     private function _getImageDataOrEmptyImageData()
     {
-        $file = $this->getImageData();
-        if (!$file['file']) {
-            $file = $this->_getEmptyImageData();
+        if (!isset($this->_imageDataOrEmptyImageData)) {
+            $file = $this->getImageData();
+            if (!$file['file']) {
+                $file = $this->_getEmptyImageData();
+            }
+            $this->_imageDataOrEmptyImageData = $file;
         }
-        return $file;
+        return $this->_imageDataOrEmptyImageData;
     }
 
     public function _getCacheRow()
@@ -160,9 +177,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         return null;
     }
 
-    public function getImageDimensions()
+    protected function _getImageDimensions()
     {
-        $data = $this->_getImageDataOrEmptyImageData();
         $row = $this->getRow();
         $dimension = $this->_getSetting('dimensions');
 
@@ -202,6 +218,13 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $s['height'] = $d['height'];
         }
         $s['scale'] = $d['scale'];
+        return $s;
+    }
+
+    public function getImageDimensions()
+    {
+        $data = $this->_getImageDataOrEmptyImageData();
+        $s = $this->_getImageDimensions();
 
         if ($data && $data['file'] && file_exists($data['file'])) {
             $sourceSize = @getimagesize($data['file']);
@@ -209,6 +232,27 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             return Vps_Media_Image::calculateScaleDimensions($sourceSize, $s);
         }
         return $s;
+    }
+
+    public static function isValidMediaOutput($id, $type, $className)
+    {
+        if (Vps_Component_Data_Root::getInstance()->getComponentById($id)) {
+            return self::VALID;
+        }
+        if (Vps_Registry::get('config')->showInvisible) {
+            //preview im frontend
+            if (Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true))) {
+                return self::VALID_DONT_CACHE;
+            }
+        }
+
+        //paragraphs vorschau im backend
+        $authData = Vps_Registry::get('userModel')->getAuthedUser();
+        if ($authData) {
+            return self::VALID_DONT_CACHE;
+        }
+
+        return self::INVALID;
     }
 
     public static function getMediaOutput($id, $type, $className)
@@ -221,7 +265,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             return null;
         }
 
-        $dim = $component->getComponent()->getImageDimensions();
+        $dim = $component->getComponent()->_getImageDimensions();
         if ($dim) {
             $output = Vps_Media_Image::scale($data['file'], $dim);
         } else {

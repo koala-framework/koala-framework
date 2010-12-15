@@ -1,1 +1,0 @@
-<?=$this->component($this->menu)?>

@@ -25,4 +25,9 @@ class Vps_Model_Db_Proxy extends Vps_Model_Proxy
         }
         parent::__construct($config);
     }
+
+    public function getAdapter()
+    {
+        return $this->getProxyModel()->getAdapter();
+    }
 }

@@ -27,7 +27,7 @@ class Vpc_Abstract_Image_Pdf extends Vpc_Abstract_Pdf
                     $this->SetY($this->getTopMargin());
                     $this->SetX($x);
                 }
-                $type = str_replace('image/', '', $data['mimeType']);
+                $type = str_replace('image/', '', 'image/jpeg');
                 $this->_pdf->Image(
                     $tempFilename, $this->getX(), $this->getY(),
                     $this->_calculatePx($data[0]), $this->_calculatePx($data[1]), $type

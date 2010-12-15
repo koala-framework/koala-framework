@@ -7,11 +7,37 @@
  */
 class Vps_User_FormTest extends Vps_Test_SeleniumTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        Vps_Test_SeparateDb::createSeparateTestDb(dirname(__FILE__).'/bootstrap.sql');
+    }
+
+    public function tearDown()
+    {
+        Vps_Test_SeparateDb::restoreTestDb();
+        parent::tearDown();
+    }
+
     public function testForm()
     {
-        $email = 'seltest123@vivid-planet.com';
+        $email = 'seltest_abc1@vivid-planet.com';
 
-        $this->open('/vps/test/vps_user_form');
+        // user wieder löschen wenns ihn gibt sonst funzt der test das nächste mal nimmer
+        $allModel = Vps_Model_Abstract::getInstance('Vps_User_All_Model');
+        $allRow = $allModel->getRow($allModel->select()
+            ->whereEquals('email', $email)
+        );
+
+        if ($allRow && $allRow->id) {
+            $model = Vps_Model_Abstract::getInstance('Vps_User_Relation_Model');
+            $row = $model->getRow($model->select()
+                ->whereEquals('user_id', $allRow->id)
+            );
+            if ($row) $row->delete();
+        }
+
+        $this->open('/vps/test/vps_user_form?testDb='.Vps_Test_SeparateDb::getDbName());
         $this->waitForConnections();
         $this->type("//input[contains(@name, 'email')]", $email);
         $this->type("//input[contains(@name, 'firstname')]", 'Sel');
@@ -23,6 +49,8 @@ class Vps_User_FormTest extends Vps_Test_SeleniumTestCase
 
         sleep(1);
         $this->waitForConnections();
-    }
 
+
+
+    }
 }

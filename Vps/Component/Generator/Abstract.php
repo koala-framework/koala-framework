@@ -14,6 +14,7 @@ abstract class Vps_Component_Generator_Abstract
     private $_model;
 
     private static $instances = array();
+    private static $_cachedInstances = array();
 
     public function __sleep()
     {
@@ -28,7 +29,7 @@ abstract class Vps_Component_Generator_Abstract
 
     public function __wakeup()
     {
-        Vps_Benchmark::count('generators wokeup', $this->_class.'-'.$this->_settings['generator']);
+        Vps_Benchmark::count('generators wokeup');
     }
 
     protected function __construct($class, $settings)
@@ -36,7 +37,7 @@ abstract class Vps_Component_Generator_Abstract
         $this->_class = $class;
         $this->_settings = $settings;
         $this->_init();
-        Vps_Benchmark::count('generators', $this->_class.'-'.$settings['generator']);
+        Vps_Benchmark::count('generators');
     }
 
     protected function _init()
@@ -44,6 +45,9 @@ abstract class Vps_Component_Generator_Abstract
         if (!is_array($this->_settings['component'])) {
             $this->_settings['component'] = array($this->_settings['generator']
                                             => $this->_settings['component']);
+        }
+        foreach ($this->_settings['component'] as $k=>$i) {
+            if (!$i) unset($this->_settings['component'][$k]);
         }
     }
 
@@ -82,10 +86,11 @@ abstract class Vps_Component_Generator_Abstract
         return $this->_getModel();
     }
 
-    //um den speicherverbrauch zu reduzieren
+    //um den speicherverbrauch zu reduzieren und fuer tests
     public static function clearInstances()
     {
         self::$instances = array();
+        self::$_cachedInstances = array();
     }
 
     public static function getInstance($componentClass, $key, $settings = array(), $pluginBaseComponentClass = false, $inherited = false)
@@ -168,18 +173,14 @@ abstract class Vps_Component_Generator_Abstract
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));
         }
-        static $cachedGenerators;
-        if (isset($cachedGenerators[$cacheId])) {
-            Vps_Benchmark::countBt('Generator::getInst hit');
-            $generators = $cachedGenerators[$cacheId];
+        if (isset(self::$_cachedInstances[$cacheId])) {
+            $generators = self::$_cachedInstances[$cacheId];
         } else if (($cachedGeneratorData = $cache->load($cacheId)) !== false) {
-            Vps_Benchmark::count('Generator::getInst semi-hit');
             $generators = array();
             foreach ($cachedGeneratorData as $g) {
                 $generators[] = self::getInstance($g['componentClass'], $g['key'], array(), $g['pluginBaseComponentClass'], $g['inherited']);
             }
         } else {
-            Vps_Benchmark::count('Generator::getInst miss', $cacheId);
 
             $generators = self::_getGeneratorsForComponent($componentClass, false);
             foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
@@ -256,18 +257,22 @@ abstract class Vps_Component_Generator_Abstract
             }
             $cache->save($cachedGeneratorData, $cacheId);
         }
-        $cachedGenerators[$cacheId] = $generators;
+        self::$_cachedInstances[$cacheId] = $generators;
 
         $selectParts = $select->getParts();
 
         $ret = array();
         foreach ($generators as $g) {
-            if ($component && is_instance_of($g, 'Vpc_Root_Category_Generator') &&
+            if ($component && $g instanceof Vpc_Root_Category_Generator &&
                 !is_numeric($component->componentId)
             ) {
                 $hasPageGenerator = false;
                 foreach (Vpc_Abstract::getSetting($component->componentClass, 'generators') as $i) {
-                    if (is_instance_of($i['class'], 'Vpc_Root_Category_Generator')) {
+                    static $isPageGenerator = array();
+                    if (!isset($isPageGenerator[$i['class']])) {
+                        $isPageGenerator[$i['class']] = is_instance_of($i['class'], 'Vpc_Root_Category_Generator');
+                    }
+                    if ($isPageGenerator[$i['class']]) {
                         $hasPageGenerator = true;
                         break;
                     }
@@ -394,26 +399,20 @@ abstract class Vps_Component_Generator_Abstract
 
     public function getChildComponentClasses($select = array())
     {
-        return self::getStaticChildComponentClasses($this->_settings, $select);
-    }
-
-    public static function getStaticChildComponentClasses($data, $select = array())
-    {
-        if ($select === array()) {
-            return $data['component']; //performance
+        if ($select === array() ||
+            ($select instanceof Vps_Model_Select &&
+                !($select->hasPart(Vps_Component_Select::WHERE_FLAGS) ||
+                    $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)
+                 )
+            )
+        ) {
+            return $this->_settings['component']; //performance
         }
+
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-
-        $ret = $data['component'];
-
-        if (!is_array($ret)) $ret = array($ret);
-        foreach ($ret as $key => $r) {
-            if (!$r) {
-                unset($ret[$key]);
-            }
-        }
+        $ret = $this->_settings['component'];
 
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS)) {
             $flags = $select->getPart(Vps_Component_Select::WHERE_FLAGS);
@@ -570,7 +569,9 @@ abstract class Vps_Component_Generator_Abstract
             }
             $config['generator'] = $this; //wird benötigt für duplizieren
             $pageDataClass = $this->_getDataClass($config, $row);
-            $this->_dataCache[$parentData->componentId][$id] = new $pageDataClass($config);
+            $d = new $pageDataClass($config);
+            $this->_dataCache[$parentData->componentId][$id] = $d;
+            Vps_Component_Data_Root::getInstance()->addToDataCache($d);
         }
         return $this->_dataCache[$parentData->componentId][$id];
     }
@@ -638,6 +639,11 @@ abstract class Vps_Component_Generator_Abstract
         throw new Vps_Exception_NotYetImplemented();
     }
 
+    public function makeChildrenVisible($source)
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
     public function getPagesControllerConfig($component, $generatorClass = null)
     {
         $data = array();
@@ -656,9 +662,11 @@ abstract class Vps_Component_Generator_Abstract
             $c = $c->parent;
         }
 
-        $data['editControllerComponentId'] = $c->componentId;
-        $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
-            ->getControllerUrl('Generator');
+        if ($c) { //TODO warum tritt das auf?
+            $data['editControllerComponentId'] = $c->componentId;
+            $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
+                ->getControllerUrl('Generator');
+        }
 
         $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
             'pageGenerator' => true

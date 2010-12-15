@@ -28,7 +28,7 @@ class Vpc_Posts_Detail_Edit_Form_Component extends Vpc_Posts_Write_Form_Componen
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlVps('save');
+        $ret['placeholder']['submitButton'] = trlVpsStatic('save');
         return $ret;
     }
 }

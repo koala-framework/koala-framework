@@ -5,7 +5,7 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = array_merge(parent::getSettings(), array(
             'ownModel' => 'Vpc_Basic_Link_Model',
-            'componentName' => 'Link',
+            'componentName' => trlVps('Link'),
             'componentIcon' => new Vps_Asset('page_white_link'),
             'default' => array(),
         ));

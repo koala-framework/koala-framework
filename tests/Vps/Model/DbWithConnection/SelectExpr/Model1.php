@@ -59,6 +59,8 @@ class Vps_Model_DbWithConnection_SelectExpr_Model1 extends Vps_Model_Db
                         (id, foo, bar) VALUES ('1', 'aaabbbccc', 'abcd')");
         Vps_Registry::get('db')->query("INSERT INTO {$this->_tableName}
                         (id, foo, bar) VALUES ('2', 'bam', 'bum')");
+        Vps_Registry::get('db')->query("INSERT INTO {$this->_tableName}
+                        (id, foo, bar) VALUES ('3', 'bam2', 'bum2')");
     }
 
     public function dropTable()

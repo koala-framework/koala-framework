@@ -15,19 +15,15 @@ class Vpc_Basic_LinkTag_Intern_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
             if (count($linkingRows)) {
                 $ret = array();
                 foreach ($linkingRows as $linkingRow) {
-                    $ret[] = Vps_Component_Data_Root::getInstance()
-                        ->getComponentById($linkingRow->component_id);
+                    $c = Vps_Component_Data_Root::getInstance()
+                        ->getComponentByDbId($linkingRow->component_id);
+                    //$c kann null sein wenn es nicht online ist
+                    if ($c) $ret[] = $c;
                 }
                 return $ret;
             }
         }
         return array();
-    }
-
-    public function setup()
-    {
-        $fields['target']   = "varchar(255) NOT NULL";
-        $this->createFormTable('vpc_basic_link_intern', $fields);
     }
 
     public function componentToString(Vps_Component_Data $data)

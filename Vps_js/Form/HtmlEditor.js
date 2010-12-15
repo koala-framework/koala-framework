@@ -201,7 +201,10 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                         c = String.fromCharCode(c).toLowerCase();
                         if (c == 'v') {
                             //tidy on paste
-                            Ext.getBody().mask('Cleaning...');
+                            // defer bei mask wird benötigt, da sonst das eingefügte
+                            // am ende angehängt wird, auch wenn text im editor markiert ist,
+                            // der eigentlich überschrieben werden sollte
+                            this.mask.defer(1, this, [trlVps('Cleaning...')]);
                             (function() {
                                 this.syncValue();
                                 this.tidyHtml();
@@ -209,6 +212,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                         }
                     }
                 }
+                /*  auskommentiert, so ist es fehlerhaft
                 if (Ext.isIE) {
                     if (!e.shiftKey && e.getCharCode() == 13) {
                         this.relayCmd('insertParagraph', 'specialHackToRemoveBr');
@@ -221,6 +225,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                         }).defer(100, this);
                     }
                 }
+                */
             }, this);
         }
     },
@@ -305,6 +310,15 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             this._renderBlockStylesSelect();
             tb.tr = tb.originalTr;
         }
+
+        // Jumpmark: #JM1
+        // nach einfügen mit Strg+V in Firefox ist der knochen nicht sichtbar
+        // dieses element wird nur dazu missbraucht, nach dem einfügen mit
+        // Strg+V den focus aus dem editor zu nehmen um ihn dann wieder
+        // reinplatzieren zu können
+        tb.el.createChild({
+            tag: 'a', cls: 'blurNode', href: '#', style: 'position: absolute; left: -5000px;' 
+        });
     },
 
     createInlineStylesOptions : function(){
@@ -542,7 +556,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     _insertImage: function(r) {
         var html = '<img src="'+r.imageUrl+'?'+Math.random()+'" ';
         html += 'width="'+r.imageDimension.width+'" ';
-        html += 'height="'+r.imageDimension.height+'" />'
+        html += 'height="'+r.imageDimension.height+'" />';
         this.insertAtCursor(html);
     },
     _modifyImage: function(r) {
@@ -665,11 +679,18 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         });
     },
 
+    mask: function(txt) {
+        this.el.up('div').mask(txt);
+    },
+    unmask: function() {
+        this.el.up('div').unmask();
+    },
+
     tidyHtml: function()
     {
         if (!this.enableTidy) return;
 
-        Ext.getBody().mask(trlVps('Cleaning...'));
+        this.mask(trlVps('Cleaning...'));
         Ext.Ajax.request({
             url: this.controllerUrl+'/json-tidy-html',
             params: {
@@ -682,7 +703,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 }
             },
             callback: function() {
-                Ext.getBody().unmask();
+                this.unmask();
+                // Um den Knochen in Firefox sichtbar zu halten.
+                // Weiteres zum blurNode: Suche nach #JM1 in dieser Datei.
+                this.el.up('div').child('.blurNode', true).focus();
+                this.deferFocus();
             },
             scope: this
         });
@@ -725,7 +750,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 } else {
                     return tag == t;
                 }
-            }
+            };
             while (elm && elm.parentNode &&
                     (!elm.tagName || !isNeededTag(elm.tagName.toLowerCase()))) {
                 elm = elm.parentNode;
@@ -821,7 +846,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             } else {
                 //TODO: IE kompatibel?
                 this.insertAtCursor('<'+tag+' class="'+className+'">&nbsp;</'+tag+'>');
-                this.win.getSelection().getRangeAt(0).selectNode(this.win.getSelection().focusNode)
+                this.win.getSelection().getRangeAt(0).selectNode(this.win.getSelection().focusNode);
             }
         }
         this.deferFocus();
@@ -847,7 +872,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             doc.getElementsByTagName("head")[0].appendChild(s);
         };
         reloadCss.call(this, document);
-        reloadCss.call(this, this.doc);
+        if (this.doc) reloadCss.call(this, this.doc);
         Ext.Ajax.request({
             params: {
                 componentId: this.componentId

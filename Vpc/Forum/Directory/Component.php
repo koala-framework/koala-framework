@@ -104,7 +104,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getStaticCacheVars($calledClass)
+    public static function getStaticCacheVars($calledClass)
     {
         $ret = array();
         $class = Vpc_Abstract::getChildComponentClass($calledClass, 'groups');

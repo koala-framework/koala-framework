@@ -1,2 +1,9 @@
-.$cssClass .text { margin-bottom: 10px; }
-.$cssClass .text .publishDate { font-size: 10px; margin-bottom: 10px; }
+.cssClass .entry { margin-bottom: 30px; }
+.cssClass .text p { margin-bottom: 0px; }
+.cssClass .image { margin-right: 10px; }
+.cssClass h3 { margin-bottom: 3px; }
+.cssClass .publishDate { margin-top: 0px; }
+.cssClass .back { margin-top: 10px; }
+.cssClass .readMore { clear: both; padding-top: 0px; padding-bottom: 2px; border-bottom: 1px dotted var(mainColor); }
+.cssClass .readMore a { text-decoration: none; }
+.cssClass .readMore a:hover { text-decoration: underline; }

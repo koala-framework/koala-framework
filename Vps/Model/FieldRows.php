@@ -42,12 +42,8 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
         $iId = $row->getModelParentRow()->getInternalId();
         if (!isset($rowData[$this->getPrimaryKey()])) {
             if (!isset($this->_autoId[$iId])) {
-                $this->_autoId[$iId] = 0;
-                foreach ($this->_data[$iId] as $k=>$i) {
-                    if (isset($i[$this->getPrimaryKey()])) {
-                        $this->_autoId[$iId] = max($i[$this->getPrimaryKey()], $this->_autoId[$iId]);
-                    }
-                }
+                //setzt _autoId und _data
+                $this->getRowsByParentRow($row->getModelParentRow());
             }
             $this->_autoId[$iId]++;
             $rowData[$this->getPrimaryKey()] = $this->_autoId[$iId];
