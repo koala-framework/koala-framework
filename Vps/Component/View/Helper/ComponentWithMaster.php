@@ -1,18 +1,18 @@
 <?php
 class Vps_Component_View_Helper_ComponentWithMaster extends Vps_Component_View_Helper_Component
 {
-    public function componentWithMaster(array $componentsWithMaster)
+    public function componentWithMaster(array $componentWithMaster)
     {
-        $last = array_pop($componentsWithMaster);
+        $last = array_pop($componentWithMaster);
 
         $component = $last['data'];
 
         if ($last['type'] == 'master') {
-            $innerComponent = $componentsWithMaster[0]['data'];
+            $innerComponent = $componentWithMaster[0]['data'];
             $vars = array();
             $vars['component'] = $innerComponent;
             $vars['data'] = $innerComponent;
-            $vars['componentsWithMastert'] = $componentsWithMaster;
+            $vars['componentWithMaster'] = $componentWithMaster;
             $vars['cssClass'] = Vpc_Abstract::getCssClass($component->componentClass);
             $vars['boxes'] = array();
             foreach ($innerComponent->getChildBoxes() as $box) {

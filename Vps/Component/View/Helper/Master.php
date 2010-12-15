@@ -26,15 +26,15 @@ class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
     {
         $component = $this->_getComponentById($componentId);
 
-        $componentsWithMaster = array();
-        $componentsWithMaster[] = array(
+        $componentWithMaster = array();
+        $componentWithMaster[] = array(
             'type' => 'component',
             'data' => $component
         );
         $c = $component;
         while ($c) {
             if (Vpc_Abstract::getTemplateFile($c->componentClass, 'Master')) {
-                $componentsWithMaster[] = array(
+                $componentWithMaster[] = array(
                     'type' => 'master',
                     'data' => $c
                 );
@@ -43,6 +43,6 @@ class Vps_Component_View_Helper_Master extends Vps_Component_View_Renderer
         }
         $helper = new Vps_Component_View_Helper_ComponentWithMaster();
         $helper->setRenderer($this->_getRenderer());
-        return $helper->componentWithMaster($componentsWithMaster);
+        return $helper->componentWithMaster($componentWithMaster);
     }
 }
