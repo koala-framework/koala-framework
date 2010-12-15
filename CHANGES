@@ -1,18 +1,23 @@
 == TODO ==
-1.11
-- RTE mit tinymce unterstützung                                    3
-- Component Cache Meta-Daten, löschen neu, Component Output neu
-                                      erste einsatzfähige Version  7
-
+- Model Typ-Strikt und Mongo                                       x
 - ACL mit Resourcen, sprerren von hinzufügen & löschen             8
-- Formulargenerator der auch Mails verschickt                      2
 - MenuConfig, flexibleres erstellen von Menüpunkten in Komponenten 2
 - Zurück Button
 - Volltextsuche bei änderung neu indizieren                        4
 - mögliche wildcards im RTE anzeigen                               1
 - Bearbeitbare Mails für neue Benutzer usw                         4
-- Component Cache fertigstellen                                    x
-- Model Typ-Strikt und Mongo                                       x
+
+
+== 2.0 ==
+Neue Features
+- RTE mit tinymce unterstützung
+- Component Cache Neu, Url Cache, ProcessInput Cache
+
+möglicherweise nicht kompatible Änderungen:
+- Helper: Statt $this->ifHasContent($component) muss man if ($this->hasContent($component)) schreiben
+- partials view Helper: 2. Parameter (partialClass) wurde entfernt
+- Master.tpl muss $this->componentWithMaster($this->componentWithMaster) für die Haupt-Komponente verwenden
+
 
 == 1.11 ==
 Erstellt: 17.08.10
@@ -46,9 +51,6 @@ möglicherweise nicht kompatible Änderungen:
 - showInPageTreeAdmin flag gibts nicht mehr, ist jetzt nur noch ein generatorFlag
 - Image Dimensionen: wenn width oder height 0 ist muss 'deform' verwendet werden
 - Neue tdpdf-Version (5.9.023). PDFs gehören auf jeden Fall überprüft
-Neuer Component-Cache:
-- Helper: Statt $this->ifHasContent($component) muss man if ($this->hasContent($component)) schreiben
-- partials view Helper: 2. Parameter (partialClass) wurde entfernt
 
 == 1.10 ==
 Erstellt: 09.06.10
