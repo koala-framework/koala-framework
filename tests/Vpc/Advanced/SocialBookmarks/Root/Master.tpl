@@ -5,6 +5,6 @@
     <body>
         <?=$this->component($this->boxes['socialBookmarks']);?>
 
-        <?=$this->component($this->component);?>
+        <?=$this->componentWithMaster($this->componentWithMaster)?>
     </body>
 </html>
