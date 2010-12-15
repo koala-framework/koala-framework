@@ -9,7 +9,6 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
         $config = array();
         $type = 'component';
         $value = null;
-        $plugins = array();
 
         if ($renderer instanceof Vps_Component_Renderer_Mail) {
             $type = 'mail';
@@ -17,12 +16,8 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
                 'type' => $renderer->getRenderFormat(),
                 'recipient' => $renderer->getRecipient()
             );
-        } else if ($renderer && !(isset($component->box) && $component->box)) {
-            //TODO warum plugins nicht bei mail?
-            // Plugins
-            $plugins = $renderer->getPlugins($component);
         }
-        return $this->_getRenderPlaceholder($component->componentId, $config, $value, $type, $plugins);
+        return $this->_getRenderPlaceholder($component->componentId, $config, $value, $type, array());
     }
 
     public function render($componentId, $config)
