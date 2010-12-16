@@ -17,9 +17,9 @@ class Vps_Component_Renderer extends Vps_Component_Renderer_Abstract
     protected function _renderComponentContent($component)
     {
         if ($this->_renderMaster) {
-            if ($this->_enableCache && isset($this->_cache['page'][$component->componentId][''])) {
-                $content = $this->_cache['page'][$component->componentId][''];
-            } else {
+            if (!$this->_enableCache ||
+                ($content = Vps_Component_Cache::getInstance()->load($component, 'page')) === null
+            ) {
                 $masterHelper = new Vps_Component_View_Helper_Master();
                 $masterHelper->setRenderer($this);
                 $content = $masterHelper->master($component);

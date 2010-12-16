@@ -56,25 +56,27 @@ abstract class Vps_Component_Renderer_Abstract
             } else {
                 $helper = $helpers[$type];
             }
+
             $statType = null;
-
-            if ($this->_enableCache && Vps_Component_Cache::getInstance()->test($componentId, $type, $value)) {
-
+            $content = null;
+            $saveCache = true;
+            if ($this->_enableCache) {
                 $content = Vps_Component_Cache::getInstance()->load($componentId, $type, $value);
-                $content = $helper->renderCached($content, $componentId, $config);
                 $statType = 'cache';
-
-            } else {
-
+                if ($content == Vps_Component_Cache::NO_CACHE) {
+                    $content = null;
+                    $saveCache = false;
+                }
+            }
+            if (is_null($content)) {
                 $content = $helper->render($componentId, $config);
-                if ($this->_enableCache && $helper->saveCache($componentId, $config, $value, $content)) {
+                if ($saveCache && $helper->saveCache($componentId, $config, $value, $content)) {
                     $statType = 'nocache';
                 } else {
                     $statType = 'noviewcache';
                 }
-                $content = $helper->renderCached($content, $componentId, $config);
-
             }
+            $content = $helper->renderCached($content, $componentId, $config);
 
             foreach ($plugins as $pluginClass) {
                 $plugin = new $pluginClass($componentId);

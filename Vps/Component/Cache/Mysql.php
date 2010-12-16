@@ -2,7 +2,6 @@
 class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 {
     protected $_models;
-    private $_cache = array();
 
     public function __construct()
     {
@@ -32,19 +31,16 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     public function save(Vps_Component_Data $component, $content, $type = 'component', $value = '')
     {
         $settings = $component->getComponent()->getViewCacheSettings();
+        if (!$settings['enabled']) $content = self::NO_CACHE;
 
-        $page = $component;
-        while ($page && !$page->isPage) $page = $page->parent;
-        $expire = is_null($settings['lifetime']) ? null : time() + $settings['lifetime'];
-
+        // MySQL
         $data = array(
             'component_id' => $component->componentId,
-            'page_id' => $page ? $page->componentId : null,
             'db_id' => $component->dbId,
             'component_class' => $component->componentClass,
             'type' => $type,
             'value' => (string)$value,
-            'expire' => $expire,
+            'expire' => is_null($settings['lifetime']) ? null : time() + $settings['lifetime'],
             'deleted' => false,
             'content' => $content
         );
@@ -53,6 +49,12 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'replace' => true
         );
         $this->getModel('cache')->import(Vps_Model_Abstract::FORMAT_ARRAY, array($data), $options);
+
+        // APC
+        $cacheId = $this->_getCacheId($component->componentId, $type, $value);
+        $ttl = 60*60; // Damit er nicht vollgemüllt wird, sondern alles was er wirklich oft braucht drinnen hat
+        apc_add($cacheId, $content, $ttl);
+
         return true;
     }
 
@@ -62,7 +64,8 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             $componentId = $componentId->componentId;
         }
         $cacheId = $this->_getCacheId($componentId, $type, $value);
-        if (!isset($this->_cache[$cacheId])) {
+        $content = apc_fetch($cacheId);
+        if ($content === false && $content != self::NO_CACHE) {
             $select = $this->getModel('cache')->select()
                 ->whereEquals('component_id', $componentId)
                 ->whereEquals('type', $type)
@@ -70,14 +73,15 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 ->whereEquals('value', $value);
             $row = $this->getModel('cache')->export(Vps_Model_Db::FORMAT_ARRAY, $select);
             $content = isset($row[0]) ? $row[0]['content'] : null;
-            $this->_cache[$cacheId] = $content;
         }
-        return $this->_cache[$cacheId];
+        return $content;
     }
 
     protected static function _getCacheId($componentId, $type, $value)
     {
-        return "$componentId/$type/$value";
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix() . '-cc-';
+        return $prefix . "$componentId/$type/$value";
     }
 
     // wird nur von Vps_Component_View_Renderer->saveCache() verwendet
@@ -263,6 +267,10 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         if ($or) {
             $select->where(new Vps_Model_Select_Expr_Or($or));
             //p($select->getParts());
+            foreach ($this->getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
+                $cacheId = $this->_getCacheId($row['component_id'], $row['type'], $row['value']);
+                apc_delete($cacheId);
+            }
             $this->getModel()->updateRows(array('deleted' => true), $select);
             //d($this->getModel('metaModel')->getRows()->toArray());
             //d($this->getModel()->getRows()->toArray());
@@ -285,10 +293,16 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         foreach ($this->getModel('metaComponent')->getRows($componentSelect) as $r) {
             $componentClasses[] = $r->target_component_class;
         }
-        $componentClasses = array_unique($componentClasses);
+
+        $select = $this->getModel('cache')->select()
+            ->whereEquals('component_class', array_unique($componentClasses));
+        foreach ($this->getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
+            $cacheId = $this->_getCacheId($row['component_id'], $row['type'], $row['value']);
+            apc_delete($cacheId);
+        }
         $this->getModel('cache')->updateRows(
             array('deleted' => true),
-            $this->getModel('cache')->select()->whereEquals('component_class', $componentClasses)
+            $select
         );
     }
 
@@ -394,6 +408,5 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     public function cleanByRow($row, $dirtyColumns = array())
     {
         parent::cleanByRow($row, $dirtyColumns);
-        $this->_cache = array();
     }
 }
