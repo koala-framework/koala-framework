@@ -14,7 +14,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             'metaChained' => 'Vps_Component_Cache_Mysql_MetaChainedModel',
             'url' => 'Vps_Component_Cache_Mysql_UrlModel',
             'urlParents' => 'Vps_Component_Cache_Mysql_UrlParentsModel',
-            'processInput' => 'Vps_Component_Cache_Mysql_ProcessInputModel'
         );
     }
 
@@ -386,11 +385,10 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
     protected function _cleanProcessInput(Vps_Component_Data $component)
     {
-        $s = new Vps_Model_Select();
-        $page = $component->getPage();
-        $pageId = $page ? $page->componentId : '';
-        $s->whereEquals('page_id', $pageId);
-        $this->getModel('processInput')->deleteRows($s);
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'procI-'.$component->getPageOrRoot()->componentId;
+        apc_delete($cacheId);
     }
 
     public function cleanByRow($row, $dirtyColumns = array())
