@@ -70,7 +70,8 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 ->whereEquals('component_id', $componentId)
                 ->whereEquals('type', $type)
                 ->whereEquals('deleted', false)
-                ->whereEquals('value', $value);
+                ->whereEquals('value', $value)
+                ->where(new Vps_Model_Select_Expr_Higher('expire', new Vps_DateTime(time())));
             $row = $this->getModel('cache')->export(Vps_Model_Db::FORMAT_ARRAY, $select);
             $content = isset($row[0]) ? $row[0]['content'] : null;
         }
