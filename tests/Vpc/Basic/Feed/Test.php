@@ -16,6 +16,7 @@ class Vpc_Basic_Feed_Test extends Vpc_TestAbstract
         $xml = $feed->getComponent()->getXml();
         $rows = Vps_Component_Cache::getInstance()->getModel()->getRows();
         $row = $rows->current();
+        $feedRow = Vps_Model_Abstract::getInstance('Vpc_Basic_Feed_Model')->getRows()->current();
 
         // XML prüfen
         $this->assertEquals('<?xml', substr($xml, 0, 5));
@@ -30,12 +31,11 @@ class Vpc_Basic_Feed_Test extends Vpc_TestAbstract
         $this->assertEquals($xml, $row->content);
 
         // Cache-Eintrag ändern um festzustellen, ob eh Cache verwendet wird
-        $row->content = 'foo';
-        $row->save();
+        $feedRow->description = 'foo';
+        $feedRow->save();
         $this->assertEquals($row->content, $feed->getComponent()->getXml());
 
         // Cache löschen
-        $feedRow = Vps_Model_Abstract::getInstance('Vpc_Basic_Feed_Model')->getRows()->current();
         Vps_Component_Cache::getInstance()->cleanByRow($feedRow);
         $xml = $feed->getComponent()->getXml();
         $this->assertEquals('<?xml', substr($xml, 0, 5));

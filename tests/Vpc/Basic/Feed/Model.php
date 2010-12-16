@@ -6,6 +6,7 @@ class Vpc_Basic_Feed_Model extends Vps_Model_FnF
         $config = array(
             'data' =>array(
                 array(
+                    'id' => 1,
                     'title' => 'testtitle',
                     'description' => 'testdescription',
                     'link' => 'testlink'

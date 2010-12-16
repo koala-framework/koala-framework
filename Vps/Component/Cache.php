@@ -224,8 +224,6 @@ abstract class Vps_Component_Cache
                 $this->_cleanProcessInput($component);
             }
         }
-
-        
     }
 
     abstract protected function _cleanUrl(Vps_Component_Data $component);
