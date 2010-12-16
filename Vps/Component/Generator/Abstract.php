@@ -7,7 +7,6 @@ abstract class Vps_Component_Generator_Abstract
 
     protected $_loadTableFromComponent = false;
 
-    private $_dataCache = array();
     protected $_idSeparator;
     protected $_inherits = false;
     private $_model;
@@ -574,7 +573,9 @@ abstract class Vps_Component_Generator_Abstract
             }
         }
 
-        if (!isset($this->_dataCache[$parentData->componentId][$id])) {
+        $componentId = $this->_getComponentIdFromRow($parentData, $row);
+        $ret = Vps_Component_Data_Root::getInstance()->getFromDataCache($componentId);
+        if (!$ret) {
             $config = $this->_formatConfig($parentData, $row);
             if (!$config['componentClass'] || !is_string($config['componentClass'])) {
                 throw new Vps_Exception("no componentClass set (id $parentData->componentId $id)");
@@ -588,11 +589,10 @@ abstract class Vps_Component_Generator_Abstract
             }
             $config['generator'] = $this; //wird benötigt für duplizieren
             $pageDataClass = $this->_getDataClass($config, $row);
-            $d = new $pageDataClass($config);
-            $this->_dataCache[$parentData->componentId][$id] = $d;
-            Vps_Component_Data_Root::getInstance()->addToDataCache($d, $select);
+            $ret = new $pageDataClass($config);
+            Vps_Component_Data_Root::getInstance()->addToDataCache($ret, $select);
         }
-        return $this->_dataCache[$parentData->componentId][$id];
+        return $ret;
     }
 
     protected function _getDataClass($config, $row)
@@ -602,6 +602,11 @@ abstract class Vps_Component_Generator_Abstract
         } else {
             return 'Vps_Component_Data';
         }
+    }
+
+    protected function _getComponentIdFromRow($parentData, $row)
+    {
+        throw new Vps_Exception('_getComponentIdFromRow has to be implemented for '.get_class($this));
     }
 
     protected function _formatConfig($parentData, $row) {

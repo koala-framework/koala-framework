@@ -227,6 +227,11 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         return parent::_createData($parentData, $id, $select);
     }
 
+    protected function _getComponentIdFromRow($parentData, $id)
+    {
+        return $this->_pageData[$id]['id'];
+    }
+
     protected function _formatConfig($parentData, $id)
     {
         $data = array();
@@ -236,7 +241,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $data['name'] = $page['name'];
         $data['isPage'] = true;
         $data['isPseudoPage'] = true;
-        $data['componentId'] = $page['id'];
+        $data['componentId'] = $this->_getComponentIdFromRow($parentData, $id);
         $data['componentClass'] = $this->_getChildComponentClass($page['component'], $parentData);
         $data['row'] = (object)$page;
         $data['parent'] = $parentData;

@@ -241,9 +241,14 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $select;
     }
 
+    protected function _getComponentIdFromRow($parentData, $row)
+    {
+        return $parentData->componentId . $this->_idSeparator . $this->_getIdFromRow($row);
+    }
+
     protected function _formatConfig($parentData, $row)
     {
-        $componentId = $parentData->componentId . $this->_idSeparator . $this->_getIdFromRow($row);
+        $componentId = $this->_getComponentIdFromRow($parentData, $row);
         $dbId = $this->_getIdFromRow($row);
         if (isset($this->_settings['dbIdShortcut'])) {
             $dbId = $this->_settings['dbIdShortcut'] . $dbId;
