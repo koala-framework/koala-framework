@@ -523,6 +523,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     {
         if (isset($this->_dataCache[$id])) {
             return $this->_dataCache[$id];
+        } else if (isset($this->_dataCacheIgnoreVisible[$id])) {
+            return $this->_dataCacheIgnoreVisible[$id];
         }
         return null;
     }
