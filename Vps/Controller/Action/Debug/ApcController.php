@@ -172,6 +172,8 @@ class Vps_Controller_Action_Debug_ApcController extends Vps_Controller_Action
 {
     public function indexAction()
     {
+
+        global $MY_SELF,$MYREQUEST,$AUTHENTICATED,$col_black,$time,$MY_SELF_WO_SORT;
 /*
   +----------------------------------------------------------------------+
   | APC                                                                  |
