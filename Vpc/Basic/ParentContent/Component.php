@@ -7,7 +7,13 @@ class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
 {
     public function getTemplateVars()
     {
-        $ret = array();
+        $ret = parent::getTemplateVars();
+        $ret['parentComponent'] = $this->_getParentContentData();
+        return $ret;
+    }
+
+    private function _getParentContentData()
+    {
         $data = $this->getData();
         $ids = array();
         while ($data && !$data->inherits) {
@@ -22,18 +28,26 @@ class Vpc_Basic_ParentContent_Component extends Vpc_Abstract
                 }
                 if (!$d) break;
                 if ($d->componentClass != $this->getData()->componentClass) {
-                    $ret['parentComponent'] = $d;
-                    break;
+                    return $d;
                 }
             }
             $data = $data->parent;
         }
-        return $ret;
+        return null;
     }
 
     public function hasContent()
     {
         //TODO, ist mit cache loeschen womoeglich ein problem
         return true;
+    }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        foreach (Vps_Component_Data_Root::getInstance()->getPageGenerators() as $generator) {
+            $ret[] = new Vpc_Basic_ParentContent_CacheMeta($generator->getModel());
+        }
+        return $ret;
     }
 }
