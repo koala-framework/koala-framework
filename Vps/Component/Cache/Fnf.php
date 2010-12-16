@@ -11,7 +11,6 @@ class Vps_Component_Cache_Fnf extends Vps_Component_Cache_Mysql
             'metaChained' => 'Vps_Component_Cache_Fnf_MetaChainedModel',
             'url' => 'Vps_Component_Cache_Fnf_UrlModel',
             'urlParents' => 'Vps_Component_Cache_Fnf_UrlParentsModel',
-            'processInput' => 'Vps_Component_Cache_Fnf_ProcessInputModel'
         );
     }
 }

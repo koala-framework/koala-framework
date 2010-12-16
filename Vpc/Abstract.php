@@ -267,9 +267,11 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     protected function _callProcessInput()
     {
-        $model = Vps_Component_Cache::getInstance()->getModel('processInput');
-        $row = $model->getRow($this->getData()->componentId);
-        if (!$row) {
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'procI-'.$this->getData()->getPageOrRoot()->componentId;
+        $processCached = apc_fetch($cacheId, $success);
+        if (!$success) {
             $process = $this->getData()
                 ->getRecursiveChildComponents(array(
                         'page' => false,
@@ -294,14 +296,10 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             foreach ($process as $p) {
                 $datas[] = $p->vpsSerialize();
             }
-            if (!$row) $row = $model->createRow();
-            $row->page_id = $this->getData()->componentId;
-            $row->process_component_ids = serialize($datas);
-            $row->save();
+            apc_add($cacheId, $datas);
         } else {
             $process = array();
-            $datas = unserialize($row->process_component_ids);
-            foreach ($datas as $d) {
+            foreach ($processCached as $d) {
                 $process[] = Vps_Component_Data::vpsUnserialize($d);
             }
         }
