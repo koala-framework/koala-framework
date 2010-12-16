@@ -99,13 +99,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
             $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
         }
-        $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];            //TODO: acceptLanguage berücksichtigen?
-        $urlCacheModel = Vps_Component_Cache::getInstance()->getModel('url');
-        $s = new Vps_Model_Select();
-        $s->whereEquals('url', $cacheUrl);
-        if ($row = $urlCacheModel->getRow($s)) {
+        //TODO: acceptLanguage berücksichtigen?
+        $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'url-'.$cacheUrl;
+        if ($page = apc_fetch($cacheId)) {
             $exactMatch = true;
-            $ret = Vps_Component_Data::vpsUnserialize(unserialize($row->page));
+            $ret = Vps_Component_Data::vpsUnserialize($page);
         } else {
             $path = $this->getComponent()->formatPath($parsedUrl);
             if (is_null($path)) return null;
@@ -121,20 +122,27 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $ret = $this->getComponent()->getPageByUrl($path, $acceptLangauge);
             if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
                 $exactMatch = true;
-                $row = $urlCacheModel->createRow();
-                $row->url = $cacheUrl;
-                $row->page_id = $ret->componentId;
-                $row->page = serialize($ret->vpsSerialize());
-                $row->save();
+                apc_add($cacheId, $ret->vpsSerialize());
+
+                Vps_Component_Cache::getInstance()->getModel('url')->import(Vps_Model_Abstract::FORMAT_ARRAY,
+                    array(array(
+                        'url' => $cacheUrl,
+                        'page_id' => $ret->componentId
+                    )), array('replace'=>true));
 
                 $m = Vps_Component_Cache::getInstance()->getModel('urlParents');
+                $s = new Vps_Model_Select();
+                $s->whereEquals('page_id', $ret->componentId);
+                $m->deleteRows($s);
+
                 $c = $ret;
                 while($c = $c->parent) {
                     if ($c->isPseudoPage) {
-                        $row = $m->createRow();
-                        $row->page_id = $ret->componentId;
-                        $row->parent_page_id = $c->componentId;
-                        $row->save();
+                        $m->import(Vps_Model_Abstract::FORMAT_ARRAY,
+                            array(array(
+                                'page_id' => $ret->componentId,
+                                'parent_page_id' => $c->componentId
+                            )), array('buffer'=>true));
                     }
                 }
             }

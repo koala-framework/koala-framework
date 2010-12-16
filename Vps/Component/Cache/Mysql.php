@@ -375,6 +375,12 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
         $s = new Vps_Model_Select();
         $s->whereEquals('page_id', $ids);
+        foreach ($this->getModel('url')->export(Vps_Model_Abstract::FORMAT_ARRAY, $s) as $row) {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+            $cacheId = $prefix.'url-'.$row['url'];
+            apc_delete($cacheId);
+        }
         $this->getModel('url')->deleteRows($s);
     }
 
