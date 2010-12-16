@@ -35,8 +35,8 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
         // MySQL
         $data = array(
-            'component_id' => $component->componentId,
-            'db_id' => $component->dbId,
+            'component_id' => (string)$component->componentId,
+            'db_id' => (string)$component->dbId,
             'component_class' => $component->componentClass,
             'type' => $type,
             'value' => (string)$value,
@@ -257,6 +257,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 if (isset($w['db_id'])) {
                     $val = $w['db_id'];
                     if (is_array($val) && count($val) == 1) $val = $val[0];
+                    if (!is_array($val)) $val = (string)$val;
                     if (!is_array($val) && strpos($val, '%') !== false) {
                         $and[] = new Vps_Model_Select_Expr_Like('db_id', $val);
                         $and[] = new Vps_Model_Select_Expr_Equal('component_class', $cClass);
@@ -277,6 +278,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 $cacheId = $this->_getCacheId($row['component_id'], $row['type'], $row['value']);
                 apc_delete($cacheId);
             }
+            //p($this->getModel()->getRows($select)->toArray());
             $this->getModel()->updateRows(array('deleted' => true), $select);
             //d($this->getModel('metaModel')->getRows()->toArray());
             //d($this->getModel()->getRows()->toArray());
