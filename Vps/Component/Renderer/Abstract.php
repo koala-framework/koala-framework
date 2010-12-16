@@ -6,7 +6,7 @@ abstract class Vps_Component_Renderer_Abstract
 
     public function setEnableCache($enableCache)
     {
-        $this->_enableCache = true;
+        $this->_enableCache = $enableCache;
     }
 
     public function renderComponent($component)
