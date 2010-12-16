@@ -178,10 +178,11 @@ class Vps_Util_ClearCache
             } else {
                 $d = Vps_Registry::get('config')->server->domain;
                 $url = "http://$d/vps/util/apc/clear-cache";
-                if (file_get_contents($url) == 'OK') {
+                $c = @file_get_contents($url);
+                if ($c == 'OK') {
                     if ($output) echo "cleared:     apc\n";
                 } else {
-                    if ($output) echo "error:     apc\n";
+                    if ($output) echo "error:       apc\n$c\n\n";
                 }
             }
         }
