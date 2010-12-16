@@ -15,6 +15,7 @@ class Vps_Component_Output_CacheTest extends Vps_Test_TestCase
         $this->_renderer = new Vps_Component_Renderer();
         $this->_renderer->setEnableCache(true);
         Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
+        apc_clear_cache('user');
     }
 
     public function testC3()
@@ -51,8 +52,8 @@ class Vps_Component_Output_CacheTest extends Vps_Test_TestCase
         $value = $this->_renderer->renderMaster($this->_root);
         $this->assertEquals('c2_root c2_child c2_childNoCache ', $value);
 
-        //page, master und 2 component
-        $this->assertEquals(4, $model->countRows());
+        //page, master, 2 component und ein {nocache}
+        $this->assertEquals(5, $model->countRows());
     }
 
     public function testC4()

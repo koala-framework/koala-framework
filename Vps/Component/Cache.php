@@ -6,6 +6,7 @@ abstract class Vps_Component_Cache
     const CACHE_BACKEND_MYSQL = 'Vps_Component_Cache_Mysql';
     const CACHE_BACKEND_MONGO = 'Vps_Component_Cache_Mongo';
     const CACHE_BACKEND_FNF = 'Vps_Component_Cache_Fnf';
+    const NO_CACHE = '{nocache}';
 
     /**
      * @return Vps_Component_Cache_Mysql
