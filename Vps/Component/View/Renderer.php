@@ -50,7 +50,7 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         // Komponenten, deshalb hier schreiben
         if ($type == 'component' &&
             ($component->getComponent() instanceof Vpc_Chained_Abstract_Component) &&
-            !Vps_Component_Cache::getInstance()->test($component->chained)
+            !Vps_Component_Cache::getInstance()->test($component->chained->componentId)
         ) {
             // neuer Helper, damit _getRenderer() leer ist
             $helper = new Vps_Component_View_Helper_Component();

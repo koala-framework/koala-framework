@@ -2,7 +2,7 @@
 class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 {
     protected $_models;
-    private $_cache;
+    private $_cache = array();
 
     public function __construct()
     {
@@ -59,6 +59,9 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
     public function load($componentId, $type = 'component', $value = '')
     {
+        if ($componentId instanceof Vps_Component_Data) {
+            $componentId = $componentId->componentId;
+        }
         $cacheId = $this->_getCacheId($componentId, $type, $value);
         if (!isset($this->_cache[$cacheId])) {
             $select = $this->getModel('cache')->select()
@@ -382,5 +385,11 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $pageId = $page ? $page->componentId : '';
         $s->whereEquals('page_id', $pageId);
         $this->getModel('processInput')->deleteRows($s);
+    }
+
+    public function cleanByRow($row, $dirtyColumns = array())
+    {
+        parent::cleanByRow($row, $dirtyColumns);
+        $this->_cache = array();
     }
 }
