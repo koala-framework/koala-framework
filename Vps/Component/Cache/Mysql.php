@@ -53,6 +53,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         // APC
         $cacheId = $this->_getCacheId($component->componentId, $type, $value);
         $ttl = 60*60; // Damit er nicht vollgemüllt wird, sondern alles was er wirklich oft braucht drinnen hat
+        if ($settings['lifetime']) $ttl = min($ttl, $settings['lifetime']);
         apc_add($cacheId, $content, $ttl);
 
         return true;
