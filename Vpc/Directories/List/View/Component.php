@@ -107,6 +107,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
             $generator = Vps_Component_Generator_Abstract::getInstance($c, 'detail');
             $items = $generator->getChildData(null, array('select'=>$select));
         } else {
+            $select->whereGenerator('detail');
             $items = $itemDirectory->getChildComponents($select);
         }
         foreach ($items as &$item) {
