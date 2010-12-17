@@ -148,4 +148,12 @@ class Vps_Component_ModelObserver
 
         return $ret;
     }
+
+    // Nur für Tests
+    // TODO: Damit sowas nicht notwendig ist, das Ganze testbarer machen (Observer
+    // in Row austauschbar, damit man ihn mocken kann und die Klasse hier modularer machen
+    public function getProcess()
+    {
+        return $this->_process;
+    }
 }

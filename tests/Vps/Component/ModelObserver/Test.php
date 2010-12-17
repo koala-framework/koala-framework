@@ -61,4 +61,30 @@ class Vps_Component_ModelObserver_Test extends Vps_Test_TestCase
         Vps_Component_ModelObserver::getInstance()->add('update', $this->_model);
         $this->assertEquals(array('Vps_Model_FnF' => array(null)), $this->_observer->process());
     }
+
+    public function testDirtyColumns()
+    {
+        $fnf = new Vps_Model_FnF(array(
+            'data' => array(
+                array('id' => 1, 'value' => 'foo')
+            ),
+            'columns' => array('id', 'value')
+        ));
+        $model = new Vps_Model_Proxy(array('proxyModel' => $fnf));
+
+        // Row ohne Proxy
+        $row = $fnf->getRow(1);
+        $row->value = 'bar';
+        $row->save();
+        $process = $this->_observer->getProcess();
+        $this->assertEquals(array('value'), $process['update'][0]['dirtyColumns']);
+        $this->_observer->process(); // damit process leer ist
+
+        // Row mit Proxy
+        $row = $model->getRow(1);
+        $row->value = 'foo';
+        $row->save();
+        $process = $this->_observer->getProcess();
+        $this->assertEquals(array('value'), $process['update'][0]['dirtyColumns']);
+    }
 }
