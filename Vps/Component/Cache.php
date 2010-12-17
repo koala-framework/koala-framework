@@ -190,10 +190,12 @@ abstract class Vps_Component_Cache
         $wheres = $this->_addComponentWhere($wheres);
         $wheres = $this->_addChainedWhere($wheres);
         foreach ($this->_getComponentIdsFromWheres($wheres) as $componentId) {
-            $component = Vps_Component_Data_Root::getInstance()->getComponentById(
+            $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId(
                 $componentId, array('ignoreVisible' => true)
             );
-            if ($component) $component->getComponent()->onCacheCallback($row);
+            foreach ($components as $component) {
+                 $component->getComponent()->onCacheCallback($row);
+            }
         }
 
         // Url Cache
