@@ -3,7 +3,7 @@
  * @group Vpc_Basic_Text
  * @group StylesModel
  */
-class Vpc_Basic_TextMasterStyles_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_TextMasterStyles_Test extends Vps_Test_TestCase
 {
     public function testIt()
     {
