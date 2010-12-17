@@ -184,6 +184,35 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         $ret = $this;
         $idParts = $this->_getIdParts($componentId);
+
+        //Optimierung: wenn bereits ein parent der gesuchten komponente existiert, dieses direkt verwenden
+        //hilft vorallem wenn das parent deserialisiert wurde da in dem fall die weiteren parents nicht erstellt werden müssen
+        for($i=0; $i<count($idParts); ++$i) {
+            $id = implode('', array_slice($idParts, 0, count($idParts)-$i-1));
+            $found = false;
+            if (isset($this->_dataCache[$id])) {
+                $ret = $this->_dataCache[$id];
+                $found = true;
+            } else {
+                if (is_array($select)) {
+                    if (isset($select[Vps_Component_Select::IGNORE_VISIBLE])) {
+                        $ignoreVisible = $select[Vps_Component_Select::IGNORE_VISIBLE];
+                    } else {
+                        $ignoreVisible = false;
+                    }
+                } else {
+                    $ignoreVisible = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+                }
+                if ($ignoreVisible && isset($this->_dataCacheIgnoreVisible[$id])) {
+                    $ret = $this->_dataCacheIgnoreVisible[$id];
+                    $found = true;
+                }
+            }
+            if ($found) {
+                $idParts = array_slice($idParts, count($idParts)-$i-1);
+                break;
+            }
+        }
         foreach ($idParts as $i=>$idPart) {
             if ($idPart == 'root') {
                 $ret = $this;
@@ -207,7 +236,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     $s = new Vps_Component_Select($s);
                 }
 
-                if ($i == 0) { // Muss eine Page sein
+                if ($i == 0 && !$found) { // Muss eine Page sein
                     $generators = $this->getPageGenerators();
                     foreach ($generators as $generator) {
                         $ret = array_pop($generator->getChildData(null, $s));
