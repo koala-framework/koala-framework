@@ -12,12 +12,7 @@ class Vps_Controller_Action_Util_ApcController extends Vps_Controller_Action
 
         if (class_exists('APCIterator')) {
             $prefix = Vps_Cache::getUniquePrefix();
-            $i = new APCIterator('user', '#^'.$prefix.'#');
-            foreach ($i as $entry) {
-                if (substr($entry['key'], 0, strlen($prefix.'bench-')) != $prefix.'bench-') {
-                    apc_delete($entry['key']);
-                }
-            }
+            apc_delete_file(new APCIterator('user', '#^'.$prefix.'#'));
         } else {
             apc_clear_cache('user');
         }
