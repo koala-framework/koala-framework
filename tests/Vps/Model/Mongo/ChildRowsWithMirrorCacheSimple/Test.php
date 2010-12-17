@@ -3,6 +3,7 @@
  * @group Model
  * @group Mongo
  * @group Mongo_ChildRowsWithMirrorCacheSimple
+ * @group slow
  */
 class Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_Test extends Vps_Test_TestCase
 {
