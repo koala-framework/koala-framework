@@ -137,7 +137,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
                 $c = $ret;
                 while($c = $c->parent) {
-                    if ($c->isPseudoPage) {
+                    if ($c->generator->getGeneratorFlag('table')) {
                         $m->import(Vps_Model_Abstract::FORMAT_ARRAY,
                             array(array(
                                 'page_id' => $ret->componentId,
