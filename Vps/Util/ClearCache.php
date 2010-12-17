@@ -78,6 +78,8 @@ class Vps_Util_ClearCache
     {
         if ($types == 'all') {
             $types = $this->getTypes();
+        } else if ($types == 'component' && extension_loaded('apc')) {
+            $types = array('component', 'apc');
         } else {
             if (!is_array($types)) {
                 $types = explode(',', $types);
