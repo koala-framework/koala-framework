@@ -249,6 +249,14 @@ abstract class Vps_Component_Generator_Abstract
         }
         self::$_cachedInstances[$cacheId] = $generators;
 
+
+        $ret = self::_filterGenerators($generators, $component, $componentClass, $select);
+
+        return $ret;
+    }
+
+    private static function _filterGenerators(array $generators, $component, $componentClass, Vps_Component_Select $select)
+    {
         $selectParts = $select->getParts();
 
         $ret = array();
