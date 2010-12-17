@@ -10,7 +10,7 @@ class Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_Test extends Vps_Test_TestC
     {
         $m = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_MongoModel');
 
-        $m->initialSync();
+        $m->initialSync(false);
 
         $this->assertEquals(1, $m->getProxyModel()->getCollection()->find()->count());
         $row = $m->getProxyModel()->getCollection()->findOne();
@@ -22,7 +22,7 @@ class Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_Test extends Vps_Test_TestC
     public function testParentExpr()
     {
         $m = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_MongoModel');
-        $m->initialSync();
+        $m->initialSync(false);
         $row = $m->getRow(1);
         $this->assertEquals('bar', $row->getChildRows('Children')->current()->parent_foo);
     }
@@ -31,7 +31,7 @@ class Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_Test extends Vps_Test_TestC
     {
         $m = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_MongoModel');
 
-        $m->initialSync();
+        $m->initialSync(false);
         $row = $m->getProxyModel()->getCollection()->findOne();
         $this->assertTrue(!isset($row['children'][0]['parent_foo']));
     }
