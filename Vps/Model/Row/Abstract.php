@@ -373,6 +373,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                 $row->save();
             }
         }
+        $this->_callObserver('save');
     }
 
     protected function _callObserver($fn)
@@ -397,7 +398,6 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             }
         }
         $this->_updateFilters(true);
-        $this->_callObserver('save');
 
         $this->_callReferencedModelsRowUpdated('save');
     }
@@ -427,21 +427,21 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     protected function _beforeUpdate()
     {
+        $this->_callObserver('update');
     }
 
     protected function _afterUpdate()
     {
         $this->_updateFilters(true);
-        $this->_callObserver('update');
     }
 
     protected function _beforeInsert()
     {
+        $this->_callObserver('insert');
     }
 
     protected function _afterInsert()
     {
-        $this->_callObserver('insert');
     }
 
     protected function _beforeDelete()
