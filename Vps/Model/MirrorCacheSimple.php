@@ -27,7 +27,7 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
         return $this->_sourceModel;
     }
 
-    public function initialSync()
+    public function initialSync($processInCli = true)
     {
         $stepSize = 100;
 
@@ -35,7 +35,7 @@ class Vps_Model_MirrorCacheSimple extends Vps_Model_Proxy
         $count = $this->_sourceModel->countRows();
 
         $progress = null;
-        if (php_sapi_name() == 'cli') {
+        if (php_sapi_name() == 'cli' && $processInCli) {
             $c = new Zend_ProgressBar_Adapter_Console();
             $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                     Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
