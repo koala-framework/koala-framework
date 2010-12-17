@@ -3,6 +3,7 @@
  * @group Model
  * @group Mongo_ParentExprWithProxy
  * @group Mongo
+ * @group slow
  */
 class Vps_Model_Mongo_ParentExprWithProxyTest_Test extends Vps_Test_TestCase
 {

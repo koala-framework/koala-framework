@@ -2,6 +2,7 @@
 /**
  * @group Model
  * @group Mongo
+ * @group slow
  */
 class Vps_Model_Mongo_WriteTest_Test extends Vps_Test_TestCase
 {
