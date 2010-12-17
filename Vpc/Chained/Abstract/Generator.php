@@ -182,12 +182,18 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
         return substr($row->componentId, max(strrpos($row->componentId, '-'),strrpos($row->componentId, '_'))+1);
     }
 
+    
+    protected function _getComponentIdFromRow($parentData, $row)
+    {
+        return $parentData->componentId.$this->getIdSeparator().$this->_getIdFromRow($row);
+    }
+
     protected function _formatConfig($parentData, $row)
     {
         $componentClass = $this->_settings['component'][$this->_settings['masterComponentsMap'][$row->componentClass]];
         $id = $this->_getIdFromRow($row);
         $data = array(
-            'componentId' => $parentData->componentId.$this->getIdSeparator().$id,
+            'componentId' => $this->_getComponentIdFromRow($parentData, $row),
             'dbId' => $parentData->dbId.$this->getIdSeparator().$id,
             'componentClass' => $componentClass,
             'parent' => $parentData,
