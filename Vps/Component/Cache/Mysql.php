@@ -72,7 +72,10 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 ->whereEquals('type', $type)
                 ->whereEquals('deleted', false)
                 ->whereEquals('value', $value)
-                ->where(new Vps_Model_Select_Expr_Higher('expire', new Vps_DateTime(time())));
+                ->where(new Vps_Model_Select_Expr_Or(array(
+                    new Vps_Model_Select_Expr_Higher('expire', new Vps_DateTime(time())),
+                    new Vps_Model_Select_Expr_IsNull('expire'),
+                )));
             $row = $this->getModel('cache')->export(Vps_Model_Db::FORMAT_ARRAY, $select);
             $content = isset($row[0]) ? $row[0]['content'] : null;
             if ($content) {
@@ -244,6 +247,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     protected function _cleanByWheres($wheres)
     {
         $select = $this->getModel('cache')->select();
+
         $or = array();
         //p($wheres);
         foreach ($wheres as $cClass => $where) {
