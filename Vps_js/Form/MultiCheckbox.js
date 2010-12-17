@@ -2,7 +2,7 @@ Vps.Form.MultiCheckbox = Ext.extend(Vps.Form.FieldSet, {
     afterRender: function() {
         Vps.Form.MultiCheckbox.superclass.afterRender.call(this);
 
-        if (this.showCheckAllLinks) {
+        if (this.showCheckAllLinks && this.header) {
             var checkAllWrapper = this.header.createChild({ tag: 'span', cls: 'vpsCheckAllWrapper' });
             checkAllWrapper.createChild({ tag: 'span', html: ' ('});
             var checkAllLink = checkAllWrapper.createChild({
