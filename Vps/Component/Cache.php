@@ -65,14 +65,14 @@ abstract class Vps_Component_Cache
                     foreach ($generator->getChildComponentClasses() as $c) {
                         self::getInstance()->saveMeta($c, $meta);
                     }
-
-                    //UrlCache
-                    $meta = new Vps_Component_Cache_Meta_Static_UrlCache($generator);
-                    self::getInstance()->saveMeta($class, $meta); //$class wird nicht verwendet, ist aber im primaryKey wird nur darum gesetzt
                 }
                 if ($generator &&
                     $generator->getGeneratorFlag('table')
                 ) {
+                    //UrlCache
+                    $meta = new Vps_Component_Cache_Meta_Static_UrlCache($generator);
+                    self::getInstance()->saveMeta($class, $meta); //$class wird nicht verwendet, ist aber im primaryKey wird nur darum gesetzt
+
                     //ProcessInputCache
                     $meta = new Vps_Component_Cache_Meta_Static_ProcessInputCache($generator);
                     self::getInstance()->saveMeta($class, $meta); //$class wird nicht verwendet, ist aber im primaryKey wird nur darum gesetzt
