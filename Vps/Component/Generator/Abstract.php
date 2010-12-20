@@ -163,11 +163,17 @@ abstract class Vps_Component_Generator_Abstract
 
         //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
         if (($id = $select->getPart(Vps_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
+            $filteredGeneratorKeys = array();
             foreach ($generatorKeys as $g) {
-                if ($g['childComponentIds'] && in_array($id, $g['childComponentIds'])) {
-                    return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
+                if ($g['childComponentIds']) {
+                    if (in_array($id, $g['childComponentIds'])) {
+                        return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
+                    }
+                } else {
+                    $filteredGeneratorKeys[] = $g;
                 }
             }
+            $generatorKeys = $filteredGeneratorKeys;
         }
 
         //performance abkürzung: wenn direkt nach einem generator gesucht wird, effizienter heraussuchen
@@ -212,11 +218,17 @@ abstract class Vps_Component_Generator_Abstract
 
         //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
         if (($id = $select->getPart(Vps_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
+            $filteredGeneratorKeys = array();
             foreach ($generatorKeys as $g) {
-                if ($g['childComponentIds'] && in_array($id, $g['childComponentIds'])) {
-                    return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
+                if ($g['childComponentIds']) {
+                    if (in_array($id, $g['childComponentIds'])) {
+                        return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
+                    }
+                } else {
+                    $filteredGeneratorKeys[] = $g;
                 }
             }
+            $generatorKeys = $filteredGeneratorKeys;
         }
 
         $generators = array();
