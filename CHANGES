@@ -19,7 +19,7 @@ möglicherweise nicht kompatible Änderungen:
 - Helper: Statt $this->ifHasContent($component) muss man if ($this->hasContent($component)) schreiben
 - partials view Helper: 2. Parameter (partialClass) wurde entfernt
 - Master.tpl muss $this->componentWithMaster($this->componentWithMaster) für die Haupt-Komponente verwenden
-
+- generators: box priority wurde entfernt
 
 == 1.11 ==
 Erstellt: 17.08.10
