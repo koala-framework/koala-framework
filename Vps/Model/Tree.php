@@ -21,9 +21,9 @@ class Vps_Model_Tree extends Vps_Model_Db_Proxy
     public function getRecursiveIds($parentId)
     {
         if (!isset($this->_parentIdsCache)) {
-            foreach ($this->getRows() as $row) {
-                $this->_parentIdsCache[$row->{$this->getPrimaryKey()}]
-                            = $row->{$this->_referenceMap['Parent']['column']};
+            foreach ($this->export(Vps_Model_Interface::FORMAT_ARRAY, array()) as $row) {
+                $this->_parentIdsCache[$row[$this->getPrimaryKey()]]
+                            = $row[$this->_referenceMap['Parent']['column']];
             }
         }
         $ret = array($parentId);
