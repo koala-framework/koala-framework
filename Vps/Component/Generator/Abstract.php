@@ -170,6 +170,16 @@ abstract class Vps_Component_Generator_Abstract
             }
         }
 
+        //performance abkürzung: wenn direkt nach einem generator gesucht wird, effizienter heraussuchen
+        if (($genKey = $select->getPart(Vps_Component_Select::WHERE_GENERATOR))) {
+            foreach ($generatorKeys as $g) {
+                if ($g['key'] == $genKey && $g['componentClass']==$componentClass) {
+                    return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
+                }
+            }
+            return array();
+        }
+
         $generators = array();
         foreach ($generatorKeys as $g) {
             if (!$g['inherited']) {
@@ -185,6 +195,12 @@ abstract class Vps_Component_Generator_Abstract
             $select = new Vps_Component_Select($select);
         }
 
+        //performance abkürzung: wenn direkt nach einem generator gesucht wird, ist das nie ein inherited
+        if (($genKey = $select->getPart(Vps_Component_Select::WHERE_GENERATOR))) {
+            return array();
+        }
+
+
         if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
         } else {
@@ -192,8 +208,19 @@ abstract class Vps_Component_Generator_Abstract
             $component = null;
         }
 
+        $generatorKeys = self::_getGeneratorKeys($component, $componentClass);
+
+        //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
+        if (($id = $select->getPart(Vps_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
+            foreach ($generatorKeys as $g) {
+                if ($g['childComponentIds'] && in_array($id, $g['childComponentIds'])) {
+                    return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
+                }
+            }
+        }
+
         $generators = array();
-        foreach (self::_getGeneratorKeys($component, $componentClass) as $g) {
+        foreach ($generatorKeys as $g) {
             if ($g['inherited']) {
                 $generators[] = self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']);
             }
