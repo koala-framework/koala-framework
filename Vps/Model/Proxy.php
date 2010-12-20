@@ -148,15 +148,17 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     public function deleteRows($where)
     {
         Vps_Component_ModelObserver::getInstance()->disable();
-        return $this->_proxyModel->deleteRows($where);
+        $ret = $this->_proxyModel->deleteRows($where);
         Vps_Component_ModelObserver::getInstance()->enable();
+        return $ret;
     }
 
     public function updateRows($data, $where)
     {
         Vps_Component_ModelObserver::getInstance()->disable();
-        return $this->_proxyModel->updateRows($data, $where);
+        $ret = $this->_proxyModel->updateRows($data, $where);
         Vps_Component_ModelObserver::getInstance()->enable();
+        return $ret;
     }
 
     public function countRows($where = array())
