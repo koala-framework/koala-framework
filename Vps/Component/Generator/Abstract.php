@@ -159,8 +159,19 @@ abstract class Vps_Component_Generator_Abstract
             $component = null;
         }
 
+        $generatorKeys = self::_getGeneratorKeys(null, $componentClass);
+
+        //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
+        if (($id = $select->getPart(Vps_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
+            foreach ($generatorKeys as $g) {
+                if ($g['childComponentIds'] && in_array($id, $g['childComponentIds'])) {
+                    return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
+                }
+            }
+        }
+
         $generators = array();
-        foreach (self::_getGeneratorKeys(null, $componentClass) as $g) {
+        foreach ($generatorKeys as $g) {
             if (!$g['inherited']) {
                 $generators[] = self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']);
             }
@@ -270,11 +281,19 @@ abstract class Vps_Component_Generator_Abstract
         }
         $ret = array();
         foreach ($generators as $g) {
+            $childComponentIds = null;
+            if ($g instanceof Vps_Component_Generator_Static) {
+                $childComponentIds = array();
+                foreach (array_keys($g->_settings['component']) as $c) {
+                    $childComponentIds[] = $g->getIdSeparator().$c;
+                }
+            }
             $ret[] = array(
                 'componentClass' => $g->_class,
                 'key' => $g->_settings['generator'],
                 'pluginBaseComponentClass' => $g->_pluginBaseComponentClass,
                 'inherited' => in_array($g, $inheritedGenerators, true),
+                'childComponentIds' => $childComponentIds
             );
         }
         apc_add($prefix.'genInst-'.$cacheId, $ret);
