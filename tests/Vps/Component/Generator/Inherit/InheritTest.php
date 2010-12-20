@@ -43,7 +43,7 @@ class Vps_Component_Generator_Inherit_InheritTest extends Vpc_TestAbstract
         $page = $this->_root->getChildComponent('_static');
         $this->assertNotNull($page);
         $gen = Vps_Component_Generator_Abstract::getInstances($page);
-        $this->assertEquals(count($gen), 1);
+        $this->assertEquals(count($gen), 1); //aus performancegründen hier nur einer, page generator wird durch spezial-code in Generator::getInstances nicht zurückgegeben
     }
 
 }
