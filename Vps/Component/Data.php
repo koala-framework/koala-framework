@@ -430,7 +430,6 @@ class Vps_Component_Data
         }
 
         if (!isset($this->_constraintsCache[$sc])) {
-            $ret = array();
 
             $this->_constraintsCache[$sc] = array();
 
@@ -444,35 +443,47 @@ class Vps_Component_Data
                 $limitCount = null;
             }
 
-            $generators = Vps_Component_Generator_Abstract::getInstances($this, $select);
-            $ret = array();
+            $generators = Vps_Component_Generator_Abstract::getOwnInstances($this, $select);
+            $ret = $this->_getChildComponentsFromGenerators($generators, $select, $limitCount);
 
-            foreach ($generators as $generator) {
-                $generatorSelect = clone $select;
-                if ($limitCount) {
-                    $generatorSelect->limit($limitCount - count($ret));
-                }
-                $genId = $generator->getClass().$generator->getGeneratorKey();
-                $parentData = $this;
-                if (isset($this->_uniqueParentDatas[$genId])) {
-                    $parentData = $this->_uniqueParentDatas[$genId];
-                }
-                foreach ($generator->getChildData($parentData, $generatorSelect) as $data) {
-                    if (isset($ret[$data->componentId])) {
-                        throw new Vps_Exception("Id not unique: {$data->componentId}");
-                    }
-                    $ret[$data->componentId] = $data;
-
-                    if ($limitCount) {
-                        if ($limitCount - count($ret) <= 0) {
-                            break 2;
-                        }
-                    }
-                }
+            if (is_null($limitCount) || count($ret) < $limitCount) {
+                if (!is_null($limitCount)) $limitCount -= count($ret);
+                $generators = Vps_Component_Generator_Abstract::getInheritedInstances($this, $select);
+                $ret += $this->_getChildComponentsFromGenerators($generators, $select, $limitCount); //kein array_merge, da wuerden die keys verloren gehen - und die sind eh eindeutig
             }
+
             $this->_constraintsCache[$sc] = $ret;
         }
         return $this->_constraintsCache[$sc];
+    }
+
+    private function _getChildComponentsFromGenerators($generators, $select, $limitCount)
+    {
+        $ret = array();
+        foreach ($generators as $generator) {
+            $generatorSelect = clone $select;
+            if ($limitCount) {
+                $generatorSelect->limit($limitCount - count($ret));
+            }
+            $genId = $generator->getClass().$generator->getGeneratorKey();
+            $parentData = $this;
+            if (isset($this->_uniqueParentDatas[$genId])) {
+                $parentData = $this->_uniqueParentDatas[$genId];
+            }
+            foreach ($generator->getChildData($parentData, $generatorSelect) as $data) {
+                if (isset($ret[$data->componentId])) {
+                    throw new Vps_Exception("Id not unique: {$data->componentId}");
+                }
+                $ret[$data->componentId] = $data;
+
+                if ($limitCount) {
+                    if ($limitCount - count($ret) <= 0) {
+                        break 2;
+                    }
+                }
+            }
+        }
+        return $ret;
     }
 
     public function getChildPages($select = array(), $childSelect = array('page'=>false))
