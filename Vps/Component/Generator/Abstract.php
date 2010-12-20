@@ -140,6 +140,17 @@ abstract class Vps_Component_Generator_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
+        return array_merge(
+            self::getOwnInstances($component, $select),
+            self::getInheritedInstances($component, $select)
+        );
+    }
+
+    public static function getOwnInstances($component, $select = array())
+    {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
 
         if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
@@ -154,7 +165,21 @@ abstract class Vps_Component_Generator_Abstract
                 $generators[] = self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']);
             }
         }
-        $ret = self::_filterGenerators($generators, $component, $componentClass, $select);
+        return self::_filterGenerators($generators, $component, $componentClass, $select);
+    }
+
+    public static function getInheritedInstances($component, $select = array())
+    {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+
+        if ($component instanceof Vps_Component_Data) {
+            $componentClass = $component->componentClass;
+        } else {
+            $componentClass = $component;
+            $component = null;
+        }
 
         $generators = array();
         foreach (self::_getGeneratorKeys($component, $componentClass) as $g) {
@@ -162,9 +187,7 @@ abstract class Vps_Component_Generator_Abstract
                 $generators[] = self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']);
             }
         }
-        $ret = array_merge($ret, self::_filterGenerators($generators, $component, $componentClass, $select));
-
-        return $ret;
+        return self::_filterGenerators($generators, $component, $componentClass, $select);
     }
 
     private static function _getGeneratorKeys($component, $componentClass)
