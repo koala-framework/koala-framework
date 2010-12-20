@@ -247,22 +247,12 @@ abstract class Vps_Component_Generator_Abstract
                         continue;
                     }
                     $inheritedBoxes = $inheritedGenerator->getBoxes();
-//                     if (count($inheritedBoxes) != 1) {
-//                         throw new Vps_Exception("There should be only one box in an inherited generator");
-//                     }
-                    $inheritedBox = $inheritedBoxes[0];
                     foreach ($generators as $k=>$g) {
                         if (!$g->getGeneratorFlag('box')) continue;
                         foreach ($inheritedBoxes as $inheritedBox) {
-                            if (!in_array($inheritedBox, $g->getBoxes())) continue;
-                            if ($g->getPriority() >= $inheritedGenerator->getPriority()) {
+                            if (in_array($inheritedBox, $g->getBoxes())) {
+                                //geerbte box wurde überschrieben, ignorieren
                                 continue 3;
-                            } else {
-                                if (count($g->getBoxes()) > 1) {
-                                    throw new Vps_Exception("There should be only one box in an inherited generator");
-                                }
-                                unset($generators[$k]);
-                                break;
                             }
                         }
                     }
