@@ -160,7 +160,7 @@ abstract class Vps_Component_Generator_Abstract
         }
 
         $generators = array();
-        foreach (self::_getGeneratorKeys($component, $componentClass) as $g) {
+        foreach (self::_getGeneratorKeys(null, $componentClass) as $g) {
             if (!$g['inherited']) {
                 $generators[] = self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']);
             }
