@@ -446,7 +446,7 @@ class Vps_Component_Data
             $generators = Vps_Component_Generator_Abstract::getOwnInstances($this, $select);
             $ret = $this->_getChildComponentsFromGenerators($generators, $select, $limitCount);
 
-            if (is_null($limitCount) || count($ret) < $limitCount) {
+            if (is_null($limitCount) || count($ret) < $limitCount) { //wenn limit nicht erreicht, inherited generator auch noch fragen
                 if (!is_null($limitCount)) $limitCount -= count($ret);
                 $generators = Vps_Component_Generator_Abstract::getInheritedInstances($this, $select);
                 $ret += $this->_getChildComponentsFromGenerators($generators, $select, $limitCount); //kein array_merge, da wuerden die keys verloren gehen - und die sind eh eindeutig
