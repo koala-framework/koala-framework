@@ -10,9 +10,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             if ($module == 'component_test') {
 
                 //FnF models setzen damit tests nicht in echte tabellen schreiben
-                Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
-                Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
-                Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
+                Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
 
                 Vps_Component_Data_Root::setComponentClass($request->getParam('root'));
 
