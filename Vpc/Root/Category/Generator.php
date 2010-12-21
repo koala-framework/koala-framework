@@ -15,6 +15,8 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     private $_pageHome = null;
     private $_pageChilds = array();
 
+    private $_basesCache = array();
+
     protected function _loadPageData($parentData, $select)
     {
         if ($this->_pageDataLoaded) return;
@@ -176,15 +178,19 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
 
                 $subroot = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+                $subroot = $subroot[0];
 
-                //alle category komponenten der aktuellen domain suchen
-                $bases = Vps_Component_Data_Root::getInstance()->
-                    getComponentsBySameClass($this->getClass(), array('subroot' => $subroot[0]));
+                if (!isset($this->_basesCache[$subroot->componentId])) {
+                    //alle category komponenten der aktuellen domain suchen
+                    $this->_basesCache[$subroot->componentId] = Vps_Component_Data_Root::getInstance()->
+                        getComponentsBySameClass($this->getClass(), array('subroot' => $subroot));
+                }
+
 
                 $allowedPageIds = array();
                 foreach ($pageIds as $pageId) {
                     $allowed = false;
-                    foreach ($bases as $base) {
+                    foreach ($this->_basesCache[$subroot->componentId] as $base) {
                         $id = $pageId;
                         while (!$allowed && isset($this->_pageData[$id])) {
                             $id = $this->_pageData[$id]['parent_id'];
