@@ -124,18 +124,22 @@ class Vps_Component_Data
         } else if ($var == 'parent' && isset($this->_lazyParent)) {
             $ret = Vps_Component_Data_Root::getInstance()->getComponentById($this->_lazyParent, array('ignoreVisible'=>true));
             $this->parent = $ret;
+            unset($this->_lazyParent);
             return $ret;
         } else if ($var == 'generator' && isset($this->_lazyGenerator)) {
             $ret = Vps_Component_Generator_Abstract::getInstance($this->_lazyGenerator[0], $this->_lazyGenerator[1]);
             $this->generator = $ret;
+            unset($this->_lazyGenerator);
             return $ret;
         } else if ($var == 'row' && isset($this->_lazyRow)) {
             $ret = $this->getModel()->getRow($this->_lazyRow);
             $this->row = $ret;
+            unset($this->_lazyRow);
             return $ret;
         } else if ($var == 'chained' && isset($this->_lazyChained)) {
             $ret = Vps_Component_Data_Root::getInstance()->getComponentById($this->_lazyChained, array('ignoreVisible'=>true));
             $this->chained = $ret;
+            unset($this->_lazyChained);
             return $ret;
         } else {
             throw new Vps_Exception("Variable '$var' is not set for ".get_class($this) . " with componentId '{$this->componentId}'");
@@ -619,6 +623,23 @@ class Vps_Component_Data
     public function getPage()
     {
         $page = $this;
+        if (isset($this->_lazyParent)) {
+            //optimierung: hier koennen eventuell ein paar nicht-pages uebersprungen werden
+            $id = $this->_lazyParent;
+            if (is_numeric($id)) {
+                //ist eine page
+            } else {
+                if (strpos($id, '_') === false) {
+                    $id = substr($id, 0, strrpos($id, '-'));
+                    if (!is_numeric($id)) {
+                        return null;
+                    }
+                } else {
+                    $id = substr($id, 0, strrpos($id, '_'));
+                }
+            }
+            return Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+        }
         while ($page && !$page->isPage) {
             $page = $page->parent;
         }
