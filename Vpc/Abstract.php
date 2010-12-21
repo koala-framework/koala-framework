@@ -465,6 +465,14 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     public static function getComponentClassesByParentClass($class)
     {
         if (!is_array($class)) $class = array($class);
+
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'cclsbpc-'.implode('-', $class);
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
         $ret = array();
         foreach (Vpc_Abstract::getComponentClasses() as $c) {
             if (in_array($c, $class) || in_array((strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c), $class)) {
@@ -478,6 +486,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 }
             }
         }
+        apc_add($cacheId, $ret);
         return $ret;
     }
     public static function getComponentClassByParentClass($class)
