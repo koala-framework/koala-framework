@@ -89,7 +89,6 @@ class Vpc_Mail_HtmlParser_Test extends Vps_Test_TestCase
 
     public function testSelector()
     {
-        $this->markTestIncomplete();
         $styles = array(
             array(
                 'tag' => 'p',
@@ -106,8 +105,8 @@ class Vpc_Mail_HtmlParser_Test extends Vps_Test_TestCase
         );
         $html  = '<table><tr><td><p>Blu bla Bli</p></td></tr></table>';
         $html .= '<table class="foo"><tr><td><p>Blu bla Bli</p></td></tr></table>';
-        $expected  = '<table><tr><td><font size="3">Blu bla Bli</font></td></tr></table>';
-        $expected .= '<table class="foo"><tr><td><font size="2">Blu bla Bli</font></td></tr></table>';
+        $expected  = '<table><tr><td><p><font size="3">Blu bla Bli</font></p></td></tr></table>';
+        $expected .= '<table class="foo"><tr><td><p><font size="2">Blu bla Bli</font></p></td></tr></table>';
         $p = new Vpc_Mail_HtmlParser($styles);
         $html = $p->parse($html);
         $this->assertEquals($expected, $html);
