@@ -174,15 +174,16 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             }
 
             if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+
+                $subroot = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+
+                //alle category komponenten der aktuellen domain suchen
+                $bases = Vps_Component_Data_Root::getInstance()->
+                    getComponentsBySameClass($this->getClass(), array('subroot' => $subroot[0]));
+
                 $allowedPageIds = array();
                 foreach ($pageIds as $pageId) {
                     $allowed = false;
-                    $subroot = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
-
-                    //alle category komponenten der aktuellen domain suchen
-                    $bases = Vps_Component_Data_Root::getInstance()->
-                        getComponentsBySameClass($this->getClass(), array('subroot' => $subroot[0]));
-
                     foreach ($bases as $base) {
                         $id = $pageId;
                         while (!$allowed && isset($this->_pageData[$id])) {
