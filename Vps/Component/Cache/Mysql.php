@@ -78,7 +78,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 )));
             $row = $this->getModel('cache')->export(Vps_Model_Db::FORMAT_ARRAY, $select);
             $content = isset($row[0]) ? $row[0]['content'] : null;
-            if ($content) {
+            if (isset($row[0])) {
                 $ttl = min(60*60, time() - $row[0]['expire']);
                 apc_add($cacheId, $content, $ttl);
             }
