@@ -132,7 +132,7 @@ class Vps_Component_Data
             unset($this->_lazyGenerator);
             return $ret;
         } else if ($var == 'row' && isset($this->_lazyRow)) {
-            $ret = $this->getModel()->getRow($this->_lazyRow);
+            $ret = $this->generator->getModel()->getRow($this->_lazyRow);
             $this->row = $ret;
             unset($this->_lazyRow);
             return $ret;
