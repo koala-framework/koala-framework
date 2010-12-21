@@ -15,7 +15,12 @@ class Vpc_TestController extends Vps_Controller_Action
         //FnF models setzen damit tests nicht in echte tabellen schreiben
         Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
 
-        apc_clear_cache('user');
+        if (class_exists('APCIterator')) {
+            $prefix = Vps_Cache::getUniquePrefix();
+            apc_delete_file(new APCIterator('user', '#^'.$prefix.'#'));
+        } else {
+            apc_clear_cache('user');
+        }
         Vps_Component_Data_Root::setComponentClass($this->_getParam('root'));
         $root = Vps_Component_Data_Root::getInstance();
         $root->setFilename('vps/vpctest/'.$this->_getParam('root'));
