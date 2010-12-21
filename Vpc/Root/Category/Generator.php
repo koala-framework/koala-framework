@@ -189,6 +189,9 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                             $id = $this->_pageData[$id]['parent_id'];
                             if ($id == $base->componentId) $allowed = true;
                         }
+                        /*
+                        auskommentiert, das ist langsam
+                        und es muss mir erst wer zeigen *wo* das wirklich benötigt wird
                         if (!$allowed) {
                             $component = Vps_Component_Data_Root::getInstance()
                                 ->getComponentById($id)->parent;
@@ -199,6 +202,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                                 $component = $component->parent;
                             }
                         }
+                        */
                     }
                     if ($allowed) $allowedPageIds[] = $pageId;
                 }
