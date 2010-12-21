@@ -256,8 +256,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (is_array($value)) {
                     if ($value) {
                         foreach ($value as &$v) {
-                            $v = $this->_fixStupidQuoteBug($v);
-                            $v = $this->getAdapter()->quote($v);
+                            if (!is_int($v)) {
+                                $v = $this->_fixStupidQuoteBug($v);
+                                $v = $this->getAdapter()->quote($v);
+                            }
                         }
                         $value = implode(', ', $value);
                         $dbSelect->where($this->_formatField($field, $dbSelect)." IN ($value)");
@@ -274,8 +276,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
             foreach ($whereNotEquals as $field=>$value) {
                 if (is_array($value)) {
                     foreach ($value as &$v) {
-                        $v = $this->_fixStupidQuoteBug($v);
-                        $v = $this->getAdapter()->quote($v);
+                        if (!is_int($v)) {
+                            $v = $this->_fixStupidQuoteBug($v);
+                            $v = $this->getAdapter()->quote($v);
+                        }
                     }
                     $value = implode(', ', $value);
                     $dbSelect->where($this->_formatField($field, $dbSelect)." NOT IN ($value)");
