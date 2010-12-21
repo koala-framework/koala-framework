@@ -12,7 +12,6 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         $ret['componentName'] = trlVps('Search engine referer');
         $ret['childModel'] = 'Vpc_Advanced_SearchEngineReferer_Model';
         $ret['saveReferer'] = true;
-        $ret['viewCache'] = true;
         $ret['flags']['processInput'] = true;
         return $ret;
     }
@@ -20,7 +19,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model(Vpc_Abstract::getSetting($componentClass, 'childModel'));
+        $ret[] = new Vpc_Advanced_SearchEngineReferer_CacheMeta(Vpc_Abstract::getSetting($componentClass, 'childModel'), '{component_id}');
         return $ret;
     }
 
@@ -42,7 +41,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
             $model = $this->getChildModel();
 
             $rowCompare = $model->getRow($model->select()
-                ->whereEquals('component_id', $this->getData()->parent->componentId)
+                ->whereEquals('component_id', $this->getData()->componentId)
                 ->order('id', 'DESC'));
 
             $query = self::getQueryVar($referer);
@@ -56,7 +55,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
                 && strpos($query, 'site:') === false
             ) {
                 $row = $model->createRow();
-                $row->component_id = $this->getData()->parent->componentId;
+                $row->component_id = $this->getData()->componentId;
                 $row->referer_url = $referer;
                 $row->save();
 
@@ -77,7 +76,8 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
     public static function getQueryVar($url)
     {
         $host = parse_url($url, PHP_URL_HOST);
-        $queryString = parse_url($url, PHP_URL_QUERY);
+        $parts = parse_url($url);
+        $queryString = isset($parts['query']) ? $parts['query'] : $parts['fragment'];
         $queryVars = explode('&', $queryString);
         if (count($queryVars)) {
             foreach ($queryVars as $queryVar) {
