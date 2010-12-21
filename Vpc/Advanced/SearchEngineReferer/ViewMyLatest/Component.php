@@ -12,13 +12,13 @@ class Vpc_Advanced_SearchEngineReferer_ViewMyLatest_Component
     protected function _getSelect()
     {
         $select = parent::_getSelect();
-        return $select->whereEquals('component_id', $this->getData()->parent->parent->componentId);
+        return $select->whereEquals('component_id', $this->getData()->parent->componentId);
     }
 
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_GeneratorRow();
+        $ret[] = new Vpc_Advanced_SearchEngineReferer_CacheMeta('Vpc_Advanced_SearchEngineReferer_Model', '{component_id}-view');
         return $ret;
     }
 }
