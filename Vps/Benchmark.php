@@ -137,7 +137,7 @@ class Vps_Benchmark
         if (PHP_SAPI != 'cli') {
             echo '<div style="text-align:left;position:absolute;top:0;right:0;z-index:1000;width:200px;opacity:0.5" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5">';
             echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:1500px;position:absolute;padding:5px;">';
-            echo round(microtime(true) - self::$_startTime, 2)." sec<br />\n";
+            echo round(microtime(true) - self::$_startTime, 3)." sec<br />\n";
             $load = @file_get_contents('/proc/loadavg');
             $load = explode(' ', $load);
             echo "Load: ". $load[0]."<br />\n";
