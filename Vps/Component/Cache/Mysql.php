@@ -67,6 +67,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
         $cacheId = $this->_getCacheId($componentId, $type, $value);
         $content = apc_fetch($cacheId);
         if ($content === false) {
+            Vps_Benchmark::count('comp cache mysql');
             $select = $this->getModel('cache')->select()
                 ->whereEquals('component_id', $componentId)
                 ->whereEquals('type', $type)
