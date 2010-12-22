@@ -21,7 +21,7 @@ class Vpc_Advanced_SearchEngineReferer_Test extends Vpc_TestAbstract
         $model = $ref2->getChildModel();
 
         $oldRow = $model->getRow($model->select()
-            ->whereEquals('component_id', 'root')
+            ->whereEquals('component_id', 'root-referer2')
             ->order('id', 'DESC')
         );
         $this->assertEquals($oldRow->id, 2);
@@ -29,7 +29,7 @@ class Vpc_Advanced_SearchEngineReferer_Test extends Vpc_TestAbstract
         $_SERVER['HTTP_REFERER'] = 'http://www.google.at/search?hl=de&q=foo2';
         $ref2->processInput();
         $newRow = $model->getRow($model->select()
-            ->whereEquals('component_id', 'root')
+            ->whereEquals('component_id', 'root-referer2')
             ->order('id', 'DESC')
         );
         $this->assertEquals($oldRow->id, $newRow->id);
@@ -38,7 +38,7 @@ class Vpc_Advanced_SearchEngineReferer_Test extends Vpc_TestAbstract
         $_SERVER['HTTP_REFERER'] = 'http://www.google.at/search?hl=de&q=fooNew';
         $ref2->processInput();
         $newRow = $model->getRow($model->select()
-            ->whereEquals('component_id', 'root')
+            ->whereEquals('component_id', 'root-referer2')
             ->order('id', 'DESC')
         );
         $this->assertEquals(6, $newRow->id);
@@ -46,7 +46,7 @@ class Vpc_Advanced_SearchEngineReferer_Test extends Vpc_TestAbstract
         $_SERVER['HTTP_REFERER'] = 'http://www.google.at/search?hl=de&q=foo2';
         $ref2->processInput();
         $newRow = $model->getRow($model->select()
-            ->whereEquals('component_id', 'root')
+            ->whereEquals('component_id', 'root-referer2')
             ->order('id', 'DESC')
         );
         $this->assertEquals(7, $newRow->id);
