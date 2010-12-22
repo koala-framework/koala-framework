@@ -5,6 +5,7 @@ class Vps_Model_Tree extends Vps_Model_Db_Proxy
     private $_parentIdsCache;
     private $_recursiveIdsCache;
     protected $_rowClass = 'Vps_Model_Tree_Row';
+    protected $_useRecursiveIdsCache = false;
 
     protected function _init()
     {
@@ -18,6 +19,8 @@ class Vps_Model_Tree extends Vps_Model_Db_Proxy
 
     public function getRecursiveIdsCache()
     {
+        if (!$this->useRecursiveIdsCache()) return false;
+
         if (!isset($this->_recursiveIdsCache)) {
             $this->_recursiveIdsCache = Vps_Cache::factory('Core', 'Apc', array(
                 'automatic_serialization' => true
@@ -28,12 +31,20 @@ class Vps_Model_Tree extends Vps_Model_Db_Proxy
         return $this->_recursiveIdsCache;
     }
 
+    public function useRecursiveIdsCache()
+    {
+        return $this->_useRecursiveIdsCache;
+    }
+
     /**
      * @internal über row aufrufen!
      */
     public function getRecursiveIds($parentId)
     {
-        $ret = $this->getRecursiveIdsCache()->load((string)$parentId);
+        $ret = false;
+        if ($this->useRecursiveIdsCache()) {
+            $ret = $this->getRecursiveIdsCache()->load((string)$parentId);
+        }
         if ($ret === false) {
             if (!isset($this->_parentIdsCache)) {
                 foreach ($this->export(Vps_Model_Interface::FORMAT_ARRAY, array()) as $row) {
@@ -48,7 +59,9 @@ class Vps_Model_Tree extends Vps_Model_Db_Proxy
             }
 
             $ret = array_values(array_unique($ret));
-            $this->getRecursiveIdsCache()->save($ret, (string)$parentId);
+            if ($this->useRecursiveIdsCache()) {
+                $this->getRecursiveIdsCache()->save($ret, (string)$parentId);
+            }
         }
         return $ret;
     }
