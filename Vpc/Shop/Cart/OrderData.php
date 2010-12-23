@@ -95,6 +95,7 @@ class Vpc_Shop_Cart_OrderData
         );
         $shipping = $this->_getShipping($order);
         $ret[] = array(
+            'class' => 'shippingHandling',
             'text' => trlVps('Shipping and Handling').':',
             'amount' => round($shipping/1.2, 2)
         );
