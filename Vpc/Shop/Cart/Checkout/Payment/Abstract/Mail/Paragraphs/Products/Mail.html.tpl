@@ -27,8 +27,28 @@
 <table width="100%" class="moneyInfo" cellspacing="0" cellpadding="0">
     <? foreach ($this->sumRows as $row) { ?>
         <tr>
-            <td align="right"><?=htmlspecialchars($row['text']);?></td>
-            <td width="120" align="right"><?=htmlspecialchars($this->money($row['amount'],''));?></td>
+            <td align="right">
+                <?
+                    if(isset($row['class']) && $row['class']=='valueOfGoods') {
+                        echo '<i>'.htmlspecialchars($row['text']).'</i>';
+                    } else if(isset($row['class']) && $row['class']=='totalAmount') {
+                        echo '<b>'.htmlspecialchars($row['text']).'</b>';
+                    } else {
+                        echo htmlspecialchars($row['text']);
+                    }
+                ?>
+            </td>
+            <td width="120" align="right">
+                <?
+                    if(isset($row['class']) && $row['class']=='valueOfGoods') {
+                        echo '<i>'.htmlspecialchars($this->money($row['amount'],'')).'</i>';
+                    } else if(isset($row['class']) && $row['class']=='totalAmount') {
+                        echo '<b>'.htmlspecialchars($this->money($row['amount'],'')).'</b>';
+                    } else {
+                        echo htmlspecialchars($this->money($row['amount'],''));
+                    }
+                ?>
+            </td>
         </tr>
     <? } ?>
 </table>
