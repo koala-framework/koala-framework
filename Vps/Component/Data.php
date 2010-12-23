@@ -752,6 +752,56 @@ class Vps_Component_Data
         return $d;
     }
 
+    public function getParentComponent($numParent = 1)
+    {
+        if (isset($this->_lazyParent)) {
+            $id = $this->_lazyParent;
+            for ($i=0;$i<$numParent;$i++) {
+                $pos = max(strrpos($id, '_'), strrpos($id, '-'));
+                if ($pos) {
+                    $id = substr($id, 0, $pos);
+                } else {
+                    $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+                    for ($j=0;$j<$numParent-$i-1;$j++) {
+                        $c = $c->parent;
+                    }
+                    return $c;
+                }
+            }
+            return Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+        }
+        $c = $this;
+        for ($i=0;$i<$numParent;$i++) {
+            $c = $c->parent;
+        }
+        return $c;
+    }
+
+    public function getParentComponentId($numParent = 1)
+    {
+        if (isset($this->_lazyParent)) {
+            $id = $this->_lazyParent;
+            for ($i=0;$i<$numParent;$i++) {
+                $pos = max(strrpos($id, '_'), strrpos($id, '-'));
+                if ($pos) {
+                    $id = substr($id, 0, $pos);
+                } else {
+                    $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+                    for ($j=0;$j<$numParent-$i-1;$j++) {
+                        $c = $c->parent;
+                    }
+                    return $c->componentId;
+                }
+            }
+            return $id;
+        }
+        $c = $this;
+        for ($i=0;$i<$numParent;$i++) {
+            $c = $c->parent;
+        }
+        return $c->componentId;
+    }
+
     public function getTitle()
     {
         $title = array();
