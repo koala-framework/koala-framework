@@ -81,15 +81,29 @@ class Vpc_Shop_Cart_OrderData
         $ret = array();
         $subTotal = $order->getSubTotal();
         $ret[] = array(
-            'class' => 'subtotal',
-            'text' => trlVps('Subtotal').':',
+            'class' => 'valueOfGoods',
+            'text' => trlVps('value of goods').':',
             'amount' => $subTotal
+        );
+        $ret[] = array(
+            'text' => trlVps('net amount').':',
+            'amount' => round($subTotal/1.2, 2)
+        );
+        $ret[] = array(
+            'text' => trlVps('+20% VAT').':',
+            'amount' => round($subTotal - $subTotal/1.2, 2)
         );
         $shipping = $this->_getShipping($order);
         $ret[] = array(
             'text' => trlVps('Shipping and Handling').':',
-            'amount' => $shipping
+            'amount' => round($shipping/1.2, 2)
         );
+        if ($shipping) {
+            $ret[] = array(
+                'text' => trlVps('+20% VAT').':',
+                'amount' => round($shipping - $shipping/1.2, 2)
+            );
+        }
         $ret = array_merge($ret, $this->_getAdditionalSumRows($order, $subTotal+$shipping));
         $ret[] = array(
             'class' => 'totalAmount',
