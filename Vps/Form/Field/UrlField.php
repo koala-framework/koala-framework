@@ -10,8 +10,10 @@ class Vps_Form_Field_UrlField extends Vps_Form_Field_TextField
     protected function _processLoaded($value)
     {
         $value = parent::_processLoaded($value);
-        $punycode = new Vps_Util_Punycode();
-        $value = $punycode->decode($value);
+        if ($value != 'http://') {
+            $punycode = new Vps_Util_Punycode();
+            $value = $punycode->decode($value);
+        }
         return $value;
     }
 
