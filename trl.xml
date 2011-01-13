@@ -6143,5 +6143,20 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Darf nicht negativ sein</de>
 <id>1566</id>
 </text>
+<text>
+<en>value of goods</en>
+<de>Warenwert</de>
+<id>1567</id>
+</text>
+<text>
+<en>net amount</en>
+<de>Nettobetrag</de>
+<id>1568</id>
+</text>
+<text>
+<en>+20% VAT</en>
+<de>+20% MwSt</de>
+<id>1569</id>
+</text>
 </trl>
 
