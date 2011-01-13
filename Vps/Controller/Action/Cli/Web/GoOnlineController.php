@@ -254,43 +254,19 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             Vps_Registry::set('testServerConfig', $cfg);
             $result = $runner->doRun(new Vps_Test_TestSuite(), $arguments);
             if (!$result->wasSuccessful()) {
-                if ($testConfig) {
-                    if ($useSvn) {
-                        $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
-                        $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
-                    } else {
-                        $this->_systemSshVpsWithSubSections("git checkout-master", 'test');
-                    }
-                }
-                throw new Vps_ClientException("Tests failed");
+                $this->_revertOnTestFailure($testConfig, $useSvn);
             }
 
             // VPS
-            $dir = getcwd();
-            chdir(VPS_PATH);
-            $config = Vps_Registry::get('config');
-            $trl = Vps_Trl::getInstance();
-            Vps_Registry::set('trl', new Vps_Trl());
-            $cfg = new Vps_Config_Web(Vps_Setup::getConfigSection());
-            Vps_Registry::set('config', $cfg);
-            Vps_Registry::set('testDomain', $cfg->server->domain);
-            Vps_Registry::set('testServerConfig', $cfg);
-            $result = $runner->doRun(new Vps_Test_TestSuite(), $arguments);
-            if (!$result->wasSuccessful()) {
-                if ($testConfig) {
-                    if ($useSvn) {
-                        $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
-                        $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
-                    } else {
-                        $this->_systemSshVpsWithSubSections("git checkout-master", 'test');
-                    }
-                }
-                throw new Vps_ClientException("Tests failed");
+            $cmd = 'php '.VPS_PATH.'/bootstrap.php test';
+            $cmd .= ' --exclude-group=skipGoOnline';
+            $cmd .= ' --retry-on-error';
+            $cmd .= ' --stop-on-failure';
+            if ($this->_getParam('verbose')) $cmd .= ' --verbose';
+            passthru($cmd, $retPassthru);
+            if ($retPassthru !== 0) {
+                $this->_revertOnTestFailure($testConfig, $useSvn);
             }
-
-            chdir($dir);
-            Vps_Registry::set('config', $config);
-            Vps_Registry::set('trl', $trl);
         }
 
         if ($hasTestHost || $hasTestSubsections) {
@@ -416,6 +392,20 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
 
         exit;
     }
+
+    private function _revertOnTestFailure($testConfig, $useSvn)
+    {
+        if ($testConfig) {
+            if ($useSvn) {
+                $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
+                $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
+            } else {
+                $this->_systemSshVpsWithSubSections("git checkout-master", 'test');
+            }
+        }
+        throw new Vps_Exception_Client("Tests failed");
+    }
+
     private function _hasRevisionInHistory($project, $version, $revision)
     {
         if (!file_exists('.svn')) {
