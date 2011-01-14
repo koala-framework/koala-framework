@@ -24,4 +24,15 @@ class Vpc_Shop_Products_View_Component extends Vpc_Shop_Products_ViewWithoutAddT
             $addToCart->getComponent()->processInput($postData);
         }
     }
+    public function getPartialCacheVars($nr)
+    {
+        $ret = parent::getPartialCacheVars($nr);
+        // Wenn sich bei einer View ändert, was angezeigt wird
+        $ret[] = array(
+            'model' => 'Vps_Component_FieldModel',
+            'field' => 'component_id',
+            'value' => $this->getData()->parent->componentId
+        );
+        return $ret;
+    }
 }
