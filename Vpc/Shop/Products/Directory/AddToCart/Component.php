@@ -1,6 +1,8 @@
 <?php
 class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Form_Component
 {
+    private $_actionUrl;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -19,6 +21,18 @@ class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Form_Component
         $this->_form = $addToCart->getComponent()->getForm();
         $this->_form->setName('order'.$id);
         parent::_initForm();
+    }
+
+    public function setActionUrl($url)
+    {
+        $this->_actionUrl = $url;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        if ($this->_actionUrl) $ret['action'] = $this->_actionUrl;
+        return $ret;
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
