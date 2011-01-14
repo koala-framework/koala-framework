@@ -12,7 +12,6 @@ class Vpc_Shop_Products_View_Component extends Vpc_Shop_Products_ViewWithoutAddT
         $ret = parent::getPartialVars($partial, $nr, $info);
         $ret['item']->addToCart = $this->getData()->parent->getComponent()
             ->getItemDirectory()->getChildComponent('-'.$ret['item']->row->id);
-        $ret['item']->addToCart->getComponent()->setActionUrl($this->getData()->url);
         return $ret;
     }
 

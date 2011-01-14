@@ -1,8 +1,6 @@
 <?php
 class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Form_Component
 {
-    private $_actionUrl;
-
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -31,7 +29,7 @@ class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Form_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        if ($this->_actionUrl) $ret['action'] = $this->_actionUrl;
+        $ret['action'] = '#';
         return $ret;
     }
 
