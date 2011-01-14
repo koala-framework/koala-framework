@@ -15,10 +15,11 @@ class Vpc_Shop_Products_Detail_Component extends Vpc_Directories_Item_Detail_Com
             'column' => 'component'
         );
         $ret['cssClass'] = 'webStandard';
-        $ret['placeholder']['backToShop'] = trlVps('Back to shop');
+        $ret['placeholder']['back'] = trlVps('Back');
         $ret['assetsAdmin']['dep'][] = 'VpsFormDateTimeField';
         return $ret;
     }
+
     public static function modifyItemData(Vps_Component_Data $item)
     {
         $item->previewImage = $item->getChildComponent('-image');
