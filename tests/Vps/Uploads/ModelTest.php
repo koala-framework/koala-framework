@@ -2,13 +2,14 @@
 /**
  * @group Uploads
  */
-class Vps_Uploads_ModelTest extends PHPUnit_Framework_TestCase
+class Vps_Uploads_ModelTest extends Vps_Test_TestCase
 {
     private $_model;
     private $_uploadsModel;
-    
+
     public function setUp()
     {
+        parent::setUp();
         $this->_uploadsModel = new Vps_Uploads_TestModel();
 
         $this->_model = new Vps_Model_FnF(array(
@@ -59,7 +60,7 @@ class Vps_Uploads_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('txt', $row->extension);
         unlink($file);
     }
-    
+
     public function testCopyFile()
     {
         $file = tempnam('/tmp', 'testupload');
@@ -98,23 +99,23 @@ class Vps_Uploads_ModelTest extends PHPUnit_Framework_TestCase
 
         $row = $this->_uploadsModel->createRow();
         $row->writeFile('<html><head></head><body></body></html>', 'foo', 'html');
-        $this->assertEquals('text/html', $row->mime_type);
+        $this->assertContains('text/html', $row->mime_type);
 
         $row = $this->_uploadsModel->createRow();
         $row->writeFile('<html><head></head><body>bäm ähm</body></html>', 'foo', 'html');
-        $this->assertEquals('text/html', $row->mime_type);
+        $this->assertContains('text/html', $row->mime_type);
 
         $row = $this->_uploadsModel->createRow();
         $row->copyFile(VPS_PATH.'/images/welcome/ente.jpg', 'foo', 'jpg');
-        $this->assertEquals('image/jpeg', $row->mime_type);
+        $this->assertContains('image/jpeg', $row->mime_type);
 
         $row = $this->_uploadsModel->createRow();
         $row->copyFile(VPS_PATH.'/images/links.png', 'foo', 'png');
-        $this->assertEquals('image/png', $row->mime_type);
+        $this->assertContains('image/png', $row->mime_type);
 
         $row = $this->_uploadsModel->createRow();
         $row->copyFile(VPS_PATH.'/images/spacer.gif', 'foo', 'gif');
-        $this->assertEquals('image/gif', $row->mime_type);
+        $this->assertContains('image/gif', $row->mime_type);
     }
 
 
@@ -148,7 +149,7 @@ class Vps_Uploads_ModelTest extends PHPUnit_Framework_TestCase
         $row->copyFile(VPS_PATH.'/images/welcome/ente.jpg', 'foo', 'jpg');
         $info = $row->getFileInfo();
         $this->assertEquals(2, $info['uploadId']);
-        $this->assertEquals('image/jpeg', $info['mimeType']);
+        $this->assertContains('image/jpeg', $info['mimeType']);
         $this->assertEquals('foo', $info['filename']);
         $this->assertEquals('jpg', $info['extension']);
         $this->assertEquals(2266, $info['fileSize']);

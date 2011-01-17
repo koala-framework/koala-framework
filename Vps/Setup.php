@@ -327,7 +327,7 @@ class Vps_Setup
 
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
-            Vps_Registry::get('trl')->setUseUserLanguage(false);
+            Vps_Trl::getInstance()->setUseUserLanguage(false);
             self::_setLocale();
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
@@ -341,6 +341,7 @@ class Vps_Setup
                 header('Location: '.$data->url);
                 exit;
             }
+
             $page = $data->getComponent();
             $page->sendContent();
 
@@ -383,6 +384,56 @@ class Vps_Setup
             }
             Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
         }
+    }
+
+    /**
+     * Proxy, der zB für cross-domain ajax requests verwendet werden kann
+     *
+     * @param string|array $hosts Erlaubte Hostnamen (RegExp erlaubt, ^ vorne und $ hinten werden autom. angefügt)
+     */
+    public static function dispatchProxy($hostnames)
+    {
+        if (empty($_SERVER['REDIRECT_URL'])) return;
+
+        if (!preg_match('#^/vps/proxy/?$#i', $_SERVER['REDIRECT_URL'])) return;
+
+        if (is_string($hostnames)) {
+            $hostnames = array($hostnames);
+        }
+
+        $proxyUrl = $_REQUEST['proxyUrl'];
+        $proxyPostVars = $_POST;
+        $proxyGetVars = $_GET;
+        if (array_key_exists('proxyUrl', $proxyPostVars)) unset($proxyPostVars['proxyUrl']);
+        if (array_key_exists('proxyUrl', $proxyGetVars)) unset($proxyGetVars['proxyUrl']);
+
+        // host checking
+        $proxyHost = parse_url($proxyUrl, PHP_URL_HOST);
+        $matched = false;
+        foreach ($hostnames as $hostname) {
+            if (preg_match('/^'.$hostname.'$/i', $proxyHost)) {
+                $matched = true;
+                break;
+            }
+        }
+        if (!$matched) return;
+
+        // proxying
+        $http = new Zend_Http_Client($proxyUrl);
+        if (count($_POST)) {
+            $http->setMethod(Zend_Http_Client::POST);
+        } else {
+            $http->setMethod(Zend_Http_Client::GET);
+        }
+        if (count($_GET)) $http->setParameterGet($proxyGetVars);
+        if (count($_POST)) $http->setParameterPost($proxyPostVars);
+        $response = $http->request();
+        $headers = $response->getHeaders();
+        if ($headers && !empty($headers['Content-type'])) {
+            header("Content-Type: ".$headers['Content-type']);
+        }
+        echo $response->getBody();
+        exit;
     }
 
     public static function getHost($includeProtocol = true)

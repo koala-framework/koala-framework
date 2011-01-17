@@ -76,7 +76,7 @@ class Vps_Util_Model_Feed_Row_Feed extends Vps_Model_Row_Data_Abstract
                 $str = $tidy->value;
                 $str = preg_replace('#(<?xml[^>]* encoding=["\'])([^"\']*)(["\'])#', '\1utf-8\3', $str);
                 $str = str_replace("\0", '', $str);
-                $this->_xml = simplexml_load_string($str, 'SimpleXMLElement');
+                $this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
             }
         }
 

@@ -21,7 +21,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['method'] = 'post';
 
         //todo: wenn mehrere verbessern
-        $ret['assets']['dep'][] = 'ExtCore';
+        $ret['assets']['dep'][] = 'ExtElement';
         $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
         $ret['assets']['files'][] = 'vps/Vps/Form/Field/MultiCheckbox/Component.js';
         $ret['assets']['files'][] = 'vps/Vpc/Form/Component.js';
@@ -152,7 +152,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         if (!$this->_initialized) {
             $this->_initialized = true;
             $this->_initForm();
-            $this->_form->trlStaticExecute($this->getData()->getLanguage());
+            if ($this->_form) $this->_form->trlStaticExecute($this->getData()->getLanguage());
         }
         return $this->_form;
     }
@@ -172,7 +172,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         $ret['isPosted'] = $this->_posted;
         $ret['showSuccess'] = false;
-        $ret['errors'] = $this->getErrors();
+        $ret['errors'] = Vps_Form::formatValidationErrors($this->getErrors());
         if ($this->isSaved()) {
             if (!$ret['errors'] && $class) {
                 $ret['showSuccess'] = true;
@@ -185,7 +185,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $dec = $this->_getSetting('decorator');
         if ($dec && is_string($dec)) {
             $dec = new $dec();
-            $ret['form'] = $dec->processItem($ret['form']);
+            $ret['form'] = $dec->processItem($ret['form'], $this->getErrors());
         }
 
         $ret['formName'] = $this->getData()->componentId;

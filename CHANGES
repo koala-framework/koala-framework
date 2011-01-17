@@ -44,13 +44,16 @@ möglicherweise nicht kompatible Änderungen:
 - .webStandard strong/em/ol/ul/li ist jetzt im vps und sollte in webs entfernt werden
 - newsListView und eventsListView Teaser haben jetzt ein nl2br
 - showInPageTreeAdmin flag gibts nicht mehr, ist jetzt nur noch ein generatorFlag
-
+- Image Dimensionen: wenn width oder height 0 ist muss 'deform' verwendet werden
+- Neue tdpdf-Version (5.9.023). PDFs gehören auf jeden Fall überprüft
 == 1.10 ==
 Erstellt: 09.06.10
 Stable: 16.08.10
 Neue Features:
 - Generator Plugins
 - Generator Plugin: Tags
+- Kaltstart Performance
+- Vpc_Form: vpsFieldError klasse wird für Felder mit Validierungs-Fehler gesetzt
 - needsParentComponentClass Setting, damit wird die $parentComponentClass bei getSettings
   übergeben
 - ExtConfig ist eigene Klasse - statt Admin::getExtConfig, setzen über extConfig Setting
@@ -68,6 +71,8 @@ möglicherweise nicht kompatible Änderungen:
 - editComponents werden auch bei Paragraphs berücksichtigt
 - Vpc_Basic_Flash_Component gibts nicht mehr, stattdessen Flash_Code und Flash_Upload
   Vpc_Basic_Flash_Component mit Upload (nicht Url) wird nicht autom. konvertiert
+- Form_Field::validate gibt jetzt nicht nur mehr ein array mit Validierungsmessages zurueck sondern
+  ein array mit field und message
 - Vpc_Columns::getSettings beöntigt $parentComponentClass Argument, muss bei abgeleiteten
   durchgeschliffen werden
 - Vpc_List_Switch hat options, müssen im Template ausgegeben werden

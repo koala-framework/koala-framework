@@ -3981,7 +3981,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Do you really wish to remove this paragraph?</en>
-<de>Wollen Sie diesen Absatz wirklich löschen?</de>
+<de>Wollen Sie diesen Absatz wirklich l&#xF6;schen?</de>
 <id>1102</id>
 </text>
 <text>
@@ -6015,7 +6015,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Voucher Code</en>
-<de>Gutscheint Code</de>
+<de>Gutschein Code</de>
 <id>1545</id>
 </text>
 <text>
@@ -6052,8 +6052,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Your Voucher has been successfully redeemed.</en>
-<de>Ihr Gutschein wurde erfolgreich eingelöst.</de>
-<id>1552</id>
+<de>Ihr Gutschein wurde erfolgreich eingel&#xF6;st.</de>
+<id>1634</id>
 </text>
 <text>
 <en>Set password</en>
@@ -6247,16 +6247,16 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Contains video</en>
 <de>Beinhaltet ein Video</de>
-<id>1564</id>
+<id>1635</id>
 </text>
 <text>
 <en>Invalid search terms</en>
-<de>Ungültige Suchbegriffe</de>
+<de>Ung&#xFC;ltige Suchbegriffe</de>
 <id>1630</id>
 </text>
 <text>
 <en>Search results can be extended using wildcards.</en>
-<de>Die Suchergebnisse können durch die Verwendung von Wildcards erweitert werden.</de>
+<de>Die Suchergebnisse k&#xF6;nnen durch die Verwendung von Wildcards erweitert werden.</de>
 <id>1631</id>
 </text>
 <text>
@@ -6266,8 +6266,28 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>No results found for &lt;strong&gt;"{0}"&lt;/strong&gt;</en>
-<de>Keine Ergebnisse gefunden für &lt;strong&gt;"{0}"&lt;/strong&gt;</de>
+<de>Keine Ergebnisse gefunden f&#xFC;r &lt;strong&gt;"{0}"&lt;/strong&gt;</de>
 <id>1633</id>
 </text>
-
+<text>
+<en>Must not be negative</en>
+<de>Darf nicht negativ sein</de>
+<id>1637</id>
+</text>
+<text>
+<en>value of goods</en>
+<de>Warenwert</de>
+<id>1567</id>
+</text>
+<text>
+<en>net amount</en>
+<de>Nettobetrag</de>
+<id>1568</id>
+</text>
+<text>
+<en>+20% VAT</en>
+<de>+20% MwSt</de>
+<id>1569</id>
+</text>
 </trl>
+

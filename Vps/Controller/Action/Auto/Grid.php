@@ -523,6 +523,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID)) continue;
                 $invalid = $column->validate($row, $submitRow);
                 if ($invalid) {
+                    $invalid = Vps_Form::formatValidationErrors($invalid);
                     throw new Vps_ClientException(implode("<br />", $invalid));
                 }
                 $column->prepareSave($row, $submitRow);

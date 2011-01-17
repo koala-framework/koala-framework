@@ -2,7 +2,7 @@
 /**
  * @group Form_File
  */
-class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
+class Vps_Form_File_FileTest extends Vps_Test_TestCase
 {
     private $_model;
     private $_uploadsModel;
@@ -11,7 +11,7 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        Vps_Model_Abstract::clearInstances();
+        parent::setUp();
         $this->_uploadsModel = Vps_Model_Abstract::getInstance('Vps_Form_File_UploadsTestModel');
 
         $this->_model = new Vps_Model_FnF(array(
@@ -206,16 +206,7 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
     public function testSaveDisabled1()
     {
         $this->_field->setSave(false);
-        $this->_testSaveDisabled();
-    }
-    public function testSaveDisabled2()
-    {
-        $this->_field->setInternalSave(false);
-        $this->_testSaveDisabled();
-    }
 
-    private function _testSaveDisabled()
-    {
         $post = array(
             'File_upload_id' => '1',
             'File_del' => 1,

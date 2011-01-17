@@ -192,7 +192,10 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         foreach ($cursor as $row) {
             $ret[] = $row['id']; //TODO: dynam.
         }
-        if ($profiler instanceof Vps_Db_Profiler) $profiler->getLogger()->info('(ids) count result '.count($ret));
+        if ($profiler instanceof Vps_Db_Profiler) {
+            $profiler->getLogger()->info('(ids) count result '.count($ret));
+            //$profiler->getLogger()->debug(print_r($cursor->explain(), true));
+        }
         $p = $profiler->queryEnd($p);
         return $ret;
     }
@@ -230,9 +233,14 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         $row = $this->_collection->findOne($this->_getQuery($select));
         $p = $profiler->queryEnd($p);
         if (!$row) return null;
-        $this->_data[$row['_id']->__toString()] = $row;
+
+        $id = $row['_id'];
+        if ($id instanceof MongoId) $id = $id->__toString();
+        if (!isset($this->_data[$id])) {
+            $this->_data[$id] = $row;
+        }
         $ret =  new $this->_rowClass(array(
-            'data' => $row,
+            'data' => $this->_data[$id],
             'model' => $this
         ));
         return $ret;
@@ -250,16 +258,33 @@ class Vps_Model_Mongo extends Vps_Model_Abstract
         $keys = array();
         $cursor = $this->_getCursor($select);
 
+
         $profiler = Vps_Registry::get('db')->getProfiler();
         $p = $profiler->queryStart($this->_collection->__toString()."\n".Zend_Json::encode($this->_getQuery($select)));
         foreach($cursor as $row) {
-            if (!isset($this->_data[$row['_id']->__toString()])) {
-                $this->_data[$row['_id']->__toString()] = $row;
+            $id = $row['_id'];
+            if ($id instanceof MongoId) $id = $id->__toString();
+            if (!isset($this->_data[$id])) {
+                $this->_data[$id] = $row;
             }
-            $keys[] = $row['_id']->__toString();
+            $keys[] = $id;
         }
-        if ($profiler instanceof Vps_Db_Profiler) $profiler->getLogger()->debug('(rows) count result '.count($keys));
         $p = $profiler->queryEnd($p);
+        if ($profiler instanceof Vps_Db_Profiler) {
+            $profiler->getLogger()->debug('(rows) count result '.count($keys));
+            /*
+            $profiler->getLogger()->debug(print_r($cursor->explain(), true));
+            $i = 0;
+            foreach ($keys as $id) {
+                $i++;
+                $profiler->getLogger()->debug(print_r($this->_data[$id], true));
+                if ($i > 10) {
+                    $profiler->getLogger()->debug('...');
+                    break;
+                }
+            }
+            */
+        }
 
         $ret =  new $this->_rowsetClass(array(
             'dataKeys' => $keys,
