@@ -17,7 +17,6 @@ class Vps_Media
             }
         }
         if (is_null($time)) {
-            self::_getOutputWithoutCheckingIsValid($class, $id, $type);
             $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
             if (!$time) $time = time();
         }
@@ -60,11 +59,6 @@ class Vps_Media
             );
         }
         return null;
-    }
-
-    public static function setOutputCache(Zend_Cache_Core $cache)
-    {
-        self::$_ouputCache = $cache;
     }
 
     public static function getOutputCache()

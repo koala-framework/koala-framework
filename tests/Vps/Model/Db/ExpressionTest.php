@@ -2,7 +2,7 @@
 /**
  * @group Model_Db_Expr
  */
-class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Db_ExpressionTest extends Vps_Test_TestCase
 {
     private $_table;
     private $_dbSelect;
@@ -10,6 +10,7 @@ class Vps_Model_Db_ExpressionTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
         $this->_table = $this->getMock('Vps_Model_Db_Table',
             array('_setupMetadata', '_setupPrimaryKey'),
             array('db' => new Vps_Model_Db_TestAdapter()), '', true);

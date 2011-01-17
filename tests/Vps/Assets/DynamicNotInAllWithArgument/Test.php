@@ -4,11 +4,12 @@
  * @group slow
  * slow weil sie den assets cache löschen
  */
-class Vps_Assets_DynamicNotInAllWithArgument_Test extends PHPUnit_Framework_TestCase
+class Vps_Assets_DynamicNotInAllWithArgument_Test extends Vps_Test_TestCase
 {
     private $_loader;
     public function setUp()
     {
+        parent::setUp();
         Vps_Assets_DynamicNotInAllWithArgument_Asset::$file = tempnam('/tmp', 'asset');
         file_put_contents(Vps_Assets_DynamicNotInAllWithArgument_Asset::$file, 'a { color: {arg}; }');
         Vps_Assets_Cache::getInstance()->clean();
@@ -21,6 +22,7 @@ class Vps_Assets_DynamicNotInAllWithArgument_Test extends PHPUnit_Framework_Test
     public function tearDown()
     {
         unlink(Vps_Assets_DynamicNotInAllWithArgument_Asset::$file);
+        parent::tearDown();
     }
 
     public function testIt()

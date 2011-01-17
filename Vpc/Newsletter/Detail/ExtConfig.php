@@ -48,6 +48,11 @@ class Vpc_Newsletter_Detail_ExtConfig extends Vps_Component_Abstract_ExtConfig_F
                     'controllerUrl'         => $this->getControllerUrl('Mailing'),
                     'title'                 => trlVps('Mailing'),
                     'tbar'                  => array()
+                ),
+                'statistics' => array(
+                    'xtype'                 => 'vps.autogrid',
+                    'controllerUrl'         => $this->getControllerUrl('Statistics'),
+                    'title'                 => trlVps('Statistics')
                 )
             )
         ));

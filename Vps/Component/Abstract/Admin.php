@@ -48,7 +48,7 @@ class Vps_Component_Abstract_Admin
                 $class = str_replace('/', '_', $item->getPath());
                 $class = strrchr($class, 'Vpc_');
                 $class .= '_' . str_replace('.php', '', $item->getFilename());
-                if (Vps_Loader::classExists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
+                if (class_exists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
                     $return[] = $class;
                 }
 
@@ -158,26 +158,59 @@ class Vps_Component_Abstract_Admin
      */
     protected function _addResourcesBySameClass(Vps_Acl $acl)
     {
+        $dropdownName = 'vpc_'.$this->_class;
+
+        //BEGIN hack
+        //TODO im 1.11 gscheite lösung
+        $isTrl = is_instance_of($this->_class, 'Vpc_Chained_Trl_Component');
+        $hasTrl = false;
+        foreach (Vpc_Abstract::getComponentClasses() as $cls) {
+            if (is_instance_of($cls, 'Vpc_Chained_Trl_Component')) {
+                if (Vpc_Abstract::getSetting($cls, 'masterComponentClass') == $this->_class) {
+                    $dropdownName = 'vpc_'.$cls;
+                    $hasTrl = true;
+                    break;
+                }
+            }
+        }
+        /*
+            class Vps_Component_MenuConfig_Abstract {
+                public function __construct(...)
+                public static function getInstance($componentclass);
+                public function getPriority(); //trls haben niedrige priorität
+                abstract public function addResources(Vps_Acl $acl);
+            }
+            $ret['menuConfig'] = 'Vps_Component_MenuConfig_SameClass'; //fürs deutsche
+            $ret['menuConfig'] = 'Vps_Component_MenuConfig_Trl_SameClass'; //fürs trls, erstellt ein dropdown und verschiebt auch das deutsche da hinein
+
+            $ret['menuConfigDropdownName'] = '';
+            $ret['menuConfig'] = 'Vps_Component_MenuConfig_Dropdown_SameClass'; //fürs deutsche
+        */
+        //END hack
+
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
         $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
-        if (count($components) > 1) {
-            if (!$acl->has('vpc_news')) {
+        if ($hasTrl  || count($components) > 1) {
+            if (!$acl->has($dropdownName)) {
                 $acl->add(
                     new Vps_Acl_Resource_MenuDropdown(
-                        'vpc_news', array('text'=>$name, 'icon'=>$icon)
+                        $dropdownName, array('text'=>$name, 'icon'=>$icon)
                     ), 'vps_component_root'
                 );
             }
             foreach ($components as $c) {
                 $t = $c->getTitle();
-                if (!$t) $t = $c->componentId;
+                if (!$t) $t = $name;
+                if ($hasTrl || $isTrl) {
+                    $t .= ' ('.$c->getLanguageData()->name.')';
+                }
                 $acl->add(
                     new Vps_Acl_Resource_Component_MenuUrl(
                         $c, array('text'=>$t, 'icon'=>$icon)
-                    ), 'vpc_news'
+                    ), $dropdownName
                 );
             }
         } else if (count($components) == 1) {

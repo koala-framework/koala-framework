@@ -4,16 +4,18 @@
  * @group Service
  * @group Model_Service
  */
-class Vps_Model_Service_ModelTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Service_ModelTest extends Vps_Test_TestCase
 {
     private $_client;
 
     public function setUp()
     {
+        parent::setUp();
         $this->_client = $this->getMock('Vps_Srpc_Client',
             array('getColumns', 'getPrimaryKey', 'getRow', 'countRows', 'getRows'),
             array(array('serverUrl' => 'invalid'.uniqid())), '', true
         );
+        parent::setUp();
     }
 
     public function testIsEqual()

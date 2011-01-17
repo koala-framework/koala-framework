@@ -774,7 +774,7 @@ class Vps_Component_Data
     {
         $langData = $this->getLanguageData();
         if (!$langData) {
-            return Vps_Registry::get('trl')->getWebCodeLanguage();
+            return Vps_Trl::getInstance()->getWebCodeLanguage();
         } else {
             return $langData->getComponent()->getLanguage();
         }
@@ -782,47 +782,47 @@ class Vps_Component_Data
 
     public function trlStaticExecute($trlStaticData)
     {
-        return Zend_Registry::get('trl')->trlStaticExecute($trlStaticData, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlStaticExecute($trlStaticData, $this->getLanguage());
     }
 
     public function trl($string, $text = array())
     {
-        return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+        return Vps_Trl::getInstance()->trl($string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
     }
 
     public function trlc($context, $string, $text = array())
     {
-        return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
     }
 
     public function trlp($single, $plural, $text =  array())
     {
-        return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
     }
 
     public function trlcp($context, $single, $plural, $text = array())
     {
-        return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
     }
 
     public function trlVps($string, $text = array())
     {
-        return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+        return Vps_Trl::getInstance()->trl($string, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
     }
 
     public function trlcVps($context, $string, $text = array())
     {
-        return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
     }
 
     public function trlpVps($single, $plural, $text =  array())
     {
-        return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
     }
 
     public function trlcpVps($context, $single, $plural, $text = array())
     {
-        return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
     }
 
     public function toDebug()
