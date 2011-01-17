@@ -139,7 +139,7 @@ abstract class Vps_Util_Rrd_File
         } else {
             $cmd .= "N:";
         }
-        $cmd .= implode(':', $values);
+        $cmd .= str_replace(' ', '', implode(':', $values));
 
         $ret = null;
         system($cmd, $ret);
