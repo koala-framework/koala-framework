@@ -54,7 +54,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
 
-        foreach (array_keys($this->_settings['component']) as $key) {
+        foreach (array_keys($this->_getChildComponentClasses($parentData)) as $key) {
             if ($this->_acceptKey($key, $select, $parentData)) {
                 $ret[] = $key;
             }
@@ -67,12 +67,13 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
 
     protected function _acceptKey($key, $select, $parentData)
     {
-        if (isset($this->_settings['component'][$key]) && !$this->_settings['component'][$key]) {
+        $components = $this->_getChildComponentClasses($parentData);
+        if (isset($components[$key]) && !$components[$key]) {
             return false;
         }
         if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
             $value = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-            if (!in_array($this->_settings['component'][$key], $value)) {
+            if (!in_array($components[$key], $value)) {
                 return false;
             }
         }
