@@ -102,6 +102,14 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
 
     private function _checkTheSizes($html, $smallImageNum, $smallWidth, $smallHeight)
     {
+        // getMediaOutput aufrufen, damit Cache-Meta geschrieben wird (wegen d0cf3812b20fa19c40617ac5b08ed08a18ff808d)
+        // muss so gemacht werden, weil der request über getimagesize weiter unten
+        // nicht das FnF-Cache Model dieses Request schreiben kann
+        preg_match('/.*\/media\/([\w\.]+)\/([\w\-]+)\/(\w+)\/.*/', $html, $matches);
+        $class = $matches[1];
+        $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+        call_user_func(array($classWithoutDot, 'getMediaOutput'), $matches[2], $matches[3], $class);
+
         $this->assertRegExp('#<img.+?src=".+?'.$smallImageNum.'\.jpg.+width="'.$smallWidth.'".+height="'.$smallHeight.'"#ms', $html);
 
         preg_match('#src="(.+?)"#ms', $html, $matches);
