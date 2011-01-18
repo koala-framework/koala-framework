@@ -569,10 +569,14 @@ abstract class Vps_Component_Generator_Abstract
         return count($this->getChildData($parentData, $select));
     }
 
+    protected function _getChildComponentClasses($parentData = null)
+    {
+        return $this->_settings['component'];
+    }
 
     protected function _getChildComponentClass($key, $parentData)
     {
-        $c = $this->_settings['component'];
+        $c = $this->_getChildComponentClasses($parentData);
         if ($key) {
             if (!isset($c[$key])) {
                 throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found; set are ".implode(', ', array_keys($c)));

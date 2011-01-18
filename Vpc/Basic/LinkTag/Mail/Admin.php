@@ -1,11 +1,11 @@
 <?php
 class Vpc_Basic_LinkTag_Mail_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
 {
-    public function setup()
+    // wird bei linklist verwendet, damit url richtig ausgegeben wird
+    public function componentToString($data)
     {
-        $fields['mail']     = "varchar(255) NOT NULL";
-        $fields['subject']  = "varchar(255) NOT NULL";
-        $fields['text']     = "text NOT NULL";
-        $this->createFormTable('vpc_basic_link_mail', $fields);
+        $ret = parent::componentToString($data);
+        $punycode = new Vps_Util_Punycode();
+        return $punycode->decode($ret);
     }
 }
