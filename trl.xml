@@ -6066,7 +6066,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1629</id>
 </text>
 <text>
-<<<<<<< HEAD
 <en>Contains video</en>
 <de>Beinhaltet ein Video</de>
 <id>1635</id>
@@ -6090,10 +6089,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>No results found for &lt;strong&gt;"{0}"&lt;/strong&gt;</en>
 <de>Keine Ergebnisse gefunden f&#xFC;r &lt;strong&gt;"{0}"&lt;/strong&gt;</de>
 <id>1633</id>
-=======
-<en>Text/Image - Alignment</en>
-<id>1565</id>
->>>>>>> 1.10
 </text>
 <text>
 <en>Must not be negative</en>
