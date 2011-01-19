@@ -25,4 +25,11 @@ class Vpc_Shop_Products_Detail_Component extends Vpc_Directories_Item_Detail_Com
         $item->previewImage = $item->getChildComponent('-image');
         $item->previewText = $item->getChildComponent('-text');
     }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['addToCart'] = $this->getData()->getChildComponent('-addToCart');
+        return $ret;
+    }
 }
