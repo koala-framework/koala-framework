@@ -52,6 +52,7 @@ class Vpc_Shop_AddToCart_OrderProductData extends Vpc_Shop_AddToCartAbstract_Ord
             );
         }
         $form->prepend(new Vps_Form_Field_Select('shop_product_price_id', trlVps('Product')))
-            ->setValues($data);
+            ->setValues($data)
+            ->setAllowBlank(false);
     }
 }
