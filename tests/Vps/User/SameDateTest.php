@@ -6,7 +6,7 @@
  * @group Model_User
  * @group Real_Model_User
  */
-class Vps_User_SameDateTest extends PHPUnit_Framework_TestCase
+class Vps_User_SameDateTest extends Vps_Test_TestCase
 {
     private static $_lastMailNumber = 0;
 

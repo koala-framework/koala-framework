@@ -4,12 +4,14 @@
  * @group slow
  * alle sleeps damit der webservice nicht überfordert wird
  */
-class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
+class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
 {
     public function setUp()
     {
+        parent::setUp();
         sleep(1);
     }
+
     public function testNodes()
     {
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Amazon_Products');
@@ -168,7 +170,7 @@ class Vps_Util_Model_Amazon_Test extends PHPUnit_Framework_TestCase
         $select->limit(10, 0);
         $m->countRows($select);
         $this->assertEquals(1, Vps_Benchmark::getCounterValue('Service Amazon request'));
-        
+
         Vps_Benchmark::disable();
     }
 }

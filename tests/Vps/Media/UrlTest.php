@@ -2,7 +2,7 @@
 /**
  * @group Media
  */
-class Vps_Media_UrlTest extends PHPUnit_Framework_TestCase
+class Vps_Media_UrlTest extends Vps_Test_TestCase
 {
     public function testUrl()
     {
