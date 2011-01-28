@@ -29,7 +29,7 @@ class Vpc_Shop_Products_Directory_AddToCart_Component extends Vpc_Form_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['action'] = '#';
+        $ret['action'] = '';
         return $ret;
     }
 
