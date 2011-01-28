@@ -34,6 +34,9 @@
     background: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/next.png) no-repeat right 100px;
 }
 .lightbox .lightboxBody .nextBtn img.nextImgBtn { position: absolute; top: 100px; right: 0px; }
+.lightbox .lightboxBody .loading { position: absolute; top: 40%; text-align: center; width:100% }
+.lightbox .lightboxBody .image { visibility: hidden; z-index: 1 }
+.lightbox .lightboxBody .image .centerImage { margin-bottom: -3px; }
 .lightbox .lightboxBody .centerImage { margin-bottom: -3px; }
 .lightbox .lightboxBody .prevBtn,
 .lightbox .lightboxBody .prevBtn a {
