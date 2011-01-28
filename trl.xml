@@ -4513,7 +4513,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1240</id>
 </text>
 <text>
-<en>If you typed the address, make sure the spelling is correct</en>
+<en>If you typed the address, make sure the spelling is correct.</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
 <id>1243</id>
 </text>
@@ -6144,6 +6144,11 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Errormessage</en>
 <de>Fehlermeldung</de>
 <id>1576</id>
+</text>
+<text>
+<en>If you typed the address, make sure the spelling is correct</en>
+<de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
+<id>1577</id>
 </text>
 </trl>
 
