@@ -1608,11 +1608,6 @@ wurde soeben erstellt.</de>
 <id>501</id>
 </text>
 <text>
-<en>Selector</en>
-<de>Selektor</de>
-<id>502</id>
-</text>
-<text>
 <en>Default</en>
 <de>Grundeinstellung</de>
 <id>503</id>
@@ -1646,11 +1641,6 @@ wurde soeben erstellt.</de>
 <en>Inline</en>
 <de>Textformat</de>
 <id>515</id>
-</text>
-<text>
-<en>Master-Styles</en>
-<de>Master-Formatvorlagen</de>
-<id>516</id>
 </text>
 <text>
 <en>Color</en>
@@ -1951,11 +1941,6 @@ wurde soeben erstellt.</de>
 <en>Passwords not equal</en>
 <de>Passw&#xF6;rter unterschiedlich</de>
 <id>605</id>
-</text>
-<text>
-<en>Select Page</en>
-<de>Seite ausw&#xE4;hlen</de>
-<id>606</id>
 </text>
 <text>
 <en>Activation link sent to email address.</en>
@@ -2746,11 +2731,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>790</id>
 </text>
 <text>
-<en>Flash Media Player</en>
-<de>Flash Media Player</de>
-<id>791</id>
-</text>
-<text>
 <en>Element</en>
 <de>Element</de>
 <id>792</id>
@@ -3219,11 +3199,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Properties</en>
 <de>Einstellungen</de>
 <id>919</id>
-</text>
-<text>
-<en>Edit News</en>
-<de>Neuigkeiten bearbeiten</de>
-<id>920</id>
 </text>
 <text>
 <en>Context</en>
@@ -3878,11 +3853,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1082</id>
 </text>
 <text>
-<en>Link-Action</en>
-<de>Link-Aktion</de>
-<id>1519</id>
-</text>
-<text>
 <en>Text/Image - Alignment</en>
 <de>Text/Bild - Ausrichtung</de>
 <id>1520</id>
@@ -4029,10 +3999,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Flash</en>
 <id>1132</id>
-</text>
-<text>
-<en>Flash file</en>
-<id>1133</id>
 </text>
 <text>
 <en>Flash variables</en>
@@ -4278,11 +4244,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Useraccount activated</en>
 <de>Benutzerkonto aktiviert</de>
 <id>1185</id>
-</text>
-<text>
-<en>This export is limited to {0} rows.</en>
-<de>Dieser Export ist auf {0} Eintr&#xE4;ge limitiert.</de>
-<id>1186</id>
 </text>
 <text>
 <en>Collecting data</en>
@@ -5246,10 +5207,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1405</id>
 </text>
 <text>
-<en>Community Video</en>
-<id>1406</id>
-</text>
-<text>
 <en>Please insert the web address to your YouTube or Vimeo video.</en>
 <de>Bitte f&#xFC;gen Sie die Adresse von YouTube oder Vimeo ein.</de>
 <id>1407</id>
@@ -5480,24 +5437,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1463</id>
 </text>
 <text>
-<en>Flash source</en>
-<de>Flash Quelle</de>
-<id>1464</id>
-</text>
-<text>
-<en>Upload a Flash file</en>
-<id>1465</id>
-</text>
-<text>
-<en>From external source</en>
-<de>Von externer Quelle</de>
-<id>1466</id>
-</text>
-<text>
-<en>URL to Flash file</en>
-<id>1467</id>
-</text>
-<text>
 <en>Allow fullscreen</en>
 <de>Vollbild erlauben</de>
 <id>1468</id>
@@ -5552,11 +5491,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Fade images</en>
 <id>1479</id>
-</text>
-<text>
-<en>Advanced Gallery</en>
-<de>Erweiterte Galerie</de>
-<id>1480</id>
 </text>
 <text>
 <en>zwei Bilder</en>
@@ -5753,10 +5687,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1554</id>
 </text>
 <text>
-<en>You got a requst</en>
-<id>1555</id>
-</text>
-<text>
 <en>E-Mail Recipient</en>
 <id>1556</id>
 </text>
@@ -5905,11 +5835,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Your new password has been set.</en>
 <de>Ihr neues Passwort wurde gesetzt.</de>
 <id>1579</id>
-</text>
-<text>
-<en>Product: Voucher</en>
-<de>Produkt: Gutschein</de>
-<id>1580</id>
 </text>
 <text>
 <en>Can't paste paragraph type '{0}', as it is not avaliable here.</en>
@@ -6066,11 +5991,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1629</id>
 </text>
 <text>
-<en>Contains video</en>
-<de>Beinhaltet ein Video</de>
-<id>1635</id>
-</text>
-<text>
 <en>Invalid search terms</en>
 <de>Ung&#xFC;ltige Suchbegriffe</de>
 <id>1630</id>
@@ -6112,7 +6032,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Newsletter Subscriber settings</en>
-<de>Newsletterempfänger-Einstellungen</de>
+<de>Newsletterempf&#xE4;nger-Einstellungen</de>
 <id>1570</id>
 </text>
 <text>
@@ -6149,6 +6069,42 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>If you typed the address, make sure the spelling is correct</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
 <id>1577</id>
+</text>
+<text>
+<en>Master Url</en>
+<id>1638</id>
+</text>
+<text>
+<en>Original Position</en>
+<id>1639</id>
+</text>
+<text>
+<en>attached</en>
+<id>1640</id>
+</text>
+<text>
+<en>off</en>
+<id>1641</id>
+</text>
+<text>
+<en>Form.File Upload</en>
+<id>1642</id>
+</text>
+<text>
+<en>Land</en>
+<id>1643</id>
+</text>
+<text>
+<en>Temporary access</en>
+<id>1644</id>
+</text>
+<text>
+<en>Remove Hyperlink</en>
+<id>1645</id>
+</text>
+<text>
+<en>Remove the selected link.</en>
+<id>1646</id>
 </text>
 </trl>
 
