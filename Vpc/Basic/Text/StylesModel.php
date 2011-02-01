@@ -37,7 +37,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
     public function getMasterStyles()
     {
         if (file_exists('css/master.css')) {
-            return parseMasterStyles(file_get_contents('css/master.css'));
+            return $this->parseMasterStyles(file_get_contents('css/master.css'));
         }
         return array();
     }
