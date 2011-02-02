@@ -5,6 +5,7 @@ class Vpc_Directories_Category_Directory_Trl_Component extends Vpc_Directories_I
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['hasModifyItemData'] = true;
+        $ret['childModel'] = 'Vpc_Directories_Category_Directory_Trl_CategoriesModel';
         return $ret;
     }
 

@@ -3,10 +3,10 @@ require_once 'Vps/Config/Ini.php';
 
 class Vps_Config_Web extends Vps_Config_Ini
 {
+    static private $_instances = array();
     public static function getInstance($section)
     {
-        static $instances = array();
-        if (!isset($instances[$section])) {
+        if (!isset(self::$_instances[$section])) {
             require_once 'Vps/Config/Cache.php';
             $cache = Vps_Config_Cache::getInstance();
             $cacheId = 'config_'.str_replace('-', '_', $section);
@@ -17,9 +17,14 @@ class Vps_Config_Web extends Vps_Config_Ini
                 $mtime = time();
                 $cache->save($ret, $cacheId);
             }
-            $instances[$section] = $ret;
+            self::$_instances[$section] = $ret;
         }
-        return $instances[$section];
+        return self::$_instances[$section];
+    }
+
+    public static function clearInstances()
+    {
+        self::$_instances = array();
     }
 
     public static function getInstanceMtime($section)
@@ -45,13 +50,28 @@ class Vps_Config_Web extends Vps_Config_Ini
         $vpsSection = false;
 
         $webSection = $this->_getWebSection($webPath.'/application/config.ini', $section);
-        $webConfig = new Vps_Config_Ini($webPath.'/application/config.ini', $webSection);
-        if (!empty($webConfig->vpsConfigSection)) {
-            $vpsSection = $webConfig->vpsConfigSection;
-        } else {
-            $vpsConfigFull = new Vps_Config_Ini($vpsPath.'/config.ini', null);
-            if (isset($vpsConfigFull->$section)) {
-                $vpsSection = $section;
+        $webConfig = parse_ini_file($webPath.'/application/config.ini', true);
+        foreach ($webConfig as $i=>$cfg) {
+            if ($i == $webSection
+                || substr($i, 0, strlen($webSection)+1)==$webSection.' '
+                || substr($i, 0, strlen($webSection)+1)==$webSection.':'
+            ) {
+                if (isset($cfg['vpsConfigSection'])) {
+                    $vpsSection = $cfg['vpsConfigSection'];
+                }
+                break;
+            }
+        }
+        if (!$vpsSection) {
+            $vpsConfigFull = array_keys(parse_ini_file($vpsPath.'/config.ini', true));
+            foreach ($vpsConfigFull as $i) {
+                if ($i == $section
+                    || substr($i, 0, strlen($section)+1)==$section.' '
+                    || substr($i, 0, strlen($section)+1)==$section.':'
+                ) {
+                    $vpsSection = $section;
+                    break;
+                }
             }
         }
         if (!$vpsSection) {
@@ -63,7 +83,7 @@ class Vps_Config_Web extends Vps_Config_Ini
                         array('allowModifications'=>true));
 
         $fixes = array();
-        if ($webSection != $section && $this->server->host == 'vivid') {
+        if ($webSection != $section && ($this->server->host == 'vivid' || $this->server->host == 'vivid-test-server')) {
             $fixes = array(
                 'libraryPath' => $this->libraryPath,
                 'uploads' => $this->uploads,
@@ -98,20 +118,30 @@ class Vps_Config_Web extends Vps_Config_Ini
 
         $this->server->dir = str_replace('%id%', $this->application->id, $this->server->dir);
         $this->server->domain = str_replace('%id%', $this->application->id, $this->server->domain);
+        $this->server->mongo->database = str_replace('%id%', $this->application->id, $this->server->mongo->database);
         $this->uploads = str_replace('%id%', $this->application->id, $this->uploads);
     }
 
     private function _getWebSection($file, $section)
     {
-        $webConfigFull = new Vps_Config_Ini($file, null);
-        if (isset($webConfigFull->$section)) {
-            $webSection = $section;
-        } else if (isset($webConfigFull->vivid)) {
-            $webSection = 'vivid';
-        } else {
-            $webSection = 'production';
+        $webConfigSections = array_keys(parse_ini_file($file, true));
+        foreach ($webConfigSections as $i) {
+            if ($i == $section
+                || substr($i, 0, strlen($section)+1)==$section.' '
+                || substr($i, 0, strlen($section)+1)==$section.':'
+            ) {
+                return $section;
+            }
         }
-        return $webSection;
+        foreach ($webConfigSections as $i) {
+            if ($i == $section
+                || substr($i, 0, 6)=='vivid '
+                || substr($i, 0, 6)=='vivid:'
+            ) {
+                return 'vivid';
+            }
+        }
+        return 'production';
     }
 
     protected function _mergeWebConfig($path, $section)

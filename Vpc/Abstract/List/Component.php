@@ -6,13 +6,20 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'List',
             'childModel'     => 'Vpc_Abstract_List_Model',
+            'ownModel'     => 'Vpc_Abstract_List_OwnModel',
         ));
         $ret['generators']['child'] = array(
             'class' => 'Vps_Component_Generator_Table',
             'component' => null
         );
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/Panel.js';
+        $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/EditButton.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/PanelWithEditButton.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/List.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/ListEditButton.js';
+        $ret['extConfig'] = 'Vpc_Abstract_List_ExtConfigListUpload';
+        $ret['hasVisible'] = true;
         return $ret;
     }
 
@@ -26,7 +33,20 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['children'] = $this->getData()->getChildComponents(array('generator' => 'child'));
+        $children = $this->getData()->getChildComponents(array('generator' => 'child'));
+
+        // children ist die alte methode, bleibt drin wegen kompatibilität
+        $ret['children'] = $children;
+
+        // das hier ist die neue variante und ist besser, weil man leichter mehr daten
+        // zurückgeben kann, bzw. in der übersetzung überschreiben kann
+        // zB: Breite bei übersetzung von Columns
+        $ret['listItems'] = array();
+        foreach ($children as $child) {
+            $ret['listItems'][] = array(
+                'data' => $child
+            );
+        }
         return $ret;
     }
 
@@ -49,19 +69,10 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         return false;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getCacheVars();
-        $ret[] = $this->_getCacheVars();
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
         return $ret;
-    }
-
-    protected function _getCacheVars()
-    {
-        return array(
-            'model' => $this->getChildModel(),
-            'id' => $this->getData()->dbId,
-            'field' => 'component_id'
-        );
     }
 }

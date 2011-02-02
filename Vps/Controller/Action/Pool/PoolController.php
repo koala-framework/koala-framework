@@ -19,7 +19,7 @@ class Vps_Controller_Action_Pool_PoolController extends Vps_Controller_Action_Au
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('value', 'Wert', 300))
+        $this->_columns->add(new Vps_Grid_Column('value', trlVps('Value'), 300))
             ->setEditor(new Vps_Form_Field_TextField());
         $this->_columns->add(new Vps_Grid_Column_Visible());
     }

@@ -11,6 +11,7 @@ class Vpc_Basic_LinkTag_ComponentClass_Form extends Vpc_Abstract_Form
 
         $this->add(new Vps_Form_Field_Select('target_component_id', trlVps('Page')))
             ->setDisplayField('title')
+            ->setPageSize(20)
             ->setStoreUrl(
                 Vpc_Admin::getInstance($class)->getControllerUrl('Components').'/json-data'
             )

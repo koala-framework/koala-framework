@@ -4,7 +4,7 @@
  * für das Menü benötigt werden.
  * @package Vpc
  */
-class Vpc_Menu_Component extends Vpc_Menu_Abstract
+class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
 {
     public static function getSettings()
     {
@@ -19,6 +19,15 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret['cssClass'] = 'webStandard printHidden';
         $ret['emptyIfSingleEntry'] = false;
         return $ret;
+    }
+
+    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    {
+        $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
+        $maxLevel = Vpc_Abstract::getSetting($componentClass, 'maxLevel');
+        $level = Vpc_Abstract::getSetting($componentClass, 'level');
+        if ($level > $maxLevel) $maxLevel = $level;
+        return $menuLevel > $maxLevel;
     }
 
     public function getMenuComponent()

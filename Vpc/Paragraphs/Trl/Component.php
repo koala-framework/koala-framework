@@ -9,6 +9,7 @@ class Vpc_Paragraphs_Trl_Component extends Vpc_Chained_Trl_Component
         $ret['generators']['paragraphs']['class'] = 'Vpc_Paragraphs_Trl_Generator';
         $ret['childModel'] = 'Vpc_Paragraphs_Trl_Model';
         $ret['previewWidth'] = Vpc_Abstract::getSetting($masterComponentClass, 'previewWidth');
+        $ret['extConfig'] = 'Vpc_Paragraphs_Trl_ExtConfig';
         return $ret;
     }
 
@@ -20,16 +21,19 @@ class Vpc_Paragraphs_Trl_Component extends Vpc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getCacheVars()
+    public function hasContent()
     {
-        $ret = parent::getCacheVars();
-        foreach ($this->getData()->getChildComponents(array('generator'=>'paragraphs', 'ignoreVisible'=>true)) as $p) {
-            $ret[] = array(
-                'model' => $this->getChildModel(),
-                'id' => $p->dbId,
-                'field' => 'component_id'
-            );
+        $childComponents = $this->getData()->getChildComponents(array('generator' => 'paragraphs'));
+        foreach ($childComponents as $c) {
+            if ($c->hasContent()) return true;
         }
+        return false;
+    }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
         return $ret;
     }
 }

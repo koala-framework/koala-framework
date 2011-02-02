@@ -1,6 +1,9 @@
 <?php
 class Vps_Assets_Loader
 {
+    /**
+     * @var Vps_Assets_Dependencies
+     */
     private $_dep = null;
     private $_config = null;
 
@@ -61,11 +64,13 @@ class Vps_Assets_Loader
             }
             $assetsType = $m[1];
             $rootComponent = $m[3];
-            $assetClass = $m[4];
+            $m = explode(':', $m[4]);
+            $assetClass = array_shift($m);
+            $arguments = $m;
             if (!class_exists($assetClass) || !is_instance_of($assetClass, 'Vps_Assets_Dynamic_Interface')) {
                 throw new Vps_Exception_NotFound();
             }
-            $file = new $assetClass($this, $assetsType, $rootComponent);
+            $file = new $assetClass($this, $assetsType, $rootComponent, $arguments);
             $ret = array();
             $ret['contents'] = $file->getContents();
             $ret['mtime'] = $file->getMTime();
@@ -113,11 +118,12 @@ class Vps_Assets_Loader
                 foreach ($this->_getDep()->getAssetFiles($assetsType, $fileType, $section, $rootComponent) as $file) {
                     if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
                         if (substr($file, 0, 8) == 'dynamic/') {
-                            $file = substr($file, 8);
+                            $arguments = explode(':', substr($file, 8));
+                            $file = array_shift($arguments);
                             if (!is_instance_of($file, 'Vps_Assets_Dynamic_Interface')) {
                                 throw new Vps_Exception_NotFound();
                             }
-                            $file = new $file($this, $assetsType, $rootComponent);
+                            $file = new $file($this, $assetsType, $rootComponent, $arguments);
                             if (!$file->getIncludeInAll()) continue;
                             $c = array();
                             $c['contents'] = $file->getContents();
@@ -172,7 +178,7 @@ class Vps_Assets_Loader
 
             if (substr($ret['mimeType'], 0, 5) == 'text/') { //nur texte cachen
                 if (!$language) {
-                    $language = Zend_Registry::get('trl')->getTargetLanguage();
+                    $language = Vps_Trl::getInstance()->getTargetLanguage();
                 }
 
                 $cache = Vps_Assets_Cache::getInstance();

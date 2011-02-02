@@ -17,13 +17,15 @@ abstract class Vpc_Abstract_Flash_Upload_Component extends Vpc_Abstract_Flash_Co
             return null;
         }
         $filename = $fRow->filename.'.'.$fRow->extension;
-        $id = $this->getData()->dbId;
+        $id = $this->getData()->componentId;
         return Vps_Media::getUrl(get_class($this), $id, 'default', $filename);
     }
 
     public static function getMediaOutput($id, $type, $className)
     {
-        $row = Vpc_Abstract::createOwnModel($className)->getRow($id);
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+        if (!$c) return null;
+        $row = $c->getComponent()->getRow();
         $fileRow = false;
         if ($row) {
             $fileRow = $row->getParentRow(Vpc_Abstract::getSetting($className, 'uploadModelRule'));
@@ -40,7 +42,7 @@ abstract class Vpc_Abstract_Flash_Upload_Component extends Vpc_Abstract_Flash_Co
 
         if ($row) {
             Vps_Component_Cache::getInstance()->saveMeta(
-                get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+                new Vps_Component_Cache_Meta_Static_Callback($row->getModel())
             );
         }
 

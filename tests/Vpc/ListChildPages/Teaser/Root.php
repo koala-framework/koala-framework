@@ -16,7 +16,7 @@ class Vpc_ListChildPages_Teaser_Root extends Vps_Component_NoCategoriesRoot
                   'parent_id'=>400, 'component'=>'empty', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
         )));
         $ret['generators']['page']['component'] = array(
-            'listchild' => 'Vpc_ListChildPages_Teaser_Component',
+            'listchild' => 'Vpc_List_ChildPages_Teaser_Component',
             'empty' => 'Vpc_Basic_Empty_Component'
         );
 

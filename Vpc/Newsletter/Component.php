@@ -23,6 +23,10 @@ class Vpc_Newsletter_Component extends Vpc_Directories_ItemPage_Directory_Compon
         $ret['childModel'] = 'Vpc_Newsletter_Model';
         $ret['flags']['hasResources'] = true;
         $ret['componentName'] = trlVps('Newsletter');
+        $ret['componentIcon'] = new Vps_Asset('email');
+
+        $ret['extConfig'] = 'Vpc_Newsletter_ExtConfig';
+
         return $ret;
     }
 }

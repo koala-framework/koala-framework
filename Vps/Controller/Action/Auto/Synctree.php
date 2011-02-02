@@ -9,7 +9,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected $_tableName;
     protected $_model;
     protected $_modelName;
-    protected $_searchFields = array();
+    protected $_filters;
 
     protected $_icons = array (
         'root'      => 'folder',
@@ -51,6 +51,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         ));
     }
 
+    protected function _init() {}
+
     public function preDispatch()
     {
         parent::preDispatch();
@@ -66,6 +68,12 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         if (!isset($this->_model)) {
             throw new Vps_Exception('$_model oder $_modelName not set');
         }
+
+        $this->_filters = new Vps_Collection();
+
+        $this->_init();
+
+        foreach ($this->_filters as $filter) $filter->setModel($this->_model);
 
         // PrimaryKey setzen
         if (!isset($this->_primaryKey)) {
@@ -104,6 +112,17 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 'direction'   => 'ASC'
             );
         }
+
+        // Falls Filter einen Default-Wert hat:
+        // - GET query-Parameter setzen,
+        // - Im JavaScript nach rechts verschieben und Defaultwert setzen
+        foreach ($this->_filters as $filter) {
+            if ($filter instanceof Vps_Controller_Action_Auto_Filter_Text) continue;
+            $param = $filter->getParamName();
+            if ($filter->getConfig('default') && !$this->_getParam($param)) {
+                $this->_setParam($param, $filter->getConfig('default'));
+            }
+        }
     }
 
     public function jsonMetaAction()
@@ -113,7 +132,11 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         foreach ($this->_icons as $k=>$i) {
             $this->view->icons[$k] = $i->__toString();
         }
-        $this->view->search = !empty($this->_searchFields);
+        $filters = array();
+        foreach ($this->_filters as $filter) {
+            $filters[] = $filter->getExtConfig();
+        }
+        $this->view->filters = $filters;
         $this->view->rootText = $this->_rootText;
         $this->view->rootVisible = $this->_rootVisible;
         $this->view->buttons = $this->_buttons;
@@ -131,15 +154,14 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     public function jsonDataAction()
     {
         $parentId = $this->_getParam('node');
-
         $this->_saveSessionNodeOpened($parentId, true);
         $this->_saveNodeOpened();
 
-        if ($this->_getParam('searchValue') != '') {
-            $this->view->nodes = $this->_searchNodes($this->_getParam('searchValue'));
-        } else {
-            $this->view->nodes = $this->_formatNodes();
+        $method = '_formatNodes';
+        foreach ($this->_filters as $filter) {
+            if ($this->_getParam($filter->getParamName())) $method = '_filterNodes';
         }
+        $this->view->nodes = $this->$method();
     }
 
     public function jsonNodeDataAction()
@@ -183,14 +205,25 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         return $nodes;
     }
 
-    protected function _searchNodes($searchValue)
+    protected function _getQueryExpression($query)
+    {
+        $containsExpression = array();
+        foreach ($this->_queryFields as $queryField) {
+            $containsExpression[] = new Vps_Model_Select_Expr_Contains($queryField, $query);
+        }
+        return new Vps_Model_Select_Expr_Or($containsExpression);
+    }
+
+    protected function _filterNodes()
     {
         $select = $this->_getSelect();
-        $or = array();
-        foreach ($this->_searchFields as $searchField) {
-            $or[] = new Vps_Model_Select_Expr_Like($searchField, '%' . $searchValue . '%');
+
+        //erzeugen von Filtern
+        foreach ($this->_filters as $filter) {
+            if ($filter->getSkipWhere()) continue;
+            $select = $filter->formatSelect($select, $this->_getAllParams());
         }
-        $select->where(new Vps_Model_Select_Expr_Or($or));
+
         $rows = $this->_model->getRows($select);
 
         $plainNodes = array();
@@ -204,12 +237,17 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $node = $this->_formatNode($row);
                 $node['leaf'] = true;
                 $node['allowDrag'] = false;
-                $node['search'] = true;
+                $node['filter'] = true;
+                $node['sort'] = $select->getPart('order');
                 $plainNodes[$pV][$row->$primaryKey] = $node;
             }
             $plainNodes[$pV][$row->$primaryKey]['disabled'] = false;
             while ($parentValue) {
                 $parentRow = $this->_model->getRow($parentValue);
+                if (!$parentRow) {
+                    $parentValue = null;
+                    continue;
+                }
                 $parentValue = $this->_getParentId($parentRow);
                 $pV = is_null($parentValue) ? 0 : $parentValue;
                 $primaryValue = $parentRow->$primaryKey;
@@ -219,7 +257,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                     $node['expanded'] = true;
                     $node['expanded'] = true;
                     $node['allowDrag'] = false;
-                    $node['search'] = true;
+                    $node['filter'] = true;
+                    $node['sort'] = $select->getPart('order');
                     $plainNodes[$pV][$primaryValue] = $node;
                 }
             }
@@ -240,7 +279,30 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $node['children'] = $this->_structurePlainNodes($nodes, $primaryValue);
             $ret[] = $node;
         }
+        $fieldname = $node['sort'][0]['field'];
+        if ($node && isset($node['data'][$fieldname])) {
+            usort($ret, array("Vps_Controller_Action_Auto_Synctree", "_sortFilteredNodes"));
+        }
+        foreach ($ret as &$r) unset($r['sort']);
         return $ret;
+    }
+
+    private static function _sortFilteredNodes($a, $b)
+    {
+        foreach ($a['sort'] as $s) {
+            $field = $s['field'];
+            if (!isset($a['data'][$field])) continue;
+            $value1 = ord(strtolower($a['data'][$field]));
+            $value2 = ord(strtolower($b['data'][$field]));
+            if ($value1 != $value2) {
+                if ($s['direction'] == 'DESC') {
+                    return $value1 > $value2;
+                } else {
+                    return $value1 > $value2;
+                }
+            }
+        }
+        return 0;
     }
 
     protected function _fetchData($parentRow)
@@ -306,14 +368,17 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
         $openedNodes = $this->_saveSessionNodeOpened(null, null);
         $data['uiProvider'] = 'Vps.Tree.Node';
+        $id = $row->$primaryKey;
         if ($openedNodes == 'all' ||
-            isset($openedNodes[$row->$primaryKey]) ||
-            isset($this->_openedNodes[$row->id])
+            (isset($openedNodes[$id]) && $openedNodes[$id]) ||
+            isset($this->_openedNodes[$id]) ||
+            $this->_getParam('openedId') == $id
         ) {
             $data['expanded'] = true;
         } else {
             $data['expanded'] = false;
         }
+        $data['expandRequest'] = true;
         return $data;
     }
 
@@ -321,13 +386,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         $session = new Zend_Session_Namespace('admin');
         $key = 'treeNodes_' . get_class($this);
+        if ($this->_getParam('openedId')) $session->$key = array();
         $ids = is_array($session->$key) ? $session->$key : array();
         if ($id) {
-            if (!$activate && isset($ids[$id])) {
-                unset($ids[$id]);
-            } else if ($activate) {
-                $ids[$id] = true;
-            }
+            $ids[$id] = $activate;
             $session->$key = $ids;
         }
         return $ids;
@@ -350,6 +412,9 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $visible = $this->getRequest()->getParam('visible') == 'true';
         $id = $this->getRequest()->getParam('id');
         $row = $this->_model->find($id)->current();
+        if (!$this->_hasPermissions($row, 'visible')) {
+            throw new Vps_Exception("Making visible/unvisible is not allowed for this row.");
+        }
         $this->_changeVisibility($row);
         $this->view->id = $row->save();
         $this->view->visible = $row->visible == '1';
@@ -373,6 +438,9 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $insert['pos'] = 0;
         }
         $row = $this->_model->createRow($insert);
+        if (!$this->_hasPermissions($row, 'add')) {
+            throw new Vps_Exception("Save is not allowed for this row.");
+        }
         $row->save();
         $data = $this->_formatNode($row);
         foreach ($data as $k=>$i) {
@@ -388,6 +456,9 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $row = $this->_model->find($id)->current();
         if (!$row) throw new Vps_Exception("No entry with id '$id' found");
+        if (!$this->_hasPermissions($row, 'delete')) {
+            throw new Vps_Exception("Delete is not allowed for this row.");
+        }
         $this->_beforeDelete($row);
         $row->delete();
         $this->view->id = $id;
@@ -401,10 +472,16 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
         $parentField = $this->_parentField;
         $row = $this->_model->getRow($source);
+        if (!$this->_hasPermissions($row, 'move')) {
+            throw new Vps_Exception("Moving this node is not allowed.");
+        }
+        $targetRow = $this->_model->getRow($target);
+        if (!$this->_hasPermissions($targetRow, 'moveTo')) {
+            throw new Vps_Exception("Moving here is not allowed.");
+        }
         $this->_beforeSaveMove($row);
 
         if ($point == 'append') {
-            $targetRow = $this->_model->getRow($target);
             if (is_numeric($target) && (int)$target == 0) $target = null;
 
             if (!is_null($target)) {
@@ -419,7 +496,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $this->view->error = trlVps('Cannot move here. View has been reloaded, please try again.');
             }
         } else {
-            $targetRow = $this->_model->getRow($target);
             if ($targetRow) {
                 if ($this->_hasPosition) {
                     $targetPosition = $targetRow->pos;
@@ -481,5 +557,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         $this->_saveSessionNodeOpened($id, true);
+    }
+
+    protected function _hasPermissions($row, $action)
+    {
+        return true;
     }
 }

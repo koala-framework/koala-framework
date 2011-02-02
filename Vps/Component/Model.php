@@ -2,10 +2,6 @@
 class Vps_Component_Model extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Component_Model_Row';
-    protected $_constraints = array(
-        'ignoreVisible' => true,
-        'flags' => array('showInPageTreeAdmin' => true)
-    );
     protected $_primaryKey = 'componentId';
     private $_root;
 
@@ -53,24 +49,52 @@ class Vps_Component_Model extends Vps_Model_Abstract
         if ($select->hasPart(Vps_Model_Select::WHERE_EXPRESSION)) { // Suchfeld
             $model = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
             $rowset = array();
+            $languages = null;
+            $searchSelect = array('ignoreVisible' => true);
             foreach ($model->getRows($select) as $row) {
-                $rowset[] = $this->getRow($row->id);
+                $component = $root->getComponentById($row->id, $searchSelect);
+                if (!$component) continue;
+                if (is_null($languages)) {
+                    $c = $component;
+                    while ($c && !Vpc_Abstract::getFlag($c->componentClass, 'hasLanguage')) {
+                        $c = $c->parent;
+                    }
+                    if ($c) {
+                        $languagesModel = $c->parent->getComponent()->getChildModel();
+                        foreach ($languagesModel->getRows() as $language) {
+                            $data = $root->getComponentById($language->component_id, $searchSelect);
+                            if ($data) {
+                                $languages[] = $data;
+                            }
+                        }
+                    } else {
+                        $languages = array();
+                    }
+                }
+                $rowset[] = $component;
+                foreach ($languages as $language) {
+                    $rowset[] = Vpc_Chained_Trl_Component::getChainedByMaster($component, $language, $searchSelect);
+                }
+            }
+            if ($languages) {
+                $model = Vps_Model_Abstract::getInstance('Vpc_Root_Category_Trl_GeneratorModel');
+                $s = clone $select;
+                $s->unsetPart('order');
+                foreach ($model->getRows($s) as $row) {
+                    $rowset[] = $root->getComponentById($row->component_id, $searchSelect);
+                }
             }
         } else if ($parts && in_array('parent_id', $parts)) {
             $rowset = array($root);
         } else if (isset($where['parent_id'])) {
             $page = $root->getComponentById($where['parent_id'], array('ignoreVisible' => true));
             if (!$page) {
-                throw new Vps_Exception("Can't find page with parent_id '{$where['parent_id']}'");
+                throw new Vps_Exception("Can't find page with id '{$where['parent_id']}'");
             }
             $rowset = $page->getChildComponents(array(
                 'ignoreVisible' => true,
-                'flags' => array('showInPageTreeAdmin' => true)
-            ));
-            $rowset = array_merge($rowset, $page->getChildComponents(array(
-                'ignoreVisible' => true,
                 'generatorFlags' => array('showInPageTreeAdmin' => true)
-            )));
+            ));
             $rowset = array_values($rowset);
         } else if (isset($where['componentId'])) {
             $rowset = array(Vps_Component_Data_Root::getInstance()->getComponentById($where['componentId'], array('ignoreVisible' => true)));

@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_FnF
  */
-class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
+class Vps_Model_FnF_ModelExprSelectTest extends Vps_Test_TestCase
 {
     public function testExprNullSelect()
     {
@@ -32,7 +32,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         ));
 
         $select = $model->select();
-        $select->where(new Vps_Model_Select_Expr_Equals('value', array('bar', 'foo')));
+        $select->where(new Vps_Model_Select_Expr_Equal('value', array('bar', 'foo')));
         $rows = $model->getRows($select);
         $count = $rows->count();
         $current = $rows->current();
@@ -40,7 +40,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $current->id);
 
         $this->assertEquals(1, $model->getRows($model->select()
-                                ->where(new Vps_Model_Select_Expr_Equals('value', 'foo')))->current()->id);
+                                ->where(new Vps_Model_Select_Expr_Equal('value', 'foo')))->current()->id);
     }
 
     public function testExprEqualsSelect()
@@ -52,7 +52,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         ));
 
         $select = $model->select();
-        $select->where(new Vps_Model_Select_Expr_Equals('value', 'bar'));
+        $select->where(new Vps_Model_Select_Expr_Equal('value', 'bar'));
         $rows = $model->getRows($select);
         $count = $rows->count();
         $current = $rows->current();
@@ -60,7 +60,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $current->id);
 
         $this->assertEquals(1, $model->getRows($model->select()
-                                ->where(new Vps_Model_Select_Expr_Equals('value', 'foo')))->current()->id);
+                                ->where(new Vps_Model_Select_Expr_Equal('value', 'foo')))->current()->id);
     }
 
     public function testExprHigherSelect()
@@ -91,7 +91,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         $select = $model->select();
 
         $select->where(new Vps_Model_Select_Expr_Higher('value', 6));
-        $select->where(new Vps_Model_Select_Expr_Equals('value', 7));
+        $select->where(new Vps_Model_Select_Expr_Equal('value', 7));
 
         $rows = $model->getRows($select);
         $count = $rows->count();
@@ -117,7 +117,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
 
         $select = $model->select();
         $orExpression = new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Higher('value', 6),
-                                                           new Vps_Model_Select_Expr_Equals('value', 5)));
+                                                           new Vps_Model_Select_Expr_Equal('value', 5)));
         $select->where($orExpression);
         $rows = $model->getRows($select);
         $count = $rows->count();
@@ -158,7 +158,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         ));
 
         $select = $model->select();
-        $smallExpression = new Vps_Model_Select_Expr_Smaller('value', 13);
+        $smallExpression = new Vps_Model_Select_Expr_Lower('value', 13);
 
         $select = $model->select();
         $select->where($smallExpression);
@@ -241,7 +241,7 @@ class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
         ));
 
         $select = $model->select();
-        $orExpression = new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Smaller('value', 8),
+        $orExpression = new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Lower('value', 8),
                                                            new Vps_Model_Select_Expr_Higher('value', 13)));
 
         $notExpression = new Vps_Model_Select_Expr_Not($orExpression);

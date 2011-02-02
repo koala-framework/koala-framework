@@ -23,7 +23,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             }
         }
         if (Vps_Setup::getConfigSection() == $server) {
-            throw new Vps_ClientException("Von dir selbst importieren ist natuerlich nicht moeglich.");
+            throw new Vps_Exception_Client("Von dir selbst importieren ist natuerlich nicht moeglich.");
         }
         if (Vps_Setup::getConfigSection() == 'production') {
             echo "ACHTUNG!!!!\n";
@@ -40,11 +40,11 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
 
         $config = Vps_Config_Web::getInstance($server);
         if (!$config->server || !$config->server->host) {
-            throw new Vps_ClientException("kein server host konfiguriert");
+            throw new Vps_Exception_Client("kein server host konfiguriert");
         }
         if (in_array($config->server->host, $localHosts) && !in_array($ownConfig->server->host, $localHosts)) {
             if ($config->server->host != 'vivid') {
-                throw new Vps_ClientException("Nur von vivid kann nach online importiert werden");
+                throw new Vps_Exception_Client("Nur von vivid kann nach online importiert werden");
             }
             $config->server->host = 'intern.vivid-planet.com';
         }
@@ -61,11 +61,11 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         }
         if ($this->_getParam('debug')) echo $cmd."\n";
         exec($cmd, $onlineRevision, $ret);
-        if ($ret != 0) throw new Vps_ClientException();
+        if ($ret != 0) throw new Vps_Exception_Client();
         $onlineRevision = implode('', $onlineRevision);
 
         if (!$onlineRevision) {
-            throw new Vps_ClientException("Can't get onlineRevision");
+            throw new Vps_Exception_Client("Can't get onlineRevision");
         }
 
         if (!$this->_getParam('skip-users') && Vps_Registry::get('config')->application->id != 'service') {
@@ -87,24 +87,35 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
 
         if ($config->uploads && $ownConfig->uploads) {
             echo "kopiere uploads...\n";
+
+            $uploadExcludes = array();
+            $uploadExcludeRsyncString = '';
+            if ($ownConfig->server->import->excludeUploadFolders) {
+                $uploadExcludes = $ownConfig->server->import->excludeUploadFolders->toArray();
+                foreach ($uploadExcludes as $ex) {
+                    $uploadExcludeRsyncString .= ' --exclude='.$ex;
+                }
+            }
+
             if ($ownConfig->server->host == $config->server->host) {
                 if ($ownConfig->uploads == $config->uploads) {
-                    throw new Vps_ClientException("Uplodas-Pfade für beide Server sind gleich!");
+                    throw new Vps_Exception_Client("Uplodas-Pfade für beide Server sind gleich!");
                 }
                 if (!file_exists($ownConfig->uploads)) {
                     mkdir($ownConfig->uploads);
                 }
-                $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$config->uploads}/ {$ownConfig->uploads}/";
+
+                $cmd = "rsync --progress --delete --times".$uploadExcludeRsyncString." --recursive {$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             } else if ($this->_useSshVps) {
-                $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
+                $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/ --excludes='.escapeshellarg(implode(';', $uploadExcludes)), $config->uploads);
             } else if ($config->server->host == 'vivid' && !in_array($ownConfig->server->host, $localHosts)) {
-                $cmd = "rsync --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
+                $cmd = "rsync --progress --delete --times".$uploadExcludeRsyncString." --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             } else {
-                $cmd = "rsync -e 'ssh -p $this->_sshPort' --progress --delete --times --exclude=cache/ --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
+                $cmd = "rsync -e 'ssh -p $this->_sshPort' --progress --delete --times".$uploadExcludeRsyncString." --recursive {$this->_sshHost}:{$config->uploads}/ {$ownConfig->uploads}/";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             }
@@ -147,7 +158,13 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             }
         }
 
-        exec("echo \"SHOW DATABASES\" | mysql", $existingDatabases);
+        exec('which mysqldump 2>&1 >/dev/null', $out, $ret);
+        $hasMysqlBinary = !$ret;
+        
+
+        if ($hasMysqlBinary) {
+            exec("echo \"SHOW DATABASES\" | mysql", $existingDatabases);
+        }
 
         $databases = $config->server->databases->toArray();
         if (!$databases) $databases = array('web');
@@ -159,24 +176,24 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 echo "ignoriere $dbKey, nicht in lokaler db config vorhanden...\n";
                 continue;
             }
-            if (!in_array($dbConfig['dbname'], $existingDatabases)) {
+            if (isset($existingDatabases) && !in_array($dbConfig['dbname'], $existingDatabases)) {
                 echo "Datenbank {$dbConfig['dbname']} nicht vorhanden, versuche sie zu erstellen...\n";
                 system("echo \"CREATE DATABASE \`{$dbConfig['dbname']}\`;\" | mysql", $ret);
                 if ($ret != 0) {
-                    throw new Vps_ClientException("Kann Datenbank '{$dbConfig['dbname']}' nicht erstellen, bitte manuell anlegen od. config anpassen.");
+                    throw new Vps_Exception_Client("Kann Datenbank '{$dbConfig['dbname']}' nicht erstellen, bitte manuell anlegen od. config anpassen.");
                 }
                 echo "OK\n";
             }
             $db = Zend_Registry::get('dao')->getDb($dbKey);
 
-            $mysqlLocalOptions = "--host=$dbConfig[host] ";
-            //auskommentiert weil: es muss in ~/.my.cnf ein benutzer der das machen darf eingestellt sein!
-            //ansonsten gibt es probleme für das erstellen von triggers, dazu benötigt man SUPER priviliges
-            // -> scheiß mysql
-            //$mysqlLocalOptions .= "--user={$dbConfig->username} --password={$dbConfig->password} ";
+            $mysqlLocalOptions = "--host=localhost "; //immer localhost da per ssh auf remote host verbunden wird
+            
+            //doch wida einkommentiert da 1. sicherer und 2. bei POI probleme und 3. im neuen mysql hoffenltich kein problem mehr
+            ////auskommentiert weil: es muss in ~/.my.cnf ein benutzer der das machen darf eingestellt sein!
+            ////ansonsten gibt es probleme für das erstellen von triggers, dazu benötigt man SUPER priviliges
+            //// -> scheiß mysql
+            $mysqlLocalOptions .= "--user=$dbConfig[username] --password=$dbConfig[password] ";
 
-
-            echo "erstelle datenbank-backup '$dbKey'...\n";
 
             $tables = $db->fetchCol('SHOW TABLES');
 
@@ -210,29 +227,32 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                     }
                 }
             }
-
-            $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
-            if ($dumpname) {
-                $backupSize = filesize($dumpname);
-                $this->_systemCheckRet("nice bzip2 --fast $dumpname");
-                echo $dumpname.".bz2\n";
+            if (!$this->_getParam('skip-backup')) {
+                echo "erstelle datenbank-backup '$dbKey'...\n";
+                $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
+                if ($dumpname) {
+                    $backupSize = filesize($dumpname);
+                    $this->_systemCheckRet("nice bzip2 --fast $dumpname");
+                    echo $dumpname.".bz2\n";
+                }
             }
 
-
-            if ($keepTables) {
-                echo "erstelle dump fuer KeepTables '$dbKey'...\n";
-                $keepTablesDump = tempnam('/tmp', 'importkeep');
-                $cmd = "mysqldump --add-drop-table=false --no-create-info=true $mysqlLocalOptions $dbConfig[dbname] ".implode(' ', $keepTables).">> $keepTablesDump";
-                if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
+            echo "loesche lokale tabellen in datenbank '$dbKey'...\n";
+            $deleteTables = array();
+            foreach ($tables as $i) {
+                if (!in_array($i, $keepTables)) {
+                    $deleteTables[] = $i;
+                }
+            }
+            if ($deleteTables) {
+                $cmd = "echo \"SET foreign_key_checks = 0;  DROP TABLE ".implode(', ', $deleteTables)."; SET foreign_key_checks = 1; \"";
+                $cmd .= " | mysql $mysqlLocalOptions $dbConfig[dbname] ";
+                if ($dbConfig['host'] != 'localhost') {
+                    $cmd = "ssh $dbConfig[host] ".escapeshellarg($cmd);
+                }
+                if ($this->_getParam('debug')) echo "$cmd\n";
                 $this->_systemCheckRet($cmd);
             }
-
-            echo "loesche lokale datenbank '$dbKey'...\n";
-            $this->_systemCheckRet("echo \"SET foreign_key_checks = 0; DROP DATABASE \`$dbConfig[dbname]\`; SET foreign_key_checks = 1;\" | mysql $mysqlLocalOptions");
-
-            echo "erstelle neue datenbank '$dbKey'...\n";
-            $this->_systemCheckRet("echo \"CREATE DATABASE \`$dbConfig[dbname]\`\" | mysql $mysqlLocalOptions");
-
 
             echo "importiere datenbank '$dbKey'...\n";
             if ($ownConfig->server->host == $config->server->host) {
@@ -255,7 +275,12 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
                 $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
-                $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg($cmd);
+                if ($dbConfig['host'] != 'localhost') { //TODO: diese if-abfrage ist nicht immer richtig
+                    //fuer poi, nur maja2 darf zu pbk-sql im moment
+                    $cmd = "ssh $dbConfig[host] ".escapeshellarg($cmd);
+                } else {
+                    $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg($cmd);
+                }
             }
             $descriptorspec = array(
                 1 => array("pipe", "w")
@@ -264,36 +289,35 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             $procDump = new Vps_Util_Proc($cmd, $descriptorspec);
 
             $cmd = "mysql $mysqlLocalOptions --default-character-set=utf8 $dbConfig[dbname]";
+            if ($dbConfig['host'] != 'localhost') {
+                $cmd = "ssh $dbConfig[host] ".escapeshellarg($cmd);
+            }
+            if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
             $descriptorspec = array(
                 0 => array("pipe", "r")
             );
             $procImport = new Vps_Util_Proc($cmd, $descriptorspec);
 
-            $c = new Zend_ProgressBar_Adapter_Console();
-            $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
-            $progress = new Zend_ProgressBar($c, 0, $backupSize);
+            $progress = false;
+            if (isset($backupSize) && $backupSize) {
+                $c = new Zend_ProgressBar_Adapter_Console();
+                $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+                $progress = new Zend_ProgressBar($c, 0, $backupSize);
+            }
             $size = 0;
             while (!feof($procDump->pipe(1))) {
                 $buffer = fgets($procDump->pipe(1), 4096);
                 fputs($procImport->pipe(0), $buffer);
                 $size += strlen($buffer);
-                $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
+                if ($progress) $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
             }
             fclose($procDump->pipe(1));
             fclose($procImport->pipe(0));
             $procImport->close();
             $procDump->close();
-
-            if ($keepTables) {
-                echo "spiele KeepTables ein '$dbKey'...\n";
-                $cmd = "mysql $mysqlLocalOptions $dbConfig[dbname] < $keepTablesDump";
-                if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
-                $this->_systemCheckRet($cmd);
-                unlink($keepTablesDump);
-            }
         }
         echo "\n";
 
@@ -404,7 +428,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         if ($this->_getParam('debug')) echo $cmd."\n";
         passthru($cmd, $ret);
         if ($ret) {
-            throw new Vps_ClientException("");
+            throw new Vps_Exception_Client("");
         }
     }
 
@@ -489,10 +513,10 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
 
     public function backupDbAction()
     {
-        exec('which mysqldump', $out, $ret);
-        if ($ret) {
-            echo "mysqldump nicht gefunden, ES WIRD KEIN DB BACKUP ERSTELLT!!\n";
-        } else {
+        //exec('which mysqldump', $out, $ret);
+        //if ($ret) {
+        //    echo "mysqldump nicht gefunden, ES WIRD KEIN DB BACKUP ERSTELLT!!\n";
+        //} else {
             echo "erstelle backup...\n";
             $dumpname = $this->_backupDb(Vps_Util_ClearCache::getInstance()->getDbCacheTables());
             if ($dumpname) {
@@ -502,7 +526,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             } else {
                 echo "uebersprungen...\n";
             }
-        }
+        //}
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
@@ -510,7 +534,11 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
     {
         $ret = '';
 
-        $mysqlOptions = "--host=$dbConfig[host] --user=$dbConfig[username] --password=$dbConfig[password] ";
+                        //immer localhost, denn wenn es ein anderer host ist wird dahin per ssh verbunden (siehe unten)
+        $mysqlOptions = "--host=localhost --user=$dbConfig[username] --password=$dbConfig[password] ";
+        if (!Vps_Util_Mysql::hasPrivilege('LOCK TABLES')) {
+            $mysqlOptions .= " --skip-lock-tables --skip-add-locks";
+        }
         $config = Zend_Registry::get('config');
 
         $mysqlDir = '';
@@ -527,6 +555,9 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             $ret .= " && {$mysqlDir}mysqldump --no-data $mysqlOptions $dbConfig[dbname] $t";
         }
         $ret .= "; }";
+        if ($dbConfig['host'] != 'localhost') {
+            $ret = "ssh $dbConfig[host] ".escapeshellarg($ret);
+        }
 
         return $ret;
     }
@@ -549,6 +580,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
         $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";
+        if ($this->_getParam('debug')) echo $cmd."\n";
         $this->_systemCheckRet($cmd);
 
         return $dumpname;
@@ -564,7 +596,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 $onlineRevision = (int)$info->entry['revision'];
             } catch (Exception $e) {}
             if (!$onlineRevision) {
-                throw new Vps_ClientException("Can't detect online revision");
+                throw new Vps_Exception_Client("Can't detect online revision");
             }
             echo $onlineRevision;
         }
@@ -589,8 +621,8 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         $out = array();
         foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
             $rrd = new $n;
-            $file = $rrd->getFileName();
-            if (file_exists($file)) {
+            if ($rrd->fileExists()) {
+                $file = $rrd->getFileName();
                 $out[$file] = `LC_ALL=C rrdtool dump $file | gzip`;
             }
         }

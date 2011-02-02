@@ -31,7 +31,12 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             } catch (e) {
                 throw new Error("Invalid autoForm \'"+this.autoForm+"': "+e);
             }
-            this.autoForm = new d({ baseCls: 'x-plain' });
+            this.autoForm = new d({
+                baseCls: 'x-plain',
+                controllerUrl: this.controllerUrl,
+                autoLoad: false,
+                checkDirty: false
+            });
         }
 
         var onRender = function() {
@@ -124,7 +129,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         this.setTitle(this.editTitle);
         this.show();
         if (id) {
-            this.getAutoForm().load(id);
+            this.getAutoForm().load(id, { focusAfterLoad: true });
         }
     },
 

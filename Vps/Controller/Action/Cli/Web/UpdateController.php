@@ -28,10 +28,13 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
 
     public static function update($rev = false, $debug = false, $skipClearCache = false)
     {
+        if (!$skipClearCache) {
+            Vps_Util_ClearCache::getInstance()->clearCache('all', false, false);
+        }
         echo "Update\n";
 
         if (in_array('vps', Vps_Registry::get('config')->server->updateTags->toArray())) {
-            if (!file_exists('.git')) {
+            if (!file_exists('.git') && Vps_Registry::get('config')->application->id!='zeiterfassung') {
                 echo "\n\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
                 echo "ACHTUNG web (und eventuell vps) wurden auf git umgestellt.\n";
                 system("php bootstrap.php git convert-to-git", $ret);

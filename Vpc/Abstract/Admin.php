@@ -35,7 +35,7 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
 
     public function duplicate($source, $target)
     {
-        if ($model = $source->getComponent()->getModel()) {
+        if ($model = $source->getComponent()->getOwnModel()) {
             $row = $model->getRow($source->dbId);
             if ($row) {
                 $newRow = $row->duplicate(array(
@@ -44,8 +44,16 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
             }
         }
 
-        foreach ($source->getChildComponents(array('inherit' => false)) as $c) {
+        $s = array('inherit' => false, 'ignoreVisible'=>true);
+        foreach ($source->getChildComponents($s) as $c) {
             $c->generator->duplicateChild($c, $target);
+        }
+    }
+
+    public function makeVisible($source)
+    {
+        foreach ($source->getChildComponents(array('inherit' => false, 'ignoreVisible'=>true)) as $c) {
+            $c->generator->makeChildrenVisible($c);
         }
     }
 

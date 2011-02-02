@@ -1,17 +1,22 @@
 <?php
 class Vpc_News_Directory_Trl_Admin extends Vpc_Directories_Item_Directory_Trl_Admin
 {
-    protected function _getContentClass()
+    protected function _getPluginParentComponents()
     {
         $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
-        return Vpc_Abstract::getChildComponentClass($detail, 'child', 'content');
+        return array($detail, $this->_class);
     }
 
-    public function getExtConfig()
+    public function addResources(Vps_Acl $acl)
     {
-        $ret = parent::getExtConfig();
-        $ret['items']['idSeparator'] = '_';
-        $ret['items']['idPostfix'] = '-content';
+        parent::addResources($acl);
+        $this->_addResourcesBySameClass($acl);
+    }
+
+    protected function _addResourcesBySameClassResourceName($c)
+    {
+        $ret = parent::_addResourcesBySameClassResourceName($c);
+        $ret .= ' '.$c->getLanguageData()->name;
         return $ret;
     }
 }

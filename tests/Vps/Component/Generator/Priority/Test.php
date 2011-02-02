@@ -1,11 +1,9 @@
 <?php
-class Vps_Component_Generator_Priority_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_Generator_Priority_Test extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Priority_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Component_Generator_Priority_Root');
     }
 
     public function testBox1()
@@ -21,15 +19,6 @@ class Vps_Component_Generator_Priority_Test extends PHPUnit_Framework_TestCase
         $ids = array_keys($boxes);
         $this->_assertIds($boxes, array('root_page1-box2'));
     }
-
-    public function testBox3()
-    {
-        $boxes = $this->_root->getChildComponent('_page1')
-                        ->getChildComponent('_page2')
-                        ->getChildComponents(array('box'=>true));
-        $this->_assertIds($boxes, array('root_page1_page2-box2'));
-    }
-
 
     public function testBox4()
     {

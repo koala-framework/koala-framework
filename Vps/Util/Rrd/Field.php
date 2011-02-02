@@ -8,10 +8,23 @@ class Vps_Util_Rrd_Field
     private $_max;
     private $_heartbeat = null;
 
+    /**
+     * @var Vps_Util_Rrd_File
+     */
+    private $_file;
+
     public function __construct($settings)
     {
         if (is_string($settings)) $settings = array('name' => $settings);
-        $this->_name = $this->_escapeField($settings['name']);
+        $this->_name = $settings['name'];
+        if (isset($settings['escapedName'])) {
+            if ($settings['escapedName'] != $this->_escapeField($settings['escapedName'])) {
+                throw new Vps_Exception('invalid escapedName');
+            }
+            $this->_escapedName = $settings['escapedName'];
+        } else {
+            $this->_escapedName = $this->_escapeField($this->_name);
+        }
         if (isset($settings['text'])) {
             $this->_text = $settings['text'];
         } else {
@@ -47,8 +60,15 @@ class Vps_Util_Rrd_Field
 
     public function nameEquals($name)
     {
+        if ($name == $this->_name) return true;
         $name = $this->_escapeField($name);
-        return $name == $this->_name;
+        if ($name == $this->_escapedName) return true;
+        return false;
+    }
+
+    public function getEscapedName()
+    {
+        return $this->_escapedName;
     }
 
     public function getName()
@@ -79,5 +99,23 @@ class Vps_Util_Rrd_Field
     public function getHeartbeat()
     {
         return $this->_heartbeat;
+    }
+
+    /**
+     * @internal wird autom gesetzt
+     */
+    public function setFile(Vps_Util_Rrd_File $file)
+    {
+        $this->_file = $file;
+    }
+
+    public function getFile()
+    {
+        return $this->_file;
+    }
+
+    public final function getFileNameWithField()
+    {
+        return $this->getFile()->getFileName().':'.$this->getEscapedName();
     }
 }

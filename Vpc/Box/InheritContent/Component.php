@@ -13,6 +13,8 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
         //TODO: viewcache nicht deaktiveren
         //cache löschen muss dazu korrekt eingebaut werden
         $ret['viewCache'] = false;
+
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 
@@ -31,16 +33,28 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
     public function getContentChild()
     {
         $page = $this->getData();
+        $ids = array();
+        while ($page && !$page->inherits) {
+            $ids[] = $page->id;
+            $page = $page->parent;
+            if ($page instanceof Vps_Component_Data_Root) break;
+        }
+        $ids = array_reverse($ids);
+        $page = $this->getData();
         do {
             while ($page && !$page->inherits) {
                 $page = $page->parent;
                 if ($page instanceof Vps_Component_Data_Root) break;
             }
-            $ic = $page->getChildComponent('-'.$this->getData()->id);
-            if (!$ic) {
-                return null;
+            $ic = $page;
+            foreach ($ids as $id) {
+                $ic = $ic->getChildComponent('-'.$id);
+                if (!$ic) {
+                    return null;
+                }
             }
             $c = $ic->getChildComponent(array('generator' => 'child'));
+            if (!$c) break; //box wurde überschrieben
             if ($page instanceof Vps_Component_Data_Root) break;
             $page = $page->parent;
         } while(!$c->hasContent());

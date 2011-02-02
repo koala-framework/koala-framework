@@ -8,6 +8,7 @@ class Vpc_Basic_LinkTag_FirstChildPage_Component extends Vpc_Basic_LinkTag_Abstr
             'componentIcon' => new Vps_Asset('page_go'),
             'dataClass' => 'Vpc_Basic_LinkTag_FirstChildPage_Data'
         ));
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 }

@@ -1,5 +1,8 @@
 <?php
-class Vps_View_Helper_ImageAsset extends Vps_View_Helper_Image
+/**
+ * @deprecated
+ */
+class Vps_View_Helper_ImageAsset extends Vps_Component_View_Helper_Image
 {
     public function imageAsset($image, $alt = '', $cssClass = null)
     {

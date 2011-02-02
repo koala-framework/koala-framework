@@ -15,9 +15,14 @@ class Vpc_Root_Category_Component extends Vpc_Abstract
             ),
             'model' => 'Vpc_Root_Category_GeneratorModel'
         );
-        $ret['configChildComponentsGenerator'] = 'page';
+        $cc = Vps_Registry::get('config')->vpc->childComponents;
+        if (isset($cc->Vpc_Root_Category_Component)) {
+            $ret['generators']['page']['component'] = array_merge(
+                $ret['generators']['page']['component'],
+                $cc->Vpc_Root_Category_Component->toArray()
+            );
+        }
         $ret['componentName'] = trlVps('Category');
-        $ret['flags']['showInPageTreeAdmin'] = true;
         $ret['flags']['menuCategory'] = true;
         return $ret;
     }

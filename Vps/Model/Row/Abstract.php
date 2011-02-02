@@ -9,7 +9,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     private $_internalId;
     protected $_siblingRows;
     protected $_exprValues = array();
-    protected $_dirty = false;
+    private $_dirtyColumns = array();
     static private $_internalIdCounter = 0;
 
     //damit im save() die childRows autom. mitgespeichert werden können
@@ -167,6 +167,59 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         }
     }
 
+    /**
+     * Speichert in jedem Fall, auch wenn sich keine daten geändert haben.
+     */
+    final public function forceSave()
+    {
+        $this->_setDirty($this->_getPrimaryKey());
+        return $this->save();
+    }
+
+    protected function _setDirty($column)
+    {
+        if (!in_array($column, $this->_dirtyColumns)) {
+            $this->_dirtyColumns[] = $column;
+        }
+    }
+
+    protected function _resetDirty()
+    {
+        $this->_dirtyColumns = array();
+    }
+
+    /**
+     * Ob die Row seblst dirty ist
+     */
+    protected function _isDirty()
+    {
+        return !empty($this->_dirtyColumns);
+    }
+
+    /**
+     * Ob die Row oder eine sibling row dirty ist
+     */
+    public final function isDirty()
+    {
+        if ($this->_isDirty()) return true;
+        foreach ($this->_getSiblingRows() as $r) {
+            if ($r->_isDirty()) return true;
+        }
+        return false;
+    }
+
+    /**
+     * dirty columns der row und der sibling rows
+     */
+    public function getDirtyColumns()
+    {
+        $ret = $this->_dirtyColumns;
+        foreach ($this->_getSiblingRows() as $r) {
+            $ret = array_merge($ret, $r->getDirtyColumns());
+        }
+        return $ret;
+    }
+
     public function save()
     {
         foreach ($this->_getSiblingRows() as $k=>$r) {
@@ -201,10 +254,6 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
 
     public function getChildRows($rule, $select = array())
     {
-        // TODO: getDependetModel soll array zurückgeben können, wo zusätzlich
-        // die referenz vom Relationsmodel steht (ist nötig wenn zwei relationen
-        // zur selben Tabelle gehen (getDependetModel ist dann vllt. die falsche
-        // bezeichnung)
         if ($rule instanceof Vps_Model_Abstract) {
             $m = $rule;
             $dependentOf = $this->_model;
@@ -222,10 +271,9 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             } else {
                 $select = clone $select; //nicht select objekt ändern
             }
-            $ref = $m->getReferenceByModelClass(get_class($dependentOf), null);
+            $ref = $m->getReferenceByModelClass(get_class($dependentOf), isset($dependent['rule']) ? $dependent['rule'] : null);
             if (!$this->{$this->_getPrimaryKey()}) {
                 return array();
-                //throw new Vps_Exception("row does not yet have a primary id");
             }
             $select->whereEquals($ref['column'], $this->{$this->_getPrimaryKey()});
             $ret = $m->getRows($select);
@@ -259,6 +307,12 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     public function getParentRow($rule)
     {
         $ref = $this->_model->getReference($rule);
+        if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+            if (!($this instanceof  Vps_Model_RowsSubModel_Row_Interface)) {
+                throw new Vps_Exception("row '".get_class($this)."' must implement Vps_Model_RowsSubModel_Row_Interface");
+            }
+            return $this->getSubModelParentRow();
+        }
         if (!isset($ref['column'])) {
             throw new Vps_Exception("column for reference '$rule' not set");
         }
@@ -319,13 +373,12 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                 $row->save();
             }
         }
+        $this->_callObserver('save');
     }
 
     protected function _callObserver($fn)
     {
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_ModelObserver::getInstance()->$fn($this);
-        }
+        Vps_Component_ModelObserver::getInstance()->add($fn, $this);
     }
 
     protected function _afterSave()
@@ -339,30 +392,56 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
                     $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
                     $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
                 }
-                $row->save();
+                if ($row->_isDirty()) {
+                    $row->save();
+                }
             }
         }
         $this->_updateFilters(true);
-        $this->_callObserver('save');
+
+        $this->_callReferencedModelsRowUpdated('save');
+    }
+
+    private function _callReferencedModelsRowUpdated($action)
+    {
+        $called = array();
+        foreach ($this->getModel()->getDependentModels() as $depName=>$m) {
+            if (!in_array($m, $called, true)) {
+                $m->dependentModelRowUpdated($this, $action);
+                $called[] = $m;
+            }
+        }
+
+        $called = array();
+        foreach ($this->getModel()->getReferences() as $refName) {
+            if ($this->getModel()->getReference($refName) === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                continue;
+            }
+            $m = $this->getModel()->getReferencedModel($refName);
+            if (!in_array($m, $called, true)) {
+                $m->childModelRowUpdated($this, $action);
+                $called[] = $m;
+            }
+        }
     }
 
     protected function _beforeUpdate()
     {
+        $this->_callObserver('update');
     }
 
     protected function _afterUpdate()
     {
         $this->_updateFilters(true);
-        $this->_callObserver('update');
     }
 
     protected function _beforeInsert()
     {
+        $this->_callObserver('insert');
     }
 
     protected function _afterInsert()
     {
-        $this->_callObserver('insert');
     }
 
     protected function _beforeDelete()
@@ -374,11 +453,13 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             }
         }
         $this->_callObserver('delete');
+
     }
 
     protected function _afterDelete()
     {
         $this->_isDeleted = true;
+        $this->_callReferencedModelsRowUpdated('delete');
     }
 
     protected function _updateFilters($filterAfterSave = false)

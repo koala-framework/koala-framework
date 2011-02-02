@@ -1,49 +1,14 @@
 <?php
 class Vpc_Paragraphs_Admin extends Vpc_Admin
 {
-    private function _componentNameToArray($name, $component, &$componentList)
+    public function gridColumns()
     {
-        $names = explode('.', $name, 2);
-        if (count($names) > 1) {
-            $this->_componentNameToArray($names[1], $component, $componentList[$names[0]]);
-        } else {
-            $componentList[$name] = $component;
-        }
+        return array();
     }
 
-    public function getExtConfig()
+    //gibts nimma
+    protected final function _getComponents()
     {
-        $componentList = array();
-        $componentIcons = array();
-        foreach ($this->_getComponents() as $component) {
-            if (!Vpc_Abstract::hasSetting($component, 'componentName')) continue;
-            $name = Vpc_Abstract::getSetting($component, 'componentName');
-            $icon = Vpc_Abstract::getSetting($component, 'componentIcon');
-            if ($icon) {
-                $icon = $icon->__toString();
-            }
-            if ($name) {
-                $this->_componentNameToArray($name, $component, $componentList);
-                $componentIcons[$component] = $icon;
-            }
-        }
-
-        return array(
-            'paragraphs' => array(
-                'xtype'=>'vpc.paragraphs',
-                'controllerUrl' => $this->getControllerUrl(),
-                'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
-                'icon' => $this->_getSetting('componentIcon')->__toString(),
-                'components' => $componentList,
-                'componentIcons' => $componentIcons,
-                'previewWidth' => $this->_getSetting('previewWidth')
-            )
-        );
-    }
-
-    protected function _getComponents()
-    {
-        return Vpc_Abstract::getChildComponentClasses($this->_class, 'paragraphs');
     }
 
     public function setup()

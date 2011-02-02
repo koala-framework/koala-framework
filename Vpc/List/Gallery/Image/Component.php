@@ -21,20 +21,14 @@ class Vpc_List_Gallery_Image_Component extends Vpc_Basic_ImageEnlarge_Component
         return $dimensions[$variant];
     }
 
-    public function getCacheVars()
+    public function getCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        $settingsRow = $this->getData()->parent->getComponent()->getRow();
-
-        $ret[] = array(
-            'model' => $settingsRow->getModel(),
-            'id' => $settingsRow->component_id
-        );
-        $ret[] = array(
-            'model' => $settingsRow->getModel(),
-            'id' => $settingsRow->component_id,
-            'callback' => true
-        );
+        $ret = parent::getCacheMeta();
+        $model = $this->getData()->parent->getComponent()->getRow()->getModel();
+        // wenn sich im Setting die Bildgröße ändert, müssen alle Komponenten gelöscht
+        // werden inkl. der Bilder selbst (per callback)
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($model, '{component_id}-%');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Callback($model, '{component_id}-%');
         return $ret;
     }
 }

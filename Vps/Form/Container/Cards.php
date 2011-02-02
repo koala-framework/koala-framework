@@ -105,45 +105,17 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return $ret;
     }
 
-    public function setInternalSave($v)
+    //verhindert aufrufen von validate/prepareSave/save etc fuer kinder wenn card nicht ausgewählt
+    protected function _processChildren($method, $childField, $row, $postData)
     {
-        $this->_combobox->setInternalSave($v);
-        return parent::setInternalSave($v);
+        if ($method == 'load') return true;
+        if ($childField === $this->_combobox) return true;
+
+        //wenn card nicht gewählt, nicht aufrufen
+        $value = isset($postData[$this->_combobox->getFieldName()]) ? $postData[$this->_combobox->getFieldName()] : $this->_combobox->getDefaultValue();
+        return $childField->getName() == $value;
     }
 
-    public function validate($row, $postData)
-    {
-        foreach ($this->fields as $card) {
-            if ($card != $this->_combobox
-                && $card->getName() != $postData[$this->_combobox->getFieldName()]) {
-                $card->setInternalSave(false);
-            } else {
-                $card->setInternalSave(true);
-            }
-        }
-        return parent::validate($row, $postData);
-    }
-
-    public function load($parentRow, $postData = array())
-    {
-        $row = (object)$this->_getRowByParentRow($parentRow);
-        $ret = array();
-        if ($this->hasChildren()) {
-            foreach ($this->getChildren() as $field) {
-                if ($field instanceof Vps_Form_Container_Card) {
-                    $data = $this->_combobox->load($row, $postData);
-                    $c = $data[$this->_combobox->getFieldName()];
-                    if ($field->getName() == $c) {
-                        $ret = array_merge($ret, $field->load($row, $postData));
-                    }
-                } else {
-                    $ret = array_merge($ret, $field->load($row, $postData));
-                }
-            }
-        }
-        return $ret;
-    }
-    
     public function getTemplateVars($values)
     {
         $ret = array();

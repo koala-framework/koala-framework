@@ -6,9 +6,8 @@ class Vpc_Advanced_SocialBookmarks_Inherit_Component extends Vpc_Abstract
         $ret = array();
         $ret['linkTemplate'] = false;
         if ($c = $this->_getBookmarksComponent()) {
-            $ret = $c->getComponent()->getTemplateVars();
+            $ret = $c->getComponent()->getTemplateVarsWithNetworks($this->getData()->parent);
             $ret['linkTemplate'] = self::getTemplateFile($c->componentClass);
-            $ret['networks'] = $c->getComponent()->getNetworks($this->getData()->parent);
         }
         return $ret;
     }
@@ -27,11 +26,11 @@ class Vpc_Advanced_SocialBookmarks_Inherit_Component extends Vpc_Abstract
         return null;
     }
 
-    public function getCacheVars()
+    public function getCacheMeta()
     {
-        $ret = parent::getCacheVars();
+        $ret = parent::getCacheMeta();
         if ($c = $this->_getBookmarksComponent()) {
-            $ret = array_merge($ret, $c->getComponent()->getCacheVars());
+            $ret[] = new Vps_Component_Cache_Meta_Component($c);
         }
         return $ret;
     }

@@ -71,6 +71,20 @@ class Vps_Setup
             }
             Vps_Util_Check_Config::check();
         }
+        if (isset($_SERVER['REQUEST_URI']) &&
+            substr($_SERVER['REQUEST_URI'], 0, 8) == '/vps/apc'
+        ) {
+            Vps_Loader::registerAutoload();
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                header('WWW-Authenticate: Basic realm="Check Config"');
+                throw new Vps_Exception_AccessDenied();
+            }
+            self::setUpVps();
+            $_SERVER['PHP_SELF'] = '/vps/apc';
+            global $MY_SELF;
+            require_once(Vps_Registry::get('config')->libraryPath . '/apc/apc.php');
+            exit;
+        }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
             Vps_Loader::registerAutoload();
             Vps_Util_Check_Config::check();
@@ -113,6 +127,7 @@ class Vps_Setup
         error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
         mb_internal_encoding('UTF-8');
+        iconv_set_encoding('internal_encoding', 'utf-8');
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
@@ -146,9 +161,12 @@ class Vps_Setup
         }
 
         if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != $config->application->vps->version) {
-            $required = trim(file_get_contents('application/vps_branch'));
-            $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
-            throw new Vps_Exception("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
+            $validCommands = array('shell', 'export', 'copy-to-test');
+            if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
+                $required = trim(file_get_contents('application/vps_branch'));
+                $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
+                throw new Vps_Exception_Client("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
+            }
         }
 
         if (isset($_POST['PHPSESSID'])) {
@@ -190,7 +208,18 @@ class Vps_Setup
                 $redirect = $config->server->domain;
             }
             if ($redirect) {
-                header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
+                $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
+                    ->findRedirectUrl('domainPath', array($host.$_SERVER['REQUEST_URI'], 'http://'.$host.$_SERVER['REQUEST_URI']));
+                if (!$target) {
+                    $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
+                        ->findRedirectUrl('domain', $host);
+                }
+                if ($target) {
+                    //TODO: funktioniert nicht bei mehreren domains
+                    header("Location: http://".$redirect.$target, true, 301);
+                } else {
+                    header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
+                }
                 exit;
             }
         }
@@ -215,23 +244,9 @@ class Vps_Setup
             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
         ) {
-            $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
-            if (empty($sessionPhpAuthed->success)) {
-                if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
-                    $loginResponse = Zend_Registry::get('userModel')
-                        ->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    if ($loginResponse['zendAuthResultCode'] == Zend_Auth_Result::SUCCESS) {
-                        $sessionPhpAuthed->success = 1;
-                    } else {
-                        unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    }
-                }
-
-                // separate if abfrage, damit login wieder kommt, falls gerade falsch eingeloggt wurde
-                if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
-                    header('WWW-Authenticate: Basic realm="Testserver"');
-                    throw new Vps_Exception_AccessDenied();
-                }
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                header('WWW-Authenticate: Basic realm="Testserver"');
+                throw new Vps_Exception_AccessDenied();
             }
         }
 
@@ -326,20 +341,25 @@ class Vps_Setup
 
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
-            Vps_Registry::get('trl')->setUseUserLanguage(false);
+            Vps_Trl::getInstance()->setUseUserLanguage(false);
             self::_setLocale();
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Vps_Component_Data_Root::getInstance();
-            $data = $root->getPageByUrl($requestUrl, $acceptLanguage);
+            $exactMatch = true;
+            $data = $root->getPageByUrl($requestUrl, $acceptLanguage, $exactMatch);
             if (!$data) {
-               throw new Vps_Exception_NotFound();
+                throw new Vps_Exception_NotFound();
             }
-            $root->setCurrentPage($data);
-            if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
+            if (!$exactMatch) {
+                if (rawurldecode($data->url) == $_SERVER['REDIRECT_URL']) {
+                    throw new Vps_Exception("getPageByUrl reposrted this isn't an exact match, but the urls are equal. wtf.");
+                }
                 header('Location: '.$data->url);
                 exit;
             }
+            $root->setCurrentPage($data);
+
             $page = $data->getComponent();
             $page->sendContent();
 
@@ -367,20 +387,71 @@ class Vps_Setup
         ) {
             Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text'], $_GET['assetsType']);
         } else if (is_array($urlParts) && $urlParts[0] == 'media') {
-            if (sizeof($urlParts) != 6) {
+            if (sizeof($urlParts) != 7) {
                 throw new Vps_Exception_NotFound();
             }
             $class = $urlParts[1];
             $id = $urlParts[2];
             $type = $urlParts[3];
             $checksum = $urlParts[4];
-            $filename = $urlParts[5];
+            // time() wäre der 5er, wird aber nur wegen browsercache benötigt
+            $filename = $urlParts[6];
 
             if ($checksum != Vps_Media::getChecksum($class, $id, $type, $filename)) {
                 throw new Vps_Exception_AccessDenied('Access to file not allowed.');
             }
             Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
         }
+    }
+
+    /**
+     * Proxy, der zB für cross-domain ajax requests verwendet werden kann
+     *
+     * @param string|array $hosts Erlaubte Hostnamen (RegExp erlaubt, ^ vorne und $ hinten werden autom. angefügt)
+     */
+    public static function dispatchProxy($hostnames)
+    {
+        if (empty($_SERVER['REDIRECT_URL'])) return;
+
+        if (!preg_match('#^/vps/proxy/?$#i', $_SERVER['REDIRECT_URL'])) return;
+
+        if (is_string($hostnames)) {
+            $hostnames = array($hostnames);
+        }
+
+        $proxyUrl = $_REQUEST['proxyUrl'];
+        $proxyPostVars = $_POST;
+        $proxyGetVars = $_GET;
+        if (array_key_exists('proxyUrl', $proxyPostVars)) unset($proxyPostVars['proxyUrl']);
+        if (array_key_exists('proxyUrl', $proxyGetVars)) unset($proxyGetVars['proxyUrl']);
+
+        // host checking
+        $proxyHost = parse_url($proxyUrl, PHP_URL_HOST);
+        $matched = false;
+        foreach ($hostnames as $hostname) {
+            if (preg_match('/^'.$hostname.'$/i', $proxyHost)) {
+                $matched = true;
+                break;
+            }
+        }
+        if (!$matched) return;
+
+        // proxying
+        $http = new Zend_Http_Client($proxyUrl);
+        if (count($_POST)) {
+            $http->setMethod(Zend_Http_Client::POST);
+        } else {
+            $http->setMethod(Zend_Http_Client::GET);
+        }
+        if (count($_GET)) $http->setParameterGet($proxyGetVars);
+        if (count($_POST)) $http->setParameterPost($proxyPostVars);
+        $response = $http->request();
+        $headers = $response->getHeaders();
+        if ($headers && !empty($headers['Content-type'])) {
+            header("Content-Type: ".$headers['Content-type']);
+        }
+        echo $response->getBody();
+        exit;
     }
 
     public static function getHost($includeProtocol = true)
