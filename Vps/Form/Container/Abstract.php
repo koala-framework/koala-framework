@@ -88,14 +88,6 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
         return $this->fields->getIterator();
     }
 
-    public function setInternalSave($v)
-    {
-        $this->setProperty('internalSave', $v);
-        foreach ($this as $f) {
-            $f->setInternalSave($v);
-        }
-    }
-
     public function setNamePrefix($v)
     {
         if ($this->getName()) {
@@ -119,34 +111,42 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
 
     public function save($parentRow, $postData)
     {
-        //wenn form zB in einem CardLayout liegt und deaktivert wurde nicht speichern
-        if ($this->getSave() === false || $this->getInternalSave() === false) return array();
+        if ($this->getSave() === false) return array();
 
         $row = $this->_getRowByParentRow($parentRow);
         parent::save($row, $postData);
     }
 
+    public function afterSave($parentRow, $postData)
+    {
+        //wenn form zB in einem CardLayout liegt und deaktivert wurde nicht speichern
+        if ($this->getSave() === false) return array();
+
+        $row = $this->_getRowByParentRow($parentRow);
+        parent::afterSave($row, $postData);
+    }
+
     public function delete($parentRow)
     {
-        $row = (object)$this->_getRowByParentRow($parentRow);
+        $row = $this->_getRowByParentRow($parentRow);
         parent::delete($row);
     }
 
     public function load($parentRow, $postData = array())
     {
-        $row = (object)$this->_getRowByParentRow($parentRow);
+        $row = $this->_getRowByParentRow($parentRow);
         return parent::load($row, $postData);
     }
 
     public function validate($parentRow, $postData = array())
     {
-        $row = (object)$this->_getRowByParentRow($parentRow);
+        $row = $this->_getRowByParentRow($parentRow);
         return parent::validate($row, $postData);
     }
 
     public function processInput($parentRow, $postData = array())
     {
-        $row = (object)$this->_getRowByParentRow($parentRow);
+        $row = $this->_getRowByParentRow($parentRow);
         return parent::processInput($row, $postData);
     }
 

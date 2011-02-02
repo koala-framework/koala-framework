@@ -2,14 +2,12 @@
 /**
  * @group Vpc_Basic_LinkTagParentPage
  **/
-class Vpc_Basic_LinkTagParentPage_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_LinkTagParentPage_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_LinkTagParentPage_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Basic_LinkTagParentPage_Root');
+        $this->_root->setFilename(null);
     }
 
     public function testUrlAndRel()
@@ -25,8 +23,7 @@ class Vpc_Basic_LinkTagParentPage_Test extends PHPUnit_Framework_TestCase
 
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1402));
+        $html = $this->_root->getComponentById(1402)->render();
         $this->assertEquals('<a href="/foo1">', $html);
     }
 }

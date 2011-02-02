@@ -2,7 +2,7 @@
 /**
  * @group Form_MultiFields
  */
-class Vps_Form_MultiFields_ChildFormTest extends PHPUnit_Framework_TestCase
+class Vps_Form_MultiFields_ChildFormTest extends Vps_Test_TestCase
 {
     public function testBam()
     {
@@ -35,6 +35,7 @@ class Vps_Form_MultiFields_ChildFormTest extends PHPUnit_Framework_TestCase
         $form->validate($form->getRow(), $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $r = $m1->getRow(1);
         $this->assertEquals('blub', $r->test1);

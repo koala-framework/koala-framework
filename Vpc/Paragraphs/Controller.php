@@ -1,39 +1,4 @@
 <?php
-class Vpc_Paragraphs_Controller_EditComponentsData extends Vps_Data_Abstract
-{
-    private $_componentClass;
-    private $_componentConfigs = array();
-
-    public function __construct($componentClass)
-    {
-        $this->_componentClass = $componentClass;
-    }
-
-    public function load($row)
-    {
-        $generators = Vpc_Abstract::getSetting($this->_componentClass, 'generators');
-        $classes = $generators['paragraphs']['component']; 
-        $admin = Vpc_Admin::getInstance($classes[$row->component]);
-        $ret = array();
-        foreach ($admin->getExtConfig() as $k=>$cfg) {
-            $cls = $classes[$row->component];
-            if (!isset($this->_componentConfigs[$cls.'-'.$k])) {
-                $this->_componentConfigs[$cls.'-'.$k] = $cfg;
-            }
-            $ret[] = array(
-                'componentClass' => $cls,
-                'type' => $k
-            );
-        }
-        return $ret;
-    }
-
-    public function getComponentConfigs()
-    {
-        return $this->_componentConfigs;
-    }
-}
-
 class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
     protected $_permissions = array(
@@ -56,7 +21,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             ->setRenderer('component');
         $this->_columns->add(new Vps_Grid_Column_Visible());
         $this->_columns->add(new Vps_Grid_Column('edit_components'))
-            ->setData(new Vpc_Paragraphs_Controller_EditComponentsData($this->_getParam('class')));
+            ->setData(new Vpc_Paragraphs_EditComponentsData($this->_getParam('class')));
     }
 
     public function jsonDataAction()
@@ -98,7 +63,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $generators = Vpc_Abstract::getSetting($this->_getParam('class'), 'generators');
             $classes =$generators['paragraphs']['component'];
             $row->component = array_search($class, $classes);
-            $row->visible = 0;
+            if (is_null($row->visible)) $row->visible = 0;
             $row->pos = $this->_getParam('pos');
             $row->save();
             $id = $row->id;
@@ -113,7 +78,9 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
             $this->view->componentConfigs = array();
             $this->view->editComponents = array();
-            $cfg = Vpc_Admin::getInstance($classes[$row->component])->getExtConfig();
+            $extConfig = Vps_Component_Abstract_ExtConfig_Abstract::getInstance($classes[$row->component]);
+            $this->view->openConfigKey = $extConfig->getEditAfterCreateConfigKey();
+            $cfg = $extConfig->getConfig(Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
             foreach ($cfg as $k=>$i) {
                 $this->view->componentConfigs[$classes[$row->component].'-'.$k] = $i;
                 $this->view->editComponents[] = array(
@@ -155,14 +122,35 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $targetCls = $classes[$source->row->component];
         }
         if ($source->componentClass != $targetCls) {
-            throw new Vps_Exception_Client(trlVps('Source and target paragraphs are not compatible.'));
+            if (Vpc_Abstract::hasSetting($source->componentClass, 'componentName')) {
+                $name = Vpc_Abstract::getSetting($source->componentClass, 'componentName');
+                $msg = trlVps("Can't paste paragraph type '{0}', as it is not avaliable here.", $name);
+            } else {
+                $msg = trlVps('Source and target paragraphs are not compatible.');
+            }
+            throw new Vps_Exception_Client($msg);
         }
 
-        $newParagraph = $source->generator->duplicateChild($source, $target);
+        $c = $target;
+        while ($c->parent) {
+            if ($c->dbId == $source->dbId) {
+                throw new Vps_Exception_Client(trlVps("You can't paste a paragraph into itself."));
+            }
+            $c = $c->parent;
+        }
+
+        $newParagraph = Vps_Util_Component::duplicate($source, $target);
 
         $row = $newParagraph->row;
         $row->pos = $this->_getParam('pos');
         $row->visible = null;
         $row->save();
+    }
+
+    public function jsonMakeAllVisibleAction()
+    {
+        $id = $this->_getParam('componentId');
+        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
+        Vpc_Admin::getInstance($c->componentClass)->makeVisible($c);
     }
 }

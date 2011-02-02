@@ -1,5 +1,4 @@
 <?php
-class Vpc_Form_Dynamic_Controller extends Vpc_Paragraphs_Controller
+class Vpc_Form_Dynamic_Controller extends Vps_Controller_Action_Auto_Vpc_Form
 {
-    protected $_tableName = 'Vpc_Form_Dynamic_Model';
 }

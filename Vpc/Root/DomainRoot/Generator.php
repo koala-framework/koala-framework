@@ -32,4 +32,11 @@ class Vpc_Root_DomainRoot_Generator extends Vps_Component_Generator_PseudoPage_T
     {
         return Vps_Component_Data_Root::getInstance();
     }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['showInPageTreeAdmin'] = true;
+        return $ret;
+    }
 }

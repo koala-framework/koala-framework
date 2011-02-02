@@ -2,7 +2,7 @@
 /**
  * @group Vps_Form_MultiCheckbox
  */
-class Vps_Form_MultiCheckbox_PhpTest extends PHPUnit_Framework_TestCase
+class Vps_Form_MultiCheckbox_PhpTest extends Vps_Test_TestCase
 {
     public function testRelation()
     {
@@ -22,17 +22,18 @@ class Vps_Form_MultiCheckbox_PhpTest extends PHPUnit_Framework_TestCase
         $form->validate($form->getRow(), $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $rows = $m1->getRow(1)->getChildRows('Relation')->toArray();
         $expected = array(
             'id' => 1,
             'data_id' => 1,
-            'values_id' => 2
+            'values_id' => 3
         );
         $this->assertEquals(2, count($rows));
         $this->assertEquals($expected, $rows[0]);
         $expected['id'] = 2;
-        $expected['values_id'] = 3;
+        $expected['values_id'] = 2;
         $this->assertEquals($expected, $rows[1]);
     }
 
@@ -55,6 +56,7 @@ class Vps_Form_MultiCheckbox_PhpTest extends PHPUnit_Framework_TestCase
         $form->validate($form->getRow(), $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $rows = $m2->getRows($m2->select()->whereEquals('data_id', 1))->toArray();
         $expected = array(

@@ -1,5 +1,6 @@
 <?php
 class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_Abstract
+    implements Vps_Component_Plugin_Interface_Login
 {
     public static function getSettings()
     {
@@ -27,7 +28,12 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
         setcookie(get_class($this), sha1($this->_getLoginPassword()), time()+60*60*24*365);
     }
 
-    public function isLoggedId()
+    /**
+     * @deprecated
+     */
+    public final function isLoggedId() { return $this->isLoggedIn(); }
+
+    public function isLoggedIn()
     {
         $pw = $this->_getPassword();
         if (!is_array($pw)) $pw = array($pw);
@@ -51,7 +57,8 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
 
     public function processOutput($output)
     {
-        if ($this->isLoggedId()) {
+        //TODO: nicht auf $_POST zugreifen sondern loginForm->getFormRow()
+        if ($this->isLoggedIn()) {
             if (isset($_POST['save_cookie']) && $_POST['save_cookie']) {
                 $this->_saveCookie();
             }
@@ -65,8 +72,10 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
         $templateVars['placeholder'] = Vpc_Abstract::getSetting(get_class($this), 'placeholder');
 
         $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
-        $view = new Vps_View_Component();
+
+        $renderer = new Vps_Component_Renderer();
+        $view = new Vps_Component_View($renderer);
         $view->assign($templateVars);
-        return $view->render($template);
+        return $renderer->render($view->render($template));
     }
 }

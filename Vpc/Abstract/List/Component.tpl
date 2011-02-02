@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass;?>">
     <? $i = 0; ?>
-    <? foreach ($this->children as $child) { ?>
+    <? foreach ($this->listItems as $child) { ?>
         <?
             $class = 'listItem ';
             if ($i == 0) $class .= 'vpcFirst ';
@@ -14,7 +14,8 @@
             $i++;
         ?>
         <div class="<?=$class;?>">
-            <?=$this->component($child);?>
+            <?=$this->component($child['data']);?>
         </div>
     <? } ?>
+    <div class="clear"></div>
 </div>

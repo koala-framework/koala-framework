@@ -1,6 +1,8 @@
 <?php
 /**
  * @group Composite_Images
+ *
+ * http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Composite_Images_Root/Vpc_Composite_Images_TestComponent/Index?componentId=2100
  */
 class Vpc_Composite_Images_Test extends Vpc_TestAbstract
 {
@@ -11,8 +13,7 @@ class Vpc_Composite_Images_Test extends Vpc_TestAbstract
 
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(2100));
+        $html = $this->_root->getComponentById(2100)->render();
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
         $doc->loadHTML($html);
@@ -24,7 +25,7 @@ class Vpc_Composite_Images_Test extends Vpc_TestAbstract
         $this->assertEquals(100, (string)$img[0]['height']);
         $src = (string)$img[0]['src'];
 
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();

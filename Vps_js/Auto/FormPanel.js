@@ -73,7 +73,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         //wir in einem Binding sind
         if (!this.autoLoad) return;
 
-        this.load();
+        this.load({}, {focusAfterLoad: this.focusAfterAutoLoad});
     },
 
     onMetaChange : function(meta)
@@ -94,26 +94,26 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 if (!meta.form.tbar) meta.form.tbar = [];
                 meta.form.tbar.push(this.getAction(b));
             }
-	        if (meta.helpText) {
-				meta.form.tbar.push('->');
-	            meta.form.tbar.push(new Ext.Action({
-	                icon : '/assets/silkicons/information.png',
-	                cls : 'x-btn-icon',
-	                handler : function (a) {
-	                    var helpWindow = new Ext.Window({
-	                        html: meta.helpText,
-	                        width: 400,
-	                        bodyStyle: 'padding: 10px; background-color: white;',
-	                        autoHeight: true,
-	                        bodyBorder : false,
-	                        title: trlVps('Info'),
-	                        resize: false
-	                    });
-	                    helpWindow.show();
-	                },
-	                scope: this
-	            }));
-	        }
+            if (meta.helpText) {
+                meta.form.tbar.push('->');
+                meta.form.tbar.push(new Ext.Action({
+                    icon : '/assets/silkicons/information.png',
+                    cls : 'x-btn-icon',
+                    handler : function (a) {
+                        var helpWindow = new Ext.Window({
+                            html: meta.helpText,
+                            width: 400,
+                            bodyStyle: 'padding: 10px; background-color: white;',
+                            autoHeight: true,
+                            bodyBorder : false,
+                            title: trlVps('Info'),
+                            resize: false
+                        });
+                        helpWindow.show();
+                    },
+                    scope: this
+                }));
+            }
         }
         if (this.formPanel != undefined) {
             this.remove(this.formPanel, true);
@@ -191,6 +191,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     this.getForm().resetDirty();
                 }
                 var lo = options.loadOptions;
+                if (lo && lo.focusAfterLoad) {
+                    this.focusFirstField()
+                }
                 if (lo && lo.success) {
                     lo.success.call(lo.scope || this, this, result);
                 }
@@ -243,7 +246,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     {
         if (!this.getForm().isValid()) {
             Ext.Msg.alert(trlVps('Save'),
-                trlVps("Can't save, please fill all marked fields correctly."));
+                trlVps("Can't save, please fill all red underlined fields correctly."));
             return;
         }
 
@@ -302,7 +305,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     onSubmitFailure: function(form, action) {
         if(action.failureType == Ext.form.Action.CLIENT_INVALID) {
             Ext.Msg.alert(trlVps('Save'),
-                trlVps("Can't save, please fill all marked fields correctly."));
+                trlVps("Can't save, please fill all red underlined fields correctly."));
         }
         this.getAction('save').enable();
     },
@@ -360,6 +363,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.applyBaseParams({id: 0});
             this.getForm().setDefaultValues();
             this.getForm().clearInvalid();
+            this.focusFirstField();
             this.fireEvent('addaction', this);
 
 			if (this.ownerCt instanceof Ext.TabPanel) {
@@ -419,6 +423,17 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
     getBaseParams : function() {
         return this.baseParams;
+    },
+
+    focusFirstField : function() {
+        var form = this.getForm();
+        if (!form) return;
+        form.items.each(function(i) {
+            if (i.isFormField && !i.disabled) {
+                i.focus();
+                return false;
+            }
+        }, this);
     }
 });
 

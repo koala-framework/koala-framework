@@ -5,7 +5,7 @@ abstract class Vpc_Abstract_Pdf_Component extends Vpc_Abstract
     {
         return $this->getData()->parent;
     }
-    
+
     public function sendContent($output = 'I', $filename = null)
     {
         if ($output == 'I') {
@@ -21,12 +21,12 @@ abstract class Vpc_Abstract_Pdf_Component extends Vpc_Abstract
                 }
             }
         }
-        
+
         $masterClass = Vpc_Admin::getComponentFile(get_class($this), 'PdfMaster', 'php', true);
         if (!$masterClass) { $masterClass = 'Vps_Pdf_TcPdf'; }
         $pdfComponent = $this->_getPdfComponent();
         if ($pdfComponent instanceof Vps_Component_Data) {
-            $pdfComponent = $pdfComponent->getComponent(); 
+            $pdfComponent = $pdfComponent->getComponent();
         }
         $pdf = new $masterClass($pdfComponent);
         $pdfComponent->getPdfWriter($pdf)->writeContent();

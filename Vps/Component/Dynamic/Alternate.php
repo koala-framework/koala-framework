@@ -12,6 +12,6 @@ class Vps_Component_Dynamic_Alternate extends Vps_Component_Dynamic_Abstract
 
     public function getContent()
     {
-        return ($this->_info['partial']['number'] % $this->_modulo) + 1;
+        return ($this->_info['number'] % $this->_modulo) + 1;
     }
 }

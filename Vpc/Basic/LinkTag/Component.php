@@ -16,7 +16,6 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
                 'component'    => 'intern'
             )
         ));
-        $ret['configChildComponentsGenerator'] = 'link';
         $ret['generators']['link'] = array(
             'class' => 'Vpc_Basic_LinkTag_Generator',
             'component' => array(
@@ -26,12 +25,21 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
                 'download' => 'Vpc_Basic_DownloadTag_Component'
             ),
         );
+        $cc = Vps_Registry::get('config')->vpc->childComponents;
+        if (isset($cc->Vpc_Basic_LinkTag_Component)) {
+            $ret['generators']['link']['component'] = array_merge(
+                $ret['generators']['link']['component'],
+                $cc->Vpc_Basic_LinkTag_Component->toArray()
+            );
+        }
         $ret['assetsAdmin']['dep'][] = 'VpsFormCards';
+
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = array();
         $ret['linkTag'] = $this->getData()->getChildComponent(array(
             'generator' => 'link'
         ));
@@ -45,37 +53,13 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
         ))->hasContent();
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getCacheVars();
-        $row = $this->_getCacheRow();
-        $ret[] = array(
-            'model' => $row->getModel(),
-            'id' => $row->component_id,
-            'callback' => true
-        );
+        $ret = parent::getStaticCacheMeta($componentClass);
         // der typ vom link-tag kann sich ändern und hat die gleiche cache-id,
         // deshalb unterkomponente gleich mitlöschen
-        $link = $this->getData()->getChildComponent('-link');
-        if ($link) {
-            $ret['linkTagLink'] = array(
-                'model' => $row->getModel(),
-                'id' => $row->component_id,
-                'componentId' => $link->componentId
-            );
-        }
+        $model = Vpc_Abstract::getSetting($componentClass, 'ownModel');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($model, '{component_id}-link');
         return $ret;
     }
-
-    public function onCacheCallback($row)
-    {
-        if ($this->getData()->isPage) {
-            foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
-                if (is_instance_of($componentClass, 'Vpc_Menu_Abstract')) {
-                    Vps_Component_Cache::getInstance()->cleanComponentClass($componentClass);
-                }
-            }
-        }
-    }
-
 }

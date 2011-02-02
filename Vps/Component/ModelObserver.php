@@ -13,7 +13,8 @@ class Vps_Component_ModelObserver
     );
     private $_skipFnF = true;
     private $_processed = array();
-    private $_disableCache = false; // für Tests
+    private $_enabled = true; // wird zB. beim Import in Proxy ausgeschaltet
+    private $_enableProcess = true; // für Unit Tests
 
     public static function getInstance()
     {
@@ -23,16 +24,30 @@ class Vps_Component_ModelObserver
         return self::$_instance;
     }
 
+    public static function clearInstance()
+    {
+        self::$_instance = null;
+    }
+
     //für tests
     public function setSkipFnF($v)
     {
         $this->_skipFnF = $v;
     }
 
-    //für tests
-    public function setDisableCache($disable)
+    public function enable()
     {
-        $this->_disableCache = $disable;
+        $this->_enabled = true;
+    }
+
+    public function disable()
+    {
+        $this->_enabled = false;
+    }
+
+    public function setEnableProcess($enableProcess)
+    {
+        $this->_enableProcess = $enableProcess;
     }
 
     public function clear()
@@ -44,35 +59,31 @@ class Vps_Component_ModelObserver
     }
 
 
-    public function insert($source)
+    public function add($function, $source)
     {
-        $this->_process['insert'][] = $source;
-    }
-
-    public function update($source)
-    {
-        $this->_process['update'][] = $source;
-    }
-
-    public function save($source)
-    {
-        $this->_process['save'][] = $source;
-    }
-
-    public function delete($source)
-    {
-        // Wird hier direkt aufgerufen, weil wenn später aufgerufen, ist row schon gelöscht
-        if (!Vps_Component_Data_Root::getComponentClass()) return;
-        $this->_processCache($source);
+        if ($this->_enabled) {
+            $source = array('source' => $source);
+            if ($function == 'delete') {
+                // Wird hier direkt aufgerufen, weil wenn später aufgerufen, ist row schon gelöscht
+                if (!Vps_Component_Data_Root::getComponentClass()) return;
+                if ($this->_enabled) $this->_processCache($source);
+            } else {
+                if ($source['source'] instanceof Vps_Model_Row_Abstract) {
+                    $source['dirtyColumns'] = $source['source']->getDirtyColumns();
+                }
+                $this->_process[$function][] = $source;
+            }
+        }
     }
 
     protected function _processCache($source)
     {
-        if ($source instanceof Vps_Model_Interface) {
-            $model = $source;
+        if ($source['source'] instanceof Vps_Model_Interface) {
+            $model = $source['source'];
             $id = null;
+            $row = null;
         } else {
-            $row = $source;
+            $row = $source['source'];
             if ($row instanceof Zend_Db_Table_Row_Abstract) {
                 $model = $row->getTable();
                 $primary = current($model->info('primary'));
@@ -80,15 +91,15 @@ class Vps_Component_ModelObserver
                 $model = $row->getModel();
                 $primary = $model->getPrimaryKey();
                 if (get_class($model) == 'Vps_Model_Db') $model = $model->getTable();
-                if ($model instanceof Vps_Component_Cache_MetaModel ||
-                    $model instanceof Vps_Component_Cache_Model ||
-                    ($model instanceof  Vps_Model_Field && !$primary)
-                ) {
-                    return array();
-                }
             }
-            $id = $row->$primary;
+            $id = is_array($primary) ? null : $row->$primary;
             $componentId = isset($row->component_id) ? $row->component_id : null;
+        }
+        if ($model instanceof Vps_Component_Cache_MetaModel ||
+            $model instanceof Vps_Component_Cache_Model ||
+            ($model instanceof  Vps_Model_Field && !$primary)
+        ) {
+            return array();
         }
         if (get_class($model) == 'Vps_Db_Table') return array();
         if ($this->_skipFnF) {
@@ -100,10 +111,14 @@ class Vps_Component_ModelObserver
         if (!isset($this->_processed[$modelname]) || !in_array($id, $this->_processed[$modelname])) {
             if (!isset($this->_processed[$modelname])) $this->_processed[$modelname] = array();
             $this->_processed[$modelname][] = $id;
-            if (!$this->_disableCache) {
-                Vps_Component_Cache::getInstance()->clean(
-                    Vps_Component_Cache::CLEANING_MODE_META, $source
-                );
+            if ($this->_enableProcess) {
+                if ($row) {
+                    $dirtyColumns = isset($source['dirtyColumns']) ? $source['dirtyColumns'] : null;
+                    Vps_Component_Cache::getInstance()->cleanByRow($row, $dirtyColumns);
+                } else {
+                    // Bei Import kommt ein Model daher
+                    Vps_Component_Cache::getInstance()->cleanByModel($model);
+                }
             }
             return array($modelname => $id);
         }
@@ -132,5 +147,13 @@ class Vps_Component_ModelObserver
         }
 
         return $ret;
+    }
+
+    // Nur für Tests
+    // TODO: Damit sowas nicht notwendig ist, das Ganze testbarer machen (Observer
+    // in Row austauschbar, damit man ihn mocken kann und die Klasse hier modularer machen
+    public function getProcess()
+    {
+        return $this->_process;
     }
 }

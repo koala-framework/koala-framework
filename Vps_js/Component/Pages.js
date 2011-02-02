@@ -39,9 +39,19 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         
         var tbar = this.treePanel.getTopToolbar();
         tbar.add(this.pageButton);
-        tbar.add('|');
-        tbar.add(trlVps('Search'));
-        tbar.add(this.treePanel.searchField);
+
+        tbar.add('-');
+        tbar.add(trlVps('Search: '));
+        
+        var filter = new Vps.Auto.Filter.Text({name: 'text', 'paramName': 'query'});
+        filter.on('filter', function(f, params) {
+            this.applyBaseParams(params);
+            this.reload();
+        }, this.treePanel);
+        filter.getToolbarItem().each(function(i) {
+            tbar.add(i);
+        });
+        
         tbar.add('->');
         tbar.add(this.treePanel.getAction('reload'));
         
@@ -93,10 +103,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('delete'),
                 this.getAction('visible'),
                 this.getAction('makeHome'),
-                this.getAction('preview'),
-                '-',
-                this.getAction('expand'),
-                this.getAction('collapse')
+                this.getAction('preview')
             ]
         });
 
@@ -108,14 +115,9 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }, this);
 
         tree.on('dblclick', function (o, e) {
-            var action;
-            for (var i in this.editActions) {
-                if (!this.editActions[i].isHidden()) {
-                    action = this.editActions[i];
-                }
-            }
-            if (action) {
-                action.execute(action.initialConfig);
+            var i = this.contextMenu.items.first();
+            if (i) {
+                i.handler.call(i.scope, i, e);
             }
         }, this);
 
@@ -135,25 +137,34 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }
         
         for (var action in data.actions) {
-        	if (data.actions[action]) {
+            if (data.actions[action]) {
                 this.getAction(action).enable();
-        	} else {
+            } else {
                 this.getAction(action).disable();
-        	}
+            }
         }
 
-        for (var i in this.editActions) {
-            this.editActions[i].hide();
-        }
+        this.contextMenu.items.each(function(i) {
+            if (i.initialConfig.actionKey) {
+                this.contextMenu.remove(i);
+            }
+        }, this);
+        this.pageButtonMenu.items.each(function(i) {
+            if (i.initialConfig.actionKey) {
+                this.pageButtonMenu.remove(i);
+            }
+        }, this);
+        var actionsAdded = 0;
         data.editComponents.each(function(editComponent) {
+        	var editKey = editComponent.componentId;
             var actionKey = editComponent.componentClass+'-'+editComponent.type;
-            if (!this.editActions[actionKey]) {
-                this.editActions[actionKey] = new Ext.Action({
+            if (!this.editActions[editKey]) {
+                this.editActions[editKey] = new Ext.Action({
                     text    : this.componentConfigs[actionKey].title,
                     handler : function (o, e) {
                         var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
                         node.attributes.editComponents.each(function(editComponent) {
-                            if (editComponent.componentClass+'-'+editComponent.type == o.actionKey) {
+                        	if (editComponent.componentId == o.editKey) {
                                 this.loadComponent({
                                     id: editComponent.componentId,
                                     componentClass: editComponent.componentClass,
@@ -170,13 +181,14 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                     icon    : this.componentConfigs[actionKey].icon,
                     cls     : 'x-btn-text-icon',
                     scope   : this,
-                    disabled : data.disabled,
-                    actionKey: actionKey
+                    actionKey: actionKey,
+                    editKey: editKey
                 });
-                this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
-                this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[actionKey]));
             }
-            this.editActions[actionKey].show();
+            this.editActions[editKey].setDisabled(data.disabled);
+            this.contextMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[editKey]));
+            this.pageButtonMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[editKey]));
+            actionsAdded++;
         }, this);
     },
 
@@ -219,7 +231,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
         if (type == 'properties') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Properties of selected Page'),
+                text    : trlVps('Page properties'),
                 handler : function () {
                     var form = this.editDialog.getAutoForm();
                     form.controllerUrl = form.editControllerUrl;
@@ -239,7 +251,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'add') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Add new Subpage'),
+                text    : trlVps('Add new child page'),
                 handler : function () {
             		var form = this.editDialog.getAutoForm();
                     form.controllerUrl = form.addControllerUrl;
@@ -260,7 +272,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'delete') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Delete selected Page'),
+                text    : trlVps('Delete page'),
                 handler : function() {
                     this.treePanel.onDelete();
                 },
@@ -270,7 +282,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'visible') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Toggle Visibility of selected Page'),
+                text    : trlVps('Show / hide page'),
                 handler : function() {
                     this.treePanel.onVisible();
                 },
@@ -280,19 +292,31 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'makeHome') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Make selected Page Homepage'),
+                text    : trlVps('Use as homepage'),
                 handler : function (o, e) {
-                    Ext.Ajax.request({
-                        url: '/admin/component/pages/json-make-home',
-                        success: function(r) {
-                            response = Ext.decode(r.responseText);
-                            var oldhome = this.treePanel.tree.getNodeById(response.oldhome);
-                            oldhome.attributes.visible = response.oldhomeVisible;
-                            this.treePanel.setVisible(oldhome);
-                            var home = this.treePanel.tree.getNodeById(response.home);
-                            home.ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/application_home.png)';
+                    Ext.Msg.show({
+                        title: trlVps('Use as homepage'),
+                        msg: trlVps('Attention! You are about to set the selected page as the homepage of your website. This may affect the entire website. Do you wish to proceed?'),
+                        buttons: Ext.Msg.YESNO,
+                        icon: Ext.MessageBox.WARNING,
+                        fn: function(btn, text) {
+                            if (btn == 'yes') {
+                                Ext.Ajax.request({
+                                    url: '/admin/component/pages/json-make-home',
+                                    success: function(r) {
+                                        response = Ext.decode(r.responseText);
+                                        var oldhome = this.treePanel.tree.getNodeById(response.oldhome);
+                                        oldhome.attributes.visible = response.oldhomeVisible;
+                                        this.treePanel.setVisible(oldhome);
+                                        oldhome.ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/page.png)';
+                                        var home = this.treePanel.tree.getNodeById(response.home);
+                                        home.ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/application_home.png)';
+                                    },
+                                    params: {id: this.treePanel.tree.getSelectionModel().getSelectedNode().id },
+                                    scope: this
+                                });
+                            }
                         },
-                        params: {id: this.treePanel.tree.getSelectionModel().getSelectedNode().id },
                         scope: this
                     });
                 },
@@ -318,7 +342,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'preview') {
             this.actions[type] = new Ext.Action({
-                text    : trlVps('Open Preview'),
+                text    : trlVps('Open preview'),
                 handler : function () {
                     window.open('/admin/component/pages/open-preview?page_id='+
                                 this.treePanel.getSelectedId());

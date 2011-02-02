@@ -5,7 +5,14 @@ class Vpc_News_Detail_Abstract_Trl_Component extends Vpc_Directories_Item_Detail
     {
         $ret = parent::getTemplateVars();
         $ret['title'] = $this->getData()->row->title;
+
+        $ret['editComponents'] = array('content');
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        return $this->getData()->getChildComponent('-content')->hasContent();
     }
 
     public static function modifyItemData(Vps_Component_Data $new)
@@ -14,5 +21,4 @@ class Vpc_News_Detail_Abstract_Trl_Component extends Vpc_Directories_Item_Detail
         $new->publish_date = $new->chained->row->publish_date;
         $new->teaser = $new->row->teaser;
     }
-
 }

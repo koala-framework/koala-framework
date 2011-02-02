@@ -6,6 +6,7 @@ class Vpc_Forum_Search_View_Component extends Vpc_Forum_Group_View_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['searchForm'] = 'Vpc_Forum_Search_View_SearchForm_Component';
         $ret['searchQueryFields'] = 'vpc_posts.content';
+        $ret['partialClass'] = 'Vps_Component_Partial_Id';
         return $ret;
     }
 
@@ -15,10 +16,5 @@ class Vpc_Forum_Search_View_Component extends Vpc_Forum_Group_View_Component
         $formRow = $this->_getSearchForm()->getComponent()->getFormRow();
         if (!$formRow->query) return null;
         return parent::_getSelect();
-    }
-
-    public function getPartialClass()
-    {
-        return 'Vps_Component_Partial_Id';
     }
 }

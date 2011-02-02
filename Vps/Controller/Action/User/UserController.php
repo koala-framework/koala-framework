@@ -24,7 +24,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         $fs->setLabelWidth(100);
 
         $fs->add(new Vps_Form_Field_Panel())
-            ->setHtml(trlVps('At the following action emails are automatically sent to the adequade user.').'<br />'
+            ->setHtml(trlVps('After following actions emails are sent automatically to the respective user:').'<br />'
                      .trlVps('Create, Delete and E-Mail change'));
         $fs->add(new Vps_Form_Field_ShowField('password', trlVps('Activation link')))
             ->setData(new Vps_Controller_Action_User_Users_ActivationlinkData());

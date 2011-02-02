@@ -42,11 +42,16 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         var params;
         if (data.componentId) {
             params = { componentId: data.componentId };
-            if (componentConfig.componentIdSuffix) {
-                params.componentId += componentConfig.componentIdSuffix;
+            if (data.componentIdSuffix) {
+                params.componentId += data.componentIdSuffix;
+            } else if (componentConfig.componentIdSuffix) {
+                //deprecated!
+                throw new Error("don't use componentConfig.componentIdSuffix");
+                //params.componentId += componentConfig.componentIdSuffix;
             }
         } else {
             params = this.getBaseParams();
+            data.componentId = params.componentId;
         }
         var item;
         this.items.each(function(i) {
@@ -56,12 +61,17 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             }
         }, this);
 
+        this.componentsStack.push(data);
+        this.updateToolbar();
+
         if (item) {
             item.applyBaseParams(params);
-            item.load();
+            item.load({}, {focusAfterLoad: true});
             if (item.getAction && item.getAction('saveBack')) {
-                if (this.getTopToolbar().items.getCount() > 0) {
+                if (this.getTopToolbar().items.getCount() > 2) {
                     item.getAction('saveBack').show();
+                } else {
+                    item.getAction('saveBack').hide();
                 }
             }
         } else {
@@ -70,6 +80,8 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 componentClass: data.componentClass,
                 type: data.type,
                 baseParams: params,
+                focusAfterAutoLoad: true,
+                autoHeight: this.autoHeight,
                 listeners: {
                     scope: this,
                     gotComponentConfigs: function(componentConfigs) {
@@ -90,16 +102,16 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             item.on('loaded', function() {
                 //muss hier auch nochmal gemacht werden
                 if (item.getAction && item.getAction('saveBack')) {
-                    if (this.getTopToolbar().items.getCount() > 0) {
+                    if (this.getTopToolbar().items.getCount() > 2) {
                         item.getAction('saveBack').show();
+                    } else {
+                        item.getAction('saveBack').hide();
                     }
                 }
             }, this);
             this.add(item);
             this.doLayout();
         }
-        this.componentsStack.push(data);
-        this.updateToolbar();
         this.getLayout().setActiveItem(item);
     },
 
@@ -141,14 +153,16 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     stackIndex: i,
                     componentClass: ec.componentClass,
                     type: ec.type,
+                    componentIdTemplate: ec.componentIdTemplate,
+                    componentIdSuffix: ec.componentIdSuffix,
                     componentId: ec.componentId, //gesetzt wenn aus Pages - weil da gibts unterschiedliche
                     handler: function(o) {
                         var data = Vps.clone(this.componentsStack[o.stackIndex]);
-                        if (o.componentId) {
-                            data.componentId = o.componentId;
-                        }
+                        if (o.componentId) data.componentId = o.componentId;
                         data.componentClass = o.componentClass;
                         data.type = o.type;
+                        data.componentIdTemplate = o.componentIdTemplate;
+                        data.componentIdSuffix = o.componentIdSuffix;
                         this.componentsStack = this.componentsStack.slice(0, o.stackIndex);
                         this.loadComponent(data);
                     },
@@ -160,7 +174,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             toolbar.add('»');
         }
 
-        var data = this.componentsStack[this.componentsStack.length-1]
+        var data = this.componentsStack[this.componentsStack.length-1];
         var cfg = this.componentConfigs[data.componentClass+'-'+data.type];
         toolbar.add({
             cls: 'x-btn-text-icon',

@@ -3,6 +3,13 @@ class Vps_Component_Abstract
 {
     private static $_settings = null;
     private static $_rebuildingSettings = false;
+    private static $_cacheSettings = array();
+    private static $_modelsCache = array(
+        'own' => array(),
+        'child' => array(),
+        'form' => array(),
+        'table' => array()
+    );
 
     public function __construct()
     {
@@ -18,39 +25,63 @@ class Vps_Component_Abstract
 
     public static function hasSettings($class)
     {
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+
+        $cacheId = $prefix.'-hasSettings-'.$class;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         //& für performance
         $s =& self::_getSettingsCached();
-        return isset($s[$class]);
+        $ret = isset($s[$class]);
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     public static function hasSetting($class, $setting)
     {
-        static $settingsCache;
-        if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
-        if (self::$_rebuildingSettings || !$settingsCache) {
+        if (self::$_rebuildingSettings) {
             //um endlosschleife in settingsCache zu verhindern
             $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             if (!class_exists($c)) {
                 throw new Vps_Exception("Invalid component '$class'");
             }
             $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
-            $settings = call_user_func(array($c, 'getSettings'), $param);
+            if (isset(self::$_cacheSettings[$c][$param])) {
+                $settings = self::$_cacheSettings[$c][$param];
+            } else {
+                $settings = call_user_func(array($c, 'getSettings'), $param);
+                self::$_cacheSettings[$c][$param] = $settings;
+            }
             return isset($settings[$setting]);
         }
+
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'-has-'.$class.'-'.$setting;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         //& für performance
         $s =& self::_getSettingsCached();
         if (!isset($s[$class])) {
             throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses. Requested setting: $setting");
         }
-        return array_key_exists($setting, $s[$class]);
+        $ret = array_key_exists($setting, $s[$class]);
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     public static function getSetting($class, $setting)
     {
-        static $settingsCache;
-        if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
-        if (self::$_rebuildingSettings || !$settingsCache) {
+        if (self::$_rebuildingSettings) {
             //um endlosschleife in settingsCache zu verhindern
+
             if (!class_exists(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class)) {
                 throw new Vps_Exception("Invalid component '$class'");
             }
@@ -60,75 +91,140 @@ class Vps_Component_Abstract
                 do {
                     $ret[] = $p;
                 } while ($p = get_parent_class($p));
-                return $ret;
-            } else {
-                $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-                $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
-                $settings = call_user_func(array($c, 'getSettings'), $param);
-                if (!array_key_exists($setting, $settings)) {
-                    throw new Vps_Exception("Couldn't find required setting '$setting' for $c.");
-                }
-                if ($setting == 'generators' && Vps_Registry::get('config')->vpc->rootComponent == Vps_Component_Data_Root::getComponentClass()) {
-                    $classes = self::getSetting($class, 'parentClasses');
-                    $cc = array();
-                    if (isset(Vps_Registry::get('config')->vpc->childComponents)) {
-                        $cc = Vps_Registry::get('config')->vpc->childComponents->toArray();
-                    }
-                    foreach ($classes as $c) {
-                        if (isset($cc[$c])) {
-                            if (!isset($settings['configChildComponentsGenerator'])) {
-                                throw new Vps_Exception("configChildComponentsGenerator setting not set for '$class', but vpc.childComponents in config is used");
+            } else if ($setting == 'parentFilePaths') {
+                //value = klasse, key=pfad
+                $ret = array();
+                foreach (self::getSetting($class, 'parentClasses') as $c) {
+                    $file = str_replace('_', DIRECTORY_SEPARATOR, $c) . '.php';
+                    $dirs = explode(PATH_SEPARATOR, get_include_path());
+                    foreach ($dirs as $dir) {
+                        if ($dir == '.') $dir = getcwd();
+                        $path = $dir . '/' . $file;
+                        if (is_file($path)) {
+                            if (substr($path, -14) == '/Component.php') {
+                                $ret[substr($path, 0, -14)] = substr($c, 0, -10);
+                            } else {
+                                $ret[substr($path, 0, -4)] = $c; //nur .php
                             }
-                            $gen = $settings['configChildComponentsGenerator'];
-                            if (!isset($settings['generators'][$gen])) {
-                                throw new Vps_Exception("invalid configChildComponentsGenerator for '$class'");
-                            }
-                            if (!is_array($settings['generators'][$gen]['component'])) {
-                                throw new Vps_Exception("component must be an array for generator '$gen' for '$class'");
-                            }
-                            foreach ($cc[$c] as $componentKey=>$componentClass) {
-                                $settings['generators'][$gen]['component'][$componentKey] = $componentClass;
-                            }
+                            break;
                         }
                     }
                 }
-                return $settings[$setting];
-            }
+            } else if ($setting == 'componentFiles') {
+                $ret = Vps_Component_Abstract_Admin::getComponentFiles($class, array(
+                    'Master.tpl' => array('filename'=>'Master', 'ext'=>'tpl', 'returnClass'=>false),
+                    'Component.tpl' => array('filename'=>'Component', 'ext'=>'tpl', 'returnClass'=>false),
+                    'Partial.tpl' => array('filename'=>'Partial', 'ext'=>'tpl', 'returnClass'=>false),
+                    'Admin' => array('filename'=>'Admin', 'ext'=>'php', 'returnClass'=>true),
+                    'Controller' => array('filename'=>'Controller', 'ext'=>'php', 'returnClass'=>true),
+                    'FrontendForm' => array('filename'=>'FrontendForm', 'ext'=>'php', 'returnClass'=>true),
+                    'Form' => array('filename'=>'Form', 'ext'=>'php', 'returnClass'=>true),
 
+                    //verwendet bei dependencies
+                    'css' => array('filename'=>'Component', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
+                    'printcss' => array('filename'=>'Component', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
+                ));
+            } else {
+                $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+                $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
+                if (isset(self::$_cacheSettings[$c][$param])) {
+                    $settings = self::$_cacheSettings[$c][$param];
+                } else {
+                    $settings = call_user_func(array($c, 'getSettings'), $param);
+                    self::$_cacheSettings[$c][$param] = $settings;
+                }
+                if (!array_key_exists($setting, $settings)) {
+                    throw new Vps_Exception("Couldn't find required setting '$setting' for $c.");
+                }
+                $ret = $settings[$setting];
+                if ($setting == 'generators') {
+                    $ret = array();
+                    foreach ($settings[$setting] as $k=>$g) {
+                        if (is_array($g['component'])) {
+                            foreach ($g['component'] as $l=>$cc) {
+                                if (!$cc) continue;
+                                if (Vpc_Abstract::hasSetting($cc, 'needsParentComponentClass')
+                                    && Vpc_Abstract::getSetting($cc, 'needsParentComponentClass')
+                                ) {
+                                    $g['component'][$l] .= '.'.$class;
+                                }
+                            }
+                        } else {
+                            if (!$g['component']) continue;
+                            if (Vpc_Abstract::hasSetting($g['component'], 'needsParentComponentClass')
+                                && Vpc_Abstract::getSetting($g['component'], 'needsParentComponentClass')
+                            ) {
+                                $g['component'] .= '.'.$class;
+                            }
+                        }
+                        $ret[$k] = $g;
+                    }
+                }
+            }
+            return $ret;
         }
-        //& für performance
-        $s =& self::_getSettingsCached();
-        if (!is_string($class)) {
-            throw new Vps_Exception("Invalid component '$class'");
+
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'-'.$class.'-'.$setting;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
         }
-        if (!isset($s[$class])) {
-            throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
+
+        if (!self::$_settings) self::_getSettingsCached();
+        try {
+            $ret = self::$_settings[$class][$setting];
+        } catch (ErrorException $e) {
+            //diese checks im nachhinein machen damit sie nicht immer gemacht werden (diese fkt wird am meisten von allen aufgerufen)
+            //und hier dann versuchen eine bessere exception msg zu erstellen
+            if (!is_string($class)) {
+                throw new Vps_Exception("Invalid component '$class'");
+            } else if (!isset(self::$_settings[$class])) {
+                throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
+            } else if (!array_key_exists($setting, self::$_settings[$class])) {
+                // man könnte hier isset() machen, nur wenn das setting NULL ist, gibt es false zurück... scheis PHP :)
+                throw new Vps_Exception("Setting '$setting' does not exist for Component '$class'");
+            } else {
+                throw $e;
+            }
         }
-        // man könnte hier isset() machen, nur wenn das setting NULL ist, gibt es false zurück... scheis PHP :)
-        if (!array_key_exists($setting, $s[$class])) {
-            throw new Vps_Exception("Setting '$setting' does not exist for Component '$class'");
-        }
-        return $s[$class][$setting];
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     public static function getSettingMtime()
     {
         if (!Vps_Registry::get('config')->vpc->rootComponent) return 0;
+
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'-settingsMtime';
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         $s =& self::_getSettingsCached();
-        return $s['mtime'];
+        $ret = $s['mtime'];
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     //wenn root geändert wird muss der cache hier gelöscht werden können
     public static function resetSettingsCache()
     {
         self::$_settings = null;
+        self::$_rebuildingSettings = false;
+        self::$_cacheSettings = array();
     }
 
     private static function &_getSettingsCached()
     {
+        self::$_cacheSettings = array();
         if (!self::$_settings) {
             $cache = new Vps_Assets_Cache(array('checkComponentSettings' => false));
-            $cacheId = 'componentSettings'.Vps_Registry::get('trl')->getTargetLanguage()
+            $cacheId = 'componentSettings'.Vps_Trl::getInstance()->getTargetLanguage()
                                 .'_'.Vps_Component_Data_Root::getComponentClass();
             self::$_settings = $cache->load($cacheId);
             if (!self::$_settings) {
@@ -144,21 +240,15 @@ class Vps_Component_Abstract
                     //generators �ber getSetting holen, da dort noch die aus der config dazugemixt werden
                     self::$_settings[$c]['generators'] = self::getSetting($c, 'generators', false/*don't use settings cache*/);
 
-                    try {
-                        call_user_func(array($realCls, 'validateSettings'), self::$_settings[$c], $c);
-                    } catch (Vps_Exception $e) {
-                        throw new Vps_Exception("$c: ".$e->getMessage());
-                    }
-
-                    //*** templates
-                    self::$_settings[$c]['templates'] = array(
-                        'Master' => Vpc_Admin::getComponentFile($c, 'Master', 'tpl'),
-                        'Component' => Vpc_Admin::getComponentFile($c, 'Component', 'tpl'),
-                        'Partial' => Vpc_Admin::getComponentFile($c, 'Partial', 'tpl')
-                    );
+                    //*** load templates + componentFiles
+                    //vorladen fuer Vps_Component_Abstract_Admin::getComponentFile
+                    self::$_settings[$c]['componentFiles'] = self::getSetting($c, 'componentFiles');
 
                     //*** parentClasses
-                    self::$_settings[$c]['parentClasses'] = self::getSetting($c, 'parentClasses', false/*don't use settings cache*/);
+                    self::$_settings[$c]['parentClasses'] = self::getSetting($c, 'parentClasses');
+
+                    //*** parentFilePaths
+                    self::$_settings[$c]['parentFilePaths'] = self::getSetting($c, 'parentFilePaths');
 
                     //*** processedCssClass
                     self::$_settings[$c]['processedCssClass'] = '';
@@ -198,8 +288,20 @@ class Vps_Component_Abstract
                         self::$_settings['mtimeFiles'][] = $f;
                         self::$_settings['mtimeFiles'][] = $incPath.DIRECTORY_SEPARATOR.$file.'.css';
                     } while ($p = get_parent_class($p));
+
+                    //*** generators
+                    self::$_settings[$c]['generators'] = self::getSetting($c, 'generators');
                 }
                 self::$_rebuildingSettings = false;
+
+                foreach (self::getComponentClasses() as $c) {
+                    $realCls = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
+                    try {
+                        call_user_func(array($realCls, 'validateSettings'), self::$_settings[$c], $c);
+                    } catch (Vps_Exception $e) {
+                        throw new Vps_Exception("$c: ".$e->getMessage());
+                    }
+                }
 
                 $cache->save(self::$_settings, $cacheId);
             }
@@ -235,7 +337,8 @@ class Vps_Component_Abstract
             'placeholder'   => array(),
             'plugins'       => array(),
             'generators'    => array(),
-            'flags'         => array()
+            'flags'         => array(),
+            'extConfig'     => 'Vps_Component_Abstract_ExtConfig_None'
         );
     }
 
@@ -268,7 +371,7 @@ class Vps_Component_Abstract
 
     public static function createTable($class, $tablename = null)
     {
-        static $tables = array();
+        $tables = self::$_modelsCache['table'];
         if (!isset($tables[$class.'-'.$tablename])) {
             if (!$tablename) {
                 $tablename = Vpc_Abstract::getSetting($class, 'tablename');
@@ -295,62 +398,79 @@ class Vps_Component_Abstract
         return self::createOwnModel($class);
     }
 
+    /**
+     * @return Vps_Model_Abstract
+     */
     public static function createOwnModel($class)
     {
-        static $models = array();
-        if (!array_key_exists($class, $models)) {
+        if (!array_key_exists($class, self::$_modelsCache['own'])) {
             if (Vpc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
                 if (!$t instanceof Zend_Db_Table_Abstract) {
                     throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
                 }
-                $models[$class] = new Vps_Model_Db(array(
+                $model = new Vps_Model_Db(array(
                     'table' => $t
                 ));
             } else if (Vpc_Abstract::hasSetting($class, 'ownModel')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'ownModel');
-                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+                $model = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                $models[$class] = null;
+                $model = null;
             }
+            self::$_modelsCache['own'][$class] = $model;
         }
-        return $models[$class];
+        return self::$_modelsCache['own'][$class];
     }
 
+    /**
+     * @return Vps_Model_Abstract
+     */
     public static function createChildModel($class)
     {
-        static $models = array();
-        if (!array_key_exists($class, $models)) {
+        if (!array_key_exists($class, self::$_modelsCache['child'])) {
             if (Vpc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
                 if (!$t instanceof Zend_Db_Table_Abstract) {
                     throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
                 }
-                $models[$class] = new Vps_Model_Db(array(
+                $model = new Vps_Model_Db(array(
                     'table' => $t
                 ));
             } else if (Vpc_Abstract::hasSetting($class, 'childModel')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'childModel');
-                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+                $model = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                $models[$class] = null;
+                $model = null;
             }
+            self::$_modelsCache['child'][$class] = $model;
         }
-        return $models[$class];
+        return self::$_modelsCache['child'][$class];
     }
 
+    /**
+     * @return Vps_Model_Abstract
+     */
     public static function createFormModel($class)
     {
-        static $models = array();
-        if (!array_key_exists($class, $models)) {
+        if (!array_key_exists($class, self::$_modelsCache['form'])) {
             if (Vpc_Abstract::hasSetting($class, 'formModel')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'formModel');
-                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+                self::$_modelsCache['form'][$class] = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                $models[$class] = null;
+                self::$_modelsCache['form'][$class] = null;
             }
         }
-        return $models[$class];
+        return self::$_modelsCache['form'][$class];
+    }
+
+    public static function clearModelInstances()
+    {
+        self::$_modelsCache = array(
+            'own' => array(),
+            'child' => array(),
+            'form' => array()
+        );
     }
 
     /**
@@ -388,22 +508,44 @@ class Vps_Component_Abstract
 
     static public function getFlag($class, $flag)
     {
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'-flag-'.$class.'-'.$flag;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         $flags = self::getSetting($class, 'flags');
-        if (!isset($flags[$flag])) return false;
-        return $flags[$flag];
+        if (!isset($flags[$flag])) {
+            $ret = false;
+        } else {
+            $ret = $flags[$flag];
+        }
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     public static function getComponentClasses()
     {
+        $root = Vps_Component_Data_Root::getComponentClass();
+        if (!$root) return array();
         if (!self::$_rebuildingSettings) {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+            $cacheId = $prefix.'-componentClasses-'.Vps_Component_Data_Root::getComponentClass();
+            $ret = apc_fetch($cacheId, $success);
+            if ($success) {
+                return $ret;
+            }
             $s =& self::_getSettingsCached();
             $ret = array_keys($s);
             unset($ret[array_search('mtime', $ret)]);
             unset($ret[array_search('mtimeFiles', $ret)]);
-            return array_values($ret);
+            $ret = array_values($ret);
+            apc_add($cacheId, $ret);
+            return $ret;
         }
-        $root = Vps_Component_Data_Root::getComponentClass();
-        if (!$root) return array();
         $componentClasses = array($root);
         self::_getChildComponentClasses($componentClasses, $root);
         return $componentClasses;
@@ -412,19 +554,23 @@ class Vps_Component_Abstract
     private static function _getChildComponentClasses(&$componentClasses, $class)
     {
         $classes = array();
-        foreach (Vpc_Abstract::getSetting($class, 'generators', false) as $generator) {
+        foreach (Vpc_Abstract::getSetting($class, 'generators') as $generator) {
             if (is_array($generator['component'])) {
                 $classes = array_merge($classes, $generator['component']);
             } else {
                 $classes[] = $generator['component'];
             }
+            if (isset($generator['plugins'])) {
+                $classes = array_merge($classes, $generator['plugins']);
+            }
         }
-        $plugins = Vpc_Abstract::getSetting($class, 'plugins', false);
+        $plugins = Vpc_Abstract::getSetting($class, 'plugins');
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
         }
-        if (Vpc_Abstract::hasSetting($class, 'inheritComponentClass', false)) {
-            $classes[] = Vpc_Abstract::getSetting($class, 'inheritComponentClass', false);
+        $alternativeComponent = Vpc_Abstract::getFlag($class, 'alternativeComponent');
+        if ($alternativeComponent) {
+            $classes[] = $alternativeComponent;
         }
         foreach ($classes as $c) {
             if ($c&& !in_array($c, $componentClasses)) {

@@ -24,6 +24,8 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         // e.g.: 'green' => trlVps('Green')
         $ret['tableStyles'] = array('green' => trlVps('Green'));
         $ret['cssClass'] = 'webStandard';
+
+        $ret['extConfig'] = 'Vpc_Basic_Table_ExtConfig';
         return $ret;
     }
 
@@ -40,13 +42,18 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getCacheVars()
+    public function getColumnCount()
     {
-        $ret = parent::getCacheVars();
-        $ret[] = array(
-            'model' => $this->getChildModel(),
-            'componentId' => $this->getData()->componentId
-        );
+        if (!$this->getRow() || !$this->getRow()->columns) {
+            throw new Vps_Exception_Client("Please set first the amount of columns in the settings section.");
+        }
+        return $this->getRow()->columns;
+    }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
         return $ret;
     }
 }

@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_FnF
  */
-class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
+class Vps_Model_FnF_ModelTest extends Vps_Test_TestCase
 {
     public function testRowUnset()
     {
@@ -432,5 +432,21 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $row->id = 3;
         $row->value = 'bloe';
         $row->save();
+    }
+
+    public function testDirtyColumns()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 'foo'),
+            array('id' => 2, 'value' => 'bar'),
+        ));
+
+        $row = $model->getRow(1);
+        $this->assertEquals($row->getDirtyColumns(), array());
+        $this->assertEquals($row->isDirty(), false);
+        $row->value = 'blubb';
+        $this->assertEquals($row->getDirtyColumns(), array('value'));
+        $this->assertEquals($row->isDirty(), true);
     }
 }
