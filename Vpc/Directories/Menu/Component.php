@@ -21,6 +21,11 @@ class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract_Component
         return $ret;
     }
 
+    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    {
+        return false;
+    }
+
     protected function _getItemDirectory()
     {
         $data = $this->getData();
