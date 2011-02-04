@@ -12,7 +12,7 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
 
         //TODO: viewcache nicht deaktiveren
         //cache löschen muss dazu korrekt eingebaut werden
-        $ret['viewCache'] = false;
+        //$ret['viewCache'] = false;
 
         $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
@@ -59,6 +59,18 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
             $page = $page->parent;
         } while(!$c->hasContent());
         return $c;
+    }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
+        if (isset($generators['child']) && $generators['child']['component']) {
+            $childClass = $generators['child']['component'];
+            // TODO: es sollte nur mit Pattern wie "%-ic-child" gemacht werden, geht aber noch nicht
+            if ($childClass) $ret[] = new Vpc_Box_InheritContent_CacheMeta($childClass);
+        }
+        return $ret;
     }
 
     public function hasContent()
