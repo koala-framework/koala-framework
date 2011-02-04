@@ -288,9 +288,9 @@ class Vps_Setup
             return trim(file_get_contents('application/config_section'));
         } else if (file_exists('/var/www/vivid-test-server')) {
             return 'vivid-test-server';
-        } else if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
-            if ($m[2]=='vps-projekte') return 'vivid';
-            return $m[2];
+        } else if (preg_match('#/(www|wwwnas)/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
+            if ($m[3]=='vps-projekte') return 'vivid';
+            return $m[3];
         } else if (substr($host, 0, 9)=='dev.test.') {
             return 'devtest';
         } else if (substr($host, 0, 4)=='dev.') {
