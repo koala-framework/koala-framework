@@ -1013,7 +1013,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         if (isset($options['ignore']) && $options['ignore'])
             $sqlTableAndColumns .= ' IGNORE';
-        $sqlTableAndColumns .= ' INTO '.$this->getTableName().' ('.implode(', ', $fields).') VALUES ';
+        $sqlTableAndColumns .= ' INTO '.$this->getTableName().' (`'.implode('`, `', $fields).'`) VALUES ';
         $sqlValues = '';
         foreach ($data as $d) {
             if (array_keys($d) != array_keys($data[0])) {
