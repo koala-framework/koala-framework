@@ -1,23 +1,23 @@
 <?php
 class Vpc_NewsletterCategory_Detail_RecipientCategoryData extends Vps_Data_Abstract
 {
-    protected $_poolId;
+    protected $_categoryId;
 
-    public function __construct($poolId)
+    public function __construct($categoryId)
     {
-        if (!is_numeric($poolId)) {
-            throw new Vps_Exception("pool id must be set as a numeric value");
+        if (!is_numeric($categoryId)) {
+            throw new Vps_Exception("category id must be set as a numeric value");
         }
 
-        $this->_poolId = $poolId;
+        $this->_categoryId = $categoryId;
     }
 
     public function load($row)
     {
-        $model = Vps_Model_Abstract::getInstance('Vpc_NewsletterCategory_Subscribe_SubscriberToPool');
+        $model = Vps_Model_Abstract::getInstance('Vpc_NewsletterCategory_Subscribe_SubscriberToCategory');
         $hasCategory = $model->getRow($model->select()
             ->whereEquals('subscriber_id', $row->id)
-            ->whereEquals('pool_id', $this->_poolId)
+            ->whereEquals('category_id', $this->_categoryId)
         );
         return ($hasCategory ? true : false);
     }

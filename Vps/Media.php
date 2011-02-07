@@ -4,11 +4,12 @@ class Vps_Media
     private static $_ouputCache;
     const PASSWORD = 'l4Gx8SFe';
 
-    public static function getUrl($class, $id, $type, $filename)
+    public static function getUrl($class, $id, $type, $filename, $time = null)
     {
         if ($filename instanceof Vps_Uploads_Row) {
             $filename = $filename->filename . '.' . $filename->extension;
         }
+        if ($filename == '.') $filename = '';
         $checksum = self::getChecksum($class, $id, $type, $filename);
         $prefix = '';
         if ($r = Vps_Component_Data_Root::getInstance()) {
@@ -16,7 +17,11 @@ class Vps_Media
                 $prefix = '/'.$r->filename;
             }
         }
-        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.urlencode($filename);
+        if (is_null($time)) {
+            $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
+            if (!$time) $time = time();
+        }
+        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.urlencode($filename);
     }
 
     public static function getChecksum($class, $id, $type, $filename)
@@ -57,11 +62,6 @@ class Vps_Media
         return null;
     }
 
-    public static function setOutputCache(Zend_Cache_Core $cache)
-    {
-        self::$_ouputCache = $cache;
-    }
-
     public static function getOutputCache()
     {
         if (!isset(self::$_ouputCache)) {
@@ -72,14 +72,50 @@ class Vps_Media
 
     public static function getOutput($class, $id, $type)
     {
-        $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-        if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Vps_Media_Output_Interface')) {
-            // TODO Ev. Mail senden, wenn Grafik nicht ausgeliefert wird
-            throw new Vps_Exception_NotFound();
-        }
-
         $cacheId = self::createCacheId($class, $id, $type);
+
+        $isValidCache = Vps_Cache::factory('Core', 'File',
+            array('lifetime'=>60*60, 'automatic_serialization'=>true),
+            array('file_name_prefix' => 'isValid',
+                'cache_dir' => 'application/cache/media',
+                'cache_file_umask' => 0666,
+                'hashed_directory_umask' => 0777
+            ));
+        if (!$isValidCache->load($cacheId)) {
+            $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            if (!class_exists($classWithoutDot)) throw new Vps_Exception_NotFound();
+            $isValid = Vps_Media_Output_IsValidInterface::VALID;
+            if (is_instance_of($classWithoutDot, 'Vps_Media_Output_IsValidInterface')) {
+                $isValid = call_user_func(array($classWithoutDot, 'isValidMediaOutput'), $id, $type, $class);
+                if ($isValid == Vps_Media_Output_IsValidInterface::INVALID) {
+                    throw new Vps_Exception_NotFound();
+                } else if ($isValid == Vps_Media_Output_IsValidInterface::ACCESS_DENIED) {
+                    throw new Vps_Exception_AccessDenied();
+                } else if ($isValid == Vps_Media_Output_IsValidInterface::VALID) {
+                } else if ($isValid == Vps_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
+                } else {
+                    throw new Vps_Exception("unknown isValidMediaOutput return value");
+                }
+            }
+            if ($isValid != Vps_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
+                $data = array('valid'=>true);
+                $isValidCache->save($data, $cacheId);
+            }
+        }
+        $output = self::_getOutputWithoutCheckingIsValid($class, $id, $type);
+        return $output;
+    }
+
+    private static function _getOutputWithoutCheckingIsValid($class, $id, $type)
+    {
+        $cacheId = self::createCacheId($class, $id, $type);
+
         if (!Vps_Registry::get('config')->debug->mediaCache || !($output = self::getOutputCache()->load($cacheId))) {
+            $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
+            if (!class_exists($classWithoutDot) || !is_instance_of($classWithoutDot, 'Vps_Media_Output_Interface')) {
+                // TODO Ev. Mail senden, wenn Grafik nicht ausgeliefert wird
+                throw new Vps_Exception_NotFound();
+            }
             $output = call_user_func(array($classWithoutDot, 'getMediaOutput'), $id, $type, $class);
             $specificLifetime = false;
             if (isset($output['lifetime'])) {

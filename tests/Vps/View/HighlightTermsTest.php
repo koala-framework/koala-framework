@@ -3,12 +3,13 @@
  * @group Helper
  * @group Helper_HighlightTerms
  */
-class Vps_View_HighlightTermsTest extends PHPUnit_Framework_TestCase
+class Vps_View_HighlightTermsTest extends Vps_Test_TestCase
 {
     private $_text = '';
 
     public function setUp()
     {
+        parent::setUp();
         $this->_text = "Für. Dies ist ein Text für das Highlighten des Textes. \n"
             ."Es können auch Umlaute vorkommen, die gut für das Testen von utf8 sind.\n"
             ."Auch Zeilenumbrüche sind drin um zu sehen, ob trotzem alles funktioniert.\n"

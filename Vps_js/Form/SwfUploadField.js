@@ -76,13 +76,12 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         }
         if (this.infoPosition == 'south') this.createInfoContainer();
 
-        //return; // Flash Uploader deaktiviert
         if (this.allowOnlyImages) {
             fileTypes = '*.jpg;*.jpeg;*.gif;*.png';
-            fileTypesDescription = 'Web Image Files';
+            fileTypesDescription = trlVps('Web Image Files');
         } else {
             fileTypes = '*.*';
-            fileTypesDescription = 'All Files';
+            fileTypesDescription = trlVps('All Files');
         }
 
         //cookie als post mitschicken
@@ -95,12 +94,11 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
                 params.PHPSESSID = c[1];
             }
         });
+        params.maxResolution = this.maxResolution;
         if (!params.PHPSESSID) return;
-        if (!(navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"])){
-            return;
-        }
-        if (Ext.isLinux) return; //für markus deaktivert
         
+        if (navigator.mimeTypes && !navigator.mimeTypes["application/x-shockwave-flash"]) return;
+
         if (navigator.mimeTypes && !navigator.mimeTypes["application/x-shockwave-flash"]) return;
 
         this.useSwf = false;
@@ -121,6 +119,8 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             button_text_left_padding: 28,
             button_text_top_padding: 2,
             button_window_mode: SWFUpload.WINDOW_MODE.OPAQUE,
+            button_action : SWFUpload.BUTTON_ACTION.SELECT_FILE,
+            button_cursor : SWFUpload.CURSOR.HAND,
 
             file_queued_handler: function(file) {
                 this.progress = Ext.MessageBox.show({
@@ -227,7 +227,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             swfupload_loaded_handler: function() {
                 //wenn CallFunction nicht vorhanden funktioniert der uploader nicht.
                 //dann einfach durch die html version ersetzen
-                if (!this.getMovieElement().CallFunction) {
+                if (typeof(this.getMovieElement().CallFunction) == "undefined") {
                     this.customSettings.field.createUploadButton(true);
                     return;
                 }

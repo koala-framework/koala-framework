@@ -40,12 +40,21 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         return $ret;
     }
 
+    public function getColumnCount()
+    {
+        if (!$this->getRow() || !$this->getRow()->columns) {
+            throw new Vps_Exception_Client("Please set first the amount of columns in the settings section.");
+        }
+        return $this->getRow()->columns;
+    }
+
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();
-        $ret[] = array(
+        $ret['tableData'] = array(
             'model' => $this->getChildModel(),
-            'componentId' => $this->getData()->componentId
+            'id' => $this->getData()->componentId,
+            'field' => 'component_id'
         );
         return $ret;
     }

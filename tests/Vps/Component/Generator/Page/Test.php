@@ -2,13 +2,12 @@
 /**
  * @group Vpc_UrlResolve
  */
-class Vps_Component_Generator_Page_Test extends PHPUnit_Framework_TestCase
+class Vps_Component_Generator_Page_Test extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Page_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Component_Generator_Page_Root');
+        $this->_root->setFilename(null);
     }
 
     public function testChilds()

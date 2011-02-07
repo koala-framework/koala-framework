@@ -14,4 +14,15 @@ class Vpc_Advanced_SearchEngineReferer_ViewMyLatest_Component
         $select = parent::_getSelect();
         return $select->whereEquals('component_id', $this->getData()->parent->parent->componentId);
     }
+
+    public function getCacheVars()
+    {
+        $ret = parent::getCacheVars();
+        $ret[] = array(
+            'model' => $this->_getParentModel(),
+            'id' => $this->getData()->parent->parent->componentId,
+            'field' => 'component_id'
+        );
+        return $ret;
+    }
 }

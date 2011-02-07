@@ -7,10 +7,10 @@
                 <li class="<? if($i++ == 0) echo 'first'; ?>">
                     <? if ($v['component']) echo $this->componentLink($v['component']); ?>
                     gefunden bei<br />
-                    <a href="<?= $v['row']->referer_url; ?>" rel="popup_blank"><?= $v['host']; ?></a>
+                    <a href="<?= htmlspecialchars($v['row']->referer_url); ?>" rel="popup_blank"><?= htmlspecialchars($v['host']); ?></a>
                     <? if ($v['query']) { ?>
                         mit Suche nach
-                        <a href="<?= $v['row']->referer_url; ?>" rel="popup_blank"><?= $v['query']; ?></a>
+                        <a href="<?= htmlspecialchars($v['row']->referer_url); ?>" rel="popup_blank"><?= htmlspecialchars($v['query']); ?></a>
                     <? } ?>
                 </li>
             <? } ?>

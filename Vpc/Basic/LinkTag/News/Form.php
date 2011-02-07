@@ -7,6 +7,7 @@ class Vpc_Basic_LinkTag_News_Form extends Vpc_Abstract_Form
 
         $this->add(new Vps_Form_Field_Select('news_id', trlVps('News')))
             ->setDisplayField('title')
+            ->setPageSize(20)
             ->setStoreUrl(
                 Vpc_Admin::getInstance($class)->getControllerUrl('News').'/json-data'
             )

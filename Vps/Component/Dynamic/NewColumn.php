@@ -15,8 +15,17 @@ class Vps_Component_Dynamic_NewColumn
     public function getContent()
     {
         $info = $this->_info['partial'];
-        if ($info['number'] % ceil($info['total'] / $this->_columns) == 0) {
-            $column = $info['number'] / ceil($info['total'] / $this->_columns) + 1;
+        // bei number == 0 nichts machen - das erste <ul> wird händisch hingeschrieben
+        if ($info['number'] == 0) return '';
+
+        $columnLimit = ceil($info['total'] / $this->_columns);
+        $currentNumber = $info['number']+1; // info[number] fängt bei 0 zu zählen an, currentNumber nicht
+
+        // wenn sichs genau ausgeht, hat man ohne diese if unten dran eine zusätzliche column
+        if ($currentNumber == $info['total']) return '';
+
+        if ($currentNumber % $columnLimit == 0) {
+            $column = ($currentNumber / $columnLimit) + 1;
             return "</$this->_tag><$this->_tag class=\"column$column\">";
         }
         return '';

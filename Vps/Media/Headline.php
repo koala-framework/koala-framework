@@ -31,7 +31,7 @@ class Vps_Media_Headline
 
         $loader = new Vps_Assets_Loader();
         $dep = $loader->getDependencies();
-        $language = Zend_Registry::get('trl')->getTargetLanguage();
+        $language = Vps_Trl::getInstance()->getTargetLanguage();
         $cacheId = 'headline'.md5($selector.$text);
         $cache = new Vps_Assets_Cache();
         $cacheData = $cache->load($cacheId);
@@ -158,11 +158,11 @@ class Vps_Media_Headline
         if ($backgroundColor) {
             $bgColor = ImageColorAllocate ($im1, hexdec(substr($backgroundColor,1,2)), hexdec(substr($backgroundColor,3,2)), hexdec(substr($backgroundColor,5,2)));
         } else {
-	    if (PHP_VERSION == '5.2.0-8+etch16') {
+            if (PHP_VERSION == '5.2.0-8+etch16') {
                 $bgColor = imagecolorallocatealpha($im1, 255, 255, 255, 0);
-	    } else {
-	        $bgColor = imagecolorallocatealpha($im1, 255, 255, 255, 127);
-	    }
+            } else {
+                $bgColor = imagecolorallocatealpha($im1, 255, 255, 255, 127);
+            }
         }
         imageFill($im1, 0, 0, $bgColor);
         $textColorAllocated = ImageColorAllocate ($im1, hexdec(substr($color,1,2)), hexdec(substr($color,3,2)), hexdec(substr($color,5,2)));

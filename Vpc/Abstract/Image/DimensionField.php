@@ -28,7 +28,7 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
         Vps_Form_Field_Abstract::prepareSave($row, $postData);
-        $value = $postData[$this->getFieldName()];
+        $value = $this->_getValueFromPostData($postData);
         if (is_string($value)) {
             $value = Zend_Json::decode($value);
         }

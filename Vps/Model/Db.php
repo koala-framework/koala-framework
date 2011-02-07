@@ -801,8 +801,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $select = $this->select($select);
             }
 
-            $tmpExportFolder = realpath('application/temp').'/modelcsv'.uniqid();
-            mkdir($tmpExportFolder, 0777);
+            $tmpExportFolder = realpath('application/temp').'/modelcsvex'.uniqid();
             $filename = $tmpExportFolder.'/csvexport';
 
             $dbSelect = $this->createDbSelect($select);
@@ -812,6 +811,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $fieldResult = $dbSelect->query()->fetchAll();
             $columnsCsv = '';
             if (count($fieldResult)) {
+                mkdir($tmpExportFolder, 0777);
                 $columns = array_keys($fieldResult[0]);
                 $columnsCsv = '"'.implode('","', $columns).'"';
                 $this->executeSql($sqlString);
@@ -885,7 +885,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             // if no data is recieved, quit
             if (!$data) return;
 
-            $tmpImportFolder = realpath('application/temp').'/modelcsv'.uniqid();
+            $tmpImportFolder = realpath('application/temp').'/modelcsvim'.uniqid();
             mkdir($tmpImportFolder, 0777);
             $filename = $tmpImportFolder.'/csvimport';
             file_put_contents($filename.'.gz', $data);
@@ -1022,7 +1022,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
     {
         // Performance, bei Pdo wird der Adapter umgangen
         if ($this->_table->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $q = $this->_table->getAdapter()->getProfiler()->queryStart($sql, Zend_Db_Profiler::INSERT);
             $this->_table->getAdapter()->getConnection()->exec($sql);
+            $this->_table->getAdapter()->getProfiler()->queryEnd($q);
         } else {
             $this->_table->getAdapter()->query($sql);
         }
@@ -1039,10 +1041,20 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     // check if csv is possible with current database rights
                     if (!Vps_Util_Mysql::getFileRight()) {
                         unset($ret[$k]);
-                        $ret = array_values($ret);
+                    }
+                } else if ($v === self::FORMAT_SQL) {
+                    // check if mysql is available (mainly because of POI Servers,
+                    // where mysql is on another server)
+                    exec("whereis mysql", $output, $execRet);
+
+                    if ($output && is_array($output) && trim($output[0]) != 'mysql:') {
+                        // hier bleibts drin
+                    } else {
+                        unset($ret[$k]);
                     }
                 }
             }
+            $ret = array_values($ret);
             return $ret;
         }
     }
