@@ -9,6 +9,7 @@ class Vps_Media
         if ($filename instanceof Vps_Uploads_Row) {
             $filename = $filename->filename . '.' . $filename->extension;
         }
+        if ($filename == '.') $filename = '';
         $checksum = self::getChecksum($class, $id, $type, $filename);
         $prefix = '';
         if ($r = Vps_Component_Data_Root::getInstance()) {
