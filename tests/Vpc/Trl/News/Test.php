@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Vpc_Trl
+ * @group Vpc_Trl_News
  *
 ansicht frontend:
 http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_News_Root/de/test
@@ -20,10 +21,33 @@ class Vpc_Trl_News_Test extends Vpc_TestAbstract
     public function testDe()
     {
         $c = $this->_root->getComponentById('root-master_test');
-        $this->assertContains('/de/test/2_lipsum2', $c->render());
-        $this->assertContains('/de/test/1_lipsum', $c->render());
+        $html = $c->render();
+        $this->assertEquals(2, substr_count($html, 'href='));
+        $this->assertContains('/de/test/1_lipsum', $html);
+        $this->assertContains('/de/test/2_lipsum2', $html);
+    }
 
+    public function testEn()
+    {
         $c = $this->_root->getComponentById('root-en_test');
         $this->assertContains('/en/test/1_loremen', $c->render());
+    }
+
+    public function testCacheEnOnVisibleChange()
+    {
+        $c = $this->_root->getComponentById('root-en_test');
+        $html = $c->render(); //cache it
+        $this->assertEquals(1, substr_count($html, 'href='));
+        $vars = $c->getGenerator('detail')->getCacheVars($c);
+
+        $model = Vps_Model_Abstract::getInstance('Vpc_Trl_News_News_Trl_TestModel');
+        $r = $model->getRow('root-en_test_1');
+        $r->visible = 0;
+        $r->save();
+
+        $this->_process();
+        $c = $this->_root->getComponentById('root-en_test');
+        $html = $c->render();
+        $this->assertEquals(0, substr_count($html, 'href='));
     }
 }

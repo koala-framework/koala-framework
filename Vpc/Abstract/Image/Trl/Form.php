@@ -3,7 +3,7 @@ class Vpc_Abstract_Image_Trl_Form_ImageData extends Vpc_Abstract_Image_Trl_Image
 {
     public function load($row)
     {
-        $src = $this->_getImageUrl($row->component_id);
+        $src = $this->_getMasterImageUrl($row->component_id);
         if ($src) {
             return "<img src=\"$src\" />";
         }
@@ -11,7 +11,7 @@ class Vpc_Abstract_Image_Trl_Form_ImageData extends Vpc_Abstract_Image_Trl_Image
     }
 }
 
-class Vpc_Abstract_Image_Trl_Form extends Vpc_Abstract_Composite_Trl_Form
+class Vpc_Abstract_Image_Trl_Form extends Vpc_Abstract_Form //nicht von Vpc_Abstract_Composite_Trl_Form, da sonst die felder doppelt eingefügt werden
 {
     protected function _initFields()
     {

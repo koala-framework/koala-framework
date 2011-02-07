@@ -7,38 +7,26 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         $this->view->xtype = 'vps.autotree';
     }
 
-    public function jsonDataAction()
-    {
-        $parentId = $this->_getParam('node');
-        $this->_saveSessionNodeOpened($parentId, true);
-        $this->_saveNodeOpened();
-
-        if ($this->_getParam('searchValue') != '') {
-            $this->view->nodes = $this->_searchNodes($this->_getParam('searchValue'));
-        } else {
-            if ($parentId) {
-                $parentRow = $this->_model->getRow($parentId);
-            } else {
-                $parentRow = null;
-            }
-            $rows = $this->_fetchData($parentRow);
-            $nodes = array();
-            foreach ($rows as $row) {
-                $data = $this->_formatNode($row);
-                foreach ($data as $k=>$i) {
-                    if ($i instanceof Vps_Asset) {
-                        $data[$k] = $i->__toString();
-                    }
-                }
-                $nodes[]= $data;
-            }
-            $this->view->nodes = $nodes;
-        }
-    }
-
     protected function _formatNodes($parentId = null)
     {
-        return array();
+        $parentId = $this->_getParam('node');
+        if ($parentId) {
+            $parentRow = $this->_model->getRow($parentId);
+        } else {
+            $parentRow = null;
+        }
+        $rows = $this->_fetchData($parentRow);
+        $nodes = array();
+        foreach ($rows as $row) {
+            $data = $this->_formatNode($row);
+            foreach ($data as $k=>$i) {
+                if ($i instanceof Vps_Asset) {
+                    $data[$k] = $i->__toString();
+                }
+            }
+            $nodes[]= $data;
+        }
+        return $nodes;
     }
 
     protected function _formatNode($row)
@@ -52,7 +40,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
             $openedNodes = $this->_saveSessionNodeOpened(null, null);
             if ($openedNodes == 'all' ||
                 isset($openedNodes[$row->{$this->_primaryKey}]) ||
-                isset($this->_openedNodes[$row->{$this->_primaryKey}])
+                isset($this->_openedNodes[$row->{$this->_primaryKey}]) ||
+                $this->_getParam('openedId') == $row->{$this->_primaryKey}
             ) {
                 $data['expanded'] = true;
             } else {

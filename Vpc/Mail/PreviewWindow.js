@@ -72,6 +72,7 @@ Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
         this.closeAction = 'hide';
 
         this.tbar.add(this.button['html'], this.button['text'], '|', this.address, send);
+        this.baseParams = {};
         Vpc.Mail.PreviewWindow.superclass.initComponent.call(this);
     },
 
@@ -100,7 +101,7 @@ Vpc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
     },
 
     applyBaseParams : function(baseParams) {
-        this.baseParams = baseParams;
+    	Ext.apply(this.baseParams, baseParams);
     },
 
     toggleButton : function(button, pressed)

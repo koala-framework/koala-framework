@@ -38,7 +38,6 @@ class Vps_Dao
         if (!isset($dbConfig['username']) && isset($dbConfig['user'])) $dbConfig['username'] = $dbConfig['user'];
         if (!isset($dbConfig['password']) && isset($dbConfig['pass'])) $dbConfig['password'] = $dbConfig['pass'];
         if (!isset($dbConfig['dbname']) && isset($dbConfig['name'])) $dbConfig['dbname'] = $dbConfig['name'];
-        $dbConfig['persistent'] = true;
         return $dbConfig;
     }
 
@@ -62,6 +61,9 @@ class Vps_Dao
 
             if (Zend_Registry::get('config')->debug->querylog) {
                 $profiler = new Vps_Db_Profiler(true);
+                $this->_db[$db]->setProfiler($profiler);
+            } else if (Zend_Registry::get('config')->debug->queryTimeout) {
+                $profiler = new Vps_Db_Profiler_Timeout(Zend_Registry::get('config')->debug->queryTimeout, true);
                 $this->_db[$db]->setProfiler($profiler);
             } else if (Zend_Registry::get('config')->debug->benchmark || Zend_Registry::get('config')->debug->benchmarkLog) {
                 $profiler = new Vps_Db_Profiler_Count(true);

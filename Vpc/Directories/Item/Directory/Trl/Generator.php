@@ -14,9 +14,16 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         $ret = parent::_getChainedChildComponents($parentData, $select);
         if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
             //kann nur gemacht werden nur wenn parentData vorhanden
+            $ids = array();
             foreach ($ret as $k=>$c) {
-                $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($c));
-                if (!$r || !$r->visible) {
+                $ids[] = $parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($c);
+            }
+            foreach ($this->_getRows($ids) as $r) {
+                if ($r) $visible[$r->component_id] = $r->visible;
+            }
+            foreach ($ret as $k=>$c) {
+                $id = $parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($c);
+                if (!isset($visible[$id]) || !$visible[$id]) {
                     unset($ret[$k]);
                 }
             }
@@ -38,7 +45,7 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         //für fälle wo es das nicht war hier unten nochmal überprüfen
         $m = Vpc_Abstract::createChildModel($this->_class);
         if ($m && $select->getPart(Vps_Component_Select::IGNORE_VISIBLE) !== true) {
-            $r = $m->getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row));
+            $r = $this->_getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row));
             if (!$r || !$r->visible) {
                 return null;
             }
@@ -52,7 +59,7 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         $m = Vpc_Abstract::createChildModel($this->_class);
         if ($m) {
             $id = $parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row);
-            $ret['row'] = $m->getRow($id);
+            $ret['row'] = $this->_getRow($id);
             if (!$ret['row']) {
                 $ret['row'] = $m->createRow();
                 $ret['row']->component_id = $id;
@@ -102,6 +109,10 @@ class Vpc_Directories_Item_Directory_Trl_Generator extends Vpc_Chained_Trl_Gener
         } else {
             //TODO
         }
+        // Daten hängen ja auch vom MasterModel ab
+        $ret[] = array(
+            'model' => $this->getModel()
+        );
         return $ret;
     }
 }

@@ -59,7 +59,8 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         if (is_object($modelName)) return $modelName;
         static $config;
         if (!isset($config)) $config = Vps_Registry::get('config')->models->toArray();
-        if (isset($config[$modelName]) && $config[$modelName]) {
+        if (array_key_exists($modelName, $config)) {
+            if (!$config[$modelName]) return null;
             $modelName = $config[$modelName];
         }
         if (!isset(self::$_instances[$modelName])) {
@@ -677,6 +678,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         foreach ($call as $method=>$arguments) {
             $ret[$method] = call_user_func_array(array($this, $method), $arguments);
         }
+        return $ret;
+    }
+
+    public function toDebug()
+    {
+        $ret = '<pre> Model '.get_class($this).'</pre>';
         return $ret;
     }
 }

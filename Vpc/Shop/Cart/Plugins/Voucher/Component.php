@@ -69,7 +69,7 @@ class Vpc_Shop_Cart_Plugins_Voucher_Component extends Vps_Component_Plugin_Abstr
 
     public function alterBackendOrderForm(Vps_Form $form)
     {
-        $fs = $form->insertAfter($form->fields->first(), new Vps_Form_Container_FieldSet(trlVps('Voucher')));
+        $fs = $form->add(new Vps_Form_Container_FieldSet(trlVps('Voucher')));
         $fs->add(new Vps_Form_Field_TextField('voucher_code', trlVps('Code')));
         $fs->add(new Vps_Form_Field_NumberField('voucher_amount', trlcVps('Amount of Money', 'Amount')))
             ->setComment('€')

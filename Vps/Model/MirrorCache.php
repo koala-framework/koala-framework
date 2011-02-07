@@ -11,6 +11,10 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     const SYNC_ONCE = true;
     const SYNC_ALWAYS = 2;
 
+    const SYNC_SELECT_TYPE_NOSYNC = 'nosync'; // nichts syncen, ist up-to-date
+    const SYNC_SELECT_TYPE_ALL    = 'all';    // alles neu syncen
+    const SYNC_SELECT_TYPE_SELECT = 'select'; // alles was im select steht syncen
+
     /**
      * Max sync delay in seconds. Default is to 5 minutes
      */
@@ -108,18 +112,37 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
      * Rückgabewert false: kein sync notwendig
      *              null: alles syncen
      *              Vps_Model_Select: das was im select steht syncen
+     * Ab VPS 1.9: Darf nicht mehr überschrieben werden, das ist keine
+     * verwendbare API mit diesen null / false Rückgabewerten.
+     * @deprecated VPS 1.9, 07.05.2010
+     * @see _getSynchronizeVars
      */
-    protected function _getSynchronizeSelect($overrideMaxSyncDelay)
+    final protected function _getSynchronizeSelect($overrideMaxSyncDelay)
+    {
+        throw new Vps_Exception("_getSynchronizeSelect does not exist anymore.");
+    }
+
+    /**
+     * @param $syncType Any of SYNC_ALWAYS, SYNC_AFTER_DELAY or SYNC_ONCE
+     * @return array $ret An Array with keys
+     *        'type'   => any of: SYNC_SELECT_TYPE_NOSYNC, SYNC_SELECT_TYPE_ALL, SYNC_SELECT_TYPE_SELECT
+     *        'select' => the select object for syncing or null (depending on type)
+     */
+    protected function _getSynchronizeVars($syncType)
     {
         if ($this->_synchronizeDone) {
-            if ($overrideMaxSyncDelay !== self::SYNC_ALWAYS) {
+            if ($syncType !== self::SYNC_ALWAYS) {
                 $this->_lockSync();
-                return false; //es wurde bereits synchronisiert
+                //es wurde bereits synchronisiert
+                return array(
+                    'type' => self::SYNC_SELECT_TYPE_NOSYNC,
+                    'select' => null
+                );
             }
         }
 
         if ($this->_getMaxSyncDelay()) {
-            if ($overrideMaxSyncDelay === self::SYNC_AFTER_DELAY) {
+            if ($syncType === self::SYNC_AFTER_DELAY) {
                 $lastSyncFile = $this->_getLastSyncFile();
                 $lastSync = false;
                 if (file_exists($lastSyncFile)) {
@@ -127,18 +150,25 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 }
                 if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
                     $this->_lockSync();
-                    return false; //maxSyncDelay wurde noch nicht erreicht
+                    //maxSyncDelay wurde noch nicht erreicht
+                    return array(
+                        'type' => self::SYNC_SELECT_TYPE_NOSYNC,
+                        'select' => null
+                    );
                 }
             }
         }
 
-        $this->_synchronizeDone = true; //wegen endlosschleife ganz oben
+        $this->_synchronizeDone = true; //wegen endlosschleife schon hier
 
         Vps_Benchmark::count('mirror sync');
 
         if (!$this->_syncTimeField) {
             // kein modified feld vorhanden, alle kopieren
-            $select = null;
+            $ret = array(
+                'type' => self::SYNC_SELECT_TYPE_ALL,
+                'select' => null
+            );
         } else {
             $syncField = $this->_syncTimeField;
             $proxyModel = $this->getProxyModel();
@@ -152,16 +182,23 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             $sourceModel = $this->getSourceModel();
             if (!$cacheTimestamp) {
                 // kein cache vorhanden, alle kopieren
-                $select = null;
+                $ret = array(
+                    'type' => self::SYNC_SELECT_TYPE_ALL,
+                    'select' => null
+                );
             } else {
                 $select = $sourceModel->select()->where(
                     new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
                 );
+                $ret = array(
+                    'type' => self::SYNC_SELECT_TYPE_SELECT,
+                    'select' => $select
+                );
             }
         }
 
-        if (is_null($select)) {
-            //wenn alles importiert wird write lock befor maxSyncFile geschrieben wird
+        if ($ret['type'] == self::SYNC_SELECT_TYPE_ALL) {
+            //wenn alles importiert wird write lock bevor maxSyncFile geschrieben wird
             $this->_lockSync(true);
         } else {
             $this->_lockSync();
@@ -170,23 +207,32 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             //letzten sync zeitpunkt schreiben
             file_put_contents($this->_getLastSyncFile(), time());
         }
-        return $select;
+        return $ret;
     }
 
     public final function synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
     {
         $this->_synchronize($overrideMaxSyncDelay);
         $this->_unlockSync();
+        $this->_afterSync();
+    }
+
+    /**
+     * Wird aufgerufen bevor ein sync stattfindet, nicht wenn kein sync notwendig ist
+     */
+    protected function _beforeSynchronize()
+    {
     }
 
     private function _synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
     {
-        $select = $this->_getSynchronizeSelect($overrideMaxSyncDelay);
-        if ($select !== false) {
+        $select = $this->_getSynchronizeVars($overrideMaxSyncDelay);
+        if ($select['type'] !== self::SYNC_SELECT_TYPE_NOSYNC) {
+            $this->_beforeSynchronize();
             // it's possible to use $this->getProxyModel()->copyDataFromModel()
             // but if < 20 rows are copied, array is faster than sql or csv
             $format = null;
-            if (!is_null($select)) {
+            if ($select['type'] === self::SYNC_SELECT_TYPE_SELECT) {
                 if (in_array(self::FORMAT_ARRAY, $this->getProxyModel()->getSupportedImportExportFormats())
                     && in_array(self::FORMAT_ARRAY, $this->getSourceModel()->getSupportedImportExportFormats())
                 ) {
@@ -198,8 +244,8 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             }
 
             $options = array();
-            $data = $this->getSourceModel()->export($format, $select);
-            if (!$select && $this->_truncateBeforeFullImport) {
+            $data = $this->getSourceModel()->export($format, $select['select']);
+            if ($select['type'] === self::SYNC_SELECT_TYPE_ALL && $this->_truncateBeforeFullImport) {
                 $this->getProxyModel()->deleteRows($this->getProxyModel()->select());
             } else {
                 $options['replace'] = true;
@@ -218,16 +264,16 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
     public function synchronizeAndUpdateRow($data)
     {
-        $select = $this->_getSynchronizeSelect(self::SYNC_ONCE);
+        $select = $this->_getSynchronizeVars(self::SYNC_ONCE);
 
         $call = array();
-        if ($select !== false) {
+        if ($select['type'] !== self::SYNC_SELECT_TYPE_NOSYNC) {
             $format = self::_optimalImportExportFormat($this->getSourceModel(), $this->getProxyModel());
-            $call['export'] = array($format, $select);
+            $call['export'] = array($format, $select['select']);
         }
         $call['updateRow'] = array($data);
         $r = $this->getSourceModel()->callMultiple($call);
-        if ($select !== false) {
+        if ($select['type'] !== self::SYNC_SELECT_TYPE_NOSYNC) {
             $this->getProxyModel()->import($format, $r['export'], array('replace' => true));
         }
         $this->getProxyModel()->import(self::FORMAT_ARRAY,
@@ -240,16 +286,16 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
     public function synchronizeAndInsertRow($data)
     {
-        $select = $this->_getSynchronizeSelect(self::SYNC_ONCE);
+        $select = $this->_getSynchronizeVars(self::SYNC_ONCE);
 
         $call = array();
-        if ($select !== false) {
+        if ($select['type'] !== self::SYNC_SELECT_TYPE_NOSYNC) {
             $format = self::_optimalImportExportFormat($this->getSourceModel(), $this->getProxyModel());
-            $call['export'] = array($format, $select);
+            $call['export'] = array($format, $select['select']);
         }
         $call['insertRow'] = array($data);
         $r = $this->getSourceModel()->callMultiple($call);
-        if ($select !== false) {
+        if ($select['type'] !== self::SYNC_SELECT_TYPE_NOSYNC) {
             $this->getProxyModel()->import($format, $r['export'], array('replace' => true));
         }
         $this->getProxyModel()->import(self::FORMAT_ARRAY,
@@ -258,5 +304,9 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
         $this->_unlockSync();
         return $r['insertRow'];
+    }
+
+    protected function _afterSync()
+    {
     }
 }

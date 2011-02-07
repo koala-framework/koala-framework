@@ -151,11 +151,11 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             foreach ($dataKeys as $key) {
                 if ($order['field'] instanceof Zend_Db_Expr) {
                     //can't be done in FnF
-                    $orderData[$inData[$key]['id']] = 0;
+                    $orderData[$inData[$key][$this->_primaryKey]] = 0;
                 } else if ($order['field'] == Vps_Model_Select::ORDER_RAND) {
-                    $orderData[$inData[$key]['id']] = rand();
+                    $orderData[$inData[$key][$this->_primaryKey]] = rand();
                 } else {
-                   $orderData[$inData[$key]['id']] = strtolower($this->_rowValue($order['field'], $inData[$key]));
+                   $orderData[$inData[$key][$this->_primaryKey]] = strtolower($this->_rowValue($order['field'], $inData[$key]));
                 }
             }
             if ($order['direction'] == 'ASC') {
@@ -168,7 +168,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             $sortedDataKeys = array();
             foreach (array_keys($orderData) as $id) {
                 foreach ($dataKeys as $key) {
-                    if ($inData[$key]['id'] == $id) {
+                    if ($inData[$key][$this->_primaryKey] == $id) {
                         $sortedDataKeys[] = $key;
                     }
                 }
@@ -314,8 +314,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                     $reg = str_replace($part, '\\' . $part, $reg);
                 }
                 $reg = str_replace('%', '(.*)', $reg);
-                $reg = "^$reg$";
-                return eregi($reg, $v);
+                $reg = "/^$reg$/i";
+                return preg_match($reg, $v);
             }
             return false;
         } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {

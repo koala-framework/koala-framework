@@ -2,14 +2,15 @@ Ext.namespace('Vpc.ListSwitch');
 
 Vpc.ListSwitch.View = function(componentWrapper) {
     this.componentWrapper = Ext.get(componentWrapper);
+    this.previewElements = [];
+    this.activePreviewLink = null;
     this.init();
 };
 
 Vpc.ListSwitch.View.prototype = {
-    previewElements: [],
-    activePreviewLink: null,
-
     init: function() {
+        if (this.componentWrapper.initDone) return;
+
         this.previousEl = this.componentWrapper.down('.listSwitchLargeWrapper a.listSwitchPrevious');
         this.nextEl = this.componentWrapper.down('.listSwitchLargeWrapper a.listSwitchNext');
 
@@ -31,7 +32,11 @@ Vpc.ListSwitch.View.prototype = {
             this.previewElements.push(previewLink);
         }, this);
 
-        this.setLarge(this.previewElements[0]);
+        if (this.previewElements.length && this.previewElements[0]) {
+            this.setLarge(this.previewElements[0]);
+        }
+
+        this.componentWrapper.initDone = true;
     },
 
     setLarge: function(previewEl) {

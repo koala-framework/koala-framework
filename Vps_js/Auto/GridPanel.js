@@ -456,48 +456,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             }
         }
 
-        this.filters = new Ext.util.MixedCollection();
-        var first = true;
-        if (meta.filters.text && typeof(meta.filters.text) != 'object') {
-            meta.filters.text = { type: 'TextField' };
-        }
-        for(var filter in meta.filters) {
-            var f = meta.filters[filter];
-            if (!Vps.Auto.GridFilter[f.type]) {
-                throw "Unknown filter.type: "+f.type;
-            }
-            var type = Vps.Auto.GridFilter[f.type];
-            delete f.type;
-            f.id = filter;
-            var filterField = new type(f);
-
-            if (f.right) {
-				gridConfig.tbar.add('->');
-				f.label += ' ';
-			} else if(first && gridConfig.tbar.length > 0) {
-                gridConfig.tbar.add('-');
-            }
-            if (first && !f.label) f.label = 'Filter:';
-            if (f.label) {
-                if (!first) {
-                    f.label = '  '+f.label;
-                }
-                gridConfig.tbar.add(f.label);
-            } else {
-                if (!first) {
-                    gridConfig.tbar.add('  ');
-                }
-            }
-            filterField.getToolbarItem().each(function(i) {
-                gridConfig.tbar.add(i);
-            });
-            this.filters.add(filterField);
-            filterField.on('filter', function(f, params) {
+        this.filters = new Vps.Auto.FilterCollection(meta.filters, this);
+        this.filters.each(function(filter) {
+            filter.on('filter', function(f, params) {
                 this.applyBaseParams(params);
                 this.load();
             }, this);
-            first = false;
-        }
+        }, this);
+        this.filters.applyToTbar(gridConfig.tbar);
 
         if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv || meta.buttons.reload) {
             gridConfig.tbar.add('->');
@@ -700,19 +666,19 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.reload();
                 this.fireEvent('datachange', r);
                 if (cb.success) {
-                    cb.success.apply(cb.scope, arguments)
+                    cb.success.apply(cb.scope, arguments);
                 }
             },
             failure: function() {
                 this.getAction('save').enable();
                 if (cb.failure) {
-                    cb.failure.apply(cb.scope, arguments)
+                    cb.failure.apply(cb.scope, arguments);
                 }
             },
             callback: function() {
                 this.el.unmask();
                 if (cb.callback) {
-                    cb.callback.apply(cb.scope, arguments)
+                    cb.callback.apply(cb.scope, arguments);
                 }
             },
             scope  : this
@@ -813,16 +779,17 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                         url: this.controllerUrl+'/json-delete',
                         params: params,
                         success: function(response, options, r) {
-                            this.reload();
-                            this.fireEvent('deleterow', this.grid);
-                            this.fireEvent('datachange', r);
-
                             this.activeId = null;
                             //wenn gelöscht alle anderen disablen
                             this.bindings.each(function(i) {
                                 i.item.disable();
                                 i.item.reset();
                             }, this);
+
+                            this.reload();
+                            this.fireEvent('deleterow', this.grid);
+                            this.fireEvent('datachange', r);
+
                         },
                         callback: function() {
                             this.el.unmask();
@@ -1001,7 +968,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!this.getStore()) {
             Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
             Ext.Ajax.request({
-                mask: true,
+                mask: this.el,
                 url: this.controllerUrl+'/json-data',
                 params: params,
                 success: function(response, options, r) {

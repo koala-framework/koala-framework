@@ -1,6 +1,7 @@
 <?php
 class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
+    protected $backupStaticAttributes = false;
     protected $autoStop = false;
     protected $_unitTestCookie;
     protected $_domain = null;
@@ -95,6 +96,7 @@ protected function _createSeparateTestDb($bootstrapFile)
     {
         parent::start();
         $this->open('/vps/test/vps_start');
+        $this->deleteAllVisibleCookies();
         $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/, max_age=60*5');
     }
 
@@ -131,7 +133,7 @@ protected function _createSeparateTestDb($bootstrapFile)
     {
         $url = '/vps/componentedittest/'.
                 Vps_Component_Data_Root::getComponentClass().'/'.
-                $componentClass.
+                $componentClass.'/Index'.
                 '?componentId='.$componentId;
         return $this->open($url);
     }

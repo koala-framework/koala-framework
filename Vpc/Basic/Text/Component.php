@@ -30,6 +30,9 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             //veraltert NICHT VERWENDEN!! (in der Vpc_Mail komponente ist ein besserer ersatz)
             'emailStyles'       => array()
         ));
+
+        $ret['stylesModel'] = 'Vpc_Basic_Text_StylesModel';
+
         $ret['generators']['child'] = array(
             'class' => 'Vpc_Basic_Text_Generator',
             'component' => array(

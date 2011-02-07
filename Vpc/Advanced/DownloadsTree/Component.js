@@ -3,6 +3,9 @@ Vps.onContentReady(function() {
         var options = Ext.decode(Ext.get(i).down('.options').dom.value);
         this.downloads = new Vps.Auto.GridPanel({
             controllerUrl: options.downloadsUrl,
+            baseParams: {
+                componentId: options.componentId
+            },
             region: 'center'
         });
         this.projects = new Vps.Auto.TreePanel({

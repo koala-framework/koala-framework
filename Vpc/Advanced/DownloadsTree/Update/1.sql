@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `vpc_downloadstree_downloads` (
   PRIMARY KEY  (`id`),
   KEY `project_id` (`project_id`),
   KEY `vps_upload_id` (`vps_upload_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 CREATE TABLE IF NOT EXISTS `vpc_downloadstree_projects` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `vpc_downloadstree_projects` (
   KEY `parent_id` (`parent_id`),
   KEY `component_id` (`component_id`),
   KEY `visible` (`visible`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 CREATE TABLE IF NOT EXISTS `vpc_downloadstree_projects_to_users` (
   `id` int(11) NOT NULL auto_increment,
@@ -30,14 +30,14 @@ CREATE TABLE IF NOT EXISTS `vpc_downloadstree_projects_to_users` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`),
   KEY `project_id` (`project_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 ALTER TABLE `vpc_downloadstree_downloads`
-  ADD CONSTRAINT `vpc_downloadstree_downloads_ibfk_3` FOREIGN KEY (`project_id`) REFERENCES `vpc_downloadstree_projects` (`id`),
-  ADD CONSTRAINT `vpc_downloadstree_downloads_ibfk_4` FOREIGN KEY (`vps_upload_id`) REFERENCES `vps_uploads` (`id`);
+  ADD CONSTRAINT `vpc_downloadstree_downloads_ibfk_3` FOREIGN KEY (`project_id`) REFERENCES `vpc_downloadstree_projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `vpc_downloadstree_downloads_ibfk_4` FOREIGN KEY (`vps_upload_id`) REFERENCES `vps_uploads` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `vpc_downloadstree_projects`
-  ADD CONSTRAINT `vpc_downloadstree_projects_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `vpc_downloadstree_projects` (`id`);
+  ADD CONSTRAINT `vpc_downloadstree_projects_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `vpc_downloadstree_projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `vpc_downloadstree_projects_to_users`
-  ADD CONSTRAINT `vpc_downloadstree_projects_to_users_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `vpc_downloadstree_projects` (`id`);
+  ADD CONSTRAINT `vpc_downloadstree_projects_to_users_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `vpc_downloadstree_projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

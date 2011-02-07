@@ -3,11 +3,12 @@
  * @group Model_FnF
  * @group Model_Expr_SumFields
  */
-class Vps_Model_FnF_ExprSumFields_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_FnF_ExprSumFields_Test extends Vps_Test_TestCase
 {
     private $_model;
     public function setUp()
     {
+        parent::setUp();
         $this->_model = new Vps_Model_FnF(array(
             'columns' => array('id', 'value1', 'value2'),
             'data' => array(

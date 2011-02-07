@@ -24,15 +24,11 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
             ->setAllowBlank(false)
             ->setWidth(120);
 
-        $form = Vpc_Abstract_Form::createChildComponentForm($class, '-text');
-        $this->fields->add($form);
-
-
-        $this->fields->add(new Vps_Form_Field_Select('zoom_properties', 'Zoomeinstellungen'))
+        $this->fields->add(new Vps_Form_Field_Select('zoom_properties', trlVps('Zoom properties')))
             ->setValues(array(
                 '0' => trlVpsStatic('Move + Zoom'),
                 '1' => trlVpsStatic('Move + Zoom (without zoombar)'),
-                '2' => trlVpsStatic('Just Zoom')
+                '2' => trlVpsStatic('None')
             ))
             ->setWidth(300)
             ->setAllowBlank(false);
@@ -41,6 +37,9 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
         $this->fields->add(new Vps_Form_Field_Checkbox('satelite', trlVps('Satelitemap')));
         $this->fields->add(new Vps_Form_Field_Checkbox('overview', trlVps('Overviewmap')));
 
+        $form = Vpc_Abstract_Form::createChildComponentForm($class, '-text');
+        $form->fields->getByName('content')->setHeight(170);
+        $this->fields->add($form);
     }
 
     protected function _getZoomLevels()

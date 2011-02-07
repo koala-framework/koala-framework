@@ -63,7 +63,7 @@ class Vps_Config_Web extends Vps_Config_Ini
                         array('allowModifications'=>true));
 
         $fixes = array();
-        if ($webSection != $section && $this->server->host == 'vivid') {
+        if ($webSection != $section && ($this->server->host == 'vivid' || $this->server->host == 'vivid-test-server')) {
             $fixes = array(
                 'libraryPath' => $this->libraryPath,
                 'uploads' => $this->uploads,

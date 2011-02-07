@@ -12,6 +12,7 @@ class Vpc_Chained_Trl_MasterAsChild_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Static',
             'component' => $masterComponentClass,
         );
+        $ret['editComponents'] = array('child');
         try {
             $ret['componentName'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentName');
         } catch (Exception $e) {}
@@ -33,4 +34,8 @@ class Vpc_Chained_Trl_MasterAsChild_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function hasContent()
+    {
+        return $this->getData()->getChildComponent('-child')->hasContent();
+    }
 }

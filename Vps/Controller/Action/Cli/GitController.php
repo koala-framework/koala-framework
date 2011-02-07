@@ -292,6 +292,14 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             echo "vps: ".$g->getActiveBranch()." != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
         }
 
+        if ($this->_getParam('with-library')) {
+            echo "\nupdating library\n";
+            $git = new Vps_Util_Git(Vps_Registry::get('config')->libraryPath);
+            $git->system("pull --rebase");
+        } else {
+            echo "\n\033[01;33mlibrary skipped\033[00m: use --with-library if you wish to update library as well\n";
+        }
+
         $projectIds = Vps_Model_Abstract::getInstance('Vps_Util_Model_Projects')
                             ->getApplicationProjectIds();
         if ($projectIds && Vps_Registry::get('config')->todo->markAsOnTestOnUpdate) {

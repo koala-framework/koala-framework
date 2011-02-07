@@ -72,7 +72,7 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                           'url'        => ''),
                     array('root'=>1, 'url'=>2)));
         $this->AddRoute('vps_test_componentedit', new Zend_Controller_Router_Route(
-                    '/vps/componentedittest/:root/:class/:action',
+                    '/vps/componentedittest/:root/:class/:componentController/:action',
                     array('module' => 'component_test',
                           'controller' => 'component_test',
                           'action' => 'index')));

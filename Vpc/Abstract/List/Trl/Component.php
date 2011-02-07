@@ -7,14 +7,27 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
         $ret['componentIcon'] = new Vps_Asset('page');
         $ret['generators']['child']['class'] = 'Vpc_Abstract_List_Trl_Generator';
         $ret['childModel'] = 'Vpc_Abstract_List_Trl_Model';
+
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/Trl/FullSizeEditPanel.js';
+        $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
+        $ret['assetsAdmin']['dep'][] = 'VpsComponent';
+
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['children'] = $this->getData()
-            ->getChildComponents(array('generator'=>'child'));
+        $children = $this->getData()->getChildComponents(array('generator' => 'child'));
+
+        // wird zweimal gesetzt. siehe kommentar in nicht-trl component
+        $ret['children'] = $children;
+        $ret['listItems'] = array();
+        foreach ($children as $child) {
+            $ret['listItems'][] = array(
+                'data' => $child
+            );
+        }
         return $ret;
     }
 

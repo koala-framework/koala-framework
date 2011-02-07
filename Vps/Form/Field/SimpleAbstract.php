@@ -74,15 +74,28 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
     {
         parent::prepareSave($row, $postData);
         if ($this->getSave() !== false && $this->getInternalSave() !== false) {
-            $data = $this->_getValueFromPostData($postData);
-            $this->getData()->save($row, $data);
+            $save = false;
+            if (array_key_exists($this->getFieldName(), $postData)) {
+                //wenn postData gesetzt, speichern
+                $save = true;
+            } else {
+                $pk = $row->getModel()->getPrimaryKey();
+                if (!$row->$pk) {
+                    //wenn postData nicht gesetzt, aber die row neu eingefügt wird,
+                    //auch speichern - mit DefaultValue (kommt von _getValueFromPostData)
+                    $save = true;
+                }
+            }
+            if ($save) {
+                $this->getData()->save($row, $this->_getValueFromPostData($postData));
+            }
         }
     }
 
     protected function _getValueFromPostData($postData)
     {
         $fieldName = $this->getFieldName();
-        if (!isset($postData[$fieldName])) $postData[$fieldName] = null;
+        if (!isset($postData[$fieldName])) $postData[$fieldName] = $this->getDefaultValue();
         return $postData[$fieldName];
     }
 }

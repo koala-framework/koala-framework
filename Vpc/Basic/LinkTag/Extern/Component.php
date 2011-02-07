@@ -11,7 +11,8 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
             'dataClass' => 'Vpc_Basic_LinkTag_Extern_Data',
             'ownModel'     => 'Vpc_Basic_LinkTag_Extern_Model',
             'componentName' => trlVps('Link.Extern'),
-            'hasPopup'      => true
+            'hasPopup'      => true, //TODO: bezeichnung von diesem setting ist scheiße
+            'openType'      => null, //wenn hasPopup auf false
         ));
         $ret['assets']['files'][] = 'vps/Vpc/Basic/LinkTag/Extern/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';

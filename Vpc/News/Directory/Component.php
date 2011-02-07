@@ -12,6 +12,8 @@ class Vpc_News_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
         $ret['generators']['detail']['nameColumn'] = 'title';
         $ret['generators']['detail']['dbIdShortcut'] = 'news_';
 
+        $ret['generators']['child']['component']['view'] = 'Vpc_News_List_View_Component';
+
         $ret['generators']['feed'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_News_List_Feed_Component',

@@ -154,6 +154,9 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                 throw new Vps_Exception("setPool with MultiCheckbox only works if relationToValues references to an instance of Vps_Util_Model_Pool");
             }
         }
+        if ($this->getValuesModel()->hasColumn('pos') && !$this->_valuesSelect->getPart(Vps_Model_Select::ORDER)) {
+            $this->_valuesSelect->order('pos', 'ASC');
+        }
         return $this->_valuesSelect;
     }
 
@@ -226,17 +229,23 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         return $ret;
     }
 
-    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    protected function _getIdsFromPostData($postData)
     {
-        $dataModel = $row->getModel();
-        if ($dataModel) $this->setDataModel($dataModel);
-
         $new = array();
         foreach ($this->_getFields() as $f) {
             if (isset($postData[$f->getFieldName()]) && $postData[$f->getFieldName()]) {
                 $new[] = substr($f->getFieldName(), strlen($this->getFieldName())+1);
             }
         }
+        return $new;
+    }
+
+    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    {
+        $dataModel = $row->getModel();
+        if ($dataModel) $this->setDataModel($dataModel);
+
+        $new = $this->_getIdsFromPostData($postData);
 
         $avaliableKeys = array();
         foreach ($this->_getFields() as $field) {

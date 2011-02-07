@@ -16,7 +16,7 @@ class Vpc_List_Gallery_Admin extends Vpc_Abstract_List_Admin
         $config['tabs']['settings'] = array(
             'xtype' => 'vps.autoform',
             'controllerUrl' => $this->getControllerUrl('Settings'),
-            'title' => trl('Settings')
+            'title' => trlVps('Settings')
         );
         $config['tabs']['images'] = $listConfig['list'];
 
