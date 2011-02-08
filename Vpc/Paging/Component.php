@@ -11,10 +11,10 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['bigPagingSteps'] = array(10, 50);
         $ret['nextPrevOnly'] = false;
         $ret['placeholder'] = array(
-            'first'    => '&lt;&lt;',
-            'previous' => '&lt;',
-            'next'     => '&gt;',
-            'last'     => '&gt;&gt;',
+            'first'    => '&laquo;',
+            'previous' => '&#x8B;',
+            'next'     => '&#x9B;',
+            'last'     => '&raquo;',
             'prefix'   => trlVpsStatic('Page').':'
         );
         $ret['cssClass'] = 'webPaging webStandard';
