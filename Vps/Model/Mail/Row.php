@@ -58,8 +58,8 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         $varsRow = $siblingRows['vars'];
 
         $mail = new $essentialsRow->mailerClass();
-        $mail->setBodyText($this->sent_mail_content_text);
-        $mail->setBodyHtml($this->sent_mail_content_html);
+        if ($this->sent_mail_content_text) $mail->setBodyText($this->sent_mail_content_text);
+        if ($this->sent_mail_content_html) $mail->setBodyHtml($this->sent_mail_content_html);
         $mail->setSubject($this->getSubject());
 
         $cc = $this->getCc();

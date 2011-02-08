@@ -190,10 +190,15 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 $select->whereEquals('db_id', '');
                 foreach ($model->getRows($select) as $r) {
                     foreach ($dbIds as $dbId) {
-                        $id = call_user_func(
+                        $ids = call_user_func(
                             array($r->meta_class, 'getDeleteDbId'), $r, $dbId
                         );
-                        if (!is_null($id)) $newIds[$r->target_component_class][] = $id;
+                        if (!is_null($ids) && !is_array($ids)) $ids = array($ids);
+                        if (is_array($ids)) {
+                            $tcc = $r->target_component_class;
+                            if (!isset($newIds[$tcc])) $newIds[$tcc] = array();
+                            $newIds[$tcc] = array_merge($newIds[$tcc], $ids);
+                        }
                     }
                 }
                 // Einträge mit db_id
@@ -212,7 +217,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 $where = array();
                 if (count($ids) > 0 && $ids[0]) $where = array('db_id' => $ids);
                 $wheres[$class][] = $where;
-
                 // alles was schon in allIds vorkommt nicht mehr zu searchIds hinzufügen
                 if (!isset($allIds[$class])) $allIds[$class] = array();
                 $diff = array_diff($ids, $allIds[$class]);
@@ -260,16 +264,25 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                     }
                 }
                 if (isset($w['db_id'])) {
-                    $val = $w['db_id'];
-                    if (is_array($val) && count($val) == 1) $val = $val[0];
-                    if (!is_array($val)) $val = (string)$val;
-                    if (!is_array($val) && strpos($val, '%') !== false) {
-                        $and[] = new Vps_Model_Select_Expr_Like('db_id', $val);
-                        $and[] = new Vps_Model_Select_Expr_Equal('component_class', $cClass);
-                    } else {
-                        // Hier keine componentClass-where, damit man im Pattern andere Komponente angeben kann
-                        $and[] = new Vps_Model_Select_Expr_Equal('db_id', $val);
+                    $dbIdOr = array();
+                    $dbIds = array();
+                    $vals = $w['db_id'];
+                    if (!is_array($vals)) $vals = array($val);
+                    foreach ($vals as $val) {
+                        if (strpos($val, '%') !== false) {
+                            $dbIdOr[] = new Vps_Model_Select_Expr_And(array(
+                                new Vps_Model_Select_Expr_Like('db_id', $val),
+                                new Vps_Model_Select_Expr_Equal('component_class', $cClass)
+                            ));
+                        } else {
+                            $dbIds[] = (string)$val;
+                        }
                     }
+                    if ($dbIds) {
+                        // Hier keine componentClass-where, damit man im Pattern andere Komponente angeben kann
+                        $dbIdOr[] = new Vps_Model_Select_Expr_Equal('db_id', $dbIds);
+                    }
+                    $and[] = new Vps_Model_Select_Expr_Or($dbIdOr);
                 } else {
                     $and[] = new Vps_Model_Select_Expr_Equal('component_class', $cClass);
                 }

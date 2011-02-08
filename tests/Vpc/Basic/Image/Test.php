@@ -119,6 +119,14 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
+
+        Vps_Media::getOutput('Vpc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
+        $c = $this->_root->getComponentById('1605');
+        $row = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_TestModel')->getRow('1605');
+        $row->save();
+        Vps_Component_ModelObserver::getInstance()->process();
+        Vps_Media::getOutput('Vpc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
+        $this->assertEquals(2, Vpc_Basic_Image_ParentImageComponent_Child_Component::$getMediaOutputCalled);
     }
 
     public function testClearOutputCache()
