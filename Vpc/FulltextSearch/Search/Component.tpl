@@ -1,7 +1,7 @@
 <div class="<?=$this->cssClass;?>">
     <form action="<?=$this->data->url;?>">
-        <input name="query" value="<?=htmlspecialchars($this->queryString);?>" />
-        <input type="submit" value="<?=$this->data->trlVps('Search');?>" />
+        <input class="query" name="query" value="<?=htmlspecialchars($this->queryString);?>" />
+        <input class="submit" type="submit" value="<?=$this->data->trlVps('Search');?>" />
     </form>
     <? if ($this->error) { ?>
         <p><?=$this->error?></p>
@@ -12,12 +12,17 @@
         </div>
         <?=$this->component($this->paging);?>
         <ul class="resultList">
-            <? foreach ($this->hits as $hit) { ?>
-                <li>
+            <? $h=0; foreach ($this->hits as $hit) { ?>
+                <?
+                $class = '';
+                if($h==0) $class = 'first ';
+                if($h==count($this->hits)-1) $class = 'last ';
+                ?>
+                <li class="<?=trim($class);?>">
                     <?=$this->componentLink($hit['data'],$this->highlightTerms($this->queryParts, $hit['data']->name));?>
                     <span class="preview"><?=$this->highlightTerms($this->queryParts, $hit['content']);?></span>
                 </li>
-            <? } ?>
+            <? $h++; } ?>
         </ul>
         <?=$this->component($this->paging)?>
     <? } else if ($this->queryString) { ?>
