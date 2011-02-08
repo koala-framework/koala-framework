@@ -30,7 +30,7 @@ class Vps_Component_Data
         if (!isset($this->dbId) && isset($this->componentId)) {
             $this->dbId = $this->componentId;
         }
-        
+
         if (isset($config['unserialized']) && $config['unserialized']) {
             Vps_Benchmark::count('unserialized componentDatas', $this->componentId);
         } else {
@@ -626,7 +626,7 @@ class Vps_Component_Data
         if (isset($this->_lazyParent)) {
             //optimierung: hier koennen eventuell ein paar nicht-pages uebersprungen werden
             $id = $this->_lazyParent;
-            if (is_numeric($id)) {
+            if (is_numeric($id) || strpos($id, '-') === false) {
                 //ist eine page
             } else {
                 if (strpos($id, '_') === false) {
