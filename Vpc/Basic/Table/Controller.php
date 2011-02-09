@@ -21,10 +21,10 @@ class Vpc_Basic_Table_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         $sel->setShowNoSelection(true);
         $this->_columns->add(new Vps_Grid_Column('css_style', trlVps('Style'), 100))
             ->setEditor($sel);
+        $this->_columns->add(new Vps_Grid_Column_Visible());
         for ($i = 1; $i <= $columnCount; $i++) {
             $this->_columns->add(new Vps_Grid_Column("column$i", trlVps('Column {0}', $i), 150))
                 ->setEditor(new Vps_Form_Field_TextField());
         }
-        $this->_columns->add(new Vps_Grid_Column_Visible());
     }
 }
