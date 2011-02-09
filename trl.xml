@@ -6106,5 +6106,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Remove the selected link.</en>
 <id>1646</id>
 </text>
+<text>
+<en>Please enter a search term</en>
+<de>Bitte geben Sie einen Suchbegriff ein</de>
+<id>1647</id>
+</text>
 </trl>
 
