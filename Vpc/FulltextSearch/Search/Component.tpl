@@ -27,12 +27,15 @@
             <? $h++; } ?>
         </ul>
         <?=$this->component($this->paging)?>
-    <? } else if ($this->queryString) { ?>
+    <? } else if (trim($this->queryString)) { ?>
         <div class="resultText webSearchError">
             <p><?=$this->data->trlVps('No results found for <strong>"{0}"</strong>',htmlspecialchars($this->queryString));?></p>
         </div>
+    <? } else { ?>
+        <div class="resultText webSearchError">
+            <p><?=$this->data->trlVps('Please enter a search term');?></p>
+        </div>
     <? } ?>
-
     <div class="webSearchHelper">
         <p><?=$this->placeholder['helpFooter']?></p>
     </div>
