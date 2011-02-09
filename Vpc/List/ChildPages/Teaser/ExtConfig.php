@@ -3,7 +3,7 @@ class Vpc_List_ChildPages_Teaser_ExtConfig extends Vps_Component_Abstract_ExtCon
 {
     protected function _getConfig()
     {
-        $config = $this->_getStandardConfig('vpc.list');
+        $config = $this->_getStandardConfig('vpc.list.list');
 
         $class = Vpc_Abstract::getChildComponentClass($this->_class, 'child');
         $childConfig = array_values(Vpc_Admin::getInstance($class)->getExtConfig());
