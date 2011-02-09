@@ -56,8 +56,17 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         var item;
         this.items.each(function(i) {
             if (i.componentClass == data.componentClass && i.type == data.type) {
-                item = i;
-                return false; //break each
+                // render always kann bei der ExtConfig.php mitgegeben werden
+                // um zu erzwingen, dass immer gerendert wird.
+                // Bsp: 2x Table in einem Paragraph mit unterschiedlicher col-anzahl
+                //      wenn beide nacheinander bearbeitet werden, würde sonst die
+                //      zweite die col-anzahl der ersten verwenden was falsch wär
+                if (i.renderAlways) {
+                    this.remove(i);
+                } else {
+                    item = i;
+                    return false; //break each
+                }
             }
         }, this);
 
