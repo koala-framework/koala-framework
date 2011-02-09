@@ -4444,8 +4444,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1234</id>
 </text>
 <text>
-<en>Unsubscribe</en>
-<de>Abmelden</de>
+<en>Unsubscribe Newsletter</en>
+<de>Newsletter abmelden</de>
 <id>1235</id>
 </text>
 <text>
@@ -4492,6 +4492,11 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Active?</en>
 <de>Aktiv?</de>
 <id>1254</id>
+</text>
+<text>
+<en>Newsletter Subscriber settings</en>
+<de>Newsletter Empf&#xE4;nger Einstellungen</de>
+<id>1255</id>
 </text>
 <text>
 <en>unsubscribed</en>
