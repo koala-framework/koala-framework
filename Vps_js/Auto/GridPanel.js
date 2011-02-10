@@ -751,10 +751,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 }
 
                 this.getGrid().stopEditing();
-                this.store.insert(0, record);
+
+                var rowInsertPosition = 0;
+                if (this.insertNewRowAtBottom) {
+                    rowInsertPosition = this.store.getCount();
+                }
+                this.store.insert(rowInsertPosition, record);
                 this.store.newRecords.push(record);
                 if (record.dirty) {
-                    this.getGrid().startEditing(0, i);
+                    this.getGrid().startEditing(rowInsertPosition, i);
                 }
             }
         }
