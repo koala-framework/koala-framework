@@ -529,7 +529,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $invalid = $column->validate($row, $submitRow);
                 if ($invalid) {
                     $invalid = Vps_Form::formatValidationErrors($invalid);
-                    throw new Vps_ClientException(implode("<br />", $invalid));
+                    throw new Vps_Exception_Client(implode("<br />", $invalid));
                 }
                 $column->prepareSave($row, $submitRow);
             }
@@ -570,7 +570,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         foreach ($ids as $id) {
             $row = $this->_model->find($id)->current();
             if (!$row) {
-                throw new Vps_ClientException("Can't find row with id '$id'.");
+                throw new Vps_Exception_Client("Can't find row with id '$id'.");
             }
             if (!$this->_hasPermissions($row, 'delete')) {
                 throw new Vps_Exception("You don't have the permissions to delete this row.");
@@ -866,7 +866,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->_helper->viewRenderer->setNoRender();
     }
 
-    private function _getColumnLetterByIndex($idx)
+    protected function _getColumnLetterByIndex($idx)
     {
         $letters = array('A','B','C','D','E','F','G','H','I','J','K','L','M',
             'N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
