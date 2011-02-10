@@ -185,7 +185,7 @@ class Vps_Util_ClearCache
                 $url = "http://$preLogin$d/vps/util/apc/clear-cache";
                 $c = @file_get_contents($url);
                 if ($c != 'OK') {
-                    $d = $config->application->id . '.' . $config->server->host;
+                    $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
                     $url = "http://$preLogin$d/vps/util/apc/clear-cache";
                     $c = @file_get_contents($url);
                 }
