@@ -4,6 +4,11 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
+
+        $ret['assetsAdmin']['dep'][] = 'ExtGridCheckboxSelectionModel';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Table/TableGridPanel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Table/TableXlsImportForm.js';
+
         $ret['componentName'] = trlVps('Table');
         $ret['ownModel'] = 'Vpc_Basic_Table_Model';
         $ret['childModel'] = 'Vpc_Basic_Table_ModelData';
