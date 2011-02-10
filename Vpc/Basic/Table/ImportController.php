@@ -28,15 +28,18 @@ class Vpc_Basic_Table_ImportController extends Vps_Controller_Action_Auto_Vpc_Fo
         $model = Vps_Model_Abstract::getInstance('Vps_Uploads_Model');
         $ulRow = $model->getRow($row->upload_id);
 
-        $import = $this->_import($ulRow->getFileSource(), $row);
+        $import = $this->_import($ulRow, $row);
 
         unlink($ulRow->getFileSource());
         $ulRow->delete();
     }
 
-    private function _import($fileSource, $formRow)
+    private function _import($fileRow, $formRow)
     {
-        $xls = PHPExcel_IOFactory::load($fileSource)->getActiveSheet();
+        if ($fileRow->extension != 'xls') {
+            throw new Vps_Exception_Client(trlVps('Uploaded file is not of type "xls".'));
+        }
+        $xls = PHPExcel_IOFactory::load($fileRow->getFileSource())->getActiveSheet();
 
         $settingsRow = Vps_Model_Abstract::getInstance('Vpc_Basic_Table_Model')
             ->getRow($this->_getParam('componentId'));
