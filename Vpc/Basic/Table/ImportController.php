@@ -17,7 +17,8 @@ class Vpc_Basic_Table_ImportController extends Vps_Controller_Action_Auto_Vpc_Fo
         )));
 
         $this->_form->add(new Vps_Form_Field_Static(trlVps('Upload a file and click "Save" to import.')));
-        $this->_form->add(new Vps_Form_Field_File('import', 'Import'));
+        $this->_form->add(new Vps_Form_Field_File('import', 'Import'))
+            ->setAllowBlank(false);
         $this->_form->add(new Vps_Form_Field_Checkbox('adjust_columns', trlVps('Adjust columns')))
             ->setBoxLabel(trlVps('Add columns if necessary'))
             ->setDefaultValue(1);
