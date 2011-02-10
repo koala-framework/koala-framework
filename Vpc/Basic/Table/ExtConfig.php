@@ -7,9 +7,11 @@ class Vpc_Basic_Table_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstrac
         $table = $this->_getStandardConfig('vps.autogrid', 'Index', trlVps('Table'), new Vps_Asset('wrench'));
         $table['renderAlways'] = true;
         $table['insertNewRowAtBottom'] = true;
+        $xlsImportTable = $this->_getStandardConfig('vps.autoform', 'Import', trlVps('XLS Import'), new Vps_Asset('page_excel'));
         return array(
             'settings' => $settings,
-            'table' => $table
+            'table' => $table,
+            'xlsImportTable' => $xlsImportTable
         );
     }
 }
