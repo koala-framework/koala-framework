@@ -179,7 +179,7 @@ class Vps_Util_ClearCache
                 if ($output) echo "ignored:     apc\n";
             } else {
                 $d = Vps_Registry::get('config')->server->domain;
-                $url = "http://$d/vps/util/apc/clear-cache";
+                $url = "http://vivid:planet@$d/vps/util/apc/clear-cache";
                 $c = @file_get_contents($url);
                 if ($c == 'OK') {
                     if ($output) echo "cleared:     apc\n";
