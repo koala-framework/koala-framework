@@ -30,7 +30,8 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
     {
         $domain = $this->_getParam('domain');
         if (!$domain) $domain = Vps_Registry::get('config')->server->domain;
-        $url = 'http://' . $domain . '/vps/util/render/render?componentId=' . $componentId;
+        $login = Vps_Registry::get('config')->preLogin ? 'vivid:planet' : '';
+        $url = 'http://' . $login . $domain . '/vps/util/render/render?componentId=' . $componentId;
         echo "$url: ";
         $b = Vps_Benchmark::start('render');
         $content = file_get_contents($url);
