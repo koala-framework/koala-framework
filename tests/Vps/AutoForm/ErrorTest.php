@@ -24,6 +24,8 @@ class Vps_AutoForm_ErrorTest extends Vps_Test_SeleniumTestCase
 
     private function _testAutoForm($errors) {
 
+        $this->open('/vps/test/vps_auto-form_test/reset');
+
         $this->open('/vps/test/vps_auto-form_test/get-row-count');
         $count = $this->getText('//body');
         $this->assertEquals(1, $count);

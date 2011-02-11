@@ -54,7 +54,7 @@ Ext.util.Format.money = function(v, p)
     }
     ret = preSign+x+ret+v.substr(v.length-3, 3);
     return ret;
-}
+};
 
 Ext.util.Format.percent = function(v)
 {
@@ -112,7 +112,7 @@ Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');
 Ext.util.Format.germanDay = function(value, p) {
     p.css += 'vps-renderer-bright';
     return Ext.util.Format.date(value, 'd.m.');
-}
+};
 Ext.util.Format.time = Ext.util.Format.dateRenderer('H:i');
 Ext.util.Format.secondsToTime = function(v, format) {
     format.css += 'secondsToTimeRight';

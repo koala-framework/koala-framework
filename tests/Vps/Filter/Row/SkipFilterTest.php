@@ -6,7 +6,7 @@ class Vps_Filter_Row_SkipFilterTestFilter extends Vps_Filter_Row_AutoFill
         return !!$row->skip;
     }
 }
-class Vps_Filter_Row_SkipFilterTest extends PHPUnit_Framework_TestCase
+class Vps_Filter_Row_SkipFilterTest extends Vps_Test_TestCase
 {
     public function testSkipFilter()
     {

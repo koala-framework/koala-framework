@@ -2,7 +2,7 @@
 /**
  * @group Vpc_Basic_Text
  */
-class Vpc_Basic_Text_ParserTest extends PHPUnit_Framework_TestCase
+class Vpc_Basic_Text_ParserTest extends Vps_Test_TestCase
 {
     private $_parser;
     public function setUp()
@@ -14,7 +14,9 @@ class Vpc_Basic_Text_ParserTest extends PHPUnit_Framework_TestCase
         ));
         $this->_parser->setEnableTagsWhitelist(true);
         $this->_parser->setEnableStyles(true);
+        parent::setUp();
     }
+
     public function testParser()
     {
         $out = $this->_parser->parse('<br />');

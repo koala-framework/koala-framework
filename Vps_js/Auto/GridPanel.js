@@ -666,19 +666,19 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.reload();
                 this.fireEvent('datachange', r);
                 if (cb.success) {
-                    cb.success.apply(cb.scope, arguments)
+                    cb.success.apply(cb.scope, arguments);
                 }
             },
             failure: function() {
                 this.getAction('save').enable();
                 if (cb.failure) {
-                    cb.failure.apply(cb.scope, arguments)
+                    cb.failure.apply(cb.scope, arguments);
                 }
             },
             callback: function() {
                 this.el.unmask();
                 if (cb.callback) {
-                    cb.callback.apply(cb.scope, arguments)
+                    cb.callback.apply(cb.scope, arguments);
                 }
             },
             scope  : this
@@ -968,7 +968,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!this.getStore()) {
             Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
             Ext.Ajax.request({
-                mask: true,
+                mask: this.el,
                 url: this.controllerUrl+'/json-data',
                 params: params,
                 success: function(response, options, r) {

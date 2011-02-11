@@ -77,7 +77,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                     this.store = new Ext.data[store.type](storeConfig);
                 } else if (store.type) {
                     try {
-                        var storeType = eval(store.type)
+                        var storeType = eval(store.type);
                     } catch(e) {
                         throw "invalid storeType: "+store.type;
                     }

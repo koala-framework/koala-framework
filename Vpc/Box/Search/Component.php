@@ -20,6 +20,9 @@ abstract class Vpc_Box_Search_Component extends Vpc_Abstract_Composite_Component
         $ret['placeholder']['clearOnFocus'] = trlVps('Search term');
         $ret['placeholder']['initialResultText'] = trlVps('Please type at least two characters.');
 
+        $ret['searchResultBoxAlign'] = 'tl-bl';
+        $ret['searchResultBoxFade'] = true;
+
         return $ret;
     }
 
@@ -31,6 +34,10 @@ abstract class Vpc_Box_Search_Component extends Vpc_Abstract_Composite_Component
         $ret['queryParam'] = $formData['queryParam'];
         $ret['submitParam'] = $formData['submitParam'];
         $ret['searchPageUrl'] = $formData['searchPageUrl'];
+        $ret['searchSettings'] = array(
+            'searchResultBoxAlign' => $this->_getSetting('searchResultBoxAlign'),
+            'searchResultBoxFade' => $this->_getSetting('searchResultBoxFade')
+        );
         return $ret;
     }
 

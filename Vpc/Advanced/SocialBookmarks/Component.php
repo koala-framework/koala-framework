@@ -12,7 +12,7 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getNetworks($currentPage)
+    private function _getNetworks($currentPage)
     {
         //TODO: funktioniert mit mehreren domains nicht korrekt
         $pageUrl = 'http://'.Vps_Registry::get('config')->server->domain.$currentPage->url;
@@ -46,10 +46,15 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVarsWithNetworks($currentPage)
     {
         $ret = parent::getTemplateVars();
-        $ret['networks'] = $this->getNetworks($this->getData()->parent);
+        $ret['networks'] = $this->_getNetworks($this->getData()->parent);
         return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        return $this->getTemplateVarsWithNetworks($this->getData()->parent);
     }
 }
