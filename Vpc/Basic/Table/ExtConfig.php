@@ -12,9 +12,9 @@ class Vpc_Basic_Table_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstrac
         $xlsImportTable = $this->_getStandardConfig('vpc.tablexlsimport', 'Import', trlVps('XLS Import'), new Vps_Asset('page_excel'));
 
         return array(
-            'settings' => $settings,
             'table' => $table,
-            'xlsImportTable' => $xlsImportTable
+            'xlsImportTable' => $xlsImportTable,
+            'settings' => $settings
         );
     }
 }
