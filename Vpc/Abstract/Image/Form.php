@@ -10,7 +10,7 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
         }
 
         // Fileupload
-        $image = new Vps_Form_Field_File('Image', trlVps('Image'));
+        $image = new Vps_Form_Field_File('Image', Vpc_Abstract::getSetting($this->getClass(), 'imageLabel'));
         $image
             ->setAllowBlank(Vpc_Abstract::getSetting($this->getClass(), 'allowBlank'))
             ->setAllowOnlyImages(true);

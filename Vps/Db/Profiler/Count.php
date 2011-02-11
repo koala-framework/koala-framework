@@ -1,7 +1,7 @@
 <?php
 class Vps_Db_Profiler_Count extends Zend_Db_Profiler
 {
-    private $_count = 0;
+    protected $_count = 0;
     public function queryStart($queryText, $queryType = null)
     {
         if (!$this->_enabled) {

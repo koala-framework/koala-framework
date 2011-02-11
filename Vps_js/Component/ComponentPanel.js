@@ -47,6 +47,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             }
         } else {
             params = this.getBaseParams();
+            data.componentId = params.componentId;
         }
         var item;
         this.items.each(function(i) {
@@ -63,7 +64,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             item.applyBaseParams(params);
             item.load();
             if (item.getAction && item.getAction('saveBack')) {
-                if (this.getTopToolbar().items.getCount() > 3) {
+                if (this.getTopToolbar().items.getCount() > 2) {
                     item.getAction('saveBack').show();
                 } else {
                     item.getAction('saveBack').hide();
@@ -75,6 +76,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 componentClass: data.componentClass,
                 type: data.type,
                 baseParams: params,
+                autoHeight: this.autoHeight,
                 listeners: {
                     scope: this,
                     gotComponentConfigs: function(componentConfigs) {
@@ -95,7 +97,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             item.on('loaded', function() {
                 //muss hier auch nochmal gemacht werden
                 if (item.getAction && item.getAction('saveBack')) {
-                    if (this.getTopToolbar().items.getCount() > 3) {
+                    if (this.getTopToolbar().items.getCount() > 2) {
                         item.getAction('saveBack').show();
                     } else {
                         item.getAction('saveBack').hide();
@@ -165,7 +167,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             toolbar.add('»');
         }
 
-        var data = this.componentsStack[this.componentsStack.length-1]
+        var data = this.componentsStack[this.componentsStack.length-1];
         var cfg = this.componentConfigs[data.componentClass+'-'+data.type];
         toolbar.add({
             cls: 'x-btn-text-icon',

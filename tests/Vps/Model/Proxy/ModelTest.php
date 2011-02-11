@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_Proxy
  */
-class Vps_Model_Proxy_ModelTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Proxy_ModelTest extends Vps_Test_TestCase
 {
     public function testIsEqual()
     {

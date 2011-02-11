@@ -21,6 +21,7 @@ class Vpc_Advanced_Amazon_Nodes_Test extends Vps_Test_SeleniumTestCase
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesTestComponent", "Php");
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesTestComponent", "JavaScript");
         $this->clickAndWait('link=Php');
+
         $this->assertElementPresent('link=PHP 5.3 + MySQL 5.1: Der Einstieg in die Programmierung dynamischer Websites');
         $this->clickAndWait('link=PHP 5.3 + MySQL 5.1: Der Einstieg in die Programmierung dynamischer Websites');
         $this->assertContainsText("css=.vpcAdvancedAmazonNodesProductsDirectoryDetail .bookInfos h1", "Der Einstieg");

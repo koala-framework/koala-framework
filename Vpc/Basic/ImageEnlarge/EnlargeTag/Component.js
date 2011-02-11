@@ -44,7 +44,13 @@ Vpc.Basic.ImageEnlarge.tplHeader = new Ext.XTemplate(
 Vpc.Basic.ImageEnlarge.tplBody = new Ext.XTemplate(
     '<div class="prevBtn">{previousImageButton}</div>',
     '<div class="nextBtn">{nextImageButton}</div>',
+    /* alter Style, wird noch unterstützt, ersetzt durch die zwei folgenden Zeilen
     '<img src="{values.image.src}" width="{values.image.width}" height="{values.image.height}" class="centerImage" />'
+     */
+    '<div class="loading"><img src="/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/loading.gif" width="66" height="66" class="preloadImage" /></div>',
+    '<div class="image" style="width:{values.image.width}px; height:{values.image.height}px"><img class="centerImage" /></div>'
+    /*
+    */
 );
 
 Vpc.Basic.ImageEnlarge.tplFooter = new Ext.XTemplate(
@@ -165,6 +171,16 @@ Vpc.Basic.ImageEnlarge.prototype =
 
         tpls.tpl.overwrite(this.lightbox, data);
 
+        var image = new Image();
+        image.onload = (function(){
+            if (this.lightbox.child('.image')) {
+                this.lightbox.child('.loading').hide();
+                this.lightbox.child('.centerImage').dom.src = linkEl.dom.href;
+                this.lightbox.child('.image').fadeIn();
+            }
+        }).createDelegate(this);
+        image.src = linkEl.dom.href;
+
         this.lightbox.child('.lightboxFooter').setWidth(m[1]);
 
         var applyNextPreviousEvents = function(imageLink, type) {
@@ -175,7 +191,14 @@ Vpc.Basic.ImageEnlarge.prototype =
             this.lightbox.query('.'+type+'SwitchButton').each(function(el) {
                 el = Ext.fly(el);
                 el.on('click', function(e) {
-                    this.lightbox.show(this.imageLink);
+                    if (this.lightbox.lightbox.child('.image')) {
+                        this.lightbox.lightbox.child('.image').fadeOut({
+                            callback: this.lightbox.show(this.imageLink),
+                            scope: this
+                        });
+                    } else {
+                        this.lightbox.show(this.imageLink);
+                    }
                 }, {lightbox: this, imageLink: imageLink}, { stopEvent: true });
             }, this);
         };
@@ -260,7 +283,7 @@ Vpc.Basic.ImageEnlarge.prototype =
             pageWidth = windowWidth;
         }
 
-        arrayPageSize = new Array(pageWidth,pageHeight,windowWidth,windowHeight) 
+        arrayPageSize = new Array(pageWidth,pageHeight,windowWidth,windowHeight);
         return arrayPageSize;
     }
 };

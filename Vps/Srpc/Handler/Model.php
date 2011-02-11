@@ -43,6 +43,11 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
         return $this->getModel()->getColumns();
     }
 
+    public function getColumnType($column)
+    {
+        return $this->getModel()->getColumnType($column);
+    }
+
     public function getPrimaryKey()
     {
         return $this->getModel()->getPrimaryKey();
