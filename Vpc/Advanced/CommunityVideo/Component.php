@@ -18,7 +18,7 @@ class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract_Flash_Component
     {
         $ret = parent::_getFlashData();
 
-        $ret['url'] = self::replaceUrl($this->getRow());
+        $ret['url'] = self::getFlashUrl($this->getRow());
         $ret['width'] = $this->getRow()->width;
         $ret['height'] = $this->getRow()->height;
         $ret['params'] = array(
@@ -27,7 +27,7 @@ class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract_Flash_Component
         return $ret;
     }
 
-    public static function replaceUrl($row)
+    static public function getFlashUrl($row)
     {
         $url = $row->url;
         if (!empty($url)) {

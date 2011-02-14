@@ -237,7 +237,7 @@ class Vps_Setup
 
         if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
-            && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
+            && $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
