@@ -2,7 +2,7 @@
 /**
  * @group Service
  */
-class Vps_Srpc_HandlerModelTest extends PHPUnit_Framework_TestCase
+class Vps_Srpc_HandlerModelTest extends Vps_Test_TestCase
 {
     private $_handler;
     private $_modelData = array(
@@ -14,6 +14,7 @@ class Vps_Srpc_HandlerModelTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
         $model = new Vps_Model_FnF(array(
             'columns' => array('id', 'firstname', 'lastname'),
             'data' => array(
