@@ -213,6 +213,10 @@ class Vps_Debug
     public static function handleError($errno, $errstr, $errfile, $errline)
     {
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
+        if (defined('E_DEPRECATED') && $errno == E_DEPRECATED
+            && (strpos($errfile, 'tcpdf/') !== false || strpos($errfile, '/usr/share/php/') !== false)) {
+            return;
+        }
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 

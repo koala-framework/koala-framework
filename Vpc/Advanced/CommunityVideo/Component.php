@@ -17,14 +17,25 @@ class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract_Flash_Component
     {
         $ret = parent::_getFlashData();
 
-        $url = $this->getRow()->url;
+        $ret['url'] = self::getFlashUrl($this->getRow());
+        $ret['width'] = $this->getRow()->width;
+        $ret['height'] = $this->getRow()->height;
+        $ret['params'] = array(
+            'allowfullscreen' => 'true'
+        );
+        return $ret;
+    }
+
+    static public function getFlashUrl($row)
+    {
+        $url = $row->url;
         if (!empty($url)) {
             $urlParts = parse_url($url);
 
             if ($urlParts && !empty($urlParts['host'])) {
                 if (preg_match('/youtube\.com$/i', $urlParts['host'])) {
                     $url = str_replace('/watch?v=', '/v/', $url);
-                    if (!$this->getRow()->show_similar_videos) {
+                    if (!$row->show_similar_videos) {
                         if (strpos($url, 'rel=0') === false) {
                             $url .= '&rel=0';
                         }
@@ -35,14 +46,7 @@ class Vpc_Advanced_CommunityVideo_Component extends Vpc_Abstract_Flash_Component
                 }
             }
         }
-
-        $ret['url'] = $url;
-        $ret['width'] = $this->getRow()->width;
-        $ret['height'] = $this->getRow()->height;
-        $ret['params'] = array(
-            'allowfullscreen' => 'true'
-        );
-        return $ret;
+        return $url;
     }
 
     public function hasContent()
