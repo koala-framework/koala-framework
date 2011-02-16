@@ -6,7 +6,9 @@ class Vps_Controller_Action_Util_ApcController extends Vps_Controller_Action
     public function clearCacheAction()
     {
         //darf nur von cli aus aufgerufen werden
-        if ($_SERVER['SERVER_ADDR']!=$_SERVER['REMOTE_ADDR']) {
+        if ($_SERVER['SERVER_ADDR']!=$_SERVER['REMOTE_ADDR'] &&
+            !$_SERVER['REMOTE_ADDR'] != '83.215.136.30'
+        ) {
             throw new Vps_Exception_AccessDenied();
         }
 
