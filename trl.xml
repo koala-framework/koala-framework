@@ -6033,7 +6033,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Newsletter Subscriber settings</en>
-<de>Newsletterempfänger-Einstellungen</de>
+<de>Newsletterempf&#xE4;nger-Einstellungen</de>
 <id>1570</id>
 </text>
 <text>
@@ -6070,6 +6070,78 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>If you typed the address, make sure the spelling is correct</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
 <id>1577</id>
+</text>
+<text>
+<en>Master</en>
+<id>1578</id>
+</text>
+<text>
+<en>Master URL</en>
+<id>1579</id>
+</text>
+<text>
+<en>Master width</en>
+<id>1580</id>
+</text>
+<text>
+<en>Master height</en>
+<id>1581</id>
+</text>
+<text>
+<en>Land</en>
+<id>1582</id>
+</text>
+<text>
+<en>E-Mail Address</en>
+<id>1583</id>
+</text>
+<text>
+<en>Predefined Subject for Mail</en>
+<id>1584</id>
+</text>
+<text>
+<en>Predefined Text for Mail</en>
+<id>1585</id>
+</text>
+<text>
+<en>Unsubscribe</en>
+<id>1586</id>
+</text>
+<text>
+<en>Master</en>
+<id>1587</id>
+</text>
+<text>
+<en>Master URL</en>
+<id>1588</id>
+</text>
+<text>
+<en>Master width</en>
+<id>1589</id>
+</text>
+<text>
+<en>Master height</en>
+<id>1590</id>
+</text>
+<text>
+<en>Land</en>
+<id>1591</id>
+</text>
+<text>
+<en>E-Mail Address</en>
+<id>1592</id>
+</text>
+<text>
+<en>Predefined Subject for Mail</en>
+<id>1593</id>
+</text>
+<text>
+<en>Predefined Text for Mail</en>
+<id>1594</id>
+</text>
+<text>
+<en>Unsubscribe</en>
+<id>1595</id>
 </text>
 </trl>
 
