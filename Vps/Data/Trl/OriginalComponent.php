@@ -19,6 +19,7 @@ class Vps_Data_Trl_OriginalComponent extends Vps_Data_Abstract
         } else {
             $fieldname = $this->getFieldname();
         }
+        if (!$c->chained->getComponent()->getRow()) return null;
         return $c->chained
             ->getComponent()
             ->getRow()
