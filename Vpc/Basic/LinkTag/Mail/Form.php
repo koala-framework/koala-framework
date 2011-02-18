@@ -1,9 +1,9 @@
 <?php
 class Vpc_Basic_LinkTag_Mail_Form extends Vpc_Abstract_Form
 {
-    public function __construct($name, $class, $id = null)
+    public function _initFields()
     {
-        parent::__construct($name, $class, $id);
+        parent::_initFields();
 
         $this->add(new Vps_Form_Field_EMailField('mail', 'E-Mail Address'))
             ->setWidth(300);
