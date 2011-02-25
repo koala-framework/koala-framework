@@ -8,7 +8,7 @@ class Vpc_Mail_HtmlParser
 
     //einstellungen für parser
     private $_styles;
-    
+
     private $_noCloseTags = array('br', 'img', 'hr');
 
 
@@ -83,6 +83,9 @@ class Vpc_Mail_HtmlParser
                         if ($style == 'font-family') {
                             $appendTags['font']['face'] = $value;
                         } else if ($style == 'font-size') {
+                            if (substr($value, -2) == 'px') {
+                                $value = round((int)$value / 6); // TODO: das ist pi mal daumen
+                            }
                             $appendTags['font']['size'] = $value;
                         } else if ($style == 'color') {
                             $appendTags['font']['color'] = $value;
@@ -97,7 +100,7 @@ class Vpc_Mail_HtmlParser
                 }
             }
         }
-        
+
         $this->_ret .= "<$tag";
         foreach ($attributes as $n=>$v) {
             $n= strtolower($n);
@@ -170,7 +173,6 @@ class Vpc_Mail_HtmlParser
 
         // re-replace entities
         $this->_ret = preg_replace('/\+([a-z0-9#]{2,5});/i', '&$1;', $this->_ret);
-
         return $this->_ret;
     }
 }
