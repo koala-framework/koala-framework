@@ -91,6 +91,8 @@ class Vpc_Mail_HtmlParser
                             $appendTags['font']['color'] = $value;
                         } else if ($style == 'font-weight' && $value == 'bold') {
                             $appendTags['b'] = array();
+                        } else if ($style == 'text-align') {
+                            $appendTags['center'] = array();
                         }
                     }
                 }
