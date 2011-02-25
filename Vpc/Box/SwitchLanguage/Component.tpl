@@ -4,7 +4,9 @@
         if ($i >= 1) echo $this->separator;
 
         if ($l['flag']) {
-            $text = $this->ifHasNoContent($l['flag']).$l['name'].$this->ifHasNoContent();
+            if(!$this->hasContent($l['flag'])) {
+                $text = $l['name'];
+            }
             $text .= $this->component($l['flag']);
         } else {
             $text = $l['name'];
