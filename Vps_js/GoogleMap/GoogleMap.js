@@ -307,6 +307,7 @@ Vps.GoogleMap.Map.prototype = {
     addMarker : function(markerConfig)
     {
         var gmarkCfg = { draggable: false };
+        if (markerConfig.draggable) gmarkCfg.draggable = true;
         if (this._isLightMarker(markerConfig.latitude, markerConfig.longitude)
             && this.config.lightMarkerSrc
         ) {

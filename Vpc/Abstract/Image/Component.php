@@ -78,6 +78,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             }
         }
 
+        //wenn erste dimension (=standard wert!) bestfit oder crop ist, müssen
+        //width oder height gesetzt sein
         reset($settings['dimensions']);
         $firstDimension = current($settings['dimensions']);
         if (($firstDimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||

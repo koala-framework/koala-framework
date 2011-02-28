@@ -18,6 +18,13 @@ class Vpc_News_Detail_Abstract_Trl_Component extends Vpc_Directories_Item_Detail
     {
         $ret = parent::getCacheVars();
         $ret = array_merge($ret, $this->getData()->getChildComponent('-content')->getComponent()->getCacheVars());
+        $row = $this->getData()->row;
+        $model = $row->getModel();
+        $primaryKey = $model->getPrimaryKey();
+        $ret[] = array(
+            'model' => $model,
+            'id' => $row->$primaryKey
+        );
         return $ret;
     }
 
@@ -27,5 +34,4 @@ class Vpc_News_Detail_Abstract_Trl_Component extends Vpc_Directories_Item_Detail
         $new->publish_date = $new->chained->row->publish_date;
         $new->teaser = $new->row->teaser;
     }
-
 }
