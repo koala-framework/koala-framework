@@ -78,6 +78,7 @@ class Vpc_Basic_Table_ImportController extends Vps_Controller_Action_Auto_Vpc_Fo
             $newRow = $model->createRow();
             $newRow->component_id = $settingsRow->component_id;
             $newRow->css_style = null;
+            $newRow->visible = 1;
 
             for ($c=0; $c<$importColumns; $c++) {
                 $colname = 'column'.($c+1);
