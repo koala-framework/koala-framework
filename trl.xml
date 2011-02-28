@@ -6131,5 +6131,66 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Die Anfrage wurde gesendet von</de>
 <id>1650</id>
 </text>
+<text>
+<en>http://www.vivid-planet.com</en>
+<id>1651</id>
+</text>
+<text>
+<en>Imprint.Facebook Disclaimer</en>
+<de>Impressum.Facebook Disclaimer</de>
+<id>1652</id>
+</text>
+<text>
+<en>Facebook Social Plugin</en>
+<id>1653</id>
+</text>
+<text>
+<en>Master</en>
+<id>1654</id>
+</text>
+<text>
+<en>Master URL</en>
+<id>1655</id>
+</text>
+<text>
+<en>Master width</en>
+<id>1656</id>
+</text>
+<text>
+<en>Master height</en>
+<id>1657</id>
+</text>
+<text>
+<en>XLS Import</en>
+<id>1658</id>
+</text>
+<text>
+<en>Upload a file and click "Save" to import.</en>
+<id>1659</id>
+</text>
+<text>
+<en>Adjust columns</en>
+<id>1660</id>
+</text>
+<text>
+<en>Add columns if necessary</en>
+<id>1661</id>
+</text>
+<text>
+<en>Uploaded file is not of type "xls".</en>
+<id>1662</id>
+</text>
+<text>
+<en>Import done</en>
+<id>1663</id>
+</text>
+<text>
+<en>The File has been imported successfully.</en>
+<id>1664</id>
+</text>
+<text>
+<en>Unsubscribe</en>
+<id>1665</id>
+</text>
 </trl>
 
