@@ -3,12 +3,13 @@
  * @group Model
  * @group SiblingModel
  */
-class Vps_Model_FnF_SiblingModelTest extends PHPUnit_Framework_TestCase
+class Vps_Model_FnF_SiblingModelTest extends Vps_Test_TestCase
 {
     private $_model;
 
     public function setUp()
     {
+        parent::setUp();
         $this->_model = new Vps_Model_FnF_SiblingMasterModel();
         Vps_Model_Abstract::getInstance('Vps_Model_FnF_SiblingModel')->setData(
             array(

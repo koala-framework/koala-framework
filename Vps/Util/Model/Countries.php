@@ -13,7 +13,7 @@ class Vps_Util_Model_Countries extends Vps_Model_Data_Abstract
             $this->_data = array();
             $terr = Zend_Locale::getTranslationList(
                 'Territory',
-                Vps_Registry::get('trl')->getTargetLanguage(),
+                Vps_Trl::getInstance()->getTargetLanguage(),
                 '2'/*nur laender, ged aber ned korrekt mit zend 1.9*/);
             foreach ($terr as $iso2=>$terr) {
                 if (is_numeric($iso2)) continue;

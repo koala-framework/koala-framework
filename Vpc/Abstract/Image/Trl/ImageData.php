@@ -35,6 +35,9 @@ class Vpc_Abstract_Image_Trl_ImageData extends Vps_Data_Abstract implements Vps_
     protected function _getMasterImageUrl($componentId)
     {
         $c = Vps_Component_Data_Root::getInstance()->getComponentById($componentId, array('ignoreVisible'=>true));
+        if (!is_instance_of($c->componentClass, 'Vpc_Abstract_Image_Component')
+            && !is_instance_of($c->componentClass, 'Vpc_Abstract_Image_Trl_Component')
+        ) return null;
         $row = $c->chained->getComponent()->getRow();
         if (!$row) return null;
         $row = $row->getParentRow('Image');
