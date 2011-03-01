@@ -53,7 +53,7 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
                 $data = substr($data, 13);
             }
             try {
-                $data = unserialize($data);
+                $data = json_decode($data);
             } catch (Exception $e) {
                 $e = new Vps_Exception($e->getMessage(). " $data");
                 $e->logOrThrow();
