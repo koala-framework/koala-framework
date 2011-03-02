@@ -2,6 +2,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     layout: 'fit',
 
+    // true, false, integer. If integer: after x filters another new tbar is generated
+    filtersInSeparateTbar: false,
+
     initComponent : function()
     {
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
@@ -463,7 +466,16 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.load(params);
             }, this);
         }, this);
-        this.filters.applyToTbar(gridConfig.tbar);
+
+        if (this.filtersInSeparateTbar === false || (
+            typeof this.filtersInSeparateTbar != 'boolean' && this.filtersInSeparateTbar >= 1
+        )) {
+            if (this.filtersInSeparateTbar) {
+                this.filters.applyToTbar(gridConfig.tbar, this.filtersInSeparateTbar);
+            } else {
+                this.filters.applyToTbar(gridConfig.tbar);
+            }
+        }
 
         if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv || meta.buttons.reload) {
             gridConfig.tbar.add('->');
@@ -504,6 +516,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
         if (gridConfig.tbar.length == 0 && !alwaysKeepTbar) {
             delete gridConfig.tbar;
+        }
+
+        gridConfig.filtersInSeparateTbar = this.filtersInSeparateTbar;
+        if (this.filtersInSeparateTbar) {
+            gridConfig.filters = this.filters;
         }
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
