@@ -1,1 +1,1 @@
-<?=$this->component($this->image)?>
+<?=$this->image($this->image, 'default', '', $this->imgCssClass)?>
