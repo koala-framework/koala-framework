@@ -5252,10 +5252,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1415</id>
 </text>
 <text>
-<en>http://www.vivid-planet.at</en>
-<id>1416</id>
-</text>
-<text>
 <en>This {0} is an {1}</en>
 <de>Diese {0} ist ein {1}</de>
 <id>1417</id>
@@ -6041,11 +6037,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1570</id>
 </text>
 <text>
-<en>Unsubscribe Newsletter</en>
-<de>Vom Newsletter abmelden</de>
-<id>1571</id>
-</text>
-<text>
 <en>Count</en>
 <de>Anzahl</de>
 <id>1572</id>
@@ -6074,10 +6065,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>If you typed the address, make sure the spelling is correct</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
 <id>1577</id>
-</text>
-<text>
-<en>Master Url</en>
-<id>1638</id>
 </text>
 <text>
 <en>Original Position</en>
@@ -6191,6 +6178,22 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Unsubscribe</en>
 <id>1665</id>
+</text>
+<text>
+<en>E-Mail Address</en>
+<id>1666</id>
+</text>
+<text>
+<en>Predefined Subject for Mail</en>
+<id>1667</id>
+</text>
+<text>
+<en>Predefined Text for Mail</en>
+<id>1668</id>
+</text>
+<text>
+<en>Newsletter Show in Web</en>
+<id>1669</id>
 </text>
 </trl>
 
