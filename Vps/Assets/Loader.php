@@ -172,6 +172,16 @@ class Vps_Assets_Loader
                 $ret['mimeType'] = 'image/x-icon';
             } else if (substr($file, -5)=='.html') {
                 $ret['mimeType'] = 'text/html; charset=utf-8';
+            } else if (substr($file, -4)=='.otf') { // für Schriften
+                $ret['mimeType'] = 'application/octet-stream';
+            } else if (substr($file, -4)=='.eot') { // für Schriften
+                $ret['mimeType'] = 'application/vnd.ms-fontobject';
+            } else if (substr($file, -4)=='.svg') { // für Schriften
+                $ret['mimeType'] = 'image/svg+xml';
+            } else if (substr($file, -4)=='.ttf') { // für Schriften
+                $ret['mimeType'] = 'application/octet-stream';
+            } else if (substr($file, -5)=='.woff') { // für Schriften
+                $ret['mimeType'] = 'application/x-woff';
             } else {
                 throw new Vps_Assets_NotFoundException("Invalid filetype ($file)");
             }
