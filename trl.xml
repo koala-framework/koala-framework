@@ -5672,7 +5672,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Paste Paragraph</en>
-<de>Absatz einfügen</de>
+<de>Absatz einf&#xFC;gen</de>
 <id>1475</id>
 </text>
 <text>
@@ -5706,6 +5706,16 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Variant</en>
 <de>Varianten</de>
 <id>1482</id>
+</text>
+<text>
+<en>No items to display</en>
+<de>Keine Einträge zum anzeigen
+<id>1483</id>
+</text>
+<text>
+<en>Login:</en>
+<de>Login:</en>
+<id>1484</id>
 </text>
 </trl>
 
