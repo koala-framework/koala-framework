@@ -2125,7 +2125,7 @@ wurde soeben erstellt.</de>
 <id>650</id>
 </text>
 <text>
-<en>The Form has been submitted successfully.</en>
+<en>The form has been submitted successfully.</en>
 <de>Das Formular wurde erfolgreich abgeschickt.</de>
 <id>651</id>
 </text>
@@ -5961,6 +5961,14 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Product: Voucher</en>
 <de>Produkt: Gutschein</de>
 <id>1393</id>
+<en>No items to display</en>
+<de>Keine Einträge zum anzeigen</de>
+<id>1484</id>
+</text>
+<text>
+<en>Login:</en>
+<de>Login:</de>
+<id>1485</id>
 </text>
 <text>
 <en>Copy of</en>
