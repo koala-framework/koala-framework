@@ -69,8 +69,13 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                     buttons: Ext.MessageBox.CANCEL,
                     scope: this,
                     fn: function(button) {
+<<<<<<< HEAD
                         for(var i=this.startFileIndex;i<this.numFiles;i++) {
                             this.cancelUpload(this.getFile(i).id);
+=======
+                        for(var i=0;i<this.vpsFiles.length;i++) {
+                            this.cancelUpload(this.vpsFiles[i]);
+>>>>>>> production/cultourseurope
                         }
                         this.running = false;
                     }
@@ -80,10 +85,17 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
             upload_progress_handler: function(file, done, total) {
                 var total = 0;
                 var sumDone = 0;
+<<<<<<< HEAD
                 for(var i=this.startFileIndex;i<this.numFiles;i++) {
                     var f = this.getFile(i);
                     total += f.size;
                     if (f.id == file.id) {
+=======
+                for(var i=0;i<this.vpsFiles.length;i++) {
+                    var f = this.getFile(this.vpsFiles[i]);
+                    total += f.size;
+                    if (this.vpsFiles[i] == file.id) {
+>>>>>>> production/cultourseurope
                         sumDone += done;
                     } else if (f.filestatus != SWFUpload.FILE_STATUS.QUEUED) {
                         sumDone += f.size;
@@ -101,9 +113,16 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                 if (r.success) {
 
                     this.uploadedIds.push(r.value.uploadId);
+<<<<<<< HEAD
                     for(var i=this.startFileIndex;i<this.numFiles;i++) {
                         var f = this.getFile(i);
                         if (f.filestatus == SWFUpload.FILE_STATUS.QUEUED) {
+=======
+
+                    for(var i=0;i<this.vpsFiles.length;i++) {
+                        var f = this.getFile(this.vpsFiles[i]);
+                        if (f && f.filestatus == SWFUpload.FILE_STATUS.QUEUED) {
+>>>>>>> production/cultourseurope
                             //neeext
                             this.startUpload(f.id);
                             return;
@@ -154,8 +173,13 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
                         Vps.handleError(r.exception, 'Error', !r.exception);
                     }
                     this.running = false;
+<<<<<<< HEAD
                     for(var i=0;i<this.numFiles;i++) {
                         this.cancelUpload(this.getFile(i), false);
+=======
+                    for(var i=0;i<this.vpsFiles.length;i++) {
+                        this.cancelUpload(this.vpsFiles[i], false);
+>>>>>>> production/cultourseurope
                     }
                 }
             },
