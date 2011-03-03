@@ -42,14 +42,18 @@ class Vps_Update_35000 extends Vps_Update
             }
         }
 
+        $db->query("SET NAMES utf8");
         foreach ($fields as $tablename => $fieldnames) {
             foreach ($fieldnames as $fieldname) {
+                //$sql = "UPDATE $tablename SET $fieldname=REPLACE($fieldname, 'u00', '\\\\u00')";
                 foreach ($db->fetchCol("SELECT DISTINCT $fieldname FROM $tablename") as $oldval) {
                     if ($oldval == '') continue;
                     $val = @unserialize($oldval);
                     if (!$val) continue;
                     $val = json_encode($val);
+                    $val = str_replace('\u', '\\\\u', $val);
                     $sql = "UPDATE $tablename SET $fieldname='$val' WHERE $fieldname='$oldval'";
+                    //p($sql);
                     $db->query($sql);
                 }
             }
