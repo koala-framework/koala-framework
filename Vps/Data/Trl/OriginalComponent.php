@@ -19,9 +19,12 @@ class Vps_Data_Trl_OriginalComponent extends Vps_Data_Abstract
         } else {
             $fieldname = $this->getFieldname();
         }
-        return $c->chained
+        $row = $c->chained
             ->getComponent()
-            ->getRow()
-            ->{$fieldname};
+            ->getRow();
+        if ($row->hasColumn($fieldname)) {
+            return $row->$fieldname;
+        }
+        return '';
     }
 }
