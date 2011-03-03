@@ -138,7 +138,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         if (!$this->_initialized) {
             $this->_initialized = true;
             $this->_initForm();
-            $this->_form->trlStaticExecute($this->getData()->getLanguage());
+            if ($this->_form) $this->_form->trlStaticExecute($this->getData()->getLanguage());
         }
         return $this->_form;
     }

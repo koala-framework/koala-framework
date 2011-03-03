@@ -1,0 +1,12 @@
+<?php
+class Vps_Form_CardsRealModels_Model_WrapperTable extends Vps_Db_Table
+{
+    protected $_rowClass = 'Row_BookingService';
+    protected $_name = 'booking_services';
+
+   public function getServices (){
+
+       return array('first'=>'Firstname',
+                    'last'=>'Lastname');
+   }
+}

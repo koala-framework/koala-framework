@@ -43,7 +43,7 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
     public function getColumnCount()
     {
         if (!$this->getRow() || !$this->getRow()->columns) {
-            throw new Vps_ClientException("Please set first the amount of columns in the settings section.");
+            throw new Vps_Exception_Client("Please set first the amount of columns in the settings section.");
         }
         return $this->getRow()->columns;
     }
@@ -53,7 +53,8 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         $ret = parent::getCacheVars();
         $ret['tableData'] = array(
             'model' => $this->getChildModel(),
-            'componentId' => $this->getData()->componentId
+            'id' => $this->getData()->componentId,
+            'field' => 'component_id'
         );
         return $ret;
     }

@@ -1,7 +1,7 @@
-<?=trim($this->order->title.' '.$this->order->firstname);?> <?=$this->order->lastname;?>
+<?=htmlspecialchars(trim($this->order->title.' '.$this->order->firstname));?> <?=htmlspecialchars($this->order->lastname);?>
 
-<?=$this->order->street;?>
+<?=htmlspecialchars($this->order->street);?>
 
-<?=$this->order->zip;?> <?=$this->order->city;?>
+<?=htmlspecialchars($this->order->zip);?> <?=htmlspecialchars($this->order->city);?>
 
-<?=$this->order->country;?>
+<?=htmlspecialchars($this->order->country);?>

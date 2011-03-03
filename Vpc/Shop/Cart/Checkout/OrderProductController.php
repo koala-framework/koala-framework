@@ -15,7 +15,8 @@ class Vpc_Shop_Cart_Checkout_OrderProductController extends Vps_Controller_Actio
                 $card->setName($c);
                 $card->setTitle(Vpc_Abstract::getSetting($c, 'productTypeText'));
 
-                $form = Vpc_Abstract_Form::createComponentForm($c, $c);
+                $formClass = Vpc_Admin::getComponentClass($c, 'FrontendForm');
+                $form = new $formClass($c, $c);
                 $form->setModel(Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_OrderProducts'));
                 $form->setIdTemplate('{0}');
                 Vpc_Shop_AddToCartAbstract_OrderProductData::getInstance($c)
@@ -23,6 +24,7 @@ class Vpc_Shop_Cart_Checkout_OrderProductController extends Vps_Controller_Actio
                 $card->add($form);
             }
         }
+        $cards->setAllowBlank(false);
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
