@@ -8,7 +8,7 @@ class Vps_Util_Country {
     
     public static function getValue($key, $what = self::NAME)
     {
-        $language = Zend_Registry::get('trl')->getTargetLanguage();
+        $language = Vps_Trl::getInstance()->getTargetLanguage();
         $masterFile = VPS_PATH . '/Vps/Form/Field/SelectCountry/countries.xml';
         $cacheId = "countries_{$language}_{$what}";
         

@@ -3,6 +3,11 @@ class Vps_Component_Abstract
 {
     private static $_settings = null;
     private static $_rebuildingSettings = false;
+    private static $_modelsCache = array(
+        'own' => array(),
+        'child' => array(),
+        'form' => array()
+    );
 
     public function __construct()
     {
@@ -104,7 +109,7 @@ class Vps_Component_Abstract
     {
         if (!self::$_settings) {
             $cache = new Vps_Assets_Cache(array('checkComponentSettings' => false));
-            $cacheId = 'componentSettings'.Vps_Registry::get('trl')->getTargetLanguage()
+            $cacheId = 'componentSettings'.Vps_Trl::getInstance()->getTargetLanguage()
                                 .'_'.Vps_Component_Data_Root::getComponentClass();
             self::$_settings = $cache->load($cacheId);
             if (!self::$_settings) {
@@ -274,59 +279,68 @@ class Vps_Component_Abstract
     public static function createOwnModel($class)
     {
         static $models = array();
-        if (!array_key_exists($class, $models)) {
+        if (!array_key_exists($class, self::$_modelsCache['own'])) {
             if (Vpc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
                 if (!$t instanceof Zend_Db_Table_Abstract) {
                     throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
                 }
-                $models[$class] = new Vps_Model_Db(array(
+                $model = new Vps_Model_Db(array(
                     'table' => $t
                 ));
             } else if (Vpc_Abstract::hasSetting($class, 'ownModel')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'ownModel');
-                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+                $model = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                $models[$class] = null;
+                $model = null;
             }
+            self::$_modelsCache['own'][$class] = $model;
         }
-        return $models[$class];
+        return self::$_modelsCache['own'][$class];
     }
 
     public static function createChildModel($class)
     {
-        static $models = array();
-        if (!array_key_exists($class, $models)) {
+        if (!array_key_exists($class, self::$_modelsCache['child'])) {
             if (Vpc_Abstract::hasSetting($class, 'tablename')) {
                 $t = self::createTable($class);
                 if (!$t instanceof Zend_Db_Table_Abstract) {
                     throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
                 }
-                $models[$class] = new Vps_Model_Db(array(
+                $model = new Vps_Model_Db(array(
                     'table' => $t
                 ));
             } else if (Vpc_Abstract::hasSetting($class, 'childModel')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'childModel');
-                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+                $model = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                $models[$class] = null;
+                $model = null;
             }
+            self::$_modelsCache['child'][$class] = $model;
         }
-        return $models[$class];
+        return self::$_modelsCache['child'][$class];
     }
 
     public static function createFormModel($class)
     {
-        static $models = array();
-        if (!array_key_exists($class, $models)) {
+        if (!array_key_exists($class, self::$_modelsCache['form'])) {
             if (Vpc_Abstract::hasSetting($class, 'formModel')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'formModel');
-                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
+                self::$_modelsCache['form'][$class] = Vps_Model_Abstract::getInstance($modelName);
             } else {
-                $models[$class] = null;
+                self::$_modelsCache['form'][$class] = null;
             }
         }
-        return $models[$class];
+        return self::$_modelsCache['form'][$class];
+    }
+
+    public static function clearModelInstances()
+    {
+        self::$_modelsCache = array(
+            'own' => array(),
+            'child' => array(),
+            'form' => array()
+        );
     }
 
     /**

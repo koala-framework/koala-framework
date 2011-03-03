@@ -34,6 +34,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         if (!$_SERVER['HTTP_REFERER']) return;
         $referer = $_SERVER['HTTP_REFERER'];
         $host = parse_url($referer, PHP_URL_HOST);
+        if (strpos($host, 'google') !== false && strpos($referer, '&url=') !== false) return;
         $allowedHosts = $this->_getSetting('allowedHosts');
         if (preg_match('/^(www\.)?(('.implode(')|(', $allowedHosts).'))\.[a-z]+$/i', $host)) {
             $model = $this->getChildModel();

@@ -4,6 +4,7 @@ abstract class Vpc_Newsletter_Subscribe_AbstractRecipientsController extends Vps
     public function jsonSaveRecipientsAction()
     {
         set_time_limit(60*10);
+        ini_set('memory_limit', '384M');
 
         $component = Vps_Component_Data_Root::getInstance()->getComponentByDbId(
             $this->_getParam('componentId'), array('ignoreVisible'=>true)
@@ -19,20 +20,29 @@ abstract class Vpc_Newsletter_Subscribe_AbstractRecipientsController extends Vps
         $select = $this->_getSelect();
         if (is_null($select)) return null;
         $select->order($order);
-        $rowset = $this->_model->getRows($select);
-        $count = count($rowset);
 
+        $count = $this->_model->countRows($select);
         $progressBar = new Zend_ProgressBar(
             new Vps_Util_ProgressBar_Adapter_Cache(
                 $this->_getParam('progressNum')
             ), 0, $count * 1.1
         );
-        $x = 0;
-        foreach ($rowset as $row) {
-            $x++;
-            $component->getComponent()->addToQueue($row);
-            $progressBar->next(1, "$x / $count");
-        }
+
+        $limit = 1000;
+
+        $offset = 0;
+        do {
+            $select->limit($limit, $offset);
+            $rowset = $this->_model->getRows($select);
+            $x = 0;
+            foreach ($rowset as $row) {
+                $x++;
+                $component->getComponent()->addToQueue($row);
+                $progressBar->next(1, ($offset+$x)." / $count");
+            }
+            $offset += $limit;
+        } while (count($rowset));
+        unset($rowset);
 
         $progressBar->next(1, trlVps('RTR-ECG-Check and saving data: please wait...'));
         $this->view->assign($component->getComponent()->saveQueue());
