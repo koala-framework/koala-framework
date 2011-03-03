@@ -244,6 +244,9 @@ wurde soeben erstellt.</de>
 <text>
 <en>E-Mail</en>
 <de>E-Mail</de>
+<fr>E-mail</fr>
+<es>E-Mail</es>
+<ru>Электронная почта</ru>
 <id>85</id>
 </text>
 <text>
@@ -286,6 +289,7 @@ wurde soeben erstellt.</de>
 <de>Vorname</de>
 <fr>Pr&#xE9;nom</fr>
 <es>Nombre</es>
+<ru>Имя</ru>
 <id>97</id>
 </text>
 <text>
@@ -293,6 +297,7 @@ wurde soeben erstellt.</de>
 <de>Nachname</de>
 <fr>Nom</fr>
 <es>Apellidos</es>
+<ru>Фамилия</ru>
 <id>98</id>
 </text>
 <text>
@@ -300,6 +305,7 @@ wurde soeben erstellt.</de>
 <de>E-Mail</de>
 <fr>E-mail</fr>
 <es>E-Mail</es>
+<ru>Электронная почта</ru>
 <id>99</id>
 </text>
 <text>
@@ -760,6 +766,8 @@ wurde soeben erstellt.</de>
 <text>
 <en>An error has occurred</en>
 <de>Ein Fehler ist aufgetreten</de>
+<es>Ha ocurrido un error</es>
+<ru>Произошла ошибка</ru>
 <id>286</id>
 </text>
 <text>
@@ -2112,6 +2120,8 @@ wurde soeben erstellt.</de>
 <text>
 <en>The Form has been submitted successfully.</en>
 <de>Das Formular wurde erfolgreich abgeschickt.</de>
+<es>El formulario es enviado con éxito.</es>
+<ru>форма успешно отправлена.</ru>
 <id>651</id>
 </text>
 <text>
@@ -2375,6 +2385,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Please fill out the field</en>
 <de>Bitte f&#xFC;llen Sie das Feld aus</de>
+<es>Por favor, rellene el campo</es>
+<ru>Пожалуйста, заполните поля</ru>
 <id>709</id>
 </text>
 <text>
@@ -2390,6 +2402,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>'%value%' is not a valid email address</en>
 <de>'%value%' ist keine g&#xFC;ltige E-Mail-Adresse</de>
+<es>'%value%' no es una dirección válida de correo electrónico</es>
+<ru>'%value%' не действительный адрес электронной почты</ru>
 <id>712</id>
 </text>
 <text>
@@ -2780,6 +2794,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Stra&#xDF;e</de>
 <fr>Rue</fr>
 <es>Calle</es>
+<ru>Улица</ru>
 <id>803</id>
 </text>
 <text>
@@ -2797,6 +2812,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Land</de>
 <fr>Pays</fr>
 <es>Pa&#xED;s</es>
+<ru>Страна</ru>
 <id>806</id>
 </text>
 <text>
@@ -2804,6 +2820,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Telefon</de>
 <fr>T&#xE9;l&#xE9;phone</fr>
 <es>Tel&#xE9;fono</es>
+<ru>телефон</ru>
 <id>807</id>
 </text>
 <text>
@@ -3128,6 +3145,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Fax</de>
 <fr>Fax</fr>
 <es>Fax</es>
+<ru>Факс</ru>
 <id>897</id>
 </text>
 <text>
@@ -3550,6 +3568,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Firma</de>
 <fr>Entreprise</fr>
 <es>Empresa</es>
+<ru>Фирма</ru>
 <id>1004</id>
 </text>
 <text>
@@ -4320,6 +4339,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Message</en>
 <de>Mitteilung</de>
 <es>Mensaje</es>
+<ru>Связь</ru>
 <id>1207</id>
 </text>
 <text>
@@ -6106,6 +6126,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>ZIP / City</en>
 <de>PLZ / Ort</de>
+<es>CP / Localidad</es>
+<ru>Почтовый индекс / Город</ru>
 <id>1648</id>
 </text>
 <text>
@@ -6194,6 +6216,20 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Newsletter Show in Web</en>
 <id>1669</id>
+</text>
+<text>
+<en>Required field</en>
+<de>Pflichtfeld</de>
+<es>Campo obligatorio</es>
+<ru>Обязательное поле</ru>
+<id>1670</id>
+</text>
+<text>
+<en>Send message</en>
+<de>Nachricht absenden</de>
+<es>Enviar un mensaje</es>
+<ru>Отправить сообщение</ru>
+<id>1671</id>
 </text>
 </trl>
 
