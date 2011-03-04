@@ -211,6 +211,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
         });
     }
 });
+
 Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
 {
     initComponent: function()
