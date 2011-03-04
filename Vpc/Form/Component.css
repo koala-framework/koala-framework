@@ -18,6 +18,7 @@
 }
 .cssClass .submitWrapper {
     text-align: center;
+    clear: both;
 }
 .cssClass .submitWrapper .beforeButton,
 .cssClass .submitWrapper .button,
