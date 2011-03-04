@@ -66,6 +66,13 @@ abstract class Vps_Component_Cache
                     foreach ($generator->getChildComponentClasses() as $c) {
                         self::getInstance()->saveMeta($c, $meta);
                     }
+                    // Komponenten, die im Seitenbaum vorkommen
+                    if ($generator->getModel() instanceof Vpc_Root_Category_GeneratorModel) {
+                        $meta = new Vps_Component_Cache_Meta_Static_ComponentLink('Vps_Component_Model');
+                        foreach ($generator->getChildComponentClasses() as $c) {
+                            self::getInstance()->saveMeta($c, $meta);
+                        }
+                    }
                 }
                 if ($generator &&
                     $generator->getGeneratorFlag('table')

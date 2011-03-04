@@ -132,9 +132,15 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $data = $this->_getImageDataOrEmptyImageData();
         if ($data && $data['filename']) {
             $id = $this->getData()->componentId;
-            return Vps_Media::getUrl($this->getData()->componentClass, $id, 'default', $data['filename']);
+            return Vps_Media::getUrl($this->getData()->componentClass, $id, $this->getImageKey(), $data['filename']);
         }
         return null;
+    }
+
+    // falls zB. Größe in DB umgestellt werden kann, kann man hier unterschiedliche zurückgeben, damit der Browsercache nicht greift
+    public function getImageKey()
+    {
+        return 'default';
     }
 
     public function getImageData()
@@ -314,7 +320,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     public function onCacheCallback($row)
     {
         $cacheId = Vps_Media::createCacheId(
-            $this->getData()->componentClass, $this->getData()->componentId, 'default'
+            $this->getData()->componentClass, $this->getData()->componentId, $this->getImageKey()
         );
         Vps_Media::getOutputCache()->remove($cacheId);
     }
