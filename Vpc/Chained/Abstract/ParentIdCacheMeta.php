@@ -1,5 +1,5 @@
 <?php
-class Vpc_Paragraphs_Trl_CacheMeta extends Vps_Component_Cache_Meta_Static_ChildModel
+class Vpc_Chained_Abstract_ParentIdCacheMeta extends Vps_Component_Cache_Meta_Static_Model
 {
     public static function getDeleteWhere($pattern, $row, $dirtyColumns, $params)
     {
