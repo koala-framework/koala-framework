@@ -2118,7 +2118,7 @@ wurde soeben erstellt.</de>
 <id>650</id>
 </text>
 <text>
-<en>The Form has been submitted successfully.</en>
+<en>The form has been submitted successfully.</en>
 <de>Das Formular wurde erfolgreich abgeschickt.</de>
 <es>El formulario es enviado con &#xE9;xito.</es>
 <ru>&#x444;&#x43E;&#x440;&#x43C;&#x430; &#x443;&#x441;&#x43F;&#x435;&#x448;&#x43D;&#x43E; &#x43E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x43B;&#x435;&#x43D;&#x430;.</ru>
@@ -5831,6 +5831,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Set password</en>
 <de>Passwort setzen</de>
 <id>1543</id>
+<en>Product: Voucher</en>
+<de>Produkt: Gutschein</de>
+<id>1393</id>
+<en>No items to display</en>
+<de>Keine Einträge zum anzeigen</de>
+<id>1484</id>
+</text>
+<text>
+<en>Login:</en>
+<de>Login:</de>
+<id>1485</id>
 </text>
 <text>
 <en>Set a new password</en>
