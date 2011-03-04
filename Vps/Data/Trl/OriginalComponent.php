@@ -22,7 +22,7 @@ class Vps_Data_Trl_OriginalComponent extends Vps_Data_Abstract
         $row = $c->chained
             ->getComponent()
             ->getRow();
-        if ($row->hasColumn($fieldname)) {
+        if ($row && $row->hasColumn($fieldname)) {
             return $row->$fieldname;
         }
         return '';

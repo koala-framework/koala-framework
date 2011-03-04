@@ -12,6 +12,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     public function __construct($fieldname = null, $fieldLabel = null)
     {
         parent::__construct($fieldname, $fieldLabel);
+        $this->setFrontendButtonText(trlVpsStatic('Browse').'...');
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->setAllowOnlyImages(false);
         $this->setMaxResolution(false);
@@ -25,6 +26,13 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $maxSize = substr($maxSize, 0, -1)*1024*1024*1024;
         }
         $this->setFileSizeLimit($maxSize.' B');
+    }
+
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'frontendButtonText';
+        return $ret;
     }
 
     public function getMetaData($model)
@@ -157,15 +165,19 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
                         " value=\"$value[uploadId]\" />";
             if ($value['image']) {
-                //todo: with und height von image
+                //todo: width und height von image
                 $ret['html'] .= " <img src=\"/vps/media/upload/preview?uploadId=$value[uploadId]&hashKey=$value[hashKey]&amp;size=frontend\" alt=\"\" width=\"100\" height=\"100\" />";
             }
         }
         $ret['html'] .= '</div>';
         $ret['html'] .= "<div class=\"vpsFormFieldFileInnerContent\">\n";
-        $ret['html'] .= "<div class=\"imagePath\">\n";
-        $ret['html'] .= "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
-                        " style=\"width: {$this->getWidth()}px\" />";
+        $ret['html'] .= "<div class=\"imagePath vpsFormFieldFileUploadWrapper\">\n";
+            $ret['html'] .= "<input class=\"fileSelector\" type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
+                            " style=\"width: {$this->getWidth()}px\" onchange=\"document.getElementById(this.id+'_underlayText').value = this.value;\" />";
+            $ret['html'] .= '<div class="underlayFileSelector">';
+            $ret['html'] .= '<input type="text" id="'.$ret['id'].'_underlayText" style="width: '.$this->getWidth().'px;" />';
+            $ret['html'] .= ' <a href="#" class="vpsFormFieldFileUploadButton" onclick="return false;">'.$this->getFrontendButtonText().'</a>';
+            $ret['html'] .= '</div>';
         $ret['html'] .= '</div>';
         if ($value) {
             $ret['html'] .= "<div class=\"imageTitle\">\n";
@@ -173,7 +185,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $helper = new Vps_View_Helper_FileSize();
             $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
             $ret['html'] .= '</div>';
-            $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete Image").'</button></div>';
+            $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete").'</button></div>';
             $uploadId = $value['uploadId'];
         } else {
             $uploadId = '0';
