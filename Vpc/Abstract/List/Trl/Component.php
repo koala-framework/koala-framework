@@ -57,4 +57,11 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
         }
         return $ret;
     }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vpc_Chained_Abstract_ParentIdCacheMeta(Vpc_Abstract::getSetting($componentClass, 'childModel'));
+        return $ret;
+    }
 }
