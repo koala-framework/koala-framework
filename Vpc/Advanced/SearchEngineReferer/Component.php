@@ -77,7 +77,12 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
     {
         $host = parse_url($url, PHP_URL_HOST);
         $parts = parse_url($url);
-        $queryString = isset($parts['query']) ? $parts['query'] : $parts['fragment'];
+        if (isset($parts['query'])) {
+            $queryString = $parts['query'];
+        } else if (isset($parts['fragment'])) {
+            $queryString = $parts['fragment'];
+        }
+        if (!$queryString) return null;
         $queryVars = explode('&', $queryString);
         if (count($queryVars)) {
             foreach ($queryVars as $queryVar) {
