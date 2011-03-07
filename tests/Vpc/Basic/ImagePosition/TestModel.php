@@ -7,7 +7,7 @@ class Vpc_Basic_ImagePosition_TestModel extends Vps_Component_FieldModel
                 'columns' => array('component_id', 'data'),
                 'primaryKey' => 'component_id',
                 'data'=> array(
-                    array('component_id'=>1900, 'data'=>serialize(array('image_position'=>'right'))),
+                    array('component_id'=>1900, 'data'=>json_encode(array('image_position'=>'right'))),
                 )
             ));
         parent::__construct($config);
