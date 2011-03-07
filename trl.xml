@@ -244,6 +244,9 @@ wurde soeben erstellt.</de>
 <text>
 <en>E-Mail</en>
 <de>E-Mail</de>
+<fr>E-mail</fr>
+<es>E-Mail</es>
+<ru>&#x42D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x430;&#x44F; &#x43F;&#x43E;&#x447;&#x442;&#x430;</ru>
 <id>85</id>
 </text>
 <text>
@@ -286,6 +289,7 @@ wurde soeben erstellt.</de>
 <de>Vorname</de>
 <fr>Pr&#xE9;nom</fr>
 <es>Nombre</es>
+<ru>&#x418;&#x43C;&#x44F;</ru>
 <id>97</id>
 </text>
 <text>
@@ -293,6 +297,7 @@ wurde soeben erstellt.</de>
 <de>Nachname</de>
 <fr>Nom</fr>
 <es>Apellidos</es>
+<ru>&#x424;&#x430;&#x43C;&#x438;&#x43B;&#x438;&#x44F;</ru>
 <id>98</id>
 </text>
 <text>
@@ -300,6 +305,7 @@ wurde soeben erstellt.</de>
 <de>E-Mail</de>
 <fr>E-mail</fr>
 <es>E-Mail</es>
+<ru>&#x42D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x430;&#x44F; &#x43F;&#x43E;&#x447;&#x442;&#x430;</ru>
 <id>99</id>
 </text>
 <text>
@@ -760,6 +766,8 @@ wurde soeben erstellt.</de>
 <text>
 <en>An error has occurred</en>
 <de>Ein Fehler ist aufgetreten</de>
+<es>Ha ocurrido un error</es>
+<ru>&#x41F;&#x440;&#x43E;&#x438;&#x437;&#x43E;&#x448;&#x43B;&#x430; &#x43E;&#x448;&#x438;&#x431;&#x43A;&#x430;</ru>
 <id>286</id>
 </text>
 <text>
@@ -2110,8 +2118,10 @@ wurde soeben erstellt.</de>
 <id>650</id>
 </text>
 <text>
-<en>The Form has been submitted successfully.</en>
+<en>The form has been submitted successfully.</en>
 <de>Das Formular wurde erfolgreich abgeschickt.</de>
+<es>El formulario es enviado con &#xE9;xito.</es>
+<ru>&#x444;&#x43E;&#x440;&#x43C;&#x430; &#x443;&#x441;&#x43F;&#x435;&#x448;&#x43D;&#x43E; &#x43E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x43B;&#x435;&#x43D;&#x430;.</ru>
 <id>651</id>
 </text>
 <text>
@@ -2375,6 +2385,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Please fill out the field</en>
 <de>Bitte f&#xFC;llen Sie das Feld aus</de>
+<es>Por favor, rellene el campo</es>
+<ru>&#x41F;&#x43E;&#x436;&#x430;&#x43B;&#x443;&#x439;&#x441;&#x442;&#x430;, &#x437;&#x430;&#x43F;&#x43E;&#x43B;&#x43D;&#x438;&#x442;&#x435; &#x43F;&#x43E;&#x43B;&#x44F;</ru>
 <id>709</id>
 </text>
 <text>
@@ -2390,6 +2402,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>'%value%' is not a valid email address</en>
 <de>'%value%' ist keine g&#xFC;ltige E-Mail-Adresse</de>
+<es>'%value%' no es una direcci&#xF3;n v&#xE1;lida de correo electr&#xF3;nico</es>
+<ru>'%value%' &#x43D;&#x435; &#x434;&#x435;&#x439;&#x441;&#x442;&#x432;&#x438;&#x442;&#x435;&#x43B;&#x44C;&#x43D;&#x44B;&#x439; &#x430;&#x434;&#x440;&#x435;&#x441; &#x44D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x43E;&#x439; &#x43F;&#x43E;&#x447;&#x442;&#x44B;</ru>
 <id>712</id>
 </text>
 <text>
@@ -2780,6 +2794,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Stra&#xDF;e</de>
 <fr>Rue</fr>
 <es>Calle</es>
+<ru>&#x423;&#x43B;&#x438;&#x446;&#x430;</ru>
 <id>803</id>
 </text>
 <text>
@@ -2797,6 +2812,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Land</de>
 <fr>Pays</fr>
 <es>Pa&#xED;s</es>
+<ru>&#x421;&#x442;&#x440;&#x430;&#x43D;&#x430;</ru>
 <id>806</id>
 </text>
 <text>
@@ -2804,6 +2820,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Telefon</de>
 <fr>T&#xE9;l&#xE9;phone</fr>
 <es>Tel&#xE9;fono</es>
+<ru>&#x442;&#x435;&#x43B;&#x435;&#x444;&#x43E;&#x43D;</ru>
 <id>807</id>
 </text>
 <text>
@@ -3128,6 +3145,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Fax</de>
 <fr>Fax</fr>
 <es>Fax</es>
+<ru>&#x424;&#x430;&#x43A;&#x441;</ru>
 <id>897</id>
 </text>
 <text>
@@ -3550,6 +3568,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Firma</de>
 <fr>Entreprise</fr>
 <es>Empresa</es>
+<ru>&#x424;&#x438;&#x440;&#x43C;&#x430;</ru>
 <id>1004</id>
 </text>
 <text>
@@ -4320,6 +4339,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Message</en>
 <de>Mitteilung</de>
 <es>Mensaje</es>
+<ru>&#x421;&#x432;&#x44F;&#x437;&#x44C;</ru>
 <id>1207</id>
 </text>
 <text>
@@ -4444,8 +4464,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1234</id>
 </text>
 <text>
-<en>Unsubscribe</en>
-<de>Abmelden</de>
+<en>Unsubscribe Newsletter</en>
+<de>Newsletter abmelden</de>
 <id>1235</id>
 </text>
 <text>
@@ -4492,6 +4512,11 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Active?</en>
 <de>Aktiv?</de>
 <id>1254</id>
+</text>
+<text>
+<en>Newsletter Subscriber settings</en>
+<de>Newsletter Empf&#xE4;nger Einstellungen</de>
+<id>1255</id>
 </text>
 <text>
 <en>unsubscribed</en>
@@ -5247,10 +5272,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1415</id>
 </text>
 <text>
-<en>http://www.vivid-planet.at</en>
-<id>1416</id>
-</text>
-<text>
 <en>This {0} is an {1}</en>
 <de>Diese {0} ist ein {1}</de>
 <id>1417</id>
@@ -5810,6 +5831,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Set password</en>
 <de>Passwort setzen</de>
 <id>1543</id>
+<en>Product: Voucher</en>
+<de>Produkt: Gutschein</de>
+<id>1393</id>
+<en>No items to display</en>
+<de>Keine Einträge zum anzeigen</de>
+<id>1484</id>
+</text>
+<text>
+<en>Login:</en>
+<de>Login:</de>
+<id>1485</id>
 </text>
 <text>
 <en>Set a new password</en>
@@ -6036,11 +6068,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1570</id>
 </text>
 <text>
-<en>Unsubscribe Newsletter</en>
-<de>Vom Newsletter abmelden</de>
-<id>1571</id>
-</text>
-<text>
 <en>Count</en>
 <de>Anzahl</de>
 <id>1572</id>
@@ -6069,10 +6096,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>If you typed the address, make sure the spelling is correct</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
 <id>1577</id>
-</text>
-<text>
-<en>Master Url</en>
-<id>1638</id>
 </text>
 <text>
 <en>Original Position</en>
@@ -6105,6 +6128,124 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Remove the selected link.</en>
 <id>1646</id>
+</text>
+<text>
+<en>Please enter a search term</en>
+<de>Bitte geben Sie einen Suchbegriff ein</de>
+<id>1647</id>
+</text>
+<text>
+<en>ZIP / City</en>
+<de>PLZ / Ort</de>
+<es>CP / Localidad</es>
+<ru>&#x41F;&#x43E;&#x447;&#x442;&#x43E;&#x432;&#x44B;&#x439; &#x438;&#x43D;&#x434;&#x435;&#x43A;&#x441; / &#x413;&#x43E;&#x440;&#x43E;&#x434;</ru>
+<id>1648</id>
+</text>
+<text>
+<en>You got a requst on {0}</en>
+<de>Es wurde eine Anfrage auf {0} gestellt</de>
+<id>1649</id>
+</text>
+<text>
+<en>This enquiry was sent by</en>
+<de>Die Anfrage wurde gesendet von</de>
+<id>1650</id>
+</text>
+<text>
+<en>http://www.vivid-planet.com</en>
+<id>1651</id>
+</text>
+<text>
+<en>Imprint.Facebook Disclaimer</en>
+<de>Impressum.Facebook Disclaimer</de>
+<id>1652</id>
+</text>
+<text>
+<en>Facebook Social Plugin</en>
+<id>1653</id>
+</text>
+<text>
+<en>Master</en>
+<id>1654</id>
+</text>
+<text>
+<en>Master URL</en>
+<id>1655</id>
+</text>
+<text>
+<en>Master width</en>
+<id>1656</id>
+</text>
+<text>
+<en>Master height</en>
+<id>1657</id>
+</text>
+<text>
+<en>XLS Import</en>
+<id>1658</id>
+</text>
+<text>
+<en>Upload a file and click "Save" to import.</en>
+<id>1659</id>
+</text>
+<text>
+<en>Adjust columns</en>
+<id>1660</id>
+</text>
+<text>
+<en>Add columns if necessary</en>
+<id>1661</id>
+</text>
+<text>
+<en>Uploaded file is not of type "xls".</en>
+<id>1662</id>
+</text>
+<text>
+<en>Import done</en>
+<id>1663</id>
+</text>
+<text>
+<en>The File has been imported successfully.</en>
+<id>1664</id>
+</text>
+<text>
+<en>Unsubscribe</en>
+<id>1665</id>
+</text>
+<text>
+<en>E-Mail Address</en>
+<id>1666</id>
+</text>
+<text>
+<en>Predefined Subject for Mail</en>
+<id>1667</id>
+</text>
+<text>
+<en>Predefined Text for Mail</en>
+<id>1668</id>
+</text>
+<text>
+<en>Newsletter Show in Web</en>
+<id>1669</id>
+</text>
+<text>
+<en>Mandatory field</en>
+<de>Pflichtfeld</de>
+<es>Campo obligatorio</es>
+<ru>&#x41E;&#x431;&#x44F;&#x437;&#x430;&#x442;&#x435;&#x43B;&#x44C;&#x43D;&#x43E;&#x435; &#x43F;&#x43E;&#x43B;&#x435;</ru>
+<id>1670</id>
+</text>
+<text>
+<en>Send message</en>
+<de>Nachricht absenden</de>
+<es>Enviar un mensaje</es>
+<ru>&#x41E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x441;&#x43E;&#x43E;&#x431;&#x449;&#x435;&#x43D;&#x438;&#x435;</ru>
+<id>1671</id>
+</text>
+<text>
+<de>Durchsuchen</de>
+<en>Browse</en>
+<id>1672</id>
 </text>
 </trl>
 

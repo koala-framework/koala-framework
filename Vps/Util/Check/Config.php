@@ -40,6 +40,9 @@ class Vps_Util_Check_Config
         $checks['imagick_functionality_2'] = array(
             'name' => 'imagick functionality 2'
         );
+        $checks['memory_limit'] = array(
+            'name' => 'memory_limit'
+        );
 
         //ab hier wird die config geladen
         $checks['setup_vps'] = array(
@@ -268,6 +271,12 @@ class Vps_Util_Check_Config
         $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         $im->getImageBlob();
         $im->destroy();
+    }
+
+    private static function _memory_limit()
+    {
+        $m = ini_get('memory_limit');
+        if ((int)$m < 128) throw new Vps_Exception("need 128M, got $m");
     }
 
     private static function _uploads()

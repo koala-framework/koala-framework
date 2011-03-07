@@ -18,6 +18,12 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
                 if (!$c) $c = "Vpc_Chained_{$prefix}_Component";
                 $c .= '.'.$masterC;
                 $g['masterComponentsMap'][$masterC] = $key;
+                // Für jede Unterkomponente mit einer AlternativeComponent muss es auch einen Eintrag in der masterComponentsMap geben
+                $alternativeComponent = Vpc_Abstract::getFlag($masterC, 'alternativeComponent');
+                if ($alternativeComponent) {
+                    $g['masterComponentsMap'][$alternativeComponent] = $masterC;
+                    $g['component'][$masterC] = $alternativeComponent;
+                }
             }
             $g['chainedGenerator'] = $g['class'];
             $g['class'] = "Vpc_Chained_{$prefix}_Generator";

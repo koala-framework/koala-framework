@@ -20,7 +20,7 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract_Component
         $ret = parent::getTemplateVars();
         $ret['separator'] = $this->_getSetting('separator');
         $ret['links'] = array();
-        $page = $this->getData();
+        $page = $this->getData()->getPage();
         do {
             $ret['links'][] = $page;
         } while ($page = $page->getParentPage());

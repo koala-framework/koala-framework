@@ -39,6 +39,15 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
         return $ret;
     }
 
+    public function hasContent()
+    {
+        $childComponents = $this->getData()->getChildComponents(array('generator' => 'child'));
+        foreach ($childComponents as $c) {
+            if ($c->hasContent()) return true;
+        }
+        return false;
+    }
+
     public function getExportData()
     {
         $ret = array('list' => array());
@@ -46,6 +55,13 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
         foreach ($children as $child) {
             $ret['list'][] = $child->getComponent()->getExportData();
         }
+        return $ret;
+    }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vpc_Chained_Abstract_ParentIdCacheMeta(Vpc_Abstract::getSetting($componentClass, 'childModel'));
         return $ret;
     }
 }

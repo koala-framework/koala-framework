@@ -1,61 +1,49 @@
 <?php
 class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_Action_Cli_Abstract
 {
+    public static function getHelpOptions()
+    {
+        $ret = array();
+        $ret[] = array('param' => 'componentId');
+        $ret[] = array('param' => 'domain');
+        return $ret;
+    }
+
     public static function getHelp()
     {
-        return "various view cache commands";
-    }
-    protected function _callProcessInput($c)
-    {
-        $process = $c->getRecursiveChildComponents(array(
-                    'page' => false,
-                    'flags' => array('processInput' => true)
-                ));
-        if (Vps_Component_Abstract::getFlag($c->componentClass, 'processInput')) {
-            $process[] = $c;
-        }
-        $postData = array();
-        foreach ($process as $i) {
-            Vps_Benchmark::count('processInput', $i->componentId);
-            if (method_exists($i->getComponent(), 'preProcessInput')) {
-                $i->getComponent()->preProcessInput($postData);
-            }
-        }
-        foreach ($process as $i) {
-            if (method_exists($i->getComponent(), 'processInput')) {
-                $i->getComponent()->processInput($postData);
-            }
-        }
+        return "Various view cache commands";
     }
 
     public function generateOneAction()
     {
         Zend_Session::start(true);
         $ids = $this->_getParam('componentId');
+
         $ids = explode(',', $ids);
         foreach ($ids as $id) {
-            $page = Vps_Component_Data_Root::getInstance()->getComponentById($id);
-            echo "$page->componentId $page->url...";
-            try {
-                $this->_callProcessInput($page);
-            } catch (Vps_Exception_AccessDenied $e) {
-                echo " Access Denied [skipping]\n";
-                continue;
-            }
-            echo " processedInput";
-            try {
-                Vps_View_Component::renderMasterComponent($page);
-            } catch (Vps_Exception_AccessDenied $e) {
-                echo " Access Denied [skipping]\n";
-                continue;
-            }
-            echo " rendered\n";
+            $this->_generate($id);
         }
         exit;
     }
 
+    private function _generate($componentId)
+    {
+        $domain = $this->_getParam('domain');
+        if (!$domain) $domain = Vps_Registry::get('config')->server->domain;
+        $login = Vps_Registry::get('config')->preLogin ? 'vivid:planet@' : '';
+        $url = 'http://' . $login . $domain . '/vps/util/render/render?componentId=' . $componentId;
+        echo "$url: ";
+        $b = Vps_Benchmark::start('render');
+        $content = file_get_contents($url);
+        $b->stop();
+        echo round(strlen($content) / 1000, 2) . 'KB, ' . round($b->duration, 3) . 's';
+        echo " rendered\n";
+    }
+
     public function generateAction()
     {
+        if ($this->_getParam('componentId')) $this->generateOneAction();
+
         $queueFile = 'application/temp/viewCacheGenerateQueue';
         $processedFile = 'application/temp/viewCacheGenerateProcessed';
 
@@ -113,24 +101,7 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
                     if (!$page->isPage) continue;
                     if (is_instance_of($page->componentClass, 'Vpc_Abstract_Feed_Component')) continue;
 
-                    echo "$page->componentId $page->url...";
-                    try {
-                        $this->_callProcessInput($page);
-                    } catch (Vps_Exception_AccessDenied $e) {
-                        echo " Access Denied [skipping]\n";
-                        continue;
-                    }
-                    echo " processedInput";
-                    try {
-                        $page->render(true, true);
-                    } catch (Vps_Exception_AccessDenied $e) {
-                        echo " Access Denied [skipping]\n";
-                        continue;
-                    } catch (Exception $e) {
-                        echo ' '.get_class($e).' '.$e->getMessage()." [skipping]\n";
-                        continue;
-                    }
-                    echo " rendered\n";
+                    $this->_generate($page->componentId);
                 }
                 //echo "child finished\n";
                 exit(0);

@@ -33,7 +33,7 @@ class Vpc_Paragraphs_Trl_Component extends Vpc_Chained_Trl_Component
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
+        $ret[] = new Vpc_Chained_Abstract_ParentIdCacheMeta(Vpc_Abstract::getSetting($componentClass, 'childModel'));
         return $ret;
     }
 }

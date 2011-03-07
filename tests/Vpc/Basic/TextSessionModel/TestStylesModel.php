@@ -16,7 +16,7 @@ class Vpc_Basic_TextSessionModel_TestStylesModel extends Vpc_Basic_Text_StylesMo
         parent::__construct($config);
     }
 
-    public function getMasterStyles()
+    public static function getMasterStyles()
     {
         return array();
     }
