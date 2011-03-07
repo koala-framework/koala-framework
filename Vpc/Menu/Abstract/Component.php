@@ -231,8 +231,10 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                 $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel());
             }
         }
+
         $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');
         $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Menu_Abstract_Model');
+
         return $ret;
     }
 }

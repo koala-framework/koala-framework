@@ -49,6 +49,26 @@ class Vpc_Mail_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function getHtmlStyles()
+    {
+        $ret = $this->_getSetting('mailHtmlStyles');
+
+        // Hack für Tests, weil da der statische getStylesArray-Aufruf nicht funktioniert
+        $contentClass = $this->getData()->getChildComponent('-content')->componentClass;
+        if (!is_instance_of($contentClass, 'Vpc_Paragraphs_Component')) return $ret;
+
+        foreach (Vpc_Basic_Text_StylesModel::getStylesArray() as $tag => $classes) {
+            foreach ($classes as $class => $style) {
+                $ret[] = array(
+                    'tag' => $tag,
+                    'class' => $class,
+                    'styles' => $style['styles']
+                );
+            }
+        }
+        return $ret;
+    }
+
     /**
      * Verschickt ein mail an @param $recipient.
      * @param $data Optionale Daten die benötigt werden, kann von den
@@ -118,8 +138,9 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $ret = $renderer->renderComponent($this->getData());
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
-        if ($this->_getSetting('mailHtmlStyles')) {
-            $p = new Vpc_Mail_HtmlParser($this->_getSetting('mailHtmlStyles'));
+        $htmlStyles = $this->getHtmlStyles();
+        if ($htmlStyles){
+            $p = new Vpc_Mail_HtmlParser($htmlStyles);
             $ret = $p->parse($ret);
         }
         return $ret;

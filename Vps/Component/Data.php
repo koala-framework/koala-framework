@@ -151,6 +151,10 @@ class Vps_Component_Data
         if ($var == 'url' || $var == 'rel' || $var == 'filename') {
             return true;
         }
+        if (substr($var, 0, 5) != '_lazy') {
+            $lazyVar = '_lazy' . ucfirst($var);
+            if (isset($this->$lazyVar)) return true;
+        }
         return false;
     }
 

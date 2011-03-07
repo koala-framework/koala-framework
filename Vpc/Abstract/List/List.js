@@ -180,7 +180,7 @@ Vpc.Abstract.List.MultiFileUploadPanel = Ext.extend(Ext.Panel,
 
     html5UploadFile: function()
     {
-        var file = this.fileQueue.pop();
+        var file = this.fileQueue.shift();
         this.currentXhr = Vps.Utils.Upload.uploadFile({
             maxResolution: this.maxResolution,
             file: file,

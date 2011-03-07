@@ -25,6 +25,16 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract_Component
     {
         $menuLevel = self::_getMenuLevel($componentClass, $parentData, $generator);
         $maxLevel = Vpc_Abstract::getSetting($componentClass, 'maxLevel');
+        $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
+        $level = (int)Vpc_Abstract::getSetting($componentClass, 'level');
+        while (isset($generators['subMenu'])) {
+            $class = $generators['subMenu']['component'];
+            if (!is_instance_of($class, 'Vpc_Menu_Abstract_Component')) break;
+            $maxLevel = max($maxLevel, Vpc_Abstract::getSetting($class, 'maxLevel'));
+            if ($level >= $maxLevel) break;
+            $generators = Vpc_Abstract::getSetting($class, 'generators');
+            $level++;
+        }
         $level = Vpc_Abstract::getSetting($componentClass, 'level');
         if ($level > $maxLevel) $maxLevel = $level;
         return $menuLevel > $maxLevel;
