@@ -2,7 +2,7 @@
 /**
  * @group CategoryModel
  */
-class Vpc_Root_CategoryModelTest extends PHPUnit_Framework_TestCase
+class Vpc_Root_CategoryModelTest extends Vps_Test_TestCase
 {
     public function testModel()
     {
