@@ -48,6 +48,11 @@ class Vpc_Newsletter_Detail_Admin extends Vpc_Admin
                     'controllerUrl'         => $this->getControllerUrl('Mailing'),
                     'title'                 => trlVps('Mailing'),
                     'tbar'                  => array()
+                ),
+                'statistics' => array(
+                    'xtype'                 => 'vps.autogrid',
+                    'controllerUrl'         => $this->getControllerUrl('Statistics'),
+                    'title'                 => trlVps('Statistics')
                 )
             )
         ));

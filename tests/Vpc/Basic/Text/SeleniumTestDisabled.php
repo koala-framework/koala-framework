@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_SeleniumTest extends PHPUnit_Framework_TestCase
+class Vpc_Basic_Text_SeleniumTest extends Vpc_TestAbstract
 {
 }
 /**
@@ -45,7 +45,7 @@ class Vpc_Basic_Text_SeleniumTest extends Vps_Test_SeleniumTestCase
     {
         $this->openVpcEdit('Vpc_Basic_Text_TestComponent', 1000);
         $this->waitForConnections();
-	
+
 
         $this->focus('dom=window.frames[0].document.body');
         $this->keyPress('dom=window.frames[0].document.body', 'a');
