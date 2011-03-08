@@ -223,7 +223,7 @@ class Vps_Setup
 
         if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
-            && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
+            && $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
@@ -289,9 +289,9 @@ class Vps_Setup
             return trim(file_get_contents('application/config_section'));
         } else if (file_exists('/var/www/vivid-test-server')) {
             return 'vivid-test-server';
-        } else if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
-            if ($m[2]=='vps-projekte') return 'vivid';
-            return $m[2];
+        } else if (preg_match('#/(www|wwwnas)/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
+            if ($m[3]=='vps-projekte') return 'vivid';
+            return $m[3];
         } else if (substr($host, 0, 9)=='dev.test.') {
             return 'devtest';
         } else if (substr($host, 0, 4)=='dev.') {
