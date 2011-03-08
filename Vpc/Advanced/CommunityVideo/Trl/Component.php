@@ -15,11 +15,19 @@ class Vpc_Advanced_CommunityVideo_Trl_Component extends Vpc_Chained_Trl_Componen
 
         $url = $this->getRow()->url;
         if ($url) {
-            $ret['flash']['data']['url'] = Vpc_Advanced_CommunityVideo_Component::replaceUrl($this->getRow());
+            $ret['flash']['data']['url'] = Vpc_Advanced_CommunityVideo_Component::getFlashUrl($this->getRow());
             if ($this->getRow()->width) $ret['flash']['data']['width'] = $this->getRow()->width;
             if ($this->getRow()->height) $ret['flash']['data']['height'] = $this->getRow()->height;
         }
 
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        if (Vpc_Advanced_CommunityVideo_Component::getFlashUrl($this->getRow())) {
+            return true;
+        }
+        return false;
     }
 }
