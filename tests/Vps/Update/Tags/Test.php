@@ -2,7 +2,7 @@
 /**
  * @group Update
  */
-class Vps_Update_Tags_Test extends PHPUnit_Framework_TestCase
+class Vps_Update_Tags_Test extends Vps_Test_TestCase
 {
 
     public function testGetUpdatesSql()

@@ -26,7 +26,7 @@ class Vpc_Basic_ImagePosition_Test extends Vpc_TestAbstract
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($this->_root->getComponentById('1900'));
         $this->assertRegExp('#^\s*<div class="vpcBasicImagePosition vpcBasicImagePositionTestComponent">'.
-            '\s*<div class="right">'
+            '\s*<div class="posright">'
             .'\s*<div class="vpcBasicImagePositionImageTestComponent">'
             .'\s*<img src="/media/Vpc_Basic_ImagePosition_Image_TestComponent/1900-image/default/9fef39ee396927f548e7e79529f4e345/[0-9]+/foo.png" width="16" height="16" alt="" class="" />'
             .'\s*</div>\s*</div>'.

@@ -17,9 +17,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
             'name' => 'r'
         );
 
+        $sender = Vps_Mail::getSenderFromConfig();
         $ret['default'] = array(
-            'from_email' => 'el@vivid-planet.com', //TODO: dieser standardwert macht selten sinn
-            'from_name' => 'Erich Lechenauer',
+            'from_email' => $sender['address'],
+            'from_name' => $sender['name']
         );
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/PreviewWindow.js';
@@ -43,6 +44,26 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $c = $this->getData()->getChildComponent('-content');
         if ($c) {
             $ret['content'] = $c;
+        }
+        return $ret;
+    }
+
+    public function getHtmlStyles()
+    {
+        $ret = $this->_getSetting('mailHtmlStyles');
+
+        // Hack für Tests, weil da der statische getStylesArray-Aufruf nicht funktioniert
+        $contentClass = $this->getData()->getChildComponent('-content')->componentClass;
+        if (!is_instance_of($contentClass, 'Vpc_Paragraphs_Component')) return $ret;
+
+        foreach (Vpc_Basic_Text_StylesModel::getStylesArray() as $tag => $classes) {
+            foreach ($classes as $class => $style) {
+                $ret[] = array(
+                    'tag' => $tag,
+                    'class' => $class,
+                    'styles' => $style['styles']
+                );
+            }
         }
         return $ret;
     }
@@ -116,8 +137,9 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $ret = $output->render($this->getData());
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
-        if ($this->_getSetting('mailHtmlStyles')) {
-            $p = new Vpc_Mail_HtmlParser($this->_getSetting('mailHtmlStyles'));
+        $htmlStyles = $this->getHtmlStyles();
+        if ($htmlStyles){
+            $p = new Vpc_Mail_HtmlParser($htmlStyles);
             $ret = $p->parse($ret);
         }
         return $ret;

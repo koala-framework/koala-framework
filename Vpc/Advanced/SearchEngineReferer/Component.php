@@ -12,9 +12,19 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         $ret['componentName'] = trlVps('Search engine referer');
         $ret['childModel'] = 'Vpc_Advanced_SearchEngineReferer_Model';
         $ret['saveReferer'] = true;
-        $ret['viewCache'] = false;
+        $ret['viewCache'] = true;
         $ret['flags']['processInput'] = true;
         return $ret;
+    }
+
+    public function getCacheVars()
+    {
+        return $this->getData()->getChildComponent('-view')->getComponent()->getCacheVars();
+    }
+
+    public function getViewCacheLifetime()
+    {
+        return $this->getData()->getChildComponent('-view')->getComponent()->getViewCacheLifetime();
     }
 
     public function processInput()
@@ -24,6 +34,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         if (!$_SERVER['HTTP_REFERER']) return;
         $referer = $_SERVER['HTTP_REFERER'];
         $host = parse_url($referer, PHP_URL_HOST);
+        if (strpos($host, 'google') !== false && strpos($referer, '&url=') !== false) return;
         $allowedHosts = $this->_getSetting('allowedHosts');
         if (preg_match('/^(www\.)?(('.implode(')|(', $allowedHosts).'))\.[a-z]+$/i', $host)) {
             $model = $this->getChildModel();

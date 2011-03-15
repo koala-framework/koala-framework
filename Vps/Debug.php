@@ -158,7 +158,7 @@ function _btArgString($arg)
     } else if (is_null($arg)) {
         $ret[] = 'null';
     } else if (is_string($arg)) {
-        if (strlen($arg) > 50) $arg = substr($arg, 0, 47)."...";
+        if (strlen($arg) > 200) $arg = substr($arg, 0, 197)."...";
         $ret[] = '"'.$arg.'"';
     } else if (is_bool($arg)) {
         $ret[] = $arg ? 'true' : 'false';
@@ -213,6 +213,10 @@ class Vps_Debug
     public static function handleError($errno, $errstr, $errfile, $errline)
     {
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
+        if (defined('E_DEPRECATED') && $errno == E_DEPRECATED
+            && (strpos($errfile, 'tcpdf/') !== false || strpos($errfile, '/usr/share/php/') !== false)) {
+            return;
+        }
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 

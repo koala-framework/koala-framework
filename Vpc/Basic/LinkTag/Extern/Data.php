@@ -5,7 +5,7 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
     private function _getLinkRow()
     {
         if (!isset($this->_linkRow)) {
-            $m = Vpc_Abstract::createModel($this->componentClass);
+            $m = Vpc_Abstract::createOwnModel($this->componentClass);
             $this->_linkRow = $m->getRow($this->dbId);
         }
         return $this->_linkRow;
@@ -17,6 +17,14 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
             if (!$row) return '';
             return $row->target;
         } else if ($var == 'rel') {
+            if (!Vpc_Abstract::getSetting($this->componentClass, 'hasPopup')) {
+                $type = Vpc_Abstract::getSetting($this->componentClass, 'openType');
+                if ($type == 'blank') {
+                    return 'popup_blank';
+                } else {
+                    throw new Vps_Exception_NotYetImplemented();
+                }
+            }
             $ret = '';
             $row = $this->_getLinkRow();
             if (!$row) return '';
