@@ -38,7 +38,16 @@ class Vps_Loader extends Zend_Loader
             $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
             try {
                 include_once $file;
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+                if ($fp = @fopen($file, 'r', true)) {
+                    //wenns die datei gibt, fehler weiterschmeissen
+                    //(file_exists akzeptiert leider keinen use_include_path parameter)
+                    fclose($fp);
+                    throw $e;
+                }
+                //wenns die datei nicht gibt, keinen fehler schmeissen
+                //ist notwendig für class_exists das false zurück gibt
+            }
         }
     }
 }

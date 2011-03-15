@@ -6,7 +6,8 @@ class Vps_View_Helper_Date
         if (!$format) $format = trlVps('Y-m-d');
 
         if (!$date) return '';
-return date($format, strtotime($date));
+        if (is_string($date)) $date = strtotime($date);
+return date($format, $date);
         $d = new Vps_Date($date);
         return $d->toString($format);
 

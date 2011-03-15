@@ -45,7 +45,7 @@ class Vps_Assets_Dependencies
 
     public function getAssetUrls($assetsType, $fileType, $section, $rootComponent, $language = null)
     {
-        $b = Vps_Benchmark::start();
+        Vps_Benchmark::count('getAssetUrls');
         if ($this->_config->debug->menu) {
             $session = new Zend_Session_Namespace('debug');
             if (isset($session->enable) && $session->enable) {
@@ -56,7 +56,7 @@ class Vps_Assets_Dependencies
         $ret = array();
         if (!$this->_config->debug->assets->$fileType || (isset($session->$fileType) && !$session->$fileType)) {
             $v = $this->getMaxFileMTime();
-            if (!$language) $language = Zend_Registry::get('trl')->getTargetLanguage();
+            if (!$language) $language = Vps_Trl::getInstance()->getTargetLanguage();
             $ret[] = "/assets/all/$section/"
                             .($rootComponent?$rootComponent.'/':'')
                             ."$language/$assetsType.$fileType?v=$v";

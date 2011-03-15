@@ -283,7 +283,7 @@ class Vps_Util_Check_Config
     {
         $locale = setlocale(LC_ALL, 0); //backup locale
 
-        $l = Vps_Registry::get('trl')->trlc('locale', 'C', array(), Vps_Trl::SOURCE_VPS, 'de');
+        $l = Vps_Trl::getInstance()->trlc('locale', 'C', array(), Vps_Trl::SOURCE_VPS, 'de');
         if (!setlocale(LC_ALL, explode(', ', $l))) {
             throw new Vps_Exception("Locale not installed, tried: ".$l);
         }

@@ -10,8 +10,9 @@ class Vps_Controller_Action_Auto_Filter_Query extends Vps_Controller_Action_Auto
 
     public function formatSelect($select, $params = array()) {
         $column = $this->getFieldName();
-        if (!$this->getModel()->hasColumn($column))
+        if (!$this->getModel()->hasColumn($column)) {
             throw new Vps_Exception("Model has to have column \"$column\" to filter");
+        }
         if (isset($params[$this->getParamName()]) && $params[$this->getParamName()]) {
             $select->whereEquals($column, $params[$this->getParamName()]);
         }

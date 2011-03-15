@@ -113,8 +113,7 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
             $args = unserialize($matches[2][$key]);
             $info['componentClass'] = $componentClass;
 
-            $dynamicClass = Vps_Component_Abstract_Admin::getComponentClass($componentClass, $class);
-            if (!class_exists($dynamicClass)) $dynamicClass = 'Vps_Component_Dynamic_' . $class;
+            $dynamicClass = 'Vps_Component_Dynamic_' . $class;
             $dynamic = new $dynamicClass();
             $dynamic->setInfo($info);
             call_user_func_array(array($dynamic, 'setArguments'), $args);

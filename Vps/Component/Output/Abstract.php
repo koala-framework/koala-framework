@@ -27,8 +27,10 @@ abstract class Vps_Component_Output_Abstract
 
     protected function _getComponent($componentId)
     {
+        $select = array();
+        if ($this->ignoreVisible()) $select['ignoreVisible'] = true;
         $ret = Vps_Component_Data_Root::getInstance()
-            ->getComponentById($componentId, array('ignoreVisible' => $this->ignoreVisible()));
+            ->getComponentById($componentId, $select);
         if (!$ret) throw new Vps_Exception("Can't find component '$componentId' for rendering");
         return $ret;
     }

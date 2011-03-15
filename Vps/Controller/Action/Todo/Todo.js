@@ -64,7 +64,7 @@ Vps.Todo.Overview = Ext.extend(Ext.Window,
             autoScroll: true,
             bodyStyle: 'padding: 10px;',
             region: 'center'
-        })
+        });
         this.items = [ this.content ];
 
         Vps.Todo.Overview.superclass.initComponent.call(this);

@@ -258,10 +258,10 @@ Vps.GoogleMap.Map.prototype = {
         var maxRes = this.config.maximumResolution;
         for (var i=0; i<mapTypes.length; i++) {
             if (minRes) {
-                mapTypes[i].getMinimumResolution = function() {return minRes;}
+                mapTypes[i].getMinimumResolution = function() {return minRes;};
             }
             if (maxRes) {
-                mapTypes[i].getMaximumResolution = function() {return maxRes;}
+                mapTypes[i].getMaximumResolution = function() {return maxRes;};
             }
         }
     },
@@ -307,6 +307,7 @@ Vps.GoogleMap.Map.prototype = {
     addMarker : function(markerConfig)
     {
         var gmarkCfg = { draggable: false };
+        if (markerConfig.draggable) gmarkCfg.draggable = true;
         if (this._isLightMarker(markerConfig.latitude, markerConfig.longitude)
             && this.config.lightMarkerSrc
         ) {

@@ -2,10 +2,11 @@
 /**
  * @group Model_Db_Sibling
  */
-class Vps_Model_Db_DbSibling_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Db_DbSibling_Test extends Vps_Test_TestCase
 {
     public function setUp()
     {
+        parent::setUp();
         $this->_db = $this->getMock('Vps_Model_Db_TestAdapter',
             array('query'));
         $this->_table = $this->getMock('Vps_Model_Db_DbSibling_MasterTable',
