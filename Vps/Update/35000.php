@@ -1,8 +1,10 @@
 <?php
 class Vps_Update_35000 extends Vps_Update
 {
-    protected function _init()
+    public function update()
     {
+        parent::update();
+
         $db = Vps_Registry::get('db');
 
         $fields = array();
