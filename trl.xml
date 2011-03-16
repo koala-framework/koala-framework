@@ -6238,5 +6238,15 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Unsubscribe</en>
 <id>1595</id>
 </text>
+<text>
+<en>ZIP / City</en>
+<de>PLZ / Ort</de>
+<id>1596</id>
+</text>
+<text>
+<en>Send message</en>
+<de>Nachricht abschicken</de>
+<id>1597</id>
+</text>
 </trl>
 
