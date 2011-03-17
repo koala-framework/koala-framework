@@ -58,7 +58,12 @@ abstract class Vps_Component_Cache
                 ) {
                     //ComponentLink
                     $model = $generator->getModel();
-                    $pattern = '{' . $model->getPrimaryKey() . '}';
+                    if ($model instanceof Vpc_Root_Category_GeneratorModel) {
+                        $primaryKey = 'id';
+                    } else {
+                        $primaryKey = $model->getPrimaryKey();
+                    }
+                    $pattern = '{' . $primaryKey . '}';
                     if (isset($setting['dbIdShortcut'])) {
                         $pattern = $setting['dbIdShortcut'] . $pattern;
                     }

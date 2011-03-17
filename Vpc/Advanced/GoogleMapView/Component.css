@@ -4,7 +4,7 @@
 .cssClass .fromAddress input.textBefore { width: 375px; color: var(typo); }
 .cssClass .fromAddress input.vpsClearOnFocusBlurred { color: var(gray); }
 .cssClass .fromAddress input.textOn { color: var(typo); }
-.cssClass .fromAddress input.submitOn {
+.cssClass .fromAddress button {
     float: right;
     margin-top: -3px;
     padding: 0px 5px;
