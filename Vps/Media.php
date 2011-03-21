@@ -9,6 +9,7 @@ class Vps_Media
         if ($filename instanceof Vps_Uploads_Row) {
             $filename = $filename->filename . '.' . $filename->extension;
         }
+        if ($filename == '.') $filename = '';
         $checksum = self::getChecksum($class, $id, $type, $filename);
         $prefix = '';
         if ($r = Vps_Component_Data_Root::getInstance()) {
@@ -17,7 +18,6 @@ class Vps_Media
             }
         }
         if (is_null($time)) {
-            self::_getOutputWithoutCheckingIsValid($class, $id, $type);
             $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
             if (!$time) $time = time();
         }

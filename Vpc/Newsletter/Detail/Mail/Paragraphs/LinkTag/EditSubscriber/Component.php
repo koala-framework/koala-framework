@@ -6,7 +6,7 @@ class Vpc_Newsletter_Detail_Mail_Paragraphs_LinkTag_EditSubscriber_Component
     {
         $ret = parent::getSettings();
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Subscriber settings')
+            'componentName' => trlVps('Newsletter Subscriber settings')
         ));
         return $ret;
     }
