@@ -24,6 +24,7 @@ class Vpc_Shop_Cart_Checkout_OrderProductController extends Vps_Controller_Actio
                 $card->add($form);
             }
         }
+        $cards->setAllowBlank(false);
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)

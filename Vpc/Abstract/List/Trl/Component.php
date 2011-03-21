@@ -31,6 +31,15 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
         return $ret;
     }
 
+    public function hasContent()
+    {
+        $childComponents = $this->getData()->getChildComponents(array('generator' => 'child'));
+        foreach ($childComponents as $c) {
+            if ($c->hasContent()) return true;
+        }
+        return false;
+    }
+
     public function getExportData()
     {
         $ret = array('list' => array());

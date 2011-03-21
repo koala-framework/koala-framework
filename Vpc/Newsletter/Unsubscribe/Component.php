@@ -21,6 +21,12 @@ class Vpc_Newsletter_Unsubscribe_Component extends Vpc_Form_Component
         $this->processInput($params);
     }
 
+    public function getForm()
+    {
+        if (!$this->_recipient) return null;
+        return parent::getForm();
+    }
+
     protected function _initForm()
     {
         parent::_initForm();
