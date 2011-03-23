@@ -29,8 +29,9 @@ class Vps_Controller_Action_Cli_Web_NewsletterController extends Vps_Controller_
 
     public function indexAction()
     {
-        $component = Vps_Component_Data_Root::getInstance()->getComponentByClass('Vpc_Newsletter_Component');
-        $model = $component->getComponent()->getChildModel();
+        $components = Vps_Component_Data_Root::getInstance()->getComponentsByClass('Vpc_Newsletter_Component');
+        if (empty($components)) return;
+        $model = $components[0]->getComponent()->getChildModel();
         $model->send($this->_getParam('timeLimit'), $this->_getParam('mailsPerMinute'), $this->_getParam('debug'));
         $this->_helper->viewRenderer->setNoRender(true);
     }

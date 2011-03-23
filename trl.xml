@@ -6247,5 +6247,25 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Browse</en>
 <id>1672</id>
 </text>
+<text>
+<en>ZIP / City</en>
+<de>PLZ / Ort</de>
+<id>1596</id>
+</text>
+<text>
+<en>Send message</en>
+<de>Nachricht abschicken</de>
+<id>1597</id>
+</text>
+<text>
+<en>You got a requst on {0}</en>
+<de>Es wurde eine Anfrage auf {0} gestellt</de>
+<id>1598</id>
+</text>
+<text>
+<en>This enquiry was sent by</en>
+<de>Die Anfrage wurde gesendet von</de>
+<id>1599</id>
+</text>
 </trl>
 
