@@ -136,7 +136,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
     protected function _getStylesArray()
     {
         $cache = self::_getCache();
-        $cacheId = 'RteStyles'.$this->getUniqueIdentifier();
+        $cacheId = 'RteStyles'.$model->getUniqueIdentifier();
         if (!$styles = $cache->load($cacheId)) {
             $styles = array();
             foreach ($this->getRows() as $row) {
