@@ -45,6 +45,8 @@ class Vps_Setup
 
     public static function setUp($configClass = 'Vps_Config_Web')
     {
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CLIENT_IP'];
+
         self::setUpZend();
 
         if (isset($_SERVER['REQUEST_URI']) &&
