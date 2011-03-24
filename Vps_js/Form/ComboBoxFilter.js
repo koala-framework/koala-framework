@@ -49,6 +49,7 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
                 this.filterBox.setValue(saveStoreData.data[this.saveBox.filterField]);
                 this.saveBox.enable();
             } else if (!this.firstChangeDone && !this.filterBox.defaultValue) {
+                this.saveBox.valueToSetAfterLoad = contactId;
                 this.saveBox.disable();
             }
 
@@ -58,6 +59,13 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
         this.saveBox.store.on('beforeload', function() {
             this.saveBox.store.baseParams[this.saveBox.queryParam] = null;
             this.saveBox.store.baseParams[this.saveBox.filterField] = this.filterBox.getValue();
+        }, this);
+
+        this.saveBox.store.on('load', function() {
+            if (this.saveBox.valueToSetAfterLoad) {
+                this.saveBox.setValue(this.saveBox.valueToSetAfterLoad);
+                this.saveBox.valueToSetAfterLoad = null;
+            }
         }, this);
 
         this.saveBox.on('expand', function(box, r, idx) {
