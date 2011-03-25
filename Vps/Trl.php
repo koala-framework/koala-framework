@@ -319,7 +319,10 @@ class Vps_Trl
         static $prefix;
         if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
         $cacheId = $prefix.'trl-'.$source.'-'.$target.'-'.$needle.'-'.$context;
-        $ret = apc_fetch($cacheId, $success);
+        $success = false;
+        if (function_exists('apc_fetch')) {
+            $ret = apc_fetch($cacheId, $success);
+        }
         if ($success) {
             return $ret;
         }
