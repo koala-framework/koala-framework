@@ -42,7 +42,7 @@ abstract class Vpc_Abstract_Flash_Upload_Component extends Vpc_Abstract_Flash_Co
 
         if ($row) {
             Vps_Component_Cache::getInstance()->saveMeta(
-                get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+                new Vps_Component_Cache_Meta_Static_Callback($row->getModel())
             );
         }
 

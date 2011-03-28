@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract
+class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract_Component
 {
     public function getTemplateVars()
     {
@@ -10,17 +10,21 @@ class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract
         if ($itemDirectory) {
             $classes = Vpc_Abstract::getChildComponentClasses($itemDirectory->componentClass);
             foreach ($classes as $c) {
-                if (Vpc_Abstract::hasSetting($c, 'categoryChildId')) {
+                if (Vpc_Abstract::hasSetting($c, 'categoryName')) {
                     $name = Vpc_Abstract::getSetting($c, 'categoryName');
-                    $componentId = $itemDirectory->componentId.'_'.Vpc_Abstract::getSetting($c, 'categoryChildId');
-                    $parent = Vps_Component_Data_Root::getInstance()
-                        ->getComponentById($componentId);
-                    if (!$parent) throw new Vps_Exception("Component '$componenId' not found, please make sure that key for generator is named like the setting 'categoryChildId' of the component");
-                    $ret['categories'][$name] = $this->_getMenuData($parent);
+                    $parent = $itemDirectory->getChildComponent(array('componentClass'=>$c));
+                    if ($parent) {
+                        $ret['categories'][$name] = $this->_getMenuData($parent);
+                    }
                 }
             }
         }
         return $ret;
+    }
+
+    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    {
+        return false;
     }
 
     protected function _getItemDirectory()

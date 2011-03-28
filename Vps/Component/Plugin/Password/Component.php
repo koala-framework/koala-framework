@@ -76,8 +76,10 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
         }
 
         $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
-        $view = new Vps_View_Component();
+
+        $renderer = new Vps_Component_Renderer();
+        $view = new Vps_Component_View($renderer);
         $view->assign($this->getTemplateVars());
-        return $view->render($template);
+        return $renderer->render($view->render($template));
     }
 }

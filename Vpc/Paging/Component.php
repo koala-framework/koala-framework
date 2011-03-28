@@ -11,21 +11,27 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['bigPagingSteps'] = array(10, 50);
         $ret['nextPrevOnly'] = false;
         $ret['placeholder'] = array(
-            'first'    => '&lt;&lt;',
-            'previous' => '&lt;',
-            'next'     => '&gt;',
-            'last'     => '&gt;&gt;',
+            'first'    => '&laquo;',
+            'previous' => '&#x8B;',
+            'next'     => '&#x9B;',
+            'last'     => '&raquo;',
             'prefix'   => trlVpsStatic('Page').':'
         );
         $ret['cssClass'] = 'webPaging webStandard';
         return $ret;
     }
 
+    public function getPartialClass()
+    {
+        return 'Vps_Component_Partial_Pager';
+    }
+
     public function getViewCacheSettings()
     {
         $ret = parent::getViewCacheSettings();
-        if ($this->getData()->parent->getComponent() instanceof Vpc_Directories_List_View_Component &&
-            is_instance_of($this->getData()->parent->getComponent()->getPartialClass(), 'Vps_Component_Partial_Id'))
+        $c = $this->getData()->parent;
+        if ($c->getComponent() instanceof Vpc_Directories_List_View_Component &&
+            $c->getComponent()->getPartialClass() == 'Vps_Component_Partial_Id')
         {
             $ret['enabled'] = false;
         }
@@ -186,17 +192,16 @@ class Vpc_Paging_Component extends Vpc_Abstract
         );
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getCacheVars();
-        $ret = array_merge($ret, $this->getData()->parent->getComponent()->getCacheVars());
-        return $ret;
-    }
-
-    public function getPartialCacheVars($nr)
-    {
-        $ret = array();
-        $ret = array_merge($ret, $this->getData()->parent->getComponent()->getCacheVars());
+        $ret = parent::getStaticCacheMeta($componentClass);
+        foreach (Vpc_Abstract::getComponentClasses() as $class) {
+            foreach (Vpc_Abstract::getChildComponentClasses($class) as $childClass) {
+                if ($childClass == $componentClass) {
+                    $ret[] = new Vpc_Paging_CacheMeta($class);
+                }
+            }
+        }
         return $ret;
     }
 

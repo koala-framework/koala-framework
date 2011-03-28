@@ -10,4 +10,14 @@ class Vps_Exception_Client extends Vps_Exception_NoLog
     {
         return 'ErrorClient';
     }
+
+    
+    public function render($ignoreCli = false)
+    {
+        if (!$ignoreCli && php_sapi_name() == 'cli') {
+            file_put_contents('php://stderr', $this->getMessage()."\n");
+            exit(1);
+        }
+        parent::render($ignoreCli);
+    }
 }

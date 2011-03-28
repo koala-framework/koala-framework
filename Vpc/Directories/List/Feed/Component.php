@@ -36,7 +36,7 @@ class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
         return $ret;
     }
 
-    public function getCacheVars()
+    public function getCacheMeta()
     {
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
         if (is_string($dir)) {
@@ -45,7 +45,9 @@ class Vpc_Directories_List_Feed_Component extends Vpc_Abstract_Feed_Component
         } else {
             $generator = $dir->getGenerator('detail');
         }
-        return $generator->getCacheVars($dir instanceof Vps_Component_Data ? $dir : null);
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel(), "{component_id}-feed");
+        return $ret;
     }
 
     protected function _getRssEntryByItem(Vps_Component_Data $item)

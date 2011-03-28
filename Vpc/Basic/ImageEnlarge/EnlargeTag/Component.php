@@ -40,7 +40,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['showInactiveSwitchLinks'] = $this->_getSetting('showInactiveSwitchLinks');
 
         if ($this->_getSetting('imageTitle')) {
-            $ret['title'] = $this->getRow()->title;
+            $ret['title'] = nl2br($this->getRow()->title);
         }
         if ($this->_getSetting('fullSizeDownloadable')) {
             $data = $this->getImageData();

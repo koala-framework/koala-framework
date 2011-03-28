@@ -45,7 +45,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $ret['imageCaption'] = false;
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
-        $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
+        $ret['assetsAdmin']['dep'][] = 'VpsFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/Image/DimensionField.js';
         return $ret;
@@ -75,6 +75,14 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $validScales = array(Vps_Media_Image::SCALE_BESTFIT, Vps_Media_Image::SCALE_CROP, Vps_Media_Image::SCALE_ORIGINAL, Vps_Media_Image::SCALE_DEFORM);
             if (!in_array($d['scale'], $validScales)) {
                 throw new Vps_Exception("Invalid Scale '$d[scale]'");
+            }
+            if ($d['scale'] != Vps_Media_Image::SCALE_ORIGINAL) {
+                if (!$d['width'] && !$d['height']) {
+                    throw new Vps_Exception('Dimension setting must contain width or height');
+                }
+                if ((!$d['width'] || !$d['height']) && $d['scale'] != Vps_Media_Image::SCALE_DEFORM) {
+                    throw new Vps_Exception('Dimension setting must use scale \'deform\' when width or height is 0');
+                }
             }
         }
 
@@ -124,9 +132,15 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $data = $this->_getImageDataOrEmptyImageData();
         if ($data && $data['filename']) {
             $id = $this->getData()->componentId;
-            return Vps_Media::getUrl($this->getData()->componentClass, $id, 'default', $data['filename']);
+            return Vps_Media::getUrl($this->getData()->componentClass, $id, $this->getImageKey(), $data['filename']);
         }
         return null;
+    }
+
+    // falls zB. Größe in DB umgestellt werden kann, kann man hier unterschiedliche zurückgeben, damit der Browsercache nicht greift
+    public function getImageKey()
+    {
+        return 'default';
     }
 
     public function getImageData()
@@ -163,13 +177,6 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             $this->_imageDataOrEmptyImageData = $file;
         }
         return $this->_imageDataOrEmptyImageData;
-    }
-
-    public function _getCacheRow()
-    {
-        $data = $this->getImageData();
-        if (isset($data['row'])) return $data['row'];
-        return null;
     }
 
     protected function _getEmptyImageData()
@@ -248,7 +255,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
 
         //paragraphs vorschau im backend
         $authData = Vps_Registry::get('userModel')->getAuthedUser();
-        if ($authData) {
+        if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, $authData)) {
             return self::VALID_DONT_CACHE;
         }
 
@@ -298,18 +305,22 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         } else {
             $ret['mtime'] = filemtime($data['file']);
         }
-        if (isset($data['row'])) {
-            Vps_Component_Cache::getInstance()->saveMeta(
-                get_class($data['row']->getModel()), $data['row']->component_id, $id, Vps_Component_Cache::META_CALLBACK
-            );
-        }
         return $ret;
     }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $model = Vpc_Abstract::getSetting($componentClass, 'ownModel');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Callback($model);
+        return $ret;
+    }
+
 
     public function onCacheCallback($row)
     {
         $cacheId = Vps_Media::createCacheId(
-            $this->getData()->componentClass, $this->getData()->componentId, 'default'
+            $this->getData()->componentClass, $this->getData()->componentId, $this->getImageKey()
         );
         Vps_Media::getOutputCache()->remove($cacheId);
     }

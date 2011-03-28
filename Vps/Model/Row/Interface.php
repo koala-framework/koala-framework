@@ -11,6 +11,7 @@ interface Vps_Model_Row_Interface
     public function duplicate(array $data = array());
     public function toArray();
     public function isDirty();
+    public function getDirtyColumns();
 
     public function setSiblingRows(array $rows); //internal
 

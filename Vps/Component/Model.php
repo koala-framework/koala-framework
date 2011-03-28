@@ -2,10 +2,6 @@
 class Vps_Component_Model extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Component_Model_Row';
-    protected $_constraints = array(
-        'ignoreVisible' => true,
-        'flags' => array('showInPageTreeAdmin' => true)
-    );
     protected $_primaryKey = 'componentId';
     private $_root;
 
@@ -93,16 +89,12 @@ class Vps_Component_Model extends Vps_Model_Abstract
         } else if (isset($where['parent_id'])) {
             $page = $root->getComponentById($where['parent_id'], array('ignoreVisible' => true));
             if (!$page) {
-                throw new Vps_Exception("Can't find page with parent_id '{$where['parent_id']}'");
+                throw new Vps_Exception("Can't find page with id '{$where['parent_id']}'");
             }
             $rowset = $page->getChildComponents(array(
                 'ignoreVisible' => true,
-                'flags' => array('showInPageTreeAdmin' => true)
-            ));
-            $rowset = array_merge($rowset, $page->getChildComponents(array(
-                'ignoreVisible' => true,
                 'generatorFlags' => array('showInPageTreeAdmin' => true)
-            )));
+            ));
             $rowset = array_values($rowset);
         } else if (isset($where['componentId'])) {
             $rowset = array(Vps_Component_Data_Root::getInstance()->getComponentById($where['componentId'], array('ignoreVisible' => true)));

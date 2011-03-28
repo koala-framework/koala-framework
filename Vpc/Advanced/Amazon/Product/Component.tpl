@@ -9,10 +9,10 @@
     <? if(!is_null($this->product->averageRating)) { ?>
         <p><?=trlVps('Rating')?>:
         <? for($i=0; $i<round($this->product->averageRating); $i++) { ?>
-            <?=$this->imageAsset('/assets/vps/images/rating/ratingStarFull.jpg','StarFull', 'ratingStar');?>
+            <?=$this->image('/assets/vps/images/rating/ratingStarFull.jpg','StarFull', 'ratingStar');?>
         <? } ?>
         <? for($i=0; $i<5-round($this->product->averageRating); $i++) { ?>
-            <?=$this->imageAsset('/assets/vps/images/rating/ratingStarEmpty.jpg','StarEmpty', 'ratingStar');?>
+            <?=$this->image('/assets/vps/images/rating/ratingStarEmpty.jpg','StarEmpty', 'ratingStar');?>
         <? } ?></p>
     <? } ?>
     <a class="order" href="<?=$this->product->detailPageURL?>" rel="popup_blank"><?=trlVps('order now at amazon')?></a>

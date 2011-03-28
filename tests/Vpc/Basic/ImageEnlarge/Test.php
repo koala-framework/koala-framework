@@ -26,8 +26,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testWithoutSmallImageComponentHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1800));
+        $html = $this->_root->getComponentById(1800)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -77,8 +76,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testWithoutSmallImageUploadedHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1801));
+        $html = $this->_root->getComponentById(1801)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -137,8 +135,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testWithSmallImageUploadedHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1802));
+        $html = $this->_root->getComponentById(1802)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -175,8 +172,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testWithOriginalHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1803));
+        $html = $this->_root->getComponentById(1803)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;

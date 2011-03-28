@@ -22,8 +22,10 @@
                 <?=$this->data->trlVps('on') ?> <?=$this->date($this->data->row->create_time)?>
                 <?=$this->data->trlVps('at') ?> <?=$this->time($this->data->row->create_time)?>
             </em><br />
-            <?=$this->data->trlVps('Post')?>:
-            <?= $this->component($this->actions) ?>
+            <? if($this->actions) { ?>
+                <?=$this->data->trlVps('Post')?>:
+                <?= $this->component($this->actions) ?>
+            <? } ?>
         </div>
         <div class="text">
             <?=$this->content?>

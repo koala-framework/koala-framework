@@ -8,20 +8,56 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
         'add'
     );
 
-    protected $_editDialog = array(
-        'width' =>  500,
-        'height' =>  400,
-        'autoForm' => 'Vpc.Directories.Item.Directory.EditFormPanel'
-    );
-
     protected $_filters = array('text'=>true);
     protected $_paging = 25;
 
     public function preDispatch()
     {
         parent::preDispatch();
-        $url = Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form');
-        $this->_editDialog['controllerUrl'] = $url;
+        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')
+            || is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
+            $url = Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form');
+            $this->_editDialog = array(
+                'width' =>  500,
+                'height' =>  400,
+                'autoForm' => 'Vpc.Directories.Item.Directory.EditFormPanel',
+                'controllerUrl' => $url
+            );
+        }
+    }
+
+    protected function _initColumns()
+    {
+        $extConfigType = false;
+        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
+            $extConfigType = 'extConfig';
+        } else if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
+            $extConfigType = 'extConfigControllerIndex';
+        }
+        if ($extConfigType) {
+            //shows editDialog
+            $this->_columns->add(new Vps_Grid_Column_Button('properties', ' ', 20))
+                ->setButtonIcon('/assets/silkicons/newspaper.png')
+                ->setTooltip(trlVps('Properties'));
+
+            $extConfig = Vps_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $extConfigType)
+                        ->getConfig(Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
+            $extConfig = $extConfig['items'];
+            $i=0;
+            foreach ($extConfig['contentEditComponents'] as $ec) {
+                $name = Vpc_Abstract::getSetting($ec['componentClass'], 'componentName');
+                $icon = Vpc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
+                $this->_columns->add(new Vps_Grid_Column_Button('edit_'.$i, ' ', 20))
+                    ->setColumnType('editContent')
+                    ->setEditComponentClass($ec['componentClass'])
+                    ->setEditType($ec['type'])
+                    ->setEditIdTemplate($ec['idTemplate'])
+                    ->setEditComponentIdSuffix($ec['componentIdSuffix'])
+                    ->setButtonIcon($icon->toString(array('arrow')))
+                    ->setTooltip(trlVps('Edit {0}', $name));
+                $i++;
+            }
+        }
     }
 
     protected function _beforeSave(Vps_Model_Row_Interface $row)

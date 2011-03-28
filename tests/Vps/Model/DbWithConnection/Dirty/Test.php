@@ -59,6 +59,30 @@ class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
         $this->assertEquals(0, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
     }
 
+    public function testNotDirtyForceSave()
+    {
+        Vps_Model_DbWithConnection_Dirty_Row::resetMock();
+
+        $table = new Vps_Db_Table(array(
+            'name' => $this->_tableName,
+            'rowClass' => 'Vps_Model_DbWithConnection_Dirty_Row'
+        ));
+        $model = new Vps_Model_Db(array(
+            'table' => $table
+        ));
+
+        $row = $model->getRow(1);
+        $row->forceSave();
+
+        $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+
+        $row = $model->getRow(1);
+        $row->test1 = 'foo';
+        $row->forceSave();
+
+        $this->assertEquals(2, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+    }
+
     public function testSaveNewRowNotDirty()
     {
         Vps_Model_DbWithConnection_Dirty_Row::resetMock();
@@ -108,5 +132,35 @@ class Vps_Model_DbWithConnection_Dirty_Test extends Vps_Test_TestCase
         $row->save();
 
         $this->assertEquals(1, Vps_Model_DbWithConnection_Dirty_Row::$saveCount);
+    }
+
+    public function testDirtyColumns()
+    {
+        $model = new Vps_Model_Db(array(
+            'table' => $this->_tableName
+        ));
+
+        $row = $model->getRow(1);
+        $this->assertEquals($row->getDirtyColumns(), array());
+        $this->assertEquals($row->isDirty(), false);
+        $row->test1 = 'blubb';
+        $this->assertEquals($row->getDirtyColumns(), array('test1'));
+        $this->assertEquals($row->isDirty(), true);
+    }
+
+    public function testDirtyColumnsWithProxy()
+    {
+        $model = new Vps_Model_Proxy(array(
+            'proxyModel' => new Vps_Model_Db(array(
+                'table' => $this->_tableName
+            )
+        )));
+
+        $row = $model->getRow(1);
+        $this->assertEquals($row->getDirtyColumns(), array());
+        $this->assertEquals($row->isDirty(), false);
+        $row->test1 = 'blubb';
+        $this->assertEquals($row->getDirtyColumns(), array('test1'));
+        $this->assertEquals($row->isDirty(), true);
     }
 }

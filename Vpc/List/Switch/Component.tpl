@@ -1,4 +1,5 @@
 <div class="vpsListSwitch <?=$this->cssClass?>">
+    <input type="hidden" class="options" value="<?= htmlspecialchars(Zend_Json::encode($this->options)) ?>" />
     <div class="listSwitchLargeWrapper">
         <div class="listSwitchLargeContent">
             <? foreach ($this->children as $child) {

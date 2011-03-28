@@ -21,8 +21,7 @@ class Vpc_Basic_LinkTagMail_Test extends Vpc_TestAbstract
     }
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1400));
+        $html = $this->_root->getComponentById(1400)->render();
         $this->assertEquals('<a href="mailto:example(vpsat)example(vpsdot)com">', $html);
     }
 

@@ -31,8 +31,7 @@ class Vpc_Basic_Html_Test extends Vpc_TestAbstract
     public function testOutput()
     {
         $c = $this->_root->getComponentById(2001)->getComponent();
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
+        $html = $c->getData()->render();
         $this->assertEquals("<div class=\"vpcBasicHtmlTestComponent\">\n    <p>foochildbar</p></div>",
                             $html);
     }

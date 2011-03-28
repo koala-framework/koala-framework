@@ -1,11 +1,11 @@
 <div class="<?=$this->cssClass?>">
     <h2><?= $this->componentLink($this->data->targetPage); ?></h2>
-    <?= $this->ifHasContent($this->image); ?>
+    <? if ($this->hasContent($this->image)) { ?>
         <div class="left prevImg">
             <?= $this->componentLink($this->data->targetPage, $this->component($this->image)); ?>
         </div>
-    <?= $this->ifHasContent(); ?>
-    <div class="text<?= $this->ifHasContent($this->image); ?> withImage<?= $this->ifHasContent(); ?>">
+    <? } ?>
+    <div class="text<?if ($this->hasContent($this->image)) { ?> withImage<?}?>">
         <?= $this->component($this->text); ?>
     </div>
     <div class="clear"></div>

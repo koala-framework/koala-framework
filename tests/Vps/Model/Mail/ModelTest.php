@@ -6,24 +6,21 @@
  */
 class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
 {
-    private $_fnf;
-
     public function setUp()
     {
         parent::setUp();
-        $this->_fnf = new Vps_Model_FnF(array(
-            'data' => array(
-                array('id' => 4, 'save_date' => '2008-10-29 08:15:00', 'is_spam' => 0, serialize(array()), serialize(array()))
-            ),
-            'columns' => array('id', 'save_date', 'is_spam', 'mail_sent', 'serialized_mail_vars', 'serialized_mail_essentials'),
-            'primaryKey' => 'id'
-        ));
+        Vps_Test_SeparateDb::createSeparateTestDb(dirname(__FILE__).'/bootstrap.sql');
+    }
+
+    public function tearDown()
+    {
+        Vps_Test_SeparateDb::restoreTestDb();
+        parent::tearDown();
     }
 
     public function testRow()
     {
         $model = new Vps_Model_Mail(array(
-            'proxyModel' => $this->_fnf,
             'tpl' => 'UserActivation',
         ));
 
@@ -41,13 +38,8 @@ class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
     {
         $addStore = new Vps_Model_FnF();
 
-        // händisches MockMail weil nur der class-name übergeben werden darf, kein objekt
-        Vps_Model_Mail_MockMail::resetCalls();
-
-        $model = new Vps_Model_Mail(array(
-            'proxyModel' => $this->_fnf,
+        $model = new Vps_Model_Mail_Model_NoSend(array(
             'tpl' => 'UserActivation',
-            'mailerClass' => 'Vps_Model_Mail_MockMail',
             'spamFields' => array(),
             'additionalStore' => $addStore
         ));
@@ -67,13 +59,8 @@ class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
 
     public function testMail()
     {
-        // händisches MockMail weil nur der class-name übergeben werden darf, kein objekt
-        Vps_Model_Mail_MockMail::resetCalls();
-
-        $model = new Vps_Model_Mail(array(
-            'proxyModel' => $this->_fnf,
+        $model = new Vps_Model_Mail_Model_NoSend(array(
             'tpl' => 'UserActivation',
-            'mailerClass' => 'Vps_Model_Mail_MockMail',
             'spamFields' => array()
         ));
         $row = $model->createRow();
@@ -89,34 +76,32 @@ class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
 
         $this->assertEquals('bar', $row->foo);
         $this->assertEquals('Test subject', $row->subject);
-        $this->assertEquals('Test subject', Vps_Model_Mail_MockMail::$data['subject']);
+        $this->assertEquals('Test subject', $row->getSubject());
 
-        $this->assertEquals(2, count(Vps_Model_Mail_MockMail::$addToCalled));
         $this->assertEquals(array(
-            array('markus@vivid.vps', ''),
-            array('markus2@vivid.vps', 'm2')
-        ), Vps_Model_Mail_MockMail::$addToCalled);
+            array('email' => 'markus@vivid.vps', 'name' => ''),
+            array('email' => 'markus2@vivid.vps', 'name' => 'm2')
+        ), $row->getTo());
 
         $this->assertEquals(
-            array('from@vivid.vps', 'Vps'),
-            Vps_Model_Mail_MockMail::$setFromCalled
+            array('email' => 'from@vivid.vps', 'name' => 'Vps'),
+            $row->getFrom()
         );
 
         $this->assertEquals(array(
-                array('cc@vivid.vps', 'cc')
-            ), Vps_Model_Mail_MockMail::$addCcCalled
+                array('email' => 'cc@vivid.vps', 'name' => 'cc')
+            ), $row->getCc()
         );
 
         $this->assertEquals(
             array('bcc@vivid.vps'),
-            Vps_Model_Mail_MockMail::$addBccCalled
+            $row->getBcc()
         );
 
-        $this->assertContains(
-            array('X-MyHeader', '321', false),
-            Vps_Model_Mail_MockMail::$addHeaderCalled
+        $this->assertEquals(
+            array(array('name' => 'X-MyHeader', 'value' => '321', 'append' => false)),
+            $row->getHeader()
         );
-
     }
 }
 

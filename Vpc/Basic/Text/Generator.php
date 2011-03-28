@@ -1,6 +1,12 @@
 <?php
 class Vpc_Basic_Text_Generator extends Vps_Component_Generator_Table
 {
+    protected function _getModel()
+    {
+        return Vpc_Basic_Text_Component::getTextModel($this->_class)
+                ->getDependentModel('ChildComponents');
+    }
+
     protected function _getIdFromRow($row)
     {
         return substr($row->component, 0, 1).$row->nr;
