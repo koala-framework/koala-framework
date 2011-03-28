@@ -92,7 +92,17 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
     /**
      * @cfg {Object} timeConfig Config for TimeField constructor.
      */
+    ,defaultValue:null
 
+    // Überschrieben, weil this.getEl() immer nur 0 bei den Koordinaten zurückliefert
+    ,alignHelpAndComment: function() {
+    	if (this.helpEl) {
+    		this.helpEl.alignTo(this.getEl().parent(), 'tr', [325 - this.getEl().parent().getWidth(), 3]);
+    	}
+    	if (this.commentEl) {
+    		this.commentEl.alignTo(this.getEl().parent(), 'tr', [330 - this.getEl().parent().getWidth(),  6]);
+    	}
+    }
     // {{{
     /**
      * @private
@@ -133,6 +143,10 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
         this.tf = new Ext.form.TimeField(timeConfig);
         this.tf.ownerCt = this;
         delete(this.timeFormat);
+        
+        if (this.defaultValue) {
+            this.setValue(this.defaultValue);
+        }
 
         // relay events
         this.relayEvents(this.df, ['focus', 'specialkey', 'invalid', 'valid']);

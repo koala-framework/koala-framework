@@ -244,6 +244,9 @@ wurde soeben erstellt.</de>
 <text>
 <en>E-Mail</en>
 <de>E-Mail</de>
+<fr>E-mail</fr>
+<es>E-Mail</es>
+<ru>&#x42D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x430;&#x44F; &#x43F;&#x43E;&#x447;&#x442;&#x430;</ru>
 <id>85</id>
 </text>
 <text>
@@ -286,6 +289,7 @@ wurde soeben erstellt.</de>
 <de>Vorname</de>
 <fr>Pr&#xE9;nom</fr>
 <es>Nombre</es>
+<ru>&#x418;&#x43C;&#x44F;</ru>
 <id>97</id>
 </text>
 <text>
@@ -293,6 +297,7 @@ wurde soeben erstellt.</de>
 <de>Nachname</de>
 <fr>Nom</fr>
 <es>Apellidos</es>
+<ru>&#x424;&#x430;&#x43C;&#x438;&#x43B;&#x438;&#x44F;</ru>
 <id>98</id>
 </text>
 <text>
@@ -300,6 +305,7 @@ wurde soeben erstellt.</de>
 <de>E-Mail</de>
 <fr>E-mail</fr>
 <es>E-Mail</es>
+<ru>&#x42D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x430;&#x44F; &#x43F;&#x43E;&#x447;&#x442;&#x430;</ru>
 <id>99</id>
 </text>
 <text>
@@ -463,7 +469,7 @@ wurde soeben erstellt.</de>
 <id>195</id>
 </text>
 <text>
-<en>At the following action emails are automatically sent to the adequade user.</en>
+<en>After following actions emails are sent automatically to the respective user:</en>
 <de>Nach &#xC4;nderungen der folgenden Felder wird automatisch eine E-Mail an die eingetragene E-Mail Adresse versendet:</de>
 <id>196</id>
 </text>
@@ -760,6 +766,8 @@ wurde soeben erstellt.</de>
 <text>
 <en>An error has occurred</en>
 <de>Ein Fehler ist aufgetreten</de>
+<es>Ha ocurrido un error</es>
+<ru>&#x41F;&#x440;&#x43E;&#x438;&#x437;&#x43E;&#x448;&#x43B;&#x430; &#x43E;&#x448;&#x438;&#x431;&#x43A;&#x430;</ru>
 <id>286</id>
 </text>
 <text>
@@ -1608,11 +1616,6 @@ wurde soeben erstellt.</de>
 <id>501</id>
 </text>
 <text>
-<en>Selector</en>
-<de>Selektor</de>
-<id>502</id>
-</text>
-<text>
 <en>Default</en>
 <de>Grundeinstellung</de>
 <id>503</id>
@@ -1646,11 +1649,6 @@ wurde soeben erstellt.</de>
 <en>Inline</en>
 <de>Textformat</de>
 <id>515</id>
-</text>
-<text>
-<en>Master-Styles</en>
-<de>Master-Formatvorlagen</de>
-<id>516</id>
 </text>
 <text>
 <en>Color</en>
@@ -1953,11 +1951,6 @@ wurde soeben erstellt.</de>
 <id>605</id>
 </text>
 <text>
-<en>Select Page</en>
-<de>Seite ausw&#xE4;hlen</de>
-<id>606</id>
-</text>
-<text>
 <en>Activation link sent to email address.</en>
 <de>Aktivierungslink wurde zur Email-Adresse gesendet.</de>
 <id>607</id>
@@ -2127,6 +2120,8 @@ wurde soeben erstellt.</de>
 <text>
 <en>The form has been submitted successfully.</en>
 <de>Das Formular wurde erfolgreich abgeschickt.</de>
+<es>El formulario es enviado con &#xE9;xito.</es>
+<ru>&#x444;&#x43E;&#x440;&#x43C;&#x430; &#x443;&#x441;&#x43F;&#x435;&#x448;&#x43D;&#x43E; &#x43E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x43B;&#x435;&#x43D;&#x430;.</ru>
 <id>651</id>
 </text>
 <text>
@@ -2388,8 +2383,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>708</id>
 </text>
 <text>
-<en>Value is empty, but a non-empty value is required</en>
+<en>Please fill out the field</en>
 <de>Bitte f&#xFC;llen Sie das Feld aus</de>
+<es>Por favor, rellene el campo</es>
+<ru>&#x41F;&#x43E;&#x436;&#x430;&#x43B;&#x443;&#x439;&#x441;&#x442;&#x430;, &#x437;&#x430;&#x43F;&#x43E;&#x43B;&#x43D;&#x438;&#x442;&#x435; &#x43F;&#x43E;&#x43B;&#x44F;</ru>
 <id>709</id>
 </text>
 <text>
@@ -2403,8 +2400,10 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>711</id>
 </text>
 <text>
-<en>'%value%' is not a valid email address in the basic format local-part@hostname</en>
+<en>'%value%' is not a valid email address</en>
 <de>'%value%' ist keine g&#xFC;ltige E-Mail-Adresse</de>
+<es>'%value%' no es una direcci&#xF3;n v&#xE1;lida de correo electr&#xF3;nico</es>
+<ru>'%value%' &#x43D;&#x435; &#x434;&#x435;&#x439;&#x441;&#x442;&#x432;&#x438;&#x442;&#x435;&#x43B;&#x44C;&#x43D;&#x44B;&#x439; &#x430;&#x434;&#x440;&#x435;&#x441; &#x44D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x43D;&#x43D;&#x43E;&#x439; &#x43F;&#x43E;&#x447;&#x442;&#x44B;</ru>
 <id>712</id>
 </text>
 <text>
@@ -2746,11 +2745,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>790</id>
 </text>
 <text>
-<en>Flash Media Player</en>
-<de>Flash Media Player</de>
-<id>791</id>
-</text>
-<text>
 <en>Element</en>
 <de>Element</de>
 <id>792</id>
@@ -2800,6 +2794,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Stra&#xDF;e</de>
 <fr>Rue</fr>
 <es>Calle</es>
+<ru>&#x423;&#x43B;&#x438;&#x446;&#x430;</ru>
 <id>803</id>
 </text>
 <text>
@@ -2817,6 +2812,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Land</de>
 <fr>Pays</fr>
 <es>Pa&#xED;s</es>
+<ru>&#x421;&#x442;&#x440;&#x430;&#x43D;&#x430;</ru>
 <id>806</id>
 </text>
 <text>
@@ -2824,6 +2820,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Telefon</de>
 <fr>T&#xE9;l&#xE9;phone</fr>
 <es>Tel&#xE9;fono</es>
+<ru>&#x442;&#x435;&#x43B;&#x435;&#x444;&#x43E;&#x43D;</ru>
 <id>807</id>
 </text>
 <text>
@@ -3148,6 +3145,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Fax</de>
 <fr>Fax</fr>
 <es>Fax</es>
+<ru>&#x424;&#x430;&#x43A;&#x441;</ru>
 <id>897</id>
 </text>
 <text>
@@ -3219,11 +3217,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Properties</en>
 <de>Einstellungen</de>
 <id>919</id>
-</text>
-<text>
-<en>Edit News</en>
-<de>Neuigkeiten bearbeiten</de>
-<id>920</id>
 </text>
 <text>
 <en>Context</en>
@@ -3410,7 +3403,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>None</en>
-<de>keine</de>
+<de>Keine</de>
 <id>966</id>
 </text>
 <text>
@@ -3575,6 +3568,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Firma</de>
 <fr>Entreprise</fr>
 <es>Empresa</es>
+<ru>&#x424;&#x438;&#x440;&#x43C;&#x430;</ru>
 <id>1004</id>
 </text>
 <text>
@@ -3878,14 +3872,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1082</id>
 </text>
 <text>
-<en>Link-Action</en>
-<de>Link-Aktion</de>
-<id>1067</id>
-</text>
-<text>
 <en>Text/Image - Alignment</en>
 <de>Text/Bild - Ausrichtung</de>
-<id>1068</id>
+<id>1520</id>
 </text>
 <text>
 <en>Seitenbaum</en>
@@ -4029,10 +4018,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Flash</en>
 <id>1132</id>
-</text>
-<text>
-<en>Flash file</en>
-<id>1133</id>
 </text>
 <text>
 <en>Flash variables</en>
@@ -4280,11 +4265,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1185</id>
 </text>
 <text>
-<en>This export is limited to {0} rows.</en>
-<de>Dieser Export ist auf {0} Eintr&#xE4;ge limitiert.</de>
-<id>1186</id>
-</text>
-<text>
 <en>Collecting data</en>
 <de>Sammle Daten</de>
 <id>1187</id>
@@ -4359,6 +4339,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Message</en>
 <de>Mitteilung</de>
 <es>Mensaje</es>
+<ru>&#x421;&#x432;&#x44F;&#x437;&#x44C;</ru>
 <id>1207</id>
 </text>
 <text>
@@ -5141,6 +5122,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>none</en>
+<de>keine</de>
 <id>1381</id>
 </text>
 <text>
@@ -5250,10 +5232,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1405</id>
 </text>
 <text>
-<en>Community Video</en>
-<id>1406</id>
-</text>
-<text>
 <en>Please insert the web address to your YouTube or Vimeo video.</en>
 <de>Bitte f&#xFC;gen Sie die Adresse von YouTube oder Vimeo ein.</de>
 <id>1407</id>
@@ -5292,10 +5270,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>A-5202 Neumarkt a. Wallersee</en>
 <id>1415</id>
-</text>
-<text>
-<en>http://www.vivid-planet.at</en>
-<id>1416</id>
 </text>
 <text>
 <en>This {0} is an {1}</en>
@@ -5484,24 +5458,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1463</id>
 </text>
 <text>
-<en>Flash source</en>
-<de>Flash Quelle</de>
-<id>1464</id>
-</text>
-<text>
-<en>Upload a Flash file</en>
-<id>1465</id>
-</text>
-<text>
-<en>From external source</en>
-<de>Von externer Quelle</de>
-<id>1466</id>
-</text>
-<text>
-<en>URL to Flash file</en>
-<id>1467</id>
-</text>
-<text>
 <en>Allow fullscreen</en>
 <de>Vollbild erlauben</de>
 <id>1468</id>
@@ -5558,11 +5514,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1479</id>
 </text>
 <text>
-<en>Advanced Gallery</en>
-<de>Erweiterte Galerie</de>
-<id>1480</id>
-</text>
-<text>
 <en>zwei Bilder</en>
 <id>1481</id>
 </text>
@@ -5593,6 +5544,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Years</en>
+<de>Jahre</de>
 <id>1489</id>
 </text>
 <text>
@@ -5640,41 +5592,9 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1498</id>
 </text>
 <text>
-<en>Original Filename</en>
-<id>1499</id>
-</text>
-<text>
-<en>Headlines</en>
-<id>1500</id>
-</text>
-<text>
-<en>Headline 1</en>
-<id>1501</id>
-</text>
-<text>
-<en>Headline 2</en>
-<id>1502</id>
-</text>
-<text>
-<en>Original headline 1</en>
-<id>1503</id>
-</text>
-<text>
-<en>Original headline 2</en>
-<id>1504</id>
-</text>
-<text>
 <en>2 Columns</en>
 <de>2 Spalten</de>
 <id>1505</id>
-</text>
-<text>
-<en>Left column</en>
-<id>1506</id>
-</text>
-<text>
-<en>Right column</en>
-<id>1507</id>
 </text>
 <text>
 <en>All Visible</en>
@@ -5692,10 +5612,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1510</id>
 </text>
 <text>
-<en>Toolbox</en>
-<id>1511</id>
-</text>
-<text>
 <en>Time recording</en>
 <de>Zeiterfassung</de>
 <id>1512</id>
@@ -5719,10 +5635,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Year {0}</en>
 <de>{0}. Jahr</de>
 <id>1516</id>
-</text>
-<text>
-<en>Timer</en>
-<id>1517</id>
 </text>
 <text>
 <en>Spent time by years</en>
@@ -5731,171 +5643,129 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Original Filename</en>
-<id>1499</id>
+<id>1521</id>
 </text>
 <text>
 <en>Headlines</en>
-<id>1500</id>
+<id>1522</id>
 </text>
 <text>
 <en>Headline 1</en>
-<id>1501</id>
+<id>1523</id>
 </text>
 <text>
 <en>Headline 2</en>
-<id>1502</id>
+<id>1524</id>
 </text>
 <text>
 <en>Original headline 1</en>
-<id>1503</id>
+<id>1525</id>
 </text>
 <text>
 <en>Original headline 2</en>
-<id>1504</id>
-</text>
-<text>
-<en>2 Columns</en>
-<id>1505</id>
+<id>1526</id>
 </text>
 <text>
 <en>Left column</en>
-<id>1506</id>
+<id>1528</id>
 </text>
 <text>
 <en>Right column</en>
-<id>1507</id>
-</text>
-<text>
-<en>Do you really wish to set everything to visible?</en>
-<id>1509</id>
-</text>
-<text>
-<en>Setting visible...</en>
-<de>Sichtbar setzen...</de>
-<id>1510</id>
+<id>1529</id>
 </text>
 <text>
 <en>Toolbox</en>
-<id>1511</id>
-</text>
-<text>
-<en>Time recording</en>
-<de>Zeiterfassung</de>
-<id>1512</id>
-</text>
-<text>
-<en>Year</en>
-<de>Jahr</de>
-<id>1513</id>
-</text>
-<text>
-<en>Spent time</en>
-<de>Verbrauchte Zeit</de>
-<id>1514</id>
-</text>
-<text>
-<en>Included time</en>
-<de>Inkludierte Zeit</de>
-<id>1515</id>
-</text>
-<text>
-<en>Year {0}</en>
-<de>{0}. Jahr</de>
-<id>1516</id>
+<id>1533</id>
 </text>
 <text>
 <en>Timer</en>
-<id>1517</id>
-</text>
-<text>
-<en>Spent time by years</en>
-<de>Verbrauchte Zeite nach Jahren</de>
-<id>1518</id>
+<id>1539</id>
 </text>
 <text>
 <en>Dear Sir or Madam</en>
 <de>Sehr geehrte Damen und Herren</de>
-<id>1519</id>
+<id>1549</id>
+</text>
+<text>
+<en>Copy of</en>
+<de>Kopie von</de>
+<id>1550</id>
 </text>
 <text>
 <en>Web Image Files</en>
-<id>1521</id>
+<id>1551</id>
 </text>
 <text>
 <en>All Files</en>
-<id>1522</id>
+<id>1552</id>
 </text>
 <text>
 <en>Upload Files</en>
-<id>1523</id>
+<id>1553</id>
 </text>
 <text>
 <en>Uploading files</en>
-<id>1524</id>
-</text>
-<text>
-<en>You got a requst</en>
-<id>1525</id>
+<id>1554</id>
 </text>
 <text>
 <en>E-Mail Recipient</en>
-<id>1526</id>
+<id>1556</id>
 </text>
 <text>
 <en>E-Mail Subject</en>
-<id>1527</id>
+<id>1557</id>
 </text>
 <text>
 <en>Form.Fieldset</en>
-<id>1528</id>
+<id>1558</id>
 </text>
 <text>
 <en>Required</en>
-<id>1529</id>
+<id>1559</id>
 </text>
 <text>
 <en>Form.Checkbox</en>
-<id>1530</id>
+<id>1560</id>
 </text>
 <text>
 <en>Box Label</en>
-<id>1531</id>
+<id>1561</id>
 </text>
 <text>
 <en>Form.Radio</en>
-<id>1532</id>
+<id>1562</id>
 </text>
 <text>
 <en>Output Type</en>
-<id>1533</id>
+<id>1563</id>
 </text>
 <text>
 <en>horizontal</en>
-<id>1534</id>
+<id>1564</id>
 </text>
 <text>
 <en>vertical</en>
-<id>1535</id>
+<id>1565</id>
 </text>
 <text>
 <en>Form.Select</en>
-<id>1536</id>
+<id>1566</id>
 </text>
 <text>
 <en>Form.Textarea</en>
-<id>1537</id>
+<id>1567</id>
 </text>
 <text>
 <en>Form.Textfield</en>
-<id>1538</id>
+<id>1568</id>
 </text>
 <text>
 <en>Alphanumeric</en>
-<id>1539</id>
+<id>1569</id>
 </text>
 <text>
 <en>Bezeichnung</en>
-<id>1540</id>
+<id>1570</id>
 </text>
 <text>
 <en>This account has already been activated.</en>
@@ -5940,24 +5810,27 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>'%value%' is not a valid voucher code</en>
 <de>'%value%' ist ein ung&#xFC;ltiger Gutschein Code</de>
-<id>1549</id>
+<id>1581</id>
 </text>
 <text>
 <en>Redeem Voucher</en>
 <de>Gutschein einl&#xF6;sen</de>
-<id>1550</id>
+<id>1582</id>
 </text>
 <text>
 <en>Remaining Amount {0}</en>
 <de>Restbetrag {0}</de>
-<id>1551</id>
+<id>1573</id>
 </text>
 <text>
 <en>Your Voucher has been successfully redeemed.</en>
 <de>Ihr Gutschein wurde erfolgreich eingel&#xF6;st.</de>
-<id>1552</id>
+<id>1634</id>
 </text>
 <text>
+<en>Set password</en>
+<de>Passwort setzen</de>
+<id>1543</id>
 <en>Product: Voucher</en>
 <de>Produkt: Gutschein</de>
 <id>1393</id>
@@ -5971,58 +5844,208 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1485</id>
 </text>
 <text>
-<en>Copy of</en>
-<de>Kopie von</de>
-<id>1553</id>
+<en>Set a new password</en>
+<de>Ein neues Passwort setzen</de>
+<id>1575</id>
+</text>
+<text>
+<en>After entering your new password you are automatically logged in.</en>
+<de>Nach eingabe des neuen Passworts werden Sie automatisch eingeloggt.</de>
+<id>1576</id>
+</text>
+<text>
+<en>Set new Password</en>
+<de>Neues Passwort setzen</de>
+<id>1577</id>
+</text>
+<text>
+<en>Maybe you have already set your password, or the link was not copied correct out of the email.</en>
+<de>Eventuell haben Sie das Passwort bereits neu gesetzt, oder der Link wurde falsch aus dem E-Mail kopiert.</de>
+<id>1578</id>
+</text>
+<text>
+<en>Your new password has been set.</en>
+<de>Ihr neues Passwort wurde gesetzt.</de>
+<id>1579</id>
+</text>
+<text>
+<en>Can't paste paragraph type '{0}', as it is not avaliable here.</en>
+<de>Absatz vom Typ '{0}' kann nicht eingef&#xFC;gt werden, da er hier nicht verf&#xFC;gbar ist.</de>
+<id>1618</id>
+</text>
+<text>
+<en>Show User Menu</en>
+<id>1619</id>
+</text>
+<text>
+<en>Filter</en>
+<id>1584</id>
+</text>
+<text>
+<en>More about this Topic</en>
+<id>1585</id>
+</text>
+<text>
+<en>Routing</en>
+<id>1586</id>
+</text>
+<text>
+<en>Flash.Community Video</en>
+<id>1587</id>
+</text>
+<text>
+<en>Flash.Code</en>
+<id>1591</id>
+</text>
+<text>
+<en>Flash.Upload</en>
+<id>1592</id>
+</text>
+<text>
+<en>swf File</en>
+<id>1593</id>
+</text>
+<text>
+<en>Flash.Media Player</en>
+<id>1594</id>
+</text>
+<text>
+<en>&lt;strong&gt;Found Results&lt;/strong&gt; (in {0} seconds)</en>
+<de>&lt;strong&gt;Ergebnisse gefunden&lt;/strong&gt; (in {0} Sekunden)</de>
+<id>1595</id>
+</text>
+<text>
+<en>Social Networks</en>
+<id>1596</id>
+</text>
+<text>
+<en>Authenticate</en>
+<id>1597</id>
+</text>
+<text>
+<en>You are not yet authenticated to {0}. Do you want to authenticate now?</en>
+<id>1598</id>
+</text>
+<text>
+<en>Please confirm the authentification in the opened popup</en>
+<id>1599</id>
+</text>
+<text>
+<en>Success</en>
+<id>1600</id>
+</text>
+<text>
+<en>Status Update successfully posted.</en>
+<id>1601</id>
+</text>
+<text>
+<en>Too many rows to export. Try exporting two times with fewer rows.</en>
+<id>1607</id>
+</text>
+<text>
+<en>Writing data. Please be patient.</en>
+<id>1608</id>
+</text>
+<text>
+<en>Path</en>
+<id>1609</id>
+</text>
+<text>
+<en>Domain and Path</en>
+<id>1610</id>
+</text>
+<text>
+<en>Source</en>
+<id>1611</id>
+</text>
+<text>
+<en>Redirects</en>
+<id>1613</id>
+</text>
+<text>
+<en>{0}-{1} of about {2}</en>
+<de>{0}-{1} von zirka {2}</de>
+<id>1614</id>
+</text>
+<text>
+<en>The Form has been submitted successfully. You will receive an E-Mail with the access link to the protected area.</en>
+<de>Das Formular wurde erfolgreich abgeschickt. Sie erhalten in K&#xFC;rze eine E-Mail mit dem Zugangslink zum gesch&#xFC;tzten Bereich.</de>
+<id>1615</id>
+</text>
+<text>
+<en>Please enter your E-Mail Address to access this area.</en>
+<de>Bitte geben Sie Ihre E-Mail Adresse ein um Zugang zu diesem Bereich zu erhalten.</de>
+<id>1616</id>
+</text>
+<text>
+<en>Invalid or expired Link. Please request a new one.</en>
+<de>Ung&#xFC;ltiger oder abgelaufener Link. Bitte fordern Sie einen neuen an.</de>
+<id>1617</id>
 </text>
 <text>
 <en>Information</en>
-<id>1554</id>
+<id>1620</id>
 </text>
 <text>
 <en>Shop.Product: Voucher</en>
-<id>1555</id>
+<id>1621</id>
 </text>
 <text>
 <en>Directory</en>
-<id>1556</id>
+<id>1622</id>
 </text>
 <text>
 <en>Activation code is wrong. Maybe the address was copied wrong out of the email?</en>
-<id>1557</id>
+<id>1623</id>
 </text>
 <text>
 <en>Fill out the Form</en>
-<id>1558</id>
+<id>1624</id>
 </text>
 <text>
 <en>Click the save button above</en>
-<id>1559</id>
+<id>1625</id>
 </text>
 <text>
 <en>If no error pops up, the cache has been cleared sucessfully</en>
-<id>1560</id>
+<id>1626</id>
 </text>
 <text>
 <en>Affected component / part (e.g.: References)</en>
-<id>1561</id>
+<id>1627</id>
 </text>
 <text>
 <en>Why do you need to clear the cache? (steps to reproduce / description)</en>
-<id>1562</id>
+<id>1628</id>
 </text>
 <text>
 <en>Clear Cache</en>
-<id>1563</id>
+<id>1629</id>
 </text>
 <text>
-<en>Text/Image - Alignment</en>
-<id>1565</id>
+<en>Invalid search terms</en>
+<de>Ung&#xFC;ltige Suchbegriffe</de>
+<id>1630</id>
+</text>
+<text>
+<en>Search results can be extended using wildcards.</en>
+<de>Die Suchergebnisse k&#xF6;nnen durch die Verwendung von Wildcards erweitert werden.</de>
+<id>1631</id>
+</text>
+<text>
+<en>Examples: "Hallo Welt" , ? , * , AND , OR</en>
+<de>Beispiele: "Hallo Welt" , ? , * , AND , OR</de>
+<id>1632</id>
+</text>
+<text>
+<en>No results found for &lt;strong&gt;"{0}"&lt;/strong&gt;</en>
+<de>Keine Ergebnisse gefunden f&#xFC;r &lt;strong&gt;"{0}"&lt;/strong&gt;</de>
+<id>1633</id>
 </text>
 <text>
 <en>Must not be negative</en>
 <de>Darf nicht negativ sein</de>
-<id>1566</id>
+<id>1637</id>
 </text>
 <text>
 <en>value of goods</en>
@@ -6043,11 +6066,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Newsletter Subscriber settings</en>
 <de>Newsletterempf&#xE4;nger-Einstellungen</de>
 <id>1570</id>
-</text>
-<text>
-<en>Unsubscribe Newsletter</en>
-<de>Vom Newsletter abmelden</de>
-<id>1571</id>
 </text>
 <text>
 <en>Count</en>
@@ -6080,76 +6098,174 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1577</id>
 </text>
 <text>
-<en>Master</en>
-<id>1578</id>
+<en>Original Position</en>
+<id>1639</id>
 </text>
 <text>
-<en>Master URL</en>
-<id>1579</id>
+<en>attached</en>
+<id>1640</id>
 </text>
 <text>
-<en>Master width</en>
-<id>1580</id>
+<en>off</en>
+<id>1641</id>
 </text>
 <text>
-<en>Master height</en>
-<id>1581</id>
-</text>
-<text>
-<en>Land</en>
-<id>1582</id>
-</text>
-<text>
-<en>E-Mail Address</en>
-<id>1583</id>
-</text>
-<text>
-<en>Predefined Subject for Mail</en>
-<id>1584</id>
-</text>
-<text>
-<en>Predefined Text for Mail</en>
-<id>1585</id>
-</text>
-<text>
-<en>Unsubscribe</en>
-<id>1586</id>
-</text>
-<text>
-<en>Master</en>
-<id>1587</id>
-</text>
-<text>
-<en>Master URL</en>
-<id>1588</id>
-</text>
-<text>
-<en>Master width</en>
-<id>1589</id>
-</text>
-<text>
-<en>Master height</en>
-<id>1590</id>
+<en>Form.File Upload</en>
+<id>1642</id>
 </text>
 <text>
 <en>Land</en>
-<id>1591</id>
+<id>1643</id>
 </text>
 <text>
-<en>E-Mail Address</en>
-<id>1592</id>
+<en>Temporary access</en>
+<id>1644</id>
 </text>
 <text>
-<en>Predefined Subject for Mail</en>
-<id>1593</id>
+<en>Remove Hyperlink</en>
+<id>1645</id>
 </text>
 <text>
-<en>Predefined Text for Mail</en>
-<id>1594</id>
+<en>Remove the selected link.</en>
+<id>1646</id>
+</text>
+<text>
+<en>Please enter a search term</en>
+<de>Bitte geben Sie einen Suchbegriff ein</de>
+<id>1647</id>
+</text>
+<text>
+<en>ZIP / City</en>
+<de>PLZ / Ort</de>
+<es>CP / Localidad</es>
+<ru>&#x41F;&#x43E;&#x447;&#x442;&#x43E;&#x432;&#x44B;&#x439; &#x438;&#x43D;&#x434;&#x435;&#x43A;&#x441; / &#x413;&#x43E;&#x440;&#x43E;&#x434;</ru>
+<id>1648</id>
+</text>
+<text>
+<en>You got a requst on {0}</en>
+<de>Es wurde eine Anfrage auf {0} gestellt</de>
+<id>1649</id>
+</text>
+<text>
+<en>This enquiry was sent by</en>
+<de>Die Anfrage wurde gesendet von</de>
+<id>1650</id>
+</text>
+<text>
+<en>http://www.vivid-planet.com</en>
+<id>1651</id>
+</text>
+<text>
+<en>Imprint.Facebook Disclaimer</en>
+<de>Impressum.Facebook Disclaimer</de>
+<id>1652</id>
+</text>
+<text>
+<en>Facebook Social Plugin</en>
+<id>1653</id>
+</text>
+<text>
+<en>Master</en>
+<id>1654</id>
+</text>
+<text>
+<en>Master URL</en>
+<id>1655</id>
+</text>
+<text>
+<en>Master width</en>
+<id>1656</id>
+</text>
+<text>
+<en>Master height</en>
+<id>1657</id>
+</text>
+<text>
+<en>XLS Import</en>
+<id>1658</id>
+</text>
+<text>
+<en>Upload a file and click "Save" to import.</en>
+<id>1659</id>
+</text>
+<text>
+<en>Adjust columns</en>
+<id>1660</id>
+</text>
+<text>
+<en>Add columns if necessary</en>
+<id>1661</id>
+</text>
+<text>
+<en>Uploaded file is not of type "xls".</en>
+<id>1662</id>
+</text>
+<text>
+<en>Import done</en>
+<id>1663</id>
+</text>
+<text>
+<en>The File has been imported successfully.</en>
+<id>1664</id>
 </text>
 <text>
 <en>Unsubscribe</en>
-<id>1595</id>
+<id>1665</id>
+</text>
+<text>
+<en>E-Mail Address</en>
+<id>1666</id>
+</text>
+<text>
+<en>Predefined Subject for Mail</en>
+<id>1667</id>
+</text>
+<text>
+<en>Predefined Text for Mail</en>
+<id>1668</id>
+</text>
+<text>
+<en>Newsletter Show in Web</en>
+<id>1669</id>
+</text>
+<text>
+<en>Mandatory field</en>
+<de>Pflichtfeld</de>
+<es>Campo obligatorio</es>
+<ru>&#x41E;&#x431;&#x44F;&#x437;&#x430;&#x442;&#x435;&#x43B;&#x44C;&#x43D;&#x43E;&#x435; &#x43F;&#x43E;&#x43B;&#x435;</ru>
+<id>1670</id>
+</text>
+<text>
+<en>Send message</en>
+<de>Nachricht absenden</de>
+<es>Enviar un mensaje</es>
+<ru>&#x41E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x441;&#x43E;&#x43E;&#x431;&#x449;&#x435;&#x43D;&#x438;&#x435;</ru>
+<id>1671</id>
+</text>
+<text>
+<de>Durchsuchen</de>
+<en>Browse</en>
+<id>1672</id>
+</text>
+<text>
+<en>ZIP / City</en>
+<de>PLZ / Ort</de>
+<id>1596</id>
+</text>
+<text>
+<en>Send message</en>
+<de>Nachricht abschicken</de>
+<id>1597</id>
+</text>
+<text>
+<en>You got a requst on {0}</en>
+<de>Es wurde eine Anfrage auf {0} gestellt</de>
+<id>1598</id>
+</text>
+<text>
+<en>This enquiry was sent by</en>
+<de>Die Anfrage wurde gesendet von</de>
+<id>1599</id>
 </text>
 </trl>
 

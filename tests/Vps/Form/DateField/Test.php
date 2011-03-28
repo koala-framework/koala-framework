@@ -22,6 +22,7 @@ class Vps_Form_DateField_Test extends Vps_Test_TestCase
         $form->validate($form->getRow(), $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $row = $m1->getRow($m1->select());
         $this->assertEquals('2009-12-01', $row->{$field1->getFieldName()});

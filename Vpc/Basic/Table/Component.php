@@ -4,6 +4,11 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
+
+        $ret['assetsAdmin']['dep'][] = 'ExtGridCheckboxSelectionModel';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Table/TableGridPanel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Table/TableXlsImportForm.js';
+
         $ret['componentName'] = trlVps('Table');
         $ret['ownModel'] = 'Vpc_Basic_Table_Model';
         $ret['childModel'] = 'Vpc_Basic_Table_ModelData';
@@ -24,6 +29,8 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         // e.g.: 'green' => trlVps('Green')
         $ret['tableStyles'] = array('green' => trlVps('Green'));
         $ret['cssClass'] = 'webStandard';
+
+        $ret['extConfig'] = 'Vpc_Basic_Table_ExtConfig';
         return $ret;
     }
 
@@ -33,6 +40,7 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         $ret['settingsRow'] = $this->_getRow();
 
         $dataSelect = new Vps_Model_Select();
+        $dataSelect->whereEquals('visible', 1);
         $dataSelect->order('pos', 'ASC');
         $ret['dataRows'] = $this->_getRow()->getChildRows('tableData', $dataSelect);
 
@@ -48,14 +56,10 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         return $this->getRow()->columns;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getCacheVars();
-        $ret['tableData'] = array(
-            'model' => $this->getChildModel(),
-            'id' => $this->getData()->componentId,
-            'field' => 'component_id'
-        );
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
         return $ret;
     }
 }

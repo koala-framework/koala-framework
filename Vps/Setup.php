@@ -45,6 +45,8 @@ class Vps_Setup
 
     public static function setUp($configClass = 'Vps_Config_Web')
     {
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CLIENT_IP'];
+
         self::setUpZend();
 
         if (isset($_SERVER['REQUEST_URI']) &&
@@ -70,6 +72,20 @@ class Vps_Setup
                 throw new Vps_Exception_AccessDenied();
             }
             Vps_Util_Check_Config::check();
+        }
+        if (isset($_SERVER['REQUEST_URI']) &&
+            substr($_SERVER['REQUEST_URI'], 0, 8) == '/vps/apc'
+        ) {
+            Vps_Loader::registerAutoload();
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                header('WWW-Authenticate: Basic realm="Check Config"');
+                throw new Vps_Exception_AccessDenied();
+            }
+            self::setUpVps();
+            $_SERVER['PHP_SELF'] = '/vps/apc';
+            global $MY_SELF;
+            require_once(Vps_Registry::get('config')->libraryPath . '/apc/apc.php');
+            exit;
         }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
             Vps_Loader::registerAutoload();
@@ -147,9 +163,12 @@ class Vps_Setup
         }
 
         if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != $config->application->vps->version) {
-            $required = trim(file_get_contents('application/vps_branch'));
-            $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
-            throw new Vps_Exception("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
+            $validCommands = array('shell', 'export', 'copy-to-test');
+            if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
+                $required = trim(file_get_contents('application/vps_branch'));
+                $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
+                throw new Vps_Exception_Client("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
+            }
         }
 
         if (isset($_POST['PHPSESSID'])) {
@@ -191,7 +210,18 @@ class Vps_Setup
                 $redirect = $config->server->domain;
             }
             if ($redirect) {
-                header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
+                $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
+                    ->findRedirectUrl('domainPath', array($host.$_SERVER['REQUEST_URI'], 'http://'.$host.$_SERVER['REQUEST_URI']));
+                if (!$target) {
+                    $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
+                        ->findRedirectUrl('domain', $host);
+                }
+                if ($target) {
+                    //TODO: funktioniert nicht bei mehreren domains
+                    header("Location: http://".$redirect.$target, true, 301);
+                } else {
+                    header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
+                }
                 exit;
             }
         }
@@ -319,17 +349,20 @@ class Vps_Setup
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Vps_Component_Data_Root::getInstance();
-            $data = $root->getPageByUrl($requestUrl, $acceptLanguage);
+            $exactMatch = true;
+            $data = $root->getPageByUrl($requestUrl, $acceptLanguage, $exactMatch);
             if (!$data) {
-               throw new Vps_Exception_NotFound();
+                throw new Vps_Exception_NotFound();
             }
-            $root->setCurrentPage($data);
-            if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
+            if (!$exactMatch) {
+                if (rawurldecode($data->url) == $_SERVER['REDIRECT_URL']) {
+                    throw new Vps_Exception("getPageByUrl reposrted this isn't an exact match, but the urls are equal. wtf.");
+                }
                 header('Location: '.$data->url);
                 exit;
             }
-            // hickedy-hack: Für Formular Validierung. Im 1.10 ist das bereits schön gelöst
-            Vps_Trl::getInstance()->overrideTargetLanguage($data->getLanguage());
+            $root->setCurrentPage($data);
+
             $page = $data->getComponent();
             $page->sendContent();
 

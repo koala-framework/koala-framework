@@ -137,11 +137,11 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }
         
         for (var action in data.actions) {
-        	if (data.actions[action]) {
+            if (data.actions[action]) {
                 this.getAction(action).enable();
-        	} else {
+            } else {
                 this.getAction(action).disable();
-        	}
+            }
         }
 
         this.contextMenu.items.each(function(i) {
@@ -156,14 +156,15 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }, this);
         var actionsAdded = 0;
         data.editComponents.each(function(editComponent) {
+        	var editKey = editComponent.componentId;
             var actionKey = editComponent.componentClass+'-'+editComponent.type;
-            if (!this.editActions[actionKey]) {
-                this.editActions[actionKey] = new Ext.Action({
+            if (!this.editActions[editKey]) {
+                this.editActions[editKey] = new Ext.Action({
                     text    : this.componentConfigs[actionKey].title,
                     handler : function (o, e) {
                         var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
                         node.attributes.editComponents.each(function(editComponent) {
-                            if (editComponent.componentClass+'-'+editComponent.type == o.actionKey) {
+                        	if (editComponent.componentId == o.editKey) {
                                 this.loadComponent({
                                     id: editComponent.componentId,
                                     componentClass: editComponent.componentClass,
@@ -180,12 +181,13 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                     icon    : this.componentConfigs[actionKey].icon,
                     cls     : 'x-btn-text-icon',
                     scope   : this,
-                    actionKey: actionKey
+                    actionKey: actionKey,
+                    editKey: editKey
                 });
             }
-            this.editActions[actionKey].setDisabled(data.disabled);
-            this.contextMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[actionKey]));
-            this.pageButtonMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[actionKey]));
+            this.editActions[editKey].setDisabled(data.disabled);
+            this.contextMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[editKey]));
+            this.pageButtonMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[editKey]));
             actionsAdded++;
         }, this);
     },

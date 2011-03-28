@@ -12,10 +12,11 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     public function __construct($fieldname = null, $fieldLabel = null)
     {
         parent::__construct($fieldname, $fieldLabel);
+        $this->setFrontendButtonText(trlVpsStatic('Browse').'...');
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->setAllowOnlyImages(false);
         $this->setMaxResolution(false);
-        $this->setXtype('swfuploadfield');
+        $this->setXtype('vps.file');
         $maxSize = ini_get('upload_max_filesize');
         if (strtolower(substr($maxSize, -1))=='k') {
             $maxSize = substr($maxSize, 0, -1)*1024;
@@ -27,6 +28,13 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         $this->setFileSizeLimit($maxSize.' B');
     }
 
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'frontendButtonText';
+        return $ret;
+    }
+
     public function getMetaData($model)
     {
         $ret = parent::getMetaData($model);
@@ -36,7 +44,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
     public function load($row, $postData = array())
     {
-        if ($this->getSave() === false || $this->getInternalSave() === false) {
+        if ($this->getSave() === false || !$row) {
             return array();
         }
 
@@ -71,15 +79,16 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     {
         $ret = parent::validate($row, $postData);
 
-        if ($this->getSave() !== false && $this->getInternalSave() !== false) {
+        if ($this->getSave() !== false) {
             $data = $this->_getValueFromPostData($postData);
             if ($data) {
                 $fileModel = $row->getModel()->getReferencedModel($this->getName());
                 $row = $fileModel->getRow($data);
                 if ($this->getAllowOnlyImages() && substr($row->mime_type, 0, 6) !=  'image/') {
-                    $name = $this->getFieldLabel();
-                    if (!$name) $name = $this->getName();
-                    $ret[] = $name.': '.trlVps('This is not an image.');
+                    $ret[] = array(
+                        'message' => trlVps('This is not an image.'),
+                        'field' => $this
+                    );
                 }
             }
         }
@@ -90,7 +99,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     {
         $postData = parent::processInput($row, $postData);
 
-        if ($this->getSave() === false || $this->getInternalSave() === false) return $postData;
+        if ($this->getSave() === false) return $postData;
 
         if (isset($postData[$this->getFieldName().'_upload_id'])
             && (!isset($postData[$this->getFieldName()])
@@ -137,7 +146,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
-        if ($this->getSave() === false || $this->getInternalSave() === false) return;
+        if ($this->getSave() === false) return;
 
         $ref = $row->getModel()->getReference($this->getName());
         $row->{$ref['column']} = $postData[$this->getFieldName()];
@@ -146,7 +155,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     public function getTemplateVars($values, $namePostfix = '')
     {
         $name = $this->getFieldName();
-        $value = $values[$name];
+        $value = isset($values[$name]) ? $values[$name] : null;
         $ret = parent::getTemplateVars($values);
 
         $name = htmlspecialchars($name);
@@ -156,15 +165,19 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
                         " value=\"$value[uploadId]\" />";
             if ($value['image']) {
-                //todo: with und height von image
+                //todo: width und height von image
                 $ret['html'] .= " <img src=\"/vps/media/upload/preview?uploadId=$value[uploadId]&hashKey=$value[hashKey]&amp;size=frontend\" alt=\"\" width=\"100\" height=\"100\" />";
             }
         }
         $ret['html'] .= '</div>';
         $ret['html'] .= "<div class=\"vpsFormFieldFileInnerContent\">\n";
-        $ret['html'] .= "<div class=\"imagePath\">\n";
-        $ret['html'] .= "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
-                        " style=\"width: {$this->getWidth()}px\" />";
+        $ret['html'] .= "<div class=\"imagePath vpsFormFieldFileUploadWrapper\">\n";
+            $ret['html'] .= "<input class=\"fileSelector\" type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
+                            " style=\"width: {$this->getWidth()}px\" onchange=\"document.getElementById(this.id+'_underlayText').value = this.value;\" />";
+            $ret['html'] .= '<div class="underlayFileSelector">';
+            $ret['html'] .= '<input type="text" id="'.$ret['id'].'_underlayText" style="width: '.$this->getWidth().'px;" />';
+            $ret['html'] .= ' <a href="#" class="vpsFormFieldFileUploadButton" onclick="return false;">'.$this->getFrontendButtonText().'</a>';
+            $ret['html'] .= '</div>';
         $ret['html'] .= '</div>';
         if ($value) {
             $ret['html'] .= "<div class=\"imageTitle\">\n";
@@ -172,7 +185,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $helper = new Vps_View_Helper_FileSize();
             $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
             $ret['html'] .= '</div>';
-            $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete Image").'</button></div>';
+            $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete").'</button></div>';
             $uploadId = $value['uploadId'];
         } else {
             $uploadId = '0';

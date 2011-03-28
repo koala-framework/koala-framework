@@ -23,12 +23,12 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        $fields = array('parent_id', 'pos', 'visible', 'name', 'is_home');
+        $fields = array('parent_id', 'pos', 'visible', 'is_home');
         if (!$this->_tableLoaded &&
             in_array($name, $fields) &&
             is_numeric($this->componentId)
         ) {
-            $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+            $m = $this->_data->generator->getModel();
             if (isset($this->_data->row) && $row = $m->getRow($this->_data->row->id)) {
                 foreach ($fields as $field) {
                     $this->_data->$field = $row->$field;
@@ -38,9 +38,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
         }
         if ($name == 'id') $name = 'componentId';
         if (isset($this->_data->$name)) {
-            $ret = $this->_data->$name;
-            if ($name == 'tags') $ret = implode(',', $ret);
-            return $ret;
+            return $this->_data->$name;;
         } else if ($name == 'parent_id' && $this->_data->parent) {
             return $this->_data->parent->componentId;
         } else {
@@ -96,7 +94,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function delete()
     {
         $this->_beforeDelete();
-        $m = Vps_Model_Abstract::getInstance('Vpc_Root_Category_GeneratorModel');
+        $m = $this->_data->generator->getModel();
         $m->getRow($this->_data->row->id)->delete();
         $this->_afterDelete();
     }

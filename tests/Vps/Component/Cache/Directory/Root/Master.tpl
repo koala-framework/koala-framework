@@ -1,0 +1,1 @@
+<?= $this->component($this->boxes['box']) ?> <?= $this->component($this->boxes['boxUnique']) ?>

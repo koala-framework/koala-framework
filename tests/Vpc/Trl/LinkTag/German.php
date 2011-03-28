@@ -19,6 +19,7 @@ class Vpc_Trl_LinkTag_German extends Vpc_Abstract
             'component' => 'Vpc_Trl_LinkTag_LinkTag_Component',
             'name' => 'test3',
         );
+        $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
 }

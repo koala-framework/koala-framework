@@ -195,7 +195,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                 $p = $p->getPageOrRoot();
                 $select->where(new Vps_Model_Select_Expr_Or(array(
                     new Vps_Model_Select_Expr_StartsWith('component_id', $p->dbId.'-'),
-                    new Vps_Model_Select_Expr_Equals('component_id', $p->dbId),
+                    new Vps_Model_Select_Expr_Equal('component_id', $p->dbId),
                 )));
             }
         }
@@ -241,9 +241,14 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $select;
     }
 
+    protected function _getComponentIdFromRow($parentData, $row)
+    {
+        return $parentData->componentId . $this->_idSeparator . $this->_getIdFromRow($row);
+    }
+
     protected function _formatConfig($parentData, $row)
     {
-        $componentId = $parentData->componentId . $this->_idSeparator . $this->_getIdFromRow($row);
+        $componentId = $this->_getComponentIdFromRow($parentData, $row);
         $dbId = $this->_getIdFromRow($row);
         if (isset($this->_settings['dbIdShortcut'])) {
             $dbId = $this->_settings['dbIdShortcut'] . $dbId;
@@ -251,19 +256,13 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $dbId = $parentData->dbId . $this->_idSeparator . $dbId;
         }
 
-        if (count($this->_settings['component']) > 1) {
-            if (isset($row->component)) {
-                if (!isset($this->_settings['component'][$row->component]) || !$this->_settings['component'][$row->component]) {
-                    throw new Vps_Exception("Component stored in table does is not valid child: '{$row->component}' (for component '$this->_class')");
-                }
-                $componentClass = $this->_settings['component'][$row->component];
-            } else {
-                throw new Vps_Exception("Either only one component or field 'component' in table has to exist for " . get_class($this) . " ($this->_class).");
-            }
+        if (count($this->_settings['component']) > 1 && isset($row->component)) {
+            $componentKey = $row->component;
         } else {
-            reset($this->_settings['component']);
-            $componentClass = current($this->_settings['component']);
+            $componentKey = null;
         }
+        $componentClass = $this->_getChildComponentClass($componentKey, $parentData);
+
         $data = array(
             'componentId' => $componentId,
             'dbId' => $dbId,
@@ -330,20 +329,12 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    public function getCacheVars($parentData)
+    // TODO Cache
+    public function getStaticCacheVarsForMenu()
     {
-        $field = null;
-        $id = null;
-        if ($parentData && $this->_getModel()->hasColumn('component_id') && $this->_getModel()->getPrimaryKey() != 'component_id') {
-            $field = 'component_id';
-            $id = $parentData->dbId;
-        }
-        $ret = array(
-            array(
-                'model' => $this->getModel(),
-                'field' => $field,
-                'id' => $id
-            )
+        $ret = array();
+        $ret[] = array(
+            'model' => $this->getModel()
         );
         return $ret;
     }

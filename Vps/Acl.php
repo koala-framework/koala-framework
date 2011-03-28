@@ -29,8 +29,11 @@ class Vps_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('vps_debug_activate'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_debug_session-restart'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_debug_php-info'), 'vps_debug');
+        $this->add(new Zend_Acl_Resource('vps_debug_apc'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_debug_assets-dependencies'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_media_upload'));
+        $this->add(new Zend_Acl_Resource('vps_util_apc'));
+        $this->add(new Zend_Acl_Resource('vps_util_render'));
         $this->add(new Zend_Acl_Resource('vps_test'));
         $this->add(new Zend_Acl_Resource('edit_role'));
         $this->add(new Vps_Acl_Resource_EditRole('edit_role_admin', 'admin'), 'edit_role');
@@ -65,6 +68,8 @@ class Vps_Acl extends Zend_Acl
         $this->deny('guest', 'vps_user_self');
         $this->allow('admin', 'vps_debug');
         $this->allow(null, 'vps_media_upload');
+        $this->allow(null, 'vps_util_apc');
+        $this->allow(null, 'vps_util_render');
         $this->allow('admin', 'edit_role');
         $this->allow(null, 'vps_spam_set');
         $this->allow(null, 'vps_debug_session-restart');
@@ -389,6 +394,16 @@ class Vps_Acl extends Zend_Acl
             if (!$allowCheck) {
                 $sharedDataClass = Vpc_Abstract::getFlag($class, 'sharedDataClass');
                 $allowCheck = ($component->componentClass == $sharedDataClass);
+            }
+
+            //generator plugins erlauben
+            if (!$allowCheck && $component->componentId != 'root') { //root hat keinen generator
+                foreach ($component->generator->getGeneratorPlugins() as $p) {
+                    if ($class == get_class($p)) {
+                        $allowCheck = true;
+                        break;
+                    }
+                }
             }
 
             // Nötig für news-link in link-komponente die einen eigenen controller hat

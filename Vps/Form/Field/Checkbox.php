@@ -5,29 +5,38 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('checkbox');
-        $this->setErrorText(trlVps("Please mark the checkbox"));
+        $this->setEmptyMessage(trlVpsStatic("Please mark the checkbox"));
+    }
+
+    /**
+     * @deprecated
+     */
+    public function setErrorText()
+    {
+        throw new Vps_Exception('setErrorText is deprecated, use setEmptyText');
     }
 
     protected function _getTrlProperties()
     {
         $ret = parent::_getTrlProperties();
         $ret[] = 'boxLabel';
-        $ret[] = 'errorText';
         return $ret;
     }
 
-    protected function _validateNotAllowBlank($data, $name)
+    protected function _addValidators()
     {
-        $ret = array();
-        if (!$data) {
-            $msg = '';
-            if (trim($name)) {
-                $msg .= $name.': ';
+        parent::_addValidators();
+
+        if ($this->getAllowBlank() === false
+            || $this->getAllowBlank() === 0
+            || $this->getAllowBlank() === '0'
+        ) {
+            $v = new Vps_Validate_NotEmptyNotZero();
+            if ($this->getEmptyMessage()) {
+                $v->setMessage(Vps_Validate_NotEmpty::IS_EMPTY, $this->getEmptyMessage());
             }
-            $msg .= $this->getErrorText();
-            $ret[] = $msg;
+            $this->addValidator($v, 'notEmpty');
         }
-        return $ret;
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '')

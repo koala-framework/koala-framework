@@ -151,7 +151,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             plain:true,
             footer:true,
             closable:false
-        });;
+        });
         var dlg = new Ext.Window(cfg);
 
         if (typeof cfg.showCancel == 'undefined' || cfg.showCancel) {
@@ -316,7 +316,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             if (options.vpsCallback.success) {
                 options.vpsCallback.success.call(options.vpsCallback.scope, response, options, r);
             }
-        };
+        }
     },
     vpsNoJsonSuccess: function(response, options)
     {

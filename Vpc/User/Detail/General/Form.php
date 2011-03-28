@@ -41,6 +41,7 @@ class Vpc_User_Detail_General_Form extends Vpc_Abstract_Composite_Form
                     ->setWidth(250);
 
         $fieldsContainer->add(new Vps_Form_Field_Select('gender', trlVps('Gender')))
+                    ->setShowNoSelection(true)
                     ->setValues(array(
                             'female' => trlVps('Female'),
                             'male'   => trlVps('Male')

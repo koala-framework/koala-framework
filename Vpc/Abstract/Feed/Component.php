@@ -18,10 +18,12 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
     public function getXml()
     {
         $cache = Vps_Component_Cache::getInstance();
-        if (!$xml = $cache->load($this->getData()->componentId)) {
+        if (!$xml = $cache->load($this->getData())) {
             $xml = $this->_getFeedXml();
-            $cache->save($xml, $this->getData()->componentId, $this->getData()->componentClass);
-            $cache->saveCacheVars($this->getData(), $this->getCacheVars(), $this->getData()->componentId);
+            $cache->save($this->getData(), $xml);
+            foreach ($this->getData()->getComponent()->getCacheMeta() as $m) {
+                Vps_Component_Cache::getInstance()->saveMeta($component, $m);
+            }
         }
         return $xml;
     }

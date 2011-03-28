@@ -1,212 +1,275 @@
 <?php
 /**
- * @group Cache
+ * @group Component_Cache
  */
-class Vps_Component_Cache_Test extends Vpc_TestAbstract
+class Vps_Component_Cache_Test extends Vps_Test_TestCase
 {
-    public function setUp()
-    {
-        parent::setUp('Vpc_Root_Component');
-    }
-
-    public function testCacheId()
+    public function testDeleteByModelSimple()
     {
         $cache = Vps_Component_Cache::getInstance();
+        $cacheModel = $cache->getModel('cache');
 
-        $cacheId = $cache->getCacheId('root');
-        $this->assertEquals('root', $cacheId);
+        // Cache-Row einfügen
+        $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_class' => 'Vpc_Foo', 'type' => 'component'),
+            array('component_class' => 'Vpc_Bar', 'type' => 'component'),
+            array('component_class' => 'Vpc_FooBar', 'type' => 'component')
+        ));
 
-        $cacheId = $cache->getCacheId('root', Vps_Component_Cache::TYPE_MASTER);
-        $this->assertEquals('root-master', $cacheId);
+        // Meta-Row einfügen
+        $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model'),
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Bar', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model'),
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_FooBar', 'pattern' => '{id}', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model'), //darf nicht gelöscht werden, da pattern nur bei row aktiv wird
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_FooBar', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Callback') //darf nicht gelöscht werden
+        ));
 
-        $cacheId = $cache->getCacheId('root', Vps_Component_Cache::TYPE_HASCONTENT, 1);
-        $this->assertEquals('root-hasContent1', $cacheId);
-
-        $cacheId = $cache->getCacheId('root', Vps_Component_Cache::TYPE_PARTIAL, 2);
-        $this->assertEquals('root~2', $cacheId);
+        $cache->cleanByModel(new Vps_Model_FnF());
+        $this->assertEquals(1, $cacheModel->countActiveRows());
     }
 
-    public function testSave()
+    public function testDeleteByModelComponent()
     {
         $cache = Vps_Component_Cache::getInstance();
-        $cache->save('root', 'root', 'Vpc_Root');
-        $cache->save('partial', 'root~2', 'Vpc_Root', 2);
-        $cache->save('foobar', 'root', 'Vpc_Root');
+        $cacheModel = $cache->getModel('cache');
 
-        $rows = $cache->getModel()->getRows()->toArray();
-        $this->assertEquals(count($rows), 2);
-        $this->assertEquals($rows[1]['id'], 'root~2');
-        $this->assertEquals($rows[1]['page_id'], 'root');
-        $this->assertEquals($rows[1]['component_class'], 'Vpc_Root');
-        $this->assertEquals($rows[1]['content'], 'partial');
-        $this->assertTrue($rows[1]['expire'] > time());
-        $this->assertEquals($rows[0]['content'], 'foobar');
+        // Cache-Row einfügen
+        $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_class' => 'Vpc_Foo', 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_class' => 'Vpc_Bar', 'type' => 'component', 'component_class' => 'Vpc_Foo')
+        ));
+
+        // Meta-Row einfügen
+        $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model')
+        ));
+
+        // Component-Meta-Row einfügen
+        $cache->getModel('metaComponent')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_class' => 'Vpc_Foo', 'target_component_class' => 'Vpc_Bar', 'meta_class' => 'Vps_Component_Cache_Meta_Component')
+        ));
+
+        $cache->cleanByModel(new Vps_Model_FnF());
+        $this->assertEquals(0, $cacheModel->countActiveRows());
     }
 
-    public function testSaveMeta()
+    public function testDeleteByRowSimple()
     {
         $cache = Vps_Component_Cache::getInstance();
-        $cache->saveMeta('TestModel', null, 'a');
-        $cache->saveMeta('TestModel', null, 'b', Vps_Component_Cache::META_CALLBACK);
-        $cache->saveMeta('TestModel', null, 'c', Vps_Component_Cache::META_COMPONENT_CLASS);
-        $cache->saveMeta('TestModel', 1, 'a');
-        $cache->saveMeta('TestModel', 1, 'a');
+        $cacheModel = $cache->getModel('cache');
 
-        $rows = $cache->getMetaModel()->getRows()->toArray();
-        $this->assertEquals(4, count($rows));
-        $this->assertEquals('TestModel', $rows[0]['model']);
-        $this->assertEquals('', $rows[0]['id']);
-        $this->assertEquals('a', $rows[0]['value']);
-        $this->assertEquals('b', $rows[1]['value']);
-        $this->assertEquals('c', $rows[2]['value']);
-        $this->assertEquals(Vps_Component_Cache::META_CACHE_ID, $rows[0]['type']);
-        $this->assertEquals(Vps_Component_Cache::META_CALLBACK, $rows[1]['type']);
-        $this->assertEquals(Vps_Component_Cache::META_COMPONENT_CLASS, $rows[2]['type']);
-        $this->assertEquals(1, $rows[3]['id']);
+        // Cache-Row einfügen
+        $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_id' => '1', 'db_id' => '1', 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => '2', 'db_id' => '2', 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => '3', 'db_id' => '3', 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+        ));
+
+        // Meta-Row einfügen
+        $cache->getModel('metaRow')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array(
+                'model' => 'Vps_Model_FnF',
+                'column' => 'id',
+                'value' => 1,
+                'component_id' => 1,
+                'component_class' => 'Vpc_Foo',
+                'meta_class' => 'Vps_Component_Cache_Meta_Row'
+            ),
+            array(
+                'model' => 'Vps_Model_FnF',
+                'column' => 'foo',
+                'value' => 'yyz',
+                'component_id' => 2,
+                'component_class' => 'Vpc_Foo',
+                'meta_class' => 'Vps_Component_Cache_Meta_Row'
+            ),
+            array(
+                'model' => 'Vps_Foo_Model',
+                'column' => 'id',
+                'value' => 1,
+                'component_id' => 3,
+                'component_class' => 'Vpc_Foo',
+                'meta_class' => 'Vps_Component_Cache_Meta_Row'
+            ),
+        ));
+
+        // Datenmodel
+        $model = new Vps_Model_FnF(array(
+            'columns' => array('id', 'foo'),
+            'primaryKey' => 'id',
+            'data' => array(
+                array('id' => 1, 'foo'=>'xxy'),
+                array('id' => 2, 'foo'=>'yyz'),
+                array('id' => 3, 'foo'=>'aab')
+            )
+        ));
+
+        $cache->cleanByRow($model->getRow(3));
+        $this->assertEquals(3, $cacheModel->countActiveRows());
+
+        $cache->cleanByRow($model->getRow(1));
+        $this->assertEquals(2, $cacheModel->countActiveRows());
+
+        $cache->cleanByRow($model->getRow(2));
+        $this->assertEquals(1, $cacheModel->countActiveRows());
     }
 
-    public function testDelete()
+    public function testDeleteByRowWithComponent()
     {
         $cache = Vps_Component_Cache::getInstance();
-        $cache->save('', 'a', 'root', 'Vpc_Bar');
-        $cache->save('', 'b', 'Vpc_Bar');
-        $cache->save('', 'c1', 'Vpc_Foo');
-        $cache->save('', 'c2', 'Vpc_Foo');
+        $cacheModel = $cache->getModel('cache');
 
-        $this->assertEquals(4, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_ID, 'a');
-        $this->assertEquals(3, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_COMPONENT_CLASS, 'Vpc_Foo');
-        $this->assertEquals(1, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_ALL);
-        $this->assertEquals(0, $cache->getModel()->countRows());
+        // Cache-Row einfügen
+        $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_id' => 1, 'db_id' => 1, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => 2, 'db_id' => 2, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => 3, 'db_id' => 3, 'type' => 'component', 'component_class' => 'Vpc_Foo')
+        ));
+
+        // Meta-Row einfügen
+        $cache->getModel('metaRow')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('model' => 'Vps_Model_FnF', 'column' => 'id', 'value' => 1, 'component_id' => 1, 'component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Row')
+        ));
+
+        // Component-Meta-Row einfügen
+        $cache->getModel('metaComponent')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('db_id' => 1, 'target_db_id' => 2, 'target_component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Component'), // wenn 1 gelöscht wird, wird auch 2 gelöscht
+            array('db_id' => 2, 'target_db_id' => 3, 'target_component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Component'),
+            array('db_id' => 3, 'target_db_id' => 1, 'target_component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Component') // wegen Rekursion
+        ));
+
+        // Datenmodel
+        $model = new Vps_Model_FnF(array('data' => array(array('id' => 1))));
+
+        $cache->cleanByRow($model->getRow(1));
+        $this->assertEquals(0, $cacheModel->countActiveRows());
     }
 
-    public function testDeleteByMeta()
+    public function testDeleteByRowWithStaticComponent()
     {
         $cache = Vps_Component_Cache::getInstance();
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_TestModel');
-        $cache->saveMeta($model, null, 'a');
-        $cache->saveMeta($model, 1, 'b');
-        $cache->saveMeta($model, 2, 'Vpc_Foo', Vps_Component_Cache::META_COMPONENT_CLASS);
-        $cache->save('', 'a', 'Vpc_Bar');
-        $cache->save('', 'b', 'Vpc_Bar');
-        $cache->save('', 'c1', 'Vpc_Foo');
-        $cache->save('', 'c2', 'Vpc_Foo');
+        $cacheModel = $cache->getModel('cache');
 
-        $this->assertEquals(4, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model->getRow(3));
-        $this->assertEquals(3, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model->getRow(2));
-        $this->assertEquals(1, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model->getRow(1));
-        $this->assertEquals(0, $cache->getModel()->countRows());
+        // Cache-Row einfügen
+        $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_id' => 1, 'db_id' => 1, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => 2, 'db_id' => 2, 'type' => 'component', 'component_class' => 'Vpc_Bar')
+        ));
+
+        // Meta-Row einfügen
+        $cache->getModel('metaRow')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('model' => 'Vps_Model_FnF', 'column' => 'id', 'value' => 1, 'component_id' => 1, 'component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Row')
+        ));
+
+        // Component-Meta-Row einfügen
+        $cache->getModel('metaComponent')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_class' => 'Vpc_Foo', 'db_id' => '', 'target_component_class' => 'Vpc_Bar', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Component'),
+        ));
+
+        // Datenmodel
+        $model = new Vps_Model_FnF(array('data' => array(array('id' => 1))));
+
+        $cache->cleanByRow($model->getRow(1));
+        $this->assertEquals(0, $cacheModel->countActiveRows());
     }
 
-    public function testDeleteByMetaModel()
+    public function testDeleteByRowPatternSimple()
     {
         $cache = Vps_Component_Cache::getInstance();
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_TestModel');
-        $cache->saveMeta($model, null, 'a');
-        $cache->saveMeta($model, 1, 'b');
-        $cache->save('', 'a', 'Vpc_Bar');
-        $cache->save('', 'b', 'Vpc_Bar');
+        $cacheModel = $cache->getModel('cache');
 
-        $this->assertEquals(2, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model);
-        $this->assertEquals(0, $cache->getModel()->countRows());
+        // Cache-Row einfügen
+        $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_id' => 'a_1', 'db_id' => 'a_1', 'component_class' => 'Vpc_Foo', 'type' => 'component'),
+            array('component_id' => 'a_2', 'db_id' => 'a_2', 'component_class' => 'Vpc_Foo', 'type' => 'component')
+        ));
+
+        // Meta-Row einfügen
+        $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'pattern' => '{component_id}_{id}', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model')
+        ));
+
+        // Datenmodel
+        $model = new Vps_Model_FnF(array(
+            'data' => array(array('id' => 1, 'component_id' => 'a')),
+            'columns' => array('id', 'component_id')
+        ));
+
+        $cache->cleanByRow($model->getRow(1));
+        $this->assertEquals(1, $cacheModel->countActiveRows());
     }
 
-    public function testDeleteByMetaField()
+    public function testDeleteByRowPatternWildcard()
     {
         $cache = Vps_Component_Cache::getInstance();
-        $model = Vps_Model_Abstract::getInstance('Vps_Component_Cache_TestModelField');
+        $cacheModel = $cache->getModel('cache');
 
-        $cache->saveMeta($model, 7, 'a', Vps_Component_Cache::META_CACHE_ID, 'foo');
-        $cache->saveMeta($model, null, 'b', Vps_Component_Cache::META_CACHE_ID, 'foo');
-        $cache->save('', 'a', 'Vpc_Bar');
-        $cache->save('', 'b', 'Vpc_Bar');
+        // Cache-Row einfügen
+        $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_id' => 'a_1', 'db_id' => 'a_1', 'component_class' => 'Vpc_Foo', 'type' => 'component'),
+            array('component_id' => 'b_1', 'db_id' => 'b_1', 'component_class' => 'Vpc_Foo', 'type' => 'component'),
+            array('component_id' => 'c_1', 'db_id' => 'c_1', 'component_class' => 'Vpc_Bar', 'type' => 'component'),
+            array('component_id' => 'a_2', 'db_id' => 'a_2', 'component_class' => 'Vpc_Foo', 'type' => 'component')
+        ));
 
-        $this->assertEquals(2, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model->getRow(2));
-        $this->assertEquals(1, $cache->getModel()->countRows());
-        $cache->clean(Vps_Component_Cache::CLEANING_MODE_META, $model->getRow(1));
-        $this->assertEquals(0, $cache->getModel()->countRows());
+        // Meta-Row einfügen
+        $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'pattern' => '%_{id}', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Model')
+        ));
+
+        // Datenmodel
+        $model = new Vps_Model_FnF(array(
+            'data' => array(array('id' => 1, 'component_id' => 'a')),
+            'columns' => array('id', 'component_id')
+        ));
+
+        $cache->cleanByRow($model->getRow(1));
+        $this->assertEquals(2, $cacheModel->countActiveRows());
     }
 
-    public function testDeleteWithObserver()
+    public function testStaticCallback()
     {
         $cache = Vps_Component_Cache::getInstance();
-        $cache->saveMeta('Vps_Component_Cache_TestModel', 1, 'a');
-        $cache->saveMeta('Vps_Component_Cache_TestModel', null, 'b');
-        $cache->save('', 'a', 'Vpc_Foo');
-        $cache->save('', 'b', 'Vpc_Foo');
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Cache_TestCallbackRoot');
 
-        $model = new Vps_Component_Cache_TestModel();
+        // Meta-Row einfügen
+        $cache->getModel('metaModel')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('model' => 'Vps_Model_FnF', 'component_class' => 'Vpc_Foo', 'pattern' => '{id}', 'meta_class' => 'Vps_Component_Cache_Meta_Static_Callback')
+        ));
 
-        $this->assertEquals(2, $cache->getModel()->countRows());
-
-        $model->getRow(2)->save();
-        Vps_Component_ModelObserver::getInstance()->process();
-        $this->assertEquals(1, $cache->getModel()->countRows());
-
-        $model->getRow(1)->save();
-        Vps_Component_ModelObserver::getInstance()->process();
-        $this->assertEquals(0, $cache->getModel()->countRows());
-    }
-
-    public function testDeleteCallback()
-    {
-        $model = new Vps_Component_Cache_TestModel();
+        // Datenmodel
+        $model = new Vps_Model_FnF(array('data' => array(array('id' => 1))));
         $row = $model->getRow(1);
 
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Cache_Root');
+        $cache->cleanByRow($row);
+
         $root = Vps_Component_Data_Root::getInstance();
-
-        $cache = Vps_Component_Cache::getInstance();
-        $cache->saveMeta('Vps_Component_Cache_TestModel', null, 'root', Vps_Component_Cache::META_CALLBACK);
-
-        $row->save();
-        Vps_Component_ModelObserver::getInstance()->process();
-
         $callbacks = $root->getComponent()->getCallbacks();
         $this->assertEquals(1, count($callbacks));
         $this->assertEquals($row->toArray(), $callbacks[0]->toArray());
     }
 
-    public function testPreload()
+    public function testDeleteWithObserver()
     {
+        Vps_Component_Data_Root::setComponentClass('Vpc_Root_Component');
         $cache = Vps_Component_Cache::getInstance();
-        $cache->save('a', 'a', 'Vpc_Foo');
-        $cache->save('b', 'b', 'Vpc_Foo');
 
-        $cache->preload(array('a', 'r'));
-        $this->assertTrue($cache->shouldBeLoaded('a'));
-        $this->assertFalse($cache->shouldBeLoaded('b'));
-        $this->assertTrue($cache->shouldBeLoaded('r'));
-        $this->assertTrue($cache->isLoaded('a'));
-        $this->assertFalse($cache->isLoaded('b'));
-        $this->assertFalse($cache->isLoaded('r'));
+        $cacheModel = $cache->getModel('cache');
+        $cacheModel->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('component_id' => 1, 'db_id' => 1, 'type' => 'component', 'component_class' => 'Vpc_Foo'),
+            array('component_id' => 2, 'db_id' => 2, 'type' => 'component', 'component_class' => 'Vpc_Foo')
+        ));
+
+        $cache->getModel('metaRow')->import(Vps_Model_Abstract::FORMAT_ARRAY, array(
+            array('model' => 'Vps_Model_FnF', 'column' => 'id', 'value' => 1, 'component_id' => 1, 'component_class' => 'Vpc_Foo', 'meta_class' => 'Vps_Component_Cache_Meta_Row')
+        ));
+
+        Vps_Component_ModelObserver::clearInstance();
+        $model = new Vps_Model_FnF(array('data' => array(array('id' => 1))));
+        $model->getRow(1)->save();
+        Vps_Component_ModelObserver::getInstance()->setSkipFnf(false);
+        Vps_Component_ModelObserver::getInstance()->process();
+
+        $this->assertEquals(1, $cacheModel->countActiveRows());
     }
-
-    public function testPreloadPage()
-    {
-        $cache = Vps_Component_Cache::getInstance();
-        $cache->save('a', 'a', 'a');
-        $cache->save('a-1', 'a-1', 'Vpc_Foo');
-        $cache->save('a-2', 'a-2', 'Vpc_Foo');
-        $cache->save('a_1', 'a_1', 'Vpc_Foo');
-
-        $cache->preload(array('a-1'));
-        $this->assertFalse($cache->isLoaded('a'));
-        $this->assertTrue($cache->isLoaded('a-1'));
-        $this->assertFalse($cache->isLoaded('a-2'));
-
-        $cache->preload(array('a'));
-        $this->assertTrue($cache->isLoaded('a'));
-        $this->assertTrue($cache->isLoaded('a-1'));
-        $this->assertTrue($cache->isLoaded('a-2'));
-        $this->assertFalse($cache->isLoaded('a_1'));
-    }
-
 }

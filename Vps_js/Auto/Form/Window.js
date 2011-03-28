@@ -129,7 +129,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         this.setTitle(this.editTitle);
         this.show();
         if (id) {
-            this.getAutoForm().load(id);
+            this.getAutoForm().load(id, { focusAfterLoad: true });
         }
     },
 

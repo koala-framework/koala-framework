@@ -5,7 +5,7 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('combobox');
-        $this->setEmptyText(trlVps('no selection'));
+        $this->setEmptyText(trlVpsStatic('no selection'));
     }
 
     protected function _addValidators()

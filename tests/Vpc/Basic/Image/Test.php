@@ -11,12 +11,6 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $this->_root->setFilename(null);
     }
 
-    public function tearDown()
-    {
-        Vps_Component_ModelObserver::getInstance()->clear();
-        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
-    }
-
     public function testUrl()
     {
         $c = $this->_root->getComponentById('1600');
@@ -63,11 +57,10 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
 
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1600));
+        $html = $this->_root->getComponentById(1600)->render();
 
         $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">'.
-            '\s*<img src="/media/Vpc_Basic_Image_FixDimensionComponent/1600/default/74d187822e02d6b7e96b53938519c028/[0-9]+/foo.png" width="100" height="100" alt="" class="" />'.
+            '\s*<img src="/media/Vpc_Basic_Image_FixDimensionComponent/1600/default/74d187822e02d6b7e96b53938519c028/[0-9]+/foo.png" width="100" height="100" alt="" />'.
             '\s*</div>\s*$#ms', $html);
     }
 
@@ -76,8 +69,7 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('1602');
         $this->assertFalse($c->hasContent());
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c);
+        $html = $c->render();
         $this->assertRegExp('#^\s*<div class="vpcBasicImageFixDimensionComponent">\s*</div>\s*$#ms', $html);
     }
 
@@ -127,10 +119,19 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
+
+        Vps_Media::getOutput('Vpc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
+        $c = $this->_root->getComponentById('1605');
+        $row = Vps_Model_Abstract::getInstance('Vpc_Basic_Image_TestModel')->getRow('1605');
+        $row->save();
+        Vps_Component_ModelObserver::getInstance()->process();
+        Vps_Media::getOutput('Vpc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
+        $this->assertEquals(2, Vpc_Basic_Image_ParentImageComponent_Child_Component::$getMediaOutputCalled);
     }
 
     public function testClearOutputCache()
     {
+        Vps_Registry::get('config')->debug->mediaCache = true;
         Vps_Media::getOutputCache()->clean();
 
         Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled = 0;

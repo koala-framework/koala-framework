@@ -22,6 +22,7 @@ class Vps_Form_MultiCheckbox_PhpTest extends Vps_Test_TestCase
         $form->validate($form->getRow(), $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $rows = $m1->getRow(1)->getChildRows('Relation')->toArray();
         $expected = array(
@@ -55,6 +56,7 @@ class Vps_Form_MultiCheckbox_PhpTest extends Vps_Test_TestCase
         $form->validate($form->getRow(), $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $rows = $m2->getRows($m2->select()->whereEquals('data_id', 1))->toArray();
         $expected = array(

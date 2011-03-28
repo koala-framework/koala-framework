@@ -7,7 +7,6 @@ class Vps_Component_Generator_Priority_Page1 extends Vpc_Abstract
         $ret['generators']['box2'] = array(
             'class' => 'Vps_Component_Generator_Box_Static',
             'component' => 'Vpc_Basic_Empty_Component',
-            'priority' => 2,
             'inherit' => true,
             'box' => 'foo'
         );

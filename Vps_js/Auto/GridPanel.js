@@ -18,6 +18,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             'rendergrid',
             'beforerendergrid',
             'deleterow',
+            'cellclick',
             'celldblclick',
             'rowdblclick'
         );
@@ -534,6 +535,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.ignoreCellClicks = false;
             }).defer(500, this);
 
+            this.fireEvent('cellclick', grid, rowIndex, columnIndex, e);
             var col = grid.getColumnModel().config[columnIndex];
             if (col.clickHandler) {
                 col.clickHandler.call(col.scope || this, grid, rowIndex, col, e);
@@ -749,10 +751,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 }
 
                 this.getGrid().stopEditing();
-                this.store.insert(0, record);
+
+                var rowInsertPosition = 0;
+                if (this.insertNewRowAtBottom) {
+                    rowInsertPosition = this.store.getCount();
+                }
+                this.store.insert(rowInsertPosition, record);
                 this.store.newRecords.push(record);
                 if (record.dirty) {
-                    this.getGrid().startEditing(0, i);
+                    this.getGrid().startEditing(rowInsertPosition, i);
                 }
             }
         }

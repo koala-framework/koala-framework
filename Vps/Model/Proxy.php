@@ -1,6 +1,9 @@
 <?php
 class Vps_Model_Proxy extends Vps_Model_Abstract
 {
+    /**
+     * @var Vps_Model_Interface
+     */
     protected $_proxyModel;
     protected $_rowClass = 'Vps_Model_Proxy_Row';
     protected $_rowsetClass = 'Vps_Model_Proxy_Rowset';
@@ -16,6 +19,9 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         parent::_init();
         if (is_string($this->_proxyModel)) {
             $this->_proxyModel = Vps_Model_Abstract::getInstance($this->_proxyModel);
+        }
+        if (!$this->_proxyModel) {
+            throw new Vps_Exception("proxyModel config is required for model '".get_class($this)."'");
         }
         $this->_proxyModel->addProxyContainerModel($this);
     }
@@ -141,7 +147,18 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function deleteRows($where)
     {
-        return $this->_proxyModel->deleteRows($where);
+        Vps_Component_ModelObserver::getInstance()->disable();
+        $ret = $this->_proxyModel->deleteRows($where);
+        Vps_Component_ModelObserver::getInstance()->enable();
+        return $ret;
+    }
+
+    public function updateRows($data, $where)
+    {
+        Vps_Component_ModelObserver::getInstance()->disable();
+        $ret = $this->_proxyModel->updateRows($data, $where);
+        Vps_Component_ModelObserver::getInstance()->enable();
+        return $ret;
     }
 
     public function countRows($where = array())
@@ -169,7 +186,9 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function import($format, $data, $options = array())
     {
+        Vps_Component_ModelObserver::getInstance()->disable();
         $this->_proxyModel->import($format, $data, $options);
+        Vps_Component_ModelObserver::getInstance()->enable();
     }
 
     public function writeBuffer()
@@ -185,5 +204,31 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     public function getSqlForSelect($select)
     {
         return $this->_proxyModel->getSqlForSelect($select);
+    }
+
+    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    {
+        parent::dependentModelRowUpdated($row, $action);
+        $this->_proxyModel->dependentModelRowUpdated($row, $action);
+    }
+
+    public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    {
+        parent::childModelRowUpdated($row, $action);
+        $this->_proxyModel->childModelRowUpdated($row, $action);
+    }
+
+    /**
+     * @internal
+     */
+    public function getExistingRows()
+    {
+        return $this->_rows;
+    }
+
+    public function clearRows()
+    {
+        parent::clearRows();
+        $this->_proxyModel->clearRows();
     }
 }

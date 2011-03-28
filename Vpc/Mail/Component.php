@@ -35,6 +35,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
 
         $ret['mailHtmlStyles'] = array();
         $ret['bcc'] = false;
+        $ret['viewCache'] = false;
         return $ret;
     }
 
@@ -128,13 +129,13 @@ class Vpc_Mail_Component extends Vpc_Abstract
      *
      * @param bool forMail: ob images als attachment angehängt werden sollen oder nicht
      */
-    public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null, $forMail = false)
+    public function getHtml(Vpc_Mail_Recipient_Interface $recipient = null, $attachImages = false)
     {
-        $output = new Vps_Component_Output_Mail();
-        $output->setType(Vps_Component_Output_Mail::TYPE_HTML);
-        $output->setRecipient($recipient);
-        $output->setViewClass($forMail ? 'Vps_View_ComponentMail' : 'Vps_View_Component');
-        $ret = $output->render($this->getData());
+        $renderer = new Vps_Component_Renderer_Mail();
+        $renderer->setRenderFormat(Vps_Component_Renderer_Mail::RENDER_HTML);
+        $renderer->setRecipient($recipient);
+        $renderer->setAttachImages($attachImages);
+        $ret = $renderer->renderComponent($this->getData());
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
         $htmlStyles = $this->getHtmlStyles();
@@ -152,10 +153,10 @@ class Vpc_Mail_Component extends Vpc_Abstract
      */
     public function getText(Vpc_Mail_Recipient_Interface $recipient = null)
     {
-        $output = new Vps_Component_Output_Mail();
-        $output->setType(Vps_Component_Output_Mail::TYPE_TXT);
-        $output->setRecipient($recipient);
-        $ret = $output->render($this->getData());
+        $renderer = new Vps_Component_Renderer_Mail();
+        $renderer->setRenderFormat(Vps_Component_Renderer_Mail::RENDER_TXT);
+        $renderer->setRecipient($recipient);
+        $ret = $renderer->renderComponent($this->getData());
         $ret = str_replace('&nbsp;', ' ', $ret);
         $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);

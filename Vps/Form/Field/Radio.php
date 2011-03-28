@@ -9,6 +9,7 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
         parent::__construct($field_name, $field_label);
         $this->setXtype('radiogroup');
         $this->setOutputType('horizontal');
+        $this->setEmptyMessage(trlVpsStatic('Please choose an option'));
     }
 
     // $this->setOutputType($type)
@@ -40,16 +41,6 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
                 'boxLabel' => $value,
                 'inputValue' => $id
             );
-        }
-        return $ret;
-    }
-
-    protected function _validateNotAllowBlank($data, $name)
-    {
-        $ret = array();
-        $v = new Vps_Validate_NotEmpty();
-        if (!$v->isValid($data)) {
-            $ret[] = $name.": ".trlVps("Please choose an option");
         }
         return $ret;
     }

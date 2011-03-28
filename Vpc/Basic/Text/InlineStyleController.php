@@ -1,7 +1,6 @@
 <?php
 class Vpc_Basic_Text_InlineStyleController extends Vps_Controller_Action_Auto_Form
 {
-    protected $_modelName = 'Vpc_Basic_Text_StylesModel';
     protected $_buttons = array('save');
     protected $_permissions = array('save', 'add');
     protected $_formName = 'Vpc_Basic_Text_InlineStyleForm';
@@ -14,6 +13,7 @@ class Vpc_Basic_Text_InlineStyleController extends Vps_Controller_Action_Auto_Fo
         ) {
             throw new Vps_Exception("Styles are disabled");
         }
+        $this->_model = Vps_Model_Abstract::getInstance(Vpc_Abstract::getSetting($class, 'stylesModel'));
         parent::init();
     }
 

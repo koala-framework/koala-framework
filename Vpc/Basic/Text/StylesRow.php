@@ -8,11 +8,11 @@ class Vpc_Basic_Text_StylesRow extends Vps_Model_Proxy_Row
     protected function _afterSave()
     {
         parent::_afterSave();
-        Vpc_Basic_Text_StylesModel::removeCache();
+        $this->getModel()->removeCache();
     }
     protected function _afterDelete()
     {
         parent::_afterDelete();
-        Vpc_Basic_Text_StylesModel::removeCache();
+        $this->getModel()->removeCache();
     }
 }
