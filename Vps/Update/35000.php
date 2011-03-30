@@ -68,7 +68,7 @@ class Vps_Update_35000 extends Vps_Update
                 foreach ($db->fetchCol("SELECT DISTINCT $fieldname FROM $tablename") as $oldval) {
                     if ($oldval == '') continue;
                     $val = @unserialize($oldval);
-                    if (!$val) continue;
+                    if ($val === false) continue;
                     $val = json_encode($val);
                     $val = str_replace('\u', '\\\\u', $val);
                     $sql = "UPDATE $tablename SET $fieldname='$val' WHERE $fieldname='$oldval'";
