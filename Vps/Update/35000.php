@@ -46,7 +46,24 @@ class Vps_Update_35000 extends Vps_Update
 
         $db->query("SET NAMES utf8");
         foreach ($fields as $tablename => $fieldnames) {
+            // checken, ob das feld wirklich in der datenbank-tabelle existiert
+            // wenn das entsprechende feld nicht existiert, würde sonst ein fehler auftreten.
+            // das hat folgenden hintergrund:
+            // wenn eine komponente mit einem update-script >35000 ein 'data' field
+            // anlegt, dann will er das hier durchlaufen und updaten, weils ja im
+            // php-code schon als sibling angegeben ist. und das problem ist dann,
+            // dass das echte DB-Feld erst mit dem script >35000 angelegt wird.
+            // wenn so ein fall auftritt (zB bei der Tabelle vpc_composite_list)
+            // dann ignorieren wir das updaten dieses feldes einfach weil sowieso
+            // noch nix drinsteht wenns erst später angelegt wird.
+            $reallyExistingFieldsInTable = array();
+            foreach ($db->query("SHOW COLUMNS FROM {$tablename}")->fetchAll() as $reallyFieldRow) {
+                $reallyExistingFieldsInTable[] = $reallyFieldRow['Field'];
+            }
+
             foreach ($fieldnames as $fieldname) {
+                if (!in_array($fieldname, $reallyExistingFieldsInTable)) continue; // siehe fetter kommentar paar zeilen drüber
+
                 //$sql = "UPDATE $tablename SET $fieldname=REPLACE($fieldname, 'u00', '\\\\u00')";
                 foreach ($db->fetchCol("SELECT DISTINCT $fieldname FROM $tablename") as $oldval) {
                     if ($oldval == '') continue;
