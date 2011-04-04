@@ -78,6 +78,11 @@ Vps.GoogleMap.maps = [];
 Vps.GoogleMap.Map = function(config) {
     if (!config.mapContainer) throw new Error('config value mapContainer not set');
 
+    this.addEvents({
+        'show': true,
+        'useFrom': true
+    });
+
     this.mapContainer = Ext.get(config.mapContainer);
     this.config = config;
     if (typeof this.config.width == 'undefined') this.config.width = 350;
@@ -168,7 +173,7 @@ Vps.GoogleMap.Map = function(config) {
 
 };
 
-Vps.GoogleMap.Map.prototype = {
+Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
 
     markers: [ ],
 
@@ -206,6 +211,8 @@ Vps.GoogleMap.Map.prototype = {
                 new GLatLng(this.config.zoom[2], this.config.zoom[3]),
                 new GLatLng(this.config.zoom[0], this.config.zoom[1])
             ));
+            if (this.config.maximumInitialResolution < this.config.zoom)
+            	this.config.zoom = this.config.maximumInitialResolution;
         }
 
         this.gmap.setCenter(
@@ -256,12 +263,14 @@ Vps.GoogleMap.Map.prototype = {
         var maxRes = this.config.maximumResolution;
         for (var i=0; i<mapTypes.length; i++) {
             if (minRes) {
-                mapTypes[i].getMinimumResolution = function() {return minRes;}
+                mapTypes[i].getMinimumResolution = function() {return minRes;};
             }
             if (maxRes) {
-                mapTypes[i].getMaximumResolution = function() {return maxRes;}
+                mapTypes[i].getMaximumResolution = function() {return maxRes;};
             }
         }
+
+        this.fireEvent('show', this);
     },
 
     _reloadMarkers: function() {
@@ -305,6 +314,7 @@ Vps.GoogleMap.Map.prototype = {
     addMarker : function(markerConfig)
     {
         var gmarkCfg = { draggable: false };
+        if (markerConfig.draggable) gmarkCfg.draggable = true;
         if (this._isLightMarker(markerConfig.latitude, markerConfig.longitude)
             && this.config.lightMarkerSrc
         ) {
@@ -382,6 +392,8 @@ Vps.GoogleMap.Map.prototype = {
             this.mapContainer.down("form.fromAddress").set({ value: Placemark.address });
         }
         this.mapContainer.down(".mapDirSuggestParent").setStyle({display:"none"});
+
+        this.fireEvent('useFrom', this);
     },
     suggestLocations : function(Placemark){
         this.suggestPlacemarks = Placemark;
@@ -406,4 +418,4 @@ Vps.GoogleMap.Map.prototype = {
             elParent.setStyle({ display:"none" });
         }
     }
-};
+});

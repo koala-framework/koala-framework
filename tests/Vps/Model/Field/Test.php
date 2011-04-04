@@ -3,13 +3,13 @@
  * @group Model
  * @group Model_Field
  */
-class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Field_Test extends Vps_Test_TestCase
 {
     public function testFnFField()
     {
         $model = new Vps_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>'blub')))),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub')))),
             'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
         ));
 
@@ -19,7 +19,7 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
         $row->blub1 = 'blub1';
         $row->save();
 
-        $this->assertEquals(array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(
+        $this->assertEquals(array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(
                                   array('blub'=>'blub', 'blub1'=>'blub1')))), $model->getData());
         $row = $model->getRow(1);
         $this->assertEquals($row->blub1, 'blub1');
@@ -31,8 +31,8 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
         $row->blub = 'newBlub';
         $row->save();
         $this->assertEquals($model->getData(), array(
-            array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>'blub', 'blub1'=>'blub1'))),
-            array('id'=>2, 'foo'=>'newFoo', 'data'=>serialize(array('blub'=>'newBlub'))),
+            array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub', 'blub1'=>'blub1'))),
+            array('id'=>2, 'foo'=>'newFoo', 'data'=>json_encode(array('blub'=>'newBlub'))),
         ));
     }
 
@@ -40,8 +40,8 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
     {
         $model = new Vps_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>'blub',
-                        'data'=>serialize(array('blub1'=>'blub1')))))),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub',
+                        'data'=>json_encode(array('blub1'=>'blub1')))))),
             'siblingModels' => array(new Vps_Model_Field(array(
                 'fieldName'=>'data',
                 'columns' => array('blub', 'data'),
@@ -64,8 +64,8 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
         $row->blub2 = 'blub2';
         $row->save();
 
-        $this->assertEquals($model->getData(), array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>'blub',
-                'data'=>serialize(array('blub1'=>'blub1', 'blub2'=>'blub2')))))));
+        $this->assertEquals($model->getData(), array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub',
+                'data'=>json_encode(array('blub1'=>'blub1', 'blub2'=>'blub2')))))));
         $row = $model->getRow(1);
         $this->assertEquals($row->blub2, 'blub2');
     }
@@ -74,14 +74,14 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
     {
         $model = new Vps_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'')),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(''))),
             'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
         $row->blub = 1;
         $row->save();
         $this->assertEquals($model->getData(), array(
-            array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>1)))
+            array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>1)))
         ));
     }
 
@@ -89,14 +89,14 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
     {
         $model = new Vps_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'vpsSerialized'.serialize(array('blub'=>'blub')))),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'vpsSerialized'.json_encode(array('blub'=>'blub')))),
             'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
         $row->blub = 1;
         $row->save();
         $this->assertEquals($model->getData(), array(
-            array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>1)))
+            array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>1)))
         ));
     }
 
@@ -144,7 +144,7 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
         $row->blub = 'bum';
         $row->save();
         $this->assertEquals($fnf->getData(), array(
-            array('id'=>1, 'foo1'=>'bar', 'data'=>serialize(array('blub'=>'bum')))
+            array('id'=>1, 'foo1'=>'bar', 'data'=>json_encode(array('blub'=>'bum')))
         ));
     }
 

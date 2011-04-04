@@ -1,6 +1,7 @@
 <?
 /**
  * @group Vpc_Trl
+ * @group Vpc_Trl_Columns
  *
 http://cultourseurope.vps.niko.vivid/vps/vpctest/Vpc_Trl_Columns_Root/de/test
 http://cultourseurope.vps.niko.vivid/vps/vpctest/Vpc_Trl_Columns_Root/en/test

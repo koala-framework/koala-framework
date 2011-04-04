@@ -4,23 +4,23 @@ abstract class Vps_Component_Generator_Abstract
     protected $_class;
     protected $_settings;
     protected $_pluginBaseComponentClass = false;
-    protected $_inherited = false;
 
     protected $_loadTableFromComponent = false;
 
-    private $_dataCache = array();
     protected $_idSeparator;
     protected $_inherits = false;
     private $_model;
+    private $_plugins;
 
     private static $instances = array();
-    private static $_cachedInstances = array();
+    private static $_cachedGeneratorKeys = array();
 
     public function __sleep()
     {
+        throw new Vps_Exception("serializing generators is not possible because you could have multiple instances of the same generators");
         $ret = array();
         foreach (array_keys(get_object_vars($this)) as $i) {
-            if ($i != '_model') {
+            if ($i != '_model' && $i != '_plugins') {
                 $ret[] = $i;
             }
         }
@@ -29,7 +29,7 @@ abstract class Vps_Component_Generator_Abstract
 
     public function __wakeup()
     {
-        Vps_Benchmark::count('generators wokeup', $this->_class.'-'.$this->_settings['generator']);
+        throw new Vps_Exception("unserializing generators is not possible");
     }
 
     protected function __construct($class, $settings)
@@ -37,7 +37,7 @@ abstract class Vps_Component_Generator_Abstract
         $this->_class = $class;
         $this->_settings = $settings;
         $this->_init();
-        Vps_Benchmark::count('generators', $this->_class.'-'.$settings['generator']);
+        Vps_Benchmark::count('generators');
     }
 
     protected function _init()
@@ -45,6 +45,9 @@ abstract class Vps_Component_Generator_Abstract
         if (!is_array($this->_settings['component'])) {
             $this->_settings['component'] = array($this->_settings['generator']
                                             => $this->_settings['component']);
+        }
+        foreach ($this->_settings['component'] as $k=>$i) {
+            if (!$i) unset($this->_settings['component'][$k]);
         }
     }
 
@@ -71,7 +74,7 @@ abstract class Vps_Component_Generator_Abstract
                 } else if ($this->_loadTableFromComponent) {
                     $this->_model = Vpc_Abstract::createChildModel($this->_class);
                 } else {
-                    throw new Vps_Exception("Can't create model");
+                    throw new Vps_Exception("Can't create model for generator '{$this->getGeneratorKey()}' in '$this->_class'");
                 }
             }
         }
@@ -87,12 +90,15 @@ abstract class Vps_Component_Generator_Abstract
     public static function clearInstances()
     {
         self::$instances = array();
-        self::$_cachedInstances = array();
+        self::$_cachedGeneratorKeys = array();
     }
 
-    public static function getInstance($componentClass, $key, $settings = array(), $pluginBaseComponentClass = false, $inherited = false)
+    /**
+     * @return Vps_Component_Generator_Abstract
+     */
+    public static function getInstance($componentClass, $key, $settings = array(), $pluginBaseComponentClass = false)
     {
-        $instanceKey = $componentClass . '_' . $key . '_' . $pluginBaseComponentClass . '_' . $inherited;
+        $instanceKey = $componentClass . '_' . $key . '_' . $pluginBaseComponentClass;
         if (!isset(self::$instances[$instanceKey])) {
             if (empty($settings)) {
                 $settings = Vpc_Abstract::getSetting($componentClass, 'generators');
@@ -111,25 +117,10 @@ abstract class Vps_Component_Generator_Abstract
                 throw new Vps_Exception("Generator-Class '{$settings['class']}' is not an Vps_Component_Generator_Abstract");
             }
             $settings['generator'] = $key;
-            if ($inherited) {
-                if (is_array($settings['component'])) {
-                    foreach ($settings['component'] as $k=>$c) {
-                        if (!$c) continue;
-                        if (Vpc_Abstract::hasSetting($c, 'inheritComponentClass')) {
-                            $settings['component'][$k] = Vpc_Abstract::getSetting($c, 'inheritComponentClass');
-                        }
-                    }
-                } else {
-                    if (Vpc_Abstract::hasSetting($settings['component'], 'inheritComponentClass')) {
-                        $settings['component'] = Vpc_Abstract::getSetting($settings['component'], 'inheritComponentClass');
-                    }
-                }
-            }
             self::$instances[$instanceKey] = new $settings['class']($componentClass, $settings);
             if ($pluginBaseComponentClass) {
                 self::$instances[$instanceKey]->_pluginBaseComponentClass = $pluginBaseComponentClass;
             }
-            self::$instances[$instanceKey]->_inherited = $inherited;
         }
         return self::$instances[$instanceKey];
     }
@@ -149,126 +140,224 @@ abstract class Vps_Component_Generator_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
+        return array_merge(
+            self::getOwnInstances($component, $select),
+            self::getInheritedInstances($component, $select)
+        );
+    }
+
+    public static function getOwnInstances($component, $select = array())
+    {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+
         if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
         } else {
             $componentClass = $component;
             $component = null;
         }
-        $cacheId = 'genInst'.$componentClass;
+
+        $generatorKeys = self::_getGeneratorKeys(null, $componentClass);
+
+        //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
+        if (($id = $select->getPart(Vps_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
+            $filteredGeneratorKeys = array();
+            foreach ($generatorKeys as $g) {
+                if ($g['childComponentIds']) {
+                    if (in_array($id, $g['childComponentIds'])) {
+                        return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
+                    }
+                } else {
+                    $filteredGeneratorKeys[] = $g;
+                }
+            }
+            $generatorKeys = $filteredGeneratorKeys;
+        }
+
+        //performance abkürzung: wenn direkt nach einem generator gesucht wird, effizienter heraussuchen
+        if (($genKey = $select->getPart(Vps_Component_Select::WHERE_GENERATOR))) {
+            foreach ($generatorKeys as $g) {
+                if ($g['key'] == $genKey && $g['componentClass']==$componentClass) {
+                    return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
+                }
+            }
+            return array();
+        }
+
+        $generators = array();
+        foreach ($generatorKeys as $g) {
+            if (!$g['inherited']) {
+                $generators[] = self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']);
+            }
+        }
+        return self::_filterGenerators($generators, $component, $componentClass, $select);
+    }
+
+    public static function getInheritedInstances($component, $select = array())
+    {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+
+        //performance abkürzung: wenn direkt nach einem generator gesucht wird, ist das nie ein inherited
+        if (($genKey = $select->getPart(Vps_Component_Select::WHERE_GENERATOR))) {
+            return array();
+        }
+
+
+        if ($component instanceof Vps_Component_Data) {
+            $componentClass = $component->componentClass;
+        } else {
+            $componentClass = $component;
+            $component = null;
+        }
+
+        $generatorKeys = self::_getGeneratorKeys($component, $componentClass);
+
+        //performance abkürzung: wenn direkt nach einer id gesucht wird, generator effizienter heraussuchen
+        if (($id = $select->getPart(Vps_Component_Select::WHERE_ID)) && !is_numeric(substr($id, 1))) {
+            $filteredGeneratorKeys = array();
+            foreach ($generatorKeys as $g) {
+                if ($g['childComponentIds']) {
+                    if (in_array($id, $g['childComponentIds'])) {
+                        return array(self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']));
+                    }
+                } else {
+                    $filteredGeneratorKeys[] = $g;
+                }
+            }
+            $generatorKeys = $filteredGeneratorKeys;
+        }
+
+        $generators = array();
+        foreach ($generatorKeys as $g) {
+            if ($g['inherited']) {
+                $generators[] = self::getInstance($g['componentClass'], $g['key'], null, $g['pluginBaseComponentClass']);
+            }
+        }
+        return self::_filterGenerators($generators, $component, $componentClass, $select);
+    }
+
+    private static function _getGeneratorKeys($component, $componentClass)
+    {
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $componentClass;
         if ($component) {
-            $ic = $component->inheritClasses;
-            foreach ($ic as $inheritComponent) {
+            foreach ($component->inheritClasses as $inheritComponent) {
                 $cacheId .= '__' . $inheritComponent;
             }
         }
-        $cacheId = str_replace('.', '_', $cacheId);
-        static $cache = null;
-        if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Memcached', array(
-                'lifetime'=>null,
-                'automatic_cleaning_factor' => false,
-                'automatic_serialization'=>true));
-        }
-        if (isset(self::$_cachedInstances[$cacheId])) {
-            Vps_Benchmark::countBt('Generator::getInst hit');
-            $generators = self::$_cachedInstances[$cacheId];
-        } else if (($cachedGeneratorData = $cache->load($cacheId)) !== false) {
-            Vps_Benchmark::count('Generator::getInst semi-hit');
-            $generators = array();
-            foreach ($cachedGeneratorData as $g) {
-                $generators[] = self::getInstance($g['componentClass'], $g['key'], array(), $g['pluginBaseComponentClass'], $g['inherited']);
-            }
-        } else {
-            Vps_Benchmark::count('Generator::getInst miss', $cacheId);
 
-            $generators = self::_getGeneratorsForComponent($componentClass, false);
-            foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
-                $generators = array_merge($generators, self::_getGeneratorsForComponent($pluginClass, $componentClass));
-            }
-            if (is_object($component) && $component->inheritClasses) {
-                $ic = $component->inheritClasses;
-                foreach ($ic as $inheritClass) {
-                    $gs = Vpc_Abstract::getSetting($inheritClass, 'generators');
-                    foreach ($gs as $key => $inheritedGenerator) {
-                        if (!$inheritedGenerator['component']) {
-                            unset($gs[$key]);
-                            continue;
-                        }
-                        if (!isset($inheritedGenerator['inherit']) || !$inheritedGenerator['inherit']) continue;
-                        if (!is_instance_of($inheritedGenerator['class'], 'Vps_Component_Generator_Static')) continue;
-                        /* Auskommentiert wegen memcached-cache, möglicherweise brauchen wir da noch ein bessere lösung dafür
-                        if (is_array($inheritedGenerator['component']) && count($inheritedGenerator['component']) > 1) {
-                            unset($gs[$key]);
-                            foreach ($inheritedGenerator['component'] as $k=>$c) {
-                                if (isset($gs[$k])) {
-                                    throw new Vps_Exception("Generator '$k' does already exist");
-                                }
-                                $gs[$k] = $inheritedGenerator;
-                                $gs[$k]['component'] = $c;
-                            }
-                        }
-                        */
+        if (isset(self::$_cachedGeneratorKeys[$cacheId])) {
+            return self::$_cachedGeneratorKeys[$cacheId];
+        }
+        $ret = apc_fetch($prefix.'genInst-'.$cacheId, $success);
+        if ($success) {
+            self::$_cachedGeneratorKeys[$cacheId] = $ret;
+            return $ret;
+        }
+
+        $generators = self::_getGeneratorsForComponent($componentClass, false);
+        foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
+            $generators = array_merge($generators, self::_getGeneratorsForComponent($pluginClass, $componentClass));
+        }
+        $inheritedGenerators = array();
+        if ($component && $component->inheritClasses) {
+            foreach ($component->inheritClasses as $inheritClass) {
+                $gs = Vpc_Abstract::getSetting($inheritClass, 'generators');
+                foreach ($gs as $key => $inheritedGenerator) {
+                    if (!$inheritedGenerator['component']) {
+                        unset($gs[$key]);
+                        continue;
                     }
-                    foreach ($gs as $key => $inheritedGenerator) {
-                        if (!isset($inheritedGenerator['inherit']) || !$inheritedGenerator['inherit']) continue;
-                        $inheritedGenerator = self::getInstance($inheritClass, $key, $inheritedGenerator, false, true);
-                        if (!$inheritedGenerator->getGeneratorFlag('box')) {
-                            $generators[] = $inheritedGenerator;
-                            continue;
+                    if (!isset($inheritedGenerator['inherit']) || !$inheritedGenerator['inherit']) continue;
+                    if (!is_instance_of($inheritedGenerator['class'], 'Vps_Component_Generator_Static')) continue;
+                    /* Auskommentiert wegen memcached-cache, möglicherweise brauchen wir da noch ein bessere lösung dafür
+                    if (is_array($inheritedGenerator['component']) && count($inheritedGenerator['component']) > 1) {
+                        unset($gs[$key]);
+                        foreach ($inheritedGenerator['component'] as $k=>$c) {
+                            if (isset($gs[$k])) {
+                                throw new Vps_Exception("Generator '$k' does already exist");
+                            }
+                            $gs[$k] = $inheritedGenerator;
+                            $gs[$k]['component'] = $c;
                         }
-                        $inheritedBoxes = $inheritedGenerator->getBoxes();
-//                             if (count($inheritedBoxes) != 1) {
-//                                 throw new Vps_Exception("There should be only one box in an inherited generator");
-//                             }
-                        $inheritedBox = $inheritedBoxes[0];
-                        foreach ($generators as $k=>$g) {
-                            if (!$g->getGeneratorFlag('box')) continue;
-                            foreach ($inheritedBoxes as $inheritedBox) {
-                                if (!in_array($inheritedBox, $g->getBoxes())) continue;
-                                if ($g->getPriority() >= $inheritedGenerator->getPriority()) {
-                                    continue 3;
-                                } else {
-                                    if (count($g->getBoxes()) > 1) {
-                                        throw new Vps_Exception("There should be only one box in an inherited generator");
-                                    }
-                                    unset($generators[$k]);
-                                    break;
-                                }
+                    }
+                    */
+                }
+                foreach ($gs as $key => $inheritedGenerator) {
+                    if (!isset($inheritedGenerator['inherit']) || !$inheritedGenerator['inherit']) continue;
+                    $inheritedGenerator = self::getInstance($inheritClass, $key, $inheritedGenerator, false);
+                    if (!$inheritedGenerator->getGeneratorFlag('box')) {
+                        $generators[] = $inheritedGenerator;
+                        $inheritedGenerators[] = $inheritedGenerator;
+                        continue;
+                    }
+                    $inheritedBoxes = $inheritedGenerator->getBoxes();
+                    foreach ($generators as $k=>$g) {
+                        if (!$g->getGeneratorFlag('box')) continue;
+                        foreach ($inheritedBoxes as $inheritedBox) {
+                            if (in_array($inheritedBox, $g->getBoxes())) {
+                                //geerbte box wurde überschrieben, ignorieren
+                                continue 3;
                             }
                         }
-                        $generators[] = $inheritedGenerator;
+                    }
+                    $generators[] = $inheritedGenerator;
+                    $inheritedGenerators[] = $inheritedGenerator;
+                }
+            }
+/*
+                foreach ($generators as $k=>$g) {
+                    if ($g->getGeneratorFlag('box') && !$g->getBoxes()) {
+                        unset($generators[$k]);
                     }
                 }
-/*
-                    foreach ($generators as $k=>$g) {
-                        if ($g->getGeneratorFlag('box') && !$g->getBoxes()) {
-                            unset($generators[$k]);
-                        }
-                    }
 */
-            }
-            $cachedGeneratorData = array();
-            foreach ($generators as $g) {
-                $cachedGeneratorData[] = array('componentClass' => $g->_class,
-                                               'key' => $g->_settings['generator'],
-                                               'pluginBaseComponentClass' => $g->_pluginBaseComponentClass,
-                                               'inherited' => $g->_inherited);
-            }
-            $cache->save($cachedGeneratorData, $cacheId);
         }
-        self::$_cachedInstances[$cacheId] = $generators;
+        $ret = array();
+        foreach ($generators as $g) {
+            $childComponentIds = null;
+            if ($g instanceof Vps_Component_Generator_Static && !$g instanceof Vpc_Basic_LinkTag_Generator) {
+                $childComponentIds = array();
+                foreach (array_keys($g->_settings['component']) as $c) {
+                    $childComponentIds[] = $g->getIdSeparator().$c;
+                }
+            }
+            $ret[] = array(
+                'componentClass' => $g->_class,
+                'key' => $g->_settings['generator'],
+                'pluginBaseComponentClass' => $g->_pluginBaseComponentClass,
+                'inherited' => in_array($g, $inheritedGenerators, true),
+                'childComponentIds' => $childComponentIds
+            );
+        }
+        apc_add($prefix.'genInst-'.$cacheId, $ret);
 
+        self::$_cachedGeneratorKeys[$cacheId] = $ret;
+        return $ret;
+    }
+
+    private static function _filterGenerators(array $generators, $component, $componentClass, Vps_Component_Select $select)
+    {
         $selectParts = $select->getParts();
 
         $ret = array();
         foreach ($generators as $g) {
-            if ($component && is_instance_of($g, 'Vpc_Root_Category_Generator') &&
+            //performance: page generator nur zurückgeben wenn: component eine aus pages-tabelle ist oder eine category
+            if ($component && $g instanceof Vpc_Root_Category_Generator &&
                 !is_numeric($component->componentId)
             ) {
                 $hasPageGenerator = false;
                 foreach (Vpc_Abstract::getSetting($component->componentClass, 'generators') as $i) {
-                    if (is_instance_of($i['class'], 'Vpc_Root_Category_Generator')) {
+                    static $isPageGenerator = array();
+                    if (!isset($isPageGenerator[$i['class']])) {
+                        $isPageGenerator[$i['class']] = is_instance_of($i['class'], 'Vpc_Root_Category_Generator');
+                    }
+                    if ($isPageGenerator[$i['class']]) {
                         $hasPageGenerator = true;
                         break;
                     }
@@ -316,7 +405,8 @@ abstract class Vps_Component_Generator_Abstract
             if (isset($selectParts[Vps_Component_Select::WHERE_GENERATOR_FLAGS])) {
                 $flags = $g->getGeneratorFlags();
                 foreach ($selectParts[Vps_Component_Select::WHERE_GENERATOR_FLAGS] as $flag=>$value) {
-                    if (!isset($flags[$flag]) || $flags[$flag] != $value) continue 2;
+                    if (!isset($flags[$flag])) $flags[$flag] = null;
+                    if ($flags[$flag] != $value) continue 2;
                 }
             }
 
@@ -350,21 +440,32 @@ abstract class Vps_Component_Generator_Abstract
                     continue;
                 }
                 $editComponents = Vpc_Abstract::getSetting($g->_class, 'editComponents');
-                if (is_array($g->_settings['component'])) {
-                    $continue = true;
-                    foreach (array_keys($g->_settings['component']) as $componentKey) {
-                        if (in_array($componentKey, $editComponents)) {
-                            $continue = false;
-                            break;
-                        }
+                if ($g->getGeneratorFlag('table')) {
+                    //es kann entweder ein table generator angegeben werden
+                    //da kommen dann alle unterkomponenten daher
+                    if (!in_array($g->_settings['generator'], $editComponents)) {
+                        continue;
                     }
-                    if ($continue) continue;
-                } else if (!in_array($key, $editComponents)) {
-                    continue;
-                }
-                if (isset($g->_settings['unique']) && $g->_settings['unique']) {
-                    //vererbte, unique nur bei eigener komponente zurückgeben
-                    if ($g->_class != $componentClass) continue;
+                } else {
+
+                    if (is_array($g->_settings['component'])) {
+                        //oder eine komponente eines static generators
+                        $continue = true;
+                        foreach (array_keys($g->_settings['component']) as $componentKey) {
+                            if (in_array($componentKey, $editComponents)) {
+                                $continue = false;
+                                break;
+                            }
+                        }
+                        if ($continue) continue;
+                    } else if (!in_array($key, $editComponents)) {
+                        //oder ein static generator (wenn er nur eine unter komponente hat)
+                        continue;
+                    }
+                    if (isset($g->_settings['unique']) && $g->_settings['unique']) {
+                        //vererbte, unique nur bei eigener komponente zurückgeben
+                        if ($g->_class != $componentClass) continue;
+                    }
                 }
             }
             if (isset($selectParts[Vps_Component_Select::WHERE_COMPONENT_CLASSES])) {
@@ -395,26 +496,21 @@ abstract class Vps_Component_Generator_Abstract
 
     public function getChildComponentClasses($select = array())
     {
-        return self::getStaticChildComponentClasses($this->_settings, $select);
-    }
-
-    public static function getStaticChildComponentClasses($data, $select = array())
-    {
-        if ($select === array()) {
-            return $data['component']; //performance
+        if ($select === array() ||
+            ($select instanceof Vps_Model_Select &&
+                !($select->hasPart(Vps_Component_Select::WHERE_FLAGS) ||
+                    $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)
+                 )
+            )
+        ) {
+            return $this->_settings['component']; //performance
         }
+
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
 
-        $ret = $data['component'];
-
-        if (!is_array($ret)) $ret = array($ret);
-        foreach ($ret as $key => $r) {
-            if (!$r) {
-                unset($ret[$key]);
-            }
-        }
+        $ret = $this->_settings['component'];
 
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS)) {
             $flags = $select->getPart(Vps_Component_Select::WHERE_FLAGS);
@@ -473,14 +569,33 @@ abstract class Vps_Component_Generator_Abstract
         return count($this->getChildData($parentData, $select));
     }
 
-
-    protected function _getChildComponentClass($key)
+    protected function _getChildComponentClasses($parentData = null)
     {
-        $c = $this->_settings['component'];
-        if (!isset($c[$key])) {
-            throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found; set are ".implode(', ', array_keys($c)));
+        return $this->_settings['component'];
+    }
+
+    protected function _getChildComponentClass($key, $parentData)
+    {
+        $c = $this->_getChildComponentClasses($parentData);
+        if ($key) {
+            if (!isset($c[$key])) {
+                throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found; set are ".implode(', ', array_keys($c)));
+            }
+            $componentClass = $this->_settings['component'][$key];
+        } else {
+            if (count($c) > 1) {
+                throw new Vps_Exception("For multiple components you have to submit a key in generator " . get_class($this) . " ($this->_class).");
+            }
+            reset($this->_settings['component']);
+            $componentClass = current($this->_settings['component']);
         }
-        return $c[$key];
+
+        $alternativeComponent = Vpc_Abstract::getFlag($componentClass, "alternativeComponent");
+        if ($alternativeComponent && call_user_func(array($componentClass, 'useAlternativeComponent'), $componentClass, $parentData, $this)) {
+            $componentClass = $alternativeComponent;
+        }
+
+        return $componentClass;
     }
 
     protected function _formatSelectFilename(Vps_Component_Select $select)
@@ -557,7 +672,9 @@ abstract class Vps_Component_Generator_Abstract
             }
         }
 
-        if (!isset($this->_dataCache[$parentData->componentId][$id])) {
+        $componentId = $this->_getComponentIdFromRow($parentData, $row);
+        $ret = Vps_Component_Data_Root::getInstance()->getFromDataCache($componentId);
+        if (!$ret) {
             $config = $this->_formatConfig($parentData, $row);
             if (!$config['componentClass'] || !is_string($config['componentClass'])) {
                 throw new Vps_Exception("no componentClass set (id $parentData->componentId $id)");
@@ -571,9 +688,10 @@ abstract class Vps_Component_Generator_Abstract
             }
             $config['generator'] = $this; //wird benötigt für duplizieren
             $pageDataClass = $this->_getDataClass($config, $row);
-            $this->_dataCache[$parentData->componentId][$id] = new $pageDataClass($config);
+            $ret = new $pageDataClass($config);
+            Vps_Component_Data_Root::getInstance()->addToDataCache($ret, $select);
         }
-        return $this->_dataCache[$parentData->componentId][$id];
+        return $ret;
     }
 
     protected function _getDataClass($config, $row)
@@ -583,6 +701,11 @@ abstract class Vps_Component_Generator_Abstract
         } else {
             return 'Vps_Component_Data';
         }
+    }
+
+    protected function _getComponentIdFromRow($parentData, $row)
+    {
+        throw new Vps_Exception('_getComponentIdFromRow has to be implemented for '.get_class($this));
     }
 
     protected function _formatConfig($parentData, $row) {
@@ -619,14 +742,6 @@ abstract class Vps_Component_Generator_Abstract
     }
 
     /**
-     * Ob dieser Generator geerbt wurde
-     */
-    public function getInherited()
-    {
-        return $this->_inherited;
-    }
-
-    /**
      * OB dieser Generator erbt (normalerweise nur Pages)
      */
     public function getInherits()
@@ -639,44 +754,26 @@ abstract class Vps_Component_Generator_Abstract
         throw new Vps_Exception_NotYetImplemented();
     }
 
+    public function makeChildrenVisible($source)
+    {
+        throw new Vps_Exception_NotYetImplemented();
+    }
+
     public function getPagesControllerConfig($component, $generatorClass = null)
     {
         $data = array();
-
-        $disabled = !Vps_Registry::get('acl')->getComponentAcl()
-            ->isAllowed(Zend_Registry::get('userModel')->getAuthedUser(), $component);
-        if (!$generatorClass) $generatorClass = $this->getClass();
 
         $data['icon'] = 'bullet_yellow';
         $data['iconEffects'] = array();
         $data['allowDrag'] = false;
         $data['allowDrop'] = false;
 
-        $c = $component;
-        while ($c && $c->componentClass != $generatorClass) {
-            $c = $c->parent;
-        }
+        if (!$generatorClass) $generatorClass = $this->getClass();
+        $data['editControllerComponentId'] = $component->componentId;
+        $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
+            ->getControllerUrl('Generator');
 
-        if ($c) { //TODO warum tritt das auf?
-            $data['editControllerComponentId'] = $c->componentId;
-            $data['editControllerUrl'] = Vpc_Admin::getInstance($generatorClass)
-                ->getControllerUrl('Generator');
-        }
-
-        $pageGenerator = Vps_Component_Generator_Abstract::getInstances($component, array(
-            'pageGenerator' => true
-        ));
-        if ($pageGenerator) {
-            $data['addControllerUrl'] = Vpc_Admin::getInstance($pageGenerator[0]->_class)
-                ->getControllerUrl('Generator');
-            $data['actions']['add'] = true;
-            $data['allowDrag'] = true;
-            $data['allowDrop'] = true;
-        }
-
-        if ($component->isPage) {
-            $data['actions']['preview'] = true;
-        }
+        $data['loadChildren'] = false;
 
         return $data;
     }
@@ -691,5 +788,30 @@ abstract class Vps_Component_Generator_Abstract
         $flags = $this->getGeneratorFlags();
         if (!isset($flags[$flag])) return null;
         return $flags[$flag];
+    }
+
+    public final function getGeneratorPlugins()
+    {
+        if (!isset($this->_plugins)) {
+            $this->_plugins = array();
+            if (isset($this->_settings['plugins'])) {
+                foreach ($this->_settings['plugins'] as $k=>&$p) {
+                    $this->_plugins[$k] = new $p($this);
+                }
+            }
+        }
+        return $this->_plugins;
+    }
+
+    public final function getGeneratorPlugin($key)
+    {
+        $plugins = $this->getGeneratorPlugins();
+        if (isset($plugins[$key])) return $plugins[$key];
+        return null;
+    }
+
+    public function getStaticCacheVarsForMenu()
+    {
+        return array();
     }
 }

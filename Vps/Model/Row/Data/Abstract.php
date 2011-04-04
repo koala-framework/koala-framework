@@ -14,7 +14,16 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
     //internal
     public function setData($data)
     {
-        $this->_data = $data;
+        foreach (array_keys($this->_cleanData) as $k) {
+            if (!isset($this->_data[$k]) || $this->_cleanData[$k] === $this->_data[$k]) {
+                //nicht ge�ndert
+                if (isset($data[$k])) {
+                    $this->_data[$k] = $data[$k];
+                } else {
+                    unset($this->_data[$k]);
+                }
+            }
+        }
         $this->_cleanData = $data;
     }
 
@@ -45,7 +54,9 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
+        if (in_array($name, $this->_model->getExprColumns())
+            || ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns()))
+        ) {
             return parent::__get($name);
         } else {
             $name = $this->_transformColumnName($name);
@@ -56,13 +67,15 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function __set($name, $value)
     {
-        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
+        if (in_array($name, $this->_model->getExprColumns())
+            || ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns()))
+        ) {
             parent::__set($name, $value);
             return;
         }
         $n = $this->_transformColumnName($name);
         if ($this->$name !== $value) {
-            $this->_dirty = true;
+            $this->_setDirty($name);
         }
         $this->_data[$n] = $value;
         $this->_postSet($name, $value);
@@ -93,9 +106,8 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         }
 
         if ($update) {
-            if ($this->_dirty) {
+            if ($this->_isDirty()) {
                 $ret = $this->_model->update($this, $this->_data);
-                $this->_dirty = false;
             } else {
                 $ret = $this->{$this->_getPrimaryKey()};
             }
@@ -112,6 +124,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         }
         $this->_afterSave();
         parent::save(); //siblings nach uns speichern; damit auto-inc id vorhanden
+        $this->_resetDirty();
 
         return $ret;
     }

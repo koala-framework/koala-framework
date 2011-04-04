@@ -1,0 +1,16 @@
+.vpsTabs .vpsTabsContents { position: relative; }
+.vpsTabs .vpsTabsContent { display: none; position: absolute; top: 0px; }
+/* das important muss bleiben weil es das selbe element ist  wie .vpsTabsContent */
+.vpsTabs .vpsTabsContentActive { display: block !important; }
+
+.vpsTabsContent {
+    border: 1px solid #bbb;
+    padding: 3px 10px;
+}
+.vpsTabsLink {
+    background-color: #ddd;
+    float: left; cursor: pointer;
+    padding: 3px 10px; border: 1px solid #bbb;
+    border-bottom: none; margin-right: 10px;
+}
+.vpsTabsLinkActive { background-color: #fff; position: relative; bottom: -1px; z-index: 3; }

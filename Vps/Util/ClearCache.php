@@ -26,6 +26,7 @@ class Vps_Util_ClearCache
         foreach (new DirectoryIterator('application/cache') as $d) {
             if ($d->isDir() && substr($d->getFilename(), 0, 1) != '.') {
                 if ($d->getFilename() == 'searchindex') continue;
+                if ($d->getFilename() == 'fulltext') continue;
                 $ret[] = $d->getFilename();
             }
         }
@@ -67,6 +68,7 @@ class Vps_Util_ClearCache
 
         $types = array('all');
         if (class_exists('Memcache')) $types[] = 'memcache';
+        if (extension_loaded('apc')) $types[] = 'apc';
         $types = array_merge($types, $this->getCacheDirs());
         $types = array_merge($types, $this->getDbCacheTables());
         return $types;
@@ -76,6 +78,8 @@ class Vps_Util_ClearCache
     {
         if ($types == 'all') {
             $types = $this->getTypes();
+        } else if ($types == 'component' && extension_loaded('apc')) {
+            $types = array('component', 'apc');
         } else {
             if (!is_array($types)) {
                 $types = explode(',', $types);
@@ -85,12 +89,25 @@ class Vps_Util_ClearCache
 
         if ($refresh) {
             if ($output) echo "\n";
-            if (in_array('cache_component_meta', $this->getDbCacheTables())
-                && (in_array('component', $types) || in_array('cache_component_meta', $types))
+            if ($output) echo "Refresh settings.......";
+            Vps_Config_Web::clearInstances();
+            $config = Vps_Config_Web::getInstance(Vps_Setup::getConfigSection());
+            Vps_Registry::set('config', $config);
+            Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(Vps_Setup::getConfigSection()));
+            if ($output) echo " [\033[00;32mOK\033[00m]\n";
+
+            if (Vps_Component_Data_Root::getComponentClass()) {
+                if ($output) echo "Refresh component......";
+                Vpc_Abstract::getSettingMtime();
+                if ($output) echo " [\033[00;32mOK\033[00m]\n";
+            }
+
+            if (in_array('cache_component', $this->getDbCacheTables())
+                && (in_array('component', $types) || in_array('cache_component', $types))
             ) {
                 if ($output) echo "Refresh static cache...";
                 try {
-                    Vps_Component_Cache::refreshStaticCache();
+                    Vps_Component_Cache::saveStaticMeta();
                     if ($output) echo " [\033[00;32mOK\033[00m]\n";
                 } catch (Exception $e) {
                     if ($output) echo " [\033[01;31mERROR\033[00m] $e\n";
@@ -155,6 +172,30 @@ class Vps_Util_ClearCache
                     'automatic_serialization'=>true));
                 $cache->clean();
                 if ($output) echo "cleared:     memcache\n";
+            }
+        }
+        if (in_array('apc', $types)) {
+            if ($server) {
+                if ($output) echo "ignored:     apc\n";
+            } else {
+                $config = Vps_Registry::get('config');
+                $preLogin = $config->preLogin ? 'vivid:planet@' : '';
+
+                $d = $config->server->domain;
+                $url = "http://$preLogin$d/vps/util/apc/clear-cache";
+                $c = @file_get_contents($url);
+                if ($c != 'OK') {
+                    $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
+                    $url = "http://$preLogin$d/vps/util/apc/clear-cache";
+                    $c = @file_get_contents($url);
+                }
+                if ($output) {
+                    if ($c == 'OK') {
+                        if ($output) echo "cleared:     apc\n";
+                    } else {
+                        if ($output) echo "error:       apc\n$c\n\n";
+                    }
+                }
             }
         }
         foreach ($this->getDbCacheTables() as $t) {

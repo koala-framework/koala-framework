@@ -3,14 +3,11 @@
  * @group Vpc_Basic_Text
  * @group Vpc_Basic_Text_Model
  **/
-class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
+class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_Text_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Basic_Text_Root');
     }
 
     public function testCreatesLinkComponent()
@@ -25,7 +22,8 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1003-l1', current($cc)->componentId);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_TestChildComponentsModel');
+        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+            ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1003'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -53,8 +51,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
+        $html = $c->getData()->render();
 
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"http://www.vivid-planet.com/\">foo</a>\n</p>".
@@ -76,7 +73,8 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1014-l1', current($cc)->componentId);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_TestChildComponentsModel');
+        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+            ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1014'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -95,10 +93,9 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $row = $rows->current();
         $this->assertEquals('1001', $row->target);
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
+        $html = $c->getData()->render();
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"/foo1\">foo</a>\n</p>".
+                    "<p>\n  <a href=\"/vps/vpctest/Vpc_Basic_Text_Root/foo1\">foo</a>\n</p>".
                     "</div>", $html);
     }
 
@@ -110,8 +107,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
+        $html = $c->getData()->render();
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"mailto:foo(vpsat)example(vpsdot)com\">foo</a>\n</p>".
                     "</div>", $html);
@@ -125,8 +121,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
+        $html = $c->getData()->render();
         $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"http://vivid.com\">foo</a>\n</p>".
                     "</div>", $html);
@@ -134,19 +129,18 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCreatesImageComponentx()
     {
-        $this->markTestIncomplete();
-
         $c = $this->_root->getComponentById(1008)->getComponent();
         $row = $c->getRow();
-        $html = '<p><img src="http://www.vivid-planet.com/files/vividplanet_internet_agentur_salzburg.gif" /></p>';
+        $html = '<p><img src="http://www.vivid-planet.com/assets/web/images/structure/logo.png" /></p>';
         $html = $row->tidy($html);
-        $this->assertEquals("<p>\n  <img src=\"/media/Vpc_Basic_Text_Image_TestComponent/1008-i1/default/34df9defa3f1aba945f116672a671f76/vividplanetinternetagentursalzburg.gif\" width=\"100\" height=\"100\" />\n</p>", $html);
+        $this->assertRegExp("#^<p>\n  <img src=\"/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1008-i1/default/[0-9a-z]+/[0-9]+/logo.png\" width=\"100\" height=\"100\" />\n</p>$#ms", $html);
 
         $cc = array_values($c->getData()->getChildComponents());
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1008-i1', current($cc)->componentId);
 
-        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_TestChildComponentsModel');
+        $m = Vpc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
+            ->getDependentModel('ChildComponents');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1008'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -161,29 +155,25 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
         $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Image_UploadsModel');
         $row = $m->getRow(2);
-        $this->assertEquals('image/gif', $row->mime_type);
-        $this->assertEquals('gif', $row->extension);
-        $this->assertEquals('vividplanetinternetagentursalzburg', $row->filename);
+        $this->assertEquals('image/png', $row->mime_type);
+        $this->assertEquals('png', $row->extension);
+        $this->assertEquals('logo', $row->filename);
         $this->assertEquals(file_get_contents($m->getUploadDir().'/2'),
-                            file_get_contents('http://www.vivid-planet.com/files/vividplanet_internet_agentur_salzburg.gif'));
+                            file_get_contents('http://www.vivid-planet.com/assets/web/images/structure/logo.png'));
     }
 
     public function testCreatesImageComponentHtml()
     {
-        $this->markTestIncomplete();
-
         $c = $this->_root->getComponentById(1009)->getComponent();
         $row = $c->getRow();
-        $html = '<p><img src="http://www.vivid-planet.com/files/vividplanet_internet_agentur_salzburg.gif" /></p>';
+        $html = '<p><img src="http://www.vivid-planet.com/assets/web/images/structure/logo.png" /></p>';
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
-
+        $html = $c->getData()->render();
         $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'.
                     '\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
-                    .'\s*<img src="/media/Vpc_Basic_Text_Image_TestComponent/1009-i1/default/12a259547cf4ad9a4687e39969cc0033/vividplanetinternetagentursalzburg.gif" width="100" height="100" alt="" class="" />'
+                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1009-i1/default/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" />'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
 
@@ -197,11 +187,10 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
+        $html = $c->getData()->render();
         $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
-                    .'\s*<img src="/media/Vpc_Basic_Text_Image_TestComponent/1010-i1/default/9ab09415a09caef30d520e9080262b7f/foo.png" width="100" height="100" alt="" class="" />'
+                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1010-i1/default/9ab09415a09caef30d520e9080262b7f/[0-9]+/foo.png" width="100" height="100" alt="" />'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
     }
@@ -214,11 +203,10 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $row->content = $html;
         $row->save();
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
-                    "<p>\n  <a href=\"/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/a1b024ef219bcfe6b3f5ac9916d8f722/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
-                    "</div>", $html);
+        $html = $c->getData()->render();
+        $this->assertRegExp("#^<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
+                    "<p>\n  <a href=\"/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/a1b024ef219bcfe6b3f5ac9916d8f722/[0-9]+/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
+                    "</div>$#ms", $html);
     }
 
     public function testOldMediaUrlImage()
@@ -231,11 +219,10 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $html = $row->content;
         $this->assertEquals("<p>\n  <img src=\n  \"/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/File/small/e73520d11dee6ff49859b8bb26fc631f/filename.jpg?319\" />\n</p>", $html);
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c->getData());
+        $html = $c->getData()->render();
         $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
-                    .'\s*<img src="/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/default/987577de8b2c5b4b75b8343ed85db0bf/foo.png" width="100" height="100" alt="" class="" />'
+                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/default/987577de8b2c5b4b75b8343ed85db0bf/[0-9]+/foo.png" width="100" height="100" alt="" />'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
     }

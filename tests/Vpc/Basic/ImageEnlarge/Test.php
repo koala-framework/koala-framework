@@ -3,17 +3,12 @@
  * @group Basic_ImageEnlarge
  * @group Image
  */
-class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_ImageEnlarge_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
-        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
-        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
-        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
+        parent::setUp('Vpc_Basic_ImageEnlarge_Root');
+        $this->_root->setFilename(null);
     }
 
     public function testWithoutSmallImageComponent()
@@ -31,8 +26,7 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
 
     public function testWithoutSmallImageComponentHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1800));
+        $html = $this->_root->getComponentById(1800)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -82,8 +76,7 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
 
     public function testWithoutSmallImageUploadedHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1801));
+        $html = $this->_root->getComponentById(1801)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -142,8 +135,7 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
 
     public function testWithSmallImageUploadedHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1802));
+        $html = $this->_root->getComponentById(1802)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -180,8 +172,7 @@ class Vpc_Basic_ImageEnlarge_Test extends PHPUnit_Framework_TestCase
 
     public function testWithOriginalHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1803));
+        $html = $this->_root->getComponentById(1803)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;

@@ -16,10 +16,10 @@ class Vpc_Basic_DownloadTag_Test extends Vpc_TestAbstract
 
         $url = $c->getComponent()->getDownloadUrl();
         $url = explode('/', trim($url, '/'));
-        $this->assertEquals('Vpc_Basic_DownloadTag_TestComponent', $url[1]);
-        $this->assertEquals('1700', $url[2]);
-        $this->assertEquals('default', $url[3]);
-        $this->assertEquals('foo.png', $url[5]);
+        $this->assertEquals('Vpc_Basic_DownloadTag_TestComponent', $url[1+3]);
+        $this->assertEquals('1700', $url[2+3]);
+        $this->assertEquals('default', $url[3+3]);
+        $this->assertEquals('foo.png', $url[6+3]);
     }
 
     public function testUrlWithOwnFilename()
@@ -27,7 +27,7 @@ class Vpc_Basic_DownloadTag_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('1701');
         $url = $c->getComponent()->getDownloadUrl();
         $url = explode('/', trim($url, '/'));
-        $this->assertEquals('myname.png', $url[5]);
+        $this->assertEquals('myname.png', $url[6+3]);
     }
 
     public function testGetMediaOutput()
@@ -39,9 +39,8 @@ class Vpc_Basic_DownloadTag_Test extends Vpc_TestAbstract
 
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1700));
-        $this->assertEquals('<a href="/media/Vpc_Basic_DownloadTag_TestComponent/1700/default/26ef864633eb161c415779746271adc8/foo.png" rel="popup_blank">', $html);
+        $html = $this->_root->getComponentById(1700)->render();
+        $this->assertRegExp('#^<a href="/vps/vpctest/Vpc_Basic_DownloadTag_Root/media/Vpc_Basic_DownloadTag_TestComponent/1700/default/26ef864633eb161c415779746271adc8/[0-9]+/foo.png" rel="popup_blank">$#ms', $html);
     }
 
     public function testEmpty()
@@ -49,8 +48,6 @@ class Vpc_Basic_DownloadTag_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('1702');
         $this->assertFalse($c->hasContent());
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($c);
-        $this->assertEquals('', $html);
+        $this->assertEquals('', $c->render());
     }
 }

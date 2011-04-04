@@ -1,40 +1,11 @@
 <?php
-class Vpc_Chained_Trl_MasterAsChild_Component extends Vpc_Abstract
+class Vpc_Chained_Trl_MasterAsChild_Component extends Vpc_Chained_Abstract_MasterAsChild_Component
 {
-    public static function getSettings($masterComponentClass)
-    {
-        $ret = parent::getSettings();
-        if (!$masterComponentClass) {
-            throw new Vps_Exception("This component requires a parameter");
-        }
-        $ret['masterComponentClass'] = $masterComponentClass;
-        $ret['generators']['child'] = array(
-            'class' => 'Vps_Component_Generator_Static',
-            'component' => $masterComponentClass,
-        );
-        try {
-            $ret['componentName'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentName');
-        } catch (Exception $e) {}
-        try {
-            $ret['componentIcon'] = Vpc_Abstract::getSetting($masterComponentClass, 'componentIcon');
-        } catch (Exception $e) {}
-        return $ret;
-    }
-
+    //wofür wird das benötigt?
+    //habs *nicht* in Vpc_Chained_Abstract_MasterAsChild_Component gegeben da es da bei ingenieurbueros suche probleme verursacht hat
+    //und zwar ist die page nicht die für die sendContent() aufgerufen wird sondern die child, und da fehlen dann die boxen und alles
     public function sendContent()
     {
         $this->getData()->getChildComponent('-child')->getComponent()->sendContent();
-    }
-
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $ret['child'] = $this->getData()->getChildComponent('-child');
-        return $ret;
-    }
-
-    public function hasContent()
-    {
-        return $this->getData()->getChildComponent('-child')->hasContent();
     }
 }

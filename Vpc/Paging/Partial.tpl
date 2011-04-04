@@ -1,3 +1,5 @@
 <?php foreach ($this->pageLinks as $l) { ?>
-    <a href="<?= $l['href'] ?>" rel="<?= $l['rel'] ?>"<?php if ($l['active']) { ?> class="active"<?php } ?>><?= $l['text'] ?></a>
+    <a<? if ($l['active']) { ?> class="active"<? } ?> href="<?=$l['href'];?>" rel="<?=$l['rel'];?>">
+        <span<? if (!is_numeric($l['text'])) { ?> class="navigation"<? } ?>><?=$l['text'];?></span>
+    </a>
 <?php } ?>

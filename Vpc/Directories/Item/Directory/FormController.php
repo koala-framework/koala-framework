@@ -6,6 +6,11 @@ class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Actio
 
     public function _initFields()
     {
+        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigTabs') ||
+            is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Vpc_Directories_Item_Directory_ExtConfigTabs'))
+        {
+            $this->_buttons['save'] = true;
+        }
         $this->_form = Vpc_Abstract_Form::createChildComponentForm(
                 $this->_getParam('class'), '-detail', $this->_getParam('class'));
         $this->_form->setIdTemplate(null);
@@ -16,7 +21,7 @@ class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Actio
         foreach ($classes as $class) {
             $formName = Vpc_Admin::getComponentClass($class, 'ItemEditForm');
             if ($formName) {
-                $this->_form->add(new $formName($class, $class));
+                $this->_form->add(new $formName($class, $class, $this->_getParam('componentId')));
             }
         }
     }

@@ -20,7 +20,28 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret['level'] = 'main';
         $ret['dataModel'] = 'Vpc_Menu_Abstract_Model';
         $ret['menuModel'] = 'Vpc_Menu_Abstract_MenuModel';
+        $ret['flags']['alternativeComponent'] = 'Vpc_Basic_ParentContent_Component';
+
+        $ret['extConfig'] = 'Vpc_Menu_Abstract_ExtConfig';
         return $ret;
+    }
+
+    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    {
+        $level = self::_getMenuLevel($componentClass, $parentData, $generator);
+        $maxLevel = (int)Vpc_Abstract::getSetting($componentClass, 'level');
+        return $level > $maxLevel;
+    }
+
+    protected static function _getMenuLevel($componentClass, $parentData, Vps_Component_Generator_Abstract $generator)
+    {
+        $data = $parentData;
+        $level = $generator->getGeneratorFlag('page') ? 1 : 0; // falls zu erstellendes Data eigene Page ist (tritt eigentlich nur bei Tests auf)
+        while ($data && !Vpc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
+            if ($data->isPage) $level++;
+            $data = $data->parent;
+        }
+        return $level;
     }
 
     public function getTemplateVars()
@@ -28,7 +49,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['parentPage'] = null;
         if ($this->_getSetting('showParentPage')) {
-            $currentPages = array_reverse($this->_getCurrentPages());
+            $currentPages = array_reverse($this->_getCurrentPagesCached());
             if (isset($this->getData()->level)) {
                 $level = $this->getData()->level;
             } else {
@@ -74,7 +95,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret = null;
 
         $ret = array();
-        $currentPages = array_reverse($this->_getCurrentPages());
+        $currentPages = array_reverse($this->_getCurrentPagesCached());
         if ($parentData) {
             $ret = $parentData;
         } else {
@@ -116,32 +137,44 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    protected function _getMenuData($parentData = null, $select = array())
+    protected function _getMenuPages($parentData, $select)
     {
         if (is_array($select)) $select = new Vps_Component_Select($select);
         $select->whereShowInMenu(true);
         $ret = array();
         $pageComponent = $this->getPageComponent($parentData);
         if ($pageComponent) $ret = $pageComponent->getChildPages($select);
+        return $ret;
+    }
+
+    protected function _getMenuData($parentData = null, $select = array())
+    {
         $currentPageIds = array();
-        $currentPages = array_reverse($this->_getCurrentPages());
+        $currentPages = array_reverse($this->_getCurrentPagesCached());
         foreach ($currentPages as $page) {
             if (!$page instanceof Vps_Component_Data_Root) {
                 $currentPageIds[] = $page->getComponentId();
             }
         }
         $i = 0;
-        foreach ($ret as $r) {
+        $ret = array();
+        $pages = $this->_getMenuPages($parentData, $select);
+        foreach ($pages as $p) {
+            $r = array(
+                'data' => $p,
+                'text' => $p->name
+            );
             $class = array();
             if ($i == 0) { $class[] = 'first'; }
-            if ($i == count($ret)-1) { $class[] = 'last'; }
-            if (in_array($r->componentId, $currentPageIds)) {
+            if ($i == count($pages)-1) { $class[] = 'last'; }
+            if (in_array($p->componentId, $currentPageIds)) {
                 $class[] ='current';
-                $r->current = true;
+                $r['current'] = true;
             }
-            $cssClass = $this->_getConfig($r, 'cssClass');
+            $cssClass = $this->_getConfig($p, 'cssClass');
             if ($cssClass) $class[] = $cssClass;
-            $r->class = implode(' ', $class);
+            $r['class'] = implode(' ', $class);
+            $ret[] = $r;
             $i++;
         }
         return $ret;
@@ -165,42 +198,43 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         return $ret;
     }
 
-    // Array mit IDs von aktueller Seiten und Parent Pages
-    protected function _getCurrentPages()
+    // Array mit aktueller Seiten und Parent Pages
+    protected final function _getCurrentPagesCached()
     {
         if (!isset($this->_currentPages)) {
-            $this->_currentPages = array();
-            $p = $this->getData()->getPage();
-            while ($p) {
-                $this->_currentPages[] = $p;
-                $p = $p->getParentPage();
-            }
+            $this->_currentPages = $this->_getCurrentPages();
         }
         return $this->_currentPages;
     }
 
-    public static function getStaticCacheVars()
+    protected function _getCurrentPages()
     {
         $ret = array();
-        foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
-            foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
+        $p = $this->getData()->getPage();
+        while ($p) {
+            $ret[] = $p;
+            $p = $p->getParentPage();
+        }
+        return $ret;
+    }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        foreach (Vpc_Abstract::getComponentClasses() as $class) {
+            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
                 if (!isset($generator['showInMenu']) || !$generator['showInMenu']) continue;
                 $generator = current(Vps_Component_Generator_Abstract::getInstances(
-                    $componentClass, array('generator' => $key))
+                    $class, array('generator' => $key))
                 );
                 if (!$generator->getGeneratorFlag('page') || !$generator->getGeneratorFlag('table')) continue;
-                $ret[] = array(
-                    'model' => $generator->getModel()
-                );
+                $ret[] = new Vps_Component_Cache_Meta_Static_Model($generator->getModel());
             }
         }
-        $ret[] = array(
-            'model' => 'Vps_Component_Model'
-        );
-        // Falls Nickname geändert wird, ändert sich Url zum User
-        $ret[] = array(
-            'model' => Vps_Registry::get('config')->user->model
-        );
+
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Menu_Abstract_Model');
+
         return $ret;
     }
 }

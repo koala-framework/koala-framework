@@ -26,4 +26,13 @@ class Vpc_List_ChildPages_Teaser_TeaserImage_Component extends Vpc_Abstract_Comp
         if ($this->getRow()->visible) return true;
         return false;
     }
+
+    public function getCacheMeta()
+    {
+        $ret = parent::getCacheMeta();
+        if (isset($this->getData()->targetPage->row)) {
+            $ret[] = new Vps_Component_Cache_Meta_Component($this->getData()->targetPage);
+        }
+        return $ret;
+    }
 }

@@ -1,11 +1,12 @@
 <?php
 class Vps_Mail extends Zend_Mail
 {
-    // die folgenden 4 sind für maillog
+    // die folgenden 5 sind für maillog
     protected $_ownFrom = '';
     protected $_ownTo = array();
     protected $_ownCc = array();
     protected $_ownBcc = array();
+    protected $_attachments = array();
 
     public function __construct($mustNotBeSet = null)
     {
@@ -13,6 +14,20 @@ class Vps_Mail extends Zend_Mail
             throw new Vps_Exception("Vps_Mail got replaced with Vps_Mail_Template");
         }
         parent::__construct('utf-8');
+    }
+
+    public function getMailContent($type = Vps_Model_Mail_Row::MAIL_CONTENT_AUTO)
+    {
+        if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_AUTO) {
+            $ret = $this->getBodyHtml(true);
+            if (!$ret) $ret = $this->getBodyText(true);
+            return $ret;
+        } else if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_HTML) {
+            return $this->getBodyHtml(true);
+        } else if ($type == Vps_Model_Mail_Row::MAIL_CONTENT_TEXT) {
+            return $this->getBodyText(true);
+        }
+        return null;
     }
 
     public function addCc($email, $name='')
@@ -56,6 +71,12 @@ class Vps_Mail extends Zend_Mail
         return $this;
     }
 
+    public function addAttachment(Zend_Mime_Part $attachment)
+    {
+        $this->_attachments[] = $attachment;
+        return parent::addAttachment($attachment);
+    }
+
     public function setFrom($email, $name='')
     {
         if (empty($email)) {
@@ -78,17 +99,9 @@ class Vps_Mail extends Zend_Mail
             parent::addBcc($mailSendAllBcc);
         }
 
-        if (isset($_SERVER['HTTP_HOST'])) {
-            $host = $_SERVER['HTTP_HOST'];
-        } else {
-            $host = Vps_Registry::get('config')->server->domain;
-        }
-        $hostNonWww = preg_replace('#^www\\.#', '', $host);
-
         if ($this->getFrom() == null) {
-            $fromName = str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->name);
-            $fromAddress = str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->address);
-            $this->setFrom($fromAddress, $fromName);
+            $sender = $this->getSenderFromConfig();
+            $this->setFrom($sender['address'], $sender['name']);
         }
 
         // in service mitloggen wenn url vorhanden
@@ -97,10 +110,16 @@ class Vps_Mail extends Zend_Mail
             if (isset($_COOKIE['unitTest']) && $_COOKIE['unitTest']) {
                 $r->identifier = $_COOKIE['unitTest'];
             }
+            $attachmentFilenames = array();
+            foreach ($this->_attachments as $attachment) {
+                $attachmentFilenames[] = $attachment->filename;
+            }
             $r->from = $this->_ownFrom;
+            $r->return_path = $this->getReturnPath();
             $r->to = implode(';', $this->_ownTo);
             $r->cc = implode(';', $this->_ownCc);
             $r->bcc = implode(';', $this->_ownBcc);
+            $r->attachment_filenames = implode(';', $attachmentFilenames);
             $r->subject = $this->getSubject();
             $r->body_text = $this->_bodyText;
             $r->body_html = $this->_bodyHtml;
@@ -108,5 +127,19 @@ class Vps_Mail extends Zend_Mail
         }
 
         return parent::send($transport);
+    }
+
+    public static function getSenderFromConfig()
+    {
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = Vps_Registry::get('config')->server->domain;
+        }
+        $hostNonWww = preg_replace('#^www\\.#', '', $host);
+        return array(
+            'address' => str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->address),
+            'name' => str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->name)
+        );
     }
 }
