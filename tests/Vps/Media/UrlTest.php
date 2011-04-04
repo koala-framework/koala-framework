@@ -2,35 +2,41 @@
 /**
  * @group Media
  */
-class Vps_Media_UrlTest extends PHPUnit_Framework_TestCase
+class Vps_Media_UrlTest extends Vpc_TestAbstract
 {
+    public function setUp()
+    {
+        parent::setUp('Vpc_Basic_Image_Root');
+        $this->_root->setFilename(null);
+    }
+
     public function testUrl()
     {
-        $url = Vps_Media::getUrl('TestClass', 123, 'foo', 'test.jpg');
+        $url = Vps_Media::getUrl('Vpc_Basic_Image_TestComponent', 1600, 'foo', 'test.jpg');
         $url = explode('/', trim($url, '/'));
-        $this->assertEquals('TestClass', $url[1]);
-        $this->assertEquals(123, $url[2]);
+        $this->assertEquals('Vpc_Basic_Image_TestComponent', $url[1]);
+        $this->assertEquals(1600, $url[2]);
         $this->assertEquals('foo', $url[3]);
-        $this->assertEquals('test.jpg', $url[5]);
+        $this->assertEquals('test.jpg', $url[6]);
 
-        $c1 = Vps_Media::getChecksum('TestClass', 123, 'foo', 'test.jpg');
-        $c2 = Vps_Media::getChecksum($url[1], $url[2], $url[3], $url[5]);
+        $c1 = Vps_Media::getChecksum('Vpc_Basic_Image_TestComponent', 1600, 'foo', 'test.jpg');
+        $c2 = Vps_Media::getChecksum($url[1], $url[2], $url[3], $url[6]);
         $this->assertEquals($c1, $c2);
     }
 
     public function testUrlByRow()
     {
-        $m = new Vps_Model_FnF();
+        $m = Vps_Model_Abstract::getInstance('Vps_Media_TestOutputModel');
         $r = $m->createRow();
         $r->id = 23;
         $r->save();
 
         $url = Vps_Media::getUrlByRow($r, 'default', 'test.jpg');
         $url = explode('/', trim($url, '/'));
-        $this->assertEquals('Vps_Model_FnF', $url[1]);
+        $this->assertEquals('Vps_Media_TestOutputModel', $url[1]);
         $this->assertEquals(23, $url[2]);
         $this->assertEquals('default', $url[3]);
-        $this->assertEquals('test.jpg', $url[5]);
+        $this->assertEquals('test.jpg', $url[6]);
     }
 
     public function testOutputCache()
@@ -94,7 +100,7 @@ class Vps_Media_UrlTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(touch($f, $newTime));
         clearstatcache();
         $this->assertEquals($newTime, filemtime($f));
-        
+
         $o = Vps_Media::getOutput('Vps_Media_TestMediaOutputClass', $id, 'mtimeFiles');
         $this->assertEquals(array('mimeType' => 'text/plain',
                                   'contents'=>'foobar'.$id,

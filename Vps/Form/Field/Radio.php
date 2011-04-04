@@ -9,6 +9,7 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
         parent::__construct($field_name, $field_label);
         $this->setXtype('radiogroup');
         $this->setOutputType('horizontal');
+        $this->setEmptyMessage(trlVpsStatic('Please choose an option'));
     }
 
     // $this->setOutputType($type)
@@ -44,22 +45,12 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
         return $ret;
     }
 
-    protected function _validateNotAllowBlank($data, $name)
-    {
-        $ret = array();
-        $v = new Vps_Validate_NotEmpty();
-        if (!$v->isValid($data)) {
-            $ret[] = $name.": ".trlVps("Please choose an option");
-        }
-        return $ret;
-    }
-
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
         $name = $this->getFieldName();
-        $value = $values[$name];
+        $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
 
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $store = $this->_getStoreData();
@@ -72,7 +63,9 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
             $ret['html'] .= '<span class="value'.htmlspecialchars(ucfirst($i[0])).'">';
             $ret['html'] .= '<input type="radio" class="radio" id="'.$ret['id'].++$k.'" '
                 .'name="'.$name.$fieldNamePostfix.'" value="'.htmlspecialchars($i[0]).'"';
-            if ($i[0] == $value) $ret['html'] .= ' checked="checked"';
+            if ($value === $i[0] || (!is_null($value) && $i[0] == $value)) {
+                $ret['html'] .= ' checked="checked"';
+            }
             $ret['html'] .= ' /> <label for="'.$ret['id'].$k.'">'.htmlspecialchars($i[1]).'</label>';
             $ret['html'] .= '</span>';
         }

@@ -3,6 +3,7 @@ class Vps_Assets_Dependencies
 {
     private $_files = array();
     private $_config;
+    private $_path;
     private $_loader;
     private $_dependenciesConfig;
     private $_processedDependencies = array();
@@ -15,6 +16,7 @@ class Vps_Assets_Dependencies
     {
         $this->_loader = $loader;
         $this->_config = $loader->getConfig();
+        $this->_path = $this->_config->path->toArray();
     }
 
     public function getMaxFileMTime()
@@ -25,15 +27,18 @@ class Vps_Assets_Dependencies
         $cache = Vps_Assets_Cache::getInstance();
         if (($ret = $cache->load('maxFileMTime')) === false) {
             $ret = 0;
-            foreach ($this->_config->assets->toArray() as $assetType=>$v) {
-                $files = $this->getAssetFiles($assetType, null, 'web', Vps_Component_Data_Root::getComponentClass());
-                unset($files['mtime']);
-                foreach ($files as $file) {
-                    if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
-                    } else if (substr($file, 0, 8) == 'dynamic/') {
-                    } else {
-                        $ret = max($ret, filemtime($this->getAssetPath($file)));
-                    }
+            $assetsType = 'Admin';
+            if (!isset($this->_config->assets->Admin)) {
+                //für tests wenn keine Admin da, erste aus config nehmen
+                $assetsType = key($this->_config->assets->toArray());
+            }
+            $files = $this->getAssetFiles($assetsType, null, 'web', Vps_Component_Data_Root::getComponentClass());
+            unset($files['mtime']);
+            foreach ($files as $file) {
+                if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
+                } else if (substr($file, 0, 8) == 'dynamic/') {
+                } else {
+                    $ret = max($ret, filemtime($this->getAssetPath($file)));
                 }
             }
             $ret = array($ret);
@@ -45,7 +50,7 @@ class Vps_Assets_Dependencies
 
     public function getAssetUrls($assetsType, $fileType, $section, $rootComponent, $language = null)
     {
-        $b = Vps_Benchmark::start();
+        Vps_Benchmark::count('getAssetUrls');
         if ($this->_config->debug->menu) {
             $session = new Zend_Session_Namespace('debug');
             if (isset($session->enable) && $session->enable) {
@@ -69,7 +74,9 @@ class Vps_Assets_Dependencies
             } else {
                 if (substr($file, 0, 8) == 'dynamic/') {
                     $file = substr($file, 8);
-                    $a = new $file($this->_loader, $assetsType, $rootComponent);
+                    $arguments = explode(':', $file);
+                    $assetClass = array_shift($arguments);
+                    $a = new $assetClass($this->_loader, $assetsType, $rootComponent, $arguments);
                     if (!$allUsed || !$a->getIncludeInAll()) {
                         $v = $this->getMaxFileMTime();
                         $f = "/assets/dynamic/$assetsType/"
@@ -146,8 +153,9 @@ class Vps_Assets_Dependencies
             $files = array();
             foreach ($this->_files[$assetsType] as $file) {
                 if (substr($file, 0, 8) == 'dynamic/') {
-                    $f = substr($file, 8);
-                    $f = new $f($this->_loader, $assetsType, $rootComponent);
+                    $arguments = explode(':', substr($file, 8));
+                    $f = array_shift($arguments);
+                    $f = new $f($this->_loader, $assetsType, $rootComponent, $arguments);
                     if ($f->getType() == $fileType) {
                         $files[] = $file;
                     }
@@ -227,6 +235,8 @@ class Vps_Assets_Dependencies
 
     private function _hasFile($assetsType, $file)
     {
+        return in_array($file, $this->_files[$assetsType], true);
+        /*
         //in_array scheint mit php 5.1 mit objekten nicht zu funktionieren
         foreach ($this->_files[$assetsType] as $f) {
             if (gettype($f) == gettype($file) && $f == $file) {
@@ -234,6 +244,7 @@ class Vps_Assets_Dependencies
             }
         }
         return false;
+        */
     }
 
     private function _processComponentDependency($assetsType, $class, $rootComponent, $includeAdminAssets)
@@ -268,36 +279,32 @@ class Vps_Assets_Dependencies
         }
 
         //alle css-dateien der vererbungshierache includieren
+        $files = Vpc_Abstract::getSetting($class, 'componentFiles');
         $componentCssFiles = array();
-
-        foreach (Vpc_Abstract::getParentClasses($class) as $c) {
-            $curClass = $c;
-            if (substr($curClass, -10) == '_Component') {
-                $curClass = substr($curClass, 0, -10);
+        foreach (array_merge($files['css'], $files['printcss']) as $f) {
+            if (substr($f, 0, strlen(VPS_PATH)) == VPS_PATH) { //zuerst, da vps in web liegen kann
+                //kann nur aus vps
+                $f = 'vps'.substr($f, strlen(VPS_PATH));
+            } else {
+                //oder web kommen
+                $f = 'web'.substr($f, strlen(getcwd()));
             }
-            $curClass =  $curClass . '_Component';
-            $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass);
-            foreach ($this->_config->path as $type=>$dir) {
-                if ($dir == '.') $dir = getcwd();
-                if (is_file($dir . '/' . $file.'.css')) {
-                    $f = $type . '/' . $file.'.css';
-                    if (!$this->_hasFile($assetsType, $f)) {
-                        $componentCssFiles[] = $f;
-                    }
-                }
-                if (is_file($dir . '/' . $file.'.printcss')) {
-                    $f = $type . '/' . $file.'.printcss';
-                    if (!$this->_hasFile($assetsType, $f)) {
-                        $componentCssFiles[] = $f;
-                    }
-                }
+            if (!$this->_hasFile($assetsType, $f)) {
+                $componentCssFiles[] = $f;
             }
         }
+
         //reverse damit css von weiter unten in der vererbungshierachie überschreibt
         $this->_files[$assetsType] = array_merge($this->_files[$assetsType], array_reverse($componentCssFiles));
 
         $classes = Vpc_Abstract::getChildComponentClasses($class);
         $classes = array_merge($classes, Vpc_Abstract::getSetting($class, 'plugins'));
+        foreach (Vpc_Abstract::getSetting($class, 'generators') as $g) {
+            if (isset($g['plugins'])) {
+                $classes = array_merge($classes, $g['plugins']);
+            }
+        }
+
         foreach ($classes as $class) {
             if ($class) {
                 $this->_processComponentDependency($assetsType, $class, $rootComponent, $includeAdminAssets);
@@ -309,12 +316,12 @@ class Vps_Assets_Dependencies
     {
         if (is_string($file) && substr($file, -2)=="/*") {
             $pathType = substr($file, 0, strpos($file, '/'));
-            if (!isset($this->_config->path->$pathType)) {
+            if (!isset($this->_path[$pathType])) {
                 throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
             }
             $file = substr($file, strpos($file, '/')); //pathtype abschneiden
             $file = substr($file, 0, -1); //* abschneiden
-            $path = $this->_config->path->$pathType.$file;
+            $path = $this->_path[$pathType].$file;
             if (!file_exists($path)) {
                 throw new Vps_Exception("Path '$path' does not exist.");
             }
@@ -324,7 +331,7 @@ class Vps_Assets_Dependencies
                     && (substr($file->getPathname(), -3) == '.js'
                         || substr($file->getPathname(), -4) == '.css')) {
                     $f = $file->getPathname();
-                    $f = substr($f, strlen($this->_config->path->$pathType));
+                    $f = substr($f, strlen($this->_path[$pathType]));
                     $f = $pathType . $f;
                     if (!$this->_hasFile($assetsType, $f)) {
                         $this->_files[$assetsType][] = $f;
@@ -340,7 +347,6 @@ class Vps_Assets_Dependencies
     public function getAssetPath($url)
     {
         if (file_exists($url)) return $url;
-        $paths = $this->_config->path;
 
         $type = substr($url, 0, strpos($url, '/'));
         $url = substr($url, strpos($url, '/')+1);
@@ -351,10 +357,10 @@ class Vps_Assets_Dependencies
         if (strpos($type, '-')!==false) {
             $type = substr($type, strpos($type, '-')+1); //section abschneiden
         }
-        if (!isset($paths->$type)) {
+        if (!isset($this->_path[$type])) {
             throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' for url '$url' not found in config.");
         }
-        $p = $paths->$type;
+        $p = $this->_path[$type];
         if (!file_exists($p.'/'.$url)) {
             throw new Vps_Assets_NotFoundException("Assets '$p/$url' not found");
         }

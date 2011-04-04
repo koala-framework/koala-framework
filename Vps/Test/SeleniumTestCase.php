@@ -1,16 +1,19 @@
 <?php
 class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
+    protected $backupStaticAttributes = false;
     protected $autoStop = false;
     protected $_unitTestCookie;
     protected $_domain = null;
 
-
-protected function _createSeparateTestDb($bootstrapFile)
-{
-    Vps_Test_OwnDbTestCase::createSeparateTestDb($bootstrapFile);
-    $this->_dbName = Vps_Test_OwnDbTestCase::getSeparateTestDbName();
-}
+    protected function initTestDb($bootstrapFile)
+    {
+        Vps_Test_SeparateDb::createSeparateTestDb($bootstrapFile);
+        $dbName = Vps_Test_SeparateDb::getDbName();
+        $this->createCookie('test_special_db='.$dbName, 'path=/, max_age=60*5');
+        Vps_Registry::set('db', Vps_Test::getTestDb($dbName));
+        Vps_Model_Abstract::clearInstances();
+    }
 
     public static function suite($className)
     {
@@ -26,6 +29,12 @@ protected function _createSeparateTestDb($bootstrapFile)
             throw new Vps_Exception("No test-Browser avaliable");
         }
         return parent::suite($className);
+    }
+
+    public function tearDown()
+    {
+        Vps_Test_SeparateDb::restoreTestDb(); // macht das nur wenns eine gibt
+        parent::tearDown();
     }
 
     protected function setUp()
@@ -132,7 +141,7 @@ protected function _createSeparateTestDb($bootstrapFile)
     {
         $url = '/vps/componentedittest/'.
                 Vps_Component_Data_Root::getComponentClass().'/'.
-                $componentClass.
+                $componentClass.'/Index'.
                 '?componentId='.$componentId;
         return $this->open($url);
     }

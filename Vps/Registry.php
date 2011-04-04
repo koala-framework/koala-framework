@@ -14,6 +14,13 @@ class Vps_Registry extends Zend_Registry
             return $v;
         } else if ($index == 'acl' && !parent::offsetExists($index)) {
             $class = Vps_Registry::get('config')->aclClass;
+            if (!$class) {
+                $validCommands = array('shell', 'export', 'copy-to-test'); //für ältere branches
+                if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
+                    throw new Vps_Exception("'aclClass' has to exist in web-config and the web must have an own acl-class for media output rights check (NOT CREATED IN BOOTSTRAP!)");
+                }
+                $class = 'Vps_Acl';
+            }
             $v = new $class();
             $this->offsetSet('acl', $v);
             return $v;

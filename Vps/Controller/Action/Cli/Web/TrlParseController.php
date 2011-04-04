@@ -37,7 +37,7 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
         //festsetzen der sprachen
         $parser = new Vps_Trl_Parser($modelVps, $modelWeb, $this->_getParam('type'), $this->_getParam('cleanUp'));
         $parser->setDebug($this->_getParam('debug'));
-        set_time_limit(200);
+        set_time_limit(2000);
         $results = $parser->parse();
         echo "\n\n------------------------\n";
         echo $results['files']." files parsed\n";
@@ -84,5 +84,68 @@ class Vps_Controller_Action_Cli_Web_TrlParseController extends Vps_Controller_Ac
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
+    public function checkIdsAction()
+    {
+        $models = array(
+            Vps_Model_Abstract::getInstance('Vps_Trl_Model_Vps'),
+            Vps_Model_Abstract::getInstance('Vps_Trl_Model_Web')
+        );
+        foreach ($models as $m) {
+            while ($m instanceof Vps_Model_Proxy) $m = $m->getProxyModel();
+            if (!file_exists($m->getFilePath())) continue;
+            $ids = array();
+            $duplicate = 0;
+            $xml = simplexml_load_file($m->getFilePath());
+            $maxId = 0;
+            foreach ($xml->text as $row) {
+                $maxId = max($maxId, (int)$row->id);
+            }
+            foreach ($xml->text as $row) {
+                $id = (int)$row->id;
+                if (in_array($id, $ids)) {
+                    echo $m->getFilePath().": $id doppelt\n";
+                    $duplicate++;
+                    $row->id = ++$maxId;
+                    continue;
+                }
+                $ids[] = $id;
+            }
+            if (!$duplicate) {
+                echo $m->getFilePath().": alles ok\n";
+            } else {
+                file_put_contents($m->getFilePath(), Vps_Model_Xml::asPrettyXML($xml->asXML()));
+            }
+        }
+        exit;
+    }
+
+    public function checkDoubleEntriesAction()
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Trl_Model_Vps');
+        $entries = array();
+        foreach ($m->getRows() as $row) {
+            $key = $row->context.$row->en;
+            if (!isset($entries[$key])) {
+            } else {
+                echo "double entry: $row->en ($row->de)\n";
+            }
+            $entries[$key][] = $row;
+        }
+        foreach ($entries as $rows) {
+            if (count($rows) == 1) continue;
+            $deleted = false;
+            foreach ($rows as $row) {
+                if (!$row->de) {
+                    $deleted = true;
+                    $row->delete();
+                    break;
+                }
+            }
+            if (!$deleted) {
+                $rows[count($rows)-1]->delete();
+            }
+        }
+        exit;
+    }
 }
 

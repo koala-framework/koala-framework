@@ -9,9 +9,13 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
     {
         $ret = parent::getSettings();
         $ret['limit'] = 5;
-        $ret['viewCache'] = false;
         $ret['placeholder']['header'] = trlVps('Latest referer');
         return $ret;
+    }
+
+    public function getViewCacheLifetime()
+    {
+        return 60*60;
     }
 
     public function getTemplateVars()
@@ -52,6 +56,11 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
         return $this->_referersCache;
     }
 
+    public function emptyReferersCache()
+    {
+        $this->_referersCache = null;
+    }
+
     public function hasContent()
     {
         $refs = $this->_getReferers();
@@ -66,13 +75,10 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
             ->limit($this->_getSetting('limit'));
     }
 
-    public function getCacheVars()
+    public function getCacheMeta()
     {
-        $ret = parent::getCacheVars();
-        $ret[] = array(
-            'model' => $this->_getParentModel(),
-            'id' => null
-        );
+        $ret = parent::getCacheMeta();
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($this->_getParentModel());
         return $ret;
     }
 }

@@ -2,7 +2,7 @@
  /**
   * @group Vps_Form
   */
-class Vps_Form_FormInFormTest extends PHPUnit_Framework_TestCase
+class Vps_Form_FormInFormTest extends Vps_Test_TestCase
 {
     public function testForm()
     {

@@ -21,6 +21,8 @@ class Vpc_Advanced_DownloadsTree_Component extends Vpc_Abstract_Composite_Compon
 
         $ret['panelWidth'] = 490;
         $ret['panelHeight'] = 500;
+
+        $ret['extConfig'] = 'Vpc_Advanced_DownloadsTree_ExtConfig';
         return $ret;
     }
 

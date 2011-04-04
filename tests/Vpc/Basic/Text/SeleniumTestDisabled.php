@@ -1,11 +1,12 @@
 <?php
-class Vpc_Basic_Text_SeleniumTest extends PHPUnit_Framework_TestCase
+class Vpc_Basic_Text_SeleniumTest extends Vpc_TestAbstract
 {
 }
 /**
 das funktioniert alles nicht; sowas zu testen ist mit selenium _etwas_ schwierig
 
-http://fnprofile.markus.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent?componentId=1000
+http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Basic_Text_Root/Vpc_Basic_Text_TestComponent/Index?componentId=1000
+
 
  * @group slow
  * @group Vpc_Basic_Text
@@ -21,7 +22,7 @@ class Vpc_Basic_Text_SeleniumTest extends Vps_Test_SeleniumTestCase
     {
         $this->openVpcEdit('Vpc_Basic_Text_TestComponent', 1000);
         $this->waitForConnections();
-	
+
 
         $this->focus('dom=window.frames[0].document.body');
         $this->keyPress('dom=window.frames[0].document.body', 'a');

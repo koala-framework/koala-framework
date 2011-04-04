@@ -33,7 +33,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
             $this->addValidator(new Zend_Validate_Regex('/^[a-zA-Z0-9_]+$/'));
         }
         if ($this->getMaxLength()) {
-            $this->addValidator(new Zend_Validate_StringLength(0, $this->getMaxLength()));
+            $this->addValidator(new Zend_Validate_StringLength(0, $this->getMaxLength()+1));
         }
     }
 

@@ -1,1 +1,1 @@
-master <?= $this->component($this->component->getChildComponent('-box')) ?> <?= $this->component($this->component) ?>
+rootmaster <?=$this->componentWithMaster($this->componentWithMaster)?> rootmasterend

@@ -9,7 +9,14 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Static',
             'component' => array()
         );
-        $ret['configChildComponentsGenerator'] = 'child';
+        $cc = Vps_Registry::get('config')->vpc->childComponents;
+        if (isset($cc->Vpc_Abstract_Composite_Component)) {
+            $ret['generators']['child']['component'] =
+                $cc->Vpc_Abstract_Composite_Component->toArray();
+        }
+
+        $ret['extConfig'] = 'Vpc_Abstract_Composite_ExtConfigForm';
+
         return $ret;
     }
 
@@ -39,6 +46,22 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
         $ret = array('composite' => array());
         foreach ($children as $child) {
             $ret['composite'][$child->id] = $child->getComponent()->getExportData();
+        }
+        return $ret;
+    }
+
+    public static function getStaticCacheMeta($componentClass)
+    {
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
+        if (isset($generators['child'])) {
+            $components = $generators['child']['component'];
+            if (!is_array($components)) $components = array($components);
+            foreach ($components as $class) {
+                if ($class) {
+                    $ret[] = new Vpc_Abstract_Composite_MetaHasContent($class);
+                }
+            }
         }
         return $ret;
     }

@@ -2,14 +2,11 @@
 /**
  * @group Vpc_Basic_LinkTagExtern
  **/
-class Vpc_Basic_LinkTagExtern_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_LinkTagExtern_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_LinkTagExtern_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Basic_LinkTagExtern_Root');
     }
 
     public function testUrlAndRel()
@@ -28,12 +25,10 @@ class Vpc_Basic_LinkTagExtern_Test extends PHPUnit_Framework_TestCase
     }
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1200));
+        $html = $this->_root->getComponentById(1200)->render();
         $this->assertEquals('<a href="http://example.com">', $html);
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1201));
+        $html = $this->_root->getComponentById(1201)->render();
         $this->assertEquals('<a href="http://example.com" rel="popup_blank">', $html);
     }
 }

@@ -6,6 +6,8 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Directories_Item_D
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['content'] = 'Vpc_Paragraphs_Component';
         $ret['cssClass'] = 'webStandard';
+        $ret['placeholder']['backLink'] = '';
+        $ret['editComponents'] = array('content');
         return $ret;
     }
 

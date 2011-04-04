@@ -3,13 +3,11 @@
  * @group Generator_RecursiveTable
  * Test der Nachbaut: Paragraphs wo Columns wo Paragraphs drin sind
  */
-class Vps_Component_Generator_RecursiveTable2_RecursiveTest extends PHPUnit_Framework_TestCase
+class Vps_Component_Generator_RecursiveTable2_RecursiveTest extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_RecursiveTable2_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Component_Generator_RecursiveTable2_Root');
     }
 
     public function testFlag2()

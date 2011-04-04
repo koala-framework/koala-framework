@@ -2,6 +2,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     layout: 'fit',
 
+    // true, false, integer. If integer: after x filters another new tbar is generated
+    filtersInSeparateTbar: false,
+
     initComponent : function()
     {
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
@@ -15,6 +18,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             'rendergrid',
             'beforerendergrid',
             'deleterow',
+            'cellclick',
             'celldblclick',
             'rowdblclick'
         );
@@ -456,47 +460,22 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             }
         }
 
-        this.filters = new Ext.util.MixedCollection();
-        var first = true;
-        if (meta.filters.text && typeof(meta.filters.text) != 'object') {
-            meta.filters.text = { type: 'TextField' };
-        }
-        for(var filter in meta.filters) {
-            var f = meta.filters[filter];
-            if (!Vps.Auto.GridFilter[f.type]) {
-                throw "Unknown filter.type: "+f.type;
-            }
-            var type = Vps.Auto.GridFilter[f.type];
-            delete f.type;
-            f.id = filter;
-            var filterField = new type(f);
-
-            if (f.right) {
-				gridConfig.tbar.add('->');
-				f.label += ' ';
-			} else if(first && gridConfig.tbar.length > 0) {
-                gridConfig.tbar.add('-');
-            }
-            if (first && !f.label) f.label = 'Filter:';
-            if (f.label) {
-                if (!first) {
-                    f.label = '  '+f.label;
-                }
-                gridConfig.tbar.add(f.label);
-            } else {
-                if (!first) {
-                    gridConfig.tbar.add('  ');
-                }
-            }
-            filterField.getToolbarItem().each(function(i) {
-                gridConfig.tbar.add(i);
-            });
-            this.filters.add(filterField);
-            filterField.on('filter', function(f, params) {
+        this.filters = new Vps.Auto.FilterCollection(meta.filters, this);
+        this.filters.each(function(filter) {
+            filter.on('filter', function(f, params) {
                 this.applyBaseParams(params);
                 this.load();
             }, this);
-            first = false;
+        }, this);
+
+        if (this.filtersInSeparateTbar === false || (
+            typeof this.filtersInSeparateTbar != 'boolean' && this.filtersInSeparateTbar >= 1
+        )) {
+            if (this.filtersInSeparateTbar) {
+                this.filters.applyToTbar(gridConfig.tbar, this.filtersInSeparateTbar);
+            } else {
+                this.filters.applyToTbar(gridConfig.tbar);
+            }
         }
 
         if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv || meta.buttons.reload) {
@@ -540,6 +519,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             delete gridConfig.tbar;
         }
 
+        gridConfig.filtersInSeparateTbar = this.filtersInSeparateTbar;
+        if (this.filtersInSeparateTbar) {
+            gridConfig.filters = this.filters;
+        }
+
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
         this.relayEvents(this.grid, ['beforeedit', 'aftereditcomplete', 'validateedit']);
 
@@ -551,6 +535,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.ignoreCellClicks = false;
             }).defer(500, this);
 
+            this.fireEvent('cellclick', grid, rowIndex, columnIndex, e);
             var col = grid.getColumnModel().config[columnIndex];
             if (col.clickHandler) {
                 col.clickHandler.call(col.scope || this, grid, rowIndex, col, e);
@@ -700,19 +685,19 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.reload();
                 this.fireEvent('datachange', r);
                 if (cb.success) {
-                    cb.success.apply(cb.scope, arguments)
+                    cb.success.apply(cb.scope, arguments);
                 }
             },
             failure: function() {
                 this.getAction('save').enable();
                 if (cb.failure) {
-                    cb.failure.apply(cb.scope, arguments)
+                    cb.failure.apply(cb.scope, arguments);
                 }
             },
             callback: function() {
                 this.el.unmask();
                 if (cb.callback) {
-                    cb.callback.apply(cb.scope, arguments)
+                    cb.callback.apply(cb.scope, arguments);
                 }
             },
             scope  : this
@@ -766,10 +751,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 }
 
                 this.getGrid().stopEditing();
-                this.store.insert(0, record);
+
+                var rowInsertPosition = 0;
+                if (this.insertNewRowAtBottom) {
+                    rowInsertPosition = this.store.getCount();
+                }
+                this.store.insert(rowInsertPosition, record);
                 this.store.newRecords.push(record);
                 if (record.dirty) {
-                    this.getGrid().startEditing(0, i);
+                    this.getGrid().startEditing(rowInsertPosition, i);
                 }
             }
         }
@@ -813,16 +803,17 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                         url: this.controllerUrl+'/json-delete',
                         params: params,
                         success: function(response, options, r) {
-                            this.reload();
-                            this.fireEvent('deleterow', this.grid);
-                            this.fireEvent('datachange', r);
-
                             this.activeId = null;
                             //wenn gelöscht alle anderen disablen
                             this.bindings.each(function(i) {
                                 i.item.disable();
                                 i.item.reset();
                             }, this);
+
+                            this.reload();
+                            this.fireEvent('deleterow', this.grid);
+                            this.fireEvent('datachange', r);
+
                         },
                         callback: function() {
                             this.el.unmask();
@@ -1001,7 +992,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!this.getStore()) {
             Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
             Ext.Ajax.request({
-                mask: true,
+                mask: this.el,
                 url: this.controllerUrl+'/json-data',
                 params: params,
                 success: function(response, options, r) {

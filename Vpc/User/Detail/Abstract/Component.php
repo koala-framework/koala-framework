@@ -8,14 +8,11 @@ abstract class Vpc_User_Detail_Abstract_Component extends Vpc_Abstract_Composite
         return $ret;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getCacheVars();
-        $row = $this->getData()->parent->row;
-        $ret[] = array(
-            'model' => $row->getModel(),
-            'id' => $row->id
-        );
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $model = Vps_Registry::get('config')->user->model;
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($model, 'users_{id}-general');
         return $ret;
     }
 }

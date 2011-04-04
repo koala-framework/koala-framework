@@ -3,10 +3,11 @@
  * @group Model
  * @group Model_MirrorCache
  */
-class Vps_Model_MirrorCache_NoModifiedField_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_MirrorCache_NoModifiedField_Test extends Vps_Test_TestCase
 {
     public function setUp()
     {
+        parent::setUp();
         $this->_sourceModel = new Vps_Model_FnF(array(
             'uniqueIdentifier' => 'unique',
             'columns' => array('id', 'firstname', 'lastname', 'timefield'),
@@ -32,6 +33,7 @@ class Vps_Model_MirrorCache_NoModifiedField_Test extends PHPUnit_Framework_TestC
             'maxSyncDelay' => 0
         ));
     }
+
     public function testRequests()
     {
         Vps_Benchmark::enable();

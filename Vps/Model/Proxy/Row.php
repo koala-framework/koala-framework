@@ -16,7 +16,9 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
 
     public function __isset($name)
     {
-        if ($this->_row->hasColumn($name)) {
+        if (in_array($name, $this->_model->getExprColumns())) {
+            return parent::__isset($name);
+        } else if ($this->_row->hasColumn($name)) {
             return true;
         } else {
             return parent::__isset($name);
@@ -34,7 +36,9 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        if ($this->_row->hasColumn($name)) {
+        if (in_array($name, $this->_model->getExprColumns())) {
+            return parent::__get($name);
+        } else if ($this->_row->hasColumn($name)) {
             return $this->_row->$name;
         } else {
             return parent::__get($name);
@@ -50,6 +54,32 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
         }
     }
 
+
+    //für forceSave
+    protected function _setDirty($column)
+    {
+        $this->_row->_setDirty($column);
+    }
+
+    protected function _resetDirty()
+    {
+        throw new Vps_Exception("should not be needed");
+    }
+
+    protected function _isDirty()
+    {
+        return $this->_row->isDirty();
+    }
+
+    public function getDirtyColumns()
+    {
+        $ret = $this->_row->getDirtyColumns();
+        foreach ($this->_getSiblingRows() as $r) {
+            $ret = array_merge($ret, $r->getDirtyColumns());
+        }
+        return $ret;
+    }
+
     public function save()
     {
         $this->_beforeSave();
@@ -60,7 +90,9 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
             $this->_beforeUpdate();
         }
         $this->_beforeSaveSiblingMaster();
+        Vps_Component_ModelObserver::getInstance()->disable();
         $ret = $this->_row->save();
+        Vps_Component_ModelObserver::getInstance()->enable();
         $this->_afterSave();
         if (!$id) {
             $this->_afterInsert();
@@ -75,7 +107,9 @@ class Vps_Model_Proxy_Row extends Vps_Model_Row_Abstract
     {
         parent::delete();
         $this->_beforeDelete();
+        Vps_Component_ModelObserver::getInstance()->disable();
         $this->_row->delete();
+        Vps_Component_ModelObserver::getInstance()->enable();
         $this->_afterDelete();
     }
 

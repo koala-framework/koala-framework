@@ -2,7 +2,7 @@
 /**
  * @group MediaImage
  */
-class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
+class Vps_Media_ImageTest extends Vps_Test_TestCase
 {
     public function testImageScaleDimensions()
     {
@@ -29,6 +29,12 @@ class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
         $this->_testBestFit(array(100, 200), $dimension, array(25, 50));
         $this->_testBestFit(array(100, 30), $dimension, array(100, 30));
 
+    }
+
+    public function testNotZeroHeight()
+    {
+        //weil eine dimension von 0 gibt (logischerweise) einen imagick fehler
+        $this->_testBestFit(array(100, 1), array(10, 10), array(10, 1));
     }
 
     public function testAvoidDivideByZero()

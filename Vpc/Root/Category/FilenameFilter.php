@@ -20,10 +20,18 @@ class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
                 ->getComponentById($componentId, array('ignoreVisible' => true))
                 ->parent;
         }
+        $parent = $parent->getPseudoPageOrRoot();
+
         $values = array();
         foreach ($parent->getChildPages(array('ignoreVisible' => true)) as $c) {
             if ($c->componentId == $componentId) continue;
             $values[] = $c->filename;
+        }
+        if ($parent instanceof Vps_Component_Data_Root) {
+            $values[] = 'admin';
+            $values[] = 'vps';
+            $values[] = 'media';
+            $values[] = 'assets';
         }
 
         $x = 0;
@@ -36,7 +44,6 @@ class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
                 $unique = ++$x;
             }
         }
-
         return (string)$unique;
     }
 

@@ -1,4 +1,35 @@
 <?php
+function _pArray($src, $indent = '')
+{
+    $ret = '';
+    if (is_array($src)) {
+        $ret .= "{$indent}array ".count($src)." entries (\n";
+        foreach ($src as $k=>$i) {
+            $ret .= $indent."$k =>\n";
+            $ret .= _pArray($i, $indent . '  ');
+        }
+        $ret .= "{$indent})\n";
+    } else {
+        if (is_object($src) && method_exists($src, 'toDebug')) {
+            $src = $src->toDebug();
+            $src = str_replace('<pre>', '', $src);
+            $src = str_replace('</pre>', '', $src);
+        } else if (is_object($src) && method_exists($src, '__toString')) {
+            $src = $src->__toString();
+        } else if (!is_string($src)) {
+            $src = print_r($src, true);
+        } else {
+            if (strlen($src) > 400) {
+                $src = substr($src, 0, 400)."...".' (length='.strlen($src).')';
+            }
+        }
+        foreach (explode("\n", $src) as $l) {
+            $ret .= $indent.$l."\n";
+        }
+    }
+    return $ret;
+}
+
 function p($src, $Type = 'LOG')
 {
     if (!Vps_Debug::isEnabled()) return;
@@ -18,6 +49,15 @@ function p($src, $Type = 'LOG')
     }
     if (is_object($src) && method_exists($src, '__toString')) {
         $src = $src->__toString();
+    }
+    if (is_array($src)) {
+        $isToDebug = true;
+        $src = _pArray($src);
+        if (php_sapi_name() == 'cli') {
+            $src = "\n$src";
+        } else {
+            $src = "<pre>\n$src</pre>";
+        }
     }
     if ($isToDebug) {
         echo $src;
@@ -125,7 +165,7 @@ function _btArgString($arg)
     } else if (is_null($arg)) {
         $ret[] = 'null';
     } else if (is_string($arg)) {
-        if (strlen($arg) > 50) $arg = substr($arg, 0, 47)."...";
+        if (strlen($arg) > 200) $arg = substr($arg, 0, 197)."...";
         $ret[] = '"'.$arg.'"';
     } else if (is_bool($arg)) {
         $ret[] = $arg ? 'true' : 'false';
@@ -134,24 +174,31 @@ function _btArgString($arg)
     }
     return current($ret);
 }
+
+function btString()
+{
+    $bt = debug_backtrace();
+    $ret = '';
+    foreach ($bt as $i) {
+        if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') break;
+        if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') break;
+        if (isset($i['file']) && substr($i['file'], 0, 16) == '/www/public/niko/phpunit') break;
+        $ret .=
+            (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
+            (isset($i['line']) ? $i['line'] : '?') . ' - ' .
+            ((isset($i['object']) && $i['object'] instanceof Vps_Component_Data) ? $i['object']->componentId . '->' : '') .
+            (isset($i['function']) ? $i['function'] : '') . '(' .
+            _btArgsString($i['args']) . ')' . "\n";
+    }
+    $ret .= "\n";
+    return $ret;
+}
+
 function bt($file = false)
 {
     if (!Vps_Debug::isEnabled()) return;
-    $bt = debug_backtrace();
     if (php_sapi_name() == 'cli' || $file) {
-        $ret = '';
-        foreach ($bt as $i) {
-            if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') break;
-            if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') break;
-            if (isset($i['file']) && substr($i['file'], 0, 16) == '/www/public/niko/phpunit') break;
-            $ret .=
-                (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
-                (isset($i['line']) ? $i['line'] : '?') . ' - ' .
-                ((isset($i['object']) && $i['object'] instanceof Vps_Component_Data) ? $i['object']->componentId . '->' : '') .
-                (isset($i['function']) ? $i['function'] : '') . '(' .
-                _btArgsString($i['args']) . ')' . "\n";
-        }
-        $ret .= "\n";
+        $ret = btString();
         if ($file) {
             $ret = "=============================================\n\n".$ret;
             file_put_contents('backtrace', $ret, FILE_APPEND);
@@ -159,6 +206,7 @@ function bt($file = false)
             echo $ret;
         }
     } else {
+        $bt = debug_backtrace();
         unset($bt[0]);
         $out = array(array('File', 'Line', 'Function', 'Args'));
         foreach ($bt as $i) {
@@ -174,12 +222,16 @@ function bt($file = false)
 
 class Vps_Debug
 {
-    static $_enabled = true;
+    static $_enabled = 1;
     static $_view;
 
     public static function handleError($errno, $errstr, $errfile, $errline)
     {
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
+        if (defined('E_DEPRECATED') && $errno == E_DEPRECATED
+            && (strpos($errfile, '/usr/share/php/') !== false)) {
+            return;
+        }
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
@@ -188,36 +240,7 @@ class Vps_Debug
         if (!$exception instanceof Vps_Exception_Abstract) {
             $exception = new Vps_Exception_Other($exception);
         }
-
-        if (!$ignoreCli && php_sapi_name() == 'cli') {
-            file_put_contents('php://stderr', $exception->getException()->__toString()."\n");
-            exit(1);
-        }
-
-        $view = self::getView();
-        $view->exception = $exception->getException();
-        $view->message = $exception->getException()->getMessage();
-        $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
-            $_SERVER['REQUEST_URI'] : '' ;
-        $view->debug = Vps_Exception::isDebug();
-
-        $header = $exception->getHeader();
-        $template = $exception->getTemplate();
-        $template = strtolower(Zend_Filter::filterStatic($template, 'Word_CamelCaseToDash').'.tpl');
-        if ($exception instanceof Vps_Exception_Abstract) $exception->log();
-
-        if (!headers_sent()) header($header);
-        try {
-            echo $view->render($template);
-        } catch (Exception $e) {
-            echo '<pre>';
-            echo $exception->getException()->__toString();
-            echo "\n\n\nError happened while handling exception:";
-            echo $e->__toString();
-            echo '</pre>';
-        }
-        Vps_Benchmark::shutDown();
-        Vps_Benchmark::output();
+        $exception->render($ignoreCli);
     }
 
     public static function setView(Vps_View $view)
@@ -233,17 +256,20 @@ class Vps_Debug
 
     public static function enable()
     {
-        self::$_enabled = true;
+        self::$_enabled++;
     }
 
-    public static function disable()
+    /**
+     * @param int wie oft enable() aufgerufen werden muss um wirklich enabled zu sein
+     */
+    public static function disable($count = 1)
     {
         p('debug output disabled');
-        self::$_enabled = false;
+        self::$_enabled -= $count;
     }
 
     public static function isEnabled()
     {
-        return self::$_enabled;
+        return self::$_enabled > 0;
     }
 }

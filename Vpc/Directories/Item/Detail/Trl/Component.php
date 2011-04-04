@@ -5,6 +5,7 @@ class Vpc_Directories_Item_Detail_Trl_Component extends Vpc_Abstract_Composite_T
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['hasModifyItemData'] = true;
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
         return $ret;
     }
     public static function modifyItemData(Vps_Component_Data $item)

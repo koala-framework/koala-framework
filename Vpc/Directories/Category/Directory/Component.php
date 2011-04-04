@@ -4,23 +4,29 @@ class Vpc_Directories_Category_Directory_Component extends Vpc_Directories_ItemP
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['pool'] = null;
-        $ret['childModel'] = 'Vps_Util_Model_Pool';
+        $ret['childModel'] = 'Vpc_Directories_Category_Directory_CategoriesModel';
         $ret['generators']['detail']['class'] = 'Vpc_Directories_Category_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Vpc_Directories_Category_Detail_Component';
         $ret['generators']['detail']['showInMenu'] = true;
+        $ret['generators']['detail']['nameColumn'] = 'name';
 
         // zB für Kategorien Box
-        $ret['categoryChildId'] = 'categories';
         $ret['categoryName'] = trlVps('Categories');
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Directories/Category/Directory/Plugin.js';
-        $ret['assetsAdmin']['dep'][] = 'VpsPool';
 
         $ret['hasModifyItemData'] = true;
         $ret['categoryToItemModelName'] = null;
 
         return $ret;
+    }
+
+    public static function validateSettings($settings, $componentClass)
+    {
+        parent::validateSettings($settings, $componentClass);
+        if (isset($settings['pool'])) {
+            throw new Vps_Exception("Directories_Category doesn't use pools anymore");
+        }
     }
 
     public static function modifyItemData(Vps_Component_Data $item, $componentClass)

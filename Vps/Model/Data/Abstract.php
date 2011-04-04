@@ -53,6 +53,16 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         foreach ($this->getRows($where) as $row) $row->delete();
     }
 
+    public function updateRows($data, $where)
+    {
+        foreach ($this->getRows($where) as $row) {
+            foreach ($data as $key => $val) {
+                $row->$key = $val;
+            }
+            $row->save();
+        }
+    }
+
     private function _getDataKeys($where, $order, $limit, $start)
     {
         if (!is_object($where) || $where instanceof Vps_Model_Select_Expr_Interface) {
@@ -151,11 +161,11 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             foreach ($dataKeys as $key) {
                 if ($order['field'] instanceof Zend_Db_Expr) {
                     //can't be done in FnF
-                    $orderData[$inData[$key]['id']] = 0;
+                    $orderData[$inData[$key][$this->_primaryKey]] = 0;
                 } else if ($order['field'] == Vps_Model_Select::ORDER_RAND) {
-                    $orderData[$inData[$key]['id']] = rand();
+                    $orderData[$inData[$key][$this->_primaryKey]] = rand();
                 } else {
-                   $orderData[$inData[$key]['id']] = strtolower($this->_rowValue($order['field'], $inData[$key]));
+                   $orderData[$inData[$key][$this->_primaryKey]] = strtolower($this->_rowValue($order['field'], $inData[$key]));
                 }
             }
             if ($order['direction'] == 'ASC') {
@@ -168,7 +178,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             $sortedDataKeys = array();
             foreach (array_keys($orderData) as $id) {
                 foreach ($dataKeys as $key) {
-                    if ($inData[$key]['id'] == $id) {
+                    if ($inData[$key][$this->_primaryKey] == $id) {
                         $sortedDataKeys[] = $key;
                     }
                 }
@@ -252,11 +262,18 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     private function _checkExpressions(Vps_Model_Select_Expr_Interface $expr, $data)
     {
-        if ($expr instanceof Vps_Model_Select_Expr_Equals) {
+        if ($expr instanceof Vps_Model_Select_Expr_Equal) {
             $v = $this->_rowValue($expr->getField(), $data);
             $values = $expr->getValue();
             if (!is_array($values)) $values = array($values);
             if (!in_array($v, $values)) {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_NotEquals) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            $values = $expr->getValue();
+            if (!is_array($values)) $values = array($values);
+            if (in_array($v, $values)) {
                 return false;
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
@@ -266,20 +283,50 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             }
         } else if ($expr instanceof Vps_Model_Select_Expr_Higher) {
             $v = $this->_rowValue($expr->getField(), $data);
-            if (!($v && $v > $expr->getValue())) {
+            $exprValue = $expr->getValue();
+            if ($exprValue instanceof Vps_Date) {
+                $exprValue = $exprValue->getTimestamp();
+                $v = strtotime($v);
+            }
+            if (!($v && $v > $exprValue)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_Smaller) {
+        } else if ($expr instanceof Vps_Model_Select_Expr_Lower) {
             $v = $this->_rowValue($expr->getField(), $data);
-            if (!($v && $v < $expr->getValue())) {
+            $exprValue = $expr->getValue();
+            if ($exprValue instanceof Vps_Date) {
+                $exprValue = $exprValue->getTimestamp();
+                $v = strtotime($v);
+            }
+            if (!($v && $v < $exprValue)) {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_HigherDate) {
+        } else if ($expr instanceof Vps_Model_Select_Expr_HigherEqual) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            $exprValue = $expr->getValue();
+            if ($exprValue instanceof Vps_Date) {
+                $exprValue = $exprValue->getTimestamp();
+                $v = strtotime($v);
+            }
+            if (!($v && $v >= $exprValue)) {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_LowerEqual) {
+            $v = $this->_rowValue($expr->getField(), $data);
+            $exprValue = $expr->getValue();
+            if ($exprValue instanceof Vps_Date) {
+                $exprValue = $exprValue->getTimestamp();
+                $v = strtotime($v);
+            }
+            if (!($v && $v <= $exprValue)) {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_HigherEqualDate) {
             $v = $this->_rowValue($expr->getField(), $data);
             if ($v) {
                 $fieldTime = strtotime($v);
                 $exprTime = strtotime($expr->getValue());
-                if ($fieldTime > $exprTime) {
+                if ($fieldTime >= $exprTime) {
                     return true;
                 } else {
                     return false;
@@ -287,12 +334,12 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             } else {
                 return false;
             }
-        } else if ($expr instanceof Vps_Model_Select_Expr_SmallerDate) {
+        } else if ($expr instanceof Vps_Model_Select_Expr_SmallerEqualDate) {
             $v = $this->_rowValue($expr->getField(), $data);
             if ($v) {
                 $fieldTime = strtotime($v);
                 $exprTime = strtotime($expr->getValue());
-                if ($fieldTime < $exprTime) {
+                if ($fieldTime <= $exprTime) {
                     return true;
                 } else {
                     return false;
@@ -314,8 +361,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                     $reg = str_replace($part, '\\' . $part, $reg);
                 }
                 $reg = str_replace('%', '(.*)', $reg);
-                $reg = "^$reg$";
-                return eregi($reg, $v);
+                $reg = "/^$reg$/i";
+                return preg_match($reg, $v);
             }
             return false;
         } else if ($expr instanceof Vps_Model_Select_Expr_StartsWith) {

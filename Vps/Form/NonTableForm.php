@@ -40,6 +40,10 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
     {
         $key = $parentRow ? $parentRow->getInternalId() : 0;
         if (!isset($this->_rows[$key])) {
+            if (!$parentRow && $this->getIdTemplate()) {
+                //tritt auf in Cards bei einer nicht aktiven card (da ist parentRow null)
+                return null;
+            }
             $id = $this->_getIdByParentRow($parentRow);
             $model = new Vps_Model_FnF();
             $this->_rows[$key] = $model->createRow(array('id' => $id));
@@ -53,7 +57,7 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
     public function setName($name)
     {
         $this->fields->setFormName($name); //damit prefixName der Felder nachträglich angepasst wird
-        $this->setProperty('name', $name);
+        parent::setName($name);
     }
 
     public function getId()
