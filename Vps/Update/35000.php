@@ -44,6 +44,10 @@ class Vps_Update_35000 extends Vps_Update
             }
         }
 
+        if ($db->fetchOne("SHOW TABLES LIKE 'vps_enquiries'")) {
+            $fields['vps_enquiries'] = array('serialized_mail_vars', 'serialized_mail_essentials');
+        }
+
         $db->query("SET NAMES utf8");
         foreach ($fields as $tablename => $fieldnames) {
             // checken, ob das feld wirklich in der datenbank-tabelle existiert
@@ -71,8 +75,11 @@ class Vps_Update_35000 extends Vps_Update
                     if ($val === false) continue;
                     $val = json_encode($val);
                     $val = str_replace('\u', '\\\\u', $val);
+                    $val = str_replace('\"', '\\\\"', $val);
+                    $val = str_replace('\r', '\\\\r', $val);
+                    $val = str_replace('\n', '\\\\n', $val);
+                    $val = str_replace('\t', '\\\\t', $val);
                     $sql = "UPDATE $tablename SET $fieldname='$val' WHERE $fieldname='$oldval'";
-                    //p($sql);
                     $db->query($sql);
                 }
             }

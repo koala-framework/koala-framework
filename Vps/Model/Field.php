@@ -67,12 +67,12 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
                 } else {
                     $encodedData = json_decode($data);
                     if (is_null($encodedData)) { // json_encode hat nicht funktioniert, siehe mörder-kommentar paar zeilen vorher
-                        throw new Vps_Exception("json_encode failed. Input data was: '$data'");
+                        throw new Vps_Exception("json_decode failed. Input data was: '$data'");
                     }
                     $data = $encodedData;
                 }
             } catch (Exception $e) {
-                $e = new Vps_Exception($e->getMessage(). " $data");
+                $e = new Vps_Exception($e->getMessage());
                 $e->logOrThrow();
                 $data = false;
             }
