@@ -22,14 +22,14 @@ Vps.Auto.Filter.Text = function(config)
 };
 
 Ext.extend(Vps.Auto.Filter.Text, Vps.Auto.Filter.Abstract, {
-	clear: function()
-	{
+    clear: function()
+    {
         if (this.textField.getValue()) {
             this.textField.setValue('');
             this.fireEvent('filter', this, this.getParams());
         }
-	},
-	
+    },
+
     reset: function() {
         this.textField.reset();
     },
