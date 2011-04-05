@@ -57,12 +57,12 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
                 // falschen string (zB serialized) übergibt. bei nicht-json-daten
                 // kommt immer null raus. Da bringt das try-catch eher wenig,
                 // weil null nunmal keine Exception ist.
-                // Lösung: Wir schmeissen die exception händisch im falle von 
+                // Lösung: Wir schmeissen die exception händisch im falle von
                 // NULL. Eventuelles PROBLEM dabei ist jedoch,
                 // wenn man: $data = json_decode(json_encode(NULL))
                 // macht, weil dann korrekterweise NULL rauskommen würde.
                 // deshalb wird dieser fall separat ohne dem json_decode behandelt
-                if ($data == 'null') {
+                if ($data == 'null' || $data == '') {
                     $data = null;
                 } else {
                     $encodedData = json_decode($data);
