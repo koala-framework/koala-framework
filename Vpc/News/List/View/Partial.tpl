@@ -1,26 +1,27 @@
 <a name="<?=$this->item->componentId;?>"></a>
 <div class="entry">
-    <div class="text">
-        <h3>
-            <?if ($this->hasContent($this->item)) {?>
-                <?=$this->componentLink($this->item)?>
-            <?} else { ?>
-                <?=$this->item->row->title?>
-            <?}?>
-        </h3>
+    <h2>
+        <? if ($this->hasContent($this->item)) { ?>
+            <?=$this->componentLink($this->item)?>
+        <? } else { ?>
+            <?=$this->item->row->title?>
+        <? } ?>
+    </h2>
+    <div class="publishDate">
+        <p><?=$this->date($this->item->publish_date);?></p>
     </div>
-
-    <div class="publishDate"><?=$this->date($this->item->publish_date);?></div>
-
-    <div class="clear"></div>
-
-    <div class="teaser">
-        <p><?=nl2br($this->mailEncodeText($this->item->row->teaser));?></p>
-        <p class="readMore">
-            <?if ($this->hasContent($this->item)) {?>
-                <?=$this->componentLink($this->item, $this->item->trlVps('Read more') . ' &#xBB;')?>
-            <?}?>
-        </p>
+    <? if($this->hasContent($this->item->previewImage)) { ?>
+        <div class="prevImage left">
+            <?=$this->component($this->item->previewImage);?>
+        </div>
+    <? } ?>
+    <div<? if($this->hasContent($this->item->previewImage)) { echo ' class="teaser left"'; } ?>>
+        <p><?=nl2br($this->item->row->teaser);?></p>
     </div>
     <div class="clear"></div>
+    <? if($this->hasContent($this->item)) { ?>
+        <div class="readMoreLink">
+            <p><?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?></p>
+        </div>
+    <? } ?>
 </div>
