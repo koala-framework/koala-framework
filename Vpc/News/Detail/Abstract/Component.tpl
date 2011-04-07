@@ -5,7 +5,7 @@
     </div>
     <div class="infoContainer">
 	   <?=$this->component($this->content);?>
-   </div>
+    </div>
     <? if ($this->placeholder['backLink']) { ?>
         <div class="backLink">
             <p><?=$this->componentLink($this->data->parent, '&laquo; '.$this->placeholder['backLink'])?><p>
