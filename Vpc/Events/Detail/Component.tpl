@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass;?>">
-    <h2><?=$this->title;?></h2>
-    <div class="date">
+    <h1><?=$this->title;?></h1>
+    <div class="publishDate">
         <?
         if ($this->date($this->row->start_date,'H:i') != '00:00') {
             echo $this->dateTime($this->row->start_date);

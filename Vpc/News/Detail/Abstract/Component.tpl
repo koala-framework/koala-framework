@@ -1,8 +1,8 @@
 <div class="<?=$this->cssClass;?>">
-    <h2><?=$this->title;?></h2>
+    <h1><?=$this->title;?></h1>
     <div class="publishDate">
         <?=$this->date($this->row->publish_date);?>
-	</div>
+    </div>
     <div class="infoContainer">
 	   <?=$this->component($this->content);?>
    </div>
