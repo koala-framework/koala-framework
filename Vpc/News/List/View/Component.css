@@ -1,5 +1,5 @@
 .cssClass .entry { margin-bottom: 20px; padding-bottom: 20px; }
 .cssClass .entry h2,
 .cssClass .entry p { margin-bottom: 0px; }
-.cssClass .entry .teaser { margin-bottom: 10px; padding: 10px; background: var(lightGray); }
+.cssClass .entry .teaser { margin: 10px 0px; padding: 10px; background: var(lightGray); }
 .cssClass .entry .readMoreLink { text-align: right; }
