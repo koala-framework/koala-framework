@@ -1,0 +1,8 @@
+.cssClass .entry {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(gray);
+}
+.cssClass .entry h2,
+.cssClass .entry p { margin-bottom: 0px; }
+.cssClass .entry .teaser { margin-bottom: 10px; padding: 10px; background: var(lightGray); }

@@ -15,9 +15,11 @@
             <?=$this->component($this->item->previewImage);?>
         </div>
     <? } ?>
-    <div class="teaser<? if($this->hasContent($this->item->previewImage)) { echo ' left'; } ?>">
-        <p><?=nl2br($this->item->row->teaser);?></p>
-    </div>
+    <? if($this->item->row->teaser) { ?>
+	    <div class="teaser<? if($this->hasContent($this->item->previewImage)) { echo ' left'; } ?>">
+	        <p><?=nl2br($this->item->row->teaser);?></p>
+	    </div>
+    <? } ?>
     <div class="clear"></div>
     <? if($this->hasContent($this->item)) { ?>
         <div class="readMoreLink">
