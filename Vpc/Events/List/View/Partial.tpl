@@ -34,13 +34,19 @@
         </p>
     </div>
     <? if($this->item->row->teaser) { ?>
-	    <div class="teaser">
-	        <p><?=nl2br($this->mailEncodeText($this->item->row->teaser));?></p>
-	    </div>
-    <? } ?>
-    <? if($this->hasContent($this->item)) { ?>
+        <div class="teaser">
+            <p>
+                <?=nl2br($this->item->row->teaser);?>
+                <? if($this->hasContent($this->item)) { ?>
+                    <span class="readMoreLink">
+                        <?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?>
+                    </span>
+                <? } ?>
+            </p>
+        </div>
+    <? } else if($this->hasContent($this->item)) { ?>
         <div class="readMoreLink">
-            <p><?=$this->componentLink($this->item, $this->item->trlVps('Read more') . ' &raquo;');?></p>
+            <?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?>
         </div>
     <? } ?>
 </div>

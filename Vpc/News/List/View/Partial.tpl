@@ -17,13 +17,19 @@
     <? } ?>
     <? if($this->item->row->teaser) { ?>
 	    <div class="teaser<? if($this->hasContent($this->item->previewImage)) { echo ' left'; } ?>">
-	        <p><?=nl2br($this->item->row->teaser);?></p>
+	        <p>
+	        	<?=nl2br($this->item->row->teaser);?>
+				<? if($this->hasContent($this->item)) { ?>
+				    <span class="readMoreLink">
+				        <?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?>
+					</span>
+				<? } ?>
+			</p>
 	    </div>
-    <? } ?>
-    <div class="clear"></div>
-    <? if($this->hasContent($this->item)) { ?>
+    <? } else if($this->hasContent($this->item)) { ?>
         <div class="readMoreLink">
-            <p><?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?></p>
+            <?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?>
         </div>
     <? } ?>
+    <div class="clear"></div>
 </div>
