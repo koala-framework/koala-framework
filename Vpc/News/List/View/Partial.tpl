@@ -15,7 +15,7 @@
             <?=$this->component($this->item->previewImage);?>
         </div>
     <? } ?>
-    <div<? if($this->hasContent($this->item->previewImage)) { echo ' class="teaser left"'; } ?>>
+    <div class="teaser<? if($this->hasContent($this->item->previewImage)) { echo ' left'; } ?>">
         <p><?=nl2br($this->item->row->teaser);?></p>
     </div>
     <div class="clear"></div>
