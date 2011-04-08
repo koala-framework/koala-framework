@@ -13,37 +13,17 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
             );
             return $this->_getRenderPlaceholder($target->componentId, $config);
         } else {
-            if (is_array($target)) {
-                $url = $target['url'];
-                $rel = isset($target['rel']) ? $target['rel'] : '';
-            } else {
-                $url = $target;
-                $rel = '';
-            }
-            return $this->_getLink($url, $rel, $text, $cssClass, $get, $anchor);
+            $helper = new Vps_View_Helper_ComponentLink();
+            return $helper->componentLink($target, $text, $cssClass, $get, $anchor);
         }
-    }
-
-    private function _getLink($url, $rel, $text, $cssClass, $get, $anchor)
-    {
-        if (!empty($get)) {
-            $url .= '?';
-            foreach ($get as $key => $val) $url .= "&$key=$val";
-        }
-        if ($anchor) $url .= "#$anchor";
-        $cssClass = $cssClass ? " class=\"$cssClass\"" : '';
-        return "<a href=\"$url\" rel=\"$rel\"$cssClass>$text</a>";
     }
 
     public function render($componentId, $config)
     {
+        $helper = new Vps_View_Helper_ComponentLink();
         $targetComponent = $this->_getComponentById($config['targetComponentId']);
-        $targetPage = $targetComponent->getPage();
-        if (is_instance_of($targetPage->componentClass, 'Vpc_Basic_LinkTag_Abstract_Component')) {
-            if (!$targetPage->getComponent()->hasContent()) {
-                return '';
-            }
-        }
+        $targetPage = $helper->getTargetPage($targetComponent);
+        if (!$targetPage) return '';
         return $targetPage->url.';'.$targetPage->rel.';'.$targetPage->name;
     }
 
@@ -54,7 +34,8 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
         $targetPage = explode(';', $cachedContent);
 
         $text = $config['text'] ? $config['text'] : $targetPage[2];
-        return $this->_getLink(
+        $helper = new Vps_View_Helper_ComponentLink();
+        return $helper->getLink(
             $targetPage[0], $targetPage[1], $text,
             $config['cssClass'], $config['get'], $config['anchor']
         );
