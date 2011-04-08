@@ -161,9 +161,11 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                 }
             }
         } else {
-            $components = Vps_Component_Data_Root::getInstance()->getComponentsBySameClass($this->_class);
+            $components = Vps_Component_Data_Root::getInstance()->getComponentsBySameClass($this->_class, array('ignoreVisible' => true));
             if (count($components) == 1) {
                 return $components[0];
+            } else if (count($components) == 0) {
+                return null;
             }
             throw new Vps_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
         }
