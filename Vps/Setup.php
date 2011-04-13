@@ -209,7 +209,7 @@ class Vps_Setup
 
         if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
-            && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
+            && $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
@@ -275,14 +275,15 @@ class Vps_Setup
             return trim(file_get_contents('application/config_section'));
         } else if (file_exists('/var/www/vivid-test-server')) {
             return 'vivid-test-server';
-        } else if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
-            if ($m[2]=='vps-projekte') return 'vivid';
-            return $m[2];
+        } else if (preg_match('#/(www|wwwnas)/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
+            if ($m[3]=='vps-projekte') return 'vivid';
+            return $m[3];
         } else if (substr($host, 0, 9)=='dev.test.') {
             return 'devtest';
         } else if (substr($host, 0, 4)=='dev.') {
             return 'dev';
         } else if (substr($host, 0, 5)=='test.' ||
+                   substr($host, 0, 3)=='qa.' ||
                    substr($path, 0, 17) == '/docs/vpcms/test.' ||
                    substr($path, 0, 21) == '/docs/vpcms/www.test.' ||
                    substr($path, 0, 25) == '/var/www/html/vpcms/test.' ||
@@ -371,6 +372,56 @@ class Vps_Setup
             }
             Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
         }
+    }
+
+    /**
+     * Proxy, der zB für cross-domain ajax requests verwendet werden kann
+     *
+     * @param string|array $hosts Erlaubte Hostnamen (RegExp erlaubt, ^ vorne und $ hinten werden autom. angefügt)
+     */
+    public static function dispatchProxy($hostnames)
+    {
+        if (empty($_SERVER['REDIRECT_URL'])) return;
+
+        if (!preg_match('#^/vps/proxy/?$#i', $_SERVER['REDIRECT_URL'])) return;
+
+        if (is_string($hostnames)) {
+            $hostnames = array($hostnames);
+        }
+
+        $proxyUrl = $_REQUEST['proxyUrl'];
+        $proxyPostVars = $_POST;
+        $proxyGetVars = $_GET;
+        if (array_key_exists('proxyUrl', $proxyPostVars)) unset($proxyPostVars['proxyUrl']);
+        if (array_key_exists('proxyUrl', $proxyGetVars)) unset($proxyGetVars['proxyUrl']);
+
+        // host checking
+        $proxyHost = parse_url($proxyUrl, PHP_URL_HOST);
+        $matched = false;
+        foreach ($hostnames as $hostname) {
+            if (preg_match('/^'.$hostname.'$/i', $proxyHost)) {
+                $matched = true;
+                break;
+            }
+        }
+        if (!$matched) return;
+
+        // proxying
+        $http = new Zend_Http_Client($proxyUrl);
+        if (count($_POST)) {
+            $http->setMethod(Zend_Http_Client::POST);
+        } else {
+            $http->setMethod(Zend_Http_Client::GET);
+        }
+        if (count($_GET)) $http->setParameterGet($proxyGetVars);
+        if (count($_POST)) $http->setParameterPost($proxyPostVars);
+        $response = $http->request();
+        $headers = $response->getHeaders();
+        if ($headers && !empty($headers['Content-type'])) {
+            header("Content-Type: ".$headers['Content-type']);
+        }
+        echo $response->getBody();
+        exit;
     }
 
     public static function getHost($includeProtocol = true)
