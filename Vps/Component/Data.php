@@ -639,7 +639,11 @@ class Vps_Component_Data
                         return null;
                     }
                 } else {
-                    $id = substr($id, 0, strrpos($id, '_'));
+                    $underScorePos = strrpos($id, '_');
+                    $hyphenPos = strpos($id, '-', $underScorePos);
+                    if ($hyphenPos > $underScorePos) {
+                        $id = substr($id, 0, $hyphenPos);
+                    }
                 }
             }
             return Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));

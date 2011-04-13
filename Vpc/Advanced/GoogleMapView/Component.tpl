@@ -21,7 +21,7 @@
     <? if ($this->options['routing']) { ?>
         <form action="#" class="fromAddress printHidden">
             <input type="text" class="textBefore vpsClearOnFocus" value="<?= $this->data->trlVps('Place of departure: zip code, Town, Street'); ?>" />
-            <input type="submit" value="<?= $this->data->trlVps('Show Route') ?>" class="submitOn"/>
+            <button class="submitOn"><?= $this->data->trlVps('Show Route') ?></button>
             <div class="clear"></div>
         </form>
     <? } ?>

@@ -1,3 +1,15 @@
 .vpsFormFieldFileInner img {
     margin-top: -20px;
 }
+.vpsFormFieldFileInnerContent { float: left; white-space: nowrap; }
+.vpsFormFieldFileUploadWrapper { position: relative; }
+.vpsFormFieldFileUploadWrapper .fileSelector,
+.vpsFormFieldFileUploadWrapper .underlayFileSelector {
+    position: absolute; top: 0px; left: 0px;
+}
+.vpsFormFieldFileUploadWrapper .fileSelector {
+    z-index: 2;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+.vpsFormFieldFileUploadWrapper .underlayFileSelector { z-index: 1; }

@@ -25,7 +25,7 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
 
     //setValues
         //url (string), rowset, array
-    
+
     //setFields
         //array mit feldern
 
@@ -38,13 +38,13 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
 
     //setEmptyText
         //text fuer keine auswahl
-    
+
     //setFilterValue
         //wird von ComboBoxFilter aufgerufen
 
     //setDisplayField (name)
     //setListWidth
-        
+
 
     public function getMetaData($model)
     {

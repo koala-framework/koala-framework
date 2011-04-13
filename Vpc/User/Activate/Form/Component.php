@@ -57,7 +57,7 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         }
         $code = explode('-', $code);
         if (count($code) != 2 || empty($code[0]) || empty($code[1])) {
-            $this->_errors[] = $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE);
+            $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE));
             $this->_hideForm = true;
         } else {
             $userId = (int)$code[0];
@@ -65,13 +65,13 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
             $userModel = Zend_Registry::get('userModel');
             $this->_user = $userModel->getRow($userModel->select()->whereEquals('id', $userId));
             if (!$this->_user) {
-                $this->_errors[] = $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE);
+                $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE));
                 $this->_hideForm = true;
             } else if ($this->_user->getActivationCode() != $code && $this->_user->password) {
-                $this->_errors[] = $this->_getErrorMessage(self::ERROR_ALREADY_ACTIVATED);
+                $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_ALREADY_ACTIVATED));
                 $this->_hideForm = true;
             } else if ($this->_user->getActivationCode() != $code && !$this->_user->password) {
-                $this->_errors[] = $this->_getErrorMessage(self::ERROR_CODE_WRONG);
+                $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_CODE_WRONG));
                 $this->_hideForm = true;
             }
         }

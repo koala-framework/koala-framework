@@ -92,7 +92,7 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
     static public function getInfoWindowHtml($data)
     {
         $row = $data->getRow();
-        $link = new Vps_Component_View_Helper_ComponentLink();
-        return $link->componentLink($data).'<br />'.$row->street.'<br />'.$row->zipcode.' '.$row->city;
+        $link = new Vps_View_Helper_ComponentLink();
+        return $link->componentLinkRendered($data).'<br />'.$row->street.'<br />'.$row->zipcode.' '.$row->city;
     }
 }
