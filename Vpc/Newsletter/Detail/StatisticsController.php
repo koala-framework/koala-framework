@@ -26,7 +26,7 @@ class Vpc_Newsletter_Detail_StatisticsController extends Vps_Controller_Action_A
                     $link =
                         'http://' . Vps_Registry::get('config')->server->domain .
                         $c->getUrl() .
-                        ' (' . substr(1, strrchr($row['value'], '-')) . ')';
+                        ' (' . substr(strrchr($row['value'], '-'), 1) . ')';
                 } else {
                     $link = $row['value'];
                 }
