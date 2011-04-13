@@ -23,6 +23,7 @@ class Vpc_Abstract_List_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     {
         Zend_Registry::get('db')->beginTransaction();
 
+        $asciiFilter = new Vps_Filter_Ascii();
         $uploadIds = explode(',', $this->_getParam('uploadIds'));
         foreach ($uploadIds as $uploadId) {
             $fileRow = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')->getRow($uploadId);
@@ -40,9 +41,9 @@ class Vpc_Abstract_List_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             );
             foreach ($this->_getAutoFillFilenameField($form) as $f) {
                 if ($f->getAutoFillWithFilename() == 'filename') {
-                    $postData[$f->getFieldName()] = $fileRow->filename;
+                    $postData[$f->getFieldName()] = $asciiFilter->filter($fileRow->filename);
                 } else if ($f->getAutoFillWithFilename() == 'filenameWithExt') {
-                    $postData[$f->getFieldName()] = $fileRow->filename.'.'.$fileRow->extension;
+                    $postData[$f->getFieldName()] = $asciiFilter->filter($fileRow->filename).'.'.$fileRow->extension;
                 }
             }
             $postData = $form->processInput(null, $postData);

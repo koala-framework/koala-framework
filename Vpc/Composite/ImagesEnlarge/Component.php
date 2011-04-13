@@ -5,7 +5,7 @@ class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Compone
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component'] = 'Vpc_Basic_ImageEnlarge_Component';
-        $ret['componentName'] = trlVps('Gallery');
+        $ret['componentName'] = trlVps('Gallery').' '.trlVps('old');
         $ret['assets']['dep'][] = 'VpsEnlargeNextPrevious';
         return $ret;
     }
