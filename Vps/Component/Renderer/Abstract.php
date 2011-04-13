@@ -93,8 +93,7 @@ abstract class Vps_Component_Renderer_Abstract
             if ($statType) Vps_Benchmark::count("rendered $statType", $statId);
             $ret = str_replace($matches[0], $content, $ret);
         }
-
-        while (preg_match('/{plugin (\d) ([^}]*) ([^}]*)}(.*){\/plugin \\1}/', $ret, $matches)) {
+        while (preg_match('/{plugin (\d) ([^}]*) ([^}]*)}(.*){\/plugin \\1}/s', $ret, $matches)) {
             $pluginClass = $matches[2];
             $plugin = new $pluginClass($matches[3]);
             $content = $plugin->processOutput($matches[4]);
