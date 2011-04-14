@@ -13,16 +13,14 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
             );
             return $this->_getRenderPlaceholder($target->componentId, $config);
         } else {
-            $helper = new Vps_View_Helper_ComponentLink();
-            return $helper->componentLink($target, $text, $cssClass, $get, $anchor);
+            return $this->_getHelper()->componentLink($target, $text, $cssClass, $get, $anchor);
         }
     }
 
     public function render($componentId, $config)
     {
-        $helper = new Vps_View_Helper_ComponentLink();
         $targetComponent = $this->_getComponentById($config['targetComponentId']);
-        $targetPage = $helper->getTargetPage($targetComponent);
+        $targetPage = $this->_getHelper()->getTargetPage($targetComponent);
         if (!$targetPage) return '';
         return $targetPage->url.';'.$targetPage->rel.';'.$targetPage->name;
     }
@@ -34,11 +32,16 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
         $targetPage = explode(';', $cachedContent);
 
         $text = $config['text'] ? $config['text'] : $targetPage[2];
-        $helper = new Vps_View_Helper_ComponentLink();
-        return $helper->getLink(
+        return $this->_getHelper()->getLink(
             $targetPage[0], $targetPage[1], $text,
             $config['cssClass'], $config['get'], $config['anchor']
         );
     }
 
+    private function _getHelper()
+    {
+        $helper = new Vps_View_Helper_ComponentLink();
+        $helper->setRenderer($this->_getRenderer());
+        return $helper;
+    }
 }
