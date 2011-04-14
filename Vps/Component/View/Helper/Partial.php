@@ -9,7 +9,7 @@ class Vps_Component_View_Helper_Partial extends Vps_Component_View_Renderer
 
         // Normaler Output
         $componentClass = $component->componentClass;
-        $template = Vpc_Abstract::getTemplateFile($componentClass, 'Partial');
+        $template = $this->_getTemplate($componentClass, $config);
         if (!$template) {
             throw new Vps_Exception("No Partial-Template found for '$componentClass'");
         }
@@ -22,5 +22,10 @@ class Vps_Component_View_Helper_Partial extends Vps_Component_View_Renderer
         $view = new Vps_Component_View($this->_getRenderer());
         $view->assign($vars);
         return $view->render($template);
+    }
+
+    protected function _getTemplate($componentClass, $config)
+    {
+        return Vpc_Abstract::getTemplateFile($componentClass, 'Partial');
     }
 }

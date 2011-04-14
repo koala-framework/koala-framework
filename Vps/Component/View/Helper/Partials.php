@@ -35,7 +35,13 @@ class Vps_Component_View_Helper_Partials extends Vps_Component_View_Renderer
                     'number' => $number++,
                 )
             );
-            $ret .= $this->_getRenderPlaceholder($componentId, $config, $id, 'partial');
+            $type = 'partial';
+            $renderer = $this->_getRenderer();
+            if ($renderer instanceof Vps_Component_Renderer_Mail) {
+                $type = 'mailPartial';
+                $config['type'] = $renderer->getRenderFormat();
+            }
+            $ret .= $this->_getRenderPlaceholder($componentId, $config, $id, $type);
         }
         return $ret;
     }
