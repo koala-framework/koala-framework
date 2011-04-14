@@ -15,6 +15,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['assets']['dep'][] = 'ExtElement';
         $ret['assets']['dep'][] = 'ExtXTemplate';
         $ret['assets']['dep'][] = 'ExtUtilJson';
+        $ret['assets']['dep'][] = 'ExtFx';
 
         return $ret;
     }
