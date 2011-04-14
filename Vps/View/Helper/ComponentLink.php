@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Helper_ComponentLink
+class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
 {
     public function componentLink($target, $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
@@ -25,6 +25,10 @@ class Vps_View_Helper_ComponentLink
             $url .= '?';
             foreach ($get as $key => $val) $url .= "&$key=$val";
         }
+        if ($this->_getRenderer() instanceof Vps_View_MailInterface) {
+            $url = '*redirect*' . $url . '*';
+        }
+
         if ($anchor) $url .= "#$anchor";
         $cssClass = $cssClass ? " class=\"$cssClass\"" : '';
         return "<a href=\"$url\" rel=\"$rel\"$cssClass>$text</a>";
