@@ -30,7 +30,7 @@ class Vps_Component_View_Helper_Image extends Vps_View_Helper_Image
         if (is_string($image)) return parent::_getImageFileContents($image);
         return call_user_func_array(
             array($image->componentClass, 'getMediaOutput'),
-            array($c->getData()->componentId, null, $image->componentClass)
+            array($image->getComponent()->getData()->componentId, null, $image->componentClass)
         );
     }
 
