@@ -10,23 +10,30 @@
     <div class="publishDate">
         <p>
         	<?
-			if ($this->date($this->item->row->start_date,'H:i') != '00:00') {
+            if ($this->date($this->item->row->start_date,'H:i') != '00:00' && ($this->date($this->item->row->start_date,'H:i') != $this->date($this->item->row->end_date,'H:i'))) {
+			    //startdatum mit unterschiedlicher uhrzeit
                 echo $this->dateTime($this->item->row->start_date);
             } else {
+                //startdatum mit gleicher uhrzeit
                 echo $this->date($this->item->row->start_date);
             }
-            if ($this->item->row->end_date && ($this->item->row->start_date!=$this->item->row->end_date)) {
-                echo " - ";
-                if($this->date($this->item->row->end_date,'H:i') != '00:00') {
-                    if($this->date($this->item->row->start_date,'H:i') != $this->date($this->item->row->end_date,'H:i')) {
-                        echo $this->date($this->item->row->end_date, 'H:i');
-					} else {
-                        echo $this->dateTime($this->item->row->end_date);
-					}
-                } else {
-                    echo $this->date($this->item->row->end_date);
+			if ($this->date($this->item->row->start_date) != $this->date($this->item->row->end_date)) {
+                //datum unterschiedlich
+	            if ($this->date($this->item->row->end_date,'H:i') != '00:00' && ($this->date($this->item->row->start_date,'H:i') != $this->date($this->item->row->end_date,'H:i'))) {
+                    //enddatum mit unterschiedlicher uhrzeit
+	                echo " - ".$this->dateTime($this->item->row->end_date);
+	            } else {
+				    //enddatum mit gleicher uhrzeit
+	                echo " - ".$this->date($this->item->row->end_date);
+	            }
+			} else {
+			 //datum gleich
+                if ($this->date($this->item->row->end_date,'H:i') != '00:00' && ($this->date($this->item->row->start_date,'H:i') != $this->date($this->item->row->end_date,'H:i'))) {
+                    //enddatum mit unterschiedlicher uhrzeit
+                    echo " - ".$this->dateTime($this->item->row->end_date,'H:i');
                 }
-            }
+			}
+			//place
             if ($this->item->row->place) {
                 echo " | ".$this->item->row->place;
             }
