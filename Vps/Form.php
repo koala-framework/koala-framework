@@ -239,6 +239,9 @@ class Vps_Form extends Vps_Form_NonTableForm
     {
         $msg = array();
         foreach ($errors as $i) {
+            if (!is_array($i)) {
+                throw new Vps_Exception('Form errors must be of type array');
+            }
             $name = '';
             if (isset($i['field'])) {
                 $name = $i['field']->getFieldLabel();
