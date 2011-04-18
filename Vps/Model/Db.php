@@ -445,7 +445,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             }
             $sql = implode(" - ", $sqlExpressions);
             if (!$expr->lowerNullAllowed) {
-                $sql = "GREATEST ($sql, 0)";
+                $sql = "IF (($sql > 0), $sql, 0)";
             }
             return $sql;
         } else if ($expr instanceof Vps_Model_Select_Expr_Concat) {
