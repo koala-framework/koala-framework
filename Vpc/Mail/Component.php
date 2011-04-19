@@ -136,6 +136,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $renderer->setRecipient($recipient);
         $renderer->setAttachImages($attachImages);
         $ret = $renderer->renderComponent($this->getData());
+        $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
         $htmlStyles = $this->getHtmlStyles();
         if ($htmlStyles){
@@ -156,6 +157,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $renderer->setRenderFormat(Vps_Component_Renderer_Mail::RENDER_TXT);
         $renderer->setRecipient($recipient);
         $ret = $renderer->renderComponent($this->getData());
+        $ret = $this->_processPlaceholder($ret, $recipient);
         $ret = str_replace('&nbsp;', ' ', $ret);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
         return $ret;
