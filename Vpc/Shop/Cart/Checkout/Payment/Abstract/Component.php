@@ -59,7 +59,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
         throw new Vps_Exception("removed");
     }
 
-    public function sendConfirmMail($order)
+    public function sendConfirmMail(Vpc_Shop_Cart_Order $order)
     {
         $mail = $this->getData()->getChildComponent('-mail')->getComponent();
         $data = array(

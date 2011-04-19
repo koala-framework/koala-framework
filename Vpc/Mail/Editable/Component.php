@@ -8,4 +8,10 @@ class Vpc_Mail_Editable_Component extends Vpc_Mail_Component
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Mail/Editable/Panel.js';
         return $ret;
     }
+
+    // Wird hier verwendet: Vpc_Mail_Editable_ComponentsModel
+    public function getName()
+    {
+        return Vpc_Abstract::getSetting($this->getData()->componentClass, 'componentName');
+    }
 }
