@@ -8,7 +8,7 @@ class Vps_Component_View_Helper_Mail extends Vps_Component_View_Renderer
         if (!$template) {
             $template = Vpc_Admin::getComponentFile($component->componentClass, 'Component', 'tpl');
         }
-        $vars = $component->getComponent()->getMailVars($config['recipient']);
+        $vars = $component->getComponent()->getMailVars($this->_getRenderer()->getRecipient());
         if (is_null($vars)) {
             throw new Vps_Exception('Return value of getMailVars() returns null. Maybe forgot "return $ret?"');
         }
