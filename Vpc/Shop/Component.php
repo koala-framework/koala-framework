@@ -10,7 +10,8 @@ class Vpc_Shop_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['cart'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Shop_Cart_Component',
-            'name' => trlVps('Cart')
+            'name' => trlVps('Cart'),
+            'showInMenu' => true
         );
 
         $ret['componentName'] = trlVps('Shop');
