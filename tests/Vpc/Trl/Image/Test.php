@@ -97,6 +97,7 @@ class Vpc_Trl_Image_Test extends Vpc_TestAbstract
         $row->save();
         $this->_process();
 
+        sleep(1);
         $this->_checkTheSizes($c->render(), 2, 120, 101);
     }
 
