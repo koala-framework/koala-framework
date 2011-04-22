@@ -25,7 +25,7 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
         return $targetPage->url.';'.$targetPage->rel.';'.$targetPage->name;
     }
 
-    public function renderCached($cachedContent, $componentId, $config)
+    public function renderCached($cachedContent, $componentId, $config, $id = null)
     {
         if (!$cachedContent) return '';
 
@@ -34,7 +34,7 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
         $text = $config['text'] ? $config['text'] : $targetPage[2];
         return $this->_getHelper()->getLink(
             $targetPage[0], $targetPage[1], $text,
-            $config['cssClass'], $config['get'], $config['anchor']
+            $config['cssClass'], $config['get'], $config['anchor'], $id
         );
     }
 
