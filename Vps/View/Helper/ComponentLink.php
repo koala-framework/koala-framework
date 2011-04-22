@@ -19,7 +19,7 @@ class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
         }
     }
 
-    public function getLink($url, $rel, $text, $cssClass, $get, $anchor)
+    public function getLink($url, $rel, $text, $cssClass, $get, $anchor, $id = null)
     {
         if (!empty($get)) {
             $url .= '?';
@@ -31,7 +31,8 @@ class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
 
         if ($anchor) $url .= "#$anchor";
         $cssClass = $cssClass ? " class=\"$cssClass\"" : '';
-        return "<a href=\"$url\" rel=\"$rel\"$cssClass>$text</a>";
+        if ($id) $id = 'id="' . $id . '" ';
+        return "<a href=\"$url\" {$id}rel=\"$rel\"$cssClass>$text</a>";
     }
 
     public function getTargetPage($component)

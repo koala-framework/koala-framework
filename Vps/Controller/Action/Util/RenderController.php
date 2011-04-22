@@ -3,13 +3,12 @@ class Vps_Controller_Action_Util_RenderController extends Vps_Controller_Action
 {
     public function renderAction()
     {
-        //darf nur von cli aus aufgerufen werden
-        if ($_SERVER['SERVER_ADDR']!=$_SERVER['REMOTE_ADDR']) {
-            //throw new Vps_Exception_AccessDenied();
-        }
         $id = $this->_getParam('componentId');
         if ($id) {
             $c = Vps_Component_Data_Root::getInstance()->getComponentById($id);
+            if (!Vpc_Abstract::getSetting($c->componentClass, 'allowIsolatedRender')) {
+                throw new Vps_Exception_AccessDenied('This component must not be rendered this way');
+            }
 
             $process = $c->getRecursiveChildComponents(array(
                 'page' => false,
@@ -30,8 +29,7 @@ class Vps_Controller_Action_Util_RenderController extends Vps_Controller_Action
                     $i->getComponent()->processInput($postData);
                 }
             }
-            //echo $c->render(true);
-            echo $c->getComponent()->sendContent();
+            echo $c->render(true);
         }
         exit;
     }
