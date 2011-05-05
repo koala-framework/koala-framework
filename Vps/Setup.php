@@ -73,20 +73,6 @@ class Vps_Setup
             }
             Vps_Util_Check_Config::check();
         }
-        if (isset($_SERVER['REQUEST_URI']) &&
-            substr($_SERVER['REQUEST_URI'], 0, 8) == '/vps/apc'
-        ) {
-            Vps_Loader::registerAutoload();
-            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
-                header('WWW-Authenticate: Basic realm="Check Config"');
-                throw new Vps_Exception_AccessDenied();
-            }
-            self::setUpVps();
-            $_SERVER['PHP_SELF'] = '/vps/apc';
-            global $MY_SELF;
-            require_once(Vps_Registry::get('config')->libraryPath . '/apc/apc.php');
-            exit;
-        }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
             Vps_Loader::registerAutoload();
             Vps_Util_Check_Config::check();
