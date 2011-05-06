@@ -3,11 +3,10 @@ class Vps_Controller_Action_Util_RenderController extends Vps_Controller_Action
 {
     public function renderAction()
     {
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($this->_getParam('componentId'));
+        $url = $this->_getParam('url');
+        if (!$url) throw new Vps_Exception_Client('Need URL.');
+        $c = Vps_Component_Data_Root::getInstance()->getPageByUrl($url, null);
         if (!$c) throw new Vps_Exception_Client('Could not find component');
-        if (!Vpc_Abstract::getSetting($c->componentClass, 'allowIsolatedRender')) {
-            throw new Vps_Exception_AccessDenied('This component must not be rendered this way');
-        }
 
         $process = $c->getRecursiveChildComponents(array(
             'page' => false,

@@ -22,7 +22,7 @@ class Vps_Component_View_Helper_ComponentLightbox extends Vps_Component_View_Hel
         $settings = str_replace("\"", "'", Zend_Json::encode($config['lightbox']));
         $ret .= '<input type="hidden" class="settings" value="' . $settings . '" />';
         $config['cssClass'] .= ' ' . $config['lightbox']['sel'];
-        $ret .= parent::renderCached($cachedContent, $componentId, $config, $componentId);
+        $ret .= parent::renderCached($cachedContent, $componentId, $config);
         $ret .= '</div>';
         return $ret;
     }
