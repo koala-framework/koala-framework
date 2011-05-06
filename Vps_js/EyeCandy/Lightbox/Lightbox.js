@@ -47,7 +47,8 @@ Vps.Lightbox.Lightbox = (function(link, config) {
             overlayDuration: 0.2,
             hideInfo: false,
             easing: 'easeNone',
-            title: false
+            title: false,
+            navigate: true
         },
         
         // ************* open *****************
@@ -80,8 +81,10 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                     this.loadItem(index);
 
                     // update controls
-                    els.navPrev.update(this.opts.previous);
-                    els.navNext.update(this.opts.next);
+                    if (this.opts.navigate) {
+                        els.navPrev.update(this.opts.previous);
+                        els.navNext.update(this.opts.next);
+                    }
                     els.navClose.update(this.opts.close);
                     
                     // check info visibility
@@ -113,9 +116,9 @@ Vps.Lightbox.Lightbox = (function(link, config) {
             els.loadingOverlay.show();
             els.loading.show();
 
-            var componentId = items[activeItem].id;
+            var url = items[activeItem].href;
             Ext.Ajax.request({
-                params: {componentId: componentId},
+                params: {url: url},
                 url: '/vps/util/render/render',
                 success: function(response, options, r) {
                     currentX = false;
