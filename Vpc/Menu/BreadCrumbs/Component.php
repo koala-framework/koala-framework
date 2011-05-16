@@ -30,7 +30,7 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract_Component
                 $home = Vps_Component_Data_Root::getInstance()->getRecursiveChildComponents(array(
                     'home' => true,
                     'subRoot' => $this->getData()
-                ), array());
+                ));
                 if ($home) {
                     $ret['links'][] = $home[0];
                 }

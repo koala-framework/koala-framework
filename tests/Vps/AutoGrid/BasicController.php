@@ -21,15 +21,15 @@ class Vps_AutoGrid_BasicController extends Vps_Controller_Action_Auto_Grid
         );
         $this->_model = new Vps_Model_FnF();
         $this->_model->setData(array(
-            array('id' => 1, 'value' => 'Herbert', 'testtime' => '2008-12-03', 'type' => 'X'),
-            array('id' => 2, 'value' => 'Kurt', 'testtime' => '2008-12-06', 'type' => 'X'),
-            array('id' => 3, 'value' => 'Klaus', 'testtime' => '2008-12-09', 'type' => 'Y'),
-            array('id' => 4, 'value' => 'Rainer', 'testtime' => '2008-12-12', 'type' => 'Y'),
-            array('id' => 5, 'value' => 'Franz', 'testtime' => '2008-12-10', 'type' => 'Z'),
-            array('id' => 6, 'value' => 'Niko', 'testtime' => '2008-12-15', 'type' => 'Z'),
-            array('id' => 7, 'value' => 'Lorenz', 'testtime' => '2008-12-18', 'type' => 'Z'),
+            array('id' => 1, 'value' => 'Herbert', 'value2' => 'Lorenz', 'testtime' => '2008-12-03', 'type' => 'X'),
+            array('id' => 2, 'value' => 'Kurt', 'value2' => 'Herbert', 'testtime' => '2008-12-06', 'type' => 'X'),
+            array('id' => 3, 'value' => 'Klaus', 'value2' => 'Kurt', 'testtime' => '2008-12-09', 'type' => 'Y'),
+            array('id' => 4, 'value' => 'Rainer', 'value2' => 'Klaus', 'testtime' => '2008-12-12', 'type' => 'Y'),
+            array('id' => 5, 'value' => 'Franz', 'value2' => 'Rainer', 'testtime' => '2008-12-10', 'type' => 'Z'),
+            array('id' => 6, 'value' => 'Niko', 'value2' => 'Franz', 'testtime' => '2008-12-15', 'type' => 'Z'),
+            array('id' => 7, 'value' => 'Lorenz', 'value2' => 'Niko', 'testtime' => '2008-12-18', 'type' => 'Z'),
         ));
-        $this->_model->setColumns(array('id', 'value', 'testtime', 'type'));
+        $this->_model->setColumns(array('id', 'value', 'value2', 'testtime', 'type'));
         parent::preDispatch();
     }
 
@@ -43,6 +43,7 @@ class Vps_AutoGrid_BasicController extends Vps_Controller_Action_Auto_Grid
 
         $this->_columns->add(new Vps_Grid_Column('id', 'Id', 50));
         $this->_columns->add(new Vps_Grid_Column('value', 'Context', 100));
+        $this->_columns->add(new Vps_Grid_Column('value2', 'Context2', 100));
         $this->_columns->add(new Vps_Grid_Column('type', 'Type', 50));
         parent::_initColumns();
     }

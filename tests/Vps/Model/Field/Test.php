@@ -74,7 +74,7 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
     {
         $model = new Vps_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'')),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(''))),
             'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
