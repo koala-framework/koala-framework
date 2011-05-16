@@ -2510,7 +2510,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Auto Login</en>
-<de>eingeloggt bleiben</de>
+<de>Eingeloggt bleiben</de>
 <id>738</id>
 </text>
 <text>
@@ -4237,12 +4237,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1179</id>
 </text>
 <text>
-<en>Shop Conformation Mail</en>
+<en>Shop Confirmation Mail</en>
 <de>Shop Best&#xE4;tigungsmail</de>
 <id>1180</id>
 </text>
 <text>
-<en>Shop Conformation Text</en>
+<en>Shop Confirmation Text</en>
 <de>Shop Best&#xE4;tigungstext</de>
 <id>1181</id>
 </text>
@@ -6266,6 +6266,16 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>This enquiry was sent by</en>
 <de>Die Anfrage wurde gesendet von</de>
 <id>1599</id>
+</text>
+<text>
+<en>old</en>
+<de>alt</de>
+<id>1600</id>
+</text>
+<text>
+<en>Back to overview</en>
+<de>Zur&#xFC;ck zur Übersicht</de>
+<id>1056</id>
 </text>
 </trl>
 

@@ -71,6 +71,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = true;
+        $ret['allowIsolatedRender'] = false;
         return $ret;
     }
 

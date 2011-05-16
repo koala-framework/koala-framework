@@ -77,6 +77,11 @@ abstract class Vps_Component_Cache
                         foreach ($generator->getChildComponentClasses() as $c) {
                             self::getInstance()->saveMeta($c, $meta);
                         }
+                        // Wenns ein hascontent(menu) im master.tpl gibt
+                        $meta = new Vpc_Menu_Abstract_CacheMetaMaster('Vps_Component_Model');
+                        foreach ($generator->getChildComponentClasses() as $c) {
+                            self::getInstance()->saveMeta($c, $meta);
+                        }
                     }
                 }
                 if ($generator &&

@@ -16,4 +16,4 @@ INSERT INTO `vps_enquiries` (`id`, `save_date`, `is_spam`, `mail_sent`,
     `serialized_mail_vars`, `serialized_mail_essentials`,
     `mail_attachments`, `sent_mail_content_text`, `sent_mail_content_html`
 ) VALUES
-(4, '2008-10-29 08:15:00', 0, 1, 'a:0:{}', 'a:0:{}', 'a:0:{}', 'mail text', 'mail html');
+(4, '2008-10-29 08:15:00', 0, 1, '""', '""', '""', 'mail text', 'mail html');

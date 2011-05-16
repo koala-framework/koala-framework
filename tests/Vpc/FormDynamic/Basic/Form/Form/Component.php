@@ -12,7 +12,8 @@ class Vpc_FormDynamic_Basic_Form_Form_Component extends Vpc_Form_Dynamic_Form_Co
             'componentClass' => get_class($this),
             'proxyModel' => new Vps_Model_FnF(),
             'referenceMap' => $referenceMap,
-            'mailerClass' => 'Vps_Mail'
+            'mailerClass' => 'Vps_Mail',
+            'spamFields' => array()
         ));
 
         $uploads = new Vps_Uploads_TestModel();
