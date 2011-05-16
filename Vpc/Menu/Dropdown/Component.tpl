@@ -8,7 +8,7 @@
                         <div class="dropdown">
                             <ul>
                                 <? foreach ($m['submenu'] as $sm) { ?>
-                                    <li class="<?=$m['class'];?>">
+                                    <li class="<?=$sm['class'];?>">
                                         <?=$this->componentLink($sm['data']);?>
                                     </li>
                                 <? } ?>
