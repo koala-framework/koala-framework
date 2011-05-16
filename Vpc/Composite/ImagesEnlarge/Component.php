@@ -5,7 +5,7 @@ class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Compone
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component'] = 'Vpc_Basic_ImageEnlarge_Component';
-        $ret['componentName'] = trlVps('Gallery');
+        $ret['componentName'] = trlVps('Gallery').' '.trlVps('old');
         $ret['assets']['dep'][] = 'VpsEnlargeNextPrevious';
         return $ret;
     }
@@ -24,23 +24,6 @@ class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Compone
             $ret['smallMaxHeight'] = max($ret['smallMaxHeight'], $img['height']);
         }
 
-        return $ret;
-    }
-
-    public function getCacheVars()
-    {
-        $ret = parent::getCacheVars();
-        $ret[] = $this->_getCacheVars();
-        $images = $this->getData()->getChildComponents(array(
-            'generator' => 'child'
-        ));
-        foreach ($images as $image) {
-            $ret[] = array(
-                'model' => $image->getComponent()->getOwnModel(),
-                'id' => $image->dbId,
-                'field' => 'component_id'
-            );
-        }
         return $ret;
     }
 }

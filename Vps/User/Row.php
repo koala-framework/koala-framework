@@ -254,7 +254,7 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         return $this->_sendMail('UserDeleted', $subject);
     }
 
-    private function _sendMail($tpl, $subject, $tplParams = null)
+    protected function _sendMail($tpl, $subject, $tplParams = null)
     {
         if (!$this->email || !$this->_sendMails) {
             return false;
@@ -268,21 +268,26 @@ class Vps_User_Row extends Vps_Model_Proxy_Row
         $mail->fullname = $this->__toString();
         $mail->userData = $this->toArray();
 
-        $activateComponent = Vps_Component_Data_Root::getInstance();
-        if ($activateComponent) {
+        $root = Vps_Component_Data_Root::getInstance();
+        $activateComponent = null;
+        $lostPasswortComponent = null;
+        if ($root) {
             // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
             // für den Benutzer auswählen
             // oder man leitet auf eine redirect seite um und schaut auf die
             // browser accept language
-            $activateComponent = $activateComponent
+            $activateComponent = $root
                 ->getComponentByClass('Vpc_User_Activate_Component', array('limit' => 1));
+            $lostPasswortComponent = $root
+                ->getComponentByClass('Vpc_User_LostPassword_SetPassword_Component', array('limit' => 1));
         }
-        if ($activateComponent) {
-            $url = $activateComponent->url;
-        } else {
-            $url = '/vps/user/login/activate';
-        }
-        $mail->activationUrl = $mail->webUrl.$url.'?code='.$this->id.'-'.
+        $activateUrl = $lostPassUrl = '/vps/user/login/activate';
+        if ($activateComponent) $activateUrl = $activateComponent->url;
+        $mail->activationUrl = $mail->webUrl.$activateUrl.'?code='.$this->id.'-'.
+                        $this->getActivationCode();
+
+        if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->url;
+        $mail->lostPasswordUrl = $mail->webUrl.$lostPassUrl.'?code='.$this->id.'-'.
                         $this->getActivationCode();
 
         $ret = $mail->send();

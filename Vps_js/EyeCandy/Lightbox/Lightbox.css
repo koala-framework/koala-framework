@@ -1,0 +1,169 @@
+#ux-extbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 200px;
+    padding: 0;
+    margin: 0;
+    background: #000;
+    cursor: pointer
+}
+#ux-extbox-shim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    width: 100%;
+    height: 200px;
+    padding: 0;
+    margin: 0
+}
+
+/* the overlayed element */
+#ux-extbox {
+    background-color: #fff;
+    z-index: 10000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 2px solid #222;
+    padding: 3px;
+    /* CSS3 styling for latest browsers */
+    -moz-box-shadow: 0 0 10px #000;
+    -webkit-box-shadow: 0 0 10px #000;
+    box-shadow: 0 0 10px #000;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+#ux-extbox-container {
+    position: relative;
+}
+
+#ux-extbox img,
+#ux-extbox iframe {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* close button positioned on bottom right corner */
+#ux-extbox-navClose {
+    position:absolute;
+    top: 0;
+    right: 0;
+    height: 14px;
+    width: 12px;
+    padding: 0 1px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    font-size: 14px;
+    line-height: 12px;
+    font-weight: bold;
+    color: #222;
+    background-color: #fff;
+    cursor: pointer;
+    z-index: 10003;
+    /* CSS3 styling for latest browsers */
+    -moz-border-radius-bottomleft: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    border-radius-bottomleft: 4px;
+}
+
+#ux-extbox-navNext,
+#ux-extbox-navPrev {
+	position: absolute;
+	top: 40%;
+	border: 1px solid #fff;
+	cursor: pointer;
+	display: block;
+	padding: 8px 10px 10px;
+	color: #222;
+    background-color: #fff;
+	font-size: 16px;
+	line-height: 14px;
+    opacity: 0.3;
+	/* upcoming CSS3 features */
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+}
+#ux-extbox-navPrev {
+	left:0;
+	border-left:0;
+	-moz-border-radius-topleft:0;
+	-moz-border-radius-bottomleft:0;
+	-webkit-border-bottom-left-radius:0;
+	-webkit-border-top-left-radius:0;
+}
+#ux-extbox-navNext {
+	right:0;
+	border-right:0;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright:0;
+	-webkit-border-bottom-right-radius:0;
+	-webkit-border-top-right-radius:0;
+}
+
+#ux-extbox-navNext:hover, #ux-extbox-navPrev:hover {
+	opacity: 1;
+}
+/* the "information box" */
+#ux-extbox-info {
+    position: absolute;
+    width: 90%;
+    height: 14px;
+    top: 0;
+    left: 0;
+    color: #222;
+    background-color: #fff;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    font-size: 12px;
+    line-height: 12px;
+    /* CSS3 styling for latest browsers */
+    -moz-border-radius-bottomright: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    border-radius-bottomright: 4px;
+}
+
+#ux-extbox-title {
+    text-align: center;
+    margin-left: 40px;
+}
+#ux-extbox-current {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10002;
+    margin-left: 3px;
+    height: 14px;
+    width: 36px;
+    color:#666;
+    font: italic normal 11px/12px "Trebuchet MS", Arial, sans-serif;
+}
+#ux-extbox-loadingOverlay {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    z-index: 10006;
+}
+#ux-extbox-loading {
+    font-size: 24px;
+    line-height: 20px;
+    color: #222;
+    z-index: 10007;
+}
+#ux-extbox-loading:after {
+    content: '↻';
+}
+#ux-extbox-content {
+    width: 200px;
+    height: 200px;
+    overflow: auto;
+}

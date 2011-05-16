@@ -40,6 +40,9 @@ class Vps_Util_Check_Config
         $checks['imagick_functionality_2'] = array(
             'name' => 'imagick functionality 2'
         );
+        $checks['memory_limit'] = array(
+            'name' => 'memory_limit'
+        );
 
         //ab hier wird die config geladen
         $checks['setup_vps'] = array(
@@ -68,6 +71,9 @@ class Vps_Util_Check_Config
         );
         $checks['fileinfo_functionality'] = array(
             'name' => 'fileinfo functionality'
+        );
+        $checks['apc'] = array(
+            'name' => 'apc'
         );
 
 
@@ -267,6 +273,12 @@ class Vps_Util_Check_Config
         $im->destroy();
     }
 
+    private static function _memory_limit()
+    {
+        $m = ini_get('memory_limit');
+        if ((int)$m < 128) throw new Vps_Exception("need 128M, got $m");
+    }
+
     private static function _uploads()
     {
         $m = Vps_Model_Abstract::getInstance('Vps_Uploads_Model');
@@ -283,7 +295,7 @@ class Vps_Util_Check_Config
     {
         $locale = setlocale(LC_ALL, 0); //backup locale
 
-        $l = Vps_Registry::get('trl')->trlc('locale', 'C', array(), Vps_Trl::SOURCE_VPS, 'de');
+        $l = Vps_Trl::getInstance()->trlc('locale', 'C', array(), Vps_Trl::SOURCE_VPS, 'de');
         if (!setlocale(LC_ALL, explode(', ', $l))) {
             throw new Vps_Exception("Locale not installed, tried: ".$l);
         }
@@ -305,6 +317,35 @@ class Vps_Util_Check_Config
         $mime = Vps_Uploads_Row::detectMimeType(false, file_get_contents(VPS_PATH.'/images/information.png'));
         if ($mime != 'image/png') {
             throw new Vps_Exception("fileinfo returned wrong information");
+        }
+    }
+
+    private static function _apc()
+    {
+        if (php_sapi_name() == 'cli') return; //apc gibts im cli nicht
+
+        if (!extension_loaded('apc')) {
+            throw new Vps_Exception("apc extension not loaded");
+        }
+        $info = apc_sma_info(false);
+        if ($info['num_seg'] * $info['seg_size'] < 128*1000*1000) {
+            throw new Vps_Exception("apc memory size < 128");
+        }
+        $value = uniqid();
+        if (!apc_store('foobar', $value)) {
+            throw new Vps_Exception("apc_store returned false");
+        }
+        if (apc_fetch('foobar') != $value) {
+            throw new Vps_Exception("apc_fetch returned something different");
+        }
+        while (strlen($value) < 1500) {
+            $value .= chr(rand(0,255));
+        }
+        if (!apc_store('foobar', $value)) {
+            throw new Vps_Exception("apc_store returned false");
+        }
+        if (!apc_delete('foobar')) {
+            throw new Vps_Exception("apc_delete returned false");
         }
     }
 }

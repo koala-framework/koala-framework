@@ -2,7 +2,7 @@
 /**
  * @group AutoGrid
  */
-class Vps_AutoGrid_GridTest extends PHPUnit_Framework_TestCase
+class Vps_AutoGrid_GridTest extends Vps_Test_TestCase
 {
     public function testExprEqualsSelect()
     {
@@ -27,7 +27,7 @@ class Vps_AutoGrid_GridTest extends PHPUnit_Framework_TestCase
         $request = new Vps_Test_Request_Simple('index', null, null, array('query' => 'a'));
         $controller = new Vps_AutoGrid_TestFilterController($request, new Zend_Controller_Response_Http());
         $controller->preDispatch();
-        $this->assertEquals(3, $controller->fetchData(array('field' => 'id', 'direction' => 'ASC'), 50, 0)->count());
+        $this->assertEquals(4, $controller->fetchData(array('field' => 'id', 'direction' => 'ASC'), 50, 0)->count());
     }
 
     public function testFilterContainsNothing()
@@ -44,7 +44,7 @@ class Vps_AutoGrid_GridTest extends PHPUnit_Framework_TestCase
         $controller = new Vps_AutoGrid_TestFilterController($request, new Zend_Controller_Response_Http());
         $controller->preDispatch();
         $data = $controller->fetchData(array('field' => 'id', 'direction' => 'ASC'), 50, 0);
-        $this->assertEquals(1, $data->count());
+        $this->assertEquals(2, $data->count());
         $this->assertEquals('Klaus', $data->current()->value);
     }
 
@@ -66,6 +66,29 @@ class Vps_AutoGrid_GridTest extends PHPUnit_Framework_TestCase
         $data = $controller->fetchData(array('field' => 'id', 'direction' => 'ASC'), 50, 0);
         $this->assertEquals(1, $data->count());
         $this->assertEquals('Kurt', $data->current()->value);
+    }
+
+    public function testFilterTextColumn()
+    {
+        $request = new Vps_Test_Request_Simple('index', null, null, array(
+            'queryTextColumn_text' => 'Kurt', 'queryTextColumn_column' => '0'
+        ));
+        $controller = new Vps_AutoGrid_TestFilterColumnController($request, new Zend_Controller_Response_Http());
+        $controller->preDispatch();
+        $data = $controller->fetchData(array('field' => 'id', 'direction' => 'ASC'), 50, 0);
+        $this->assertEquals(2, $data->count());
+        $this->assertEquals('Kurt', $data->current()->value);
+        $this->assertEquals('Herbert', $data->current()->value2);
+
+        $request = new Vps_Test_Request_Simple('index', null, null, array(
+            'queryTextColumn_text' => 'Kurt', 'queryTextColumn_column' => 'value2'
+        ));
+        $controller = new Vps_AutoGrid_TestFilterColumnController($request, new Zend_Controller_Response_Http());
+        $controller->preDispatch();
+        $data = $controller->fetchData(array('field' => 'id', 'direction' => 'ASC'), 50, 0);
+        $this->assertEquals(1, $data->count());
+        $this->assertEquals('Klaus', $data->current()->value);
+        $this->assertEquals('Kurt', $data->current()->value2);
     }
 
     public function testFilterQueryId()

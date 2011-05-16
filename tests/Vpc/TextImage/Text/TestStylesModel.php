@@ -10,8 +10,8 @@ class Vpc_TextImage_Text_TestStylesModel extends Vpc_Basic_Text_StylesModel
             ));
         parent::__construct($config);
     }
-    protected function _getMasterStyles()
+    public static function getMasterStyles()
     {
-        return array('block'=>array(), 'inline'=>array());
+        return array();
     }
 }

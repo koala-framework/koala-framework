@@ -12,21 +12,11 @@ class Vpc_Newsletter_Admin extends Vpc_Directories_Item_Directory_Admin
 
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
-        $c = $components[0];
+        if ($components) {
+            $c = $components[0];
 
-        $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c), 'vpc_newsletter');
-    }
-
-    protected function _getContentClass()
-    {
-        return Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
-    }
-
-    public function getExtConfig()
-    {
-        $ret = parent::getExtConfig();
-        $ret['items']['idSeparator'] = '_';
-        return $ret;
+            $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c), 'vpc_newsletter');
+        }
     }
 
     public function setup()

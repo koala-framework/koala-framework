@@ -9,6 +9,11 @@ class Vps_Component_Output_Partial_Paging_Component extends Vpc_Abstract_Composi
         return $ret;
     }
 
+    public function getPartialClass()
+    {
+        return 'Vps_Component_Partial_Paging';
+    }
+
     public function getPartialVars($partial, $nr, $info)
     {
         return array('item' => 'bar' . $nr);
@@ -25,11 +30,6 @@ class Vps_Component_Output_Partial_Paging_Component extends Vpc_Abstract_Composi
         $ret = $paging->getComponent()->getPartialParams();
         $ret['count'] = $this->getPagingCount();
         return $ret;
-    }
-
-    public function getPartialClass()
-    {
-        return 'Vps_Component_Partial_Paging';
     }
 
     public function getPagingCount()

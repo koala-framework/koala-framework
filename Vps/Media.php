@@ -4,11 +4,21 @@ class Vps_Media
     private static $_ouputCache;
     const PASSWORD = 'l4Gx8SFe';
 
+    /**
+     *
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param int Kann gesetzt werden wenn wir in diesem web auf das bild nicht direkten zugriff haben
+     *            sondern nur für ein anderes web die url generieren
+     */
     public static function getUrl($class, $id, $type, $filename, $time = null)
     {
         if ($filename instanceof Vps_Uploads_Row) {
             $filename = $filename->filename . '.' . $filename->extension;
         }
+        if ($filename == '.') $filename = '';
         $checksum = self::getChecksum($class, $id, $type, $filename);
         $prefix = '';
         if ($r = Vps_Component_Data_Root::getInstance()) {
@@ -17,7 +27,6 @@ class Vps_Media
             }
         }
         if (is_null($time)) {
-            self::_getOutputWithoutCheckingIsValid($class, $id, $type);
             $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
             if (!$time) $time = time();
         }
@@ -60,11 +69,6 @@ class Vps_Media
             );
         }
         return null;
-    }
-
-    public static function setOutputCache(Zend_Cache_Core $cache)
-    {
-        self::$_ouputCache = $cache;
     }
 
     public static function getOutputCache()

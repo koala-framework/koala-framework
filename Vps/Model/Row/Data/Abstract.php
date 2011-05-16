@@ -16,7 +16,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
     {
         foreach (array_keys($this->_cleanData) as $k) {
             if (!isset($this->_data[$k]) || $this->_cleanData[$k] === $this->_data[$k]) {
-                //nicht geändert
+                //nicht geï¿½ndert
                 if (isset($data[$k])) {
                     $this->_data[$k] = $data[$k];
                 } else {
@@ -54,7 +54,9 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
+        if (in_array($name, $this->_model->getExprColumns())
+            || ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns()))
+        ) {
             return parent::__get($name);
         } else {
             $name = $this->_transformColumnName($name);
@@ -65,13 +67,15 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
     public function __set($name, $value)
     {
-        if ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns())) {
+        if (in_array($name, $this->_model->getExprColumns())
+            || ($this->_model->getOwnColumns() && !in_array($name, $this->_model->getOwnColumns()))
+        ) {
             parent::__set($name, $value);
             return;
         }
         $n = $this->_transformColumnName($name);
         if ($this->$name !== $value) {
-            $this->_setDirty();
+            $this->_setDirty($name);
         }
         $this->_data[$n] = $value;
         $this->_postSet($name, $value);
@@ -104,14 +108,12 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         if ($update) {
             if ($this->_isDirty()) {
                 $ret = $this->_model->update($this, $this->_data);
-                $this->_setDirty(false);
             } else {
                 $ret = $this->{$this->_getPrimaryKey()};
             }
         } else {
             $ret = $this->_model->insert($this, $this->_data);
             $this->_data[$this->_getPrimaryKey()] = $ret;
-            $this->_setDirty(false);
         }
         $this->_cleanData = $this->_data;
 
@@ -122,6 +124,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         }
         $this->_afterSave();
         parent::save(); //siblings nach uns speichern; damit auto-inc id vorhanden
+        $this->_resetDirty();
 
         return $ret;
     }

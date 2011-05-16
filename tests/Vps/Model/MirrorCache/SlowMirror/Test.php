@@ -5,7 +5,7 @@
  * @group Model_MirrorCache_SlowMirror
  * @group slow
  */
-class Vps_Model_MirrorCache_SlowMirror_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_MirrorCache_SlowMirror_Test extends Vps_Test_TestCase
 {
     public function testRequests()
     {

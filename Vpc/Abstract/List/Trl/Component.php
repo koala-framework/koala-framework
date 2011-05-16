@@ -12,6 +12,8 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
         $ret['assetsAdmin']['dep'][] = 'VpsComponent';
 
+        $ret['extConfig'] = 'Vpc_Abstract_List_Trl_ExtConfigList';
+
         return $ret;
     }
 
@@ -22,13 +24,28 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
 
         // wird zweimal gesetzt. siehe kommentar in nicht-trl component
         $ret['children'] = $children;
-        $ret['listItems'] = array();
-        foreach ($children as $child) {
-            $ret['listItems'][] = array(
-                'data' => $child
-            );
+        $childrenById = array();
+        foreach ($children as $c) {
+            $childrenById[$c->id] = $c;
+        }
+        foreach (array_keys($ret['listItems']) as $k) {
+            $id = $ret['listItems'][$k]['data']->id;
+            if (isset($childrenById[$id])) {
+                $ret['listItems'][$k]['data'] = $childrenById[$id];
+            } else {
+                unset($ret['listItems'][$k]);
+            }
         }
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        $childComponents = $this->getData()->getChildComponents(array('generator' => 'child'));
+        foreach ($childComponents as $c) {
+            if ($c->hasContent()) return true;
+        }
+        return false;
     }
 
     public function getExportData()
@@ -41,16 +58,10 @@ class Vpc_Abstract_List_Trl_Component extends Vpc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getCacheVars();
-        foreach ($this->getData()->getChildComponents(array('generator'=>'child', 'ignoreVisible'=>true)) as $p) {
-            $ret[] = array(
-                'model' => $this->getChildModel(),
-                'id' => $p->dbId,
-                'field' => 'component_id'
-            );
-        }
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vpc_Chained_Abstract_ParentIdCacheMeta(Vpc_Abstract::getSetting($componentClass, 'childModel'));
         return $ret;
     }
 }

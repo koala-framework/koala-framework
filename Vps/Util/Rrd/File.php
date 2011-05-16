@@ -17,6 +17,11 @@ abstract class Vps_Util_Rrd_File
         return $this->_fileName;
     }
 
+    public function fileExists()
+    {
+        return file_exists($this->_fileName);
+    }
+
     public function getFileName()
     {
         if (!file_exists($this->_fileName)) {
@@ -186,7 +191,7 @@ abstract class Vps_Util_Rrd_File
         } else {
             $cmd .= "N:";
         }
-        $cmd .= implode(':', $values);
+        $cmd .= str_replace(' ', '', implode(':', $values));
 
         $ret = null;
         //echo "$cmd<br>\n";

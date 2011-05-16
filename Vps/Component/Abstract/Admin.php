@@ -2,8 +2,6 @@
 class Vps_Component_Abstract_Admin
 {
     protected $_class;
-    const EXT_CONFIG_DEFAULT = 'default';
-    const EXT_CONFIG_SHARED = 'shared';
 
     protected function __construct($class)
     {
@@ -22,7 +20,7 @@ class Vps_Component_Abstract_Admin
     {
         static $instances = array();
         if (!isset($instances[$componentClass])) {
-            $c = self::getComponentFile($componentClass, 'Admin', 'php', true);
+            $c = self::getComponentClass($componentClass, 'Admin');
             if (!$c) { return null; }
             $instances[$componentClass] = new $c($componentClass);
         }
@@ -50,7 +48,7 @@ class Vps_Component_Abstract_Admin
                 $class = str_replace('/', '_', $item->getPath());
                 $class = strrchr($class, 'Vpc_');
                 $class .= '_' . str_replace('.php', '', $item->getFilename());
-                if (Vps_Loader::classExists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
+                if (class_exists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
                     $return[] = $class;
                 }
 
@@ -59,31 +57,12 @@ class Vps_Component_Abstract_Admin
         return $return;
     }
 
-    public function getExtConfig($type = self::EXT_CONFIG_DEFAULT)
+    public final function getExtConfig($type = Vps_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT)
     {
-        if ($type == self::EXT_CONFIG_DEFAULT && Vpc_Abstract::getFlag($this->_class, 'sharedDataClass')) return array();
-        if ($type == self::EXT_CONFIG_SHARED && !Vpc_Abstract::getFlag($this->_class, 'sharedDataClass')) return array();
-
-        if (!self::getComponentFile($this->_class, 'Controller')) {
-            return array();
-        }
-        if (!Vpc_Abstract::hasSetting($this->_class, 'componentName')
-            || !Vpc_Abstract::getSetting($this->_class, 'componentName'))
-        {
-            //wenn das probleme verursact ignorieren - aber es erspart lange fehlersuche warum eine komp. nicht angezeigt wird :D
-            throw new Vps_Exception("Component '$this->_class' does have no componentName but must have one for editing");
-        }
-        $ret = array(
-            'form' => array(
-                'xtype' => 'vps.autoform',
-                'controllerUrl' => $this->getControllerUrl(),
-                'title' => trlVps('Edit {0}', $this->_getSetting('componentName')),
-                'icon' => $this->_getSetting('componentIcon')->__toString()
-            )
-        );
-        return $ret;
+        return Vps_Component_Abstract_ExtConfig_Abstract::getInstance($this->_class)->getConfig($type);
     }
 
+    //TODO: in ExtConfig/Abstract verschieben
     public function getControllerUrl($class = 'Index')
     {
         $urlOptions = array(
@@ -108,34 +87,62 @@ class Vps_Component_Abstract_Admin
 
     public static function getComponentFile($class, $filename = '', $ext = 'php', $returnClass = false)
     {
-        if (is_object($class)) $class = get_class($class);
-        $class = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-        $ret = null;
-        while (!$ret && $class != '') {
-            $curClass = $class;
-            if ($filename != '') {
-                if (substr($curClass, -10) == '_Component') {
-                    $curClass = substr($curClass, 0, -10);
-                }
-                $curClass =  $curClass . '_' . $filename;
+        if (is_object($class)) {
+            if ($class instanceof Vps_Component_Abstract) $class = get_class($class);
+            else if ($class instanceof Vps_Component_Data) $class = $class->componentClass;
+            else throw new Vps_Exception("invalid class");
+        }
+        $files = Vpc_Abstract::getSetting($class, 'componentFiles');
+        $key = false;
+
+        //precomputed aus Vps/Component/Abstract.php
+        if ($ext == 'php' && $returnClass) {
+            $key = $filename;
+        } else if ($ext == 'tpl' && !$returnClass) {
+            $key = $filename.'.tpl';
+        }
+        if ($key) {
+            Vps_Benchmark::count('getComponentFile precomputed');
+            if (isset($files[$key])) return $files[$key];
+        }
+        Vps_Benchmark::count('getComponentFile slow');
+        $ret = self::getComponentFiles($class, array(array('filename'=>$filename, 'ext'=>$ext, 'returnClass'=>$returnClass)));
+        return $ret[0];
+    }
+
+    public static function getComponentFiles($class, $files)
+    {
+        $ret = array();
+        $paths = Vpc_Abstract::getSetting($class, 'parentFilePaths'); //teuer, nur einmal aufrufen
+        foreach ($files as $kFile => $file) {
+            if (isset($file['multiple']) && $file['multiple']) {
+                $ret[$kFile] = array();
+            } else {
+                $ret[$kFile] = false;
             }
-            $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass) . '.' . $ext;
-            $dirs = explode(PATH_SEPARATOR, get_include_path());
-            foreach ($dirs as $dir) {
-                if ($dir == '.') $dir = getcwd();
-                $path = $dir . '/' . $file;
-                if (is_file($path)) {
-                    $ret = $returnClass ? $curClass : $path;
-                    break;
+            foreach ($paths as $path => $c) {
+                $f = $path.'/'.$file['filename'].'.'.$file['ext'];
+                if (file_exists($f)) {
+                    if ($file['returnClass']) {
+                        $i = $c.'_'.str_replace('/', '_', $file['filename']);
+                    } else {
+                        $i = $f;
+                    }
+                    if (isset($file['multiple']) && $file['multiple']) {
+                        $ret[$kFile][] = $i;
+                    } else {
+                        $ret[$kFile] = $i;
+                        continue 2;
+                    }
                 }
             }
-            $class = get_parent_class($class);
         }
         return $ret;
     }
+
     public static function getComponentClass($class, $filename)
     {
-        return self::getComponentFile($class, $filename, 'php', true);
+        return self::getComponentFile($class, str_replace('_', '/', $filename), 'php', true);
     }
 
     public function delete()
@@ -151,26 +158,59 @@ class Vps_Component_Abstract_Admin
      */
     protected function _addResourcesBySameClass(Vps_Acl $acl)
     {
+        $dropdownName = 'vpc_'.$this->_class;
+
+        //BEGIN hack
+        //TODO im 1.11 gscheite lösung
+        $isTrl = is_instance_of($this->_class, 'Vpc_Chained_Trl_Component');
+        $hasTrl = false;
+        foreach (Vpc_Abstract::getComponentClasses() as $cls) {
+            if (is_instance_of($cls, 'Vpc_Chained_Trl_Component')) {
+                if (Vpc_Abstract::getSetting($cls, 'masterComponentClass') == $this->_class) {
+                    $dropdownName = 'vpc_'.$cls;
+                    $hasTrl = true;
+                    break;
+                }
+            }
+        }
+        /*
+            class Vps_Component_MenuConfig_Abstract {
+                public function __construct(...)
+                public static function getInstance($componentclass);
+                public function getPriority(); //trls haben niedrige priorität
+                abstract public function addResources(Vps_Acl $acl);
+            }
+            $ret['menuConfig'] = 'Vps_Component_MenuConfig_SameClass'; //fürs deutsche
+            $ret['menuConfig'] = 'Vps_Component_MenuConfig_Trl_SameClass'; //fürs trls, erstellt ein dropdown und verschiebt auch das deutsche da hinein
+
+            $ret['menuConfigDropdownName'] = '';
+            $ret['menuConfig'] = 'Vps_Component_MenuConfig_Dropdown_SameClass'; //fürs deutsche
+        */
+        //END hack
+
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
         $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
-        if (count($components) > 1) {
-            if (!$acl->has('vpc_news')) {
+        if ($hasTrl  || count($components) > 1) {
+            if (!$acl->has($dropdownName)) {
                 $acl->add(
                     new Vps_Acl_Resource_MenuDropdown(
-                        'vpc_news', array('text'=>$name, 'icon'=>$icon)
+                        $dropdownName, array('text'=>$name, 'icon'=>$icon)
                     ), 'vps_component_root'
                 );
             }
             foreach ($components as $c) {
                 $t = $c->getTitle();
-                if (!$t) $t = $c->componentId;
+                if (!$t) $t = $name;
+                if ($hasTrl || $isTrl) {
+                    $t .= ' ('.$c->getLanguageData()->name.')';
+                }
                 $acl->add(
                     new Vps_Acl_Resource_Component_MenuUrl(
                         $c, array('text'=>$t, 'icon'=>$icon)
-                    ), 'vpc_news'
+                    ), $dropdownName
                 );
             }
         } else if (count($components) == 1) {
@@ -226,7 +266,7 @@ class Vps_Component_Abstract_Admin
     {
         $ret = array();
 
-        $cache = Vps_Cache::factory('Core', 'Memcached', array('automatic_serialization'=>true, 'lifetime'=>null));
+        $cache = Vps_Cache::factory('Core', 'Apc', array('automatic_serialization'=>true, 'lifetime'=>null));
         if (!$componentsWithDependsOnRow = $cache->load('componentsWithDependsOnRow')) {
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
                 $a = Vpc_Admin::getInstance($c);

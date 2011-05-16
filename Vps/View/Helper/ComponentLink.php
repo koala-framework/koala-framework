@@ -1,37 +1,48 @@
 <?php
-class Vps_View_Helper_ComponentLink
+class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
 {
-    public function componentLink($m, $text = null, $cssClass = null, $get = array(), $anchor = null)
+    public function componentLink($target, $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
-        if ($m instanceof Vps_Component_Data) {
-            $m = $m->getPage();
-            if (is_instance_of($m->componentClass, 'Vpc_Basic_LinkTag_Abstract_Component')) {
-                if (!$m->getComponent()->hasContent()) {
-                    return '';
-                }
-            }
-            $m = array(
-                'url' => $m->url,
-                'rel' => $m->rel,
-                'name' => $m->name
-            );
-        }
-        if (!$get) $get = array();
-        if (!empty($get)) {
-            $m['url'] .= '?';
-        }
-        foreach ($get as $key => $val) {
-            $m['url'] .= "&$key=$val";
-        }
-        if ($anchor) {
-            $m['url'] .= "#$anchor";
-        }
-        if (!$text) $text = $m['name'];
-        if ($cssClass) {
-            $cssClass = " class=\"$cssClass\"";
+        if ($target instanceof Vps_Component_Data) {
+            $target = $this->getTargetPage($target);
+            if (!$text) $text = $target->name;
+            return $this->getLink($target->url, $target->rel, $text, $cssClass, $get, $anchor);
         } else {
-            $cssClass = '';
+            if (is_array($target)) {
+                $url = $target['url'];
+                $rel = isset($target['rel']) ? $target['rel'] : '';
+            } else {
+                $url = $target;
+                $rel = '';
+            }
+            return $this->getLink($url, $rel, $text, $cssClass, $get, $anchor);
         }
-        return "<a href=\"{$m['url']}\" rel=\"{$m['rel']}\"$cssClass>$text</a>";
     }
+
+    public function getLink($url, $rel, $text, $cssClass, $get, $anchor)
+    {
+        if (!empty($get)) {
+            $url .= '?';
+            foreach ($get as $key => $val) $url .= "&$key=$val";
+        }
+        if ($this->_getRenderer() instanceof Vps_View_MailInterface) {
+            $url = '*redirect*' . $url . '*';
+        }
+
+        if ($anchor) $url .= "#$anchor";
+        $cssClass = $cssClass ? " class=\"$cssClass\"" : '';
+        return "<a href=\"$url\" rel=\"$rel\"$cssClass>$text</a>";
+    }
+
+    public function getTargetPage($component)
+    {
+        $ret = $component->getPage();
+        if (is_instance_of($ret->componentClass, 'Vpc_Basic_LinkTag_Abstract_Component')) {
+            if (!$ret->getComponent()->hasContent()) {
+                return null;
+            }
+        }
+        return $ret;
+    }
+
 }
