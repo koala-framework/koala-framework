@@ -10,7 +10,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
             'componentIcon' => new Vps_Asset('folder_link'),
         ));
         $ret['dataClass'] = 'Vpc_Basic_DownloadTag_Data';
-        $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
+        $ret['assetsAdmin']['dep'][] = 'VpsFormFile';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/DownloadTag/Panel.js';
         return $ret;
     }
@@ -58,14 +58,14 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
     public static function isValidMediaOutput($id, $type, $className)
     {
         $retValid = self::VALID;
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id);
+        $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id);
         if (!$c) {
-            $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+            $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
             if (!$c) return self::INVALID;
             if (Vps_Registry::get('config')->showInvisible) {
                 //preview im frontend
                 $retValid = self::VALID_DONT_CACHE;
-            } else if (Vps_Registry::get('userModel')->getAuthedUser()) {
+            } else if (Vps_Registry::get('acl')->isAllowedComponentById($id, $className, Vps_Registry::get('userModel')->getAuthedUser())) {
                 //paragraphs vorschau im backend
                 $retValid = self::VALID_DONT_CACHE;
             }
@@ -103,7 +103,8 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
             return null;
         }
         Vps_Component_Cache::getInstance()->saveMeta(
-            get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+            Vps_Component_Data_Root::getInstance()->getComponentById($id),
+            new Vps_Component_Cache_Meta_Static_Callback($row->getModel())
         );
         return array(
             'file' => $file,

@@ -9,7 +9,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Message_Component 
         return $ret;
     }
 
-    public function getMailVars($order)
+    public function getMailVars(Vpc_Shop_Cart_Order $order)
     {
         $ret = parent::getMailVars($order);
         $ret['order'] = $order;

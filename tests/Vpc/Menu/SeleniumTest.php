@@ -6,7 +6,7 @@
 // /vps/componentedittest/Vpc_Menu_Root/Vpc_Menu_Menu_Component?componentId=root-menu
 // /vps/componentedittest/Vpc_Menu_Root/Vpc_Menu_Menu_Component?componentId=1-menu-subMenu
 // /vps/componentedittest/Vpc_Menu_Root/Vpc_Menu_LevelMenu_Component?componentId=3-levelmenu
-class Vps_Component_SharedData_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Vpc_Menu_SeleniumTest extends Vps_Test_SeleniumTestCase
 {
     public function setUp()
     {

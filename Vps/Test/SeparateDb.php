@@ -17,7 +17,9 @@ class Vps_Test_SeparateDb
 
     public static function setDbFromCookie()
     {
-        Vps_Registry::set('db', Vps_Test::getTestDb($_COOKIE['test_special_db']));
+        if (!empty($_COOKIE['test_special_db'])) {
+            Vps_Registry::set('db', Vps_Test::getTestDb($_COOKIE['test_special_db']));
+        }
     }
 
     /**

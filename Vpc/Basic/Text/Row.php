@@ -122,9 +122,9 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         $select->order('nr', 'DESC');
         $select->limit(1);
         $select->whereEquals('component', $type);
-        $row = $this->getChildRows('ChildComponents', $select)->current();
-        if (!$row) return 0;
-        return $row->nr;
+        $rows = $this->getChildRows('ChildComponents', $select);
+        if (!count($rows)) return 0;
+        return $rows->current()->nr;
     }
 
     protected function _beforeDelete()
@@ -181,7 +181,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         }
     }
 
-    public function tidy($html)
+    public function tidy($html, Vpc_Basic_Text_Parser $parser = null)
     {
         $config = array(
                     'indent'         => true,
@@ -222,11 +222,15 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $html = preg_replace('#<(.[a-z]+) ([^>]*)class=""([^>]*)>#', '<\1 \2 \3>', $html);
 
             $tidy = new tidy;
+            $html = str_replace('_mce_type="bookmark"', 'class="_mce_type-bookmark"', $html);
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
-            $parser = new Vpc_Basic_Text_Parser($this);
+            if (!$parser) {
+                $parser = new Vpc_Basic_Text_Parser($this);
+                $parser->setMasterStyles(Vpc_Basic_Text_StylesModel::getMasterStyles());
+            }
             $parser->setEnableColor(Vpc_Abstract::getSetting($this->_componentClass, 'enableColors'));
             $parser->setEnableTagsWhitelist(Vpc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
             $parser->setEnableStyles(Vpc_Abstract::getSetting($this->_componentClass, 'enableStyles'));
@@ -234,6 +238,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
+            $html = str_replace('class="_mce_type-bookmark"', '_mce_type="bookmark"', $html);
             $html = str_replace('#nbsp#', '&nbsp;', $html);
         }
 
@@ -334,27 +339,43 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     } catch (Vpc_Exception $e) {
                         $srcRow = false;
                     }
-                    $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
-                    if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
-                        $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
-                        $srcLinkRow = $linkModel->getRow($part['componentId'].'-link');
-                        if ($srcLinkRow) {
-                            $destRow->component = $srcRow->component;
-                            $destRow->save();
-                            $destLinkRow = $linkModel->getRow($destRow->component_id.'-link');
-                            if (!$destLinkRow) {
-                                $destLinkRow = $linkModel->createRow();
-                                $destLinkRow->component_id = $destRow->component_id.'-link';
+                    if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Component')) {
+                        $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
+                        if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
+                            $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
+                            $srcLinkRow = $linkModel->getRow($part['componentId'].'-link');
+                            if ($srcLinkRow) {
+                                $destRow->component = $srcRow->component;
+                                $destRow->save();
+                                $destLinkRow = $linkModel->getRow($destRow->component_id.'-link');
+                                if (!$destLinkRow) {
+                                    $destLinkRow = $linkModel->createRow();
+                                    $destLinkRow->component_id = $destRow->component_id.'-link';
+                                }
+                                foreach ($srcLinkRow->toArray() as $k=>$i) {
+                                    if ($k != 'component_id') {
+                                        $destLinkRow->$k = $i;
+                                    }
+                                }
+                                $destLinkRow->save();
+                                $newContent .= "<a href=\"{$destRow->component_id}\">";
+                                continue;
                             }
-                            foreach ($srcLinkRow->toArray() as $k=>$i) {
+                        }
+                    } else if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Abstract_Component')) {
+                        if ($srcRow) {
+                            foreach ($srcRow->toArray() as $k=>$i) {
                                 if ($k != 'component_id') {
-                                    $destLinkRow->$k = $i;
+                                    $destRow->$k = $i;
                                 }
                             }
-                            $destLinkRow->save();
+                            $destRow->save();
                             $newContent .= "<a href=\"{$destRow->component_id}\">";
                             continue;
                         }
+                    } else {
+                        //Kein link möglich
+                        continue;
                     }
                 }
                 if (!$destRow) {

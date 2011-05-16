@@ -141,7 +141,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $this->_rows[$id];
     }
 
-    private function _formatField($field, $select)
+    private function _formatField($field, Zend_Db_Select $select = null)
     {
         if ($field instanceof Zend_Db_Expr) return $field->__toString();
 
@@ -256,8 +256,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (is_array($value)) {
                     if ($value) {
                         foreach ($value as &$v) {
-                            $v = $this->_fixStupidQuoteBug($v);
-                            $v = $this->getAdapter()->quote($v);
+                            if (!is_int($v)) {
+                                $v = $this->_fixStupidQuoteBug($v);
+                                $v = $this->getAdapter()->quote($v);
+                            }
                         }
                         $value = implode(', ', $value);
                         $dbSelect->where($this->_formatField($field, $dbSelect)." IN ($value)");
@@ -274,8 +276,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
             foreach ($whereNotEquals as $field=>$value) {
                 if (is_array($value)) {
                     foreach ($value as &$v) {
-                        $v = $this->_fixStupidQuoteBug($v);
-                        $v = $this->getAdapter()->quote($v);
+                        if (!is_int($v)) {
+                            $v = $this->_fixStupidQuoteBug($v);
+                            $v = $this->getAdapter()->quote($v);
+                        }
                     }
                     $value = implode(', ', $value);
                     $dbSelect->where($this->_formatField($field, $dbSelect)." NOT IN ($value)");
@@ -316,12 +320,35 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
         if ($exprs = $select->getPart(Vps_Model_Select::EXPR)) {
             foreach ($exprs as $field) {
-                if (!$col = $this->_formatFieldExpr($field, $dbSelect)) {
-                    throw new Vps_Exception("Expression '$field' not found");
+                if ($col = $this->_formatFieldExpr($field, $dbSelect)) {
+                    $dbSelect->from(null, array($field=>new Zend_Db_Expr($col)));
                 }
-                $dbSelect->from(null, array($field=>new Zend_Db_Expr($col)));
             }
         }
+    }
+
+    private static function _getInnerDbModel2($model)
+    {
+        if ($model instanceof Vps_Model_Db) return $model;
+        if ($model instanceof Vps_Model_Proxy) {
+            $ret = self::_getInnerDbModel2($model->getProxyModel());
+            if ($ret) return $ret;
+        }
+        if ($model instanceof Vps_Model_MirrorCacheSimple || $model instanceof Vps_Model_RowsSubModel_MirrorCacheSimple) {
+            $ret = self::_getInnerDbModel2($model->getSourceModel());
+            if ($ret) return $ret;
+        }
+        return null;
+    }
+
+    private static function _getInnerDbModel($model)
+    {
+        if (is_string($model)) $model = Vps_Model_Abstract::getInstance($model);
+        $ret = self::_getInnerDbModel2($model);
+        if (!$ret) {
+            throw new Vps_Exception_NotYetImplemented();
+        }
+        return $ret;
     }
 
     private function _createDbSelectExpression($expr, $dbSelect, $depOf = null)
@@ -339,6 +366,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     $v = $this->_table->getAdapter()->quote($v);
                 }
             } else {
+                if ($quotedValue instanceof Vps_DateTime) {
+                    $quotedValue = $quotedValue->format('Y-m-d H:i:s');
+                } else if ($quotedValue instanceof Vps_Date) {
+                    $quotedValue = $quotedValue->format('Y-m-d');
+                }
                 $quotedValue = $this->_fixStupidQuoteBug($quotedValue);
                 $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
             }
@@ -348,20 +380,28 @@ class Vps_Model_Db extends Vps_Model_Abstract
         ) {
             $field = $this->_formatField($expr->getField(), $dbSelect);
         }
-        if ($expr instanceof Vps_Model_Select_Expr_Equals) {
+        if ($expr instanceof Vps_Model_Select_Expr_Equal) {
             if (is_array($quotedValue)) {
                 return $field." IN (".implode(',', $quotedValue).")";
             } else {
                 return $field." = ".$quotedValue;
             }
+        } else if ($expr instanceof Vps_Model_Select_Expr_NotEquals) {
+            if (is_array($quotedValue)) {
+                return $field." NOT IN (".implode(',', $quotedValue).")";
+            } else {
+                return $field." != ".$quotedValue;
+            }
         } else if ($expr instanceof Vps_Model_Select_Expr_IsNull) {
             return $field." IS NULL";
-        } else if ($expr instanceof Vps_Model_Select_Expr_Smaller
-                || $expr instanceof Vps_Model_Select_Expr_SmallerDate) {
+        } else if ($expr instanceof Vps_Model_Select_Expr_Lower) {
             return $field." < ".$quotedValue;
-        } else if ($expr instanceof Vps_Model_Select_Expr_Higher
-                || $expr instanceof Vps_Model_Select_Expr_HigherDate) {
+        } else if ($expr instanceof Vps_Model_Select_Expr_Higher) {
             return $field." > ".$quotedValue;
+        } else if ($expr instanceof Vps_Model_Select_Expr_LowerEqual) {
+            return $field." <= ".$quotedValue;
+        } else if ($expr instanceof Vps_Model_Select_Expr_HigherEqual) {
+            return $field." >= ".$quotedValue;
         } else if ($expr instanceof Vps_Model_Select_Expr_Like) {
             $quotedValue = str_replace("_", "\\_", $quotedValue);
             if ($expr instanceof Vps_Model_Select_Expr_Contains) {
@@ -403,11 +443,15 @@ class Vps_Model_Db extends Vps_Model_Abstract
             foreach ($expr->getExpressions() as $expression) {
                 $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
             }
-            return implode(" - ", $sqlExpressions);
+            $sql = implode(" - ", $sqlExpressions);
+            if (!$expr->lowerNullAllowed) {
+                $sql = "IF (($sql > 0), $sql, 0)";
+            }
+            return $sql;
         } else if ($expr instanceof Vps_Model_Select_Expr_Concat) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {
-                if ($expression instanceof Vps_Model_Select_Expr_Interface) {
+                            if ($expression instanceof Vps_Model_Select_Expr_Interface) {
                     $sqlExpressions[] = $this->_createDbSelectExpression($expression, $dbSelect);
                 } else {
                     $sqlExpressions[] = $this->_formatField($expression, $dbSelect);
@@ -464,23 +508,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
             ";
         } else if ($expr instanceof Vps_Model_Select_Expr_Child) {
             $depM = $depOf->getDependentModel($expr->getChild());
-            $depM = Vps_Model_Abstract::getInstance($depM);
-            $dbDepM = $depM;
-            while ($dbDepM instanceof Vps_Model_Proxy) {
-                $dbDepM = $dbDepM->getProxyModel();
-            }
-            if (!$dbDepM instanceof Vps_Model_Db) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
-            $dbDepOf = $depOf;
-            while ($dbDepOf instanceof Vps_Model_Proxy) {
-                $dbDepOf = $dbDepOf->getProxyModel();
-            }
-            if (!$dbDepOf instanceof Vps_Model_Db) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
+            $dbDepM = self::_getInnerDbModel($depM);
+            $dbDepOf = self::_getInnerDbModel($depOf);
+
             $depTableName = $dbDepM->getTableName();
-            $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
+            $ref = $depM->getReferenceByModelClass(get_class($depOf), null/*todo*/);
             $depSelect = $expr->getSelect();
             if (!$depSelect) {
                 $depSelect = $dbDepM->select();
@@ -515,41 +547,28 @@ class Vps_Model_Db extends Vps_Model_Abstract
             if (!$dbDepOf instanceof Vps_Model_Db) {
                 throw new Vps_Exception_NotYetImplemented();
             }
-            $depTableName = $dbDepM->getTableName();
             $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
             $depSelect = $expr->getSelect();
             if (!$depSelect) $depSelect = $dbDepM->select();
-            $col1 = $dbDepM->transformColumnName($ref['column']);
+            $col1 = $dbDepM->_formatField($ref['column'], null /* select fehlt - welches ist das korrekte?*/);
             $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
-            $depDbSelect->from(null, "$depTableName.$col1");
+            $depDbSelect->from(null, $col1);
             return $this->_fieldWithTableName($this->getPrimaryKey())." IN ($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
-            $refM = $depOf->getReferencedModel($expr->getParent());
-            $refM = Vps_Model_Abstract::getInstance($refM);
-            $dbRefM = $refM;
-            while ($dbRefM instanceof Vps_Model_Proxy) {
-                $dbRefM = $dbRefM->getProxyModel();
-            }
-            if (!$dbRefM instanceof Vps_Model_Db) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
-            $dbDepOf = $depOf;
-            while ($dbDepOf instanceof Vps_Model_Proxy) {
-                $dbDepOf = $dbDepOf->getProxyModel();
-            }
-            if (!$dbDepOf instanceof Vps_Model_Db) {
-                throw new Vps_Exception_NotYetImplemented();
-            }
+            $dbRefM = self::_getInnerDbModel($depOf->getReferencedModel($expr->getParent()));
+            $dbDepOf = self::_getInnerDbModel($depOf);
             $refTableName = $dbRefM->getTableName();
             $ref = $depOf->getReference($expr->getParent());
             $refSelect = $dbRefM->select();
-
-            $col1 = $dbDepOf->transformColumnName($ref['column']);
+            if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                $ref = $dbDepOf->getReferenceByModelClass($depOf->getParentModel(), null);
+            }
+            $col1 = $dbDepOf->_formatField($ref['column'], null /* select fehlt - welches sollte das sein? */ );
             $col2 = $dbRefM->transformColumnName($dbRefM->getPrimaryKey());
 
-            $refSelect->where("$refTableName.$col2={$dbDepOf->getTableName()}.$col1");
+            $refSelect->where("$refTableName.$col2=$col1");
             $refDbSelect = $dbRefM->createDbSelect($refSelect);
             $exprStr = $dbRefM->_formatField($expr->getField(), $refDbSelect);
             $refDbSelect->reset(Zend_Db_Select::COLUMNS);
@@ -619,7 +638,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         ));
     }
 
-    public function deleteRows($where)
+    private function _getTableUpdateWhere($where)
     {
         if (!is_object($where)) {
             if (is_string($where)) $where = array($where);
@@ -630,7 +649,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($select->getPart(Vps_Model_Select::OTHER) ||
             $select->getPart(Vps_Model_Select::LIMIT_COUNT) ||
             $select->getPart(Vps_Model_Select::LIMIT_OFFSET))
-            throw new Vps_Exception('Select for delete must only contain where* parts');
+            throw new Vps_Exception('Select for update must only contain where* parts');
         $dbSelect = new Zend_Db_Select($this->getAdapter());
         $this->_applySelect($dbSelect, $select);
         $where = array();
@@ -638,7 +657,17 @@ class Vps_Model_Db extends Vps_Model_Abstract
             if (substr($part, 0, 4) == 'AND ') $part = substr($part, 4);
             $where[] = $part;
         }
-        return $this->_table->delete($where);
+        return $where;
+    }
+
+    public function deleteRows($where)
+    {
+        return $this->_table->delete($this->_getTableUpdateWhere($where));
+    }
+
+    public function updateRows($data, $where)
+    {
+        return $this->_table->update($data, $this->_getTableUpdateWhere($where));
     }
 
     private function _getDbSelect($where, $order=null, $limit=null, $start=null)
@@ -768,7 +797,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     if (is_string($select)) $select = array($select);
                     $select = $this->select($select);
                 }
-                $dbSelect = $this->createDbSelect($select);
+                $dbSelect = $this->_getDbSelect($select);
                 $whereParts = $dbSelect->getPart(Zend_Db_Select::WHERE);
                 $wherePart = implode(' ', $whereParts);
 
@@ -801,17 +830,17 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $select = $this->select($select);
             }
 
-            $tmpExportFolder = realpath('application/temp').'/modelcsv'.uniqid();
-            mkdir($tmpExportFolder, 0777);
+            $tmpExportFolder = realpath('application/temp').'/modelcsvex'.uniqid();
             $filename = $tmpExportFolder.'/csvexport';
 
-            $dbSelect = $this->createDbSelect($select);
+            $dbSelect = $this->_getDbSelect($select);
             $sqlString = $dbSelect->assembleIntoOutfile($filename);
 
             $dbSelect->limit(1);
             $fieldResult = $dbSelect->query()->fetchAll();
             $columnsCsv = '';
             if (count($fieldResult)) {
+                mkdir($tmpExportFolder, 0777);
                 $columns = array_keys($fieldResult[0]);
                 $columnsCsv = '"'.implode('","', $columns).'"';
                 $this->executeSql($sqlString);
@@ -836,7 +865,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (is_string($select)) $select = array($select);
                 $select = $this->select($select);
             }
-            $dbSelect = $this->createDbSelect($select);
+            $dbSelect = $this->_getDbSelect($select);
             if (!$dbSelect) return array();
             return $dbSelect->query()->fetchAll();
         } else {
@@ -849,10 +878,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if (Vps_Component_Data_Root::getComponentClass()) {
             if ($this->_proxyContainerModels) {
                 foreach ($this->_proxyContainerModels as $m) {
-                    Vps_Component_ModelObserver::getInstance()->update($m);
+                    Vps_Component_ModelObserver::getInstance()->add('update', $m);
                 }
             } else {
-                Vps_Component_ModelObserver::getInstance()->update($this);
+                Vps_Component_ModelObserver::getInstance()->add('update', $this);
             }
         }
     }
@@ -885,7 +914,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             // if no data is recieved, quit
             if (!$data) return;
 
-            $tmpImportFolder = realpath('application/temp').'/modelcsv'.uniqid();
+            $tmpImportFolder = realpath('application/temp').'/modelcsvim'.uniqid();
             mkdir($tmpImportFolder, 0777);
             $filename = $tmpImportFolder.'/csvimport';
             file_put_contents($filename.'.gz', $data);
@@ -988,7 +1017,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         if (isset($options['ignore']) && $options['ignore'])
             $sqlTableAndColumns .= ' IGNORE';
-        $sqlTableAndColumns .= ' INTO '.$this->getTableName().' ('.implode(', ', $fields).') VALUES ';
+        $sqlTableAndColumns .= ' INTO '.$this->getTableName().' (`'.implode('`, `', $fields).'`) VALUES ';
         $sqlValues = '';
         foreach ($data as $d) {
             if (array_keys($d) != array_keys($data[0])) {

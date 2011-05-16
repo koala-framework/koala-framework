@@ -1,14 +1,4 @@
-.$cssClass .positionLeft .image {
-    float: left;
-    margin-right: 20px;
-}
-.$cssClass .positionLeft .noFlow .text {
-    padding-left: 20px;
-}
-.$cssClass .positionRight .image {
-    float: right;
-    margin-left: 20px;
-}
-.$cssClass .positionRight .noFlow .text {
-    padding-right: 20px;
-}
+.cssClass .positionLeft .image { float: left; margin-right: 18px; }
+.cssClass .positionLeft .noFlow .text { padding-left: 30px; }
+.cssClass .positionRight .image { float: right; margin-left: 18px; }
+.cssClass .positionRight .noFlow .text { padding-right: 30px; }

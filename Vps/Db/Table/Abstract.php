@@ -39,9 +39,9 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
                 'automatic_serialization' => true,
                 'write_control' => false
             );
-            if (class_exists('Memcache')) {
+            if (extension_loaded('apc') && php_sapi_name() != 'cli') {
                 $backendOptions = array();
-                $backend = 'Memcached';
+                $backend = 'Apc';
             } else {
                 $backendOptions = array(
                     'cache_dir' => 'application/cache/model',

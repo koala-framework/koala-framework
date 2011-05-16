@@ -1,3 +1,94 @@
+== TODO ==
+- Model Typ-Strikt und Mongo                                       x
+- ACL mit Resourcen, sprerren von hinzufügen & löschen             8
+- MenuConfig, flexibleres erstellen von Menüpunkten in Komponenten 2
+- Zurück Button
+- Volltextsuche bei änderung neu indizieren                        4
+- mögliche wildcards im RTE anzeigen                               1
+- Bearbeitbare Mails für neue Benutzer usw                         4
+- Inherit Content Cache
+
+== 2.0 ==
+Neue Features
+- RTE mit tinymce unterstützung
+- Component Cache Neu, Url Cache, ProcessInput Cache
+- HtmlEditor: enableBlocks setting gibts nicht mehr, wurde in FormatBlock plugin ausgelagert und
+  müsste manuell zu plugins hinzugefügt werden (bevorzugt wird Text-Komponente!)
+
+möglicherweise nicht kompatible Änderungen:
+- Helper: Statt $this->ifHasContent($component) muss man if ($this->hasContent($component)) schreiben
+- partials view Helper: 2. Parameter (partialClass) wurde entfernt
+- Master.tpl muss $this->componentWithMaster($this->componentWithMaster) für die Haupt-Komponente verwenden
+- generators: box priority wurde entfernt
+
+== 1.11 ==
+Erstellt: 17.08.10
+Stable: wenn neuer component cache fertig
+Neue Features:
+- Vps_Date, Vps_DateTime
+- CopyContent
+- editComponents geht jetzt auch mit Table Generator
+- MultiCheckbox: Alle / keine Links (standardmäßig aktiv)
+- Volltextsuche
+- Model_Mongo
+- Model_MirrorCacheSimple
+- AccessByMail Plugin
+- (Multi)-FileUpload per html5 wenn moeglich, incl drag&drop support
+- Doppeltes bearbeiten von zB Directories ist mittels extConfigControllerIndex deaktivierbar
+
+möglicherweise nicht kompatible Änderungen:
+- Vps_Date ist komplett inkompatibel (erbt nicht mehr von Zend_Date)
+- Expr_Smaller -> Expr_Lower
+- Expr_SmallerDate, Expr_HigherDate -> entfernt; Expr_Smaller kann dafür auch mit
+  Vps_Date und Vps_DateTime umgehen
+- Expr_Equal (Equals ist deprected)
+- Menü-Komponenten: TemplateVars wurden geändert, ist jetzt ein array. Alle überschriebenen
+  Templates müssen angepasst werden (bzw. schaun obs wirklich überschrieben werden muss)
+- frontControllerClass MUSS in application/config.ini angegeben werden
+- Tags in Seitenbaum gibts nicht mehr (kein Vps_Component_Acl->allowTag())
+- aclClass MUSS in application/config.ini angegeben werden
+- Columns admin ist jetzt keine Form mehr sondern ein Grid
+- .webStandard strong/em/ol/ul/li ist jetzt im vps und sollte in webs entfernt werden
+- newsListView und eventsListView Teaser haben jetzt ein nl2br
+- showInPageTreeAdmin flag gibts nicht mehr, ist jetzt nur noch ein generatorFlag
+- Image Dimensionen: wenn width oder height 0 ist muss 'deform' verwendet werden
+- Neue tdpdf-Version (5.9.023). PDFs gehören auf jeden Fall überprüft
+
+== 1.10 ==
+Erstellt: 09.06.10
+Stable: 16.08.10
+Neue Features:
+- Generator Plugins
+- Generator Plugin: Tags
+- Kaltstart Performance
+- Vpc_Form: vpsFieldError klasse wird für Felder mit Validierungs-Fehler gesetzt
+- needsParentComponentClass Setting, damit wird die $parentComponentClass bei getSettings
+  übergeben
+- ExtConfig ist eigene Klasse - statt Admin::getExtConfig, setzen über extConfig Setting
+- Vpc_List_Switch hat transitions (fade ist jetzt standard) und die weiter-pfeile
+  funktionieren über das ende hinaus und fangen wieder von vorn an
+- Directory Administration: es gibt jetzt ExtConfigTabs
+- Neues EyeCandy: Vps.Switch.Overlay
+- Administrierbare Redirects
+
+möglicherweise nicht kompatible Änderungen:
+- editComponents werden im Seitenbaum nur mehr berücksichtigt wenn direkt unter der bearbeitenden Komponente liegen
+  (indirekt nur wenn der ganze Pfad editComponents eingestellt hat)
+- Directories Administration: o Admin::_getContentClass gibts nicht mehr
+                              o idTemplate muss nicht mehr gesetzt werden
+- editComponents werden auch bei Paragraphs berücksichtigt
+- Vpc_Basic_Flash_Component gibts nicht mehr, stattdessen Flash_Code und Flash_Upload
+  Vpc_Basic_Flash_Component mit Upload (nicht Url) wird nicht autom. konvertiert
+- Form_Field::validate gibt jetzt nicht nur mehr ein array mit Validierungsmessages zurueck sondern
+  ein array mit field und message
+- Vpc_Columns::getSettings beöntigt $parentComponentClass Argument, muss bei abgeleiteten
+  durchgeschliffen werden
+- Vpc_List_Switch hat options, müssen im Template ausgegeben werden
+- Admin::getExtConfig gibts nicht mehr, durch extConfig Setting ersetzen
+- Vpc_Abstract_List_*Admin und Vpc_Abstract_Composite_*Admin gibts nicht mehr, stattdessen
+  sollte die passende extConfig Einstellung gesetzt werden
+- Update auf Zend 1.10.7
+
 == 1.9 ==
 Erstellt: 07.05.10
 Stable: 09.06.10

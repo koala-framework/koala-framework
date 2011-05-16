@@ -24,6 +24,7 @@ class Vpc_Advanced_DownloadsTree_ViewProjectsController extends Vps_Controller_A
     protected function _isAllowedComponent()
     {
         $c = Vps_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'));
+        if (!$c) return false;
         while($c) {
             foreach (Vpc_Abstract::getSetting($c->componentClass, 'plugins') as $p) {
                 if (is_instance_of($p, 'Vps_Component_Plugin_Interface_Login')) {

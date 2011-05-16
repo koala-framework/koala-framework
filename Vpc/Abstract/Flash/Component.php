@@ -9,7 +9,9 @@ abstract class Vpc_Abstract_Flash_Component extends Vpc_Abstract
 
         $ret['assets']['files'][] = 'vps/Vpc/Abstract/Flash/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';
+        $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['assets']['dep'][] = 'SwfObject';
+        $ret['assets']['dep'][] = 'ExtElement';
 
         $ret['cssClass'] = 'webStandard';
 

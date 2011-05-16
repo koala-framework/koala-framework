@@ -1,23 +1,9 @@
 <?php
 class Vps_Trl_Model_Vps extends Vps_Trl_Model_Abstract
 {
-    public function __construct(array $config = array())
+    public function __construct()
     {
-        $modelVps = new Vps_Model_Xml(array(
-            'xpath' => '/trl',
-            'topNode' => 'text',
-            'filepath' => VPS_PATH.'/trl.xml'
-        ));
-
-		if (!isset($config['proxyModel'])) $config['proxyModel'] = $modelVps;
-		if (!isset($config['cacheSettings'])) {
-		    $config['cacheSettings'] = array(
-		        array(
-					'index' => array('en', 'context'), //ist ok so ..
-					'columns' => $this->_getTargetLanguages()
-                )
-             );
-		}
+        $config['filepath'] = VPS_PATH.'/trl.xml';
         parent::__construct($config);
     }
 }

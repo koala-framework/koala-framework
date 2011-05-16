@@ -14,7 +14,7 @@ Ext.grid.GridView.prototype.getColumnStyle = function(col, isHeader){
     return style;
 };
 
-//Workaround für Bug beschrieben hier:
+//Workaround fÃ¼r Bug beschrieben hier:
 //http://extjs.com/forum/showthread.php?p=205062#post205062
 //!!!! entfernen wenn in ext behoben
 Ext.grid.GridView.prototype.afterRender = function(){

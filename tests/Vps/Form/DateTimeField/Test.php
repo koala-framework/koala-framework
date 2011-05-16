@@ -2,7 +2,7 @@
 /**
  * @group Vps_Form_DateTimeField
  */
-class Vps_Form_DateTimeField_Test extends PHPUnit_Framework_TestCase
+class Vps_Form_DateTimeField_Test extends Vps_Test_TestCase
 {
     public function testDateTime()
     {
@@ -25,6 +25,7 @@ class Vps_Form_DateTimeField_Test extends PHPUnit_Framework_TestCase
         $form->validate($form->getRow(), $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $row = $m1->getRow($m1->select());
 
