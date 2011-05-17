@@ -122,7 +122,9 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
 
         this.getAutoForm().onAdd({
             success: function() {
-                this._vpsResize();
+                if (!this.width || !this.height) {
+                    this._vpsResize();
+                }
             },
             scope: this
         });
@@ -136,7 +138,9 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         if (id) {
             this.getAutoForm().load(id, {
                 success: function() {
-                    this._vpsResize();
+                    if (!this.width || !this.height) {
+                        this._vpsResize();
+                    }
                 },
                 scope: this
             });
