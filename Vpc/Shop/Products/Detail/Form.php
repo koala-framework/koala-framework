@@ -1,6 +1,8 @@
 <?php
 class Vpc_Shop_Products_Detail_Form extends Vps_Form
 {
+    private $_cards;
+
     public function __construct($name, $class)
     {
         $this->setClass($class);
@@ -13,18 +15,27 @@ class Vpc_Shop_Products_Detail_Form extends Vps_Form
 
         $fs = $this->add(new Vps_Form_Container_FieldSet('Daten'));
         $fs->add(new Vps_Form_Field_TextField('title', trlVps('Title')));
+
         $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
-        $types = array();
-        foreach ($generators['addToCart']['component'] as $component => $class) {
-            $types[$component] = Vpc_Abstract::getSetting($class, 'productTypeText');
-        }
-        if (count($types) == 1) {
+        if (count($generators['addToCart']['component']) == 1) {
             $fs->add(new Vps_Form_Field_Hidden('component'))
-                ->setDefaultValue(key($types));
+                ->setDefaultValue(key($generators['addToCart']['component']));
         } else {
-            $fs->add(new Vps_Form_Field_Select('component', trlVps('Type')))
-                ->setValues($types)
-                ->setAllowBlank(false);
+            $this->_cards = $fs->add(new Vps_Form_Container_Cards('component', trlVps('Type')));
+            $this->_cards->setAllowBlank(false);
+            foreach ($generators['addToCart']['component'] as $component=>$class) {
+                if (is_instance_of($class, 'Vpc_Shop_AddToCartAbstract_Component')) {
+                    $card = $this->_cards->add();
+                    $card->setName($component);
+                    $card->setTitle(Vpc_Abstract::getSetting($class, 'productTypeText'));
+
+                    $form = Vpc_Abstract_Form::createComponentForm($class);
+                    if ($form) {
+                        $form->setIdTemplate('{0}');
+                        $card->add($form);
+                    }
+                }
+            }
         }
         $fs->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
         $fs->add(Vpc_Abstract_Form::createComponentForm('shopProducts_{0}-image'));
@@ -39,5 +50,15 @@ class Vpc_Shop_Products_Detail_Form extends Vps_Form
                 ->setAllowBlank(false);
 
         $this->add(Vpc_Abstract_Form::createComponentForm('shopProducts_{0}-text'));
+    }
+
+    public function setModel($model)
+    {
+        parent::setModel($model);
+        if ($this->_cards) {
+            foreach ($this->_cards as $c) {
+                $c->getIterator()->current()->setModel($model);
+            }
+        }
     }
 }
