@@ -2,6 +2,7 @@
 class Vpc_Shop_Products_Detail_Form extends Vps_Form
 {
     private $_cards;
+    private $_fieldSet;
 
     public function __construct($name, $class)
     {
@@ -13,7 +14,8 @@ class Vpc_Shop_Products_Detail_Form extends Vps_Form
     {
         parent::_init();
 
-        $fs = $this->add(new Vps_Form_Container_FieldSet('Daten'));
+        $fs = $this->add(new Vps_Form_Container_FieldSet(trlVps('Data')));
+        $this->_fieldSet = $fs;
         $fs->add(new Vps_Form_Field_TextField('title', trlVps('Title')));
 
         $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
@@ -60,5 +62,10 @@ class Vpc_Shop_Products_Detail_Form extends Vps_Form
                 $c->getIterator()->current()->setModel($model);
             }
         }
+    }
+
+    protected function _getFieldSet()
+    {
+        return $this->_fieldSet;
     }
 }
