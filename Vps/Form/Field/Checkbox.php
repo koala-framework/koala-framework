@@ -23,6 +23,22 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
         return $ret;
     }
 
+    protected function _addValidators()
+    {
+        parent::_addValidators();
+
+        if ($this->getAllowBlank() === false
+            || $this->getAllowBlank() === 0
+            || $this->getAllowBlank() === '0'
+        ) {
+            $v = new Vps_Validate_NotEmptyNotZero();
+            if ($this->getEmptyMessage()) {
+                $v->setMessage(Vps_Validate_NotEmpty::IS_EMPTY, $this->getEmptyMessage());
+            }
+            $this->addValidator($v, 'notEmpty');
+        }
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();

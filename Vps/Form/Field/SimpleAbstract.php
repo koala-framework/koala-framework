@@ -27,6 +27,8 @@ class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
     {
         $ret = parent::_getTrlProperties();
         $ret[] = 'emptyMessage';
+        $ret[] = 'comment';
+        $ret[] = 'defaultValue';
         return $ret;
     }
 

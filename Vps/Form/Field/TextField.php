@@ -40,7 +40,8 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
     protected function _getOutputValueFromValues($values)
     {
         $name = $this->getFieldName();
-        return isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
+        $ret = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
+        return (string)$ret;
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '')

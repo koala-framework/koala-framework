@@ -4,6 +4,15 @@ class Vps_Media
     private static $_ouputCache;
     const PASSWORD = 'l4Gx8SFe';
 
+    /**
+     *
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param int Kann gesetzt werden wenn wir in diesem web auf das bild nicht direkten zugriff haben
+     *            sondern nur für ein anderes web die url generieren
+     */
     public static function getUrl($class, $id, $type, $filename, $time = null)
     {
         if ($filename instanceof Vps_Uploads_Row) {

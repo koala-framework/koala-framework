@@ -45,6 +45,8 @@ class Vps_Setup
 
     public static function setUp($configClass = 'Vps_Config_Web')
     {
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CLIENT_IP'];
+
         self::setUpZend();
 
         if (isset($_SERVER['REQUEST_URI']) &&
@@ -70,20 +72,6 @@ class Vps_Setup
                 throw new Vps_Exception_AccessDenied();
             }
             Vps_Util_Check_Config::check();
-        }
-        if (isset($_SERVER['REQUEST_URI']) &&
-            substr($_SERVER['REQUEST_URI'], 0, 8) == '/vps/apc'
-        ) {
-            Vps_Loader::registerAutoload();
-            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
-                header('WWW-Authenticate: Basic realm="Check Config"');
-                throw new Vps_Exception_AccessDenied();
-            }
-            self::setUpVps();
-            $_SERVER['PHP_SELF'] = '/vps/apc';
-            global $MY_SELF;
-            require_once(Vps_Registry::get('config')->libraryPath . '/apc/apc.php');
-            exit;
         }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
             Vps_Loader::registerAutoload();
@@ -311,6 +299,7 @@ class Vps_Setup
         } else if (substr($host, 0, 4)=='dev.') {
             return 'dev';
         } else if (substr($host, 0, 5)=='test.' ||
+                   substr($host, 0, 3)=='qa.' ||
                    substr($path, 0, 17) == '/docs/vpcms/test.' ||
                    substr($path, 0, 21) == '/docs/vpcms/www.test.' ||
                    substr($path, 0, 25) == '/var/www/html/vpcms/test.' ||

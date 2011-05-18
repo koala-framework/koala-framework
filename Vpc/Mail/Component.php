@@ -52,6 +52,11 @@ class Vpc_Mail_Component extends Vpc_Abstract
     public function getHtmlStyles()
     {
         $ret = $this->_getSetting('mailHtmlStyles');
+
+        // Hack für Tests, weil da der statische getStylesArray-Aufruf nicht funktioniert
+        $content = $this->getData()->getChildComponent('-content');
+        if ($content && !is_instance_of($content->componentClass, 'Vpc_Paragraphs_Component')) return $ret;
+
         foreach (Vpc_Basic_Text_StylesModel::getStylesArray() as $tag => $classes) {
             foreach ($classes as $class => $style) {
                 $ret[] = array(
@@ -152,8 +157,8 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $renderer->setRenderFormat(Vps_Component_Renderer_Mail::RENDER_TXT);
         $renderer->setRecipient($recipient);
         $ret = $renderer->renderComponent($this->getData());
-        $ret = str_replace('&nbsp;', ' ', $ret);
         $ret = $this->_processPlaceholder($ret, $recipient);
+        $ret = str_replace('&nbsp;', ' ', $ret);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
         return $ret;
     }
