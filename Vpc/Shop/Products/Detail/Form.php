@@ -19,10 +19,7 @@ class Vpc_Shop_Products_Detail_Form extends Vps_Form
         $fs->add(new Vps_Form_Field_TextField('title', trlVps('Title')));
 
         $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
-        if (count($generators['addToCart']['component']) == 1) {
-            $fs->add(new Vps_Form_Field_Hidden('component'))
-                ->setDefaultValue(key($generators['addToCart']['component']));
-        } else {
+        if (count($generators['addToCart']['component']) > 1) {
             $this->_cards = $fs->add(new Vps_Form_Container_Cards('component', trlVps('Type')));
             $this->_cards->setAllowBlank(false);
             foreach ($generators['addToCart']['component'] as $component=>$class) {
@@ -39,6 +36,7 @@ class Vpc_Shop_Products_Detail_Form extends Vps_Form
                 }
             }
         }
+
         $fs->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
         $fs->add(Vpc_Abstract_Form::createComponentForm('shopProducts_{0}-image'));
 
@@ -67,5 +65,15 @@ class Vpc_Shop_Products_Detail_Form extends Vps_Form
     protected function _getFieldSet()
     {
         return $this->_fieldSet;
+    }
+
+    protected function _beforeInsert($row)
+    {
+        parent::_beforeInsert($row);
+        $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
+        if (count($generators['addToCart']['component']) == 1) {
+            reset($generators['addToCart']['component']);
+            $row->component = key($generators['addToCart']['component']);
+        }
     }
 }
