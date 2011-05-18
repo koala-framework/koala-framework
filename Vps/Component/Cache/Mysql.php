@@ -170,6 +170,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
         // Alle bisherigen wheres durchgehen und nur die nehmen, wo eine db_id gelöscht wird
         $allIds = array();
+        $dbIds = array();
         foreach ($wheres as $class => $where) {
             $allIds[$class] = array();
             foreach ($where as $w) {
@@ -180,15 +181,22 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             }
         }
         $searchIds = $allIds;
+
+        $select = $model->select();
+        $select->whereEquals('db_id', '');
+        $staticEntries = array();
+        foreach ($model->getRows($select) as $row) {
+            $staticEntries[$row->component_class][] = $row;
+        }
+
         do {
             // Tabelle durchsuchen und Ergebnisse in newIds speichern
             $newIds = array();
+            $uniqueDbIds = array();
             foreach ($searchIds as $class => $dbIds) {
                 // Einträge ohne db_id
-                $select = $model->select();
-                $select->whereEquals('component_class', $class);
-                $select->whereEquals('db_id', '');
-                foreach ($model->getRows($select) as $r) {
+                if (!isset($staticEntries[$class])) $staticEntries[$class] = array();
+                foreach ($staticEntries[$class] as $r) {
                     foreach ($dbIds as $dbId) {
                         $ids = call_user_func(
                             array($r->meta_class, 'getDeleteDbId'), $r, $dbId
@@ -201,13 +209,17 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                         }
                     }
                 }
-                // Einträge mit db_id
+                $uniqueDbIds = array_unique(array_merge($uniqueDbIds, $dbIds));
+            }
+            // Einträge mit db_id
+            if ($uniqueDbIds) {
                 $select = $model->select();
-                $select->whereEquals('db_id', $dbIds);
+                $select->whereEquals('db_id', $uniqueDbIds);
                 foreach ($model->getRows($select) as $r) {
                     $newIds[$r->target_component_class][] = $r->target_db_id;
                 }
             }
+
             // searchIds neu berechnen und wheres hinzufügen
             $searchIds = array();
             foreach ($newIds as $class => $ids) {
@@ -253,7 +265,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     {
         $select = $this->getModel('cache')->select();
 
-        $or = array();
+        $unions = array();
         //p($wheres);
         foreach ($wheres as $cClass => $where) {
             foreach ($where as $w) {
@@ -286,10 +298,14 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 } else {
                     $and[] = new Vps_Model_Select_Expr_Equal('component_class', $cClass);
                 }
-                $or[] = new Vps_Model_Select_Expr_And($and);
+                $keys = array_keys($w);
+                asort($keys);
+                $key = '';
+                foreach ($keys as $k) $key .=  substr($k, 0, 1);
+                $unions[$key][] = new Vps_Model_Select_Expr_And($and);
             }
         }
-        if ($or) {
+        foreach ($unions as $or) {
             $select->where(new Vps_Model_Select_Expr_Or($or));
             //p($select->getParts());
             foreach ($this->getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
