@@ -1,12 +1,6 @@
 <?php
 class Vpc_Shop_Products_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
 {
-    protected function _getContentClass()
-    {
-        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
-        return Vpc_Abstract::getChildComponentClass($detail, 'child', 'content');
-    }
-
     protected function _getPluginParentComponents()
     {
         $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');

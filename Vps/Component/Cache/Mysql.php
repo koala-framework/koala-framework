@@ -31,7 +31,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
     public function save(Vps_Component_Data $component, $content, $type = 'component', $value = '')
     {
         $settings = $component->getComponent()->getViewCacheSettings();
-        if (!$settings['enabled']) $content = self::NO_CACHE;
+        if ($type != 'componentLink' && !$settings['enabled']) $content = self::NO_CACHE;
 
         // MySQL
         $data = array(

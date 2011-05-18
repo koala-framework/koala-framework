@@ -58,13 +58,30 @@ abstract class Vps_Component_Cache
                 ) {
                     //ComponentLink
                     $model = $generator->getModel();
-                    $pattern = '{' . $model->getPrimaryKey() . '}';
+                    if ($model instanceof Vpc_Root_Category_GeneratorModel) {
+                        $primaryKey = 'id';
+                    } else {
+                        $primaryKey = $model->getPrimaryKey();
+                    }
+                    $pattern = '{' . $primaryKey . '}';
                     if (isset($setting['dbIdShortcut'])) {
                         $pattern = $setting['dbIdShortcut'] . $pattern;
                     }
                     $meta = new Vps_Component_Cache_Meta_Static_ComponentLink($model, $pattern);
                     foreach ($generator->getChildComponentClasses() as $c) {
                         self::getInstance()->saveMeta($c, $meta);
+                    }
+                    // Komponenten, die im Seitenbaum vorkommen
+                    if ($generator->getModel() instanceof Vpc_Root_Category_GeneratorModel) {
+                        $meta = new Vps_Component_Cache_Meta_Static_ComponentLink('Vps_Component_Model');
+                        foreach ($generator->getChildComponentClasses() as $c) {
+                            self::getInstance()->saveMeta($c, $meta);
+                        }
+                        // Wenns ein hascontent(menu) im master.tpl gibt
+                        $meta = new Vpc_Menu_Abstract_CacheMetaMaster('Vps_Component_Model');
+                        foreach ($generator->getChildComponentClasses() as $c) {
+                            self::getInstance()->saveMeta($c, $meta);
+                        }
                     }
                 }
                 if ($generator &&

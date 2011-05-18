@@ -1,11 +1,6 @@
 <?php
 class Vpc_Directories_Item_Directory_Cc_CacheMeta extends Vps_Component_Cache_Meta_Static_Model
 {
-    public static function createComponentId($pattern, $row)
-    {
-        return $ret;
-    }
-
     public static function getDeleteWhere($pattern, $row, $dirtyColumns, $params)
     {
         $ret = parent::getDeleteWhere($pattern, $row, $dirtyColumns, $params);

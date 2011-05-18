@@ -443,7 +443,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
             foreach ($expr->getExpressions() as $expression) {
                 $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect).")";
             }
-            return implode(" - ", $sqlExpressions);
+            $sql = implode(" - ", $sqlExpressions);
+            if (!$expr->lowerNullAllowed) {
+                $sql = "IF (($sql > 0), $sql, 0)";
+            }
+            return $sql;
         } else if ($expr instanceof Vps_Model_Select_Expr_Concat) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {

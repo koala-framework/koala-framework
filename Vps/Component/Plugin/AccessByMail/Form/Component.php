@@ -18,7 +18,9 @@ class Vps_Component_Plugin_AccessByMail_Form_Component extends Vpc_Form_Componen
             $s->where(new Vps_Model_Select_Expr_Higher('date', new Vps_Date(time()-24*60*60)));
             $row = Vps_Model_Abstract::getInstance('Vps_Component_Plugin_AccessByMail_Model')->getRow($s);
             if (!$row) {
-                $this->_errors[] = trlVps("Invalid or expired Link. Please request a new one.");
+                $this->_errors[] = array(
+                    'message' => trlVps("Invalid or expired Link. Please request a new one.")
+                );
             } else {
                 $session = new Zend_Session_Namespace('vpc_'.$this->getData()->parent->componentId);
                 $session->login = true;

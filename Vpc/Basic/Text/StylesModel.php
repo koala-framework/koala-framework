@@ -107,10 +107,11 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
         return $mtime;
     }
 
-    public static function getStylesContents()
+    public static function getStylesContents($modelClass = 'Vpc_Basic_Text_StylesModel')
     {
         $ret = '';
-        foreach (self::getStylesArray() as $tag => $classes) {
+        $_styles = Vps_Model_Abstract::getInstance($modelClass)->_getStylesArray();
+        foreach ($_styles as $tag => $classes) {
             foreach ($classes as $class => $style) {
                 $styles = '';
                 foreach ($style['styles'] as $k => $v) {
@@ -122,14 +123,23 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
         return $ret;
     }
 
+    public function getStylesContents2()
+    {
+        return $this->getStylesContents(get_class($this));
+    }
+
     public static function getStylesArray()
     {
-        $model = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_StylesModel');
+        return Vps_Model_Abstract::getInstance('Vpc_Basic_Text_StylesModel')->_getStylesArray();
+    }
+
+    protected function _getStylesArray()
+    {
         $cache = self::_getCache();
         $cacheId = 'RteStyles'.$this->getUniqueIdentifier();
         if (!$styles = $cache->load($cacheId)) {
             $styles = array();
-            foreach ($model->getRows() as $row) {
+            foreach ($this->getRows() as $row) {
                 $css = array();
                 foreach ($row->getSiblingRow('styles')->toArray() as $name=>$value) {
                     if (!$value) continue;

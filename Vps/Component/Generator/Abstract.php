@@ -323,7 +323,7 @@ abstract class Vps_Component_Generator_Abstract
             $childComponentIds = null;
             if ($g instanceof Vps_Component_Generator_Static && !$g instanceof Vpc_Basic_LinkTag_Generator) {
                 $childComponentIds = array();
-                foreach (array_keys($g->_settings['component']) as $c) {
+                foreach (array_keys($g->_getChildComponentClasses()) as $c) {
                     $childComponentIds[] = $g->getIdSeparator().$c;
                 }
             }
@@ -581,13 +581,13 @@ abstract class Vps_Component_Generator_Abstract
             if (!isset($c[$key])) {
                 throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found; set are ".implode(', ', array_keys($c)));
             }
-            $componentClass = $this->_settings['component'][$key];
+            $componentClass = $c[$key];
         } else {
             if (count($c) > 1) {
                 throw new Vps_Exception("For multiple components you have to submit a key in generator " . get_class($this) . " ($this->_class).");
             }
-            reset($this->_settings['component']);
-            $componentClass = current($this->_settings['component']);
+            reset($c);
+            $componentClass = current($c);
         }
 
         $alternativeComponent = Vpc_Abstract::getFlag($componentClass, "alternativeComponent");
