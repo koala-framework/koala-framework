@@ -20,7 +20,8 @@ class Vpc_Shop_Products_Directory_Component extends Vpc_Directories_ItemPage_Dir
         $ret['componentName'] = trlVps('Shop.Products');
         $ret['flags']['hasResources'] = true;
 
-        $ret['extConfig'] = 'Vpc_Shop_Products_Directory_ExtConfig';
+        $ret['extConfig'] = 'Vpc_Abstract_ExtConfigNone';
+        $ret['extConfigControllerIndex'] = 'Vpc_Directories_Item_Directory_ExtConfigEditButtons';
         return $ret;
     }
 }

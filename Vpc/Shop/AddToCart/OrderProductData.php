@@ -32,7 +32,7 @@ class Vpc_Shop_AddToCart_OrderProductData extends Vpc_Shop_AddToCartAbstract_Ord
     {
         $component = null;
         foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            if (is_instance_of($c, 'Vpc_Babytuch_Shop_Products_Detail_Component')) {
+            if (is_instance_of($c, 'Vpc_Shop_Products_Detail_Component')) {
                 $generators = Vpc_Abstract::getSetting($c, 'generators');
                 foreach ($generators['addToCart']['component'] as $key => $class) {
                     if ($class == $this->_class) $component = $key;

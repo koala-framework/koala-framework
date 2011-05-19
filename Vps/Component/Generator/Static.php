@@ -26,6 +26,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
                 $parentSelect = new Vps_Component_Select();
                 $parentSelect->copyParts(array(
                     Vps_Component_Select::WHERE_SUBROOT,
+                    Vps_Component_Select::IGNORE_VISIBLE,
                     Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE),
                     $select
                 );
