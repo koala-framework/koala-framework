@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `vps_enquiries` (
   `serialized_mail_essentials` text,
   `mail_attachments` text NOT NULL,
   `sent_mail_content_text` text NOT NULL,
-  `sent_mail_content_html` text NOT NULL,
+  `sent_mail_content_html` text,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
 

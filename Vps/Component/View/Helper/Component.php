@@ -12,16 +12,15 @@ class Vps_Component_View_Helper_Component extends Vps_Component_View_Renderer
         if ($renderer instanceof Vps_Component_Renderer_Mail) {
             $type = 'mail';
             $config = array(
-                'type' => $renderer->getRenderFormat(),
-                'recipient' => $renderer->getRecipient()
+                'type' => $renderer->getRenderFormat()
             );
+            $plugins = array();
+        } else {
+            $plugins = $component->getPlugins(); // Plugins werden bei Mail nicht ausgeführt, weil die manuell durchgegangen werden, damit der Recipient übergeben werden kann
         }
-        $plugins = $component->getPlugins();
-        return $this->_getRenderPlaceholder($component->componentId,
-                                            $config,
-                                            null,
-                                            $type,
-                                            $plugins);
+        return $this->_getRenderPlaceholder(
+            $component->componentId, $config, null, $type, $plugins
+        );
     }
 
     public function render($componentId, $config)

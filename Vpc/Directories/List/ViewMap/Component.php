@@ -15,6 +15,7 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
             'name'      => 'Coordinates'
         );
         $ret['mapOptions'] = array(
+            'zoom' => null,
             'zoom_properties' => 0,
             'height' => 400,
             'width' => 550,

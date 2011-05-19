@@ -402,6 +402,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             foreach ($expr->getExpressions() as $andExpr) {
                 $ret -= $this->_checkExpressions($andExpr, $data);
             }
+            if ($expr->lowerNullAllowed && $ret < 0) $ret = 0;
             return $ret;
         } else {
             return (bool)$this->getExprValue($data, $expr);

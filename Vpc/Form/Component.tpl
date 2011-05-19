@@ -12,7 +12,7 @@ if ($this->showSuccess) {
         echo '<p class="error">'.$this->placeholder['error'].':</p>';
         echo '<ul>';
         foreach ($this->errors as $error) {
-            echo "<li>$error</li>";
+            echo '<li>' . htmlspecialchars($error) . '</li>';
         }
         echo '</ul>';
         echo '</div>';

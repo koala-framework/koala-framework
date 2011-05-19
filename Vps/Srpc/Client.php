@@ -68,10 +68,15 @@ class Vps_Srpc_Client
             $httpClientConfig = array_merge($httpClientConfig, $this->_proxy);
             $httpClientConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
         }
-        $httpClient = new Zend_Http_Client($this->getServerUrl(), $httpClientConfig);
+        $serverUrl = $this->getServerUrl();
+        $httpClient = new Zend_Http_Client($serverUrl, $httpClientConfig);
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost($params);
-        return $httpClient->request()->getBody();
+        try {
+            return $httpClient->request()->getBody();
+        } catch (Zend_Http_Client_Adapter_Exception $e) {
+            throw new Zend_Http_Client_Adapter_Exception($e->getMessage() . ', serverUrl was ' . $serverUrl);
+        }
     }
 
     public function __call($method, $args)
