@@ -263,8 +263,6 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
     protected function _cleanByWheres($wheres)
     {
-        $select = $this->getModel('cache')->select();
-
         $unions = array();
         //p($wheres);
         foreach ($wheres as $cClass => $where) {
@@ -294,20 +292,32 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                         // Hier keine componentClass-where, damit man im Pattern andere Komponente angeben kann
                         $dbIdOr[] = new Vps_Model_Select_Expr_Equal('db_id', $dbIds);
                     }
-                    $and[] = new Vps_Model_Select_Expr_Or($dbIdOr);
-                } else {
+                    if (count($dbIdOr) > 1) {
+                        $and[] = new Vps_Model_Select_Expr_Or($dbIdOr);
+                    } else {
+                        $and[] = $dbIdOr[0];
+                    }
+                } else if ($w != array('type' => 'master')) { // Hack, componentClass sollte in der Meta zurückgegeben und nicht automatisch dazugeschwindelt werden, hier Ausnahme für Vps_Component_Cache_Meta_Static_Master
                     $and[] = new Vps_Model_Select_Expr_Equal('component_class', $cClass);
                 }
                 $keys = array_keys($w);
                 asort($keys);
                 $key = '';
                 foreach ($keys as $k) $key .=  substr($k, 0, 1);
-                $unions[$key][] = new Vps_Model_Select_Expr_And($and);
+                if (count($and) > 1) {
+                    $unions[$key][] = new Vps_Model_Select_Expr_And($and);
+                } else {
+                    $unions[$key][] = $and[0];
+                }
             }
         }
         foreach ($unions as $or) {
-            $select->where(new Vps_Model_Select_Expr_Or($or));
-            //p($select->getParts());
+            $select = $this->getModel('cache')->select();
+            if (count($or) > 1) {
+                $select->where(new Vps_Model_Select_Expr_Or($or));
+            } else {
+                $select->where($or[0]);
+            }
             foreach ($this->getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
                 $cacheId = $this->_getCacheId($row['component_id'], $row['type'], $row['value']);
                 apc_delete($cacheId);
