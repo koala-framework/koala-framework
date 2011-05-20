@@ -26,7 +26,7 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
             if (!content) {
                 if (options.contentClass) {
                     var f = Ext.query('div.' + options.contentClass);
-                    var outerContent = f[0].parentNode;
+                    var outerContent = f[0];
                 } else {
                     var outerContent = Ext.get('innerContent').dom;
                 }
@@ -36,13 +36,14 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
                     content.appendChild(outerContent.firstChild);
                 }
                 outerContent.appendChild(content);
+                
                 content = Ext.get('vpsComponentAjax');
             }
             
             Ext.applyIf(options, this.defaults);
             if (options.hideFx == 'slideOut') {
                 content.slideOut(options.hideFxConfig.slideDirection, options.hideFxConfig);
-            } else if (options.hideFx == 'fadeOut') {
+            } else {
                 content.fadeOut(options.hideFxConfig);
             }
 
@@ -55,10 +56,11 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
                 params: params,
                 url: '/vps/util/render/render',
                 success: function(response) {
+                    content.hide();
                     content.update(response.responseText);
-                    if (options.hideFx == 'slideOut') {
+                    if (options.hideFx == 'slideIn') {
                         content.slideIn(options.showFxConfig.slideDirection, options.showFxConfig);
-                    } else if (options.hideFx == 'fadeOut') {
+                    } else {
                         content.fadeIn(options.showFxConfig);
                     }
                     Vps.callOnContentReady();
