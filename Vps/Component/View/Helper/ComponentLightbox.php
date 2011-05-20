@@ -3,16 +3,10 @@ class Vps_Component_View_Helper_ComponentLightbox extends Vps_Component_View_Hel
 {
     public function componentLightbox(Vps_Component_Data $target, $lightboxConfig = array(), $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
+        $config = $this->_getConfig($target, $text, $cssClass, $get, $anchor);
         $lightboxConfig['sel'] = $target->componentClass . '-LightboxLink';
         $lightboxConfig['group'] = true;
-        $config = array(
-            'targetComponentId' => $target->componentId,
-            'text' => $text,
-            'cssClass' => $cssClass,
-            'get' => $get,
-            'anchor' => $anchor,
-            'lightbox' => $lightboxConfig
-        );
+        $config['lightbox'] = $lightboxConfig;
         return $this->_getRenderPlaceholder($target->componentId, $config);
     }
 

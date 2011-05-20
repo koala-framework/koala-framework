@@ -17,7 +17,13 @@ class Vpc_Paging_Component extends Vpc_Abstract
             'last'     => '&raquo;',
             'prefix'   => trlVpsStatic('Page').':'
         );
+        $ret['useComponentSwitch'] = false;
+        $ret['componentSwitchConfig'] = array(
+            'hideFx' => 'slideOut',
+            'showFx' => 'slideIn'
+        );
         $ret['cssClass'] = 'webPaging webStandard';
+        $ret['assets']['dep'][] = 'VpsComponentAjax';
         return $ret;
     }
 
@@ -73,14 +79,16 @@ class Vpc_Paging_Component extends Vpc_Abstract
         return $this->_entries;
     }
 
-    private function _getLinkData($pageNumber, $linktext = null)
+    private function _getLinkData($pageNumber, $text = null)
     {
-        if (is_null($linktext)) $linktext = $pageNumber;
+        if (is_null($text)) $text = $pageNumber;
 
         $params = array();
+        $get = array();
         foreach ($_GET as $p=>$v) {
             if ($p != $this->_getParamName() && !is_array($v)) {
                 $params[] = "$p=".urlencode($v);
+                $get[$p] = $v;
             }
         }
         $params = implode('&', $params);
@@ -92,13 +100,30 @@ class Vpc_Paging_Component extends Vpc_Abstract
         } else {
             $p = '?'.$this->_getParamName().'='.$pageNumber;
             if ($params) $p .= '&'.$params;
+            $get[$this->_getParamName()] = $pageNumber;
         }
 
+        $classes = array();
+        if ($currentPage == $pageNumber) $classes[] = 'active';
+
+        $linktext = '<span';
+        if (!is_numeric($text)) $linktext .= ' class="navigation"';
+        $linktext .= '>';
+        $linktext .= $text;
+        $linktext .= '</span>';
+
         return array(
-            'text' => $linktext,
+            // Für alte Version
+            'text' => $text,
             'href' => $this->getUrl().$p,
             'rel'  => '',
-            'active' => $currentPage == $pageNumber
+            'active' => $currentPage == $pageNumber,
+            // ab hier für componentLinkHelper
+            'get' => $get,
+            'class' => $classes,
+            'linktext' => $linktext,
+            'currentPageNumber' => $currentPage,
+            'pageNumber' => $pageNumber
         );
     }
 
@@ -188,7 +213,9 @@ class Vpc_Paging_Component extends Vpc_Abstract
     {
         $pages = $partial->getParam('pages');
         return array(
-            'pageLinks' => $this->_getPageLinks($pages, $nr)
+            'pageLinks' => $this->_getPageLinks($pages, $nr),
+            'useComponentSwitch' => $this->_getSetting('useComponentSwitch'),
+            'componentSwitchConfig' => $this->_getSetting('componentSwitchConfig')
         );
     }
 

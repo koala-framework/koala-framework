@@ -20,3 +20,6 @@
     background-color: #fff;
 }
 .cssClass span { font-weight: bold; }
+.cssClass .vpsComponentAjax {
+       display: inline;
+}
