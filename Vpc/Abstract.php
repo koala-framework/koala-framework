@@ -336,12 +336,12 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
     }
 
-    public function sendContent()
+    public function sendContent($renderMaster = true)
     {
         header('Content-Type: text/html; charset=utf-8');
         $process = $this->_callProcessInput();
         $useCache = !Vps_Registry::get('config')->debug->componentCache->disable;
-        echo $this->getData()->render($useCache, true);
+        echo $this->getData()->render($useCache, $renderMaster);
         $this->_callPostProcessInput($process);
     }
 
