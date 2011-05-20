@@ -5,8 +5,8 @@ class Vpc_Paging_Ajax_Component extends Vpc_Paging_Abstract_Component
     {
         $ret = parent::getSettings();
         $ret['componentAjaxConfig'] = array(
-            'hideFx' => 'slideOut',
-            'showFx' => 'slideIn'
+            'hideFx' => 'fadeOut',
+            'showFx' => 'fadeIn'
         );
         $ret['assets']['dep'][] = 'VpsComponentAjax';
         return $ret;
