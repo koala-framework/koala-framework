@@ -5,6 +5,15 @@ class Vps_Controller_Action_Util_RenderController extends Vps_Controller_Action
     {
         $url = $this->_getParam('url');
         if (!$url) throw new Vps_Exception_Client('Need URL.');
+        $parsedUrl = parse_url($url);
+        $_GET = array();
+        if (isset($parsedUrl['query'])) {
+            foreach (explode('&' , $parsedUrl['query']) as $get) {
+                if (!$get) continue;
+                $pos = strpos($get, '=');
+                $_GET[substr($get, 0, $pos)] = substr($get, $pos+1);
+            }
+        }
         $c = Vps_Component_Data_Root::getInstance()->getPageByUrl($url, null);
         if (!$c) throw new Vps_Exception_Client('Could not find component');
 
@@ -27,7 +36,7 @@ class Vps_Controller_Action_Util_RenderController extends Vps_Controller_Action
                 $i->getComponent()->processInput($postData);
             }
         }
-        echo $c->render(true);
+        echo $c->render(!Vps_Registry::get('config')->debug->componentCache->disable);
         exit;
     }
 }
