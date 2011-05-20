@@ -7,6 +7,8 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
             easing: 'easeNone',
             hideFx: 'fadeOut',
             showFx: 'fadeIn',
+            contentClass: null, // Css-Klasse von Element, das ersetzt wird (wenn null, wird innerContent ersetzt)
+            componentId: null, // ComponentId, die gerendert wird (wenn null, wird gesamte Page gerendert)
             hideFxConfig: {
                 slideDirection: 'l'
             },
@@ -17,18 +19,23 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
         
         // ************* open *****************
         open: function(link, options) {
-            var content = Ext.get('vpsComponentAjax');
 
-            // Zwischen innerContent-div und Kindknote ein div "vpsComponentAjax" 
-            //einziehen, das wird das gefadet, ansonsten geht sowas wie float:left verloren
-            if (!content) { 
-                var innerContent = Ext.get('innerContent').dom;
+            // Zwischen content-div und Kindknoten ein div "vpsComponentAjax" 
+            // einziehen, das wird das gefadet, ansonsten geht sowas wie float:left verloren
+            var content = Ext.get('vpsComponentAjax');
+            if (!content) {
+                if (options.contentClass) {
+                    var f = Ext.query('div.' + options.contentClass);
+                    var outerContent = f[0].parentNode;
+                } else {
+                    var outerContent = Ext.get('innerContent').dom;
+                }
                 var content = document.createElement('div');
                 content.id = 'vpsComponentAjax';
-                while (innerContent.hasChildNodes()){
-                    content.appendChild(innerContent.firstChild);
+                while (outerContent.hasChildNodes()){
+                    content.appendChild(outerContent.firstChild);
                 }
-                innerContent.appendChild(content);
+                outerContent.appendChild(content);
                 content = Ext.get('vpsComponentAjax');
             }
             
@@ -38,8 +45,14 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
             } else if (options.hideFx == 'fadeOut') {
                 content.fadeOut(options.hideFxConfig);
             }
+
+            var params = {url: link.dom.href};
+            if (options.componentId) {
+                params.componentId = options.componentId;
+            }
+
             Ext.Ajax.request({
-                params: {url: link.dom.href},
+                params: params,
                 url: '/vps/util/render/render',
                 success: function(response) {
                     content.update(response.responseText);
