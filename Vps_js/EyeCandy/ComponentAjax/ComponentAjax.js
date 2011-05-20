@@ -43,7 +43,11 @@ Vps.ComponentAjax.ComponentAjax = (function(link, config) {
                 url: '/vps/util/render/render',
                 success: function(response) {
                     content.update(response.responseText);
-                    content.slideIn(options.showFxConfig.slideDirection, options.showFxConfig);
+                    if (options.hideFx == 'slideOut') {
+                        content.slideIn(options.showFxConfig.slideDirection, options.showFxConfig);
+                    } else if (options.hideFx == 'fadeOut') {
+                        content.fadeIn(options.showFxConfig);
+                    }
                     Vps.callOnContentReady();
                 },
                 scope: this
