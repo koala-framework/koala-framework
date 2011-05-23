@@ -43,7 +43,9 @@ Vps.Tabs = function(el) {
         }, { tabsObject: this, idx: i } );
     }
 
-    this.tabsContents.setHeight(Ext.get(this.contentEls[this._activeTabIdx]).getHeight());
+    if (this._activeTabIdx != null && this.contentEls[this._activeTabIdx]) {
+        this.tabsContents.setHeight(Ext.get(this.contentEls[this._activeTabIdx]).getHeight());
+    }
 
     tabsLinks.createChild({
         tag: 'div', cls: 'clear'

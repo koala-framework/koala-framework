@@ -93,7 +93,8 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         if ($this->_lockSync) {
             throw new Vps_Exception('Already locked');
         }
-        $this->_lockSync = fopen($this->_getLastSyncFile().'.lock', "w");
+        $filename = $this->_getLastSyncFile().'.lock';
+        $this->_lockSync = fopen($filename, "w");
 
         $startTime = microtime(true);
         while(true) {
@@ -101,7 +102,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 break;
             }
             if (microtime(true)-$startTime > 120) {
-                throw new Vps_Exception("Lock Failed, locked by");
+                throw new Vps_Exception("Lock Failed, locked by: " . $filename);
             }
             usleep(rand(0, 100)*100);
         }

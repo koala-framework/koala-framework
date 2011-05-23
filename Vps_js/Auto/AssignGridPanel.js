@@ -11,6 +11,10 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
 
     initComponent: function()
     {
+        this.addEvents({
+            'assigned': true
+        });
+
         this.actions.assign = new Ext.Action({
             text    : trlVps('Assign'),
             icon    : '/assets/silkicons/table_relationship.png',
@@ -96,6 +100,7 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
             success: function() {
                 this.gridAssigned.reload();
                 this.gridData.reload();
+                this.fireEvent('assigned', this);
             },
             scope: this
         });
