@@ -53,9 +53,26 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
                 $data = substr($data, 13);
             }
             try {
-                $data = json_decode($data);
+                // json_decode gibt auch keinen fehler aus, wenn man ihm einen
+                // falschen string (zB serialized) übergibt. bei nicht-json-daten
+                // kommt immer null raus. Da bringt das try-catch eher wenig,
+                // weil null nunmal keine Exception ist.
+                // Lösung: Wir schmeissen die exception händisch im falle von
+                // NULL. Eventuelles PROBLEM dabei ist jedoch,
+                // wenn man: $data = json_decode(json_encode(NULL))
+                // macht, weil dann korrekterweise NULL rauskommen würde.
+                // deshalb wird dieser fall separat ohne dem json_decode behandelt
+                if ($data == 'null' || $data == '') {
+                    $data = null;
+                } else {
+                    $encodedData = json_decode($data);
+                    if (is_null($encodedData)) { // json_encode hat nicht funktioniert, siehe mörder-kommentar paar zeilen vorher
+                        throw new Vps_Exception("json_decode failed. Input data was: '$data'");
+                    }
+                    $data = $encodedData;
+                }
             } catch (Exception $e) {
-                $e = new Vps_Exception($e->getMessage(). " $data");
+                $e = new Vps_Exception($e->getMessage());
                 $e->logOrThrow();
                 $data = false;
             }

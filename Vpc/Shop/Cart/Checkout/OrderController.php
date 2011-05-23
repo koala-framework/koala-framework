@@ -7,15 +7,15 @@ class Vpc_Shop_Cart_Checkout_OrderController extends Vps_Controller_Action_Auto_
 
     protected function _initFields()
     {
-        $this->_form->add(new Vps_Form_Field_Select('origin', trlVps('Origin')))
+        $this->_form->add(new Vps_Form_Field_ComboBoxText('origin', trlVps('Origin')))
             ->setValues(array(
                 //TODO: im web einstellbar machen, pool oder so
-                'internet' => trlVps('Internet'),
-                'phone' => trlVps('Phone'),
-                'folder' => trlVps('Folder'),
-                'fair'   => trlVps('Fair')
+                trlVps('Internet'),
+                trlVps('Phone'),
+                trlVps('Folder'),
+                trlVps('Fair')
             ))
-            ->setAllowBlank(false);
+            ->setShowNoSelection(true);
 
         $cc = Vpc_Abstract::getChildComponentClasses($this->_getParam('class'), 'payment');
         $payments = array();

@@ -6,6 +6,9 @@
 abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
     implements IteratorAggregate
 {
+    /**
+     * @var Vps_Collection_FormFields
+     */
     public $fields;
 
     public function __construct($name = null)
@@ -30,7 +33,7 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
         parent::_init();
         $this->_initFields();
     }
-    
+
     protected function _initFields(){}
 
     public function getMetaData($model)

@@ -73,20 +73,6 @@ class Vps_Setup
             }
             Vps_Util_Check_Config::check();
         }
-        if (isset($_SERVER['REQUEST_URI']) &&
-            substr($_SERVER['REQUEST_URI'], 0, 8) == '/vps/apc'
-        ) {
-            Vps_Loader::registerAutoload();
-            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
-                header('WWW-Authenticate: Basic realm="Check Config"');
-                throw new Vps_Exception_AccessDenied();
-            }
-            self::setUpVps();
-            $_SERVER['PHP_SELF'] = '/vps/apc';
-            global $MY_SELF;
-            require_once(Vps_Registry::get('config')->libraryPath . '/apc/apc.php');
-            exit;
-        }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
             Vps_Loader::registerAutoload();
             Vps_Util_Check_Config::check();
@@ -330,6 +316,7 @@ class Vps_Setup
     {
         if (!isset($_SERVER['REDIRECT_URL'])) return;
 
+        $data = null;
         $uri = substr($_SERVER['REDIRECT_URL'], 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
@@ -356,26 +343,49 @@ class Vps_Setup
             }
             if (!$exactMatch) {
                 if (rawurldecode($data->url) == $_SERVER['REDIRECT_URL']) {
-                    throw new Vps_Exception("getPageByUrl reposrted this isn't an exact match, but the urls are equal. wtf.");
+                    throw new Vps_Exception("getPageByUrl reported this isn't an exact match, but the urls are equal. wtf.");
                 }
                 header('Location: '.$data->url);
                 exit;
             }
             $root->setCurrentPage($data);
-
-            $page = $data->getComponent();
-            $page->sendContent();
-
+            $data->getComponent()->sendContent();
             Vps_Benchmark::shutDown();
 
             //TODO: ein flag oder sowas ähnliches stattdessen verwenden
-            if ($page instanceof Vpc_Abstract_Feed_Component || $page instanceof Vpc_Export_Xml_Component || $page instanceof Vpc_Export_Xml_Trl_Component) {
+            if ($data instanceof Vpc_Abstract_Feed_Component || $data instanceof Vpc_Export_Xml_Component || $data instanceof Vpc_Export_Xml_Trl_Component) {
                 echo "<!--";
             }
             Vps_Benchmark::output();
-            if ($page instanceof Vpc_Abstract_Feed_Component || $page instanceof Vpc_Export_Xml_Component || $page instanceof Vpc_Export_Xml_Trl_Component) {
+            if ($data instanceof Vpc_Abstract_Feed_Component || $data instanceof Vpc_Export_Xml_Component || $data instanceof Vpc_Export_Xml_Trl_Component) {
                 echo "-->";
             }
+            exit;
+
+        } else if ($_SERVER['REDIRECT_URL'] == '/vps/util/render/render') {
+
+            if (!isset($_REQUEST['url']) || !$_REQUEST["url"]) {
+                throw new Vps_Exception_Client('Need URL.');
+            }
+            $url = $_REQUEST['url'];
+            $componentId = isset($_REQUEST['componentId']) ? $_REQUEST['componentId'] : null;
+            $parsedUrl = parse_url($url);
+            $_GET = array();
+            if (isset($parsedUrl['query'])) {
+                foreach (explode('&' , $parsedUrl['query']) as $get) {
+                    if (!$get) continue;
+                    $pos = strpos($get, '=');
+                    $_GET[substr($get, 0, $pos)] = substr($get, $pos+1);
+                }
+            }
+            if ($componentId) {
+                $data = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
+            } else {
+                $data = Vps_Component_Data_Root::getInstance()->getPageByUrl($url, null);
+            }
+            if (!$data) throw new Vps_Exception_NotFound();
+            $data->getComponent()->sendContent(false);
+            Vps_Benchmark::shutDown();
             exit;
         }
     }
