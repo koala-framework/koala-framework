@@ -42,7 +42,7 @@ class Vps_Component_Output_CacheSlowTest extends Vps_Test_TestCase
         $this->_root->render();
         $this->assertEquals($content, $row->content);
         // muss hier gemacht werden, weil TTL nicht funktioniert
-        apc_delete('vps-franz--cc-root/component/');
+        apc_delete(Vps_Cache::getUniquePrefix() . '-cc-root/component/');
         sleep(3);
         $this->_root->render();
         $this->assertNotEquals($content, $row->content);
