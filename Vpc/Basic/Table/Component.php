@@ -60,14 +60,13 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         } else {
             $rows = $this->_getRow()->getChildRows('tableData');
         }
-
         $ret = 0;
         foreach ($rows as $row) {
             for ($i=1; $i<=$this->_getSetting('maxColumns'); $i++) {
-                if (!empty($row->{'column'.$i})) $ret = $i;
+                if (!empty($row->{'column'.$i}) && $i > $ret) $ret = $i;
             }
         }
-        return $i;
+        return $ret;
     }
 
     public static function getStaticCacheMeta($componentClass)
