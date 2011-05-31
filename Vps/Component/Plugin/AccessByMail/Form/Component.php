@@ -14,13 +14,13 @@ class Vps_Component_Plugin_AccessByMail_Form_Component extends Vpc_Form_Componen
     public function processInput(array $postData)
     {
         parent::processInput($postData);
+        $this->_accessByMailRow = false;
         if (isset($postData['key'])) {
             $s = new Vps_Model_Select();
             $s->whereEquals('key', $postData['key']);
             $s->where(new Vps_Model_Select_Expr_Higher('date', new Vps_Date(time()-24*60*60)));
             $this->_accessByMailRow = Vps_Model_Abstract::getInstance('Vps_Component_Plugin_AccessByMail_Model')->getRow($s);
             if (!$this->_accessByMailRow) {
-                $this->_accessByMailRow = false;
                 $this->_errors[] = array(
                     'message' => trlVps("Invalid or expired Link. Please request a new one.")
                 );
