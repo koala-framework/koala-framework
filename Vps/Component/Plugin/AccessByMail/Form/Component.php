@@ -1,6 +1,8 @@
 <?php
 class Vps_Component_Plugin_AccessByMail_Form_Component extends Vpc_Form_Component
 {
+    private $_accessByMailRow;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -16,8 +18,9 @@ class Vps_Component_Plugin_AccessByMail_Form_Component extends Vpc_Form_Componen
             $s = new Vps_Model_Select();
             $s->whereEquals('key', $postData['key']);
             $s->where(new Vps_Model_Select_Expr_Higher('date', new Vps_Date(time()-24*60*60)));
-            $row = Vps_Model_Abstract::getInstance('Vps_Component_Plugin_AccessByMail_Model')->getRow($s);
-            if (!$row) {
+            $this->_accessByMailRow = Vps_Model_Abstract::getInstance('Vps_Component_Plugin_AccessByMail_Model')->getRow($s);
+            if (!$this->_accessByMailRow) {
+                $this->_accessByMailRow = false;
                 $this->_errors[] = array(
                     'message' => trlVps("Invalid or expired Link. Please request a new one.")
                 );
@@ -26,6 +29,14 @@ class Vps_Component_Plugin_AccessByMail_Form_Component extends Vpc_Form_Componen
                 $session->login = true;
             }
         }
+    }
+
+    public function getAccessByMailRow()
+    {
+        if (is_null($this->_accessByMailRow)) {
+            throw new Vps_Exception('You must processInput first');
+        }
+        return $this->_accessByMailRow;
     }
 
     protected function _initForm()
