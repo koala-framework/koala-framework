@@ -224,13 +224,15 @@ class Vps_Setup
         if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
             && $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
-            && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
-            && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
-            && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
-            && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
-            && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
         ) {
-            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+            $ignore = false;
+            foreach ($config->preLoginIgnore as $i) {
+                if (substr($_SERVER['REDIRECT_URL'], 0, strlen($i)) == $i) {
+                    $ignore = true;
+                    break;
+                }
+            }
+            if (!$ignore && (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet')) {
                 header('WWW-Authenticate: Basic realm="Testserver"');
                 throw new Vps_Exception_AccessDenied();
             }
