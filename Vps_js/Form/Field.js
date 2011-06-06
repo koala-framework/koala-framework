@@ -27,7 +27,7 @@ Ext.form.Field.override({
                 var helpEl = wrapDiv.createChild({
                     tag: 'a',
                     href: '#',
-                    style: 'display: block; width: 16px; height: 16px; '+
+                    style: 'display: block; width: 16px; height: 16px; margin-bottom: -16px; '+
                         'background-image: url(/assets/silkicons/information.png)'
                 });
                 helpEl.on('click', function(e) {

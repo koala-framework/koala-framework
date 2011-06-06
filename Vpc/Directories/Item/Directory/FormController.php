@@ -6,7 +6,9 @@ class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Actio
 
     public function _initFields()
     {
-        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigTabs')) {
+        if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigTabs') ||
+            is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Vpc_Directories_Item_Directory_ExtConfigTabs'))
+        {
             $this->_buttons['save'] = true;
         }
         $this->_form = Vpc_Abstract_Form::createChildComponentForm(

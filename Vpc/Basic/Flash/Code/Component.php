@@ -56,6 +56,8 @@ class Vpc_Basic_Flash_Code_Component extends Vpc_Abstract_Flash_Component
         $ret = array();
         $c = $this->_parseCode();
         $ret['url'] = $c['url'];
+        $ret['width'] = 0;
+        $ret['height'] = 0;
         if (isset($c['objectParams']['width'])) $ret['width'] = $c['objectParams']['width'];
         if (isset($c['objectParams']['height'])) $ret['height'] = $c['objectParams']['height'];
         $ret['params'] = $c['params'];

@@ -18,6 +18,12 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         $this->setLayout('form');
     }
 
+    public function __clone()
+    {
+        parent::__clone();
+        $this->_combobox = clone $this->_combobox;
+    }
+
     public function setNamePrefix($v)
     {
         parent::setNamePrefix($v);
@@ -99,24 +105,15 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return $ret;
     }
 
-    public function setInternalSave($v)
+    //verhindert aufrufen von validate/prepareSave/save etc fuer kinder wenn card nicht ausgewählt
+    protected function _processChildren($method, $childField, $row, $postData)
     {
-        $this->_combobox->setInternalSave($v);
-        return parent::setInternalSave($v);
-    }
+        if ($method == 'load') return true;
+        if ($childField === $this->_combobox) return true;
 
-    public function validate($row, $postData)
-    {
+        //wenn card nicht gewählt, nicht aufrufen
         $value = isset($postData[$this->_combobox->getFieldName()]) ? $postData[$this->_combobox->getFieldName()] : $this->_combobox->getDefaultValue();
-        foreach ($this->fields as $card) {
-            if ($card != $this->_combobox
-                && $card->getName() != $value) {
-                $card->setInternalSave(false);
-            } else {
-                $card->setInternalSave(true);
-            }
-        }
-        return parent::validate($row, $postData);
+        return $childField->getName() == $value;
     }
 
     public function getTemplateVars($values)

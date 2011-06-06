@@ -2,7 +2,7 @@
 /**
  * @group MediaImage
  */
-class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
+class Vps_Media_ImageTest extends Vps_Test_TestCase
 {
     public function testImageScaleDimensions()
     {
@@ -52,7 +52,12 @@ class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
     {
         $dimension = array('width' => $dimension[0], 'height' => $dimension[1], 'scale' => Vps_Media_Image::SCALE_BESTFIT);
         $ret = Vps_Media_Image::calculateScaleDimensions($imageSize, $dimension);
-        $this->assertEquals($ret, array('width' => $expectedSize[0], 'height' => $expectedSize[1], 'scale' => Vps_Media_Image::SCALE_BESTFIT));
+        $this->assertEquals($ret, array(
+            'width' => $expectedSize[0],
+            'height' => $expectedSize[1],
+            'scale' => Vps_Media_Image::SCALE_BESTFIT,
+            'rotate' => null
+        ));
     }
 
     public function testImageScaleDeform()

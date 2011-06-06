@@ -6,8 +6,8 @@
  *
  * DateTime field, combination of DateField and TimeField
  *
- * @author      Ing. Jozef Sakálo?
- * @copyright (c) 2008, Ing. Jozef Sakálo?
+ * @author      Ing. Jozef Sakï¿½lo?
+ * @copyright (c) 2008, Ing. Jozef Sakï¿½lo?
  * @version   2.0
  * @revision  $Id: Vps.Form.DateTime.js 749 2009-09-15 19:18:44Z jozo $
  *
@@ -92,7 +92,17 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
     /**
      * @cfg {Object} timeConfig Config for TimeField constructor.
      */
+    ,defaultValue:null
 
+    // Ãœberschrieben, weil this.getEl() immer nur 0 bei den Koordinaten zurÃ¼ckliefert
+    ,alignHelpAndComment: function() {
+    	if (this.helpEl) {
+    		this.helpEl.alignTo(this.getEl().parent(), 'tr', [325 - this.getEl().parent().getWidth(), 3]);
+    	}
+    	if (this.commentEl) {
+    		this.commentEl.alignTo(this.getEl().parent(), 'tr', [330 - this.getEl().parent().getWidth(),  6]);
+    	}
+    }
     // {{{
     /**
      * @private
@@ -133,6 +143,10 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
         this.tf = new Ext.form.TimeField(timeConfig);
         this.tf.ownerCt = this;
         delete(this.timeFormat);
+        
+        if (this.defaultValue) {
+            this.setValue(this.defaultValue);
+        }
 
         // relay events
         this.relayEvents(this.df, ['focus', 'specialkey', 'invalid', 'valid']);
@@ -522,7 +536,7 @@ Vps.Form.DateTime = Ext.extend(Ext.form.Field, {
           val = new Date(val);
         }
         else if('string' === typeof val && this.hiddenFormat) {
-            val = Date.parseDate(val, this.hiddenFormat)
+            val = Date.parseDate(val, this.hiddenFormat);
         }
         val = val ? val : new Date(1970, 0 ,1, 0, 0, 0);
         var da, time;

@@ -106,7 +106,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         }
         return $rows;
     }
-    public function load(Vps_Model_Row_Interface $row, $postData = array())
+    public function load($row, $postData = array())
     {
         if (isset($postData[$this->getFieldName()])) {
             $postData = $postData[$this->getFieldName()];
@@ -275,12 +275,15 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             $postData = $postData[$this->getFieldName()];
         }
 
-        $cnt = count($postData);
+        $cnt = count($postData['save']);
         $name = $this->getFieldLabel();
         if (!$name) $name = $this->getName();
         foreach ($this->getValidators() as $v) {
             if (!$v->isValid($cnt)) {
-                $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
+                $ret[] = array(
+                    'messages' => $v->getMessages(),
+                    'field' => $this
+                );
             }
         }
 

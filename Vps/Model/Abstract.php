@@ -52,14 +52,15 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     /**
      * @param Vps_Model_Abstract|string wenn string: entweder aus config (models.modelName)
      *                                               oder Klassenname von Model
-     * @return Vps_Model_Abstract
+     * @return Vps_Model_Interface
      **/
     public static function getInstance($modelName)
     {
         if (is_object($modelName)) return $modelName;
         static $config;
         if (!isset($config)) $config = Vps_Registry::get('config')->models->toArray();
-        if (isset($config[$modelName]) && $config[$modelName]) {
+        if (array_key_exists($modelName, $config)) {
+            if (!$config[$modelName]) return null;
             $modelName = $config[$modelName];
         }
         if (!isset(self::$_instances[$modelName])) {
@@ -72,6 +73,11 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public static function clearInstances()
     {
         self::$_instances = array();
+    }
+
+    public static function getInstances()
+    {
+        return self::$_instances;
     }
 
     protected function _init()
@@ -287,16 +293,19 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function getReferenceRulesByModelClass($modelClassName)
     {
         $ret = array();
-        foreach ($this->_referenceMap as $k=>$ref) {
-            if (isset($ref['refModelClass'])) {
+        foreach ($this->getReferences() as $rule) {
+            $ref = $this->getReference($rule);
+            if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                $c = $this->getParentModel();
+            } else if (isset($ref['refModelClass'])) {
                 $c = $ref['refModelClass'];
             } else if (isset($ref['refModel'])) {
-                $c = get_class($ref['refModel']);
+                $c = $ref['refModel'];
             } else {
                 throw new Vps_Exception("refModelClass and refModel not set");
             }
             if (is_instance_of($modelClassName, $c)) {
-                $ret[$k] = $ref;
+                $ret[$rule] = $ref;
             }
         }
         if (count($ret) >= 1) {
@@ -308,22 +317,32 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function getReferenceByModelClass($modelClassName, $rule)
     {
-        $models = $this->_proxyContainerModels;
-        $models[] = $this;
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
         foreach ($models as $m) {
             $matchingRules = $m->getReferenceRulesByModelClass($modelClassName);
 
             if (count($matchingRules) > 1) {
                 if ($rule && in_array($rule, $matchingRules)) {
-                    return $m->_referenceMap[$rule];
+                    return $m->getReference($rule);
                 } else {
                     throw new Vps_Exception("Multiple references from '".get_class($this)."' to '$modelClassName' found, but none with rule-name '$rule'");
                 }
             } else if (count($matchingRules) == 1) {
-                return $m->_referenceMap[$matchingRules[0]];
+                return $m->getReference($matchingRules[0]);
             }
         }
         throw new Vps_Exception("No reference from '".get_class($this)."' to '$modelClassName'");
+    }
+
+    /**
+     * Namen der verfügbaren References
+     *
+     * Details zu einer Reference über getReferencedModel() bzw. getReference() holen
+     */
+    public function getReferences()
+    {
+        return array_keys($this->_referenceMap);
     }
 
     public function getReference($rule)
@@ -331,15 +350,35 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         if (!isset($this->_referenceMap[$rule])) {
             throw new Vps_Exception("Reference '$rule' for model '".get_class($this)."' not set, set are '".implode(', ', array_keys($this->_referenceMap))."'");
         }
-        return $this->_referenceMap[$rule];
+        $ret = $this->_referenceMap[$rule];
+        if (is_string($ret)) {
+            if ($ret === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+            } else {
+                if (strpos($ret, '->') === false) {
+                    throw new Vps_Exception("Reference '$rule' for model '".get_class($this)."' is a string but doesn't contain ->");
+                }
+                $ret = array(
+                    'refModelClass' => substr($ret, strpos($ret, '->')+2),
+                    'column' => substr($ret, 0, strpos($ret, '->')),
+                );
+            }
+        }
+        return $ret;
     }
 
     public function getReferencedModel($rule)
     {
-        if (!isset($this->_referenceMap[$rule])) {
-            throw new Vps_Exception("No Reference from '".get_class($this)."' with rule '$rule'");
+        $ref = $this->getReference($rule);
+        if ($ref === Vps_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+            return $this->getParentModel();
         }
-        return self::getInstance($this->_referenceMap[$rule]['refModelClass']);
+        if (isset($ref['refModelClass'])) {
+            return self::getInstance($ref['refModelClass']);
+        }
+        if (isset($ref['refModel'])) {
+            return $ref['refModel'];
+        }
+        throw new Vps_Exception("refModelClass not set for reference '$rule'");
     }
 
     public function getDependentRuleByModelClass($modelClassName)
@@ -366,6 +405,26 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $ret;
     }
 
+    protected function _createDependentModel($rule)
+    {
+        $ret = $this->_dependentModels[$rule];
+        if (is_array($ret)) {
+            if (!isset($ret['model'])) {
+                throw new Vps_Exception("model not set for dependentModel");
+            }
+            $ret = $ret['model'];
+        }
+        if (is_string($ret)) {
+            if (strpos($ret, '->') !== false) {
+                $m = Vps_Model_Abstract::getInstance(substr($ret, 0, strpos($ret, '->')));
+                $ret = $m->_createDependentModel(substr($ret, strpos($ret, '->')+2));
+            } else {
+                $ret = Vps_Model_Abstract::getInstance($ret);
+            }
+        }
+        return $ret;
+    }
+
     public function getDependentModelWithDependentOf($rule)
     {
         if (!$rule) {
@@ -379,11 +438,10 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         foreach ($models as $m) {
             if (isset($m->_dependentModels[$rule])) {
                 $ret = $m->_dependentModels[$rule];
-                if (!$ret instanceof Vps_Model_Abstract) $ret = Vps_Model_Abstract::getInstance($ret);
-                return array(
-                    'model' => $ret,
-                    'dependentOf' => $m
-                );
+                if (!is_array($ret)) $ret = array();
+                $ret['model'] = $m->_createDependentModel($rule);
+                $ret['dependentOf'] = $m;
+                return $ret;
             }
         }
         throw new Vps_Exception("dependent Model with rule '$rule' does not exist for '".get_class($this)."'");
@@ -393,6 +451,19 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
         $ret = $this->getDependentModelWithDependentOf($rule);
         return $ret['model'];
+    }
+
+    /**
+     * @internal return value will change, don't use it
+     */
+    public function getDependentModels()
+    {
+        $ret = array();
+        //TODO _proxyContainerModels berücksichtigen
+        foreach (array_keys($this->_dependentModels) as $rule) {
+            $ret[$rule] = $this->_createDependentModel($rule);
+        }
+        return $ret;
     }
 
     public function getRowsetClass()
@@ -476,6 +547,11 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     }
 
     public function deleteRows($where)
+    {
+        throw new Vps_Exception('not implemented yet.');
+    }
+
+    public function updateRows($data, $where)
     {
         throw new Vps_Exception('not implemented yet.');
     }
@@ -684,5 +760,43 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
         $ret = '<pre> Model '.get_class($this).'</pre>';
         return $ret;
+    }
+
+    /**
+     * @internal
+     */
+    public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    {
+    }
+
+    /**
+     * @internal
+     */
+    public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
+    {
+    }
+
+    /**
+     * Kann zum Speicher-Sparen aufgerufen werden
+     */
+    public function clearRows()
+    {
+        $this->_rows = array();
+    }
+
+    /**
+     * @internal
+     */
+    public function getProxyContainerModels()
+    {
+        return $this->_proxyContainerModels;
+    }
+
+    /**
+     * @internal
+     */
+    public function getExpr($name)
+    {
+        return $this->_exprs[$name];
     }
 }

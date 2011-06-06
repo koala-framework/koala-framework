@@ -23,7 +23,8 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
 
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = Vpc_Abstract::getTemplateVars();
+        $ret['linkTemplate'] = self::getTemplateFile($this->getData()->chained->componentClass);
         $ret['child'] = $this->_getContentChild();
         return $ret;
     }
@@ -34,7 +35,12 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
         $masterChild = $this->getData()->chained->getComponent()->getContentChild();
         $c = Vpc_Chained_Trl_Component::getChainedByMaster($masterChild, $this->getData());
         $page = $this->getData();
-        while($c && (!$c->hasContent() || ($this->_getSetting('hasVisible') && !$c->parent->getComponent()->getRow()->visible))) {
+        while(
+            $c && (
+                !$c->hasContent() ||
+                ($this->_getSetting('hasVisible') && $c->parent->getComponent()->getRow() && !$c->parent->getComponent()->getRow()->visible)
+            )
+        ) {
             while ($page && !$page->inherits) {
                 $page = $page->parent;
                 if ($page instanceof Vps_Component_Data_Root) break;
@@ -50,16 +56,6 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
             $page = $page->parent;
         }
         return $c;
-    }
-
-    public static function getNextContentChild($page, $inheritContentChildId)
-    {
-        while ($page && !$page->inherits) {
-            $page = $page->parent;
-            if ($page instanceof Vps_Component_Data_Root) break;
-        }
-        return $page->getChildComponent('-'.$inheritContentChildId)
-                ->getChildComponent(array('generator' => 'child'));
     }
 
     public function getExportData()

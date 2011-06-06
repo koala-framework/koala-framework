@@ -7,7 +7,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
         $this->setViewSuffix('tpl');
         $this->setRender('master');
     }
-    
+
     public function preDispatch() {
         $module = $this->getRequest()->getParam('module');
         if ($this->isJson()) {

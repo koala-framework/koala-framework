@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_TestCase
+abstract class Vps_Util_PubSubHubbub_AbstractTest extends Vps_Test_TestCase
 {
     protected $_hubApp;
     protected $_hubUrl;
@@ -10,6 +10,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
 
     public function setUp()
     {
+        parent::setUp();
         $debugOutput = false;
         //echo "setUp\n";
 
@@ -18,11 +19,8 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         mkdir($this->_storePath);
         //installation see here: http://code.google.com/p/pubsubhubbub/wiki/DeveloperGettingStartedGuide
         //echo "startHub\n";
-        if (!$this->_startHub($debugOutput)) {
-            echo "startHub again\n";
-            //try again with differnet port
-            $this->assertTrue($this->_startHub($debugOutput));
-        }
+        $this->_startHub($debugOutput);
+
         //echo "test hub\n";
         try {
             $c = file_get_contents($this->_hubUrl);
@@ -66,7 +64,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         } else {
             $d = "/www/public/library/pshb/";
         }
-        $port = rand(8000, 10000);
+        $port = Vps_Util_Tcp::getFreePort(8000, $address);
         $cmd = "python2.5 {$d}google_appengine/dev_appserver.py {$d}pubsubhubbub/hub/ ".
                "--port=$port --address=$address --clear_datastore ".
                "--datastore_path=$this->_storePath/dev_appserver.datastore ".
@@ -78,7 +76,9 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         $this->_hubUrl = "http://$address:$port";
         sleep(10);
         $status = proc_get_status($this->_hubApp);
-        return $status['running'];
+        if (!$status['running']) {
+            throw new Vps_Exception('can\'t start pshb server');
+        }
     }
 
     public function tearDown()
@@ -86,18 +86,21 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         //echo "\n".date('H:i:s')."tearDown\n";
 
         $start = time();
-        //echo "\nsending SIGTERM to hub\n";
-        proc_terminate($this->_hubApp, SIGTERM);
+        $status = proc_get_status($this->_hubApp);
+        //echo "\nsending SIGINT to hub\n";
+        posix_kill($status['pid'], SIGINT);
+        posix_kill($status['pid']+1, SIGINT); //+1 weil sh prozess python startet
         do {
             //echo "waiting while running\n";
-            if (time() - $start > 15) {
-                echo "\nsending SIGKILL to hub\n";
+            if (time() - $start > 30) {
+                //echo "\nsending SIGKILL to hub\n";
                 proc_terminate($this->_hubApp, SIGKILL);
                 break;
             }
             $status = proc_get_status($this->_hubApp);
             if ($status['running']) sleep(1);
         } while ($status['running']);
+        sleep(5);
 
         //echo "removing datastore\n";
         system("rm -r $this->_storePath");
@@ -106,6 +109,7 @@ abstract class Vps_Util_PubSubHubbub_AbstractTest extends PHPUnit_Framework_Test
         unlink('/tmp/feed'.$this->_testId);
         unlink('/tmp/lastCallback'.$this->_testId);
         unlink('/tmp/feedRequested'.$this->_testId);
+        parent::tearDown();
     }
 
     protected function assertFeedRequested($num)

@@ -71,6 +71,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = true;
+        $ret['allowIsolatedRender'] = false;
         return $ret;
     }
 
@@ -131,38 +132,39 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         static $ccc = array();
 
-        static $cache = null;
-        if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Memcached', array('lifetime'=>null, 'automatic_serialization'=>true));
-        }
-        $currentCacheId = 'iccc'.md5($class.$cacheId);
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $currentCacheId = $prefix.'iccc-'.md5($class.$cacheId);
 
         if (isset($ccc[$class.$cacheId])) {
             Vps_Benchmark::count('iccc cache hit');
             return $ccc[$class.$cacheId];
-        } else if (($ret = $cache->load($currentCacheId)) !== false) {
+        }
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
             $ccc[$class.$cacheId] = $ret;
             Vps_Benchmark::count('iccc cache semi-hit');
             return $ret;
-        } else {
-            Vps_Benchmark::count('iccc cache miss', $class.' '.print_r($select->getParts(), true));
-            $childConstraints = array('page' => false);
-            $ccc[$class.$cacheId] = array();
-            foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
-                if (Vpc_Abstract::getChildComponentClasses($childClass, $select, $cacheId)) {
-                    $ccc[$class.$cacheId][] = $childClass;
-                    continue;
-                }
-                $classes = Vpc_Abstract::_getIndirectChildComponentClasses($childClass, $select, $cacheId);
-                if ($classes) {
-                    $ccc[$class.$cacheId][] = $childClass;
-                }
-            }
-            $ccc[$class.$cacheId] = array_unique(array_values($ccc[$class.$cacheId]));
-
-            $cache->save($ccc[$class.$cacheId], $currentCacheId);
-            return $ccc[$class.$cacheId];
         }
+
+        Vps_Benchmark::count('iccc cache miss', $class.' '.print_r($select->getParts(), true));
+        $childConstraints = array('page' => false);
+        $ccc[$class.$cacheId] = array();
+        foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
+            if (Vpc_Abstract::getChildComponentClasses($childClass, $select, $cacheId)) {
+                $ccc[$class.$cacheId][] = $childClass;
+                continue;
+            }
+            $classes = Vpc_Abstract::_getIndirectChildComponentClasses($childClass, $select, $cacheId);
+            if ($classes) {
+                $ccc[$class.$cacheId][] = $childClass;
+            }
+        }
+        $ccc[$class.$cacheId] = array_unique(array_values($ccc[$class.$cacheId]));
+
+        apc_add($currentCacheId, $ccc[$class.$cacheId]);
+        return $ccc[$class.$cacheId];
+
     }
 
     public static function getChildComponentClass($class, $generator, $componentKey = null)
@@ -266,23 +268,40 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     protected function _callProcessInput()
     {
-        $process = $this->getData()
-            ->getRecursiveChildComponents(array(
-                    'page' => false,
-                    'flags' => array('processInput' => true)
-                ));
-        if (Vps_Component_Abstract::getFlag($this->getData()->componentClass, 'processInput')) {
-            $process[] = $this->getData();
-        }
-        // TODO: Äußerst suboptimal
-        if ($this instanceof Vpc_Show_Component) {
-            $process += $this->getShowComponent()
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'procI-'.$this->getData()->getPageOrRoot()->componentId;
+        $processCached = apc_fetch($cacheId, $success);
+        if (!$success) {
+            $process = $this->getData()
                 ->getRecursiveChildComponents(array(
-                    'page' => false,
-                    'flags' => array('processInput' => true)
-                ));
-            if (Vps_Component_Abstract::getFlag(get_class($this->getShowComponent()->getComponent()), 'processInput')) {
+                        'page' => false,
+                        'flags' => array('processInput' => true)
+                    ));
+            if (Vps_Component_Abstract::getFlag($this->getData()->componentClass, 'processInput')) {
                 $process[] = $this->getData();
+            }
+
+            // TODO: Äußerst suboptimal
+            if ($this instanceof Vpc_Show_Component) {
+                $process += $this->getShowComponent()
+                    ->getRecursiveChildComponents(array(
+                        'page' => false,
+                        'flags' => array('processInput' => true)
+                    ));
+                if (Vps_Component_Abstract::getFlag(get_class($this->getShowComponent()->getComponent()), 'processInput')) {
+                    $process[] = $this->getData();
+                }
+            }
+            $datas = array();
+            foreach ($process as $p) {
+                $datas[] = $p->vpsSerialize();
+            }
+            apc_add($cacheId, $datas);
+        } else {
+            $process = array();
+            foreach ($processCached as $d) {
+                $process[] = Vps_Component_Data::vpsUnserialize($d);
             }
         }
 
@@ -317,11 +336,12 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
     }
 
-    public function sendContent($masterTemplate = null, $ignoreVisible = false)
+    public function sendContent($renderMaster = true)
     {
         header('Content-Type: text/html; charset=utf-8');
         $process = $this->_callProcessInput();
-        echo Vps_View_Component::renderMasterComponent($this->getData(), $masterTemplate, $ignoreVisible);
+        $useCache = !Vps_Registry::get('config')->debug->componentCache->disable;
+        echo $this->getData()->render($useCache, $renderMaster);
         $this->_callPostProcessInput($process);
     }
 
@@ -340,9 +360,12 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $ret;
     }
 
-    protected function _getPlaceholder()
+    protected function _getPlaceholder($placeholder = null)
     {
         $ret = $this->_getSetting('placeholder');
+        if ($placeholder) {
+            return $this->getData()->trlStaticExecute($ret[$placeholder]);
+        }
         foreach ($ret as $k => $v) {
             $ret[$k] = $this->getData()->trlStaticExecute($v);
         }
@@ -362,36 +385,26 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $this->getTemplateVars();
     }
 
-    public function getCacheVars()
-    {
-        $ret = array();
-        $row = $this->_getCacheRow();
-        if ($row) {
-            $model = $row->getModel();
-            $primaryKey = $model->getPrimaryKey();
-            $ret[] = array(
-                'model' => $model,
-                'id' => $row->$primaryKey
-            );
-        }
-        // Seite im Seitanbaum wird gelöscht, wenn Eigenschaften im Admin geändert werden
-        if ($this->getData()->isPage && is_numeric($this->getData()->componentId)) {
-            $ret[] = array(
-                'model' => 'Vpc_Root_Category_GeneratorModel',
-                'id' => $this->getData()->componentId
-            );
-        }
-        return $ret;
+    // deprecated
+    public function getCacheVars() {
+        throw new Vps_Exception('getCacheVars is not supported anymore.');
     }
 
-    public static function getStaticCacheVars($componentClass)
+    public static function getStaticCacheVars() {
+        throw new Vps_Exception('getStaticCacheVars is not supported anymore.');
+    }
+
+    public function getCacheMeta()
     {
         return array();
     }
 
-    protected function _getCacheRow()
-    {
-        return $this->_getRow();
+    public static function getStaticCacheMeta($componentClass) {
+        $ret = array();
+        if (Vpc_Abstract::hasSetting($componentClass, 'ownModel')) {
+            $ret[] = new Vps_Component_Cache_Meta_Static_OwnModel();
+        }
+        return $ret;
     }
 
     public function onCacheCallback($row) {}
@@ -451,19 +464,29 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     public static function getComponentClassesByParentClass($class)
     {
+        if (!is_array($class)) $class = array($class);
+
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'cclsbpc-'.implode('-', $class);
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
         $ret = array();
         foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            if ((strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c) == $class) {
+            if (in_array($c, $class) || in_array((strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c), $class)) {
                 $ret[] = $c;
                 continue;
             }
             foreach (Vpc_Abstract::getParentClasses($c) as $p) {
-                if ((strpos($p, '.') ? substr($p, 0, strpos($p, '.')) : $p) == $class) {
+                if (in_array($p, $class)) {
                     $ret[] = $c;
                     break;
                 }
             }
         }
+        apc_add($cacheId, $ret);
         return $ret;
     }
     public static function getComponentClassByParentClass($class)

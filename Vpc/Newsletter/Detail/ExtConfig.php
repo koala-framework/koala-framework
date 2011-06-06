@@ -22,11 +22,6 @@ class Vpc_Newsletter_Detail_ExtConfig extends Vps_Component_Abstract_ExtConfig_F
         $ret['form'] = array_merge($ret['form'], array(
             'xtype' => 'vps.tabpanel',
             'tabs' => array(
-                'settings' => array(
-                    'xtype'                 => 'vps.autoform',
-                    'controllerUrl'         => $this->getControllerUrl(),
-                    'title'                 => trlVps('Settings')
-                ),
                 'mail' => array(
                     'xtype'                 => 'vps.component',
                     'componentEditUrl'      => '/admin/component/edit',
@@ -48,6 +43,11 @@ class Vpc_Newsletter_Detail_ExtConfig extends Vps_Component_Abstract_ExtConfig_F
                     'controllerUrl'         => $this->getControllerUrl('Mailing'),
                     'title'                 => trlVps('Mailing'),
                     'tbar'                  => array()
+                ),
+                'statistics' => array(
+                    'xtype'                 => 'vps.autogrid',
+                    'controllerUrl'         => $this->getControllerUrl('Statistics'),
+                    'title'                 => trlVps('Statistics')
                 )
             )
         ));

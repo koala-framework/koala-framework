@@ -16,6 +16,12 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
      */
     protected $_pool = null;
 
+    // setShowCheckAllLinks(true) | default=true, zeigt "alle" und "keine" links an, die alle checkboxes auf einmal setzen
+    // setCheckAllText($txt)
+    // setCheckNoneText($txt)
+
+    // setValuesBoxLabelField(true) | feldname aus valuesModel fuer boxLabel
+
     /**
      * Zeigt mehrere Checkboxes an und speichert diese in einer Relationstabelle
      *
@@ -48,8 +54,11 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             $this->setFieldLabel($title);
         }
         $this->setAutoHeight(true);
+        $this->setShowCheckAllLinks(true);
+        $this->setCheckAllText(trlVpsStatic('All'));
+        $this->setCheckNoneText(trlVpsStatic('None'));
         $this->setLayout('form');
-        $this->setXtype('fieldset');
+        $this->setXtype('multicheckbox');
     }
 
     public function setRelationToData($rel)
@@ -171,7 +180,14 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                 if (isset($pk)) {
                     $key = $i->$pk;
                 }
-                if (!is_string($i)) $i = $i->__toString();
+                if (!is_string($i)) {
+                    if ($this->getValuesBoxLabelField()) {
+                        $boxLabelField = $this->getValuesBoxLabelField();
+                        $i = $i->$boxLabelField;
+                    } else {
+                        $i = $i->__toString();
+                    }
+                }
                 $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName().'_'.$key))
                     ->setKey($key)
                     ->setBoxLabel($i)
@@ -212,7 +228,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $key = $ref['column'];
 
         $selectedIds = array();
-        if ($this->getSave() !== false && $this->getInternalSave() !== false) {
+        if ($this->getSave() !== false && $row) {
             foreach ($row->getChildRows($this->getRelModel()) as $i) {
                 $selectedIds[] = $i->$key;
             }
@@ -276,6 +292,14 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         }
     }
 
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'checkAllText';
+        $ret[] = 'checkNoneText';
+        return $ret;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
@@ -288,6 +312,14 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             $i++;
         }
         $ret['html'] .= '<div class="checkboxItemEnd"></div>';
+        if ($this->getShowCheckAllLinks()) {
+            $ret['html'] .=
+                '<div class="checkAllLinksWrapper">'
+                    .'<a href="#" class="vpsMultiCheckboxCheckAll">'.$this->getCheckAllText().'</a>'
+                    .' / '
+                    .'<a href="#" class="vpsMultiCheckboxCheckNone">'.$this->getCheckNoneText().'</a>'
+                .'</div>';
+        }
         return $ret;
     }
 }

@@ -57,8 +57,9 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 
         $ret['cssClass'] = 'webStandard vpcText';
 
-        $ret['assets']['files'][] = 'dynamic/Vpc_Basic_Text_StylesAsset';
+        $ret['assets']['files']['styles'] = 'dynamic/Vpc_Basic_Text_StylesAsset:Vpc_Basic_Text_StylesModel';
         $ret['flags']['searchContent'] = true;
+        $ret['flags']['hasFulltext'] = true;
         return $ret;
     }
 
@@ -131,6 +132,59 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             }
         }
         return $ret;
+    }
+
+    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    {
+        $fieldName = $this->getData()->componentId;
+
+        $html = '';
+        foreach ($this->_getRow()->getContentParts() as $part) {
+            if (is_string($part)) $html .= ' '.$part;
+        }
+
+        $doc->getField('content')->value .= ' '.$this->_stripTags($html);
+
+        $tags = array(
+            'h1' => 5,
+            'h2' => 3,
+            'h3' => 2,
+            'h4' => 1.5,
+            'h5' => 1.3,
+            'h6' => 1.2,
+            'strong' => 2,
+        );
+        foreach ($tags as $tag=>$boost) {
+            if (preg_match_all("#<$tag.*?>(.*?)</$tag>#", $html, $m)) {
+                $html = preg_replace("#<$tag.*?>.*?</$tag>#", '', $html);
+                foreach ($m[1] as $text) {
+                    $text = $this->_stripTags($text);
+                    if ($text) {
+                        $field = Zend_Search_Lucene_Field::UnStored($fieldName.$tag, $text, 'utf-8');
+                        $field->boost = $boost;
+                        $doc->addField($field);
+                    }
+                }
+            }
+        }
+
+        $html = $this->_stripTags($html);
+        if ($html) {
+            $field = Zend_Search_Lucene_Field::UnStored($fieldName.'p', $html, 'utf-8');
+            $doc->addField($field);
+        }
+
+        return $doc;
+    }
+
+    private static function _stripTags($html)
+    {
+        $html = preg_replace("#<[^>]*>#", ' ', $html);
+        $html = str_replace("\r", ' ', $html);
+        $html = str_replace("\n", ' ', $html);
+        $html = preg_replace('#  +#', ' ', $html);
+        $html = trim($html);
+        return $html;
     }
 
     public function getMailVars($user)

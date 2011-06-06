@@ -13,7 +13,7 @@ Vpc.Box.Dogear.enlarge = function() {
 Vpc.Box.Dogear.shrink = function() {
     var dogearSmall = document.getElementById('dogearSmall');
     var dogearBig = document.getElementById('dogearBig');
-    dogearSmall.childNodes[0].showLoop();
+    dogearSmall.showLoop();
     dogearSmall.style.top = '0';
     dogearBig.style.top = '-700px';
 };
@@ -27,35 +27,52 @@ Vpc.Box.Dogear.init = function() {
     var options = Ext.decode(optionsEl[0].value);
 
     if (options.urlSmall && options.urlBig) {
-        var s1 = new SWFObject("/assets/vps/Vpc/Box/DogearRandom/Dogear/dogear.swf","dogearSmallPlayer","180","180","9","#FFFFFF");
-        s1.addParam("allowfullscreen","false");
-        s1.addParam("allowscriptaccess","always");
-        s1.addParam("wmode","transparent");
-        s1.addParam("swLiveConnect","true");
-        s1.addParam("flashvars",
-            "picurl="+options.urlSmall
-            +"&color1=0x"+options.colors.color_small_1+"&color2=0x"+options.colors.color_small_2
-            +"&linktarget="+(options.linkOpen ? 'blank' : 'self')
-            +"&clicktag="+options.linkUrl
+
+        var s1 = new swfobject.embedSWF(
+            "/assets/vps/Vpc/Box/DogearRandom/Dogear/dogear.swf",
+            "dogearSmall",
+            "180","180",
+            "9",
+            "#FFFFFF",
+            {
+                'picurl': options.urlSmall,
+                'color1': '0x' + options.colors.color_small_1,
+                'color2': '0x' + options.colors.color_small_2,
+                'linktarget': options.linkOpen ? 'blank' : 'self',
+                'clicktag': options.linkUrl
+            },
+            {
+                'allowfullscreen': 'false',
+                'allowscriptaccess': 'always',
+                'wmode': 'transparent',
+                'swLiveConnect': 'true'
+            }
         );
-        s1.write("dogearSmall");
 
         // big image preloaden
         var tmp = new Image();
         tmp.src = options.urlBig;
 
-        var s2 = new SWFObject("/assets/vps/Vpc/Box/DogearRandom/Dogear/dogear_large.swf","dogearBigPlayer","680","680","9","#FFFFFF");
-        s2.addParam("allowfullscreen","false");
-        s2.addParam("allowscriptaccess","always");
-        s2.addParam("wmode","transparent");
-        s2.addParam("swLiveConnect","true");
-        s2.addParam("flashvars",
-            "picurl="+options.urlBig
-            +"&color1=0x"+options.colors.color_big_1+"&color2=0x"+options.colors.color_big_2
-            +"&linktarget="+(options.linkOpen ? 'blank' : 'self')
-            +"&clicktag="+options.linkUrl
+        var s2 = new swfobject.embedSWF(
+            "/assets/vps/Vpc/Box/DogearRandom/Dogear/dogear_large.swf",
+            "dogearBig",
+            "680","680",
+            "9",
+            "#FFFFFF",
+            {
+                'picurl': options.urlBig,
+                'color1': '0x' + options.colors.color_big_1,
+                'color2': '0x' + options.colors.color_big_2,
+                'linktarget': options.linkOpen ? 'blank' : 'self',
+                'clicktag': options.linkUrl
+            },
+            {
+                'allowfullscreen': 'false',
+                'allowscriptaccess': 'always',
+                'wmode': 'transparent',
+                'swLiveConnect': 'true'
+            }
         );
-        s2.write("dogearBig");
 
         Vpc.Box.Dogear.initDone = true;
     }

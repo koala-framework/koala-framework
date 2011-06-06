@@ -2,11 +2,11 @@
 <? if($this->data->hasContent()) { ?>
 
     <? if ($this->text && ($this->text instanceof Vps_Component_Data)) { ?>
-        <?= $this->ifHasContent($this->text); ?>
+        <?if ($this->hasContent($this->text)) {?>
             <div class="text">
                 <?= $this->component($this->text); ?>
             </div>
-        <?= $this->ifHasContent(); ?>
+        <? } ?>
     <? } else if ($this->text) { ?>
         <div class="text">
             <?= $this->text; ?>
@@ -21,7 +21,7 @@
     <? if ($this->options['routing']) { ?>
         <form action="#" class="fromAddress printHidden">
             <input type="text" class="textBefore vpsClearOnFocus" value="<?= $this->data->trlVps('Place of departure: zip code, Town, Street'); ?>" />
-            <input type="submit" value="<?= $this->data->trlVps('Show Route') ?>" class="submitOn"/>
+            <button class="submitOn"><?= $this->data->trlVps('Show Route') ?></button>
             <div class="clear"></div>
         </form>
     <? } ?>

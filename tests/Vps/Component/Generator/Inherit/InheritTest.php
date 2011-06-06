@@ -1,11 +1,9 @@
 <?php
-class Vps_Component_Generator_Inherit_InheritTest extends PHPUnit_Framework_TestCase
+class Vps_Component_Generator_Inherit_InheritTest extends Vpc_TestAbstract
 {
-    private $_root;
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Inherit_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vps_Component_Generator_Inherit_Root');
     }
 
     public function testInherit()
@@ -45,7 +43,7 @@ class Vps_Component_Generator_Inherit_InheritTest extends PHPUnit_Framework_Test
         $page = $this->_root->getChildComponent('_static');
         $this->assertNotNull($page);
         $gen = Vps_Component_Generator_Abstract::getInstances($page);
-        $this->assertEquals(count($gen), 1);
+        $this->assertEquals(count($gen), 1); //aus performancegründen hier nur einer, page generator wird durch spezial-code in Generator::getInstances nicht zurückgegeben
     }
 
 }

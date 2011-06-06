@@ -73,7 +73,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         //wir in einem Binding sind
         if (!this.autoLoad) return;
 
-        this.load();
+        this.load({}, {focusAfterLoad: this.focusAfterAutoLoad});
     },
 
     onMetaChange : function(meta)
@@ -191,6 +191,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     this.getForm().resetDirty();
                 }
                 var lo = options.loadOptions;
+                if (lo && lo.focusAfterLoad) {
+                    this.focusFirstField()
+                }
                 if (lo && lo.success) {
                     lo.success.call(lo.scope || this, this, result);
                 }
@@ -352,7 +355,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
         });
     },
-    onAdd : function() {
+    onAdd : function(options) {
         var cb = function() {
             this.enable();
             if (this.deleteButton) this.deleteButton.disable();
@@ -360,21 +363,26 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.applyBaseParams({id: 0});
             this.getForm().setDefaultValues();
             this.getForm().clearInvalid();
+            this.focusFirstField();
             this.fireEvent('addaction', this);
 
-			if (this.ownerCt instanceof Ext.TabPanel) {
+            if (this.ownerCt instanceof Ext.TabPanel) {
                 //wenn  form in einem tab, die form anzeigen
                 //nach addaction, damit in grid an dem die form gebunden ist die activeId
                 //auf 0 gesetzt werden kann
                 this.ownerCt.setActiveTab(this);
             } else if (this.getFormPanel() && this.getFormPanel().items.first()
                         && this.getFormPanel().items.first().items.first()
-						&& this.getFormPanel().items.first().items.first() instanceof Ext.TabPanel
+                        && this.getFormPanel().items.first().items.first() instanceof Ext.TabPanel
                         && this.getFormPanel().items.first().items.first().items.first()) {
                 //und das gleiche auch noch wenn IN der form tabs sind
                 //da den ersten tab öffnen
                 var tabs = this.getFormPanel().items.first().items.first();
                 tabs.setActiveTab(tabs.items.first());
+            }
+
+            if (options && options.success) {
+                options.success.call(options.scope || this);
             }
         };
         if (!this.getForm()) {
@@ -419,6 +427,17 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
     getBaseParams : function() {
         return this.baseParams;
+    },
+
+    focusFirstField : function() {
+        var form = this.getForm();
+        if (!form) return;
+        form.items.each(function(i) {
+            if (i.isFormField && !i.disabled) {
+                i.focus();
+                return false;
+            }
+        }, this);
     }
 });
 

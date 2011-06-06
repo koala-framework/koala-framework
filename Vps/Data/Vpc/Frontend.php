@@ -31,11 +31,17 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
                 $process[] = $data;
             }
             foreach ($process as $i) {
+                if (method_exists($i->getComponent(), 'preProcessInput')) {
+                    $i->getComponent()->preProcessInput(array());
+                }
+            }
+            foreach ($process as $i) {
                 if (method_exists($i->getComponent(), 'processInput')) {
                     $i->getComponent()->processInput(array());
                 }
             }
-            return Vps_View_Component::renderComponent($data, true);
+            $view = new Vps_Component_Renderer();
+            return $view->renderComponent($data);
         } else if (isset($row->settings)) {
             $settingsModel = new Vps_Model_Field(array(
                 'parentModel' => $row->getModel(),

@@ -15,6 +15,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['assets']['dep'][] = 'ExtElement';
         $ret['assets']['dep'][] = 'ExtXTemplate';
         $ret['assets']['dep'][] = 'ExtUtilJson';
+        $ret['assets']['dep'][] = 'ExtFx';
 
         return $ret;
     }
@@ -80,14 +81,14 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
     {
         if ($type == 'original') {
             $data = Vps_Component_Data_Root::getInstance()
-                ->getComponentByDbId($id, array('limit'=>1))
+                ->getComponentByDbId($id, array('limit'=>1, 'ignoreVisible' => true))
                 ->getComponent()->getImageData();
             if (!$data || !$data['file']) {
                 return null;
             }
             return array(
                 'file' => $data['file'],
-                'mimeType' => $data['mimeType']
+                'mimeType' => 'application/octet-stream'
             );
         } else {
             return parent::getMediaOutput($id, $type, $className);

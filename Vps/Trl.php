@@ -8,35 +8,35 @@ function hlpVps($string) {
 }
 
 function trl($string, $text = array()) {
-    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB);
+    return Vps_Trl::getInstance()->trl($string, $text, Vps_Trl::SOURCE_WEB);
 }
 
 function trlc($context, $string, $text = array()) {
-    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB);
+    return Vps_Trl::getInstance()->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB);
 }
 
 function trlp($single, $plural, $text =  array()) {
-    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB);
+    return Vps_Trl::getInstance()->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB);
 }
 
 function trlcp($context, $single, $plural, $text = array()) {
-    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB);
+    return Vps_Trl::getInstance()->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB);
 }
 
 function trlVps($string, $text = array()) {
-    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_VPS);
+    return Vps_Trl::getInstance()->trl($string, $text, Vps_Trl::SOURCE_VPS);
 }
 
 function trlcVps($context, $string, $text = array()) {
-    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS);
+    return Vps_Trl::getInstance()->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS);
 }
 
 function trlpVps($single, $plural, $text =  array()) {
-    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS);
+    return Vps_Trl::getInstance()->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS);
 }
 
 function trlcpVps($context, $single, $plural, $text = array()) {
-    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
+    return Vps_Trl::getInstance()->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
 }
 
 // trl functions for e.g. placeholders
@@ -99,6 +99,16 @@ class Vps_Trl
         self::ERROR_WRONG_NR_OF_ARGUMENTS => 'To few arguments.'
     );
 
+
+    private static $_instance = null;
+
+    public static function getInstance()
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
 
     public function __construct($config = array())
     {
@@ -267,10 +277,13 @@ class Vps_Trl
         }
 
         if ($plural) $target = $target.'_plural';
-        $cache = Vps_Cache::factory('Core', 'Memcached',
+        $cache = Vps_Cache::factory('Core', 'File',
             array(
                 'automatic_serialization'=>true,
                 'caching' => !isset($this->_modelVps) && !isset($this->_modelWeb)
+            ),
+            array(
+                'cache_dir' => 'application/cache/model'
             )
         );
         $cacheId = 'trl_'.$source.$target.$plural;
@@ -303,29 +316,53 @@ class Vps_Trl
         if ($language) $target = $language;
         else $target = $this->getTargetLanguage();
 
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'trl-'.$source.'-'.$target.'-'.$needle.'-'.$context;
+        $success = false;
+        if (function_exists('apc_fetch')) {
+            $ret = apc_fetch($cacheId, $success);
+        }
+        if ($success) {
+            return $ret;
+        }
+
         if (!isset($this->_cache[$source][$target])) {
             $this->_loadCache($source, $target, false);
         }
         if (isset($this->_cache[$source][$target][$needle.'-'.$context])) {
-            return $this->_cache[$source][$target][$needle.'-'.$context];
+            $ret = $this->_cache[$source][$target][$needle.'-'.$context];
         } else {
-            return $needle;
+            $ret = $needle;
         }
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
+    //TODO: wofuer wird der $needle parameter verwendet?!
     protected function _findElementPlural($needle, $plural, $source, $context = '', $language = null)
     {
         if ($language) $target = $language;
         else $target = $this->getTargetLanguage();
 
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'trlp-'.$source.'-'.$target.'-'.$plural.'-'.$context;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
         if (!isset($this->_cache[$source][$target.'_plural'])) {
             $this->_loadCache($source, $target, true);
         }
         if (isset($this->_cache[$source][$target.'_plural'][$plural.'-'.$context])) {
-            return $this->_cache[$source][$target.'_plural'][$plural.'-'.$context];
+            $ret = $this->_cache[$source][$target.'_plural'][$plural.'-'.$context];
         } else {
-            return $plural;
+            $ret = $plural;
         }
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     function getTrlpValues($context, $single, $plural, $source, $language = null)

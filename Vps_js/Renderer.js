@@ -54,7 +54,7 @@ Ext.util.Format.money = function(v, p)
     }
     ret = preSign+x+ret+v.substr(v.length-3, 3);
     return ret;
-}
+};
 
 Ext.util.Format.percent = function(v)
 {
@@ -112,7 +112,7 @@ Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');
 Ext.util.Format.germanDay = function(value, p) {
     p.css += 'vps-renderer-bright';
     return Ext.util.Format.date(value, 'd.m.');
-}
+};
 Ext.util.Format.time = Ext.util.Format.dateRenderer('H:i');
 Ext.util.Format.secondsToTime = function(v, format) {
     format.css += 'secondsToTimeRight';
@@ -141,12 +141,16 @@ Ext.util.Format.mouseoverPic = function(v, p, record){
 };
 
 Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, store, column) {
-    p.css += 'vps-cell-button';
-    if (column && column.buttonIcon) {
-        p.attr += 'style="background-image:url('+column.buttonIcon+');" ';
-    }
-    if (column && column.tooltip) {
-        p.attr += ' ext:qtip="'+column.tooltip+'"';
+    if (column && column.noIconWhenNew && !record.data.id) {
+        p.attr += 'style="background-image:none;" ';
+    } else {
+        p.css += 'vps-cell-button';
+        if (column && column.buttonIcon) {
+            p.attr += 'style="background-image:url('+column.buttonIcon+');" ';
+        }
+        if (column && column.tooltip) {
+            p.attr += ' ext:qtip="'+column.tooltip+'"';
+        }
     }
     return '';
 };

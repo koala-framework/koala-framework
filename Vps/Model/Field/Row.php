@@ -19,7 +19,7 @@ class Vps_Model_Field_Row extends Vps_Model_Row_Data_Abstract
     protected function _beforeSaveSiblingMaster()
     {
         parent::_beforeSaveSiblingMaster();
-        $this->_siblingRow->{$this->_fieldName} = serialize($this->_data);
+        $this->_siblingRow->{$this->_fieldName} = json_encode($this->_data);
     }
 
     public function save()

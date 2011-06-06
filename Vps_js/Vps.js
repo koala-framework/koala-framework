@@ -55,7 +55,7 @@ Ext.applyIf(Function.prototype, {
             return newRetval;
         };
         if (this.prototype){
-            Ext.apply(interception.prototype, this.prototype)
+            Ext.apply(interception.prototype, this.prototype);
             if (this.superclass){ interception.superclass=this.superclass; }
             if (this.override){ interception.override=this.override; }
         }
@@ -140,7 +140,7 @@ Vps.activateKeepAlive = function() {
     if (Vps.keepAliveActivated) return;
     Vps.keepAliveActivated = true;
     Vps.keepAlive.defer(1000 * 60 * 5);
-}
+};
 
 if (Vps.isApp) {
     Vps.activateKeepAlive();
@@ -148,17 +148,24 @@ if (Vps.isApp) {
 
 Vps.contentReadyHandlers = [];
 Vps.onContentReady = function(fn, scope) {
-    if (Vps.isApp) {
-        //in einer Ext-Anwendung mit Vps.main den contentReadHandler
-        //nicht gleich ausführen, das paragraphs-panel führt es dafür aus
-        Vps.contentReadyHandlers.push({
-            fn: fn,
-            scope: scope
-        });
-    } else {
+    // Handler merken, damit zB in ComponentSwitch das Ganz nochmal ausgeführt
+    // werden kann
+    Vps.contentReadyHandlers.push({
+        fn: fn,
+        scope: scope
+    });
+    //in einer Ext-Anwendung mit Vps.main den contentReadHandler
+    //nicht gleich ausführen, das paragraphs-panel führt es dafür aus
+    if (!Vps.isApp) {
         //normales Frontend
         Ext.onReady(fn, scope);
     }
+};
+
+Vps.callOnContentReady = function() {
+    Ext.each(Vps.contentReadyHandlers, function(i) {
+        i.fn.call(i.scope | window);
+    }, this);
 };
 
 Vps.include =  function(url, restart)

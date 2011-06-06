@@ -211,6 +211,8 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
                 new GLatLng(this.config.zoom[2], this.config.zoom[3]),
                 new GLatLng(this.config.zoom[0], this.config.zoom[1])
             ));
+            if (this.config.maximumInitialResolution < this.config.zoom)
+            	this.config.zoom = this.config.maximumInitialResolution;
         }
 
         this.gmap.setCenter(
@@ -261,10 +263,10 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
         var maxRes = this.config.maximumResolution;
         for (var i=0; i<mapTypes.length; i++) {
             if (minRes) {
-                mapTypes[i].getMinimumResolution = function() {return minRes;}
+                mapTypes[i].getMinimumResolution = function() {return minRes;};
             }
             if (maxRes) {
-                mapTypes[i].getMaximumResolution = function() {return maxRes;}
+                mapTypes[i].getMaximumResolution = function() {return maxRes;};
             }
         }
 

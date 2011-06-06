@@ -12,9 +12,10 @@ class Vps_Trl_ZendAdapter extends Zend_Translate_Adapter
         $this->_locale = $locale;
     }
 
+    //muss false zurückgeben da sonst validator keine message bekommen
     public function isTranslated($msg)
     {
-        return true;
+        return false;
     }
 
     public function translate($messageId)

@@ -76,6 +76,9 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     
     reload: function()
     {
+    	this.tree.un('collapsenode', this.onCollapseNode, this);
+    	this.tree.un('expandnode', this.onExpandNode, this);
+    	this.tree.initMask();
     	var node = this.getSelectedNode();
     	if (!node || !node.getOwnerTree()) {
     		this.tree.getRootNode().reload();
@@ -119,7 +122,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         // Tree
         var baseParams = this.baseParams != undefined ? this.baseParams : {};
         if (this.openedId != undefined) { baseParams.openedId = this.openedId; }
-        this.tree = new Ext.tree.TreePanel({
+        this.tree = new Vps.Auto.Tree.Panel({
             border      : false,
 //            animate     : true,
             loader      : new Ext.tree.TreeLoader({
@@ -146,14 +149,17 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             return this.fireEvent('beforeselectionchange', newNode.attributes.id);
         }, this);
         this.tree.on('beforenodedrop', this.onMove, this);
-        this.tree.on('collapsenode', this.onCollapseNode, this);
-        this.tree.on('expandnode', this.onExpandNode, this);
 
         this.tree.on('load', function(node) {
             if (this.openedId == node.id) {
                 node.select();
             }
             return true;
+        }, this);
+        
+        this.tree.getLoader().on('load', function(node) {
+        	this.tree.on('collapsenode', this.onCollapseNode, this);
+        	this.tree.on('expandnode', this.onExpandNode, this);
         }, this);
 
         this.relayEvents(this.tree, ['click', 'dblclick']);
@@ -223,7 +229,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 this.onSaved(result.data);
             },
             scope: this
-        })
+        });
     },
 
     onSelectionchange: function (selModel, node) {
@@ -258,7 +264,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     onMove : function(dropEvent){
-        var params = this.getBaseParams()
+        var params = this.getBaseParams();
         params.source = dropEvent.dropNode.id;
         params.target = dropEvent.target.id;
         params.point = dropEvent.point;
@@ -306,7 +312,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 node.ui.iconNode.style.backgroundImage = 'url(' + result.icon + ')';
             },
             scope: this
-        })
+        });
     },
 
     getTree : function() {

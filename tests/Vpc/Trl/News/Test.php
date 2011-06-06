@@ -38,11 +38,10 @@ class Vpc_Trl_News_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('root-en_test');
         $html = $c->render(); //cache it
         $this->assertEquals(1, substr_count($html, 'href='));
-        $vars = $c->getGenerator('detail')->getCacheVars($c);
 
         $model = Vps_Model_Abstract::getInstance('Vpc_Trl_News_News_Trl_TestModel');
         $r = $model->getRow('root-en_test_1');
-        $r->visible = 0;
+        $r->visible = false;
         $r->save();
 
         $this->_process();

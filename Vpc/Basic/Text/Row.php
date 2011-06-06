@@ -56,7 +56,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             } else if (isset($classes['image']) && $m[3] != '') {
                 $ret[] = array('type'=>'invalidImage', 'src'=>$m[3], 'html'=>$m[2]);
             } else if ($m[3] != '') {
-                $ret[] = $m[2];
+                //kein image möglich
             }
 
             if ((isset($classes['link']) || isset($classes['download'])) && $m[4] != ''
@@ -106,7 +106,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             } else if (isset($classes['link']) && $m[4] != '') {
                 $ret[] = array('type'=>'invalidLink', 'href'=>$m[4], 'html'=>$m[2]);
             } else if ($m[4] != '') {
-                $ret[] = $m[2];
+                //kein link möglich
             }
 
             $content = $m[5];
@@ -122,9 +122,9 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         $select->order('nr', 'DESC');
         $select->limit(1);
         $select->whereEquals('component', $type);
-        $row = $this->getChildRows('ChildComponents', $select)->current();
-        if (!$row) return 0;
-        return $row->nr;
+        $rows = $this->getChildRows('ChildComponents', $select);
+        if (!count($rows)) return 0;
+        return $rows->current()->nr;
     }
 
     protected function _beforeDelete()
@@ -181,7 +181,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         }
     }
 
-    public function tidy($html)
+    public function tidy($html, Vpc_Basic_Text_Parser $parser = null)
     {
         $config = array(
                     'indent'         => true,
@@ -222,11 +222,15 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $html = preg_replace('#<(.[a-z]+) ([^>]*)class=""([^>]*)>#', '<\1 \2 \3>', $html);
 
             $tidy = new tidy;
+            $html = str_replace('_mce_type="bookmark"', 'class="_mce_type-bookmark"', $html);
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
-            $parser = new Vpc_Basic_Text_Parser($this);
+            if (!$parser) {
+                $parser = new Vpc_Basic_Text_Parser($this);
+                $parser->setMasterStyles(Vpc_Basic_Text_StylesModel::getMasterStyles());
+            }
             $parser->setEnableColor(Vpc_Abstract::getSetting($this->_componentClass, 'enableColors'));
             $parser->setEnableTagsWhitelist(Vpc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
             $parser->setEnableStyles(Vpc_Abstract::getSetting($this->_componentClass, 'enableStyles'));
@@ -234,13 +238,13 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
+            $html = str_replace('class="_mce_type-bookmark"', '_mce_type="bookmark"', $html);
             $html = str_replace('#nbsp#', '&nbsp;', $html);
         }
 
         $classes = $this->_classes;
 
         $newContent = '';
-
         foreach ($this->getContentParts($html) as $part) {
             if (is_string($part)) {
                 $newContent .= $part;
@@ -335,83 +339,108 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     } catch (Vpc_Exception $e) {
                         $srcRow = false;
                     }
-                    $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
-                    if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
-                        $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
-                        $srcLinkRow = $linkModel->getRow($part['componentId'].'-link');
-                        if ($srcLinkRow) {
-                            $destRow->component = $srcRow->component;
-                            $destRow->save();
-                            $destLinkRow = $linkModel->getRow($destRow->component_id.'-link');
-                            if (!$destLinkRow) {
-                                $destLinkRow = $linkModel->createRow();
-                                $destLinkRow->component_id = $destRow->component_id.'-link';
+                    if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Component')) {
+                        $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
+                        if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
+                            $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
+                            $srcLinkRow = $linkModel->getRow($part['componentId'].'-link');
+                            if ($srcLinkRow) {
+                                $destRow->component = $srcRow->component;
+                                $destRow->save();
+                                $destLinkRow = $linkModel->getRow($destRow->component_id.'-link');
+                                if (!$destLinkRow) {
+                                    $destLinkRow = $linkModel->createRow();
+                                    $destLinkRow->component_id = $destRow->component_id.'-link';
+                                }
+                                foreach ($srcLinkRow->toArray() as $k=>$i) {
+                                    if ($k != 'component_id') {
+                                        $destLinkRow->$k = $i;
+                                    }
+                                }
+                                $destLinkRow->save();
+                                $newContent .= "<a href=\"{$destRow->component_id}\">";
+                                continue;
                             }
-                            foreach ($srcLinkRow->toArray() as $k=>$i) {
+                        }
+                    } else if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Abstract_Component')) {
+                        if ($srcRow) {
+                            foreach ($srcRow->toArray() as $k=>$i) {
                                 if ($k != 'component_id') {
-                                    $destLinkRow->$k = $i;
+                                    $destRow->$k = $i;
                                 }
                             }
-                            $destLinkRow->save();
+                            $destRow->save();
                             $newContent .= "<a href=\"{$destRow->component_id}\">";
                             continue;
                         }
+                    } else {
+                        //Kein link möglich
+                        continue;
                     }
                 }
                 if (!$destRow) {
                     $destRow = $model->createRow();
                     $this->addChildComponentRow('link', $destRow);
                 }
-                $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
+                if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Component')) {
+                    $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
 
-                $destRow->component = null;
-                if (preg_match('#^mailto:#', $part['href'], $m)) {
-                    if (isset($linkClasses['mail']) && $linkClasses['mail']) {
-                        $destRow->component = 'mail';
-                    }
-                } else {
-                    if (isset($linkClasses['intern']) && $linkClasses['intern']) {
-                        $url = $part['href'];
-                        $parsedUrl = parse_url($url);
-                        if (!isset($parsedUrl['host'])) {
-                            if (isset($_SERVER['HTTP_HOST'])) {
-                                $url = 'http://'.$_SERVER['HTTP_HOST'].$url;
-                            } else {
-                                $url = 'http://'.Vps_Registry::get('config')->server->domain.$url;
+                    $destRow->component = null;
+                    if (preg_match('#^mailto:#', $part['href'], $m)) {
+                        if (isset($linkClasses['mail']) && $linkClasses['mail']) {
+                            $destRow->component = 'mail';
+                        }
+                    } else {
+                        if (isset($linkClasses['intern']) && $linkClasses['intern']) {
+                            $url = $part['href'];
+                            $parsedUrl = parse_url($url);
+                            if (!isset($parsedUrl['host'])) {
+                                if (isset($_SERVER['HTTP_HOST'])) {
+                                    $url = 'http://'.$_SERVER['HTTP_HOST'].$url;
+                                } else {
+                                    $url = 'http://'.Vps_Registry::get('config')->server->domain.$url;
+                                }
+                            }
+                            $internLinkPage = Vps_Component_Data_Root::getInstance()
+                                ->getPageByUrl($url, null);
+                            if ($internLinkPage) {
+                                $destRow->component = 'intern';
                             }
                         }
-                        $internLinkPage = Vps_Component_Data_Root::getInstance()
-                            ->getPageByUrl($url, null);
-                        if ($internLinkPage) {
-                            $destRow->component = 'intern';
+                        if (!$destRow->component && isset($linkClasses['extern']) && $linkClasses['extern']) {
+                            $destRow->component = 'extern';
                         }
                     }
-                    if (!$destRow->component && isset($linkClasses['extern']) && $linkClasses['extern']) {
-                        $destRow->component = 'extern';
+                    if (!$destRow->component) continue; //kein solcher-link möglich
+                    $destRow->save();
+
+                    $destClasses =  Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
+
+                    $row = Vpc_Abstract::createModel($destClasses[$destRow->component])
+                                ->getRow($destRow->component_id.'-link');
+                    if (!$row) $row = Vpc_Abstract::createModel($destClasses[$destRow->component])
+                                                ->createRow();
+                    $row->component_id = $destRow->component_id.'-link';
+                    if ($destRow->component == 'extern') {
+                        $row->target = $part['href'];
+                    } else if ($destRow->component == 'intern') {
+                        $row->target = $internLinkPage->dbId;
+                    } else {
+                        preg_match('#^mailto:(.*)\\??(.*)#', $part['href'], $m);
+                        $row->mail = $m[1];
+                        $m = parse_str($m[2]);
+                        $row->subject = isset($m['subject']) ? $m['subject'] : '';
+                        $row->text = isset($m['body']) ? $m['body'] : '';
                     }
-                }
-
-                if (!$destRow->component) continue; //kein solcher-link möglich
-                $destRow->save();
-                $destClasses =  Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
-
-                $row = Vpc_Abstract::createModel($destClasses[$destRow->component])
-                            ->getRow($destRow->component_id.'-link');
-                if (!$row) $row = Vpc_Abstract::createModel($destClasses[$destRow->component])
-                                            ->createRow();
-                $row->component_id = $destRow->component_id.'-link';
-                if ($destRow->component == 'extern') {
-                    $row->target = $part['href'];
-                } else if ($destRow->component == 'intern') {
-                    $row->target = $internLinkPage->dbId;
+                    $row->save();
+                } else if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Extern_Component')) {
+                    $destRow->target = $part['href'];
+                    $destRow->save();
                 } else {
-                    preg_match('#^mailto:(.*)\\??(.*)#', $part['href'], $m);
-                    $row->mail = $m[1];
-                    $m = parse_str($m[2]);
-                    $row->subject = isset($m['subject']) ? $m['subject'] : '';
-                    $row->text = isset($m['body']) ? $m['body'] : '';
+                    //Kein link möglich
+                    continue;
                 }
-                $row->save();
+
                 $newContent .= "<a href=\"{$destRow->component_id}\">";
 
             } else if ($part['type'] == 'invalidDownload') {

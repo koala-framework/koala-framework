@@ -13,6 +13,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
             'ownModel'     => 'Vpc_Basic_Html_Model'
         ));
         $ret['flags']['searchContent'] = true;
+        $ret['flags']['hasFulltext'] = true;
         return $ret;
     }
 
@@ -26,7 +27,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
         $c = $this->_getRow()->content;
         preg_match_all('#{([a-z0-9]+)}#', $c, $m);
         if ($m[0]) {
-            $helper = new Vps_View_Helper_Component;
+            $helper = new Vps_Component_View_Helper_Component;
             foreach ($m[1] as $i) {
                 if (isset($childComponents[$i]) && $childComponents[$i] instanceof Vps_Component_Data) {
                     $c = str_replace('{'.$i.'}', $helper->component($childComponents[$i]), $c);
@@ -64,5 +65,18 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract_Composite_Component
     public function getSearchContent()
     {
         return strip_tags($this->_getRow()->content);
+    }
+
+
+    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    {
+        $fieldName = $this->getData()->componentId;
+
+        $text = strip_tags($this->_getRow()->content);
+
+        $doc->getField('content')->value .= ' '.$text;
+
+        $field = Zend_Search_Lucene_Field::UnStored($fieldName, $text, 'utf-8');
+        $doc->addField($field);
     }
 }

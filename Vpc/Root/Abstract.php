@@ -17,7 +17,6 @@ class Vpc_Root_Abstract extends Vpc_Abstract
             'priority' => 0
         );
         $ret['componentName'] = trlVps('Root');
-        $ret['flags']['showInPageTreeAdmin'] = true;
         return $ret;
     }
 
@@ -40,7 +39,7 @@ class Vpc_Root_Abstract extends Vpc_Abstract
     public function getPageByUrl($path, $acceptLangauge)
     {
         if ($path == '') {
-            $ret = $this->getData()->getChildPage(array('home' => true));
+            $ret = $this->getData()->getChildPage(array('home' => true), array());
         } else {
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
                 if (Vpc_Abstract::getFlag($c, 'shortcutUrl')) {
@@ -52,7 +51,7 @@ class Vpc_Root_Abstract extends Vpc_Abstract
         }
 
         if ($ret && !$ret->isPage && Vps_Component_Abstract::getFlag($ret->componentClass, 'hasHome')) {
-            $ret = $ret->getChildPage(array('home' => true));
+            $ret = $ret->getChildPage(array('home' => true), array());
         }
         return $ret;
     }

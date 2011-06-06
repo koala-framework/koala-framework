@@ -10,26 +10,15 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Products_Component
         return $ret;
     }
 
-    public function getMailVars($order)
+    public function getMailVars(Vpc_Shop_Cart_Order $order)
     {
         $ret = parent::getMailVars($order);
 
-        $items = $order->getChildRows('Products');
-        $ret['items'] = array();
-        foreach ($items as $i) {
-            $addComponent = Vps_Component_Data_Root::getInstance()
-                                ->getComponentByDbId($i->add_component_id);
-            $ret['items'][] = (object)array(
-                'product' => $addComponent->parent,
-                'row' => $i,
-                'additionalOrderData' => $addComponent->getComponent()->getAdditionalOrderData($i)
-            );
-        }
+        $ret['items'] = $order->getProductsData();
 
         $c = $this->getData()->getParentByClass('Vpc_Shop_Cart_Checkout_Component');
         $ret['sumRows'] = $c->getComponent()->getSumRows($order);
 
         return $ret;
     }
-
 }

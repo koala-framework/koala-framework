@@ -5,7 +5,7 @@ class Vps_AutoGrid_TestGetExpressionsFilter extends Vps_Controller_Action_Auto_F
     {
         return new Vps_Model_Select_Expr_Or(
             array(
-                new Vps_Model_Select_Expr_Smaller('id', 5),
+                new Vps_Model_Select_Expr_Lower('id', 5),
                 new Vps_Model_Select_Expr_Contains('value', 'a')
             )
         );

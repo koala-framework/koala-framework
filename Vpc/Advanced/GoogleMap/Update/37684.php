@@ -1,7 +1,7 @@
 <?php
 class Vpc_Advanced_GoogleMap_Update_37684 extends Vps_Update
 {
-    protected function _init()
+    public function update()
     {
         $components = Vps_Component_Data_Root::getInstance()
             ->getComponentsByClass('Vpc_Advanced_GoogleMap_Component');

@@ -21,20 +21,10 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Products_Compon
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        
+
         $order = $this->_getOrder();
         if ($order) {
-            $items = $order->getChildRows('Products');
-            $ret['items'] = array();
-            foreach ($items as $i) {
-                $addComponent = Vps_Component_Data_Root::getInstance()
-                                    ->getComponentByDbId($i->add_component_id);
-                $ret['items'][] = (object)array(
-                    'product' => $addComponent->parent,
-                    'row' => $i,
-                    'additionalOrderData' => $addComponent->getComponent()->getAdditionalOrderData($i)
-                );
-            }
+            $ret['items'] = $order->getProductsData();
             $c = $this->getData()->getParentByClass('Vpc_Shop_Cart_Checkout_Component');
             $ret['sumRows'] = $c->getComponent()->getSumRows($order);
         }

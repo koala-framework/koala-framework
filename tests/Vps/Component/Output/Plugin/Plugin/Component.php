@@ -15,15 +15,16 @@ class Vps_Component_Output_Plugin_Plugin_Component extends Vps_Component_Plugin_
     {
         // Da das Plugin nach dem Rendern ausgeführt wird, muss schon der
         // fertige Content hier reinkommen
-        if ($output != 'root plugin(plugin(master2 child child2))') {
-            return 'not ok from plugin';
+        if ($output != 'root plugin(plugin(c1_child c1_childchild))') {
+            return 'not ok from plugin. output was: ' . $output;
         } else {
             $template = Vpc_Admin::getComponentFile($this, 'Component', 'tpl');
-            $view = new Vps_View_Component();
+            $renderer = new Vps_Component_Renderer();
+            $view = new Vps_Component_View($renderer);
             $view->child = Vps_Component_Data_Root::getInstance()
                 ->getComponentById($this->_componentId)
                 ->getChildComponent('-pluginChild');
-            return $view->render($template);
+            return $renderer->render($view->render($template));
         }
     }
 

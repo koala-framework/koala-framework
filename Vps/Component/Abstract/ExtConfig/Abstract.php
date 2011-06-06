@@ -12,17 +12,19 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
     }
 
     /**
+     * @param string componentClass
+     * @param string welches setting verwendet werden soll, zB extConfigControllerIndex im Vps_Controller_Action_Auto_Vpc_Grid
      * @return $this
      */
-    public static function getInstance($componentClass)
+    public static function getInstance($componentClass, $setting = 'extConfig')
     {
         static $instances = array();
-        if (!isset($instances[$componentClass])) {
-            $c = Vpc_Abstract::getSetting($componentClass, 'extConfig');
+        if (!isset($instances[$componentClass.'-'.$setting])) {
+            $c = Vpc_Abstract::getSetting($componentClass, $setting);
             if (!$c) throw new Vps_Exception("extConfig not set");
-            $instances[$componentClass] = new $c($componentClass);
+            $instances[$componentClass.'-'.$setting] = new $c($componentClass);
         }
-        return $instances[$componentClass];
+        return $instances[$componentClass.'-'.$setting];
     }
 
 
@@ -56,6 +58,18 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
         return array();
     }
 
+    /**
+     * Welche config direkt nach dem anlegen dieser Komponente geöffnet werden soll.
+     *
+     * Fragt der Paragraphs Controller ab.
+     */
+    public function getEditAfterCreateConfigKey()
+    {
+        $keys = array_keys($this->getConfig(self::TYPE_DEFAULT));
+        if (!$keys) return null;
+        return $keys[0];
+    }
+
     abstract protected function _getConfig();
 
     protected final function _getStandardConfig($xtype, $controllerName = 'Index', $title = null, $icon = null)
@@ -67,7 +81,8 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
                 throw new Vps_Exception("Component '$this->_class' does have no componentName but must have one for editing");
             }
             $title = $this->_getSetting('componentName');
-            if (strpos($title, '.') !== false) $title = substr(strrchr($title, '.'), 1);
+            $pos = strpos($title, '.');
+            if ($pos !== false && substr($title, $pos + 1, 1) !== ' ') $title = substr(strrchr($title, '.'), 1);
         }
 
         if (!$icon) $icon = $this->_getSetting('componentIcon');
@@ -79,6 +94,51 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
         );
         if ($controllerName) {
             $ret['controllerUrl'] = $this->getControllerUrl($controllerName);
+        }
+        return $ret;
+    }
+
+    public static function getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate, $componentIdSuffix)
+    {
+        $ret = array(
+            'componentConfigs' => array(),
+            'contentEditComponents' => array(),
+        );
+        $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig();
+        foreach ($cfg as $k=>$c) {
+            $ret['componentConfigs'][$componentClass.'-'.$k] = $c;
+            $ret['contentEditComponents'][] = array(
+                'componentClass' => $componentClass,
+                'type' => $k,
+                'idTemplate' => $idTemplate,
+                'componentIdSuffix' => $componentIdSuffix
+            );
+        }
+        foreach ($gen->getGeneratorPlugins() as $plugin) {
+            $cls = get_class($plugin);
+            $cfg = Vpc_Admin::getInstance($cls)->getExtConfig();
+            foreach ($cfg as $k=>$c) {
+                $ret['componentConfigs'][$cls.'-'.$k] = $c;
+                $ret['contentEditComponents'][] = array(
+                    'componentClass' => $cls,
+                    'type' => $k,
+                    'idTemplate' => $idTemplate,
+                    'componentIdSuffix' => $componentIdSuffix
+                );
+            }
+        }
+        if (Vpc_Abstract::hasSetting($componentClass, 'editComponents')) {
+            $editComponents = Vpc_Abstract::getSetting($componentClass, 'editComponents');
+            foreach ($editComponents as $c) {
+                $childGen = Vps_Component_Generator_Abstract::getInstances($componentClass, array('componentKey'=>$c));
+                $childGen = $childGen[0];
+                $cls = Vpc_Abstract::getChildComponentClass($componentClass, null, $c);
+                $edit = self::getEditConfigs($cls, $childGen,
+                                               $idTemplate,
+                                               $componentIdSuffix.$childGen->getIdSeparator().$c);
+                $ret['componentConfigs'] = array_merge($ret['componentConfigs'], $edit['componentConfigs']);
+                $ret['contentEditComponents'] = array_merge($ret['contentEditComponents'], $edit['contentEditComponents']);
+            }
         }
         return $ret;
     }

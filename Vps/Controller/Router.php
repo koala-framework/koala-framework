@@ -62,6 +62,10 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/vps/redirects/:controller/:action',
                     array('module'     => 'vps_controller_action_redirects',
                           'action'     =>'index')));
+        $this->AddRoute('vpsutil', new Zend_Controller_Router_Route(
+                    '/vps/util/:controller/:action',
+                    array('module'     => 'vps_controller_action_util',
+                          'action'     =>'index')));
 
         //für selenium-tests von sachen die im vps liegen
         $this->AddRoute('vps_test', new Zend_Controller_Router_Route(

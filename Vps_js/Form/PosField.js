@@ -6,7 +6,7 @@ Vps.Form.PosField = function(config)
             this.selectText();
         },
         this
-    )
+    );
 };
 Ext.extend(Vps.Form.PosField, Ext.form.TextField,
 {

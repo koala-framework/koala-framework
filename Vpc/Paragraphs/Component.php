@@ -30,6 +30,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
                 $cc->Vpc_Paragraphs_Component->toArray()
             );
         }
+        $ret['showCopyPaste'] = true;
         $ret['previewWidth'] = 600;
         $ret['extConfig'] = 'Vpc_Paragraphs_ExtConfig';
         return $ret;
@@ -52,14 +53,10 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         return false;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getCacheVars();
-        $ret[] = array(
-            'model' => $this->getChildModel(),
-            'id' => $this->getData()->dbId,
-            'field' => 'component_id'
-        );
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
         return $ret;
     }
 }

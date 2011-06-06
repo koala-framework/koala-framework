@@ -13,6 +13,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
         $ret['showIcon'] = true;
         $ret['cssClass'] = 'webStandard';
         $ret['flags']['searchContent'] = true;
+        $ret['flags']['hasFulltext'] = true;
         $ret['generators']['child']['component']['downloadTag'] = 'Vpc_Basic_DownloadTag_Component';
         return $ret;
     }
@@ -60,5 +61,15 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
     public function getSearchContent()
     {
         return $this->_getRow()->infotext;
+    }
+
+    public function modifyFulltextDocument(Zend_Search_Lucene_Document $doc)
+    {
+        $fieldName = $this->getData()->componentId;
+
+        $doc->getField('content')->value .= ' '.$this->_getRow()->infotext;
+
+        $field = Zend_Search_Lucene_Field::UnStored($fieldName, $this->_getRow()->infotext, 'utf-8');
+        $doc->addField($field);
     }
 }
