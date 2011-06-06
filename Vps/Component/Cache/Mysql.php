@@ -74,7 +74,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                 ->whereEquals('deleted', false)
                 ->whereEquals('value', $value)
                 ->where(new Vps_Model_Select_Expr_Or(array(
-                    new Vps_Model_Select_Expr_Higher('expire', new Vps_DateTime(time())),
+                    new Vps_Model_Select_Expr_Higher('expire', time()),
                     new Vps_Model_Select_Expr_IsNull('expire'),
                 )));
             $row = $this->getModel('cache')->export(Vps_Model_Db::FORMAT_ARRAY, $select);
@@ -297,7 +297,7 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
                     } else {
                         $and[] = $dbIdOr[0];
                     }
-                } else {
+                } else if ($w != array('type' => 'master')) { // Hack, componentClass sollte in der Meta zurückgegeben und nicht automatisch dazugeschwindelt werden, hier Ausnahme für Vps_Component_Cache_Meta_Static_Master
                     $and[] = new Vps_Model_Select_Expr_Equal('component_class', $cClass);
                 }
                 $keys = array_keys($w);
