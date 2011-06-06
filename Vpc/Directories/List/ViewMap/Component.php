@@ -8,12 +8,14 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'VpsGoogleMap';
         $ret['assets']['dep'][] = 'ExtUtilJson';
+        $ret['generators']['child']['component']['paging'] = null;
         $ret['generators']['coordinates'] = array(
             'class'     => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Directories_List_ViewMap_Coordinates_Component',
             'name'      => 'Coordinates'
         );
         $ret['mapOptions'] = array(
+            'zoom' => null,
             'zoom_properties' => 0,
             'height' => 400,
             'width' => 550,
@@ -23,26 +25,35 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
 //             'minimumResolution' => 7, // min zoomstufe wenn nötig
 //             'maximumResolution' => 12, // max zoomstufe wenn nötig
         );
-        $ret['viewCache'] = false;
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $markers = array();
-        foreach ($this->_getItems() as $item) {
-            $row = $item->getRow();
-            $infoHtml = call_user_func_array(
-                array($this->getData()->componentClass, 'getInfoWindowHtml'), array($item)
+        $ret['options'] = $this->_getSetting('mapOptions');
+        if ($this->getData()->getChildComponent('_coordinates')) {
+            $ret['options'] = array_merge(
+                $ret['options'],
+                array('markers' => $this->getData()->getChildComponent('_coordinates')->getUrl()),
+                $this->_noMarkersOptions()
             );
-            $marker = array('infoHtml' => $infoHtml);
-            if (empty($row->coordinates) && (
-                !(isset($row->longitude) && isset($row->latitude))
-                || (is_null($row->longitude) && is_null($row->latitude))
-            )) {
-                continue;
-            }
+        }
+        return $ret;
+    }
+
+    public function getPartialVars($partial, $nr, $info)
+    {
+        $ret = parent::getPartialVars($partial, $nr, $info);
+
+        $row = $ret['item']->getRow();
+        if (empty($row->coordinates) && (
+            !(isset($row->longitude) && isset($row->latitude))
+            || (is_null($row->longitude) && is_null($row->latitude))
+        )) {
+            $marker = false;
+        } else {
+            $marker = array();
             if (isset($row->longitude) && isset($row->latitude)
                 && !is_null($row->longitude) && !is_null($row->latitude)
             ) {
@@ -55,50 +66,13 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
             } else {
                 throw new Vps_Exception('Either longitude and latitude, or coordinates has to exist in model');
             }
-            $markers[] = $marker;
-        }
 
-        // calculating the middle
-        $lowestLat = $highestLat = $lowestLng = $highestLng = null;
-        foreach ($markers as $m) {
-            if (is_null($lowestLng) || $lowestLng > $m['longitude']) {
-                $lowestLng = $m['longitude'];
-            }
-            if (is_null($highestLng) || $highestLng < $m['longitude']) {
-                $highestLng = $m['longitude'];
-            }
-            if (is_null($lowestLat) || $lowestLat > $m['latitude']) {
-                $lowestLat = $m['latitude'];
-            }
-            if (is_null($highestLat) || $highestLat < $m['latitude']) {
-                $highestLat = $m['latitude'];
-            }
-        }
-
-        $lightMarkers = $markers;
-        if ($this->getData()->getChildComponent('_coordinates')) {
-            $markers = $this->getData()->getChildComponent('_coordinates')->getUrl();
-        }
-
-        $ret['options'] = $this->_getSetting('mapOptions');
-        if (is_null($lowestLng) || is_null($highestLng) || is_null($lowestLat) || is_null($highestLat)) {
-            $ret['options'] = array_merge(
-                $ret['options'],
-                array('markers' => $markers),
-                $this->_noMarkersOptions()
-            );
-        } else {
-            $ret['options'] = array_merge(
-                array(
-                    'zoom' => array($highestLat, $highestLng, $lowestLat, $lowestLng),
-                    'longitude' => ($lowestLng + $highestLng) / 2,
-                    'latitude' => ($lowestLat + $highestLat) / 2,
-                    'markers' => $markers,
-                    'lightMarkers' => $lightMarkers
-                ),
-                $ret['options']
+            $marker['infoHtml'] = call_user_func_array(
+                array($this->getData()->componentClass, 'getInfoWindowHtml'), array($ret['item'])
             );
         }
+
+        $ret['markerData'] = $marker;
         return $ret;
     }
 
@@ -120,6 +94,6 @@ class Vpc_Directories_List_ViewMap_Component extends Vpc_Directories_List_View_C
     {
         $row = $data->getRow();
         $link = new Vps_View_Helper_ComponentLink();
-        return $link->componentLink($data).'<br />'.$row->street.'<br />'.$row->zipcode.' '.$row->city;
+        return $link->componentLinkRendered($data).'<br />'.$row->street.'<br />'.$row->zipcode.' '.$row->city;
     }
 }

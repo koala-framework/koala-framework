@@ -181,7 +181,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 
         this.userToolbar = new Ext.Toolbar({
             renderTo: this.el,
-            style: 'position:absolute;right:0',
+            style: 'position:absolute;right:0'
         });
 
         if (result.fullname && result.userSelfControllerUrl) {
@@ -192,8 +192,6 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 icon: '/assets/silkicons/user.png',
                 handler: function() {
                     var dlg = new Vps.Auto.Form.Window({
-                        width: 450,
-                        height: 370,
                         formConfig: {
                             controllerUrl: result.userSelfControllerUrl
                         }

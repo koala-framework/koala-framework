@@ -6,6 +6,7 @@ class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract_Component
         $ret = parent::getTemplateVars();
         $ret['categories'] = array();
         $itemDirectory = $this->_getItemDirectory();
+
         if ($itemDirectory) {
             $classes = Vpc_Abstract::getChildComponentClasses($itemDirectory->componentClass);
             foreach ($classes as $c) {
@@ -19,6 +20,11 @@ class Vpc_Directories_Menu_Component extends Vpc_Menu_Abstract_Component
             }
         }
         return $ret;
+    }
+
+    public static function useAlternativeComponent($componentClass, $parentData, $generator)
+    {
+        return false;
     }
 
     protected function _getItemDirectory()

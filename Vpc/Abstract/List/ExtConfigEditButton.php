@@ -1,4 +1,7 @@
 <?php
+/**
+ * Form mit Edit-Buttons
+ */
 class Vpc_Abstract_List_ExtConfigEditButton extends Vps_Component_Abstract_ExtConfig_Form
 {
     protected function _getConfig()

@@ -5,30 +5,24 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
     private $_mailData = array();
     protected $_additionalMailVarsRow = null;
 
-    const GET_MAIL_CONTENT_AUTO = 'auto'; // html if possible, otherwise text
-    const GET_MAIL_CONTENT_HTML = 'html';
-    const GET_MAIL_CONTENT_TEXT = 'text';
+    //ob der mail content von außen gesetzt wird (true) oder per template zusammengebaut wird (false)
+    private $_mailContentManual = false;
 
-    public function getMailContent($type = self::GET_MAIL_CONTENT_AUTO)
+    const MAIL_CONTENT_AUTO = 'auto'; // html if possible, otherwise text
+    const MAIL_CONTENT_HTML = 'html';
+    const MAIL_CONTENT_TEXT = 'text';
+
+    public function getMailContent($type = self::MAIL_CONTENT_AUTO)
     {
-        if ($this->mail_sent) {
-            if ($type == self::GET_MAIL_CONTENT_AUTO) {
-                if ($this->sent_mail_content_html) return $this->sent_mail_content_html;
-                return $this->sent_mail_content_text;
-            } else if ($type == self::GET_MAIL_CONTENT_HTML) {
-                return $this->sent_mail_content_html;
-            } else if ($type == self::GET_MAIL_CONTENT_TEXT) {
-                return $this->sent_mail_content_text;
-            } else {
-                throw new Vps_Exception_NotYetImplemented();
-            }
+        if ($type == self::MAIL_CONTENT_AUTO) {
+            if ($this->sent_mail_content_html) return $this->sent_mail_content_html;
+            return $this->sent_mail_content_text;
+        } else if ($type == self::MAIL_CONTENT_HTML) {
+            return $this->sent_mail_content_html;
+        } else if ($type == self::MAIL_CONTENT_TEXT) {
+            return $this->sent_mail_content_text;
         } else {
-            $mail = $this->_prepareMail();
-            if ($mail instanceof Vps_Mail_Template) {
-                return $mail->getMailContent($type);
-            } else {
-                throw new Vps_Exception_NotYetImplemented();
-            }
+            throw new Vps_Exception_NotYetImplemented();
         }
     }
 
@@ -37,22 +31,36 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         return $this->_additionalMailVarsRow;
     }
 
-    private function _prepareMail()
+    public function sendMail()
+    {
+        if (!$this->mail_sent) {
+            if (!$this->sent_mail_content_text) {
+                throw new Vps_Exception("text content must be set when sending a mail");
+            }
+            $this->_sendMail();
+        } else {
+            throw new Vps_Exception("'sendMail' may only be called once (usually in _afterInsert). Maybe you wanted to call 'resendMail()'");
+        }
+    }
+
+    public function resendMail()
+    {
+        $this->_sendMail();
+    }
+
+    /**
+     * really sends mail, may be called by sendMail AND resendMail
+     */
+    private function _sendMail()
     {
         $siblingRows = $this->_getSiblingRows();
         $essentialsRow = $siblingRows['essentials'];
         $varsRow = $siblingRows['vars'];
 
-        if (!empty($essentialsRow->masterTemplate)) {
-            $mail = new $essentialsRow->mailerClass($essentialsRow->template, $essentialsRow->masterTemplate);
-        } else {
-            $mail = new $essentialsRow->mailerClass($essentialsRow->template);
-        }
-
-        $mail->vars = $varsRow;
-        foreach ($varsRow->toArray() as $k => $v) {
-            $mail->$k = $v;
-        }
+        $mail = new $essentialsRow->mailerClass();
+        if ($this->sent_mail_content_text) $mail->setBodyText($this->sent_mail_content_text);
+        if ($this->sent_mail_content_html) $mail->setBodyHtml($this->sent_mail_content_html);
+        $mail->setSubject($this->getSubject());
 
         $cc = $this->getCc();
         if ($cc) {
@@ -92,69 +100,48 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
                 $mail->addAttachment($attachment);
             }
         }
-
-        return $mail;
-    }
-
-    public function sendMail()
-    {
-        if (!$this->mail_sent) {
-            $mail = $this->_prepareMail();
-            $mail->send();
-
-            if ($mail->getView()->getImages()) {
-                $addedImages = array();
-                foreach ($mail->getView()->getImages() as $image) {
-                    if (in_array($image, $addedImages)) continue;
-                    $this->_saveAttachmentData($image);
-                    $addedImages[] = $image;
-                }
-            }
-
-            // save sent mail in database
-            $this->sent_mail_content_text = $mail->getMailContent(self::GET_MAIL_CONTENT_TEXT);
-            $this->sent_mail_content_html = $mail->getMailContent(self::GET_MAIL_CONTENT_HTML);
-            $this->save();
-        } else {
-            throw new Vps_Exception("'sendMail' may only be called once (usually in _afterInsert). Maybe you wanted to call 'resendMail()'");
-        }
-    }
-
-    public function resendMail()
-    {
-        $mail = new Vps_Mail();
-
-        $items = $this->getTo();
-        if ($items) { foreach ($items as $item) $mail->addTo($item['email'], $item['name']); }
-
-        $item = $this->getFrom();
-        if ($item) $mail->setFrom($item['email'], $item['name']);
-
-        $item = $this->getReturnPath();
-        if ($item) $mail->setReturnPath($item);
-
-        $items = $this->getBcc();
-        if ($items) { foreach ($items as $item) $mail->addBcc($item); }
-
-        $items = $this->getCc();
-        if ($items) { foreach ($items as $item) $mail->addCc($item['email'], $item['name']); }
-
-        $items = $this->_getAttachments();
-        if ($items) {
-            $mail->setType(Zend_Mime::MULTIPART_RELATED);
-            foreach ($items as $item) $mail->addAttachment($item);
-        }
-
-        $mail->setSubject($this->subject);
-        $mail->setBodyText($this->sent_mail_content_text);
-        if ($this->sent_mail_content_html) $mail->setBodyHtml($this->sent_mail_content_html);
-
         $mail->send();
+    }
+
+    private function _buildContentAndSetToRow()
+    {
+        // hier gehts ausschließlich um den mail-inhalt (html, txt, attachments)
+        // eine mail class darf hier nicht drin sein
+
+        $siblingRows = $this->_getSiblingRows();
+        $essentialsRow = $siblingRows['essentials'];
+        $varsRow = $siblingRows['vars'];
+
+        if (!empty($essentialsRow->masterTemplate)) {
+            $view = new Vps_Mail_Template_View($essentialsRow->template, $essentialsRow->masterTemplate);
+        } else {
+            $view = new Vps_Mail_Template_View($essentialsRow->template);
+        }
+
+        $view->vars = $varsRow;
+        foreach ($varsRow->toArray() as $k => $v) {
+            $view->$k = $v;
+        }
+
+        $this->sent_mail_content_text = $view->renderText();
+        $this->sent_mail_content_html = $view->renderHtml();
+
+        if ($view->getImages()) {
+            $addedImages = array();
+            foreach ($view->getImages() as $image) {
+                if (in_array($image, $addedImages)) continue;
+                $this->_saveAttachmentData($image);
+                $addedImages[] = $image;
+            }
+        }
     }
 
     protected function _beforeInsert()
     {
         $this->mail_sent = 0;
+        if (!$this->_mailContentManual) {
+            $this->_buildContentAndSetToRow();
+        }
     }
 
     protected function _afterInsert()
@@ -166,6 +153,12 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             $this->mail_sent = 1;
         }
         $this->save();
+    }
+
+    public function setMailContentManual($value)
+    {
+        $this->_mailContentManual = $value;
+        return $this;
     }
 
     static public function getSpamKey($enquiriesRow)
@@ -208,7 +201,7 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         return 0;
     }
 
-    // sets für mail essentails
+    // sets for mail essentails
     private function _getEssentialsRow()
     {
         $siblingRows = $this->_getSiblingRows();
@@ -333,6 +326,22 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         );
     }
 
+    public function setBodyText($text)
+    {
+        if ($this->_mailContentManual) {
+            $this->sent_mail_content_text = $text;
+        }
+        return $this;
+    }
+
+    public function setBodyHtml($html)
+    {
+        if ($this->_mailContentManual) {
+            $this->sent_mail_content_html = $html;
+        }
+        return $this;
+    }
+
     public function setReturnPath($email)
     {
         $row = $this->_getEssentialsRow();
@@ -343,6 +352,17 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
     {
         $row = $this->_getEssentialsRow();
         $row->from = serialize(array('email' => $email, 'name' => $name));
+    }
+
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+    }
+
+    public function getSubject()
+    {
+        if (!empty($this->subject)) return $this->subject;
+        return null;
     }
 
     public function getCc()

@@ -5,7 +5,7 @@
  * @group slow
  * slow weil sie den assets cache löschen
  */
- class Vps_Assets_WithComponents_Test extends PHPUnit_Framework_TestCase
+ class Vps_Assets_WithComponents_Test extends Vps_Test_TestCase
 {
     public function testIt()
     {
@@ -84,14 +84,14 @@
         $type = 'Vps_Assets_OwnConfig:Test';
         $files = $dep->getAssetUrls($type, 'js', 'web', $rootComponent);
         $expected = array(
-            "/assets/all/web/$rootComponent/".Zend_Registry::get('trl')->getTargetLanguage()."/Vps_Assets_OwnConfig:Test.js?v=".$v,
+            "/assets/all/web/$rootComponent/".Vps_Trl::getInstance()->getTargetLanguage()."/Vps_Assets_OwnConfig:Test.js?v=".$v,
         );
         $this->assertEquals($expected, $files);
 
-        $c = $loader->getFileContents("all/web/$rootComponent/".Zend_Registry::get('trl')->getTargetLanguage()."/Vps_Assets_OwnConfig:Test.js?v=".$v);
+        $c = $loader->getFileContents("all/web/$rootComponent/".Vps_Trl::getInstance()->getTargetLanguage()."/Vps_Assets_OwnConfig:Test.js?v=".$v);
         $this->assertContains("file2\nfile1\n", $c['contents']);
 
-        $c = $loader->getFileContents("all/web/$rootComponent/".Zend_Registry::get('trl')->getTargetLanguage()."/Vps_Assets_OwnConfig:Test.js?v=".$v);
+        $c = $loader->getFileContents("all/web/$rootComponent/".Vps_Trl::getInstance()->getTargetLanguage()."/Vps_Assets_OwnConfig:Test.js?v=".$v);
         $this->assertContains("file2\nfile1\n", $c['contents']);
 
         Vps_Component_Data_Root::setComponentClass(null);

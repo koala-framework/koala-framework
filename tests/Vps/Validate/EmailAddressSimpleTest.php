@@ -2,11 +2,12 @@
 /**
  * @group Validate
  */
-class Vps_Validate_EmailAddressSimpleTest extends PHPUnit_Framework_TestCase
+class Vps_Validate_EmailAddressSimpleTest extends Vps_Test_TestCase
 {
     private $_v;
     public function setUp()
     {
+        parent::setUp();
         $this->_v = new Vps_Validate_EmailAddressSimple();
     }
 

@@ -6,7 +6,7 @@
  * @group Mail
  * @group slow
  */
-class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Mail_Resend_Test extends Vps_Test_TestCase
 {
     public function setUp()
     {
@@ -36,6 +36,7 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
 
         $model = new Vps_Model_Mail(array(
             'tpl' => 'tests/Vps/Model/Mail/Resend/Mail',
+            'spamFields' => array()
         ));
         $model->setAttachmentSaveFolder($uploads->getUploadDir().'/mailattachments');
         if (!file_exists($uploads->getUploadDir().'/mailattachments') || !is_dir($uploads->getUploadDir().'/mailattachments')) {
@@ -69,7 +70,6 @@ class Vps_Model_Mail_Resend_Test extends PHPUnit_Framework_TestCase
         $mailFirst = $this->_getLatestMail();
 
         $row->resendMail();
-
         $mailSecond = $this->_getLatestMail();
 
         $this->assertNotEquals($mailFirst->id, $mailSecond->id);

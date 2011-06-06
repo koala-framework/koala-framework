@@ -3,6 +3,9 @@ Vps.onContentReady(function() {
         var options = Ext.decode(Ext.get(i).down('.options').dom.value);
         this.downloads = new Vps.Auto.GridPanel({
             controllerUrl: options.downloadsUrl,
+            baseParams: {
+                componentId: options.componentId
+            },
             region: 'center'
         });
         this.projects = new Vps.Auto.TreePanel({
@@ -32,7 +35,7 @@ Vps.onContentReady(function() {
             height: options.height,
             renderTo: i,
             layout: 'border',
-            items: [downloads, projects]
+            items: [this.downloads, this.projects]
         });
     }, this); 
 });

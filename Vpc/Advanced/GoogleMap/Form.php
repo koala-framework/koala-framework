@@ -28,7 +28,7 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
             ->setValues(array(
                 '0' => trlVpsStatic('Move + Zoom'),
                 '1' => trlVpsStatic('Move + Zoom (without zoombar)'),
-                '2' => trlVpsStatic('Zoom only')
+                '2' => trlVpsStatic('None')
             ))
             ->setWidth(300)
             ->setAllowBlank(false);

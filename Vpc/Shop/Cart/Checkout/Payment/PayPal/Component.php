@@ -8,8 +8,6 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
         $ret['generators']['child']['component']['confirmLink'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component';
         $ret['generators']['confirm']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component';
         $ret['generators']['confirm']['name'] = trlVps('done');
-        $ret['generators']['mail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_Mail_Component';
-        $ret['generators']['shippedMail']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_PayPal_ShippedMail_Component';
 
         $ret['business'] = '';
         return $ret;
@@ -36,12 +34,21 @@ class Vpc_Shop_Cart_Checkout_Payment_PayPal_Component extends Vpc_Shop_Cart_Chec
 
             $order->payment_component_id = $this->getData()->componentId;
             $order->checkout_component_id = $this->getData()->parent->componentId;
+            $order->cart_component_class = $this->getData()->parent->parent->componentClass;
 
             $order->status = 'payed';
             $order->date = date('Y-m-d H:i:s');
             $order->payed = date('Y-m-d H:i:s');
             $order->save();
 
+            foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
+                $p->orderConfirmed($order);
+            }
+            foreach ($order->getChildRows('Products') as $p) {
+                $addComponent = Vps_Component_Data_Root::getInstance()
+                    ->getComponentByDbId($p->add_component_id);
+                $addComponent->getComponent()->orderConfirmed($p);
+            }
             $this->sendConfirmMail($order);
 
             return true;

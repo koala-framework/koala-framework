@@ -9,7 +9,7 @@ class Vpc_Editable_ComponentsModel extends Vps_Model_Data_Abstract
         foreach ($components as $c) {
             $data[] = array(
                 'id' => $c->dbId,
-                'name' => Vpc_Abstract::getSetting($c->componentClass, 'componentName'),
+                'name' => $c->getComponent()->getName(),
                 'content_component_class' => $c->getChildComponent('-content')->componentClass,
             );
         }

@@ -8,7 +8,7 @@
  * @group UserServiceConn
  * @group UserBruteForce
  */
-class Vps_User_ServiceConnTest extends PHPUnit_Framework_TestCase
+class Vps_User_ServiceConnTest extends Vps_Test_TestCase
 {
     public function testBruteServiceConnection()
     {

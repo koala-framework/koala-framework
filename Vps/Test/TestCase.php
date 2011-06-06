@@ -1,6 +1,26 @@
 <?php
 class Vps_Test_TestCase extends PHPUnit_Framework_TestCase
 {
+    protected $backupStaticAttributes = false;
+
+    public function setUp()
+    {
+        Vps_Component_Data_Root::setComponentClass(false);
+        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
+        Vps_Component_ModelObserver::getInstance()->clear();
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
+        Vps_Media::getOutputCache()->clean();
+    }
+
+    public function tearDown()
+    {
+        Vps_Component_ModelObserver::getInstance()->clear();
+        Vps_Component_ModelObserver::getInstance()->setSkipFnF(true);
+        Vps_Component_Data_Root::reset();
+        Vps_Component_Cache::clearInstance();
+        Vps_Model_Abstract::clearInstances();
+    }
+
     public static function assertValidHtml($uri)
     {
         if (!preg_match('#^[a-z]+://#', $uri)) {

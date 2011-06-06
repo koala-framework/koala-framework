@@ -4,11 +4,21 @@ class Vps_Media
     private static $_ouputCache;
     const PASSWORD = 'l4Gx8SFe';
 
+    /**
+     *
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param int Kann gesetzt werden wenn wir in diesem web auf das bild nicht direkten zugriff haben
+     *            sondern nur für ein anderes web die url generieren
+     */
     public static function getUrl($class, $id, $type, $filename, $time = null)
     {
         if ($filename instanceof Vps_Uploads_Row) {
             $filename = $filename->filename . '.' . $filename->extension;
         }
+        if ($filename == '.') $filename = '';
         $checksum = self::getChecksum($class, $id, $type, $filename);
         $prefix = '';
         if ($r = Vps_Component_Data_Root::getInstance()) {
@@ -17,7 +27,6 @@ class Vps_Media
             }
         }
         if (is_null($time)) {
-            self::getOutput($class, $id, $type);
             $time = self::getOutputCache()->test(self::createCacheId($class, $id, $type));
             if (!$time) $time = time();
         }
@@ -62,11 +71,6 @@ class Vps_Media
         return null;
     }
 
-    public static function setOutputCache(Zend_Cache_Core $cache)
-    {
-        self::$_ouputCache = $cache;
-    }
-
     public static function getOutputCache()
     {
         if (!isset(self::$_ouputCache)) {
@@ -94,6 +98,12 @@ class Vps_Media
                 $isValid = call_user_func(array($classWithoutDot, 'isValidMediaOutput'), $id, $type, $class);
                 if ($isValid == Vps_Media_Output_IsValidInterface::INVALID) {
                     throw new Vps_Exception_NotFound();
+                } else if ($isValid == Vps_Media_Output_IsValidInterface::ACCESS_DENIED) {
+                    throw new Vps_Exception_AccessDenied();
+                } else if ($isValid == Vps_Media_Output_IsValidInterface::VALID) {
+                } else if ($isValid == Vps_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
+                } else {
+                    throw new Vps_Exception("unknown isValidMediaOutput return value");
                 }
             }
             if ($isValid != Vps_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
@@ -101,6 +111,13 @@ class Vps_Media
                 $isValidCache->save($data, $cacheId);
             }
         }
+        $output = self::_getOutputWithoutCheckingIsValid($class, $id, $type);
+        return $output;
+    }
+
+    private static function _getOutputWithoutCheckingIsValid($class, $id, $type)
+    {
+        $cacheId = self::createCacheId($class, $id, $type);
 
         if (!Vps_Registry::get('config')->debug->mediaCache || !($output = self::getOutputCache()->load($cacheId))) {
             $classWithoutDot = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;

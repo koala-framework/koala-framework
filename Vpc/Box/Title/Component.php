@@ -28,8 +28,8 @@ class Vpc_Box_Title_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        return Vpc_Menu_Component::getStaticCacheVars();
+        return Vpc_Menu_Component::getStaticCacheMeta($componentClass);
     }
 }

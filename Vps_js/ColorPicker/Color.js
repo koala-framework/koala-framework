@@ -48,9 +48,9 @@ Ext.namespace("Vps.ColorPicker.color");
  */
 
 Vps.ColorPicker.color.Color = function(config) {
-    Ext.apply(this, this.defaultValues)
+    Ext.apply(this, this.defaultValues);
     Ext.apply(this, config);
-}
+};
 
 Vps.ColorPicker.color.Color.prototype = {
 
@@ -156,7 +156,7 @@ Vps.ColorPicker.color.Color.prototype = {
             //console.warn(key+" value must be between "+min+" and "+max+". You supplied "+value+" for "+key+". Using "+max+" instead.");
             value = max;
         }
-        return value
+        return value;
     },
 
     //private
@@ -178,7 +178,7 @@ Vps.ColorPicker.color.Color.prototype = {
 
         red   = this.red   / 255;
         green = this.green / 255;
-        blue  = this.blue  / 255
+        blue  = this.blue  / 255;
 
         max = Math.max(red, green, blue);
         min = Math.min(red, green, blue);
@@ -274,7 +274,7 @@ Vps.ColorPicker.color.Color.prototype = {
             red:   hex.slice(0, 2),
             green: hex.slice(2, 4),
             blue:  hex.slice(4, 6)
-        }
+        };
     },
 
     //private

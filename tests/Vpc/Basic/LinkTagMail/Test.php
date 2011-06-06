@@ -2,14 +2,11 @@
 /**
  * @group Vpc_Basic_LinkTagMail
  **/
-class Vpc_Basic_LinkTagMail_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_LinkTagMail_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_LinkTagMail_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
+        parent::setUp('Vpc_Basic_LinkTagMail_Root');
     }
 
     public function testUrlAndRel()
@@ -24,8 +21,7 @@ class Vpc_Basic_LinkTagMail_Test extends PHPUnit_Framework_TestCase
     }
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1400));
+        $html = $this->_root->getComponentById(1400)->render();
         $this->assertEquals('<a href="mailto:example(vpsat)example(vpsdot)com">', $html);
     }
 

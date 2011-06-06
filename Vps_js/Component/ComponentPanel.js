@@ -51,12 +51,22 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             }
         } else {
             params = this.getBaseParams();
+            data.componentId = params.componentId;
         }
         var item;
         this.items.each(function(i) {
             if (i.componentClass == data.componentClass && i.type == data.type) {
-                item = i;
-                return false; //break each
+                // render always kann bei der ExtConfig.php mitgegeben werden
+                // um zu erzwingen, dass immer gerendert wird.
+                // Bsp: 2x Table in einem Paragraph mit unterschiedlicher col-anzahl
+                //      wenn beide nacheinander bearbeitet werden, würde sonst die
+                //      zweite die col-anzahl der ersten verwenden was falsch wär
+                if (i.renderAlways) {
+                    this.remove(i);
+                } else {
+                    item = i;
+                    return false; //break each
+                }
             }
         }, this);
 
@@ -65,9 +75,9 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
         if (item) {
             item.applyBaseParams(params);
-            item.load();
+            item.load({}, {focusAfterLoad: true});
             if (item.getAction && item.getAction('saveBack')) {
-                if (this.getTopToolbar().items.getCount() > 3) {
+                if (this.getTopToolbar().items.getCount() > 2) {
                     item.getAction('saveBack').show();
                 } else {
                     item.getAction('saveBack').hide();
@@ -79,6 +89,8 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 componentClass: data.componentClass,
                 type: data.type,
                 baseParams: params,
+                focusAfterAutoLoad: true,
+                autoHeight: this.autoHeight,
                 listeners: {
                     scope: this,
                     gotComponentConfigs: function(componentConfigs) {
@@ -99,7 +111,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             item.on('loaded', function() {
                 //muss hier auch nochmal gemacht werden
                 if (item.getAction && item.getAction('saveBack')) {
-                    if (this.getTopToolbar().items.getCount() > 3) {
+                    if (this.getTopToolbar().items.getCount() > 2) {
                         item.getAction('saveBack').show();
                     } else {
                         item.getAction('saveBack').hide();
@@ -171,7 +183,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             toolbar.add('»');
         }
 
-        var data = this.componentsStack[this.componentsStack.length-1]
+        var data = this.componentsStack[this.componentsStack.length-1];
         var cfg = this.componentConfigs[data.componentClass+'-'+data.type];
         toolbar.add({
             cls: 'x-btn-text-icon',

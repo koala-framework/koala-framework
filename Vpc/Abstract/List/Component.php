@@ -13,10 +13,14 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
             'component' => null
         );
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
-        $ret['assetsAdmin']['dep'][] = 'VpsListWithEditButtons';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/Panel.js';
-
+        $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
+        $ret['assetsAdmin']['dep'][] = 'VpsMultiFileUploadPanel';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/EditButton.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/PanelWithEditButton.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/List.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/ListEditButton.js';
         $ret['extConfig'] = 'Vpc_Abstract_List_ExtConfigListUpload';
+        $ret['hasVisible'] = true;
         return $ret;
     }
 
@@ -66,19 +70,10 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         return false;
     }
 
-    public function getCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = parent::getCacheVars();
-        $ret[] = $this->_getCacheVars();
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vps_Component_Cache_Meta_Static_ChildModel();
         return $ret;
-    }
-
-    protected function _getCacheVars()
-    {
-        return array(
-            'model' => $this->getChildModel(),
-            'id' => $this->getData()->dbId,
-            'field' => 'component_id'
-        );
     }
 }
