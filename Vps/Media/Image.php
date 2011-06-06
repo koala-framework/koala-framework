@@ -6,33 +6,55 @@ class Vps_Media_Image
     const SCALE_DEFORM = 'deform';
     const SCALE_ORIGINAL = 'original';
 
-    public static function calculateScaleDimensions($sourceSize, $size)
+    public static function calculateScaleDimensions($source, $targetSize)
     {
-        if (is_string($sourceSize)) {
-            $sourceSize = @getimagesize($sourceSize);
+        if (is_string($source)) {
+            $sourceSize = @getimagesize($source);
+        } else {
+            $sourceSize = $source;
+            $source = null;
         }
-        if (!$sourceSize) return false;
 
-        if (isset($size['width'])) $width = $size['width'];
-        else if (isset($size[0])) $width = $size[0];
+        if (!$sourceSize) return false;
+        $w = null;
+        if (isset($sourceSize['width'])) $w = $sourceSize['width'];
+        if (isset($sourceSize[0])) $w = $sourceSize[0];
+        $h = null;
+        if (isset($sourceSize['height'])) $h = $sourceSize['height'];
+        if (isset($sourceSize[1])) $h = $sourceSize[1];
+        $size = array($w, $h);
+        $rotate = null;
+        if ($source) {
+            $exif = @exif_read_data($source);
+            if (isset($exif['Orientation'])) {
+                switch ($exif['Orientation']) {
+                    case 6:
+                        $size = array($h, $w);
+                        $rotate = 90;
+                    case 8:
+                        $size = array($h, $w);
+                        $rotate = -90;
+                }
+            }
+        }
+        if (!$size[0] || !$size[1]) return false;
+
+        if (isset($targetSize['width'])) $width = $targetSize['width'];
+        else if (isset($targetSize[0])) $width = $targetSize[0];
         else $width = 0;
 
-        if (isset($size['height'])) $height = $size['height'];
-        else if (isset($size[1])) $height = $size[1];
+        if (isset($targetSize['height'])) $height = $targetSize['height'];
+        else if (isset($targetSize[1])) $height = $targetSize[1];
         else $height = 0;
 
-        if (isset($size['scale'])) $scale = $size['scale'];
-        else if (isset($size[2])) $scale = $size[2];
+        if (isset($targetSize['scale'])) $scale = $targetSize['scale'];
+        else if (isset($targetSize[2])) $scale = $targetSize[2];
         else $scale = self::SCALE_BESTFIT;
         if (!$scale) $scale = self::SCALE_BESTFIT;
+
         if ($width == 0 && $height == 0 && $scale != self::SCALE_ORIGINAL) {
             return false;
         }
-        $size = $sourceSize;
-        if (isset($size['width'])) $size[0] = $size['width'];
-        if (isset($size['height'])) $size[1] = $size['height'];
-
-        if (!$size[0] || !$size[1]) return false;
 
         if ($scale != self::SCALE_ORIGINAL) {
             if ($width == 0) {
@@ -85,7 +107,8 @@ class Vps_Media_Image
                          'y'            => round($y),
                          'resizeWidth'  => $resizeWidth,
                          'resizeHeight' => $resizeHeight,
-                         'scale'=>$scale
+                         'scale'        => $scale,
+                         'rotate'       => $rotate
             );
 
         } elseif ($scale == self::SCALE_BESTFIT) {
@@ -136,7 +159,12 @@ class Vps_Media_Image
         $height = round($height);
         if ($width <= 0) $width = 1;
         if ($height <= 0) $height = 1;
-        return array('width'=>$width, 'height'=>$height, 'scale'=>$scale);
+        return array(
+            'width' => $width,
+            'height' => $height,
+            'scale' => $scale,
+            'rotate' => $rotate
+        );
     }
 
     public static function scale($source, $size)
@@ -147,10 +175,8 @@ class Vps_Media_Image
         if (!is_file($source)) {
             return false;
         }
-        $sourceSize = @getimagesize($source);
-        if (!$sourceSize) return false;
-        $size = self::calculateScaleDimensions($sourceSize, $size);
 
+        $size = self::calculateScaleDimensions($source, $size);
         if ($size === false) return false;
 
         // wenn bild schon der angeforderten größe entspricht, original ausgeben
@@ -163,10 +189,14 @@ class Vps_Media_Image
         }
 
         if ($size['scale'] == self::SCALE_CROP) {
+
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
             if (class_exists('Imagick')) {
                 $im = new Imagick();
                 $im->readImage($source);
+                if (isset($size['rotate']) && $size['rotate']) {
+                    $im->rotateImage('#FFF', $size['rotate']);
+                }
                 $im->scaleImage($size['resizeWidth'], $size['resizeHeight']);
                 $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
                 $im->setImagePage(0, 0, 0, 0);
@@ -177,9 +207,13 @@ class Vps_Media_Image
             }
 
         } elseif ($size['scale'] == self::SCALE_BESTFIT || $size['scale'] == self::SCALE_DEFORM) {
+
             if (class_exists('Imagick')) {
                 $im = new Imagick();
                 $im->readImage($source);
+                if (isset($size['rotate']) && $size['rotate']) {
+                    $im->rotateImage('#FFF', $size['rotate']);
+                }
                 $im->thumbnailImage($size['width'], $size['height']);
                 $im = self::_processCommonImagickSettings($im);
                 $ret = $im->getImageBlob();
@@ -192,6 +226,9 @@ class Vps_Media_Image
                     $source = imagecreatefromjpeg($source);
                 } elseif ($srcSize[2] == 3) {
                     $source = imagecreatefrompng($source);
+                }
+                if (isset($size['rotate']) && $size['rotate']) {
+                    $source = imagerotate($source, $size['rotate'], 0);
                 }
                 $destination = imagecreatetruecolor($size['width'], $size['height']);
                 imagecopyresampled($destination, $source, 0, 0, 0, 0,
