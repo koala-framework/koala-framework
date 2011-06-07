@@ -179,7 +179,13 @@ class Vps_Setup
                         if (!$redirect && !$domain->pattern) $redirect = $domain->domain;
                         if ($domain->pattern && preg_match('/' . $domain->pattern . '/', $host)
                         ) {
-                            $redirect = $domain->domain;
+                            if ($domain->noRedirectPattern &&
+                                preg_match('/'.$domain->noRedirectPattern.'/', $host)
+                            ) {
+                                $redirect = false;
+                            } else {
+                                $redirect = $domain->domain;
+                            }
                             break;
                         }
                     }
