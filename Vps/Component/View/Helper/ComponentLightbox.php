@@ -3,21 +3,20 @@ class Vps_Component_View_Helper_ComponentLightbox extends Vps_Component_View_Hel
 {
     public function componentLightbox(Vps_Component_Data $target, $lightboxConfig = array(), $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
-        $config = $this->_getConfig($target, $text, $cssClass, $get, $anchor);
+        if ($cssClass) $cssClass .= ' ';
         $lightboxConfig['sel'] = $target->componentClass . '-LightboxLink';
-        $lightboxConfig['group'] = true;
-        $config['lightbox'] = $lightboxConfig;
+        $cssClass .= 'vpsLightbox ' . $lightboxConfig['sel'];
+        $settings = str_replace("\"", "'", Zend_Json::encode($lightboxConfig));
+        $text = '<input type="hidden" class="settings" value="' . $settings . '" />' . $text;
+        $config = $this->_getConfig($target, $text, $cssClass, $get, $anchor);
         return $this->_getRenderPlaceholder($target->componentId, $config);
     }
 
     public function renderCached($cachedContent, $componentId, $config)
     {
-        $ret = '<div class="vpsLightbox">';
-        $settings = str_replace("\"", "'", Zend_Json::encode($config['lightbox']));
-        $ret .= '<input type="hidden" class="settings" value="' . $settings . '" />';
-        $config['cssClass'] .= ' ' . $config['lightbox']['sel'];
-        $ret .= parent::renderCached($cachedContent, $componentId, $config);
-        $ret .= '</div>';
-        return $ret;
+        if (!$cachedContent) return '';
+        $targetPage = explode(';', $cachedContent);
+        $config['text'] .= $targetPage[2];
+        return parent::renderCached($cachedContent, $componentId, $config);
     }
 }
