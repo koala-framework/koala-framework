@@ -54,7 +54,9 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
             foreach ($forms as $k=>$i) {
                 $form = $i['form'];
                 if ($form) {
-                    $form->setIdTemplate('{0}-link');
+                    if (!$form->getIdTemplate()) {
+                        $form->setIdTemplate('{0}-link');
+                    }
                     $form->setAutoHeight(true);
                     $form->setBaseCls('x-plain');
                 }
