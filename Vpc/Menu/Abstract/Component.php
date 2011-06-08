@@ -11,6 +11,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret['componentIcon'] = new Vps_Asset('layout');
         $ret['cssClass'] = 'webStandard';
         $ret['showParentPage'] = false;
+        $ret['showParentPageLink'] = false;
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Menu/Abstract/Panel.js';
         $ret['showAsEditComponent'] = false;
@@ -48,7 +49,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['parentPage'] = null;
-        if ($this->_getSetting('showParentPage')) {
+        if ($this->_getSetting('showParentPage') || $this->_getSetting('showParentPageLink')) {
             $currentPages = array_reverse($this->_getCurrentPagesCached());
             if (isset($this->getData()->level)) {
                 $level = $this->getData()->level;
@@ -59,7 +60,11 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                 throw new Vps_Exception("You can't use showParentMenu for MainMenus (what should that do?)");
             }
             if (isset($currentPages[$level-2])) {
-                $ret['parentPage'] = $currentPages[$level-2];
+                if ($this->_getSetting('showParentPage')) {
+                    $ret['parentPage'] = $currentPages[$level-2];
+                } else {
+                    $ret['parentPageLink'] = $currentPages[$level-2];
+                }
             }
         }
         return $ret;
