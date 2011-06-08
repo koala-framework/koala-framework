@@ -3,7 +3,7 @@
         <? if ($this->parentPage) { ?>
             <h2 class="parentPageName"><?=$this->parentPage->name;?></h2>
         <? } else if ($this->parentPageLink) { ?>
-            <h2 class="parentPageName"><?=$this->componentLink($this->parentPageLink,$this->parentPageLink->name);?></h2>
+            <h2 class="parentPageName"><?=$this->componentLink($this->parentPage);?></h2>
         <? } ?>
         <ul class="menu">
             <? $i = 0;
