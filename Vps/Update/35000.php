@@ -33,6 +33,15 @@ class Vps_Update_35000 extends Vps_Update
                 $fields = array_merge($fields, $this->_getFieldModelData($model));
             }
 
+            if (is_instance_of($class, 'Vpc_Basic_Text_Component')) {
+                if (Vpc_Abstract::hasSetting($class, 'stylesModel')) {
+                    $stylesModel = Vpc_Abstract::getSetting($class, 'stylesModel');
+                    $stylesModel = Vps_Model_Abstract::getInstance($stylesModel);
+                    $fields = array_merge($fields, $this->_getFieldModelData($stylesModel));
+                }
+                $model = Vpc_Basic_Text_Component::getTextModel($class);
+            }
+
             $model = Vpc_Abstract::createChildModel($class);
             if ($model) {
                 $fields = array_merge($fields, $this->_getFieldModelData($model));

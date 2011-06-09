@@ -13,6 +13,8 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         $ret['ownModel'] = 'Vpc_Basic_Table_Model';
         $ret['childModel'] = 'Vpc_Basic_Table_ModelData';
 
+        $ret['maxColumns'] = 26;
+
         // row styles: the key is put in the proper <tr> tag
         // if no tag is set in the sub-array, td is used
         // simple string example: 'bold' => trlVps('Bold')
@@ -38,6 +40,7 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $ret['settingsRow'] = $this->_getRow();
+        $ret['columnCount'] = $this->getColumnCount();
 
         $dataSelect = new Vps_Model_Select();
         $dataSelect->whereEquals('visible', 1);
@@ -48,12 +51,22 @@ class Vpc_Basic_Table_Component extends Vpc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getColumnCount()
+    public function getColumnCount($isAdmin = false)
     {
-        if (!$this->getRow() || !$this->getRow()->columns) {
-            throw new Vps_Exception_Client("Please set first the amount of columns in the settings section.");
+        if ($isAdmin) {
+            $dataSelect = new Vps_Model_Select();
+            $dataSelect->whereEquals('visible', 1);
+            $rows = $this->_getRow()->getChildRows('tableData', $dataSelect);
+        } else {
+            $rows = $this->_getRow()->getChildRows('tableData');
         }
-        return $this->getRow()->columns;
+        $ret = 0;
+        foreach ($rows as $row) {
+            for ($i=1; $i<=$this->_getSetting('maxColumns'); $i++) {
+                if (!empty($row->{'column'.$i}) && $i > $ret) $ret = $i;
+            }
+        }
+        return $ret;
     }
 
     public static function getStaticCacheMeta($componentClass)

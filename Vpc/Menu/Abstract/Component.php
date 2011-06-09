@@ -11,6 +11,7 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
         $ret['componentIcon'] = new Vps_Asset('layout');
         $ret['cssClass'] = 'webStandard';
         $ret['showParentPage'] = false;
+        $ret['showParentPageLink'] = false;
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Menu/Abstract/Panel.js';
         $ret['showAsEditComponent'] = false;
@@ -48,7 +49,9 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['parentPage'] = null;
-        if ($this->_getSetting('showParentPage')) {
+        $ret['parentPageLink'] = false;
+        if ($this->_getSetting('showParentPage') || $this->_getSetting('showParentPageLink')) {
+            if ($this->_getSetting('showParentPageLink')) $ret['parentPageLink'] = true;
             $currentPages = array_reverse($this->_getCurrentPagesCached());
             if (isset($this->getData()->level)) {
                 $level = $this->getData()->level;
