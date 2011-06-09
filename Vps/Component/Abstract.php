@@ -255,7 +255,7 @@ class Vps_Component_Abstract
                     if (isset(self::$_settings[$c]['cssClass'])) {
                         self::$_settings[$c]['processedCssClass'] .= self::$_settings[$c]['cssClass'].' ';
                     }
-                    $cssClass = array(self::_formatCssClass($c));
+                    $cssClass = array(self::formatCssClass($c));
                     $dirs = explode(PATH_SEPARATOR, get_include_path());
                     foreach (self::$_settings[$c]['parentClasses'] as $i) {
                         if ($i == $c) continue;
@@ -265,7 +265,7 @@ class Vps_Component_Abstract
                         }
                         foreach ($dirs as $dir) {
                             if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.printcss')) {
-                                $cssClass[] = self::_formatCssClass($i);
+                                $cssClass[] = self::formatCssClass($i);
                                 break;
                             }
                         }
@@ -309,7 +309,7 @@ class Vps_Component_Abstract
         return self::$_settings;
     }
 
-    static private function _formatCssClass($c)
+    static public function formatCssClass($c)
     {
         $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
         if (substr($c, -10) == '_Component') {

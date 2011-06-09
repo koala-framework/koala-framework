@@ -5,7 +5,7 @@ class Vps_Component_View_Helper_Image extends Vps_View_Helper_Image
     {
         if ($image instanceof Vpc_Abstract_Image_Component)
             $image = $image->getData();
-        return parent::image($image);
+        return parent::image($image, $alt, $cssClass);
     }
 
     protected function _getImageUrl($image)
