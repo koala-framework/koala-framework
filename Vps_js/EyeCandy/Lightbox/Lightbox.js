@@ -68,7 +68,6 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                     if(!this.opts.group) {
                         items.push(item);
                     } else {
-                        console.log(sel);
                         items = Ext.query(sel);
                     }
 
