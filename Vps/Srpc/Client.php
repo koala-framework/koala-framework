@@ -71,6 +71,8 @@ class Vps_Srpc_Client
         $httpClient = new Zend_Http_Client($this->getServerUrl(), $httpClientConfig);
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost($params);
+        $log = "\n\n\n".date('Y-m-d H:i:s')." ".$this->getServerUrl()."\nCONFIG: ".print_r($httpClientConfig, true)."\nPARAMS: ".print_r($params, true);
+        file_put_contents('application/log/srpc-request-values', $log, FILE_APPEND);
         return $httpClient->request()->getBody();
     }
 
