@@ -93,26 +93,41 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
         return $mtime;
     }
 
-    public static function getStylesContents()
+    public static function getStylesContents($modelClass = null)
     {
-        return Vps_Model_Abstract::getInstance('Vpc_Basic_Text_StylesModel')->getStylesContents2();
+        $ret = '';
+        foreach (self::getStylesArray($modelClass) as $tag => $classes) {
+            foreach ($classes as $class => $style) {
+                $styles = '';
+                foreach ($style['styles'] as $k => $v) {
+                    $styles .= "$k: $v; ";
+                }
+                $ret .= ".vpcText $tag.$class { {$styles}} /* {$style['name']} */\n";
+            }
+        }
+        return $ret;
     }
 
     public function getStylesContents2()
     {
+        return $this->getStylesContents(get_class($this));
+    }
+
+    public static function getStylesArray($modelClass = null)
+    {
+        if (!$modelClass) $modelClass = 'Vpc_Basic_Text_StylesModel';
+        $model = Vps_Model_Abstract::getInstance($modelClass);
         $cache = self::_getCache();
-        if (!$css = $cache->load('RteStyles')) {
-            $css = '';
-            foreach ($this->getRows() as $row) {
-                $css .= '.vpcText ' . $row->tag;
-                $css .= '.style'.$row->id;
-                $css .= ' { ';
+        if (!$styles = $cache->load('RteStyles')) {
+            $styles = array();
+            foreach ($model->getRows() as $row) {
+                $css = array();
                 foreach ($row->getSiblingRow('styles')->toArray() as $name=>$value) {
                     if (!$value) continue;
                     if ($name == 'id') continue;
                     $name = str_replace('_', '-', $name);
                     if ($name == 'additional') {
-                        $css .= $value;
+                        $value = $value;
                         continue;
                     } else if ($name == 'margin-top' || $name == 'margin-bottom'
                             || $name=='font-size') {
@@ -120,13 +135,16 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
                     } else if ($name == 'color') {
                         $value = '#'.$value;
                     }
-                    $css .= $name.': '.$value.'; ';
+                    $css[$name] = $value;
                 }
-                $css .= "} /* $row->name */\n";
+                $styles[$row->tag]['style' . $row->id] = array(
+                    'name' => $row->name,
+                    'styles' => $css
+                );
             }
-            $css = array('contents' => $css);
-            $cache->save($css, 'RteStyles');
+            $styles = array('content' => $styles);
+            $cache->save($styles, 'RteStyles');
         }
-        return $css['contents'];
+        return $styles['content'];
     }
 }

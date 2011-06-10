@@ -2,6 +2,7 @@
 class Vps_Form_CardsRealModels_TestController extends Vps_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save', 'add');
+    protected $_buttons = array('save');
 
     public function init()
     {

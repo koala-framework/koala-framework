@@ -9,7 +9,6 @@ class Vps_Form_CardsRealModels_Form_Abstract extends Vps_Form
         if (!$this->_rowType) {
             throw new Vps_Exception('_rowType must be set when using '.get_class($this));
         }
-
         $row = parent::getRow($parentRow);
         $row->type = $this->_rowType;
         return $row;
@@ -17,13 +16,7 @@ class Vps_Form_CardsRealModels_Form_Abstract extends Vps_Form
 
     protected function _init()
     {
+        $this->setIdTemplate('{0}');
         parent::_init();
-
-        $form = new Vps_Form_CardsRealModels_Form_Details();
-        $form->setIdTemplate('{0}');
-        $this->add($form);
-
-
     }
-
 }
