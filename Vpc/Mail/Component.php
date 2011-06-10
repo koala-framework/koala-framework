@@ -99,7 +99,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
             $mail->setFrom($this->getRow()->from_email, $this->getRow()->from_name);
         }
         if ($this->getRow()->reply_email) {
-            $mail->addHeader('Reply-To', $this->getRow()->reply_email);
+            $mail->setReplyTo($this->getRow()->reply_email);
         }
 
         if ($this->_images){

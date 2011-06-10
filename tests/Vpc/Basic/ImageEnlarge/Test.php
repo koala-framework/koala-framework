@@ -184,7 +184,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $opt = Zend_Json::decode((string)$opt[0]['value']);
         $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', $opt['fullSizeUrl'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
-        $this->assertEquals('image/png', $o['mimeType']);
+        $this->assertEquals('application/octet-stream', $o['mimeType']);
         $im = new Imagick();
         $this->assertEquals(Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1', $o['file']);
     }
