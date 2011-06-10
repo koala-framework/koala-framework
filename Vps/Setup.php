@@ -179,7 +179,13 @@ class Vps_Setup
                         if (!$redirect && !$domain->pattern) $redirect = $domain->domain;
                         if ($domain->pattern && preg_match('/' . $domain->pattern . '/', $host)
                         ) {
-                            $redirect = $domain->domain;
+                            if ($domain->noRedirectPattern &&
+                                preg_match('/'.$domain->noRedirectPattern.'/', $host)
+                            ) {
+                                $redirect = false;
+                            } else {
+                                $redirect = $domain->domain;
+                            }
                             break;
                         }
                     }
@@ -283,6 +289,7 @@ class Vps_Setup
         } else if (substr($host, 0, 4)=='dev.') {
             return 'dev';
         } else if (substr($host, 0, 5)=='test.' ||
+                   substr($host, 0, 3)=='qa.' ||
                    substr($path, 0, 17) == '/docs/vpcms/test.' ||
                    substr($path, 0, 21) == '/docs/vpcms/www.test.' ||
                    substr($path, 0, 25) == '/var/www/html/vpcms/test.' ||
