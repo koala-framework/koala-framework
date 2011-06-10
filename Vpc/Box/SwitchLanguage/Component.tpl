@@ -7,7 +7,7 @@
             if(!$this->hasContent($l['flag'])) {
                 $text = $l['name'];
             } else {
-                $text .= $this->component($l['flag']);
+                $text = $this->component($l['flag']);
             }
         } else {
             $text = $l['name'];

@@ -182,7 +182,7 @@ Ext.extend(Vps.Form.HtmlEditor.Styles, Ext.util.Observable, {
                 forceSelection: true,
                 tpl: '<tpl for="."><div class="x-combo-list-item webStandard vpcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
                 mode: 'local',
-                width: 65,
+                width: 130,
                 store: new Ext.data.JsonStore({
                     autoDestroy: true,
                     fields: ['id', 'name', 'tagName', 'className'],

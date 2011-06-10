@@ -33,10 +33,10 @@ class Vps_Controller_Action_Cli_Web_ViewCacheController extends Vps_Controller_A
         $login = Vps_Registry::get('config')->preLogin ? 'vivid:planet@' : '';
         $url = 'http://' . $login . $domain . '/vps/util/render/render?componentId=' . $componentId;
         echo "$url: ";
-        $b = Vps_Benchmark::start('render');
+        //$b = Vps_Benchmark::start('render');
         $content = file_get_contents($url);
-        $b->stop();
-        echo round(strlen($content) / 1000, 2) . 'KB, ' . round($b->duration, 3) . 's';
+        //$b->stop();
+        echo round(strlen($content) / 1000, 2) . 'KB';
         echo " rendered\n";
     }
 

@@ -1,6 +1,8 @@
 <? if (count($this->menu)) { ?>
     <div class="<?=$this->cssClass;?>">
-        <? if ($this->parentPage) { ?>
+        <? if ($this->parentPageLink) { ?>
+            <h2 class="parentPageName"><?=$this->componentLink($this->parentPage);?></h2>
+        <? } else if ($this->parentPage) { ?>
             <h2 class="parentPageName"><?=$this->parentPage->name;?></h2>
         <? } ?>
         <ul class="menu">

@@ -7,7 +7,7 @@ class Vps_Controller_Action_Util_ApcController extends Vps_Controller_Action
     {
         //darf nur von cli aus aufgerufen werden
         if ($_SERVER['SERVER_ADDR']!=$_SERVER['REMOTE_ADDR'] &&
-            $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
+            $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
         ) {
             throw new Vps_Exception_AccessDenied();
         }
