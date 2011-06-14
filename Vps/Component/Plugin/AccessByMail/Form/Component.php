@@ -27,6 +27,14 @@ class Vps_Component_Plugin_AccessByMail_Form_Component extends Vpc_Form_Componen
             } else {
                 $session = new Zend_Session_Namespace('vpc_'.$this->getData()->parent->componentId);
                 $session->login = true;
+                $session->key = $postData['key'];
+            }
+        } else {
+            $session = new Zend_Session_Namespace('vpc_'.$this->getData()->parent->componentId);
+            if ($session->login) {
+                $s = new Vps_Model_Select();
+                $s->whereEquals('key', $session->key);
+                $this->_accessByMailRow = Vps_Model_Abstract::getInstance('Vps_Component_Plugin_AccessByMail_Model')->getRow($s);
             }
         }
     }
