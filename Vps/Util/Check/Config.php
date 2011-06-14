@@ -51,9 +51,6 @@ class Vps_Util_Check_Config
         $checks['db_connection'] = array(
             'name' => 'db connection'
         );
-        $checks['svn'] = array(
-            'name' => 'svn'
-        );
         $checks['git'] = array(
             'name' => 'git >= 1.5'
         );
@@ -188,13 +185,6 @@ class Vps_Util_Check_Config
     private static function _db_connection()
     {
         Vps_Registry::get('db')->query("SHOW TABLES")->fetchAll();
-    }
-    private static function _svn()
-    {
-        exec("svn --version", $out, $ret);
-        if ($ret) {
-            throw new Vps_Exception("Svn command failed");
-        }
     }
     private static function _git()
     {
