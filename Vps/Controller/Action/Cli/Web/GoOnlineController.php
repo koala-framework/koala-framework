@@ -228,11 +228,8 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             }
         }
 
-        echo "\n\n*** [07/13] test: unit-tests laufen lassen (zuerst Web-Tests, dann VPS-Tests)\n";
-        $skipTest = ($this->_getParam('skip-test') || $this->_getParam('skip-tests'));
-        if ($skipTest) {
-            echo "(uebersprungen)\n";
-        } else if (!$hasTestHost) {
+        echo "\n\n*** [07/13] test: unit-tests vom web laufen lassen\n";
+        if (!$hasTestHost) {
             echo "(uebersprungen, kein test server angegeben)\n";
         } else {
             Vps_Controller_Action_Cli_TestController::initForTests();
@@ -256,16 +253,23 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             if (!$result->wasSuccessful()) {
                 $this->_revertOnTestFailure($testConfig, $useSvn);
             }
+        }
 
-            // VPS
-            $cmd = 'php '.VPS_PATH.'/bootstrap.php test';
-            $cmd .= ' --exclude-group=skipGoOnline';
-            $cmd .= ' --retry-on-error';
-            $cmd .= ' --stop-on-failure';
-            if ($this->_getParam('verbose')) $cmd .= ' --verbose';
-            passthru($cmd, $retPassthru);
-            if ($retPassthru !== 0) {
-                $this->_revertOnTestFailure($testConfig, $useSvn);
+        $updateProd = false;
+        $doneTodos = array();
+        if ($this->_getParam('skip-prod')) {
+            echo "\n\n*** [10/13] prod: (uebersprungen)\n";
+        } else {
+            $testWebUrl = 'http://' . $testConfig->server->domain;
+            echo "\nUnit-Tests waren erfolgreich, Test ist momentan auf Prod-Stand";
+            echo "\nJetzt manuell checken ob alles funktioniert: $testWebUrl";
+            echo "\nFunktioniert Test und gehe online mit Prod? [Y/n]";
+            $this->_notifyUser("Test Finished. Update Production?");
+            $stdin = fopen('php://stdin', 'r');
+            $input = trim(strtolower(fgets($stdin, 2)));
+            fclose($stdin);
+            if ($input == '' || $input == 'j' || $input == 'y') {
+                $updateProd = true;
             }
         }
 
@@ -276,21 +280,6 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
                 $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
             } else {
                 $this->_systemSshVpsWithSubSections("git checkout-master", 'test');
-            }
-        }
-
-        $updateProd = false;
-        $doneTodos = array();
-        if ($this->_getParam('skip-prod')) {
-            echo "\n\n*** [10/13] prod: (uebersprungen)\n";
-        } else {
-            echo "\nUpdate Production?  [Y/n]";
-            $this->_notifyUser("Test Finished. Update Production?");
-            $stdin = fopen('php://stdin', 'r');
-            $input = trim(strtolower(fgets($stdin, 2)));
-            fclose($stdin);
-            if ($input == '' || $input == 'j' || $input == 'y') {
-                $updateProd = true;
             }
         }
 
@@ -359,12 +348,8 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             if (date('w')==5) {
                 $msg .= "Und das obwohl heute Freitag ist!\n";
             }
-            if ($skipTest) {
-                $msg .= "\nUnit-Tests wurden NICHT ausgeführt.";
-            } else if (!$testConfig) {
+            if (!$testConfig) {
                 $msg .= "\nUnit-Tests wurden lokal erfolgreich ausgeführt, Testserver ist keiner verfügbar.";
-            } else {
-                $msg .= "\nUnit-Tests wurden erfolgreich ausgeführt.";
             }
             if (count($doneTodos)) {
                 $msg .= "\n\nFolgende Todos wurden erledigt:";
@@ -386,6 +371,8 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
                 echo $cmd."\n";
             }
             $this->_systemCheckRet($cmd);
+
+            echo "\n\nOnline upgedated, bitte checken: http://" . $prodConfig->server->domain;
         }
 
         echo "\n\n\n\033[32mF E R T I G ! ! !\033[0m\n";
