@@ -179,21 +179,19 @@ class Vps_Util_ClearCache
                 if ($output) echo "ignored:     apc\n";
             } else {
                 $config = Vps_Registry::get('config');
-                $preLogin = $config->preLogin ? 'vivid:planet@' : '';
-
                 $d = $config->server->domain;
-                $url = "http://$preLogin$d/vps/util/apc/clear-cache";
+                $url = "http://vivid:planet@$d/vps/util/apc/clear-cache";
                 $c = @file_get_contents($url);
                 if ($c != 'OK') {
                     $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
-                    $url = "http://$preLogin$d/vps/util/apc/clear-cache";
+                    $url = "http://vivid:planet@$d/vps/util/apc/clear-cache";
                     $c = @file_get_contents($url);
                 }
                 if ($output) {
                     if ($c == 'OK') {
                         if ($output) echo "cleared:     apc\n";
                     } else {
-                        if ($output) echo "error:       apc\n$c\n\n";
+                        if ($output) echo "error:       apc ($url)\n$c\n\n";
                     }
                 }
             }
