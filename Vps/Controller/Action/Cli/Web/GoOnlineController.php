@@ -221,7 +221,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
                 exit;
             }
         }
-exit;
+
         if ($useSvn) {
             echo "\n\n*** [02/14] vps-tag erstellen\n";
             Vps_Controller_Action_Cli_Web_TagController::createVpsTag($vpsVersion);
