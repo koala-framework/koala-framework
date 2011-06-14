@@ -1,7 +1,7 @@
 <?php
 class Vps_Util_Check_Config
 {
-    public function check()
+    public function check($quiet = false)
     {
         $checks = array();
         $checks['php'] = array(
@@ -51,9 +51,6 @@ class Vps_Util_Check_Config
         $checks['db_connection'] = array(
             'name' => 'db connection'
         );
-        $checks['svn'] = array(
-            'name' => 'svn'
-        );
         $checks['git'] = array(
             'name' => 'git >= 1.5'
         );
@@ -70,33 +67,46 @@ class Vps_Util_Check_Config
             'name' => 'apc'
         );
 
-        $res = '<h3>';
-        if (php_sapi_name()!= 'cli') {
-            $res .= "Test Webserver...\n";
+        if ($quiet) {
+            foreach ($checks as $k=>$i) {
+                try {
+                    call_user_func(array('Vps_Util_Check_Config', '_'.$k));
+                } catch (Exception $e) {
+                    echo "\nERROR: " . $e->getMessage();
+                }
+            }
+            if (php_sapi_name()!= 'cli') {
+                passthru("php bootstrap.php check-config quiet", $ret);
+                if ($ret) echo "\nFAILED CLI";
+            }
         } else {
-            $res .= "Test Cli...\n";
-        }
-        $res .= '</h3>';
-        foreach ($checks as $k=>$i) {
-            $res .= "<p style=\"margin:0;\">";
-            $res .= $i['name'].': ';
-            try {
-                call_user_func(array('Vps_Util_Check_Config', '_'.$k));
-                $res .= "<span style=\"background-color:green\">OK</span>";
-            } catch (Exception $e) {
-                $res .= "<span style=\"background-color:red\">FAILED:</span> ".$e->getMessage();
+            $res = '';
+            if (php_sapi_name()!= 'cli') {
+                $res .= "<h3>Test Webserver...\n</h3>";
             }
-            $res .= "</p>";
-        }
-        echo $res;
+            foreach ($checks as $k=>$i) {
+                $res .= "<p style=\"margin:0;\">";
+                $res .= $i['name'].': ';
+                try {
+                    call_user_func(array('Vps_Util_Check_Config', '_'.$k));
+                    $res .= "<span style=\"background-color:green\">OK</span>";
+                } catch (Exception $e) {
+                    $res .= "<span style=\"background-color:red\">FAILED:</span> ".$e->getMessage();
+                }
+                $res .= "</p>";
+            }
+            echo $res;
 
-        if (php_sapi_name()!= 'cli') {
-            passthru("php bootstrap.php check-config", $ret);
-            if ($ret) {
-                echo "<span style=\"background-color:red\">FAILED CLI</span>";
+            if (php_sapi_name()!= 'cli') {
+                echo "<h3>Test Cli...\n</h3>";
+                passthru("php bootstrap.php check-config 2>&1", $ret);
+                if ($ret) {
+                    echo "<span style=\"background-color:red\">FAILED CLI: $ret</span>";
+                }
+                echo  '<br /><br /> all tests finished';
             }
-            echo  '<br /><br /> all tests finished';
         }
+
         exit;
     }
 
@@ -173,13 +183,6 @@ class Vps_Util_Check_Config
     private static function _db_connection()
     {
         Vps_Registry::get('db')->query("SHOW TABLES")->fetchAll();
-    }
-    private static function _svn()
-    {
-        exec("svn --version", $out, $ret);
-        if ($ret) {
-            throw new Vps_Exception("Svn command failed");
-        }
     }
     private static function _git()
     {
