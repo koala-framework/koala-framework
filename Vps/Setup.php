@@ -182,7 +182,13 @@ class Vps_Setup
                         if (!$redirect && !$domain->pattern) $redirect = $domain->domain;
                         if ($domain->pattern && preg_match('/' . $domain->pattern . '/', $host)
                         ) {
-                            $redirect = $domain->domain;
+                            if ($domain->noRedirectPattern &&
+                                preg_match('/'.$domain->noRedirectPattern.'/', $host)
+                            ) {
+                                $redirect = false;
+                            } else {
+                                $redirect = $domain->domain;
+                            }
                             break;
                         }
                     }
@@ -224,6 +230,12 @@ class Vps_Setup
         if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
             && $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
+            && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
+            && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
+            && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
+            && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
+            && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
+            && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
         ) {
             $ignore = false;
             foreach ($config->preLoginIgnore as $i) {
