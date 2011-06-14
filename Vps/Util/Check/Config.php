@@ -80,13 +80,10 @@ class Vps_Util_Check_Config
                 if ($ret) echo "\nFAILED CLI";
             }
         } else {
-            $res = '<h3>';
+            $res = '';
             if (php_sapi_name()!= 'cli') {
-                $res .= "Test Webserver...\n";
-            } else {
-                $res .= "Test Cli...\n";
+                $res .= "<h3>Test Webserver...\n</h3>";
             }
-            $res .= '</h3>';
             foreach ($checks as $k=>$i) {
                 $res .= "<p style=\"margin:0;\">";
                 $res .= $i['name'].': ';
@@ -101,9 +98,10 @@ class Vps_Util_Check_Config
             echo $res;
 
             if (php_sapi_name()!= 'cli') {
-                passthru("php bootstrap.php check-config", $ret);
+                echo "<h3>Test Cli...\n</h3>";
+                passthru("php bootstrap.php check-config 2>&1", $ret);
                 if ($ret) {
-                    echo "<span style=\"background-color:red\">FAILED CLI</span>";
+                    echo "<span style=\"background-color:red\">FAILED CLI: $ret</span>";
                 }
                 echo  '<br /><br /> all tests finished';
             }
