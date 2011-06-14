@@ -110,7 +110,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             }
         }
 
-        echo "\n\n*** [00/13] ueberpruefe auf nicht eingecheckte dateien\n";
+        echo "\n\n*** [00/14] ueberpruefe auf nicht eingecheckte dateien\n";
 
         if ($this->_getParam('skip-check')) {
             echo "(uebersprungen)\n";
@@ -175,22 +175,69 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             throw new Vps_Exception_Client("vps: current branch is not ".trim(file_get_contents('application/vps_branch')).". This is not yet supported.");
         }
 
+        echo "\n\n*** [01/14] ueberpruefe check-config\n";
+        $checkConfigSuccessful = true;
+        if ($hasTestHost || $hasTestSubsections) {
+            $checkConfigUrl = 'http://' . $testConfig->server->domain . '/vps/check-config?quiet';
+            echo "test ($checkConfigUrl): ";
+            try {
+                $ret = file_get_contents(str_replace('http://', 'http://vivid:planet@', $checkConfigUrl));
+            } catch (Exception $e) {
+                $ret = 'Error: ' . $e->getMessage();
+            }
+            if (substr($ret, 0, 4) == '<h3>') {
+                echo 'Skipped';
+            } else if ($ret) {
+                $checkConfigSuccessful = false;
+                echo $ret;
+            } else {
+                echo 'OK';
+            }
+            echo "\n";
+        }
+        $checkConfigUrl = 'http://' . $prodConfig->server->domain . '/vps/check-config?quiet';
+        echo "prod ($checkConfigUrl): ";
+        try {
+            $ret = file_get_contents(str_replace('http://', 'http://vivid:planet@', $checkConfigUrl));
+        } catch (Exception $e) {
+            $ret = 'Error: ' . $e->getMessage();
+        }
+        if (substr($ret, 0, 4) == '<h3>') {
+            echo 'Skipped';
+        } else if ($ret) {
+            $checkConfigSuccessful = false;
+            echo $ret;
+        } else {
+            echo 'OK';
+        }
+        echo "\n";
+        if (!$checkConfigSuccessful) {
+            echo "Check-Config nicht erfolgreich!\n";
+            echo "Trotzdem weitermachen? [Y/n]";
+            $stdin = fopen('php://stdin', 'r');
+            $input = trim(strtolower(fgets($stdin, 2)));
+            fclose($stdin);
+            if (!($input == '' || $input == 'j' || $input == 'y')) {
+                exit;
+            }
+        }
+exit;
         if ($useSvn) {
-            echo "\n\n*** [01/13] vps-tag erstellen\n";
+            echo "\n\n*** [02/14] vps-tag erstellen\n";
             Vps_Controller_Action_Cli_Web_TagController::createVpsTag($vpsVersion);
         } else {
             $stagingVps = Vps_Util_Git::vps()->revParse("HEAD");
         }
 
         if ($useSvn) {
-            echo "\n\n*** [02/13] web-tag erstellen\n";
+            echo "\n\n*** [03/14] web-tag erstellen\n";
             Vps_Controller_Action_Cli_Web_TagController::createWebTag($webVersion);
         } else {
             $stagingWeb = Vps_Util_Git::web()->revParse("HEAD");
         }
 
         if ($useSvn) {
-            echo "\n\n*** [03/13] vps tag auschecken\n";
+            echo "\n\n*** [04/14] vps tag auschecken\n";
             if ($hasTestHost || $hasTestSubsections) {
                 $this->_systemSshVpsWithSubSections("tag-checkout vps-checkout --version=$vpsVersion", 'test');
             }
@@ -199,13 +246,13 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
 
         if ($hasTestHost || $hasTestSubsections) {
             if ($useSvn) {
-                echo "\n\n*** [04/13] test: vps-version anpassen\n";
+                echo "\n\n*** [05/14] test: vps-version anpassen\n";
                 $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=$vpsVersion", 'test');
 
-                echo "\n\n*** [05/13] test: web tag switchen\n";
+                echo "\n\n*** [06/14] test: web tag switchen\n";
                 $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=$webVersion", 'test');
             } else {
-                echo "\n\n*** [04/13] test: checkout staging\n";
+                echo "\n\n*** [05/14] test: checkout staging\n";
                 $this->_systemSshVpsWithSubSections("git checkout-staging --revVps=$stagingVps --revWeb=$stagingWeb", 'test');
             }
         }
@@ -213,14 +260,14 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         $importParams = '';
         if ($this->_getParam('skip-backup')) $importParams .= ' --skip-backup';
         if ($hasTestHost || $hasTestSubsections) {
-            echo "\n\n*** [06/13] prod daten auf test uebernehmen\n";
+            echo "\n\n*** [07/14] prod daten auf test uebernehmen\n";
             if ($this->_getParam('skip-copy-to-test')) {
                 echo "(uebersprungen)\n";
             } else {
                 $this->_systemSshVpsWithSubSections("import".$importParams, 'test');
             }
         } else {
-            echo "\n\n*** [06/13] prod daten importieren\n";
+            echo "\n\n*** [07/14] prod daten importieren\n";
             if ($this->_getParam('skip-copy-to-test')) {
                 echo "(uebersprungen)\n";
             } else {
@@ -228,7 +275,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             }
         }
 
-        echo "\n\n*** [07/13] test: unit-tests vom web laufen lassen\n";
+        echo "\n\n*** [08/14] test: unit-tests vom web laufen lassen\n";
         if (!$hasTestHost) {
             echo "(uebersprungen, kein test server angegeben)\n";
         } else {
@@ -258,7 +305,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         $updateProd = false;
         $doneTodos = array();
         if ($this->_getParam('skip-prod')) {
-            echo "\n\n*** [10/13] prod: (uebersprungen)\n";
+            echo "\n\n*** [09/14] prod: (uebersprungen)\n";
         } else {
             $testWebUrl = 'http://' . $testConfig->server->domain;
             echo "\nUnit-Tests waren erfolgreich, Test ist momentan auf Prod-Stand";
@@ -274,7 +321,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         }
 
         if ($hasTestHost || $hasTestSubsections) {
-            echo "\n\n*** [08/13] test: zurueck auf trunk switchen\n";
+            echo "\n\n*** [10/14] test: zurueck auf trunk switchen\n";
             if ($useSvn) {
                 $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
                 $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
@@ -286,22 +333,22 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         if ($updateProd) {
 
             if (!$this->_getParam('skip-backup')) {
-                echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
+                echo "\n\n*** [11/14] prod: erstelle datenbank backup\n";
                 $this->_systemSshVpsWithSubSections("import backup-db", 'production');
             }
 
             if ($useSvn) {
-                echo "\n\n*** [11/13] prod: vps-version anpassen\n";
+                echo "\n\n*** [12/14] prod: vps-version anpassen\n";
                 $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=$vpsVersion", 'production');
 
-                echo "\n\n*** [12/13] prod: web tag switchen\n";
+                echo "\n\n*** [13/14] prod: web tag switchen\n";
                 $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=$webVersion", 'production');
 
-                echo "\n\n*** [13/13] prod: update ausführen\n";
+                echo "\n\n*** [14/14] prod: update ausführen\n";
                 $this->_systemSshVpsWithSubSections("update", 'production');
             } else {
 
-                echo "\n\n*** [12/13] prod: production branches erstellen\n";
+                echo "\n\n*** [13/14] prod: production branches erstellen\n";
 
                 Vps_Util_Git::vps()->productionBranch('production/'.$appId, $stagingVps);
                 Vps_Util_Git::web()->productionBranch('production', $stagingWeb);
@@ -309,7 +356,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
                 $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Util/Git.php'), 'production');
                 $this->_systemSshVpsWithSubSections("scp-vps --file=".escapeshellarg('Vps/Controller/Action/Cli/GitController.php'), 'production');
 
-                echo "\n\n*** [13/13] prod: updaten\n";
+                echo "\n\n*** [14/14] prod: updaten\n";
                 $this->_systemSshVpsWithSubSections("git checkout-production", 'production');
             }
 

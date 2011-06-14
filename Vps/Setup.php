@@ -71,11 +71,13 @@ class Vps_Setup
                 header('WWW-Authenticate: Basic realm="Check Config"');
                 throw new Vps_Exception_AccessDenied();
             }
-            Vps_Util_Check_Config::check();
+            $quiet = isset($_GET['quiet']);
+            Vps_Util_Check_Config::check($quiet);
         }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
             Vps_Loader::registerAutoload();
-            Vps_Util_Check_Config::check();
+            $quiet = isset($_SERVER['argv'][2]) && $_SERVER['argv'][2] == 'quiet';
+            Vps_Util_Check_Config::check($quiet);
         }
 
         self::setUpVps($configClass);
