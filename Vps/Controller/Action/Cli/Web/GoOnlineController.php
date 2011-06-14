@@ -178,10 +178,10 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         echo "\n\n*** [01/14] ueberpruefe check-config\n";
         $checkConfigSuccessful = true;
         if ($hasTestHost || $hasTestSubsections) {
-            $checkConfigUrl = 'http://' . $testConfig->server->domain . '/vps/check-config?quiet';
+            $checkConfigUrl = 'http://' . $testConfig->server->domain . '/vps/check-config';
             echo "test ($checkConfigUrl): ";
             try {
-                $ret = file_get_contents(str_replace('http://', 'http://vivid:planet@', $checkConfigUrl));
+                $ret = file_get_contents(str_replace('http://', 'http://vivid:planet@', $checkConfigUrl) . '?quiet');
             } catch (Exception $e) {
                 $ret = 'Error: ' . $e->getMessage();
             }
@@ -195,10 +195,10 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             }
             echo "\n";
         }
-        $checkConfigUrl = 'http://' . $prodConfig->server->domain . '/vps/check-config?quiet';
+        $checkConfigUrl = 'http://' . $prodConfig->server->domain . '/vps/check-config';
         echo "prod ($checkConfigUrl): ";
         try {
-            $ret = file_get_contents(str_replace('http://', 'http://vivid:planet@', $checkConfigUrl));
+            $ret = file_get_contents(str_replace('http://', 'http://vivid:planet@', $checkConfigUrl) . '?quiet');
         } catch (Exception $e) {
             $ret = 'Error: ' . $e->getMessage();
         }
