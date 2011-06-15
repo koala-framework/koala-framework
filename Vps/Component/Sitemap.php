@@ -30,7 +30,7 @@ class Vps_Component_Sitemap
         }
 
         if ($page->url) {
-            $sites[] = $page->url;
+            $sites[] = 'http://' . Vps_Registry::get('config')->server->domain . $page->url;
         }
         foreach ($page->getChildPseudoPages(array(), array('pseudoPage'=>false)) as $childPage) {
             $sites = array_merge($sites, $this->_getSitemap($childPage));
