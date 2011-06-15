@@ -1,6 +1,13 @@
 <?php
 class Vpc_Basic_LinkTag_CommunityVideo_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
 {
+    // wird bei linklist verwendet, damit url richtig ausgegeben wird
+    public function componentToString($data)
+    {
+        $row = $data->getChildComponent('-video')->getComponent()->getRow();
+        return $row->url;
+    }
+
     public function getLinkTagForms()
     {
         $ret = array();
