@@ -322,6 +322,18 @@ class Vps_Setup
         if ($i) $uri = substr($uri, 0, $i);
         $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
 
+        if ($uri == 'robots.txt') {
+            Vps_Media_Output::output(array(
+                'contents' => "User-agent: *\nDisallow: /admin/",
+                'mimeType' => 'text/plain'
+            ));
+        }
+
+        if ($uri == 'sitemap.xml') {
+            $sitemap = new Vps_Component_Sitemap();
+            $sitemap->outputSitemap(Vps_Component_Data_Root::getInstance());
+        }
+
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))
             && (!$urlPrefix || substr($_SERVER['REDIRECT_URL'], 0, strlen($urlPrefix)) == $urlPrefix)
         ) {
