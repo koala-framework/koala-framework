@@ -32,18 +32,8 @@ class Vps_Component_Sitemap
         if ($page->url) {
             $sites[] = $page->url;
         }
-        $generators = Vps_Component_Generator_Abstract::getOwnInstances($page);
-        foreach ($generators as $generator) {
-            $select = array(
-                'generator' => $generator->getGeneratorKey(),
-                'page' => true
-            );
-            $count = $page->countChildComponents($select);
-            if ($count > 0 && $count < 30) {
-                foreach ($page->getChildComponents($select) as $childPage) {
-                    $sites = array_merge($sites, $this->_getSitemap($childPage));
-                }
-            }
+        foreach ($page->getChildPseudoPages(array(), array('pseudoPage'=>false)) as $childPage) {
+            $sites = array_merge($sites, $this->_getSitemap($childPage));
         }
         return $sites;
     }
