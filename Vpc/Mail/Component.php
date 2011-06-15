@@ -53,16 +53,18 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $ret = $this->_getSetting('mailHtmlStyles');
 
         // Hack für Tests, weil da der statische getStylesArray-Aufruf nicht funktioniert
-        $contentClass = $this->getData()->getChildComponent('-content')->componentClass;
-        if (!is_instance_of($contentClass, 'Vpc_Paragraphs_Component')) return $ret;
-
-        foreach (Vpc_Basic_Text_StylesModel::getStylesArray() as $tag => $classes) {
-            foreach ($classes as $class => $style) {
-                $ret[] = array(
-                    'tag' => $tag,
-                    'class' => $class,
-                    'styles' => $style['styles']
-                );
+        $contentComponent = $this->getData()->getChildComponent('-content');
+        if ($contentComponent &&
+            is_instance_of($contentComponent->componentClass, 'Vpc_Paragraphs_Component')
+        ) {
+            foreach (Vpc_Basic_Text_StylesModel::getStylesArray() as $tag => $classes) {
+                foreach ($classes as $class => $style) {
+                    $ret[] = array(
+                        'tag' => $tag,
+                        'class' => $class,
+                        'styles' => $style['styles']
+                    );
+                }
             }
         }
         return $ret;

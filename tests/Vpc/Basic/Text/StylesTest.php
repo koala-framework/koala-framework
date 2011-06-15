@@ -27,7 +27,7 @@ class Vpc_Basic_Text_StylesTest extends Vpc_TestAbstract
     {
         $model = new Vpc_Basic_Text_TestStylesModel();
         Vpc_Basic_Text_TestStylesModel::removeCache();
-        $content = $model->getStylesContents();
+        $content = $model->getStylesContents2();
         $this->assertEquals(".vpcText h1.style1 { font-weight: bold; font-size: 10px; text-align: center; } /* Test1 */
 .vpcText p.style2 { font-size: 10px; color: #ff0000; } /* Test2 */
 .vpcText span.style3 { font-size: 8px; color: #00ff00; } /* Test3 */\n", $content);

@@ -11,18 +11,18 @@
         </h3>
         <div class="publishDate">
 
-            <? if ($this->date($this->item->row->start_date,'H:i') != '00:00') { ?>
-                <?=$this->dateTime($this->item->row->start_date);?>
+            <? if ($this->date($this->item->start_date,'H:i') != '00:00') { ?>
+                <?=$this->dateTime($this->item->start_date);?>
             <? } else { ?>
-                <?=$this->date($this->item->row->start_date);?>
+                <?=$this->date($this->item->start_date);?>
             <? } ?>
 
-            <? if ($this->item->row->end_date) { ?>
+            <? if ($this->item->end_date) { ?>
                 -
-                <? if($this->date($this->item->row->end_date,'H:i') != '00:00') { ?>
-                    <?=$this->dateTime($this->item->row->end_date);?>
+                <? if($this->date($this->item->end_date,'H:i') != '00:00') { ?>
+                    <?=$this->dateTime($this->item->end_date);?>
                 <? } else { ?>
-                    <?=$this->date($this->item->row->end_date);?>
+                    <?=$this->date($this->item->end_date);?>
                 <? } ?>
             <? } ?>
 
