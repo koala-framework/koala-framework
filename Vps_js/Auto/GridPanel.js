@@ -396,7 +396,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.actions[i].disable();
             }
             if (i == 'add' && this.editDialog) continue; //add-button anzeigen auch wenn keine permissions da die add-permissions im dialog sein müssen
-            if (!meta.permissions[i]) {
+            if (!meta.permissions[i] && this.getAction(i).hide) {
                 this.getAction(i).hide();
             }
         }
