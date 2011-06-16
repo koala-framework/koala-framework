@@ -84,7 +84,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         Ext.applyIf(meta.form, { bodyStyle: 'padding: 10px;'});
 
         for (var i in this.actions) {
-            if (!meta.permissions[i]) {
+            if (!meta.permissions[i] && this.getAction(i).hide) {
                 this.getAction(i).hide();
             }
         }
