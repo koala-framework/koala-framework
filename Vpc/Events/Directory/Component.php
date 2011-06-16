@@ -19,7 +19,9 @@ class Vpc_Events_Directory_Component extends Vpc_News_Directory_Component
     public function getSelect()
     {
         $select = parent::getSelect();
-        $select->where("IF(ISNULL(end_date), start_date, end_date) >= NOW()");
+        // nur aktuellen tag nehmen ohne uhrzeit, dann sieht man ein event
+        // den restlichen tag, egal welche uhrzeit. - das soll so sein
+        $select->where("IF(ISNULL(end_date), start_date, end_date) >= CURDATE()");
         return $select;
     }
 }
