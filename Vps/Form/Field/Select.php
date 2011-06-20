@@ -16,6 +16,7 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
     //setHideIfNoValues
 
 
+    //TODO: diese funktion wird niergends aufgerufen!!!
     protected function _validateNotAllowBlank($data, $name)
     {
         $ret = array();
