@@ -5598,14 +5598,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1489</id>
 </text>
 <text>
-<en>Login:</en>
-<id>1490</id>
-</text>
-<text>
-<en>No items to display</en>
-<id>1491</id>
-</text>
-<text>
 <en>Read more</en>
 <de>Weiterlesen</de>
 <fr>Davantage</fr>
@@ -5889,7 +5881,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Produkt: Gutschein</de>
 <id>1393</id>
 <en>No items to display</en>
-<de>Keine Einträge zum anzeigen</de>
+<de>Keine Eintr&#xE4;ge zum anzeigen</de>
 <id>1484</id>
 </text>
 <text>
@@ -6110,31 +6102,24 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Must not be negative</en>
 <de>Darf nicht negativ sein</de>
 <id>1637</id>
+<en>Must not be negative</en>
+<de>Darf nicht negativ sein</de>
+<id>1600</id>
 </text>
 <text>
 <en>value of goods</en>
 <de>Warenwert</de>
-<id>1567</id>
+<id>1638</id>
 </text>
 <text>
 <en>net amount</en>
 <de>Nettobetrag</de>
-<id>1568</id>
+<id>1602</id>
 </text>
 <text>
 <en>+20% VAT</en>
 <de>+20% MwSt</de>
-<id>1569</id>
-</text>
-<text>
-<en>Newsletter Subscriber settings</en>
-<de>Newsletterempf&#xE4;nger-Einstellungen</de>
-<id>1570</id>
-</text>
-<text>
-<en>Unsubscribe Newsletter</en>
-<de>Vom Newsletter abmelden</de>
-<id>1571</id>
+<id>1603</id>
 </text>
 <text>
 <en>Count</en>
@@ -6144,7 +6129,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Sum</en>
 <de>Summe</de>
-<id>1573</id>
+<id>1605</id>
 </text>
 <text>
 <en>Back</en>
@@ -6154,109 +6139,79 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Shop.ProductList</en>
 <de>Shop.Produktliste</de>
-<id>1575</id>
+<id>1606</id>
 </text>
 <text>
 <en>Errormessage</en>
 <de>Fehlermeldung</de>
-<id>1576</id>
+<id>1639</id>
 </text>
 <text>
 <en>If you typed the address, make sure the spelling is correct</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
-<id>1577</id>
+<id>1640</id>
 </text>
 <text>
 <en>Master</en>
-<id>1578</id>
+<id>1641</id>
 </text>
 <text>
 <en>Master URL</en>
-<id>1579</id>
+<id>1642</id>
 </text>
 <text>
 <en>Master width</en>
-<id>1580</id>
+<id>1643</id>
 </text>
 <text>
 <en>Master height</en>
-<id>1581</id>
+<id>1644</id>
 </text>
 <text>
 <en>Land</en>
-<id>1582</id>
+<id>1645</id>
 </text>
 <text>
 <en>E-Mail Address</en>
-<id>1583</id>
+<id>1646</id>
 </text>
 <text>
 <en>Predefined Subject for Mail</en>
-<id>1584</id>
+<id>1647</id>
 </text>
 <text>
 <en>Predefined Text for Mail</en>
-<id>1585</id>
+<id>1648</id>
 </text>
 <text>
 <en>Unsubscribe</en>
-<id>1586</id>
-</text>
-<text>
-<en>Master</en>
-<id>1587</id>
-</text>
-<text>
-<en>Master URL</en>
-<id>1588</id>
-</text>
-<text>
-<en>Master width</en>
-<id>1589</id>
-</text>
-<text>
-<en>Master height</en>
-<id>1590</id>
-</text>
-<text>
-<en>Land</en>
-<id>1591</id>
-</text>
-<text>
-<en>E-Mail Address</en>
-<id>1592</id>
-</text>
-<text>
-<en>Predefined Subject for Mail</en>
-<id>1593</id>
-</text>
-<text>
-<en>Predefined Text for Mail</en>
-<id>1594</id>
-</text>
-<text>
-<en>Unsubscribe</en>
-<id>1595</id>
+<id>1649</id>
 </text>
 <text>
 <en>ZIP / City</en>
 <de>PLZ / Ort</de>
-<id>1596</id>
+<id>1650</id>
 </text>
 <text>
 <en>Send message</en>
 <de>Nachricht abschicken</de>
-<id>1597</id>
+<id>1651</id>
 </text>
 <text>
 <en>You got a requst on {0}</en>
 <de>Es wurde eine Anfrage auf {0} gestellt</de>
-<id>1598</id>
+<id>1652</id>
 </text>
 <text>
 <en>This enquiry was sent by</en>
 <de>Die Anfrage wurde gesendet von</de>
-<id>1599</id>
+<id>1653</id>
+</text>
+<text>
+<context>thousands separator</context>
+<en>,</en>
+<de>.</de>
+<id>1654</id>
 </text>
 </trl>
 
