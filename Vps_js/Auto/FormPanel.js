@@ -161,7 +161,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.getForm().resetDirty();
         }
 
-        Ext.Ajax.request({
+        if (!this.loadConn) this.loadConn = new Vps.Connection({ autoAbort: true });
+        this.loadConn.request({
             mask: !this.el, //globale mask wenn kein el vorhanden
             loadOptions: options,
             url: this.controllerUrl+'/json-load',

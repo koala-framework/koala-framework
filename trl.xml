@@ -5597,14 +5597,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1489</id>
 </text>
 <text>
-<en>Login:</en>
-<id>1490</id>
-</text>
-<text>
-<en>No items to display</en>
-<id>1491</id>
-</text>
-<text>
 <en>Read more</en>
 <de>Weiterlesen</de>
 <fr>Davantage</fr>
@@ -5878,7 +5870,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Your Voucher has been successfully redeemed.</en>
 <de>Ihr Gutschein wurde erfolgreich eingel&#xF6;st.</de>
-<id>1552</id>
+<id>1598</id>
 </text>
 <text>
 <en>Set password</en>
@@ -5888,7 +5880,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Produkt: Gutschein</de>
 <id>1393</id>
 <en>No items to display</en>
-<de>Keine Einträge zum anzeigen</de>
+<de>Keine Eintr&#xE4;ge zum anzeigen</de>
 <id>1484</id>
 </text>
 <text>
@@ -5967,38 +5959,24 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1593</id>
 </text>
 <text>
-<en>Text/Image - Alignment</en>
-<id>1565</id>
-</text>
-<text>
 <en>Must not be negative</en>
 <de>Darf nicht negativ sein</de>
-<id>1566</id>
+<id>1600</id>
 </text>
 <text>
 <en>value of goods</en>
 <de>Warenwert</de>
-<id>1567</id>
+<id>1601</id>
 </text>
 <text>
 <en>net amount</en>
 <de>Nettobetrag</de>
-<id>1568</id>
+<id>1602</id>
 </text>
 <text>
 <en>+20% VAT</en>
 <de>+20% MwSt</de>
-<id>1569</id>
-</text>
-<text>
-<en>Newsletter Subscriber settings</en>
-<de>Newsletterempf&#xE4;nger-Einstellungen</de>
-<id>1570</id>
-</text>
-<text>
-<en>Unsubscribe Newsletter</en>
-<de>Vom Newsletter abmelden</de>
-<id>1571</id>
+<id>1603</id>
 </text>
 <text>
 <en>Count</en>
@@ -6008,7 +5986,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Sum</en>
 <de>Summe</de>
-<id>1573</id>
+<id>1605</id>
 </text>
 <text>
 <en>Back</en>
@@ -6018,81 +5996,45 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Shop.ProductList</en>
 <de>Shop.Produktliste</de>
-<id>1575</id>
+<id>1606</id>
 </text>
 <text>
 <en>Errormessage</en>
 <de>Fehlermeldung</de>
-<id>1576</id>
+<id>1607</id>
 </text>
 <text>
 <en>If you typed the address, make sure the spelling is correct</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
-<id>1577</id>
+<id>1608</id>
 </text>
 <text>
 <en>Master</en>
-<id>1578</id>
+<id>1617</id>
 </text>
 <text>
 <en>Master URL</en>
-<id>1579</id>
+<id>1618</id>
 </text>
 <text>
 <en>Master width</en>
-<id>1580</id>
+<id>1619</id>
 </text>
 <text>
 <en>Master height</en>
-<id>1581</id>
+<id>1620</id>
 </text>
 <text>
 <en>Land</en>
-<id>1582</id>
+<id>1621</id>
 </text>
 <text>
 <en>E-Mail Address</en>
-<id>1583</id>
+<id>1622</id>
 </text>
 <text>
 <en>Predefined Subject for Mail</en>
-<id>1584</id>
-</text>
-<text>
-<en>Predefined Text for Mail</en>
-<id>1585</id>
-</text>
-<text>
-<en>Unsubscribe</en>
-<id>1586</id>
-</text>
-<text>
-<en>Master</en>
-<id>1587</id>
-</text>
-<text>
-<en>Master URL</en>
-<id>1588</id>
-</text>
-<text>
-<en>Master width</en>
-<id>1589</id>
-</text>
-<text>
-<en>Master height</en>
-<id>1590</id>
-</text>
-<text>
-<en>Land</en>
-<id>1591</id>
-</text>
-<text>
-<en>E-Mail Address</en>
-<id>1592</id>
-</text>
-<text>
-<en>Predefined Subject for Mail</en>
-<id>1593</id>
+<id>1623</id>
 </text>
 <text>
 <en>Predefined Text for Mail</en>
@@ -6101,6 +6043,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Unsubscribe</en>
 <id>1595</id>
+</text>
+<text>
+<context>thousands separator</context>
+<en>,</en>
+<de>.</de>
+<id>1597</id>
 </text>
 </trl>
 

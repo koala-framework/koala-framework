@@ -985,7 +985,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!params) params = {};
         if (!this.getStore()) {
             Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
-            Ext.Ajax.request({
+            if (!this.metaConn) this.metaConn = new Vps.Connection({ autoAbort: true });
+            this.metaConn.request({
                 mask: this.el,
                 url: this.controllerUrl+'/json-data',
                 params: params,
