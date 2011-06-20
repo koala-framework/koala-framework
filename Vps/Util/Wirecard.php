@@ -9,6 +9,8 @@ class Vps_Util_Wirecard
         }
         if ($url != '/wirecard_confirm') return;
 
+        Zend_Registry::get('config')->debug->error->log = true; //log immer aktivieren, da dieser request von wirecard gemacht wird
+        ignore_user_abort(true);
 
         $secret = Vps_Registry::get('config')->wirecard->secret;
 
@@ -75,13 +77,19 @@ class Vps_Util_Wirecard
                 && ($mandatoryFingerPrintFields == 3)
                 && ($secretUsed == 1))
             {
+
                 // everything is ok. store the successfull payment somewhere
 
                 // please store at least the paymentType and the orderNumber additional to the orderinformation,
                 // otherwise you will never find the transaction again.
 
                 $m = Vps_Model_Abstract::getInstance($logModel);
-                $row = $m->createRow($order);
+                $row = $m->createRow();
+                foreach ($order as $i) {
+                    if ($i != 'secret') {
+                        $row->$i = $_POST[$i];
+                    }
+                }
                 $row->txn_type = 'wirecard_payment';
                 $row->save();
 
