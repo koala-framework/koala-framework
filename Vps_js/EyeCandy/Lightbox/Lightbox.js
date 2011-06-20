@@ -1,14 +1,17 @@
 Vps.onContentReady(function()
 {
-    var components = Ext.query('div.vpsLightbox');
+    var components = Ext.query('a.vpsLightbox');
     Ext.each(components, function(c) {
-        var div = Ext.get(c);
-        var settings = Ext.decode(div.child('.settings').getValue());
-        var link = div.child('.' + settings.sel);
-        link.on('click', function (ev) {
-            ev.preventDefault();
-            Vps.Lightbox.Lightbox.open(ev.getTarget(), '.' + settings.sel, settings.group, settings);
-        });
+        var link = Ext.get(c);
+        var settings = Ext.decode(link.child('.settings').getValue());
+        if (!link.lightboxProcessed) {
+            link.lightboxProcessed = true;
+            link.on('click', function (ev) {
+                ev.preventDefault();
+                Vps.Lightbox.Lightbox.open(link.dom, '.' + settings.sel, settings);
+            });
+            
+        }
     });
 });
 
@@ -42,17 +45,18 @@ Vps.Lightbox.Lightbox = (function(link, config) {
             innerHeight: false,
             maxWidth: '90%',
             maxHeight: '90%',
+            group: true,
             resizeDuration: 0.3,
             overlayOpacity: 0.1,
             overlayDuration: 0.2,
             hideInfo: false,
             easing: 'easeNone',
-            title: false
+            title: false,
+            navigate: true
         },
         
         // ************* open *****************
-        open: function(item, sel, group, options) {
-            group = group || false;
+        open: function(item, sel, options) {
             Ext.apply(this.opts, options, this.defaults);
             this.setViewSize();
             els.overlay.fadeIn({
@@ -61,7 +65,7 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                 callback: function() {
                     items = [];
                     var index = 0;
-                    if(!group) {
+                    if(!this.opts.group) {
                         items.push(item);
                     } else {
                         items = Ext.query(sel);
@@ -80,8 +84,10 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                     this.loadItem(index);
 
                     // update controls
-                    els.navPrev.update(this.opts.previous);
-                    els.navNext.update(this.opts.next);
+                    if (this.opts.navigate) {
+                        els.navPrev.update(this.opts.previous);
+                        els.navNext.update(this.opts.next);
+                    }
                     els.navClose.update(this.opts.close);
                     
                     // check info visibility
@@ -113,24 +119,41 @@ Vps.Lightbox.Lightbox = (function(link, config) {
             els.loadingOverlay.show();
             els.loading.show();
 
-            var componentId = items[activeItem].id;
-            Ext.Ajax.request({
-                params: {componentId: componentId},
-                url: '/vps/util/render/render',
-                success: function(response, options, r) {
-                    currentX = false;
-                    currentY = false;
-                    loadContent = {
-                        tag: 'div',
-                        id: 'ux-extbox-loadedContent',
-                        html: response.responseText,
-                        style: {display: 'none'}
-                    };
-                    Ext.DomHelper.overwrite(els.content, loadContent);
-                    this.resize();
-                },
-                scope: this
-            });
+            if (this.opts.inline) {
+                isImg = false;
+                currentX = false;
+                currentY = false;
+                var cnt = Ext.query(this.opts.href);
+                loadContent = {
+                    tag: 'div',
+                    id: 'ux-extbox-loadedContent',
+                    html: cnt[0].innerHTML,
+                    style: {display: 'none'}
+                };
+                
+                Ext.DomHelper.overwrite(els.content, loadContent);
+                this.resize();
+            } else {
+                var url = items[activeItem].href;
+                Ext.Ajax.request({
+                    params: {url: url},
+                    url: '/vps/util/render/render',
+                    success: function(response, options, r) {
+                        currentX = false;
+                        currentY = false;
+                        loadContent = {
+                            tag: 'div',
+                            id: 'ux-extbox-loadedContent',
+                            html: response.responseText,
+                            style: {display: 'none'}
+                        };
+                        Ext.DomHelper.overwrite(els.content, loadContent);
+                        Vps.callOnContentReady();
+                        this.resize();
+                    },
+                    scope: this
+                });
+            }
             
             // update Nav
             (function () {
@@ -282,21 +305,6 @@ Vps.Lightbox.Lightbox = (function(link, config) {
             }, this);
         },
         
-        // ************* register *****************
-        register: function(sel, group, options) {
-            if(selectors.indexOf(sel) === -1) {
-                selectors.push(sel);
-                Ext.fly(document).on('click', function(ev){
-                    var target = ev.getTarget(sel);
-
-                    if (target) {
-                        ev.preventDefault();
-                        this.open(target, sel, group, options);
-                    }
-                }, this);
-            }
-        },
-
         // ************* helping methods *****************
         setViewSize: function() {
             var viewSize = [

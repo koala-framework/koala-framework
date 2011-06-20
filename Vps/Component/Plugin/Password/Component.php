@@ -51,6 +51,9 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_View_
         $session = new Zend_Session_Namespace('login_password');
         if (in_array($this->_getLoginPassword(), $pw)) {
             $session->login = true;
+            $currentPageUrl = Vps_Component_Data_Root::getInstance()->getComponentById($this->_componentId)->url;
+            header('Location: '.$currentPageUrl);
+            die();
         }
         return $session->login;
     }

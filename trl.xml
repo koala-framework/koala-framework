@@ -2510,7 +2510,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Auto Login</en>
-<de>eingeloggt bleiben</de>
+<de>Eingeloggt bleiben</de>
 <id>738</id>
 </text>
 <text>
@@ -2685,8 +2685,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>777</id>
 </text>
 <text>
-<en>image in originalsize</en>
-<de>Bild in Originalgr&#xF6;&#xDF;e</de>
+<en>Download original image</en>
+<de>Originalbild herunterladen</de>
 <id>778</id>
 </text>
 <text>
@@ -5701,10 +5701,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Upload Files</en>
+<de>Dateien hochladen</de>
 <id>1553</id>
 </text>
 <text>
 <en>Uploading files</en>
+<de>Lade Dateien hoch</de>
 <id>1554</id>
 </text>
 <text>
@@ -5835,7 +5837,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Produkt: Gutschein</de>
 <id>1393</id>
 <en>No items to display</en>
-<de>Keine Einträge zum anzeigen</de>
+<de>Keine Eintr&#xE4;ge zum anzeigen</de>
 <id>1484</id>
 </text>
 <text>
@@ -6274,8 +6276,55 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Back to overview</en>
-<de>Zur&#xFC;ck zur Übersicht</de>
+<de>Zur&#xFC;ck zur &#xDC;bersicht</de>
 <id>1056</id>
+</text>
+<text>
+<en>Entry {current} of {total}</en>
+<id>1673</id>
+</text>
+<text>
+<en>Guestbook Detail</en>
+<de>Gästebuch Detail</de>
+<id>1674</id>
+</text>
+<text>
+<en>Set password</en>
+<de>Passwort setzen</de>
+<id>1675</id>
+</text>
+<text>
+<en>Data</en>
+<de>Daten</de>
+<id>1676</id>
+</text>
+<text>
+<en>Link.to CommunityVideo</en>
+<id>1677</id>
+</text>
+<text>
+<en>E-Mail address</en>
+<de>E-Mail Adresse</de>
+<id>1678</id>
+</text>
+<text>
+<en>Subject of E-Mail</en>
+<de>Betreff der E-Mail</de>
+<id>1679</id>
+</text>
+<text>
+<en>Predefined text of E-Mail</en>
+<de>Vordefinierter Text für die E-Mail</de>
+<id>1680</id>
+</text>
+<text>
+<en>Image text</en>
+<de>Bildtext</de>
+<id>1681</id>
+</text>
+<text>
+<en>No content specified. Please add in Admin -&gt; Texts.</en>
+<id>1682</id>
 </text>
 </trl>
 

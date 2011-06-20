@@ -4,17 +4,21 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
     public function componentLink($target, $text = null, $cssClass = null, $get = array(), $anchor = null)
     {
         if ($target instanceof Vps_Component_Data) {
-            $config = array(
-                'targetComponentId' => $target->componentId,
-                'text' => $text,
-                'cssClass' => $cssClass,
-                'get' => $get,
-                'anchor' => $anchor,
-            );
+            $config = $this->_getConfig($target, $text, $cssClass, $get, $anchor);
             return $this->_getRenderPlaceholder($target->componentId, $config);
         } else {
             return $this->_getHelper()->componentLink($target, $text, $cssClass, $get, $anchor);
         }
+    }
+
+    protected function _getConfig($target, $text, $cssClass, $get, $anchor) {
+        return array(
+            'targetComponentId' => $target->componentId,
+            'text' => $text,
+            'cssClass' => $cssClass,
+            'get' => $get,
+            'anchor' => $anchor,
+        );
     }
 
     public function render($componentId, $config)
@@ -25,7 +29,7 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
         return $targetPage->url.';'.$targetPage->rel.';'.$targetPage->name;
     }
 
-    public function renderCached($cachedContent, $componentId, $config, $id = null)
+    public function renderCached($cachedContent, $componentId, $config)
     {
         if (!$cachedContent) return '';
 
@@ -34,7 +38,7 @@ class Vps_Component_View_Helper_ComponentLink extends Vps_Component_View_Rendere
         $text = $config['text'] ? $config['text'] : $targetPage[2];
         return $this->_getHelper()->getLink(
             $targetPage[0], $targetPage[1], $text,
-            $config['cssClass'], $config['get'], $config['anchor'], $id
+            $config['cssClass'], $config['get'], $config['anchor']
         );
     }
 

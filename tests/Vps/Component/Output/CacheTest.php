@@ -61,13 +61,13 @@ class Vps_Component_Output_CacheTest extends Vps_Test_TestCase
         $this->_setup('Vps_Component_Output_C4_Component');
         $model = Vps_Component_Cache::getInstance()->getModel('cache');
         $value = $this->_renderer->renderMaster($this->_root);
-        $this->assertEquals('c4', $value);
+        $this->assertEquals('c4', substr($value, 0, 2));
 
         //page, master und 1 component
         $this->assertEquals(3, $model->countRows());
 
         $row = $model->getRows()->current();
-        $this->assertTrue($row->expire > (time() + 9));
-        $this->assertTrue($row->expire < (time() + 11));
+        $this->assertTrue($row->expire > (time() + 1));
+        $this->assertTrue($row->expire < (time() + 5));
     }
 }

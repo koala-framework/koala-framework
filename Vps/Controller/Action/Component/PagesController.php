@@ -325,6 +325,14 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         }
         $root = Vps_Component_Data_Root::getInstance();
         $component = $root->getComponentById($id, array('ignoreVisible' => true));
+
+        if (get_class($component) != 'Vps_Component_Data') {
+            //da die data klasse auf Vps_Component_Data_Home angepasst geändert muss kann das nicht
+            //gleichzeitig FirstChildPage oder LinkIntern sein. Daher verbieten.
+            $name = Vpc_Abstract::getSetting($component->componentClass, 'componentName');
+            throw new Vps_Exception_Client(trlVps("You can't set {0} as Home", $name));
+        }
+
         while ($component) {
             if (Vpc_Abstract::getFlag($component->componentClass, 'hasHome')) {
                 $homeComponent = $component;
