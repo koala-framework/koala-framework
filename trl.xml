@@ -6151,5 +6151,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Unsubscribe</en>
 <id>1595</id>
 </text>
+<text>
+<context>decimal separator</context>
+<en>.</en>
+<de>,</de>
+<id>1596</id>
+</text>
+<text>
+<context>thousands separator</context>
+<en>,</en>
+<de>.</de>
+<id>1597</id>
+</text>
 </trl>
 
