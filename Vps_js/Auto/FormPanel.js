@@ -84,7 +84,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         Ext.applyIf(meta.form, { bodyStyle: 'padding: 10px;'});
 
         for (var i in this.actions) {
-            if (!meta.permissions[i]) {
+            if (!meta.permissions[i] && this.getAction(i).hide) {
                 this.getAction(i).hide();
             }
         }
@@ -161,7 +161,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.getForm().resetDirty();
         }
 
-        Ext.Ajax.request({
+        if (!this.loadConn) this.loadConn = new Vps.Connection({ autoAbort: true });
+        this.loadConn.request({
             mask: !this.el, //globale mask wenn kein el vorhanden
             loadOptions: options,
             url: this.controllerUrl+'/json-load',
