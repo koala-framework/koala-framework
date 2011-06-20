@@ -54,8 +54,6 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             buttons = [this.getAction('close')];
         }
         Ext.applyIf(this, {
-            width: 400,
-            height: 300,
             layout: 'fit',
             bodyStyle:'padding:5px;',
             plain: true,
@@ -121,16 +119,47 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
     {
         this.setTitle(this.addTitle);
         this.show();
-        this.getAutoForm().onAdd();
+
+        this.getAutoForm().onAdd({
+            success: function() {
+                if (!this.width || !this.height) {
+                    this._vpsResize();
+                }
+            },
+            scope: this
+        });
     },
 
     showEdit : function(id, record)
     {
         this.setTitle(this.editTitle);
         this.show();
+
         if (id) {
-            this.getAutoForm().load(id, { focusAfterLoad: true });
+            this.getAutoForm().load(id, {
+                focusAfterLoad: true,
+                success: function() {
+                    if (!this.width || !this.height) {
+                        this._vpsResize();
+                    }
+                },
+                scope: this
+            });
         }
+    },
+
+    _vpsResize : function()
+    {
+        var maxHeight = Math.ceil(Ext.getBody().getHeight() * 0.9);
+        var maxWidth = Math.ceil(Ext.getBody().getWidth() * 0.9);
+
+        if (this.el.getHeight() > maxHeight) {
+            this.setSize(this.el.getWidth(), maxHeight);
+        }
+        if (this.el.getWidth() > maxWidth) {
+            this.setSize(maxWidth, this.el.getHeight());
+        }
+        this.center();
     },
 
     getAutoForm : function()

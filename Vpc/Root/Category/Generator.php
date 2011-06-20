@@ -94,7 +94,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $pageIds = array();
 
         if ($parentData && !$select->hasPart(Vps_Component_Select::WHERE_ID)) {
-
             // diese Abfragen sind implizit recursive=true
             $parentId = $parentData->dbId;
             if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
@@ -147,7 +146,9 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
         } else {
 
-            if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
+            if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
+                $pageIds = $this->_pageHome;
+            } else if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
                 if (isset($this->_pageData[$id])) {
                     if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
                         $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);

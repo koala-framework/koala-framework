@@ -32,10 +32,6 @@ class Vpc_Shop_ProductList_Controller extends Vps_Controller_Action_Auto_Vpc_For
             $select = $productsModel->select()
                 ->whereEquals('component', $key)
                 ->order('pos');
-            $card->add(new Vps_Form_Field_Select('product_' . $key, trlVps('Product')))
-                ->setValues($productsModel->getRows($select))
-                ->setShowNoSelection(true)
-                ->setEmptyText(trlVps('All'));
         }
     }
 }

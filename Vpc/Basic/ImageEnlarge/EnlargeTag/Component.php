@@ -88,7 +88,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
             }
             return array(
                 'file' => $data['file'],
-                'mimeType' => $data['mimeType']
+                'mimeType' => 'application/octet-stream'
             );
         } else {
             return parent::getMediaOutput($id, $type, $className);

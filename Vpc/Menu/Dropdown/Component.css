@@ -1,14 +1,14 @@
-ul.vpcMenuDropdown li { display: block; float: left; position: relative; }
-ul.vpcMenuDropdown li a { display: block; width: auto; }
+.cssClass ul li { display: block; float: left; position: relative; }
+.cssClass ul li a { display: block; width: auto; }
 
-ul.vpcMenuDropdown div.dropdown {
+.cssClass ul div.dropdown {
     position: absolute;
     margin-left: -7px;
     display: none;
     z-index: 1000;
 }
-ul.vpcMenuDropdown li:hover div.dropdown,
-ul.vpcMenuDropdown li.hover div.dropdown { display: block; }
-ul.vpcMenuDropdown div.dropdown ul { margin-bottom: -1px; }
-ul.vpcMenuDropdown div.dropdown ul li { float: none; margin: 0px; }
-ul.vpcMenuDropdown div.dropdown ul li a { padding: 0px; float: none; }
+.cssClass ul li:hover div.dropdown,
+.cssClass ul li.hover div.dropdown { display: block; }
+.cssClass ul div.dropdown ul { margin-bottom: -1px; }
+.cssClass ul div.dropdown ul li { float: none; margin: 0px; }
+.cssClass ul div.dropdown ul li a { padding: 0px; float: none; }

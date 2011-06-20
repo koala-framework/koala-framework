@@ -30,7 +30,7 @@ class Vpc_FormStatic_SeleniumTest extends Vps_Test_SeleniumTestCase
 
         $this->type('css=#form_email', 'test@vivid-planet.com');
         $this->clickAndWait('css=button');
-        $this->assertTextPresent('The Form has been submitted successfully');
+        $this->assertTextPresent('The form has been submitted successfully');
 
         // geschickte mail checken
         $mail = $this->_getLatestMail();

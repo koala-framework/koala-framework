@@ -1,6 +1,8 @@
 <?php
 class Vpc_Basic_Table_Trl_AdminModel extends Vpc_Directories_Item_Directory_Trl_AdminModel
 {
+    protected $_rowClass = 'Vpc_Basic_Table_Trl_AdminRow';
+
     protected function _getTrlRow($proxiedRow, $componentId)
     {
         $proxyId = $proxiedRow->id;

@@ -22,10 +22,6 @@ class Vpc_Shop_ProductList_Component extends Vpc_Directories_List_Component
         $ret = parent::getSelect($overrideValues);
         if ($this->getRow()->component) {
             $ret->whereEquals('component', $this->getRow()->component);
-            $field = 'product_' . $this->getRow()->component;
-            if ($this->getRow()->$field) {
-                $ret->whereEquals('id', $this->getRow()->$field);
-            }
         }
         return $ret;
     }

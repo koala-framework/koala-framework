@@ -14,6 +14,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         );
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
+        $ret['assetsAdmin']['dep'][] = 'VpsMultiFileUploadPanel';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/EditButton.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/PanelWithEditButton.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/List.js';

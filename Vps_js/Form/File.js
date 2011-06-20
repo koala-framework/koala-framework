@@ -6,7 +6,7 @@ Vps.Form.File = Ext.extend(Ext.form.Field, {
     infoPosition: 'south',
     defaultAutoCreate : {
         tag: 'div',
-        style: 'width: 300px; height: 53px'
+        style: 'width: 310px; height: 53px'
     },
     fileIcons: {
         'application/pdf': 'page_white_acrobat',

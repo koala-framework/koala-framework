@@ -309,7 +309,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         if ($m instanceof Vps_Model_RowsSubModel_Interface) {
             $ret = $m->createRowByParentRow($this, $data);
         } else {
-            $ret = $m->createRow();
+            $ret = $m->createRow($data);
             $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
             $ret->{$ref['column']} = $this->{$this->_getPrimaryKey()};
         }

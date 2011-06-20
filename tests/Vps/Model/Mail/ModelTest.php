@@ -51,7 +51,10 @@ class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
         $row->foo2 = 'bar2';
         $row->save();
 
-        $addRow = $addStore->getRows()->current();
+        $addRows = $addStore->getRows();
+        $this->assertEquals(1, count($addRows));
+
+        $addRow = $addRows->current();
         $this->assertEquals('bar', $addRow->foo);
         $this->assertEquals('bar2', $addRow->foo2);
         $this->assertEquals('foo sub', $addRow->subject);
