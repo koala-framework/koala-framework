@@ -69,7 +69,8 @@ class Vps_Model_Mail_Resend_Test extends Vps_Test_TestCase
         $row->save();
         $mailFirst = $this->_getLatestMail();
 
-        $row->resendMail();
+        $row->mail_sent = 0;
+        $row->sendMail();
         $mailSecond = $this->_getLatestMail();
 
         $this->assertNotEquals($mailFirst->id, $mailSecond->id);

@@ -16,8 +16,6 @@ class Vps_Controller_Action_Spam_SetController extends Vps_Controller_Action
 
             if (!$row->mail_sent) {
                 $row->is_spam = 0;
-                $row->mail_sent = 1;
-                $row->save();
                 $result = $row->sendMail();
                 die('1');
             }
