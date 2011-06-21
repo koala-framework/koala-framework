@@ -167,4 +167,44 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
         $this->assertEquals($row->blub, 'blub');
         $this->assertEquals($row->blub2, 'xxx');
     }
+
+    public function testFieldEvents()
+    {
+        $model = new Vps_Model_FnF(array(
+            'columns' => array('id', 'foo', 'data'),
+            'siblingModels' => array(new Vps_Model_Field_FieldModel(array(
+                'fieldName'=>'data',
+            )))
+        ));
+        $row = $model->createRow();
+        $row->foo = 'foo';
+        $row->blub = 'blub';
+        $row->blub2 = 'blub2';
+        $row->save();
+
+        $counts = Vps_Model_Field_FieldModelRow::$counts;
+        $this->assertEquals(1, $counts['beforeInsert']);
+        $this->assertEquals(1, $counts['afterInsert']);
+        $this->assertEquals(0, $counts['beforeUpdate']);
+        $this->assertEquals(0, $counts['afterUpdate']);
+        $this->assertEquals(1, $counts['beforeSave']);
+        $this->assertEquals(1, $counts['afterSave']);
+        $this->assertEquals(0, $counts['beforeDelete']);
+        $this->assertEquals(0, $counts['afterDelete']);
+
+        $row->save();
+
+        $counts = Vps_Model_Field_FieldModelRow::$counts;
+        $this->assertEquals(1, $counts['beforeInsert']);
+        $this->assertEquals(1, $counts['afterInsert']);
+        $this->assertEquals(1, $counts['beforeUpdate']);
+        $this->assertEquals(1, $counts['afterUpdate']);
+        $this->assertEquals(2, $counts['beforeSave']);
+        $this->assertEquals(2, $counts['afterSave']);
+        $this->assertEquals(0, $counts['beforeDelete']);
+        $this->assertEquals(0, $counts['afterDelete']);
+
+        // delete nicht gecheckt, data row kann selbst nicht gelöscht werden,
+        // die wird sowieso von der hauptrow mitgerissen
+    }
 }
