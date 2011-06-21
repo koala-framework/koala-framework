@@ -11,23 +11,6 @@ class Vpc_User_BoxWithoutLogin_Component extends Vpc_User_BoxAbstract_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['register'] = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByClass(
-                            'Vpc_User_Register_Component',
-                            array('subroot' => $this->getData())
-                        );
-        if ($this->_getSetting('showLostPassword')) {
-            $ret['lostPassword'] = Vps_Component_Data_Root::getInstance()
-                            ->getComponentByClass(
-                                'Vpc_User_LostPassword_Component',
-                                array('subroot' => $this->getData())
-                            );
-        }
-        $ret['login'] = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByClass(
-                            'Vpc_User_Login_Component',
-                            array('subroot' => $this->getData())
-                        );
         if ($ret['authedUser']) {
             $userDir = Vps_Component_Data_Root::getInstance()
                 ->getComponentByClass(
@@ -38,6 +21,24 @@ class Vpc_User_BoxWithoutLogin_Component extends Vpc_User_BoxAbstract_Component
                 $ret['myProfile'] = $userDir->getChildComponent('_' . $ret['authedUser']->id);
             }
             $ret['links'] = $this->_getLinks();
+        } else {
+            $ret['register'] = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByClass(
+                                'Vpc_User_Register_Component',
+                                array('subroot' => $this->getData())
+                            );
+            if ($this->_getSetting('showLostPassword')) {
+                $ret['lostPassword'] = Vps_Component_Data_Root::getInstance()
+                                ->getComponentByClass(
+                                    'Vpc_User_LostPassword_Component',
+                                    array('subroot' => $this->getData())
+                                );
+            }
+            $ret['login'] = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByClass(
+                                'Vpc_User_Login_Component',
+                                array('subroot' => $this->getData())
+                            );
         }
 
         $ret['linkPostfix'] = $this->_getSetting('linkPostfix');
