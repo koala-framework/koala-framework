@@ -6302,5 +6302,24 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>No content specified. Please add in Admin -&gt; Texts.</en>
 <id>1682</id>
 </text>
+<text>
+<en>Hide Label</en>
+<de>Bezeichnung verstecken</de>
+<id>1703</id>
+</text>
+<text>
+<en>Form.Multi Checkbox</en>
+<id>1704</id>
+</text>
+<text>
+<en>Show check all links</en>
+<de>Zeige alle auswählen Links</de>
+<id>1705</id>
+</text>
+<text>
+<en>You can't set {0} as Home</en>
+<de>{0} kann nicht als Home verwendet werden</de>
+<id>1706</id>
+</text>
 </trl>
 
