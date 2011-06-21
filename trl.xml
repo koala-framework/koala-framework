@@ -2685,8 +2685,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>777</id>
 </text>
 <text>
-<en>image in originalsize</en>
-<de>Bild in Originalgr&#xF6;&#xDF;e</de>
+<en>Download original image</en>
+<de>Originalbild herunterladen</de>
 <id>778</id>
 </text>
 <text>
@@ -5548,14 +5548,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1489</id>
 </text>
 <text>
-<en>Login:</en>
-<id>1490</id>
-</text>
-<text>
-<en>No items to display</en>
-<id>1491</id>
-</text>
-<text>
 <en>Read more</en>
 <de>Weiterlesen</de>
 <fr>Davantage</fr>
@@ -5701,10 +5693,12 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Upload Files</en>
+<de>Dateien hochladen</de>
 <id>1553</id>
 </text>
 <text>
 <en>Uploading files</en>
+<de>Lade Dateien hoch</de>
 <id>1554</id>
 </text>
 <text>
@@ -5835,7 +5829,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Produkt: Gutschein</de>
 <id>1393</id>
 <en>No items to display</en>
-<de>Keine Einträge zum anzeigen</de>
+<de>Keine Eintr&#xE4;ge zum anzeigen</de>
 <id>1484</id>
 </text>
 <text>
@@ -6046,26 +6040,24 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Must not be negative</en>
 <de>Darf nicht negativ sein</de>
 <id>1637</id>
+<en>Must not be negative</en>
+<de>Darf nicht negativ sein</de>
+<id>1600</id>
 </text>
 <text>
 <en>value of goods</en>
 <de>Warenwert</de>
-<id>1567</id>
+<id>1638</id>
 </text>
 <text>
 <en>net amount</en>
 <de>Nettobetrag</de>
-<id>1568</id>
+<id>1602</id>
 </text>
 <text>
 <en>+20% VAT</en>
 <de>+20% MwSt</de>
-<id>1569</id>
-</text>
-<text>
-<en>Newsletter Subscriber settings</en>
-<de>Newsletterempf&#xE4;nger-Einstellungen</de>
-<id>1570</id>
+<id>1683</id>
 </text>
 <text>
 <en>Count</en>
@@ -6075,7 +6067,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Sum</en>
 <de>Summe</de>
-<id>1573</id>
+<id>1605</id>
 </text>
 <text>
 <en>Back</en>
@@ -6085,21 +6077,21 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Shop.ProductList</en>
 <de>Shop.Produktliste</de>
-<id>1575</id>
+<id>1606</id>
 </text>
 <text>
 <en>Errormessage</en>
 <de>Fehlermeldung</de>
-<id>1576</id>
+<id>1639</id>
 </text>
 <text>
 <en>If you typed the address, make sure the spelling is correct</en>
 <de>Wenn Sie die Adresse selbst eingegeben haben, &#xFC;berpr&#xFC;fen Sie die Schreibweise</de>
-<id>1577</id>
+<id>1685</id>
 </text>
 <text>
 <en>Original Position</en>
-<id>1639</id>
+<id>1686</id>
 </text>
 <text>
 <en>attached</en>
@@ -6112,10 +6104,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <text>
 <en>Form.File Upload</en>
 <id>1642</id>
-</text>
-<text>
-<en>Land</en>
-<id>1643</id>
 </text>
 <text>
 <en>Temporary access</en>
@@ -6165,22 +6153,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1653</id>
 </text>
 <text>
-<en>Master</en>
-<id>1654</id>
-</text>
-<text>
-<en>Master URL</en>
-<id>1655</id>
-</text>
-<text>
-<en>Master width</en>
-<id>1656</id>
-</text>
-<text>
-<en>Master height</en>
-<id>1657</id>
-</text>
-<text>
 <en>XLS Import</en>
 <id>1658</id>
 </text>
@@ -6209,22 +6181,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1664</id>
 </text>
 <text>
-<en>Unsubscribe</en>
-<id>1665</id>
-</text>
-<text>
-<en>E-Mail Address</en>
-<id>1666</id>
-</text>
-<text>
-<en>Predefined Subject for Mail</en>
-<id>1667</id>
-</text>
-<text>
-<en>Predefined Text for Mail</en>
-<id>1668</id>
-</text>
-<text>
 <en>Newsletter Show in Web</en>
 <id>1669</id>
 </text>
@@ -6248,34 +6204,103 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1672</id>
 </text>
 <text>
-<en>ZIP / City</en>
-<de>PLZ / Ort</de>
-<id>1596</id>
+<en>Master</en>
+<id>1687</id>
 </text>
 <text>
-<en>Send message</en>
-<de>Nachricht abschicken</de>
-<id>1597</id>
+<en>Master URL</en>
+<id>1688</id>
 </text>
 <text>
-<en>You got a requst on {0}</en>
-<de>Es wurde eine Anfrage auf {0} gestellt</de>
-<id>1598</id>
+<en>Master width</en>
+<id>1689</id>
 </text>
 <text>
-<en>This enquiry was sent by</en>
-<de>Die Anfrage wurde gesendet von</de>
-<id>1599</id>
+<en>Master height</en>
+<id>1690</id>
+</text>
+<text>
+<en>Land</en>
+<id>1691</id>
+</text>
+<text>
+<en>E-Mail Address</en>
+<id>1692</id>
+</text>
+<text>
+<en>Predefined Subject for Mail</en>
+<id>1693</id>
+</text>
+<text>
+<en>Predefined Text for Mail</en>
+<id>1694</id>
+</text>
+<text>
+<en>Unsubscribe</en>
+<id>1695</id>
+</text>
+<text>
+<context>thousands separator</context>
+<en>,</en>
+<de>.</de>
+<id>1700</id>
 </text>
 <text>
 <en>old</en>
 <de>alt</de>
-<id>1600</id>
+<id>1701</id>
 </text>
 <text>
 <en>Back to overview</en>
-<de>Zur&#xFC;ck zur Übersicht</de>
-<id>1056</id>
+<de>Zur&#xFC;ck zur &#xDC;bersicht</de>
+<id>1702</id>
+</text>
+<text>
+<en>Entry {current} of {total}</en>
+<id>1673</id>
+</text>
+<text>
+<en>Guestbook Detail</en>
+<de>G&#xE4;stebuch Detail</de>
+<id>1674</id>
+</text>
+<text>
+<en>Set password</en>
+<de>Passwort setzen</de>
+<id>1675</id>
+</text>
+<text>
+<en>Data</en>
+<de>Daten</de>
+<id>1676</id>
+</text>
+<text>
+<en>Link.to CommunityVideo</en>
+<id>1677</id>
+</text>
+<text>
+<en>E-Mail address</en>
+<de>E-Mail Adresse</de>
+<id>1678</id>
+</text>
+<text>
+<en>Subject of E-Mail</en>
+<de>Betreff der E-Mail</de>
+<id>1679</id>
+</text>
+<text>
+<en>Predefined text of E-Mail</en>
+<de>Vordefinierter Text f&#xFC;r die E-Mail</de>
+<id>1680</id>
+</text>
+<text>
+<en>Image text</en>
+<de>Bildtext</de>
+<id>1681</id>
+</text>
+<text>
+<en>No content specified. Please add in Admin -&gt; Texts.</en>
+<id>1682</id>
 </text>
 </trl>
 

@@ -118,7 +118,7 @@ Vpc.Basic.ImageEnlarge.prototype =
                 }
             } else if (i == 'fullSizeUrl') {
                 if (options.fullSizeUrl) {
-                    data.fullSizeLink = '<a href="'+options.fullSizeUrl+'" class="fullSizeLink" title="'+trlVps('image in originalsize')+'" target="_blank">'+trlVps('image in originalsize')+'</a> ';
+                    data.fullSizeLink = '<a href="'+options.fullSizeUrl+'" class="fullSizeLink" title="'+trlVps('Download original image')+'">'+trlVps('Download original image')+'</a> ';
                 } else {
                     data.fullSizeLink = '';
                 }

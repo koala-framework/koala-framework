@@ -30,6 +30,7 @@ class Vps_View_Helper_ComponentLink extends Vps_Component_View_Helper_Abstract
         }
 
         if ($anchor) $url .= "#$anchor";
+        if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
         $cssClass = $cssClass ? " class=\"$cssClass\"" : '';
         return "<a href=\"$url\" rel=\"$rel\"$cssClass>$text</a>";
     }

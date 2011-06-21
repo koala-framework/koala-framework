@@ -54,16 +54,18 @@ class Vpc_Mail_Component extends Vpc_Abstract
         $ret = $this->_getSetting('mailHtmlStyles');
 
         // Hack für Tests, weil da der statische getStylesArray-Aufruf nicht funktioniert
-        $content = $this->getData()->getChildComponent('-content');
-        if ($content && !is_instance_of($content->componentClass, 'Vpc_Paragraphs_Component')) return $ret;
-
-        foreach (Vpc_Basic_Text_StylesModel::getStylesArray() as $tag => $classes) {
-            foreach ($classes as $class => $style) {
-                $ret[] = array(
-                    'tag' => $tag,
-                    'class' => $class,
-                    'styles' => $style['styles']
-                );
+        $contentComponent = $this->getData()->getChildComponent('-content');
+        if ($contentComponent &&
+            is_instance_of($contentComponent->componentClass, 'Vpc_Paragraphs_Component')
+        ) {
+            foreach (Vpc_Basic_Text_StylesModel::getStylesArray() as $tag => $classes) {
+                foreach ($classes as $class => $style) {
+                    $ret[] = array(
+                        'tag' => $tag,
+                        'class' => $class,
+                        'styles' => $style['styles']
+                    );
+                }
             }
         }
         return $ret;
@@ -99,7 +101,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
             $mail->setFrom($this->getRow()->from_email, $this->getRow()->from_name);
         }
         if ($this->getRow()->reply_email) {
-            $mail->addHeader('Reply-To', $this->getRow()->reply_email);
+            $mail->setReplyTo($this->getRow()->reply_email);
         }
 
         if ($this->_images){
