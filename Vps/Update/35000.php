@@ -99,6 +99,7 @@ class Vps_Update_35000 extends Vps_Update
 
     private function _getFieldModelData(Vps_Model_Abstract $model)
     {
+        if (get_class($model)=='Boxes') return array(); //rssinclude ignorieren
         $ret = array();
         if (!$model instanceof Vps_Model_Db && !$model instanceof Vps_Model_Db_Proxy) return $ret;
         $tablename = $model instanceof Vps_Model_Db_Proxy ?
