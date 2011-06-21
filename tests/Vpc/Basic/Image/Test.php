@@ -35,7 +35,7 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $c = $this->_root->getComponentById('1600');
         $this->assertTrue($c->hasContent());
 
-        $this->assertEquals(array('width'=>100, 'height'=>100, 'scale'=>Vps_Media_Image::SCALE_DEFORM),
+        $this->assertEquals(array('width'=>100, 'height'=>100, 'scale'=>Vps_Media_Image::SCALE_DEFORM, 'rotate' => null),
             $c->getComponent()->getImageDimensions());
     }
 
@@ -77,7 +77,7 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
     {
         $c = $this->_root->getComponentById('1603');
 
-        $this->assertEquals(array('width'=>10, 'height'=>10, 'scale'=>Vps_Media_Image::SCALE_DEFORM),
+        $this->assertEquals(array('width'=>10, 'height'=>10, 'scale'=>Vps_Media_Image::SCALE_DEFORM, 'rotate' => null),
             $c->getComponent()->getImageDimensions());
     }
 
@@ -88,7 +88,7 @@ class Vpc_Basic_Image_Test extends Vpc_TestAbstract
         $url = $c->getComponent()->getImageUrl();
         $this->assertNotNull($url);
 
-        $this->assertEquals(array('width'=>16, 'height'=>16, 'scale'=>Vps_Media_Image::SCALE_DEFORM),
+        $this->assertEquals(array('width'=>16, 'height'=>16, 'scale'=>Vps_Media_Image::SCALE_DEFORM, 'rotate' => null),
             $c->getComponent()->getImageDimensions());
 
         $o = Vpc_Basic_Image_Component::getMediaOutput($c->componentId, 'default', $c->componentClass);

@@ -292,7 +292,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             $ret = $m->getRows($select);
         }
         foreach ($ret as $r) {
-            $this->_childRows[] = $r;
+            if (!in_array($r, $this->_childRows, true)) $this->_childRows[] = $r;
         }
         $ret->rewind();
         return $ret;
@@ -309,7 +309,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         if ($m instanceof Vps_Model_RowsSubModel_Interface) {
             $ret = $m->createRowByParentRow($this, $data);
         } else {
-            $ret = $m->createRow();
+            $ret = $m->createRow($data);
             $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
             $ret->{$ref['column']} = $this->{$this->_getPrimaryKey()};
         }
