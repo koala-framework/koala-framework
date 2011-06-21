@@ -14,6 +14,11 @@ class Vpc_FormDynamic_Basic_Root extends Vpc_Root_Abstract
             'name' => 'form2',
             'component' => 'Vpc_FormDynamic_Basic_Form_Component'
         );
+        $ret['generators']['form3'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'name' => 'form3',
+            'component' => 'Vpc_FormDynamic_Basic_Form_Component'
+        );
         return $ret;
     }
 }

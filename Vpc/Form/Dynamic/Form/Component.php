@@ -17,7 +17,8 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
     protected function _initForm()
     {
         $this->_form = new Vps_Form('form');
-        $referenceMap= array();
+        $referenceMap = array();
+        $dependentModels = array();
         foreach ($this->getData()->parent->getChildComponent('-paragraphs')->getRecursiveChildComponents(array('flags'=>array('formField'=>true))) as $c) {
             $f = $c->getComponent()->getFormField();
             $this->_form->fields->add($f);
@@ -26,23 +27,25 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
                     'refModelClass' => 'Vps_Uploads_Model',
                     'column' => $f->getName()
                 );
+            } else if ($f instanceof Vps_Form_Field_MultiCheckbox) {
+                $dependentModels[$f->getName()] = 'Vpc_Form_Field_MultiCheckbox_DataToValuesModel';
             }
         }
-        $this->_form->setModel($this->_createModel($referenceMap));
+        $this->_form->setModel($this->_createModel(array('referenceMap'=>$referenceMap,
+                                                         'dependentModels'=>$dependentModels)));
     }
 
-    protected function _createModel($referenceMap)
+    protected function _createModel(array $config)
     {
-        return new Vps_Model_Mail(array(
-            'componentClass' => get_class($this),
-            'referenceMap' => $referenceMap,
-            'mailerClass' => 'Vps_Mail'
-        ));
+        $config['componentClass'] = get_class($this);
+        $config['mailerClass'] = 'Vps_Mail';
+        return new Vpc_Form_Dynamic_Form_MailModel($config);
     }
 
-    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    protected function _afterInsert(Vps_Model_Row_Interface $row)
     {
-        parent::_beforeSave($row);
+        parent::_afterInsert($row);
+
         if (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } else {
@@ -69,6 +72,21 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
                     } else {
                         $msg .= $f->getFieldLabel().': '.$this->getData()->trlVps('off')."\n";
                     }
+                } else if ($f instanceof Vps_Form_Field_MultiCheckbox) {
+                    $values = array();
+                    foreach ($row->getChildRows($f->getName()) as $r) {
+                        if (substr($r->value_id, 0, strlen($f->getName())) == $f->getName()) {
+                            $values[] = $r->value_id;
+                        }
+                    }
+                    $valuesText = array();
+                    foreach ($f->getValues() as $k=>$i) {
+                        if (in_array($k, $values)) {
+                            $valuesText[] = $i;
+                        }
+                    }
+                    $msg .= $f->getFieldLabel().': '.implode(', ', $valuesText)."\n";
+
                 } else {
                     $msg .= $f->getFieldLabel().': '.$row->{$f->getName()}."\n";
                 }
