@@ -6,6 +6,7 @@
  *
  * http://vps.vps.niko.vivid/vps/vpctest/Vpc_FormDynamic_Basic_Root/form
  * http://vps.vps.niko.vivid/vps/vpctest/Vpc_FormDynamic_Basic_Root/form2
+ * http://vps.vps.niko.vivid/vps/vpctest/Vpc_FormDynamic_Basic_Root/form3
  */
 class Vpc_FormDynamic_Basic_SeleniumTest extends Vps_Test_SeleniumTestCase
 {
@@ -63,4 +64,15 @@ class Vpc_FormDynamic_Basic_SeleniumTest extends Vps_Test_SeleniumTestCase
         //test könnte natürlich verbessert werden, aber zumindest testen ob kein fehler kommt
     }
 
+    public function testMultiCheckbox()
+    {
+        //required
+        $this->openVpc('/form3');
+        $this->clickAndWait('css=button');
+        $this->assertTextPresent('Required: Please fill out');
+        $this->assertElementPresent('css=.vpsFieldError');
+        $this->click('css=#form_root_form3-paragraphs-10_root_form3-paragraphs-10_1');
+        $this->clickAndWait('css=button');
+        $this->assertTextPresent('successfully');
+    }
 }

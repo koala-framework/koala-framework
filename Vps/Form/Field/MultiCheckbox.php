@@ -21,6 +21,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     // setCheckNoneText($txt)
 
     // setValuesBoxLabelField(true) | feldname aus valuesModel fuer boxLabel
+    // setAllowBlank(false) nur im FE
+    //   setEmptyMessage
 
     /**
      * Zeigt mehrere Checkboxes an und speichert diese in einer Relationstabelle
@@ -59,6 +61,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $this->setCheckNoneText(trlVpsStatic('None'));
         $this->setLayout('form');
         $this->setXtype('multicheckbox');
+        $this->setEmptyMessage(trlVpsStatic("Please fill out the field"));
     }
 
     public function setRelationToData($rel)
@@ -135,7 +138,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
 
     private function _getValues()
     {
-        if ($this->getValues()) {
+        if ($this->getValues() !== null) {
             return $this->getValues();
         } else {
             return $this->getValuesModel()->getRows($this->getValuesSelect());
@@ -256,6 +259,19 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         return $new;
     }
 
+    
+    public function validate($row, $postData)
+    {
+        $ret = parent::validate($row, $postData);
+        if (!$this->getAllowBlank() && !count($this->_getIdsFromPostData($postData))) {
+            $ret[] = array(
+                'message' => $this->getEmptyMessage(),
+                'field' => $this
+            );
+        }
+        return $ret;
+    }
+
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
         $dataModel = $row->getModel();
@@ -297,6 +313,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $ret = parent::_getTrlProperties();
         $ret[] = 'checkAllText';
         $ret[] = 'checkNoneText';
+        $ret[] = 'emptyMessage';
         return $ret;
     }
 

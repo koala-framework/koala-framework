@@ -444,7 +444,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 return $ret;
             }
         }
-        throw new Vps_Exception("dependent Model with rule '$rule' does not exist for '".get_class($this)."'");
+
+        $existingRules = array();
+        foreach ($models as $m) {
+            $existingRules = array_merge($existingRules, array_keys($m->_dependentModels));
+        }
+        throw new Vps_Exception("dependent Model with rule '$rule' does not exist for '".get_class($this)."', possible are '".implode("', '", $existingRules)."'");
     }
 
     public function getDependentModel($rule)
