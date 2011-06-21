@@ -49,6 +49,8 @@ class Vps_Model_Mail_ModelTest extends Vps_Test_TestCase
         $row->subject = 'foo sub';
         $row->foo = 'bar';
         $row->foo2 = 'bar2';
+        // zweimal saven ist absicht, die additional row darf dennoch nur einmal angelegt werden
+        $row->save();
         $row->save();
 
         $addRows = $addStore->getRows();

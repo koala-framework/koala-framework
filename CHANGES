@@ -9,21 +9,26 @@
 - Inherit Content Cache
 
 == 2.0 ==
+Erstellt: 20.12.10
+Stable: 03.03.11
 Neue Features
 - RTE mit tinymce unterstützung
 - Component Cache Neu, Url Cache, ProcessInput Cache
 - HtmlEditor: enableBlocks setting gibts nicht mehr, wurde in FormatBlock plugin ausgelagert und
   müsste manuell zu plugins hinzugefügt werden (bevorzugt wird Text-Komponente!)
+- simple /sitemap.xml, ohne änderungsdatum (bei Komponentenweb immer aktiv)
+- /robots.txt (bei Komponentenweb immer aktiv)
 
 möglicherweise nicht kompatible Änderungen:
 - Helper: Statt $this->ifHasContent($component) muss man if ($this->hasContent($component)) schreiben
 - partials view Helper: 2. Parameter (partialClass) wurde entfernt
 - Master.tpl muss $this->componentWithMaster($this->componentWithMaster) für die Haupt-Komponente verwenden
 - generators: box priority wurde entfernt
+- Image Resizing: exif drehung wird jetzt berücksichtigt
 
 == 1.11 ==
 Erstellt: 17.08.10
-Stable: wenn neuer component cache fertig
+Stable: 03.03.11
 Neue Features:
 - Vps_Date, Vps_DateTime
 - CopyContent
