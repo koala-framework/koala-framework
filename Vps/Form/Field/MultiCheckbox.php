@@ -23,6 +23,9 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     // setValuesBoxLabelField(true) | feldname aus valuesModel fuer boxLabel
     // setAllowBlank(false) nur im FE
     //   setEmptyMessage
+    
+    // $this->setOutputType($type) nur im FE
+    //    $type = 'vertical', otherwise horizontal
 
     /**
      * Zeigt mehrere Checkboxes an und speichert diese in einer Relationstabelle
@@ -61,7 +64,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $this->setCheckNoneText(trlVpsStatic('None'));
         $this->setLayout('form');
         $this->setXtype('multicheckbox');
-        $this->setEmptyMessage(trlVpsStatic("Please fill out the field"));
+        $this->setEmptyMessage(trlVpsStatic('Please choose an option'));
+        $this->setOutputType('horizontal');
     }
 
     public function setRelationToData($rel)
@@ -133,6 +137,8 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         if (isset($ret['tableName'])) unset($ret['tableName']);
         if (isset($ret['modelName'])) unset($ret['modelName']);
         if (isset($ret['values'])) unset($ret['values']);
+        if (isset($ret['outputType'])) unset($ret['outputType']); //wird von Ext-Form noch nicht unterstützt
+        
         return $ret;
     }
 
@@ -321,7 +327,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
         $helper = new Vps_View_Helper_FormField();
-        $ret['html'] = '';
+        $ret['html'] = '<div class="vpsFormFieldMultiCheckbox vpsFormFieldMultiCheckbox'.ucfirst($this->getOutputType()).'">';
         $fields = $this->_getFields()->getTemplateVars($values, $fieldNamePostfix);
         $i = 0;
         foreach ($fields as $field) {
@@ -337,6 +343,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
                     .'<a href="#" class="vpsMultiCheckboxCheckNone">'.$this->getCheckNoneText().'</a>'
                 .'</div>';
         }
+        $ret['html'] .= '</div>';
         return $ret;
     }
 }
