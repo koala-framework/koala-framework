@@ -50,26 +50,39 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
         $data = $siblingRow->{$this->_fieldName};
         if (is_string($data)) {
             if (substr($data, 0, 13) == 'vpsSerialized') {
+                //früher wurde es mal so gespeichert
                 $data = substr($data, 13);
             }
-            // json_decode gibt auch keinen fehler aus, wenn man ihm einen
-            // falschen string (zB serialized) übergibt. bei nicht-json-daten
-            // kommt immer null raus. Da bringt das try-catch eher wenig,
-            // weil null nunmal keine Exception ist.
-            // Lösung: Wir schmeissen die exception händisch im falle von
-            // NULL. Eventuelles PROBLEM dabei ist jedoch,
-            // wenn man: $data = json_decode(json_encode(NULL))
-            // macht, weil dann korrekterweise NULL rauskommen würde.
-            // deshalb wird dieser fall separat ohne dem json_decode behandelt
-            if ($data == 'null' || $data == '') {
-                $data = null;
-            } else {
-                $encodedData = json_decode($data);
-                if (is_null($encodedData)) { // json_encode hat nicht funktioniert, siehe mörder-kommentar paar zeilen vorher
-                    $e = new Vps_Exception("json_decode failed. Input data was: '$data'");
+            if (substr($data, 0, 2) == 'a:') {
+                //früher wurde es mal so gespeichert, das 35000 update script sollte es konvertieren
+                //erwischt aber manchmal nicht alles
+                try {
+                    $data = unserialize($data);
+                } catch (Exception $e) {
+                    $e = new Vps_Exception($e->getMessage(). " $data");
                     $e->logOrThrow();
+                    $data = false;
                 }
-                $data = $encodedData;
+            } else {
+                // json_decode gibt auch keinen fehler aus, wenn man ihm einen
+                // falschen string (zB serialized) übergibt. bei nicht-json-daten
+                // kommt immer null raus. Da bringt das try-catch eher wenig,
+                // weil null nunmal keine Exception ist.
+                // Lösung: Wir schmeissen die exception händisch im falle von
+                // NULL. Eventuelles PROBLEM dabei ist jedoch,
+                // wenn man: $data = json_decode(json_encode(NULL))
+                // macht, weil dann korrekterweise NULL rauskommen würde.
+                // deshalb wird dieser fall separat ohne dem json_decode behandelt
+                if ($data == 'null' || $data == '') {
+                    $data = null;
+                } else {
+                    $decodedData = json_decode($data);
+                    if (is_null($decodedData)) { // json_encode hat nicht funktioniert, siehe mörder-kommentar paar zeilen vorher
+                        $e = new Vps_Exception("json_decode failed. Input data was: '$data'");
+                        $e->logOrThrow();
+                    }
+                    $data = $decodedData;
+                }
             }
         }
         if (!$data) {
