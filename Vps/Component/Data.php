@@ -1,6 +1,9 @@
 <?php
 class Vps_Component_Data
 {
+    /**
+     * @var Vpc_Abstract
+     */
     private $_component;
 
     private $_url;
