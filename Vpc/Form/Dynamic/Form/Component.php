@@ -74,7 +74,8 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
                 }
             }
         }
-        $row->setMailContentManual(true);
-        $row->setBodyText($msg);
+        $row->sent_mail_content_text = $msg;
+
+        $row->sendMail(); //manuell aufrufen weils beim speichern nicht automatisch gemacht wird (da da der content nocht nicht vorhanden ist)
     }
 }

@@ -5,9 +5,6 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
     private $_mailData = array();
     protected $_additionalMailVarsRow = null;
 
-    //ob der mail content von außen gesetzt wird (true) oder per template zusammengebaut wird (false)
-    private $_mailContentManual = false;
-
     const MAIL_CONTENT_AUTO = 'auto'; // html if possible, otherwise text
     const MAIL_CONTENT_HTML = 'html';
     const MAIL_CONTENT_TEXT = 'text';
@@ -33,32 +30,25 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
 
     public function sendMail()
     {
-        if (!$this->mail_sent) {
-            if (!$this->sent_mail_content_text) {
-                throw new Vps_Exception("text content must be set when sending a mail");
-            }
-            $this->_sendMail();
-        } else {
-            throw new Vps_Exception("'sendMail' may only be called once (usually in _afterInsert). Maybe you wanted to call 'resendMail()'");
+        if ($this->mail_sent) {
+            throw new Vps_Exception("'sendMail' may only be called once");
         }
-    }
 
-    public function resendMail()
-    {
-        $this->_sendMail();
-    }
+        if (!$this->sent_mail_content_text) {
+            throw new Vps_Exception("text content must be set when sending a mail");
+        }
 
-    /**
-     * really sends mail, may be called by sendMail AND resendMail
-     */
-    private function _sendMail()
-    {
+        if ($this->is_spam) {
+            $this->save();
+            return;
+        }
+
         $siblingRows = $this->_getSiblingRows();
         $essentialsRow = $siblingRows['essentials'];
         $varsRow = $siblingRows['vars'];
 
         $mail = new $essentialsRow->mailerClass();
-        if ($this->sent_mail_content_text) $mail->setBodyText($this->sent_mail_content_text);
+        $mail->setBodyText($this->sent_mail_content_text);
         if ($this->sent_mail_content_html) $mail->setBodyHtml($this->sent_mail_content_html);
         $mail->setSubject($this->getSubject());
 
@@ -101,6 +91,9 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             }
         }
         $mail->send();
+
+        $this->mail_sent = 1;
+        $this->save();
     }
 
     private function _buildContentAndSetToRow()
@@ -139,26 +132,15 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
     protected function _beforeInsert()
     {
         $this->mail_sent = 0;
-        if (!$this->_mailContentManual) {
-            $this->_buildContentAndSetToRow();
-        }
     }
-
     protected function _afterInsert()
     {
-        // checkIsSpam brauch eine ID, deshalb im afterInsert
-        $this->is_spam = $this->_checkIsSpam();
-        if (!$this->is_spam) {
-            $this->sendMail();
-            $this->mail_sent = 1;
-        }
-        $this->save();
-    }
+        parent::_afterInsert();
 
-    public function setMailContentManual($value)
-    {
-        $this->_mailContentManual = $value;
-        return $this;
+        $this->_buildContentAndSetToRow();
+
+        $this->is_spam = $this->_checkIsSpam();
+        $this->sendMail();
     }
 
     static public function getSpamKey($enquiriesRow)
@@ -166,8 +148,10 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         return substr(md5(serialize($enquiriesRow->id.$enquiriesRow->save_date)), 0, 15);
     }
 
-    private function _checkIsSpam()
+    protected function _checkIsSpam()
     {
+        if (!$this->id) throw new Vps_Exception("row wurde noch nie gespeichert, daher spam check nicht möglich da keine id vorhanden");
+
         $siblingRows = $this->_getSiblingRows();
         $essentialsRow = $siblingRows['essentials'];
         $mailVarsRow = $siblingRows['vars'];
@@ -324,22 +308,6 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
         $this->_addToSerializedEssentialsColumn(
             'to', array('email' => $email, 'name' => $name)
         );
-    }
-
-    public function setBodyText($text)
-    {
-        if ($this->_mailContentManual) {
-            $this->sent_mail_content_text = $text;
-        }
-        return $this;
-    }
-
-    public function setBodyHtml($html)
-    {
-        if ($this->_mailContentManual) {
-            $this->sent_mail_content_html = $html;
-        }
-        return $this;
     }
 
     public function setReturnPath($email)
