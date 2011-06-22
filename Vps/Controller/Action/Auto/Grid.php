@@ -181,7 +181,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             if (!$primaryFound) {
                 //primary key hinzufügen falls er noch nicht in gridColumns existiert
                 $columnObject = new Vps_Grid_Column($this->_primaryKey);
-                $columnObject->setType((string)$this->_model->getColumnType($this->_primaryKey));
+                if (isset($this->_model)) {
+                    $columnObject->setType((string)$this->_model->getColumnType($this->_primaryKey));
+                } else {
+                    // fallback
+                    $columnObject->setType('string');
+                }
                 $this->_columns[] = $columnObject;
             }
         }
@@ -523,6 +528,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID)) continue;
                 $invalid = $column->validate($row, $submitRow);
                 if ($invalid) {
+                    $invalid = Vps_Form::formatValidationErrors($invalid);
                     throw new Vps_ClientException(implode("<br />", $invalid));
                 }
                 $column->prepareSave($row, $submitRow);

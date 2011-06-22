@@ -35,7 +35,12 @@ class Vpc_Box_InheritContent_Trl_Component extends Vpc_Chained_Trl_Component
         $masterChild = $this->getData()->chained->getComponent()->getContentChild();
         $c = Vpc_Chained_Trl_Component::getChainedByMaster($masterChild, $this->getData());
         $page = $this->getData();
-        while($c && (!$c->hasContent() || ($this->_getSetting('hasVisible') && !$c->parent->getComponent()->getRow()->visible))) {
+        while(
+            $c && (
+                !$c->hasContent() ||
+                ($this->_getSetting('hasVisible') && $c->parent->getComponent()->getRow() && !$c->parent->getComponent()->getRow()->visible)
+            )
+        ) {
             while ($page && !$page->inherits) {
                 $page = $page->parent;
                 if ($page instanceof Vps_Component_Data_Root) break;

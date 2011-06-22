@@ -2,7 +2,7 @@
 /**
  * @group Model_Db
  */
-class Vps_Model_Db_FetchTest extends PHPUnit_Framework_TestCase
+class Vps_Model_Db_FetchTest extends Vps_Test_TestCase
 {
     private $_table;
     private $_dbSelect;
@@ -10,6 +10,7 @@ class Vps_Model_Db_FetchTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
         $this->_table = $this->getMock('Vps_Model_Db_Table',
             array('select', '_setupMetadata', '_setupPrimaryKey', '_fetch', 'insert'),
             array('db' => new Vps_Model_Db_TestAdapter()), '', true);

@@ -5,12 +5,12 @@
  * @group Mongo_ParentExpr
  * @group slow
  */
-class Vps_Model_Mongo_ParentExprTest_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Mongo_ParentExprTest_Test extends Vps_Test_TestCase
 {
     private $_model;
     public function setUp()
     {
-        Vps_Model_Abstract::clearInstances();
+        parent::setUp();
 
         $this->_model = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ParentExprTest_MongoModel');
         $this->_model->getCollection()->insert(
@@ -18,10 +18,10 @@ class Vps_Model_Mongo_ParentExprTest_Test extends PHPUnit_Framework_TestCase
         , array('safe'=>true));
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         if ($this->_model) $this->_model->cleanUp();
-        Vps_Model_Abstract::clearInstances();
+        parent::tearDown();
     }
 
     public function testInitial()

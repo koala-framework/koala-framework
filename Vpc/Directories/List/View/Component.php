@@ -234,7 +234,7 @@ class Vpc_Directories_List_View_Component extends Vpc_Abstract_Composite_Compone
             $ret = $generator->getCacheVars($dir instanceof Vps_Component_Data ? $dir : null);
             if ($nr) {
                 foreach ($ret as $k=>$i) {
-                    if (!$i['field']) {
+                    if (empty($i['field'])) {
                         $ret[$k]['id'] = $nr;
                     }
                 }
