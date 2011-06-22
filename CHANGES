@@ -13,6 +13,7 @@ Stable:
 Neue Features:
 
 möglicherweise nicht kompatible Änderungen:
+- User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
 
 == 2.1 ==
 Erstellt: 21.06.11

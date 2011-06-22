@@ -4,17 +4,9 @@ class Vpc_User_BoxAbstract_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
         return $ret;
     }
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $ret['authedUser'] = Vps_Registry::get('userModel')->getAuthedUser();
-        return $ret;
-    }
-
 
     public function preProcessInput($postData)
     {
