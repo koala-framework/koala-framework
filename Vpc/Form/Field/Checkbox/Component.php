@@ -16,6 +16,7 @@ class Vpc_Form_Field_Checkbox_Component extends Vpc_Form_Field_Abstract_Componen
         $ret->setBoxLabel($this->getRow()->box_label);
         $ret->setDefaultValue($this->getRow()->default_value);
         $ret->setAllowBlank(!$this->getRow()->required);
+        $ret->setHideLabel($this->getRow()->hide_label);
         return $ret;
     }
 }

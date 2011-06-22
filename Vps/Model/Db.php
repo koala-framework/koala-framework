@@ -473,6 +473,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 throw new Vps_Exception_NotYetImplemented();
             }
             return $pad."($field, {$expr->getPadLength()}, {$expr->getPadStr()})";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Date_Year) {
+            $field = $expr->getField();
+            if ($field instanceof Vps_Model_Select_Expr_Interface) {
+                $field = $this->_createDbSelectExpression($field, $dbSelect);
+            } else {
+                $field = $this->_formatField($field, $dbSelect);
+            }
+            return "YEAR($field)";
         } else if ($expr instanceof Vps_Model_Select_Expr_String) {
             $quotedString = $this->_fixStupidQuoteBug($expr->getString());
             $quotedString = $this->_table->getAdapter()->quote($quotedString);

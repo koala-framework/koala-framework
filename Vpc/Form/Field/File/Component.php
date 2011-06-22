@@ -14,6 +14,7 @@ class Vpc_Form_Field_File_Component extends Vpc_Form_Field_Abstract_Component
         $ret = new Vps_Form_Field_File($this->getData()->componentId);
         $ret->setFieldLabel($this->getRow()->field_label);
         $ret->setAllowBlank(!$this->getRow()->required);
+        $ret->setHideLabel($this->getRow()->hide_label);
         return $ret;
     }
 }

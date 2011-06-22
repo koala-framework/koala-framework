@@ -3,15 +3,20 @@
 //direkt in der cli ist das leider nicht möglich, da der speicher im webserver liegt
 class Vps_Controller_Action_Util_ApcController extends Vps_Controller_Action
 {
-    public function clearCacheAction()
+    public function preDispatch()
     {
-        //darf nur von cli aus aufgerufen werden
-        if ($_SERVER['SERVER_ADDR']!=$_SERVER['REMOTE_ADDR'] &&
-            $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
-        ) {
+        if (empty($_SERVER['PHP_AUTH_USER']) ||
+            empty($_SERVER['PHP_AUTH_PW']) ||
+            $_SERVER['PHP_AUTH_USER']!='vivid' ||
+            $_SERVER['PHP_AUTH_PW']!='planet')
+        {
+            header('WWW-Authenticate: Basic realm="Testserver"');
             throw new Vps_Exception_AccessDenied();
         }
+    }
 
+    public function clearCacheAction()
+    {
         if (class_exists('APCIterator')) {
             $prefix = Vps_Cache::getUniquePrefix();
             apc_delete_file(new APCIterator('user', '#^'.$prefix.'#'));
@@ -24,11 +29,6 @@ class Vps_Controller_Action_Util_ApcController extends Vps_Controller_Action
 
     public function getCounterValueAction()
     {
-        //darf nur von cli aus aufgerufen werden
-        if ($_SERVER['SERVER_ADDR']!=$_SERVER['REMOTE_ADDR']) {
-            throw new Vps_Exception_AccessDenied();
-        }
-
         $prefix = Vps_Cache::getUniquePrefix().'bench-';
         echo apc_fetch($prefix.$this->_getParam('name'));
         exit;

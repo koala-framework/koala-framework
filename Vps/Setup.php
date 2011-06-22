@@ -71,11 +71,13 @@ class Vps_Setup
                 header('WWW-Authenticate: Basic realm="Check Config"');
                 throw new Vps_Exception_AccessDenied();
             }
-            Vps_Util_Check_Config::check();
+            $quiet = isset($_GET['quiet']);
+            Vps_Util_Check_Config::check($quiet);
         }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
             Vps_Loader::registerAutoload();
-            Vps_Util_Check_Config::check();
+            $quiet = isset($_SERVER['argv'][2]) && $_SERVER['argv'][2] == 'quiet';
+            Vps_Util_Check_Config::check($quiet);
         }
 
         self::setUpVps($configClass);
@@ -184,7 +186,13 @@ class Vps_Setup
                         if (!$redirect && !$domain->pattern) $redirect = $domain->domain;
                         if ($domain->pattern && preg_match('/' . $domain->pattern . '/', $host)
                         ) {
-                            $redirect = $domain->domain;
+                            if ($domain->noRedirectPattern &&
+                                preg_match('/'.$domain->noRedirectPattern.'/', $host)
+                            ) {
+                                $redirect = false;
+                            } else {
+                                $redirect = $domain->domain;
+                            }
                             break;
                         }
                     }
@@ -226,6 +234,7 @@ class Vps_Setup
         if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
             && $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
+            && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
         ) {
             $ignore = false;
             foreach ($config->preLoginIgnore as $i) {
@@ -323,6 +332,18 @@ class Vps_Setup
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
         $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+
+        if ($uri == 'robots.txt') {
+            Vps_Media_Output::output(array(
+                'contents' => "User-agent: *\nDisallow: /admin/",
+                'mimeType' => 'text/plain'
+            ));
+        }
+
+        if ($uri == 'sitemap.xml') {
+            $sitemap = new Vps_Component_Sitemap();
+            $sitemap->outputSitemap(Vps_Component_Data_Root::getInstance());
+        }
 
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))
             && (!$urlPrefix || substr($_SERVER['REDIRECT_URL'], 0, strlen($urlPrefix)) == $urlPrefix)
