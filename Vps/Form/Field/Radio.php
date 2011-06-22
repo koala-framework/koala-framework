@@ -63,7 +63,9 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
             $ret['html'] .= '<span class="value'.htmlspecialchars(ucfirst($i[0])).'">';
             $ret['html'] .= '<input type="radio" class="radio" id="'.$ret['id'].++$k.'" '
                 .'name="'.$name.$fieldNamePostfix.'" value="'.htmlspecialchars($i[0]).'"';
-            if ($i[0] == $value) $ret['html'] .= ' checked="checked"';
+            if ($value === $i[0] || (!is_null($value) && $i[0] == $value)) {
+                $ret['html'] .= ' checked="checked"';
+            }
             $ret['html'] .= ' /> <label for="'.$ret['id'].$k.'">'.htmlspecialchars($i[1]).'</label>';
             $ret['html'] .= '</span>';
         }

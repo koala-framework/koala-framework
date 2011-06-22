@@ -4,13 +4,8 @@
  * @group Mongo
  * @group Mongo_ChildRowsWithMirrorCacheSimple
  */
-class Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_Test extends Vps_Test_TestCase
 {
-    public function setUp()
-    {
-        Vps_Model_Abstract::clearInstances();
-    }
-
     public function testIt()
     {
         $m = Vps_Model_Abstract::getInstance('Vps_Model_Mongo_ChildRowsWithMirrorCacheSimple_MongoModel');

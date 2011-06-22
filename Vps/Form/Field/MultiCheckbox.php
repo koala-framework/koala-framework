@@ -228,7 +228,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $key = $ref['column'];
 
         $selectedIds = array();
-        if ($this->getSave() !== false && $this->getInternalSave() !== false) {
+        if ($this->getSave() !== false && $row) {
             foreach ($row->getChildRows($this->getRelModel()) as $i) {
                 $selectedIds[] = $i->$key;
             }

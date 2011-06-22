@@ -465,6 +465,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 throw new Vps_Exception_NotYetImplemented();
             }
             return $pad."($field, {$expr->getPadLength()}, {$expr->getPadStr()})";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Date_Year) {
+            $field = $expr->getField();
+            if ($field instanceof Vps_Model_Select_Expr_Interface) {
+                $field = $this->_createDbSelectExpression($field, $dbSelect);
+            } else {
+                $field = $this->_formatField($field, $dbSelect);
+            }
+            return "YEAR($field)";
         } else if ($expr instanceof Vps_Model_Select_Expr_String) {
             $quotedString = $this->_fixStupidQuoteBug($expr->getString());
             $quotedString = $this->_table->getAdapter()->quote($quotedString);
@@ -812,8 +820,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $select = $this->select($select);
             }
 
-            $tmpExportFolder = realpath('application/temp').'/modelcsv'.uniqid();
-            mkdir($tmpExportFolder, 0777);
+            $tmpExportFolder = realpath('application/temp').'/modelcsvex'.uniqid();
             $filename = $tmpExportFolder.'/csvexport';
 
             $dbSelect = $this->_getDbSelect($select);
@@ -823,6 +830,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $fieldResult = $dbSelect->query()->fetchAll();
             $columnsCsv = '';
             if (count($fieldResult)) {
+                mkdir($tmpExportFolder, 0777);
                 $columns = array_keys($fieldResult[0]);
                 $columnsCsv = '"'.implode('","', $columns).'"';
                 $this->executeSql($sqlString);
@@ -896,7 +904,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             // if no data is recieved, quit
             if (!$data) return;
 
-            $tmpImportFolder = realpath('application/temp').'/modelcsv'.uniqid();
+            $tmpImportFolder = realpath('application/temp').'/modelcsvim'.uniqid();
             mkdir($tmpImportFolder, 0777);
             $filename = $tmpImportFolder.'/csvimport';
             file_put_contents($filename.'.gz', $data);

@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends PHPUnit_Framework_TestCase
+abstract class Vps_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends Vps_Test_TestCase
 {
     protected $_modelClass;
     protected $_parentModelClass;
@@ -7,7 +7,7 @@ abstract class Vps_Model_Mongo_ChildRowsWithParentExpr_Abstract_Test extends PHP
     private $_model;
     public function setUp()
     {
-        Vps_Model_Abstract::clearInstances();
+        parent::setUp();
 
         $this->_model = Vps_Model_Abstract::getInstance($this->_modelClass);
         $m = $this->_model;

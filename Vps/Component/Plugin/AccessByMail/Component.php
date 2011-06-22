@@ -14,8 +14,15 @@ class Vps_Component_Plugin_AccessByMail_Component extends Vps_Component_Plugin_V
 
     public function isLoggedIn()
     {
-        $session = new Zend_Session_Namespace('vpc_'.$this->_componentId);
-        return $session->login;
+        $ret = null;
+        $data = Vps_Component_Data_Root::getInstance()
+            ->getComponentById($this->_componentId);
+        while (!$ret && $data) {
+            $session = new Zend_Session_Namespace('vpc_'.$data->componentId);
+            $ret = $session->login;
+            $data = $data->parent;
+        }
+        return $ret;
     }
 
     public function processOutput($output)

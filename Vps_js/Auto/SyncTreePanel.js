@@ -65,7 +65,8 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     loadMeta: function()
     {
-        Ext.Ajax.request({
+        if (!this.metaConn) this.metaConn = new Vps.Connection({ autoAbort: true });
+        this.metaConn.request({
             mask: this.el || Ext.getBody(),
             url: this.controllerUrl + '/json-meta',
             params: this.baseParams,

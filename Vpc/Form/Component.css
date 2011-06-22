@@ -107,3 +107,5 @@
 }
 .cssClass span.comment { margin-left: 10px; color: #999; }
 .cssClass .vpsField { clear: both; }
+
+.cssClass .vpsFieldError label { color: red; } /* TODO beserer standard-wert */

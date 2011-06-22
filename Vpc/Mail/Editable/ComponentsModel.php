@@ -10,7 +10,7 @@ class Vpc_Mail_Editable_ComponentsModel extends Vps_Model_Data_Abstract
             $a = Vpc_Admin::getInstance($c->componentClass);
             $data[] = array(
                 'id' => $c->dbId,
-                'name' => Vpc_Abstract::getSetting($c->componentClass, 'componentName'),
+                'name' => Vps_Registry::get('trl')->trlStaticExecute(Vpc_Abstract::getSetting($c->componentClass, 'componentName')),
                 'settings_controller_url' => $a->getControllerUrl(),
                 'content_component_class' => $c->getChildComponent('-content')->componentClass,
             );

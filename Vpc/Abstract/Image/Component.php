@@ -76,8 +76,18 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             if (!in_array($d['scale'], $validScales)) {
                 throw new Vps_Exception("Invalid Scale '$d[scale]'");
             }
+            if ($d['scale'] != Vps_Media_Image::SCALE_ORIGINAL) {
+                if (!$d['width'] && !$d['height']) {
+                    throw new Vps_Exception('Dimension setting must contain width or height');
+                }
+                if ((!$d['width'] || !$d['height']) && $d['scale'] != Vps_Media_Image::SCALE_DEFORM) {
+                    throw new Vps_Exception('Dimension setting must use scale \'deform\' when width or height is 0');
+                }
+            }
         }
 
+        //wenn erste dimension (=standard wert!) bestfit oder crop ist, müssen
+        //width oder height gesetzt sein
         reset($settings['dimensions']);
         $firstDimension = current($settings['dimensions']);
         if (($firstDimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||

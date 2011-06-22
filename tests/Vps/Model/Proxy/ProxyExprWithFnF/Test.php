@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_ProxyExprWithFnF
  */
-class Vps_Model_Proxy_ProxyExprWithFnF_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Proxy_ProxyExprWithFnF_Test extends Vps_Test_TestCase
 {
     public function testIt()
     {

@@ -60,11 +60,12 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
 
     public function trlStaticExecute($language = null)
     {
+        $trl = Vps_Trl::getInstance();
         foreach ($this->_getTrlProperties() as $property) {
             $trlStaticData = $this->getProperty($property);
             $this->setProperty(
                 $property,
-                Zend_Registry::get('trl')->trlStaticExecute($trlStaticData, $language)
+                $trl->trlStaticExecute($trlStaticData, $language)
             );
         }
 
@@ -127,17 +128,26 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         $ret = array();
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $ret = array_merge($ret, $field->load($row, $postData));
+                if ($this->_processChildren('load', $field, $row, $postData)) {
+                    $ret = array_merge($ret, $field->load($row, $postData));
+                }
             }
         }
         return $ret;
+    }
+
+    protected function _processChildren($method, $childField, $row, $postData)
+    {
+        return true;
     }
 
     public function processInput($row, $postData)
     {
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $postData = $field->processInput($row, $postData);
+                if ($this->_processChildren('processInput', $field, $row, $postData)) {
+                    $postData = $field->processInput($row, $postData);
+                }
             }
         }
         return $postData;
@@ -148,7 +158,9 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         $ret = array();
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $ret = array_merge($ret, $field->validate($row, $postData));
+                if ($this->_processChildren('validate', $field, $row, $postData)) {
+                    $ret = array_merge($ret, $field->validate($row, $postData));
+                }
             }
         }
         return $ret;
@@ -158,7 +170,9 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     {
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $field->prepareSave($row, $postData);
+                if ($this->_processChildren('prepareSave', $field, $row, $postData)) {
+                    $field->prepareSave($row, $postData);
+                }
             }
         }
     }
@@ -167,7 +181,9 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     {
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $field->save($row, $postData);
+                if ($this->_processChildren('save', $field, $row, $postData)) {
+                    $field->save($row, $postData);
+                }
             }
         }
     }
@@ -176,7 +192,9 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
     {
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $field->afterSave($row, $postData);
+                if ($this->_processChildren('afterSave', $field, $row, $postData)) {
+                    $field->afterSave($row, $postData);
+                }
             }
         }
     }

@@ -66,7 +66,11 @@ class Vps_Controller_Front extends Zend_Controller_Front
         if (null === self::$_instance) {
             $class = Vps_Registry::get('config')->frontControllerClass;
             if (!$class) {
-                throw new Vps_Exception("frontControllerClass must be set in application/config.ini");
+                $validCommands = array('shell', 'export', 'copy-to-test'); //für ältere branches
+                if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
+                    throw new Vps_Exception("frontControllerClass must be set in application/config.ini");
+                }
+                $class = 'Vps_Controller_Front';
             }
             self::$_instance = new $class();
             self::$_instance->_init();
