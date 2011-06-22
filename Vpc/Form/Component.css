@@ -81,12 +81,19 @@
 .cssClass .vpsFormFieldRadio {
     margin-left: -10px;
 }
-.cssClass form .vpsFormFieldRadio label{
+.cssClass form .vpsFormFieldRadio label {
     margin-left: 10px;
     margin-right: 20px;
     clear: none;
 }
-.cssClass form .vpsFormFieldRadioHorizontal label { float: none; width: auto; }
+.cssClass form .vpsFormFieldRadio input { margin: 0px; padding: 0px; }
+.cssClass form .vpsFormFieldRadioVertical,
+.cssClass form .vpsFormFieldRadioHorizontal { margin-left: 150px; }
+.cssClass form .vpsFormFieldRadioHorizontal label { float: none; width: auto; margin-left: 0px; }
+.cssClass form .vpsFormFieldRadioHorizontal span { white-space: nowrap; }
+.cssClass form .vpsFormFieldRadioVertical span { display: block; }
+.cssClass form .vpsFormFieldRadioVertical span label { margin-left: 0px; }
+.cssClass form .vpsFormFieldRadioVertical label { float: none; }
 .ext-ie .cssClass .form_title {
     margin-top: -5px;
     padding-bottom: 5px;

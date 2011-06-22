@@ -2,6 +2,9 @@ Vps.onContentReady(function()
 {
     var fadeComponents = Ext.query('div.vpsFadeElements');
     Ext.each(fadeComponents, function(c) {
+        var extWrapperEl = Ext.get(c);
+        if (extWrapperEl.fadeElementsObject) return; // nur einmal initialisieren
+
         var selector = Ext.query('.fadeSelector', c)[0].value;
         var config = Ext.query('.fadeConfig', c); // optional
         if (config && config[0]) {
@@ -17,8 +20,8 @@ Vps.onContentReady(function()
         config.selector = selector;
         config.selectorRoot = c;
 
-        var fade = new Vps.Fade.Elements(config);
-        fade.start();
+        extWrapperEl.fadeElementsObject = new Vps.Fade.Elements(config);
+        extWrapperEl.fadeElementsObject.start();
     });
 });
 

@@ -102,6 +102,9 @@ class Vps_Trl
 
     private static $_instance = null;
 
+    /**
+     * @return Vps_Trl
+     */
     public static function getInstance()
     {
         if (is_null(self::$_instance)) {
@@ -335,7 +338,9 @@ class Vps_Trl
         } else {
             $ret = $needle;
         }
-        apc_add($cacheId, $ret);
+        if (function_exists('apc_add')) {
+            apc_add($cacheId, $ret);
+        }
         return $ret;
     }
 

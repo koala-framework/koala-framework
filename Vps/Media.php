@@ -127,11 +127,17 @@ class Vps_Media
             }
             $output = call_user_func(array($classWithoutDot, 'getMediaOutput'), $id, $type, $class);
             $specificLifetime = false;
+            $useCache = true;
             if (isset($output['lifetime'])) {
                 $specificLifetime = $output['lifetime'];
+                if (!$output['lifetime']) {
+                    $useCache = false;
+                }
             }
             if (Vps_Registry::get('config')->debug->mediaCache) {
-                self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
+                if ($useCache) {
+                    self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
+                }
             } else {
                 //browser cache deaktivieren
                 $output['lifetime'] = false;

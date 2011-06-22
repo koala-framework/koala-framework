@@ -6,24 +6,27 @@ Vps.onContentReady(function() {
         var checkAll = mc.child('a.vpsMultiCheckboxCheckAll');
         var checkNone = mc.child('a.vpsMultiCheckboxCheckNone');
 
-        checkAll.on('click', function(ev) {
-            ev.stopEvent();
-            var allInputs = this.query('input');
-            for (var i = 0; i < allInputs.length; i++) {
-                if (allInputs[i].type == 'checkbox') {
-                    allInputs[i].checked = true;
+        if (checkAll) {
+            checkAll.on('click', function(ev) {
+                ev.stopEvent();
+                var allInputs = this.query('input');
+                for (var i = 0; i < allInputs.length; i++) {
+                    if (allInputs[i].type == 'checkbox') {
+                        allInputs[i].checked = true;
+                    }
                 }
-            }
-        }, mc);
-
-        checkNone.on('click', function(ev) {
-            ev.stopEvent();
-            var allInputs = this.query('input');
-            for (var i = 0; i < allInputs.length; i++) {
-                if (allInputs[i].type == 'checkbox') {
-                    allInputs[i].checked = false;
+            }, mc);
+        }
+        if (checkNone) {
+            checkNone.on('click', function(ev) {
+                ev.stopEvent();
+                var allInputs = this.query('input');
+                for (var i = 0; i < allInputs.length; i++) {
+                    if (allInputs[i].type == 'checkbox') {
+                        allInputs[i].checked = false;
+                    }
                 }
-            }
-        }, mc);
+            }, mc);
+        }
     });
 });
