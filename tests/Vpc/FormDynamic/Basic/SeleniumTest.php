@@ -69,7 +69,7 @@ class Vpc_FormDynamic_Basic_SeleniumTest extends Vps_Test_SeleniumTestCase
         //required
         $this->openVpc('/form3');
         $this->clickAndWait('css=button');
-        $this->assertTextPresent('Required: Please fill out');
+        $this->assertTextPresent('Required: Please choose an option');
         $this->assertElementPresent('css=.vpsFieldError');
         $this->click('css=#form_root_form3-paragraphs-10_root_form3-paragraphs-10_1');
         $this->clickAndWait('css=button');
