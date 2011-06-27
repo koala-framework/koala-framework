@@ -87,13 +87,16 @@
     clear: none;
 }
 .cssClass form .vpsFormFieldRadio input { margin: 0px; padding: 0px; }
-.cssClass form .vpsFormFieldRadioVertical,
-.cssClass form .vpsFormFieldRadioHorizontal { margin-left: 150px; }
-.cssClass form .vpsFormFieldRadioHorizontal label { float: none; width: auto; margin-left: 0px; }
+.cssClass form .vpsFormFieldRadioHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
 .cssClass form .vpsFormFieldRadioHorizontal span { white-space: nowrap; }
 .cssClass form .vpsFormFieldRadioVertical span { display: block; }
 .cssClass form .vpsFormFieldRadioVertical span label { margin-left: 0px; }
 .cssClass form .vpsFormFieldRadioVertical label { float: none; }
+
+.cssClass form .vpsFormFieldMultiCheckboxHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
+.cssClass form .vpsFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; }
+.cssClass form .vpsFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
+
 .ext-ie .cssClass .form_title {
     margin-top: -5px;
     padding-bottom: 5px;
