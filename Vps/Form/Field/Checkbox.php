@@ -51,7 +51,7 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
         if ($value) $ret['html'] .= 'checked="checked" ';
         $ret['html'] .= "/>";
         if ($this->getBoxLabel()) {
-            $ret['html'] .= ' '.$this->getBoxLabel();
+            $ret['html'] .= ' <label for="'.$ret['id'].'">'.$this->getBoxLabel().'</label>';
         }
         $ret['html'] .= "<input type=\"hidden\" name=\"$name$fieldNamePostfix-post\" value=\"1\" />";
         return $ret;

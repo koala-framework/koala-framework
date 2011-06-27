@@ -20,6 +20,7 @@ class Vpc_Form_Field_MultiCheckbox_Component extends Vpc_Form_Field_Abstract_Com
         $ret->setAllowBlank(!$this->getRow()->required);
         $ret->setHideLabel($this->getRow()->hide_label);
         $ret->setShowCheckAllLinks($this->getRow()->show_check_all_links);
+        $ret->setOutputType($this->getRow()->output_type);
         $values = array();
         foreach ($this->getRow()->getChildRows('Values') as $i) {
             $values[$ret->getName().'_'.$i->id] = $i->value;
