@@ -6143,5 +6143,18 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>Unsubscribe</en>
 <id>1595</id>
 </text>
+<text>
+<en>Filter</en>
+<id>1596</id>
+</text>
+<text>
+<en>The Form has been submitted successfully.</en>
+<id>1597</id>
+</text>
+<text>
+<en>Please choose a file</en>
+<de>Bitte Datei auswählen</de>
+<id>1598</id>
+</text>
 </trl>
 
