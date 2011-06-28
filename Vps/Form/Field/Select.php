@@ -15,23 +15,6 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
 
     //setHideIfNoValues
 
-
-    //TODO: diese funktion wird niergends aufgerufen!!!
-    protected function _validateNotAllowBlank($data, $name)
-    {
-        $ret = array();
-        if ($this->getHideIfNoValues()) {
-            $store = $this->_getStoreData();
-            if (!$store['data']) return $ret;
-        }
-        $v = new Vps_Validate_NotEmpty();
-        $v->setMessage(Vps_Validate_NotEmpty::IS_EMPTY, trlVps('Please select a value'));
-        if (!$v->isValid($data)) {
-            $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
-        }
-        return $ret;
-    }
-
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
