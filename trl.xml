@@ -5929,10 +5929,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1619</id>
 </text>
 <text>
-<en>Filter</en>
-<id>1584</id>
-</text>
-<text>
 <en>More about this Topic</en>
 <id>1585</id>
 </text>
@@ -6215,16 +6211,16 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Filter</en>
-<id>1598</id>
+<id>1655</id>
 </text>
 <text>
 <en>The Form has been submitted successfully.</en>
-<id>1599</id>
+<id>1656</id>
 </text>
 <text>
 <en>Please choose a file</en>
-<de>Bitte Datei auswählen</de>
-<id>1600</id>
+<de>Bitte Datei ausw&#xE4;hlen</de>
+<id>1657</id>
 </text>
 </trl>
 
