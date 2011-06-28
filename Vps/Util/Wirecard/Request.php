@@ -24,7 +24,7 @@ class Vps_Util_Wirecard_Request
         $params['secret'] = Vps_Registry::get('config')->wirecard->secret;
         $params['customerId'] = Vps_Registry::get('config')->wirecard->customerId;
         if (Vps_Registry::get('config')->wirecard->shopId) $params['shopId'] = Vps_Registry::get('config')->wirecard->shopId;
-        $params['paymenttype'] = 'SELECT';//'CCARD';
+        $params['paymenttype'] = 'CCARD';
 
         $params['requestFingerprintOrder'] = "";
         $requestFingerprintSeed  = "";

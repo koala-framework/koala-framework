@@ -259,7 +259,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 $cmd = "cd {$config->server->dir} && php bootstrap.php import get-db-config --key=$dbKey";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
-                $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
+                $cmd = $this->_getDumpCommand($config, $otherDbConfig, array_merge($cacheTables, $keepTables));
             } else if ($this->_useSshVps) {
                 $ignoreTables = '';
                 if (!$this->_getParam('include-cache')) {
@@ -274,7 +274,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-db-config --key=$dbKey");
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
-                $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
+                $cmd = $this->_getDumpCommand($config, $otherDbConfig, array_merge($cacheTables, $keepTables));
                 if ($dbConfig['host'] != 'localhost') { //TODO: diese if-abfrage ist nicht immer richtig
                     //fuer poi, nur maja2 darf zu pbk-sql im moment
                     $cmd = "ssh $dbConfig[host] ".escapeshellarg($cmd);
@@ -530,7 +530,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    private function _getDumpCommand($dbConfig, array $cacheTables)
+    private function _getDumpCommand($config, $dbConfig, array $cacheTables)
     {
         $ret = '';
 
@@ -539,7 +539,6 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         if (!Vps_Util_Mysql::hasPrivilege('LOCK TABLES')) {
             $mysqlOptions .= " --skip-lock-tables --skip-add-locks";
         }
-        $config = Zend_Registry::get('config');
 
         $mysqlDir = '';
         if ($config->server->host == 'vivid-planet.com') {
@@ -579,8 +578,10 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         if (!$db) return null;
         $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
-        $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";
+
+        $cmd = $this->_getDumpCommand(Vps_Registry::get('config'), $dbConfig, $ignoreTables)." > $dumpname";
         if ($this->_getParam('debug')) echo $cmd."\n";
+
         $this->_systemCheckRet($cmd);
 
         return $dumpname;
@@ -591,14 +592,11 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         if (file_exists('application/update')) {
             echo file_get_contents('application/update');
         } else {
-            try {
-                $info = new SimpleXMLElement(`svn info --xml`);
-                $onlineRevision = (int)$info->entry['revision'];
-            } catch (Exception $e) {}
-            if (!$onlineRevision) {
-                throw new Vps_Exception_Client("Can't detect online revision");
+            $doneNames = array();
+            foreach (Vps_Update::getUpdates(0, 9999999) as $u) {
+                $doneNames[] = $u->getUniqueName();
             }
-            echo $onlineRevision;
+            echo serialize($doneNames);
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }

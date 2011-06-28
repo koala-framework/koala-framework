@@ -79,6 +79,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return parent::__get($var);
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getPageByUrl($url, $acceptLangauge)
     {
         $parsedUrl = parse_url($url);
@@ -105,6 +108,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $this->getComponent()->getPageByUrl($path, $acceptLangauge);
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getComponentById($componentId, $select = array())
     {
         if (isset($this->_dataCache[$componentId])) {
