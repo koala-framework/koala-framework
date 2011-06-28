@@ -239,7 +239,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 $cmd = "cd {$config->server->dir} && php bootstrap.php import get-db-config --key=$dbKey";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
-                $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
+                $cmd = $this->_getDumpCommand($config, $otherDbConfig, array_merge($cacheTables, $keepTables));
             } else if ($this->_useSshVps) {
                 $ignoreTables = '';
                 if (!$this->_getParam('include-cache')) {
@@ -254,7 +254,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-db-config --key=$dbKey");
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
-                $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
+                $cmd = $this->_getDumpCommand($config, $otherDbConfig, array_merge($cacheTables, $keepTables));
                 $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg($cmd);
             }
             $descriptorspec = array(
@@ -509,12 +509,11 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    private function _getDumpCommand($dbConfig, array $cacheTables)
+    private function _getDumpCommand($config, $dbConfig, array $cacheTables)
     {
         $ret = '';
 
         $mysqlOptions = "--host=$dbConfig[host] --user=$dbConfig[username] --password=$dbConfig[password] ";
-        $config = Zend_Registry::get('config');
 
         $mysqlDir = '';
         if ($config->server->host == 'vivid-planet.com') {
@@ -551,7 +550,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         if (!$db) return null;
         $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
-        $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";
+        $cmd = $this->_getDumpCommand(Vps_Registry::get('config'), $dbConfig, $ignoreTables)." > $dumpname";
         $this->_systemCheckRet($cmd);
 
         return $dumpname;
