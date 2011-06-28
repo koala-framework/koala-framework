@@ -5872,10 +5872,6 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <id>1619</id>
 </text>
 <text>
-<en>Filter</en>
-<id>1584</id>
-</text>
-<text>
 <en>More about this Topic</en>
 <id>1585</id>
 </text>
@@ -6320,6 +6316,19 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <en>You can't set {0} as Home</en>
 <de>{0} kann nicht als Home verwendet werden</de>
 <id>1706</id>
+</text>
+<text>
+<en>Filter</en>
+<id>1655</id>
+</text>
+<text>
+<en>The Form has been submitted successfully.</en>
+<id>1656</id>
+</text>
+<text>
+<en>Please choose a file</en>
+<de>Bitte Datei ausw&#xE4;hlen</de>
+<id>1657</id>
 </text>
 </trl>
 

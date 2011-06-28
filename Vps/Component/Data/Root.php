@@ -86,6 +86,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
      * @param string Die Uri incl Protokoll und Domain
      * @param string acceptLanguage falls verfügbar (kann null sein)
      * @param bool wird auf false gesetzt falls die url nicht exakt passte und ein redirekt auf die korrekte gemacht werden sollte
+     * @return Vps_Component_Data
      */
     public function getPageByUrl($url, $acceptLangauge, &$exactMatch = true)
     {
