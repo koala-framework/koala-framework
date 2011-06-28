@@ -561,14 +561,11 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         if (file_exists('application/update')) {
             echo file_get_contents('application/update');
         } else {
-            try {
-                $info = new SimpleXMLElement(`svn info --xml`);
-                $onlineRevision = (int)$info->entry['revision'];
-            } catch (Exception $e) {}
-            if (!$onlineRevision) {
-                throw new Vps_ClientException("Can't detect online revision");
+            $doneNames = array();
+            foreach (Vps_Update::getUpdates(0, 9999999) as $u) {
+                $doneNames[] = $u->getUniqueName();
             }
-            echo $onlineRevision;
+            echo serialize($doneNames);
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
