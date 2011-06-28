@@ -26,6 +26,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $maxSize = substr($maxSize, 0, -1)*1024*1024*1024;
         }
         $this->setFileSizeLimit($maxSize.' B');
+        $this->setEmptyMessage(trlVpsStatic("Please choose a file"));
     }
 
     protected function _getTrlProperties()
