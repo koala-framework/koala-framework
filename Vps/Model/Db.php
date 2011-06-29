@@ -6,6 +6,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     protected $_table;
     private $_tableName;
     private $_columns;
+    private $_primaryKey;
 
     protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
 
@@ -38,20 +39,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
     protected function _init()
     {
         parent::_init();
-        if (is_string($this->_table)) {
-            $this->_tableName = $this->_table;
-            $this->_table = new Vps_Db_Table(array(
-                'name' => $this->_table
-            ));
-        }
         if (!$this->_table) {
             if (isset($this->_name)) {
                 throw new Vps_Exception("You must rename _name to _table in '".get_class($this)."'");
             }
             throw new Vps_Exception("No table set");
-        }
-        if (!$this->_table instanceof Zend_Db_Table_Abstract) {
-            throw new Vps_Exception("'".get_class($this->_table)."' is not a Zend_Db_Table");
         }
     }
 
@@ -82,15 +74,21 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     protected function _getOwnColumns()
     {
-        if (!$this->_columns)
-            $this->_columns = $this->_table->info(Zend_Db_Table_Abstract::COLS);
+        if (!$this->_columns) {
+            $cache = self::_getMetadataCache();
+            $cacheId = md5($this->getUniqueIdentifier()).'_columns';
+            if (!$this->_columns = $cache->load($cacheId)) {
+                $this->_columns = $this->getTable()->info(Zend_Db_Table_Abstract::COLS);
+                $cache->save($this->_columns, $cacheId);
+            }
+        }
         return $this->_columns;
     }
 
     public function createRow(array $data=array())
     {
         $ret = new $this->_rowClass(array(
-            'row' => $this->_table->createRow(),
+            'row' => $this->getTable()->createRow(),
             'model' => $this
         ));
         $data = array_merge($this->_default, $data);
@@ -239,7 +237,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     {
         if (!$select) return null;
         $tablename = $this->getTableName();
-        $dbSelect = $this->_table->select();
+        $dbSelect = $this->getTable()->select();
         $dbSelect->from($tablename);
         $this->_applySelect($dbSelect, $select);
         return $dbSelect;
@@ -363,7 +361,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             if (is_array($quotedValue)) {
                 foreach ($quotedValue as &$v) {
                     $v = $this->_fixStupidQuoteBug($v);
-                    $v = $this->_table->getAdapter()->quote($v);
+                    $v = $this->getTable()->getAdapter()->quote($v);
                 }
             } else {
                 if ($quotedValue instanceof Vps_DateTime) {
@@ -372,7 +370,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                     $quotedValue = $quotedValue->format('Y-m-d');
                 }
                 $quotedValue = $this->_fixStupidQuoteBug($quotedValue);
-                $quotedValue = $this->_table->getAdapter()->quote($quotedValue);
+                $quotedValue = $this->getTable()->getAdapter()->quote($quotedValue);
             }
         }
         if ($expr instanceof Vps_Model_Select_Expr_CompareField_Abstract ||
@@ -407,7 +405,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             if ($expr instanceof Vps_Model_Select_Expr_Contains) {
                 $v = $expr->getValue();
                 $v = $this->_fixStupidQuoteBug($v);
-                $quotedValueContains = $this->_table->getAdapter()->quote('%'.$v.'%');
+                $quotedValueContains = $this->getTable()->getAdapter()->quote('%'.$v.'%');
 
                 $quotedValue = str_replace("%", "\\%", $quotedValue);
                 $quotedValue = str_replace(
@@ -483,7 +481,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             return "YEAR($field)";
         } else if ($expr instanceof Vps_Model_Select_Expr_String) {
             $quotedString = $this->_fixStupidQuoteBug($expr->getString());
-            $quotedString = $this->_table->getAdapter()->quote($quotedString);
+            $quotedString = $this->getTable()->getAdapter()->quote($quotedString);
             return $quotedString;
         } else if ($expr instanceof Vps_Model_Select_Expr_Count) {
             $field = $expr->getField();
@@ -619,7 +617,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     public function find($id)
     {
         return new $this->_rowsetClass(array(
-            'rowset' => $this->_table->find($id),
+            'rowset' => $this->getTable()->find($id),
             'rowClass' => $this->_rowClass,
             'model' => $this
         ));
@@ -630,7 +628,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         $dbSelect = $this->_getDbSelect($where, $order, $limit, $start);
         $id = $this->getPrimaryKey();
         $ret = array();
-        foreach ($this->_table->fetchAll($dbSelect) as $row) {
+        foreach ($this->getTable()->fetchAll($dbSelect) as $row) {
             $ret[] = $row->$id;
         }
         return $ret;
@@ -640,7 +638,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     {
         $dbSelect = $this->_getDbSelect($where, $order, $limit, $start);
         return new $this->_rowsetClass(array(
-            'rowset' => $this->_table->fetchAll($dbSelect),
+            'rowset' => $this->getTable()->fetchAll($dbSelect),
             'rowClass' => $this->_rowClass,
             'model' => $this
         ));
@@ -670,12 +668,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     public function deleteRows($where)
     {
-        return $this->_table->delete($this->_getTableUpdateWhere($where));
+        return $this->getTable()->delete($this->_getTableUpdateWhere($where));
     }
 
     public function updateRows($data, $where)
     {
-        return $this->_table->update($data, $this->_getTableUpdateWhere($where));
+        return $this->getTable()->update($data, $this->_getTableUpdateWhere($where));
     }
 
     private function _getDbSelect($where, $order=null, $limit=null, $start=null)
@@ -727,7 +725,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
         } else {
             $dbSelect->from(null, 'COUNT(*) c');
         }
-        return $this->_table->getAdapter()->query($dbSelect)->fetchColumn();
+        return $this->getTable()->getAdapter()->query($dbSelect)->fetchColumn();
     }
 
     public function evaluateExpr(Vps_Model_Select_Expr_Interface $expr, Vps_Model_Select $select = null)
@@ -737,21 +735,34 @@ class Vps_Model_Db extends Vps_Model_Abstract
         $dbSelect->reset(Zend_Db_Select::COLUMNS);
         $dbSelect->setIntegrityCheck(false);
         $dbSelect->from(null, $this->_createDbSelectExpression($expr, $dbSelect));
-        return $this->_table->getAdapter()->query($dbSelect)->fetchColumn();
+        return $this->getTable()->getAdapter()->query($dbSelect)->fetchColumn();
     }
 
     public function getPrimaryKey()
     {
-        $ret = $this->_table->info('primary');
-        if (sizeof($ret) == 1) {
-            $ret = array_values($ret);
-            $ret = $ret[0];
+        if (!$this->_primaryKey) {
+            $cache = self::_getMetadataCache();
+            $cacheId = md5($this->getUniqueIdentifier()).'_primaryKey';
+            if (!$this->_primaryKey = $cache->load($cacheId)) {
+                $this->_primaryKey = $this->getTable()->info('primary');
+                if (sizeof($this->_primaryKey) == 1) {
+                    $this->_primaryKey = array_values($this->_primaryKey);
+                    $this->_primaryKey = $this->_primaryKey[0];
+                }
+                $cache->save($this->_primaryKey, $cacheId);
+            }
         }
-        return $ret;
+        return $this->_primaryKey;
     }
 
     public function getTable()
     {
+        if (is_string($this->_table)) {
+            $this->_tableName = $this->_table;
+            $this->_table = new Vps_Db_Table(array(
+                'name' => $this->_table
+            ));
+        }
         return $this->_table;
     }
 
@@ -762,8 +773,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     public function getTableName()
     {
-        if (!$this->_tableName)
-            $this->_tableName = $this->_table->info(Zend_Db_Table_Abstract::NAME);
+        if (!$this->_tableName) {
+            if (is_string($this->_table)) return $this->_table;
+            return $this->_table->info(Zend_Db_Table_Abstract::NAME);
+        }
         return $this->_tableName;
     }
 
@@ -1036,7 +1049,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (is_null($i)) {
                     $sqlValues .= 'NULL';
                 } else {
-                    $sqlValues .= $this->_table->getAdapter()->quote($i);
+                    $sqlValues .= $this->getTable()->getAdapter()->quote($i);
                 }
                 $sqlValues .= ',';
             }
@@ -1058,12 +1071,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
     public function executeSql($sql)
     {
         // Performance, bei Pdo wird der Adapter umgangen
-        if ($this->_table->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $q = $this->_table->getAdapter()->getProfiler()->queryStart($sql, Zend_Db_Profiler::INSERT);
-            $this->_table->getAdapter()->getConnection()->exec($sql);
-            $this->_table->getAdapter()->getProfiler()->queryEnd($q);
+        if ($this->getTable()->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $q = $this->getTable()->getAdapter()->getProfiler()->queryStart($sql, Zend_Db_Profiler::INSERT);
+            $this->getTable()->getAdapter()->getConnection()->exec($sql);
+            $this->getTable()->getAdapter()->getProfiler()->queryEnd($q);
         } else {
-            $this->_table->getAdapter()->query($sql);
+            $this->getTable()->getAdapter()->query($sql);
         }
     }
 
@@ -1094,5 +1107,28 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $ret = array_values($ret);
             return $ret;
         }
+    }
+
+    private static function _getMetadataCache()
+    {
+        static $ret;
+        if (!isset($ret)) {
+            $frontendOptions = array(
+                'automatic_serialization' => true,
+                'write_control' => false,
+            );
+            if (extension_loaded('apc') && php_sapi_name() != 'cli') {
+                $backendOptions = array();
+                $backend = 'Apc';
+            } else {
+                $backendOptions = array(
+                    'cache_dir' => 'application/cache/model',
+                    'file_name_prefix' => 'servicemeta'
+                );
+                $backend = 'File';
+            }
+            $ret = Vps_Cache::factory('Core', $backend, $frontendOptions, $backendOptions);
+        }
+        return $ret;
     }
 }
