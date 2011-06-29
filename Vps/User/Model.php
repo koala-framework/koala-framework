@@ -1,7 +1,6 @@
 <?php
 class Vps_User_Model extends Vps_Model_Proxy
 {
-    protected $_siblingModels = array('webuser' => 'Vps_User_Web_Model');
     protected $_rowClass = 'Vps_User_Row';
     protected $_authedUser;
     protected $_passwordColumn = 'password';
@@ -21,8 +20,21 @@ class Vps_User_Model extends Vps_Model_Proxy
     public function __construct(array $config = array())
     {
         if (!isset($config['proxyModel'])) {
-            $config['proxyModel'] = new Vps_User_Mirror();
+            $config['proxyModel'] = new Vps_Model_RowCache(array(
+                'cacheColumns' => array('email'),
+                'proxyModel' => new Vps_User_Mirror()
+            ));
         }
+        $this->_siblingModels['webuser'] = new Vps_Model_RowCache(array(
+            'cacheColumns' => array('role'),
+            'referenceMap' => array(
+                'User' => array(
+                    'column' => 'id',
+                    'refModelClass' => 'Vps_User_Model' // muss hier hardcodet sein, sonst endlos
+                )
+            ),
+            'proxyModel' => Vps_Model_Abstract::getInstance('Vps_User_Web_Model'),
+        ));
         if (isset($config['mailClass'])) {
             $this->_mailClass = $config['mailClass'];
         }
@@ -370,7 +382,7 @@ class Vps_User_Model extends Vps_Model_Proxy
 
     public function synchronize($overrideMaxSyncDelay = Vps_Model_MirrorCache::SYNC_AFTER_DELAY)
     {
-        $this->_proxyModel->synchronize($overrideMaxSyncDelay);
+        $this->_proxyModel->_proxyModel->synchronize($overrideMaxSyncDelay);
     }
 
     public function writeLog(array $data)

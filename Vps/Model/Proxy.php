@@ -145,6 +145,13 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         ));
     }
 
+    public function getRow($select)
+    {
+        $proxyRow = $this->_proxyModel->getRow($select);
+        if (!$proxyRow) return $proxyRow;
+        return $this->getRowByProxiedRow($proxyRow);
+    }
+
     public function deleteRows($where)
     {
         Vps_Component_ModelObserver::getInstance()->disable();
