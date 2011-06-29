@@ -14,6 +14,7 @@ class Vpc_Form_Field_Radio_Component extends Vpc_Form_Field_Select_Component
         $ret->setFieldLabel($this->getRow()->field_label);
         $ret->setOutputType($this->getRow()->output_type);
         $ret->setAllowBlank(!$this->getRow()->required);
+        $ret->setHideLabel($this->getRow()->hide_label);
         $values = array();
         foreach ($this->getRow()->getChildRows('Values') as $i) {
             $values[$i->value] = $i->value;

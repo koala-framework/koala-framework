@@ -292,7 +292,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
             $ret = $m->getRows($select);
         }
         foreach ($ret as $r) {
-            $this->_childRows[] = $r;
+            if (!in_array($r, $this->_childRows, true)) $this->_childRows[] = $r;
         }
         $ret->rewind();
         return $ret;

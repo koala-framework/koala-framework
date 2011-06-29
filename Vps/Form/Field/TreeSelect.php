@@ -62,7 +62,7 @@ class Vps_Form_Field_TreeSelect extends Vps_Form_Field_SimpleAbstract
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
-        if ($ret == '' || $ret == 'null') $ret = null;
+        if ($ret == '' || $ret == '0' || $ret == 'null') $ret = null;
         return $ret;
     }
 }

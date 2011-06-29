@@ -24,8 +24,10 @@ class Vps_Media_Image
         if (isset($sourceSize[1])) $h = $sourceSize[1];
         $size = array($w, $h);
         $rotate = null;
-        if ($source) {
-            $exif = @exif_read_data($source);
+        if ($source && function_exists('exif_read_data') &&
+            isset($sourceSize['mime']) && $sourceSize['mime'] == 'image/jpg'
+        ) {
+            $exif = exif_read_data($source);
             if (isset($exif['Orientation'])) {
                 switch ($exif['Orientation']) {
                     case 6:

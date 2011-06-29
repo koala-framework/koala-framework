@@ -16,12 +16,12 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
 
     public function createRow(array $data=array())
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Field');
+        throw new Vps_Exception('getRows is not possible for Vps_Model_FieldRows');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Field');
+        throw new Vps_Exception('getRows is not possible for Vps_Model_FieldRows');
     }
 
     public function update(Vps_Model_FieldRows_Row $row, $rowData)
