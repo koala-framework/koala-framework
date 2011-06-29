@@ -277,9 +277,14 @@ class Vps_Setup
         return $dao->getDb();
     }
 
+    public static function hasDb()
+    {
+        return file_exists('application/config.db.ini');
+    }
+
     public static function createDao()
     {
-        if (!file_exists('application/config.db.ini')) {
+        if (!self::hasDb()) {
             return null;
         }
         return new Vps_Dao();
