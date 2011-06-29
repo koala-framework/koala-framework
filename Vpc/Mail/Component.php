@@ -71,6 +71,8 @@ class Vpc_Mail_Component extends Vpc_Abstract
      */
     public function send(Vpc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
     {
+        $this->_images = array();
+
         $this->_mailData = $data;
 
         $mail = new Vps_Mail();
