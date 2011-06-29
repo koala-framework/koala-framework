@@ -317,7 +317,7 @@ class Vps_User_Model extends Vps_Model_Proxy
 
     public function getAuthedUser()
     {
-        if (!Vps_Registry::get('db')) return null;
+        if (!Vps_Setup::hasDb()) return null;
 
         if (php_sapi_name() == 'cli') return null;
 
@@ -326,7 +326,7 @@ class Vps_User_Model extends Vps_Model_Proxy
             if (!$loginData || !isset($loginData['userId']) || !$loginData['userId']) {
                 return null;
             }
-            $this->_authedUser = $this->getRow($this->select($loginData['userId']));
+            $this->_authedUser = $this->getRow($loginData['userId']);
         }
         return $this->_authedUser;
     }
@@ -339,7 +339,7 @@ class Vps_User_Model extends Vps_Model_Proxy
     public function getAuthedUserRole()
     {
         if (php_sapi_name() == 'cli') return 'cli';
-        if (!Vps_Registry::get('db')) return 'guest';
+        if (!Vps_Setup::hasDb()) return 'guest';
 
         $loginData = Vps_Auth::getInstance()->getStorage()->read();
         if (isset($loginData['userRole'])) {
