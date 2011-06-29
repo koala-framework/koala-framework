@@ -10,7 +10,7 @@ class Vpc_FormDynamic_Basic_Form_Form_Component extends Vpc_Form_Dynamic_Form_Co
         }
         $config['componentClass'] = get_class($this);
         $config['proxyModel'] = new Vps_Model_FnF();
-        $config['mailerClass'] = 'Vps_Mail';
+        $config['mailerClass'] = 'Vpc_FormDynamic_Basic_Form_Form_Mail';
         $config['spamFields'] = array();
         $ret = new Vpc_Form_Dynamic_Form_MailModel($config);
 
