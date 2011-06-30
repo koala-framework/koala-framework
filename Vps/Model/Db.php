@@ -669,6 +669,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     public function deleteRows($where)
     {
         return $this->getTable()->delete($this->_getTableUpdateWhere($where));
+        $this->_afterDeleteRows($where);
     }
 
     public function updateRows($data, $where)
@@ -931,6 +932,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             unlink($filename);
             $this->_updateModelObserver();
             if ($ret != 0) throw new Vps_Exception("SQL import failed: ".implode("\n", $output));
+            $this->_afterImport($format, $data, $options);
         } else if ($format == self::FORMAT_CSV) {
             // if no data is recieved, quit
             if (!$data) return;
@@ -966,6 +968,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             unlink($filename);
             rmdir($tmpImportFolder);
             $this->_updateModelObserver();
+            $this->_afterImport($format, $data, $options);
         } else if ($format == self::FORMAT_ARRAY) {
             if (isset($options['buffer']) && $options['buffer']) {
                 if (isset($this->_importBuffer)) {
@@ -983,6 +986,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $this->_importArray($data, $options);
             }
             $this->_updateModelObserver();
+            $this->_afterImport($format, $data, $options);
         } else {
             parent::import($format, $data);
         }

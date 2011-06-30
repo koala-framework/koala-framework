@@ -542,8 +542,16 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             foreach ($data as $k => $v) {
                 $this->createRow($v)->save();
             }
+            $this->_afterImport($format, $data, $options);
         } else {
             throw new Vps_Exception_NotYetImplemented();
+        }
+    }
+
+    protected function _afterImport($format, $data, $options)
+    {
+        foreach ($this->_proxyContainerModels as $m) {
+            $m->_afterImport($format, $data, $options);
         }
     }
 
@@ -554,6 +562,10 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function deleteRows($where)
     {
         throw new Vps_Exception('not implemented yet.');
+    }
+
+    protected function _afterDeleteRows($where)
+    {
     }
 
     public function updateRows($data, $where)
