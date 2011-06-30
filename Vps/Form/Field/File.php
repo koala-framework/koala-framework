@@ -35,6 +35,17 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         return $ret;
     }
 
+    protected function _validateNotAllowBlank($data, $name)
+    {
+        $ret = array();
+        $v = new Vps_Validate_NotEmpty();
+        $v->setMessage(Vps_Validate_NotEmpty::IS_EMPTY, trlVps("Please choose a file"));
+        if (!$v->isValid($data)) {
+            $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
+        }
+        return $ret;
+    }
+
     public function getMetaData($model)
     {
         $ret = parent::getMetaData($model);
