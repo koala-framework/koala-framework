@@ -4,7 +4,7 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     /**
      * @var Vps_Model_Interface
      */
-    private $_proxyModel;
+    protected $_proxyModel;
     protected $_rowClass = 'Vps_Model_Proxy_Row';
     protected $_rowsetClass = 'Vps_Model_Proxy_Rowset';
 
@@ -17,13 +17,12 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     protected function _init()
     {
         parent::_init();
-        if (is_string($this->_proxyModel)) {
-            $this->_proxyModel = Vps_Model_Abstract::getInstance($this->_proxyModel);
-        }
         if (!$this->_proxyModel) {
             throw new Vps_Exception("proxyModel config is required for model '".get_class($this)."'");
         }
-        $this->_proxyModel->addProxyContainerModel($this);
+        if (!is_string($this->_proxyModel)) {
+            $this->_proxyModel->addProxyContainerModel($this);
+        }
     }
 
     //kann gesetzt werden von proxy (rekursiv bei proxys)
@@ -35,6 +34,10 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function getProxyModel()
     {
+        if (is_string($this->_proxyModel)) {
+            $this->_proxyModel = Vps_Model_Abstract::getInstance($this->_proxyModel);
+            $this->_proxyModel->addProxyContainerModel($this);
+        }
         return $this->_proxyModel;
     }
 
@@ -174,11 +177,7 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     }
 
     public function getUniqueIdentifier() {
-        if (isset($this->getProxyModel())) {
-            return $this->getProxyModel()->getUniqueIdentifier().'_proxy';
-        } else {
-            throw new Vps_Exception("no unique identifier set");
-        }
+        return $this->getProxyModel()->getUniqueIdentifier().'_proxy';
     }
 
     public function getSupportedImportExportFormats()

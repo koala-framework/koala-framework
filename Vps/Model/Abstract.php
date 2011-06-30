@@ -82,9 +82,6 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     protected function _init()
     {
-        foreach ($this->_siblingModels as $k=>$i) {
-            if (is_string($i)) $this->_siblingModels[$k] = Vps_Model_Abstract::getInstance($i);
-        }
         $this->_setupFilters();
     }
 
@@ -150,7 +147,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         $ret = new $this->_rowClass($rowConfig);
 
         $siblingRows = array();
-        foreach ($this->_siblingModels as $m) {
+        foreach ($this->getSiblingModels() as $m) {
             if ($m instanceof Vps_Model_SubModel_Interface) {
                 $siblingRows[] = $m->getRowBySiblingRow($ret);
             } else {
@@ -274,6 +271,9 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function getSiblingModels()
     {
+        foreach ($this->_siblingModels as $k=>$i) {
+            if (is_string($i)) $this->_siblingModels[$k] = Vps_Model_Abstract::getInstance($i);
+        }
         return $this->_siblingModels;
     }
 
