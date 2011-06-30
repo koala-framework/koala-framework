@@ -371,7 +371,7 @@ class Vps_User_Model extends Vps_Model_RowCache
 
     public function synchronize($overrideMaxSyncDelay = Vps_Model_MirrorCache::SYNC_AFTER_DELAY)
     {
-        $this->_proxyModel->synchronize($overrideMaxSyncDelay);
+        $this->getProxyModel()->synchronize($overrideMaxSyncDelay);
     }
 
     public function writeLog(array $data)
