@@ -1,5 +1,5 @@
 <?php
-class Vps_User_Row extends Vps_Model_Proxy_Row
+class Vps_User_Row extends Vps_Model_RowCache_Row
     implements Vps_User_RowInterface, Vpc_Mail_Recipient_TitleInterface
 {
     protected $_changedPasswordData = array();
