@@ -145,12 +145,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 }
             }
         }
-<<<<<<< HEAD
         return $ret;
-=======
-        $path = trim($path, '/');
-        return $this->getComponent()->getPageByUrl($path, $acceptLanguage);
->>>>>>> 1.9
     }
 
     /**
