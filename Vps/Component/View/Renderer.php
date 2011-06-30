@@ -63,12 +63,7 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         );
 
         // Meta-Cache
-        if ($content == Vps_Component_Cache::NO_CACHE) {
-            //TODO: diese exception + die if abfrage unten entfernen, wenn das alles kein problem ist
-            $e = new Vps_Exception("warum ist content NO_CACHE?");
-            $e->logOrThrow();
-        }
-        if ($content != Vps_Component_Cache::NO_CACHE) {
+        if ($content != Vps_Component_Cache::NO_CACHE) { //ist bei partials NO_CACHE
             foreach ($component->getComponent()->getCacheMeta() as $m) {
                 Vps_Component_Cache::getInstance()->saveMeta($component, $m);
             }
