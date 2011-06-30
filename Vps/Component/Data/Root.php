@@ -120,7 +120,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 }
             }
             $path = trim($path, '/');
-            $ret = $this->getComponent()->getPageByUrl($path, $acceptLangauge);
+            $ret = $this->getComponent()->getPageByUrl($path, $acceptLanguage);
             if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
                 $exactMatch = true;
                 apc_add($cacheId, $ret->vpsSerialize());
