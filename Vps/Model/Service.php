@@ -224,6 +224,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
     public function deleteRows($where)
     {
         return $this->_client->deleteRows($where);
+        $this->_afterDeleteRows($where);
     }
 
     public function getSupportedImportExportFormats()
@@ -247,6 +248,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
     public function import($format, $data, $options = array())
     {
         $this->_client->import($format, $data, $options);
+        $this->_afterImport($format, $data, $options);
     }
 
     public function updateRow(array $data)

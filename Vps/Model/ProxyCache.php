@@ -211,7 +211,7 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
             $select = $this->select($select);
         }
         $select->limit(1);
-        return $this->_proxyModel->getRow($select);
+        return $this->getProxyModel()->getRow($select);
     }
 
     public function clearCache()
@@ -227,7 +227,7 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
 
     public function createRow(array $data=array())
     {
-        $proxyRow = $this->_proxyModel->createRow($data);
+        $proxyRow = $this->getProxyModel()->createRow($data);
         $ret = new $this->_rowClass(array(
             'row' => $proxyRow,
             'model' => $this

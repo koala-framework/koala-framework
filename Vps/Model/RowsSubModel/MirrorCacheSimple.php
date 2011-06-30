@@ -19,7 +19,7 @@ class Vps_Model_RowsSubModel_MirrorCacheSimple extends Vps_Model_RowsSubModel_Pr
         }
         $this->_sourceModel->addProxyContainerModel($this);
 
-        if (!($this->_proxyModel instanceof Vps_Model_RowsSubModel_Interface)) {
+        if (!($this->getProxyModel() instanceof Vps_Model_RowsSubModel_Interface)) {
             throw  new Vps_Exception("Proxy model doesn't implement Vps_Model_RowsSubModel_Interface");
         }
     }
