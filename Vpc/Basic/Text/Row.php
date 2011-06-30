@@ -221,6 +221,9 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
             //einfach leere klassen löschen
             $html = preg_replace('#<(.[a-z]+) ([^>]*)class=""([^>]*)>#', '<\1 \2 \3>', $html);
 
+            //html kommentare löschen, löscht auch word schas mit
+            $html = preg_replace('#<!--.*?-->#s', '', $html);
+
             $tidy = new tidy;
             $html = str_replace('_mce_type="bookmark"', 'class="_mce_type-bookmark"', $html);
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig

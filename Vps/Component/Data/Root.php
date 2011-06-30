@@ -82,12 +82,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return parent::__get($var);
     }
 
-    /**
-     * @param string Die Uri incl Protokoll und Domain
-     * @param string acceptLanguage falls verfügbar (kann null sein)
-     * @param bool wird auf false gesetzt falls die url nicht exakt passte und ein redirekt auf die korrekte gemacht werden sollte
-     */
-    public function getPageByUrl($url, $acceptLangauge, &$exactMatch = true)
+    public function getPageByUrl($url, $acceptLanguage)
     {
         $parsedUrl = parse_url($url);
         if (!isset($parsedUrl['path'])) return null;
@@ -119,7 +114,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 }
             }
             $path = trim($path, '/');
-            $ret = $this->getComponent()->getPageByUrl($path, $acceptLangauge);
+            $ret = $this->getComponent()->getPageByUrl($path, $acceptLanguage);
             if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
                 $exactMatch = true;
                 apc_add($cacheId, $ret->vpsSerialize());
