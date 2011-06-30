@@ -89,4 +89,21 @@ class Vps_Model_RowCache extends Vps_Model_Proxy
         $this->_cacheRows = array();
     }
 
+    protected function _afterImport($format, $data, $options)
+    {
+        if ($format == self::FORMAT_ARRAY) {
+            foreach ($data as $r) {
+                $this->clearRowCache($r[$this->getPrimaryKey()]);
+            }
+        } else {
+            apc_delete_file(new APCIterator('user', '#^'.preg_quote($this->_getCacheId('')).'#'));
+        }
+        parent::_afterImport($format, $data, $options);
+    }
+
+    protected function _afterDeleteRows($where)
+    {
+        parent::_afterDeleteRows($where);
+        apc_delete_file(new APCIterator('user', '#^'.preg_quote($this->_getCacheId('')).'#'));
+    }
 }
