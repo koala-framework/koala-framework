@@ -51,6 +51,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
     public function deleteRows($where)
     {
         foreach ($this->getRows($where) as $row) $row->delete();
+        $this->_afterDeleteRows($where);
     }
 
     public function updateRows($data, $where)
@@ -249,7 +250,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         } else if (isset($rowData[$field])) {
             $ret = $rowData[$field];
         } else {
-            foreach ($this->_siblingModels as $m) {
+            foreach ($this->getSiblingModels() as $m) {
                 if ($m->hasColumn($field)) {
                     $row = $m->getRow($rowData[$this->getPrimaryKey()]);
                     if ($row) $ret = $row->$field;
@@ -466,6 +467,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 }
                 $row->save();
             }
+            $this->_afterImport($format, $data, $options);
         } else {
             throw new Vps_Exception_NotYetImplemented();
         }

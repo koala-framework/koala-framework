@@ -17,13 +17,12 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     protected function _init()
     {
         parent::_init();
-        if (is_string($this->_proxyModel)) {
-            $this->_proxyModel = Vps_Model_Abstract::getInstance($this->_proxyModel);
-        }
         if (!$this->_proxyModel) {
             throw new Vps_Exception("proxyModel config is required for model '".get_class($this)."'");
         }
-        $this->_proxyModel->addProxyContainerModel($this);
+        if (!is_string($this->_proxyModel)) {
+            $this->_proxyModel->addProxyContainerModel($this);
+        }
     }
 
     //kann gesetzt werden von proxy (rekursiv bei proxys)
@@ -35,12 +34,16 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function getProxyModel()
     {
+        if (is_string($this->_proxyModel)) {
+            $this->_proxyModel = Vps_Model_Abstract::getInstance($this->_proxyModel);
+            $this->_proxyModel->addProxyContainerModel($this);
+        }
         return $this->_proxyModel;
     }
 
     public function createRow(array $data=array())
     {
-        $proxyRow = $this->_proxyModel->createRow();
+        $proxyRow = $this->getProxyModel()->createRow();
         $ret = new $this->_rowClass(array(
             'row' => $proxyRow,
             'model' => $this
@@ -88,34 +91,34 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function getPrimaryKey()
     {
-        return $this->_proxyModel->getPrimaryKey();
+        return $this->getProxyModel()->getPrimaryKey();
     }
 
     public function isEqual(Vps_Model_Interface $other)
     {
-        if ($this->_proxyModel->isEqual($other)) return true;
+        if ($this->getProxyModel()->isEqual($other)) return true;
         if ($other instanceof Vps_Model_Proxy) {
-            return $this->_proxyModel->isEqual($other->_proxyModel);
+            return $this->getProxyModel()->isEqual($other->getProxyModel());
         }
         return false;
     }
 
     public function getColumnType($col)
     {
-        if ($this->_proxyModel->hasColumn($col)) {
-            return $this->_proxyModel->getColumnType($col);
+        if ($this->getProxyModel()->hasColumn($col)) {
+            return $this->getProxyModel()->getColumnType($col);
         }
         return parent::getColumnType($col);
     }
 
     protected function _getOwnColumns()
     {
-        return $this->_proxyModel->getColumns();
+        return $this->getProxyModel()->getColumns();
     }
 
     public function hasColumn($col)
     {
-        if ($this->_proxyModel->hasColumn($col)) return true;
+        if ($this->getProxyModel()->hasColumn($col)) return true;
         if (in_array($col, $this->getExprColumns())) return true;
         foreach ($this->getSiblingModels() as $m) {
             if ($m->hasColumn($col)) return true;
@@ -126,18 +129,18 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     public function getExprColumns()
     {
         $ret = parent::getExprColumns();
-        $ret = array_merge($this->_proxyModel->getExprColumns(), $ret);
+        $ret = array_merge($this->getProxyModel()->getExprColumns(), $ret);
         return $ret;
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
-        return $this->_proxyModel->getIds($where, $order, $limit, $start);
+        return $this->getProxyModel()->getIds($where, $order, $limit, $start);
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        $proxyRowset = $this->_proxyModel->getRows($where, $order, $limit, $start);
+        $proxyRowset = $this->getProxyModel()->getRows($where, $order, $limit, $start);
         return new $this->_rowsetClass(array(
             'rowset' => $proxyRowset,
             'rowClass' => $this->_rowClass,
@@ -145,10 +148,17 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         ));
     }
 
+    public function getRow($select)
+    {
+        $proxyRow = $this->getProxyModel()->getRow($select);
+        if (!$proxyRow) return $proxyRow;
+        return $this->getRowByProxiedRow($proxyRow);
+    }
+
     public function deleteRows($where)
     {
         Vps_Component_ModelObserver::getInstance()->disable();
-        $ret = $this->_proxyModel->deleteRows($where);
+        $ret = $this->getProxyModel()->deleteRows($where);
         Vps_Component_ModelObserver::getInstance()->enable();
         return $ret;
     }
@@ -156,66 +166,62 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     public function updateRows($data, $where)
     {
         Vps_Component_ModelObserver::getInstance()->disable();
-        $ret = $this->_proxyModel->updateRows($data, $where);
+        $ret = $this->getProxyModel()->updateRows($data, $where);
         Vps_Component_ModelObserver::getInstance()->enable();
         return $ret;
     }
 
     public function countRows($where = array())
     {
-        return $this->_proxyModel->countRows($where);
+        return $this->getProxyModel()->countRows($where);
     }
 
     public function getUniqueIdentifier() {
-        if (isset($this->_proxyModel)) {
-            return $this->_proxyModel->getUniqueIdentifier().'_proxy';
-        } else {
-            throw new Vps_Exception("no unique identifier set");
-        }
+        return $this->getProxyModel()->getUniqueIdentifier().'_proxy';
     }
 
     public function getSupportedImportExportFormats()
     {
-        return $this->_proxyModel->getSupportedImportExportFormats();
+        return $this->getProxyModel()->getSupportedImportExportFormats();
     }
 
     public function export($format, $select = array())
     {
-        return $this->_proxyModel->export($format, $select);
+        return $this->getProxyModel()->export($format, $select);
     }
 
     public function import($format, $data, $options = array())
     {
         Vps_Component_ModelObserver::getInstance()->disable();
-        $this->_proxyModel->import($format, $data, $options);
+        $this->getProxyModel()->import($format, $data, $options);
         Vps_Component_ModelObserver::getInstance()->enable();
     }
 
     public function writeBuffer()
     {
-        $this->_proxyModel->writeBuffer();
+        $this->getProxyModel()->writeBuffer();
     }
 
     public function getTable()
     {
-        return $this->_proxyModel->getTable();
+        return $this->getProxyModel()->getTable();
     }
 
     public function getSqlForSelect($select)
     {
-        return $this->_proxyModel->getSqlForSelect($select);
+        return $this->getProxyModel()->getSqlForSelect($select);
     }
 
     public function dependentModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
         parent::dependentModelRowUpdated($row, $action);
-        $this->_proxyModel->dependentModelRowUpdated($row, $action);
+        $this->getProxyModel()->dependentModelRowUpdated($row, $action);
     }
 
     public function childModelRowUpdated(Vps_Model_Row_Abstract $row, $action)
     {
         parent::childModelRowUpdated($row, $action);
-        $this->_proxyModel->childModelRowUpdated($row, $action);
+        $this->getProxyModel()->childModelRowUpdated($row, $action);
     }
 
     /**
@@ -229,6 +235,6 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     public function clearRows()
     {
         parent::clearRows();
-        $this->_proxyModel->clearRows();
+        $this->getProxyModel()->clearRows();
     }
 }
