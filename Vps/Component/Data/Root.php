@@ -85,7 +85,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     /**
      * @return Vps_Component_Data
      */
-    public function getPageByUrl($url, $acceptLangauge)
+    public function getPageByUrl($url, $acceptLanguage)
     {
         $parsedUrl = parse_url($url);
         if (!isset($parsedUrl['path'])) return null;
@@ -108,7 +108,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             }
         }
         $path = trim($path, '/');
-        return $this->getComponent()->getPageByUrl($path, $acceptLangauge);
+        return $this->getComponent()->getPageByUrl($path, $acceptLanguage);
     }
 
     /**
