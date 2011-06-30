@@ -18,12 +18,17 @@ class Vps_User_Model extends Vps_Model_RowCache
 
     protected $_noLogColumns = array();
 
+    public function getUniqueIdentifier()
+    {
+        return get_class($this);
+    }
+
     public function __construct(array $config = array())
     {
         if (!isset($config['proxyModel'])) {
-            $config['proxyModel'] = new Vps_User_Mirror();
+            $config['proxyModel'] = 'Vps_User_Mirror';
         }
-        $this->_siblingModels['webuser'] = Vps_Model_Abstract::getInstance('Vps_User_Web_Model');
+        $this->_siblingModels['webuser'] = 'Vps_User_Web_Model';
         if (isset($config['mailClass'])) {
             $this->_mailClass = $config['mailClass'];
         }
