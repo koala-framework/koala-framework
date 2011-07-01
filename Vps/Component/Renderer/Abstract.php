@@ -34,6 +34,7 @@ abstract class Vps_Component_Renderer_Abstract
 
         // {cc type: componentId(value)[plugins] config}
         while (preg_match('/{cc ([a-z]+): ([^ \[}\(]+)(\([^ }]+\))?(\[[^}]+\])?( [^}]*)}/i', $ret, $matches)) {
+            $startTime = microtime(true);
             $type = $matches[1];
             $componentId = trim($matches[2]);
             $value = (string)trim($matches[3]); // Bei Partial partialId oder bei master component_id zu der das master gehört
@@ -92,6 +93,8 @@ abstract class Vps_Component_Renderer_Abstract
 
             if ($statType) Vps_Benchmark::count("rendered $statType", $statId);
             $ret = str_replace($matches[0], $content, $ret);
+
+            Vps_Benchmark::subCheckpoint($componentId.' '.$type, microtime(true)-$startTime);
         }
         while (preg_match('/{plugin (\d) ([^}]*) ([^}]*)}(.*){\/plugin \\1}/s', $ret, $matches)) {
             $pluginClass = $matches[2];

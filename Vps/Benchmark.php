@@ -1,11 +1,13 @@
 <?php
 class Vps_Benchmark
 {
-    private static $_startTime;
     private static $_enabled = false;
     private static $_logEnabled = false;
     protected static $_counter = array();
     public static $benchmarks = array();
+    private static $_checkpoints = array();
+    private static $_subCheckpoints = array();
+    public static $startTime; //wird von Vps_Setup::setUp gesetzt
 
     private static function _getInstance()
     {
@@ -33,7 +35,6 @@ class Vps_Benchmark
 
     public static function enable()
     {
-        if (!isset(self::$_startTime)) self::$_startTime = microtime(true);
         self::$_enabled = true;
     }
 
@@ -44,7 +45,6 @@ class Vps_Benchmark
 
     public static function enableLog()
     {
-        if (!isset(self::$_startTime)) self::$_startTime = microtime(true);
         self::$_logEnabled = true;
     }
 
@@ -137,7 +137,7 @@ class Vps_Benchmark
         if (PHP_SAPI != 'cli') {
             echo '<div style="text-align:left;position:absolute;top:0;right:0;z-index:1000;width:200px;opacity:0.5" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5">';
             echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:1500px;position:absolute;padding:5px;">';
-            echo round(microtime(true) - self::$_startTime, 3)." sec<br />\n";
+            echo round(microtime(true) - self::$startTime, 3)." sec<br />\n";
             $load = @file_get_contents('/proc/loadavg');
             $load = explode(' ', $load);
             echo "Load: ". $load[0]."<br />\n";
@@ -167,6 +167,34 @@ class Vps_Benchmark
                 echo "</div>";
             }
         }
+        echo "<table>";
+        echo "<tr><th>ms</th><th>%</th><th>Checkpoint</th></tr>";
+        $sum = 0;
+        foreach (self::$_checkpoints as $checkpoint) {
+            $sum += $checkpoint[0];
+        }
+        foreach (self::$_checkpoints as $i=>$checkpoint) {
+            echo "<tr>";
+            echo "<th>".round($checkpoint[0]*1000)."</th>";
+            echo "<th>".round(($checkpoint[0]/$sum)*100)."</th>";
+            echo "<th>".$checkpoint[1]."</th>";
+            echo "</tr>";
+            if (isset(self::$_subCheckpoints[$i])) {
+                $subSum = 0;
+                foreach (self::$_subCheckpoints[$i] as $subCheckpoint) {
+                    $subSum += $subCheckpoint[0];
+                    $percent = ($subCheckpoint[0]/$sum)*100;
+                    if ($percent > 1) {
+                        echo "<tr>";
+                        echo "<th>".round($subCheckpoint[0]*1000)."</th>";
+                        echo "<th>".round($percent)."</th>";
+                        echo "<th>&nbsp;&nbsp;".$subCheckpoint[1]."</th>";
+                        echo "</tr>";
+                    }
+                }
+            }
+        }
+        echo "</table>";
         if (PHP_SAPI != 'cli') {
             echo "</div>";
             echo "</div>";
@@ -227,6 +255,8 @@ class Vps_Benchmark
 
     final public static function shutDown()
     {
+        Vps_Benchmark::checkpoint('shutDown');
+
         if (function_exists('xhprof_disable') && file_exists('/www/public/niko/xhprof')) {
             //TODO irgendwie intelligenter aktivieren/deaktivieren
             $xhprof_data = xhprof_disable();
@@ -282,7 +312,7 @@ class Vps_Benchmark
             if (is_array($value)) $value = count($value);
             $this->_memcacheCount($prefix.$name, $value);
         }
-        $value = (int)((microtime(true) - self::$_startTime)*1000);
+        $value = (int)((microtime(true) - self::$startTime)*1000);
         $this->_memcacheCount($prefix.'duration', $value);
     }
 
@@ -296,4 +326,29 @@ class Vps_Benchmark
         self::_getInstance()->_memcacheCount($name, $value);
     }
 
+    public static function subCheckpoint($description, $time)
+    {
+        if (!self::$_enabled) return;
+        if (!isset(self::$_subCheckpoints[count(self::$_checkpoints)])) {
+            self::$_subCheckpoints[count(self::$_checkpoints)] = array();
+        }
+        self::$_subCheckpoints[count(self::$_checkpoints)][] = array(
+            $time,
+            $description,
+        );
+    }
+
+    public static function checkpoint($description)
+    {
+        if (!self::$_enabled) return;
+        static $previousTime;
+        if (!$previousTime) $previousTime = self::$startTime;
+        $time = microtime(true) - $previousTime;
+        $previousTime = microtime(true);
+        self::$_checkpoints[] = array(
+            $time,
+            $description,
+            array() //sub
+        );
+    }
 }
