@@ -45,6 +45,9 @@ class Vps_Setup
 
     public static function setUp($configClass = 'Vps_Config_Web')
     {
+        require_once('Vps/Benchmark.php');
+        Vps_Benchmark::$startTime = microtime(true);
+
         if (isset($_SERVER['HTTP_CLIENT_IP'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CLIENT_IP'];
 
         self::setUpZend();
@@ -260,6 +263,7 @@ class Vps_Setup
         ) {
             self::_setLocale();
         }
+        Vps_Benchmark::checkpoint('setUp');
     }
 
     public static function shutDown()
@@ -366,6 +370,7 @@ class Vps_Setup
             $root = Vps_Component_Data_Root::getInstance();
             $exactMatch = true;
             $data = $root->getPageByUrl($requestUrl, $acceptLanguage, $exactMatch);
+            Vps_Benchmark::checkpoint('getPageByUrl');
             if (!$data) {
                 throw new Vps_Exception_NotFound();
             }
