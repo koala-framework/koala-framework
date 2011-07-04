@@ -132,6 +132,8 @@ class Vps_Benchmark
 
     public static function output()
     {
+        Vps_Benchmark::checkpoint('shutDown');
+
         if (isset($_COOKIE['unitTest'])) return;
         if (!self::$_enabled) return;
         if (PHP_SAPI != 'cli') {
