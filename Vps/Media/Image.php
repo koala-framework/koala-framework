@@ -24,8 +24,11 @@ class Vps_Media_Image
         if (isset($sourceSize[1])) $h = $sourceSize[1];
         $size = array($w, $h);
         $rotate = null;
-        if ($source && function_exists('exif_read_data') &&
-            isset($sourceSize['mime']) && $sourceSize['mime'] == 'image/jpg'
+        if (Vps_Registry::get('config')->image->autoExifRotate &&
+            $source &&
+            function_exists('exif_read_data') &&
+            isset($sourceSize['mime']) &&
+            ($sourceSize['mime'] == 'image/jpg' || $sourceSize['mime'] == 'image/jpeg')
         ) {
             $exif = exif_read_data($source);
             if (isset($exif['Orientation'])) {

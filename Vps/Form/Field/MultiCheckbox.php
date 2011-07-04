@@ -269,11 +269,13 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     public function validate($row, $postData)
     {
         $ret = parent::validate($row, $postData);
-        if (!$this->getAllowBlank() && !count($this->_getIdsFromPostData($postData))) {
-            $ret[] = array(
-                'message' => $this->getEmptyMessage(),
-                'field' => $this
-            );
+        if (!is_null($this->getAllowBlank()) && !$this->getAllowBlank()) {
+            if (!count($this->_getIdsFromPostData($postData))) {
+                $ret[] = array(
+                    'message' => $this->getEmptyMessage(),
+                    'field' => $this
+                );
+            }
         }
         return $ret;
     }
