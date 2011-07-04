@@ -21,9 +21,6 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
         if (!$xml = $cache->load($this->getData())) {
             $xml = $this->_getFeedXml();
             $cache->save($this->getData(), $xml);
-            foreach ($this->getData()->getComponent()->getCacheMeta() as $m) {
-                Vps_Component_Cache::getInstance()->saveMeta($component, $m);
-            }
         }
         return $xml;
     }
