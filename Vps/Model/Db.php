@@ -316,7 +316,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
         if ($exprs = $select->getPart(Vps_Model_Select::EXPR)) {
             foreach ($exprs as $field) {
-                if (!$col = $this->_formatFieldExpr($field, $dbSelect)) {
+                if (!$col = $this->_formatField($field, $dbSelect)) {
                     throw new Vps_Exception("Expression '$field' not found");
                 }
                 $dbSelect->from(null, array($field=>new Zend_Db_Expr($col)));
@@ -767,7 +767,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     }
 
 
-    public function export($format, $select = array())
+    public function export($format, $select = array(), $options = array())
     {
         if ($format == self::FORMAT_SQL) {
             $wherePart = '';
@@ -812,8 +812,23 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $tmpExportFolder = realpath('application/temp').'/modelcsv'.uniqid();
             mkdir($tmpExportFolder, 0777);
             $filename = $tmpExportFolder.'/csvexport';
-
+            if (isset($options['columns'])) {
+                foreach ($options['columns'] as $c) {
+                    $select->expr($c);
+                }
+            }
             $dbSelect = $this->createDbSelect($select);
+            if (isset($options['columns'])) {
+                $columns = $dbSelect->getPart(Zend_Db_Select::COLUMNS);
+                unset($columns[0]);
+                foreach ($this->getOwnColumns() as $c) {
+                    if (in_array($c, $options['columns'])) {
+                        $columns[] = array($this->getTableName(),  $c, null);
+                    }
+                }
+                $dbSelect->reset(Zend_Db_Select::COLUMNS);
+                $dbSelect->setPart(Zend_Db_Select::COLUMNS, $columns);
+            }
             $sqlString = $dbSelect->assembleIntoOutfile($filename);
 
             $dbSelect->limit(1);
