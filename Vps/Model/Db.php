@@ -584,6 +584,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
             }
             return '('.implode('+ ', $sqlExpressions).')';
         } else if ($expr instanceof Vps_Model_Select_Expr_Sql) {
+            foreach ($expr->getUsedColumns() as $f) {
+                //mit dem rückgabewert nichts machen, das ist nur zum joinen von sibling models
+                $this->_formatFieldInternal($f, $dbSelect);
+            }
             return '('.$expr->getSql().')';
         } else {
             throw new Vps_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
