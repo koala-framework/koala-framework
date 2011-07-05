@@ -24,22 +24,28 @@ class Vps_Update_Action_Component_ConvertComponentIds extends Vps_Update_Action_
             $table = array_values($table);
             $table = $table[0];
             $hasComponentId = false;
+            $column = 'component_id';
             foreach ($db->query("SHOW FIELDS FROM $table")->fetchAll() as $field) {
-                if ($field['Field'] == 'component_id') $hasComponentId = true;
+                if ($table == 'vps_pages') {
+                    $column = 'parent_id';
+                    $hasComponentId = true;
+                } else if ($field['Field'] == 'component_id') {
+                    $hasComponentId = true;
+                }
             }
             if ($hasComponentId) {
                 $dbPattern = str_replace('_', '\_', $pattern);
                 if ($overwrite) {
-                    $sql = "(SELECT REPLACE(component_id, '$search', '$replace')
-                            FROM $table WHERE component_id LIKE '$dbPattern')";
+                    $sql = "(SELECT REPLACE($column, '$search', '$replace')
+                            FROM $table WHERE $column LIKE '$dbPattern')";
                     $ids = $db->fetchCol($sql);
                     $sql = "DELETE FROM $table
-                        WHERE component_id IN ('" . implode("', '", $ids) . "')";
+                        WHERE $column IN ('" . implode("', '", $ids) . "')";
                     $db->query($sql);
                 }
-                $db->query("UPDATE $table SET component_id =
-                        REPLACE(component_id, '$search', '$replace')
-                        WHERE component_id LIKE '$dbPattern'");
+                $db->query("UPDATE $table SET $column =
+                        REPLACE($column, '$search', '$replace')
+                        WHERE $column LIKE '$dbPattern'");
             }
         }
         $db->query("UPDATE vpc_basic_text SET content =
