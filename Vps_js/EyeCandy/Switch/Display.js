@@ -4,8 +4,10 @@ document.write('<style type="text/css"> div.vpsSwitchDisplay div.switchContent {
 Vps.onContentReady(function() {
     var els = Ext.query('div.vpsSwitchDisplay');
     els.forEach(function(el) {
-        el = Ext.get(el);
-        el.switchDisplayObject = new Vps.Switch.Display(el);
+        if (!el.switchDisplayObject) {
+            el = Ext.get(el);
+            el.switchDisplayObject = new Vps.Switch.Display(el);
+        }
     });
 });
 
