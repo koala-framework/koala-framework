@@ -36,7 +36,7 @@ interface Vps_Model_Interface
 
     public function getSupportedImportExportFormats();
     public function copyDataFromModel(Vps_Model_Interface $sourceModel, Vps_Model_Select $select = null, array $importOptions = array());
-    public function export($format, $select = array());
+    public function export($format, $select = array(), $options = array());
     public function import($format, $data, $options = array());
     public function writeBuffer();
     public function updateRow(array $data);
