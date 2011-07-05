@@ -147,7 +147,10 @@ Vpc.ListSwitch.View.prototype = {
 Vps.onContentReady(function() {
     var switches = Ext.DomQuery.select('div.vpsListSwitch');
     Ext.each(switches, function(sw) {
-        var list = new Vpc.ListSwitch.View(sw);
+        if (!sw.listSwitchInitDone) {
+            var list = new Vpc.ListSwitch.View(sw);
+            sw.listSwitchInitDone = true;
+        }
     });
 });
 
