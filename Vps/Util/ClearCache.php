@@ -140,7 +140,12 @@ class Vps_Util_ClearCache
                     }
                 }
             }
+            $this->_refreshCache($types, $output, $server);
         }
+    }
+
+    protected function _refreshCache($types, $output, $server)
+    {
     }
 
     protected function _clearCache(array $types, $output, $server)
