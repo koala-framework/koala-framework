@@ -16,7 +16,7 @@ Vpc.Directories.Item.Directory.TabsPanel = Ext.extend(Vps.Binding.ProxyPanel,
         var grid = new Vps.Auto.GridPanel({
             controllerUrl: this.controllerUrl,
             region: 'west',
-            width: 500,
+            width: this.width,
             split: true
         });
 
