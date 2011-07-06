@@ -770,6 +770,28 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $this->getTableName();
     }
 
+    private function _createDbSelectWithColumns($select, $options)
+    {
+        if (isset($options['columns'])) {
+            foreach ($options['columns'] as $c) {
+                $select->expr($c);
+            }
+        }
+        $dbSelect = $this->createDbSelect($select);
+        if (isset($options['columns'])) {
+            $columns = $dbSelect->getPart(Zend_Db_Select::COLUMNS);
+            unset($columns[0]);
+            foreach ($this->getOwnColumns() as $c) {
+                if (in_array($c, $options['columns'])) {
+                    $columns[] = array($this->getTableName(),  $c, null);
+                }
+            }
+            $dbSelect->reset(Zend_Db_Select::COLUMNS);
+            $dbSelect->setPart(Zend_Db_Select::COLUMNS, $columns);
+        }
+
+        return $dbSelect;
+    }
 
     public function export($format, $select = array(), $options = array())
     {
@@ -816,24 +838,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $tmpExportFolder = realpath('application/temp').'/modelcsv'.uniqid();
             mkdir($tmpExportFolder, 0777);
             $filename = $tmpExportFolder.'/csvexport';
-            if (isset($options['columns'])) {
-                foreach ($options['columns'] as $c) {
-                    $select->expr($c);
-                }
-            }
-            $dbSelect = $this->createDbSelect($select);
-            if (isset($options['columns'])) {
-                $columns = $dbSelect->getPart(Zend_Db_Select::COLUMNS);
-                unset($columns[0]);
-                foreach ($this->getOwnColumns() as $c) {
-                    if (in_array($c, $options['columns'])) {
-                        $columns[] = array($this->getTableName(),  $c, null);
-                    }
-                }
-                $dbSelect->reset(Zend_Db_Select::COLUMNS);
-                $dbSelect->setPart(Zend_Db_Select::COLUMNS, $columns);
-            }
             $sqlString = $dbSelect->assembleIntoOutfile($filename);
+
+            $dbSelect = $this->_createDbSelectWithColumns($select, $options);
 
             $dbSelect->limit(1);
             $fieldResult = $dbSelect->query()->fetchAll();
@@ -863,7 +870,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (is_string($select)) $select = array($select);
                 $select = $this->select($select);
             }
-            $dbSelect = $this->createDbSelect($select);
+            $dbSelect = $this->_createDbSelectWithColumns($select, $options);
             if (!$dbSelect) return array();
             return $dbSelect->query()->fetchAll();
         } else {
