@@ -7,6 +7,7 @@ class Vpc_Directories_Item_Directory_ExtConfigTabs extends Vpc_Directories_Item_
         $ret['items']['needsComponentPanel'] = false;
         $ret['items']['xtype'] = 'vpc.directories.item.directory.tabs';
         $ret['items']['detailsControllerUrl'] = $this->getControllerUrl('Form');
+        $ret['items']['width'] = '500';
         return $ret;
     }
 }

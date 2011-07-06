@@ -7,15 +7,6 @@ Vps.onContentReady(function() {
             var cfg = Ext.decode(inputEl.dom.value);
             var flashWrapper = Ext.get(flashComponent).down('.flashWrapper');
             if (flashWrapper) {
-                var flashVars = '';
-                for (var i in cfg.vars) {
-                    flashVars = flashVars + '&'+i+'='+cfg.vars[i];
-                }
-
-                if (flashVars.length >= 1) {
-                    flashVars = flashVars.substr(1); // erstes zeichen wegschneiden
-                }
-
                 params = Ext.apply(
                     cfg.data.params,
                     {
@@ -31,7 +22,7 @@ Vps.onContentReady(function() {
                     cfg.data.width, cfg.data.height,
                     "9", //min version
                     "#FFFFFF",
-                    flashVars,
+                    cfg.vars,
                     params
                 );
             }

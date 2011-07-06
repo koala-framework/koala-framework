@@ -43,6 +43,9 @@ class Vps_Util_Check_Config
         $checks['memory_limit'] = array(
             'name' => 'memory_limit'
         );
+        $checks['magic_quotes_gpc'] = array(
+            'name' => 'magic_quotes_gpc'
+        );
 
         //ab hier wird die config geladen
         $checks['setup_vps'] = array(
@@ -317,6 +320,13 @@ class Vps_Util_Check_Config
         }
         if (!apc_delete('foobar')) {
             throw new Vps_Exception("apc_delete returned false");
+        }
+    }
+
+    private static function _magic_quotes_gpc()
+    {
+        if (get_magic_quotes_gpc()) {
+            throw new Vps_Exception("magic_quotes_gpc is turned on. Please allow disabling it in .httaccess or turn off in php.ini");
         }
     }
 }

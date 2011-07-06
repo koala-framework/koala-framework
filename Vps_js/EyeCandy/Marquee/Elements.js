@@ -2,10 +2,13 @@ Vps.onContentReady(function()
 {
     var MarqueeComponents = Ext.query('div.vpsMarqueeElements');
     Ext.each(MarqueeComponents, function(c) {
-        var config = Ext.decode(Ext.query('> input.settings', c)[0].value);
-        config.selectorRoot = new Ext.Element(c);
-        var Marquee = new Vps.Marquee.Elements(config);
-        Marquee.start();
+        if (!c.vpsMarqueeInitDone) {
+            var config = Ext.decode(Ext.query('> input.settings', c)[0].value);
+            config.selectorRoot = new Ext.Element(c);
+            var Marquee = new Vps.Marquee.Elements(config);
+            Marquee.start();
+            c.vpsMarqueeInitDone = true;
+        }
     });
 });
 
