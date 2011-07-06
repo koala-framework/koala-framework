@@ -7,7 +7,9 @@ class Vps_Controller_Action_Cli_Web_BenchmarkController extends Vps_Controller_A
         parent::preDispatch();
         $this->_rrds = array();
         foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
-            $this->_rrds[$k] = new $n;
+            if ($n) {
+                $this->_rrds[$k] = new $n;
+            }
         }
     }
 
