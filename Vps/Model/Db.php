@@ -195,7 +195,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
                         // aber dann müsste auch der join über diese funktion laufen
                         return $m->getTableName().'.'.$field;
                     }
-                    $ret = $m->_formatFieldInternal($field, $dbSelect);
+                    if (is_string($field)) {
+                        $ret = $m->_formatFieldInternal($field, $dbSelect);
+                    } else {
+                        $ret = $this->_createDbSelectExpression($field, $dbSelect, $m);
+                    }
                     if ($ret) return $ret;
                 }
             }
