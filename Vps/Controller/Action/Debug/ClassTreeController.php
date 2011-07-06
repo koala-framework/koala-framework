@@ -25,9 +25,9 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
                 $ret .= "\n";
                 $last = $node;
                 if (!in_array($child, $processed)) {
+                    $processed[] = $child;
                     $ret .= $this->_graphData($child, $class);
                 }
-                $processed[] = $child;
             }
         }
         return $ret;
