@@ -13,6 +13,7 @@ abstract class Vpc_Basic_LinkTag_Lightbox_Component extends Vpc_Basic_LinkTag_Ab
         $ret['assets']['dep'][] = 'VpsLightbox';
         $ret['popupDefaultWidth'] = 400;
         $ret['popupDefaultHeight'] = 300;
+        $ret['extConfig'] = 'Vpc_Abstract_Composite_ExtConfigChildConfigs';
         return $ret;
     }
 
