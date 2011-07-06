@@ -3,7 +3,7 @@ class Vps_Util_Rrd_Graph
 {
     private static $_defaultColors = array('#249900', '#999999', '#FF0000',
         '#00FFFF', '#0000FF', '#000000', '#FFFF00', '#C05800', '#FF9500', '#FF9500',
-        '#C0C0FF', '#FFC0C0');
+        '#C0C0FF', '#FFC0C0', '#00FF00', '#FF00FF');
     private $_rrd;
     private $_verticalLabel = null;
     private $_title = null;

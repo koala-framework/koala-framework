@@ -68,6 +68,19 @@ class Vps_Srpc_Client
             $httpClientConfig = array_merge($httpClientConfig, $this->_proxy);
             $httpClientConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
         }
+
+        // log
+        $logParams = $params;
+        if (!empty($logParams['arguments'])) {
+            $logParams['arguments'] = unserialize($logParams['arguments']);
+        }
+        if (!empty($logParams['extraParams'])) {
+            $logParams['extraParams'] = unserialize($logParams['extraParams']);
+        }
+        $log = "\n\n\n--".date('Y-m-d H:i:s')."-- ".$this->getServerUrl()."\nCONFIG: ".print_r($httpClientConfig, true)."\nPARAMS: ".print_r($logParams, true);
+        file_put_contents('application/log/srpc-request-values', $log, FILE_APPEND);
+
+        // http request
         $httpClient = new Zend_Http_Client($this->getServerUrl(), $httpClientConfig);
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost($params);
