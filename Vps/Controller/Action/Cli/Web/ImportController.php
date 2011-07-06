@@ -188,7 +188,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                                 $cacheTables[] = $table;
                             }
                         }
-                    } else if (in_array($t, $tables)){
+                    } else /*if (in_array($t, $tables))*/ {
                         $cacheTables[] = $t;
                     }
                 }
@@ -203,7 +203,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                                 $keepTables[] = $table;
                             }
                         }
-                    } else if (in_array($t, $tables)) {
+                    } else /*if (in_array($t, $tables))*/ {
                         $keepTables[] = $t;
                     }
                 }
@@ -217,7 +217,6 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                     echo $dumpname.".bz2\n";
                 }
             }
-
 
             if ($keepTables) {
                 echo "erstelle dump fuer KeepTables '$dbKey'...\n";
