@@ -7,7 +7,9 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
         parent::preDispatch();
         $this->_rrds = array();
         foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
-            $this->_rrds[$k] = new $n;
+            if ($n) {
+                $this->_rrds[$k] = new $n;
+            }
         }
         $this->_rrds = array_reverse($this->_rrds);
     }
