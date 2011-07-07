@@ -12,7 +12,7 @@ Vps.Form.ColorPicker = Ext.extend(Ext.form.TriggerField,
                 shadow:true,
                 closeAction: 'hide'
             });
-            debugger;
+//             debugger;
         win.show();
         win.focus();
     }
