@@ -180,16 +180,17 @@ class Vps_Util_ClearCache
             } else {
                 $config = Vps_Registry::get('config');
                 $d = $config->server->domain;
+                $s = microtime(true);
                 $url = "http://vivid:planet@$d/vps/util/apc/clear-cache";
                 $c = @file_get_contents($url);
-                if ($c != 'OK') {
+                if (substr($c, 0, 2) != 'OK') {
                     $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
                     $url = "http://vivid:planet@$d/vps/util/apc/clear-cache";
                     $c = @file_get_contents($url);
                 }
                 if ($output) {
-                    if ($c == 'OK') {
-                        if ($output) echo "cleared:     apc\n";
+                    if (substr($c, 0, 2) == 'OK') {
+                        if ($output) echo "cleared:     apc (".round((microtime(true)-$s)*1000)."ms) $c\n";
                     } else {
                         if ($output) echo "error:       apc ($url)\n$c\n\n";
                     }

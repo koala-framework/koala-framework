@@ -223,6 +223,12 @@ class Vps_Setup
             }
         }
 
+        if (isset($_SERVER['REQUEST_URI']) &&
+            substr($_SERVER['REQUEST_URI'], 0, 14) == '/vps/util/apc/'
+        ) {
+            Vps_Util_Apc::dispatchUtils();
+        }
+
         if ($config->showPlaceholder
                 && !$config->ignoreShowPlaceholder
                 && php_sapi_name() != 'cli'
