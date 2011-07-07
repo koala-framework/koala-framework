@@ -624,10 +624,12 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
     {
         $out = array();
         foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
-            $rrd = new $n;
-            $file = $rrd->getFileName();
-            if (file_exists($file)) {
-                $out[$file] = `LC_ALL=C rrdtool dump $file | gzip`;
+            if ($n) {
+                $rrd = new $n;
+                $file = $rrd->getFileName();
+                if (file_exists($file)) {
+                    $out[$file] = `LC_ALL=C rrdtool dump $file | gzip`;
+                }
             }
         }
         echo serialize($out);
