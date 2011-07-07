@@ -31,10 +31,18 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         }
     }
 
+    //kann überschrieben werden um zB ein limit einzubauen
+    protected function _getSelect()
+    {
+        $select = new Vps_Component_Select();
+        $select->whereGenerator('child');
+        return $select;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $children = $this->getData()->getChildComponents(array('generator' => 'child'));
+        $children = $this->getData()->getChildComponents($this->_getSelect());
 
         // children ist die alte methode, bleibt drin wegen kompatibilität
         $ret['children'] = $children;
