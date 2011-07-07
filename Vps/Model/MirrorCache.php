@@ -64,6 +64,14 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         return $ret;
     }
 
+    public function getRow($select)
+    {
+        $this->_synchronize();
+        $ret = parent::getRow($select);
+        $this->_unlockSync();
+        return $ret;
+    }
+
     /**
      * @deprecated
      * Use synchronize instead

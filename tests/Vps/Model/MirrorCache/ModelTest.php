@@ -60,6 +60,7 @@ class Vps_Model_MirrorCache_ModelTest extends Vps_Test_TestCase
     {
         $m = $this->_getModel();
         $r = $m->getRow(3);
+        $this->assertNotNull($r);
         $this->assertEquals(3, $r->id);
         $this->assertEquals('Kurt', $r->firstname);
     }
