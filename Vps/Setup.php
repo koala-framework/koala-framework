@@ -216,6 +216,7 @@ class Vps_Setup
             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
             && substr($_SERVER['REDIRECT_URL'], 0, 17) != '/wirecard_confirm' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/service/' //rssinclude
+            && substr($_SERVER['REDIRECT_URL'], 0, 13) != '/admin/stats/' //rssinclude
         ) {
             $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
             if (empty($sessionPhpAuthed->success)) {
