@@ -29,7 +29,7 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     public function addProxyContainerModel($m)
     {
         parent::addProxyContainerModel($m);
-        $this->_proxyModel->addProxyContainerModel($m);
+        $this->getProxyModel()->addProxyContainerModel($m);
     }
 
     public function getProxyModel()
