@@ -13,6 +13,17 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
         parent::__construct($config);
     }
 
+    //cache ist nur einmal implementiert in getRows. getRow ruft daher einfach getRows auf
+    //(und nicht wie Model_Proxy)
+    public function getRow($select)
+    {
+        if (!is_object($select)) {
+            $select = $this->select($select);
+        }
+        $select->limit(1);
+        return $this->getRows($select)->current();
+    }
+
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
 
