@@ -4,7 +4,7 @@ class Vpc_Basic_LinkTag_Lightbox_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
     // wird bei linklist verwendet, damit url richtig ausgegeben wird
     public function componentToString($data)
     {
-        return '';
+        return trlVps('Lightbox');
     }
 
     public function getLinkTagForms()
