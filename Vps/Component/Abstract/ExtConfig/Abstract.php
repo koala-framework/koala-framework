@@ -106,24 +106,36 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
         );
         $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig();
         foreach ($cfg as $k=>$c) {
+            $suffix = $componentIdSuffix;
+            if (isset($c['componentIdSuffix'])) {
+                $suffix .= $c['componentIdSuffix'];
+                unset($c['componentIdSuffix']);
+            }
             $ret['componentConfigs'][$componentClass.'-'.$k] = $c;
             $ret['contentEditComponents'][] = array(
                 'componentClass' => $componentClass,
                 'type' => $k,
                 'idTemplate' => $idTemplate,
-                'componentIdSuffix' => $componentIdSuffix
+                'componentIdSuffix' => $suffix,
+                'title' => $c['title'],
+                'icon' => $c['icon']
             );
         }
         foreach ($gen->getGeneratorPlugins() as $plugin) {
             $cls = get_class($plugin);
             $cfg = Vpc_Admin::getInstance($cls)->getExtConfig();
             foreach ($cfg as $k=>$c) {
+                $suffix = $componentIdSuffix;
+                if (isset($c['componentIdSuffix'])) {
+                    $suffix .= $c['componentIdSuffix'];
+                    unset($c['componentIdSuffix']);
+                }
                 $ret['componentConfigs'][$cls.'-'.$k] = $c;
                 $ret['contentEditComponents'][] = array(
                     'componentClass' => $cls,
                     'type' => $k,
                     'idTemplate' => $idTemplate,
-                    'componentIdSuffix' => $componentIdSuffix
+                    'componentIdSuffix' => $suffix
                 );
             }
         }
