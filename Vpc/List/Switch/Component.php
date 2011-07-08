@@ -28,6 +28,31 @@ class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
         $ret['previewCssClass'] = $this->_getSetting('previewCssClass');
         $ret['options']['transition'] = $this->_getSetting('transition');
         $ret['options']['hideArrowsAtEnds'] = $this->_getSetting('hideArrowsAtEnds');
+
+        $i = 0;
+        $ret['items'] = array();
+        foreach ($ret['listItems'] as $item) {
+            $class = '';
+            if ($i == 0) $class .= 'vpcFirst ';
+            if ($i == count($ret['listItems'])-1) $class .= 'vpcLast ';
+            $class = trim($class);
+            $i++;
+            $ret['items'][] = array(
+                'small' => $this->_getSmallImageComponent($item['data']),
+                'large' => $this->_getLargeImageComponent($item['data']),
+                'class' => $class
+            );
+        }
         return $ret;
+    }
+
+    protected function _getSmallImageComponent($childComponent)
+    {
+        return $childComponent;
+    }
+
+    protected function _getLargeImageComponent($childComponent)
+    {
+        return $childComponent->getChildComponent('-large');
     }
 }
