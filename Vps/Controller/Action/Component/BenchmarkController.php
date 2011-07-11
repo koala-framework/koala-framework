@@ -3,7 +3,7 @@ class Vps_Controller_Action_Component_BenchmarkController extends Vps_Controller
 {
     public function indexAction()
     {
-        header('Location: /admin/debug/benchmark');
+        header('Location: /vps/debug/benchmark');
         exit;
     }
 }

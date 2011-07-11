@@ -38,7 +38,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
         }
         $this->_printReloadJs();
         echo "<form action=\"\" method=\"post\" style=\"position: absolute; right:0; top:0; text-align:right; margin-right:10px;\">";
-        echo "<a href=\"/admin/debug/benchmark/values\">current values</a><br />";
+        echo "<a href=\"/vps/debug/benchmark/values\">current values</a><br />";
         foreach ($this->_rrds as $name=>$rrd) {
             $title = $rrd->getTitle();
             if (!$title) $title = $name;
@@ -80,7 +80,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
         setcookie('benchmark-start', $start, time()+60*60*24*14);
 
         foreach ($startDates as $k=>$i) {
-            echo "<a href=\"/admin/debug/benchmark?start=$i\"";
+            echo "<a href=\"/vps/debug/benchmark?start=$i\"";
             if ($i == $start) echo " style=\"font-weight: bold\"";
             echo ">$k</a> ";
         }
@@ -89,8 +89,8 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
             foreach (array_keys($rrd->getGraphs()) as $gName) {
                 $n = "{$name}_{$gName}";
                 if (in_array($n, $active)) {
-                    echo "<a href=\"/admin/debug/benchmark/detail?rrd=$name&name=$gName\">";
-                    echo "<img style=\"border:none\" src=\"/admin/debug/benchmark/graph?rrd=$name&name=$gName&start=".urlencode($start)."\" />";
+                    echo "<a href=\"/vps/debug/benchmark/detail?rrd=$name&name=$gName\">";
+                    echo "<img style=\"border:none\" src=\"/vps/debug/benchmark/graph?rrd=$name&name=$gName&start=".urlencode($start)."\" />";
                     echo "</a>";
                 }
             }
@@ -104,7 +104,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
         $this->_printReloadJs();
         $rrd = $this->_getParam('rrd');
         $name = $this->_getParam('name');
-        echo "<a href=\"/admin/debug/benchmark\">overview</a><br /><br />";
+        echo "<a href=\"/vps/debug/benchmark\">overview</a><br /><br />";
         $startDates = array(
             'last 3 hours' => '-3 hours',
             'last 6 hours' => '-6 hours',
@@ -118,7 +118,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
 
         );
         foreach ($startDates as $d) {
-            echo "<img src=\"/admin/debug/benchmark/graph?rrd=$rrd&name=$name&start=".urlencode($d)."\" />";
+            echo "<img src=\"/vps/debug/benchmark/graph?rrd=$rrd&name=$name&start=".urlencode($d)."\" />";
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
@@ -153,7 +153,7 @@ class Vps_Controller_Action_Debug_BenchmarkController extends Vps_Controller_Act
 
     public function valuesAction()
     {
-        echo "<a href=\"/admin/debug/benchmark\">graphs</a><br /><br />";
+        echo "<a href=\"/vps/debug/benchmark\">graphs</a><br /><br />";
         foreach ($this->_rrds as $rrd) {
             $values = array_values($rrd->getRecordValues());
             $cnt = 0;
