@@ -12,6 +12,14 @@ class Vps_Component_Abstract_ToStringData extends Vps_Data_Abstract implements V
         }
         $c = Vps_Component_Data_Root::getInstance()
             ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
+        if (!$c) {
+            $componentId = $row->component_id . '_' . $row->id;
+            if ($this->_subComponent) {
+                $componentId .= $this->_subComponent;
+            }
+            $c = Vps_Component_Data_Root::getInstance()
+                ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
+        }
         if (!$c) return '';
         $admin = Vpc_Admin::getInstance($c->componentClass);
         return $admin->componentToString($c);
