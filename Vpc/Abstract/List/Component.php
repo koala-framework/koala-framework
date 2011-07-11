@@ -51,12 +51,30 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         // zurückgeben kann, bzw. in der übersetzung überschreiben kann
         // zB: Breite bei übersetzung von Columns
         $ret['listItems'] = array();
+        $i = 0;
         foreach ($children as $child) {
+            $class = 'listItem ';
+            if ($i == 0) $class .= 'vpcFirst ';
+            if ($i == count($children)-1) $class .= 'vpcLast ';
+            if ($i % 2 == 0) {
+                $class .= 'vpcEven ';
+            } else {
+                $class .= 'vpcOdd ';
+            }
+            $class = trim($class);
+            $i++;
+
             $ret['listItems'][] = array(
-                'data' => $child
+                'data' => $this->_getItemComponent($child),
+                'class' => $class
             );
         }
         return $ret;
+    }
+
+    protected function _getItemComponent($childComponent)
+    {
+        return $childComponent;
     }
 
     public function getExportData()
