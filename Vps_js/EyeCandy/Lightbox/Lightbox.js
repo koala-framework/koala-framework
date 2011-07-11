@@ -68,7 +68,16 @@ Vps.Lightbox.Lightbox = (function(link, config) {
                     if(!this.opts.group) {
                         items.push(item);
                     } else {
-                        items = Ext.query(sel);
+                        var currentItems = Ext.query(sel);
+                        var currentIndex = 0;
+                        for (var i in currentItems) {
+                            var currentItem = Ext.get(currentItems[i]);
+                            if (currentItem && currentItem.isVisible(true)) {
+                                items.push(currentItem.dom);
+                                if (currentItem.dom == item) index = currentIndex;
+                                currentIndex++;
+                            }
+                        }
                     }
 
                     // calculate top and left offset for the extbox
@@ -423,11 +432,7 @@ Vps.Lightbox.Lightbox = (function(link, config) {
         
         keyNavAction: function(ev) {
             var keyCode = ev.getKey();
-            if (
-                keyCode == 88 || // x
-                keyCode == 67 || // c
-                keyCode == 27
-            ) {
+            if (keyCode == 27) { // Esc
                 this.close();
             } else if (keyCode == 80 || keyCode == 37) { // display previous item
                 if (activeItem != 0){

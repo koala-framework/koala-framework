@@ -16,7 +16,7 @@ class Vps_Component_View_Helper_ComponentLightbox extends Vps_Component_View_Hel
     {
         if (!$cachedContent) return '';
         $targetPage = explode(';', $cachedContent);
-        $config['text'] .= $targetPage[2];
+        if (!$config['text']) $config['text'] = $targetPage[2];
         return parent::renderCached($cachedContent, $componentId, $config);
     }
 }
