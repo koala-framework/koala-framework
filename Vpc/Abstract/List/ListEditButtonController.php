@@ -1,16 +1,11 @@
 <?php
-class Vpc_Abstract_List_ListEditButtonController extends Vps_Controller_Action_Auto_Vpc_Grid
+class Vpc_Abstract_List_ListEditButtonController extends Vpc_Abstract_List_Controller
 {
     protected $_position = 'pos';
     protected function _initColumns()
     {
         parent::_initColumns();
 
-        $c = Vpc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
-        foreach (Vpc_Admin::getInstance($c)->gridColumns() as $i) {
-            $this->_columns->add($i);
-        }
-        $this->_columns->add(new Vps_Grid_Column_Visible());
         $extConfig = Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig();
         $extConfig = $extConfig['list'];
         $i=0;
