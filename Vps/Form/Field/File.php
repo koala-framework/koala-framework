@@ -150,7 +150,9 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         if ($this->getSave() === false) return;
 
         $ref = $row->getModel()->getReference($this->getName());
-        $row->{$ref['column']} = $postData[$this->getFieldName()];
+        if (isset($postData[$this->getFieldName()])) {
+            $row->{$ref['column']} = $postData[$this->getFieldName()];
+        }
     }
 
     public function getTemplateVars($values, $namePostfix = '')
