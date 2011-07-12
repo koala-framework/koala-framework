@@ -14,9 +14,7 @@ abstract class Vps_Component_Renderer_Abstract
         $this->_renderComponent = $component;
         $content = $this->_renderComponentContent($component);
         $ret = $this->render($content);
-        if ($this->_enableCache) {
-            Vps_Component_Cache::getInstance()->writeBuffer();
-        }
+        Vps_Component_Cache::getInstance()->writeBuffer();
         return $ret;
     }
 
