@@ -77,6 +77,8 @@ class Vps_Update_35000 extends Vps_Update
             foreach ($fieldnames as $fieldname) {
                 if (!in_array($fieldname, $reallyExistingFieldsInTable)) continue; // siehe fetter kommentar paar zeilen drüber
 
+                echo "\nupdating {$tablename}.{$fieldname}...";
+
                 //$sql = "UPDATE $tablename SET $fieldname=REPLACE($fieldname, 'u00', '\\\\u00')";
                 foreach ($db->fetchCol("SELECT DISTINCT $fieldname FROM $tablename") as $oldval) {
                     if ($oldval == '') continue;
@@ -100,6 +102,7 @@ class Vps_Update_35000 extends Vps_Update
     private function _getFieldModelData(Vps_Model_Abstract $model)
     {
         if (get_class($model)=='Boxes') return array(); //rssinclude ignorieren
+        if (get_class($model)=='PaymentLog') return array(); //rssinclude ignorieren
         $ret = array();
         if (!$model instanceof Vps_Model_Db && !$model instanceof Vps_Model_Db_Proxy) return $ret;
         $tablename = $model instanceof Vps_Model_Db_Proxy ?
