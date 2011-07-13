@@ -5,6 +5,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
     protected $_sourceModel;
     protected $_syncTimeField = null;
+    protected $_syncTimeFieldIsUnique = true;
     protected $_truncateBeforeFullImport = false;
 
     const SYNC_AFTER_DELAY = false;
@@ -23,6 +24,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     {
         if (isset($config['sourceModel'])) $this->_sourceModel = $config['sourceModel'];
         if (isset($config['syncTimeField'])) $this->_syncTimeField = $config['syncTimeField'];
+        if (isset($config['syncTimeFieldIsUnique'])) $this->_syncTimeFieldIsUnique = $config['syncTimeFieldIsUnique'];
         if (isset($config['maxSyncDelay'])) $this->_maxSyncDelay = $config['maxSyncDelay'];
         if (isset($config['truncateBeforeFullImport'])) $this->_truncateBeforeFullImport = $config['truncateBeforeFullImport'];
         parent::__construct($config);
@@ -154,9 +156,17 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 // kein cache vorhanden, alle kopieren
                 $select = null;
             } else {
-                $select = $sourceModel->select()->where(
-                    new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
-                );
+                $select = $sourceModel->select();
+                if ($this->_syncTimeFieldIsUnique) {
+                    $select->where(
+                        new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
+                    );
+                } else {
+                    $select->where(new Vps_Model_Select_Expr_Or(array(
+                        new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp),
+                        new Vps_Model_Select_Expr_Equals($this->_syncTimeField, $cacheTimestamp),
+                    )));
+                }
             }
         }
 
@@ -218,7 +228,19 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             } else {
                 $options['replace'] = true;
             }
-            $this->getProxyModel()->import($format, $data, $options);
+            if ($select
+                && !$this->_syncTimeFieldIsUnique
+                && $format == self::FORMAT_ARRAY
+                && count($data)==1
+            ) {
+                //import kann übersprungen werden, wenn _syncTimeFieldIsUnique=false, da beim where <= verwendet wurde
+                //wenn jetzt nur *eine* row daher kommt, ist das eh die, die wir schon haben.
+                //es können aber auch mehrere daher kommen, dann wurden mehrere in der Sekunde geändert
+                $data = array();
+            }
+            if ($data) {
+                $this->getProxyModel()->import($format, $data, $options);
+            }
             $importTime = microtime(true)-$start;
 
             $tableName = '';
