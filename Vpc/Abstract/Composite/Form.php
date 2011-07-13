@@ -28,7 +28,7 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
         foreach ($classes as $key => $class) {
             if (!$class) continue;
             $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), "-$key", $key);
-            if ($form) {
+            if ($form && count($form->fields)) {
                 if ($this->_getIdTemplateForChild($key)) {
                     $form->setIdTemplate($this->_getIdTemplateForChild($key));
                 }

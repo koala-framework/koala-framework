@@ -3,6 +3,8 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
 {
     protected function _initFields()
     {
+        if (Vpc_Abstract::getSetting($this->getClass(), 'useParentImage')) return;
+
         // Dateiname
         if (Vpc_Abstract::getSetting($this->getClass(), 'editFilename')) {
             $this->add(new Vps_Form_Field_TextField('filename', trlVps('Filename')))
@@ -41,8 +43,6 @@ class Vpc_Abstract_Image_Form extends Vpc_Abstract_Composite_Form
         }
 
         parent::_initFields();
-        //absichtlich nicht aufrufen: parent::_initFields();
-        //benötigen wir hier nicht, und abgeleitete komponenten können es noch tun
     }
 
     public function setFieldLabel($label)
