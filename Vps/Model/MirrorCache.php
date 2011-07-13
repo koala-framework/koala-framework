@@ -190,6 +190,9 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
     {
         $select = $this->_getSynchronizeSelect($overrideMaxSyncDelay);
         if ($select !== false) {
+
+            $start = microtime(true);
+
             $this->_beforeSynchronize();
             // it's possible to use $this->getProxyModel()->copyDataFromModel()
             // but if < 20 rows are copied, array is faster than sql or csv
@@ -207,12 +210,29 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
 
             $options = array();
             $data = $this->getSourceModel()->export($format, $select);
+            $exportTime = microtime(true)-$start;
+
+            $start = microtime(true);
             if (!$select && $this->_truncateBeforeFullImport) {
                 $this->getProxyModel()->deleteRows($this->getProxyModel()->select());
             } else {
                 $options['replace'] = true;
             }
             $this->getProxyModel()->import($format, $data, $options);
+            $importTime = microtime(true)-$start;
+
+            $tableName = '';
+            if ($this->getProxyModel() instanceof Vps_Model_Db) $tableName = $this->getProxyModel()->getTableName();
+            $msg = date('Y-m-d H:i:s').' '.str_replace('cache_', '', $tableName).' '.$format;
+            if (is_array($data)) {
+                $msg .= " ".count($data)." entries";
+            } else if (is_string($data)) {
+                $msg .= " ".strlen($data)." bytes";
+            }
+            $msg .= ' export: '.round($exportTime, 2).'s';
+            $msg .= ' import: '.round($importTime, 2).'s';
+            //$msg .= ' SELECT: '.str_replace("\n", " ", print_r($select, true));
+            file_put_contents('application/log/mirrorcache', $msg."\n", FILE_APPEND);
         }
     }
 
