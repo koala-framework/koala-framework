@@ -150,7 +150,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         if ($this->getSave() === false) return;
 
         $ref = $row->getModel()->getReference($this->getName());
-        if (isset($postData[$this->getFieldName()])) {
+        if (array_key_exists($this->getFieldName(), $postData)) {
             $row->{$ref['column']} = $postData[$this->getFieldName()];
         }
     }
