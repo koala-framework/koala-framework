@@ -126,7 +126,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
     public function __get($name)
     {
         if (in_array($name, $this->_model->getExprColumns())) {
-            if (!isset($this->_exprValues[$name])) {
+            if (!array_key_exists($name, $this->_exprValues)) {
                 $this->_exprValues[$name] = $this->_model->getExprValue($this, $name);
             }
             return $this->_exprValues[$name];

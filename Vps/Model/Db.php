@@ -195,7 +195,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
                         // aber dann müsste auch der join über diese funktion laufen
                         return $m->getTableName().'.'.$field;
                     }
-                    $ret = $m->_formatFieldInternal($field, $dbSelect);
+                    if (is_string($field)) {
+                        $ret = $m->_formatFieldInternal($field, $dbSelect);
+                    } else {
+                        $ret = $this->_createDbSelectExpression($field, $dbSelect, $m);
+                    }
                     if ($ret) return $ret;
                 }
             }
@@ -316,7 +320,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
         if ($exprs = $select->getPart(Vps_Model_Select::EXPR)) {
             foreach ($exprs as $field) {
-                if (!$col = $this->_formatFieldExpr($field, $dbSelect)) {
+                if (!$col = $this->_formatField($field, $dbSelect)) {
                     throw new Vps_Exception("Expression '$field' not found");
                 }
                 $dbSelect->from(null, array($field=>new Zend_Db_Expr($col)));
@@ -429,6 +433,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 throw new Vps_Exception_NotYetImplemented();
             }
             return $pad."($field, {$expr->getPadLength()}, {$expr->getPadStr()})";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Date_Year) {
+            $field = $expr->getField();
+            if ($field instanceof Vps_Model_Select_Expr_Interface) {
+                $field = $this->_createDbSelectExpression($field, $dbSelect);
+            } else {
+                $field = $this->_formatField($field, $dbSelect);
+            }
+            return "YEAR($field)";
         } else if ($expr instanceof Vps_Model_Select_Expr_String) {
             $quotedString = $this->_fixStupidQuoteBug($expr->getString());
             $quotedString = $this->_table->getAdapter()->quote($quotedString);
@@ -576,6 +588,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
             }
             return '('.implode('+ ', $sqlExpressions).')';
         } else if ($expr instanceof Vps_Model_Select_Expr_Sql) {
+            foreach ($expr->getUsedColumns() as $f) {
+                //mit dem rückgabewert nichts machen, das ist nur zum joinen von sibling models
+                $this->_formatFieldInternal($f, $dbSelect);
+            }
             return '('.$expr->getSql().')';
         } else {
             throw new Vps_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
@@ -758,8 +774,30 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $this->getTableName();
     }
 
+    private function _createDbSelectWithColumns($select, $options)
+    {
+        if (isset($options['columns'])) {
+            foreach ($options['columns'] as $c) {
+                $select->expr($c);
+            }
+        }
+        $dbSelect = $this->createDbSelect($select);
+        if (isset($options['columns'])) {
+            $columns = $dbSelect->getPart(Zend_Db_Select::COLUMNS);
+            unset($columns[0]);
+            foreach ($this->getOwnColumns() as $c) {
+                if (in_array($c, $options['columns'])) {
+                    $columns[] = array($this->getTableName(),  $c, null);
+                }
+            }
+            $dbSelect->reset(Zend_Db_Select::COLUMNS);
+            $dbSelect->setPart(Zend_Db_Select::COLUMNS, $columns);
+        }
 
-    public function export($format, $select = array())
+        return $dbSelect;
+    }
+
+    public function export($format, $select = array(), $options = array())
     {
         if ($format == self::FORMAT_SQL) {
             $wherePart = '';
@@ -805,7 +843,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             mkdir($tmpExportFolder, 0777);
             $filename = $tmpExportFolder.'/csvexport';
 
-            $dbSelect = $this->createDbSelect($select);
+            $dbSelect = $this->_createDbSelectWithColumns($select, $options);
             $sqlString = $dbSelect->assembleIntoOutfile($filename);
 
             $dbSelect->limit(1);
@@ -836,7 +874,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 if (is_string($select)) $select = array($select);
                 $select = $this->select($select);
             }
-            $dbSelect = $this->createDbSelect($select);
+            $dbSelect = $this->_createDbSelectWithColumns($select, $options);
             if (!$dbSelect) return array();
             return $dbSelect->query()->fetchAll();
         } else {

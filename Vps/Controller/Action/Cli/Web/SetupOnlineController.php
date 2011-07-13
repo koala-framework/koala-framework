@@ -219,7 +219,7 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
             }
 
             echo "\n$server: [8/9] import\n";
-            $cmd = "php bootstrap.php import --server=".Vps_Setup::getConfigSection();
+            $cmd = "php bootstrap.php import --skip-backup --server=".Vps_Setup::getConfigSection();
             if (!$this->_getParam('debug')) $cmd .= " --debug";
             $this->_systemSshVps($config, $cmd);
 

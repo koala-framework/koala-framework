@@ -188,7 +188,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                                 $cacheTables[] = $table;
                             }
                         }
-                    } else if (in_array($t, $tables)){
+                    } else /*if (in_array($t, $tables))*/ {
                         $cacheTables[] = $t;
                     }
                 }
@@ -203,7 +203,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                                 $keepTables[] = $table;
                             }
                         }
-                    } else if (in_array($t, $tables)) {
+                    } else /*if (in_array($t, $tables))*/ {
                         $keepTables[] = $t;
                     }
                 }
@@ -217,7 +217,6 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                     echo $dumpname.".bz2\n";
                 }
             }
-
 
             if ($keepTables) {
                 echo "erstelle dump fuer KeepTables '$dbKey'...\n";
@@ -239,7 +238,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 $cmd = "cd {$config->server->dir} && php bootstrap.php import get-db-config --key=$dbKey";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
-                $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
+                $cmd = $this->_getDumpCommand($config, $otherDbConfig, array_merge($cacheTables, $keepTables));
             } else if ($this->_useSshVps) {
                 $ignoreTables = '';
                 if (!$this->_getParam('include-cache')) {
@@ -254,7 +253,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-db-config --key=$dbKey");
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
-                $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
+                $cmd = $this->_getDumpCommand($config, $otherDbConfig, array_merge($cacheTables, $keepTables));
                 $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg($cmd);
             }
             $descriptorspec = array(
@@ -430,8 +429,8 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
 
         if ($targetUrl == $sourceUrl) return;
 
-        $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl, 'timeout' => 120));
-        $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl, 'timeout' => 120));
+        $sourceModel = new Vps_Model_Service(array('serverUrl' => $sourceUrl, 'timeout' => 180));
+        $targetModel = new Vps_Model_Service(array('serverUrl' => $targetUrl, 'timeout' => 180));
 
         echo "importiere service...\nsource=$sourceUrl target=$targetUrl\n";
 
@@ -440,9 +439,47 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             return;
         }
 
-        echo "importiere users tabelle...\n";
+        echo "importiere users tabelle...";
 
-        $targetModel->copyDataFromModel($sourceModel, null, array('replace' => true));
+        if ($targetModel->countRows() == 0) {
+            $userCopySelect = null;
+        } else {
+            $userCopySelect = null;
+            // 10-tage-weise stichproben nehmen ob die daten übereinstimmen
+            $time = time();
+            $i = 1;
+            while (true) {
+                $date = date('Y-m-d H:i:s', $time - ($i*86400*10));
+                $sel = new Vps_Model_Select();
+                $sel->where(new Vps_Model_Select_Expr_Smaller('last_modified', $date))
+                    ->order('last_modified', 'DESC')
+                    ->limit(5);
+                $targetRows = $targetModel->getRows($sel);
+                $sourceRows = $sourceModel->getRows($sel);
+
+                if (count($sourceRows) == 5 && count($targetRows) == 5
+                    && $sourceRows->toArray() === $targetRows->toArray()
+                ) {
+                    $sourceRows->rewind();
+                    $checkLastModified = $sourceRows->current()->last_modified;
+                    $userCopySelect = new Vps_Model_Select();
+                    $userCopySelect->where(new Vps_Model_Select_Expr_Higher('last_modified', $checkLastModified));
+                    break;
+                }
+
+                $i++;
+                if ($i >= 5) break; // nach max x mal aufhören und alles kopiern
+            }
+            // sync last 6 month
+        }
+
+        if (is_null($userCopySelect)) {
+            echo " Kopiere alle Datesätze...\n";
+        } else {
+            echo " Kopiere ".($sourceModel->countRows($userCopySelect))." Datensätze seit ".$checkLastModified." ($i)...\n";
+        }
+
+        $targetModel->copyDataFromModel($sourceModel, $userCopySelect, array('replace' => true));
 
         // copy users_to_web
         $targetUrl = Vps_Registry::get('config')->service->usersRelation->url;
@@ -509,12 +546,11 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    private function _getDumpCommand($dbConfig, array $cacheTables)
+    private function _getDumpCommand($config, $dbConfig, array $cacheTables)
     {
         $ret = '';
 
         $mysqlOptions = "--host=$dbConfig[host] --user=$dbConfig[username] --password=$dbConfig[password] ";
-        $config = Zend_Registry::get('config');
 
         $mysqlDir = '';
         if ($config->server->host == 'vivid-planet.com') {
@@ -551,7 +587,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         if (!$db) return null;
         $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
-        $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";
+        $cmd = $this->_getDumpCommand(Vps_Registry::get('config'), $dbConfig, $ignoreTables)." > $dumpname";
         $this->_systemCheckRet($cmd);
 
         return $dumpname;
@@ -562,14 +598,11 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         if (file_exists('application/update')) {
             echo file_get_contents('application/update');
         } else {
-            try {
-                $info = new SimpleXMLElement(`svn info --xml`);
-                $onlineRevision = (int)$info->entry['revision'];
-            } catch (Exception $e) {}
-            if (!$onlineRevision) {
-                throw new Vps_ClientException("Can't detect online revision");
+            $doneNames = array();
+            foreach (Vps_Update::getUpdates(0, 9999999) as $u) {
+                $doneNames[] = $u->getUniqueName();
             }
-            echo $onlineRevision;
+            echo serialize($doneNames);
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
@@ -591,10 +624,12 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
     {
         $out = array();
         foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
-            $rrd = new $n;
-            $file = $rrd->getFileName();
-            if (file_exists($file)) {
-                $out[$file] = `LC_ALL=C rrdtool dump $file | gzip`;
+            if ($n) {
+                $rrd = new $n;
+                $file = $rrd->getFileName();
+                if (file_exists($file)) {
+                    $out[$file] = `LC_ALL=C rrdtool dump $file | gzip`;
+                }
             }
         }
         echo serialize($out);

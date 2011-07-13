@@ -118,4 +118,10 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
         }
         return $sql;
     }
+
+    public function setPart($part, $value)
+    {
+        $part = strtolower($part);
+        $this->_parts[$part] = $value;
+    }
 }

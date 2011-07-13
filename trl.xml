@@ -5869,5 +5869,17 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>Login:</de>
 <id>1485</id>
 </text>
+<text>
+<context>decimal separator</context>
+<en>.</en>
+<de>,</de>
+<id>1486</id>
+</text>
+<text>
+<context>thousands separator</context>
+<en>,</en>
+<de>.</de>
+<id>1487</id>
+</text>
 </trl>
 
