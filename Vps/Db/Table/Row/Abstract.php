@@ -320,4 +320,13 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         }
     }
 
+    /**
+     * @deprecated in neuerem vps haben auch die Vps_Models dieses feature, das verwenden!
+     * das hier ist nur da weil es bei rssinclude benötigt wurde
+     */
+    public function ___getDirtyColumns()
+    {
+        return array_keys($this->_modifiedFields);
+    }
+
 }
