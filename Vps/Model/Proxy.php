@@ -162,9 +162,9 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         return $this->_proxyModel->getSupportedImportExportFormats();
     }
 
-    public function export($format, $select = array())
+    public function export($format, $select = array(), $options = array())
     {
-        return $this->_proxyModel->export($format, $select);
+        return $this->_proxyModel->export($format, $select, $options);
     }
 
     public function import($format, $data, $options = array())

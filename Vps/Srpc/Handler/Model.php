@@ -2,11 +2,15 @@
 class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
 {
     protected $_model;
+    protected $_columns;
 
     public function __construct(array $config = array())
     {
-        if (isset($config['model']) && is_object($config['model']) && $config['model'] instanceof Vps_Model_Interface) {
+        if (isset($config['model'])) {
             $this->_model = $config['model'];
+        }
+        if (isset($config['columns'])) {
+            $this->_columns = $config['columns'];
         }
         parent::__construct();
     }
@@ -16,6 +20,9 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
         if (!$this->_model) {
             throw new Vps_Srpc_Exception("'model' has not been set for '".get_class($this)."'. Either set it in _init() or use the config option 'model'.");
         }
+        if (is_string($this->_model)) {
+            $this->_model = Vps_Model_Abstract::getInstance($this->_model);
+        }
         return $this->_model;
     }
 
@@ -23,7 +30,15 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
     {
         $row = $this->getModel()->getRow($id);
         if (!$row) return null;
-        return $row->toArray();
+        if ($this->_columns) {
+            $ret = array();
+            foreach ($this->_columns as $c) {
+                $ret[$c] = $row->$c;
+            }
+            return $ret;
+        } else {
+            return $row->toArray();
+        }
     }
 
     public function countRows($select = array())
@@ -35,11 +50,24 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
     {
         $result = $this->getModel()->getRows($where, $order, $limit, $start);
         if (!$result || !$result->current()) return null;
-        return $result->toArray();
+        if ($this->_columns) {
+            $ret = array();
+            foreach ($result as $row) {
+                $data = array();
+                foreach ($this->_columns as $c) {
+                    $data[$c] = $row->$c;
+                }
+                $ret[] = $data;
+            }
+            return $ret;
+        } else {
+            return $result->toArray();
+        }
     }
 
     public function getColumns()
     {
+        if ($this->_columns) return $this->_columns;
         return $this->getModel()->getColumns();
     }
 
@@ -66,7 +94,15 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
         }
         $row->save();
 
-        return $row->toArray();
+        if ($this->_columns) {
+            $ret = array();
+            foreach ($this->_columns as $c) {
+                $ret[$c] = $row->$c;
+            }
+            return $ret;
+        } else {
+            return $row->toArray();
+        }
     }
 
     public function rowDelete($id)
@@ -92,9 +128,10 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
         return $this->getModel()->copyDataFromModel($sourceModel, $select, $format);
     }
 
-    public function export($format, $select = array())
+    public function export($format, $select = array(), $options = array())
     {
-        return $this->getModel()->export($format, $select);
+        if ($this->_columns) $options['columns'] = $this->_columns;
+        return $this->getModel()->export($format, $select, $options);
     }
 
     public function import($format, $data, $options = array())
@@ -114,6 +151,14 @@ class Vps_Srpc_Handler_Model extends Vps_Srpc_Handler_Abstract
 
     public function callMultiple(array $call)
     {
+        $ret = array();
+        foreach ($call as $method=>&$arguments) {
+            if ($method == 'export') {
+                if (!isset($arguments[1])) $arguments[1] = array();
+                if (!isset($arguments[2])) $arguments[2] = array();
+                $arguments[2]['columns'] = $this->_columns;
+            }
+        }
         return $this->getModel()->callMultiple($call);
     }
 }
