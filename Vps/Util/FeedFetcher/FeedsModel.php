@@ -8,6 +8,7 @@ class Vps_Util_FeedFetcher_FeedsModel extends Vps_Model_Db_Proxy
     {
         $s = $this->select();
 
+        /* HUB CODE DEAKTIVIERT
         $s->where("
             (
                 #von hub geupdated, alle 24h zur sicherheit manuell checken
@@ -30,6 +31,13 @@ class Vps_Util_FeedFetcher_FeedsModel extends Vps_Model_Db_Proxy
                     OR ISNULL(last_update)
                 )
             )
+        ");
+        */
+
+        //das ist der zweite teil von dem oben
+        $s->where("
+            (last_update < DATE_ADD(NOW(), INTERVAL -$minutes MINUTE))
+            OR ISNULL(last_update)
         ");
 
         $s->where("(TIMESTAMPDIFF(MINUTE,last_update_started,NOW()) > 15) OR ISNULL(last_update_started)");
