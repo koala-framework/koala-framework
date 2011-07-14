@@ -18,6 +18,8 @@ Neue Features:
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
+- breite von innerContent, TwoColumns u.a. *nicht* mehr im css einstellen, sondern in Komponenten Settings
+  Fixe Breiteneinstellungen gehören generell nicht mehr ins css
 
 == 2.1 ==
 Erstellt: 21.06.11
