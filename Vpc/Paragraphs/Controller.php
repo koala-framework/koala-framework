@@ -29,6 +29,9 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         parent::jsonDataAction();
         $this->view->componentConfigs = $this->_columns['edit_components']
                                 ->getData()->getComponentConfigs();
+        $c = Vps_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'), array('limit'=>1, 'ignoreVisible'=>true));
+        $this->view->contentWidth = $c->getComponent()->getContentWidth();
     }
 
     public function preDispatch()

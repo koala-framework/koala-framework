@@ -31,7 +31,6 @@ class Vpc_Paragraphs_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstract
         $config = $this->_getStandardConfig('vpc.paragraphs');
         $config['components'] = $componentList;
         $config['componentIcons'] = $componentIcons;
-        $config['previewWidth'] = $this->_getSetting('previewWidth');
         $config['needsComponentPanel'] = true;
         return array(
             'paragraphs' => $config

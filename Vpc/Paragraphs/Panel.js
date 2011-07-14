@@ -9,13 +9,16 @@ Vpc.Paragraphs.PanelJsonReader = Ext.extend(Ext.data.JsonReader,
             this.paragraphsPanel.fireEvent('gotComponentConfigs', o.componentConfigs);
             Ext.applyIf(this.paragraphsPanel.dataView.componentConfigs, o.componentConfigs);
         }
+        if (o.contentWidth) {
+            this.paragraphsPanel.dataView.setWidth(o.contentWidth);
+        }
         return ret;
     }
 });
 
 Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
 {
-    layout:'fit',
+    layout:'auto',
     cls: 'vpc-paragraphs',
     showDelete: true,
     showPosition: true,
@@ -33,7 +36,6 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         this.dataView = new Vpc.Paragraphs.DataView({
             components: this.components,
             componentIcons: this.componentIcons,
-            width: this.previewWidth,
             showDelete: this.showDelete,
             showPosition: this.showPosition,
             showCopyPaste: this.showCopyPaste,
