@@ -30,16 +30,20 @@ class Vps_Media_Image
             isset($sourceSize['mime']) &&
             ($sourceSize['mime'] == 'image/jpg' || $sourceSize['mime'] == 'image/jpeg')
         ) {
-            $exif = exif_read_data($source);
-            if (isset($exif['Orientation'])) {
-                switch ($exif['Orientation']) {
-                    case 6:
-                        $size = array($h, $w);
-                        $rotate = 90;
-                    case 8:
-                        $size = array($h, $w);
-                        $rotate = -90;
+            try {
+                $exif = exif_read_data($source);
+                if (isset($exif['Orientation'])) {
+                    switch ($exif['Orientation']) {
+                        case 6:
+                            $size = array($h, $w);
+                            $rotate = 90;
+                        case 8:
+                            $size = array($h, $w);
+                            $rotate = -90;
+                    }
                 }
+            } catch (ErrorException $e) {
+                $rotate = null;
             }
         }
         if (!$size[0] || !$size[1]) return false;
