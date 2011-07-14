@@ -10,6 +10,25 @@ class Vpc_Composite_TwoColumns_Component extends Vpc_Abstract_Composite_Componen
         $ret['generators']['child']['component']['rightColumn'] = 'Vpc_Composite_TwoColumns_Right_Component';
 
         $ret['extConfig'] = 'Vpc_Abstract_Composite_ExtConfigTabs';
+
+        $ret['contentMargin'] = 10;
+
+        return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['leftWidth'] = $this->_getChildContentWidth($this->getData()->getChildComponent('-leftColumn'));
+        $ret['rightWidth'] = $this->_getChildContentWidth($this->getData()->getChildComponent('-rightColumn'));
+        return $ret;
+    }
+
+    protected function _getChildContentWidth(Vps_Component_Data $child)
+    {
+        $ret = parent::_getChildContentWidth($child);
+        $ret -= $this->_getSetting('contentMargin') * 2;
+        $ret = $ret / 2;
         return $ret;
     }
 }
