@@ -11,6 +11,7 @@ class Vpc_Tabs_Component extends Vpc_Abstract_List_Component
         $ret['cssClass'] = 'webStandard';
         $ret['assets']['dep'][] = 'VpsTabs';
         $ret['extConfig'] = 'Vpc_Tabs_ExtConfig';
+        $ret['contentWidthSubtract'] = 20;
         return $ret;
     }
 
