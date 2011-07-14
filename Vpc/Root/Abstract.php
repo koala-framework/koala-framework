@@ -17,6 +17,8 @@ class Vpc_Root_Abstract extends Vpc_Abstract
             'priority' => 0
         );
         $ret['componentName'] = trlVps('Root');
+        $ret['contentWidth'] = 600;
+        $ret['contentWidthBoxSubtract'] = array();
         return $ret;
     }
 
@@ -52,6 +54,19 @@ class Vpc_Root_Abstract extends Vpc_Abstract
 
         if ($ret && !$ret->isPage && Vps_Component_Abstract::getFlag($ret->componentClass, 'hasHome')) {
             $ret = $ret->getChildPage(array('home' => true), array());
+        }
+        return $ret;
+    }
+
+    protected function _getMasterChildContentWidth(Vps_Component_Data $sourcePage)
+    {
+        $ret = $this->_getSetting('contentWidth');
+        foreach ($this->_getSetting('contentWidthBoxSubtract') as $box=>$width) {
+            //TODO hier sollte eigentlich der boxname verwendet werden, der muss nicht die id sein
+            $c = $sourcePage->getChildComponent('-'.$box);
+            if ($c && $c->hasContent()) {
+                $ret -= $width;
+            }
         }
         return $ret;
     }

@@ -516,5 +516,32 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             'lifetime' => $this->getViewCacheLifetime()
         );
     }
-}
 
+    /*
+     * Breite dieser Komponente zu ermitteln
+     */
+    public function getContentWidth()
+    {
+        if ($this->getData()->isPage) {
+            $p = $this->getData();
+            while ($p->parent) $p = $p->parent; //root suchen TODO: wenn mehrere Master-tpl da stoppen
+            return $p->getComponent()->_getMasterChildContentWidth($this->getData());
+        } else {
+            return $this->getData()->parent->getComponent()->_getChildContentWidth($this->getData());
+        }
+    }
+
+    /*
+     * Kann überschrieben werden, um die verfügbare Breite für eine Kindkomponente anzupassen.
+     *
+     * In den meisten Fällen wird contentWidthSubtract setting reichen
+     */
+    protected function _getChildContentWidth(Vps_Component_Data $child)
+    {
+        $ret = $this->getContentWidth();
+        if ($this->_hasSetting('contentWidthSubtract')) {
+            $ret -= $this->_getSetting('contentWidthSubtract');
+        }
+        return $ret;
+    }
+}
