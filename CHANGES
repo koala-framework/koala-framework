@@ -12,6 +12,9 @@ Erstellt: 21.06.11
 Stable: 
 Neue Features:
 - Model_RowCache: cached angegebene columns von rows im apc cache wenn per getRow() gesucht wird
+- Komponentenbreite dynamisch ermitteln: Master.tpl: $this->componentWidth($this->data)
+                                         Root Settings: contentWidth, contentWidthBoxSubtract
+                                         Component Settings: contentWidhtSubtract
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
