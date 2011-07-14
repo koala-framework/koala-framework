@@ -80,7 +80,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     public function getExportData()
     {
         $ret = array('list' => array());
-        $children = $this->getData()->getChildComponents(array('generator' => 'child'));
+        $children = $this->getData()->getChildComponents($this->_getSelect());
         foreach ($children as $child) {
             $ret['list'][] = $child->getComponent()->getExportData();
         }
@@ -89,7 +89,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
 
     public function hasContent()
     {
-        $childComponents = $this->getData()->getChildComponents(array('generator' => 'child'));
+        $childComponents = $this->getData()->getChildComponents($this->_getSelect());
         foreach ($childComponents as $c) {
             if ($c->hasContent()) return true;
         }
