@@ -89,4 +89,16 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
     {
         return in_array($tablename, Vps_Registry::get('db')->listTables());
     }
+
+    public function getCardForms()
+    {
+        $ret = array();
+        $title = Vpc_Abstract::getSetting($this->_class, 'componentName');
+        $title = str_replace('.', ' ', $title);
+        $ret[] = array(
+            'form' => Vpc_Abstract_Form::createComponentForm($this->_class, 'child'),
+            'title' => $title,
+        );
+        return $ret;
+    }
 }
