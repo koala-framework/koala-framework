@@ -7,6 +7,11 @@ abstract class Vpc_Abstract_Flash_Component extends Vpc_Abstract
         $ret['componentName'] = trlVps('Flash');
         $ret['componentIcon'] = new Vps_Asset('film');
 
+        $ret['generators']['placeholder'] = array(
+            'class' => 'Vps_Component_Generator_Static',
+            'component' => 'Vpc_Abstract_Flash_Placeholder_Component'
+        );
+
         $ret['assets']['files'][] = 'vps/Vpc/Abstract/Flash/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtUtilJson';
@@ -42,8 +47,14 @@ abstract class Vpc_Abstract_Flash_Component extends Vpc_Abstract
             $ret['flash']['vars'][$k] = urlencode($v);
         }
         $ret['flash']['vars'] = (object)$ret['flash']['vars'];
+        $ret['placeholder'] = $this->_getPlaceholderComponent();
 
         return $ret;
+    }
+
+    protected function _getPlaceholderComponent()
+    {
+        return $this->getData()->getChildComponent('-placeholder');
     }
 
     protected function _getFlashVars()

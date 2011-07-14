@@ -1,0 +1,1 @@
+<a href="http://get.adobe.com/de/flashplayer/">Get the Flash Player</a> to see this player.
