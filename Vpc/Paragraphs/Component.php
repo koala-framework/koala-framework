@@ -31,7 +31,6 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
             );
         }
         $ret['showCopyPaste'] = true;
-        $ret['previewWidth'] = 600;
         $ret['extConfig'] = 'Vpc_Paragraphs_ExtConfig';
         return $ret;
     }

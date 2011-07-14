@@ -3,7 +3,6 @@ Vpc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
     multiSelect: true,
     overClass: 'x-view-over',
     itemSelector: 'div.paragraph-wrap',
-    width: 600,
     showToolbars: true,
     showDelete: true,
     showPosition: true,
