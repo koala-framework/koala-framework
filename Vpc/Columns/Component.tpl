@@ -15,7 +15,6 @@
         ?>
         <div class="<?=$class;?>">
             <div class="column" style="width: <?=$child['width']?>">
-                <?=$child['width']?>
                 <?=$this->component($child['data']);?>
             </div>
         </div>
