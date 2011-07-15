@@ -10,7 +10,7 @@ Vpc.Paragraphs.PanelJsonReader = Ext.extend(Ext.data.JsonReader,
             Ext.applyIf(this.paragraphsPanel.dataView.componentConfigs, o.componentConfigs);
         }
         if (o.contentWidth) {
-            this.paragraphsPanel.dataView.setWidth(o.contentWidth);
+            this.paragraphsPanel.dataView.setWidth(o.contentWidth + 20);
         }
         return ret;
     }
