@@ -3,6 +3,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
     implements Vps_Media_Output_IsValidInterface
 {
     const USER_SELECT = 'user';
+    const CONTENT_WIDTH = 'contentWidth';
     private $_imageDataOrEmptyImageData;
 
     public static function getSettings()
@@ -35,6 +36,12 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
                 'height' => self::USER_SELECT,
                 'scale' => Vps_Media_Image::SCALE_CROP
             ),
+            'fullWidth'=>array(
+                'text' => trlVps('full width'),
+                'width' => self::CONTENT_WIDTH,
+                'height' => 0,
+                'scale' => Vps_Media_Image::SCALE_DEFORM
+            ),
         );
 
         $ret['imageLabel'] = trlVps('Image');
@@ -59,29 +66,29 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         if (!is_array($settings['dimensions'])) {
             throw new Vps_Exception('Dimension setting must be an array');
         }
-        foreach ($settings['dimensions'] as $d) {
+        foreach ($settings['dimensions'] as $k=>$d) {
             if (!is_array($d)) {
                 throw new Vps_Exception('Dimension setting must contain array of arrays');
             }
             if (!array_key_exists('width', $d)) {
-                throw new Vps_Exception('Dimension setting must contain width');
+                throw new Vps_Exception('Dimension \''.$k.'\' must contain width');
             }
             if (!array_key_exists('height', $d)) {
-                throw new Vps_Exception('Dimension setting must contain height');
+                throw new Vps_Exception('Dimension \''.$k.'\' must contain height');
             }
             if (!array_key_exists('scale', $d)) {
-                throw new Vps_Exception('Dimension setting must contain scale');
+                throw new Vps_Exception('Dimension \''.$k.'\' must contain scale');
             }
             $validScales = array(Vps_Media_Image::SCALE_BESTFIT, Vps_Media_Image::SCALE_CROP, Vps_Media_Image::SCALE_ORIGINAL, Vps_Media_Image::SCALE_DEFORM);
             if (!in_array($d['scale'], $validScales)) {
-                throw new Vps_Exception("Invalid Scale '$d[scale]'");
+                throw new Vps_Exception("Invalid Scale '$d[scale]' for Dimension \''.$k.'\'");
             }
             if ($d['scale'] != Vps_Media_Image::SCALE_ORIGINAL) {
                 if (!$d['width'] && !$d['height']) {
-                    throw new Vps_Exception('Dimension setting must contain width or height');
+                    throw new Vps_Exception('Dimension \''.$k.'\' must contain width or height');
                 }
                 if ((!$d['width'] || !$d['height']) && $d['scale'] != Vps_Media_Image::SCALE_DEFORM) {
-                    throw new Vps_Exception('Dimension setting must use scale \'deform\' when width or height is 0');
+                    throw new Vps_Exception('Dimension \''.$k.'\' must use scale \'deform\' when width or height is 0');
                 }
             }
         }
@@ -204,6 +211,8 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
             } else {
                 $s['width'] = $row->width;
             }
+        } else if ($d['width'] == self::CONTENT_WIDTH) {
+            $s['width'] = $this->getContentWidth();
         } else {
             $s['width'] = $d['width'];
         }
@@ -305,6 +314,7 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
         $ret = parent::getStaticCacheMeta($componentClass);
         $model = Vpc_Abstract::getSetting($componentClass, 'ownModel');
         $ret[] = new Vps_Component_Cache_Meta_Static_Callback($model);
+        //TODO: bild und view cache löschen wenn contentWidth geändert
         return $ret;
     }
 

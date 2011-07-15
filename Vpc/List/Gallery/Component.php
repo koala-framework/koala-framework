@@ -14,52 +14,36 @@ abstract class Vpc_List_Gallery_Component extends Vpc_Abstract_List_Component
 
         $ret['extConfig'] = 'Vpc_List_Gallery_ExtConfig';
 
-        // muss im web überschrieben werden, zB:
-        // vorsicht: imagesPerLine MUSS auch gesetzt sein
-/*        $ret['dimensions'] = array(
-            'fullWidth' => array(
-                'text' => trlVps('zwei Bilder'),
-                'width' => 334,
-                'height' => 0,
-                'scale' => Vps_Media_Image::SCALE_BESTFIT,
-                'imagesPerLine' => 2
-            )
-        );
-*/
+        $ret['contentMargin'] = 10;
+
         return $ret;
     }
 
     public static function validateSettings($settings, $componentClass)
     {
         parent::validateSettings($settings, $componentClass);
-        if (!Vpc_Abstract::hasSetting($componentClass, 'dimensions')) {
-            throw new Vps_Exception("Setting 'dimension' must exist");
-        }
-        if (!count($settings['dimensions'])) {
-            throw new Vps_Exception("At least one dimension must be set");
-        }
-        foreach ($settings['dimensions'] as $dimKey => $dim) {
-            if (empty($dim['imagesPerLine'])) {
-                throw new Vps_Exception("Key 'imagesPerLine' must be set for dimension with key '$dimKey' (".$dim['text'].")");
-            }
+        if (Vpc_Abstract::hasSetting($componentClass, 'dimensions')) {
+            throw new Vps_Exception("Setting 'dimensions' must NOT exist");
         }
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $dimensions = $this->_getSetting('dimensions');
-        $ret['imagesPerLine'] = $dimensions[$this->getVariant()]['imagesPerLine'];
+        $ret['imagesPerLine'] = $this->_getRow()->columns;
+        if (!$ret['imagesPerLine']) $ret['imagesPerLine'] = 1;
         return $ret;
     }
 
-    public function getVariant()
+    protected function _getChildContentWidth(Vps_Component_Data $child)
     {
-        $variant = $this->_getRow()->variant;
-        if (!$variant) {
-            $keys = array_keys($this->_getSetting('dimensions'));
-            return $keys[0];
-        }
-        return $variant;
+        $ownWidth = parent::_getChildContentWidth($child);
+        $columns = (int)$this->_getRow()->columns;
+        if (!$columns) $columns = 1;
+        $ownWidth -= ($columns-1) * $this->_getSetting('contentMargin');
+        $ret = (int)floor($ownWidth / $columns);
+        return $ret;
     }
+
+    //TODO: cache meta für breite geändert
 }
