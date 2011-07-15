@@ -62,7 +62,12 @@ class Vps_Controller_Action_Cli_Web_ShellController extends Vps_Controller_Actio
 
             $cmd = "sudo -u vps ".Vps_Util_Git::getAuthorEnvVars()." sshvps $host $dir shell";
             if ($this->_getParam('debug')) $cmd .= " --debug";
-            if ($this->_getParam('exec')) $cmd .= " --exec=\"".$this->_getParam('exec')."\"";
+            if ($this->_getParam('exec')) {
+                $exec = $this->_getParam('exec');
+                //nützlich um sowas tun zu können: vps shell --server=$SERVER --exec="echo -n \"%VPS_CONFIG_SECTION%\" > application/config_section"
+                $exec = str_replace('%VPS_CONFIG_SECTION%', $section, $exec);
+                $cmd .= " --exec=".escapeshellarg($exec);
+            }
             if ($this->_getParam('debug')) echo $cmd."\n";
             passthru($cmd);
             if (count($sections) > 1) {
