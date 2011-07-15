@@ -11,7 +11,7 @@ class Vpc_Composite_TwoColumns_Component extends Vpc_Abstract_Composite_Componen
 
         $ret['extConfig'] = 'Vpc_Abstract_Composite_ExtConfigTabs';
 
-        $ret['contentMargin'] = 10;
+        $ret['contentMargin'] = 20;
 
         return $ret;
     }
@@ -27,8 +27,10 @@ class Vpc_Composite_TwoColumns_Component extends Vpc_Abstract_Composite_Componen
     protected function _getChildContentWidth(Vps_Component_Data $child)
     {
         $ret = parent::_getChildContentWidth($child);
-        $ret -= $this->_getSetting('contentMargin') * 2;
+        $ret -= $this->_getSetting('contentMargin') * 1;
         $ret = $ret / 2;
         return $ret;
     }
+
+    //TODO: cache meta für breite geändert
 }
