@@ -11,7 +11,7 @@ class Vpc_Columns_Component extends Vpc_Abstract_List_Component
 
         $ret['extConfig'] = 'Vpc_Columns_ExtConfig';
 
-        $ret['contentMargin'] = 10;
+        $ret['contentMargin'] = 20;
 
         return $ret;
     }
@@ -72,4 +72,6 @@ class Vpc_Columns_Component extends Vpc_Abstract_List_Component
         $ownWidth -= $this->_getSetting('contentMargin')*($columns-1) + $sumUsedWith;
         return round($ownWidth / $noWidthColumns);
     }
+
+    //TODO: cache meta für breite geändert
 }
