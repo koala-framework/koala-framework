@@ -13,6 +13,11 @@ class Vps_Controller_Action_Cli_Web_ShellController extends Vps_Controller_Actio
                 'value'=> self::_getConfigSections(),
                 'allowBlank' => true,
                 'help' => 'which server'
+            ),
+            array(
+                'param'=> 'exec',
+                'allowBlank' => true,
+                'help' => 'command to execute'
             )
         );
     }
@@ -20,6 +25,9 @@ class Vps_Controller_Action_Cli_Web_ShellController extends Vps_Controller_Actio
     {
         $section = $this->_getParam('server');
         if (!$section) {
+            if ($this->_getParam('exec')) {
+                throw new Vps_Exception_Client("server required when using exec");
+            }
             echo "Choose a server:\n";
             $sections = self::_getConfigSections();
             foreach ($sections as $k=>$i) {
@@ -30,25 +38,38 @@ class Vps_Controller_Action_Cli_Web_ShellController extends Vps_Controller_Actio
             fclose($stdin);
             $input = $input-1;
             if (!isset($sections[$input])) {
-                throw new Vps_Exception("Invalid server number");
+                throw new Vps_Exception_Client("Invalid server number");
             }
             $section = $sections[$input];
         }
 
-        $config = Vps_Config_Web::getInstance($section);
+        $sections = explode(',', $section);
+        if (count($sections) > 1 && !$this->_getParam('exec')) {
+            throw new Vps_Exception_Client("can't use multiple sections without exec");
+        }
+        foreach ($sections as $section) {
+            if (count($sections) > 1) {
+                echo "executing on $section...\n";
+            }
+            $config = Vps_Config_Web::getInstance($section);
 
+            if (!$config->server->host) {
+                throw new Vps_ClientException("No host configured for $section server");
+            }
 
-        if (!$config->server->host) {
-            throw new Vps_ClientException("No host configured for $section server");
+            $host = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
+            $dir = $config->server->dir;
+
+            $cmd = "sudo -u vps ".Vps_Util_Git::getAuthorEnvVars()." sshvps $host $dir shell";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+            if ($this->_getParam('exec')) $cmd .= " --exec=\"".$this->_getParam('exec')."\"";
+            if ($this->_getParam('debug')) echo $cmd."\n";
+            passthru($cmd);
+            if (count($sections) > 1) {
+                echo "\n";
+            }
         }
 
-        $host = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
-        $dir = $config->server->dir;
-
-        $cmd = "sudo -u vps ".Vps_Util_Git::getAuthorEnvVars()." sshvps $host $dir shell";
-        if ($this->_getParam('debug')) $cmd .= " --debug";
-        if ($this->_getParam('debug')) echo $cmd."\n";
-        passthru($cmd);
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }
