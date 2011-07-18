@@ -149,6 +149,12 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
             $cmd .= "ssh://vivid@git.vivid-planet.com/git/".Vps_Registry::get('config')->application->id." wc && mv wc/* . && mv wc/.??* . && rmdir wc";
             $this->_systemSshVps($config, $cmd);
 
+            if ($server != 'production' && $server != 'test' && $server != 'vivid-test-server') { //für die nicht nötig
+                echo "\n$server: [1.5/9] set application/config_section\n";
+                $cmd = "echo -n ".escapeshellarg($server)." > application/config_section";
+                $this->_systemSshVps($config, $cmd);
+            }
+
             echo "\n$server: [2/9] git clone vps-lib\n";
             $cmd = "git clone ";
             $cmd .= "ssh://vivid@git.vivid-planet.com/git/vps vps-lib";
