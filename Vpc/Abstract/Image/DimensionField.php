@@ -75,25 +75,16 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
         }
         if ($dimension) {
             if (($dimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
-                $dimension['scale'] == Vps_Media_Image::SCALE_CROP) &&
+                $dimension['scale'] == Vps_Media_Image::SCALE_CROP ||
+                $dimension['scale'] == Vps_Media_Image::SCALE_DEFORM) &&
                 (empty($data['width']) && empty($dimension['width'])) &&
                 (empty($data['height']) && empty($dimension['height']))
             ) {
                 $ret[] = array(
-                    'message' => trlVps('Dimension: At least width or height must be set higher than 0 when using crop or bestfit.'),
+                    'message' => trlVps('Dimension: At least width or height must be set higher than 0.'),
                     'field' => $this
                 );
             }
-            if ($dimension['scale'] == Vps_Media_Image::SCALE_DEFORM &&
-                ((empty($data['width']) && empty($dimension['width'])) ||
-                (empty($data['height']) && empty($dimension['height'])))
-            ) {
-                $ret[] = array(
-                    'message' => trlVps('Dimension: At width and height must be set higher than 0 when using deform.'),
-                    'field' => $this
-                );
-            }
-
         }
 
         return $ret;
