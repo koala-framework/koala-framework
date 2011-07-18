@@ -41,7 +41,7 @@ Ext.apply(Ext.form.VTypes, {
         return /^[a-zA-Z0-9_\-]+$/.test(v);
     },
     alphanumText : trlVps('This field should only contain letters, numbers, - and _'),
-    alphanumMask : /[a-z0-9_\-]/i
+    alphanumMask : /[a-z0-9_\-]/i,
 
     time: function(val, field) {
         return /^([0-9]{2}):([0-9]{2}):([0-9]{2})$/i.test(val);
