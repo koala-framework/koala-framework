@@ -54,8 +54,8 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
 
         // APC
         $cacheId = $this->_getCacheId($component->componentId, $type, $value);
-        $ttl = 60*60; // Damit er nicht vollgemüllt wird, sondern alles was er wirklich oft braucht drinnen hat
-        if ($settings['lifetime']) $ttl = min($ttl, $settings['lifetime']);
+        $ttl = 0;
+        if ($settings['lifetime']) $ttl = $settings['lifetime'];
         apc_add($cacheId, $content, $ttl);
 
         return true;
@@ -82,7 +82,8 @@ class Vps_Component_Cache_Mysql extends Vps_Component_Cache
             $row = $this->getModel('cache')->export(Vps_Model_Db::FORMAT_ARRAY, $select);
             $content = isset($row[0]) ? $row[0]['content'] : null;
             if (isset($row[0])) {
-                $ttl = min(60*60, time() - $row[0]['expire']);
+                $ttl = 0;
+                if ($row[0]['expire']) $ttl = $row[0]['expire']-time();
                 apc_add($cacheId, $content, $ttl);
             }
         }

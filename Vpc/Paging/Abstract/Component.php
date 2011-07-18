@@ -99,6 +99,17 @@ class Vpc_Paging_Abstract_Component extends Vpc_Abstract
 
         $classes = array();
         if ($currentPage == $pageNumber) $classes[] = 'active';
+        
+        $buttonTexts = $this->_getPlaceholder();
+        if ($text==$buttonTexts['next']) {
+            $classes[] = 'jumpNext';
+        } else if ($text==$buttonTexts['previous']) {
+            $classes[] = 'jumpPrevious';
+        } else if ($text==$buttonTexts['first']) {
+            $classes[] = 'jumpFirst';
+        } else if ($text==$buttonTexts['last']) {
+            $classes[] = 'jumpLast';
+        }
 
         $linktext = '<span';
         if (!is_numeric($text)) $linktext .= ' class="navigation"';
