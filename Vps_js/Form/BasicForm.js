@@ -32,9 +32,17 @@ Ext.form.BasicForm.override({
 Ext.apply(Ext.form.VTypes, {
     //E-Mail Validierung darf ab Ext 2.2 keine Bindestriche mehr haben, jetzt schon wieder
 	email:  function(v) {
-        return /^([a-zA-Z0-9_.-])+@(([\S-])+.)+([a-zA-Z0-9]{2,4})+$/.test(v);
+        return /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/.test(v);
     },
-    emailMask : /[\S]/i,
+
+    //Ersetzt alles außer a-z, 0-9 - durch _. So wie Vps_Filter_Ascii
+    //standard-ext implementierung überschrieben um den - zu erlauben
+    alphanum:  function(v) {
+        return /^[a-zA-Z0-9_\-]+$/.test(v);
+    },
+    alphanumText : trlVps('This field should only contain letters, numbers, - and _'),
+    alphanumMask : /[a-z0-9_\-]/i
+
     time: function(val, field) {
         return /^([0-9]{2}):([0-9]{2}):([0-9]{2})$/i.test(val);
     },
