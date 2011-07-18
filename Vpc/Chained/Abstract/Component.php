@@ -25,6 +25,9 @@ abstract class Vpc_Chained_Abstract_Component extends Vpc_Abstract
                     $g['component'][$masterC] = $alternativeComponent;
                 }
             }
+            if (!isset($g['class'])) {
+                throw new Vps_Exception("generator class is not set: '$k' in '$masterComponentClass'");
+            }
             $g['chainedGenerator'] = $g['class'];
             $g['class'] = "Vpc_Chained_{$prefix}_Generator";
             if (isset($g['dbIdShortcut'])) unset($g['dbIdShortcut']);
