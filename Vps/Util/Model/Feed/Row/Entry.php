@@ -122,6 +122,13 @@ class Vps_Util_Model_Feed_Row_Entry extends Vps_Model_Row_Data_Abstract
             }
         }
 
+        if (isset($data['description']) && strlen($data['description']) > 1024*100) {
+            $data['description'] = substr($data['description'], 0, 1024*100);
+        }
+        if (isset($data['content_encoded']) && strlen($data['content_encoded']) > 1024*100) {
+            $data['content_encoded'] = substr($data['content_encoded'], 0, 1024*100);
+        }
+
         $config['data'] = $data;
 
         parent::__construct($config);
