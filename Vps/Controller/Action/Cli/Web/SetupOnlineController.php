@@ -145,28 +145,34 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
                 }
             }
 
-            echo "\n$server: [1/8] git clone web\n";
+            echo "\n$server: [1/9] git clone web\n";
             $cmd = "git clone ";
             $cmd .= "ssh://vivid@git.vivid-planet.com/git/".Vps_Registry::get('config')->application->id." wc && mv wc/* . && mv wc/.??* . && rmdir wc";
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [2/8] git clone vps-lib\n";
+            if ($server != 'production' && $server != 'test' && $server != 'vivid-test-server') { //für die nicht nötig
+                echo "\n$server: [1.5/9] set application/config_section\n";
+                $cmd = "echo -n ".escapeshellarg($server)." > application/config_section";
+                $this->_systemSshVps($config, $cmd);
+            }
+
+            echo "\n$server: [2/9] git clone vps-lib\n";
             $cmd = "git clone ";
             $cmd .= "ssh://vivid@git.vivid-planet.com/git/vps vps-lib";
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [2.3/8] git checkout branch\n";
+            echo "\n$server: [2.3/9] git checkout branch\n";
             $branch = trim(file_get_contents('application/vps_branch'));
             $cmd = "cd vps-lib && git checkout -b $branch origin/$branch";
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [2.5/8] set vps-lib/include_path\n";
+            echo "\n$server: [2.5/9] set vps-lib/include_path\n";
             $path = "{$config->libraryPath}/zend/%version%";
             $cmd = "echo -n ".escapeshellarg($path)." > vps-lib/include_path";
             $this->_systemSshVps($config, $cmd);
 
             if ($config->uploads) {
-                echo "\n$server: [4/8] create uploads\n";
+                echo "\n$server: [4/9] create uploads\n";
                 $cmd = "mkdir {$config->uploads}";
                 try {
                     $this->_systemSshVps($config, $cmd);
@@ -176,7 +182,7 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
             if (!in_array('web', $config->server->databases->toArray())) {
                 echo "(uebersprungen) kein server.databases[] = web eintrag in config\n";
             } else {
-                echo "\n$server: [5/8] create config.db.ini\n";
+                echo "\n$server: [5/9] create config.db.ini\n";
                 $dbConfig = array();
                 $dbConfig[] = "web.host = localhost";
                 if ($server == 'vivid-test-server') {
@@ -198,7 +204,7 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
                 $this->_systemSshVps($config, $cmd);
             }
 
-            echo "\n$server: [6/8] set permissions\n";
+            echo "\n$server: [6/9] set permissions\n";
             $this->_systemSshVps($config, "chmod a+w application/cache/*");
             $this->_systemSshVps($config, "chmod a+w application/temp");
             $this->_systemSshVps($config, "chmod a+w application/log");
@@ -207,12 +213,24 @@ class Vps_Controller_Action_Cli_Web_SetupOnlineController extends Vps_Controller
                 $this->_systemSshVps($config, "chmod a+w $config->uploads");
             }
 
-            echo "\n$server: [7/8] import\n";
-            $cmd = "php bootstrap.php import --server=".Vps_Setup::getConfigSection();
+            echo "\n$server: [7/9] set mysql file rights\n";
+            // globale file rechte für csv import setzen
+            if ($server == 'vivid-test-server') {
+                echo "skipped for vivid-test-server - root user has all rights\n";
+            } else {
+                if (in_array('web', $config->server->databases->toArray())) {
+                    $cmd = "php bootstrap.php setup-online set-mysql-file-right --user=$dbUser";
+                    $this->_systemSshVps($config, $cmd);
+                }
+            }
+
+            echo "\n$server: [8/9] import\n";
+            $cmd = "php bootstrap.php import --skip-backup --server=".Vps_Setup::getConfigSection();
+
             if (!$this->_getParam('debug')) $cmd .= " --debug";
             $this->_systemSshVps($config, $cmd);
 
-            echo "\n$server: [8/8] create-users\n";
+            echo "\n$server: [9/9] create-users\n";
             if (!in_array('vps', $config->server->updateTags->toArray())) {
                 echo "(uebersprungen) kein vps updateTag in config\n";
             } else {
