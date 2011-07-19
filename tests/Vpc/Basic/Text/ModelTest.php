@@ -133,9 +133,9 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
     {
         $c = $this->_root->getComponentById(1008)->getComponent();
         $row = $c->getRow();
-        $html = '<p><img src="http://www.vivid-planet.com/files/vividplanet_internet_agentur_salzburg.gif" /></p>';
+        $html = '<p><img src="http://www.vivid-planet.com/assets/web/images/structure/logo.png" /></p>';
         $html = $row->tidy($html);
-        $this->assertRegExp("#^<p>\n  <img src=\"/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1008-i1/default/34df9defa3f1aba945f116672a671f76/[0-9]+/vividplanetinternetagentursalzburg.gif\" width=\"100\" height=\"100\" />\n</p>$#ms", $html);
+        $this->assertRegExp("#^<p>\n  <img src=\"/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1008-i1/default/91474e79878e50967d2c85a1930872a5/[0-9]+/logo.png\" width=\"100\" height=\"100\" />\n</p>$#ms", $html);
 
         $cc = array_values($c->getData()->getChildComponents());
         $this->assertEquals(1, count($cc));
@@ -156,27 +156,26 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
 
         $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Image_UploadsModel');
         $row = $m->getRow(2);
-        $this->assertEquals('image/gif', $row->mime_type);
-        $this->assertEquals('gif', $row->extension);
-        $this->assertEquals('vividplanetinternetagentursalzburg', $row->filename);
+        $this->assertEquals('image/png', $row->mime_type);
+        $this->assertEquals('png', $row->extension);
+        $this->assertEquals('logo', $row->filename);
         $this->assertEquals(file_get_contents($m->getUploadDir().'/2'),
-                            file_get_contents('http://www.vivid-planet.com/files/vividplanet_internet_agentur_salzburg.gif'));
+                            file_get_contents('http://www.vivid-planet.com/assets/web/images/structure/logo.png'));
     }
 
     public function testCreatesImageComponentHtml()
     {
         $c = $this->_root->getComponentById(1009)->getComponent();
         $row = $c->getRow();
-        $html = '<p><img src="http://www.vivid-planet.com/files/vividplanet_internet_agentur_salzburg.gif" /></p>';
+        $html = '<p><img src="http://www.vivid-planet.com/assets/web/images/structure/logo.png" /></p>';
         $row->content = $html;
         $row->save();
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
-
         $this->assertRegExp('#^\s*<div class="webStandard vpcText vpcBasicTextTestComponent">'.
                     '\s*<p>\s*<div class="vpcBasicTextImageTestComponent">'
-                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1009-i1/default/12a259547cf4ad9a4687e39969cc0033/[0-9]+/vividplanetinternetagentursalzburg.gif" width="100" height="100" alt="" class="" />'
+                    .'\s*<img src="/vps/vpctest/Vpc_Basic_Text_Root/media/Vpc_Basic_Text_Image_TestComponent/1009-i1/default/99a224bb4b0659cc74b5bfb666da59ce/[0-9]+/logo.png" width="100" height="100" alt="" class="" />'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
 

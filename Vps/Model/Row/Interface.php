@@ -10,6 +10,7 @@ interface Vps_Model_Row_Interface
     public function delete();
     public function duplicate(array $data = array());
     public function toArray();
+    public function isDirty();
 
     public function setSiblingRows(array $rows); //internal
 

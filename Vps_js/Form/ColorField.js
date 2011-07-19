@@ -83,6 +83,11 @@ Vps.Form.ColorField =  Ext.extend(function(config){
 
     width: 50,
 
+    initComponent: function() {
+        this.addEvents('select');
+        Vps.Form.ColorField.superclass.initComponent.call(this);
+    },
+
     alignHelpAndComment: function() {
         Vps.Form.ColorField.superclass.alignHelpAndComment.apply(this, arguments);
         if (this.colorPreview) {
@@ -106,7 +111,7 @@ Vps.Form.ColorField =  Ext.extend(function(config){
             this.setColor(this.defaultColor);
             if(!this.allowBlank) {
                 this.markInvalid(String.format(this.blankText, value));
-                return false
+                return false;
             }
             return true;
         }
@@ -184,6 +189,7 @@ Vps.Form.ColorField =  Ext.extend(function(config){
     //private
     handleSelect : function(palette, selColor) {
         this.setValue(selColor);
+        this.fireEvent('select', this, selColor);
     },
 
   // private

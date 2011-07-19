@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->cssClass;?>">
     <ul>
         <? $i = 0; ?>
         <? foreach ($this->children as $child) { ?>
@@ -9,7 +9,7 @@
                 $class = trim($class);
                 $i++;
             ?>
-            <li class="<?= $class; ?>"><? echo $this->component($child) ?></li>
+            <li class="<?=$class;?>"><?=$this->component($child);?></li>
         <? } ?>
     </ul>
 </div>

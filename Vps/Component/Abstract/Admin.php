@@ -151,30 +151,69 @@ class Vps_Component_Abstract_Admin
      */
     protected function _addResourcesBySameClass(Vps_Acl $acl)
     {
+        $dropdownName = 'vpc_'.$this->_class;
+
+        //BEGIN hack
+        //TODO im 1.11 gscheite lösung
+        $isTrl = is_instance_of($this->_class, 'Vpc_Chained_Trl_Component');
+        $hasTrl = false;
+        foreach (Vpc_Abstract::getComponentClasses() as $cls) {
+            if (is_instance_of($cls, 'Vpc_Chained_Trl_Component')) {
+                if (Vpc_Abstract::getSetting($cls, 'masterComponentClass') == $this->_class) {
+                    $dropdownName = 'vpc_'.$cls;
+                    $hasTrl = true;
+                    break;
+                }
+            }
+        }
+        /*
+            class Vps_Component_MenuConfig_Abstract {
+                public function __construct(...)
+                public static function getInstance($componentclass);
+                public function getPriority(); //trls haben niedrige priorität
+                abstract public function addResources(Vps_Acl $acl);
+            }
+            $ret['menuConfig'] = 'Vps_Component_MenuConfig_SameClass'; //fürs deutsche
+            $ret['menuConfig'] = 'Vps_Component_MenuConfig_Trl_SameClass'; //fürs trls, erstellt ein dropdown und verschiebt auch das deutsche da hinein
+
+            $ret['menuConfigDropdownName'] = '';
+            $ret['menuConfig'] = 'Vps_Component_MenuConfig_Dropdown_SameClass'; //fürs deutsche
+        */
+        //END hack
+
         $components = Vps_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
         if (strpos($name, '.') !== false) $name = substr($name, strrpos($name, '.') + 1);
         $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
-        if (count($components) > 1) {
-            if (!$acl->has('vpc_news')) {
-                $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_news',
-                            array('text'=>$name, 'icon'=>$icon)), 'vps_component_root');
+        if ($hasTrl  || count($components) > 1) {
+            if (!$acl->has($dropdownName)) {
+                $acl->add(
+                    new Vps_Acl_Resource_MenuDropdown(
+                        $dropdownName, array('text'=>$name, 'icon'=>$icon)
+                    ), 'vps_component_root'
+                );
             }
             foreach ($components as $c) {
                 $t = $c->getTitle();
-                if (!$t) $t = $c->componentId;
-                $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
-                        array('text'=>$t, 'icon'=>$icon),
-                        Vpc_Admin::getInstance($c->componentClass)->getControllerUrl().'?componentId='.$c->dbId), 'vpc_news');
+                if (!$t) $t = $name;
+                if ($hasTrl || $isTrl) {
+                    $t .= ' ('.$c->getLanguageData()->name.')';
+                }
+                $acl->add(
+                    new Vps_Acl_Resource_Component_MenuUrl(
+                        $c, array('text'=>$t, 'icon'=>$icon)
+                    ), $dropdownName
+                );
             }
         } else if (count($components) == 1) {
             $c = $components[0];
             $name = $this->_addResourcesBySameClassResourceName($c);
-            $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
-                    array('text'=>$name, 'icon'=>$icon),
-                    Vpc_Admin::getInstance($c->componentClass)->getControllerUrl().'?componentId='.$c->dbId), 'vps_component_root');
-
+            $acl->add(
+                new Vps_Acl_Resource_Component_MenuUrl(
+                    $c, array('text'=>$name, 'icon'=>$icon)
+                ), 'vps_component_root'
+            );
         }
     }
 
@@ -182,7 +221,9 @@ class Vps_Component_Abstract_Admin
     //falls es wo anders gebraucht wird bitte flexibler machen
     protected function _addResourcesBySameClassResourceName($c)
     {
-        return Vpc_Abstract::getSetting($this->_class, 'componentName');
+        $ret = Vpc_Abstract::getSetting($this->_class, 'componentName');
+        if (strpos($ret, '.') !== false) $ret = substr(strrchr($ret, '.'), 1);
+        return $ret;
     }
 
     protected final function _getSetting($name)

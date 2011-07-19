@@ -1,6 +1,8 @@
 <?php
 /**
  * @group Composite_Images
+ *
+ * http://vps.vps.niko.vivid/vps/componentedittest/Vpc_Composite_Images_Root/Vpc_Composite_Images_TestComponent/Index?componentId=2100
  */
 class Vpc_Composite_Images_Test extends Vpc_TestAbstract
 {

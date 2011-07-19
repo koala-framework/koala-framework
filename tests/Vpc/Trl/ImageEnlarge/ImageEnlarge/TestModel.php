@@ -3,16 +3,9 @@ class Vpc_Trl_ImageEnlarge_ImageEnlarge_TestModel extends Vpc_Abstract_Image_Mod
 {
     public function __construct()
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Vps_Model_FnFFile(array(
             'primaryKey' => 'component_id',
-            'data'=> array(
-                array('component_id'=>'root-master_test1', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test2', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test3', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test4', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test5', 'vps_upload_id'=>'1'),
-                array('component_id'=>'root-master_test6', 'vps_upload_id'=>'1'),
-            )
+            'uniqueIdentifier' => get_class($this).'-Proxy'
         ));
         $this->_referenceMap['Image']['refModelClass'] = 'Vpc_Trl_ImageEnlarge_UploadsModel';
         parent::__construct($config);

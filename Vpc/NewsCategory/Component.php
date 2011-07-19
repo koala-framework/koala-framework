@@ -10,7 +10,7 @@ class Vpc_NewsCategory_Component extends Vpc_News_Directory_Component
         $ret['generators']['categories'] = array(
             'class' => 'Vps_Component_Generator_PseudoPage_Static',
             'component' => 'Vpc_NewsCategory_Category_Directory_Component',
-            'name' => trl('Kategorien'),
+            'name' => trlVps('Categories'),
             'showInMenu' => false
         );
         return $ret;

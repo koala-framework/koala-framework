@@ -4,13 +4,15 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     // the rule to the image. defaults to the first rule with model Vps_Uploads_Model
     protected $_imageRule = null;
     protected $_labelField; // default is __toString()
+    protected $_filters = null;
 
     protected $_model;
+    protected $_additionalDataFields = array();
 
     protected $_primaryKey;
     protected $_paging = 0;
 
-    protected $_maxLabelLength = 17;
+    protected $_maxLabelLength = 16;
 
     protected $_textField = 'name';
     protected $_buttons = array(
@@ -27,6 +29,12 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     {
         $this->view->controllerUrl = $this->getRequest()->getPathInfo();
         $this->view->xtype = 'vps.imagegrid';
+    }
+
+    public function init()
+    {
+        parent::init();
+        $this->_filters = new Vps_Controller_Action_Auto_FilterCollection();
     }
 
     public function preDispatch()
@@ -75,42 +83,18 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
             }
         }
         $order = $this->_defaultOrder;
-        $primaryKey = $this->_primaryKey;
-
-        $truncateHelper = new Vps_View_Helper_Truncate();
 
         $rowSet = $this->_fetchData($order, $limit, $start);
         if (!is_null($rowSet)) {
             $rows = array();
             foreach ($rowSet as $row) {
-                $r = array();
                 if (is_array($row)) {
                     $row = (object)$row;
                 }
                 if (!$this->_hasPermissions($row, 'load')) {
                     throw new Vps_Exception("You don't have the permissions to load this row");
                 }
-                if (!isset($r[$primaryKey]) && isset($row->$primaryKey)) {
-                    $r[$primaryKey] = $row->$primaryKey;
-                }
-
-                if (!$this->_labelField && $row instanceof Vps_Model_Row_Interface) {
-                    $r['label'] = $row->__toString();
-                } else if ($this->_labelField) {
-                    $r['label'] = $row->{$this->_labelField};
-                } else {
-                    throw new Vps_Exception("You have to set _labelField in the ImageGrid Controller");
-                }
-
-                if (!empty($r['label']) && $this->_maxLabelLength) {
-                    $r['label'] = $truncateHelper->truncate($r['label'], $this->_maxLabelLength, '...', true, false);
-                }
-
-                $imageRef = $this->_getImageReference();
-                $hashKey = md5($row->{$imageRef['column']}.Vps_Uploads_Row::HASH_KEY);
-                $r['src'] = '/vps/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
-                    '&hashKey='.$hashKey.'&size=imageGrid';
-                $rows[] = $r;
+                $rows[] = $this->_createItemByRow($row);
             }
 
             $this->view->rows = $rows;
@@ -129,19 +113,71 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
         }
     }
 
+    protected function _createItemByRow($row)
+    {
+        $truncateHelper = new Vps_View_Helper_Truncate();
+        $primaryKey = $this->_primaryKey;
+        $r = array();
+
+        if (!isset($r[$primaryKey]) && isset($row->$primaryKey)) {
+            $r[$primaryKey] = $row->$primaryKey;
+        }
+
+        if (!$this->_labelField && $row instanceof Vps_Model_Row_Interface) {
+            $r['label'] = $row->__toString();
+        } else if ($this->_labelField) {
+            $r['label'] = $row->{$this->_labelField};
+        } else {
+            throw new Vps_Exception("You have to set _labelField in the ImageGrid Controller");
+        }
+
+        if (!empty($r['label'])) $r['label_short'] = $r['label'];
+
+        if (!empty($r['label_short']) && $this->_maxLabelLength) {
+            $r['label_short'] = $truncateHelper->truncate($r['label_short'], $this->_maxLabelLength, '…', true, false);
+        }
+
+        $imageRef = $this->_getImageReference();
+        $hashKey = md5($row->{$imageRef['column']}.Vps_Uploads_Row::HASH_KEY);
+        $r['src'] = '/vps/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
+            '&hashKey='.$hashKey.'&size=imageGrid';
+        $r['src_large'] = '/vps/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
+            '&hashKey='.$hashKey.'&size=imageGridLarge';
+        if ($uploadRow = $row->getParentRow($this->_imageRule)) {
+            $dim = Vps_Media_Image::calculateScaleDimensions($uploadRow->getFileSource(), array(400, 400, Vps_Media_Image::SCALE_BESTFIT));
+            $r['src_large_width'] = $dim['width'];
+            $r['src_large_height'] = $dim['height'];
+        }
+
+        foreach($this->_additionalDataFields as $f) {
+            $r[$f] = $row->{$f};
+        }
+
+        return $r;
+    }
+
     protected function _appendMetaData()
     {
         $this->view->metaData = array();
 
         $this->view->metaData['root'] = 'rows';
         $this->view->metaData['id'] = $this->_primaryKey;
-        $this->view->metaData['fields'] = array('id', 'label', 'src');
+        $this->view->metaData['fields'] = array('id', 'label', 'label_short', 'src', 'src_large', 'src_large_width', 'src_large_height');
+        foreach($this->_additionalDataFields as $f) {
+            $this->view->metaData['fields'][] = $f;
+        }
         $this->view->metaData['totalProperty'] = 'total';
         $this->view->metaData['successProperty'] = 'success';
         $this->view->metaData['buttons'] = (object)$this->_buttons;
         $this->view->metaData['permissions'] = (object)$this->_permissions;
         $this->view->metaData['paging'] = $this->_paging;
         $this->view->metaData['editDialog'] = $this->_editDialog;
+
+        $filters = array();
+        foreach ($this->_filters as $filter) {
+            $filters[] = $filter->getExtConfig();
+        }
+        $this->view->metaData['filters'] = $filters;
     }
 
     protected function _hasPermissions($row, $action)
@@ -152,6 +188,18 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
     protected function _getSelect()
     {
         $ret = $this->_model->select();
+
+        // Filter
+        foreach ($this->_filters as $filter) {
+            if ($filter->getSkipWhere()) continue;
+            $ret = $filter->formatSelect($ret, $this->_getAllParams());
+        }
+
+        $queryId = $this->getRequest()->getParam('queryId');
+        if ($queryId) {
+            $ret->where(new Vps_Model_Select_Expr_Equals($this->_primaryKey, $queryId));
+        }
+
         return $ret;
     }
 

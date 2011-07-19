@@ -29,7 +29,7 @@ class Vpc_News_Directory_Trl_Admin extends Vpc_Directories_Item_Directory_Trl_Ad
 
     protected function _addResourcesBySameClassResourceName($c)
     {
-        $ret = Vpc_Abstract::getSetting($this->_class, 'componentName');
+        $ret = parent::_addResourcesBySameClassResourceName($c);
         $ret .= ' '.$c->getLanguageData()->name;
         return $ret;
     }

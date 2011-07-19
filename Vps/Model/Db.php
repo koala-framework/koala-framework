@@ -429,6 +429,14 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 throw new Vps_Exception_NotYetImplemented();
             }
             return $pad."($field, {$expr->getPadLength()}, {$expr->getPadStr()})";
+        } else if ($expr instanceof Vps_Model_Select_Expr_Date_Year) {
+            $field = $expr->getField();
+            if ($field instanceof Vps_Model_Select_Expr_Interface) {
+                $field = $this->_createDbSelectExpression($field, $dbSelect);
+            } else {
+                $field = $this->_formatField($field, $dbSelect);
+            }
+            return "YEAR($field)";
         } else if ($expr instanceof Vps_Model_Select_Expr_String) {
             $quotedString = $this->_fixStupidQuoteBug($expr->getString());
             $quotedString = $this->_table->getAdapter()->quote($quotedString);
@@ -524,7 +532,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, "$depTableName.$col1");
-            return $this->getPrimaryKey()." IN ($depDbSelect)";
+            return $this->_fieldWithTableName($this->getPrimaryKey())." IN ($depDbSelect)";
         } else if ($expr instanceof Vps_Model_Select_Expr_Parent) {
             $refM = $depOf->getReferencedModel($expr->getParent());
             $refM = Vps_Model_Abstract::getInstance($refM);

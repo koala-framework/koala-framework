@@ -194,8 +194,21 @@ abstract class Vpc_Menu_Abstract_Component extends Vpc_Abstract
                 );
             }
         }
+
+        // das Category_Trl_GeneratorModel ist ein mega hack, aber das
+        // ->getModel() oben beim generator gibt bei Trl auch immer das vom master
+        // zurück und das eigene trl-model kann man sich da nicht direkt holen.
+        // ist aber ok so, weils im 2.0er dann sowieso anders is und nicht mehr
+        // sein muss.
+        $ret[] = array(
+            'model' => 'Vpc_Root_Category_Trl_GeneratorModel'
+        );
+
         $ret[] = array(
             'model' => 'Vps_Component_Model'
+        );
+        $ret[] = array(
+            'model' => 'Vpc_Menu_Abstract_Model'
         );
         // Falls Nickname geändert wird, ändert sich Url zum User
         $ret[] = array(

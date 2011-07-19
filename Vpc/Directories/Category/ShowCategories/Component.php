@@ -24,8 +24,8 @@ class Vpc_Directories_Category_ShowCategories_Component extends Vpc_Directories_
     {
         $categories = $this->_getCategories();
         if (count($categories)) {
-            return Vps_Component_Data_Root::getInstance()
-                ->getComponentByDbId($categories->current()->directory_component_id);
+            $componentId = $categories->current()->getParentRow('Category')->component_id;
+            return Vps_Component_Data_Root::getInstance()->getComponentByDbId($componentId)->parent;
         }
         return null;
     }

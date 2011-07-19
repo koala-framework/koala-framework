@@ -12,13 +12,21 @@ Vps.Tabs = function(el) {
     this._activeTabIdx = null;
     this.switchEls = Ext.query('.vpsTabsLink', this.el.dom);
     this.contentEls = Ext.query('.vpsTabsContent', this.el.dom);
+    this.fxDuration = .5;
 
-    var tabsWrapper = this.el.createChild({
-        tag: 'div', cls: 'vpsTabsLinks'
+    this.tabsContents = this.el.createChild({
+        tag: 'div', cls: 'vpsTabsContents'
     }, this.el.first());
+    var tabsLinks = this.el.createChild({
+        tag: 'div', cls: 'vpsTabsLinks'
+    }, this.tabsContents);
+
+    for (var i = 0; i < this.contentEls.length; i++) {
+        this.tabsContents.appendChild(this.contentEls[i]);
+    }
 
     for (var i = 0; i < this.switchEls.length; i++) {
-        tabsWrapper.appendChild(this.switchEls[i]);
+        tabsLinks.appendChild(this.switchEls[i]);
         var swEl = Ext.get(this.switchEls[i]);
 
         if (Ext.get(this.contentEls[i]).hasClass('vpsTabsContentActive')) {
@@ -30,19 +38,47 @@ Vps.Tabs = function(el) {
         }, { tabsObject: this, idx: i } );
     }
 
-    tabsWrapper.createChild({
+    if (this._activeTabIdx != null && this.contentEls[this._activeTabIdx]) {
+        this.tabsContents.setHeight(Ext.get(this.contentEls[this._activeTabIdx]).getHeight());
+    }
+
+    tabsLinks.createChild({
         tag: 'div', cls: 'clear'
     });
 };
 
 Ext.extend(Vps.Tabs, Ext.util.Observable, {
     activateTab: function(idx) {
+        if (this._activeTabIdx == idx) return;
+
         if (this._activeTabIdx !== null) {
             Ext.get(this.switchEls[this._activeTabIdx]).removeClass('vpsTabsLinkActive');
-            Ext.get(this.contentEls[this._activeTabIdx]).removeClass('vpsTabsContentActive');
+            Ext.get(this.contentEls[this._activeTabIdx]).fadeOut({
+                duration: this.fxDuration,
+                callback: function(el) {
+                    this.oldEl.removeClass('vpsTabsContentActive');
+                    this.oldEl.setStyle('z-index', '1');
+
+                    this.newEl.setStyle('z-index', '2');
+                    this.newEl.setVisible(true);
+                    this.newEl.setOpacity(1);
+                },
+                scope: {
+                    oldEl: Ext.get(this.contentEls[this._activeTabIdx]),
+                    newEl: Ext.get(this.contentEls[idx])
+                }
+            });
         }
         Ext.get(this.switchEls[idx]).addClass('vpsTabsLinkActive');
-        Ext.get(this.contentEls[idx]).addClass('vpsTabsContentActive');
+        var newContentEl = Ext.get(this.contentEls[idx]);
+        newContentEl.setStyle('z-index', '1');
+        newContentEl.setOpacity(1);
+        newContentEl.setVisible(true);
+        newContentEl.addClass('vpsTabsContentActive');
+
+        this.tabsContents.scale(undefined, newContentEl.getHeight(),
+            { easing: 'easeOut', duration: this.fxDuration }
+        );
 
         this._activeTabIdx = idx;
     }

@@ -84,6 +84,7 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
                 if (!mb_check_encoding($link, 'UTF-8')) {
                     $link = mb_convert_encoding($link, 'UTF-8');
                 }
+                $link = html_entity_decode($link, ENT_QUOTES, "utf-8");
                 $xml = @simplexml_load_string(rtrim($link, ' /') . ' />');
                 if ($xml === false) {
                     continue;
@@ -139,7 +140,6 @@ class Vps_Util_Model_Feed_Feeds extends Vps_Model_Abstract
                 $feeds[(string)$uri] = $title;
             }
         }
-
         // Return the fetched feeds
         return $feeds;
     }

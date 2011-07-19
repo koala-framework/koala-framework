@@ -3,12 +3,13 @@
  * @group Model
  * @group xmlModel
  */
-class Vps_Model_Xml_Columns_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_Xml_Columns_Test extends Vps_Test_TestCase
 {
     private $_model;
 
     public function setUp()
     {
+        parent::setUp();
         $this->_model = new Vps_Model_Xml(array(
             'xpath' => '/trl',
         	'xpathRead' => '//text',

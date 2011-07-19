@@ -3,16 +3,9 @@ class Vpc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_Image_TestModel extends V
 {
     public function __construct()
     {
-        $config['proxyModel'] = new Vps_Model_FnF(array(
+        $config['proxyModel'] = new Vps_Model_FnFFile(array(
             'primaryKey' => 'component_id',
-            'data'=> array(
-                array('component_id'=>'root-en_test1-linkTag-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test2-linkTag-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test3-linkTag-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test4-linkTag-image', 'vps_upload_id'=>null),
-                array('component_id'=>'root-en_test5-linkTag-image', 'vps_upload_id'=>'5'),
-                array('component_id'=>'root-en_test6-linkTag-image', 'vps_upload_id'=>'5'),
-            )
+            'uniqueIdentifier' => get_class($this).'-Proxy'
         ));
         $this->_referenceMap['Image']['refModelClass'] = 'Vpc_Trl_ImageEnlarge_UploadsModel';
         parent::__construct($config);

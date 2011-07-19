@@ -20,4 +20,21 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Image_Component
     {
         return parent::getImageData();
     }
+
+    public static function getMediaOutput($id, $type, $className)
+    {
+        //own_image kann sich ändern, daher zus. meta row fuer callback erstellen
+        $d = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
+        if (!$d) return null;
+
+        while (!is_instance_of($d->componentClass, 'Vpc_Basic_ImageEnlarge_Trl_Component')) {
+            $d = $d->parent;
+        }
+        $row = $d->getComponent()->getRow();
+        Vps_Component_Cache::getInstance()->saveMeta(
+            get_class($row->getModel()), $row->component_id, $id, Vps_Component_Cache::META_CALLBACK
+        );
+
+        return parent::getMediaOutput($id, $type, $className);
+    }
 }

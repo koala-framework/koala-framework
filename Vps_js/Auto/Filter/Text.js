@@ -8,6 +8,7 @@ Vps.Auto.Filter.Text = function(config)
         onTriggerClick: this.clear.createDelegate(this)
     });
     this.paramName = config.paramName;
+    if (config.minLength) this.minLength = config.minLength;
     this.textField.on('render', function() {
         // TODO:
         // event darf nicht "keypress" sein, da sonst zB backspace und del tasten
@@ -15,7 +16,11 @@ Vps.Auto.Filter.Text = function(config)
         // per rechter Maustaste etwas einfügt? Man müsste sich merken was drin
         // steht und bei allen events prüfen ob was daherkommt...
         this.textField.getEl().on('keyup', function() {
-            this.fireEvent('filter', this, this.getParams());
+            if (!this.minLength) {
+                this.fireEvent('filter', this, this.getParams());
+            } else if (this.textField.getValue().length == 0 || this.textField.getValue().length >= this.minLength) {
+                this.fireEvent('filter', this, this.getParams());
+            }
         }, this, {buffer: 500});
     }, this);
     this.toolbarItems.add(this.textField);

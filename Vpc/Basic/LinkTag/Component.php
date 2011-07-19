@@ -16,7 +16,6 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
                 'component'    => 'intern'
             )
         ));
-        $ret['configChildComponentsGenerator'] = 'link';
         $ret['generators']['link'] = array(
             'class' => 'Vpc_Basic_LinkTag_Generator',
             'component' => array(
@@ -26,12 +25,19 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
                 'download' => 'Vpc_Basic_DownloadTag_Component'
             ),
         );
+        $cc = Vps_Registry::get('config')->vpc->childComponents;
+        if (isset($cc->Vpc_Basic_LinkTag_Component)) {
+            $ret['generators']['link']['component'] = array_merge(
+                $ret['generators']['link']['component'],
+                $cc->Vpc_Basic_LinkTag_Component->toArray()
+            );
+        }
         $ret['assetsAdmin']['dep'][] = 'VpsFormCards';
         return $ret;
     }
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = array();
         $ret['linkTag'] = $this->getData()->getChildComponent(array(
             'generator' => 'link'
         ));

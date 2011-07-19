@@ -1,6 +1,9 @@
 <?php
 class Vps_Component_Data
 {
+    /**
+     * @var Vpc_Abstract
+     */
     private $_component;
 
     private $_url;
@@ -29,9 +32,6 @@ class Vps_Component_Data
             $this->dbId = $this->componentId;
         }
         Vps_Benchmark::count('componentDatas', $this->componentId);
-        if ($this->isPage) {
-            Vps_Benchmark::count('componentData Pages', $this->componentId);
-        }
     }
 
     /**
@@ -81,7 +81,7 @@ class Vps_Component_Data
             }
             return trim($rel);
         } else if ($var == 'filename') {
-            return $this->getPseudoPageOrRoot()->_filename;
+            return rawurlencode($this->getPseudoPageOrRoot()->_filename);
         } else if ($var == 'inherits') {
             return false;
         } else if ($var == 'visible') {
@@ -179,11 +179,14 @@ class Vps_Component_Data
         } else {
             $select = clone $select;
         }
-        Vps_Benchmark::count('getRecursiveChildComponents', $this->componentId);
+        Vps_Benchmark::count('getRecursiveChildComponents');
         if (is_array($childSelect)) {
             $childSelect = new Vps_Component_Select($childSelect);
         }
         $ret = $this->getChildComponents($select);
+        if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+            return $ret;
+        }
 
         $genSelect = new Vps_Component_Select();
         $genSelect->copyParts(array(
@@ -208,13 +211,10 @@ class Vps_Component_Data
         $cacheId = 'recCCGen'.$selectHash.$this->componentClass.implode('__', $this->inheritClasses);
         $cacheId = str_replace('.', '_', $cacheId);
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
-            Vps_Benchmark::count('getRecCC Gen hit', $this->componentClass);
             $generators = $this->_recursiveGeneratorsCache[$cacheId];
         } else if (($generators = $cache->load($cacheId)) !== false) {
-            Vps_Benchmark::count('getRecCC Gen semi-hit', $this->componentClass);
             $this->_recursiveGeneratorsCache[$cacheId] = $generators;
         } else {
-            Vps_Benchmark::count('getRecCC Gen miss', $this->componentClass);
             $generators = $this->_getRecursiveGenerators(
                         Vpc_Abstract::getChildComponentClasses($this, $childSelect),
                         $genSelect, $childSelect, $selectHash);
@@ -228,6 +228,9 @@ class Vps_Component_Data
                 foreach ($gen->getChildData(null, $select) as $d) {
                     if (!in_array($d, $ret, true)) {
                         $ret[] = $d;
+                        if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+                            return $ret;
+                        }
                     }
                 }
             }
@@ -262,6 +265,9 @@ class Vps_Component_Data
                         foreach ($gen->getChildData($parentDatas, $select) as $d) {
                             if (!in_array($d, $ret, true)) {
                                 $ret[] = $d;
+                                if ($select->hasPart('limitCount') && $select->getPart('limitCount') <= count($ret)) {
+                                    return $ret;
+                                }
                             }
                         }
                     }
@@ -274,7 +280,6 @@ class Vps_Component_Data
     private function _getRecursiveGenerators($componentClasses, $select, $childSelect, $selectHash)
     {
         $cacheId = Implode('-', $componentClasses).$selectHash;
-        Vps_Benchmark::count('_getRecursiveGenerators');
         if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
             return $this->_recursiveGeneratorsCache[$cacheId];
         }
@@ -735,7 +740,7 @@ class Vps_Component_Data
     {
         $langData = $this->getLanguageData();
         if (!$langData) {
-            return Vps_Registry::get('trl')->getWebCodeLanguage();
+            return Vps_Trl::getInstance()->getWebCodeLanguage();
         } else {
             return $langData->getComponent()->getLanguage();
         }
@@ -743,47 +748,47 @@ class Vps_Component_Data
 
     public function trlStaticExecute($trlStaticData)
     {
-        return Zend_Registry::get('trl')->trlStaticExecute($trlStaticData, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlStaticExecute($trlStaticData, $this->getLanguage());
     }
 
     public function trl($string, $text = array())
     {
-        return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+        return Vps_Trl::getInstance()->trl($string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
     }
 
     public function trlc($context, $string, $text = array())
     {
-        return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
     }
 
     public function trlp($single, $plural, $text =  array())
     {
-        return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
     }
 
     public function trlcp($context, $single, $plural, $text = array())
     {
-        return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB, $this->getLanguage());
     }
 
     public function trlVps($string, $text = array())
     {
-        return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+        return Vps_Trl::getInstance()->trl($string, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
     }
 
     public function trlcVps($context, $string, $text = array())
     {
-        return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
     }
 
     public function trlpVps($single, $plural, $text =  array())
     {
-        return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
     }
 
     public function trlcpVps($context, $single, $plural, $text = array())
     {
-        return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
+        return Vps_Trl::getInstance()->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS, $this->getLanguage());
     }
 
     public function toDebug()

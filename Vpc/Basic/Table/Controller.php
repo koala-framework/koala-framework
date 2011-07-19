@@ -8,7 +8,7 @@ class Vpc_Basic_Table_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     protected function _initColumns()
     {
         $columnCount = Vps_Component_Data_Root::getInstance()
-            ->getComponentById($this->_getParam('componentId'))
+            ->getComponentById($this->_getParam('componentId'), array('ignoreVisible'=>true))
             ->getComponent()->getColumnCount();
 
         $sel = new Vps_Form_Field_Select();

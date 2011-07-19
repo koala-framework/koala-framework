@@ -1,6 +1,7 @@
 <?php
 class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
+    protected $backupStaticAttributes = false;
     protected $autoStop = false;
     protected $_unitTestCookie;
     protected $_domain = null;
@@ -46,7 +47,7 @@ protected function _createSeparateTestDb($bootstrapFile)
 
         $this->_unitTestCookie = md5(uniqid('testId', true));
 
-        $this->captureScreenshotOnFailure = true;
+        $this->captureScreenshotOnFailure = Vps_Setup::getConfigSection()=='vivid-test-server';
         $this->screenshotPath = '/mnt/screenshots';
         $this->screenshotUrl = 'http://screenshots.vivid';
         parent::setUp();
@@ -95,6 +96,7 @@ protected function _createSeparateTestDb($bootstrapFile)
     {
         parent::start();
         $this->open('/vps/test/vps_start');
+        $this->deleteAllVisibleCookies();
         $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/, max_age=60*5');
     }
 

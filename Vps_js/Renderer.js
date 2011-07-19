@@ -54,7 +54,7 @@ Ext.util.Format.money = function(v, p)
     }
     ret = preSign+x+ret+v.substr(v.length-3, 3);
     return ret;
-}
+};
 
 Ext.util.Format.percent = function(v)
 {
@@ -112,8 +112,25 @@ Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');
 Ext.util.Format.germanDay = function(value, p) {
     p.css += 'vps-renderer-bright';
     return Ext.util.Format.date(value, 'd.m.');
-}
+};
 Ext.util.Format.time = Ext.util.Format.dateRenderer('H:i');
+Ext.util.Format.secondsToTime = function(v, format) {
+    format.css += 'secondsToTimeRight';
+
+    if(!v){
+        return '0:00';
+    }
+
+    var seconds = parseInt(v) % 60;
+    var minutes = Math.floor(parseInt(v)/60) % 60;
+    var hours = Math.floor(parseInt(v)/3600) % 3600;
+
+    var ret = hours+':';
+    if (minutes < 10) ret += '0';
+    ret += minutes;
+
+    return ret;
+};
 
 Ext.util.Format.mouseoverPic = function(v, p, record){
     if (!v) return '';

@@ -16,6 +16,10 @@ function _pArray($src, $indent = '')
             $src = $src->__toString();
         } else if (!is_string($src)) {
             $src = print_r($src, true);
+        } else {
+            if (strlen($src) > 400) {
+                $src = substr($src, 0, 400)."...".' (length='.strlen($src).')';
+            }
         }
         foreach (explode("\n", $src) as $l) {
             $ret .= $indent.$l."\n";
@@ -154,7 +158,7 @@ function _btArgString($arg)
     } else if (is_null($arg)) {
         $ret[] = 'null';
     } else if (is_string($arg)) {
-        if (strlen($arg) > 50) $arg = substr($arg, 0, 47)."...";
+        if (strlen($arg) > 200) $arg = substr($arg, 0, 197)."...";
         $ret[] = '"'.$arg.'"';
     } else if (is_bool($arg)) {
         $ret[] = $arg ? 'true' : 'false';
@@ -209,6 +213,10 @@ class Vps_Debug
     public static function handleError($errno, $errstr, $errfile, $errline)
     {
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
+        if (defined('E_DEPRECATED') && $errno == E_DEPRECATED
+            && (strpos($errfile, 'tcpdf/') !== false || strpos($errfile, '/usr/share/php/') !== false)) {
+            return;
+        }
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
@@ -235,7 +243,10 @@ class Vps_Debug
         $template = strtolower(Zend_Filter::filterStatic($template, 'Word_CamelCaseToDash').'.tpl');
         if ($exception instanceof Vps_Exception_Abstract) $exception->log();
 
-        if (!headers_sent()) header($header);
+        if (!headers_sent()) {
+            header($header);
+            header('Content-Type: text/html; charset=utf-8');
+        }
         try {
             echo $view->render($template);
         } catch (Exception $e) {

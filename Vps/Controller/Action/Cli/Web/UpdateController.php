@@ -28,10 +28,13 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
 
     public static function update($rev = false, $debug = false, $skipClearCache = false)
     {
+        if (!$skipClearCache) {
+            Vps_Util_ClearCache::getInstance()->clearCache('all', false, false);
+        }
         echo "Update\n";
 
         if (in_array('vps', Vps_Registry::get('config')->server->updateTags->toArray())) {
-            if (!file_exists('.git')) {
+            if (!file_exists('.git') && Vps_Registry::get('config')->application->id!='zeiterfassung') {
                 echo "\n\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
                 echo "ACHTUNG web (und eventuell vps) wurden auf git umgestellt.\n";
                 system("php bootstrap.php git convert-to-git", $ret);
@@ -204,12 +207,17 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
                 $databases = array('web');
             }
             foreach ($databases as $db) {
+                if (!$db) continue;
                 if ($method != 'checkSettings') {
                     echo $db.' ';
                     flush();
                 }
                 try {
-                    $db = Vps_Registry::get('dao')->getDb($db);
+                    if (Vps_Registry::get('dao')) {
+                        $db = Vps_Registry::get('dao')->getDb($db);
+                    } else {
+                        $db = null;
+                    }
                 } catch (Exception $e) {
                     echo "skipping, invalid db\n";
                     flush();
@@ -235,7 +243,11 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
                 }
 
                 //reset to default database
-                Vps_Registry::set('db', Vps_Registry::get('dao')->getDb());
+                $db = null;
+                try {
+                    if (Vps_Registry::get('dao')) $db = Vps_Registry::get('dao')->getDb();
+                } catch (Exception $e) {}
+                Vps_Registry::set('db', $db);
             }
             if ($method != 'checkSettings' && $ret) {
                 echo "\033[32 OK \033[0m\n";

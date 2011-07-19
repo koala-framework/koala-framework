@@ -3,19 +3,12 @@
  * @group Basic_Image
  * @group Image
  */
-class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
+class Vpc_Basic_Image_Test extends Vpc_TestAbstract
 {
-    private $_root;
-
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vpc_Basic_Image_Root');
-        $this->_root = Vps_Component_Data_Root::getInstance();
-        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
-        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
-        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
-        Vps_Component_Cache::getInstance()->emptyPreload();
-        Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
+        parent::setUp('Vpc_Basic_Image_Root');
+        $this->_root->setFilename(null);
     }
 
     public function tearDown()
@@ -48,7 +41,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $c = $this->_root->getComponentById('1600');
         $this->assertTrue($c->hasContent());
 
-        $this->assertEquals(array('width'=>100, 'height'=>100, 'scale'=>Vps_Media_Image::SCALE_DEFORM),
+        $this->assertEquals(array('width'=>100, 'height'=>100, 'scale'=>Vps_Media_Image::SCALE_DEFORM, 'rotate'=>null),
             $c->getComponent()->getImageDimensions());
     }
 
@@ -92,7 +85,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
     {
         $c = $this->_root->getComponentById('1603');
 
-        $this->assertEquals(array('width'=>10, 'height'=>10, 'scale'=>Vps_Media_Image::SCALE_DEFORM),
+        $this->assertEquals(array('width'=>10, 'height'=>10, 'scale'=>Vps_Media_Image::SCALE_DEFORM, 'rotate'=>null),
             $c->getComponent()->getImageDimensions());
     }
 
@@ -103,7 +96,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $url = $c->getComponent()->getImageUrl();
         $this->assertNotNull($url);
 
-        $this->assertEquals(array('width'=>16, 'height'=>16, 'scale'=>Vps_Media_Image::SCALE_DEFORM),
+        $this->assertEquals(array('width'=>16, 'height'=>16, 'scale'=>Vps_Media_Image::SCALE_DEFORM, 'rotate'=>null),
             $c->getComponent()->getImageDimensions());
 
         $o = Vpc_Basic_Image_Component::getMediaOutput($c->componentId, 'default', $c->componentClass);

@@ -19,7 +19,12 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
         $this->setLabelAlign('right');
         $this->setBaseCls('x-plain');
     }
-    
+
+    public function __clone()
+    {
+        $this->fields = clone $this->fields;
+    }
+
     protected function _init()
     {
         parent::_init();

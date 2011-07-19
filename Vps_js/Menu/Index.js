@@ -168,8 +168,6 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 icon: '/assets/silkicons/user.png',
                 handler: function() {
                     var dlg = new Vps.Auto.Form.Window({
-                        width: 450,
-                        height: 370,
                         formConfig: {
                             controllerUrl: result.userSelfControllerUrl
                         }
@@ -184,9 +182,8 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         }
         if (result.showLogout) {
             this.add({
-                text: trlVps('Logout')
-                    + ((result.fullname && !result.userSelfControllerUrl) ? ' ('+result.fullname+')' : ''),
-                cls: 'x-btn-text-icon',
+                cls: 'x-btn-icon',
+                tooltip: trlVps('Logout'),
                 icon: '/assets/silkicons/door_out.png',
                 handler: function() {
                     Ext.Ajax.request({
@@ -203,9 +200,9 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
             });
         }
         this.add({
-            text: 'Info',
-            cls: 'x-btn-text-icon',
+            cls: 'x-btn-icon',
             icon: '/assets/vps/images/information.png',
+            tooltip: trlVps('Information'),
             handler: function() {
                 var about = new Vps.About();
                 about.show();
@@ -214,9 +211,8 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         });
         if (result.hasFrontend) {
             this.add({
-                tooltip:trlVps('Open frontend in a new window'),
-                text:trlVps('Web'),
-                cls: 'x-btn-text-icon',
+                tooltip: trlVps('Open frontend in a new window'),
+                cls: 'x-btn-icon',
                 icon: '/assets/silkicons/world.png',
                 handler: function() {
                     window.open('/');
@@ -228,17 +224,15 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         if (Vps.Debug.showMenu) {
             this.add('-');
             this.add({
-                text: 'Debug',
-                cls: 'x-btn-text-icon',
+                cls: 'x-btn-icon',
                 icon: '/assets/silkicons/bug.png',
                 menu: new Vps.Debug.Menu()
             });
         } else if (Vps.Debug.showActivator) {
             this.add('-');
             this.add({
-                text: 'Debug',
                 tooltip: 'Activate Debugging',
-                cls: 'x-btn-text-icon',
+                cls: 'x-btn-icon',
                 icon: '/assets/silkicons/bug.png',
                 handler: function() {
                     location.href = '/vps/debug/activate?url=' + location.href;

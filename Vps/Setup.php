@@ -113,6 +113,7 @@ class Vps_Setup
         error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
         mb_internal_encoding('UTF-8');
+        iconv_set_encoding('internal_encoding', 'utf-8');
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         set_exception_handler(array('Vps_Debug', 'handleException'));
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
@@ -178,7 +179,13 @@ class Vps_Setup
                         if (!$redirect && !$domain->pattern) $redirect = $domain->domain;
                         if ($domain->pattern && preg_match('/' . $domain->pattern . '/', $host)
                         ) {
-                            $redirect = $domain->domain;
+                            if ($domain->noRedirectPattern &&
+                                preg_match('/'.$domain->noRedirectPattern.'/', $host)
+                            ) {
+                                $redirect = false;
+                            } else {
+                                $redirect = $domain->domain;
+                            }
                             break;
                         }
                     }
@@ -208,29 +215,18 @@ class Vps_Setup
 
         if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
+            && $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
             && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
+            && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
             && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
             && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
+            && substr($_SERVER['REDIRECT_URL'], 0, 17) != '/wirecard_confirm' //rssinclude
         ) {
-            $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
-            if (empty($sessionPhpAuthed->success)) {
-                if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
-                    $loginResponse = Zend_Registry::get('userModel')
-                        ->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    if ($loginResponse['zendAuthResultCode'] == Zend_Auth_Result::SUCCESS) {
-                        $sessionPhpAuthed->success = 1;
-                    } else {
-                        unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    }
-                }
-
-                // separate if abfrage, damit login wieder kommt, falls gerade falsch eingeloggt wurde
-                if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
-                    header('WWW-Authenticate: Basic realm="Testserver"');
-                    throw new Vps_Exception_AccessDenied();
-                }
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+                header('WWW-Authenticate: Basic realm="Testserver"');
+                throw new Vps_Exception_AccessDenied();
             }
         }
 
@@ -238,7 +234,13 @@ class Vps_Setup
             set_time_limit((int)$tl);
         }
 
-        self::_setLocale();
+        if (!isset($_SERVER['REDIRECT_URL']) ||
+            (substr($_SERVER['REDIRECT_URL'], 0, 7) != '/media/'
+             && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/assets/'
+             && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output') //rssinclude
+        ) {
+            self::_setLocale();
+        }
     }
 
     public static function shutDown()
@@ -281,14 +283,15 @@ class Vps_Setup
             return trim(file_get_contents('application/config_section'));
         } else if (file_exists('/var/www/vivid-test-server')) {
             return 'vivid-test-server';
-        } else if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
-            if ($m[2]=='vps-projekte') return 'vivid';
-            return $m[2];
+        } else if (preg_match('#/(www|wwwnas)/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
+            if ($m[3]=='vps-projekte') return 'vivid';
+            return $m[3];
         } else if (substr($host, 0, 9)=='dev.test.') {
             return 'devtest';
         } else if (substr($host, 0, 4)=='dev.') {
             return 'dev';
         } else if (substr($host, 0, 5)=='test.' ||
+                   substr($host, 0, 3)=='qa.' ||
                    substr($path, 0, 17) == '/docs/vpcms/test.' ||
                    substr($path, 0, 21) == '/docs/vpcms/www.test.' ||
                    substr($path, 0, 25) == '/var/www/html/vpcms/test.' ||
@@ -319,7 +322,7 @@ class Vps_Setup
 
             $requestUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REDIRECT_URL'];
 
-            Vps_Registry::get('trl')->setUseUserLanguage(false);
+            Vps_Trl::getInstance()->setUseUserLanguage(false);
             self::_setLocale();
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
@@ -329,12 +332,12 @@ class Vps_Setup
                throw new Vps_Exception_NotFound();
             }
             $root->setCurrentPage($data);
-            if ($data->url != $_SERVER['REDIRECT_URL']) {
+            if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
                 header('Location: '.$data->url);
                 exit;
             }
             // hickedy-hack: Für Formular Validierung. Im 1.10 ist das bereits schön gelöst
-            Vps_Registry::get('trl')->overrideTargetLanguage($data->getLanguage());
+            Vps_Trl::getInstance()->overrideTargetLanguage($data->getLanguage());
             $page = $data->getComponent();
             $page->sendContent();
 
@@ -377,6 +380,56 @@ class Vps_Setup
             }
             Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
         }
+    }
+
+    /**
+     * Proxy, der zB für cross-domain ajax requests verwendet werden kann
+     *
+     * @param string|array $hosts Erlaubte Hostnamen (RegExp erlaubt, ^ vorne und $ hinten werden autom. angefügt)
+     */
+    public static function dispatchProxy($hostnames)
+    {
+        if (empty($_SERVER['REDIRECT_URL'])) return;
+
+        if (!preg_match('#^/vps/proxy/?$#i', $_SERVER['REDIRECT_URL'])) return;
+
+        if (is_string($hostnames)) {
+            $hostnames = array($hostnames);
+        }
+
+        $proxyUrl = $_REQUEST['proxyUrl'];
+        $proxyPostVars = $_POST;
+        $proxyGetVars = $_GET;
+        if (array_key_exists('proxyUrl', $proxyPostVars)) unset($proxyPostVars['proxyUrl']);
+        if (array_key_exists('proxyUrl', $proxyGetVars)) unset($proxyGetVars['proxyUrl']);
+
+        // host checking
+        $proxyHost = parse_url($proxyUrl, PHP_URL_HOST);
+        $matched = false;
+        foreach ($hostnames as $hostname) {
+            if (preg_match('/^'.$hostname.'$/i', $proxyHost)) {
+                $matched = true;
+                break;
+            }
+        }
+        if (!$matched) return;
+
+        // proxying
+        $http = new Zend_Http_Client($proxyUrl);
+        if (count($_POST)) {
+            $http->setMethod(Zend_Http_Client::POST);
+        } else {
+            $http->setMethod(Zend_Http_Client::GET);
+        }
+        if (count($_GET)) $http->setParameterGet($proxyGetVars);
+        if (count($_POST)) $http->setParameterPost($proxyPostVars);
+        $response = $http->request();
+        $headers = $response->getHeaders();
+        if ($headers && !empty($headers['Content-type'])) {
+            header("Content-Type: ".$headers['Content-type']);
+        }
+        echo $response->getBody();
+        exit;
     }
 
     public static function getHost($includeProtocol = true)

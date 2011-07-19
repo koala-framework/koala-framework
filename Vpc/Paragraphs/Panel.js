@@ -35,6 +35,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             width: this.previewWidth,
             showDelete: this.showDelete,
             showPosition: this.showPosition,
+            showCopyPaste: this.showCopyPaste,
             listeners: {
                 scope: this,
                 'delete': this.onDelete,
@@ -76,7 +77,6 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             text : trlVps('All Visible'),
             icon : '/assets/silkicons/tick.png',
             cls  : 'x-btn-text-icon',
-            enableToggle: true,
             handler: function(b) {
                 Ext.Msg.show({
                     title: trlVps('All Visible'),
@@ -97,7 +97,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
                             });
                         }
                     }
-                })
+                });
             },
             scope: this
         });
@@ -109,11 +109,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
                 listeners: {
                     scope: this,
                     menushow: function() {
-                        if (this.store.getCount() == 0) {
-                            this.addParagraphPos = 1;
-                        } else {
-                            this.addParagraphPos = this.store.getAt(this.store.getCount()-1).get('pos')+1;
-                        }
+                        this.addParagraphPos = 1;
                     },
                     addParagraph: function(component) {
                         this.onParagraphAdd(component);
@@ -149,7 +145,9 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
         if (this.actions.addparagraph) {
             this.tbar.push('-');
             this.tbar.push(this.actions.addparagraph);
-            this.tbar.push(this.actions.copyPaste);
+            if (this.showCopyPaste) {
+                this.tbar.push(this.actions.copyPaste);
+            }
         }
         this.tbar.push('->');
         this.tbar.push(this.actions.makeAllVisible);

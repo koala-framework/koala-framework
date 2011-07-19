@@ -17,11 +17,17 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         $ret[] = array('param' => 'skip-test');
         $ret[] = array('param' => 'skip-prod');
         $ret[] = array('param' => 'skip-check');
+        $ret[] = array('param' => 'skip-backup');
         return $ret;
     }
 
     private function _systemSshVps($cmd, $config)
     {
+        if (!$config->server->host) {
+            echo " -> Kommando nicht ausgefuehrt, host in section '".($config->getSectionName())."' nicht gesetzt: $cmd \n";
+            return 0;
+        }
+
         $sshHost = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
         $sshDir = $config->server->dir;
         $cmd = "sshvps $sshHost $sshDir $cmd";
@@ -40,6 +46,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         $this->_systemSshVps($cmd, $config);
         if ($config->server->subSections) {
             foreach ($config->server->subSections as $s) {
+                if (!$s) continue;
                 $this->_systemSshVpsWithSubSections($cmd, $s);
             }
         }
@@ -56,16 +63,26 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         Zend_Session::start(); //wegen tests
 
         $prodConfig = Vps_Config_Web::getInstance('production');
+        $hasProdHost = true;
         if (!$prodConfig || !$prodConfig->server->host || !$prodConfig->server->dir) {
-            throw new Vps_ClientException("Prod-Server not configured");
+            echo "Prod-Server not configured.\n";
+            $hasProdHost = false;
+        }
+        if (!$hasProdHost && !$prodConfig->server->subSections) {
+            throw new Vps_ClientException("Prod-Server not configured and no subsections are set");
         }
 
         $testConfig = Vps_Config_Web::getInstance('test');
+        $hasTestHost = true;
         if (!$testConfig || !$testConfig->server->host || !$testConfig->server->dir) {
             echo "Test-Server not configured.\n";
-            $testConfig = false;
+            $hasTestHost = false;
         }
-        if ($testConfig) {
+        $hasTestSubsections = false;
+        if ($testConfig->server->subSections) {
+            $hasTestSubsections  = true;
+        }
+        if ($hasTestHost && $hasProdHost) {
             if ($testConfig->server->dir == $prodConfig->server->dir && $testConfig->server->host == $prodConfig->server->host) {
                 throw new Vps_ClientException("Test-Server not configured, same dir as production");
             }
@@ -145,7 +162,7 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
 
             Vps_Controller_Action_Cli_Web_SvnUpController::checkForModifiedFiles(true);
 
-            if ($testConfig) {
+            if ($hasTestHost || $hasTestSubsections) {
                 $this->_systemSshVpsWithSubSections("svn-up check-for-modified-files", 'test');
             }
             $this->_systemSshVpsWithSubSections("svn-up check-for-modified-files", 'production');
@@ -174,13 +191,13 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
 
         if ($useSvn) {
             echo "\n\n*** [03/13] vps tag auschecken\n";
-            if ($testConfig) {
+            if ($hasTestHost || $hasTestSubsections) {
                 $this->_systemSshVpsWithSubSections("tag-checkout vps-checkout --version=$vpsVersion", 'test');
             }
             $this->_systemSshVpsWithSubSections("tag-checkout vps-checkout --version=$vpsVersion", 'production');
         }
 
-        if ($testConfig) {
+        if ($hasTestHost || $hasTestSubsections) {
             if ($useSvn) {
                 echo "\n\n*** [04/13] test: vps-version anpassen\n";
                 $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=$vpsVersion", 'test');
@@ -193,20 +210,21 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             }
         }
 
-        $skipCopyToTest = ($this->_getParam('skip-copy-to-test') || $this->_getParam('skip-copy-to-test'));
-        if ($testConfig) {
+        $importParams = '';
+        if ($this->_getParam('skip-backup')) $importParams .= ' --skip-backup';
+        if ($hasTestHost || $hasTestSubsections) {
             echo "\n\n*** [06/13] prod daten auf test uebernehmen\n";
-            if ($skipCopyToTest) {
+            if ($this->_getParam('skip-copy-to-test')) {
                 echo "(uebersprungen)\n";
             } else {
-                $this->_systemSshVpsWithSubSections("import", 'test');
+                $this->_systemSshVpsWithSubSections("import".$importParams, 'test');
             }
         } else {
             echo "\n\n*** [06/13] prod daten importieren\n";
-            if ($skipCopyToTest) {
+            if ($this->_getParam('skip-copy-to-test')) {
                 echo "(uebersprungen)\n";
             } else {
-                $this->_systemCheckRet("php bootstrap.php import");
+                $this->_systemCheckRet("php bootstrap.php import".$importParams);
             }
         }
 
@@ -214,6 +232,8 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
         $skipTest = ($this->_getParam('skip-test') || $this->_getParam('skip-tests'));
         if ($skipTest) {
             echo "(uebersprungen)\n";
+        } else if (!$hasTestHost) {
+            echo "(uebersprungen, kein test server angegeben)\n";
         } else {
             Vps_Controller_Action_Cli_TestController::initForTests();
             $runner = new Vps_Test_TestRunner();
@@ -234,46 +254,22 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             Vps_Registry::set('testServerConfig', $cfg);
             $result = $runner->doRun(new Vps_Test_TestSuite(), $arguments);
             if (!$result->wasSuccessful()) {
-                if ($testConfig) {
-                    if ($useSvn) {
-                        $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
-                        $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
-                    } else {
-                        $this->_systemSshVpsWithSubSections("git checkout-master", 'test');
-                    }
-                }
-                throw new Vps_ClientException("Tests failed");
+                $this->_revertOnTestFailure($testConfig, $useSvn);
             }
 
             // VPS
-            $dir = getcwd();
-            chdir(VPS_PATH);
-            $config = Vps_Registry::get('config');
-            $trl = Vps_Registry::get('trl');
-            Vps_Registry::set('trl', new Vps_Trl());
-            $cfg = new Vps_Config_Web(Vps_Setup::getConfigSection());
-            Vps_Registry::set('config', $cfg);
-            Vps_Registry::set('testDomain', $cfg->server->domain);
-            Vps_Registry::set('testServerConfig', $cfg);
-            $result = $runner->doRun(new Vps_Test_TestSuite(), $arguments);
-            if (!$result->wasSuccessful()) {
-                if ($testConfig) {
-                    if ($useSvn) {
-                        $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
-                        $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
-                    } else {
-                        $this->_systemSshVpsWithSubSections("git checkout-master", 'test');
-                    }
-                }
-                throw new Vps_ClientException("Tests failed");
+            $cmd = 'php '.VPS_PATH.'/bootstrap.php test';
+            $cmd .= ' --exclude-group=skipGoOnline';
+            $cmd .= ' --retry-on-error';
+            $cmd .= ' --stop-on-failure';
+            if ($this->_getParam('verbose')) $cmd .= ' --verbose';
+            passthru($cmd, $retPassthru);
+            if ($retPassthru !== 0) {
+                $this->_revertOnTestFailure($testConfig, $useSvn);
             }
-
-            chdir($dir);
-            Vps_Registry::set('config', $config);
-            Vps_Registry::set('trl', $trl);
         }
 
-        if ($testConfig) {
+        if ($hasTestHost || $hasTestSubsections) {
             echo "\n\n*** [08/13] test: zurueck auf trunk switchen\n";
             if ($useSvn) {
                 $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
@@ -300,8 +296,10 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
 
         if ($updateProd) {
 
-            echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
-            $this->_systemSshVpsWithSubSections("import backup-db", 'production');
+            if (!$this->_getParam('skip-backup')) {
+                echo "\n\n*** [10/13] prod: erstelle datenbank backup\n";
+                $this->_systemSshVpsWithSubSections("import backup-db", 'production');
+            }
 
             if ($useSvn) {
                 echo "\n\n*** [11/13] prod: vps-version anpassen\n";
@@ -335,8 +333,6 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
                         ->whereNotEquals('status', 'prod');
                 foreach ($m->getRows($s) as $todo) {
                     if (!$todo->done_revision) continue;
-                    $project = Vps_Controller_Action_Cli_Web_TagController::getProjectName();
-
                     if (Vps_Util_Git::web()->getActiveBranchContains($todo->done_revision)
                         || Vps_Util_Git::vps()->getActiveBranchContains($todo->done_revision)
                     ) {
@@ -378,12 +374,14 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
             }
             file_put_contents('/www/public/zeiterfassung/irc/messagequeue/'.date('Y-m-d_H:i:s').uniqid(), 'WICHTIG'.$msg);
 
+            Vps_Util_Git::web()->fetch();
+            Vps_Util_Git::vps()->fetch();
             $cmd = "cd /www/public/zeiterfassung && php bootstrap.php insert-go-online-log-entry";
             $cmd .= " --applicationId=".escapeshellarg($cfg->application->id);
             $cmd .= " --webBranch=".escapeshellarg(Vps_Util_Git::web()->getActiveBranch());
             $cmd .= " --vpsBranch=".escapeshellarg(Vps_Util_Git::vps()->getActiveBranch());
-            $cmd .= " --webVersion=".escapeshellarg(Vps_Util_Git::web()->revParse('production'));
-            $cmd .= " --vpsVersion=".escapeshellarg(Vps_Util_Git::vps()->revParse('production/'.$appId));
+            $cmd .= " --webVersion=".escapeshellarg(Vps_Util_Git::web()->revParse('origin/production'));
+            $cmd .= " --vpsVersion=".escapeshellarg(Vps_Util_Git::vps()->revParse('origin/production/'.$appId));
             if ($this->_getParam('debug')) {
                 echo $cmd."\n";
             }
@@ -394,6 +392,20 @@ class Vps_Controller_Action_Cli_Web_GoOnlineController extends Vps_Controller_Ac
 
         exit;
     }
+
+    private function _revertOnTestFailure($testConfig, $useSvn)
+    {
+        if ($testConfig) {
+            if ($useSvn) {
+                $this->_systemSshVpsWithSubSections("tag-checkout web-switch --version=trunk", 'test');
+                $this->_systemSshVpsWithSubSections("tag-checkout vps-use --version=branch", 'test');
+            } else {
+                $this->_systemSshVpsWithSubSections("git checkout-master", 'test');
+            }
+        }
+        throw new Vps_Exception_Client("Tests failed");
+    }
+
     private function _hasRevisionInHistory($project, $version, $revision)
     {
         if (!file_exists('.svn')) {

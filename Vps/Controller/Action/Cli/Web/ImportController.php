@@ -169,6 +169,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         $databases = $config->server->databases->toArray();
         if (!$databases) $databases = array('web');
         foreach ($databases as $dbKey) {
+            if (!$dbKey) continue;
             try {
                 $dbConfig = Vps_Registry::get('dao')->getDbConfig($dbKey);
             } catch (Vps_Dao_Exception $e) {
@@ -193,8 +194,6 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             //// -> scheiß mysql
             $mysqlLocalOptions .= "--user=$dbConfig[username] --password=$dbConfig[password] ";
 
-
-            echo "erstelle datenbank-backup '$dbKey'...\n";
 
             $tables = $db->fetchCol('SHOW TABLES');
 
@@ -228,12 +227,14 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                     }
                 }
             }
-
-            $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
-            if ($dumpname) {
-                $backupSize = filesize($dumpname);
-                $this->_systemCheckRet("bzip2 --fast $dumpname");
-                echo $dumpname.".bz2\n";
+            if (!$this->_getParam('skip-backup')) {
+                echo "erstelle datenbank-backup '$dbKey'...\n";
+                $dumpname = $this->_backupDb(array_merge($cacheTables, $keepTables));
+                if ($dumpname) {
+                    $backupSize = filesize($dumpname);
+                    $this->_systemCheckRet("nice bzip2 --fast $dumpname");
+                    echo $dumpname.".bz2\n";
+                }
             }
 
             echo "loesche lokale tabellen in datenbank '$dbKey'...\n";
@@ -258,7 +259,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 $cmd = "cd {$config->server->dir} && php bootstrap.php import get-db-config --key=$dbKey";
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
-                $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
+                $cmd = $this->_getDumpCommand($config, $otherDbConfig, array_merge($cacheTables, $keepTables));
             } else if ($this->_useSshVps) {
                 $ignoreTables = '';
                 if (!$this->_getParam('include-cache')) {
@@ -273,7 +274,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 $cmd = "ssh -p $this->_sshPort $this->_sshHost ".escapeshellarg("cd $this->_sshDir && php bootstrap.php import get-db-config --key=$dbKey");
                 if ($this->_getParam('debug')) echo "$cmd\n";
                 $otherDbConfig = unserialize(`$cmd`);
-                $cmd = $this->_getDumpCommand($otherDbConfig, array_merge($cacheTables, $keepTables));
+                $cmd = $this->_getDumpCommand($config, $otherDbConfig, array_merge($cacheTables, $keepTables));
                 if ($dbConfig['host'] != 'localhost') { //TODO: diese if-abfrage ist nicht immer richtig
                     //fuer poi, nur maja2 darf zu pbk-sql im moment
                     $cmd = "ssh $dbConfig[host] ".escapeshellarg($cmd);
@@ -297,18 +298,21 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             );
             $procImport = new Vps_Util_Proc($cmd, $descriptorspec);
 
-            $c = new Zend_ProgressBar_Adapter_Console();
-            $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
-                                    Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
-            $progress = new Zend_ProgressBar($c, 0, $backupSize);
+            $progress = false;
+            if (isset($backupSize) && $backupSize) {
+                $c = new Zend_ProgressBar_Adapter_Console();
+                $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
+                                        Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+                $progress = new Zend_ProgressBar($c, 0, $backupSize);
+            }
             $size = 0;
             while (!feof($procDump->pipe(1))) {
                 $buffer = fgets($procDump->pipe(1), 4096);
                 fputs($procImport->pipe(0), $buffer);
                 $size += strlen($buffer);
-                $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
+                if ($progress) $progress->update($size, Vps_View_Helper_FileSize::fileSize($size));
             }
             fclose($procDump->pipe(1));
             fclose($procImport->pipe(0));
@@ -516,7 +520,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             echo "erstelle backup...\n";
             $dumpname = $this->_backupDb(Vps_Util_ClearCache::getInstance()->getDbCacheTables());
             if ($dumpname) {
-                $this->_systemCheckRet("bzip2 --fast $dumpname");
+                $this->_systemCheckRet("nice bzip2 --fast $dumpname");
                 echo $dumpname.".bz2";
                 echo "\n";
             } else {
@@ -526,7 +530,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    private function _getDumpCommand($dbConfig, array $cacheTables)
+    private function _getDumpCommand($config, $dbConfig, array $cacheTables)
     {
         $ret = '';
 
@@ -535,7 +539,6 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         if (!Vps_Util_Mysql::hasPrivilege('LOCK TABLES')) {
             $mysqlOptions .= " --skip-lock-tables --skip-add-locks";
         }
-        $config = Zend_Registry::get('config');
 
         $mysqlDir = '';
         if ($config->server->host == 'vivid-planet.com') {
@@ -572,10 +575,13 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         } catch (Exception $e) {
             return null;
         }
+        if (!$db) return null;
         $dbConfig = $db->getConfig();
         $dumpname .= date("Y-m-d_H:i:s_U")."_$dbConfig[dbname].sql";
-        $cmd = $this->_getDumpCommand($dbConfig, $ignoreTables)." > $dumpname";
+
+        $cmd = $this->_getDumpCommand(Vps_Registry::get('config'), $dbConfig, $ignoreTables)." > $dumpname";
         if ($this->_getParam('debug')) echo $cmd."\n";
+
         $this->_systemCheckRet($cmd);
 
         return $dumpname;
@@ -586,14 +592,11 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         if (file_exists('application/update')) {
             echo file_get_contents('application/update');
         } else {
-            try {
-                $info = new SimpleXMLElement(`svn info --xml`);
-                $onlineRevision = (int)$info->entry['revision'];
-            } catch (Exception $e) {}
-            if (!$onlineRevision) {
-                throw new Vps_Exception_Client("Can't detect online revision");
+            $doneNames = array();
+            foreach (Vps_Update::getUpdates(0, 9999999) as $u) {
+                $doneNames[] = $u->getUniqueName();
             }
-            echo $onlineRevision;
+            echo serialize($doneNames);
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
@@ -616,8 +619,8 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
         $out = array();
         foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
             $rrd = new $n;
-            $file = $rrd->getFileName();
-            if (file_exists($file)) {
+            if ($rrd->fileExists()) {
+                $file = $rrd->getFileName();
                 $out[$file] = `LC_ALL=C rrdtool dump $file | gzip`;
             }
         }

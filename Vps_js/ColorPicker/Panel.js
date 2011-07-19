@@ -43,7 +43,7 @@ Vps.ColorPicker.Radio = {
         this.groups[group.radioGroupId].dialed = member.radioGroupMemberId;
         Ext.each(this.groups[group.radioGroupId].members, function(member)
         {
-            this.callbacks[member].un()
+            this.callbacks[member].un();
         }, this);
         this.callbacks[member.radioGroupMemberId].dial();
     },
@@ -182,7 +182,7 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
         var field = this.modeFields[mode.name],
             val = parseInt(value, 10);
 
-        val = val.constrain(mode.min, mode.max)
+        val = val.constrain(mode.min, mode.max);
         field.setRawValue(val.toString().replace(new RegExp(mode.unit||''), '') + (mode.unit||''));
     },
 
@@ -192,7 +192,7 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
     },
     isHsv: function(mode)
     {
-        return !('hue saturation brightness hsv'.indexOf(mode.name) === -1)
+        return !('hue saturation brightness hsv'.indexOf(mode.name) === -1);
     },
 
     setFromConsole: function(mode) {
@@ -325,7 +325,7 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
             this.setAlpha(layer, 100);
             this.setBackground(layer, null);
         }, this);
-        this[this.mode+"Mode"]()
+        this[this.mode+"Mode"]();
         this.paint();
         this.paintSliders();
     },
@@ -386,10 +386,10 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
 
     onRender: function()
     {
-        debugger;
+//         debugger;
         if (this.el)
         {
-            debugger;
+//             debugger;
             Vps.ColorPicker.Panel.superclass.onRender.apply(this, arguments);
             this.initMarkup();
             this.initLayers();
@@ -453,7 +453,7 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
 
         for (slot in this.modes) {
             (function(mode){
-                el = _console.first('.' + mode.name)
+                el = _console.first('.' + mode.name);
 
                 radio = new Ext.Element(document.createElement('div'));
                 radio.addClass('x-radio');
@@ -504,7 +504,7 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
 //                        console.warn("STUB");
                     }
                 });
-            })(that.modes[slot])
+            })(that.modes[slot]);
         };
 
         this.hex = new Ext.form.TextField({
@@ -535,7 +535,7 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
 
         Ext.apply(this.map, {
             onMouseDown: function(event) {
-                this.onDrag(event)
+                this.onDrag(event);
             },
 
             onDrag: function(event, dontSet) {
@@ -580,7 +580,7 @@ Ext.extend(Vps.ColorPicker.Panel, Ext.Panel,
 
         Ext.apply(this.track, {
             onMouseDown: function(event) {
-                this.onDrag(event)
+                this.onDrag(event);
             },
 
             onDrag: function(event, dontSet) {

@@ -59,7 +59,8 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         if (is_object($modelName)) return $modelName;
         static $config;
         if (!isset($config)) $config = Vps_Registry::get('config')->models->toArray();
-        if (isset($config[$modelName]) && $config[$modelName]) {
+        if (array_key_exists($modelName, $config)) {
+            if (!$config[$modelName]) return null;
             $modelName = $config[$modelName];
         }
         if (!isset(self::$_instances[$modelName])) {
@@ -553,6 +554,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 $padType = STR_PAD_RIGHT;
             }
             return str_pad($v, $expr->getPadLength(), $expr->getPadStr(), $padType);
+        } else if ($expr instanceof Vps_Model_Select_Expr_Date_Year) {
+            $f = $expr->getField();
+            if (is_array($row)) {
+                $v = $row[$f];
+            } else {
+                $v = $row->$f;
+            }
+            return date('Y', strtotime($v));
         } else if ($expr instanceof Vps_Model_Select_Expr_Field) {
             $f = $expr->getField();
             if (is_array($row)) {

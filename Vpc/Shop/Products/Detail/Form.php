@@ -1,10 +1,35 @@
 <?php
 class Vpc_Shop_Products_Detail_Form extends Vps_Form
 {
+    private $_cards;
+
+    public function __construct($name, $class)
+    {
+        $this->setClass($class);
+        parent::__construct($name);
+    }
+
     protected function _init()
     {
         parent::_init();
         $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')));
+
+        $this->_cards = $this->add(new Vps_Form_Container_Cards('component', trlVps('Type')));
+        $this->_cards->setAllowBlank(false);
+        $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
+        foreach ($generators['addToCart']['component'] as $component => $class) {
+            if (is_instance_of($class, 'Vpc_Shop_AddToCartAbstract_Component')) {
+                $card = $this->_cards->add();
+                $card->setName($component);
+                $card->setTitle(Vpc_Abstract::getSetting($class, 'productTypeText'));
+
+                $form = Vpc_Abstract_Form::createComponentForm($class);
+                if ($form) {
+                    $form->setIdTemplate('{0}');
+                    $card->add($form);
+                }
+            }
+        }
 
         $mf = $this->add(new Vps_Form_Field_MultiFields('Prices'));
         $mf->setModel(Vps_Model_Abstract::getInstance('Vpc_Shop_ProductPrices'));
@@ -18,5 +43,13 @@ class Vpc_Shop_Products_Detail_Form extends Vps_Form
         $this->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
         $this->add(Vpc_Abstract_Form::createComponentForm('shopProducts_{0}-image'));
         $this->add(Vpc_Abstract_Form::createComponentForm('shopProducts_{0}-text'));
+    }
+
+    public function setModel($model)
+    {
+        parent::setModel($model);
+        foreach ($this->_cards as $c) {
+            $c->getIterator()->current()->setModel($model);
+        }
     }
 }
