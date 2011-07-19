@@ -291,16 +291,6 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
             } else {
                 $options['replace'] = true;
             }
-            if ($select
-                && !$this->_syncTimeFieldIsUnique
-                && $format == self::FORMAT_ARRAY
-                && count($data)==1
-            ) {
-                //import kann übersprungen werden, wenn _syncTimeFieldIsUnique=false, da beim where <= verwendet wurde
-                //wenn jetzt nur *eine* row daher kommt, ist das eh die, die wir schon haben.
-                //es können aber auch mehrere daher kommen, dann wurden mehrere in der Sekunde geändert
-                $data = array();
-            }
             if ($data) {
                 $this->getProxyModel()->import($format, $data, $options);
             }
