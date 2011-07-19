@@ -146,6 +146,10 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         $runner = new Vps_Test_TestRunner();
         $suite = new Vps_Test_TestSuite();
 
+        Vps_Model_Abstract::clearInstances();
+        Vps_Trl::getInstance()->setModel(null, 'web');
+        Vps_Trl::getInstance()->setModel(null, 'vps');
+
         try {
             $result = $runner->doRun(
               $suite,

@@ -240,9 +240,9 @@ class Vps_Model_Service extends Vps_Model_Abstract
         return $this->_supportedImportExportFormatsCache;
     }
 
-    public function export($format, $select = array())
+    public function export($format, $select = array(), $options = array())
     {
-        return $this->_client->export($format, $select);
+        return $this->_client->export($format, $select, $options);
     }
 
     public function import($format, $data, $options = array())

@@ -207,7 +207,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                                 $cacheTables[] = $table;
                             }
                         }
-                    } else if (in_array($t, $tables)){
+                    } else /*if (in_array($t, $tables))*/ {
                         $cacheTables[] = $t;
                     }
                 }
@@ -222,7 +222,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                                 $keepTables[] = $table;
                             }
                         }
-                    } else if (in_array($t, $tables)) {
+                    } else /*if (in_array($t, $tables))*/ {
                         $keepTables[] = $t;
                     }
                 }
@@ -237,6 +237,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 }
             }
 
+
             echo "loesche lokale tabellen in datenbank '$dbKey'...\n";
             $deleteTables = array();
             foreach ($tables as $i) {
@@ -250,7 +251,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
                 if ($dbConfig['host'] != 'localhost') {
                     $cmd = "ssh $dbConfig[host] ".escapeshellarg($cmd);
                 }
-                if ($this->_getParam('debug')) echo "$cmd\n";
+                if ($this->_getParam('debug')) file_put_contents('php://stderr', "$cmd\n");
                 $this->_systemCheckRet($cmd);
             }
 
@@ -656,10 +657,12 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
     {
         $out = array();
         foreach (Vps_Registry::get('config')->rrd as $k=>$n) {
-            $rrd = new $n;
-            if ($rrd->fileExists()) {
-                $file = $rrd->getFileName();
-                $out[$file] = `LC_ALL=C rrdtool dump $file | gzip`;
+            if ($n) {
+                $rrd = new $n;
+                if ($rrd->fileExists()) {
+                    $file = $rrd->getFileName();
+                    $out[$file] = `LC_ALL=C rrdtool dump $file | gzip`;
+                }
             }
         }
         echo serialize($out);

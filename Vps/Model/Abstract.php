@@ -524,7 +524,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         $this->import($format, $sourceModel->export($format, $select), $importOptions);
     }
 
-    public function export($format, $select = array())
+    public function export($format, $select = array(), $options = array())
     {
         if ($format == self::FORMAT_ARRAY) {
             return $this->getRows($select)->toArray();

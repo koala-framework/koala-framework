@@ -578,11 +578,18 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 throw new Vps_Exception("You don't have the permissions to delete this row.");
             }
             $this->_beforeDelete($row);
-            $row->delete();
+            $this->_deleteRow($row);
             $this->_afterDelete();
         }
         if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
     }
+
+    //kann ueberschrieben werden um zB deleted=1 zu setzen statt echt zu loeschen
+    protected function _deleteRow(Vps_Model_Row_Interface $row)
+    {
+        $row->delete();
+    }
+
     public function jsonDuplicateAction()
     {
         if (!isset($this->_permissions['duplicate']) || !$this->_permissions['duplicate']) {
