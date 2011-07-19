@@ -1,7 +1,6 @@
 <?php
 class Vps_Util_FeedFetcher_Feed_Cache extends Vps_Cache_Core
 {
-    static $_instance;
     public function __construct()
     {
         $options = array();
