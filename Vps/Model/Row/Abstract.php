@@ -388,7 +388,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface, Serial
         $filters = $this->getModel()->getFilters();
         foreach($filters as $k=>$f) {
             if ($f instanceof Vps_Filter_Row_Abstract) {
-                if ($f->skipFilter($this)) continue;
+                if ($f->skipFilter($this, $k)) continue;
                 if ($f->filterAfterSave() != $filterAfterSave) continue;
                 $this->$k = $f->filter($this);
             } else {
