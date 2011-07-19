@@ -206,7 +206,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                         );
                     } else {
                         $select->where(new Vps_Model_Select_Expr_Or(array(
-                            new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp),
+                            new Vps_Model_Select_Expr_Higher($this->_syncTimeField, $cacheTimestamp),
                             new Vps_Model_Select_Expr_Equals($this->_syncTimeField, $cacheTimestamp)
                         )));
                     }
@@ -222,7 +222,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                     } else {
                         $select->where(new Vps_Model_Select_Expr_Or(array(
                             new Vps_Model_Select_Expr_Higher($this->_syncTimeField, new Vps_DateTime($cacheTimestamp)),
-                            new Vps_Model_Select_Expr_Equals($this->_syncTimeField, new Vps_DateTime($cacheTimestamp))
+                            new Vps_Model_Select_Expr_Equal($this->_syncTimeField, new Vps_DateTime($cacheTimestamp))
                         )));
                     }
                 }
