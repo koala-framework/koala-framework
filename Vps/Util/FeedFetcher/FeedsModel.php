@@ -40,7 +40,7 @@ class Vps_Util_FeedFetcher_FeedsModel extends Vps_Model_Db_Proxy
             OR ISNULL(last_update)
         ");
 
-        $s->where("(TIMESTAMPDIFF(MINUTE,last_update_started,NOW()) > 15) OR ISNULL(last_update_started)");
+        $s->where("(TIMESTAMPDIFF(MINUTE,last_update_started,NOW()) > 5) OR ISNULL(last_update_started)");
 
         $s->order('last_update', 'ASC');
         return $s;
