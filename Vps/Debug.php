@@ -134,7 +134,7 @@ function _btArgString($arg)
     }
     return current($ret);
 }
-function bt($file = false)
+function bt($file = false, $return = false)
 {
     if (!Vps_Debug::isEnabled()) return;
     $bt = debug_backtrace();
@@ -152,7 +152,9 @@ function bt($file = false)
                 _btArgsString($i['args']) . ')' . "\n";
         }
         $ret .= "\n";
-        if ($file) {
+        if ($return) {
+            return $ret;
+        } else if ($file) {
             $ret = "=============================================\n\n".$ret;
             file_put_contents('backtrace', $ret, FILE_APPEND);
         } else {

@@ -37,6 +37,8 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     protected $_proxyContainerModels = array();
 
+    public static $instanceCount = array();
+
     public function __construct(array $config = array())
     {
         if (isset($config['default'])) $this->_default = (array)$config['default'];
@@ -46,7 +48,13 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         if (isset($config['filters'])) $this->_filters = (array)$config['filters'];
         if (isset($config['toStringField'])) $this->_toStringField = (string)$config['toStringField'];
         if (isset($config['exprs'])) $this->_exprs = (array)$config['exprs'];
+        self::$instanceCount[spl_object_hash($this)] = get_class($this);
         $this->_init();
+    }
+
+    public function __destruct()
+    {
+        unset(self::$instanceCount[spl_object_hash($this)]);
     }
 
     /**
@@ -687,5 +695,17 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
             $ret[$method] = call_user_func_array(array($this, $method), $arguments);
         }
         return $ret;
+    }
+
+    public static function clearAllRows()
+    {
+        foreach (self::$_instances as $i) {
+            $i->clearRows();
+        }
+    }
+
+    public function clearRows()
+    {
+        $this->_rows = array();
     }
 }
