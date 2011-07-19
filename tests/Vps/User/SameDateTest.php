@@ -34,7 +34,8 @@ class Vps_User_SameDateTest extends Vps_Test_TestCase
         $webId = Vps_Registry::get('config')->application->id;
         $webcode = Vps_Registry::get('config')->service->users->webcode;
 
-        $m = new Vps_User_Model();
+        Vps_Model_Abstract::clearInstances();
+        $m = Vps_Model_Abstract::getInstance('Vps_User_Model');
         $mailAddresses = array();
         $timeBefore = $timeAfter = array();
         $rows = array();
@@ -92,21 +93,24 @@ class Vps_User_SameDateTest extends Vps_Test_TestCase
         }
 
         // Step 3
-        $m = new Vps_User_Model();
+        Vps_Model_Abstract::clearInstances();
+        $m = Vps_Model_Abstract::getInstance('Vps_User_Model');
         $checkRow = $m->getRow($allRow2->id);
         if ($checkRow->last_modified == $allRow2->last_modified) {
             $this->fail("last_modified should not be the same here. possible bad written test.");
         }
 
         // Step 4
-        $m = new Vps_User_Model();
+        Vps_Model_Abstract::clearInstances();
+        $m = Vps_Model_Abstract::getInstance('Vps_User_Model');
         $m->synchronize(Vps_Model_MirrorCache::SYNC_ALWAYS);
 
         // Step 5
+        Vps_Model_Abstract::clearInstances();
+        $m = Vps_Model_Abstract::getInstance('Vps_User_Model');
         $checkRow = $m->getRow($allRow2->id);
         if ($checkRow->last_modified != $allRow2->last_modified) {
             $this->fail("Web is not in sync after synchronize-call. last_modified Web: {$checkRow->last_modified} Service: {$allRow2->last_modified}");
         }
-
     }
 }
