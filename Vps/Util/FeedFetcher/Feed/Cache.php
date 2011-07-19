@@ -8,7 +8,6 @@ class Vps_Util_FeedFetcher_Feed_Cache extends Vps_Cache_Core
         $options['automatic_serialization'] = true;
         $options['checkComponentSettings'] = false;
         $options['automatic_cleaning_factor'] = 0;
-        $options['cache_id_prefix'] = 'feeds';
         parent::__construct($options);
         if (!$this->getBackend()) {
             $backend = new Vps_Cache_Backend_TwoLevels(array(
