@@ -292,23 +292,27 @@ class Vps_Controller_Action_Cli_GitController extends Vps_Controller_Action_Cli_
             echo "vps: ".$g->getActiveBranch()." != $vpsBranch, daher wird kein autom. rebase ausgefuehrt.\n";
         }
 
-        $projectIds = Vps_Model_Abstract::getInstance('Vps_Util_Model_Projects')
-                            ->getApplicationProjectIds();
-        if ($projectIds && Vps_Registry::get('config')->todo->markAsOnTestOnUpdate) {
-            $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Todo');
-            $s = $m->select()
-                    ->whereEquals('project_id', $projectIds)
-                    ->whereEquals('status', 'committed');
-            $doneTodos = $m->getRows($s);
-            foreach ($doneTodos as $todo) {
-                if (!$todo->done_revision) continue;
-                if ($this->_hasRevisionInHistory($todo->done_revision)) {
-                    $todo->status = 'test';
-                    $todo->test_date = date('Y-m-d');
-                    $todo->save();
-                    echo "\ntodo #{$todo->id} ({$todo->title}) als auf test markiert";
+        if (Vps_Registry::get('config')->todo->markAsOnTestOnUpdate) {
+
+            $projectIds = Vps_Model_Abstract::getInstance('Vps_Util_Model_Projects')
+                                ->getApplicationProjectIds();
+            if ($projectIds) {
+                $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Todo');
+                $s = $m->select()
+                        ->whereEquals('project_id', $projectIds)
+                        ->whereEquals('status', 'committed');
+                $doneTodos = $m->getRows($s);
+                foreach ($doneTodos as $todo) {
+                    if (!$todo->done_revision) continue;
+                    if ($this->_hasRevisionInHistory($todo->done_revision)) {
+                        $todo->status = 'test';
+                        $todo->test_date = date('Y-m-d');
+                        $todo->save();
+                        echo "\ntodo #{$todo->id} ({$todo->title}) als auf test markiert";
+                    }
                 }
             }
+
         }
 
         echo "\n";
