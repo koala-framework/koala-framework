@@ -346,6 +346,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 // falls es irgendwo benötigt wird wieder einkommentieren
 //             $this->view->order = $order;
         }
+
+        //TODO: dieser code sollte in _getOrder liegen
         $order = $this->_defaultOrder;
         if ($this->getRequest()->getParam('sort')) {
             $order['field'] = $this->getRequest()->getParam('sort');
@@ -717,6 +719,18 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         } else {
             $sel = $this->_getSelect();
             if (is_null($sel)) return array();
+
+            //TODO: dieser code sollte in _getOrder liegen
+            $order = $this->_defaultOrder;
+            if ($this->getRequest()->getParam('sort')) {
+                $order['field'] = $this->getRequest()->getParam('sort');
+            }
+            if ($this->_getParam("direction") && $this->_getParam('direction') != 'undefined') {
+                $order['direction'] = $this->_getParam('direction');
+            }
+            $order = $this->_getOrder($order);
+            if ($order) $sel->order($order);
+
             $countRows = $this->_model->countRows($sel);
             $rowSet = $this->_model->getRows($sel);
         }
