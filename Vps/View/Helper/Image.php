@@ -52,7 +52,6 @@ class Vps_View_Helper_Image extends Vps_Component_View_Helper_Abstract
         if ($url == '') return '';
 
         if ($this->_getMailInterface() instanceof Vps_View_MailInterface) {
-            $cssClass = null;
             if ($this->_getMailInterface()->getAttachImages()) {
                 $contents = $this->_getImageFileContents($image);
                 $img = new Zend_Mime_Part($contents['contents']);
