@@ -7,8 +7,9 @@ class Vps_Util_Gearman_Client extends GearmanClient
         if (!isset($i)) {
             $i = new self();
             $c = Vps_Registry::get('config')->server->gearman;
-            foreach ($c->jobServers as $server) {
+            foreach ($c->jobServers as $k=>$server) {
                 if ($server) {
+                    Vps_Util_Gearman_AdminClient::checkConnection($server);
                     $i->addServer($server->host, $server->port);
                 }
             }

@@ -6,15 +6,34 @@ class Vps_Util_Gearman_AdminClient
     {
         static $i;
         if (!isset($i)) {
+            self::checkConnection($server);
             $i = new self();
             $c = Vps_Registry::get('config')->server->gearman;
             $server = $c->jobServers->$server;
-            $i->_connection = fsockopen($server->host, $server->port, $errno, $errstr, 30);
+            if ($server->tunnelUser) {
+                $i->_connection = fsockopen('localhost', 4730, $errno, $errstr, 30);
+            } else {
+                $i->_connection = fsockopen($server->host, $server->port, $errno, $errstr, 30);
+            }
             if (!$i->_connection) {
                 throw new Vps_Exception("Can't connect: $errstr ($errno)");
             }
         }
         return $i;
+    }
+
+    public static function checkConnection($server = 'localhost')
+    {
+        if (is_string($server)) {
+            $server = Vps_Registry::get('config')->server->gearman->jobServers->$server;
+        }
+        if ($server->tunnelUser) {
+            $fp = fsockopen('localhost', 4730, $errno, $errstr, 5);
+            if (!$fp) {
+                system("ssh $server->tunnelUser@$server->host -L $server->port:localhost:4730 >/dev/null 2>&1 &");
+            }
+            fclose($fp);
+        }
     }
 
     public function __destruct()
