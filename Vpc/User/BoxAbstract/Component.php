@@ -21,9 +21,9 @@ class Vpc_User_BoxAbstract_Component extends Vpc_Abstract_Composite_Component
         if (isset($postData['feAutologin'])
             && !Vps_Registry::get('userModel')->getAuthedUser()
         ) {
-            list($cookieId, $cookieMd5) = explode('.', $postData['feAutologin']);
-            if (!empty($cookieId) && !empty($cookieMd5)) {
-                $result = $this->_getAuthenticateResult($cookieId, $cookieMd5);
+            $feAutologin = explode('.', $postData['feAutologin']);
+            if (count($feAutologin) ==2 ) {
+                $result = $this->_getAuthenticateResult($feAutologin[0], $feAutologin[1]);
             }
         }
 
