@@ -35,8 +35,10 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 } else if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
                     $this->getResponse()->setHeader('Content-Type', 'text/javascript');
                 } else {
-                    header('Content-Type: text/plain');
-                    echo $this->_jsonFormat(Zend_Json::encode($this->view->getOutput()));
+                    header('Content-Type: text/html');
+                    echo "<pre>";
+                    echo htmlspecialchars($this->_jsonFormat(Zend_Json::encode($this->view->getOutput())));
+                    echo "</pre>";
                     Vps_Benchmark::output();
                     $this->setNoRender();
                 }
