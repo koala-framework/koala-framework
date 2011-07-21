@@ -18,6 +18,7 @@ class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
             'easingOut'          => 'easeIn', // use with types: fade, slide
             'easingIn'           => 'easeIn'  // use with types: fade, slide
         );
+        $ret['showArrows'] = true; // whether to show arrows at all or not
         $ret['hideArrowsAtEnds'] = false; // false = wenn man beim letzten element ankommt und auf "weiter" klickt, kommt man wieder zum ersten
         return $ret;
     }
@@ -28,6 +29,7 @@ class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
         $ret['previewCssClass'] = $this->_getSetting('previewCssClass');
         $ret['options']['transition'] = $this->_getSetting('transition');
         $ret['options']['hideArrowsAtEnds'] = $this->_getSetting('hideArrowsAtEnds');
+        $ret['options']['showArrows'] = $this->_getSetting('showArrows');
 
         $ret['items'] = array();
         foreach ($ret['listItems'] as $item) {

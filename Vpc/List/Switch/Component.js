@@ -8,9 +8,15 @@ Vpc.ListSwitch.View = function(componentWrapper) {
     this.init();
 };
 
-Vpc.ListSwitch.View.prototype = {
+Ext.extend(Vpc.ListSwitch.View, Ext.util.Observable, {
     init: function() {
         if (this.componentWrapper.initDone) return;
+
+        this.addEvents({
+            'next': true,
+            'previous': true,
+            'setLarge': true
+        });
 
         var opts = this.componentWrapper.down(".options", true);
         if (!opts) {
@@ -44,7 +50,7 @@ Vpc.ListSwitch.View.prototype = {
             this.setLarge(this.previewElements[0]);
         }
 
-        if (!this.switchOptions.hideArrowsAtEnds && this.previewElements.length > 1) {
+        if (this.switchOptions.showArrows && !this.switchOptions.hideArrowsAtEnds && this.previewElements.length > 1) {
             this.previousEl.setDisplayed('block');
             this.nextEl.setDisplayed('block');
         }
@@ -117,39 +123,44 @@ Vpc.ListSwitch.View.prototype = {
         this.activePreviewLink.addClass('active');
 
         // pfeile ein / ausblenden
-        if (this.switchOptions.hideArrowsAtEnds) {
+        if (this.switchOptions.showArrows && this.switchOptions.hideArrowsAtEnds) {
             this.previousEl.setDisplayed(this.activePreviewLink.switchIndex == 0 ? false : 'block');
             this.nextEl.setDisplayed(
                 this.activePreviewLink.switchIndex >= (this.previewElements.length -1) ? false : 'block'
             );
         }
+
+        this.fireEvent('setLarge', this, previewEl.switchIndex);
     },
 
     showNext: function(ev) {
         if (this.previewElements[this.activePreviewLink.switchIndex+1]) {
-            this.setLarge(this.previewElements[this.activePreviewLink.switchIndex+1]);
+            var idx = this.activePreviewLink.switchIndex+1;
         } else {
-            this.setLarge(this.previewElements[0]);
+            var idx = 0;
         }
+        this.setLarge(this.previewElements[idx]);
         ev.stopEvent();
+        this.fireEvent('next', this, idx);
     },
 
     showPrevious: function(ev) {
         if (this.activePreviewLink.switchIndex >= 1) {
-            this.setLarge(this.previewElements[this.activePreviewLink.switchIndex-1]);
+            var idx = this.activePreviewLink.switchIndex-1;
         } else {
-            this.setLarge(this.previewElements[this.previewElements.length-1]);
+            var idx = this.previewElements.length - 1;
         }
+        this.setLarge(this.previewElements[idx]);
         ev.stopEvent();
+        this.fireEvent('previous', this, idx);
     }
-};
+});
 
 Vps.onContentReady(function() {
     var switches = Ext.DomQuery.select('div.vpsListSwitch');
     Ext.each(switches, function(sw) {
-        if (!sw.listSwitchInitDone) {
-            var list = new Vpc.ListSwitch.View(sw);
-            sw.listSwitchInitDone = true;
+        if (!sw.listSwitch) {
+            sw.listSwitch = new Vpc.ListSwitch.View(sw);
         }
     });
 });
