@@ -781,7 +781,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 $select->expr($c);
             }
         }
-        $dbSelect = $this->createDbSelect($select);
+        $dbSelect = $this->_getDbSelect($select);
         if (isset($options['columns'])) {
             $columns = $dbSelect->getPart(Zend_Db_Select::COLUMNS);
             unset($columns[0]);
