@@ -21,10 +21,18 @@ class Vps_Model_Iterator_ExportArray implements Vps_Model_Iterator_ModelIterator
      **/
     private $_arrayIterator;
 
-    public function __construct(Vps_Model_Interface $model, Vps_Model_Select $select)
+    /**
+     * @var array
+     **/
+    private $_options;
+    private $_debugOutput = false;
+
+    public function __construct(Vps_Model_Interface $model, Vps_Model_Select $select, array $options = array(), $debutOutput = false)
     {
         $this->_model = $model;
         $this->_select = $select;
+        $this->_options = $options;
+        $this->_debugOutput = (bool)$debugOutput;
     }
 
     public function getModel()
@@ -39,7 +47,12 @@ class Vps_Model_Iterator_ExportArray implements Vps_Model_Iterator_ModelIterator
 
     public function rewind()
     {
-        $this->_arrayIterator = new ArrayIterator($this->_model->export(Vps_Model_Interface::FORMAT_ARRAY,  $this->_select));
+        $data = $this->_model->export(Vps_Model_Interface::FORMAT_ARRAY,  $this->_select, $this->_options);
+        if ($this->_debugOutput) {
+            echo "loaded ".count($data)." rows";
+            echo " memory: ".round(memory_get_usage()/1024/1024, 1)."MB\n";
+        }
+        $this->_arrayIterator = new ArrayIterator($data);
     }
 
     public function current()
