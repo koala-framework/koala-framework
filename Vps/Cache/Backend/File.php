@@ -10,6 +10,21 @@ class Vps_Cache_Backend_File extends Zend_Cache_Backend_File
         if (!isset($options['hashed_directory_umask'])) {
             $options['hashed_directory_umask'] = 0777;
         }
+        $this->_options['compression'] = isset($options['compression']) ? (bool)$options['compression'] : false;
         parent::__construct($options);
+    }
+
+    
+    public function load($id, $doNotTestCacheValidity = false)
+    {
+        $ret = parent::load($id, $doNotTestCacheValidity);
+        if ($this->_options['compression']) $ret = gzinflate($ret);
+        return $ret;
+    }
+
+    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    {
+        if ($this->_options['compression']) $data = gzdeflate($data);
+        return parent::save($data, $id, $tags, $specificLifetime);
     }
 }
