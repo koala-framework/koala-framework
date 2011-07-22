@@ -109,11 +109,11 @@ class Vps_Util_FeedFetcher_Feed
         $cache = Vps_Util_FeedFetcher_Feed_Cache::getInstance();
         $cacheId = self::getCacheId($row->id);
 
-        if ($response && $response->getStatusCode() == 304 && ($feed = $cache->load($cacheId))) {
+        if ($response && $response->getStatusCode() == 304 && $cache->test($cacheId)) {
             Vps_Benchmark::count('not-modified feed');
-            $feed['update'] = time();
-            $cache->save($feed, $cacheId);
+            $cache->touch($cacheId, 0);
             $status = self::UPDATE_NOT_MODIFIED;
+            $feed = $cache->load($cacheId);
         } else {
             $error = false;
             $options = array(
@@ -124,7 +124,7 @@ class Vps_Util_FeedFetcher_Feed
                 $status = self::UPDATE_ERROR;
                 if ($oldFeed = $cache->load($cacheId)) {
                     $feed = $oldFeed;
-                    $feed['update'] = time();
+                    $cache->touch($cacheId, 0);
                 }
             } else {
                 $status = self::UPDATE_SUCCESS_NO_NEW_ENTRIES;
@@ -141,8 +141,8 @@ class Vps_Util_FeedFetcher_Feed
                         break;
                     }
                 }
+                $cache->save($feed, $cacheId);
             }
-            $cache->save($feed, $cacheId);
         }
         $duration = (microtime(true) - $start)*1000;
 
@@ -159,7 +159,6 @@ class Vps_Util_FeedFetcher_Feed
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds');
         $feed = array();
         $feed['url'] = $url;
-        $feed['update'] = time();
         $entriesSelect = $m->select();
         if (isset($options['fetch_entries']) && $options['fetch_entries']) {
             $entriesSelect->limit($options['fetch_entries']);
@@ -318,11 +317,13 @@ class Vps_Util_FeedFetcher_Feed
         $cache = Vps_Util_FeedFetcher_Feed_Cache::getInstance();
         $cacheId = self::getCacheId($feedId);
 
-        $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load($cacheId);
-        if ($feed) {
-            if (!isset($feed['update']) || time()-$feed['update'] > 25*60*60) {
-                $feed = false;
-            }
+        $time = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->test($cacheId);
+        if ($time && time()-$time > 25*60*60) {
+            $time = false;
+        }
+        $feed = false;
+        if ($time) {
+            $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load($cacheId);
         }
         if (!$feed) {
             $request = self::createRequest($feedId);
