@@ -27,7 +27,7 @@ class Vps_Model_Iterator_ExportArray implements Vps_Model_Iterator_ModelIterator
     private $_options;
     private $_debugOutput = false;
 
-    public function __construct(Vps_Model_Interface $model, Vps_Model_Select $select, array $options = array(), $debutOutput = false)
+    public function __construct(Vps_Model_Interface $model, Vps_Model_Select $select, array $options = array(), $debugOutput = false)
     {
         $this->_model = $model;
         $this->_select = $select;
