@@ -148,13 +148,13 @@ abstract class Vps_Util_Rrd_File
 
     public function getAverageValues($fields, $start, $end)
     {
-        if (!file_exists('stats.rrd')) {
+        if (!file_exists($this->_fileName)) {
             $ret = array();
             foreach ($fields as $f) {
                 $ret[$f] = 0;
             }
         }
-        $cmd = "rrdtool fetch stats.rrd AVERAGE --start $start --end $end 2>&1";
+        $cmd = "rrdtool fetch $this->_fileName AVERAGE --start $start --end $end 2>&1";
         exec($cmd, $rows);
 
         foreach ($fields as $f) {

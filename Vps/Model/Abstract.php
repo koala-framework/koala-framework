@@ -697,15 +697,18 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $ret;
     }
 
+    /**
+     * Kann zum Speicher-Sparen aufgerufen werden
+     */
+    public function clearRows()
+    {
+        $this->_rows = array();
+    }
+
     public static function clearAllRows()
     {
         foreach (self::$_instances as $i) {
             $i->clearRows();
         }
-    }
-
-    public function clearRows()
-    {
-        $this->_rows = array();
     }
 }

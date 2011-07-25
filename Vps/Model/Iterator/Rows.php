@@ -39,7 +39,6 @@ class Vps_Model_Iterator_Rows implements Vps_Model_Iterator_ModelIterator_Interf
 
     public function rewind()
     {
-        //TODO: $this->_model->clearRows()
         $this->_rowset = $this->_model->getRows($this->_select);
     }
 
