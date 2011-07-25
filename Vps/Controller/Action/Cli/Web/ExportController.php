@@ -57,6 +57,11 @@ class Vps_Controller_Action_Cli_Web_ExportController extends Vps_Controller_Acti
 
     private function _update($config)
     {
+        if (!$config->server->host) {
+            echo "kein host definiert...\n";
+            return;
+        }
+
         $sshHost = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
         $sshDir = $config->server->dir;
 

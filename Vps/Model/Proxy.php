@@ -189,6 +189,7 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
 
     public function clearRows()
     {
+        parent::clearRows();
         $this->_proxyModel->clearRows();
     }
 }
