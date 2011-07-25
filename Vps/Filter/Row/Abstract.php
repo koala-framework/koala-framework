@@ -22,7 +22,7 @@ abstract class Vps_Filter_Row_Abstract implements Zend_Filter_Interface
         return false;
     }
 
-    public function skipFilter($row)
+    public function skipFilter($row, $column)
     {
         return false;
     }
