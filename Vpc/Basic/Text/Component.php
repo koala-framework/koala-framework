@@ -60,6 +60,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
         $ret['assets']['files']['styles'] = 'dynamic/Vpc_Basic_Text_StylesAsset:Vpc_Basic_Text_StylesModel';
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         return $ret;
     }
 
