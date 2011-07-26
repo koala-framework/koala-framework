@@ -3,10 +3,12 @@
  * @group Vpc_Trl
  *
 ansicht frontend:
-http://freiheit.vps.niko.vivid/vps/vpctest/Vpc_Trl_Pages_Root/de
-http://freiheit.vps.niko.vivid/vps/vpctest/Vpc_Trl_Pages_Root/de/home_de/test
-http://freiheit.vps.niko.vivid/vps/vpctest/Vpc_Trl_Pages_Root/en
-http://freiheit.vps.niko.vivid/vps/vpctest/Vpc_Trl_Pages_Root/en/home_en/test
+http://vps.niko.vivid/vps/vpctest/Vpc_Trl_Pages_Root/de
+http://vps.niko.vivid/vps/vpctest/Vpc_Trl_Pages_Root/de/home_de/test
+http://vps.niko.vivid/vps/vpctest/Vpc_Trl_Pages_Root/en
+http://vps.niko.vivid/vps/vpctest/Vpc_Trl_Pages_Root/en/home_en/test
+http://vps.niko.vivid/vps/vpctest/Vpc_Trl_Pages_Root/it
+http://vps.niko.vivid/vps/vpctest/Vpc_Trl_Pages_Root/it/home_it/test
 
 
  */
@@ -15,6 +17,12 @@ class Vpc_Trl_Pages_Test extends Vpc_TestAbstract
     public function setUp()
     {
         parent::setUp('Vpc_Trl_Pages_Root');
+    }
+    public function testGetHomeIt()
+    {
+        $rootIt = Vps_Component_Data_Root::getInstance()->getComponentById('root-it');
+        $ret = $rootIt->getChildPage(array('home' => true), array());
+        $this->assertEquals('root-it-main_1', $ret->componentId);
     }
     public function testPages()
     {
