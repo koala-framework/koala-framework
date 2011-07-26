@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_SocialBookmarks_Trl_Inherit_Component extends Vpc_Advanced_SocialBookmarks_Inherit_Component
+class Vpc_Advanced_SocialBookmarks_Inherit_Trl_Component extends Vpc_Advanced_SocialBookmarks_Inherit_Component
 {
     protected function _getBookmarksComponent()
     {
