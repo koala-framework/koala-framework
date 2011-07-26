@@ -23,6 +23,7 @@ class Vpc_Root_TrlRoot_Master_Component extends Vpc_Abstract
         );
         $ret['flags']['hasHome'] = true;
         $ret['flags']['hasLanguage'] = true;
+        $ret['flags']['subroot'] = true;
         $ret['flags']['chainedType'] = 'Trl';
         $ret['editComponents'] = array('flag');
         return $ret;
