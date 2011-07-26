@@ -248,6 +248,8 @@ class Vps_Component_Data
             $childSelect->hasPart('wherePseudoPage') && !$childSelect->getPart('wherePseudoPage');
         if ($noSubPages) {
             $select->whereChildOfSamePage($this);
+        } else {
+            $select->whereSubroot($this);
         }
 
         foreach ($generators as $g) {
