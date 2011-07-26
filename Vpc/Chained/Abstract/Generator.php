@@ -191,6 +191,12 @@ class Vpc_Chained_Abstract_Generator extends Vps_Component_Generator_Abstract
     protected function _formatConfig($parentData, $row)
     {
         $componentClass = $this->_settings['component'][$this->_settings['masterComponentsMap'][$row->componentClass]];
+
+        $alternativeComponent = Vpc_Abstract::getFlag($componentClass, "alternativeComponent");
+        if ($alternativeComponent && call_user_func(array($componentClass, 'useAlternativeComponent'), $componentClass, $parentData, $this)) {
+            $componentClass = $alternativeComponent;
+        }
+
         $id = $this->_getIdFromRow($row);
         $data = array(
             'componentId' => $this->_getComponentIdFromRow($parentData, $row),
