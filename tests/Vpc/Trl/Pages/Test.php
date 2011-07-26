@@ -18,6 +18,12 @@ class Vpc_Trl_Pages_Test extends Vpc_TestAbstract
     {
         parent::setUp('Vpc_Trl_Pages_Root');
     }
+    public function testGetHomeIt()
+    {
+        $rootIt = Vps_Component_Data_Root::getInstance()->getComponentById('root-it');
+        $ret = $rootIt->getChildPage(array('home' => true), array());
+        $this->assertEquals('root-it-main_1', $ret->componentId);
+    }
     public function testPages()
     {
         $domain = Zend_Registry::get('config')->server->domain;
