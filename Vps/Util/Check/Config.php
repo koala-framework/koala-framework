@@ -325,7 +325,9 @@ class Vps_Util_Check_Config
 
     private static function _magic_quotes_gpc()
     {
-        if (get_magic_quotes_gpc()) {
+        if (php_sapi_name()!= 'cli' // nur im web testen, die cli berührt das sowieso nicht
+            && get_magic_quotes_gpc()
+        ) {
             throw new Vps_Exception("magic_quotes_gpc is turned on. Please allow disabling it in .httaccess or turn off in php.ini");
         }
     }
