@@ -196,6 +196,7 @@ class Vps_Debug
         }
 
         if (!$ignoreCli && php_sapi_name() == 'cli') {
+            $exception->log();
             file_put_contents('php://stderr', $exception->getException()->__toString()."\n");
             exit(1);
         }
