@@ -343,6 +343,6 @@ class Vps_Util_FeedFetcher_Feed
 
     public static function getCacheId($feedId)
     {
-        return 'feed'.$feedId;
+        return $feedId;
     }
 }
