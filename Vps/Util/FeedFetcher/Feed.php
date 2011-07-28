@@ -318,9 +318,10 @@ class Vps_Util_FeedFetcher_Feed
     /**
      * @return Vps_Util_Model_Feed_Row_Feed
      */
-    public static function getFeed($feedId)
+    public static function getFeed($feedId, $updateServer = null)
     {
-
+        if (!$updateServer) $updateServer = Vps_Benchmark::getUrlType();
+        $log = date('Y-m-d H:i:s').' '.$updateServer.' '.$feedId.' ';
         $cache = Vps_Util_FeedFetcher_Feed_Cache::getInstance();
         $cacheId = self::getCacheId($feedId);
 
@@ -333,6 +334,9 @@ class Vps_Util_FeedFetcher_Feed
             $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load($cacheId);
         }
         if (!$feed) {
+            $log .= "uncached ";
+            $row = Vps_Model_Abstract::getInstance('feeds')->getRow($feedId);
+            $log .= $row->last_update;
             $request = self::createRequest($feedId);
             $start = microtime(true);
             try {
@@ -343,7 +347,12 @@ class Vps_Util_FeedFetcher_Feed
                 $response = null;
             }
             $response = new Vps_Http_Pecl_Requestor_Response($response);
-            $feed = self::handleResponse($feedId, Vps_Benchmark::getUrlType(), $start, $response);
+            $feed = self::handleResponse($feedId, $updateServer, $start, $response);
+
+            file_put_contents("application/log/get-feed", $log."\n", FILE_APPEND);
+
+        } else {
+            $log .= "cached";
         }
         return $feed;
     }

@@ -70,6 +70,8 @@ class Vps_Util_Check_Ip
 
         // wenn domains, dann durch ips ersetzen
         foreach ($allowedIps as $key => $allowedIp) {
+            $allowedIp = trim($allowedIp);
+            $allowedIps[$key] = $allowedIp;
             if (!preg_match('/^(\d|\*){1,3}\.(\d|\*){1,3}\.(\d|\*){1,3}\.(\d|\*){1,3}$/', $allowedIp)) {
                 $ipByDomain = self::_getIpByDomain($allowedIp);
                 if ($ipByDomain) $allowedIps[$key] = $ipByDomain;
