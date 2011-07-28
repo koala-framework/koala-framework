@@ -17,12 +17,13 @@ class Vpc_Directories_Item_Directory_Controller extends Vps_Controller_Action_Au
         if (is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfig'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')
             || is_instance_of(Vpc_Abstract::getSetting($this->_getParam('class'), 'extConfigControllerIndex'), 'Vpc_Directories_Item_Directory_ExtConfigEditButtons')) {
             $url = Vpc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Form');
-            $this->_editDialog = array(
-                'width' =>  isset($this->_editDialog['width']) ? $this->_editDialog['width'] : 500,
-                'height' =>  isset($this->_editDialog['height']) ? $this->_editDialog['height'] : 400,
+            $editDialog = array(
                 'autoForm' => 'Vpc.Directories.Item.Directory.EditFormPanel',
                 'controllerUrl' => $url
             );
+            if ($this->_editDialog['width']) $editDialog['width'] = $this->_editDialog['width'];
+            if ($this->_editDialog['height']) $editDialog['height'] = $this->_editDialog['height'];
+            $this->_editDialog = $editDialog;
         }
     }
 
