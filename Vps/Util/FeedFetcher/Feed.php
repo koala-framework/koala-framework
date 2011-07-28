@@ -98,6 +98,9 @@ class Vps_Util_FeedFetcher_Feed
      */
     public static function handleResponse($feedId, $updateServer, $start, Vps_Http_Requestor_Response_Interface $response = null, &$error = false)
     {
+        if (Vps_Registry::get('config')->application->id=='rssincludefeeds') {
+            throw new Vps_Exception("don't use me");
+        }
         if (is_object($feedId)) {
             $row = $feedId;
         } else {
@@ -207,6 +210,10 @@ class Vps_Util_FeedFetcher_Feed
 
     public static function updatedFeed(Vps_Util_FeedFetcher_FeedRow $row, array $feed, $updateServer, $duration, $status)
     {
+        if (Vps_Registry::get('config')->application->id=='rssincludefeeds') {
+            throw new Vps_Exception("don't use me");
+        }
+
         $row->last_update_fetch = date('Y-m-d H:i:s');
 
         $row->max_update = max($row->max_update, $duration);
