@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_FeedFetcher_Feed_Cache extends Vps_Cache_Core
+class Vps_Util_FeedFetcher_Feed_Cache extends Zend_Cache_Core //NICHT von Vps_Cache_Core erben, weil das schaut auf configMtime und löscht uns den cache damit
 {
     public function __construct()
     {
