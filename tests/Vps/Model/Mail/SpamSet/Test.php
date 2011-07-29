@@ -24,10 +24,9 @@ class Vps_Model_Mail_SpamSet_Test extends Vps_Test_TestCase
             'tpl' => 'UserActivation'
         ));
         $row = $model->createRow();
-        $row->setMailContentManual(true);
         $row->addTo('markus@vivid.vps');
         $row->subject = 'Buy cheap viagra';
-        $row->setBodyText("cheap viagra cheap cialis buy now cheap viagra cheap cialis buy now\ncheap viagra cheap cialis buy now cheap viagra cheap cialis buy now");
+        $row->sent_mail_content_text = "cheap viagra cheap cialis buy now cheap viagra cheap cialis buy now\ncheap viagra cheap cialis buy now cheap viagra cheap cialis buy now";
         $row->save();
 
         $ret = Vps_Controller_Action_Spam_SetController::sendSpammedMail($row->id, 'xx'.Vps_Model_Mail_Row::getSpamKey($row));
