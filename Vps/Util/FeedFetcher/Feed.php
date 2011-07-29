@@ -227,13 +227,13 @@ class Vps_Util_FeedFetcher_Feed
         } else if (substr($feedHost, -9, -2) == 'google.') {
             $benchmarkType = 'google';
         }
-        if ($benchmarkType) Vps_Benchmark::count('feed-update-'.$benchmarkType);
+        if ($benchmarkType) Vps_Benchmark::memcacheCount('feed-update-'.$benchmarkType);
         if ($status == self::UPDATE_ERROR) {
             $row->update_errors++;
             $row->last_update_error = date('Y-m-d H:i:s');
             $row->consecutive_update_errors++;
             Vps_Benchmark::count('feed-update-error');
-            if ($benchmarkType) Vps_Benchmark::count('feed-error-'.$benchmarkType);
+            if ($benchmarkType) Vps_Benchmark::memcacheCount('feed-error-'.$benchmarkType);
         } else {
             $row->consecutive_update_errors = 0;
             $row->last_successful_update = date('Y-m-d H:i:s');
@@ -307,6 +307,10 @@ class Vps_Util_FeedFetcher_Feed
         }
 
         $row->save();
+
+        if ($updateServer == 'getfeed' || $updateServer == 'admin') {
+            Vps_Benchmark::memcacheCount('feedfetch-'.$updateServer);
+        }
     }
 
     /**
