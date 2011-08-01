@@ -43,13 +43,13 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
 
         //select extern link
         $this->runScript("Ext.ComponentMgr.all.each(function(c) {
-            if (c instanceof Vps.Form.ComboBox && c.name == 'component') {
+            if (c instanceof Vps.Form.ComboBox && c.name == 'component_component') {
                 c.setValue('extern');
                 c.fireEvent('select');
             }
         });
         ");
-        $this->type('css=input[name="extern_target"]', 'http://orf.at');
+        $this->type('css=input[name="component_extern_target"]', 'http://orf.at');
         $this->click("css=.x-window button:contains('Save')");
         $this->waitForConnections();
 
@@ -90,9 +90,9 @@ class Vpc_Basic_TextSessionModel_SeleniumTest extends Vps_Test_SeleniumTestCase
         $this->waitForConnections();
 
         //assert previously isnerted text
-        $this->assertVisible('css=input[name="extern_target"]');
-        $this->assertElementValueEquals('css=input[name="extern_target"]', 'http://orf.at');
-        
+        $this->assertVisible('css=input[name="component_extern_target"]');
+        $this->assertElementValueEquals('css=input[name="component_extern_target"]', 'http://orf.at');
+
         sleep(5);
     }
 

@@ -15,9 +15,14 @@ Neue Features:
 - Komponentenbreite dynamisch ermitteln: Master.tpl: $this->componentWidth($this->data)
                                          Root Settings: contentWidth, contentWidthBoxSubtract
                                          Component Settings: contentWidhtSubtract
+- CLI-Update Controller kann man jetzt --class angeben:
+  führt auch SQL-Dateien aus, Beispiel: "vps update --class=Vpc_Abstract_Cards_Update_2"
+- Vpc_Abstract_Cards: Unterkomponente per Cards aus wählen, LinkTag basiert jetzt auf dieser 
+  Komponente
 
 möglicherweise nicht kompatible Änderungen:
 - User_Box: aufgeteilt in zwei komponenten, wenn eingeloggt LoggedIn Unterkomponente
+- LinkTag: Unterkomponente hat jetzt key -child statt -link, Update-Script sollte konvertieren
 
 == 2.1 ==
 Erstellt: 21.06.11

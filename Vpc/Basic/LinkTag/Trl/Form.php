@@ -21,7 +21,7 @@ class Vpc_Basic_LinkTag_Trl_Form extends Vpc_Abstract_Form
         $this->_model = new Vps_Model_FnF();
 
         $gen = Vpc_Abstract::getSetting($this->getClass(), 'generators');
-        $classes = $gen['link']['component'];
+        $classes = $gen['child']['component'];
         $cards = $this->add(new Vps_Form_Container_Cards('component', trlVps('Link type')))
             ->setDefaultValue(key($classes));
 
@@ -32,7 +32,7 @@ class Vpc_Basic_LinkTag_Trl_Form extends Vpc_Abstract_Form
         foreach ($classes as $name => $class) {
             $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), '-' . $name, $name);
             if ($form) {
-                $form->setIdTemplate('{0}-link');
+                $form->setIdTemplate('{0}-child');
                 $form->setAutoHeight(true);
                 $form->setBaseCls('x-plain');
             }

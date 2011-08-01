@@ -29,7 +29,7 @@ class Vpc_Basic_ImageEnlarge_Component extends Vpc_Abstract_Image_Component
     {
         $c = $this->getData()->getChildComponent('-linkTag');
         if (is_instance_of($c->componentClass, 'Vpc_Basic_LinkTag_Component')) {
-            $c = $c->getChildComponent('-link');
+            $c = $c->getChildComponent('-child');
         }
         if (is_instance_of($c->componentClass, 'Vpc_Basic_ImageEnlarge_EnlargeTag_Component')) {
             if (Vpc_Abstract::getSetting($c->componentClass, 'alternativePreviewImage')

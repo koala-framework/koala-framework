@@ -321,7 +321,7 @@ abstract class Vps_Component_Generator_Abstract
         $ret = array();
         foreach ($generators as $g) {
             $childComponentIds = null;
-            if ($g instanceof Vps_Component_Generator_Static && !$g instanceof Vpc_Basic_LinkTag_Generator) {
+            if ($g instanceof Vps_Component_Generator_Static && !$g->getGeneratorFlag('cards')) {
                 $childComponentIds = array();
                 foreach (array_keys($g->_getChildComponentClasses()) as $c) {
                     $childComponentIds[] = $g->getIdSeparator().$c;

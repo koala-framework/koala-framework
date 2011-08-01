@@ -45,6 +45,5 @@ class Vpc_Abstract_Cards_Form extends Vpc_Abstract_Form
                 if ($form) $card->add($form);
             }
         }
-        $cards->getCombobox()->getData()->cards = $cards->fields;
     }
 }

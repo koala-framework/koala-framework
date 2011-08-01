@@ -1,7 +1,5 @@
 <?php
-class Vpc_Basic_LinkTag_Model extends Vps_Model_Db_Proxy
+class Vpc_Basic_LinkTag_Model extends Vpc_Abstract_Cards_Model
 {
-    protected $_table = 'vpc_basic_linktag';
-    protected $_rowClass = 'Vpc_Basic_LinkTag_Row';
     protected $_default = array('component'=>'intern');
 }

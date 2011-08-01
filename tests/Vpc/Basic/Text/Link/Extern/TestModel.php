@@ -7,7 +7,7 @@ class Vpc_Basic_Text_Link_Extern_TestModel extends Vpc_Basic_LinkTag_Extern_Mode
             'primaryKey' => 'component_id',
             'columns' => array(),
             'data'=> array(
-                array('component_id'=>'1007-l1-link', 'target'=>'http://vivid.com')
+                array('component_id'=>'1007-l1-child', 'target'=>'http://vivid.com')
             )
         ));
         parent::__construct($config);

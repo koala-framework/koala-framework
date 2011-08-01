@@ -37,7 +37,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $this->assertEquals('extern', $row->component);
 
         $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Link_Extern_TestModel');
-        $rows = $m->getRows($m->select()->whereEquals('component_id', '1003-l1-link'));
+        $rows = $m->getRows($m->select()->whereEquals('component_id', '1003-l1-child'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
         $this->assertEquals('http://www.vivid-planet.com/', $row->target);
@@ -88,7 +88,7 @@ class Vpc_Basic_Text_ModelTest extends Vpc_TestAbstract
         $this->assertEquals('intern', $row->component);
 
         $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Link_Intern_TestModel');
-        $rows = $m->getRows($m->select()->whereEquals('component_id', '1014-l1-link'));
+        $rows = $m->getRows($m->select()->whereEquals('component_id', '1014-l1-child'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
         $this->assertEquals('1001', $row->target);

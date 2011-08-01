@@ -178,19 +178,8 @@ abstract class Vps_Update
                             if (substr($n, 0, 8) == 'vps-lib_') continue;
                             if (substr($n, 0, 8) == 'library_') continue;
                             $n .= 'Update_'.$nr;
-                            if ($fileType == '.sql') {
-                                $u = new Vps_Update_Sql($nr, $n);
-                                $u->sql = file_get_contents($i->getPathname());
-                                if (preg_match("#\\#\\s*tags:(.*)#", $u->sql, $m)) {
-                                    $u->_tags = explode(' ', trim($m[1]));
-                                }
-                                $u->_tags[] = 'db';
-                                $ret[] = $u;
-                            } else {
-                                if (is_instance_of($n, 'Vps_Update')) {
-                                    $ret[] = new $n($nr, $n);
-                                }
-                            }
+                            $update = self::createUpdate($n, $i->getPathname());
+                            if ($update) $ret[] = $update;
                         }
                     }
                 }
@@ -212,6 +201,38 @@ abstract class Vps_Update
         }
         $ret = self::_sortByRevision($ret);
         return $ret;
+    }
+
+    public static function createUpdate($class, $filename = null)
+    {
+        $file = str_replace('_', '/', $class);
+        $isSql = false;
+        if (!$filename) {
+            if (is_file($file . '.sql')) {
+                $filename = $file . '.sql';
+                $isSql = true;
+            } else if (is_file(VPS_PATH . '/' . $file . '.sql')) {
+                $filename = VPS_PATH . '/' . $file . '.sql';
+                $isSql = true;
+            }
+        } else {
+            $isSql = substr($filename, -4) == '.sql';
+        }
+        $nr = (int)substr(strrchr($class, '_'), 1);
+        $update = null;
+        if ($isSql) {
+            $update = new Vps_Update_Sql($nr, $class);
+            $update->sql = file_get_contents($filename);
+            if (preg_match("#\\#\\s*tags:(.*)#", $update->sql, $m)) {
+                $update->_tags = explode(' ', trim($m[1]));
+            }
+            $update->_tags[] = 'db';
+        } else {
+            if (is_instance_of($class, 'Vps_Update')) {
+                $update = new $class($nr, $class);
+            }
+        }
+        return $update;
     }
 
     private static function _sortByRevision($updates)
