@@ -5,7 +5,7 @@ class Vpc_Basic_LinkTag_Data extends Vps_Component_Data
     private function _getLinkData()
     {
         if ($this->_linkData === false) {
-            $this->_linkData = $this->getChildComponent('-link');
+            $this->_linkData = $this->getChildComponent('-child');
         }
         return $this->_linkData;
     }
