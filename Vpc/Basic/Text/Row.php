@@ -343,17 +343,17 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                         $srcRow = false;
                     }
                     if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Component')) {
-                        $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
+                        $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'child');
                         if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
                             $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
-                            $srcLinkRow = $linkModel->getRow($part['componentId'].'-link');
+                            $srcLinkRow = $linkModel->getRow($part['componentId'].'-child');
                             if ($srcLinkRow) {
                                 $destRow->component = $srcRow->component;
                                 $destRow->save();
-                                $destLinkRow = $linkModel->getRow($destRow->component_id.'-link');
+                                $destLinkRow = $linkModel->getRow($destRow->component_id.'-child');
                                 if (!$destLinkRow) {
                                     $destLinkRow = $linkModel->createRow();
-                                    $destLinkRow->component_id = $destRow->component_id.'-link';
+                                    $destLinkRow->component_id = $destRow->component_id.'-child';
                                 }
                                 foreach ($srcLinkRow->toArray() as $k=>$i) {
                                     if ($k != 'component_id') {
@@ -386,7 +386,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     $this->addChildComponentRow('link', $destRow);
                 }
                 if (is_instance_of($classes['link'], 'Vpc_Basic_LinkTag_Component')) {
-                    $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
+                    $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'child');
 
                     $destRow->component = null;
                     if (preg_match('#^mailto:#', $part['href'], $m)) {
@@ -417,13 +417,13 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     if (!$destRow->component) continue; //kein solcher-link möglich
                     $destRow->save();
 
-                    $destClasses =  Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
+                    $destClasses =  Vpc_Abstract::getChildComponentClasses($classes['link'], 'child');
 
                     $row = Vpc_Abstract::createModel($destClasses[$destRow->component])
-                                ->getRow($destRow->component_id.'-link');
+                                ->getRow($destRow->component_id.'-child');
                     if (!$row) $row = Vpc_Abstract::createModel($destClasses[$destRow->component])
                                                 ->createRow();
-                    $row->component_id = $destRow->component_id.'-link';
+                    $row->component_id = $destRow->component_id.'-child';
                     if ($destRow->component == 'extern') {
                         $row->target = $part['href'];
                     } else if ($destRow->component == 'intern') {

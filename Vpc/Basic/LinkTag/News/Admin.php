@@ -39,14 +39,14 @@ class Vpc_Basic_LinkTag_News_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
         return array();
     }
 
-    public function getLinkTagForms()
+    public function getCardForms()
     {
         $ret = array();
         $news = Vps_Component_Data_Root::getInstance()
             ->getComponentsByClass('Vpc_News_Directory_Component');
         foreach ($news as $new) {
             if (is_instance_of($new->componentClass, 'Vpc_Events_Directory_Component')) continue;
-            $form = Vpc_Abstract_Form::createComponentForm($this->_class, 'link');
+            $form = Vpc_Abstract_Form::createComponentForm($this->_class, 'child');
             $form->fields['news_id']->setBaseParams(array('newsComponentId'=>$new->dbId));
             $form->fields['news_id']->setFieldLabel($new->getPage()->name);
             $ret[$new->dbId] = array(

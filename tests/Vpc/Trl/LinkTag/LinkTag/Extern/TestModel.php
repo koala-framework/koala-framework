@@ -6,7 +6,7 @@ class Vpc_Trl_LinkTag_LinkTag_Extern_TestModel extends Vps_Model_FnF
         $config = array(
             'primaryKey' => 'component_id',
             'data'=> array(
-                array('component_id'=>'root-master_test2-link', 'target'=>'http://www.vivid-planet.com/', 'open_type'=>'self'),
+                array('component_id'=>'root-master_test2-child', 'target'=>'http://www.vivid-planet.com/', 'open_type'=>'self'),
             )
         );
         parent::__construct($config);

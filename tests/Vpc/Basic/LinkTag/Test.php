@@ -13,13 +13,13 @@ class Vpc_Basic_LinkTag_Test extends Vpc_TestAbstract
     {
         $c = $this->_root->getComponentById(1100)->getComponent();
         $vars = $c->getTemplateVars();
-        $this->assertEquals('1100-link', $vars['linkTag']->componentId);
+        $this->assertEquals('1100-child', $vars['linkTag']->componentId);
     }
 
     public function testUrlAndRel()
     {
         $c = $this->_root->getComponentById(1100);
-        $c2 = $c->getChildComponent('-link');
+        $c2 = $c->getChildComponent('-child');
         $this->assertEquals('http://example.com', $c2->url);
         $this->assertEquals('foo', $c2->rel);
 
@@ -30,7 +30,7 @@ class Vpc_Basic_LinkTag_Test extends Vpc_TestAbstract
     public function testHtml()
     {
         $c = $this->_root->getComponentById(1100);
-        $c2 = $c->getChildComponent('-link');
+        $c2 = $c->getChildComponent('-child');
 
         $html = $c2->render();
         $this->assertEquals('<a href="http://example.com" rel="foo">', $html);
@@ -51,7 +51,7 @@ class Vpc_Basic_LinkTag_Test extends Vpc_TestAbstract
         $this->_process();
 
         $c = $this->_root->getComponentById('1101');
-        $c = $c->getChildComponent('-link');
+        $c = $c->getChildComponent('-child');
         $this->assertEquals('<a href="http://example.com" rel="foo">', $c->render());
 
         $c = $this->_root->getComponentById('1101');
