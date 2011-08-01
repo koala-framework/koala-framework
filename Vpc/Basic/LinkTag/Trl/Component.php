@@ -11,9 +11,10 @@ class Vpc_Basic_LinkTag_Trl_Component extends Vpc_Chained_Trl_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['linkTag'] = $this->getData()->getChildComponent(array(
-            'generator' => 'link'
+        $ret['child'] = $this->getData()->getChildComponent(array(
+            'generator' => 'child'
         ));
+        $ret['linkTag'] = $ret['child'];
         return $ret;
     }
 }

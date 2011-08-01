@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Vpc_Trl
+ * @group Vpc_Trl_LinkTag
  *
 ansicht frontend:
 http://doleschal.vps.niko.vivid/vps/vpctest/Vpc_Trl_LinkTag_Root/de/test1
@@ -33,8 +34,8 @@ class Vpc_Trl_LinkTag_Test extends Vpc_TestAbstract
 
     public function testEn()
     {
-        $c = $this->_root->getComponentById('root-en_test1');
-        $this->assertEquals('', $c->render());
+        //$c = $this->_root->getComponentById('root-en_test1');
+        //$this->assertEquals('', $c->render());
 
         $c = $this->_root->getComponentById('root-en_test2');
         $this->assertEquals('<a href="http://www.vivid-planet.com/en">', $c->render());
@@ -60,7 +61,7 @@ class Vpc_Trl_LinkTag_Test extends Vpc_TestAbstract
 
         $model = Vps_Model_Abstract::getInstance('Vpc_Trl_LinkTag_LinkTag_Extern_TestModel');
         $model->createRow(array(
-            'component_id'=>'root-master_test3-link',
+            'component_id'=>'root-master_test3-child',
             'target'=>'http://www.test.de/',
             'open_type'=>'self'
         ))->save();
@@ -73,7 +74,7 @@ class Vpc_Trl_LinkTag_Test extends Vpc_TestAbstract
 
         $model = Vps_Model_Abstract::getInstance('Vpc_Trl_LinkTag_LinkTag_Extern_Trl_TestModel');
         $model->createRow(array(
-            'component_id'=>'root-en_test3-link',
+            'component_id'=>'root-en_test3-child',
             'target'=>'http://www.test.de/en'
         ))->save();
 

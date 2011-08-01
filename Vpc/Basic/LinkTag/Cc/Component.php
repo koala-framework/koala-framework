@@ -12,7 +12,7 @@ class Vpc_Basic_LinkTag_Cc_Component extends Vpc_Chained_Cc_Component
     {
         $ret = parent::getTemplateVars();
         $ret['linkTag'] = $this->getData()->getChildComponent(array(
-            'generator' => 'link'
+            'generator' => 'child'
         ));
         return $ret;
     }
@@ -22,7 +22,7 @@ class Vpc_Basic_LinkTag_Cc_Component extends Vpc_Chained_Cc_Component
     public function getCacheVars()
     {
         $ret = parent::getCacheVars();
-        $link = $this->getData()->getChildComponent('-link');
+        $link = $this->getData()->getChildComponent('-child');
         if ($link) {
             $ret['linkTagLink']['componentId'] = $link->componentId;
         }

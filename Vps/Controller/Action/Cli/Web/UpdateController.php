@@ -15,6 +15,12 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
                 'help' => 'Executes update for a given revision'
             ),
             array(
+                'param'=> 'class',
+                'value' => 'Vpc_..._Update_2',
+                'allowBlank' => true,
+                'help' => 'Executes specific update (also .sql)'
+            ),
+            array(
                 'param'=> 'skip-clear-cache',
                 'help' => 'Don\'t clear cache after update'
             )
@@ -22,7 +28,15 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
     }
     public function indexAction()
     {
-        self::update($this->_getParam('rev'), $this->_getParam('debug'), $this->_getParam('skip-clear-cache'));
+        if ($this->_getParam('class')) {
+            $update = Vps_Update::createUpdate($this->_getParam('class'));
+            if (!$update) { echo 'could not create update.'; exit; }
+
+            $updates = array($update);
+            self::_executeUpdates(array($update), self::_getDoneNames(), $this->_getParam('debug'), $this->_getParam('skip-clear-cache'));
+        } else {
+            self::update($this->_getParam('rev'), $this->_getParam('debug'), $this->_getParam('skip-clear-cache'));
+        }
         exit;
     }
 
@@ -44,6 +58,39 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
             }
         }
 
+        $from = 1;
+        $to = 9999999;
+        if ($rev) {
+            $ex = explode(':', $rev, 2);
+            $ex1 = $ex[0];
+            if (!isset($ex[1])) {
+                $ex2 = null;
+            } else {
+                $ex2 = $ex[1];
+            }
+            $from = $ex1;
+            if (!$ex2) {
+                $to = $from + 1;
+            } else if ($ex1 == $ex2) {
+                $to = $ex2 + 1;
+            } else {
+                $to = $ex2;
+            }
+        }
+        echo "Looking for update-scripts from revision $from to {$to}...";
+        $updates = Vps_Update::getUpdates($from, $to);
+        $doneNames = self::_getDoneNames();
+        foreach ($updates as $k=>$u) {
+            if ($u->getRevision() && in_array($u->getUniqueName(), $doneNames) && !$rev) {
+                unset($updates[$k]);
+            }
+        }
+        echo " found ".count($updates)."\n\n";
+        self::_executeUpdates($updates, $doneNames, $debug, $skipClearCache);
+    }
+
+    private static function _getDoneNames()
+    {
         if (!file_exists('application/update')) {
             $doneNames = array();
             foreach (Vps_Update::getUpdates(0, 9999999) as $u) {
@@ -97,34 +144,11 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
         if (!$doneNames) {
             throw new Vps_ClientException("Invalid application/update revision");
         }
-        $from = 1;
-        $to = 9999999;
-        if ($rev) {
-            $ex = explode(':', $rev, 2);
-            $ex1 = $ex[0];
-            if (!isset($ex[1])) {
-                $ex2 = null;
-            } else {
-                $ex2 = $ex[1];
-            }
-            $from = $ex1;
-            if (!$ex2) {
-                $to = $from + 1;
-            } else if ($ex1 == $ex2) {
-                $to = $ex2 + 1;
-            } else {
-                $to = $ex2;
-            }
-        }
-        echo "Looking for update-scripts from revision $from to {$to}...";
-        $updates = Vps_Update::getUpdates($from, $to);
-        foreach ($updates as $k=>$u) {
-            if ($u->getRevision() && in_array($u->getUniqueName(), $doneNames) && !$rev) {
-                unset($updates[$k]);
-            }
-        }
-        echo " found ".count($updates)."\n\n";
+        return $doneNames;
+    }
 
+    private static function _executeUpdates($updates, $doneNames, $debug, $skipClearCache)
+    {
         if (self::_executeUpdate($updates, 'checkSettings', $debug, $skipClearCache)) {
 
             if (!$debug && Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) {
@@ -167,6 +191,7 @@ class Vps_Controller_Action_Cli_Web_UpdateController extends Vps_Controller_Acti
         } else {
             echo "\nupdate stopped\n";
         }
+        return $doneNames;
     }
 
     private static function _executeUpdate($updates, $method, $debug = false, $skipClearCache = false)

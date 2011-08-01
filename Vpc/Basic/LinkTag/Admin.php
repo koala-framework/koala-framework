@@ -3,7 +3,7 @@ class Vpc_Basic_LinkTag_Admin extends Vpc_Admin
 {
     public function componentToString(Vps_Component_Data $data)
     {
-        $data = $data->getChildComponent('-link');
+        $data = $data->getChildComponent('-child');
         if (!$data) return '';
         return Vpc_Admin::getInstance($data->componentClass)->componentToString($data);
     }

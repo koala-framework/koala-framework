@@ -68,4 +68,11 @@ class Vpc_Abstract_Cards_Generator extends Vps_Component_Generator_Static
             'isPseudoPage' => false
         );
     }
+
+    public function getGeneratorFlags()
+    {
+        $ret = parent::getGeneratorFlags();
+        $ret['cards'] = true; // Wird in Vps_Component_Generator_Abstract::_getGeneratorKeys() geprüft
+        return $ret;
+    }
 }

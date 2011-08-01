@@ -7,14 +7,14 @@ class Vpc_Basic_LinkTag_Lightbox_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
         return trlVps('Lightbox');
     }
 
-    public function getLinkTagForms()
+    public function getCardForms()
     {
         $ret = array();
         $title = Vpc_Abstract::getSetting($this->_class, 'componentName');
         $title = str_replace('.', ' ', $title);
         $form = Vpc_Abstract_Form::createChildComponentForm($this->_class, 'child');
         if ($form) {
-            $form->setIdTemplate('{0}-link-child');
+            $form->setIdTemplate('{0}-child-child');
             $ret[] = array(
                 'form' => $form,
                 'title' => $title,
