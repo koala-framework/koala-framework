@@ -57,16 +57,32 @@ class Vps_Controller_Action_Cli_Web_ShellController extends Vps_Controller_Actio
                 throw new Vps_ClientException("No host configured for $section server");
             }
 
-            $host = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
-            $dir = $config->server->dir;
+            if ($this->_getParam('user')) {
+                $host = $this->_getParam('user').'@'.$config->server->host;
+                $host .= ' -p '.$config->server->port;
+                $dir = $config->server->dir;
 
-            $cmd = "sudo -u vps ".Vps_Util_Git::getAuthorEnvVars()." sshvps $host $dir shell";
-            if ($this->_getParam('debug')) $cmd .= " --debug";
-            if ($this->_getParam('exec')) {
-                $exec = $this->_getParam('exec');
-                //nützlich um sowas tun zu können: vps shell --server=$SERVER --exec="echo -n \"%VPS_CONFIG_SECTION%\" > application/config_section"
-                $exec = str_replace('%VPS_CONFIG_SECTION%', $section, $exec);
-                $cmd .= " --exec=".escapeshellarg($exec);
+                $cmd = "cd $dir; ";
+                $cmd .= Vps_Util_Git::getAuthorEnvVars().' ';
+                if ($this->_getParam('exec')) {
+                    $exec = $this->_getParam('exec');
+                    $cmd .= $exec;
+                } else {
+                    $cmd .= "exec bash";
+                }
+                $cmd = "ssh -t $host ".escapeshellarg($cmd);
+            } else {
+                $host = $config->server->user.'@'.$config->server->host.':'.$config->server->port;
+                $dir = $config->server->dir;
+
+                $cmd = "sudo -u vps ".Vps_Util_Git::getAuthorEnvVars()." sshvps $host $dir shell";
+                if ($this->_getParam('debug')) $cmd .= " --debug";
+                if ($this->_getParam('exec')) {
+                    $exec = $this->_getParam('exec');
+                    //nützlich um sowas tun zu können: vps shell --server=$SERVER --exec="echo -n \"%VPS_CONFIG_SECTION%\" > application/config_section"
+                    $exec = str_replace('%VPS_CONFIG_SECTION%', $section, $exec);
+                    $cmd .= " --exec=".escapeshellarg($exec);
+                }
             }
             if ($this->_getParam('debug')) echo $cmd."\n";
             passthru($cmd);
