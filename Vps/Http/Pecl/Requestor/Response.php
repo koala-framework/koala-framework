@@ -17,18 +17,21 @@ class Vps_Http_Pecl_Requestor_Response implements Vps_Http_Requestor_Response_In
     public function getStatusCode()
     {
         if (!$this->_response) return -1;
+        if ($this->_response->getType() != HTTP_MSG_RESPONSE) return -1;
         return $this->_response->getResponseCode();
     }
 
     public function getContentType()
     {
         if (!$this->_response) return '';
+        if ($this->_response->getType() != HTTP_MSG_RESPONSE) return '';
         return $this->_response->getHeader('Content-Type');
     }
 
     public function getHeader($h)
     {
         if (!$this->_response) return '';
+        if ($this->_response->getType() != HTTP_MSG_RESPONSE) return '';
         return $this->_response->getHeader($h);
     }
 

@@ -15,7 +15,7 @@ class Vps_Controller_Action_Error_CliController extends Vps_Controller_Action
         } else if ($errors->exception instanceof Vps_Exception_Client) {
             file_put_contents('php://stderr', $errors->exception->getMessage()."\n");
         } else {
-            file_put_contents('php://stderr', $errors->exception->__toString()."\n");
+            throw $errors->exception; // wird von Vps_Debug::handleException behandelt
         }
         exit(1);
     }

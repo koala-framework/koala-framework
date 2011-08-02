@@ -98,6 +98,9 @@ class Vps_Util_FeedFetcher_Feed
      */
     public static function handleResponse($feedId, $updateServer, $start, Vps_Http_Requestor_Response_Interface $response = null, &$error = false)
     {
+        if (Vps_Registry::get('config')->application->id=='rssincludefeeds') {
+            throw new Vps_Exception("don't use me");
+        }
         if (is_object($feedId)) {
             $row = $feedId;
         } else {
@@ -109,11 +112,11 @@ class Vps_Util_FeedFetcher_Feed
         $cache = Vps_Util_FeedFetcher_Feed_Cache::getInstance();
         $cacheId = self::getCacheId($row->id);
 
-        if ($response && $response->getStatusCode() == 304 && ($feed = $cache->load($cacheId))) {
+        if ($response && $response->getStatusCode() == 304 && $cache->test($cacheId)) {
             Vps_Benchmark::count('not-modified feed');
-            $feed['update'] = time();
-            $cache->save($feed, $cacheId);
+            $cache->touch($cacheId, 0);
             $status = self::UPDATE_NOT_MODIFIED;
+            $feed = $cache->load($cacheId);
         } else {
             $error = false;
             $options = array(
@@ -124,7 +127,7 @@ class Vps_Util_FeedFetcher_Feed
                 $status = self::UPDATE_ERROR;
                 if ($oldFeed = $cache->load($cacheId)) {
                     $feed = $oldFeed;
-                    $feed['update'] = time();
+                    $cache->touch($cacheId, 0);
                 }
             } else {
                 $status = self::UPDATE_SUCCESS_NO_NEW_ENTRIES;
@@ -141,8 +144,8 @@ class Vps_Util_FeedFetcher_Feed
                         break;
                     }
                 }
+                $cache->save($feed, $cacheId);
             }
-            $cache->save($feed, $cacheId);
         }
         $duration = (microtime(true) - $start)*1000;
 
@@ -159,7 +162,6 @@ class Vps_Util_FeedFetcher_Feed
         $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_Feed_Feeds');
         $feed = array();
         $feed['url'] = $url;
-        $feed['update'] = time();
         $entriesSelect = $m->select();
         if (isset($options['fetch_entries']) && $options['fetch_entries']) {
             $entriesSelect->limit($options['fetch_entries']);
@@ -208,6 +210,10 @@ class Vps_Util_FeedFetcher_Feed
 
     public static function updatedFeed(Vps_Util_FeedFetcher_FeedRow $row, array $feed, $updateServer, $duration, $status)
     {
+        if (Vps_Registry::get('config')->application->id=='rssincludefeeds') {
+            throw new Vps_Exception("don't use me");
+        }
+
         $row->last_update_fetch = date('Y-m-d H:i:s');
 
         $row->max_update = max($row->max_update, $duration);
@@ -227,13 +233,13 @@ class Vps_Util_FeedFetcher_Feed
         } else if (substr($feedHost, -9, -2) == 'google.') {
             $benchmarkType = 'google';
         }
-        if ($benchmarkType) Vps_Benchmark::count('feed-update-'.$benchmarkType);
+        if ($benchmarkType) Vps_Benchmark::memcacheCount('feed-update-'.$benchmarkType);
         if ($status == self::UPDATE_ERROR) {
             $row->update_errors++;
             $row->last_update_error = date('Y-m-d H:i:s');
             $row->consecutive_update_errors++;
             Vps_Benchmark::count('feed-update-error');
-            if ($benchmarkType) Vps_Benchmark::count('feed-error-'.$benchmarkType);
+            if ($benchmarkType) Vps_Benchmark::memcacheCount('feed-error-'.$benchmarkType);
         } else {
             $row->consecutive_update_errors = 0;
             $row->last_successful_update = date('Y-m-d H:i:s');
@@ -307,24 +313,34 @@ class Vps_Util_FeedFetcher_Feed
         }
 
         $row->save();
+
+        if ($updateServer == 'getfeed' || $updateServer == 'admin') {
+            Vps_Benchmark::memcacheCount('feedfetch-'.$updateServer);
+        }
     }
 
     /**
      * @return Vps_Util_Model_Feed_Row_Feed
      */
-    public static function getFeed($feedId)
+    public static function getFeed($feedId, $updateServer = null)
     {
-
+        if (!$updateServer) $updateServer = Vps_Benchmark::getUrlType();
+        $log = date('Y-m-d H:i:s').' '.$updateServer.' '.$feedId.' ';
         $cache = Vps_Util_FeedFetcher_Feed_Cache::getInstance();
         $cacheId = self::getCacheId($feedId);
 
-        $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load($cacheId);
-        if ($feed) {
-            if (!isset($feed['update']) || time()-$feed['update'] > 25*60*60) {
-                $feed = false;
-            }
+        $time = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->test($cacheId);
+        if ($time && time()-$time > 25*60*60) {
+            $time = false;
+        }
+        $feed = false;
+        if ($time) {
+            $feed = Vps_Util_FeedFetcher_Feed_Cache::getInstance()->load($cacheId);
         }
         if (!$feed) {
+            $log .= "uncached ";
+            $row = Vps_Model_Abstract::getInstance('feeds')->getRow($feedId);
+            $log .= $row->last_update;
             $request = self::createRequest($feedId);
             $start = microtime(true);
             try {
@@ -335,13 +351,18 @@ class Vps_Util_FeedFetcher_Feed
                 $response = null;
             }
             $response = new Vps_Http_Pecl_Requestor_Response($response);
-            $feed = self::handleResponse($feedId, Vps_Benchmark::getUrlType(), $start, $response);
+            $feed = self::handleResponse($feedId, $updateServer, $start, $response);
+
+            file_put_contents("application/log/get-feed", $log."\n", FILE_APPEND);
+
+        } else {
+            $log .= "cached";
         }
         return $feed;
     }
 
     public static function getCacheId($feedId)
     {
-        return 'feed'.$feedId;
+        return $feedId;
     }
 }

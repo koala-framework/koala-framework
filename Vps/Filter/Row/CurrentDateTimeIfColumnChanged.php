@@ -8,8 +8,10 @@ class Vps_Filter_Row_CurrentDateTimeIfColumnChanged extends Vps_Filter_Row_Curre
         parent::__construct($dateFormat);
     }
 
-    public function skipFilter($row)
+    public function skipFilter($row, $column)
     {
+        if (!$row->$column) return false;
+
         //TODO: $row->getDirtyColumns direkt verwenden!
         while ($row instanceof Vps_Model_Proxy_Row) $row = $row->getProxiedRow();
         if (!$row instanceof Vps_Model_Db_Row) return false;

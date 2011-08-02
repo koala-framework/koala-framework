@@ -125,13 +125,19 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             foreach ($config->server->import->dirs as $dir) {
                 echo "importing $dir...\n";
                 $ignores = array();
-                $ig = trim(`svn propget --recursive svn:ignore $dir`);
-                if (substr($ig, 0, strlen($dir))==$dir) $ig = substr($ig, strlen($dir));
-                foreach (preg_split("#\n".preg_quote($dir)."#", $ig) as $p) {
-                    if (preg_match("#^([^ ]*) - (.*?)$#s", $p, $m)) {
-                        foreach (explode("\n", trim($m[2])) as $i) {
-                            $ignores[] = $dir.$m[1].'/'.trim($i);
+                if (file_exists('.svn')) {
+                    $ig = trim(`svn propget --recursive svn:ignore $dir`);
+                    if (substr($ig, 0, strlen($dir))==$dir) $ig = substr($ig, strlen($dir));
+                    foreach (preg_split("#\n".preg_quote($dir)."#", $ig) as $p) {
+                        if (preg_match("#^([^ ]*) - (.*?)$#s", $p, $m)) {
+                            foreach (explode("\n", trim($m[2])) as $i) {
+                                $ignores[] = $dir.$m[1].'/'.trim($i);
+                            }
                         }
+                    }
+                } else if (file_exists("$dir/.gitignore")) {
+                    foreach (file("$dir/.gitignore") as $ig) {
+                        $ignores[] = $dir.'/'.$ig.'*';
                     }
                 }
                 if (!$ignores) continue;
@@ -139,7 +145,7 @@ class Vps_Controller_Action_Cli_Web_ImportController extends Vps_Controller_Acti
             }
         }
 
-        }
+        } //end skip-files
 
         if ($this->_getParam('include-cache')) {
             echo "importing cache dirs...\n";

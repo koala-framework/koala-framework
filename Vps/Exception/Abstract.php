@@ -55,6 +55,7 @@ abstract class Vps_Exception_Abstract extends Exception
     public function render($ignoreCli = false)
     {
         if (!$ignoreCli && php_sapi_name() == 'cli') {
+            $this->log();
             file_put_contents('php://stderr', $this->getException()->__toString()."\n");
             exit(1);
         }
