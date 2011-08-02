@@ -20,7 +20,7 @@ Vpc.Directories.Item.Directory.TabsPanel = Ext.extend(Vps.Binding.ProxyPanel,
             split: true
         });
 
-        this.detailsForm = new Vps.Auto.FormPanel({
+        this.detailsForm = new Vpc.Directories.Item.Directory.EditFormPanel({
             controllerUrl: this.detailsControllerUrl,
             title: trlVps('Details')
         });
@@ -60,10 +60,12 @@ Vpc.Directories.Item.Directory.TabsPanel = Ext.extend(Vps.Binding.ProxyPanel,
         Vpc.Directories.Item.Directory.TabsPanel.superclass.initComponent.call(this);
     },
     applyBaseParams: function(baseParams) {
+        if (baseParams.id) delete baseParams.id;
         this.detailsForm.setBaseParams(baseParams);
         return Vpc.Directories.Item.Directory.TabsPanel.superclass.applyBaseParams.apply(this, arguments);
     },
     setBaseParams : function(baseParams) {
+        if (baseParams.id) delete baseParams.id;
         this.detailsForm.setBaseParams(baseParams);
         return Vpc.Directories.Item.Directory.TabsPanel.superclass.setBaseParams.apply(this, arguments);
     }
