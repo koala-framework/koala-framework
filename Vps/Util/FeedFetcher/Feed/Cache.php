@@ -35,11 +35,4 @@ class Vps_Util_FeedFetcher_Feed_Cache extends Zend_Cache_Core //NICHT von Vps_Ca
     {
         return Vps_Cache::getInstance('feed');
     }
-
-    public function load($cacheId, $doNotTestCacheValidity = false, $doNotUnserialize = false)
-    {
-        $ret = parent::load($cacheId, $doNotTestCacheValidity, $doNotUnserialize);
-        if (!isset($ret['entries'])) $ret = false;
-        return $ret;
-    }
 }
