@@ -1,7 +1,7 @@
 <?php
 class Vpc_Abstract_Cards_Update_2 extends Vps_Update
 {
-    public function preUpdate()
+    public function update()
     {
         if (Vps_Registry::get('db')->fetchAll('SHOW TABLES LIKE "vpc_basic_linktag"')) {
             foreach (Vps_Registry::get('db')->fetchAll('SELECT component_id, component FROM vpc_basic_linktag') as $row) {
