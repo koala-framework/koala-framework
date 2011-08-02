@@ -191,10 +191,10 @@ class Vps_Util_ClearCache
                 $s = microtime(true);
                 $url = "http://vivid:planet@$d/vps/util/apc/clear-cache";
                 $c = @file_get_contents($url);
-                if (substr($c, 0, 2) != 'OK') {
+                if (substr($c, 0, 2) != 'OK' && $config->server->noRedirectPattern) {
                     $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
-                    $url = "http://vivid:planet@$d/vps/util/apc/clear-cache";
-                    $c = @file_get_contents($url);
+                    $url2 = "http://vivid:planet@$d/vps/util/apc/clear-cache";
+                    $c = @file_get_contents($url2);
                 }
                 if ($output) {
                     if (substr($c, 0, 2) == 'OK') {
