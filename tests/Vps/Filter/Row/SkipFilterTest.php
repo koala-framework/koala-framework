@@ -1,7 +1,7 @@
 <?php
 class Vps_Filter_Row_SkipFilterTestFilter extends Vps_Filter_Row_AutoFill
 {
-    public function skipFilter($row)
+    public function skipFilter($row, $column)
     {
         return !!$row->skip;
     }

@@ -171,7 +171,7 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
         }
     }
 
-    private function _processId($id)
+    protected function _getCacheIdPrefix()
     {
         static $cacheIdPrefix;
         if (!isset($cacheIdPrefix)) {
@@ -181,7 +181,12 @@ class Vps_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
             }
             $cacheIdPrefix .= Vps_Setup::getConfigSection();
         }
-        $id = md5($cacheIdPrefix.$id);
+        return $cacheIdPrefix;
+    }
+
+    private function _processId($id)
+    {
+        $id = md5($this->_getCacheIdPrefix().$id);
         return $id;
     }
 

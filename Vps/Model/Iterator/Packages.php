@@ -29,6 +29,7 @@ class Vps_Model_Iterator_Packages implements Iterator
             $s = $this->_innerIterator->getSelect();
             $s->limit($this->_packageSize, $this->_currentOffset);
             $this->_currentOffset += $this->_packageSize;
+            //$this->_innerIterator->getModel()->clearRows();
             $this->_innerIterator->rewind();
             $ret = $this->_innerIterator->valid();
         }

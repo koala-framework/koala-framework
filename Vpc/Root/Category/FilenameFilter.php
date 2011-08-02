@@ -1,7 +1,7 @@
 <?php
 class Vpc_Root_Category_FilenameFilter extends Vps_Filter_Row_Abstract
 {
-    public function skipFilter($row)
+    public function skipFilter($row, $column)
     {
         if ($row->custom_filename) return true;
         return parent::skipFilter($row);
