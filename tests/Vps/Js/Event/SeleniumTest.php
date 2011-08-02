@@ -2,21 +2,15 @@
 /**
  * @group slow
  * @group selenium
- * @group Vpc_Js
+ * @group Vps_Js
  *
- * http://vps.markus.vivid/vps/vpctest/Vpc_Js_Event_Root/js
+ * http://vps.markus.vivid/vps/test/vps_js_event_test
  */
-class Vpc_Js_Event_SeleniumTest extends Vps_Test_SeleniumTestCase
+class Vps_Js_Event_SeleniumTest extends Vps_Test_SeleniumTestCase
 {
-    public function setUp()
+    public function testJsEvent()
     {
-        parent::setUp();
-        Vps_Component_Data_Root::setComponentClass('Vpc_Js_Event_Root');
-    }
-
-    public function testForm()
-    {
-        $this->openVpc('/js');
+        $this->open('/vps/test/vps_js_event_test');
 
         $this->mouseOver('css=#eventTest');
         $this->assertEquals($this->getText('css=#result'), 'mouseEnter: enter ---');
