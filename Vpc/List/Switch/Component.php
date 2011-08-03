@@ -34,20 +34,20 @@ class Vpc_List_Switch_Component extends Vpc_Abstract_List_Component
         $ret['items'] = array();
         foreach ($ret['listItems'] as $item) {
             $ret['items'][] = array(
-                'small' => $this->_getSmallImageComponent($item['data']),
-                'large' => $this->_getLargeImageComponent($item['data']),
+                'preview' => $this->_getPreviewComponent($item['data']),
+                'large' => $this->_getLargeComponent($item['data']),
                 'class' => $item['class']
             );
         }
         return $ret;
     }
 
-    protected function _getSmallImageComponent($childComponent)
+    protected function _getPreviewComponent($childComponent)
     {
         return $childComponent;
     }
 
-    protected function _getLargeImageComponent($childComponent)
+    protected function _getLargeComponent($childComponent)
     {
         return $childComponent->getChildComponent('-large');
     }
