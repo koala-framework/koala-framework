@@ -17,7 +17,8 @@ class Vpc_Basic_Text_Model extends Vps_Model_Db_Proxy
         }
 
         if (!isset($this->_default['content'])) {
-            $config['default']['content'] = '<p>'.Vpc_Abstract::LOREM_IPSUM.'</p>';
+            $default = Vpc_Abstract::getSetting($config['componentClass'], 'defaultText');
+            $config['default']['content'] = "<p>$default</p>";
         }
         $this->_componentClass = $config['componentClass'];
         parent::__construct($config);
