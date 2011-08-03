@@ -26,6 +26,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'enableStyles'      => true,
             'enableStylesEditor'=> true,
             'enableTagsWhitelist'=> true,
+            'defaultText'       => Vpc_Abstract::LOREM_IPSUM,
 
             //veraltert NICHT VERWENDEN!! (in der Vpc_Mail komponente ist ein besserer ersatz)
             'emailStyles'       => array()
