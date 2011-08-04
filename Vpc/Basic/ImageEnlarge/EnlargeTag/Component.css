@@ -13,11 +13,16 @@
 .ext-ie6 .lightbox { width: 800px; }
 
 .lightbox .lightboxHeader { position: relative; z-index: 102; }
-.lightbox .lightboxHeader a.closeButton {
+.lightbox .lightboxHeader .closeButton {
     position: absolute;
     right: -25px;
     top: -25px;
+	display: block;
+	width: 42px;
+	height: 42px;
+	background: url('/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/close.png') no-repeat center center;
 }
+.lightbox .lightboxHeader .closeButton:hover { text-decoration: none; }
 
 .lightbox .lightboxBody { position: relative; height: 100%; z-index: 101; }
 .lightbox .lightboxBody .nextBtn,

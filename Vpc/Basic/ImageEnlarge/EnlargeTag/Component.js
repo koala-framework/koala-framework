@@ -42,9 +42,7 @@ Vpc.Basic.ImageEnlarge.tpl = new Ext.XTemplate(
 );
 
 Vpc.Basic.ImageEnlarge.tplHeader = new Ext.XTemplate(
-    '<a class="closeButton" href="#">',
-        '<img src="/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/close.png" width="42" height="42" alt="" />',
-    '</a>'
+    '<a class="closeButton" href="#">&nbsp;</a>'
 );
 
 Vpc.Basic.ImageEnlarge.tplBody = new Ext.XTemplate(
