@@ -83,4 +83,8 @@ abstract class Vps_Component_View_Renderer extends Vps_Component_View_Helper_Abs
         return $cachedContent;
     }
 
+    public function enableCache()
+    {
+        return true;
+    }
 }
