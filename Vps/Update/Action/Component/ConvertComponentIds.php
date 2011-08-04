@@ -7,7 +7,7 @@ class Vps_Update_Action_Component_ConvertComponentIds extends Vps_Update_Action_
     public function checkSettings()
     {
         parent::checkSettings();
-        if (!$this->search || !$this->replace) {
+        if (!$this->search || is_null($this->replace)) {
             throw new Vps_ClientException("Required parameters: search, replace");
         }
     }
