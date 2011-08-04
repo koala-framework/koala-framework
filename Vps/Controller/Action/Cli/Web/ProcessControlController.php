@@ -157,7 +157,7 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
             foreach ($processes as $p) {
                 if ($p['cmd'] == $requiredCmd['cmd']) {
                     if (isset($requiredCmd['shutdownFunction'])) {
-                        if (!$this->_getParam('silent')) echo "calling $requiredCmd[shutdownFunction]\n";
+                        if (!$this->_getParam('silent')) echo "calling $requiredCmd[shutdownFunction] to shutdown $p[pid]\n";
                         $fn = explode('::', $requiredCmd['shutdownFunction']);
                         call_user_func($fn);
                     } else {
