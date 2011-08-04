@@ -156,12 +156,18 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
         foreach ($this->_commands as $requiredCmd) {
             foreach ($processes as $p) {
                 if ($p['cmd'] == $requiredCmd['cmd']) {
-                    if (!$this->_getParam('silent')) echo "kill $p[pid] $p[cmd] $p[args]\n";
-                    posix_kill($p['pid'], SIGTERM);
-                    $killed[] = $p['pid'];
-                    foreach ($p['childPIds'] as $pid) {
-                        posix_kill($pid, SIGTERM);
-                        $killed[] = $pid;
+                    if (isset($requiredCmd['shutdownFunction'])) {
+                        if (!$this->_getParam('silent')) echo "calling $requiredCmd[shutdownFunction]\n";
+                        $fn = explode('::', $requiredCmd['shutdownFunction']);
+                        call_user_func($fn);
+                    } else {
+                        if (!$this->_getParam('silent')) echo "kill $p[pid] $p[cmd] $p[args]\n";
+                        posix_kill($p['pid'], SIGTERM);
+                        $killed[] = $p['pid'];
+                        foreach ($p['childPIds'] as $pid) {
+                            posix_kill($pid, SIGTERM);
+                            $killed[] = $pid;
+                        }
                     }
                 }
             }
