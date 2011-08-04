@@ -160,6 +160,7 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
                         if (!$this->_getParam('silent')) echo "calling $requiredCmd[shutdownFunction] to shutdown $p[pid]\n";
                         $fn = explode('::', $requiredCmd['shutdownFunction']);
                         call_user_func($fn);
+                        $killed[] = $p['pid'];
                     } else {
                         if (!$this->_getParam('silent')) echo "kill $p[pid] $p[cmd] $p[args]\n";
                         posix_kill($p['pid'], SIGTERM);
