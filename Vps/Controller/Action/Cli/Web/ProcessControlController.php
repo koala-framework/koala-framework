@@ -175,6 +175,7 @@ class Vps_Controller_Action_Cli_Web_ProcessControlController extends Vps_Control
         }
         $start = time();
         while(true) {
+            $pids = array();
             exec('ps ax -o pid', $pids);
             foreach ($pids as &$i) $i = (int)$i;
             $allDone = true;
