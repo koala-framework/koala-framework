@@ -31,6 +31,7 @@ class Vps_Util_Gearman_AdminClient
             $fp = @fsockopen('localhost', 4730, $errno, $errstr, 5);
             if (!$fp) {
                 system("ssh $server->tunnelUser@$server->host -L $server->port:localhost:4730 sleep 60 >application/log/gearman-tunnel.log 2>&1 &");
+                sleep(2);
             } else {
                 fclose($fp);
             }
