@@ -24,26 +24,37 @@ class Vps_Controller_Action_Cli_Web_ShellController extends Vps_Controller_Actio
     public function indexAction()
     {
         $section = $this->_getParam('server');
+        $allSections = self::_getConfigSections();
         if (!$section) {
             if ($this->_getParam('exec')) {
                 throw new Vps_Exception_Client("server required when using exec");
             }
             echo "Choose a server:\n";
-            $sections = self::_getConfigSections();
-            foreach ($sections as $k=>$i) {
+            foreach ($allSections as $k=>$i) {
                 echo ($k+1).": ".$i."\n";
             }
             $stdin = fopen('php://stdin', 'r');
             $input = fgets($stdin, 3);
             fclose($stdin);
             $input = $input-1;
-            if (!isset($sections[$input])) {
+            if (!isset($allSections[$input])) {
                 throw new Vps_Exception_Client("Invalid server number");
             }
-            $section = $sections[$input];
+            $section = $allSections[$input];
         }
-
-        $sections = explode(',', $section);
+        if (preg_match('#^([0-9]+)-([0-9]+)$#', $section, $m)) {
+            $sections = array();
+            for($i=$m[1];$i<=$m[2];$i++) {
+                $sections[] = $i;
+            }
+        } else {
+            $sections = explode(',', $section);
+        }
+        foreach ($sections as &$section) {
+            if (is_numeric($section)) {
+                $section = $allSections[$section-1];
+            }
+        }
         if (count($sections) > 1 && !$this->_getParam('exec')) {
             throw new Vps_Exception_Client("can't use multiple sections without exec");
         }
