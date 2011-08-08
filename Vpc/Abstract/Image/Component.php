@@ -80,9 +80,6 @@ class Vpc_Abstract_Image_Component extends Vpc_Abstract_Composite_Component
                 if (!$d['width'] && !$d['height']) {
                     throw new Vps_Exception('Dimension setting must contain width or height');
                 }
-                if ((!$d['width'] || !$d['height']) && $d['scale'] != Vps_Media_Image::SCALE_DEFORM) {
-                    throw new Vps_Exception('Dimension setting must use scale \'deform\' when width or height is 0');
-                }
             }
         }
 
