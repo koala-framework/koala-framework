@@ -98,12 +98,15 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
         return $ret;
     }
 
-    public static function getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate, $componentIdSuffix)
+    public static function getEditConfigs($componentClass, Vps_Component_Generator_Abstract $gen, $idTemplate = null, $componentIdSuffix = '')
     {
         $ret = array(
             'componentConfigs' => array(),
             'contentEditComponents' => array(),
         );
+        if (is_null($idTemplate)) {
+            $idTemplate = '{componentId}'.$gen->getIdSeparator().'{0}';
+        }
         $cfg = Vpc_Admin::getInstance($componentClass)->getExtConfig();
         foreach ($cfg as $k=>$c) {
             $suffix = $componentIdSuffix;
@@ -116,6 +119,7 @@ abstract class Vps_Component_Abstract_ExtConfig_Abstract
                 'componentClass' => $componentClass,
                 'type' => $k,
                 'idTemplate' => $idTemplate,
+                'idSeparator' => $gen->getIdSeparator(),
                 'componentIdSuffix' => $suffix,
                 'title' => $c['title'],
                 'icon' => $c['icon']

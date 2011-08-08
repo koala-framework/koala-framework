@@ -19,7 +19,7 @@ class Vpc_Paragraphs_EditComponentsData extends Vps_Data_Abstract
     {
         $gen = Vps_Component_Generator_Abstract::getInstance($this->_componentClass, 'paragraphs');
 
-        $edit = Vps_Component_Abstract_ExtConfig_Abstract::getEditConfigs($this->_getComponentClassByRow($row), $gen, '{componentId}-{0}', '');
+        $edit = Vps_Component_Abstract_ExtConfig_Abstract::getEditConfigs($this->_getComponentClassByRow($row), $gen);
         $this->_componentConfigs = array_merge($this->_componentConfigs, $edit['componentConfigs']);
         $ret = $edit['contentEditComponents'];
 
