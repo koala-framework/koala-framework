@@ -1,6 +1,1 @@
-.$cssClass {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid $mainColor;
-}
-.$cssClass .prevImg { margin-right: 10px; }
+.cssClass { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(mainColor); }
