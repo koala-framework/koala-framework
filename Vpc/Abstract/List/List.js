@@ -1,32 +1,43 @@
 Ext.namespace('Vpc.Abstract.List');
 Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
 {
-    border: false,
     initComponent: function()
     {
-        if (this.childConfig.title) delete this.childConfig.title;
-        this.childPanel = Ext.ComponentMgr.create(Ext.applyIf(this.childConfig, {
-            region: 'center'
-        }));
+        this.layout = 'border';
 
-        this.grid = new Vps.Auto.GridPanel({
+        var gridConfig = {
             controllerUrl: this.controllerUrl,
-            split: true,
             region: 'center',
+            split: true,
             baseParams: this.baseParams, //Kompatibilität zu ComponentPanel
-            autoLoad: this.autoLoad,
-            bindings: [{
-                item        : this.childPanel,
-                componentIdSuffix: '-{0}'
-            }],
-            onAdd: this.onAdd
-        });
+            autoLoad: this.autoLoad
+        };
+        if (this.useInsertAdd) gridConfig.onAdd = this.onAdd;
+        this.grid = new Vps.Auto.GridPanel(gridConfig);
         this.proxyItem = this.grid;
 
-        this.grid.on('datachange', function() {
-            this.childPanel.reload();
-        }, this);
+        // Wenn ein Panel direkt, sonst Tabs
+        this.editPanels = [];
+        if (this.contentEditComponents.length == 1) {
+            this.editPanels.push(Vps.Binding.AbstractPanel.createFormOrComponentPanel(
+                this.componentConfigs, this.contentEditComponents[0],
+                {region: 'center', title: null}, this.grid
+            ));
+            this.childPanel = this.editPanels[0];
+        } else {
+            this.contentEditComponents.each(function(ec) {
+                this.editPanels.push(Vps.Binding.AbstractPanel.createFormOrComponentPanel(
+                    this.componentConfigs, ec, {}, this.grid
+                ));
+            }, this);
+            this.childPanel = new Ext.TabPanel({
+                region: 'center',
+                activeTab: 0,
+                items: this.editPanels
+            });
+        }
 
+        // MultiFileUpload hinzufügen falls konfiguriert
         var westItems = [this.grid];
         if (this.multiFileUpload) {
             this.multiFileUploadPanel = new Vps.Utils.MultiFileUploadPanel(Ext.applyIf({
@@ -48,10 +59,11 @@ Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
             region: 'west',
             width: 300,
             border: false,
-            items: westItems
+            items: westItems,
+            collapsible : true,
+            title: this.listTitle
         });
 
-        this.layout = 'border';
         this.items = [this.westPanel, this.childPanel];
         Vpc.Abstract.List.List.superclass.initComponent.call(this);
     },
@@ -60,14 +72,19 @@ Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
     {
         this.grid.load();
         this.grid.selectId(false);
-
-        this.childPanel.setBaseParams({});
-        var f = this.childPanel.getForm();
-        if (f) {
-            f.clearValues();
-            f.clearInvalid();
-        }
-        this.childPanel.disable();
+        
+        // Alle Forms leeren wenn Seite neu geladen wird
+        this.editPanels.each(function(panel) {
+            panel.setBaseParams({});
+            if (panel.getForm) {
+                var f = panel.getForm();
+                if (f) {
+                    f.clearValues();
+                    f.clearInvalid();
+                }
+            }
+            panel.disable();
+        }, this);
     },
 
     onAdd : function()

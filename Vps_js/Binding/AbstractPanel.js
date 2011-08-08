@@ -2,6 +2,31 @@ Vps.Binding.AbstractPanel = function(config) {
     if (!config || !config.actions) this.actions = {}; //muss hier sein
     Vps.Binding.AbstractPanel.superclass.constructor.apply(this, arguments);
 };
+
+Vps.Binding.AbstractPanel.createFormOrComponentPanel = function(componentConfigs, ec, config, grid)
+{
+    var panel;
+    var componentConfig = componentConfigs[ec.componentClass+'-'+ec.type];
+    if (componentConfig.needsComponentPanel) {
+        panel = new Vps.Component.ComponentPanel(Ext.apply({
+            title: componentConfig.title,
+            mainComponentClass: ec.componentClass,
+            mainType: ec.type,
+            mainComponentId: ec.idTemplate + ec.componentIdSuffix,
+            componentConfigs: componentConfigs,
+            mainEditComponents: [ec]
+        }, config));
+        grid.addBinding(panel);
+    } else {
+        panel = Ext.ComponentMgr.create(Ext.apply(componentConfig, config));
+        grid.addBinding({
+            item: panel,
+            componentIdSuffix: ec.idSeparator + '{0}' + ec.componentIdSuffix
+        });
+    }
+    return panel;
+};
+
 Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
 {
     checkDirty: true,
@@ -84,6 +109,10 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
     //private
     _loadBinding: function(b)
     {
+        var baseParams = this.getBaseParams();
+        if (b.item.mainComponentId) {
+            b.item.mainComponentId = b.item.initialConfig.mainComponentId.replace('{componentId}', baseParams.componentId);
+        }
         var params = {};
         if (b.componentIdSuffix) {
             params.componentId =
@@ -91,9 +120,8 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
                 String.format(b.componentIdSuffix, this.activeId);
         } else if (b.componentId) {
             params.componentId =
-                String.format(b.componentId, this.activeId);
+                String.format(b.componentId, this.activeId).replace('{componentId}', baseParams.componentId);
         } else {
-			//this.getGrid().getSelectionModel().getSelections()[0].data[b.valueParam];
             params[b.queryParam] = this.activeId;
         }
         if (!b.item.hasBaseParams(params)) {
