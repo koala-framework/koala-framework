@@ -50,9 +50,9 @@ class Vps_Controller_Action_Cli_Web_ShellController extends Vps_Controller_Actio
         } else {
             $sections = explode(',', $section);
         }
-        foreach ($sections as &$section) {
+        foreach ($sections as $k=>$section) {
             if (is_numeric($section)) {
-                $section = $allSections[$section-1];
+                $sections[$k] = $allSections[$section-1];
             }
         }
         if (count($sections) > 1 && !$this->_getParam('exec')) {
