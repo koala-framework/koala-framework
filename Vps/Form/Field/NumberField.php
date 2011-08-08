@@ -54,6 +54,7 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
     protected function _getOutputValueFromValues($values)
     {
         $ret = parent::_getOutputValueFromValues($values);
+        if (!$ret) return '';
         $ret = number_format($ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
         return $ret;
     }
