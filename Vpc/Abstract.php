@@ -341,8 +341,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         header('Content-Type: text/html; charset=utf-8');
         $process = $this->_callProcessInput();
         Vps_Benchmark::checkpoint('processInput');
-        $useCache = !Vps_Registry::get('config')->debug->componentCache->disable;
-        echo $this->getData()->render($useCache, $renderMaster);
+        echo $this->getData()->render(null, $renderMaster);
         Vps_Benchmark::checkpoint('render');
         $this->_callPostProcessInput($process);
         Vps_Benchmark::checkpoint('postProcessInput');

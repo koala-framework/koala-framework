@@ -940,7 +940,7 @@ class Vps_Component_Data
         return $this->componentId . ' (' . $this->componentClass . ')';
     }
 
-    public function render($enableCache = true, $renderMaster = false)
+    public function render($enableCache = null, $renderMaster = false)
     {
         $output = new Vps_Component_Renderer();
         $output->setEnableCache($enableCache);

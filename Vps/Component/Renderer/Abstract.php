@@ -1,7 +1,7 @@
 <?php
 abstract class Vps_Component_Renderer_Abstract
 {
-    protected $_enableCache = false;
+    protected $_enableCache = null;
     private $_renderComponent;
 
     public function setEnableCache($enableCache)
@@ -11,6 +11,9 @@ abstract class Vps_Component_Renderer_Abstract
 
     public function renderComponent($component)
     {
+        if (is_null($this->_enableCache)) {
+            $this->_enableCache = !Vps_Registry::get('config')->debug->componentCache->disable;
+        }
         $this->_renderComponent = $component;
         $content = $this->_renderComponentContent($component);
         $ret = $this->render($content);
