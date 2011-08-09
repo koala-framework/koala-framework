@@ -10,4 +10,9 @@ class Vpc_Paragraphs_Paragraphs extends Vpc_Paragraphs_Component
         );
         return $ret;
     }
+
+    public function getContentWidth()
+    {
+        return 400;
+    }
 }
