@@ -52,7 +52,7 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
             }
             $this->_afterLogin($authedUser);
         } else {
-            $this->_errors[] = trlVps('Invalid E-Mail or password, please try again.');
+            $this->_errors[] = array('message' => trlVps('Invalid E-Mail or password, please try again.'));
         }
     }
 
