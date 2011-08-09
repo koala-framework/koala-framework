@@ -30,8 +30,10 @@ class Vpc_List_ChildPages_Teaser_Component extends Vpc_Abstract
     public static function getStaticCacheMeta($componentClass)
     {
         $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model', '{componentId}');
-        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel', '{id}');
+        // Ist ziemlich grob, sonst müsste man sich eigenes Meta schreiben
+        // Wenn eine Unterseite zB. offline genommen wird, muss der Cache gelöscht werden
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel');
         return $ret;
     }
 }
