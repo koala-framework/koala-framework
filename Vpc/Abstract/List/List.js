@@ -12,7 +12,9 @@ Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
             baseParams: this.baseParams, //Kompatibilität zu ComponentPanel
             autoLoad: this.autoLoad
         };
-        if (this.useInsertAdd) gridConfig.onAdd = this.onAdd;
+        if (this.useInsertAdd) {
+            gridConfig.onAdd = this.onAdd.createDelegate(this); // wg. Scope
+        }
         this.grid = new Vps.Auto.GridPanel(gridConfig);
         this.proxyItem = this.grid;
 
@@ -94,10 +96,13 @@ Vpc.Abstract.List.List = Ext.extend(Vps.Binding.ProxyPanel,
             url: this.controllerUrl + '/json-insert',
             params: this.getBaseParams(),
             success: function(response, options, r) {
-                this.getSelectionModel().clearSelections();
+                this.grid.getSelectionModel().clearSelections();
                 this.reload({
                     callback: function(o, r, s) {
-                        this.getSelectionModel().selectLastRow();
+                        this.grid.getSelectionModel().selectLastRow();
+                        if (this.childPanel.setActiveTab) {
+                            this.childPanel.setActiveTab(0);
+                        }
                     },
                     scope: this
                 });
