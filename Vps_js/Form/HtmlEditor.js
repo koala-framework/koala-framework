@@ -132,6 +132,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             //unschön, aber tinyMCE braucht das
             tinyMCE.activeEditor = this.tinymceEditor;
         }, this);
+        
+        this.originalValue = this.getEditorBody().innerHTML; // wegen isDirty (bei List)
     },
     // private
     // überschrieben wegen spezieller ENTER behandlung im IE die wir nicht wollen
