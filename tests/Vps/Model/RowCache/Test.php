@@ -3,7 +3,7 @@
  * @group Model
  * @group Model_RowCache
  */
-class Vps_Model_RowCache_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_RowCache_Test extends Vps_Test_TestCase
 {
     
     protected function setUp()
