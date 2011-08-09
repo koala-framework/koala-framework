@@ -74,8 +74,7 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
             $dimension = current($dimensions);
         }
         if ($dimension) {
-            if (($dimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
-                $dimension['scale'] == Vps_Media_Image::SCALE_CROP) &&
+            if ($dimension['scale'] == Vps_Media_Image::SCALE_CROP &&
                 (empty($data['width']) && empty($dimension['width'])) &&
                 (empty($data['height']) && empty($dimension['height']))
             ) {
@@ -84,7 +83,8 @@ class Vpc_Abstract_Image_DimensionField extends Vps_Form_Field_Abstract
                     'field' => $this
                 );
             }
-            if ($dimension['scale'] == Vps_Media_Image::SCALE_DEFORM &&
+            if (($dimension['scale'] == Vps_Media_Image::SCALE_BESTFIT ||
+                $dimension['scale'] == Vps_Media_Image::SCALE_DEFORM) &&
                 ((empty($data['width']) && empty($dimension['width'])) ||
                 (empty($data['height']) && empty($dimension['height'])))
             ) {
