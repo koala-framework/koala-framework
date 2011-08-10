@@ -5,8 +5,7 @@
  */
 class Vps_Model_RowCache_Test extends Vps_Test_TestCase
 {
-    
-    protected function setUp()
+    public function setUp()
     {
         apc_clear_cache('user');
         parent::setUp();
