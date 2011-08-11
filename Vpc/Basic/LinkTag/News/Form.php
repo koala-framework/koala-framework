@@ -11,7 +11,8 @@ class Vpc_Basic_LinkTag_News_Form extends Vpc_Abstract_Form
             ->setStoreUrl(
                 Vpc_Admin::getInstance($class)->getControllerUrl('News').'/json-data'
             )
-            ->setListWidth(210)
+            ->setWidth(300)
+            ->setListWidth(317)
             ->setAllowBlank(false);
     }
 

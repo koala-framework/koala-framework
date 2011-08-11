@@ -51,7 +51,7 @@ class Vpc_Basic_LinkTag_News_Admin extends Vpc_Basic_LinkTag_Abstract_Admin
             $form->fields['news_id']->setFieldLabel($new->getPage()->name);
             $ret[$new->dbId] = array(
                 'form' => $form,
-                'title' => $new->getTitle()
+                'title' => count($news) > 1 ? $new->getTitle() : trlVps('News')
             );
         }
         return $ret;
