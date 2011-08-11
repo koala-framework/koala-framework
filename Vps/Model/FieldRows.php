@@ -16,21 +16,21 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
 
     public function createRow(array $data=array())
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Field');
+        throw new Vps_Exception('getRows is not possible for Vps_Model_FieldRows');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        throw new Vps_Exception('getRows is not possible for Vps_Model_Field');
+        throw new Vps_Exception('getRows is not possible for Vps_Model_FieldRows');
     }
 
     public function update(Vps_Model_FieldRows_Row $row, $rowData)
     {
-        $iId = $row->getModelParentRow()->getInternalId();
+        $iId = $row->getSubModelParentRow()->getInternalId();
         foreach ($this->_rows[$iId] as $k=>$i) {
             if ($row === $i) {
                 $this->_data[$iId][$k] = $rowData;
-                $this->_updateParentRow($row->getModelParentRow());
+                $this->_updateParentRow($row->getSubModelParentRow());
                 return $rowData[$this->getPrimaryKey()];
             }
         }
@@ -39,28 +39,28 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
 
     public function insert(Vps_Model_FieldRows_Row $row, $rowData)
     {
-        $iId = $row->getModelParentRow()->getInternalId();
+        $iId = $row->getSubModelParentRow()->getInternalId();
         if (!isset($rowData[$this->getPrimaryKey()])) {
             if (!isset($this->_autoId[$iId])) {
                 //setzt _autoId und _data
-                $this->getRowsByParentRow($row->getModelParentRow());
+                $this->getRowsByParentRow($row->getSubModelParentRow());
             }
             $this->_autoId[$iId]++;
             $rowData[$this->getPrimaryKey()] = $this->_autoId[$iId];
         }
         $this->_data[$iId][] = $rowData;
         $this->_rows[$iId][count($this->_data[$iId])-1] = $row;
-        $this->_updateParentRow($row->getModelParentRow());
+        $this->_updateParentRow($row->getSubModelParentRow());
         return $rowData[$this->getPrimaryKey()];
     }
 
     public function delete(Vps_Model_FieldRows_Row $row)
     {
-        foreach ($this->_rows[$row->getModelParentRow()->getInternalId()] as $k=>$i) {
+        foreach ($this->_rows[$row->getSubModelParentRow()->getInternalId()] as $k=>$i) {
             if ($row === $i) {
-                unset($this->_data[$row->getModelParentRow()->getInternalId()][$k]);
-                unset($this->_rows[$row->getModelParentRow()->getInternalId()][$k]);
-                $this->_updateParentRow($row->getModelParentRow());
+                unset($this->_data[$row->getSubModelParentRow()->getInternalId()][$k]);
+                unset($this->_rows[$row->getSubModelParentRow()->getInternalId()][$k]);
+                $this->_updateParentRow($row->getSubModelParentRow());
                 return;
             }
         }

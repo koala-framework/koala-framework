@@ -10,12 +10,20 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
 
         $this->setEditable(false);
         $this->setTriggerAction('all');
+        $this->setEmptyMessage(trlVpsStatic('Please select a value'));
     }
 
+    //setHideIfNoValues
 
+
+    //TODO: diese funktion wird niergends aufgerufen!!!
     protected function _validateNotAllowBlank($data, $name)
     {
         $ret = array();
+        if ($this->getHideIfNoValues()) {
+            $store = $this->_getStoreData();
+            if (!$store['data']) return $ret;
+        }
         $v = new Vps_Validate_NotEmpty();
         $v->setMessage(Vps_Validate_NotEmpty::IS_EMPTY, trlVps('Please select a value'));
         if (!$v->isValid($data)) {
@@ -28,13 +36,21 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
+        $store = $this->_getStoreData();
+
+        if (!$store['data'] && $this->getHideIfNoValues()) {
+            $ret['html'] = '';
+            $ret['item'] = null;
+            return $ret;
+        }
+
         $name = $this->getFieldName();
         $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
 
         $onchange = '';
         if ($this->getSubmitOnChange())
             $onchange= " onchange=\"this.form.submit();\"";
-            
+
         //todo: escapen
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $style = '';
@@ -45,7 +61,6 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         //todo: andere values varianten ermöglichen
         //todo: html wählt ersten wert vor-aus - ext galub ich nicht
         //      => sollte sich gleich verhalten.
-        $store = $this->_getStoreData();
         if ($this->getShowNoSelection()) {
             $emptyText = '('.$this->getEmptyText().')';
             array_unshift($store['data'], array('', $emptyText));

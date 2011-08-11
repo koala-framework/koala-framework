@@ -19,6 +19,7 @@ class Vps_Form_NumberField_PhpTest extends Vps_Test_TestCase
         $form->validate($form->getRow(), $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
 
         $testRow = $m1->getRow(1);
         $this->assertEquals(1, $testRow->nr);
@@ -39,6 +40,7 @@ class Vps_Form_NumberField_PhpTest extends Vps_Test_TestCase
         $form->validate($form->getRow(), $post);
         $form->prepareSave(null, $post);
         $form->save(null, $post);
+        $form->afterSave(null, $post);
         $testRow = $m1->getRow(1);
         $this->assertEquals(0, $testRow->nr);
     }

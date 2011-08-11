@@ -26,7 +26,7 @@ class Vps_Test_Uploads_Model extends Vps_Uploads_Model
             return;
         }
 
-        $iterator = new RecursiveDirectoryIterator($dir);
+        $iterator = new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS);
         foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as $file) {
             if ($file->isDir()) {
                 rmdir($file->getPathname());

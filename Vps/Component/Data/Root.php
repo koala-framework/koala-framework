@@ -9,7 +9,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private $_generatorsForClassesCache = array();
     private $_currentPage;
     private $_pageGenerators;
+
+    //caches fuer getComponentById
     private $_dataCache = array();
+    private $_dataCacheIgnoreVisible = array();
 
     public function __construct($config = array())
     {
@@ -79,7 +82,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return parent::__get($var);
     }
 
-    public function getPageByUrl($url, $acceptLangauge)
+    /**
+     * @return Vps_Component_Data
+     */
+    public function getPageByUrl($url, $acceptLanguage)
     {
         $parsedUrl = parse_url($url);
         if (!isset($parsedUrl['path'])) return null;
@@ -91,25 +97,82 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
             $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
         }
-        $path = $this->getComponent()->formatPath($parsedUrl);
-        if (is_null($path)) return null;
-        $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
-        if ($urlPrefix) {
-            if (substr($path, 0, strlen($urlPrefix)) != $urlPrefix) {
-                return null;
-            } else {
-                $path = substr($path, strlen($urlPrefix));
+        //TODO: acceptLanguage berücksichtigen?
+        $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'url-'.$cacheUrl;
+        if ($page = apc_fetch($cacheId)) {
+            $exactMatch = true;
+            $ret = Vps_Component_Data::vpsUnserialize($page);
+        } else {
+            $path = $this->getComponent()->formatPath($parsedUrl);
+            if (is_null($path)) return null;
+            $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+            if ($urlPrefix) {
+                if (substr($path, 0, strlen($urlPrefix)) != $urlPrefix) {
+                    return null;
+                } else {
+                    $path = substr($path, strlen($urlPrefix));
+                }
+            }
+            $path = trim($path, '/');
+            $ret = $this->getComponent()->getPageByUrl($path, $acceptLanguage);
+            if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
+                $exactMatch = true;
+                apc_add($cacheId, $ret->vpsSerialize());
+
+                Vps_Component_Cache::getInstance()->getModel('url')->import(Vps_Model_Abstract::FORMAT_ARRAY,
+                    array(array(
+                        'url' => $cacheUrl,
+                        'page_id' => $ret->componentId
+                    )), array('replace'=>true));
+
+                $m = Vps_Component_Cache::getInstance()->getModel('urlParents');
+                $s = new Vps_Model_Select();
+                $s->whereEquals('page_id', $ret->componentId);
+                $m->deleteRows($s);
+
+                $c = $ret;
+                while($c = $c->parent) {
+                    if (isset($c->generator) && $c->generator->getGeneratorFlag('table')) {
+                        $m->import(Vps_Model_Abstract::FORMAT_ARRAY,
+                            array(array(
+                                'page_id' => $ret->componentId,
+                                'parent_page_id' => $c->componentId
+                            )), array('buffer'=>true));
+                    }
+                }
             }
         }
-        $path = trim($path, '/');
-        return $this->getComponent()->getPageByUrl($path, $acceptLangauge);
+        return $ret;
     }
 
+    /**
+     * @return Vps_Component_Data
+     */
     public function getComponentById($componentId, $select = array())
     {
-        if (isset($this->_dataCache[$componentId])) {
-            if (!$select) {
+        if (is_array($select)) {
+            $partTypes = array_keys($select);
+        } else {
+            $partTypes = $select->getPartTypes();
+        }
+        if (!$partTypes || $partTypes == array(Vps_Component_Select::IGNORE_VISIBLE)) {
+            if (isset($this->_dataCache[$componentId])) {
                 return $this->_dataCache[$componentId];
+            }
+            if (is_array($select)) {
+                if (isset($select[Vps_Component_Select::IGNORE_VISIBLE])) {
+                    $ignoreVisible = $select[Vps_Component_Select::IGNORE_VISIBLE];
+                } else {
+                    $ignoreVisible = false;
+                }
+            } else {
+                $ignoreVisible = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+            }
+            if ($ignoreVisible && isset($this->_dataCacheIgnoreVisible[$componentId])) {
+                return $this->_dataCacheIgnoreVisible[$componentId];
             }
         }
         if (is_array($select)) {
@@ -119,6 +182,35 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         $ret = $this;
         $idParts = $this->_getIdParts($componentId);
+
+        //Optimierung: wenn bereits ein parent der gesuchten komponente existiert, dieses direkt verwenden
+        //hilft vorallem wenn das parent deserialisiert wurde da in dem fall die weiteren parents nicht erstellt werden müssen
+        for($i=0; $i<count($idParts); ++$i) {
+            $id = implode('', array_slice($idParts, 0, count($idParts)-$i-1));
+            $found = false;
+            if (isset($this->_dataCache[$id])) {
+                $ret = $this->_dataCache[$id];
+                $found = true;
+            } else {
+                if (is_array($select)) {
+                    if (isset($select[Vps_Component_Select::IGNORE_VISIBLE])) {
+                        $ignoreVisible = $select[Vps_Component_Select::IGNORE_VISIBLE];
+                    } else {
+                        $ignoreVisible = false;
+                    }
+                } else {
+                    $ignoreVisible = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+                }
+                if ($ignoreVisible && isset($this->_dataCacheIgnoreVisible[$id])) {
+                    $ret = $this->_dataCacheIgnoreVisible[$id];
+                    $found = true;
+                }
+            }
+            if ($found) {
+                $idParts = array_slice($idParts, count($idParts)-$i-1);
+                break;
+            }
+        }
         foreach ($idParts as $i=>$idPart) {
             if ($idPart == 'root') {
                 $ret = $this;
@@ -142,7 +234,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     $s = new Vps_Component_Select($s);
                 }
 
-                if ($i == 0) { // Muss eine Page sein
+                if ($i == 0 && !$found) { // Muss eine Page sein
                     $generators = $this->getPageGenerators();
                     foreach ($generators as $generator) {
                         $ret = array_pop($generator->getChildData(null, $s));
@@ -163,7 +255,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         static $cache = null;
         if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Memcached', array(
+            $cache = Vps_Cache::factory('Core', 'Apc', array(
                 'lifetime'=>null,
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));
@@ -293,7 +385,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-        $cacheId = $class.$select->getHash();
+        $cacheId = (is_array($class) ? implode(',', $class) : $class).$select->getHash();
         if (!isset($this->_componentsByClassCache[$cacheId])) {
 
             $lookingForChildClasses = Vpc_Abstract::getComponentClassesByParentClass($class);
@@ -347,7 +439,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         static $cache = null;
         if (!$cache) {
-            $cache = Vps_Cache::factory('Core', 'Memcached', array(
+            $cache = Vps_Cache::factory('Core', 'Apc', array(
                 'lifetime'=>null,
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));
@@ -437,10 +529,31 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     /**
      * @internal siehe Vps_Component_Generator_Abstract
+     *
+     * für getComponentById
      */
-    public function addToDataCache(Vps_Component_Data $d)
+    public function addToDataCache(Vps_Component_Data $d, Vps_Component_Select $select)
     {
-        $this->_dataCache[$d->componentId] = $d;
+        if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+            $this->_dataCacheIgnoreVisible[$d->componentId] = $d;
+        } else {
+            $this->_dataCache[$d->componentId] = $d;
+        }
+    }
+
+    /**
+     * @internal siehe Vps_Component_Generator_Abstract
+     *
+     * für Component_Data::vpsUnserialize
+     */
+    public function getFromDataCache($id)
+    {
+        if (isset($this->_dataCache[$id])) {
+            return $this->_dataCache[$id];
+        } else if (isset($this->_dataCacheIgnoreVisible[$id])) {
+            return $this->_dataCacheIgnoreVisible[$id];
+        }
+        return null;
     }
 }
 ?>

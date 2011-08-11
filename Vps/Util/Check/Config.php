@@ -1,17 +1,17 @@
 <?php
 class Vps_Util_Check_Config
 {
-    public function check()
+    public function check($quiet = false)
     {
         $checks = array();
         $checks['php'] = array(
             'name' => 'Php >= 5.2'
         );
-        $checks['memcache'] = array(
-            'name' => 'memcache Php extension'
-        );
         $checks['imagick'] = array(
             'name' => 'imagick Php extension'
+        );
+        $checks['exif'] = array(
+            'name' => 'read EXIF data'
         );
         $checks['gd'] = array(
             'name' => 'gd Php extension'
@@ -40,22 +40,16 @@ class Vps_Util_Check_Config
         $checks['imagick_functionality_2'] = array(
             'name' => 'imagick functionality 2'
         );
+        $checks['memory_limit'] = array(
+            'name' => 'memory_limit'
+        );
 
         //ab hier wird die config geladen
         $checks['setup_vps'] = array(
             'name' => 'loading vps'
         );
-        $checks['memcache_connection'] = array(
-            'name' => 'memcache connection'
-        );
-        $checks['memcache_connection2'] = array(
-            'name' => 'memcache connection2'
-        );
         $checks['db_connection'] = array(
             'name' => 'db connection'
-        );
-        $checks['svn'] = array(
-            'name' => 'svn'
         );
         $checks['git'] = array(
             'name' => 'git >= 1.5'
@@ -69,35 +63,50 @@ class Vps_Util_Check_Config
         $checks['fileinfo_functionality'] = array(
             'name' => 'fileinfo functionality'
         );
+        $checks['apc'] = array(
+            'name' => 'apc'
+        );
 
-
-        $res = '<h3>';
-        if (php_sapi_name()!= 'cli') {
-            $res .= "Test Webserver...\n";
+        if ($quiet) {
+            foreach ($checks as $k=>$i) {
+                try {
+                    call_user_func(array('Vps_Util_Check_Config', '_'.$k));
+                } catch (Exception $e) {
+                    echo "\nERROR: " . $e->getMessage();
+                }
+            }
+            if (php_sapi_name()!= 'cli') {
+                passthru("php bootstrap.php check-config quiet", $ret);
+                if ($ret) echo "\nFAILED CLI";
+            }
         } else {
-            $res .= "Test Cli...\n";
-        }
-        $res .= '</h3>';
-        foreach ($checks as $k=>$i) {
-            $res .= "<p style=\"margin:0;\">";
-            $res .= $i['name'].': ';
-            try {
-                call_user_func(array('Vps_Util_Check_Config', '_'.$k));
-                $res .= "<span style=\"background-color:green\">OK</span>";
-            } catch (Exception $e) {
-                $res .= "<span style=\"background-color:red\">FAILED:</span> ".$e->getMessage();
+            $res = '';
+            if (php_sapi_name()!= 'cli') {
+                $res .= "<h3>Test Webserver...\n</h3>";
             }
-            $res .= "</p>";
+            foreach ($checks as $k=>$i) {
+                $res .= "<p style=\"margin:0;\">";
+                $res .= $i['name'].': ';
+                try {
+                    call_user_func(array('Vps_Util_Check_Config', '_'.$k));
+                    $res .= "<span style=\"background-color:green\">OK</span>";
+                } catch (Exception $e) {
+                    $res .= "<span style=\"background-color:red\">FAILED:</span> ".$e->getMessage();
+                }
+                $res .= "</p>";
+            }
+            echo $res;
+
+            if (php_sapi_name()!= 'cli') {
+                echo "<h3>Test Cli...\n</h3>";
+                passthru("php bootstrap.php check-config 2>&1", $ret);
+                if ($ret) {
+                    echo "<span style=\"background-color:red\">FAILED CLI: $ret</span>";
+                }
+                echo  '<br /><br /> all tests finished';
+            }
         }
 
-        echo $res;
-        if (php_sapi_name()!= 'cli') {
-            passthru("php bootstrap.php check-config", $ret);
-            if ($ret) {
-                echo "<span style=\"background-color:red\">FAILED:</span>";
-            }
-            echo  '<br /><br /> all tests finished';
-        }
         exit;
     }
 
@@ -108,18 +117,18 @@ class Vps_Util_Check_Config
         }
     }
 
-    private static function _memcache()
-    {
-        if (!extension_loaded('memcache')) {
-            throw new Vps_Exception("Extension 'memcache' is not loaded");
-        }
-    }
-
     private static function _imagick()
     {
         //if (!extension_loaded('imagick')) {
         if (!class_exists('Imagick')) {
             throw new Vps_Exception("Extension 'imagick' is not loaded");
+        }
+    }
+
+    private static function _exif()
+    {
+        if (!function_exists('exif_read_data')) {
+            throw new Vps_Exception("Function exif_read_data is not available");
         }
     }
 
@@ -171,41 +180,9 @@ class Vps_Util_Check_Config
         Vps_Setup::setUpVps();
     }
 
-    private static function _memcache_connection()
-    {
-        $cache = Vps_Cache::factory('Core', 'Memcached');
-        $cache->save('foo', 'bar');
-        if ($cache->load('bar') != 'foo') {
-            throw new Vps_Exception("Memcache doesn't return the saved value correctly");
-        }
-    }
-
-    private static function _memcache_connection2()
-    {
-        $memcache = new Memcache;
-        $memcacheSettings = Vps_Registry::get('config')->server->memcache;
-        if (!$memcache->addServer($memcacheSettings->host, $memcacheSettings->port, true, 1, 1, 1)) {
-            throw new Vps_Exception("addServer returned false");
-        }
-        $value = uniqid();
-        if (!$memcache->set('check-config-test', $value)) {
-            throw new Vps_Exception("set returned false");
-        }
-        if ($memcache->get('check-config-test') != $value) {
-            throw new Vps_Exception("get returned a different value");
-        }
-    }
-
     private static function _db_connection()
     {
         Vps_Registry::get('db')->query("SHOW TABLES")->fetchAll();
-    }
-    private static function _svn()
-    {
-        exec("svn --version", $out, $ret);
-        if ($ret) {
-            throw new Vps_Exception("Svn command failed");
-        }
     }
     private static function _git()
     {
@@ -259,12 +236,18 @@ class Vps_Util_Check_Config
             throw new Vps_Exception("Imagick class doesn't exist");
         }
         $im = new Imagick();
-        $im->readImage(VPS_PATH.'/images/information.png');
+        $im->readImage(dirname(__FILE__).'/Config/testImage.png');
         $im->scaleImage(10, 10);
         $im->setImagePage(0, 0, 0, 0);
         $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         $im->getImageBlob();
         $im->destroy();
+    }
+
+    private static function _memory_limit()
+    {
+        $m = ini_get('memory_limit');
+        if ((int)$m < 128) throw new Vps_Exception("need 128M, got $m");
     }
 
     private static function _uploads()
@@ -303,8 +286,37 @@ class Vps_Util_Check_Config
     private static function _fileinfo_functionality()
     {
         $mime = Vps_Uploads_Row::detectMimeType(false, file_get_contents(VPS_PATH.'/images/information.png'));
-        if ($mime != 'image/png') {
+        if (substr($mime, 0, 9) != 'image/png') {
             throw new Vps_Exception("fileinfo returned wrong information");
+        }
+    }
+
+    private static function _apc()
+    {
+        if (php_sapi_name() == 'cli') return; //apc gibts im cli nicht
+
+        if (!extension_loaded('apc')) {
+            throw new Vps_Exception("apc extension not loaded");
+        }
+        $info = apc_sma_info(false);
+        if ($info['num_seg'] * $info['seg_size'] < 128*1000*1000) {
+            throw new Vps_Exception("apc memory size < 128");
+        }
+        $value = uniqid();
+        if (!apc_store('foobar', $value)) {
+            throw new Vps_Exception("apc_store returned false");
+        }
+        if (apc_fetch('foobar') != $value) {
+            throw new Vps_Exception("apc_fetch returned something different");
+        }
+        while (strlen($value) < 1500) {
+            $value .= chr(rand(0,255));
+        }
+        if (!apc_store('foobar', $value)) {
+            throw new Vps_Exception("apc_store returned false");
+        }
+        if (!apc_delete('foobar')) {
+            throw new Vps_Exception("apc_delete returned false");
         }
     }
 }

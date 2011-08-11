@@ -21,13 +21,12 @@ class Vpc_Guestbook_Component extends Vpc_Posts_Directory_Component
         $ret['generators']['child']['component']['deactivate'] = 'Vpc_Guestbook_DeactivatePost_Component';
         $ret['ownModel'] = 'Vps_Component_FieldModel';
         $ret['flags']['hasResources'] = true;
-
         return $ret;
     }
 
-    public function getSelect($overrideValues = array())
+    public function getSelect()
     {
-        $ret = parent::getSelect($overrideValues);
+        $ret = parent::getSelect();
         $ret->order('id', 'DESC');
         return $ret;
     }

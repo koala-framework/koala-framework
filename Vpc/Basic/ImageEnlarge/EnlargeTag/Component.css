@@ -21,37 +21,40 @@
 
 .lightbox .lightboxBody { position: relative; height: 100%; z-index: 101; }
 .lightbox .lightboxBody .nextBtn,
-.lightbox .lightboxBody .nextBtn a {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    width: 40%;
-    height: 100%;
-    background: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/transparentPixel.gif) repeat top left; /* WORKAROUND: IE kann keinen link ohne inhalt darstellen, deswegen transparentPixel bgImage*/
-}
-.lightbox .lightboxBody .nextBtn a { width: 100%; }
-.lightbox .lightboxBody .nextBtn a:hover {
-    background: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/next.png) no-repeat right 100px;
-}
-.lightbox .lightboxBody .nextBtn img.nextImgBtn { position: absolute; top: 100px; right: 0px; }
-.lightbox .lightboxBody .loading { position: absolute; top: 40%; text-align: center; width:100% }
-.lightbox .lightboxBody .image { visibility: hidden; z-index: 1 }
-.lightbox .lightboxBody .image .centerImage { margin-bottom: -3px; }
-.lightbox .lightboxBody .centerImage { margin-bottom: -3px; }
+.lightbox .lightboxBody .nextBtn a,
 .lightbox .lightboxBody .prevBtn,
 .lightbox .lightboxBody .prevBtn a {
     position: absolute;
     top: 0px;
-    left: 0px;
     width: 40%;
     height: 100%;
-    background: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/transparentPixel.gif) repeat top left; /* WORKAROUND: IE kann keinen link ohne inhalt darstellen, deswegen transparentPixel bgImage*/
+    background: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/transparentPixel.gif); /* WORKAROUND: IE kann keinen link ohne inhalt darstellen, deswegen transparentPixel bgImage*/
+    background-repeat: repeat;
+    background-position: top left;
 }
+.lightbox .lightboxBody .nextBtn, .lightbox .lightboxBody .nextBtn a { right: 0px; }
+.lightbox .lightboxBody .prevBtn, .lightbox .lightboxBody .prevBtn a { lef: 0px; }
+.lightbox .lightboxBody .nextBtn a,
 .lightbox .lightboxBody .prevBtn a { width: 100%; }
+.lightbox .lightboxBody .nextBtn a:hover {
+    background-image: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/next.png);
+    background-repeat: no-repeat;
+    background-position: right 100px;
+}
+.lightbox .lightboxBody .nextBtn img.nextImgBtn { position: absolute; top: 100px; right: 0px; }
+
 .lightbox .lightboxBody .prevBtn a:hover {
-    background: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/previous.png) no-repeat left 100px;
+    background-image: url(/assets/vps/Vpc/Basic/ImageEnlarge/EnlargeTag/previous.png);
+    background-repeat: no-repeat;
+    background-position: left 100px;
 }
 .lightbox .lightboxBody .prevBtn img.previousImgBtn { position: absolute; top: 100px; left: 0px; }
+
+
+.lightbox .lightboxBody .loading { position: absolute; top: 40%; text-align: center; width:100% }
+.lightbox .lightboxBody .image { visibility: hidden; z-index: 1 }
+.lightbox .lightboxBody .image .centerImage { margin-bottom: -3px; }
+.lightbox .lightboxBody .centerImage { margin-bottom: -3px; }
 
 .lightbox .lightboxFooter p { text-align: left; margin-bottom: 0px; }
 .lightbox .lightboxFooter p.imageCaption { margin-top: 10px; }
@@ -64,7 +67,7 @@
     opacity: 0.8;
     -moz-opacity: 0.8;
     filter: alpha(opacity=80);
-    z-index: 50;
+    z-index: 50 !important;
 }
 .webZoom {
     display: block;

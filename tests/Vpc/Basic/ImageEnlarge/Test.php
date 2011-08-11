@@ -26,8 +26,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testWithoutSmallImageComponentHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1800));
+        $html = $this->_root->getComponentById(1800)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -77,8 +76,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testWithoutSmallImageUploadedHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1801));
+        $html = $this->_root->getComponentById(1801)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -137,8 +135,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testWithSmallImageUploadedHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1802));
+        $html = $this->_root->getComponentById(1802)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -175,8 +172,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
 
     public function testWithOriginalHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1803));
+        $html = $this->_root->getComponentById(1803)->render();
 
         $doc = new DOMDocument();
         $doc->strictErrorChecking = FALSE;
@@ -188,7 +184,7 @@ class Vpc_Basic_ImageEnlarge_Test extends Vpc_TestAbstract
         $opt = Zend_Json::decode((string)$opt[0]['value']);
         $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', $opt['fullSizeUrl'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
-        $this->assertEquals('image/png', $o['mimeType']);
+        $this->assertEquals('application/octet-stream', $o['mimeType']);
         $im = new Imagick();
         $this->assertEquals(Vps_Model_Abstract::getInstance('Vpc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1', $o['file']);
     }

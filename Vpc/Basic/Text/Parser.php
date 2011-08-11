@@ -12,7 +12,8 @@ class Vpc_Basic_Text_Parser
     protected $_enableColor = false;
     protected $_enableTagsWhitelist = true;
     protected $_enableStyles = true;
-    private $_masterStyles = null;
+    protected $_enableCursorSpan = false;
+    private $_masterStyles;
 
 
     public function __construct(Vpc_Basic_Text_Row $row = null)
@@ -27,9 +28,8 @@ class Vpc_Basic_Text_Parser
 
     protected function _getMasterStyles()
     {
-        if (is_null($this->_masterStyles)) {
-            $s = Vpc_Basic_Text_StylesModel::getMasterStyles();
-            $this->_masterStyles = array_merge($s['inline'], $s['block']);
+        if (!isset($this->_masterStyles)) {
+            throw new Vps_Exception("you must call setMasterStyles");
         }
         return $this->_masterStyles;
     }
@@ -70,15 +70,19 @@ class Vpc_Basic_Text_Parser
                  array_push($this->_stack, 'span');
                  $this->_finalHTML .= '<span style="'.$style.'">';
             } else {
-                $masterStyles = $this->_getMasterStyles();
                 $allowedClasses = array();
-                foreach (array_keys($masterStyles) as $s) {
-                    $i = explode('.', $s);
-                    if (isset($i[1])) {
-                        $allowedClasses[] = $i[1];
+                foreach ($this->_getMasterStyles() as $s) {
+                    if ($s['tagName'] == strtolower($element)) {
+                        $allowedClasses[] = $s['className'];
                     }
                 }
-                if ($this->_enableStyles && isset($attributes['CLASS'])
+                if ($this->_enableCursorSpan && isset($attributes['CLASS']) && $attributes['CLASS']=='_mce_type-bookmark') {
+                    array_push($this->_stack, 'span');
+                    $this->_finalHTML .= '<span class="'.$attributes['CLASS'].'"';
+                    if (isset($attributes['STYLE'])) $this->_finalHTML .= ' style="'.$attributes['STYLE'].'"';
+                    if (isset($attributes['ID'])) $this->_finalHTML .= ' id="'.$attributes['ID'].'"';
+                    $this->_finalHTML .= '>';
+                } else if ($this->_enableStyles && isset($attributes['CLASS'])
                     && (preg_match('#^style[0-9]+$#', $attributes['CLASS'])
                         || in_array($attributes['CLASS'], $allowedClasses))
                 ) {
@@ -135,12 +139,10 @@ class Vpc_Basic_Text_Parser
                 $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
                     if (in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
-                        $masterStyles = $this->_getMasterStyles();
                         $allowedClasses = array();
-                        foreach (array_keys($masterStyles) as $s) {
-                            $i = explode('.', $s);
-                            if ($i[0]==strtolower($element) && isset($i[1])) {
-                                $allowedClasses[] = $i[1];
+                        foreach ($this->_getMasterStyles() as $s) {
+                            if ($s['tagName'] == strtolower($element)) {
+                                $allowedClasses[] = $s['className'];
                             }
                         }
                         if ($key != 'CLASS' || (preg_match('#^style[0-9]+$#', $value) || in_array($value, $allowedClasses))) {
@@ -184,6 +186,11 @@ class Vpc_Basic_Text_Parser
     public function setEnableStyles($value)
     {
         $this->_enableStyles = $value;
+    }
+
+    public function setEnableCursorSpan($value)
+    {
+        $this->_enableCursorSpan = $value;
     }
 
     public function parse($html)

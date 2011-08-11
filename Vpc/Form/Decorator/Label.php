@@ -1,25 +1,28 @@
 <?php
 class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
 {
-    public function processItem($item)
+    public function processItem($item, $errors)
     {
         if (isset($item['items'])) {
             foreach ($item['items'] as $k=>$i) {
-                $item['items'][$k] = $this->processItem($i);
+                $item['items'][$k] = $this->processItem($i, $errors);
             }
         }
         // Kein else und auch bei preHtml - Cards hat zB. items und preHtml, hier sollte das Label aber auch funktionieren
         if (isset($item['html']) || isset($item['preHtml']) || isset($item['postHtml'])) {
-            $errors = false;
+            $hasErrors = false;
             if ($item['item']) {
-//todo: nicht nochmal fragen, vorallem nicht mit $_REQUEST (problem bei File+MultiFields)
-//                 $errors = $item['item']->validate($_REQUEST);
+                foreach ($errors as $e) {
+                    if (isset($e['field']) && $e['field'] === $item['item']) {
+                        $hasErrors = true;
+                    }
+                }
             }
             $class = 'vpsField';
             if ($item['item'] && $item['item']->getLabelAlign()) {
                 $class .= ' vpsFieldLabelAlign'.ucfirst($item['item']->getLabelAlign());
             }
-            if ($errors) {
+            if ($hasErrors) {
                 $class .= ' vpsFieldError';
             }
             if ($item['item'] && $item['item']->getAllowBlank()===false) {
@@ -38,7 +41,7 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                 $class .= ' '.$item['id'];
             }
             $preHtml = '<div class="'.$class.'">';
-            if ($item['item'] && !$item['item']->getHideLabels() && $item['item']->getFieldLabel()) {
+            if ($item['item'] && !$item['item']->getHideLabel() && $item['item']->getFieldLabel()) {
                 $preHtml .= '<label for="'
                     .(isset($item['id']) ? $item['id'] : $item['item']->getFieldName()).'"'
                     .($item['item']->getLabelWidth() ? ' style="width:'.$item['item']->getLabelWidth().'px"' : '')

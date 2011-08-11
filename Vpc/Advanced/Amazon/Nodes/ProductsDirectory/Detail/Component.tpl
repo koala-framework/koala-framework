@@ -9,10 +9,10 @@
         <? if(!is_null($this->product->averageRating)) { ?>
             <p><?=trlVps('Rating')?>:
             <? for($i=0; $i<round($this->product->averageRating); $i++) { ?>
-                <?=$this->imageAsset('/assets/vps/images/rating/ratingStarFull.jpg','StarFull', 'ratingStar');?>
+                <?=$this->image('/assets/vps/images/rating/ratingStarFull.jpg','StarFull', 'ratingStar');?>
             <? } ?>
             <? for($i=0; $i<5-round($this->product->averageRating); $i++) { ?>
-                <?=$this->imageAsset('/assets/vps/images/rating/ratingStarEmpty.jpg','StarEmpty', 'ratingStar');?>
+                <?=$this->image('/assets/vps/images/rating/ratingStarEmpty.jpg','StarEmpty', 'ratingStar');?>
             <? } ?></p>
         <? } ?>
         <a class="order" href="<?=$this->product->detailPageURL?>" rel="popup_blank"><?=trlVps('order now at amazon')?></a>
@@ -37,10 +37,10 @@
         <? foreach ($this->item->CustomerReviews as $r) { ?>
             <li>
                 <? for($i=0; $i<$r->Rating; $i++) { ?>
-                    <?=$this->imageAsset('/assets/vps/images/rating/ratingStarFull.jpg','StarFull', 'ratingStar');?>
+                    <?=$this->image('/assets/vps/images/rating/ratingStarFull.jpg','StarFull', 'ratingStar');?>
                 <? } ?>
                 <? for($i=0; $i<5-$r->Rating; $i++) { ?>
-                    <?=$this->imageAsset('/assets/vps/images/rating/ratingStarEmpty.jpg','StarEmpty', 'ratingStar');?>
+                    <?=$this->image('/assets/vps/images/rating/ratingStarEmpty.jpg','StarEmpty', 'ratingStar');?>
                 <? } ?>
                 <span class="summary"><?=$r->Summary?></span><br/>
                 <?=$r->Content?>
@@ -58,7 +58,7 @@
     </ul>
     <? } ?>
 
-    
+
     <ul class="similarProducts">
         <li><h2><?=trlVps('This entry is classified in:');?></h2></li>
         <? foreach ($this->nodes as $n) { ?>

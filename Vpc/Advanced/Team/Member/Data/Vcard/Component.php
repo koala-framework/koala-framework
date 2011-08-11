@@ -115,11 +115,27 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Component extends Vpc_Abstract
             $vcard->setNote(utf8_decode($defaults['NOTE']));
             $vcard->addParam('CHARSET', 'ISO-8859-1');
         }
-        if (isset($defaults['ADR;WORK'])) {
-            $values = explode(';', utf8_decode($defaults['ADR;WORK']));
+        if (isset($defaults['ADR;WORK']) || !empty($dataRow->street) || !empty($dataRow->city) || !empty($dataRow->zip)) {
+            /**
+             * muss ein array mit folgenden werten liefern:
+             * 0 => ''
+             * 1 => ''
+             * 2 => street
+             * 3 => city
+             * 4 => province
+             * 5 => zip
+             * 6 => country
+             */
+            $values = array();
+            if (!empty($defaults['ADR;WORK'])) {
+                $values = explode(';', utf8_decode($defaults['ADR;WORK']));
+            }
             for ($i=0; $i<=6; $i++) {
                 if (!isset($values[$i])) $values[$i] = '';
             }
+            if (!empty($dataRow->street)) $values[2] = utf8_decode($dataRow->street);
+            if (!empty($dataRow->city)) $values[3] = utf8_decode($dataRow->city);
+            if (!empty($dataRow->zip)) $values[5] = utf8_decode($dataRow->zip);
             $vcard->addAddress($values[0], $values[1], $values[2], $values[3], $values[4], $values[5], $values[6]);
             $vcard->addParam('TYPE', 'WORK');
             $vcard->addParam('CHARSET', 'ISO-8859-1');
@@ -134,9 +150,11 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Component extends Vpc_Abstract
             $type[1] = strtoupper($type[1]);
             if ($type[1] == 'PJPEG') $type[1] = 'JPEG';
 
-            $vcard->setPhoto(base64_encode($data['contents']));
-            $vcard->addParam('TYPE', $type[1]);
-            $vcard->addParam('ENCODING', 'BASE64');
+            if ($type[1] == 'JPEG') {
+                $vcard->setPhoto(base64_encode($data['contents']));
+                $vcard->addParam('TYPE', $type[1]);
+                $vcard->addParam('ENCODING', 'BASE64');
+            }
         }
 
         $vcard->setRevision(date('Y-m-d').'T'.date('H:i:s').'Z');

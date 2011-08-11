@@ -35,9 +35,10 @@ class Vps_Form_Field_DoublePassword extends Vps_Form_Field_Abstract
         if ($postData[$this->_passwordField1->getFieldName()] !=
                             $postData[$this->_passwordField2->getFieldName()])
         {
-            $name = $this->_passwordField1->getFieldLabel();
-            if (!$name) $name = $this->_passwordField1->getName();
-            $ret[] = $name.': '.trlVps("Passwords are different. Please try again.");
+            $ret[] = array(
+                'message' => trlVps("Passwords are different. Please try again."),
+                'field' => $this->_passwordField1
+            );
         }
         return $ret;
     }

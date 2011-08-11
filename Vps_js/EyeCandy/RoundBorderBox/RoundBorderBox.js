@@ -8,6 +8,7 @@ Vps.onContentReady(function()
     var els = Ext.query('.vpsRoundBorderBox');
     Ext.each(els, function(el) {
         var extEl = Ext.get(el);
+        if (extEl.child('.vpsMiddleCenterContent')) return;
         var children = el.childNodes;
 
         // mit elementen direkt arbeiten, sonst gehen zB events die auf den

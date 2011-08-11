@@ -44,4 +44,20 @@ class Vps_Model_Tree_Row extends Vps_Model_Proxy_Row
     {
         return new Vps_Model_Tree_RecursiveIterator($this);
     }
+
+    protected function _afterSave()
+    {
+        parent::_afterSave();
+        if ($this->getModel()->useRecursiveIdsCache()) {
+            $this->getModel()->getRecursiveIdsCache()->clean();
+        }
+    }
+
+    protected function _afterDelete()
+    {
+        parent::_afterDelete();
+        if ($this->getModel()->useRecursiveIdsCache()) {
+            $this->getModel()->getRecursiveIdsCache()->clean();
+        }
+    }
 }

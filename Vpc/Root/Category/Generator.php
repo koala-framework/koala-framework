@@ -15,19 +15,14 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     private $_pageHome = null;
     private $_pageChilds = array();
 
+    private $_basesCache = array();
+
     protected function _loadPageData($parentData, $select)
     {
         if ($this->_pageDataLoaded) return;
         $this->_pageDataLoaded = true;
-
-
-        if ($select->hasPart(Vps_Component_Select::WHERE_ID) &&
-            isset($this->_pageData[$select->getPart(Vps_Component_Select::WHERE_ID)])
-        ) {
-             return;
-        }
         $select = $this->_getModel()->select()->order('pos');
-        $rows = $this->_getModel()->fetchAll($select)->toArray();
+        $rows = $this->_getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select);
         foreach ($rows as $row) {
             $this->_pageData[$row['id']] = $row;
             $parentId = $row['parent_id'];
@@ -99,7 +94,6 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $pageIds = array();
 
         if ($parentData && !$select->hasPart(Vps_Component_Select::WHERE_ID)) {
-
             // diese Abfragen sind implizit recursive=true
             $parentId = $parentData->dbId;
             if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
@@ -152,7 +146,9 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
         } else {
 
-            if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
+            if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
+                $pageIds = $this->_pageHome;
+            } else if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
                 if (isset($this->_pageData[$id])) {
                     if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
                         $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
@@ -181,18 +177,29 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             }
 
             if ($select->hasPart(Vps_Component_Select::WHERE_SUBROOT)) {
+
+                $subroot = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
+                $subroot = $subroot[0];
+
+                if (!isset($this->_basesCache[$subroot->componentId])) {
+                    //alle category komponenten der aktuellen domain suchen
+                    $this->_basesCache[$subroot->componentId] = Vps_Component_Data_Root::getInstance()->
+                        getComponentsBySameClass($this->getClass(), array('subroot' => $subroot));
+                }
+
+
                 $allowedPageIds = array();
                 foreach ($pageIds as $pageId) {
                     $allowed = false;
-                    $subroot = $select->getPart(Vps_Component_Select::WHERE_SUBROOT);
-                    $bases = Vps_Component_Data_Root::getInstance()->
-                        getComponentsBySameClass($this->getClass(), array('subroot' => $subroot[0]));
-                    foreach ($bases as $base) {
+                    foreach ($this->_basesCache[$subroot->componentId] as $base) {
                         $id = $pageId;
                         while (!$allowed && isset($this->_pageData[$id])) {
                             $id = $this->_pageData[$id]['parent_id'];
                             if ($id == $base->componentId) $allowed = true;
                         }
+                        /*
+                        auskommentiert, das ist langsam
+                        und es muss mir erst wer zeigen *wo* das wirklich benötigt wird
                         if (!$allowed) {
                             $component = Vps_Component_Data_Root::getInstance()
                                 ->getComponentById($id)->parent;
@@ -203,6 +210,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
                                 $component = $component->parent;
                             }
                         }
+                        */
                     }
                     if ($allowed) $allowedPageIds[] = $pageId;
                 }
@@ -234,6 +242,11 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         return parent::_createData($parentData, $id, $select);
     }
 
+    protected function _getComponentIdFromRow($parentData, $id)
+    {
+        return $this->_pageData[$id]['id'];
+    }
+
     protected function _formatConfig($parentData, $id)
     {
         $data = array();
@@ -243,17 +256,12 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $data['name'] = $page['name'];
         $data['isPage'] = true;
         $data['isPseudoPage'] = true;
-        $data['componentId'] = $page['id'];
-        $data['componentClass'] = $this->_getChildComponentClass($page['component']);
+        $data['componentId'] = $this->_getComponentIdFromRow($parentData, $id);
+        $data['componentClass'] = $this->_getChildComponentClass($page['component'], $parentData);
         $data['row'] = (object)$page;
         $data['parent'] = $parentData;
         $data['isHome'] = $page['is_home'];
         $data['visible'] = $page['visible'];
-        if (isset($page['tags']) && $page['tags']) {
-            $data['tags'] = explode(',', $page['tags']);
-        } else {
-            $data['tags'] = array();
-        }
         return $data;
     }
     protected function _getIdFromRow($id)
@@ -292,14 +300,34 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
         $ret['actions']['visible'] = true;
         $ret['actions']['makeHome'] = true;
 
+        // Bei Pages muss nach oben gesucht werden, weil Klasse von Generator
+        // mit Komponentklasse übereinstimmen muss
+        $c = $component;
+        while ($c && $c->componentClass != $this->getClass()) {
+            $c = $c->parent;
+        }
+        if ($c) { //TODO warum tritt das auf?
+            $ret['editControllerComponentId'] = $c->componentId;
+        }
+
         $ret['icon'] = 'page';
         if ($component->isHome) {
             $ret['iconEffects'][] = 'home';
         } else if (!$component->visible) {
             $ret['iconEffects'][] = 'invisible';
         }
-        $ret['allowDrop'] = true;
+        $ret['allowDrag'] = true;
+        //allowDrop wird in PagesController gesetzt da *darunter* eine page möglich ist
 
+        return $ret;
+    }
+
+    public function getStaticCacheVarsForMenu()
+    {
+        $ret = array();
+        $ret[] = array(
+            'model' => $this->getModel()
+        );
         return $ret;
     }
 }

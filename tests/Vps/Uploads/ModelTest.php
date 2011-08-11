@@ -22,16 +22,6 @@ class Vps_Uploads_ModelTest extends Vps_Test_TestCase
         ));
     }
 
-    public function tearDown()
-    {
-        if ($this->_uploadsModel) {
-            $dir = $this->_uploadsModel->getUploadDir();
-            if (substr($dir, 0, 4)=='/tmp') {
-                system('rm -r '.$dir);
-            }
-        }
-    }
-
     public function testUploadFile()
     {
         $file = tempnam('/tmp', 'testupload');

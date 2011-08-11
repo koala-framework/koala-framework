@@ -73,7 +73,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         //wir in einem Binding sind
         if (!this.autoLoad) return;
 
-        this.load();
+        this.load({}, {focusAfterLoad: this.focusAfterAutoLoad});
     },
 
     onMetaChange : function(meta)
@@ -84,7 +84,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         Ext.applyIf(meta.form, { bodyStyle: 'padding: 10px;'});
 
         for (var i in this.actions) {
-            if (!meta.permissions[i]) {
+            if (!meta.permissions[i] && this.getAction(i).hide) {
                 this.getAction(i).hide();
             }
         }
@@ -94,26 +94,26 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 if (!meta.form.tbar) meta.form.tbar = [];
                 meta.form.tbar.push(this.getAction(b));
             }
-	        if (meta.helpText) {
-				meta.form.tbar.push('->');
-	            meta.form.tbar.push(new Ext.Action({
-	                icon : '/assets/silkicons/information.png',
-	                cls : 'x-btn-icon',
-	                handler : function (a) {
-	                    var helpWindow = new Ext.Window({
-	                        html: meta.helpText,
-	                        width: 400,
-	                        bodyStyle: 'padding: 10px; background-color: white;',
-	                        autoHeight: true,
-	                        bodyBorder : false,
-	                        title: trlVps('Info'),
-	                        resize: false
-	                    });
-	                    helpWindow.show();
-	                },
-	                scope: this
-	            }));
-	        }
+            if (meta.helpText) {
+                meta.form.tbar.push('->');
+                meta.form.tbar.push(new Ext.Action({
+                    icon : '/assets/silkicons/information.png',
+                    cls : 'x-btn-icon',
+                    handler : function (a) {
+                        var helpWindow = new Ext.Window({
+                            html: meta.helpText,
+                            width: 400,
+                            bodyStyle: 'padding: 10px; background-color: white;',
+                            autoHeight: true,
+                            bodyBorder : false,
+                            title: trlVps('Info'),
+                            resize: false
+                        });
+                        helpWindow.show();
+                    },
+                    scope: this
+                }));
+            }
         }
         if (this.formPanel != undefined) {
             this.remove(this.formPanel, true);
@@ -161,7 +161,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.getForm().resetDirty();
         }
 
-        Ext.Ajax.request({
+        if (!this.loadConn) this.loadConn = new Vps.Connection({ autoAbort: true });
+        this.loadConn.request({
             mask: !this.el, //globale mask wenn kein el vorhanden
             loadOptions: options,
             url: this.controllerUrl+'/json-load',
@@ -191,6 +192,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     this.getForm().resetDirty();
                 }
                 var lo = options.loadOptions;
+                if (lo && lo.focusAfterLoad) {
+                    this.focusFirstField()
+                }
                 if (lo && lo.success) {
                     lo.success.call(lo.scope || this, this, result);
                 }
@@ -352,7 +356,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
         });
     },
-    onAdd : function() {
+    onAdd : function(options) {
         var cb = function() {
             this.enable();
             if (this.deleteButton) this.deleteButton.disable();
@@ -360,21 +364,26 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.applyBaseParams({id: 0});
             this.getForm().setDefaultValues();
             this.getForm().clearInvalid();
+            this.focusFirstField();
             this.fireEvent('addaction', this);
 
-			if (this.ownerCt instanceof Ext.TabPanel) {
+            if (this.ownerCt instanceof Ext.TabPanel) {
                 //wenn  form in einem tab, die form anzeigen
                 //nach addaction, damit in grid an dem die form gebunden ist die activeId
                 //auf 0 gesetzt werden kann
                 this.ownerCt.setActiveTab(this);
             } else if (this.getFormPanel() && this.getFormPanel().items.first()
                         && this.getFormPanel().items.first().items.first()
-						&& this.getFormPanel().items.first().items.first() instanceof Ext.TabPanel
+                        && this.getFormPanel().items.first().items.first() instanceof Ext.TabPanel
                         && this.getFormPanel().items.first().items.first().items.first()) {
                 //und das gleiche auch noch wenn IN der form tabs sind
                 //da den ersten tab öffnen
                 var tabs = this.getFormPanel().items.first().items.first();
                 tabs.setActiveTab(tabs.items.first());
+            }
+
+            if (options && options.success) {
+                options.success.call(options.scope || this);
             }
         };
         if (!this.getForm()) {
@@ -419,6 +428,17 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
     getBaseParams : function() {
         return this.baseParams;
+    },
+
+    focusFirstField : function() {
+        var form = this.getForm();
+        if (!form) return;
+        form.items.each(function(i) {
+            if (i.isFormField && !i.disabled) {
+                i.focus();
+                return false;
+            }
+        }, this);
     }
 });
 

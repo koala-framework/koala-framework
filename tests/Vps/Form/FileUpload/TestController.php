@@ -11,6 +11,13 @@ class Vps_Form_FileUpload_TestController extends Vps_Controller_Action_Auto_Form
     protected $_buttons = array('save');
     protected $_temp = "";
 
+    public function indexAction()
+    {
+        parent::indexAction();
+        $this->view->assetsType = 'Vps_Form_FileUpload:Test';
+        $this->view->viewport = 'Vps.Test.Viewport';
+    }
+
     protected function _initFields()
     {
         $this->_form->add(new Vps_Form_Field_File("filename", "Filename"))

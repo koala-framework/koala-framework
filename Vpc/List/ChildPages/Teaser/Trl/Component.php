@@ -17,15 +17,11 @@ class Vpc_List_ChildPages_Teaser_Trl_Component extends Vpc_Chained_Trl_Component
         return $ret;
     }
 
-    public static function getStaticCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = array();
-        $ret[] = array(
-            'model' => 'Vps_Component_Model'
-        );
-        $ret[] = array(
-            'model' => 'Vpc_Root_Category_Trl_GeneratorModel'
-        );
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model', '{componentId}');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_Trl_GeneratorModel');
         return $ret;
     }
 }

@@ -1,1 +1,1 @@
-x<?=$this->component($this->component)?>y
+x<?=$this->componentWithMaster($this->componentWithMaster)?>y

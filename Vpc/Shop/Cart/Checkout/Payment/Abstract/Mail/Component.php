@@ -5,14 +5,18 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component extends Vpc_Mail_Ed
     {
         $ret = parent::getSettings();
         $ret['generators']['content']['component'] = 'Vpc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Component';
-        $ret['componentName'] = trlVps('Shop Conformation Mail');
         $ret['recipientSources'] = array(
             'ord' => 'Vpc_Shop_Cart_Orders'
         );
         return $ret;
     }
 
-    public function getPlaceholders(Vpc_Mail_Recipient_Interface $o = null)
+    public function getName()
+    {
+        return trlVps('Shop Confirmation Text') . ' ' . Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName');
+    }
+
+    public function getPlaceholders(Vpc_Shop_Cart_Order $o)
     {
         $ret = parent::getPlaceholders($o);
         $ret = array_merge($ret, $o->getPlaceholders());

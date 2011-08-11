@@ -6,12 +6,9 @@ class Vps_Test_TestCase extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         Vps_Component_Data_Root::setComponentClass(false);
-        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
-        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
-        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
+        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
         Vps_Component_ModelObserver::getInstance()->clear();
         Vps_Component_ModelObserver::getInstance()->setSkipFnF(false);
-        Vps_Component_ModelObserver::getInstance()->setDisableCache(false);
         Vps_Media::getOutputCache()->clean();
     }
 

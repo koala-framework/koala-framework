@@ -5,7 +5,8 @@ abstract class Vpc_Abstract_Ajax_Component extends Vpc_Abstract
     {
         header('Content-Type: text/html; charset=utf-8');
         $process = $this->_callProcessInput();
-        echo Vps_View_Component::renderComponent($this->getData(), null);
+        $view = new Vps_Component_Renderer();
+        echo $view->renderComponent($this->getData());
         $this->_callPostProcessInput($process);
     }
 }

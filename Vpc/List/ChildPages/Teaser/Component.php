@@ -14,7 +14,9 @@ class Vpc_List_ChildPages_Teaser_Component extends Vpc_Abstract
         $ret['componentName'] = trlVps('List child pages');
         $ret['cssClass'] = 'webStandard';
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/List.js';
+
+        $ret['extConfig'] = 'Vpc_List_ChildPages_Teaser_ExtConfig';
         return $ret;
     }
 
@@ -25,15 +27,11 @@ class Vpc_List_ChildPages_Teaser_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public static function getStaticCacheVars()
+    public static function getStaticCacheMeta($componentClass)
     {
-        $ret = array();
-        $ret[] = array(
-            'model' => 'Vps_Component_Model'
-        );
-        $ret[] = array(
-            'model' => 'Vpc_Root_Category_GeneratorModel'
-        );
+        $ret = parent::getStaticCacheMeta($componentClass);
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vps_Component_Model', '{componentId}');
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model('Vpc_Root_Category_GeneratorModel', '{id}');
         return $ret;
     }
 }

@@ -10,13 +10,14 @@ class Vpc_Shop_Products_Detail_Component extends Vpc_Directories_Item_Detail_Com
         $ret['generators']['addToCart'] = array(
             'class' => 'Vpc_Shop_Products_Detail_AddToCartGenerator',
             'component' => array(
-                'product' => 'Vpc_Shop_AddToCart_Component'
+                'product' => 'Vpc_Shop_AddToCart_Component' // Hier kann man mehrere angeben
             ),
             'column' => 'component'
         );
         $ret['cssClass'] = 'webStandard';
         $ret['placeholder']['back'] = trlVps('Back');
         $ret['assetsAdmin']['dep'][] = 'VpsFormDateTimeField';
+        $ret['editComponents'] = array('content');
         return $ret;
     }
 

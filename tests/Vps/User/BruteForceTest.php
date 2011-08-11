@@ -32,6 +32,7 @@ class Vps_User_BruteForceTest extends Vps_Test_TestCase
     public function testCreateManyAndSync()
     {
         $debugOutput = false;
+        $testStartDateTime = date('Y-m-d H:i:s');
         $numProcesses = 10; //mind. 10 damit der test sinn macht, bei >50 läuft der server heiß
 
         $cmd = "php bootstrap.php test forward --controller=vps_user_brute-force-insert --testDb=".Vps_Test_SeparateDb::getDbName();
@@ -72,8 +73,45 @@ class Vps_User_BruteForceTest extends Vps_Test_TestCase
             if ($debugOutput) echo "output process $i:\n";
             if ($debugOutput) echo $out."\n\n";
         }
+
         if ($failed) {
-            $this->fail("alt least one process failed; output was: ".implode("\n", $allOut));
+            $this->fail("at least one process failed; output was: ".implode("\n", $allOut));
+        }
+
+        /**
+         * Wenn in einer Sekunde mehrere rows gespeichert werden, könnte es passieren,
+         * dass zwei dasselbe modify date bekommen und somit evtl. nur einer gesynct wird,
+         * weil immer nur rows gesynct werden, wo modify date > dem aktuell bekannten ist.
+         */
+        // Service all model nach allen email adressen fragen die seit test-start angelegt wurden.
+        // dann durchlaufen und schauen, ob die alle in unserer cachen-tabelle sind
+        $db = Vps_Registry::get('db');
+        $allModel = Vps_Model_Abstract::getInstance('Vps_User_All_Model');
+        $allRows = $allModel->getRows($allModel->select()->where(new Vps_Model_Select_Expr_Higher('last_modified', $testStartDateTime)));
+        $i=1;
+        $failed = $failedSameDate = false;
+        $existingModifyDates = array();
+        foreach ($allRows as $allRow) {
+            $checkRows = $db->query("SELECT * FROM cache_users WHERE id = '{$allRow->id}' LIMIT 1")->fetchAll();
+            if ($checkRows && count($checkRows)) {
+                if ($debugOutput) echo "{$i}. found: [{$allRow->id}] ".$allRow->email."\n";
+            } else {
+                $failed = true;
+                if ($debugOutput) echo "{$i}. NOT FOUND: [{$allRow->id}] ".$allRow->email."\n";
+            }
+
+            if (in_array($allRow->last_modified, $existingModifyDates)) {
+                $failedSameDate = true;
+            }
+            $existingModifyDates[] = $allRow->last_modified;
+
+            $i++;
+        }
+        if ($failed) {
+            $this->fail("at least one user did not sync");
+        }
+        if ($failedSameDate) {
+            $this->fail("at least two users got the same modify date");
         }
     }
 

@@ -78,6 +78,11 @@ Vps.GoogleMap.maps = [];
 Vps.GoogleMap.Map = function(config) {
     if (!config.mapContainer) throw new Error('config value mapContainer not set');
 
+    this.addEvents({
+        'show': true,
+        'useFrom': true
+    });
+
     this.mapContainer = Ext.get(config.mapContainer);
     this.config = config;
     if (typeof this.config.width == 'undefined') this.config.width = 350;
@@ -168,7 +173,7 @@ Vps.GoogleMap.Map = function(config) {
 
 };
 
-Vps.GoogleMap.Map.prototype = {
+Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
 
     markers: [ ],
 
@@ -264,6 +269,8 @@ Vps.GoogleMap.Map.prototype = {
                 mapTypes[i].getMaximumResolution = function() {return maxRes;};
             }
         }
+
+        this.fireEvent('show', this);
     },
 
     _reloadMarkers: function() {
@@ -385,6 +392,8 @@ Vps.GoogleMap.Map.prototype = {
             this.mapContainer.down("form.fromAddress").set({ value: Placemark.address });
         }
         this.mapContainer.down(".mapDirSuggestParent").setStyle({display:"none"});
+
+        this.fireEvent('useFrom', this);
     },
     suggestLocations : function(Placemark){
         this.suggestPlacemarks = Placemark;
@@ -409,4 +418,4 @@ Vps.GoogleMap.Map.prototype = {
             elParent.setStyle({ display:"none" });
         }
     }
-};
+});

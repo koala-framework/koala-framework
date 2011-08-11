@@ -1,7 +1,7 @@
 <div class="<?=$this->cssClass?>">
     <? foreach ($this->children as $c) { ?>
-        <?= $this->ifHasContent($c); ?>
+        <?if ($this->hasContent($c)) { ?>
             <?= $this->component($c); ?>
-        <?= $this->ifHasContent(); ?>
+        <?}?>
     <? } ?>
 </div>

@@ -4,6 +4,15 @@ class Vps_Media
     private static $_ouputCache;
     const PASSWORD = 'l4Gx8SFe';
 
+    /**
+     *
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param int Kann gesetzt werden wenn wir in diesem web auf das bild nicht direkten zugriff haben
+     *            sondern nur für ein anderes web die url generieren
+     */
     public static function getUrl($class, $id, $type, $filename, $time = null)
     {
         if ($filename instanceof Vps_Uploads_Row) {
@@ -118,11 +127,17 @@ class Vps_Media
             }
             $output = call_user_func(array($classWithoutDot, 'getMediaOutput'), $id, $type, $class);
             $specificLifetime = false;
+            $useCache = true;
             if (isset($output['lifetime'])) {
                 $specificLifetime = $output['lifetime'];
+                if (!$output['lifetime']) {
+                    $useCache = false;
+                }
             }
             if (Vps_Registry::get('config')->debug->mediaCache) {
-                self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
+                if ($useCache) {
+                    self::getOutputCache()->save($output, $cacheId, array(), $specificLifetime);
+                }
             } else {
                 //browser cache deaktivieren
                 $output['lifetime'] = false;

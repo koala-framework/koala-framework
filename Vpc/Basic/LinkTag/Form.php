@@ -40,32 +40,37 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
             ->setListWidth(250);
 
         foreach ($classes as $name => $class) {
+            $forms = array();
             $admin = Vpc_Admin::getInstance($class);
             if ($admin instanceof Vpc_Basic_LinkTag_Abstract_Admin) {
                 $forms = $admin->getLinkTagForms();
-                foreach ($forms as $k=>$i) {
-                    $form = $i['form'];
-                    if ($form) {
-                        $form->setIdTemplate('{0}-link');
-                        $form->setAutoHeight(true);
-                        $form->setBaseCls('x-plain');
-                    }
-
-                    $card = $cards->add();
-                    $card->setTitle($i['title']);
-                    if (count($forms) == 1) {
-                        $card->setName($name);
-                        if ($form) $form->setName($name);
-                    } else {
-                        $card->setName($name.'_'.$k); //damits eindeutig ist wenn zB news mehrere forms hat
-                        if ($form) $form->setName($name.'_'.$k);
-                    }
-                    if ($form) $card->add($form);
-                }
-            } else {
+            }
+            if (!$forms) {
+                //wenns gar keine forms gibt
                 $card = $cards->add();
-                $card->setName($name);
                 $card->setTitle(Vpc_Abstract::getSetting($class, 'componentName'));
+                $card->setName($name);
+            }
+            foreach ($forms as $k=>$i) {
+                $form = $i['form'];
+                if ($form) {
+                    if (!$form->getIdTemplate()) {
+                        $form->setIdTemplate('{0}-link');
+                    }
+                    $form->setAutoHeight(true);
+                    $form->setBaseCls('x-plain');
+                }
+
+                $card = $cards->add();
+                $card->setTitle($i['title']);
+                if (count($forms) == 1) {
+                    $card->setName($name);
+                    if ($form) $form->setName($name);
+                } else {
+                    $card->setName($name.'_'.$k); //damits eindeutig ist wenn zB news mehrere forms hat
+                    if ($form) $form->setName($name.'_'.$k);
+                }
+                if ($form) $card->add($form);
             }
         }
         $cards->getCombobox()->getData()->cards = $cards->fields;

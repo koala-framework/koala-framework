@@ -65,7 +65,7 @@ class Vps_Media_Image
             return false;
         }
 
-        if ($scale != self::SCALE_ORIGINAL) {
+        if ($scale != self::SCALE_ORIGINAL && $scale != self::SCALE_BESTFIT) {
             if ($width == 0) {
                 $width = round($height * ($size[0]/$size[1]));
                 if ($width <= 0) $width = 1;
@@ -141,13 +141,13 @@ class Vps_Media_Image
                 }
             }
 
-            $widthRatio = $size[0] / $width;
-            $heightRatio = $size[1] / $height;
+            $widthRatio = $width ? $size[0] / $width : null;
+            $heightRatio = $height ? $size[1] / $height : null;
 
             if ($widthRatio > $heightRatio) {
                 $width = $size[0] / $widthRatio;
                 $height = $size[1] / $widthRatio;
-            } else {
+            } else if ($heightRatio > $widthRatio) {
                 $width = $size[0] / $heightRatio;
                 $height = $size[1] / $heightRatio;
             }

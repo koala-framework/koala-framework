@@ -52,14 +52,7 @@ class Vpc_Shop_Cart_Checkout_Payment_Abstract_Component extends Vpc_Abstract_Com
         return $this->getData()->parent->getComponent()->getSumRows($order);
     }
 
-    public final function getAdditionalSumRows() {
-        throw new Vps_Exception("removed");
-    }
-    public final function getAdditionalSum($order) {
-        throw new Vps_Exception("removed");
-    }
-
-    public function sendConfirmMail($order)
+    public function sendConfirmMail(Vpc_Shop_Cart_Order $order)
     {
         $mail = $this->getData()->getChildComponent('-mail')->getComponent();
         $data = array(
