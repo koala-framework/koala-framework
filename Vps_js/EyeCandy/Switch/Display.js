@@ -22,6 +22,7 @@ Vps.Switch.Display = function(el) {
 
     this.el = el;
     this.switchLink = Ext.get(Ext.query('.switchLink', this.el.dom)[0]);
+    if (!this.switchLink) this.switchLink = Ext.get(Ext.query('.switchLinkHover', this.el.dom)[0]);
     this.switchContent = Ext.get(Ext.query('.switchContent', this.el.dom)[0]);
     this.vpsSwitchCloseLink = Ext.query('.switchCloseLink', this.el.dom);
     if (this.vpsSwitchCloseLink.length) {
@@ -49,13 +50,22 @@ Vps.Switch.Display = function(el) {
     }
 
     if (this.switchLink && this.switchContent) {
-        Ext.EventManager.addListener(this.switchLink, 'click', function(e) {
-            if (this.switchLink.hasClass('switchLinkOpened')) {
-                this.doClose();
-            } else {
+        if (this.switchLink.hasClass('switchLinkHover')) {
+            Vps.Event.on(this.el.dom, 'mouseEnter', function() {
                 this.doOpen();
-            }
-        }, this, { stopEvent: true });
+            }, this);
+            Vps.Event.on(this.el.dom, 'mouseLeave', function() {
+                this.doClose();
+            }, this);
+        } else {
+            Ext.EventManager.addListener(this.switchLink, 'click', function(e) {
+                if (this.switchLink.hasClass('switchLinkOpened')) {
+                    this.doClose();
+                } else {
+                    this.doOpen();
+                }
+            }, this, { stopEvent: true });
+        }
     }
 
     if (this.vpsSwitchCloseLink) {
