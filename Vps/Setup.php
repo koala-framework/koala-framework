@@ -45,6 +45,8 @@ class Vps_Setup
 
     public static function setUp($configClass = 'Vps_Config_Web')
     {
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CLIENT_IP'];
+
         self::setUpZend();
 
         if (isset($_SERVER['REQUEST_URI']) &&
@@ -69,11 +71,13 @@ class Vps_Setup
                 header('WWW-Authenticate: Basic realm="Check Config"');
                 throw new Vps_Exception_AccessDenied();
             }
-            Vps_Util_Check_Config::check();
+            $quiet = isset($_GET['quiet']);
+            Vps_Util_Check_Config::check($quiet);
         }
         if (php_sapi_name() == 'cli' && isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'check-config') {
             Vps_Loader::registerAutoload();
-            Vps_Util_Check_Config::check();
+            $quiet = isset($_SERVER['argv'][2]) && $_SERVER['argv'][2] == 'quiet';
+            Vps_Util_Check_Config::check($quiet);
         }
 
         self::setUpVps($configClass);
@@ -147,9 +151,12 @@ class Vps_Setup
         }
 
         if (is_file('application/vps_branch') && trim(file_get_contents('application/vps_branch')) != $config->application->vps->version) {
-            $required = trim(file_get_contents('application/vps_branch'));
-            $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
-            throw new Vps_Exception("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
+            $validCommands = array('shell', 'export', 'copy-to-test');
+            if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
+                $required = trim(file_get_contents('application/vps_branch'));
+                $vpsBranch = Vps_Util_Git::vps()->getActiveBranch();
+                throw new Vps_Exception_Client("Invalid Vps branch. Required: '$required', used: '{$config->application->vps->version}' (Git branch '$vpsBranch')");
+            }
         }
 
         if (isset($_POST['PHPSESSID'])) {
@@ -179,7 +186,13 @@ class Vps_Setup
                         if (!$redirect && !$domain->pattern) $redirect = $domain->domain;
                         if ($domain->pattern && preg_match('/' . $domain->pattern . '/', $host)
                         ) {
-                            $redirect = $domain->domain;
+                            if ($domain->noRedirectPattern &&
+                                preg_match('/'.$domain->noRedirectPattern.'/', $host)
+                            ) {
+                                $redirect = false;
+                            } else {
+                                $redirect = $domain->domain;
+                            }
                             break;
                         }
                     }
@@ -191,7 +204,18 @@ class Vps_Setup
                 $redirect = $config->server->domain;
             }
             if ($redirect) {
-                header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
+                $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
+                    ->findRedirectUrl('domainPath', array($host.$_SERVER['REQUEST_URI'], 'http://'.$host.$_SERVER['REQUEST_URI']));
+                if (!$target) {
+                    $target = Vps_Model_Abstract::getInstance('Vps_Util_Model_Redirects')
+                        ->findRedirectUrl('domain', $host);
+                }
+                if ($target) {
+                    //TODO: funktioniert nicht bei mehreren domains
+                    header("Location: http://".$redirect.$target, true, 301);
+                } else {
+                    header("Location: http://".$redirect.$_SERVER['REQUEST_URI'], true, 301);
+                }
                 exit;
             }
         }
@@ -210,13 +234,16 @@ class Vps_Setup
         if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
             && $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
-            && substr($_SERVER['REDIRECT_URL'], 0, 7) != '/output' //rssinclude
-            && substr($_SERVER['REDIRECT_URL'], 0, 10) != '/callback/' //rssinclude
-            && substr($_SERVER['REDIRECT_URL'], 0, 11) != '/paypal_ipn'
-            && substr($_SERVER['REDIRECT_URL'], 0, 8) != '/pshb_cb'
-            && substr($_SERVER['REDIRECT_URL'], 0, 9) != '/vps/spam'
+            && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
         ) {
-            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet') {
+            $ignore = false;
+            foreach ($config->preLoginIgnore as $i) {
+                if (substr($_SERVER['REDIRECT_URL'], 0, strlen($i)) == $i) {
+                    $ignore = true;
+                    break;
+                }
+            }
+            if (!$ignore && (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet')) {
                 header('WWW-Authenticate: Basic realm="Testserver"');
                 throw new Vps_Exception_AccessDenied();
             }
@@ -283,6 +310,7 @@ class Vps_Setup
         } else if (substr($host, 0, 4)=='dev.') {
             return 'dev';
         } else if (substr($host, 0, 5)=='test.' ||
+                   substr($host, 0, 3)=='qa.' ||
                    substr($path, 0, 17) == '/docs/vpcms/test.' ||
                    substr($path, 0, 21) == '/docs/vpcms/www.test.' ||
                    substr($path, 0, 25) == '/var/www/html/vpcms/test.' ||
@@ -299,10 +327,23 @@ class Vps_Setup
     {
         if (!isset($_SERVER['REDIRECT_URL'])) return;
 
+        $data = null;
         $uri = substr($_SERVER['REDIRECT_URL'], 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
         $urlPrefix = Vps_Registry::get('config')->vpc->urlPrefix;
+
+        if ($uri == 'robots.txt') {
+            Vps_Media_Output::output(array(
+                'contents' => "User-agent: *\nDisallow: /admin/",
+                'mimeType' => 'text/plain'
+            ));
+        }
+
+        if ($uri == 'sitemap.xml') {
+            $sitemap = new Vps_Component_Sitemap();
+            $sitemap->outputSitemap(Vps_Component_Data_Root::getInstance());
+        }
 
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))
             && (!$urlPrefix || substr($_SERVER['REDIRECT_URL'], 0, strlen($urlPrefix)) == $urlPrefix)
@@ -318,30 +359,56 @@ class Vps_Setup
 
             $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Vps_Component_Data_Root::getInstance();
-            $data = $root->getPageByUrl($requestUrl, $acceptLanguage);
+            $exactMatch = true;
+            $data = $root->getPageByUrl($requestUrl, $acceptLanguage, $exactMatch);
             if (!$data) {
-               throw new Vps_Exception_NotFound();
+                throw new Vps_Exception_NotFound();
             }
-            $root->setCurrentPage($data);
-            if (rawurldecode($data->url) != $_SERVER['REDIRECT_URL']) {
+            if (!$exactMatch) {
+                if (rawurldecode($data->url) == $_SERVER['REDIRECT_URL']) {
+                    throw new Vps_Exception("getPageByUrl reported this isn't an exact match, but the urls are equal. wtf.");
+                }
                 header('Location: '.$data->url);
                 exit;
             }
-            // hickedy-hack: Für Formular Validierung. Im 1.10 ist das bereits schön gelöst
-            Vps_Trl::getInstance()->overrideTargetLanguage($data->getLanguage());
-            $page = $data->getComponent();
-            $page->sendContent();
-
+            $root->setCurrentPage($data);
+            $data->getComponent()->sendContent();
             Vps_Benchmark::shutDown();
 
             //TODO: ein flag oder sowas ähnliches stattdessen verwenden
-            if ($page instanceof Vpc_Abstract_Feed_Component || $page instanceof Vpc_Export_Xml_Component || $page instanceof Vpc_Export_Xml_Trl_Component) {
+            if ($data instanceof Vpc_Abstract_Feed_Component || $data instanceof Vpc_Export_Xml_Component || $data instanceof Vpc_Export_Xml_Trl_Component) {
                 echo "<!--";
             }
             Vps_Benchmark::output();
-            if ($page instanceof Vpc_Abstract_Feed_Component || $page instanceof Vpc_Export_Xml_Component || $page instanceof Vpc_Export_Xml_Trl_Component) {
+            if ($data instanceof Vpc_Abstract_Feed_Component || $data instanceof Vpc_Export_Xml_Component || $data instanceof Vpc_Export_Xml_Trl_Component) {
                 echo "-->";
             }
+            exit;
+
+        } else if ($_SERVER['REDIRECT_URL'] == '/vps/util/render/render') {
+
+            if (!isset($_REQUEST['url']) || !$_REQUEST["url"]) {
+                throw new Vps_Exception_Client('Need URL.');
+            }
+            $url = $_REQUEST['url'];
+            $componentId = isset($_REQUEST['componentId']) ? $_REQUEST['componentId'] : null;
+            $parsedUrl = parse_url($url);
+            $_GET = array();
+            if (isset($parsedUrl['query'])) {
+                foreach (explode('&' , $parsedUrl['query']) as $get) {
+                    if (!$get) continue;
+                    $pos = strpos($get, '=');
+                    $_GET[substr($get, 0, $pos)] = substr($get, $pos+1);
+                }
+            }
+            if ($componentId) {
+                $data = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
+            } else {
+                $data = Vps_Component_Data_Root::getInstance()->getPageByUrl($url, null);
+            }
+            if (!$data) throw new Vps_Exception_NotFound();
+            $data->getComponent()->sendContent(false);
+            Vps_Benchmark::shutDown();
             exit;
         }
     }

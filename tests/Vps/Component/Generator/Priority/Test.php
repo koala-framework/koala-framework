@@ -20,15 +20,6 @@ class Vps_Component_Generator_Priority_Test extends Vpc_TestAbstract
         $this->_assertIds($boxes, array('root_page1-box2'));
     }
 
-    public function testBox3()
-    {
-        $boxes = $this->_root->getChildComponent('_page1')
-                        ->getChildComponent('_page2')
-                        ->getChildComponents(array('box'=>true));
-        $this->_assertIds($boxes, array('root_page1_page2-box2'));
-    }
-
-
     public function testBox4()
     {
         $boxes = $this->_root->getChildComponent('_page1')

@@ -15,6 +15,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['assets']['dep'][] = 'ExtElement';
         $ret['assets']['dep'][] = 'ExtXTemplate';
         $ret['assets']['dep'][] = 'ExtUtilJson';
+        $ret['assets']['dep'][] = 'ExtFx';
 
         return $ret;
     }
@@ -40,7 +41,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
         $ret['showInactiveSwitchLinks'] = $this->_getSetting('showInactiveSwitchLinks');
 
         if ($this->_getSetting('imageTitle')) {
-            $ret['title'] = $this->getRow()->title;
+            $ret['title'] = nl2br($this->getRow()->title);
         }
         if ($this->_getSetting('fullSizeDownloadable')) {
             $data = $this->getImageData();
@@ -87,7 +88,7 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Component extends Vpc_Abstract_Image_Com
             }
             return array(
                 'file' => $data['file'],
-                'mimeType' => $data['mimeType']
+                'mimeType' => 'application/octet-stream'
             );
         } else {
             return parent::getMediaOutput($id, $type, $className);

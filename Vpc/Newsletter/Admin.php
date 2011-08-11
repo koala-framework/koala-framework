@@ -19,18 +19,6 @@ class Vpc_Newsletter_Admin extends Vpc_Directories_Item_Directory_Admin
         }
     }
 
-    protected function _getContentClass()
-    {
-        return Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
-    }
-
-    public function getExtConfig()
-    {
-        $ret = parent::getExtConfig();
-        $ret['items']['idSeparator'] = '_';
-        return $ret;
-    }
-
     public function setup()
     {
         $sql = "

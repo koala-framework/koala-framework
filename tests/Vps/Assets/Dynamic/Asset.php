@@ -2,7 +2,7 @@
 class Vps_Assets_Dynamic_Asset implements Vps_Assets_Dynamic_Interface
 {
     public static $file;
-    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent)
+    public function __construct(Vps_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
     {
     }
 

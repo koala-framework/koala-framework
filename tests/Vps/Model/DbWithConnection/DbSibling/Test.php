@@ -94,4 +94,14 @@ class Vps_Model_DbWithConnection_DbSibling_Test extends Vps_Test_TestCase
         $this->assertEquals('abcd', $r->bar);
         $this->assertEquals('aha', $r->baz);
     }
+
+    public function testDirty()
+    {
+        $row = $this->_model->getRow(1);
+        $this->assertEquals($row->getDirtyColumns(), array());
+        $this->assertEquals($row->isDirty(), false);
+        $row->baz = 'foo1';
+        $this->assertEquals($row->getDirtyColumns(), array('baz'));
+        $this->assertEquals($row->isDirty(), true);
+    }
 }

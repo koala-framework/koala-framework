@@ -19,8 +19,14 @@ Vps.Switch.Display = function(el) {
     this._lockAnimation = false;
 
     this.el = el;
-    this.switchLink = Ext.get(Ext.query('a.switchLink', this.el.dom)[0]);
-    this.switchContent = Ext.get(Ext.query('div.switchContent', this.el.dom)[0]);
+    this.switchLink = Ext.get(Ext.query('.switchLink', this.el.dom)[0]);
+    this.switchContent = Ext.get(Ext.query('.switchContent', this.el.dom)[0]);
+    this.vpsSwitchCloseLink = Ext.query('.switchCloseLink', this.el.dom);
+    if (this.vpsSwitchCloseLink.length) {
+        this.vpsSwitchCloseLink = Ext.get(this.vpsSwitchCloseLink[0]);
+    } else {
+        this.vpsSwitchCloseLink = false;
+    }
 
     // durch unterbinden von flackern (ganz oben) muss das auf block
     // gesetzt werden, damit die hoehe gemessen werden kann
@@ -47,6 +53,12 @@ Vps.Switch.Display = function(el) {
             } else {
                 this.doOpen();
             }
+        }, this, { stopEvent: true });
+    }
+
+    if (this.vpsSwitchCloseLink) {
+        Ext.EventManager.addListener(this.vpsSwitchCloseLink, 'click', function(e) {
+            this.doClose();
         }, this, { stopEvent: true });
     }
 };

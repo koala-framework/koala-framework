@@ -47,19 +47,24 @@ class Vpc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Vpc_Abstract_Image
         return $d;
     }
 
-    public function getCacheVars()
+    public function getCacheMeta()
     {
-        $ret = parent::getCacheVars();
+        $ret = parent::getCacheMeta();
 
         //own_image checkbox kann sich aendern
         $row = $this->_getImageEnlargeComponentData()->getComponent()->getRow();
         $model = $row->getModel();
         $primaryKey = $model->getPrimaryKey();
-        $ret[] = array(
-            'model' => $model,
-            'id' => $row->$primaryKey
-        );
-
+        $ret[] = new Vps_Component_Cache_Meta_Static_Model($model);
         return $ret;
     }
+/*
+    public function onCacheCallback($row)
+    {
+        $cacheId = Vps_Media::createCacheId(
+            $this->getData()->componentClass, $this->getData()->componentId, 'default'
+        );
+        Vps_Media::getOutputCache()->remove($cacheId);
+    }
+    */
 }

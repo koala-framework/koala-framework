@@ -1,27 +1,35 @@
-<a name="<?= $this->item->componentId; ?>"></a>
+<a name="<?=$this->item->componentId;?>"></a>
 <div class="entry">
-    <div class="text">
-        <h3>
-            <?=$this->ifHasContent($this->item)?>
-                <?=$this->componentLink($this->item)?>
-            <?=$this->ifHasContent()?>
-            <?=$this->ifHasNoContent($this->item)?>
-                <?=$this->item->row->title?>
-            <?=$this->ifHasNoContent()?>
-        </h3>
+    <h2>
+        <? if ($this->hasContent($this->item)) { ?>
+            <?=$this->componentLink($this->item)?>
+        <? } else { ?>
+            <?=$this->item->row->title?>
+        <? } ?>
+    </h2>
+    <div class="publishDate">
+        <p><?=$this->date($this->item->publish_date);?></p>
     </div>
-
-    <div class="publishDate"><?=$this->date($this->item->publish_date)?></div>
-
-    <div class="clear"></div>
-
-    <div class="teaser">
-        <p><?=$this->mailEncodeText($this->item->row->teaser)?></p>
-        <p class="readMore">
-            <?=$this->ifHasContent($this->item)?>
-                <?=$this->componentLink($this->item, $this->item->trlVps('Read more') . ' &#xBB;')?>
-            <?=$this->ifHasContent()?>
-        </p>
-    </div>
+    <? if($this->hasContent($this->item->previewImage)) { ?>
+        <div class="prevImage left">
+            <?=$this->component($this->item->previewImage);?>
+        </div>
+    <? } ?>
+    <? if($this->item->row->teaser) { ?>
+	    <div class="teaser<? if($this->hasContent($this->item->previewImage)) { echo ' left'; } ?>">
+	        <p>
+	        	<?=nl2br($this->item->row->teaser);?>
+				<? if($this->hasContent($this->item)) { ?>
+				    <span class="readMoreLink">
+				        <?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?>
+					</span>
+				<? } ?>
+			</p>
+	    </div>
+    <? } else if($this->hasContent($this->item)) { ?>
+        <div class="readMoreLink">
+            <?=$this->componentLink($this->item, $this->item->trlVps('Read more').' &raquo;');?>
+        </div>
+    <? } ?>
     <div class="clear"></div>
 </div>

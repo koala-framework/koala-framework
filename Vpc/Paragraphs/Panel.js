@@ -19,6 +19,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
     cls: 'vpc-paragraphs',
     showDelete: true,
     showPosition: true,
+    showCopyPaste: true,
     initComponent : function()
     {
         this.addEvents('editcomponent', 'gotComponentConfigs');
@@ -352,12 +353,18 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Binding.AbstractPanel,
             params: params,
             success: function(response, options, result) {
                 this.fireEvent('gotComponentConfigs', result.componentConfigs);
-                if (result.editComponents.length) {
-                    var data = Vps.clone(result.editComponents[0]);
-                    data.componentId = this.getBaseParams().componentId + '-' + result.id;
-                    data.editComponents = result.editComponents;
-                    this.fireEvent('editcomponent', data);
-                } else {
+                var opened = false;
+                result.editComponents.forEach(function(ec) {
+                    if (result.openConfigKey == ec.type) {
+                        var data = Vps.clone(ec);
+                        data.componentId = this.getBaseParams().componentId + '-' + result.id;
+                        data.editComponents = result.editComponents;
+                        this.fireEvent('editcomponent', data);
+                        opened = true;
+                        return false;
+                    }
+                }, this);
+                if (!opened) {
                     this.reload();
                 }
             },

@@ -180,18 +180,17 @@ class Vps_Util_Git
         return $ret;
     }
 
-    public function exec($cmd)
+    public function exec($cmd, &$output)
     {
         $d = getcwd();
         $cmd = "git ".$cmd;
         chdir($this->_path);
         if (self::$_debug) echo $cmd."\n";
-        exec($cmd, $ret, $retVal);
+        $ret = exec($cmd, $output, $retVal);
         chdir($d);
         if ($retVal) {
             throw new Vps_Exception("Command failed: $cmd");
         }
-        if (!$ret) $ret = array();
         return $ret;
     }
 

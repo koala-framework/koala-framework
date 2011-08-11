@@ -93,7 +93,8 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
         if ($this->_lockSync) {
             throw new Vps_Exception('Already locked');
         }
-        $this->_lockSync = fopen($this->_getLastSyncFile().'.lock', "w");
+        $filename = $this->_getLastSyncFile().'.lock';
+        $this->_lockSync = fopen($filename, "w");
 
         $startTime = microtime(true);
         while(true) {
@@ -101,7 +102,7 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                 break;
             }
             if (microtime(true)-$startTime > 120) {
-                throw new Vps_Exception("Lock Failed, locked by");
+                throw new Vps_Exception("Lock Failed, locked by: " . $filename);
             }
             usleep(rand(0, 100)*100);
         }
@@ -187,9 +188,19 @@ class Vps_Model_MirrorCache extends Vps_Model_Proxy
                     'select' => null
                 );
             } else {
-                $select = $sourceModel->select()->where(
-                    new Vps_Model_Select_Expr_HigherDate($this->_syncTimeField, $cacheTimestamp)
-                );
+                if ($sourceModel instanceof Vps_Model_Service) {
+                    $select = $sourceModel->select()->where(
+                        new Vps_Model_Select_Expr_Higher($this->_syncTimeField, $cacheTimestamp)
+                    );
+                } else {
+                    /**
+                     * TODO: Sobald Service Vps_DateTime versteht (>= VPS 1.11)
+                     * oder höher ist, if-abfrage weg und nur das hier verwenden
+                     */
+                    $select = $sourceModel->select()->where(
+                        new Vps_Model_Select_Expr_Higher($this->_syncTimeField, new Vps_DateTime($cacheTimestamp))
+                    );
+                }
                 $ret = array(
                     'type' => self::SYNC_SELECT_TYPE_SELECT,
                     'select' => $select

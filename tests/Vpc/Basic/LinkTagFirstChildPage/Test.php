@@ -23,8 +23,7 @@ class Vpc_Basic_LinkTagFirstChildPage_Test extends Vpc_TestAbstract
     }
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1500));
+        $html = $this->_root->getComponentById(1500)->render();
         $this->assertEquals('<a href="/foo1/bar1">', $html);
     }
 

@@ -7,9 +7,9 @@ class Vpc_Events_Archive_Component extends Vpc_Directories_List_Component
         $ret['useDirectorySelect'] = false;
         return $ret;
     }
-    public function getSelect($overrideValues = array())
+    public function getSelect()
     {
-        $ret = parent::getSelect($overrideValues);
+        $ret = parent::getSelect();
         if (!$ret) return null;
         $ret->where('IF(ISNULL(end_date), start_date, end_date) < NOW()');
         $ret->order('start_date', 'DESC');

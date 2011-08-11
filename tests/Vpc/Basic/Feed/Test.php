@@ -11,13 +11,12 @@ class Vpc_Basic_Feed_Test extends Vpc_TestAbstract
 
     public function testFeed()
     {
-        Vps_Component_Cache::getInstance()->setModel(new Vps_Component_Cache_CacheModel());
-        Vps_Component_Cache::getInstance()->setMetaModel(new Vps_Component_Cache_CacheMetaModel());
-        Vps_Component_Cache::getInstance()->setFieldsModel(new Vps_Component_Cache_CacheFieldsModel());
+        Vps_Component_Cache::setInstance(Vps_Component_Cache::CACHE_BACKEND_FNF);
         $feed = Vps_Component_Data_Root::getInstance()->getChildComponent('_feed');
         $xml = $feed->getComponent()->getXml();
         $rows = Vps_Component_Cache::getInstance()->getModel()->getRows();
         $row = $rows->current();
+        $feedRow = Vps_Model_Abstract::getInstance('Vpc_Basic_Feed_Model')->getRows()->current();
 
         // XML prüfen
         $this->assertEquals('<?xml', substr($xml, 0, 5));
@@ -32,13 +31,12 @@ class Vpc_Basic_Feed_Test extends Vpc_TestAbstract
         $this->assertEquals($xml, $row->content);
 
         // Cache-Eintrag ändern um festzustellen, ob eh Cache verwendet wird
-        $row->content = 'foo';
-        $row->save();
-        Vps_Component_Cache::getInstance()->emptyPreload();
+        $feedRow->description = 'foo';
+        $feedRow->save();
         $this->assertEquals($row->content, $feed->getComponent()->getXml());
 
         // Cache löschen
-        Vps_Component_Cache::getInstance()->clean(Vps_Component_Cache::CLEANING_MODE_ID, $feed->componentId);
+        Vps_Component_Cache::getInstance()->cleanByRow($feedRow);
         $xml = $feed->getComponent()->getXml();
         $this->assertEquals('<?xml', substr($xml, 0, 5));
         $this->assertTrue(strpos($xml, '<rss') !== false);

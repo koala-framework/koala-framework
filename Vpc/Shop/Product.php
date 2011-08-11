@@ -8,8 +8,10 @@ class Vpc_Shop_Product extends Vps_Model_Db_Row
 
     public function delete()
     {
-        if ($this->getChildRows('OrderProducts')) {
-            throw new Vps_ClientException("Es sind Bestellungen für dieses Produkt vorhanden, Produkt kann nicht gelöscht werden");
+        foreach ($this->getChildRows('Prices') as $price) {
+            if (count($price->getChildRows('OrderProducts')) > 0) {
+                throw new Vps_Exception_Client("Es sind Bestellungen für dieses Produkt vorhanden, Produkt kann nicht gelöscht werden");
+            }
         }
         parent::delete();
     }

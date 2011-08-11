@@ -4,6 +4,7 @@ class Vpc_Advanced_CommunityVideo_Trl_Component extends Vpc_Chained_Trl_Componen
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
+        $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_Form';
         $ret['ownModel'] = 'Vps_Component_FieldModel';
         return $ret;
     }
@@ -11,16 +12,14 @@ class Vpc_Advanced_CommunityVideo_Trl_Component extends Vpc_Chained_Trl_Componen
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['flash']['data'] = array_merge($ret['flash']['data'], $this->_getFlashData());
-        return $ret;
-    }
 
-    protected function _getFlashData()
-    {
-        $ret = array();
-        $ret['url'] = Vpc_Advanced_CommunityVideo_Component::getFlashUrl($this->getRow());
-        $ret['width'] = $this->getRow()->width;
-        $ret['height'] = $this->getRow()->height;
+        $url = $this->getRow()->url;
+        if ($url) {
+            $ret['flash']['data']['url'] = Vpc_Advanced_CommunityVideo_Component::getFlashUrl($this->getRow());
+            if ($this->getRow()->width) $ret['flash']['data']['width'] = $this->getRow()->width;
+            if ($this->getRow()->height) $ret['flash']['data']['height'] = $this->getRow()->height;
+        }
+
         return $ret;
     }
 

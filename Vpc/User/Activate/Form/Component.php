@@ -1,6 +1,10 @@
 <?php
 class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
 {
+    const ERROR_DATA_NOT_COMPLETE = 'ednc';
+    const ERROR_ALREADY_ACTIVATED = 'eaa';
+    const ERROR_CODE_WRONG        = 'ecw';
+
     private $_user = null;
     private $_hideForm = false;
 
@@ -10,6 +14,18 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         $ret['placeholder']['submitButton'] = trlVps('Activate Account');
         $ret['generators']['child']['component']['success'] = 'Vpc_User_Activate_Form_Success_Component';
         return $ret;
+    }
+
+    protected function _getErrorMessage($type)
+    {
+        if ($type == self::ERROR_DATA_NOT_COMPLETE) {
+            return trlVps('Data was not sent completely. Please copy the complete address out of the email.');
+        } else if ($type == self::ERROR_ALREADY_ACTIVATED) {
+            return trlVps('This account has already been activated.');
+        } else if ($type == self::ERROR_CODE_WRONG) {
+            return trlVps('Activation code is wrong. Maybe the address was copied wrong out of the email?');
+        }
+        return null;
     }
 
     protected function _initForm()
@@ -41,7 +57,7 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         }
         $code = explode('-', $code);
         if (count($code) != 2 || empty($code[0]) || empty($code[1])) {
-            $this->_errors[] = trlVps('Data was not sent completely. Please copy the complete address out of the email.');
+            $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE));
             $this->_hideForm = true;
         } else {
             $userId = (int)$code[0];
@@ -49,13 +65,13 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
             $userModel = Zend_Registry::get('userModel');
             $this->_user = $userModel->getRow($userModel->select()->whereEquals('id', $userId));
             if (!$this->_user) {
-                $this->_errors[] = trlVps('Data was not sent completely. Please copy the complete address out of the email.');
+                $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE));
                 $this->_hideForm = true;
             } else if ($this->_user->getActivationCode() != $code && $this->_user->password) {
-                $this->_errors[] = trlVps('This account has already been activated.');
+                $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_ALREADY_ACTIVATED));
                 $this->_hideForm = true;
             } else if ($this->_user->getActivationCode() != $code && !$this->_user->password) {
-                $this->_errors[] = trlVps('Activation code is wrong. Maybe the address was copied wrong out of the email?');
+                $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_CODE_WRONG));
                 $this->_hideForm = true;
             }
         }

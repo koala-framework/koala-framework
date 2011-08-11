@@ -4,11 +4,6 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
 {
     protected $_idSeparator = '-';
 
-    protected function _getChildComponentClasses($parentData = null)
-    {
-        return $this->_settings['component'];
-    }
-
     public function getChildData($parentData, $select = array())
     {
         Vps_Benchmark::count('GenStatic::getChildData');
@@ -31,6 +26,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
                 $parentSelect = new Vps_Component_Select();
                 $parentSelect->copyParts(array(
                     Vps_Component_Select::WHERE_SUBROOT,
+                    Vps_Component_Select::IGNORE_VISIBLE,
                     Vps_Component_Select::WHERE_CHILD_OF_SAME_PAGE),
                     $select
                 );
@@ -97,13 +93,19 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         return true;
     }
 
-    protected function _formatConfig($parentData, $componentKey)
+    protected function _getComponentIdFromRow($parentData, $componentKey)
     {
         $componentId = '';
         if ($parentData->componentId) {
             $componentId = $parentData->componentId . $this->_idSeparator;
         }
         $componentId .= $componentKey;
+        return $componentId;
+    }
+
+    protected function _formatConfig($parentData, $componentKey)
+    {
+        $componentId = $this->_getComponentIdFromRow($parentData, $componentKey);
         $dbId = '';
         if ($parentData->dbId) {
             $dbId = $parentData->dbId . $this->_idSeparator;
@@ -113,12 +115,11 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         $c = $this->_settings;
         $priority = isset($c['priority']) ? $c['priority'] : 0;
         $inherit = !isset($c['inherit']) || $c['inherit'];
-        $childComponentClasses = $this->_getChildComponentClasses($parentData);
 
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,
-            'componentClass' => $childComponentClasses[$componentKey],
+            'componentClass' => $this->_getChildComponentClass($componentKey, $parentData),
             'parent' => $parentData,
             'isPage' => false,
             'isPseudoPage' => false,

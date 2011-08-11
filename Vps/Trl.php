@@ -75,13 +75,13 @@ function trlcpVpsStatic($context, $single, $plural, $text = array()) {
 
 class Vps_Trl
 {
+    private $_cache = array();
+
     private $_modelWeb;
     private $_modelVps;
     private $_languages; //cache
     private $_useUserLanguage = true;
     private $_webCodeLanguage;
-
-    private $_overrideTargetLanguage = null;
 
     const SOURCE_VPS = 'vps';
     const SOURCE_WEB = 'web';
@@ -102,6 +102,9 @@ class Vps_Trl
 
     private static $_instance = null;
 
+    /**
+     * @return Vps_Trl
+     */
     public static function getInstance()
     {
         if (is_null(self::$_instance)) {
@@ -123,8 +126,12 @@ class Vps_Trl
 
     public function setModel($model, $type)
     {
-        if ($type == 'vps') $this->_modelVps = $model;
-        else $this->_modelWeb = $model;
+        $this->_cache = array();
+        if ($type == self::SOURCE_VPS) {
+            $this->_modelVps = $model;
+        } else {
+            $this->_modelWeb = $model;
+        }
     }
 
     public function getLanguages()
@@ -146,18 +153,8 @@ class Vps_Trl
         $this->_languages = $languages;
     }
 
-    /**
-     * Für Frontend TRL-Hack in 1.9
-     */
-    public function overrideTargetLanguage($lang)
-    {
-        $this->_overrideTargetLanguage = $lang;
-    }
-
     public function getTargetLanguage()
     {
-        if ($this->_overrideTargetLanguage) return $this->_overrideTargetLanguage;
-
         if (php_sapi_name() == 'cli' || !$this->_useUserLanguage) {
             return $this->getWebCodeLanguage();
         }
@@ -189,10 +186,6 @@ class Vps_Trl
         return $this->_webCodeLanguage;
     }
 
-    /**
-     * Diese Funktion existiert für tests. Darf nicht aufgerufen / geändert werden
-     * da sonst Web-Übersetzung nicht mehr funktionieren.
-     */
     public function setWebCodeLanguage($code)
     {
         $this->_webCodeLanguage = $code;
@@ -201,10 +194,10 @@ class Vps_Trl
     private function _getModel($type)
     {
         if ($type == self::SOURCE_WEB) {
-            if (!$this->_modelWeb) $this->_modelWeb = new Vps_Trl_Model_Web();
+            if (!isset($this->_modelWeb)) return Vps_Model_Abstract::getInstance('Vps_Trl_Model_Web');
             return $this->_modelWeb;
         } else {
-            if (!$this->_modelVps) $this->_modelVps = new Vps_Trl_Model_Vps();
+            if (!isset($this->_modelVps)) return Vps_Model_Abstract::getInstance('Vps_Trl_Model_Vps');
             return $this->_modelVps;
         }
     }
@@ -276,47 +269,105 @@ class Vps_Trl
         return is_array($placeolders) ? $placeolders : array($placeolders);
     }
 
-    protected function _findElement($needle, $source, $context, $language = null)
+    private function _loadCache($source, $target, $plural)
     {
         if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
         else $codeLanguage = "en";
 
-        if ($language) $target = $language;
-        else $target = $this->getTargetLanguage();
-        $model = $this->_getModel($source);
-        if (!$model) return $needle;
-        $select = $model->select();
-        $select->whereEquals($codeLanguage, $needle);
-        if ($context) $select->whereEquals('context', $context);
-        else $select->whereNull('context');
-        $row = $rows = $model->getRows($select)->current();
-
-        if ($row && $row->$target != '' && $row->$target != '_') { //unterstrich entfernt
-            return (string) $row->$target;
+        if ($codeLanguage == $target) {
+            $this->_cache[$source][$target] = array();
+            return;
         }
-        return $needle;
+
+        if ($plural) $target = $target.'_plural';
+        $cache = Vps_Cache::factory('Core', 'File',
+            array(
+                'automatic_serialization'=>true,
+                'caching' => !isset($this->_modelVps) && !isset($this->_modelWeb)
+            ),
+            array(
+                'cache_dir' => 'application/cache/model'
+            )
+        );
+        $cacheId = 'trl_'.$source.$target.$plural;
+
+        if (($c = $cache->load($cacheId)) === false) {
+            $c = array();
+            $m = $this->_getModel($source);
+            if ($m instanceof Vps_Model_Xml) {
+                $rows = array();
+                if (file_exists($m->getFilePath())) {
+                    $xml = simplexml_load_file($m->getFilePath());
+                    $rows = $xml->text;
+                }
+            } else {
+                $rows = $m->getRows();
+            }
+            foreach ($rows as $row) {
+                if ($row->$target != '' && $row->$target != '_') {
+                    $ctx = isset($row->context) ? $row->context : '';
+                    $c[$row->{$codeLanguage.($plural ? '_plural' : '')}.'-'.$ctx] = (string)$row->$target;
+                }
+            }
+            $cache->save($c, $cacheId);
+        }
+        $this->_cache[$source][$target] = $c;
     }
 
-    protected function _findElementPlural($needle, $plural, $source, $context = '', $language = null)
+    protected function _findElement($needle, $source, $context, $language = null)
     {
-        if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
-        else $codeLanguage = "en";
         if ($language) $target = $language;
         else $target = $this->getTargetLanguage();
-        $target = $target.'_plural';
-        $model = $this->_getModel($source);
-        if (!$model) return $needle;
-        $select = $model->select();
-        $select->whereEquals($codeLanguage, $needle);
-        if ($context) $select->whereEquals('context', $context);
-        else $select->whereNull('context');
 
-        $rows = $model->getRows($select);
-        foreach ($rows as $row) {
-            if ($row->$target && $row->$target != '' && $row->$target != '_') return (string) $row->$target; //unterstrich entfernt
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'trl-'.$source.'-'.$target.'-'.$needle.'-'.$context;
+        $success = false;
+        if (function_exists('apc_fetch')) {
+            $ret = apc_fetch($cacheId, $success);
+        }
+        if ($success) {
+            return $ret;
         }
 
-        return $plural;
+        if (!isset($this->_cache[$source][$target])) {
+            $this->_loadCache($source, $target, false);
+        }
+        if (isset($this->_cache[$source][$target][$needle.'-'.$context])) {
+            $ret = $this->_cache[$source][$target][$needle.'-'.$context];
+        } else {
+            $ret = $needle;
+        }
+        if (function_exists('apc_add')) {
+            apc_add($cacheId, $ret);
+        }
+        return $ret;
+    }
+
+    //TODO: wofuer wird der $needle parameter verwendet?!
+    protected function _findElementPlural($needle, $plural, $source, $context = '', $language = null)
+    {
+        if ($language) $target = $language;
+        else $target = $this->getTargetLanguage();
+
+        static $prefix;
+        if (!isset($prefix)) $prefix = Vps_Cache::getUniquePrefix();
+        $cacheId = $prefix.'trlp-'.$source.'-'.$target.'-'.$plural.'-'.$context;
+        $ret = apc_fetch($cacheId, $success);
+        if ($success) {
+            return $ret;
+        }
+
+        if (!isset($this->_cache[$source][$target.'_plural'])) {
+            $this->_loadCache($source, $target, true);
+        }
+        if (isset($this->_cache[$source][$target.'_plural'][$plural.'-'.$context])) {
+            $ret = $this->_cache[$source][$target.'_plural'][$plural.'-'.$context];
+        } else {
+            $ret = $plural;
+        }
+        apc_add($cacheId, $ret);
+        return $ret;
     }
 
     function getTrlpValues($context, $single, $plural, $source, $language = null)

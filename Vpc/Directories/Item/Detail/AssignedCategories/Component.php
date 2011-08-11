@@ -26,10 +26,13 @@ class Vpc_Directories_Item_Detail_AssignedCategories_Component
         return $this->_getItemDetail();
     }
 
+    // TODO Cache
+    /*
     public function getCacheVars()
     {
         return $this->getData()->getChildComponent('-view')->getComponent()->getCacheVars();
     }
+    */
 
     public function getSelect()
     {

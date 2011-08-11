@@ -12,7 +12,7 @@ if ($this->showSuccess) {
         echo '<p class="error">'.$this->placeholder['error'].':</p>';
         echo '<ul>';
         foreach ($this->errors as $error) {
-            echo "<li>$error</li>";
+            echo '<li>' . htmlspecialchars($error) . '</li>';
         }
         echo '</ul>';
         echo '</div>';
@@ -22,7 +22,7 @@ if ($this->showSuccess) {
     <div class="webStandard webForm vpcForm">
     <form action="<?= $this->action ?>" method="<?=$this->method?>"<? if($this->isUpload) { ?> enctype="multipart/form-data"<? } ?>>
         <?php $this->formField($this->form) ?>
-        <div class="submitWrapper">
+        <div class="submitWrapper <?=$this->buttonClass?>">
             <div class="beforeButton"></div>
             <div class="button">
                 <button class="submit" type="submit" name="<?= $this->formName ?>" value="submit"><?= $this->placeholder['submitButton'] ?></button>

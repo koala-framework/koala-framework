@@ -9,7 +9,7 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
     {
         $model = new Vps_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>'blub')))),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub')))),
             'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
         ));
 
@@ -19,7 +19,7 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
         $row->blub1 = 'blub1';
         $row->save();
 
-        $this->assertEquals(array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(
+        $this->assertEquals(array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(
                                   array('blub'=>'blub', 'blub1'=>'blub1')))), $model->getData());
         $row = $model->getRow(1);
         $this->assertEquals($row->blub1, 'blub1');
@@ -31,8 +31,8 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
         $row->blub = 'newBlub';
         $row->save();
         $this->assertEquals($model->getData(), array(
-            array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>'blub', 'blub1'=>'blub1'))),
-            array('id'=>2, 'foo'=>'newFoo', 'data'=>serialize(array('blub'=>'newBlub'))),
+            array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub', 'blub1'=>'blub1'))),
+            array('id'=>2, 'foo'=>'newFoo', 'data'=>json_encode(array('blub'=>'newBlub'))),
         ));
     }
 
@@ -40,8 +40,8 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
     {
         $model = new Vps_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>'blub',
-                        'data'=>serialize(array('blub1'=>'blub1')))))),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub',
+                        'data'=>json_encode(array('blub1'=>'blub1')))))),
             'siblingModels' => array(new Vps_Model_Field(array(
                 'fieldName'=>'data',
                 'columns' => array('blub', 'data'),
@@ -64,8 +64,8 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
         $row->blub2 = 'blub2';
         $row->save();
 
-        $this->assertEquals($model->getData(), array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>'blub',
-                'data'=>serialize(array('blub1'=>'blub1', 'blub2'=>'blub2')))))));
+        $this->assertEquals($model->getData(), array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub',
+                'data'=>json_encode(array('blub1'=>'blub1', 'blub2'=>'blub2')))))));
         $row = $model->getRow(1);
         $this->assertEquals($row->blub2, 'blub2');
     }
@@ -74,14 +74,14 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
     {
         $model = new Vps_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'')),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(''))),
             'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
         $row->blub = 1;
         $row->save();
         $this->assertEquals($model->getData(), array(
-            array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>1)))
+            array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>1)))
         ));
     }
 
@@ -89,14 +89,14 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
     {
         $model = new Vps_Model_FnF(array(
             'columns' => array('id', 'foo', 'data'),
-            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'vpsSerialized'.serialize(array('blub'=>'blub')))),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'vpsSerialized'.json_encode(array('blub'=>'blub')))),
             'siblingModels' => array(new Vps_Model_Field(array('fieldName'=>'data')))
         ));
         $row = $model->getRow(1);
         $row->blub = 1;
         $row->save();
         $this->assertEquals($model->getData(), array(
-            array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>1)))
+            array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>1)))
         ));
     }
 
@@ -144,7 +144,7 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
         $row->blub = 'bum';
         $row->save();
         $this->assertEquals($fnf->getData(), array(
-            array('id'=>1, 'foo1'=>'bar', 'data'=>serialize(array('blub'=>'bum')))
+            array('id'=>1, 'foo1'=>'bar', 'data'=>json_encode(array('blub'=>'bum')))
         ));
     }
 
@@ -166,5 +166,45 @@ class Vps_Model_Field_Test extends Vps_Test_TestCase
         $this->assertEquals($row->foo1, 'foo1');
         $this->assertEquals($row->blub, 'blub');
         $this->assertEquals($row->blub2, 'xxx');
+    }
+
+    public function testFieldEvents()
+    {
+        $model = new Vps_Model_FnF(array(
+            'columns' => array('id', 'foo', 'data'),
+            'siblingModels' => array(new Vps_Model_Field_FieldModel(array(
+                'fieldName'=>'data',
+            )))
+        ));
+        $row = $model->createRow();
+        $row->foo = 'foo';
+        $row->blub = 'blub';
+        $row->blub2 = 'blub2';
+        $row->save();
+
+        $counts = Vps_Model_Field_FieldModelRow::$counts;
+        $this->assertEquals(1, $counts['beforeInsert']);
+        $this->assertEquals(1, $counts['afterInsert']);
+        $this->assertEquals(0, $counts['beforeUpdate']);
+        $this->assertEquals(0, $counts['afterUpdate']);
+        $this->assertEquals(1, $counts['beforeSave']);
+        $this->assertEquals(1, $counts['afterSave']);
+        $this->assertEquals(0, $counts['beforeDelete']);
+        $this->assertEquals(0, $counts['afterDelete']);
+
+        $row->save();
+
+        $counts = Vps_Model_Field_FieldModelRow::$counts;
+        $this->assertEquals(1, $counts['beforeInsert']);
+        $this->assertEquals(1, $counts['afterInsert']);
+        $this->assertEquals(1, $counts['beforeUpdate']);
+        $this->assertEquals(1, $counts['afterUpdate']);
+        $this->assertEquals(2, $counts['beforeSave']);
+        $this->assertEquals(2, $counts['afterSave']);
+        $this->assertEquals(0, $counts['beforeDelete']);
+        $this->assertEquals(0, $counts['afterDelete']);
+
+        // delete nicht gecheckt, data row kann selbst nicht gelöscht werden,
+        // die wird sowieso von der hauptrow mitgerissen
     }
 }

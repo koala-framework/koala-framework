@@ -32,8 +32,7 @@ class Vpc_Basic_LinkTagIntern_Test extends Vpc_TestAbstract
     }
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1300));
+        $html = $this->_root->getComponentById(1300)->render();
         $this->assertEquals('<a href="/bar">', $html);
     }
 

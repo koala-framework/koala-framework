@@ -18,6 +18,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             'rendergrid',
             'beforerendergrid',
             'deleterow',
+            'cellclick',
             'celldblclick',
             'rowdblclick'
         );
@@ -395,7 +396,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.actions[i].disable();
             }
             if (i == 'add' && this.editDialog) continue; //add-button anzeigen auch wenn keine permissions da die add-permissions im dialog sein müssen
-            if (!meta.permissions[i]) {
+            if (!meta.permissions[i] && this.getAction(i).hide) {
                 this.getAction(i).hide();
             }
         }
@@ -534,6 +535,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 this.ignoreCellClicks = false;
             }).defer(500, this);
 
+            this.fireEvent('cellclick', grid, rowIndex, columnIndex, e);
             var col = grid.getColumnModel().config[columnIndex];
             if (col.clickHandler) {
                 col.clickHandler.call(col.scope || this, grid, rowIndex, col, e);
@@ -749,10 +751,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 }
 
                 this.getGrid().stopEditing();
-                this.store.insert(0, record);
+
+                var rowInsertPosition = 0;
+                if (this.insertNewRowAtBottom) {
+                    rowInsertPosition = this.store.getCount();
+                }
+                this.store.insert(rowInsertPosition, record);
                 this.store.newRecords.push(record);
                 if (record.dirty) {
-                    this.getGrid().startEditing(0, i);
+                    this.getGrid().startEditing(rowInsertPosition, i);
                 }
             }
         }
@@ -897,17 +904,24 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     },
     onXls : function()
     {
+        var params = Vps.clone(this.getStore().baseParams);
+        if(this.getStore().sortInfo){
+            var pn = this.getStore().paramNames;
+            params[pn["sort"]] = this.getStore().sortInfo.field;
+            params[pn["dir"]] = this.getStore().sortInfo.direction;
+        }
+
         Ext.Ajax.request({
             url : this.controllerUrl+'/json-xls',
-            params  : this.getStore().baseParams,
+            params  : params,
             timeout: 600000, // 10 minuten
             progress: true,
             progressTitle : trlVps('Excel export'),
             success: function(response, opt, r) {
-        		var downloadUrl = this.controllerUrl+'/download-export-file?downloadkey='+r.downloadkey;
-        		for (var i in this.getStore().baseParams) {
-        			downloadUrl += '&' + i + '=' + this.getStore().baseParams[i];
-        		}
+                var downloadUrl = this.controllerUrl+'/download-export-file?downloadkey='+r.downloadkey;
+                for (var i in params) {
+                    downloadUrl += '&' + i + '=' + params[i];
+                }
                 if (Ext.isIE) {
                     Ext.Msg.show({
                         title: trlVps('Your download is ready'),
@@ -984,7 +998,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!params) params = {};
         if (!this.getStore()) {
             Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
-            Ext.Ajax.request({
+            if (!this.metaConn) this.metaConn = new Vps.Connection({ autoAbort: true });
+            this.metaConn.request({
                 mask: this.el,
                 url: this.controllerUrl+'/json-data',
                 params: params,

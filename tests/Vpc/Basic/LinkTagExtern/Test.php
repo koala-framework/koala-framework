@@ -25,12 +25,10 @@ class Vpc_Basic_LinkTagExtern_Test extends Vpc_TestAbstract
     }
     public function testHtml()
     {
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1200));
+        $html = $this->_root->getComponentById(1200)->render();
         $this->assertEquals('<a href="http://example.com">', $html);
 
-        $output = new Vps_Component_Output_NoCache();
-        $html = $output->render($this->_root->getComponentById(1201));
+        $html = $this->_root->getComponentById(1201)->render();
         $this->assertEquals('<a href="http://example.com" rel="popup_blank">', $html);
     }
 }
