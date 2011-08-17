@@ -30,7 +30,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         } else if ($this->getVtype() === 'alpha') {
             $this->addValidator(new Zend_Validate_Regex('/^[a-zA-Z_]+$/'));
         } else if ($this->getVtype() === 'alphanum') {
-            $this->addValidator(new Zend_Validate_Regex('/^[a-zA-Z0-9_]+$/'));
+            $this->addValidator(new Zend_Validate_Regex('/^[a-zA-Z0-9_\-]+$/'));
         }
         if ($this->getMaxLength()) {
             $this->addValidator(new Zend_Validate_StringLength(0, $this->getMaxLength()+1));

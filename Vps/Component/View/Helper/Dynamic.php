@@ -25,4 +25,9 @@ class Vps_Component_View_Helper_Dynamic extends Vps_Component_View_Renderer
         $dynamic->setInfo($config['info']);
         return $dynamic->getContent();
     }
+
+    public function enableCache()
+    {
+        return false;
+    }
 }

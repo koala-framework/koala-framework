@@ -904,17 +904,24 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     },
     onXls : function()
     {
+        var params = Vps.clone(this.getStore().baseParams);
+        if(this.getStore().sortInfo){
+            var pn = this.getStore().paramNames;
+            params[pn["sort"]] = this.getStore().sortInfo.field;
+            params[pn["dir"]] = this.getStore().sortInfo.direction;
+        }
+
         Ext.Ajax.request({
             url : this.controllerUrl+'/json-xls',
-            params  : this.getStore().baseParams,
+            params  : params,
             timeout: 600000, // 10 minuten
             progress: true,
             progressTitle : trlVps('Excel export'),
             success: function(response, opt, r) {
-        		var downloadUrl = this.controllerUrl+'/download-export-file?downloadkey='+r.downloadkey;
-        		for (var i in this.getStore().baseParams) {
-        			downloadUrl += '&' + i + '=' + this.getStore().baseParams[i];
-        		}
+                var downloadUrl = this.controllerUrl+'/download-export-file?downloadkey='+r.downloadkey;
+                for (var i in params) {
+                    downloadUrl += '&' + i + '=' + params[i];
+                }
                 if (Ext.isIE) {
                     Ext.Msg.show({
                         title: trlVps('Your download is ready'),

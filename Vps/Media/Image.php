@@ -24,19 +24,26 @@ class Vps_Media_Image
         if (isset($sourceSize[1])) $h = $sourceSize[1];
         $size = array($w, $h);
         $rotate = null;
-        if ($source && function_exists('exif_read_data') &&
-            isset($sourceSize['mime']) && $sourceSize['mime'] == 'image/jpg'
+        if (Vps_Registry::get('config')->image->autoExifRotate &&
+            $source &&
+            function_exists('exif_read_data') &&
+            isset($sourceSize['mime']) &&
+            ($sourceSize['mime'] == 'image/jpg' || $sourceSize['mime'] == 'image/jpeg')
         ) {
-            $exif = exif_read_data($source);
-            if (isset($exif['Orientation'])) {
-                switch ($exif['Orientation']) {
-                    case 6:
-                        $size = array($h, $w);
-                        $rotate = 90;
-                    case 8:
-                        $size = array($h, $w);
-                        $rotate = -90;
+            try {
+                $exif = exif_read_data($source);
+                if (isset($exif['Orientation'])) {
+                    switch ($exif['Orientation']) {
+                        case 6:
+                            $size = array($h, $w);
+                            $rotate = 90;
+                        case 8:
+                            $size = array($h, $w);
+                            $rotate = -90;
+                    }
                 }
+            } catch (ErrorException $e) {
+                $rotate = null;
             }
         }
         if (!$size[0] || !$size[1]) return false;
@@ -58,7 +65,7 @@ class Vps_Media_Image
             return false;
         }
 
-        if ($scale != self::SCALE_ORIGINAL) {
+        if ($scale != self::SCALE_ORIGINAL && $scale != self::SCALE_BESTFIT) {
             if ($width == 0) {
                 $width = round($height * ($size[0]/$size[1]));
                 if ($width <= 0) $width = 1;
@@ -134,13 +141,13 @@ class Vps_Media_Image
                 }
             }
 
-            $widthRatio = $size[0] / $width;
-            $heightRatio = $size[1] / $height;
+            $widthRatio = $width ? $size[0] / $width : null;
+            $heightRatio = $height ? $size[1] / $height : null;
 
             if ($widthRatio > $heightRatio) {
                 $width = $size[0] / $widthRatio;
                 $height = $size[1] / $widthRatio;
-            } else {
+            } else if ($heightRatio > $widthRatio) {
                 $width = $size[0] / $heightRatio;
                 $height = $size[1] / $heightRatio;
             }

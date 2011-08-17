@@ -150,9 +150,11 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Component extends Vpc_Abstract
             $type[1] = strtoupper($type[1]);
             if ($type[1] == 'PJPEG') $type[1] = 'JPEG';
 
-            $vcard->setPhoto(base64_encode($data['contents']));
-            $vcard->addParam('TYPE', $type[1]);
-            $vcard->addParam('ENCODING', 'BASE64');
+            if ($type[1] == 'JPEG') {
+                $vcard->setPhoto(base64_encode($data['contents']));
+                $vcard->addParam('TYPE', $type[1]);
+                $vcard->addParam('ENCODING', 'BASE64');
+            }
         }
 
         $vcard->setRevision(date('Y-m-d').'T'.date('H:i:s').'Z');
