@@ -61,8 +61,11 @@ abstract class Vps_Component_Renderer_Abstract
             $content = null;
             $saveCache = true;
             if ($this->_enableCache) {
-                $content = Vps_Component_Cache::getInstance()->load($componentId, $type, $value);
-                $statType = 'cache';
+                $content = Vps_Component_Cache::NO_CACHE;
+                if ($helper->enableCache()) {
+                    $content = Vps_Component_Cache::getInstance()->load($componentId, $type, $value);
+                    $statType = 'cache';
+                }
                 if ($content == Vps_Component_Cache::NO_CACHE) {
                     $content = null;
                     $saveCache = false;

@@ -30,17 +30,21 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract_Image_Component
 
     protected function _getEmptyImageData()
     {
-        $emptyImage = $this->_getSetting('emptyImage');
-        if (!$emptyImage) return null;
-        $ext = substr($emptyImage, strrpos($emptyImage, '.') + 1);
-        $filename = substr($emptyImage, 0, strrpos($emptyImage, '.'));
-        $file = Vpc_Admin::getComponentFile($this, $filename, $ext);
-        $s = getimagesize($file);
-        return array(
-            'filename' => $emptyImage,
-            'file' => $file,
-            'mimeType' => $s['mime']
-        );
+        if (!$this->_getSetting('emptyImage') && $this->_getSetting('useParentImage')) {
+            return $this->getData()->parent->getComponent()->_getEmptyImageData();
+        } else {
+            $emptyImage = $this->_getSetting('emptyImage');
+            if (!$emptyImage) return null;
+            $ext = substr($emptyImage, strrpos($emptyImage, '.') + 1);
+            $filename = substr($emptyImage, 0, strrpos($emptyImage, '.'));
+            $file = Vpc_Admin::getComponentFile($this, $filename, $ext);
+            $s = getimagesize($file);
+            return array(
+                'filename' => $emptyImage,
+                'file' => $file,
+                'mimeType' => $s['mime']
+            );
+        }
     }
 
     public function onCacheCallback($row)
