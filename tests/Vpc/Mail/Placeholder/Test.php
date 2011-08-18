@@ -7,6 +7,7 @@ class Vpc_Mail_Placeholder_Test extends Vpc_TestAbstract
     public function setUp()
     {
         parent::setUp('Vpc_Mail_Placeholder_Mail_Component');
+        Vps_Registry::get('config')->debug->componentCache->disable = true;
     }
 
     public function testMail()

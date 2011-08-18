@@ -4,6 +4,12 @@
  */
 class Vps_Component_Output_Test extends Vps_Test_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        Vps_Registry::get('config')->debug->componentCache->disable = true;
+    }
+
     public function testMaster()
     {
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_C3_Root_Component');
