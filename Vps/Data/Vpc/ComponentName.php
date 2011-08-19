@@ -16,6 +16,7 @@ class Vps_Data_Vpc_ComponentName extends Vps_Data_Abstract
             return '';
         }        $class = $classes[$row->component];
         $name = Vpc_Abstract::getSetting($class, 'componentName');
+        $name = Vps_Registry::get('trl')->trlStaticExecute($name);
         return str_replace('.', ' -> ', $name);
     }
 }

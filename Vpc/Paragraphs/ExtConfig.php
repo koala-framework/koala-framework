@@ -18,6 +18,7 @@ class Vpc_Paragraphs_ExtConfig extends Vps_Component_Abstract_ExtConfig_Abstract
         foreach ($this->_getComponents() as $component) {
             if (!Vpc_Abstract::hasSetting($component, 'componentName')) continue;
             $name = Vpc_Abstract::getSetting($component, 'componentName');
+            $name = Vps_Registry::get('trl')->trlStaticExecute($name);
             $icon = Vpc_Abstract::getSetting($component, 'componentIcon');
             if ($icon) {
                 $icon = $icon->__toString();
