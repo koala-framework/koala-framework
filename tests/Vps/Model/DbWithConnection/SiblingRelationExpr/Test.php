@@ -8,7 +8,7 @@ class Vps_Model_DbWithConnection_SiblingRelationExpr_Test extends Vps_Test_TestC
     {
         Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SiblingRelationExpr_TestModel')->dropTable();
         Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SiblingRelationExpr_RelationModel')->dropTable();
-        parent::tearDown();
+        parent::shutDown();
     }
 
     public function testLoadLazy()
