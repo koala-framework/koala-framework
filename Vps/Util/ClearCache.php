@@ -189,7 +189,7 @@ class Vps_Util_ClearCache
                 $config = Vps_Registry::get('config');
                 $d = $config->server->domain;
                 $s = microtime(true);
-                $url = "http://vivid:planet@$d/vps/util/apc/clear-cache";
+                $url = "http".($config->server->https?'s':'')."://vivid:planet@$d/vps/util/apc/clear-cache";
                 $c = @file_get_contents($url);
                 if (substr($c, 0, 2) != 'OK' && $config->server->noRedirectPattern) {
                     $d = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
