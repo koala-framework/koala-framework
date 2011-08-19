@@ -97,6 +97,9 @@
 .cssClass form .vpsFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; }
 .cssClass form .vpsFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
 
+.cssClass form .vpsFormContainerColumns .vpsFormContainerColumn { float: left; clear: none; }
+.cssClass form .vpsFormContainerColumns .vpsFormContainerColumn .vpsField { clear: none; }
+
 .ext-ie .cssClass .form_title {
     margin-top: -5px;
     padding-bottom: 5px;
