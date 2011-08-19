@@ -213,7 +213,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
         if ($enableFontSize){
             $config['drop-font-tags'] = false;
         }
-        if ($enableTidy) {
+        if ($enableTidy && class_exists('tidy')) {
 
             //woraround für tidy bug wo er zwei class-attribute in einen
             //tag schreibt wenn eins davon leer ist

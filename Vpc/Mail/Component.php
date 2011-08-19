@@ -71,13 +71,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
         return $ret;
     }
 
-    /**
-     * Verschickt ein mail an @param $recipient.
-     * @param $data Optionale Daten die benötigt werden, kann von den
-     *        Komponenten per $this->getData()->getParentByClass('Vpc_Mail_Component')->getComponent()->getMailData();
-     *        ausgelesen werden
-     */
-    public function send(Vpc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
+    public function createMail(Vpc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
     {
         $this->_images = array();
 
@@ -116,8 +110,20 @@ class Vpc_Mail_Component extends Vpc_Abstract
         if ($this->_getSetting('bcc')) {
             $mail->addBcc($this->_getSetting('bcc'));
         }
-
         //TODO: attachments
+
+        return $mail;
+    }
+
+    /**
+     * Verschickt ein mail an @param $recipient.
+     * @param $data Optionale Daten die benötigt werden, kann von den
+     *        Komponenten per $this->getData()->getParentByClass('Vpc_Mail_Component')->getComponent()->getMailData();
+     *        ausgelesen werden
+     */
+    public function send(Vpc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
+    {
+        $mail->createMail($recipient, $data, $toAddress, $format);
         return $mail->send();
     }
 
