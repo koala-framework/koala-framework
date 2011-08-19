@@ -8,13 +8,7 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
 
     public static function getHelpOptions()
     {
-        return array(
-            array(
-                'param'=> 'debug',
-                'value'=> true,
-                'valueOptional' => true,
-            )
-        );
+        return array();
     }
 
     private $_commands;
@@ -48,13 +42,18 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
 
     public function statusAction()
     {
-        $processes = Kwf_Util_Process::getRunningWebProcesses();
+        $allProcesses = Kwf_Util_Process::getRunningProcesses();
+        $webProcesses = Kwf_Util_Process::getRunningWebProcesses();
         foreach ($this->_commands as $requiredCmd) {
             $found = false;
-            foreach ($processes as $p) {
+            foreach ($webProcesses as $p) {
                 if ($p['cmd'] == $requiredCmd['cmd']) {
                     $found = true;
-                    echo "[$p[pid]] $p[prettyTime] $p[cmd]\n";
+                    echo "[$p[pid]] ".Kwf_View_Helper_FileSize::fileSize($p['memory'])." $p[prettyTime] $p[cmd]\n";
+                    foreach ($p['childPIds'] as $pid) {
+                        $cp = $allProcesses[$pid];
+                        echo "  [$cp[pid]] ".Kwf_View_Helper_FileSize::fileSize($cp['memory'])." $cp[prettyTime] $cp[cmd]\n";
+                    }
                 }
             }
             if (!$found) echo "NOT RUNNING: $requiredCmd[cmd]\n";
