@@ -1,14 +1,14 @@
-<?php
+v<?php
 /**
  * @group Vps_Model_Db_SiblingRelationExpr
  */
-class Vps_Model_DbWithConnection_SiblingRelationExpr_Test extends PHPUnit_Framework_TestCase
+class Vps_Model_DbWithConnection_SiblingRelationExpr_Test extends Vps_Test_TestCase
 {
     public function shutDown()
     {
         Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SiblingRelationExpr_TestModel')->dropTable();
         Vps_Model_Abstract::getInstance('Vps_Model_DbWithConnection_SiblingRelationExpr_RelationModel')->dropTable();
-        Vps_Model_Abstract::clearInstances();
+        parent::tearDown();
     }
 
     public function testLoadLazy()
