@@ -10,12 +10,12 @@
     </div>
 
     <div class="listSwitchPreviewWrapper <?=$this->previewCssClass?>">
-        <? foreach ($this->items as $item) { ?>
-            <div class="listSwitchItem <?= $item['class']; ?>">
+        <? foreach ($this->items as $item) {
+            ?><div class="listSwitchItem <?= $item['class']; ?>">
                 <a href="#" class="previewLink"><?=$this->component($item['preview']);?></a>
                 <div class="largeContent"><?= $this->component($item['large']); ?></div>
-            </div>
-        <? } ?>
+            </div><?
+        } ?>
         <div class="clear"></div>
     </div>
 </div>
