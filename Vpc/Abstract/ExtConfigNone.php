@@ -1,8 +1,7 @@
 <?php
-class Vpc_Abstract_ExtConfigNone extends Vps_Component_Abstract_ExtConfig_Abstract
+/**
+ * @deprecated
+ */
+class Vpc_Abstract_ExtConfigNone extends Vps_Component_Abstract_ExtConfig_None
 {
-    protected function _getConfig()
-    {
-        return array();
-    }
 }
