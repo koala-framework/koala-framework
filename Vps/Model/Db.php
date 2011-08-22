@@ -4,6 +4,7 @@ class Vps_Model_Db extends Vps_Model_Abstract
     protected $_rowClass = 'Vps_Model_Db_Row';
     protected $_rowsetClass = 'Vps_Model_Db_Rowset';
     protected $_table;
+    protected $_db;
     private $_tableName;
     private $_columns;
     private $_primaryKey;
@@ -20,6 +21,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
         }
         if (isset($config['table'])) {
             $this->_table = $config['table'];
+        }
+        if (isset($config['db'])) {
+            $this->_db = $config['db'];
         }
         parent::__construct($config);
     }
@@ -770,7 +774,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if (is_string($this->_table)) {
             $this->_tableName = $this->_table;
             $this->_table = new Vps_Db_Table(array(
-                'name' => $this->_table
+                'name' => $this->_table,
+                'db' => $this->_db
             ));
         }
         return $this->_table;

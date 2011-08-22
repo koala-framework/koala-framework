@@ -23,11 +23,20 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
         $this->_setupFilters();
     }
 
+    //_setupAdapter nicht ausführen, wir machen das besser lazy in _setupDatabaseAdapter
+    protected function _setAdapter($db)
+    {
+        $this->_db = $db;
+        return $this;
+    }
+
     protected function _setupDatabaseAdapter()
     {
         //instead of setDefaultAdapter - this one lazy loads
         if (! $this->_db) {
             $this->_db = Vps_Registry::get('db');
+        } else if (is_string($this->_db)) {
+            $this->_db = Vps_Registry::get('dao')->getDb($this->_db);
         }
     }
 
