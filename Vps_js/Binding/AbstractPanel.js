@@ -19,10 +19,13 @@ Vps.Binding.AbstractPanel.createFormOrComponentPanel = function(componentConfigs
         grid.addBinding(panel);
     } else {
         panel = Ext.ComponentMgr.create(Ext.apply(componentConfig, config));
-        grid.addBinding({
-            item: panel,
-            componentIdSuffix: ec.idSeparator + '{0}' + ec.componentIdSuffix
-        });
+        var bindingConfig = { item: panel };
+        if (ec.idTemplate) {
+            bindingConfig.componentId = ec.idTemplate + ec.componentIdSuffix;
+        } else {
+            bindingConfig.componentIdSuffix = ec.idSeparator + '{0}' + ec.componentIdSuffix;
+        }
+        grid.addBinding(bindingConfig);
     }
     return panel;
 };
