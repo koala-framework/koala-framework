@@ -28,7 +28,14 @@ class Vps_Media_ImageTest extends Vps_Test_TestCase
         $this->_testBestFit(array(200, 100), $dimension, array(100, 50));
         $this->_testBestFit(array(100, 200), $dimension, array(25, 50));
         $this->_testBestFit(array(100, 30), $dimension, array(100, 30));
-
+        $dimension = array(100, 0);
+        $this->_testBestFit(array(100, 30), $dimension, array(100, 30));
+        $this->_testBestFit(array(101, 30), $dimension, array(100, 30));
+        $this->_testBestFit(array(102, 30), $dimension, array(100, 29));
+        $this->_testBestFit(array(103, 30), $dimension, array(100, 29));
+        $this->_testBestFit(array(104, 30), $dimension, array(100, 29));
+        $this->_testBestFit(array(105, 30), $dimension, array(100, 29));
+        $this->_testBestFit(array(106, 30), $dimension, array(100, 28));
     }
 
     public function testNotZeroHeight()

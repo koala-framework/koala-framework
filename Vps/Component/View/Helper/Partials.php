@@ -46,7 +46,8 @@ class Vps_Component_View_Helper_Partials extends Vps_Component_View_Renderer
         return $ret;
     }
 
-    public function saveCache($componentId, $config, $value, $content) {
-        return parent::saveCache($componentId, $config, null, Vps_Component_Cache::NO_CACHE);
+    public function enableCache()
+    {
+        return false;
     }
 }

@@ -93,7 +93,7 @@ class Vps_Update_35000 extends Vps_Update
                     $val = str_replace("'", "\\'", $val);
                     $oldval = str_replace("'", "\\'", $oldval);
                     $sql = "UPDATE $tablename SET $fieldname='$val' WHERE $fieldname='$oldval'";
-                    $db->query($sql);
+                    $db->exec($sql);
                 }
             }
         }
