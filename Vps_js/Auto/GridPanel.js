@@ -279,15 +279,17 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 gridConfig.plugins.push(column);
             } else if (column.editor) {
                 Ext.applyIf(column.editor, { msgTarget: 'qtip' });
-
-                column.editor = new Ext.grid.GridEditor(Ext.ComponentMgr.create(column.editor, 'textfield'));
-                var field = column.editor.field;
-                if(field instanceof Ext.form.ComboBox) {
+                var editorField = Ext.ComponentMgr.create(column.editor, 'textfield');
+                var editorConfig = {};
+                if(editorField instanceof Ext.form.ComboBox) {
                     this.comboBoxes.push({
-                        field: field,
+                        field: editorField,
                         column: column
                     });
+                } else if (editorField instanceof Vps.Form.AbstractSelect) {
+                    editorConfig.allowBlur = true;
                 }
+                column.editor = new Ext.grid.GridEditor(editorField, editorConfig);
             }
 
             if (column.columnType == 'button') {
@@ -651,6 +653,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     },
     submit : function(options)
     {
+        this.grid.stopEditing(false); // blurs all open editor fields (when isset "allowBlur" (e.g. AbstractSelect))
+        
         if (!options) options = {};
 
         if (arguments[1]) options.params = arguments[1]; //backwards compatibility
