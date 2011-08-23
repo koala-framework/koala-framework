@@ -1,11 +1,10 @@
-.vpsTabs .vpsTabsContents { position: relative; }
-.vpsTabs .vpsTabsContent { display: none; position: absolute; top: 0px; }
-/* das important muss bleiben weil es das selbe element ist  wie .vpsTabsContent */
-.vpsTabs .vpsTabsContentActive { display: block !important; }
-
+/* vpsTabsFx is set by javascript. So we can show all content elements if there is no javascript. */
+.vpsTabsFx .vpsTabsContents { position: relative; }
+.vpsTabsFx .vpsTabsContent { position: absolute; top: 0px; }
 .vpsTabsContent {
     border: 1px solid #bbb;
     padding: 3px 10px;
+    clear: both;
 }
 .vpsTabsLink {
     background-color: #ddd;
