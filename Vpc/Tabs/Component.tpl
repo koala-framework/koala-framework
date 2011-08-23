@@ -12,8 +12,8 @@
             }
             $class = trim($class);
         ?>
-        <div class="<?=$class;?> vpsTabsLink <? if ($i == 0) echo 'vpsTabsLinkActive'; ?>"><?= $child['title']; ?></div>
-        <div class="<?=$class;?> vpsTabsContent <? if ($i == 0) echo 'vpsTabsContentActive'; ?>">
+        <div class="<?=$class;?> vpsTabsLink"><?= $child['title']; ?></div>
+        <div class="<?=$class;?> vpsTabsContent">
             <?=$this->component($child['data']);?>
         </div>
     <? $i++;
