@@ -61,6 +61,11 @@ Vps.Tabs = function(el) {
         tag: 'div', cls: 'clear'
     });
 
+    //show first tab as default
+    if (activeTabIdx === false && this.switchEls.length) {
+        activeTabIdx = 0;
+    }
+
     if (activeTabIdx !== false) {
         Ext.get(this.switchEls[activeTabIdx]).addClass('vpsTabsLinkActive');
         Ext.get(this.contentEls[activeTabIdx]).setVisible(true);
