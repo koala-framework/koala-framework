@@ -602,6 +602,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
                 }
             }
             return $ret;
+        } else if ($expr instanceof Vps_Model_Select_Expr_If) {
+            if ($this->getExprValue($row, $expr->getIf())) {
+                return $this->getExprValue($row, $expr->getThen());
+            } else {
+                return $this->getExprValue($row, $expr->getElse());
+            }
         } else {
             throw new Vps_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
