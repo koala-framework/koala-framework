@@ -259,8 +259,8 @@ class Vps_Setup
             
             if (!$ignore && (empty($_SERVER['PHP_AUTH_USER'])
                              || empty($_SERVER['PHP_AUTH_PW'])
-                             || $_SERVER['PHP_AUTH_USER']!=$config->preLogin->user
-                             || $_SERVER['PHP_AUTH_PW']!=$config->preLogin->password)
+                             || $_SERVER['PHP_AUTH_USER']!=$config->preLoginUser
+                             || $_SERVER['PHP_AUTH_PW']!=$config->preLoginPassword)
             ) {
                 header('WWW-Authenticate: Basic realm="Testserver"');
                 throw new Vps_Exception_AccessDenied();
