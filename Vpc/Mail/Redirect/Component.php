@@ -194,6 +194,6 @@ class Vpc_Mail_Redirect_Component extends Vpc_Abstract
     private function _getHash(array $hashData)
     {
         $hashData = implode('', $hashData);
-        return substr(md5($hashData.'3olu4tgfd9'), 0, 6);
+        return substr(Vps_Util_Hash::hash($hashData), 0, 6);
     }
 }

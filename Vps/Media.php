@@ -2,7 +2,6 @@
 class Vps_Media
 {
     private static $_ouputCache;
-    const PASSWORD = 'l4Gx8SFe';
 
     /**
      *
@@ -35,7 +34,7 @@ class Vps_Media
 
     public static function getChecksum($class, $id, $type, $filename)
     {
-        return md5(self::PASSWORD . $class . $id . $type . urldecode($filename));
+        return Vps_Util_Hash::hash($class . $id . $type . urldecode($filename));
     }
 
     /**

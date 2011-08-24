@@ -20,7 +20,7 @@ class Vps_Data_Vpc_Image extends Vps_Data_Abstract implements Vps_Data_Vpc_ListI
         }
         $row = $model->getRow($componentId);
         if ($row && $row->vps_upload_id) {
-            $hashKey = md5($row->vps_upload_id.Vps_Uploads_Row::HASH_KEY);
+            $hashKey = Vps_Util_Hash::hash($row->vps_upload_id);
             return '/vps/media/upload/preview?uploadId='.$row->vps_upload_id.
                    '&hashKey='.$hashKey.'&size='.$this->_size;
         } else {

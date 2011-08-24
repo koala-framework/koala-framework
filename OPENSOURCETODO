@@ -1,9 +1,5 @@
 - hashes im code entfernen
-  o media urls
-  o Vps_Uploads_Row::HASH_KEY (wird an mehreren stellen verwendet, danach suchen!)
-  o Vpc_Mail_Redirect_Component::getHash
   o Vps_Util_FeedFetcher_Feed
-  o Vps_Util_PayPal_Ipn_LogModel::HASH_CODE
 
 - poi spezifisches verschieben
   o Vps/Auth/Adapter/PartnerNet.php
@@ -30,6 +26,7 @@
     > unsere sections
     > statistics
     > service urls
+  o Vps/Util/RtrList.php + Newsletter
     
 
 - email adressen:

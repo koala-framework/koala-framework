@@ -138,7 +138,7 @@ abstract class Vps_Controller_Action_Auto_ImageGrid extends Vps_Controller_Actio
         }
 
         $imageRef = $this->_getImageReference();
-        $hashKey = md5($row->{$imageRef['column']}.Vps_Uploads_Row::HASH_KEY);
+        $hashKey = Vps_Util_Hash::hash($row->{$imageRef['column']});
         $r['src'] = '/vps/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
             '&hashKey='.$hashKey.'&size=imageGrid';
         $r['src_large'] = '/vps/media/upload/preview?uploadId='.$row->{$imageRef['column']}.

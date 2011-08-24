@@ -69,14 +69,13 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
 
     public function previewAction()
     {
-        if (md5($this->_getParam('uploadId').Vps_Uploads_Row::HASH_KEY) != $this->_getParam('hashKey')) {
-           throw new Vps_Exception_AccessDenied();
-        }
         $fileRow = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')
             ->getRow($this->_getParam('uploadId'));
-
-
         if (!$fileRow) throw new Vps_Exception("Can't find upload");
+
+        if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
+           throw new Vps_Exception_AccessDenied();
+        }
 
         $sizes = array(
             'default' => array(40, 40),
@@ -107,12 +106,13 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
 
     public function downloadAction()
     {
-        if (md5($this->_getParam('uploadId').Vps_Uploads_Row::HASH_KEY) != $this->_getParam('hashKey')) {
-            throw new Vps_Exception_AccessDenied();
-        }
         $fileRow = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')
             ->getRow($this->_getParam('uploadId'));
         if (!$fileRow) throw new Vps_Exception("Can't find upload");
+
+        if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
+            throw new Vps_Exception_AccessDenied();
+        }
 
         $source = $fileRow->getFileSource();
         Vps_Media_Output::output(array(
