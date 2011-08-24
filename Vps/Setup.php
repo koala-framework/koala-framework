@@ -256,7 +256,12 @@ class Vps_Setup
             foreach ($config->preLoginIgnoreIp as $i) {
                 if ($_SERVER['REMOTE_ADDR'] == $i) $ignore = true;
             }
-            if (!$ignore && (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet')) {
+            
+            if (!$ignore && (empty($_SERVER['PHP_AUTH_USER'])
+                             || empty($_SERVER['PHP_AUTH_PW'])
+                             || $_SERVER['PHP_AUTH_USER']!=$config->preLogin->user
+                             || $_SERVER['PHP_AUTH_PW']!=$config->preLogin->password)
+            ) {
                 header('WWW-Authenticate: Basic realm="Testserver"');
                 throw new Vps_Exception_AccessDenied();
             }
