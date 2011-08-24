@@ -751,7 +751,7 @@ abstract class Vps_Component_Generator_Abstract
 
     public function duplicateChild($source, $parentTarget)
     {
-        throw new Vps_Exception_NotYetImplemented();
+        throw new Vps_Exception_NotYetImplemented("duplicating is not yet implemented in '".get_class($this)."'");
     }
 
     public function makeChildrenVisible($source)
