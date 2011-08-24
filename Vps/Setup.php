@@ -52,6 +52,7 @@ class Vps_Setup
 
         self::setUpZend();
 
+        //here to be as fast as possible (and have no session)
         if (isset($_SERVER['REQUEST_URI']) &&
             substr($_SERVER['REQUEST_URI'], 0, 25) == '/vps/json-progress-status' &&
             !empty($_REQUEST['progressNum'])
@@ -66,6 +67,8 @@ class Vps_Setup
             echo Zend_Json::encode($pbarStatus);
             exit;
         }
+
+        //here to have less dependencies
         if (isset($_SERVER['REQUEST_URI']) &&
             substr($_SERVER['REQUEST_URI'], 0, 17) == '/vps/check-config'
         ) {
