@@ -245,8 +245,6 @@ class Vps_Setup
 
         if (php_sapi_name() != 'cli' && $config->preLogin
             && isset($_SERVER['REDIRECT_URL'])
-            && $_SERVER['REMOTE_ADDR'] != '83.215.136.30'
-            && $_SERVER['REMOTE_ADDR'] != '83.215.136.27'
         ) {
             $ignore = false;
             foreach ($config->preLoginIgnore as $i) {
@@ -254,6 +252,9 @@ class Vps_Setup
                     $ignore = true;
                     break;
                 }
+            }
+            foreach ($config->preLoginIgnoreIp as $i) {
+                if ($_SERVER['REMOTE_ADDR'] == $i) $ignore = true;
             }
             if (!$ignore && (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!='vivid' || $_SERVER['PHP_AUTH_PW']!='planet')) {
                 header('WWW-Authenticate: Basic realm="Testserver"');
