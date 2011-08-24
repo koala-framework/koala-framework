@@ -18,12 +18,27 @@
   o Vps/Update/[0-9]+\.(php|sql)
   o Vps_js/ProjectTimer
   o Vps/Controller/Action/ProjectTimer
-  o Vps/Controller/Action/Spam
   o Vps/Controller/Action/Todo
   o Vps/Controller/Action/Cli/(Import|Export|CopyToTest)Controller.php ?
   o Vps/Controller/Action/Cli/GoOnline ?
   o Vps/Controller/Action/Cli/Scp(Vps)?
   o Vps/Controller/Action/Cli/SetupOnline ?
+  o Vps/Controller/Action/Cli/Git ?
+  o Vpc/Advanced/Imprint/VividPlanet
+  o Vpc/Advanced/Imprint/FacebookDisclaimer
+  o config.ini
+    > unsere sections
+    > statistics
+    > service urls
+    
+
+- email adressen:
+  o Vps/Controller/Action/Component/ClearCacheController.php
+  o Vps/Exception/Abstract.php
+
+- spamfilter?
+  o Vps/Model/Mail/Row.php
+  o Vps/Controller/Action/Spam
 
 - löschen?
   o Vps/Db/TabesModel
@@ -37,3 +52,9 @@
 - UserModel: im OSS-CMS Db Model verwenden, im Vps Service
 
 - alle direkten apc aufrufe optional machen
+
+- preLogin vivid:planet
+  o standard im oss-cms test:test
+  o standard im internen-cms vivid:planet
+  o im web überschreibbar
+
