@@ -1,0 +1,39 @@
+- hashes im code entfernen
+  o media urls
+  o Vps_Uploads_Row::HASH_KEY (wird an mehreren stellen verwendet, danach suchen!)
+  o Vpc_Mail_Redirect_Component::getHash
+  o Vps_Util_FeedFetcher_Feed
+  o Vps_Util_PayPal_Ipn_LogModel::HASH_CODE
+
+- poi spezifisches verschieben
+  o Vps/Auth/Adapter/PartnerNet.php
+  o Vps/Pdf/Porsche*
+
+- clear-cache apc aufruf passwort ein zufälliges generieren
+
+- in internes vps verschieben
+  o Vpc/Forum
+  o Vps/Util/FeedFetcher
+  o Vps/Util/Model/Feeds
+  o Vps/Update/[0-9]+\.(php|sql)
+  o Vps_js/ProjectTimer
+  o Vps/Controller/Action/ProjectTimer
+  o Vps/Controller/Action/Spam
+  o Vps/Controller/Action/Todo
+  o Vps/Controller/Action/Cli/(Import|Export|CopyToTest)Controller.php ?
+  o Vps/Controller/Action/Cli/GoOnline ?
+  o Vps/Controller/Action/Cli/Scp(Vps)?
+  o Vps/Controller/Action/Cli/SetupOnline ?
+
+- löschen?
+  o Vps/Db/TabesModel
+  o Vps/Db/TabeFieldsModel
+  o Vps/Update/Action/Db
+  o Vps/Dao/* <- franz fragen
+  o Vps/Controller/Action/Cli/Svn ?
+
+- license header überall einfügen
+
+- UserModel: im OSS-CMS Db Model verwenden, im Vps Service
+
+- alle direkten apc aufrufe optional machen
