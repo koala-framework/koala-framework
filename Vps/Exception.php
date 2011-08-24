@@ -38,7 +38,8 @@ class Vps_Exception extends Vps_Exception_NoLog
         $user = "guest";
         try {
             if ($u = Zend_Registry::get('userModel')->getAuthedUser()) {
-                $user = "$u, id $u->id, $u->role";
+                $userName = $u->__toString();
+                $user = "$userName, id $u->id, $u->role";
             }
         } catch (Exception $e) {
             $user = "error getting user";
