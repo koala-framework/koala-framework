@@ -27,10 +27,6 @@
   o Vps/Util/RtrList.php + Newsletter
     
 
-- email adressen:
-  o Vps/Controller/Action/Component/ClearCacheController.php
-  o Vps/Exception/Abstract.php
-
 - spamfilter?
   o Vps/Model/Mail/Row.php
   o Vps/Controller/Action/Spam
