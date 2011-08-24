@@ -14,6 +14,7 @@ class Vps_Component_Cache_Meta_Static_ComponentLink extends Vps_Component_Cache_
         return $ret;
     }
 
+    //TODO this is very inefficient
     private static function _getRecursiveIds($parentId, $model)
     {
         $ret = $model->getIds(
