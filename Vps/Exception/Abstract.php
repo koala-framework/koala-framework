@@ -34,7 +34,13 @@ abstract class Vps_Exception_Abstract extends Exception
             fwrite($fp, $content);
             fclose($fp);
         } catch(Exception $e) {
-            mail('ufx@vivid-planet.com; ns@vivid-planet.com; mh@vivid-planet.com',
+            $to = array();
+            foreach (Vps_Registry::get('config')->developers as $dev) {
+                if (isset($dev->sendException) && $dev->sendException) {
+                    $to[] = $dev->email;
+                }
+            }
+            mail(implode('; ', $to),
                 'Error while trying to write error file',
                 $e->__toString()."\n\n---------------------------\n\nOriginal Exception:\n\n".$content
                 );
