@@ -3,12 +3,21 @@
 //direkt in der cli ist das leider nicht möglich, da der speicher im webserver liegt
 class Vps_Util_Apc
 {
+    public static function getHttpPassword()
+    {
+        $file = 'application/cache/apcutilspass';
+        if (!file_exists($file)) {
+            file_put_contents($file, time().rand(100000, 1000000));
+        }
+        return file_get_contents($file);
+    }
+
     public static function dispatchUtils()
     {
         if (empty($_SERVER['PHP_AUTH_USER']) ||
             empty($_SERVER['PHP_AUTH_PW']) ||
-            $_SERVER['PHP_AUTH_USER']!='vivid' ||
-            $_SERVER['PHP_AUTH_PW']!='planet')
+            $_SERVER['PHP_AUTH_USER']!='apcutils' ||
+            $_SERVER['PHP_AUTH_PW']!=self::getHttpPassword())
         {
             header('WWW-Authenticate: Basic realm="APC Utils"');
             throw new Vps_Exception_AccessDenied();

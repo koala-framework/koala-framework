@@ -5,8 +5,6 @@
   o Vps/Auth/Adapter/PartnerNet.php
   o Vps/Pdf/Porsche*
 
-- clear-cache apc aufruf passwort ein zufälliges generieren
-
 - in internes vps verschieben
   o Vpc/Forum
   o Vps/Util/FeedFetcher
