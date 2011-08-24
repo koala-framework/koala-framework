@@ -1,7 +1,6 @@
 <?php
 class Vps_Uploads_Row extends Vps_Model_Proxy_Row
 {
-    const HASH_KEY = "ajsdfkljdsaöljfasöjfaslkjf";
     protected function _deleteFile()
     {
         $filename = $this->getFileSource();
@@ -112,6 +111,11 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
         return null;
     }
 
+    public function getHashKey()
+    {
+        return Vps_Util_Hash::hash($this->id);
+    }
+
     //wird von upload-feld verwendet
     public function getFileInfo()
     {
@@ -121,7 +125,7 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
             'filename' => $this->filename,
             'extension'=> $this->extension,
             'fileSize' => $this->getFileSize(),
-            'hashKey'  => md5($this->id.self::HASH_KEY)
+            'hashKey'  => $this->getHashKey()
         );
         if (!$this->id && is_file($this->filename)) {
             $ret['mimeType'] = $this->_getMimeType($this->filename);

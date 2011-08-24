@@ -1,7 +1,6 @@
 <?php
 class Vps_Util_PayPal_Ipn_LogModel extends Vps_Model_Db
 {
-    const HASH_CODE = '34sdkfakewrieif';
     protected $_table = 'paypal_ipn_log';
     protected $_rowClass = 'Vps_Util_PayPal_Ipn_LogModel_Row';
     protected function _init()
@@ -23,7 +22,7 @@ class Vps_Util_PayPal_Ipn_LogModel extends Vps_Model_Db
             'cb' => $ipnCallback
         );
         $data = serialize($data);
-        $ret .= substr(md5($data.self::HASH_CODE), 0, 10);
+        $ret .= substr(Vps_Util_Hash::hash($data), 0, 10);
         $data = base64_encode($data);
         $ret .= $data;
         return $ret;
@@ -39,7 +38,7 @@ class Vps_Util_PayPal_Ipn_LogModel extends Vps_Model_Db
             if (!$c) {
                 throw new Vps_Exception("Invalid vpsProcessIpnEntry: can't base64_decode");
             }
-            if (substr(md5($c.Vps_Util_PayPal_Ipn_LogModel::HASH_CODE), 0, 10) != $hash) {
+            if (substr(Vps_Util_Hash::hash($c), 0, 10) != $hash) {
                 throw new Vps_Exception("Invalid vpsProcessIpnEntry: hash not correct");
             }
             $c = @unserialize($c);
