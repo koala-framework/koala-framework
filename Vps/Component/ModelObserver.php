@@ -13,7 +13,7 @@ class Vps_Component_ModelObserver
     );
     private $_skipFnF = true;
     private $_processed = array();
-    private $_enabled = true; // wird zB. beim Import in Proxy ausgeschaltet
+    private $_disabled = 0; // wird zB. beim Import in Proxy ausgeschaltet
     private $_enableProcess = true; // für Unit Tests
 
     public static function getInstance()
@@ -37,12 +37,12 @@ class Vps_Component_ModelObserver
 
     public function enable()
     {
-        $this->_enabled = true;
+        $this->_disabled--;
     }
 
     public function disable()
     {
-        $this->_enabled = false;
+        $this->_disabled++;
     }
 
     public function setEnableProcess($enableProcess)
@@ -61,12 +61,12 @@ class Vps_Component_ModelObserver
 
     public function add($function, $source)
     {
-        if ($this->_enabled) {
+        if (!$this->_disabled) {
             $source = array('source' => $source);
             if ($function == 'delete') {
                 // Wird hier direkt aufgerufen, weil wenn später aufgerufen, ist row schon gelöscht
                 if (!Vps_Component_Data_Root::getComponentClass()) return;
-                if ($this->_enabled) $this->_processCache($source);
+                $this->_processCache($source);
             } else {
                 if ($source['source'] instanceof Vps_Model_Row_Abstract) {
                     $source['dirtyColumns'] = $source['source']->getDirtyColumns();
