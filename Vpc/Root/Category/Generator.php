@@ -17,10 +17,17 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
 
     private $_basesCache = array();
 
-    protected function _loadPageData($parentData, $select)
+    protected function _loadPageData()
     {
         if ($this->_pageDataLoaded) return;
         $this->_pageDataLoaded = true;
+        $this->_pageData = array();
+        $this->_pageParent = array();
+        $this->_pageFilename = array();
+        $this->_pageComponentParent = array();
+        $this->_pageComponent = array();
+        $this->_pageHome = null;
+        $this->_pageChilds = array();
         $select = $this->_getModel()->select()->order('pos');
         $rows = $this->_getModel()->export(Vps_Model_Abstract::FORMAT_ARRAY, $select);
         foreach ($rows as $row) {
@@ -54,7 +61,7 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
     {
         Vps_Benchmark::count('GenPage::getChildData');
 
-        $this->_loadPageData($parentData, $select);
+        $this->_loadPageData();
 
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
@@ -329,5 +336,43 @@ class Vpc_Root_Category_Generator extends Vps_Component_Generator_Abstract
             'model' => $this->getModel()
         );
         return $ret;
+    }
+
+    public function duplicateChild($source, $parentTarget)
+    {
+        if ($source->generator !== $this) {
+            throw new Vps_Exception("you must call this only with the correct source");
+        }
+        if ($parentTarget->generator !== $this) {
+            //TODO das ist nicht korrekt, es muss genschaut werden ob $parentTarget einen pagegenerator hat
+            //throw new Vps_Exception("you must call this only with the correct target");
+        }
+
+        $target = $this->_duplicateChildPages($source->parent, $parentTarget, $source->id);
+        return $target;
+    }
+
+    private function _duplicateChildPages($parentSource, $parentTarget, $childId)
+    {
+        $data = array();
+        $data['parent_id'] = $parentTarget->dbId;
+        $sourceRow = $this->getModel()->getRow($childId);
+        $newRow = $sourceRow->duplicate($data);
+
+        //force reload to have the new row loaded
+        $this->_pageDataLoaded = false;
+        $this->_loadPageData();
+
+        $source = $parentSource->getChildComponent(array('id'=>$childId, 'ignoreVisible'=>true));
+        $target = $parentTarget->getChildComponent(array('id'=>$newRow->id, 'ignoreVisible'=>true));
+
+        Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target);
+
+        if (isset($this->_pageChilds[$childId])) {
+            foreach ($this->_pageChilds[$childId] as $i) {
+                $this->_duplicateChildPages($source, $target, $i);
+            }
+        }
+        return $target;
     }
 }
