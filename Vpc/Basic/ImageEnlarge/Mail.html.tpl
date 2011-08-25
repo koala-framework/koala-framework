@@ -1,1 +1,1 @@
-<?=$this->image($this->data, 'default', '', array('class' => $this->imgCssClass, 'border' => '0'))?>
+<?=$this->image($this->data, '', array('class' => $this->imgCssClass, 'border' => '0'))?>

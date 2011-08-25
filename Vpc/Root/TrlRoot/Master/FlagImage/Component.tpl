@@ -1,1 +1,1 @@
-<?=$this->image($this->image, 'default', '', $this->imgCssClass)?>
+<?=$this->image($this->image, '', $this->imgCssClass)?>
