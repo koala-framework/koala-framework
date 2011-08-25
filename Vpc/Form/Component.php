@@ -32,6 +32,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['extConfig'] = 'Vps_Component_Abstract_ExtConfig_None';
 
         $ret['buttonClass'] = 'vpsButtonFlat'; //um standard styles aus dem Vps zu umgehen
+
+        $ret['useJavascriptSubmit'] = false;
+
         return $ret;
     }
 
@@ -205,8 +208,23 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         }
         $ret['message'] = null;
 
+        $ret['useJavascriptSubmit'] = $this->_getSetting('useJavascriptSubmit');
+
+        $ret['json'] = array(
+            'controllerUrl' => Vpc_Admin::getInstance(get_class($this))->getControllerUrl('FrontendForm'),
+            'componentId' => $this->getData()->componentId,
+            'savingImage' => '/assets/vps/Vpc/Form/saving.gif'
+        );
+
         return $ret;
     }
+
+    // used by Vpc_Form_FrontendFormController
+    public function getPlaceholder($placeholder = null)
+    {
+        return $this->_getPlaceholder($placeholder);
+    }
+
 
     public function hasContent()
     {
