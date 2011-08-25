@@ -120,6 +120,7 @@ class Vpc_Mail_Component extends Vpc_Abstract
      * @param $data Optionale Daten die benötigt werden, kann von den
      *        Komponenten per $this->getData()->getParentByClass('Vpc_Mail_Component')->getComponent()->getMailData();
      *        ausgelesen werden
+     * Wird von Gästebuch verwendet
      */
     public function send(Vpc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
     {
