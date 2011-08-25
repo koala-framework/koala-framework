@@ -22,8 +22,15 @@
 }
 .cssClass .submitWrapper .beforeButton,
 .cssClass .submitWrapper .button,
+.cssClass .submitWrapper .saving,
 .cssClass .submitWrapper .afterButton {
     float: left;
+}
+.cssClass .submitWrapper .saving {
+	background-image: url(/assets/vps/Vpc/Form/saving.gif);
+	width: 30px;
+	height: 16px;
+	visibility: hidden
 }
 .cssClass input,
 .cssClass textarea,
