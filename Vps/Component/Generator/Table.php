@@ -320,7 +320,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $target = $parentTarget->getChildComponent(array('id'=>$id, 'ignoreVisible'=>true));
         if (!$target) {
             return null;
-            throw new Vps_Exception("Can't find just duplicated component in Generator '".get_class($this)."'. Parent '$parentTarget->componentId', childId '$id'");
         }
         Vpc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
         return $target;
